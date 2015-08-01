@@ -1,0 +1,15 @@
+<h1><%= _('New Call') %></h1>
+
+<%= semantic_form_for @call do |f| %>
+  <%= f.semantic_errors %>
+  <%= f.inputs do %>
+    <%= f.input :last_name %>
+    <%= f.input :first_name %>
+    <%= f.input :telephone, as: :phone %>
+    <%= f.input :notes, input_html: { rows: 5 } %>
+    <%= f.input :insurance %>
+  <% end %>
+  <%= f.actions do %>
+    <%= f.submit %>
+  <% end %>
+<% end %>

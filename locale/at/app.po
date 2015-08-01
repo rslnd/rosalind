@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: version 0.0.1\n"
+"PO-Revision-Date: 2009-02-18 14:53+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: de-AT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+msgid "Call"
+msgstr "Anruf"
+
+msgid "Call|First name"
+msgstr "Vorname"
+
+msgid "Call|Insurance"
+msgstr "Kasse"
+
+msgid "Call|Last name"
+msgstr "Nachname"
+
+msgid "Call|Notes"
+msgstr "Grund"
+
+msgid "Call|Telephone"
+msgstr "Telefon"
+
+msgid "New Call"
+msgstr "Neuer Anruf"
+
+msgid "Open Calls"
+msgstr "Offene Anrufe"
+
+msgid "Private"
+msgstr "Privat"
