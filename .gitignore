@@ -16,3 +16,6 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+
+# Ignore redis dump
+dump.rdb

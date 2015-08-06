@@ -1,4 +1,4 @@
-<ul class="list-group">
+<ul class="list-group" id="calls">
   <% @calls.each do |call| %>
     <li class="list-group-item">
       <h4 class="list-group-item-heading">
@@ -8,6 +8,8 @@
       <h5 class="list-group-item-heading"><%= call.telephone %></h5>
       <p class="list-group-item-text"><%= call.notes %></p>
       <p class="list-group-item-text muted"><%= l(call.created_at, format: :time) %></p>
+      
+      <%= link_to 'Erledigt', call, method: :delete, remote: true %>
     </li>
   <% end %>
 </ul>

@@ -18,6 +18,10 @@ class CallsController < ApplicationController
     end
   end
 
+  def destroy
+    Call.find(params[:id]).destroy
+  end
+
   private
 
   def call_params
@@ -29,4 +33,5 @@ class CallsController < ApplicationController
       :insurance
     )
   end
+
 end

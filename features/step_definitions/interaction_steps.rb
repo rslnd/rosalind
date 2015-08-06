@@ -7,9 +7,13 @@ Angenommen(/^ich gebe bei "(.*?)" "(.*?)" ein$/) do |field, value|
 end
 
 Dann(/^sollte ich "(.*?)" sehen$/) do |text|
-  page.should have_content text
+  expect(page).to have_content(text)
+end
+
+Dann(/^sollte ich nicht (?:mehr)? "(.*?)" sehen$/) do |text|
+  expect(page).to_not have_content(text)
 end
 
 Dann(/^sollte bei "(.*?)" nichts stehen$/) do |field|
-  find_field(field).value.should be_blank
+  expect(find_field(field).value).to be_blank
 end

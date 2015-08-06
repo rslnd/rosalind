@@ -20,3 +20,14 @@ Funktionalität: Callcenter
     Und sollte ich "0660 123456789" sehen
     Und sollte ich "Termin heute von 18:00 auf 19:00 verschieben" sehen
     Und sollte ich "16:00" sehen
+
+  @javascript
+  Szenario: Anruf als erledigt markieren
+    Angenommen es existiert folgender Anruf (Call):
+      | last_name | telephone |
+      | Schwarz   | 1 2345    |
+    Und ich bin auf der Hauptseite
+    Dann sollte ich "1 2345" sehen
+    Und ich klicke auf "Erledigt"
+    Dann sollte ich nicht mehr "1 2345" sehen
+    Dann sollte ich nicht mehr "Schwarz" sehen

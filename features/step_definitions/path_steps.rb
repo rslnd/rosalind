@@ -1,3 +1,3 @@
 Angenommen(/^ich bin auf der Hauptseite$/) do
-  visit "/"
+  visit '/'
 end

@@ -1,3 +1,4 @@
+
 source 'https://rubygems.org'
 
 # Rails 5.0.0.alpha
@@ -5,7 +6,8 @@ gem 'rails', github: 'rails/rails'
 
 # Sockets
 gem 'actioncable', github: 'rails/actioncable'
-gem 'puma'
+gem 'passenger'
+gem 'passenger-rails'
 
 # DB
 gem 'pg'
@@ -23,8 +25,9 @@ gem 'formtastic-bootstrap'
 # JS
 gem 'node', platforms: :ruby
 gem 'coffee-rails', github: 'rails/coffee-rails'
-gem 'turbolinks'
+gem 'turbolinks', github: 'rails/turbolinks'
 gem 'uglifier', '>= 1.3.0'
+gem 'gon'
 
 # i18n
 gem 'gettext_i18n_rails'
@@ -42,12 +45,17 @@ end
 group :test do
   gem 'rspec'
   gem 'cucumber-rails', require: false
+  gem 'fakeredis', github: 'carsonreinke/fakeredis', branch: 'pubsub'
+  gem 'capybara-webkit'
+  gem 'capybara-screenshot'
+  gem 'factory_girl'
   gem 'database_cleaner'
   gem 'timecop'
   gem 'chronic'
 end
 
 group :development do
+  gem 'foreman'
   gem 'web-console', github: 'rails/web-console'
   gem 'spring'
 end
