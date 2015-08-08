@@ -9,9 +9,9 @@
       return this.client.url(process.env.ROOT_URL);
     });
 
-    this.When(/^I navigate to "([^"]*)"$/, function (relativePath) {
-      return this.client.
-        url(url.resolve(process.env.ROOT_URL, relativePath));
+    this.When(/^I navigate to '([^']*)'$/, function (relativePath) {
+      return this.client
+        .url(url.resolve(process.env.ROOT_URL, relativePath));
     });
 
   };

@@ -1,0 +1,27 @@
+<template name='navbar'>
+  <nav class='navbar navbar-default navbar-fixed-top'>
+    <div class='safari-translucency-fix'></div>
+    <div class='container-fluid'>
+      <div class='row'>
+        <div class='navbar-header page-scroll'>
+          <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#navbar'>
+            <span class='sr-only'>Navigation</span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </button>
+          <a class='navbar-brand page-scroll' href='/'>
+            <img src='/images/logo.png'>
+          </a>
+        </div>
+
+        <div class='collapse navbar-collapse' id='navbar'>
+          <ul class='nav navbar-nav'>
+            {{> navPrimary}}
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+</template>

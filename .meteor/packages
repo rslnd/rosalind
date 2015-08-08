@@ -6,4 +6,8 @@
 
 meteor-platform
 xolvio:cucumber
-velocity:console-reporter
+mizzao:bootstrap-3
+u2622:persistent-session
+iron:router
+aldeed:collection2
+aldeed:autoform

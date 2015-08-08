@@ -1,0 +1,9 @@
+<template name='inboundCalls'>
+  {{#each inboundCalls}}
+    <div class='list-group'>
+      {{> inboundCall}}
+    </div>
+  {{else}}
+    <h2 class='text-center'>No open inbound calls</h2>
+  {{/each}}
+</template>
