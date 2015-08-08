@@ -5,7 +5,16 @@
 <body>
   <h1>Welcome to Meteor!</h1>
 
+  <a href="#">New Call</a>
   {{> hello}}
+
+  <form>
+    <label for="last_name">Last Name</label>
+    <input id="last_name" name="last_name" />
+
+    <label for="first_name">First Name</label>
+    <input id="first_name" name="first_name" />
+  </form>
 </body>
 
 <template name="hello">
