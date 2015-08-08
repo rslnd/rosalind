@@ -1,0 +1,22 @@
+<template name='navPrimary'>
+
+  <li {{activeClass '/'}}>
+    <a href='/'>Dashboard</a>
+  </li>
+
+  <li {{activeClass '/inboundCalls'}}>
+    <a href='/inboundCalls'>
+      <i class='glyphicon glyphicon-earphone'></i>
+      Inbound Calls
+    </a>
+  </li>
+
+
+  <li {{activeClass '/inboundCalls/new'}}>
+    <a href='/inboundCalls/new'>
+      <i class='glyphicon glyphicon-earphone'></i>
+      <span>New Inbound Call</span>
+    </a>
+  </li>
+
+</template>
