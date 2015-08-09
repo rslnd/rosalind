@@ -11,3 +11,5 @@ u2622:persistent-session
 iron:router
 aldeed:collection2
 aldeed:autoform
+matb33:collection-hooks
+momentjs:moment

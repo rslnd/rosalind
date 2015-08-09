@@ -1,8 +1,8 @@
 <template name='inboundCall'>
   <li class='list-group-item'>
     <h4 class='list-group-item-heading'>
-      {{ first_name }} {{ last_name }}
-      {{#if private_patient}}
+      {{ firstName }} {{ lastName }}
+      {{#if privatePatient}}
         <small>Private</small>
       {{else}}
         <small>Insurance</small>
@@ -10,5 +10,9 @@
     </h4>
     <h5 class='list-group-item-heading'>{{ telephone }}</h5>
     <p class='list-group-item-text'>{{ note }}</p>
+    <p class='list-group-item-text'>
+      {{ time createdAt }} &middot;
+      <span class='text-muted'>{{ timeAgo createdAt}}</span>
+    </p>
   </li>
 </template>

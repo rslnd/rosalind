@@ -20,3 +20,4 @@ Feature: Inbound Calls
     Then I should see 'Sabine Schwarz'
     And I should see '0660 123456789'
     And I should see 'Move appt. for today from 18:00 to 19:00'
+    And I should see the current time

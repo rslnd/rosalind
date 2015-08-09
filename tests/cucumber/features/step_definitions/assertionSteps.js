@@ -1,6 +1,7 @@
 (function () {
   'use strict';
   var _ = require('underscore');
+  var moment = require('moment');
 
   module.exports = function () {
     var url = require('url');
@@ -23,6 +24,16 @@
           });
         });
     });
+
+    this.Then(/^I should see the current time$/, function () {
+      var time = moment().format('hh:mm');
+      return this.client
+        .waitForVisible('body *')
+        .getText('body').then(function(bodyText) {
+          expect(bodyText).to.contain(time);
+        });
+    });
+
 
     this.Then(/^I should see the title '([^']*)'$/, function (expectedTitle) {
       return this.client

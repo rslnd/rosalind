@@ -1,12 +1,12 @@
 <template name='newInboundCall'>
-  {{#autoForm collection='InboundCalls' id='insertBookForm' type='insert'}}
+  {{#autoForm collection='InboundCalls' id='insertInboundCallForm' type='insert'}}
     <fieldset>
       <legend>New inbound call</legend>
-      {{> afQuickField name='last_name'}}
-      {{> afQuickField name='first_name'}}
+      {{> afQuickField name='lastName'}}
+      {{> afQuickField name='firstName'}}
       {{> afQuickField name='telephone'}}
       {{> afQuickField name='note' rows=6}}
-      {{> afQuickField name='private_patient'}}
+      {{> afQuickField name='privatePatient'}}
     </fieldset>
     <button type='submit' class='btn btn-primary'>Save new inbound call</button>
   {{/autoForm}}

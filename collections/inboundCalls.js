@@ -4,13 +4,17 @@ InboundCalls.allow({
   insert: function() { return true; }
 });
 
+InboundCalls.before.insert(function (id, doc) {
+  doc.createdAt = Date.now();
+});
+
 InboundCalls.attachSchema(new SimpleSchema({
-  first_name: {
+  firstName: {
     type: String,
     label: 'First name',
     optional: true
   },
-  last_name: {
+  lastName: {
     type: String,
     label: 'Last name'
   },
@@ -22,8 +26,12 @@ InboundCalls.attachSchema(new SimpleSchema({
     type: String,
     label: 'Note'
   },
-  private_patient: {
+  privatePatient: {
     type: Boolean,
     label: 'Private Patient'
   },
+  createdAt: {
+    type: Date,
+    label: 'Date'
+  }
 }));
