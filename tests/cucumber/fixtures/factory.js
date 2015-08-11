@@ -2,11 +2,11 @@
 
   'use strict';
 
-  if ( ! process.env.IS_MIRROR || process.env.NODE_ENV != 'development')
-   throw 'Testing code somehow made it into production';
-
   Meteor.methods({
     'fixtures/createRecord': function(options) {
+      if ( ! process.env.IS_MIRROR || process.env.NODE_ENV != 'development')
+       throw 'Testing code somehow made it into production';
+
       var collection, attributes;
 
       collection = _.pluralize(options.collection);
@@ -20,6 +20,9 @@
 
     // taken from xolvio:cleaner
     'fixtures/resetDatabase': function() {
+      if ( ! process.env.IS_MIRROR || process.env.NODE_ENV != 'development')
+       throw 'Testing code somehow made it into production';
+
       var collectionsRemoved = 0;
       var db = MongoInternals.defaultRemoteCollectionDriver().mongo.db;
 
