@@ -1,16 +1,22 @@
 (function () {
   'use strict';
-  var _ = require('underscore');
   var moment = require('moment');
 
   module.exports = function () {
-    var url = require('url');
 
     this.Then(/^I should see '([^']*)'$/, function (string) {
       return this.client
         .waitForVisible('body *')
         .getText('body').then(function(bodyText) {
           expect(bodyText).to.contain(string);
+        });
+    });
+
+    this.Then(/^I should not see '([^']*)'$/, function (string) {
+      return this.client
+        .waitForVisible('body *')
+        .getText('body').then(function(bodyText) {
+          expect(bodyText).to.not.contain(string);
         });
     });
 
@@ -26,7 +32,7 @@
     });
 
     this.Then(/^I should see the current time$/, function () {
-      var time = moment().format('hh:mm');
+      var time = moment().format('HH:mm');
       return this.client
         .waitForVisible('body *')
         .getText('body').then(function(bodyText) {

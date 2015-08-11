@@ -1,6 +1,5 @@
 (function () {
   'use strict';
-  var _ = require('underscore');
 
   module.exports = function () {
     var url = require('url');

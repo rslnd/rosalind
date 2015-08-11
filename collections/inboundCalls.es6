@@ -1,11 +1,8 @@
-InboundCalls = new Meteor.Collection('inboundCalls');
+InboundCalls = new Mongo.Collection('inboundCalls');
 
 InboundCalls.allow({
-  insert: function() { return true; }
-});
-
-InboundCalls.before.insert(function (id, doc) {
-  doc.createdAt = Date.now();
+  insert() { return true; },
+  remove() { return true; }
 });
 
 InboundCalls.attachSchema(new SimpleSchema({
@@ -32,6 +29,6 @@ InboundCalls.attachSchema(new SimpleSchema({
   },
   createdAt: {
     type: Date,
-    label: 'Date'
+    autoValue: Util.autoCreatedAt
   }
 }));

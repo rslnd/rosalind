@@ -5,10 +5,10 @@ Router.configure({
 Router.map(function() {
 
   this.route('/inboundCalls', {
-    waitOn: function() {
+    waitOn() {
       return Meteor.subscribe('inboundCalls');
     },
-    data: function() {
+    data() {
       return {
         inboundCalls: InboundCalls.find({})
       };

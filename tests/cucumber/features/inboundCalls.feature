@@ -21,3 +21,14 @@ Feature: Inbound Calls
     And I should see '0660 123456789'
     And I should see 'Move appt. for today from 18:00 to 19:00'
     And I should see the current time
+
+  Scenario: Mark inbound call as resolved
+    Given an 'inbound call' with the following attributes:
+      | Last name | First name | Telephone | Note | Private Patient |
+      | Schwarz   | Lisa       | 123 456   | Test | false           |
+    Given I click on 'Inbound Calls'
+    Then I should see 'Lisa Schwarz'
+    And I should see 'Insurance'
+    Given I click on 'Mark as resolved'
+    Then I should not see 'Lisa Schwarz'
+    And I should see 'No open inbound calls'
