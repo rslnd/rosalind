@@ -5,6 +5,7 @@
 `meteor`
 
 Annotate scenarios with `@dev` and watch `tail -f .meteor/local/log/cucumber.log`
+
 You may need to run `cd tests/cucumber/ && npm install`
 
 ## Test
