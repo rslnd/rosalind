@@ -1,3 +1,5 @@
+var Subs = new SubsManager();
+
 Router.configure({
   layoutTemplate: 'layout'
 });
@@ -5,14 +7,8 @@ Router.configure({
 Router.map(function() {
 
   this.route('/inboundCalls', {
-    waitOn() {
-      return Meteor.subscribe('inboundCalls');
-    },
-    data() {
-      return {
-        inboundCalls: InboundCalls.find({})
-      };
-    }
+    waitOn() { return Subs.subscribe('inboundCalls'); },
+    data()   { return { inboundCalls: InboundCalls.find({}) }; }
   });
 
   this.route('/inboundCalls/new', function() {

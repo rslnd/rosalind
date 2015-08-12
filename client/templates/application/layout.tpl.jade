@@ -1,0 +1,10 @@
+head
+  meta(name='viewport' content='width=device-width, user-scalable=no')
+
+body.fixed.sidebar-mini
+  +AdminLTE(skin='blue' fixed=true sidebarMini=true)
+    .wrapper
+      +topbar
+      +sidebar      
+      .content-wrapper
+        +yield

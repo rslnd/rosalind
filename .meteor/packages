@@ -12,12 +12,23 @@ grigio:babel
 # Collections
 aldeed:collection2
 aldeed:autoform
+dburles:collection-helpers
+meteorhacks:subs-manager
+
+# Permissions
+accounts-base
+accounts-password
+alanning:roles
+yogiben:admin
 
 # Testing
 xolvio:cucumber
 
 # UI
-mizzao:bootstrap-3
+mquandalle:jade
+mfactory:admin-lte
+fortawesome:fontawesome
+fastclick
 
 # Util
 u2622:persistent-session

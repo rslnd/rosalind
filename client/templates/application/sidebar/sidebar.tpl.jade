@@ -1,0 +1,14 @@
+aside.main-sidebar
+  section.sidebar
+    ul.sidebar-menu
+      li.header Actions
+      +each sidebar
+        li.treeview
+          a(href=link)
+            <i class='fa fa-{{icon}}'></i>
+            span #{name}
+            i.fa.fa-angle-left.pull-right
+          ul.treeview-menu
+            +each submenu
+                li
+                  a.active(href=link) #{name}

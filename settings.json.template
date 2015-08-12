@@ -1,0 +1,7 @@
+{
+  "public": {
+    "velocity:html-reporter": {
+      "position": "bottom right"
+    }
+  }
+}
