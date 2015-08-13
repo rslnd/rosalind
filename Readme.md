@@ -2,7 +2,7 @@
 
 ## Develop
 
-`meteor`
+`meteor --settings settings.json`
 
 Annotate scenarios with `@dev` and watch `tail -f .meteor/local/log/cucumber.log`
 

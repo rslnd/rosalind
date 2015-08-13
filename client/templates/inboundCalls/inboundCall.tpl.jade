@@ -1,0 +1,17 @@
+.panel.panel-default
+  .panel-body
+    h4 #{firstName} #{lastName}
+      if privatePatient
+        small Private
+      else
+        small Insurance
+    h5 #{telephone}
+
+    blockquote
+      p #{note}
+
+    footer
+      span.text-muted {{time createdAt}} &middot; {{livestamp createdAt}}
+
+  .panel-footer
+    a.resolve(href='#') Mark as resolved

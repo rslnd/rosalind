@@ -1,0 +1,10 @@
+if currentUser
+  .fixed.sidebar-mini
+    +AdminLTE(skin='blue' fixed=true sidebarMini=true)
+      .wrapper
+        +topbar
+        +sidebar
+        .content-wrapper
+          +yield
+else
+  +lockedLayout
