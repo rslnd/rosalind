@@ -3,7 +3,7 @@ AutoForm.hooks({
     onSubmit: function(form) {
       if (form.name && form.password) {
         Meteor.loginWithPassword(form.name, form.password, (error) => {
-          error ? this.done(error); : this.done();
+          error ? this.done(error) : this.done();
         });
       } else {
         this.done();
