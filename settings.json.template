@@ -1,7 +1,18 @@
 {
   "public": {
+    "customer": {
+      "name": "Hautzentrum Wien Dr. Sabine Schwarz"
+    },
     "velocity:html-reporter": {
-      "position": "bottom right"
+      "position": "bottom left"
+    }
+  },
+  "private": {
+    "admin": {
+      "defaultAccount": {
+        "name": "testuser",
+        "password": "1111",
+      }
     }
   }
 }

@@ -1,0 +1,25 @@
+.locked-layout {
+  position: absolute;
+  background-color: #3c8dbc;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.locked-wrapper {
+  margin: auto auto;
+  margin-top: 60px;
+  width: 300px;
+  text-align: center;
+}
+
+.locked-logo img {
+  width: 100px;
+  margin: auto auto;
+  display: block;
+}
+
+.locked-content {
+  margin-top: 40px;
+}

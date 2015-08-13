@@ -1,10 +1,10 @@
 const sidebar = [
   {
-    name: 'Inbound Calls',
+    name: 'Inbound calls',
     icon: 'phone',
     submenu: [
-      { name: 'Inbound Calls', link: '/inboundCalls' },
-      { name: 'New Inbound Call', link: '/inboundCalls/new' }
+      { name: 'Inbound calls', link: '/inboundCalls' },
+      { name: 'New inbound call', link: '/inboundCalls/new' }
     ]
   }
 ];

@@ -4,19 +4,23 @@ Router.configure({
   layoutTemplate: 'layout'
 });
 
-Router.map(function() {
+Router.onBeforeAction(function (pause) {
+  if (!Meteor.user()) {
+    this.render('login');
+  } else {
+    this.next();
+  }
+});
 
-  this.route('/inboundCalls', {
-    waitOn() { return Subs.subscribe('inboundCalls'); },
-    data()   { return { inboundCalls: InboundCalls.find({}) }; }
-  });
+Router.route('/inboundCalls', {
+  waitOn() { return Subs.subscribe('inboundCalls'); },
+  data()   { return { inboundCalls: InboundCalls.find({}) }; }
+});
 
-  this.route('/inboundCalls/new', function() {
-    this.render('newInboundCall');
-  });
+Router.route('/inboundCalls/new', function() {
+  this.render('newInboundCall');
+});
 
-  this.route('/', function() {
-    this.render('dashboard');
-  });
-
+Router.route('/', function() {
+  this.render('dashboard');
 });

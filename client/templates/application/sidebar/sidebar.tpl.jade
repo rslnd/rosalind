@@ -4,11 +4,12 @@ aside.main-sidebar
       li.header Actions
       +each sidebar
         li.treeview
-          a(href=link)
+          a.pointer
             <i class='fa fa-{{icon}}'></i>
-            span #{name}
+            span.level-0 #{name}
             i.fa.fa-angle-left.pull-right
           ul.treeview-menu
             +each submenu
                 li
-                  a.active(href=link) #{name}
+                  a.active(href=link)
+                    span.level-1 #{name}
