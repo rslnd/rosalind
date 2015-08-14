@@ -7,4 +7,5 @@ if currentUser
         .content-wrapper
           +yield
 else
-  +lockedLayout
+  +AdminLTE(skin='blue')
+    +lockedLayout

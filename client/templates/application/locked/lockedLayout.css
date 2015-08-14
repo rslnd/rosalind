@@ -1,5 +1,5 @@
 .locked-layout {
-  position: absolute;
+  position: fixed;
   background-color: #3c8dbc;
   top: 0;
   bottom: 0;
