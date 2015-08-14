@@ -9,10 +9,13 @@ Meteor.startup(function() {
     let defaultAccount = Meteor.settings.private.admin.defaultAccount;
 
     if (defaultAccount && defaultAccount.name && defaultAccount.password) {
-      Accounts.createUser({
+      let id = Accounts.createUser({
         username: defaultAccount.name,
         password: defaultAccount.password
       });
+      
+      Roles.addUsersToRoles(id, ['admin']);
+
       console.log('Created first admin user: ' + defaultAccount.name);
     }
   } catch(e) {
