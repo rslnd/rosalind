@@ -1,0 +1,12 @@
+{
+  "name": "rosalind",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/meteor.js",
+    "test": "node scripts/test.js",
+    "tail": "node scripts/tail.js"
+  },
+  "devDependencies": {
+    "shelljs": "^0.5.3"
+  }
+}

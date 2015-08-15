@@ -2,15 +2,15 @@
 
 ## Develop
 
-`meteor --settings settings.json`
+`npm start`
 
-Annotate scenarios with `@dev` and watch `tail -f .meteor/local/log/cucumber.log`
+Annotate scenarios with `@dev` and watch `npm run tail`
 
-You may need to run `cd tests/cucumber/ && npm install`
+You may need to run `cd ./server/tests/cucumber/ && npm install`
 
 ## Test
 
-Run the full test suite with `meteor --test --release velocity:METEOR@1.1.0.3_1`
+Run the full test suite with `npm test`
 
 ## Deploy
 
