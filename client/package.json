@@ -1,0 +1,16 @@
+{
+  "name": "rosalind-client",
+  "private": true,
+  "main": "lib/main.js",
+  "devDependencies": {
+    "shelljs": "^0.5.3",
+    "electronPackager": "^5.0.1"
+  },
+  "dependencies": {
+    "electron-cookies": "^1.1.0"
+  },
+  "scripts": {
+    "client:start": "node scripts/start.js",
+    "client:build": "node scripts/build.js"
+  }
+}

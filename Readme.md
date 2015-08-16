@@ -14,4 +14,8 @@ Run the full test suite with `npm test`
 
 ## Deploy
 
-TODO
+Build the native applications with `npm client:build`
+
+Deploy to staging: TODO
+
+Deploy to production: TODO

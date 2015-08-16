@@ -2,9 +2,12 @@
   "name": "rosalind",
   "private": true,
   "scripts": {
-    "start": "node scripts/meteor.js",
-    "test": "node scripts/test.js",
-    "tail": "node scripts/tail.js"
+    "start": "node scripts/start.js",
+    "server:start": "node server/scripts/start.js",
+    "server:test": "node server/scripts/test.js",
+    "server:tail": "node server/scripts/tail.js",
+    "client:start": "node client/scripts/start.js",
+    "client:build": "node client/scripts/build.js"
   },
   "devDependencies": {
     "shelljs": "^0.5.3"
