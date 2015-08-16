@@ -1,5 +1,11 @@
 # Rosalind
 
+## Prerequisites
+
+ - Node.js
+ - Meteor
+ - `npm install -g shelljs`
+
 ## Develop
 
 `npm start`

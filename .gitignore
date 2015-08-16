@@ -28,4 +28,4 @@ node_modules
 dump.rdb
 
 # Ignore builds
-client/build/
+public/builds/*

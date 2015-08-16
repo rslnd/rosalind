@@ -1,8 +1,10 @@
 var electronPackager = require('electron-packager');
 
+var meteorDir = __dirname + '/../../../';
+
 var options = {
-  dir: __dirname + '/../',
-  out: __dirname + '/../build/',
+  dir: __dirname + '/..',
+  out: meteorDir + 'public/builds/',
   name: 'Rosalind',
   icon: undefined,
   platform: 'win32',

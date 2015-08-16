@@ -2,12 +2,12 @@
   "name": "rosalind",
   "private": true,
   "scripts": {
-    "start": "node scripts/start.js",
-    "server:start": "node server/scripts/start.js",
-    "server:test": "node server/scripts/test.js",
-    "server:tail": "node server/scripts/tail.js",
-    "client:start": "node client/scripts/start.js",
-    "client:build": "node client/scripts/build.js"
+    "start": "shjs packages/rosalind-scripts/scripts/start.js",
+    "server:start": "shjs packages/rosalind-scripts/scripts/startServer.js",
+    "server:test": "shjs packages/rosalind-scripts/scripts/test.js",
+    "server:tail": "shjs packages/rosalind-scripts/scripts/tail.js",
+    "client:start": "shjs packages/rosalind-native/scripts/start.js",
+    "client:build": "shjs packages/rosalind-native/scripts/build.js"
   },
   "devDependencies": {
     "shelljs": "^0.5.3"
