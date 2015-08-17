@@ -23,6 +23,7 @@ node_modules
 !/log/.keep
 !/tmp/.keep
 /tests/cucumber/.screenshots
+npm-debug.log
 
 # Ignore redis dump
 dump.rdb
