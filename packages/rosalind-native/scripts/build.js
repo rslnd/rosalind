@@ -9,7 +9,7 @@ var options = {
   icon: undefined,
   platform: 'win32',
   arch: 'all',
-  version: '0.29.2',
+  version: '0.30.1',
   versionString: {
     CompanyName: '',
     LegalCopyright: '',
@@ -21,7 +21,7 @@ var options = {
     InternalName: ''
   },
   overwrite: true,
-  asar: true,
+  asar: false,
   ignore: [
     'node_modules/electron-prebuilt',
     'node_modules/electron-packager',

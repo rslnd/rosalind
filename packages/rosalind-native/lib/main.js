@@ -18,6 +18,8 @@ app.on('ready', function() {
     'min-width': 560,
     'min-height': 426,
     'disable-auto-hide-cursor': true,
+    'node-integration': false,
+    'preload': require.resolve('./native.js'),
     'web-preferences': {
       'text-areas-are-resizable': false,
       'experimental-canvas-features': true,

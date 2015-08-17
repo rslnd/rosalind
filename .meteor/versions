@@ -24,7 +24,6 @@ deps@1.0.7
 ejson@1.0.6
 email@1.0.6
 fastclick@1.0.3
-force-ssl@1.0.4
 fortawesome:fontawesome@4.4.0
 geojson-utils@1.0.3
 grigio:babel@0.1.6
@@ -42,6 +41,7 @@ iron:router@1.0.9
 iron:url@1.0.9
 jquery@1.11.3_2
 json@1.0.3
+keyvan:my-force-ssl@0.0.1
 launch-screen@1.0.2
 less@1.0.14
 livedata@1.0.13
