@@ -30,6 +30,7 @@ mquandalle:jade
 mfactory:admin-lte
 fortawesome:fontawesome
 fastclick
+tap:i18n
 
 # Util
 u2622:persistent-session
