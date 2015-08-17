@@ -4,8 +4,11 @@
   "private": true,
   "main": "lib/main.js",
   "devDependencies": {
+    "electronPackager": "^5.0.1",
+    "grunt": "^0.4.5",
+    "grunt-electron-installer": "^0.37.0",
     "shelljs": "^0.5.3",
-    "electronPackager": "^5.0.1"
+    "temp": "^0.8.3" 
   },
   "dependencies": {
     "electron-cookies": "^1.1.0"
