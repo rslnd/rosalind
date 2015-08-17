@@ -1,0 +1,23 @@
+header.main-header
+  a.logo(href='/')
+    img(src='/images/logo.svg')
+
+  nav.navbar.navbar-static-top
+    a.sidebar-toggle(href='#' data-toggle='offcanvas')
+    .navbar-custom-menu
+      ul.nav.navbar-nav
+        if isInRole 'admin'
+          li
+            a(href='/admin') Admin
+        li.dropdown.user.user-menu
+          a.dropdown-toggle(data-toggle='dropdown')
+            span.hidden-xs
+              | #{currentUser.username}
+              i.caret
+          ul.dropdown-menu
+            li.user-body
+              p #{currentUser.username}
+              small Currently logged in
+            li.user-footer
+              .pull-right
+                a.btn.btn-default.logout Log Out

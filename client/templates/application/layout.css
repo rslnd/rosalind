@@ -1,0 +1,15 @@
+html, body {
+  background-color: #ECF0F5;
+}
+
+.main-header .logo img {
+  width: 20px;
+}
+
+.no-mb {
+  margin-bottom: 0;
+}
+
+.pointer {
+  cursor: pointer;
+}

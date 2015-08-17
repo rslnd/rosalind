@@ -1,0 +1,12 @@
++contentHeader(title='New inbound call' subtitle='Last Updated 12:35')
+.content
+  .box.box-default
+    .box-body
+      +autoForm(collection='InboundCalls' id='insertInboundCallForm' type='insert')
+        fieldset
+          +afQuickField(name='lastName')
+          +afQuickField(name='firstName')
+          +afQuickField(name='telephone')
+          +afQuickField(name='note' rows=6)
+          +afQuickField(name='privatePatient')
+        button.btn.btn-primary(type='submit') Save new inbound call

@@ -1,3 +1,4 @@
 Meteor.publish('inboundCalls', function() {
-  return InboundCalls.find({});
+  if(this.userId)
+    return InboundCalls.find({});
 });

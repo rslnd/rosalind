@@ -22,6 +22,11 @@ node_modules
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+/tests/cucumber/.screenshots
+npm-debug.log
 
 # Ignore redis dump
 dump.rdb
+
+# Ignore builds
+public/builds/*

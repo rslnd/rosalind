@@ -1,0 +1,12 @@
+{
+  "name": "rosalind-scripts",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "shelljs": "^0.5.3"
+  },
+  "scripts": {
+    "client:start": "node scripts/start.js",
+    "client:build": "node scripts/build.js"
+  }
+}

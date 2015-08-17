@@ -1,0 +1,15 @@
+{
+  "name": "rosalind",
+  "private": true,
+  "scripts": {
+    "start": "shjs packages/rosalind-scripts/scripts/start.js",
+    "server:start": "shjs packages/rosalind-scripts/scripts/startServer.js",
+    "server:test": "shjs packages/rosalind-scripts/scripts/test.js",
+    "server:tail": "shjs packages/rosalind-scripts/scripts/tail.js",
+    "client:start": "shjs packages/rosalind-native/scripts/start.js",
+    "client:build": "shjs packages/rosalind-native/scripts/build.js"
+  },
+  "devDependencies": {
+    "shelljs": "^0.5.3"
+  }
+}
