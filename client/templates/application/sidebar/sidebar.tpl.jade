@@ -6,10 +6,10 @@ aside.main-sidebar
         li.treeview
           a.pointer
             <i class='fa fa-{{icon}}'></i>
-            span.level-0 #{name}
+            span.level-0 {{_ name}}
             i.fa.fa-angle-left.pull-right
           ul.treeview-menu
             +each submenu
                 li
                   a.active(href=link)
-                    span.level-1 #{name}
+                    span.level-1 {{_ name}}
