@@ -5,6 +5,8 @@
     "button": "Log in",
     "name": "Name",
     "password": "Password",
+    "loggedIn": "Your are currently logged in.",
+    "logout": "Log out",
     "form": {
       "name": {
         "label": "Name short",

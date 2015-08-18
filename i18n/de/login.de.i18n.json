@@ -5,6 +5,8 @@
     "button": "Anmelden",
     "name": "Name",
     "password": "Passwort",
+    "loggedIn": "Sie sind momentan angemeldet.",
+    "logout": "Abmelden",
     "form": {
       "name": {
         "label": "Name",
