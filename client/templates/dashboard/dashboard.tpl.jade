@@ -1,0 +1,18 @@
+section.content.body
+  .row
+    .col-md-6.col-sm-12.col-xs-12
+      a(href='/inboundCalls')
+        .info-box
+          span.info-box-icon.bg-green
+            i.fa.fa-phone
+          .info-box-content
+            .info-box-text {{_ 'inboundCalls.this'}}
+            .info-box-number {{showCount 'inboundCalls'}}
+
+    .col-md-6.col-sm-12.col-xs-12
+      a(href='/inboundCalls/new')
+        .info-box
+          span.info-box-icon.bg-yellow
+            i.fa.fa-plus
+          .info-box-content
+            .info-box-text {{_ 'inboundCalls.new'}}
