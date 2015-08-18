@@ -1,0 +1,28 @@
+{
+  "inboundCalls": {
+    "this": "Inbound calls",
+    "empty": "No open inbound calls",
+    "new": "New inbound call",
+    "save": "Save new inbound call",
+    "insurance": "Insurance",
+    "private": "Private",
+    "resolve": "Mark as resolved",
+    "form": {
+      "firstName": {
+        "label": "First name"
+      },
+      "lastName": {
+        "label": "Last name"
+      },
+      "telephone": {
+        "label": "Telephone"
+      },
+      "note": {
+        "label": "Note"
+      },
+      "privatePatient": {
+        "label": "Private patient"
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "login": {
+    "heading": "Bitte anmelden",
+    "help": "Ich benötige Hilfe",
+    "button": "Anmelden",
+    "name": "Name",
+    "password": "Passwort",
+    "form": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Name"
+      },
+      "password": {
+        "label": "Passwort",
+        "placeholder": "Passwort"
+      }
+    }
+  },
+  "sidebar_actions": "Actions"
+}

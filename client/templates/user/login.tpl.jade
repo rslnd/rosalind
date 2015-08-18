@@ -1,23 +1,23 @@
 +autoForm(schema='userLoginSchema' id='loginForm' class='form-horizontal' type='normal')
   .panel.panel-default
     .panel-heading
-      h3.panel-title {{_ 'login_heading'}}
+      h3.panel-title {{_ 'login.heading'}}
     .panel-body
       .form-group(class='{{#if afFieldIsInvalid name="name"}}has-error{{/if}}')
-        label.sr-only(for='nameField') {{_ 'login_name'}}
+        label.sr-only(for='nameField') {{_ 'login.name'}}
         .col-sm-12
           +afFieldInput(name='name' id='nameField' class='input-lg' placeholder='schemaLabel')
           if afFieldIsInvalid name='name'
             span.help-block {{afFieldMessage name='name'}}
       .form-group(class='{{#if afFieldIsInvalid name="password"}}has-error{{/if}}')
-        label.sr-only(for='passwordField') {{_ 'login_password'}}
+        label.sr-only(for='passwordField') {{_ 'login.password'}}
         .col-sm-12
           +afFieldInput(name='password' id='passwordField' type='password' class='input-lg' placeholder='schemaLabel')
           if afFieldIsInvalid name='password'
             span.help-block {{afFieldMessage name='password'}}
       .form-group.no-mb
         .col-sm-12
-          button.btn.btn-success.btn-block.btn-lg(type='submit') {{_ 'login_button'}}
+          button.btn.btn-success.btn-block.btn-lg(type='submit') {{_ 'login.button'}}
 
     .panel-footer
-      a.text-muted(href='#') {{_ 'login_help'}}
+      a.text-muted(href='#') {{_ 'login.help'}}

@@ -2,9 +2,9 @@
   .panel-body
     h4 #{firstName} #{lastName}
       if privatePatient
-        small Private
+        small {{_ 'inboundCalls.private'}}
       else
-        small Insurance
+        small {{_ 'inboundCalls.insurance'}}
     h5 #{telephone}
 
     blockquote
@@ -14,4 +14,4 @@
       span.text-muted {{time createdAt}} &middot; {{livestamp createdAt}}
 
   .panel-footer
-    a.resolve(href='#') Mark as resolved
+    a.resolve(href='#') {{_ 'inboundCalls.resolve'}}

@@ -1,0 +1,28 @@
+{
+  "inboundCalls": {
+    "this": "Eingehende Anrufe",
+    "empty": "Keine offenen eingehenden Anrufe vorhanden",
+    "new": "Neuer eingehender Anruf",
+    "save": "Neuen eingehenden Anruf speichern",
+    "insurance": "Kasse",
+    "private": "Privat",
+    "resolve": "Als erledigt markieren",
+    "form": {
+      "firstName": {
+        "label": "Vorname"
+      },
+      "lastName": {
+        "label": "Nachname"
+      },
+      "telephone": {
+        "label": "Telefon"
+      },
+      "note": {
+        "label": "Notizen"
+      },
+      "privatePatient": {
+        "label": "Privatpatient"
+      }
+    }
+  }
+}
