@@ -1,14 +1,14 @@
 .panel.panel-default
   .panel-body
-    h4 #{firstName} #{lastName}
+    h4.enable-select #{firstName} #{lastName}
       if privatePatient
         small {{_ 'inboundCalls.private'}}
       else
         small {{_ 'inboundCalls.insurance'}}
-    h5 #{telephone}
+    h5.enable-select #{telephone}
 
     blockquote
-      p #{note}
+      p.enable-select #{note}
 
     footer
       span.text-muted {{time createdAt}} &middot; {{livestamp createdAt}}

@@ -1,9 +1,10 @@
-if currentUser
-  +AdminLTE(skin='blue' fixed=true sidebarMini=true)
-    +topbar
-    +sidebar
-    .content-wrapper
-      +yield
-else
-  +AdminLTE(skin='blue')
-    +lockedLayout
+.disable-select
+  if currentUser
+    +AdminLTE(skin='blue' fixed=true sidebarMini=true)
+      +topbar
+      +sidebar
+      .content-wrapper
+        +yield
+  else
+    +AdminLTE(skin='blue')
+      +lockedLayout
