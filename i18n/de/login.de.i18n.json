@@ -1,0 +1,27 @@
+{
+  "login": {
+    "heading": "Bitte anmelden",
+    "button": "Anmelden",
+    "name": "Name",
+    "password": "Passwort",
+    "loggedIn": "Sie sind momentan angemeldet.",
+    "logout": "Abmelden",
+    "help": {
+      "show": "Ich benötige Hilfe",
+      "title": "Entschuldigung!",
+      "body": "Bitte rufen Sie <b>Albert Zak</b> unter folgender Numer an: <b>0660 9911994</b>",
+      "ok": "Ok"
+    },
+    "form": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Name"
+      },
+      "password": {
+        "label": "Passwort",
+        "placeholder": "Passwort"
+      }
+    }
+  },
+  "sidebar_actions": "Actions"
+}

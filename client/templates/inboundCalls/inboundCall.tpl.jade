@@ -1,17 +1,17 @@
 .panel.panel-default
   .panel-body
-    h4 #{firstName} #{lastName}
+    h4.enable-select #{firstName} #{lastName}
       if privatePatient
-        small Private
+        small {{_ 'inboundCalls.private'}}
       else
-        small Insurance
-    h5 #{telephone}
+        small {{_ 'inboundCalls.insurance'}}
+    h5.enable-select #{telephone}
 
     blockquote
-      p #{note}
+      p.enable-select #{note}
 
     footer
       span.text-muted {{time createdAt}} &middot; {{livestamp createdAt}}
 
   .panel-footer
-    a.resolve(href='#') Mark as resolved
+    a.resolve(href='#') {{_ 'inboundCalls.resolve'}}

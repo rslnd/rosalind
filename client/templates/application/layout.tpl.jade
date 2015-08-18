@@ -1,11 +1,12 @@
-if currentUser
-  .fixed.sidebar-mini
+.disable-select
+  if currentUser
     +AdminLTE(skin='blue' fixed=true sidebarMini=true)
-      .wrapper
-        +topbar
-        +sidebar
-        .content-wrapper
-          +yield
-else
-  +AdminLTE(skin='blue')
-    +lockedLayout
+      +topbar
+      +sidebar
+      .content-wrapper
+        +yield
+  else
+    +AdminLTE(skin='blue')
+      +lockedLayout
+
+  +modals

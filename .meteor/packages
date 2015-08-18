@@ -15,6 +15,7 @@ aldeed:collection2
 aldeed:autoform
 dburles:collection-helpers
 meteorhacks:subs-manager
+tmeasday:publish-counts
 
 # Permissions
 accounts-base
@@ -30,6 +31,13 @@ mquandalle:jade
 mfactory:admin-lte
 fortawesome:fontawesome
 fastclick
+sacha:spin
+
+# I18n
+tap:i18n
+gwendall:autoform-i18n
+gwendall:simple-schema-i18n
+rzymek:moment-locale-de-at
 
 # Util
 u2622:persistent-session

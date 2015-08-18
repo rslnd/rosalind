@@ -1,15 +1,18 @@
 aside.main-sidebar
   section.sidebar
     ul.sidebar-menu
-      li.header Actions
+      li.header {{_ 'sidebar_actions'}}
       +each sidebar
         li.treeview
           a.pointer
             <i class='fa fa-{{icon}}'></i>
-            span.level-0 #{name}
-            i.fa.fa-angle-left.pull-right
+            span.level-0 {{_ name}}
+            +if showCount countBadge
+              small.label.pull-right.bg-green {{showCount countBadge}}
+            +else
+              i.fa.fa-angle-left.pull-right
           ul.treeview-menu
             +each submenu
                 li
                   a.active(href=link)
-                    span.level-1 #{name}
+                    span.level-1 {{_ name}}

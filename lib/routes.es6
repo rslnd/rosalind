@@ -1,7 +1,9 @@
 var Subs = new SubsManager();
 
 Router.configure({
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  loadingTemplate: 'loading',
+  waitOn() { return Meteor.subscribe('counts'); }
 });
 
 Router.onBeforeAction(function (pause) {

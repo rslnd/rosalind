@@ -5,30 +5,30 @@ InboundCalls.allow({
   remove() { return true; }
 });
 
-InboundCalls.attachSchema(new SimpleSchema({
+var inboundCallsSchema = new SimpleSchema({
   firstName: {
     type: String,
-    label: 'First name',
     optional: true
   },
   lastName: {
-    type: String,
-    label: 'Last name'
+    type: String
   },
   telephone: {
-    type: String,
-    label: 'Telephone',
+    type: String
   },
   note: {
-    type: String,
-    label: 'Note'
+    type: String
   },
   privatePatient: {
-    type: Boolean,
-    label: 'Private Patient'
+    type: Boolean
   },
   createdAt: {
     type: Date,
     autoValue: Util.autoCreatedAt
   }
-}));
+});
+
+Meteor.startup(function() {
+  inboundCallsSchema.i18n('inboundCalls.form');
+  InboundCalls.attachSchema(inboundCallsSchema);
+});

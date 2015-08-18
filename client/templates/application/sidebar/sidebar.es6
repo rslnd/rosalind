@@ -1,10 +1,11 @@
 const sidebar = [
   {
-    name: 'Inbound calls',
+    name: 'inboundCalls.this',
     icon: 'phone',
+    countBadge: 'inboundCalls',
     submenu: [
-      { name: 'Inbound calls', link: '/inboundCalls' },
-      { name: 'New inbound call', link: '/inboundCalls/new' }
+      { name: 'inboundCalls.this', link: '/inboundCalls' },
+      { name: 'inboundCalls.new', link: '/inboundCalls/new' }
     ]
   }
 ];
