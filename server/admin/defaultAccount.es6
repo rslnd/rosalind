@@ -2,7 +2,7 @@ Meteor.startup(function() {
   if (Meteor.users.find({}).count() !== 0)
     return;
 
-  if (process.env.IS_MIRROR || process.env.NODE_ENV != 'development')
+  if (process.env.IS_MIRROR)
     return;
 
   try {
@@ -13,7 +13,7 @@ Meteor.startup(function() {
         username: defaultAccount.name,
         password: defaultAccount.password
       });
-      
+
       Roles.addUsersToRoles(id, ['admin']);
 
       console.log('Created first admin user: ' + defaultAccount.name);
