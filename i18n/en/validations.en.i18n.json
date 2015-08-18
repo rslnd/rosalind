@@ -1,0 +1,8 @@
+{
+  "simpleschema": {
+    "messages": {
+      "incorrectPassword": "Sorry, the password was incorrect. Please check the spelling of your name and password, and try again.",
+      "passwordNotSet": "You have not yet set a password. Please visit the link in the e-mail we sent you."
+    }
+  }
+}
