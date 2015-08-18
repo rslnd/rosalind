@@ -1,7 +1,8 @@
 var Subs = new SubsManager();
 
 Router.configure({
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  loadingTemplate: 'loading'
 });
 
 Router.onBeforeAction(function (pause) {

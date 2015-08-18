@@ -31,6 +31,7 @@ mquandalle:jade
 mfactory:admin-lte
 fortawesome:fontawesome
 fastclick
+sacha:spin
 
 # I18n
 tap:i18n
