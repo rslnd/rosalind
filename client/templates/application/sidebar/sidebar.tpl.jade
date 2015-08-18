@@ -7,7 +7,10 @@ aside.main-sidebar
           a.pointer
             <i class='fa fa-{{icon}}'></i>
             span.level-0 {{_ name}}
-            i.fa.fa-angle-left.pull-right
+            +if showCount countBadge
+              small.label.pull-right.bg-green {{showCount countBadge}}
+            +else
+              i.fa.fa-angle-left.pull-right
           ul.treeview-menu
             +each submenu
                 li

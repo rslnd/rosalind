@@ -93,6 +93,7 @@ spacebars-compiler@1.0.6
 srp@1.0.3
 tap:i18n@1.5.1
 templating@1.1.1
+tmeasday:publish-counts@0.6.0
 tracker@1.0.7
 twbs:bootstrap@3.3.5
 u2622:persistent-session@0.4.1

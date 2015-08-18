@@ -15,6 +15,7 @@ aldeed:collection2
 aldeed:autoform
 dburles:collection-helpers
 meteorhacks:subs-manager
+tmeasday:publish-counts
 
 # Permissions
 accounts-base
