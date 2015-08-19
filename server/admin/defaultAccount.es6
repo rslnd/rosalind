@@ -7,18 +7,12 @@ Meteor.startup(function() {
 
   try {
     let defaultAccount = Meteor.settings.private.admin.defaultAccount;
-
-    if (defaultAccount && defaultAccount.name && defaultAccount.password) {
-      let id = Accounts.createUser({
-        username: defaultAccount.name,
-        password: defaultAccount.password
-      });
-
-      Roles.addUsersToRoles(id, ['admin']);
-
-      console.log('Created first admin user: ' + defaultAccount.name);
+    if (defaultAccount) {
+      console.log('Creating first admin user', defaultAccount.username);
+      let id = Accounts.createUser(defaultAccount);
+      Roles.addUsersToRoles(id, ['admin'], Roles.GLOBAL_GROUP);
     }
   } catch(e) {
-    console.log('Please add credentials for the default admin user in settings.json');
+    console.log('Please add credentials for the default admin user in settings.json', e);
   }
 });

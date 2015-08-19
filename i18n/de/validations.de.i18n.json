@@ -22,7 +22,7 @@
       "expectedObject": "[label] muss ein Objekt sein",
       "expectedConstructor": "[label] muss von Type [type] sein",
       "keyNotInSchema": "[key] ist vom Schema nicht erlaubt",
-      "incorrectPassword": "Entschuldigung, das Passwort war falsch. Bitte überprüfen Sie ihren eingegebenen Namen und Passwort, und versuchen Sie es noch einmal.",
+      "incorrectPassword": "Entschuldigung, Name oder Passwort sind falsch. Bitte überprüfen Sie Name und Passwort, und versuchen Sie es noch einmal.",
       "regEx": {
         "0": {
           "msg": "[label] ist durch den Regulären Ausdruck gefallen"

@@ -12,11 +12,11 @@ header.main-header
         li.dropdown.user.user-menu
           a.dropdown-toggle(data-toggle='dropdown')
             span.hidden-xs
-              | #{currentUser.username}
+              | #{currentUser.fullNameWithTitle}
               i.caret
           ul.dropdown-menu
             li.user-body
-              p #{currentUser.username}
+              p #{currentUser.fullNameWithTitle}
               small {{_ 'login.loggedIn'}}
             li.user-footer
               .pull-right
