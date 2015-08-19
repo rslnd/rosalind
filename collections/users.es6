@@ -79,6 +79,8 @@ Meteor.users.helpers({
       return this.profile.firstName + ' ' + this.profile.lastName;
     else if (this.profile.lastName)
       return this.profile.lastName;
+    else if (this.profile.firstName)
+      return this.profile.firstName;
     else
       return this.username;
   },
