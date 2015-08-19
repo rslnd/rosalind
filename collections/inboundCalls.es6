@@ -14,7 +14,8 @@ var inboundCallsSchema = new SimpleSchema({
     type: String
   },
   telephone: {
-    type: String
+    type: String,
+    optional: true
   },
   note: {
     type: String
