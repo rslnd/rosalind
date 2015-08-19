@@ -41,3 +41,7 @@ a, button, .btn {
   user-select: text;
   cursor: text;
 }
+
+.pre-wrap {
+  white-space: pre-wrap;
+}
