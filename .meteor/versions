@@ -50,6 +50,7 @@ less@1.0.14
 livedata@1.0.13
 localstorage@1.0.3
 logging@1.0.7
+matb33:collection-hooks@0.7.14
 meteor@1.1.6
 meteor-platform@1.2.2
 meteorhacks:meteorx@1.0.2
@@ -112,3 +113,5 @@ webapp-hashing@1.0.3
 xolvio:cucumber@0.13.8
 yogiben:admin@1.2.2
 zimme:active-route@2.0.4_1
+zimme:collection-behaviours@1.0.4
+zimme:collection-softremovable@1.0.4

@@ -16,6 +16,7 @@ aldeed:autoform
 dburles:collection-helpers
 meteorhacks:subs-manager
 tmeasday:publish-counts
+zimme:collection-softremovable
 
 # Permissions
 accounts-base

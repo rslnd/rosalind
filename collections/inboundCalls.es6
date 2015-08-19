@@ -2,7 +2,7 @@ InboundCalls = new Mongo.Collection('inboundCalls');
 
 InboundCalls.allow({
   insert() { return true; },
-  remove() { return true; }
+  update() { return true; }
 });
 
 var inboundCallsSchema = new SimpleSchema({
@@ -32,4 +32,5 @@ var inboundCallsSchema = new SimpleSchema({
 Meteor.startup(function() {
   inboundCallsSchema.i18n('inboundCalls.form');
   InboundCalls.attachSchema(inboundCallsSchema);
+  InboundCalls.attachBehaviour('softRemovable');
 });

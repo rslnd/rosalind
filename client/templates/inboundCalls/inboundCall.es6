@@ -1,6 +1,6 @@
 Template.inboundCall.events({
   'click .resolve'() {
-    InboundCalls.remove(this._id);
+    InboundCalls.softRemove(this._id);
   }
 });
 
