@@ -1,7 +1,7 @@
 {
   "inboundCalls": {
     "this": "Eingehende Anrufe",
-    "empty": "Keine offenen eingehenden Anrufe vorhanden",
+    "empty": "Es sind momentan keine offenen eingehenden Anrufe zu bearbeiten.",
     "new": "Neuer eingehender Anruf",
     "save": "Neuen eingehenden Anruf speichern",
     "insurance": "Kasse",

@@ -1,6 +1,8 @@
-+contentHeader(title='inboundCalls.this')
-.content
-  each inboundCalls
-    +inboundCall
-  else
-    h2 {{_ 'inboundCalls.empty' }}
+if inboundCalls.count
+  +contentHeader(title='inboundCalls.this')
+  .content
+    each inboundCalls
+      +inboundCall
+else
+  .content
+    +box(class='success' title='ui.allDone' body='inboundCalls.empty')
