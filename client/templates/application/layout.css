@@ -2,6 +2,10 @@ html, body {
   background-color: #ECF0F5;
 }
 
+body {
+  zoom: 1.2;
+}
+
 .main-header .logo img {
   width: 20px;
 }
