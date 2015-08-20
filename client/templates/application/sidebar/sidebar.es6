@@ -14,3 +14,9 @@ const sidebar = [
 Template.sidebar.helpers({
   sidebar() { return sidebar; }
 })
+
+Template.sidebar.events({
+  'click .treeview-menu a'() {
+    $('body').removeClass('sidebar-open');
+  }
+})
