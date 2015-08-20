@@ -4,15 +4,24 @@
 
  - Node.js
  - Meteor
+ - PhantomJS
  - `npm install -g shelljs`
 
 ## Develop
 
 `npm start`
 
-Annotate scenarios with `@dev` and watch `npm run tail`
+### Test Driven Development
+
+#### Cucumber
+
+Annotate cucumber scenarios with `@dev` and watch `npm run server:tail:cucumber`
 
 You may need to run `cd ./server/tests/cucumber/ && npm install`
+
+#### Jasmine
+
+Jasmine test output is displayed inside the Velocity Reporter (blue dot in the bottom left corner)
 
 ## Test
 
