@@ -15,7 +15,7 @@ UI.registerHelper('showCount', (context, options) => {
   return (counts > 0) ? counts : false;
 });
 
-UI.registerHelper('firstName', (context, options) => {
+UI.registerHelper('getFirstName', (context, options) => {
   if (typeof context === 'string')
     return Meteor.users.findOne(context).firstName();
 });
