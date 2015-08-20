@@ -1,5 +1,8 @@
 {
   "ui": {
-    "allDone": "Alles erledigt!"
+    "allDone": "Alles erledigt!",
+    "notice": "Hinweis",
+    "by": "von",
+    "at": "um"
   }
 }

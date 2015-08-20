@@ -1,5 +1,6 @@
-Meteor.publish('inboundCalls', function() {
+Meteor.publish('inboundCalls', function(options = {}) {
   if(this.userId) {
-    return InboundCalls.find({});
+    let selector = _.pick(options, 'removed');
+    return InboundCalls.find(selector);
   }
 });

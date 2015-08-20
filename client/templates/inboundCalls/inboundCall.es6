@@ -1,6 +1,9 @@
 Template.inboundCall.events({
   'click .resolve'() {
     InboundCalls.softRemove(this._id);
+  },
+  'click .unresolve'() {
+    InboundCalls.restore(this._id);
   }
 });
 

@@ -8,3 +8,12 @@ Util.autoCreatedAt = function() {
   else
     this.unset();
 };
+
+Util.autoCreatedBy = function() {
+  if (this.isInsert)
+    return Meteor.userId();
+  else if (this.isUpsert)
+    return {$setOnInsert: Meteor.userId()};
+  else
+    this.unset();
+};

@@ -11,6 +11,11 @@ UI.registerHelper('time', (context, options) => {
 });
 
 UI.registerHelper('showCount', (context, options) => {
-  var counts = Counts.get(context);
+  let counts = Counts.get(context);
   return (counts > 0) ? counts : false;
+});
+
+UI.registerHelper('firstName', (context, options) => {
+  if (typeof context === 'string')
+    return Meteor.users.findOne(context).firstName();
 });

@@ -26,6 +26,10 @@ var inboundCallsSchema = new SimpleSchema({
   createdAt: {
     type: Date,
     autoValue: Util.autoCreatedAt
+  },
+  createdBy: {
+    type: String,
+    autoValue: Util.autoCreatedBy
   }
 });
 

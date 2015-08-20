@@ -11,7 +11,14 @@
       p.enable-select.pre-wrap #{note}
 
     footer
-      span.text-muted {{time createdAt}} &middot; {{livestamp createdAt}}
+      span.text-muted {{_ 'inboundCalls.answeredBy'}} {{firstName createdBy}} {{_ 'ui.at'}} {{time createdAt}} &middot; {{livestamp createdAt}}
+      if removed
+        br
+        span.text-muted {{_ 'inboundCalls.resolvedBy'}} {{firstName removedBy}} {{_ 'ui.at'}} {{time removedAt}} &middot; {{livestamp removedAt}}
+        
 
   .panel-footer
-    a.resolve(href='#') {{_ 'inboundCalls.resolve'}}
+    unless removed
+      a.resolve(href='#') {{_ 'inboundCalls.resolve'}}
+    else
+      a.unresolve(href='#') {{_ 'inboundCalls.unresolve'}}

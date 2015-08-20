@@ -74,6 +74,12 @@ Schema.User = new SimpleSchema({
 Meteor.users.attachSchema(Schema.User);
 
 Meteor.users.helpers({
+  firstName() {
+    if (this.profile.firstName)
+      return this.profile.firstName;
+    else
+      return this.fullName();
+  },
   fullName() {
     if (this.profile.lastName && this.profile.firstName)
       return this.profile.firstName + ' ' + this.profile.lastName;

@@ -1,0 +1,8 @@
+if inboundCalls.count
+  +contentHeader(title='inboundCalls.thisResolved')
+  .content
+    each inboundCalls
+      +inboundCall
+else
+  .content
+    +box(class='warning' title='ui.notice' body='inboundCalls.emptyResolved')
