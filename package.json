@@ -5,7 +5,8 @@
     "start": "shjs packages/rosalind-scripts/scripts/start.js",
     "server:start": "shjs packages/rosalind-scripts/scripts/startServer.js",
     "server:test": "shjs packages/rosalind-scripts/scripts/test.js",
-    "server:tail": "shjs packages/rosalind-scripts/scripts/tail.js",
+    "server:tail:cucumber": "shjs packages/rosalind-scripts/scripts/tailCucumber.js",
+    "server:tail:jasmine": "shjs packages/rosalind-scripts/scripts/tailJasmine.js",
     "client:start": "shjs packages/rosalind-native/scripts/start.js",
     "client:build": "shjs packages/rosalind-native/scripts/build.js"
   },
