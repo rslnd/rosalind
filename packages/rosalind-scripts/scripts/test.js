@@ -2,4 +2,4 @@ require('shelljs/global');
 
 cd(__dirname);
 cd('../../..');
-exec('meteor --test --release velocity:METEOR@1.1.0.3_1');
+exec('VELOCITY_CI=1 meteor --test --release velocity:METEOR@1.1.0.3_1');
