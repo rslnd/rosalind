@@ -26,6 +26,7 @@ yogiben:admin
 
 # Testing
 xolvio:cucumber
+sanjo:jasmine
 
 # UI
 mquandalle:jade
