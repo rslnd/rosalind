@@ -1,0 +1,14 @@
+checkout:
+  post:
+    - cp ./settings.json.example ./settings.json
+
+dependencies:
+  pre:
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+    - curl https://install.meteor.com | /bin/sh
+    - npm install -g shelljs
+
+test:
+  override:
+    - shjs ./packages/rosalind-scripts/scripts/test.js
