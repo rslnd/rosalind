@@ -1,5 +1,7 @@
 # Rosalind
 
+[![Code Climate](https://codeclimate.com/github/clupprich/rosalind/badges/gpa.svg)](https://codeclimate.com/github/clupprich/rosalind)
+
 ## Prerequisites
 
  - Node.js
