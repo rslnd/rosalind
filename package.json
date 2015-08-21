@@ -10,8 +10,5 @@
     "server:tail:jasmine": "shjs packages/rosalind-scripts/scripts/tailJasmine.js",
     "client:start": "shjs packages/rosalind-native/scripts/start.js",
     "client:build": "shjs packages/rosalind-native/scripts/build.js"
-  },
-  "devDependencies": {
-    "shelljs": "^0.5.3"
   }
 }
