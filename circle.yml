@@ -1,0 +1,11 @@
+dependencies:
+  cache_directories:
+    - ~/.meteor
+    - /usr/local/bin
+
+  override:
+    - meteor || curl https://install.meteor.com | /bin/sh
+
+checkout:
+  post:
+    - cp ./settings.json.example ./settings.json
