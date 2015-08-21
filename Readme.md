@@ -4,7 +4,6 @@
 
  - Node.js
  - Meteor
- - PhantomJS
  - `npm install -g shelljs`
 
 ## Develop
