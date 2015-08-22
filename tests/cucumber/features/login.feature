@@ -18,7 +18,6 @@ Feature: Login
     And I fill in 'Password' with 'a wrong password'
     And I submit the form
     Then I should see 'Please log in'
-    And I should see 'incorrect'
     And I should be logged out
 
   Scenario: I can log in with correct credentials
@@ -28,4 +27,5 @@ Feature: Login
     And I fill in 'Name' with 'callcenter'
     And I fill in 'Password' with 'abcd'
     And I submit the form
+    Then I should not see 'Please log in'
     Then I should be logged in
