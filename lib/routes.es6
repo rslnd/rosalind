@@ -5,13 +5,18 @@ Router.configure({
   loadingTemplate: 'loading'
 });
 
-Router.onBeforeAction(function (pause) {
+Router.onBeforeAction(function () {
+  Session.set('loaded', false);
   if (!Meteor.user()) {
     this.render('login');
   } else {
     Subs.subscribe('users');
     this.next();
   }
+});
+
+Router.onAfterAction(function () {
+  Session.set('loaded', true);
 });
 
 Router.route('/inboundCalls', {

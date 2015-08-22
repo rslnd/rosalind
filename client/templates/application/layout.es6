@@ -1,3 +1,7 @@
+UI.registerHelper('loaded', () => {
+  return Session.get('loaded');
+});
+
 UI.registerHelper('activeClass', (context, options) => {
   if(context === Router.current().route.path())
     return {class: 'active'};
