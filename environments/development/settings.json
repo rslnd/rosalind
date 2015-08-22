@@ -1,7 +1,7 @@
 {
   "public": {
     "customer": {
-      "name": "Hautzentrum Wien Dr. Sabine Schwarz"
+      "name": "Dr. Example"
     },
     "velocity:html-reporter": {
       "position": "bottom left"
@@ -10,8 +10,13 @@
   "private": {
     "admin": {
       "defaultAccount": {
-        "name": "testuser",
+        "username": "admin",
         "password": "1111",
+        "email": "admin@example.com",
+        "profile": {
+          "firstName": "Admin",
+          "lastName": "Example"
+        }
       }
     }
   }

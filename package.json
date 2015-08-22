@@ -2,14 +2,17 @@
   "name": "rosalind",
   "private": true,
   "scripts": {
-    "start": "shjs packages/rosalind-scripts/scripts/start.js",
-    "server:start": "shjs packages/rosalind-scripts/scripts/startServer.js",
-    "server:test": "shjs packages/rosalind-scripts/scripts/test.js",
-    "tail": "shjs packages/rosalind-scripts/scripts/tailCucumber.js",
-    "test": "shjs packages/rosalind-scripts/scripts/test.js",
-    "server:tail:cucumber": "shjs packages/rosalind-scripts/scripts/tailCucumber.js",
-    "server:tail:jasmine": "shjs packages/rosalind-scripts/scripts/tailJasmine.js",
-    "client:start": "shjs packages/rosalind-native/scripts/start.js",
-    "client:build": "shjs packages/rosalind-native/scripts/build.js"
+    "start": "shjs app/packages/rosalind-scripts/scripts/start.js",
+    "server:start": "shjs app/packages/rosalind-scripts/scripts/startServer.js",
+    "server:test": "shjs app/packages/rosalind-scripts/scripts/test.js",
+    "tail": "shjs app/packages/rosalind-scripts/scripts/tailCucumber.js",
+    "test": "shjs app/packages/rosalind-scripts/scripts/test.js",
+    "server:tail:cucumber": "shjs app/packages/rosalind-scripts/scripts/tailCucumber.js",
+    "server:tail:jasmine": "shjs app/packages/rosalind-scripts/scripts/tailJasmine.js",
+    "client:start": "shjs app/packages/rosalind-native/scripts/start.js",
+    "client:build": "shjs app/packages/rosalind-native/scripts/build.js"
+  },
+  "devDependencies": {
+    "shelljs": "^0.5.3"
   }
 }

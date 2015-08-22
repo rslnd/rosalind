@@ -16,6 +16,6 @@ require('dns').lookup(require('os').hostname(), function (err, ip, fam) {
     // 'JASMINE_DEBUG=1',
     // 'VELOCITY_DEBUG=1',
     // 'VELOCITY_DEBUG_MIRROR=1',
-    'meteor --settings settings.json'
+    'meteor --settings ../environments/development/settings.json'
   ].join(' '));
 })
