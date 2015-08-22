@@ -4,9 +4,9 @@ aside.main-sidebar
       li.header {{_ 'sidebar_actions'}}
       +each sidebar
         li.treeview
-          a.pointer
+          a.pointer.level-0(id='{{toHtmlId name}}')
             <i class='fa fa-{{icon}}'></i>
-            span.level-0 {{_ name}}
+            span {{_ name}}
             +if showCount countBadge
               small.label.pull-right.bg-green {{showCount countBadge}}
             +else
@@ -14,5 +14,5 @@ aside.main-sidebar
           ul.treeview-menu
             +each submenu
                 li
-                  a.active(href=link)
-                    span.level-1 {{_ name}}
+                  a.active.level-1(href=link id='{{toHtmlId name}}')
+                    span {{_ name}}

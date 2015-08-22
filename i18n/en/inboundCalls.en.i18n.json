@@ -1,12 +1,18 @@
 {
   "inboundCalls": {
     "this": "Inbound calls",
+    "thisOpen": "Open inbound calls",
+    "thisResolved": "Resolved inbound calls",
     "empty": "No open inbound calls",
+    "emptyResolved": "Didn't find any resolved calls",
     "new": "New inbound call",
     "save": "Save new inbound call",
     "insurance": "Insurance",
     "private": "Private",
     "resolve": "Mark as resolved",
+    "unresolve": "Mark as unresolved",
+    "resolvedBy": "Resolved by",
+    "answeredBy": "Answered by",
     "form": {
       "firstName": {
         "label": "First name"

@@ -12,11 +12,12 @@ const sidebar = [
 ];
 
 Template.sidebar.helpers({
-  sidebar() { return sidebar; }
-})
+  sidebar() { return sidebar; },
+  toHtmlId(name) { return TAPi18n.__(name).replace(/[^a-z]/ig, '-').toLowerCase(); }
+});
 
 Template.sidebar.events({
   'click .treeview-menu a'() {
     $('body').removeClass('sidebar-open');
   }
-})
+});
