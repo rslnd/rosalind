@@ -14,6 +14,8 @@
       if (!options.password) options.password = '1111';
       if (!options.email) options.email = options.username + '@example.com';
 
+      Accounts.createUser(options);
+
       return options.username;
     }
   });

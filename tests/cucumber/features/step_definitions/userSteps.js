@@ -6,7 +6,6 @@
     var lastUsername = null;
 
     this.Given(/^I am an? (.*)$/, function (username) {
-      console.log('creating ' + username);
       lastUsername = this.server.call('fixtures/users/create', {username: username});
     });
 
