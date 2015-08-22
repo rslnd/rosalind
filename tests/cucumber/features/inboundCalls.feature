@@ -5,18 +5,19 @@ Feature: Inbound Calls
   So that the receptionists can schedule appointments
 
   Background:
-    Given I am a new user
-    And I am on the dashboard
+    Given I am a call center employee
+    And I am logged in
 
   Scenario: Create inbound call
-    Given I click on 'New inbound call'
+    Then I should see 'New inbound call'
+    Given I click on 'Inbound Calls > New inbound call'
     And I fill in 'Last name' with 'Schwarz'
     And I fill in 'First name' with 'Sabine'
     And I fill in 'Telephone' with '0660 123456789'
     And I fill in 'Note' with 'Move appt. for today from 18:00 to 19:00'
-    And I click on 'Save new inbound call'
+    And I submit the form
     Then the field 'Last name' should be empty
-    Given I click on 'Inbound Calls'
+    Given I click on 'Inbound Calls > Open inbound calls'
     Then I should see 'Sabine Schwarz'
     And I should see '0660 123456789'
     And I should see 'Move appt. for today from 18:00 to 19:00'
