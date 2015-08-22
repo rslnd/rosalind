@@ -10,12 +10,11 @@
     });
 
     this.Given(/^I am logged in$/, function () {
-      return this.client
-        .waitForExist('#loaded')
-        .execute(function(lastUsername) {
-          Meteor.loginWithPassword(lastUsername, '1111');
-        }, lastUsername)
-        .waitForExist('#loaded');
+      client.waitForExist('#loaded')
+      client.execute(function(lastUsername) {
+        Meteor.loginWithPassword(lastUsername, '1111');
+      }, lastUsername)
+      client.waitForExist('#loaded');
     });
 
     this.Then(/^I should be logged in$/, function () {

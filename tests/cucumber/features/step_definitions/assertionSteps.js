@@ -5,19 +5,15 @@
   module.exports = function () {
 
     this.Then(/^I should see '([^']*)'$/, function (string) {
-      return this.client
-        .waitForExist('#loaded')
-        .getText('body').then(function(bodyText) {
-          expect(bodyText).to.contain(string);
-        });
+      client.waitForExist('#loaded')
+      client.pause(2000)
+      expect(client.getText('body').toLowerCase()).to.contain(string.toLowerCase());
     });
 
     this.Then(/^I should not see '([^']*)'$/, function (string) {
-      return this.client
-        .waitForExist('#loaded')
-        .getText('body').then(function(bodyText) {
-          expect(bodyText).to.not.contain(string);
-        });
+      client.waitForExist('#loaded')
+      client.pause(2000)
+      expect(client.getText('body').toLowerCase()).to.not.contain(string.toLowerCase());
     });
 
     this.Then(/^the field '([^']*)' should be empty$/, function (labelText) {
