@@ -1,11 +1,50 @@
+machine:
+  java:
+    version: oraclejdk8
+
 dependencies:
   cache_directories:
     - ~/.meteor
     - /usr/local/bin
-
+    - ~/.npm
+    - ~/_opt
   override:
-    - meteor --version || curl https://install.meteor.com | /bin/sh
+    # Chrome
+    - sudo rm -rf /usr/local/bin/chromedriver*
+    - sudo rm /tmp/update-chrome || true
+    - /opt/google/chrome/chrome --version | grep '38' &> /dev/null; if [ $? == 0 ]; then echo UPDATE_CHROME > /tmp/update-chrome; fi
+    - if [ -e /tmp/update-chrome ] && [ -e ~/_opt/google-chrome.tar ]; then sudo tar -xvf ~/_opt/google-chrome.tar -C /; fi
+    - if [ -e /tmp/update-chrome ] && [ ! -e ~/_opt/google-chrome.tar ]; then wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -; fi
+    - if [ -e /tmp/update-chrome ] && [ ! -e ~/_opt/google-chrome.tar ]; then sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'; fi
+    - if [ -e /tmp/update-chrome ] && [ ! -e ~/_opt/google-chrome.tar ]; then sudo apt-get update; fi
+    - if [ -e /tmp/update-chrome ] && [ ! -e ~/_opt/google-chrome.tar ]; then sudo apt-get install google-chrome-stable; fi
+    - if [ -e /tmp/update-chrome ] && [ ! -e ~/_opt/google-chrome.tar ]; then mkdir ~/_opt; tar -cvf ~/_opt/google-chrome.tar /opt/google/chrome/; fi
 
-checkout:
-  post:
-    - cp ./settings.json.example ./settings.json
+    # Meteor
+    - if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
+    - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
+
+    # Mupx
+    - npm install -g mupx
+
+
+test:
+  override:
+    # Chrome
+    - npm test:
+        environment:
+          CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/chrome"
+          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/chrome.cucumber"
+          SELENIUM_BROWSER: chrome
+    - mkdir -p $CIRCLE_ARTIFACTS/chrome
+    - cp app/.meteor/local/log/*.log $CIRCLE_ARTIFACTS/chrome
+
+    # Firefox
+    - npm test:
+        environment:
+          JASMINE_SERVER_INTEGRATION: 0
+          CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/firefox"
+          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/firefox.cucumber"
+          SELENIUM_BROWSER: firefox
+    - mkdir -p $CIRCLE_ARTIFACTS/firefox
+    - cp app/.meteor/local/log/*.log $CIRCLE_ARTIFACTS/firefox
