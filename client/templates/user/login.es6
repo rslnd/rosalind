@@ -10,17 +10,19 @@ AutoForm.hooks({
       }
       return false;
     },
-    onError: function (type, error) {
-    var vc = AutoForm.getValidationContext(this.formId);
-    if (typeof error.reason === 'string') {
-      if (error.reason.indexOf('User not found') !== -1) {
-        vc.addInvalidKeys([{name: 'password', type: 'incorrectPassword'}]);
-      } else if (error.reason.indexOf('Incorrect password') !== -1) {
-        vc.addInvalidKeys([{name: 'password', type: 'incorrectPassword'}]);
-      } else if (error.reason.indexOf('User has no password set') !== -1) {
-        vc.addInvalidKeys([{name: 'password', type: 'passwordNotSet'}]);
-      }
-    }
+    onError: function (type, error, template) {
+      setTimeout(() => {
+        var vc = AutoForm.getValidationContext(this.formId);
+        if (typeof error.reason === 'string') {
+          if (error.reason.indexOf('User not found') !== -1) {
+            vc.addInvalidKeys([{name: 'password', type: 'incorrectPassword'}]);
+          } else if (error.reason.indexOf('Incorrect password') !== -1) {
+            vc.addInvalidKeys([{name: 'password', type: 'incorrectPassword'}]);
+          } else if (error.reason.indexOf('User has no password set') !== -1) {
+            vc.addInvalidKeys([{name: 'password', type: 'passwordNotSet'}]);
+          }
+        }
+      }, 10);
     }
   }
 });

@@ -31,7 +31,7 @@ Schema.UserProfile = new SimpleSchema({
 Schema.User = new SimpleSchema({
     username: {
         type: String,
-        regEx: /^[a-z0-9A-Z_]{2,15}$/,
+        regEx: /^[a-z0-9A-Z_]*$/,
         optional: true
     },
     emails: {
@@ -75,17 +75,17 @@ Meteor.users.attachSchema(Schema.User);
 
 Meteor.users.helpers({
   firstName() {
-    if (this.profile.firstName)
+    if (this.profile && this.profile.firstName)
       return this.profile.firstName;
     else
       return this.fullName();
   },
   fullName() {
-    if (this.profile.lastName && this.profile.firstName)
+    if (this.profile && this.profile.lastName && this.profile.firstName)
       return this.profile.firstName + ' ' + this.profile.lastName;
-    else if (this.profile.lastName)
+    else if (this.profile && this.profile.lastName)
       return this.profile.lastName;
-    else if (this.profile.firstName)
+    else if (this.profile && this.profile.firstName)
       return this.profile.firstName;
     else
       return this.username;
@@ -93,17 +93,17 @@ Meteor.users.helpers({
   fullNameWithTitle(overrideFullName) {
     let fullName = overrideFullName || this.fullName();
 
-    if (this.profile.titleAppend && this.profile.titlePrepend)
+    if (this.profile && this.profile.titleAppend && this.profile.titlePrepend)
       return this.profile.titlePrepend + ' ' + fullName + ', ' + this.profile.titleAppend;
-    if (this.profile.titlePrepend)
+    if (this.profile && this.profile.titlePrepend)
       return this.profile.titlePrepend + ' ' + fullName;
-    if (this.profile.titleAppend)
+    if (this.profile && this.profile.titleAppend)
       return fullName + ', ' + this.profile.titleAppend;
     else
       return this.fullName();
   },
   lastNameWithTitle() {
-    if (this.profile.lastName)
+    if (this.profile && this.profile.lastName)
       return this.fullNameWithTitle(this.profile.lastName);
     else
       return this.fullName();
