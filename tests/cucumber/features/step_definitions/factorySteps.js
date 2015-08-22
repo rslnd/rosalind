@@ -16,12 +16,20 @@
     this.Given(/^an? '([^']*)' with the following attributes:?$/, function (collection, attributes, callback) {
       var _this = this;
 
-      _.each(attributes.hashes(), function(row) {
-        _this.server.call('fixtures/createRecord', {
-          collection: collection,
-          attributes: row
+      if (collection.match(/^Users?$/i)) {
+        _.each(attributes.hashes(), function(row) {
+          _this.server.call('fixtures/users/create', {
+            attributes: row
+          });
         });
-      });
+      } else {
+        _.each(attributes.hashes(), function(row) {
+          _this.server.call('fixtures/createRecord', {
+            collection: collection,
+            attributes: row
+          });
+        });
+      }
 
       callback();
     });
