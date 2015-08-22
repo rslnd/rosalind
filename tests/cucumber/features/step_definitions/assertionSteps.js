@@ -17,24 +17,19 @@
     });
 
     this.Then(/^the field '([^']*)' should be empty$/, function (labelText) {
-      var _this = this;
-      return this.client
-        .waitForExist('#loaded')
-        .element('label=' + labelText)
-        .getAttribute('label=' + labelText, 'for').then(function(fieldId) {
-          _this.client.getValue('#' + fieldId, function(err, value) {
-            expect(value).to.equal('');
-          });
-        });
+      client.waitForExist('#loaded');
+      client.element('label=' + labelText);
+      var fieldId = client.getAttribute('label=' + labelText, 'for');
+      var fieldValue = client.getValue('#' + fieldId);
+      expect(fieldValue).to.equal('');
     });
 
     this.Then(/^I should see the current time$/, function () {
       var time = moment().format('HH:mm');
-      return this.client
-        .waitForExist('#loaded')
-        .getText('body').then(function(bodyText) {
-          expect(bodyText).to.contain(time);
-        });
+
+      client.waitForExist('#loaded');
+      var bodyText = client.getText('body');
+      expect(bodyText).to.contain(time);
     });
 
 
