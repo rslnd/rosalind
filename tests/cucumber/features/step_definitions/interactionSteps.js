@@ -18,15 +18,22 @@
       client.waitForExist('#loaded');
 
       if (menuPath) {
-        client.click(getSelector(linkText.split(' > ')[0], 0));
-        client.pause(300);
-        client.execute(function(submenuSelector) {
-          $(submenuSelector).click();
+        client.execute(function(s0) {
+          $(s0).click();
+        }, getSelector(linkText.split(' > ')[0], 0));
+        client.pause(600);
+
+        client.execute(function(s1) {
+          $(s1).click();
         }, getSelector(linkText.split(' > ')[1], 1));
+        client.pause(600);
+
+
+        client.waitForExist('#loaded');
       } else {
-        var selector = getSelector(linkText);
-        client.waitForVisible(selector);
-        client.click(selector);
+        client.execute(function(linkText) {
+          $(':contains("' + linkText + '")').click();
+        }, linkText);
       }
     });
 

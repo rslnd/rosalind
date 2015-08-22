@@ -27,7 +27,7 @@ Feature: Inbound Calls
     Given an 'inbound call' with the following attributes:
       | Last name | First name | Telephone | Note | Private Patient |
       | Schwarz   | Lisa       | 123 456   | Test | false           |
-    Given I click on 'Inbound Calls'
+    Given I click on 'Inbound Calls > Open inbound calls'
     Then I should see 'Lisa Schwarz'
     And I should see 'Insurance'
     Given I click on 'Mark as resolved'
