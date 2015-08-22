@@ -1,12 +1,11 @@
 # Rosalind
 
-[![Code Climate](https://codeclimate.com/github/clupprich/rosalind/badges/gpa.svg)](https://codeclimate.com/github/clupprich/rosalind)
+[![Code Climate](https://codeclimate.com/github/Carbonative/rosalind/badges/gpa.svg)](https://codeclimate.com/github/Carbonative/rosalind)
 
 ## Prerequisites
 
  - Node.js
  - Meteor
- - `npm install -g shelljs`
 
 ## Develop
 
@@ -18,7 +17,7 @@
 
 Annotate cucumber scenarios with `@dev` and watch `npm run server:tail:cucumber`
 
-You may need to run `cd ./server/tests/cucumber/ && npm install`
+You may need to run `cd ./app/server/tests/cucumber/ && npm install`
 
 #### Jasmine
 
