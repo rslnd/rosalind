@@ -9,8 +9,8 @@
     "logout": "Log out",
     "form": {
       "name": {
-        "label": "Name short",
-        "placeholder": "Name short"
+        "label": "Name",
+        "placeholder": "Name"
       },
       "password": {
         "label": "Password",

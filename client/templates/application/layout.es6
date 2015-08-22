@@ -20,6 +20,8 @@ UI.registerHelper('showCount', (context, options) => {
 });
 
 UI.registerHelper('getFirstName', (context, options) => {
-  if (typeof context === 'string')
-    return Meteor.users.findOne(context).firstName();
+  if (typeof context === 'string') {
+    let user = Meteor.users.findOne(context)
+    return user && user.firstName();
+  }
 });
