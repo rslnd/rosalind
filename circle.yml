@@ -37,6 +37,10 @@ test:
           CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/chrome"
           CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/chrome.cucumber"
           SELENIUM_BROWSER: chrome
+          DEBUG: 1
+          JASMINE_DEBUG: 1
+          VELOCITY_DEBUG: 1
+          VELOCITY_DEBUG_MIRROR: 1
     - mkdir -p $CIRCLE_ARTIFACTS/chrome
     - cp app/.meteor/local/log/*.log $CIRCLE_ARTIFACTS/chrome
 
@@ -47,5 +51,9 @@ test:
           CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/firefox"
           CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/firefox.cucumber"
           SELENIUM_BROWSER: firefox
+          DEBUG: 1
+          JASMINE_DEBUG: 1
+          VELOCITY_DEBUG: 1
+          VELOCITY_DEBUG_MIRROR: 1
     - mkdir -p $CIRCLE_ARTIFACTS/firefox
     - cp app/.meteor/local/log/*.log $CIRCLE_ARTIFACTS/firefox
