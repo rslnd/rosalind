@@ -18,27 +18,23 @@
     });
 
     this.Then(/^I should be logged in$/, function () {
-      return this.client
-        .waitForExist('#loaded')
-        .executeAsync(function(done) {
-          done(Meteor.user());
-        }).then(function(res) {
-          expect(res.value).to.be.not.null;
-        });
+      client.waitForExist('#loaded');
+      var user = client.execute(function() {
+        return Meteor.user();
+      });
+      expect(user.value).to.be.not.null;
     });
 
     this.Then(/^I should be logged out$/, function () {
-      return this.client
-        .waitForExist('#loaded')
-        .executeAsync(function(done) {
-          done(Meteor.user());
-        }).then(function(res) {
-          expect(res.value).to.be.null;
-        });
+      client.waitForExist('#loaded');
+      var user = client.execute(function() {
+        return Meteor.user();
+      });
+      expect(user.value).to.be.null;
     });
 
     this.Given(/^I log out$/, function () {
-      this.client.execute(function() {
+      client.execute(function() {
         Meteor.logout();
       });
     });
