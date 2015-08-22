@@ -21,9 +21,11 @@ dependencies:
     - if [ -e /tmp/update-chrome ] && [ ! -e ~/_opt/google-chrome.tar ]; then mkdir ~/_opt; tar -cvf ~/_opt/google-chrome.tar /opt/google/chrome/; fi
 
     # Meteor
-    - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
+    - meteor --version || curl https://install.meteor.com | sh
+    - mkdir -p app/.meteor/local/log/
 
     # Mupx
+    - npm install -g shelljs
     - npm install -g mupx
 
 
