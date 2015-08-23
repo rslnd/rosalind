@@ -41,7 +41,6 @@
       var selector = lastFormField = 'label=' + labelText;
 
       client.waitForExist('#loaded');
-      client.element(selector);
       var fieldId = client.getAttribute(selector, 'for');
       client.setValue('#' + fieldId, fieldValue);
     });

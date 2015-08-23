@@ -5,15 +5,17 @@
   module.exports = function () {
 
     this.Then(/^I should see '([^']*)'$/, function (string) {
-      client.waitForExist('#loaded')
-      client.pause(2000)
-      expect(client.getText('#main').toLowerCase()).to.contain(string.toLowerCase());
+      client.pause(2000);
+      client.waitForExist('#loaded');
+      var mainText = client.getText('#main');
+      expect(mainText.toLowerCase()).to.contain(string.toLowerCase());
     });
 
     this.Then(/^I should not see '([^']*)'$/, function (string) {
-      client.waitForExist('#loaded')
-      client.pause(2000)
-      expect(client.getText('#main').toLowerCase()).to.not.contain(string.toLowerCase());
+      client.pause(2000);
+      client.waitForExist('#loaded');
+      var mainText = client.getText('#main');
+      expect(mainText.toLowerCase()).to.not.contain(string.toLowerCase());
     });
 
     this.Then(/^the field '([^']*)' should be empty$/, function (labelText) {
@@ -30,14 +32,6 @@
       client.waitForExist('#loaded');
       var bodyText = client.getText('#main');
       expect(bodyText).to.contain(time.slice(0,-1));
-    });
-
-
-    this.Then(/^I should see the title '([^']*)'$/, function (expectedTitle) {
-      return this.client
-        .waitForExist('#loaded')
-        .waitForVisible('body *')
-        .getTitle().should.become(expectedTitle);
     });
 
   };
