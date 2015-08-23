@@ -3,6 +3,8 @@
 
   Meteor.methods({
     'fixtures/users/create': function(options) {
+      check(options, Object);
+      
       if (options.attributes)
         options = options.attributes
 

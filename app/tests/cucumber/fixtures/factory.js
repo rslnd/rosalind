@@ -4,6 +4,8 @@
 
   Meteor.methods({
     'fixtures/createRecord': function(options) {
+      check(options, Object);
+
       if ( ! process.env.IS_MIRROR || process.env.NODE_ENV != 'development')
        throw 'Testing code somehow made it into production';
 
