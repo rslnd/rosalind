@@ -7,13 +7,13 @@
     this.Then(/^I should see '([^']*)'$/, function (string) {
       client.waitForExist('#loaded')
       client.pause(2000)
-      expect(client.getText('body').toLowerCase()).to.contain(string.toLowerCase());
+      expect(client.getText('#main').toLowerCase()).to.contain(string.toLowerCase());
     });
 
     this.Then(/^I should not see '([^']*)'$/, function (string) {
       client.waitForExist('#loaded')
       client.pause(2000)
-      expect(client.getText('body').toLowerCase()).to.not.contain(string.toLowerCase());
+      expect(client.getText('#main').toLowerCase()).to.not.contain(string.toLowerCase());
     });
 
     this.Then(/^the field '([^']*)' should be empty$/, function (labelText) {
@@ -28,7 +28,7 @@
       var time = moment().format('HH:mm');
 
       client.waitForExist('#loaded');
-      var bodyText = client.getText('body');
+      var bodyText = client.getText('#main');
       expect(bodyText).to.contain(time.slice(0,-1));
     });
 
