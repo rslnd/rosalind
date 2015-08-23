@@ -29,7 +29,7 @@
 
       client.waitForExist('#loaded');
       var bodyText = client.getText('body');
-      expect(bodyText).to.contain(time);
+      expect(bodyText).to.contain(time.slice(0,-1));
     });
 
 
