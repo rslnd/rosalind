@@ -33,7 +33,7 @@ dependencies:
 test:
   override:
     # Chrome
-    - meteor --test --settings ../environments/tests/settings.json --release velocity:METEOR@1.1.0.3_1
+    - "meteor --test --settings ../environments/tests/settings.json --release velocity:METEOR@1.1.0.3_1":
         pwd: app
         environment:
           CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/chrome"
@@ -48,7 +48,7 @@ test:
     - cp app/.meteor/local/log/*.log $CIRCLE_ARTIFACTS/chrome
 
     # Firefox
-    - meteor --test --settings ../environments/tests/settings.json --release velocity:METEOR@1.1.0.3_1
+    - "meteor --test --settings ../environments/tests/settings.json --release velocity:METEOR@1.1.0.3_1":
         pwd: app
         environment:
           JASMINE_SERVER_INTEGRATION: 0
