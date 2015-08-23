@@ -6,6 +6,6 @@ exec([
   'VELOCITY_CI=1',
   'meteor',
   '--test',
-  '--settings ../environments/tests/settings.json',
+  '--settings ../environments/test/settings.json',
   '--release velocity:METEOR@1.1.0.3_1'
 ].join(' '));
