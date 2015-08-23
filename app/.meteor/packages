@@ -32,6 +32,7 @@ yogiben:admin
 # Testing
 xolvio:cucumber@0.14.0-rc.3
 sanjo:jasmine
+velocity:console-reporter
 
 # UI
 mquandalle:jade
