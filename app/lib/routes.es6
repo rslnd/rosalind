@@ -19,6 +19,15 @@ Router.onAfterAction(function () {
   Session.set('loaded', true);
 });
 
+Router.onAfterAction(function() {
+  if (!(
+    window.location.hash == ''
+    || window.location.hash == '#'
+    || window.location.hash == '#!') && !Meteor.userId()) {
+    this.render('login')
+  }
+});
+
 Router.route('/inboundCalls', {
   waitOn() { return Subs.subscribe('inboundCalls'); },
   data()   { return { inboundCalls: InboundCalls.find({}) }; }
