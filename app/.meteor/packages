@@ -8,8 +8,7 @@
 meteor-platform
 iron:router
 grigio:babel
-webapp
-appcache
+conditional-appcache
 
 # Security
 keyvan:my-force-ssl
