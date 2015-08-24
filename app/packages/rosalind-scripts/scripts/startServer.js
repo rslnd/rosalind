@@ -12,10 +12,8 @@ require('dns').lookup(require('os').hostname(), function (err, ip, fam) {
     'JASMINE_CLIENT_INTEGRATION=0',
     'JASMINE_SERVER_UNIT=0',
     'JASMINE_SERVER_INTEGRATION=0',
-    // 'DEBUG=1',
-    // 'JASMINE_DEBUG=1',
-    // 'VELOCITY_DEBUG=1',
-    // 'VELOCITY_DEBUG_MIRROR=1',
+    'JASMINE_BROWSER=Chrome',
+    'SELENIUM_BROWSER=phantomjs',
     'meteor --settings ../environments/development/settings.json'
   ].join(' '));
 })
