@@ -9,9 +9,6 @@ Template.inboundCall.events({
 
 // Split phone number at whitespaces. If the word contains a number,
 // replace all letters 'O' or 'o' with zeroes. Join back together.
-UI.registerHelper('vacafix', (context, options) => {
-  if (context)
-    return _.map(context.split(/\s/g), (word) => {
-      return word.match(/\d/g) ? word.replace(/o/gi, '0') : word;
-    }).join(' ');
+UI.registerHelper('zerofix', (context, options) => {
+  return Util.zerofix(context);
 });
