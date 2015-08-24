@@ -41,8 +41,11 @@
       var selector = lastFormField = 'label=' + labelText;
 
       client.waitForExist('#loaded');
+      client.waitForExist(selector);
       var fieldId = client.getAttribute(selector, 'for');
       client.setValue('#' + fieldId, fieldValue);
+
+      client.pause(300);
     });
 
     this.When(/^I submit the form$/, function() {

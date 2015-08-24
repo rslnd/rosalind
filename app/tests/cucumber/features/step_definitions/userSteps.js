@@ -10,10 +10,10 @@
     });
 
     this.Given(/^I am logged in$/, function () {
-      client.waitForExist('#loaded')
-      client.execute(function(lastUsername) {
-        Meteor.loginWithPassword(lastUsername, '1111');
-      }, lastUsername)
+      client.waitForExist('#loaded');
+      client.execute(function(name) {
+        Meteor.loginWithPassword(name, '1111');
+      }, lastUsername);
       client.waitForExist('#loaded');
     });
 
