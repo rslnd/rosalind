@@ -1,0 +1,28 @@
+{
+  "servers": [
+    {
+      "host": "$PRODUCTION_MUP_HOST",
+      "username": "$PRODUCTION_MUP_USERNAME",
+      "pem": "$PRODUCTION_MUP_PUBLIC_KEY_PATH"
+    }
+  ],
+  "setupMongo": true,
+  "appName": "rosalind",
+  "app": "$PRODUCTION_MUP_APP_PATH",
+
+  "env": {
+    "PORT": 80,
+    "ROOT_URL": "$PRODUCTION_MUP_ROOT_URL",
+    "METEOR_ENV": "production",
+    "KADIRA_APP_ID": "$PRODUCTION_MUP_KADIRA_APP_ID",
+    "KADIRA_APP_SECRET": "$PRODUCTION_MUP_KADIRA_APP_SECRET"
+  },
+
+  "ssl": {
+    "certificate": "$PRODUCTION_MUP_SSL_CERTIFICATE_PATH",
+    "key": "$PRODUCTION_MUP_SSL_KEY_PATH"
+  },
+
+  "deployCheckWaitTime": 15,
+  "enableUploadProgressBar": true
+}
