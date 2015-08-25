@@ -1,5 +1,15 @@
 #/bin/sh
 
+curl -o https://carbonative.s3-eu-central-1.amazonaws.com/ssl/bundle.crt.enc
+curl -o https://carbonative.s3-eu-central-1.amazonaws.com/ssl/key.key.enc
+
+openssl aes-256-cbc -k "$PRODUCTION_SSL_ENCRYPTION_KEY" -in bundle.crt.enc -out bundle.crt -d
+openssl aes-256-cbc -k "$PRODUCTION_SSL_ENCRYPTION_KEY" -in key.key.enc -out key.key -d
+
+mkdir -p ~/cache/ssl/
+mv bundle.crt ~/cache/ssl/
+mv key.key ~/cache/ssl/
+
 # mup.json
 sed 's/$PRODUCTION_MUP_HOST/'"$PRODUCTION_MUP_HOST"'/' -i mup.json
 sed 's/$PRODUCTION_MUP_USERNAME/'"$PRODUCTION_MUP_USERNAME"'/' -i mup.json
