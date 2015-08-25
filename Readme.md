@@ -1,6 +1,7 @@
 # Rosalind
 
-[![Code Climate](https://codeclimate.com/github/Carbonative/rosalind/badges/gpa.svg)](https://codeclimate.com/github/Carbonative/rosalind)
+[![Code Climate](https://img.shields.io/codeclimate/github/Carbonative/rosalind.svg)](https://codeclimate.com/github/Carbonative/rosalind)
+[![Codeship](https://img.shields.io/codeship/f5c381e0-2bd9-0133-ccfb-26f31a616e04.svg)](https://codeship.com/projects/98454)
 
 ## Prerequisites
 
@@ -11,15 +12,11 @@
 
 `npm start`
 
-### Test Driven Development
+Create a new feature branch (eg. `feature/myFeature`)
 
-#### Cucumber
-
-Annotate cucumber scenarios with `@dev` and watch `npm run server:tail:cucumber`
+Annotate cucumber scenarios with `@dev` and watch `npm run server:tail:cucumber`. Don't commit files with `@dev` in them - add a [pre-commit hook](https://gist.github.com/albertzak/8d512b923533077f4df5).
 
 You may need to run `cd ./app/server/tests/cucumber/ && npm install`
-
-#### Jasmine
 
 Jasmine test output is displayed inside the Velocity Reporter (blue dot in the bottom left corner)
 
@@ -31,6 +28,6 @@ Run the full test suite with `npm test`
 
 Build the native applications with `npm client:build`
 
-Deploy to staging: TODO
+The `master` branch gets deployed to production automatically when all tests pass. Be careful when merging pull requests.
 
-Deploy to production: TODO
+Deploy to staging: TODO
