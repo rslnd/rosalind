@@ -2,7 +2,8 @@ var Subs = new SubsManager();
 
 Router.configure({
   layoutTemplate: 'layout',
-  loadingTemplate: 'loading'
+  loadingTemplate: 'loading',
+  waitOn() { Subs.subscribe('counts'); }
 });
 
 Router.onBeforeAction(function () {
