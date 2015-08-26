@@ -34,7 +34,7 @@ Router.route('/inboundCalls', {
 });
 
 Router.route('/inboundCalls/resolved', {
-  waitOn() { return Meteor.subscribe('inboundCalls', {removed: true}); },
+  waitOn() { return Subs.subscribe('inboundCalls', {removed: true}); },
   data()   { return { inboundCalls: InboundCalls.find({removed: true}) }; }
 });
 
