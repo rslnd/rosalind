@@ -51,7 +51,7 @@ InboundCalls.Table = new Tabular.Table({
   columns: [
     {data: 'firstName', title: 'Vorname'},
     {data: 'lastName', title: 'Nachname'},
-    {data: 'telephone', title: 'Telefon'},
+    {data: 'telephone', title: 'Telefon', render(val, type, doc) { return Helpers.zerofix(val); }},
     {data: 'note', title: 'Notiz'},
     {data: 'privatePatient', title: 'Privat', render(val, type, doc) { return doc.privateOrInsurance(); }},
     {data: 'createdAt', title: 'Angenommen', render(val, type, doc) { return moment(val).calendar(); }},
