@@ -1,8 +1,7 @@
 if inboundCalls.count
-  +contentHeader(title='inboundCalls.thisResolved')
+  +contentHeader(title='inboundCalls.thisResolved' subtitle='inboundCalls.resolvedToday' subtitleCount='inboundCalls-resolvedToday')
   .content
-    each inboundCalls
-      +inboundCall
+    +tabular(table=InboundCallsTable class='table table-striped table-bordered table-condensed')
 else
   .content
     +box(class='warning' title='ui.notice' body='inboundCalls.emptyResolved')

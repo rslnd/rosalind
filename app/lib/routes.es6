@@ -2,7 +2,8 @@ var Subs = new SubsManager();
 
 Router.configure({
   layoutTemplate: 'layout',
-  loadingTemplate: 'loading'
+  loadingTemplate: 'loading',
+  waitOn() { Subs.subscribe('counts'); }
 });
 
 Router.onBeforeAction(function () {
@@ -34,7 +35,7 @@ Router.route('/inboundCalls', {
 });
 
 Router.route('/inboundCalls/resolved', {
-  waitOn() { return Meteor.subscribe('inboundCalls', {removed: true}); },
+  waitOn() { return Subs.subscribe('inboundCalls', {removed: true}); },
   data()   { return { inboundCalls: InboundCalls.find({removed: true}) }; }
 });
 

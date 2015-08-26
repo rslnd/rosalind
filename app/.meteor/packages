@@ -17,6 +17,7 @@ audit-argument-checks
 # Collections
 aldeed:collection2
 aldeed:autoform
+aldeed:tabular
 dburles:collection-helpers
 meteorhacks:subs-manager
 tmeasday:publish-counts

@@ -3,6 +3,7 @@
     "this": "Eingehende Anrufe",
     "thisOpen": "Offene eingehende Anrufe",
     "thisResolved": "Erledigte eingehende Anrufe",
+    "resolvedToday": "heute erledigt",
     "empty": "Es sind momentan keine offenen eingehenden Anrufe zu bearbeiten.",
     "emptyResolved": "Keine eingehenden Anrufe sind als erledigt markiert.",
     "new": "Neuer eingehender Anruf",

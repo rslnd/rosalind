@@ -1,3 +1,9 @@
 .content-header
   h1 {{_ title}}
-    small !{subtitle}
+    if titleCount
+      {{getPublishedCount titleCount}}
+    small
+      if subtitleCount
+        {{getPublishedCount subtitleCount}}
+      if subtitle
+        {{_ subtitle}}
