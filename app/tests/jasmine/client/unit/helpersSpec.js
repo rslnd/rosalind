@@ -1,5 +1,5 @@
 describe('zerofix', function () {
-  var zerofix = Util.zerofix;
+  var zerofix = Helpers.zerofix;
 
   it('should not change correct phone number', function () {
     expect(zerofix('+43 0660 9911994')).toBe('+43 0660 9911994');
