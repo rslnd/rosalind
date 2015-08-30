@@ -74,11 +74,13 @@ Meteor.users.attachSchema(Schema.User);
 Meteor.users.helpers({
   lastActivity() {
     if (this.status && this.status.lastActivity)
-      return moment(this.status.lastActivity).fromNow();
-    else if (this.status && (! this.status.lastActivity) && (this.status.online))
+      return TAPi18n.__('ui.status.lastActivity') + ' ' + moment(this.status.lastActivity).fromNow();
+    else if (this.status && this.status.online)
       return TAPi18n.__('ui.status.online');
+    else if (this.status && this.status.lastLogin && this.status.lastLogin.date)
+      return TAPi18n.__('ui.status.lastLogin') + ' ' + moment(this.status.lastLogin.date).fromNow();
     else
-      return TAPi18n.__('ui.status.never');;
+      return TAPi18n.__('ui.status.never');
   },
   firstName() {
     if (this.profile && this.profile.firstName)
@@ -159,6 +161,15 @@ Schema.UserCreate = new SimpleSchema({
 
 Schema.UserUpdatePassword = new SimpleSchema({
   password: {
+    type: String
+  },
+  userId: {
+    type: String
+  }
+});
+
+Schema.UserUpdateRoles = new SimpleSchema({
+  roles: {
     type: String
   },
   userId: {

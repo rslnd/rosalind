@@ -6,6 +6,8 @@
     "at": "um",
     "edit": "Bearbeiten",
     "status": {
+      "lastLogin": "Letzter Login",
+      "lastActivity": "Letzte Aktivität",
       "online": "Jetzt",
       "never": "Nie"
     }

@@ -6,6 +6,7 @@
     "edit": "Mitarbeiter bearbeiten",
     "save": "Mitarbeiter speichern",
     "changePassword": "Passwort ändern",
+    "setRoles": "Berechtigungen ändern",
     "form": {
       "firstName": {
         "label": "Vorname"
