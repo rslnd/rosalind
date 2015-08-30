@@ -34,16 +34,8 @@ Schema.User = new SimpleSchema({
     },
     emails: {
         type: [Object],
-        optional: true
-    },
-    "emails.$.address": {
-        type: String,
-        regEx: SimpleSchema.RegEx.Email,
-        optional: true
-    },
-    "emails.$.verified": {
-        type: Boolean,
-        optional: true
+        optional: true,
+        blackbox: true
     },
     createdAt: {
         type: Date
@@ -161,6 +153,15 @@ Schema.UserLogin = new SimpleSchema({
 
 Schema.UserCreate = new SimpleSchema({
   username: {
+    type: String
+  }
+});
+
+Schema.UserUpdatePassword = new SimpleSchema({
+  password: {
+    type: String
+  },
+  userId: {
     type: String
   }
 });

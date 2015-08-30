@@ -5,6 +5,7 @@
     "thisNew": "Neuer Mitarbeiter",
     "edit": "Mitarbeiter bearbeiten",
     "save": "Mitarbeiter speichern",
+    "changePassword": "Passwort ändern",
     "form": {
       "firstName": {
         "label": "Vorname"

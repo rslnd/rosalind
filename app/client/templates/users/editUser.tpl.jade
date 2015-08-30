@@ -12,3 +12,11 @@
           +afQuickField(name='profile.birthday')
           +afQuickField(name='profile.gender')
         button.btn.btn-primary(type='submit') {{_ 'users.save'}}
+
+  .box.box-danger
+    .box-body
+      +autoForm(schema='Schema.UserUpdatePassword' meteormethod='users/updatePassword' id='updatePasswordUserForm' type='method')
+        fieldset
+          +afQuickField(name='password')
+          +afFieldInput(name='userId' type='hidden' value=_id)
+        button.btn.btn-danger(type='submit') {{_ 'users.changePassword'}}
