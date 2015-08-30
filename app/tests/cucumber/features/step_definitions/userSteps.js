@@ -5,8 +5,9 @@
 
     var lastUsername = null;
 
-    this.Given(/^I am an? (.*)$/, function (username) {
+    this.Given(/^I am an? '(.*)'(?: with the roles? '(.*)')$/, function (username, roles) {
       lastUsername = this.server.call('fixtures/users/create', {username: username});
+      this.server.call('fixtures/users/setRoles', {username: lastUsername, roles: roles});
     });
 
     this.Given(/^I am logged in$/, function () {

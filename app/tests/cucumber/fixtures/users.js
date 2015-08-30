@@ -4,7 +4,7 @@
   Meteor.methods({
     'fixtures/users/create': function(options) {
       check(options, Object);
-      
+
       if (options.attributes)
         options = options.attributes
 
@@ -19,6 +19,16 @@
       Accounts.createUser(options);
 
       return options.username;
+    },
+
+    'fixtures/users/setRoles': function(options) {
+      check(options, Object);
+
+      var userId = Meteor.users.findOne({username: options.username})._id;
+      var roles = options.roles.replace(/\s/ig, '').split(',');
+
+      Roles.setUserRoles(userId, roles, Roles.GLOBAL_GROUP);
+      return options.username
     }
   });
 
