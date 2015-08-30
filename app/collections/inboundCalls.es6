@@ -40,6 +40,12 @@ InboundCalls.helpers({
   }
 });
 
+InboundCalls.helpers({
+  collectionSlug() {
+    return 'inboundCalls';
+  }
+})
+
 TabularTables.InboundCalls = new Tabular.Table({
   name: 'ResolvedInboundCalls',
   collection: InboundCalls,

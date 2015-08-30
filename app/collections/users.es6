@@ -123,6 +123,9 @@ Meteor.users.helpers({
   },
   getRoles() {
     return Roles.getRolesForUser(this._id).join(', ');
+  },
+  collectionSlug() {
+    return 'users';
   }
 });
 
