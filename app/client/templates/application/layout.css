@@ -55,3 +55,7 @@ a, button, .btn {
 .pre-wrap {
   white-space: pre-wrap;
 }
+
+.inline {
+  display: inline;
+}
