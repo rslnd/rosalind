@@ -45,7 +45,7 @@ InboundCalls.helpers({
   }
 });
 
-InboundCalls.Table = new Tabular.Table({
+TabularTables.InboundCalls = new Tabular.Table({
   name: 'ResolvedInboundCalls',
   collection: InboundCalls,
   columns: [

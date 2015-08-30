@@ -4,12 +4,6 @@ Template.inboundCall.events({
   }
 });
 
-Template.inboundCallsResolved.helpers({
-  InboundCallsTable: function () {
-    return InboundCalls.Table;
-  }
-});
-
 Template.inboundCallsUnresolve.events({
   'click .unresolve'() {
     InboundCalls.restore(this._id);
