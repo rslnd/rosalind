@@ -1,0 +1,14 @@
++contentHeader(title='users.edit')
+.content
+  .box.box-default
+    .box-body
+      +autoForm(collection='Meteor.users' id='editUserForm' doc=this type='update')
+        fieldset
+          +afQuickField(name='username')
+          +afQuickField(name='profile.titlePrepend')
+          +afQuickField(name='profile.firstName')
+          +afQuickField(name='profile.lastName')
+          +afQuickField(name='profile.titleAppend')
+          +afQuickField(name='profile.birthday')
+          +afQuickField(name='profile.gender')
+        button.btn.btn-primary(type='submit') {{_ 'users.save'}}

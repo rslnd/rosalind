@@ -139,7 +139,8 @@ TabularTables.Users = new Tabular.Table({
     {data: 'profile.lastName', title: 'Nachname'},
     {data: 'getRoles()', title: 'Berechtigungen'},
     {data: 'lastActivity()', title: 'Zuletzt gesehen'},
-    {data: 'status.lastLogin.ipAddr', title: 'IP'}
+    {data: 'status.lastLogin.ipAddr', title: 'IP'},
+    {tmpl: Meteor.isClient && Template.editLink }
   ],
   order: [[0, 'asc'], [3, 'desc']],
   allow: (userId) => {
@@ -158,6 +159,8 @@ userLoginSchema = new SimpleSchema({
 });
 
 Meteor.startup(function() {
+  Schema.UserProfile.i18n('user.profile');
+  Schema.User.i18n('user');
   userLoginSchema.i18n('login.form');
 });
 

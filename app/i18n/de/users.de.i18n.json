@@ -3,6 +3,8 @@
     "this": "Mitarbeiterverwaltung",
     "thisAll": "Alle Mitarbeiter",
     "thisNew": "Neuer Mitarbeiter",
+    "edit": "Mitarbeiter bearbeiten",
+    "save": "Mitarbeiter speichern",
     "form": {
       "firstName": {
         "label": "Vorname"
