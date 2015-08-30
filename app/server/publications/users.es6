@@ -13,7 +13,8 @@ Meteor.publish('users', function() {
       'profile.titlePrepend': 1,
       'profile.titleAppend': 1,
       'profile.gender': 1,
-      'profile.birthday': 1
+      'profile.birthday': 1,
+      'roles': 1
     }});
   }
 });
