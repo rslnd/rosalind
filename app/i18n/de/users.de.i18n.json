@@ -1,8 +1,8 @@
 {
   "users": {
     "this": "Mitarbeiterverwaltung",
-    "thisAll": "Alle Mitarbeiter anzeigen",
-    "thisNew": "Neuen Mitarbeiter anlegen",
+    "thisAll": "Alle Mitarbeiter",
+    "thisNew": "Neuer Mitarbeiter",
     "form": {
       "firstName": {
         "label": "Vorname"

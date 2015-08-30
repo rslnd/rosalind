@@ -120,7 +120,28 @@ Meteor.users.helpers({
       return this.fullNameWithTitle(this.profile.lastName);
     else
       return this.fullName();
+  },
+  getRoles() {
+    return Roles.getRolesForUser(this._id).join(', ');
   }
+});
+
+TabularTables.Users = new Tabular.Table({
+  name: 'Users',
+  collection: Meteor.users,
+  columns: [
+    {data: 'status', tmpl: Meteor.isClient && Template.status},
+    {data: 'username', title: 'Username'},
+    {data: 'profile.firstName', title: 'Vorname'},
+    {data: 'profile.lastName', title: 'Nachname'},
+    {data: 'getRoles()', title: 'Berechtigungen'},
+    {data: 'lastActivity()', title: 'Zuletzt gesehen'},
+    {data: 'status.lastLogin.ipAddr', title: 'IP'}
+  ],
+  order: [[0, 'asc'], [3, 'desc']],
+  allow: (userId) => {
+    return Roles.userIsInRole(userId, ['admin']);
+  },
 });
 
 userLoginSchema = new SimpleSchema({
