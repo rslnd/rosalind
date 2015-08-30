@@ -3,6 +3,13 @@
     "allDone": "Alles erledigt!",
     "notice": "Hinweis",
     "by": "von",
-    "at": "um"
+    "at": "um",
+    "edit": "Bearbeiten",
+    "status": {
+      "lastLogin": "Letzter Login",
+      "lastActivity": "Letzte Aktivität",
+      "online": "Jetzt",
+      "never": "Nie"
+    }
   }
 }

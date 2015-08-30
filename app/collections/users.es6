@@ -1,5 +1,3 @@
-let Schema = {};
-
 Schema.UserProfile = new SimpleSchema({
     firstName: {
         type: String,
@@ -35,14 +33,9 @@ Schema.User = new SimpleSchema({
         optional: true
     },
     emails: {
-        type: [Object]
-    },
-    "emails.$.address": {
-        type: String,
-        regEx: SimpleSchema.RegEx.Email
-    },
-    "emails.$.verified": {
-        type: Boolean
+        type: [Object],
+        optional: true,
+        blackbox: true
     },
     createdAt: {
         type: Date
@@ -68,12 +61,27 @@ Schema.User = new SimpleSchema({
         type: Object,
         optional: true,
         blackbox: true
+    },
+    status: {
+        type: Object,
+        optional: true,
+        blackbox: true
     }
 });
 
 Meteor.users.attachSchema(Schema.User);
 
 Meteor.users.helpers({
+  lastActivity() {
+    if (this.status && this.status.lastActivity)
+      return TAPi18n.__('ui.status.lastActivity') + ' ' + moment(this.status.lastActivity).fromNow();
+    else if (this.status && this.status.online)
+      return TAPi18n.__('ui.status.online');
+    else if (this.status && this.status.lastLogin && this.status.lastLogin.date)
+      return TAPi18n.__('ui.status.lastLogin') + ' ' + moment(this.status.lastLogin.date).fromNow();
+    else
+      return TAPi18n.__('ui.status.never');
+  },
   firstName() {
     if (this.profile && this.profile.firstName)
       return this.profile.firstName;
@@ -107,10 +115,35 @@ Meteor.users.helpers({
       return this.fullNameWithTitle(this.profile.lastName);
     else
       return this.fullName();
+  },
+  getRoles() {
+    return Roles.getRolesForUser(this._id).join(', ');
+  },
+  collectionSlug() {
+    return 'users';
   }
 });
 
-userLoginSchema = new SimpleSchema({
+TabularTables.Users = new Tabular.Table({
+  name: 'Users',
+  collection: Meteor.users,
+  columns: [
+    {data: 'status', tmpl: Meteor.isClient && Template.status},
+    {data: 'username', title: 'Username'},
+    {data: 'profile.firstName', title: 'Vorname'},
+    {data: 'profile.lastName', title: 'Nachname'},
+    {data: 'getRoles()', title: 'Berechtigungen'},
+    {data: 'lastActivity()', title: 'Zuletzt gesehen'},
+    {data: 'status.lastLogin.ipAddr', title: 'IP'},
+    {tmpl: Meteor.isClient && Template.editLink }
+  ],
+  order: [[0, 'asc'], [3, 'desc']],
+  allow: (userId) => {
+    return Roles.userIsInRole(userId, ['admin']);
+  },
+});
+
+Schema.UserLogin = new SimpleSchema({
   name: {
     type: String,
   },
@@ -120,8 +153,34 @@ userLoginSchema = new SimpleSchema({
   }
 });
 
+Schema.UserCreate = new SimpleSchema({
+  username: {
+    type: String
+  }
+});
+
+Schema.UserUpdatePassword = new SimpleSchema({
+  password: {
+    type: String
+  },
+  userId: {
+    type: String
+  }
+});
+
+Schema.UserUpdateRoles = new SimpleSchema({
+  roles: {
+    type: String
+  },
+  userId: {
+    type: String
+  }
+});
+
 Meteor.startup(function() {
-  userLoginSchema.i18n('login.form');
+  Schema.UserProfile.i18n('user.profile');
+  Schema.User.i18n('user');
+  Schema.UserLogin.i18n('login.form');
 });
 
 Accounts.config({

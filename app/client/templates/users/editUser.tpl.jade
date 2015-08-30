@@ -1,0 +1,30 @@
++contentHeader(title='users.edit')
+.content
+  .box.box-default
+    .box-body
+      +autoForm(collection='Meteor.users' id='editUserForm' doc=this type='update')
+        fieldset
+          +afQuickField(name='username')
+          +afQuickField(name='profile.titlePrepend')
+          +afQuickField(name='profile.firstName')
+          +afQuickField(name='profile.lastName')
+          +afQuickField(name='profile.titleAppend')
+          +afQuickField(name='profile.birthday')
+          +afQuickField(name='profile.gender')
+        button.btn.btn-primary(type='submit') {{_ 'users.save'}}
+
+  .box.box-warning
+    .box-body
+      +autoForm(schema='Schema.UserUpdatePassword' meteormethod='users/updatePassword' id='updatePasswordUserForm' type='method')
+        fieldset
+          +afQuickField(name='password')
+          +afFieldInput(name='userId' type='hidden' value=_id)
+        button.btn.btn-warning(type='submit') {{_ 'users.changePassword'}}
+
+  .box.box-danger
+    .box-body
+      +autoForm(schema='Schema.UserUpdateRoles' meteormethod='users/updateRoles' id='updateRolesUserForm' type='method')
+        fieldset
+          +afQuickField(name='roles' type='text' value=getRoles)
+          +afFieldInput(name='userId' type='hidden' value=_id)
+        button.btn.btn-danger(type='submit') {{_ 'users.setRoles'}}

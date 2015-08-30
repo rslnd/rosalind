@@ -1,11 +1,6 @@
 InboundCalls = new Mongo.Collection('inboundCalls');
 
-InboundCalls.allow({
-  insert() { return true; },
-  update() { return true; }
-});
-
-var inboundCallsSchema = new SimpleSchema({
+Schema.InboundCalls = new SimpleSchema({
   firstName: {
     type: String,
     optional: true
@@ -45,7 +40,13 @@ InboundCalls.helpers({
   }
 });
 
-InboundCalls.Table = new Tabular.Table({
+InboundCalls.helpers({
+  collectionSlug() {
+    return 'inboundCalls';
+  }
+})
+
+TabularTables.InboundCalls = new Tabular.Table({
   name: 'ResolvedInboundCalls',
   collection: InboundCalls,
   columns: [
@@ -69,7 +70,7 @@ InboundCalls.Table = new Tabular.Table({
 });
 
 Meteor.startup(() => {
-  inboundCallsSchema.i18n('inboundCalls.form');
-  InboundCalls.attachSchema(inboundCallsSchema);
+  Schema.InboundCalls.i18n('inboundCalls.form');
+  InboundCalls.attachSchema(Schema.InboundCalls);
   InboundCalls.attachBehaviour('softRemovable');
 });

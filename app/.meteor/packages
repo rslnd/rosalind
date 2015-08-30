@@ -13,6 +13,7 @@ conditional-appcache
 # Security
 keyvan:my-force-ssl
 audit-argument-checks
+ongoworks:security
 
 # Collections
 aldeed:collection2
@@ -23,11 +24,11 @@ meteorhacks:subs-manager
 tmeasday:publish-counts
 zimme:collection-softremovable
 
-# Permissions
+# Users
 accounts-base
 accounts-password
 alanning:roles
-yogiben:admin
+mizzao:user-status
 
 # Testing
 xolvio:cucumber@0.14.0-rc.3

@@ -1,0 +1,11 @@
+{
+  "users": {
+    "this": "Manage users",
+    "thisAll": "All users",
+    "thisNew": "New user",
+    "edit": "Edit user",
+    "save": "Save user",
+    "changePassword": "Change password",
+    "setRoles": "Set roles"
+  }
+}
