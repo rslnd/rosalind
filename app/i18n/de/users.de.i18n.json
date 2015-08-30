@@ -1,0 +1,24 @@
+{
+  "users": {
+    "this": "Mitarbeiter",
+    "thisAll": "Alle Mitarbeiter anzeigen",
+    "thisNew": "Neuen Mitarbeiter anlegen",
+    "form": {
+      "firstName": {
+        "label": "Vorname"
+      },
+      "lastName": {
+        "label": "Nachname"
+      },
+      "telephone": {
+        "label": "Telefon"
+      },
+      "note": {
+        "label": "Notizen"
+      },
+      "privatePatient": {
+        "label": "Privatpatient"
+      }
+    }
+  }
+}

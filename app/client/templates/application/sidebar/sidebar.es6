@@ -8,6 +8,14 @@ const sidebar = [
       { name: 'inboundCalls.thisResolved', link: '/inboundCalls/resolved' },
       { name: 'inboundCalls.new', link: '/inboundCalls/new' }
     ]
+  },
+  {
+    name: 'users.this',
+    icon: 'user-md',
+    submenu: [
+      { name: 'users.thisAll', link: '/users' },
+      { name: 'users.thisNew', link: '/users/new' }
+    ]
   }
 ];
 
