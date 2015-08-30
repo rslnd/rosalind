@@ -1,6 +1,6 @@
 InboundCalls = new Mongo.Collection('inboundCalls');
 
-var inboundCallsSchema = new SimpleSchema({
+Schema.InboundCalls = new SimpleSchema({
   firstName: {
     type: String,
     optional: true
@@ -70,7 +70,7 @@ TabularTables.InboundCalls = new Tabular.Table({
 });
 
 Meteor.startup(() => {
-  inboundCallsSchema.i18n('inboundCalls.form');
-  InboundCalls.attachSchema(inboundCallsSchema);
+  Schema.InboundCalls.i18n('inboundCalls.form');
+  InboundCalls.attachSchema(Schema.InboundCalls);
   InboundCalls.attachBehaviour('softRemovable');
 });

@@ -1,5 +1,6 @@
 {
   "user": {
+    "password": "Passwort",
     "profile": {
       "firstName": {
         "label": "Vorname"

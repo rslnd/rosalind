@@ -1,5 +1,3 @@
-let Schema = {};
-
 Schema.UserProfile = new SimpleSchema({
     firstName: {
         type: String,
@@ -35,14 +33,17 @@ Schema.User = new SimpleSchema({
         optional: true
     },
     emails: {
-        type: [Object]
+        type: [Object],
+        optional: true
     },
     "emails.$.address": {
         type: String,
-        regEx: SimpleSchema.RegEx.Email
+        regEx: SimpleSchema.RegEx.Email,
+        optional: true
     },
     "emails.$.verified": {
-        type: Boolean
+        type: Boolean,
+        optional: true
     },
     createdAt: {
         type: Date
@@ -148,7 +149,7 @@ TabularTables.Users = new Tabular.Table({
   },
 });
 
-userLoginSchema = new SimpleSchema({
+Schema.UserLogin = new SimpleSchema({
   name: {
     type: String,
   },
@@ -158,10 +159,16 @@ userLoginSchema = new SimpleSchema({
   }
 });
 
+Schema.UserCreate = new SimpleSchema({
+  username: {
+    type: String
+  }
+});
+
 Meteor.startup(function() {
   Schema.UserProfile.i18n('user.profile');
   Schema.User.i18n('user');
-  userLoginSchema.i18n('login.form');
+  Schema.UserLogin.i18n('login.form');
 });
 
 Accounts.config({
