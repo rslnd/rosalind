@@ -71,6 +71,7 @@ mquandalle:jade@0.4.3
 mquandalle:jade-compiler@0.4.3
 npm-bcrypt@0.7.8_2
 observe-sequence@1.0.6
+ongoworks:security@1.2.0
 ordered-dict@1.0.3
 package-version-parser@3.0.3
 practicalmeteor:chai@2.1.0_1

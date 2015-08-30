@@ -13,6 +13,7 @@ conditional-appcache
 # Security
 keyvan:my-force-ssl
 audit-argument-checks
+ongoworks:security
 
 # Collections
 aldeed:collection2
