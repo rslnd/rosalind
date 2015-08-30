@@ -28,7 +28,6 @@ accounts-base
 accounts-password
 alanning:roles
 mizzao:user-status
-yogiben:admin
 
 # Testing
 xolvio:cucumber@0.14.0-rc.3
