@@ -1,0 +1,8 @@
++contentHeader(title='users.thisNew')
+.content
+  .box.box-default
+    .box-body
+      +autoForm(schema='Schema.UserCreate' meteormethod='users/create' id='insertUserForm' type='method')
+        fieldset
+          +afQuickField(name='username')
+        button.btn.btn-primary(type='submit') {{_ 'users.save'}}
