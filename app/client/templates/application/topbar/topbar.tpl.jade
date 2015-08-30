@@ -18,7 +18,7 @@ header.main-header
             li.user-body
               p #{currentUser.fullNameWithTitle}
               small 
-                +status(user=currentUser)
+                +status currentUser
                 | {{_ 'login.loggedIn'}}
             li.user-footer
               .pull-right

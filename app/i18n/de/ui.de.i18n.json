@@ -3,6 +3,10 @@
     "allDone": "Alles erledigt!",
     "notice": "Hinweis",
     "by": "von",
-    "at": "um"
+    "at": "um",
+    "status": {
+      "online": "Jetzt",
+      "never": "Unbekannt"
+    }
   }
 }

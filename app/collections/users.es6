@@ -79,6 +79,14 @@ Schema.User = new SimpleSchema({
 Meteor.users.attachSchema(Schema.User);
 
 Meteor.users.helpers({
+  lastActivity() {
+    if (this.status && this.status.lastActivity)
+      return moment(this.status.lastActivity).fromNow();
+    else if (this.status && (! this.status.lastActivity) && (this.status.online))
+      return TAPi18n.__('ui.status.online');
+    else
+      return TAPi18n.__('ui.status.never');;
+  },
   firstName() {
     if (this.profile && this.profile.firstName)
       return this.profile.firstName;
