@@ -3,16 +3,17 @@ aside.main-sidebar
     ul.sidebar-menu
       li.header {{_ 'sidebar_actions'}}
       +each sidebar
-        li.treeview
-          a.pointer.level-0(id='{{toHtmlId name}}')
-            <i class='fa fa-{{icon}}'></i>
-            span {{_ name}}
-            +if showCount countBadge
-              small.label.pull-right.label-primary {{showCount countBadge}}
-            +else
-              i.fa.fa-angle-left.pull-right
-          ul.treeview-menu
-            +each submenu
-                li
-                  a.active.level-1(href=link id='{{toHtmlId name}}')
-                    span {{_ name}}
+        if showNav roles
+            li.treeview
+              a.pointer.level-0(id='{{toHtmlId name}}')
+                <i class='fa fa-{{icon}}'></i>
+                span {{_ name}}
+                +if showCount countBadge
+                  small.label.pull-right.label-primary {{showCount countBadge}}
+                +else
+                  i.fa.fa-angle-left.pull-right
+              ul.treeview-menu
+                +each submenu
+                    li
+                      a.active.level-1(href=link id='{{toHtmlId name}}')
+                        span {{_ name}}
