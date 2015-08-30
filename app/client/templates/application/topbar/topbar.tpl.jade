@@ -17,7 +17,9 @@ header.main-header
           ul.dropdown-menu
             li.user-body
               p #{currentUser.fullNameWithTitle}
-              small {{_ 'login.loggedIn'}}
+              small 
+                +status(user=currentUser)
+                | {{_ 'login.loggedIn'}}
             li.user-footer
               .pull-right
                 a.btn.btn-default.logout {{_ 'login.logout'}}

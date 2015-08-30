@@ -23,10 +23,11 @@ meteorhacks:subs-manager
 tmeasday:publish-counts
 zimme:collection-softremovable
 
-# Permissions
+# Users
 accounts-base
 accounts-password
 alanning:roles
+mizzao:user-status
 yogiben:admin
 
 # Testing
