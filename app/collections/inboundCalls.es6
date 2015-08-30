@@ -1,10 +1,5 @@
 InboundCalls = new Mongo.Collection('inboundCalls');
 
-InboundCalls.allow({
-  insert() { return true; },
-  update() { return true; }
-});
-
 var inboundCallsSchema = new SimpleSchema({
   firstName: {
     type: String,
