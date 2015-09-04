@@ -1,3 +1,5 @@
+Ground.Collection(Meteor.users);
+
 Schema.UserProfile = new SimpleSchema({
     firstName: {
         type: String,

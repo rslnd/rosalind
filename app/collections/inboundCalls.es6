@@ -1,4 +1,5 @@
 InboundCalls = new Mongo.Collection('inboundCalls');
+Ground.Collection(InboundCalls);
 
 Schema.InboundCalls = new SimpleSchema({
   firstName: {
