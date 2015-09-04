@@ -1,5 +1,9 @@
 var Subs = new SubsManager();
 
+Router.configure({
+  waitOn() { Subs.subscribe('inboundCalls'); }
+});
+
 Router.route('/inboundCalls', {
   waitOn() { return Subs.subscribe('inboundCalls'); },
   data()   { return { inboundCalls: InboundCalls.find({}) }; }

@@ -21,6 +21,7 @@ coffeescript@1.0.6
 conditional-appcache@1.0.5-plugins.0
 copleykj:livestamp@1.1.7
 dburles:collection-helpers@1.0.3
+dburles:mongo-collection-instances@0.3.4
 ddp@1.1.0
 deps@1.0.7
 dispatch:kernel@0.0.6
@@ -55,6 +56,7 @@ iron:url@1.0.9
 jquery@1.11.3_2
 json@1.0.3
 keyvan:my-force-ssl@0.0.1
+lai:collection-extensions@0.1.4
 launch-screen@1.0.2
 less@1.0.14
 livedata@1.0.13

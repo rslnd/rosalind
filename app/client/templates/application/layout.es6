@@ -15,8 +15,10 @@ UI.registerHelper('time', (context, options) => {
 });
 
 UI.registerHelper('showCount', (context, options) => {
-  let counts = Counts.get(context);
-  return (counts > 0) ? counts : false;
+  if(context) {
+    let count = Mongo.Collection.get(context) && Mongo.Collection.get(context).find({}).count();
+    return (count > 0) ? count : false;
+  }
 });
 
 UI.registerHelper('getFirstName', (context, options) => {
