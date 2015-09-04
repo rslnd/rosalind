@@ -19,6 +19,7 @@ ongoworks:security
 aldeed:collection2
 aldeed:autoform
 aldeed:tabular
+ground:db
 dburles:collection-helpers
 meteorhacks:subs-manager
 tmeasday:publish-counts
