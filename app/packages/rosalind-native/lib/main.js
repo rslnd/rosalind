@@ -29,6 +29,8 @@ app.on('ready', function() {
   });
 
   mainWindow.loadUrl('http://127.0.0.1:3000');
+  mainWindow.maximize();
+
 
   mainWindow.on('closed', function() {
     mainWindow = null;
