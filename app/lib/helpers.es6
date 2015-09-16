@@ -30,7 +30,7 @@ Helpers.zerofix = function(telephone) {
     }).join(' ');
     
     // If it's just a long string of digits, split into groups of 4
-    if (telephone.indexOf(' ') === -1) {
+    if (telephone.indexOf(' ') === -1 && telephone.match(/\d/g)) {
       return telephone.match(/.{1,4}/g).join(' ');
     } else {
       return telephone;
