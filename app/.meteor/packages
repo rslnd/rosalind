@@ -39,6 +39,7 @@ sanjo:jasmine
 velocity:console-reporter
 
 # UI
+twbs:bootstrap
 mquandalle:jade
 mfactory:admin-lte
 fortawesome:fontawesome
