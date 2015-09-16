@@ -1,8 +1,18 @@
-Meteor.publish('inboundCalls', function(options = {}) {
+Meteor.publishComposite('inboundCalls', function(options = {}) {
   check(options, Object);
-  
+
   if(this.userId) {
     let selector = _.pick(options, 'removed');
-    return InboundCalls.find(selector);
+
+    return {
+      find: () => InboundCalls.find(selector),
+      children: [
+        {
+          find: (inboundCall) => {
+            return Comments.find({docId: inboundCall._id});
+          }
+        }
+      ]
+    };
   }
 });
