@@ -2,7 +2,7 @@ Comments = new Mongo.Collection('comments');
 Ground.Collection(Comments);
 
 Schema.Comments = new SimpleSchema({
-  documentId: {
+  docId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
     index: 1
@@ -13,21 +13,16 @@ Schema.Comments = new SimpleSchema({
   createdBy: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    autoValue: Util.autoCreatedBy,
-    autoform: {
-      options() {
-        return _.map(Meteor.users.find({}).fetch(), (user) => {
-          return {
-            label: user.fullName(),
-            value: user._id
-          }
-        });
-      }
-    }
+    autoValue: Util.autoCreatedBy
   },
   createdAt: {
     type: Date,
     autoValue: Util.autoCreatedAt,
     index: 1
   }
+});
+
+Meteor.startup(() => {
+  Comments.attachSchema(Schema.Comments);
+  Comments.attachBehaviour('softRemovable');
 });

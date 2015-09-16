@@ -1,5 +1,16 @@
-h5.enable-select {{ commentCount }} Comments for {{ _id }}
-
-ol
-  +each comments
-    li {{ body }}
+if hasComments
+  .box-footer.box-comments
+    +each comments
+      .box-comment
+        +avatar(userId=createdBy)
+        .comment-text
+          span.username
+            | {{getFullName createdBy}}
+            span.text-muted.pull-right
+              | {{livestamp createdAt}} {{_ 'ui.at'}} {{time createdAt}}
+          p.enable-select {{ body }}
+.box-footer
+  form.add-comment
+    +avatar
+    .img-push
+      input.add-comment-body.form-control.input-sm(placeholder='{{_ "ui.press_enter_to_post_comment"}}')

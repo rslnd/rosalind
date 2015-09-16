@@ -24,3 +24,11 @@ UI.registerHelper('showCount', (context, options) => {
 UI.registerHelper('getFirstName', (context, options) => {
   return Helpers.getFirstName(context);
 });
+
+UI.registerHelper('getFullName', (context, options) => {
+  return Helpers.getFullName(context);
+});
+
+UI.registerHelper('getShortname', (context, options) => {
+  return Helpers.getShortname(context);
+});

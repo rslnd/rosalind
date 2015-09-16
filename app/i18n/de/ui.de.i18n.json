@@ -5,6 +5,9 @@
     "by": "von",
     "at": "um",
     "edit": "Bearbeiten",
+    "comment": "Kommentar",
+    "comment_plural": "Kommentare",
+    "press_enter_to_post_comment": "Kommentar schreiben...",
     "status": {
       "lastLogin": "Letzter Login",
       "lastActivity": "Letzte Aktivität",

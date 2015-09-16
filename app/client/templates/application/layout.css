@@ -59,3 +59,19 @@ a, button, .btn {
 .inline {
   display: inline;
 }
+
+.avatar {
+  display: block;
+  background: #d8e0e8;
+  border-radius: 100%;
+}
+
+.avatar.username {
+  color: #fefefe !important;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 7px;
+  font-size: 11px;
+  overflow: hidden;
+}

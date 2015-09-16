@@ -84,6 +84,12 @@ Meteor.users.helpers({
     else
       return TAPi18n.__('ui.status.never');
   },
+  shortname() {
+    if (this.username.length <= 3)
+      return this.username;
+    else
+      return _.map(this.fullName().split(' '), function(n) { return n.charAt(0); }).join('');
+  },
   firstName() {
     if (this.profile && this.profile.firstName)
       return this.profile.firstName;
