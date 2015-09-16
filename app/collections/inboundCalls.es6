@@ -60,6 +60,7 @@ TabularTables.InboundCalls = new Tabular.Table({
     {data: 'createdBy', title: 'von', render(val, type, doc) { return Helpers.getFirstName(val); }},
     {data: 'removedAt', title: 'Erledigt', render(val, type, doc) { return moment(val).calendar(); }},
     {data: 'removedBy', title: 'von', render(val, type, doc) { return Helpers.getFirstName(val); }},
+    {title: '<i class="fa fa-commenting-o"></i>', tmpl: Meteor.isClient && Template.commentCount },
     {tmpl: Meteor.isClient && Template.inboundCallsUnresolve }
   ],
   order: [[5, 'desc'], [7, 'desc']],

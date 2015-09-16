@@ -1,5 +1,5 @@
 .avatar.username.img-sm
   if userId
-    {{ getShortname userId }}
+    | {{ getShortname userId }}
   else
-    {{ currentUser.shortname }}
+    | {{ currentUser.shortname }}
