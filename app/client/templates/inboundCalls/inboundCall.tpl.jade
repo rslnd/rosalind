@@ -15,7 +15,9 @@
       if removed
         br
         span.text-muted {{_ 'inboundCalls.resolvedBy'}} {{getFirstName removedBy}} {{_ 'ui.at'}} {{time removedAt}} &middot; {{livestamp removedAt}}
-        
+
+  .panel-footer
+    +comments
 
   .panel-footer
     a.resolve {{_ 'inboundCalls.resolve'}}
