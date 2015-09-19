@@ -1,5 +1,5 @@
 Template.commentsModal.helpers({
   'collectionItem'() {
-    return this.collectionSlug().replace(/s/, '');
+    return _.singularize(this.collectionSlug());
   }
-})
+});

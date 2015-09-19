@@ -5,7 +5,7 @@ Meteor.publishComposite('inboundCalls', function(options = {}) {
     let selector = _.pick(options, 'removed');
 
     return {
-      find: () => InboundCalls.find(selector),
+      find: () => InboundCalls.find({}, selector),
       children: [
         {
           find: (inboundCall) => {

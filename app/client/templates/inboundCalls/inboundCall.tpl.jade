@@ -6,7 +6,7 @@
       else
         small {{_ 'inboundCalls.insurance'}}
     h3.description.enable-select {{zerofix telephone}}
-    
+
   .box-body
     blockquote
       p.enable-select.pre-wrap #{note}
@@ -21,4 +21,7 @@
   +comments
 
   .box-footer
-    a.resolve {{_ 'inboundCalls.resolve'}}
+    unless removedAt
+      a.resolve {{_ 'inboundCalls.resolve'}}
+    else
+      a.unresolve {{_ 'inboundCalls.unresolve'}}

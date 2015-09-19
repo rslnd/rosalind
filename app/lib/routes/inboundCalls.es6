@@ -11,7 +11,7 @@ Router.route('/inboundCalls', {
 
 Router.route('/inboundCalls/resolved', {
   subscriptions() { return Subs.subscribe('inboundCalls', {removed: true}); },
-  data()   { return { inboundCalls: InboundCalls.find({removed: true}) }; }
+  data()   { return { inboundCalls: InboundCalls.find({}, {removed: true}) }; }
 });
 
 Router.route('/inboundCalls/new', function() {
