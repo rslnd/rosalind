@@ -143,6 +143,7 @@ TabularTables.Users = new Tabular.Table({
     {data: 'getRoles()', title: 'Berechtigungen'},
     {data: 'lastActivity()', title: 'Zuletzt gesehen'},
     {data: 'status.lastLogin.ipAddr', title: 'IP'},
+    {data: 'status.lastLogin.userAgent', title: 'User Agent'},
     {tmpl: Meteor.isClient && Template.editLink }
   ],
   order: [[0, 'asc'], [3, 'desc']],
