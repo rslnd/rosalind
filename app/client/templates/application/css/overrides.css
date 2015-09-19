@@ -5,3 +5,14 @@
 .sidebar-collapse .treeview-menu {
   width: 229px !important;
 }
+
+.modal .box, .modal .box.box-widget {
+  margin-bottom: -10px;
+  margin-top: -20px;
+  border: 0;
+  box-shadow: none;
+}
+
+.modal .box-header {
+  margin-left: 0;
+}

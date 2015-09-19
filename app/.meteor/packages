@@ -45,6 +45,7 @@ mfactory:admin-lte
 fortawesome:fontawesome
 fastclick
 sacha:spin
+peppelg:bootstrap-3-modal
 
 # I18n
 tap:i18n

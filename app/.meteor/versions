@@ -85,6 +85,7 @@ observe-sequence@1.0.6
 ongoworks:security@1.2.0
 ordered-dict@1.0.3
 package-version-parser@3.0.3
+peppelg:bootstrap-3-modal@1.0.3
 practicalmeteor:chai@2.1.0_1
 practicalmeteor:loglevel@1.2.0_2
 raix:eventemitter@0.1.3
