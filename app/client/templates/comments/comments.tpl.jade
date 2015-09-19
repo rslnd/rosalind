@@ -8,7 +8,7 @@ if hasComments
             | {{getFullName createdBy}}
             span.text-muted.pull-right
               | {{livestamp createdAt}} {{_ 'ui.at'}} {{time createdAt}}
-          p.enable-select {{ body }}
+          p.enable-select.break-word {{ body }}
 .box-footer
   form.add-comment
     +avatar
