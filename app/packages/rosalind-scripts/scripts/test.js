@@ -9,7 +9,6 @@ var testCommand = [
   'meteor',
   '--test',
   '--settings ../environments/test/settings.json',
-  '--release velocity:METEOR@1.1.0.3_1'
 ].join(' ');
 
 if (process.env.CI) {

@@ -17,3 +17,6 @@ require('dns').lookup(require('os').hostname(), function (err, ip, fam) {
     'meteor --settings ../environments/development/settings.json'
   ].join(' '));
 })
+
+
+ROOT_URL=http://localhost:3000 JASMINE_CLIENT_UNIT=1 JASMINE_CLIENT_INTEGRATION=0 JASMINE_SERVER_UNIT=0 JASMINE_SERVER_INTEGRATION=0 JASMINE_BROWSER=Chrome SELENIUM_BROWSER=phantomjs meteor --settings ../environments/development/settings.json
