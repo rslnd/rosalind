@@ -10,7 +10,8 @@
 
 ## Develop
 
-`npm start`
+`npm install`
+`npm run server:start`
 
 Create a new feature branch (eg. `feature/myFeature`)
 

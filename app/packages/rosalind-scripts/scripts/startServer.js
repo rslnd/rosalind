@@ -5,7 +5,7 @@ cd('../../..');
 
 require('dns').lookup(require('os').hostname(), function (err, ip, fam) {
   var rootUrl = 'http://' + ip + ':3000';
-  console.log('Listening on ' + rootUrl + '\n');
+  console.log('Launching Meteor on ' + rootUrl + '\n');
   exec([
     'ROOT_URL=' + rootUrl,
     'JASMINE_CLIENT_UNIT=1',
