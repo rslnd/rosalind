@@ -1,5 +1,8 @@
 #/bin/sh
 
+# Exit on first command that fails
+set -e
+
 echo "** Installing mupx"
 npm -g install mupx
 
