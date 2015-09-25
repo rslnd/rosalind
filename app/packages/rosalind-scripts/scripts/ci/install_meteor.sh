@@ -16,3 +16,5 @@ fi
 export PATH=~/cache/meteor/:$PATH
 export METEOR=$(which meteor)
 echo "Meteor is installed at $METEOR"
+
+npm install -g eslint
