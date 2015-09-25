@@ -1,3 +1,8 @@
+#!/bin/sh
+
+# Exit on first command that fails
+set -e
+
 if [ -e "$HOME/.meteor/" ]; then
   echo "Removing old meteor installation"
   rm -rf "$HOME/.meteor/"
@@ -15,6 +20,9 @@ fi
 
 export PATH=~/cache/meteor/:$PATH
 export METEOR=$(which meteor)
-echo "Meteor is installed at $METEOR"
+export METEOR_VERSION=$(meteor --version)
+
+echo "** $METEOR_VERSION is installed at $METEOR"
+echo "** Clear CI cache to update to latest version"
 
 npm install -g eslint
