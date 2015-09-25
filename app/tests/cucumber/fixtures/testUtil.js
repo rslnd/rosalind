@@ -1,3 +1,5 @@
+/* global TestUtil: true */
+
 TestUtil = {};
 
 TestUtil.camelize = function(string, firstLower) {
@@ -17,7 +19,7 @@ TestUtil.constantize = function(constantName) {
     throw new SyntaxError('Constant name must be a valid Javascript name');
 
   var constant;
-  eval('constant = ' + constantName + ';');
+  eval('constant = ' + constantName + ';'); // jshint ignore: line
   return constant;
 };
 

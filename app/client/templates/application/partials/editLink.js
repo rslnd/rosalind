@@ -3,4 +3,4 @@ Template.editLink.events({
     let editUrl = '/' + [this.collectionSlug(), this._id, 'edit'].join('/');
     Router.go(editUrl);
   }
-})
+});

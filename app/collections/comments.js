@@ -1,3 +1,5 @@
+/* global Comments: true */
+
 Comments = new Mongo.Collection('comments');
 Ground.Collection(Comments);
 
@@ -8,7 +10,7 @@ Schema.Comments = new SimpleSchema({
     index: 1
   },
   body: {
-    type: String,
+    type: String
   },
   createdBy: {
     type: String,

@@ -6,6 +6,6 @@ Meteor.startup(function () {
     } else {
       TAPi18n.setLanguage('de-AT');
       moment.locale('de-at');
-    };
+    }
   });
 });

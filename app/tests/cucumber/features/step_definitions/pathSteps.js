@@ -5,7 +5,7 @@
     var url = require('url');
 
     this.Before(function() {
-      return this.client.url(process.env.ROOT_URL);      
+      return this.client.url(process.env.ROOT_URL);
     });
 
     this.Given(/^I am on the dashboard$/, function () {

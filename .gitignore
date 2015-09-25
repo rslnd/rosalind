@@ -20,6 +20,7 @@ tmp/*
 !/log/.keep
 !/tmp/.keep
 app/tests/cucumber/.screenshots
+app/tests/cucumber/*.png
 *.log
 
 # Ignore redis dump

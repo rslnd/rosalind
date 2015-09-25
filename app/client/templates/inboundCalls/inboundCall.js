@@ -14,6 +14,6 @@ Template.inboundCallsUnresolve.events({
   }
 });
 
-UI.registerHelper('zerofix', (context, options) => {
+UI.registerHelper('zerofix', (context) => {
   return Helpers.zerofix(context);
 });

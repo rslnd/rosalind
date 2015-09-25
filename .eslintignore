@@ -1,0 +1,4 @@
+**/node_modules/**
+**/packages/meteor-admin-lte/**
+**/packages/conditional-appcache/**
+**/scripts/**

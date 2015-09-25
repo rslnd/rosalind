@@ -25,4 +25,4 @@ Template.comments.events({
     input.val('');
     return false;
   }
-})
+});

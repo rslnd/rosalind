@@ -22,10 +22,10 @@ Router.onAfterAction(function () {
 
 Router.onAfterAction(function() {
   if (!(
-    window.location.hash == ''
-    || window.location.hash == '#'
-    || window.location.hash == '#!') && !Meteor.userId()) {
-    this.render('login')
+    window.location.hash === '' ||
+    window.location.hash === '#' ||
+    window.location.hash === '#!') && !Meteor.userId()) {
+    this.render('login');
   }
 });
 

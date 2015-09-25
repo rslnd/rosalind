@@ -8,14 +8,14 @@
       client.pause(2000);
       client.waitForExist('#loaded');
       var mainText = client.getText('#main');
-      expect(mainText.toLowerCase()).to.contain(string.toLowerCase());
+      expect(mainText.toLowerCase()).toContain(string.toLowerCase());
     });
 
     this.Then(/^I should not see '([^']*)'$/, function (string) {
       client.pause(2000);
       client.waitForExist('#loaded');
       var mainText = client.getText('#main');
-      expect(mainText.toLowerCase()).to.not.contain(string.toLowerCase());
+      expect(mainText.toLowerCase()).not.toContain(string.toLowerCase());
     });
 
     this.Then(/^the field '([^']*)' should be empty$/, function (labelText) {
@@ -23,7 +23,7 @@
       client.element('label=' + labelText);
       var fieldId = client.getAttribute('label=' + labelText, 'for');
       var fieldValue = client.getValue('#' + fieldId);
-      expect(fieldValue).to.equal('');
+      expect(fieldValue).toEqual('');
     });
 
     this.Then(/^I should see the current time$/, function () {
@@ -31,7 +31,7 @@
 
       client.waitForExist('#loaded');
       var bodyText = client.getText('#main');
-      expect(bodyText).to.contain(time.slice(0,-1));
+      expect(bodyText).toContain(time.slice(0,-1));
     });
 
   };

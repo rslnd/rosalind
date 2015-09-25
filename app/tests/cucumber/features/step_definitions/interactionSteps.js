@@ -2,8 +2,6 @@
   'use strict';
 
   module.exports = function () {
-    var url = require('url');
-
     var lastFormField = null;
 
     this.When(/^I click on '([^']*)'$/, function (linkText) {
@@ -13,7 +11,7 @@
           return '#' + _linkText.replace(/[^a-z]/ig, '-').toLowerCase() + '.level-' + level;
         else
           return '(//a|//input|//button)[contains(.,"' + _linkText + '")]';
-      }
+      };
 
       client.waitForExist('#loaded');
 
@@ -38,7 +36,8 @@
     });
 
     this.When(/^I fill in '([^']*)' with '([^']*)'$/, function (labelText, fieldValue) {
-      var selector = lastFormField = 'label=' + labelText;
+      var selector = 'label=' + labelText;
+      lastFormField = selector;
 
       client.waitForExist('#loaded');
       client.waitForExist(selector);

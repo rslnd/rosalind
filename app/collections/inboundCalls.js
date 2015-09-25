@@ -1,3 +1,5 @@
+/* global InboundCalls: true */
+
 InboundCalls = new Mongo.Collection('inboundCalls');
 Ground.Collection(InboundCalls);
 
@@ -45,7 +47,7 @@ InboundCalls.helpers({
   collectionSlug() {
     return 'inboundCalls';
   }
-})
+});
 
 TabularTables.InboundCalls = new Tabular.Table({
   name: 'ResolvedInboundCalls',
@@ -53,19 +55,19 @@ TabularTables.InboundCalls = new Tabular.Table({
   columns: [
     {data: 'firstName', title: 'Vorname'},
     {data: 'lastName', title: 'Nachname'},
-    {data: 'telephone', title: 'Telefon', render(val, type, doc) { return Helpers.zerofix(val); }},
+    {data: 'telephone', title: 'Telefon', render(val) { return Helpers.zerofix(val); }},
     {data: 'note', title: 'Notiz'},
     {data: 'privatePatient', title: 'Privat', render(val, type, doc) { return doc.privateOrInsurance(); }},
-    {data: 'createdAt', title: 'Angenommen', render(val, type, doc) { return moment(val).calendar(); }},
-    {data: 'createdBy', title: 'von', render(val, type, doc) { return Helpers.getFirstName(val); }},
-    {data: 'removedAt', title: 'Erledigt', render(val, type, doc) { return moment(val).calendar(); }},
-    {data: 'removedBy', title: 'von', render(val, type, doc) { return Helpers.getFirstName(val); }},
+    {data: 'createdAt', title: 'Angenommen', render(val) { return moment(val).calendar(); }},
+    {data: 'createdBy', title: 'von', render(val) { return Helpers.getFirstName(val); }},
+    {data: 'removedAt', title: 'Erledigt', render(val) { return moment(val).calendar(); }},
+    {data: 'removedBy', title: 'von', render(val) { return Helpers.getFirstName(val); }},
     {title: '<i class="fa fa-commenting-o"></i>', tmpl: Meteor.isClient && Template.commentCount },
     {tmpl: Meteor.isClient && Template.inboundCallsUnresolve }
   ],
   order: [[5, 'desc'], [7, 'desc']],
   sub: new SubsManager(),
-  changeSelector: (selector, userId) => {
+  changeSelector: (selector) => {
     selector.removed = true;
     return selector;
   }

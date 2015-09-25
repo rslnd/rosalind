@@ -1,2 +1,5 @@
+/* global TabularTables: true */
+
 TabularTables = {};
-Meteor.isClient && Template.registerHelper('TabularTables', TabularTables);
+if (Meteor.isClient)
+  Template.registerHelper('TabularTables', TabularTables);

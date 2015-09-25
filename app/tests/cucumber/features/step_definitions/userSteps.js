@@ -23,7 +23,7 @@
       var user = client.execute(function() {
         return Meteor.user();
       });
-      expect(user.value).to.be.not.null;
+      expect(user.value).not.toBeNull();
     });
 
     this.Then(/^I should be logged out$/, function () {
@@ -31,7 +31,7 @@
       var user = client.execute(function() {
         return Meteor.user();
       });
-      expect(user.value).to.be.null;
+      expect(user.value).toBeNull();
     });
 
     this.Given(/^I log out$/, function () {

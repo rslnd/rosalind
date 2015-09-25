@@ -3,14 +3,14 @@ AutoForm.hooks({
     onSubmit: function(form) {
       if (form.name && form.password) {
         Meteor.loginWithPassword(form.name, form.password, (error) => {
-          error ? this.done(error) : this.done();
+          return error ? this.done(error) : this.done();
         });
       } else {
         this.done();
       }
       return false;
     },
-    onError: function (type, error, template) {
+    onError: function (type, error) {
       setTimeout(() => {
         var vc = AutoForm.getValidationContext(this.formId);
         if (typeof error.reason === 'string') {

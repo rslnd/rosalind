@@ -6,12 +6,12 @@
       check(options, Object);
 
       if (options.attributes)
-        options = options.attributes
+        options = options.attributes;
 
       options.username = options.username.replace(/\s/g, '');
 
       if (Meteor.users.findOne({username: options.username}))
-        return;
+        return false;
 
       if (!options.password) options.password = '1111';
       if (!options.email) options.email = options.username + '@example.com';
@@ -28,7 +28,7 @@
       var roles = options.roles.replace(/\s/ig, '').split(',');
 
       Roles.setUserRoles(userId, roles, Roles.GLOBAL_GROUP);
-      return options.username
+      return options.username;
     }
   });
 
