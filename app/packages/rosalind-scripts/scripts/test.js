@@ -5,7 +5,7 @@ var testCommand = [
   'JASMINE_CLIENT_UNIT=1',
   'JASMINE_SERVER_INTEGRATION=0',
   'JASMINE_BROWSER=Chrome',
-  'SELENIUM_BROWSER=phantomjs',
+  'SELENIUM_BROWSER=Chrome',
   'meteor',
   '--test',
   '--settings ../environments/test/settings.json',

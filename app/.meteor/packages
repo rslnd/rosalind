@@ -5,11 +5,8 @@
 # but you can also edit it by hand.
 
 # Core
-iron:router
-conditional-appcache
-accounts-base
-accounts-password
-standard-minifiers
+es5-shim
+ecmascript
 meteor-base
 mobile-experience
 mongo
@@ -23,6 +20,18 @@ random
 ejson
 spacebars
 check
+conditional-appcache
+accounts-base
+accounts-password
+standard-minifiers
+
+# Routing
+iron:router
+
+# Testing
+velocity:console-reporter
+xolvio:cucumber@0.14.0-rc.3
+sanjo:jasmine
 
 # Security
 keyvan:my-force-ssl
@@ -44,11 +53,6 @@ reywood:publish-composite
 # Users
 alanning:roles
 mizzao:user-status
-
-# Testing
-xolvio:cucumber@0.14.0-rc.3
-sanjo:jasmine
-velocity:console-reporter
 
 # UI
 twbs:bootstrap
