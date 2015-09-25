@@ -1,7 +1,7 @@
 require('shelljs/global');
 
 cd(__dirname);
-cd('../../app/');
+cd('../../app/meteor/');
 
 require('dns').lookup(require('os').hostname(), function (err, ip) {
   var rootUrl = 'http://' + ip + ':3000';

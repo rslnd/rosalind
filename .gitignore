@@ -19,12 +19,12 @@ log/*
 tmp/*
 !/log/.keep
 !/tmp/.keep
-app/tests/cucumber/.screenshots
-app/tests/cucumber/*.png
+app/meteor/tests/cucumber/.screenshots
+app/meteor/tests/cucumber/*.png
 *.log
 
 # Ignore redis dump
 dump.rdb
 
 # Ignore builds
-public/builds/*
+app/meteor/public/builds/*
