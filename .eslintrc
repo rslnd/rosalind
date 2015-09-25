@@ -21,7 +21,6 @@
     "new-cap": 0,
     "no-shadow": 0,
     "strict": 0
-    
   },
   "globals": {
     "Comments": true,
@@ -48,6 +47,8 @@
     "Time": true,
 
     "server": false,
-    "client": false
+    "client": false,
+    "exec": true,
+    "cd": false
   }
 }

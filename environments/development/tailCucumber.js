@@ -1,5 +1,5 @@
 require('shelljs/global');
 
 cd(__dirname);
-cd('../../..');
+cd('../../app/');
 exec('tail -f .meteor/local/log/cucumber.log');
