@@ -6,7 +6,6 @@
 
 # Core
 iron:router
-grigio:babel
 conditional-appcache
 accounts-base
 accounts-password
