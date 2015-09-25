@@ -24,4 +24,4 @@ export JASMINE_BROWSER=chrome
 export SELENIUM_BROWSER=chrome
 
 echo "** Running test suite\n"
-meteor --test --settings ../environments/test/settings.json
+meteor --test --settings ../../environments/test/settings.json
