@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Exit on first command that fails
 set -e
@@ -20,9 +20,9 @@ fi
 
 export PATH=~/cache/meteor/:$PATH
 export METEOR=$(which meteor)
-export METEOR_VERSION=$(meteor --version)
+export METEOR_VERSION=$(~/cache/meteor/meteor --version)
 
-echo "** $METEOR_VERSION is installed at $METEOR"
+echo "** $METEOR_VERSION is installed at ~/cache/meteor/"
 echo "** Clear CI cache to update to latest version"
 
 npm install -g eslint

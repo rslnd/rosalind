@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Do not run this script with npm test on CI.
 # npm test always returns zero exit code even when tests fail.
