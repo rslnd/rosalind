@@ -10,15 +10,15 @@
       this.server.call('fixtures/users/setRoles', {username: lastUsername, roles: roles});
     });
 
-    this.Given(/^I am logged in$/, function () {
+    this.Given('I am logged in', function () {
       client.waitForExist('#loaded');
       client.execute(function(name) {
         Meteor.loginWithPassword(name, '1111');
       }, lastUsername);
-      client.waitForExist('#loaded');
+      client.waitForExist('li.user-menu');
     });
 
-    this.Then(/^I should be logged in$/, function () {
+    this.Then('I should be logged in', function () {
       client.waitForExist('#loaded');
       var user = client.execute(function() {
         return Meteor.user();
@@ -26,7 +26,7 @@
       expect(user.value).not.toBeNull();
     });
 
-    this.Then(/^I should be logged out$/, function () {
+    this.Then('I should be logged out', function () {
       client.waitForExist('#loaded');
       var user = client.execute(function() {
         return Meteor.user();
@@ -34,7 +34,7 @@
       expect(user.value).toBeNull();
     });
 
-    this.Given(/^I log out$/, function () {
+    this.Given('I log out', function () {
       client.execute(function() {
         Meteor.logout();
       });

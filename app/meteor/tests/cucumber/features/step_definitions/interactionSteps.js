@@ -4,7 +4,7 @@
   module.exports = function () {
     var lastFormField = null;
 
-    this.When(/^I click on '([^']*)'$/, function (linkText) {
+    this.When('I click on \'$linkText\'', function (linkText) {
       var menuPath = (linkText.indexOf('>') !== -1);
       var getSelector = function(_linkText, level) {
         if (typeof level === 'number')
@@ -19,12 +19,12 @@
         client.execute(function(s0) {
           $(s0).click();
         }, getSelector(linkText.split(' > ')[0], 0));
-        client.pause(600);
+        client.pause(300);
 
         client.execute(function(s1) {
           $(s1).click();
         }, getSelector(linkText.split(' > ')[1], 1));
-        client.pause(600);
+        client.pause(300);
 
 
         client.waitForExist('#loaded');
@@ -35,7 +35,7 @@
       }
     });
 
-    this.When(/^I fill in '([^']*)' with '([^']*)'$/, function (labelText, fieldValue) {
+    this.When('I fill in \'$labelText\' with \'$fieldValue\'', function (labelText, fieldValue) {
       var selector = 'label=' + labelText;
       lastFormField = selector;
 
@@ -47,10 +47,12 @@
       client.pause(300);
     });
 
-    this.When(/^I submit the form$/, function() {
+    this.When('I submit the form', function() {
       client.waitForExist('#loaded');
       client.waitForVisible(lastFormField);
       client.submitForm(lastFormField);
+      client.pause(300);
+      client.waitForExist('#loaded');
     });
 
   };

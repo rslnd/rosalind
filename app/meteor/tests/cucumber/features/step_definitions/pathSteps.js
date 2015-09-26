@@ -8,11 +8,11 @@
       return this.client.url(process.env.ROOT_URL);
     });
 
-    this.Given(/^I am on the dashboard$/, function () {
+    this.Given('I am on the dashboard', function () {
       return this.client.url(process.env.ROOT_URL);
     });
 
-    this.When(/^I navigate to '([^']*)'$/, function (relativePath) {
+    this.When('I navigate to \'$relativePath\'', function (relativePath) {
       return this.client
         .url(url.resolve(process.env.ROOT_URL, relativePath));
     });
