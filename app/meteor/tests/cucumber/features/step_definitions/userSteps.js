@@ -20,6 +20,7 @@
 
     this.Then('I should be logged in', function () {
       client.waitForExist('#loaded');
+      client.pause(300);
       var user = client.execute(function() {
         return Meteor.user();
       });
@@ -28,6 +29,7 @@
 
     this.Then('I should be logged out', function () {
       client.waitForExist('#loaded');
+      client.pause(300);
       var user = client.execute(function() {
         return Meteor.user();
       });
