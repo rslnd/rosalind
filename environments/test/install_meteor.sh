@@ -28,6 +28,7 @@ install_meteor () {
   mv ~/cache/.meteor/ ~/cache/meteor_temp
   mv ~/cache/meteor_temp ~/cache/meteor
   ln -s ~/cache/meteor/ ~/.meteor
+  export PATH=~/.meteor/:$PATH
 }
 
 clear_cache() {
@@ -53,7 +54,7 @@ else
 fi
 
 
-METEOR_VERSION=$(meteor --version)
+METEOR_VERSION=$(~/.meteor/meteor --version)
 echo "** Using $METEOR_VERSION"
 echo -e "** Clear CI cache to update to latest version\n"
 
