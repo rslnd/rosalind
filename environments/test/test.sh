@@ -6,15 +6,15 @@
 # Exit on first command that fails
 set -e
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd $DIR
 cd ../../app/meteor/
 
 echo "** Running ESLint"
 eslint .
-echo "ESLint checks were successful.\n"
+echo -e "ESLint checks were successful.\n"
 
-echo "** Killing node processes\n"
+echo -e "** Killing node processes\n"
 pkill -9 node || true
 
 export VELOCITY_CI=1
@@ -23,5 +23,5 @@ export JASMINE_SERVER_INTEGRATION=1
 export JASMINE_BROWSER=chrome
 export SELENIUM_BROWSER=chrome
 
-echo "** Running test suite\n"
+echo -e "** Running test suite\n"
 meteor --test --settings ../../environments/test/settings.json
