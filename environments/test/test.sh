@@ -24,4 +24,22 @@ export JASMINE_BROWSER=chrome
 export SELENIUM_BROWSER=chrome
 
 echo -e "** Running test suite\n"
+
+# Now don't exit if test commands fail
+set +e
+
+mkdir -p ~/clone/app/meteor/.meteor/local/log
 meteor --test --settings ../../environments/test/settings.json
+
+if [ $? -eq 0 ]; then
+  echo -e "\n** ✅ Yay! All tests completed successfully"
+  exit 0
+else
+  set -e
+  echo -e "\n"
+  echo "** ⛔️ Oh no, some tests failed"
+  echo -e "** Here are the log files\n"
+  cd ~/clone/app/meteor/.meteor/local/log/
+  tail -n +1 *
+  exit 1
+fi
