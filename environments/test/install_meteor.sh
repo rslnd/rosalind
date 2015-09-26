@@ -6,17 +6,15 @@ set -e
 DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd $DIR
 
-  REQUIRED_METEOR_VERSION=$(cat ../../app/meteor/.meteor/release)
+REQUIRED_METEOR_VERSION=$(cat ../../app/meteor/.meteor/release)
 REQUIRED_METEOR_VERSION=${REQUIRED_METEOR_VERSION:7}
 echo "** Project requires Meteor $REQUIRED_METEOR_VERSION"
 
 cd $DIR
 
-if [ -x "$HOME/cache/meteor/meteor" ]; then
-  echo "** Cache contains Meteor"
-  ~/cache/meteor/meteor --version
-else
-  echo "** No cached Meteor installation found"
+export PATH=~/.meteor/:$PATH
+
+install_meteor () {
   echo "** Installing latest Meteor"
 
   curl -o meteor_install_script.sh https://install.meteor.com/
@@ -25,15 +23,39 @@ else
 
   ./meteor_install_script.sh
 
-  mv ~/.meteor/ ~/cache/meteor/
-  ln -s ~/cache/meteor/ ~/.meteor/
+  mkdir -p ~/cache/
+  mv ~/.meteor/ ~/cache/
+  mv ~/cache/.meteor/ ~/cache/meteor_temp
+  mv ~/cache/meteor_temp ~/cache/meteor
+  ln -s ~/cache/meteor/ ~/.meteor
+}
+
+clear_cache() {
+  echo "** Clearing cache"
+  rm -rf ~/.meteor
+  rm -rf ~/cache
+}
+
+if [ -x "$(command -v meteor)" ]; then
+  INSTALLED_METEOR_VERSION=$(meteor --version)
+  INSTALLED_METEOR_VERSION=${INSTALLED_METEOR_VERSION:7}
+  echo "** Cache contains Meteor $INSTALLED_METEOR_VERSION"
+
+  if [ "$INSTALLED_METEOR_VERSION" == "$REQUIRED_METEOR_VERSION" ]; then
+    echo "** Okay, installed and required Meteor versions match"
+  else
+    clear_cache
+    install_meteor
+  fi
+else
+  echo "** Meteor not installed"
+  install_meteor
 fi
 
-export PATH=~/.meteor/:$PATH
-export METEOR_WAREHOUSE_DIR ~/cache/meteor/
 
-METEOR_VERSION=$(~/.meteor/meteor --version)
+METEOR_VERSION=$(meteor --version)
 echo "** Using $METEOR_VERSION"
-echo "** Clear CI cache to update to latest version"
+echo -e "** Clear CI cache to update to latest version\n"
 
+echo "** Installing ESLint"
 npm install -g eslint
