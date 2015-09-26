@@ -27,14 +27,18 @@ install_meteor () {
   mv ~/.meteor/ ~/cache/
   mv ~/cache/.meteor/ ~/cache/meteor_temp
   mv ~/cache/meteor_temp ~/cache/meteor
-  ln -s ~/cache/meteor/ ~/.meteor
-  export PATH=~/.meteor/:$PATH
 }
 
-clear_cache() {
+clear_cache () {
   echo "** Clearing cache"
   rm -rf ~/.meteor
   rm -rf ~/cache
+}
+
+symlink () {
+  echo "** Creating symlink"
+  ln -s ~/cache/meteor/ ~/.meteor
+  export PATH=~/.meteor/:$PATH
 }
 
 if [ -x "$(command -v meteor)" ]; then
@@ -53,7 +57,7 @@ else
   install_meteor
 fi
 
-
+symlink
 METEOR_VERSION=$(~/.meteor/meteor --version)
 echo "** Using $METEOR_VERSION"
 echo -e "** Clear CI cache to update to latest version\n"
