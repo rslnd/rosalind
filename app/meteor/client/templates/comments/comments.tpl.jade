@@ -13,4 +13,5 @@ if hasComments
   form.add-comment
     +avatar
     .img-push
-      input.add-comment-body.form-control.input-sm(placeholder='{{_ "ui.press_enter_to_post_comment"}}')
+      label.sr-only(for='add-comment-{{_id}}') {{_ 'ui.press_enter_to_post_comment'}}
+      input.add-comment-body.form-control.input-sm(placeholder='{{_ "ui.press_enter_to_post_comment"}}' id='add-comment-{{_id}}')

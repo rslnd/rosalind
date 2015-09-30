@@ -1,0 +1,19 @@
+{
+  "ui": {
+    "allDone": "All done!",
+    "notice": "Notice",
+    "by": "by",
+    "at": "at",
+    "edit": "Edit",
+    "close": "Close",
+    "comment": "Comment",
+    "comment_plural": "Comments",
+    "press_enter_to_post_comment": "Post comment...",
+    "status": {
+      "lastLogin": "Last login",
+      "lastActivity": "Last activity",
+      "online": "Now",
+      "never": "Never"
+    }
+  }
+}
