@@ -30,7 +30,7 @@ iron:router
 
 # Testing
 velocity:console-reporter
-xolvio:cucumber@0.14.0-rc.3
+xolvio:cucumber
 sanjo:jasmine
 
 # Security
