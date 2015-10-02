@@ -20,7 +20,6 @@ Feature: Comments
     And I should see 'C' in '.avatar'
     And I should see 'This is a comment'
 
-  @dev
   Scenario: Add comment in modal
     Given an 'inbound call' with the following attributes:
       | Last name | First name | Telephone | Note | Private Patient |
@@ -38,4 +37,3 @@ Feature: Comments
     And I click on 'Mark as unresolved'
     And I click on 'Inbound Calls > Open inbound calls'
     Then I should see 'Another comment from modal'
-    
