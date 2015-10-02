@@ -1,5 +1,7 @@
 .content-header
   h1 {{_ title}}
+    if titleAppend
+      | {{ titleAppend }}
     if titleCount
       | {{getPublishedCount titleCount}}
     small
@@ -7,3 +9,5 @@
         | {{getPublishedCount subtitleCount}}
       if subtitle
         | {{_ subtitle}}
+      if subtitleAppend
+        | {{ subtitleAppend }}

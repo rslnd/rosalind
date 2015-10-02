@@ -80,3 +80,7 @@ a, button, .btn {
   font-size: 11px;
   overflow: hidden;
 }
+
+.clear {
+  clear: both;
+}
