@@ -1,0 +1,10 @@
+{
+  "schedules": {
+    "this": "Schedules",
+    "thisCurrent": "Current Schedules",
+    "weekOfYear_short": "CW",
+    "weekOfYear": "Calendar Week",
+    "employee": "Employee",
+    "employee_plural": "Employees"
+  }
+}
