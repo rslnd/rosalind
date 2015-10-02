@@ -3,6 +3,7 @@ const sidebar = [
     name: 'inboundCalls.this',
     icon: 'phone',
     countBadge: 'inboundCalls',
+    roles: ['admin', 'inboundCalls'],
     submenu: [
       { name: 'inboundCalls.thisOpen', link: '/inboundCalls' },
       { name: 'inboundCalls.thisResolved', link: '/inboundCalls/resolved' },
@@ -10,8 +11,16 @@ const sidebar = [
     ]
   },
   {
-    name: 'users.this',
+    name: 'schedules.this',
     icon: 'user-md',
+    roles: ['admin', 'schedules'],
+    submenu: [
+      { name: 'schedules.thisCurrent', link: '/schedules' }
+    ]
+  },
+  {
+    name: 'users.this',
+    icon: 'unlock-alt',
     roles: ['admin'],
     submenu: [
       { name: 'users.thisAll', link: '/users' },
