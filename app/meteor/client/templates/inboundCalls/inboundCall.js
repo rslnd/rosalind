@@ -18,7 +18,3 @@ Template.inboundCallsUnresolve.events({
     InboundCalls.restore(this._id);
   }
 });
-
-UI.registerHelper('zerofix', (context) => {
-  return Helpers.zerofix(context);
-});

@@ -20,15 +20,3 @@ UI.registerHelper('showCount', (context) => {
     return (count > 0) ? count : false;
   }
 });
-
-UI.registerHelper('getFirstName', (context) => {
-  return Helpers.getFirstName(context);
-});
-
-UI.registerHelper('getFullName', (context) => {
-  return Helpers.getFullName(context);
-});
-
-UI.registerHelper('getShortname', (context) => {
-  return Helpers.getShortname(context);
-});
