@@ -74,7 +74,7 @@ u2622:persistent-session
 momentjs:moment
 bojicas:inflections
 copleykj:livestamp
-krt:meteor-reactive-fullcalendar
+drblue:fullcalendar
 
 # Monitoring
 meteorhacks:kadira@2.23.0
