@@ -1,0 +1,11 @@
+{
+  "time": {
+    "sunday": "Sonntag",
+    "monday": "Montag",
+    "tuesday": "Dienstag",
+    "wednesday": "Mittwoch",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Samstag"
+  }
+}
