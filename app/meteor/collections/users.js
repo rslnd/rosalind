@@ -137,16 +137,14 @@ TabularTables.Users = new Tabular.Table({
   collection: Meteor.users,
   columns: [
     {data: 'status', tmpl: Meteor.isClient && Template.status},
-    {data: 'username', title: 'Username'},
     {data: 'profile.lastName', title: 'Name', render: (val, type, doc) => { return doc.fullNameWithTitle(); }},
     {data: 'getRoles()', title: 'Berechtigungen'},
+    {data: 'profile.group', title: 'Gruppe'},
     {data: 'lastActivity()', title: 'Zuletzt gesehen'},
-    {data: 'status.lastLogin.ipAddr', title: 'IP'},
-    {data: 'status.lastLogin.userAgent', title: 'User Agent'},
     {tmpl: Meteor.isClient && Template.editLink }
   ],
   order: [[0, 'asc'], [2, 'asc']],
-  extraFields: ['profile'],
+  extraFields: ['profile', 'username'],
   allow: (userId) => {
     return Roles.userIsInRole(userId, ['admin']);
   }

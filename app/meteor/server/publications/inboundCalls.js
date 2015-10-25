@@ -1,7 +1,7 @@
 Meteor.publishComposite('inboundCalls', function(options = {}) {
   check(options, Object);
 
-  if(this.userId) {
+  if(this.userId && Roles.userIsInRole(this.userId, ['inboundCalls', 'admin'], Roles.GLOBAL_GROUP)) {
     let selector = _.pick(options, 'removed');
 
     return {
