@@ -1,0 +1,11 @@
++each employeeGroups
+  .box.box-default
+    .box-header.with-border
+      h3.box-title {{ group }}
+    .box-body.no-padding
+      ul.nav.nav-pills.nav-stacked
+        +each users
+          li
+            a(href='{{ linkToDefaultScheduleForUser }}')
+              | {{ getFullNameWithTitle this }}
+              span.label.label-primary.pull-right {{ totalHoursWeek }}

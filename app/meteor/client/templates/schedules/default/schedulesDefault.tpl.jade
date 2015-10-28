@@ -1,0 +1,16 @@
++contentHeader(title='schedules.thisDefault' subtitle='schedules.weekOfYear' subtitleAppend=selectedWeekOfYear)
+.content.zoom-1 
+  .row
+    .col-md-3 {{> schedulesDefaultEmployeeList }}
+
+    .col-md-9
+      .box.box-default
+        .box-body.no-padding {{> fullcalendar schedulesDefaultOptions}}
+  .row
+    .col-md-12
+      .box.box-default
+        .box-header.with-border
+          h3.box-title
+            | {{_ 'schedules.thisDefault'}} {{_ 'ui.for' }}
+            strong {{ getFullNameWithTitle viewUser }}
+        .box-body {{> schedulesDefaultForm viewUser=viewUser }}
