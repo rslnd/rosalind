@@ -134,6 +134,8 @@ Meteor.users.helpers({
   group() {
     if (this.profile && this.profile.group)
       return TAPi18n.__('users.groups.' + this.profile.group);
+    else
+      return TAPi18n.__('users.groups.none');
   },
   getRoles() {
     return Roles.getRolesForUser(this._id).join(', ');
@@ -142,6 +144,33 @@ Meteor.users.helpers({
     return 'users';
   }
 });
+
+Meteor.users.findOneByIdOrUsername = function(idOrUsername) {
+  if (typeof idOrUsername === 'string') {
+    let byId = Meteor.users.findOne(idOrUsername);
+    if (byId)
+      return byId;
+
+    let byUsername = Meteor.users.findOne({username: idOrUsername});
+    if (byUsername)
+      return byUsername;
+
+  } else if (typeof idOrUsername === 'object') {
+    let byPassthrough = (idOrUsername.collectionSlug && (idOrUsername.collectionSlug() === 'users'));
+    if (byPassthrough)
+      return idOrUsername;
+
+    let byCursor = (idOrUsername.fetch && idOrUsername.fetch()[0]);
+    if (byCursor)
+      return idOrUsername.fetch()[0];
+  }
+};
+
+Meteor.users.byGroup = function(selector = {}) {
+  let users = Meteor.users.find(selector).fetch();
+  users = _.groupBy(users, function(u) { return u.group(); });
+  return _.map(users, function(v, k) { return {group: k, users: v}; });
+};
 
 TabularTables.Users = new Tabular.Table({
   name: 'Users',

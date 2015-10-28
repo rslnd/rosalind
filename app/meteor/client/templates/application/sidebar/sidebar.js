@@ -15,7 +15,7 @@ const sidebar = [
     icon: 'user-md',
     roles: ['admin', 'schedules'],
     submenu: [
-      { name: 'schedules.thisCurrent', link: '/schedules' }
+      { name: 'schedules.thisDefault', link: '/schedules/default' }
     ]
   },
   {
