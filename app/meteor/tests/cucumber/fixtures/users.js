@@ -13,7 +13,9 @@
       if (Meteor.users.findOne({username: options.username}))
         return false;
 
-      if (!options.password) options.password = '1111';
+      options = TestUtil.transformAttributes(options);
+
+      if (typeof password != 'string') options.password = '1111';
       if (!options.email) options.email = options.username + '@example.com';
 
       Accounts.createUser(options);

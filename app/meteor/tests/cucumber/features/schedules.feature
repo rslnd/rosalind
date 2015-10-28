@@ -7,7 +7,11 @@ Feature: Schedules
   Background:
     Given I am a 'manager' with the role 'schedules'
     And I am logged in
+    Given a 'user' with the following attributes:
+      | username | profile.firstName | profile.employee |
+      | dt       | Dr. Test          | true             |
 
-  Scenario: View schedules
-    Given I click on 'Schedules > Current Schedules'
-    Then I should see the current week of the year
+    Scenario: View default schedules
+      Given I click on 'Schedules > Default Schedules'
+      Then I should see 'Dr. Test'
+      And I should see '0h'
