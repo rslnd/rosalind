@@ -16,3 +16,23 @@ Time.weekdays = function() {
     sat: { label: TAPi18n.__('time.saturday'), offset: 5 }
   };
 };
+
+Time.hm = function(float) {
+  let h = Math.floor(float);
+  let m = (float - h) * 60;
+  return { h, m };
+}
+
+Time.format = function(format, t) {
+  let s = '';
+  switch(format) {
+    case 'h[h]( m[m])':
+      s += t.h + 'h';
+      if (t.m && t.m > 0)
+        s += ' ' + Math.round(t.m) + 'm';
+      break;
+    default:
+      s = JSON.stringify(data);
+  }
+  return s;
+}
