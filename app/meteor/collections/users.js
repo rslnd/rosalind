@@ -25,14 +25,21 @@ Schema.UserProfile = new SimpleSchema({
     type: String,
     allowedValues: ['Male', 'Female'],
     optional: true
-  }
+  },
+  group: {
+    type: String,
+    optional: true
+  },
+  employee: {
+    type: Boolean,
+    optional: true
+  },
 });
 
 Schema.User = new SimpleSchema({
   username: {
     type: String,
     regEx: /^[a-z0-9A-Z_]*$/,
-    optional: true
   },
   emails: {
     type: [Object],
@@ -123,6 +130,10 @@ Meteor.users.helpers({
       return this.fullNameWithTitle(this.profile.lastName);
     else
       return this.fullName();
+  },
+  group() {
+    if (this.profile && this.profile.group)
+      return TAPi18n.__('users.groups.' + this.profile.group);
   },
   getRoles() {
     return Roles.getRolesForUser(this._id).join(', ');
