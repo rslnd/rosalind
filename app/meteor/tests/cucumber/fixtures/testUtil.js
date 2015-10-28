@@ -42,10 +42,10 @@ TestUtil.deepen = function(o) {
       part = parts.shift();
       t = t[part] = t[part] || {};
     }
-    t[key] = o[k]
+    t[key] = o[k];
   }
   return oo;
-}
+};
 
 TestUtil.transformAttributes = function(attributes) {
   var transformedAttributes = {};

@@ -6,7 +6,7 @@ Template.schedulesDefaultForm.helpers({
     } else {
       return {
         userId: this.viewUser._id,
-      }
+      };
     }
   },
   formType() {

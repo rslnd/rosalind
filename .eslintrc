@@ -13,7 +13,7 @@
   "rules": {
     "quotes": [2, "single"],
     "semi": [2, "always"],
-    "indent": [2, 2],
+    "indent": [2, 2, {"SwitchCase": 1}],
     "eol-last": 2,
     "comma-spacing": 2,
     "no-underscore-dangle": 0,

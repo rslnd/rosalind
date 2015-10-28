@@ -21,7 +21,7 @@ Time.hm = function(float) {
   let h = Math.floor(float);
   let m = (float - h) * 60;
   return { h, m };
-}
+};
 
 Time.format = function(format, t) {
   let s = '';
@@ -35,4 +35,4 @@ Time.format = function(format, t) {
       s = JSON.stringify(data);
   }
   return s;
-}
+};
