@@ -35,6 +35,13 @@
         client.pause(300);
 
         client.waitForExist('#loaded');
+      } else if (client.isExisting('//a[@title="' + linkText + '"]')) {
+        client.execute(function(title) {
+          $('a[title="' + title + '"]').click();
+        }, linkText);
+        client.pause(300);
+
+        client.waitForExist('#loaded');
       } else {
         if (linkText.match(/(^\.|^\#)/ig)) {
           client.waitForVisible(linkText);

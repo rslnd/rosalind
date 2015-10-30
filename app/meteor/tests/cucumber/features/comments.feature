@@ -28,7 +28,7 @@ Feature: Comments
     And I click on 'Mark as resolved'
     Then I should not see 'Alex'
     And I click on 'Inbound Calls > Resolved inbound calls'
-    And I click on '0'
+    And I click on '0 Comments'
     Then I should see the element '.modal'
     And I fill in 'Post comment...' with 'Commented from modal'
     And I press 'Enter'

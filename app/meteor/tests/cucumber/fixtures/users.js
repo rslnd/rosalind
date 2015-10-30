@@ -15,7 +15,7 @@
 
       options = TestUtil.transformAttributes(options);
 
-      if (typeof password != 'string') options.password = '1111';
+      if (typeof options.password != 'string') options.password = '1111';
       if (!options.email) options.email = options.username + '@example.com';
 
       Accounts.createUser(options);

@@ -26,7 +26,7 @@ Helpers.getShortname = function(user) {
 // replace all letters 'O' or 'o' with zeroes. Join back together.
 Helpers.zerofix = function(telephone) {
   if (telephone) {
-    telephone = _.map(telephone.split(/(\s|\-)/g), (word) => {
+    telephone = _.map(telephone.split(/\s/g), (word) => {
       return word.match(/\d/g) ? word.replace(/o/gi, '0') : word;
     }).join(' ');
 

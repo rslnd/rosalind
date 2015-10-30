@@ -43,5 +43,10 @@
     this.Then('I should see the element \'$selector\'', function (selector) {
       client.waitForVisible(selector);
     });
+
+    this.Then(/^I pause/, function () {
+      client.debug();
+    });
+
   };
 })();

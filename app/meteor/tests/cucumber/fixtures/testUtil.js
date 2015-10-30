@@ -60,7 +60,6 @@ TestUtil.transformAttributes = function(attributes) {
   var nestedKeys = _.filter(_.keys(transformedAttributes), function(k) { return (k.indexOf('.') > -1); });
   if (nestedKeys.length > 0) {
     transformedAttributes = TestUtil.deepen(transformedAttributes);
-    console.log(JSON.stringify(transformedAttributes));
   }
 
   return transformedAttributes;

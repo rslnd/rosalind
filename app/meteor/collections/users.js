@@ -156,11 +156,11 @@ Meteor.users.findOneByIdOrUsername = function(idOrUsername) {
       return byUsername;
 
   } else if (typeof idOrUsername === 'object') {
-    let byPassthrough = (idOrUsername.collectionSlug && (idOrUsername.collectionSlug() === 'users'));
+    let byPassthrough = (idOrUsername && idOrUsername.collectionSlug && (idOrUsername.collectionSlug() === 'users'));
     if (byPassthrough)
       return idOrUsername;
 
-    let byCursor = (idOrUsername.fetch && idOrUsername.fetch()[0]);
+    let byCursor = (idOrUsername && idOrUsername.fetch && idOrUsername.fetch()[0]);
     if (byCursor)
       return idOrUsername.fetch()[0];
   }
