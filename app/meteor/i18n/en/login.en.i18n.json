@@ -5,7 +5,7 @@
     "button": "Log in",
     "name": "Name",
     "password": "Password",
-    "loggedIn": "Your are currently logged in.",
+    "loggedIn": "You are currently logged in.",
     "logout": "Log out",
     "help": {
       "show": "I need help",
