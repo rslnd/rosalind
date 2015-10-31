@@ -4,7 +4,7 @@
     "thisOpen": "Open inbound calls",
     "thisResolved": "Resolved inbound calls",
     "empty": "No open inbound calls",
-    "emptyResolved": "Didn't find any resolved calls",
+    "emptyResolved": "Couldn't find any resolved calls",
     "new": "New inbound call",
     "save": "Save new inbound call",
     "insurance": "Insurance",

@@ -4,6 +4,10 @@
 
   module.exports = function () {
 
+    this.Before(function() {
+      browser.timeoutsImplicitWait(30 * 1000);
+    });
+
     this.Then('I should see \'$string\'', function (string) {
       browser.waitForExist('#loaded');
       var mainText = browser.getText('body');

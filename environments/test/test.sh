@@ -30,35 +30,66 @@ kill_zombies () {
   pkill -f 'java -jar' || true
 }
 
+
 # Run Meteor test suite
-# Be sure to set BROWSER before calling
-test_meteor () {
+test_meteor_selenium () {
   cd_app
   cd meteor/
   kill_zombies
+
+  export CUCUMBER=1
+  export SELENIUM_BROWSER="chrome"
+
+  export JASMINE_SERVER_UNIT=0
+  export JASMINE_SERVER_INTEGRATION=0
+  export JASMINE_CLIENT_UNIT=0
+  export JASMINE_CLIENT_INTEGRATION=0
+
   export VELOCITY_CI=1
-  export JASMINE_CLIENT_UNIT=1
-  export JASMINE_SERVER_INTEGRATION=1
-  export JASMINE_BROWSER="$BROWSER"
-  export SELENIUM_BROWSER="$BROWSER"
   export NODE_ENV="test"
   export METEOR_ENV="test"
 
-  echo -e "** Running test suite in $BROWSER\n"
+  echo -e "** Running integration test suite\n"
 
   mkdir -p .meteor/local/log
   meteor --test --settings ../../environments/test/settings.json
 
   if [ $? -eq 0 ]; then
-    echo -e "\n** Yay! Meteor test suite in $BROWSER completed successfully\n"
+    echo -e "\n** Yay! Meteor integration test suite completed successfully\n"
     return 0
   else
-    set -e
-    echo -e "\n"
-    echo "** Oh no, some tests failed in $BROWSER"
-    echo -e "** Here are the log files\n"
-    cd .meteor/local/log/
-    tail -n +1 *
+    echo -e "\n** Yay! Meteor integration test suite failed\n"
+    return 1
+  fi
+}
+
+test_meteor_jasmine () {
+  cd_app
+  cd meteor/
+  kill_zombies
+
+  export JASMINE_SERVER_INTEGRATION=1
+  export JASMINE_BROWSER="PhantomJS"
+
+  export JASMINE_SERVER_UNIT=0
+  export JASMINE_CLIENT_UNIT=0
+  export JASMINE_CLIENT_INTEGRATION=0
+  export CUCUMBER=0
+
+  export VELOCITY_CI=1
+  export NODE_ENV="test"
+  export METEOR_ENV="test"
+
+  echo -e "** Running unit test suite\n"
+
+  mkdir -p .meteor/local/log
+  meteor --test --settings ../../environments/test/settings.json
+
+  if [ $? -eq 0 ]; then
+    echo -e "\n** Meteor unit tests completed successfully\n"
+    return 0
+  else
+    echo -e "\n** Meteor unit tests failed\n"
     return 1
   fi
 }
@@ -67,15 +98,21 @@ test_meteor () {
 test_all () {
   test_eslint
 
-  BROWSER="chrome" && test_meteor || fail
+  test_meteor_jasmine || fail
+  test_meteor_selenium || fail
 
   kill_zombies
 
   if [ "$STATUS" == "0" ]; then
     echo -e "\n\n** Yay! All tests completed successfully"
   else
+    set -e
     echo "** Oh no, some tests failed"
-    echo "** $MESSAGE"
+    echo -e "\n"
+    echo "** Oh no, some scenarios failed"
+    echo -e "** Here are the log files\n"
+    cd .meteor/local/log/
+    tail -n +1 *
   fi
 
   exit $STATUS
@@ -83,10 +120,8 @@ test_all () {
 
 
 STATUS=0
-MESSAGE=""
 fail () {
   STATUS=1
-  MESSAGE="[failed: $BROWSER] $MESSAGE"
 }
 
 test_all
