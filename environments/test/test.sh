@@ -67,8 +67,6 @@ test_meteor () {
 test_all () {
   test_eslint
 
-  BROWSER="firefox" && test_meteor || fail
-
   BROWSER="chrome" && test_meteor || fail
 
   kill_zombies
