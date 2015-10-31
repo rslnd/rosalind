@@ -3,7 +3,7 @@
 
   module.exports = function () {
     this.Before(function() {
-      client.windowHandleMaximize();
+      browser.windowHandleMaximize();
     });
 
     var lastFormField = null;
@@ -21,33 +21,33 @@
         }
       };
 
-      client.waitForExist('#loaded');
+      browser.waitForExist('#loaded');
 
       if (menuPath) {
-        client.execute(function(s0) {
+        browser.execute(function(s0) {
           $(s0).click();
         }, getSelector(linkText.split(' > ')[0], 0));
-        client.pause(300);
+        browser.pause(300);
 
-        client.execute(function(s1) {
+        browser.execute(function(s1) {
           $(s1).click();
         }, getSelector(linkText.split(' > ')[1], 1));
-        client.pause(300);
+        browser.pause(300);
 
-        client.waitForExist('#loaded');
-      } else if (client.isExisting('//a[@title="' + linkText + '"]')) {
-        client.execute(function(title) {
+        browser.waitForExist('#loaded');
+      } else if (browser.isExisting('//a[@title="' + linkText + '"]')) {
+        browser.execute(function(title) {
           $('a[title="' + title + '"]').click();
         }, linkText);
-        client.pause(300);
+        browser.pause(300);
 
-        client.waitForExist('#loaded');
+        browser.waitForExist('#loaded');
       } else {
         if (linkText.match(/(^\.|^\#)/ig)) {
-          client.waitForVisible(linkText);
-          client.click(linkText);
+          browser.waitForVisible(linkText);
+          browser.click(linkText);
         } else {
-          var foundAndClicked = client.execute(function(linkText) {
+          var foundAndClicked = browser.execute(function(linkText) {
             var el = $('a,input,button').filter(':contains("' + linkText + '")').sort(function(a, b) {
               return (Number($(b).zIndex()) - Number($(a).zIndex()));
             });
@@ -68,20 +68,20 @@
       var selector = 'label=' + labelText;
       lastFormField = selector;
 
-      client.waitForExist('#loaded');
-      client.waitForExist(selector);
-      var fieldId = client.getAttribute(selector, 'for');
-      client.setValue('#' + fieldId, fieldValue);
+      browser.waitForExist('#loaded');
+      browser.waitForExist(selector);
+      var fieldId = browser.getAttribute(selector, 'for');
+      browser.setValue('#' + fieldId, fieldValue);
 
-      client.pause(300);
+      browser.pause(300);
     });
 
     this.When('I submit the form', function() {
-      client.waitForExist('#loaded');
-      client.waitForVisible(lastFormField);
-      client.submitForm(lastFormField);
-      client.pause(300);
-      client.waitForExist('#loaded');
+      browser.waitForExist('#loaded');
+      browser.waitForVisible(lastFormField);
+      browser.submitForm(lastFormField);
+      browser.pause(300);
+      browser.waitForExist('#loaded');
     });
 
     this.When('I press \'$key\'', function(key) {
@@ -101,7 +101,7 @@
       key.replace('Pageup', '\uE00E');
       key.replace('Pagedown', '\uE00F');
       key.replace('Space', '\uE00D');
-      client.keys(key);
+      browser.keys(key);
     });
 
   };

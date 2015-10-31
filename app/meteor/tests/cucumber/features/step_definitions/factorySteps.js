@@ -5,11 +5,11 @@
   module.exports = function () {
 
     this.Before(function() {
-      this.server.call('fixtures/resetDatabase');
+      server.call('fixtures/resetDatabase');
     });
 
     this.After(function() {
-      this.server.call('fixtures/resetDatabase');
+      server.call('fixtures/resetDatabase');
     });
 
 
