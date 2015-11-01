@@ -57,7 +57,7 @@ test_meteor_selenium () {
   echo -e "** Running integration test suite\n"
 
   mkdir -p .meteor/local/log
-  meteor --test --settings ../../environments/test/settings.json --release "$REQUIRED_METEOR_VERSION"
+  meteor --test --settings ../../environments/test/settings.json --release "METEOR@$REQUIRED_METEOR_VERSION"
 
   if [ $? -eq 0 ]; then
     echo -e "\n** Yay! Meteor integration test suite completed successfully\n"
@@ -88,7 +88,7 @@ test_meteor_jasmine () {
   echo -e "** Running unit test suite\n"
 
   mkdir -p .meteor/local/log
-  meteor --test --settings ../../environments/test/settings.json --release "$REQUIRED_METEOR_VERSION"
+  meteor --test --settings ../../environments/test/settings.json --release "METEOR@$REQUIRED_METEOR_VERSION"
 
   if [ $? -eq 0 ]; then
     echo -e "\n** Meteor unit tests completed successfully\n"
