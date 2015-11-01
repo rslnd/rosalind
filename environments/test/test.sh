@@ -13,6 +13,7 @@ cd_app () {
   cd ../../app/
 }
 
+echo "** Installed Meteor version: $(meteor --version)"
 cd_app
 REQUIRED_METEOR_VERSION=$(cat meteor/.meteor/release)
 REQUIRED_METEOR_VERSION=${REQUIRED_METEOR_VERSION:7}
