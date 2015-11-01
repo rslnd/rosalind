@@ -13,6 +13,11 @@ cd_app () {
   cd ../../app/
 }
 
+cd_app
+REQUIRED_METEOR_VERSION=$(cat meteor/.meteor/release)
+REQUIRED_METEOR_VERSION=${REQUIRED_METEOR_VERSION:7}
+echo "** Using Meteor $REQUIRED_METEOR_VERSION"
+
 # Run ESLint checks
 test_eslint () {
   cd_app
@@ -52,7 +57,7 @@ test_meteor_selenium () {
   echo -e "** Running integration test suite\n"
 
   mkdir -p .meteor/local/log
-  meteor --test --settings ../../environments/test/settings.json
+  meteor --test --settings ../../environments/test/settings.json --release "$REQUIRED_METEOR_VERSION"
 
   if [ $? -eq 0 ]; then
     echo -e "\n** Yay! Meteor integration test suite completed successfully\n"
@@ -83,7 +88,7 @@ test_meteor_jasmine () {
   echo -e "** Running unit test suite\n"
 
   mkdir -p .meteor/local/log
-  meteor --test --settings ../../environments/test/settings.json
+  meteor --test --settings ../../environments/test/settings.json --release "$REQUIRED_METEOR_VERSION"
 
   if [ $? -eq 0 ]; then
     echo -e "\n** Meteor unit tests completed successfully\n"
