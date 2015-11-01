@@ -17,7 +17,7 @@ echo "** Installed Meteor version: $(meteor --version)"
 cd_app
 REQUIRED_METEOR_VERSION=$(cat meteor/.meteor/release)
 REQUIRED_METEOR_VERSION=${REQUIRED_METEOR_VERSION:7}
-echo "** Using Meteor $REQUIRED_METEOR_VERSION"
+echo -e "** Using Meteor $REQUIRED_METEOR_VERSION \n"
 
 # Run ESLint checks
 test_eslint () {
@@ -61,10 +61,10 @@ test_meteor_selenium () {
   meteor --test --settings ../../environments/test/settings.json --release "METEOR@$REQUIRED_METEOR_VERSION"
 
   if [ $? -eq 0 ]; then
-    echo -e "\n** Yay! Meteor integration test suite completed successfully\n"
+    echo -e "\n** Meteor integration test suite completed successfully\n"
     return 0
   else
-    echo -e "\n** Yay! Meteor integration test suite failed\n"
+    echo -e "\n** Meteor integration test suite failed\n"
     return 1
   fi
 }
