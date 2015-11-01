@@ -13,11 +13,14 @@ cd_app () {
   cd ../../app/
 }
 
-echo "** Installed Meteor version: $(meteor --version)"
+echo "** Installed: $(meteor --version)"
 cd_app
 REQUIRED_METEOR_VERSION=$(cat meteor/.meteor/release)
 REQUIRED_METEOR_VERSION=${REQUIRED_METEOR_VERSION:7}
-echo -e "** Using Meteor $REQUIRED_METEOR_VERSION \n"
+REQUIRED_METEOR_VERSION+="_1"
+RELEASE="--release velocity:METEOR@$REQUIRED_METEOR_VERSION"
+
+echo -e "** Using: $(meteor --version $RELEASE) \n"
 
 # Run ESLint checks
 test_eslint () {
@@ -34,6 +37,14 @@ kill_zombies () {
   echo -e "** Killing node and java processes\n"
   pkill -9 node || true
   pkill -f 'java -jar' || true
+}
+
+clear_logs() {
+  cd_app
+  mkdir -p meteor/.meteor/local/log
+  cd meteor/.meteor/local/log/
+  rm -rf *
+  cd_app
 }
 
 
@@ -57,8 +68,7 @@ test_meteor_selenium () {
 
   echo -e "** Running integration test suite\n"
 
-  mkdir -p .meteor/local/log
-  meteor --test --settings ../../environments/test/settings.json --release "METEOR@$REQUIRED_METEOR_VERSION"
+  meteor $RELEASE --test --settings ../../environments/test/settings.json
 
   if [ $? -eq 0 ]; then
     echo -e "\n** Meteor integration test suite completed successfully\n"
@@ -88,8 +98,7 @@ test_meteor_jasmine () {
 
   echo -e "** Running unit test suite\n"
 
-  mkdir -p .meteor/local/log
-  meteor --test --settings ../../environments/test/settings.json --release "METEOR@$REQUIRED_METEOR_VERSION"
+  meteor $RELEASE --test --settings ../../environments/test/settings.json
 
   if [ $? -eq 0 ]; then
     echo -e "\n** Meteor unit tests completed successfully\n"
@@ -102,6 +111,8 @@ test_meteor_jasmine () {
 
 # Run test suite in different browsers
 test_all () {
+  clear_logs
+
   test_eslint
 
   test_meteor_jasmine || fail
