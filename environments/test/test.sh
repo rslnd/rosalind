@@ -19,6 +19,7 @@ REQUIRED_METEOR_VERSION=$(cat meteor/.meteor/release)
 REQUIRED_METEOR_VERSION=${REQUIRED_METEOR_VERSION:7}
 REQUIRED_METEOR_VERSION+="_1"
 RELEASE="--release velocity:METEOR@$REQUIRED_METEOR_VERSION"
+RELEASE=""
 
 echo -e "** Using: $(meteor --version $RELEASE) \n"
 
