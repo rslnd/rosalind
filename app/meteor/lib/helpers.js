@@ -2,25 +2,24 @@
 
 Helpers = {};
 
-Helpers.getFirstName = function(userId) {
-  if (typeof userId === 'string') {
-    let user = Meteor.users.findOne(userId);
-    return user && user.firstName();
-  }
+Helpers.getFirstName = function(user) {
+  user = Meteor.users.findOneByIdOrUsername(user);
+  return user && user.firstName();
 };
 
-Helpers.getFullName = function(userId) {
-  if (typeof userId === 'string') {
-    let user = Meteor.users.findOne(userId);
-    return user && user.fullName();
-  }
+Helpers.getFullName = function(user) {
+  user = Meteor.users.findOneByIdOrUsername(user);
+  return user && user.fullName();
 };
 
-Helpers.getShortname = function(userId) {
-  if (typeof userId === 'string') {
-    let user = Meteor.users.findOne(userId);
-    return user && user.shortname();
-  }
+Helpers.getFullNameWithTitle = function(user) {
+  user = Meteor.users.findOneByIdOrUsername(user);
+  return user && user.fullNameWithTitle();
+};
+
+Helpers.getShortname = function(user) {
+  user = Meteor.users.findOneByIdOrUsername(user);
+  return user && user.shortname();
 };
 
 // Split phone number at whitespaces. If the word contains a number,
@@ -39,3 +38,11 @@ Helpers.zerofix = function(telephone) {
     }
   }
 };
+
+if (Meteor.isClient) {
+  UI.registerHelper('getFirstName', (context) => { return Helpers.getFirstName(context); });
+  UI.registerHelper('getFullName', (context) => { return Helpers.getFullName(context); });
+  UI.registerHelper('getFullNameWithTitle', (context) => { return Helpers.getFullNameWithTitle(context); });
+  UI.registerHelper('getShortname', (context) => { return Helpers.getShortname(context); });
+  UI.registerHelper('zerofix', (context) => { return Helpers.zerofix(context); });
+}

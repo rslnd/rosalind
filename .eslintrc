@@ -13,7 +13,7 @@
   "rules": {
     "quotes": [2, "single"],
     "semi": [2, "always"],
-    "indent": [2, 2],
+    "indent": [2, 2, {"SwitchCase": 1}],
     "eol-last": 2,
     "comma-spacing": 2,
     "no-underscore-dangle": 0,
@@ -21,11 +21,13 @@
     "handle-callback-err": 0,
     "new-cap": 0,
     "no-shadow": 0,
-    "strict": 0
+    "strict": 0,
+    "no-multi-spaces": 0
   },
   "globals": {
     "Comments": true,
     "InboundCalls": true,
+    "Schedules": true,
 
     "AutoForm": false,
     "Roles": false,

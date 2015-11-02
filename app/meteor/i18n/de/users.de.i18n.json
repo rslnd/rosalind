@@ -1,12 +1,20 @@
 {
   "users": {
-    "this": "Mitarbeiterverwaltung",
+    "this": "Benutzerverwaltung",
     "thisAll": "Alle Mitarbeiter",
     "thisNew": "Neuer Mitarbeiter",
     "edit": "Mitarbeiter bearbeiten",
     "save": "Mitarbeiter speichern",
     "changePassword": "Passwort ändern",
     "setRoles": "Berechtigungen ändern",
+    "groups": {
+      "doctor": "Ärzte",
+      "assistance": "Assistenz",
+      "cosmetics": "Kosmetik",
+      "alternative": "Alternativ",
+      "callcenter": "Callcenter",
+      "none": "Mitarbeiter"
+    },
     "form": {
       "firstName": {
         "label": "Vorname"

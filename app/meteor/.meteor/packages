@@ -30,7 +30,7 @@ iron:router
 
 # Testing
 velocity:console-reporter
-xolvio:cucumber@0.14.0-rc.3
+xolvio:cucumber
 sanjo:jasmine
 
 # Security
@@ -74,6 +74,7 @@ u2622:persistent-session
 momentjs:moment
 bojicas:inflections
 copleykj:livestamp
+drblue:fullcalendar
 
 # Monitoring
 meteorhacks:kadira@2.23.0

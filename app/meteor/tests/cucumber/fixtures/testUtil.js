@@ -30,6 +30,23 @@ TestUtil.typecast = function(s) {
   return s;
 };
 
+// convert dot notation to nested object
+// example: {'profile.group': 'a'} => {profile: {group: 'a'}}
+TestUtil.deepen = function(o) {
+  var oo = {}, t, parts, part;
+  for (var k in o) {
+    t = oo;
+    parts = k.split('.');
+    var key = parts.pop();
+    while (parts.length) {
+      part = parts.shift();
+      t = t[part] = t[part] || {};
+    }
+    t[key] = o[k];
+  }
+  return oo;
+};
+
 TestUtil.transformAttributes = function(attributes) {
   var transformedAttributes = {};
 
@@ -39,6 +56,11 @@ TestUtil.transformAttributes = function(attributes) {
     value = TestUtil.typecast(value);
     transformedAttributes[key] = value;
   });
+
+  var nestedKeys = _.filter(_.keys(transformedAttributes), function(k) { return (k.indexOf('.') > -1); });
+  if (nestedKeys.length > 0) {
+    transformedAttributes = TestUtil.deepen(transformedAttributes);
+  }
 
   return transformedAttributes;
 };

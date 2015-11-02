@@ -22,8 +22,8 @@ Feature: Login
 
   Scenario: I can log in with correct credentials
     Given a 'user' with the following attributes:
-      | username   | password | email            |
-      | callcenter | abcd     | test@example.com |
+      | username   | password |
+      | callcenter | abcd     |
     And I fill in 'Name' with 'callcenter'
     And I fill in 'Password' with 'abcd'
     And I submit the form

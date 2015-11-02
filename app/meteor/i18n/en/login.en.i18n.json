@@ -5,8 +5,14 @@
     "button": "Log in",
     "name": "Name",
     "password": "Password",
-    "loggedIn": "Your are currently logged in.",
+    "loggedIn": "You are currently logged in.",
     "logout": "Log out",
+    "help": {
+      "show": "I need help",
+      "title": "Sorry!",
+      "body": "Please call <b>Albert Zak: 0660 9911994</b>",
+      "ok": "Ok"
+    },
     "form": {
       "name": {
         "label": "Name",

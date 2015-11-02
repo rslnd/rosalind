@@ -25,14 +25,21 @@ Schema.UserProfile = new SimpleSchema({
     type: String,
     allowedValues: ['Male', 'Female'],
     optional: true
-  }
+  },
+  group: {
+    type: String,
+    optional: true
+  },
+  employee: {
+    type: Boolean,
+    optional: true
+  },
 });
 
 Schema.User = new SimpleSchema({
   username: {
     type: String,
     regEx: /^[a-z0-9A-Z_]*$/,
-    optional: true
   },
   emails: {
     type: [Object],
@@ -124,6 +131,12 @@ Meteor.users.helpers({
     else
       return this.fullName();
   },
+  group() {
+    if (this.profile && this.profile.group)
+      return TAPi18n.__('users.groups.' + this.profile.group);
+    else
+      return TAPi18n.__('users.groups.none');
+  },
   getRoles() {
     return Roles.getRolesForUser(this._id).join(', ');
   },
@@ -132,21 +145,46 @@ Meteor.users.helpers({
   }
 });
 
+Meteor.users.findOneByIdOrUsername = function(idOrUsername) {
+  if (typeof idOrUsername === 'string') {
+    let byId = Meteor.users.findOne(idOrUsername);
+    if (byId)
+      return byId;
+
+    let byUsername = Meteor.users.findOne({username: idOrUsername});
+    if (byUsername)
+      return byUsername;
+
+  } else if (typeof idOrUsername === 'object') {
+    let byPassthrough = (idOrUsername && idOrUsername.collectionSlug && (idOrUsername.collectionSlug() === 'users'));
+    if (byPassthrough)
+      return idOrUsername;
+
+    let byCursor = (idOrUsername && idOrUsername.fetch && idOrUsername.fetch()[0]);
+    if (byCursor)
+      return idOrUsername.fetch()[0];
+  }
+};
+
+Meteor.users.byGroup = function(selector = {}) {
+  let users = Meteor.users.find(selector).fetch();
+  users = _.groupBy(users, function(u) { return u.group(); });
+  return _.map(users, function(v, k) { return {group: k, users: v}; });
+};
+
 TabularTables.Users = new Tabular.Table({
   name: 'Users',
   collection: Meteor.users,
   columns: [
     {data: 'status', tmpl: Meteor.isClient && Template.status},
-    {data: 'username', title: 'Username'},
-    {data: 'profile.firstName', title: 'Vorname'},
-    {data: 'profile.lastName', title: 'Nachname'},
+    {data: 'profile.lastName', title: 'Name', render: (val, type, doc) => { return doc.fullNameWithTitle(); }},
     {data: 'getRoles()', title: 'Berechtigungen'},
+    {data: 'profile.group', title: 'Gruppe'},
     {data: 'lastActivity()', title: 'Zuletzt gesehen'},
-    {data: 'status.lastLogin.ipAddr', title: 'IP'},
-    {data: 'status.lastLogin.userAgent', title: 'User Agent'},
     {tmpl: Meteor.isClient && Template.editLink }
   ],
-  order: [[0, 'asc'], [3, 'desc']],
+  order: [[0, 'asc'], [2, 'asc']],
+  extraFields: ['profile', 'username'],
   allow: (userId) => {
     return Roles.userIsInRole(userId, ['admin']);
   }

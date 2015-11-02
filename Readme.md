@@ -1,5 +1,6 @@
 # Rosalind
 
+![Unicorn Approved](https://img.shields.io/badge/unicorn-approved-blue.svg)
 [![Code Climate](https://img.shields.io/codeclimate/github/Carbonative/rosalind.svg)](https://codeclimate.com/github/Carbonative/rosalind)
 [![Codeship](https://img.shields.io/codeship/f5c381e0-2bd9-0133-ccfb-26f31a616e04.svg)](https://codeship.com/projects/98454)
 

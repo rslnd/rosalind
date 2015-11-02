@@ -6,6 +6,14 @@
     "edit": "Edit user",
     "save": "Save user",
     "changePassword": "Change password",
-    "setRoles": "Set roles"
+    "setRoles": "Set roles",
+    "groups": {
+      "doctor": "Doctors",
+      "assistance": "Assistance",
+      "cosmetics": "Cosmetics",
+      "alternative": "Alternative",
+      "callcenter": "Callcenter",
+      "none": "Employees"
+    }
   }
 }

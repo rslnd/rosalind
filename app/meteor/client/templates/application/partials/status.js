@@ -8,5 +8,17 @@ Template.status.helpers({
 
     if (typeof user === 'object' && user.status)
       return user.status.online ? (user.status.idle ? 'text-yellow' : 'text-green') : 'text-muted';
+  },
+  userPopoverTitle(user) {
+    if (user && user.status && user.status.lastLogin)
+      return user.status.lastLogin.ipAddr;
+  },
+  userPopoverContent(user) {
+    if (user && user.status && user.status.lastLogin)
+      return user.status.lastLogin.userAgent;
   }
 });
+
+Template.status.rendered = function() {
+  $('[data-toggle="popover"]').popover();
+};

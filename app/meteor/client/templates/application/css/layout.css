@@ -3,6 +3,14 @@ html, body {
 }
 
 body {
+  zoom: 1.1;
+}
+
+.zoom-1 {
+  zoom: 0.9090;
+}
+
+.zoom-2 {
   zoom: 1.2;
 }
 
@@ -79,4 +87,8 @@ a, button, .btn {
   padding-top: 7px;
   font-size: 11px;
   overflow: hidden;
+}
+
+.clear {
+  clear: both;
 }

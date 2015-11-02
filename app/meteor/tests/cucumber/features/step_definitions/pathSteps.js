@@ -5,16 +5,15 @@
     var url = require('url');
 
     this.Before(function() {
-      return this.client.url(process.env.ROOT_URL);
+      browser.url(process.env.ROOT_URL);
     });
 
     this.Given('I am on the dashboard', function () {
-      return this.client.url(process.env.ROOT_URL);
+      browser.url(process.env.ROOT_URL);
     });
 
     this.When('I navigate to \'$relativePath\'', function (relativePath) {
-      return this.client
-        .url(url.resolve(process.env.ROOT_URL, relativePath));
+      browser.url(url.resolve(process.env.ROOT_URL, relativePath));
     });
 
   };
