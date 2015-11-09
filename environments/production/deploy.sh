@@ -7,8 +7,8 @@ echo "** Installing mupx"
 npm -g install mupx
 
 echo "** Downloading encrypted SSL keys"
-curl -o bundle.crt.enc https://carbonative.s3-eu-central-1.amazonaws.com/ssl/bundle.crt.enc
-curl -o key.key.enc https://carbonative.s3-eu-central-1.amazonaws.com/ssl/key.key.enc
+curl -o bundle.crt.enc https://carbonative.s3-eu-central-1.amazonaws.com/ssl/bundle-s3.crt.enc
+curl -o key.key.enc https://carbonative.s3-eu-central-1.amazonaws.com/ssl/key-s3.key.enc
 
 echo "** Decrypting SSL keys"
 openssl aes-256-cbc -k "$PRODUCTION_SSL_ENCRYPTION_KEY" -in bundle.crt.enc -out bundle.crt -d
