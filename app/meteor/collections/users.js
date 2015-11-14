@@ -178,7 +178,7 @@ TabularTables.Users = new Tabular.Table({
     {data: 'getRoles()', title: 'Berechtigungen'},
     {data: 'group()', title: 'Gruppe'},
     {data: 'lastActivity()', title: 'Zuletzt gesehen'},
-    {tmpl: Meteor.isClient && Template.editLink }
+    {data: '_id', render: (val) => { return '<a href="/users/' + val + '/edit">Bearbeiten</a>'; } }
   ],
   order: [[0, 'asc'], [2, 'asc']],
   extraFields: ['profile', 'username', 'groupId'],

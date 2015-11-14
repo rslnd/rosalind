@@ -5,14 +5,14 @@
       +autoForm(collection='Meteor.users' id='editUserForm' doc=this type='update')
         fieldset
           +afQuickField(name='username')
+          +afQuickField(name='groupId')
+          +afQuickField(name='profile.employee')
           +afQuickField(name='profile.titlePrepend')
           +afQuickField(name='profile.firstName')
           +afQuickField(name='profile.lastName')
           +afQuickField(name='profile.titleAppend')
           +afQuickField(name='profile.birthday')
           +afQuickField(name='profile.gender')
-          +afQuickField(name='profile.group')
-          +afQuickField(name='profile.employee')
         button.btn.btn-primary(type='submit') {{_ 'users.save'}}
 
   .box.box-warning
