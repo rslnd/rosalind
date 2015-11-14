@@ -1,0 +1,8 @@
+.modal.fade
+  .modal-dialog.disable-selection
+    .modal-content
+      .modal-header
+        button.close(data-dismiss='modal')
+          span &times;
+        h4.modal-title {{title}}
+      .modal-body {{> quickForm id='modalAutoForm' type=type doc=doc collection=collection}}

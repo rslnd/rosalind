@@ -1,5 +1,4 @@
-+contentHeader(title='users.thisAll')
++contentHeader(title='users.this')
 .content
-  .box.box-default
-    .box-body
-      +tabular(table=TabularTables.Users class='table table-striped table-bordered table-condensed')
+  +dataTable(title='users.thisAll' table=TabularTables.Users)
+  +dataTable(title='users.group_plural' table=TabularTables.Groups)

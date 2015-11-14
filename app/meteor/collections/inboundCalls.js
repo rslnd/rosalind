@@ -44,8 +44,8 @@ InboundCalls.helpers({
 });
 
 InboundCalls.helpers({
-  collectionSlug() {
-    return 'inboundCalls';
+  collection() {
+    return InboundCalls;
   }
 });
 

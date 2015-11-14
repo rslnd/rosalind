@@ -2,11 +2,14 @@
   "users": {
     "this": "Benutzerverwaltung",
     "thisAll": "Alle Mitarbeiter",
-    "thisNew": "Neuer Mitarbeiter",
+    "thisInsert": "Neuer Mitarbeiter",
+    "thisUpdate": "Mitarbeiter bearbeiten",
     "edit": "Mitarbeiter bearbeiten",
     "save": "Mitarbeiter speichern",
     "changePassword": "Passwort ändern",
     "setRoles": "Berechtigungen ändern",
+    "group": "Gruppe",
+    "group_plural": "Gruppen",
     "groups": {
       "doctor": "Ärzte",
       "assistance": "Assistenz",

@@ -2,8 +2,7 @@ var Subs = new SubsManager();
 
 Router.configure({
   layoutTemplate: 'layout',
-  loadingTemplate: 'loading',
-  subscriptions() { Subs.subscribe('counts'); }
+  loadingTemplate: 'loading'
 });
 
 Router.onBeforeAction(function () {
@@ -12,6 +11,9 @@ Router.onBeforeAction(function () {
     this.render('login');
   } else {
     Subs.subscribe('users');
+    Subs.subscribe('groups');
+    Subs.subscribe('counts');
+
     this.next();
   }
 });

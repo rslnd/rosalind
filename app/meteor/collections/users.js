@@ -26,10 +26,6 @@ Schema.UserProfile = new SimpleSchema({
     allowedValues: ['Male', 'Female'],
     optional: true
   },
-  group: {
-    type: String,
-    optional: true
-  },
   employee: {
     type: Boolean,
     optional: true
@@ -41,13 +37,15 @@ Schema.User = new SimpleSchema({
     type: String,
     regEx: /^[a-z0-9A-Z_]*$/,
   },
-  emails: {
-    type: [Object],
-    optional: true,
-    blackbox: true
+  groupId: {
+    type: SimpleSchema.RegEx.Id,
+    autoform: { options: Groups.all },
+    optional: true
   },
   createdAt: {
-    type: Date
+    type: Date,
+    optional: true,
+    autoValue: Util.autoCreatedAt
   },
   profile: {
     type: Schema.UserProfile,
@@ -132,16 +130,15 @@ Meteor.users.helpers({
       return this.fullName();
   },
   group() {
-    if (this.profile && this.profile.group)
-      return TAPi18n.__('users.groups.' + this.profile.group);
-    else
-      return TAPi18n.__('users.groups.none');
+    let group = Groups.findOne(this.groupId);
+    if (group)
+      return group.name;
   },
   getRoles() {
     return Roles.getRolesForUser(this._id).join(', ');
   },
-  collectionSlug() {
-    return 'users';
+  collection() {
+    return Meteor.users;
   }
 });
 
@@ -156,7 +153,7 @@ Meteor.users.findOneByIdOrUsername = function(idOrUsername) {
       return byUsername;
 
   } else if (typeof idOrUsername === 'object') {
-    let byPassthrough = (idOrUsername && idOrUsername.collectionSlug && (idOrUsername.collectionSlug() === 'users'));
+    let byPassthrough = (idOrUsername && idOrUsername.collection._name && (idOrUsername.collection._name === 'users'));
     if (byPassthrough)
       return idOrUsername;
 
@@ -167,9 +164,9 @@ Meteor.users.findOneByIdOrUsername = function(idOrUsername) {
 };
 
 Meteor.users.byGroup = function(selector = {}) {
-  let users = Meteor.users.find(selector).fetch();
-  users = _.groupBy(users, function(u) { return u.group(); });
-  return _.map(users, function(v, k) { return {group: k, users: v}; });
+  return _.map(Groups.find({}).fetch(), (g) => {
+    return { group: g.name, users: g.users() };
+  });
 };
 
 TabularTables.Users = new Tabular.Table({
@@ -179,12 +176,12 @@ TabularTables.Users = new Tabular.Table({
     {data: 'status', tmpl: Meteor.isClient && Template.status},
     {data: 'profile.lastName', title: 'Name', render: (val, type, doc) => { return doc.fullNameWithTitle(); }},
     {data: 'getRoles()', title: 'Berechtigungen'},
-    {data: 'profile.group', title: 'Gruppe'},
+    {data: 'group()', title: 'Gruppe'},
     {data: 'lastActivity()', title: 'Zuletzt gesehen'},
     {tmpl: Meteor.isClient && Template.editLink }
   ],
   order: [[0, 'asc'], [2, 'asc']],
-  extraFields: ['profile', 'username'],
+  extraFields: ['profile', 'username', 'groupId'],
   allow: (userId) => {
     return Roles.userIsInRole(userId, ['admin']);
   }

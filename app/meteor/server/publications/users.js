@@ -2,6 +2,7 @@ Meteor.publish('users', function() {
   if(this.userId) {
     return Meteor.users.find({}, { fields: {
       'username': 1,
+      'groupId': 1,
       'status.online': 1,
       'status.idle': 1,
       'status.lastActivity': 1,

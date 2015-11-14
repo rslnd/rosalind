@@ -140,6 +140,7 @@ twbs:bootstrap@3.3.5
 u2622:persistent-session@0.4.4
 ui@1.0.8
 underscore@1.0.4
+underscorestring:underscore.string@3.2.2
 url@1.0.5
 velocity:chokidar@1.2.0_1
 velocity:console-reporter@0.1.4

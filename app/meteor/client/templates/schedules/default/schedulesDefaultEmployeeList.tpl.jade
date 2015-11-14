@@ -7,5 +7,5 @@
         +each users
           li
             a(href='{{ linkToDefaultScheduleForUser }}')
-              | {{ getFullNameWithTitle this }}
+              | {{ this.fullNameWithTitle }}
               span.label.label-primary.pull-right {{ totalHoursWeek }}

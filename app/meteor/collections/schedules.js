@@ -6,7 +6,7 @@ Ground.Collection(Schedules);
 
 Schema.Schedules = new SimpleSchema({
   userId: {
-    type: String,
+    type: SimpleSchema.RegEx.Id,
     index: 1,
     optional: true
   },
@@ -115,6 +115,10 @@ Schedules.helpers({
     });
   }
 });
+
+Schedules.getResources = function() {
+  return _.map(_.keys(Meteor.users.byGroup()), (resourceId) => { return { id: resourceId, title: resourceId }; });
+};
 
 Schedules.getEvents = function(range) {
   let defaultSchedules = Schedules.find({}).fetch();

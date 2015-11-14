@@ -75,6 +75,7 @@ momentjs:moment
 bojicas:inflections
 copleykj:livestamp
 drblue:fullcalendar
+underscorestring:underscore.string
 
 # Monitoring
 meteorhacks:kadira@2.23.0
