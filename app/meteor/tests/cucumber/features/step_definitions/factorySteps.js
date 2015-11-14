@@ -12,8 +12,11 @@
       server.call('fixtures/resetDatabase');
     });
 
+    this.Given('this user belongs to the group \'$groupName\'', function(groupName) {
+      server.call('fixtures/assignLastCreatedUserToGroup', groupName);
+    });
 
-    this.Given(/^an? '([^']*)' with the following attributes:?$/, function (collection, attributes, callback) {
+    this.Given(/^an? '([^']*)' with the following attributes:?$/, function (collection, attributes) {
       var _this = this;
 
       if (collection.match(/^Users?$/i))
@@ -27,8 +30,6 @@
           attributes: row
         });
       });
-
-      callback();
     });
 
   };

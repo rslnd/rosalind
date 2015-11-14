@@ -31,6 +31,15 @@
 
       Roles.setUserRoles(userId, roles, Roles.GLOBAL_GROUP);
       return options.username;
+    },
+
+    'fixtures/assignLastCreatedUserToGroup': function(groupName) {
+      check(groupName, String);
+
+      var groupId = Groups.findOne({name: groupName})._id;
+      var user = Meteor.users.find({}, {sort: {createdAt: -1}}).fetch()[0];
+
+      Meteor.users.update(user._id, {$set: {groupId: groupId}});
     }
   });
 
