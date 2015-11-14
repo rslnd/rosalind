@@ -1,7 +1,9 @@
 +each employeeGroups
   .box.box-default
     .box-header.with-border
-      h3.box-title {{ group }}
+      h3.box-title
+        +groupIcon group
+        | {{ group.name }}
     .box-body.no-padding
       ul.nav.nav-pills.nav-stacked
         +each users

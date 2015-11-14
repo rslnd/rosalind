@@ -39,7 +39,13 @@ Schema.User = new SimpleSchema({
   },
   groupId: {
     type: SimpleSchema.RegEx.Id,
-    autoform: { options: Groups.all },
+    autoform: {
+      options() {
+        return _.map(Groups.all(), (g) => {
+          return { label: g.name, value: g._id };
+        });
+      }
+    },
     optional: true
   },
   createdAt: {
@@ -164,8 +170,8 @@ Meteor.users.findOneByIdOrUsername = function(idOrUsername) {
 };
 
 Meteor.users.byGroup = function(selector = {}) {
-  return _.map(Groups.find({}).fetch(), (g) => {
-    return { group: g.name, users: g.users() };
+  return _.map(Groups.all(), (g) => {
+    return { group: g, users: g.users() };
   });
 };
 

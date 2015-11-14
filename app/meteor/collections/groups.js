@@ -7,6 +7,14 @@ Schema.Groups = new SimpleSchema({
   name: {
     type: String
   },
+  icon: {
+    type: String,
+    optional: true
+  },
+  color: {
+    type: String,
+    optional: true,
+  },
   order: {
     type: Number,
     optional: true
@@ -28,21 +36,20 @@ Groups.helpers({
 });
 
 Groups.all = function() {
-  return _.map(Groups.find({}).fetch(), (g) => {
-    return { label: g.name, value: g._id };
-  });
+  return Groups.find({}, {sort: {order: 1}}).fetch();
 };
 
 TabularTables.Groups = new Tabular.Table({
   name: 'Groups',
   collection: Groups,
   columns: [
-    {data: 'order'},
+    {data: 'order', tmpl: Meteor.isClient && Template.groupIcon},
     {data: 'name', title: 'Name'},
     {data: 'usersCount()', title: 'Benutzer'},
     {tmpl: Meteor.isClient && Template.editLink }
   ],
   order: [[0, 'asc']],
+  extraFields: ['color', 'icon'],
   allow: (userId) => {
     return Roles.userIsInRole(userId, ['admin']);
   }
