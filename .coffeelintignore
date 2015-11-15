@@ -1,0 +1,5 @@
+node_modules
+packages/conditional-appcache
+scripts
+test
+.meteor

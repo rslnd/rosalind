@@ -62,5 +62,5 @@ METEOR_VERSION=$(~/.meteor/meteor --version)
 echo "** Using $METEOR_VERSION"
 echo -e "** Clear CI cache to update to latest version\n"
 
-echo "** Installing ESLint"
-npm install -g eslint
+echo "** Installing Linters"
+npm install -g eslint coffeelint

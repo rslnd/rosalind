@@ -23,13 +23,17 @@ RELEASE=""
 
 echo -e "** Using: $(meteor --version $RELEASE) \n"
 
-# Run ESLint checks
+# Run Linters
 test_eslint () {
   cd_app
   cd ../
   echo "** Running ESLint"
   eslint .
   echo -e "ESLint checks were successful.\n"
+
+  echo -e "** Running CoffeeLint\n"
+  coffeelint .
+  echo -e "\n\n"
 }
 
 # Kill node and java processes
