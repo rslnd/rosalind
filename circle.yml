@@ -5,7 +5,10 @@ machine:
 dependencies:
   pre:
     - curl https://install.meteor.com | /bin/sh
-    - npm install -g eslint coffeelint
+    - npm install -g eslint coffeelint electron-release shelljs
+
+  cache_directories:
+    - "~/.meteor"
 
 test:
   override:
