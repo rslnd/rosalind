@@ -146,7 +146,7 @@ Meteor.users.findOneByIdOrUsername = (idOrUsername) ->
    else if (typeof idOrUsername is 'object')
      byPassthrough = (idOrUsername and idOrUsername.collection._name and (idOrUsername.collection._name is 'users'))
      if (byPassthrough)
-       return idOrUsername;
+       return idOrUsername
 
      byCursor = (idOrUsername and idOrUsername.fetch and idOrUsername.fetch()[0])
      if (byCursor)
