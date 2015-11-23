@@ -43,7 +43,7 @@ ejson@1.0.7
 email@1.0.8
 es5-shim@4.1.14
 fastclick@1.0.7
-fortawesome:fontawesome@4.4.0
+fortawesome:fontawesome@4.4.0_1
 geojson-utils@1.0.4
 ground:db@0.3.14
 ground:dictionary@0.2.1
@@ -78,7 +78,7 @@ logging@1.0.8
 matb33:collection-hooks@0.8.1
 meteor@1.1.10
 meteor-base@1.0.1
-meteorhacks:kadira@2.25.0
+meteorhacks:kadira@2.26.3
 meteorhacks:meteorx@1.4.1
 meteorhacks:subs-manager@1.6.2
 meteorspark:util@0.2.0
@@ -119,7 +119,7 @@ routepolicy@1.0.6
 rzymek:moment-locale-de-at@2.9.0
 sacha:spin@2.3.1
 sanjo:jasmine@0.20.2
-sanjo:karma@3.0.2
+sanjo:karma@3.0.3
 sanjo:long-running-child-process@1.1.3
 sanjo:meteor-files-helpers@1.2.0_1
 sanjo:meteor-version@1.0.0
@@ -152,6 +152,6 @@ velocity:shim@0.1.0
 velocity:source-map-support@0.3.2_1
 webapp@1.2.3
 webapp-hashing@1.0.5
-xolvio:cucumber@0.19.4_1
+xolvio:cucumber@0.20.2_1
 zimme:collection-behaviours@1.1.3
 zimme:collection-softremovable@1.0.5
