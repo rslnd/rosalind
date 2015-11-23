@@ -82,25 +82,25 @@ Meteor.users.helpers
 
   shortname: ->
     if (@username.length <= 3)
-      @username;
+      @username
     else
-      _.map(@fullName().split(' '), (n) -> n.charAt(0); ).join('')
+      _.map(@fullName().split(' '), (n) -> n.charAt(0) ).join('')
 
   firstName: ->
     if (@profile and @profile.firstName)
-      @profile.firstName;
+      @profile.firstName
     else
       @fullName()
 
   fullName: ->
     if (@profile and @profile.lastName and @profile.firstName)
-      @profile.firstName + ' ' + @profile.lastName;
+      @profile.firstName + ' ' + @profile.lastName
     else if (@profile and @profile.lastName)
-      @profile.lastName;
+      @profile.lastName
     else if (@profile and @profile.firstName)
-      @profile.firstName;
+      @profile.firstName
     else
-      @username;
+      @username
 
   fullNameWithTitle: (overrideFullName) ->
     fullName = overrideFullName or @fullName()
@@ -109,9 +109,9 @@ Meteor.users.helpers
       @profile.titlePrepend + ' ' + fullName
       + ', ' + @profile.titleAppend
     if (@profile and @profile.titlePrepend)
-      @profile.titlePrepend + ' ' + fullName;
+      @profile.titlePrepend + ' ' + fullName
     if (@profile and @profile.titleAppend)
-      fullName + ', ' + @profile.titleAppend;
+      fullName + ', ' + @profile.titleAppend
     else
       @fullName()
 

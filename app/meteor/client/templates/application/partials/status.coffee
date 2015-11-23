@@ -13,10 +13,10 @@ Template.status.helpers
         'text-muted'
 
   userPopoverTitle: (user) ->
-    user?.status?.lastLogin?.ipAddr;
+    user?.status?.lastLogin?.ipAddr
 
   userPopoverContent: (user) ->
-    user?.status?.lastLogin?.userAgent;
+    user?.status?.lastLogin?.userAgent
 
 Template.status.rendered = ->
   $('[data-toggle="popover"]').popover()

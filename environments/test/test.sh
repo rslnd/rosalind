@@ -31,7 +31,7 @@ test_eslint () {
   eslint .
   echo -e "ESLint checks were successful.\n"
 
-  echo -e "** Running CoffeeLint\n"
+  echo "** Running CoffeeLint"
   coffeelint .
   echo -e "\n\n"
 }
