@@ -16,7 +16,7 @@ test:
     - chmod +x ./environments/test/test.sh
     - ./environments/test/test.sh
 
-deploy:
+deployment:
   master:
     branch: master
     owner: albertzak
