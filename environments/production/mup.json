@@ -2,8 +2,7 @@
   "servers": [
     {
       "host": "$PRODUCTION_MUP_HOST",
-      "username": "$PRODUCTION_MUP_USERNAME",
-      "pem": "$PRODUCTION_MUP_PUBLIC_KEY_PATH"
+      "username": "$PRODUCTION_MUP_USERNAME"
     }
   ],
   "setupMongo": true,
@@ -17,11 +16,6 @@
     "KADIRA_APP_ID": "$PRODUCTION_MUP_KADIRA_APP_ID",
     "KADIRA_APP_SECRET": "$PRODUCTION_MUP_KADIRA_APP_SECRET",
     "HTTP_FORWARDED_COUNT": 1
-  },
-
-  "ssl": {
-    "certificate": "$PRODUCTION_MUP_SSL_CERTIFICATE_PATH",
-    "key": "$PRODUCTION_MUP_SSL_KEY_PATH"
   },
 
   "deployCheckWaitTime": 15,

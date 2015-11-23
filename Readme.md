@@ -1,8 +1,7 @@
 # Rosalind
 
 ![Unicorn Approved](https://img.shields.io/badge/unicorn-approved-blue.svg)
-[![Code Climate](https://img.shields.io/codeclimate/github/Carbonative/rosalind.svg)](https://codeclimate.com/github/Carbonative/rosalind)
-[![Codeship](https://img.shields.io/codeship/f5c381e0-2bd9-0133-ccfb-26f31a616e04.svg)](https://codeship.com/projects/98454)
+[![Circle CI](https://img.shields.io/circleci/project/albertzak/rosalind.svg)](https://circleci.com/gh/albertzak/rosalind)
 
 ## Prerequisites
 
@@ -28,7 +27,7 @@ Run the full test suite with `npm test`
 
 ## Deploy
 
-Build the native applications with `npm client:build`
+Build the native applications with `npm run client:build`
 
 The `master` branch gets deployed to production automatically when all tests pass. Be careful when merging pull requests.
 
