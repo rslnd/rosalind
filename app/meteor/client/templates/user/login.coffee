@@ -6,11 +6,10 @@ AutoForm.hooks
           if error then @done(error) else @done()
       else
         @done()
-
       false
 
     onError: (type, error) ->
-      revalidate = ->
+      revalidate = =>
         vc = AutoForm.getValidationContext(@formId)
         return unless typeof error.reason is 'string'
         if (error.reason.indexOf('User not found') is not -1)
@@ -20,4 +19,4 @@ AutoForm.hooks
         else if (error.reason.indexOf('User has no password set') is not -1)
           vc.addInvalidKeys([{ name: 'password', type: 'passwordNotSet' }])
 
-      setTimeout(revalidate, 30)
+      setTimeout(revalidate, 10)
