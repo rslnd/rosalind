@@ -3,6 +3,10 @@
 # Exit on first command that fails
 set -e
 
+# Change to script directory
+DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+cd $DIR
+
 echo "** Installing mupx"
 npm -g install mupx
 

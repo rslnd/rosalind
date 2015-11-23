@@ -15,3 +15,11 @@ test:
     - mkdir -p ./app/meteor/.meteor/local/log
     - chmod +x ./environments/test/test.sh
     - ./environments/test/test.sh
+
+deploy:
+  master:
+    branch: master
+    owner: albertzak
+    commands:
+      - chmod +x ./environments/production/deploy.sh
+      - ./environments/production/deploy.sh
