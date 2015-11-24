@@ -13,18 +13,21 @@ cd_app () {
   cd ../../app/
 }
 
-echo "** Installed: $(meteor --version)"
-cd_app
-REQUIRED_METEOR_VERSION=$(cat meteor/.meteor/release)
-REQUIRED_METEOR_VERSION=${REQUIRED_METEOR_VERSION:7}
-REQUIRED_METEOR_VERSION+="_1"
-RELEASE="--release velocity:METEOR@$REQUIRED_METEOR_VERSION"
-RELEASE=""
+prepare() {
+  echo "** Installed: $(meteor --version)"
+  cd_app
+  REQUIRED_METEOR_VERSION=$(cat meteor/.meteor/release)
+  REQUIRED_METEOR_VERSION=${REQUIRED_METEOR_VERSION:7}
+  REQUIRED_METEOR_VERSION+="_1"
+  RELEASE="--release velocity:METEOR@$REQUIRED_METEOR_VERSION"
+  RELEASE=""
 
-echo -e "** Using: $(meteor --version $RELEASE) \n"
+  echo -e "** Using: $(meteor --version $RELEASE) \n"
+
+}
 
 # Run Linters
-test_eslint () {
+test_lint () {
   cd_app
   cd ../
   echo "** Running ESLint"
@@ -118,7 +121,7 @@ test_meteor_jasmine () {
 test_all () {
   clear_logs
 
-  test_eslint
+  test_lint
 
   test_meteor_jasmine || fail
   test_meteor_selenium || fail
@@ -146,4 +149,40 @@ fail () {
   STATUS=1
 }
 
-test_all
+
+if [ -n "$CI" ]; then
+  echo "** Running parallelized test suite on CI"
+  echo "** This is node $CIRCLE_NODE_INDEX of $CIRCLE_NODE_TOTAL"
+
+  case $CIRCLE_NODE_INDEX in
+  0)
+    echo -e "** Running selenium integration tests\n"
+    prepare
+    test_meteor_selenium
+    ;;
+  1)
+    echo -e "** Running jasmine unit tests\n"
+    prepare
+    test_meteor_jasmine
+    ;;
+  2)
+    echo -e "** Running linters\n"
+    prepare
+    test_lint
+    ;;
+  *)
+    echo "** Parallelized testing for $CIRCLE_NODE_TOTAL nodes is not implemented yet"
+    exit 0
+    ;;
+  esac
+
+  cd_app
+  cp meteor/.meteor/local/log/*.log $CIRCLE_ARTIFACTS/
+
+  exit $STATUS
+
+else
+  echo -e "** Running full test suite on local machine\n"
+  prepare
+  test_all
+fi

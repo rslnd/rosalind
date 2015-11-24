@@ -3,9 +3,14 @@ machine:
     version: 0.12.7
 
 dependencies:
-  pre:
-    - curl https://install.meteor.com | /bin/sh
-    - npm install -g eslint coffeelint electron-release shelljs
+  override:
+    # Restore the meteor symlink
+    - if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
+
+    # Install Meteor if the cache didn't restore it
+    - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
+
+    - npm install -g eslint coffeelint electron-release shelljs mupx
 
   cache_directories:
     - "~/.meteor"
@@ -14,7 +19,11 @@ test:
   override:
     - mkdir -p ./app/meteor/.meteor/local/log
     - chmod +x ./environments/test/test.sh
-    # - ./environments/test/test.sh
+    - ./environments/test/test.sh:
+      parallel: true
+      environment:
+        - CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/"
+        - CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/"
 
 deployment:
   master:

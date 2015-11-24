@@ -7,9 +7,6 @@ set -e
 DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd $DIR
 
-echo "** Installing mupx"
-npm -g install mupx
-
 echo "** Setting environment variables in mup.json"
 sed 's^$PRODUCTION_MUP_HOST^'"$PRODUCTION_MUP_HOST"'^' -i mup.json
 sed 's^$PRODUCTION_MUP_USERNAME^'"$PRODUCTION_MUP_USERNAME"'^' -i mup.json
