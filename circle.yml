@@ -20,10 +20,10 @@ test:
     - mkdir -p ./app/meteor/.meteor/local/log
     - chmod +x ./environments/test/test.sh
     - ./environments/test/test.sh:
-      parallel: true
-      environment:
-        CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/"
-        CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/"
+        parallel: true
+        environment:
+          CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/"
+          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/"
 
 deployment:
   master:
