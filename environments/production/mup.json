@@ -8,7 +8,7 @@
   ],
   "setupMongo": true,
   "appName": "rosalind",
-  "app": "$PRODUCTION_MUP_APP_PATH",
+  "app": "../../app/meteor/",
 
   "env": {
     "PORT": 80,
