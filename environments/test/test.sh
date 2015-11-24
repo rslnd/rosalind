@@ -24,6 +24,7 @@ prepare() {
 
   echo -e "** Using: $(meteor --version $RELEASE) \n"
 
+  clear_logs
 }
 
 # Run Linters
@@ -177,7 +178,10 @@ if [ -n "$CI" ]; then
   esac
 
   cd_app
-  cp meteor/.meteor/local/log/*.log $CIRCLE_ARTIFACTS/
+  cd meteor/.meteor/local/log/
+  if stat -t *.log >/dev/null 2>&1; then
+    cp *.log $CIRCLE_ARTIFACTS/
+  fi
 
   exit $STATUS
 
