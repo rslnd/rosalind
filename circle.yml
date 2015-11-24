@@ -14,7 +14,7 @@ test:
   override:
     - mkdir -p ./app/meteor/.meteor/local/log
     - chmod +x ./environments/test/test.sh
-    - ./environments/test/test.sh
+    # - ./environments/test/test.sh
 
 deployment:
   master:

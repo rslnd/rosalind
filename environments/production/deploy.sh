@@ -13,6 +13,7 @@ npm -g install mupx
 echo "** Setting environment variables in mup.json"
 sed 's^$PRODUCTION_MUP_HOST^'"$PRODUCTION_MUP_HOST"'^' -i mup.json
 sed 's^$PRODUCTION_MUP_USERNAME^'"$PRODUCTION_MUP_USERNAME"'^' -i mup.json
+sed 's^$PRODUCTION_MUP_PUBLIC_KEY_PATH^'"$PRODUCTION_MUP_PUBLIC_KEY_PATH"'^' -i mup.json
 sed 's^$PRODUCTION_MUP_APP_PATH^'"$PRODUCTION_MUP_APP_PATH"'^' -i mup.json
 sed 's^$PRODUCTION_MUP_ROOT_URL^'"$PRODUCTION_MUP_ROOT_URL"'^' -i mup.json
 sed 's^$PRODUCTION_MUP_KADIRA_APP_ID^'"$PRODUCTION_MUP_KADIRA_APP_ID"'^' -i mup.json

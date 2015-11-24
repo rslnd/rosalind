@@ -2,7 +2,8 @@
   "servers": [
     {
       "host": "$PRODUCTION_MUP_HOST",
-      "username": "$PRODUCTION_MUP_USERNAME"
+      "username": "$PRODUCTION_MUP_USERNAME",
+      "pem": "$PRODUCTION_SETTINGS_PUBLIC_KEY_PATH"
     }
   ],
   "setupMongo": true,
