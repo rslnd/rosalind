@@ -6,7 +6,11 @@
       "pem": "$PRODUCTION_MUP_PUBLIC_KEY_PATH"
     }
   ],
+
   "setupMongo": true,
+  "setupNode": true,
+  "nodeVersion": "0.12.7",
+
   "appName": "rosalind",
   "app": "../../app/meteor/",
 
