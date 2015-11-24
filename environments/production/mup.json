@@ -19,6 +19,6 @@
     "HTTP_FORWARDED_COUNT": 1
   },
 
-  "deployCheckWaitTime": 15,
+  "deployCheckWaitTime": 180,
   "enableUploadProgressBar": true
 }
