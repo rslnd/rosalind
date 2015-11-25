@@ -56,6 +56,20 @@ clear_logs() {
   cd_app
 }
 
+print_logs() {
+  if [ "$STATUS" == "0" ]; then
+    echo -e "\n\n** Yay! All tests completed successfully"
+  else
+    set -e
+    echo "** Oh no, some tests failed"
+    echo -e "\n"
+    echo "** Oh no, some scenarios failed"
+    echo -e "** Here are the log files\n"
+    cd .meteor/local/log/
+    tail -n +1 *
+  fi
+}
+
 
 # Run Meteor test suite
 test_meteor_selenium () {
@@ -72,18 +86,22 @@ test_meteor_selenium () {
   export JASMINE_CLIENT_INTEGRATION=0
 
   export VELOCITY_CI=1
+  export CUCUMBER_TAIL=1
   export NODE_ENV="test"
   export METEOR_ENV="test"
 
   echo -e "** Running integration test suite\n"
+  set +e
 
   meteor $RELEASE --test --settings ../../environments/test/settings.json
 
   if [ $? -eq 0 ]; then
     echo -e "\n** Meteor integration test suite completed successfully\n"
+    set -e
     return 0
   else
     echo -e "\n** Meteor integration test suite failed\n"
+    set -e
     return 1
   fi
 }
@@ -106,14 +124,17 @@ test_meteor_jasmine () {
   export METEOR_ENV="test"
 
   echo -e "** Running unit test suite\n"
+  set +e
 
   meteor $RELEASE --test --settings ../../environments/test/settings.json
 
   if [ $? -eq 0 ]; then
     echo -e "\n** Meteor unit tests completed successfully\n"
+    set -e
     return 0
   else
     echo -e "\n** Meteor unit tests failed\n"
+    set -e
     return 1
   fi
 }
@@ -129,17 +150,7 @@ test_all () {
 
   kill_zombies
 
-  if [ "$STATUS" == "0" ]; then
-    echo -e "\n\n** Yay! All tests completed successfully"
-  else
-    set -e
-    echo "** Oh no, some tests failed"
-    echo -e "\n"
-    echo "** Oh no, some scenarios failed"
-    echo -e "** Here are the log files\n"
-    cd .meteor/local/log/
-    tail -n +1 *
-  fi
+  print_logs
 
   exit $STATUS
 }
@@ -190,8 +201,10 @@ if [ -n "$CI" ]; then
   cd_app
   cd meteor/.meteor/local/log/
   if stat -t *.log >/dev/null 2>&1; then
-    cp *.log $CIRCLE_ARTIFACTS/
+    cp *.log "$CIRCLE_ARTIFACTS/"
   fi
+
+  print_logs
 
   exit $STATUS
 
