@@ -12,10 +12,17 @@ dependencies:
     # Install Meteor if the cache didn't restore it
     - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
 
-    - npm install -g eslint coffeelint electron-release shelljs mupx
+    - npm install --dev
+
+    # Cache Meteor Packages
+    - node ./environments/test/cache.js
 
   cache_directories:
     - "~/.meteor"
+    - "~/.npm"
+    - node_modules
+    - app/meteor/.meteor
+    - app/electron/node_modules
 
 test:
   override:

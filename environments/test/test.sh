@@ -32,11 +32,11 @@ test_lint () {
   cd_app
   cd ../
   echo "** Running ESLint"
-  eslint .
+  node ./node_modules/eslint/bin/eslint.js .
   echo -e "ESLint checks were successful.\n"
 
   echo "** Running CoffeeLint"
-  coffeelint .
+  ./node_modules/coffeelint/bin/coffeelint .
   echo -e "\n\n"
 }
 
@@ -150,6 +150,15 @@ fail () {
   STATUS=1
 }
 
+if [ -n "$CACHE_PACKAGES" ]; then
+  echo -e "** Starting Meteor to cache packages\n"
+
+  prepare
+  cd_app
+  cd meteor/
+
+  meteor $RELEASE --raw-logs --settings ../../environments/test/settings.json
+fi
 
 if [ -n "$CI" ]; then
   echo "** Running test suite on CI"

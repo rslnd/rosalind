@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 # Exit on first command that fails
 set -e
@@ -25,4 +25,4 @@ sed 's^$PRODUCTION_SETTINGS_PRIVATE_ADMIN_DEFAULTACCOUNT_PROFILE_FIRSTNAME^'"$PR
 sed 's^$PRODUCTION_SETTINGS_PRIVATE_ADMIN_DEFAULTACCOUNT_PROFILE_LASTNAME^'"$PRODUCTION_SETTINGS_PRIVATE_ADMIN_DEFAULTACCOUNT_PROFILE_LASTNAME"'^' -i settings.json
 
 echo "** Deploying"
-mupx deploy
+../../node_modules/mupx/bin/mup deploy
