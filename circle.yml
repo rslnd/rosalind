@@ -1,18 +1,28 @@
 machine:
+  environment:
+    VELOCITY_CI: 1
+
   java:
     version: oraclejdk8
+
   node:
     version: 0.12.7
 
 dependencies:
   override:
+    # Update to the latest chrome
+    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    - sudo apt-get update
+    - sudo apt-get install google-chrome-stable
+
     # Restore the meteor symlink
     - if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
 
     # Install Meteor if the cache didn't restore it
     - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
 
-    - npm install
+    - npm install --dev
 
     # Cache Meteor Packages
     - node ./environments/test/cache.js

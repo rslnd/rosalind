@@ -3,7 +3,6 @@ var path = require('path');
 var env = process.env;
 
 env.CACHE_PACKAGES = 1;
-env.VELOCITY = 0;
 
 var meteorProcess = spawn(
   'bash', ['test.sh'], {
