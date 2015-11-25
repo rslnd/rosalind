@@ -152,8 +152,9 @@ fail () {
 
 
 if [ -n "$CI" ]; then
-  echo "** Running parallelized test suite on CI"
-  echo "** This is node $CIRCLE_NODE_INDEX of $CIRCLE_NODE_TOTAL"
+  echo "** Running test suite on CI"
+  echo "** Parallelizing to $CIRCLE_NODE_TOTAL nodes"
+  echo "** This is node #$CIRCLE_NODE_INDEX"
 
   case $CIRCLE_NODE_INDEX in
   0)
