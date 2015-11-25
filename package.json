@@ -1,5 +1,5 @@
 {
-  "name": "rosalind",
+  "name": "rosalind-development",
   "private": true,
   "scripts": {
     "start": "node environments/development/start.js",
@@ -9,10 +9,14 @@
     "test": "./environments/test/test.sh",
     "server:tail:cucumber": "node environments/development/tailCucumber.js",
     "server:tail:jasmine": "node environments/development/tailJasmine.js",
-    "client:start": "node app/packages/rosalind-native/scripts/start.js",
-    "client:build": "node app/packages/rosalind-native/scripts/build.js"
+    "client:start": "node app/electron/scripts/start.js",
+    "client:build": "node app/electron/scripts/build.js"
   },
-  "devDependencies": {
+  "dependencies": {
+    "coffeelint": "^1.14.1",
+    "electron-release": "^2.2.0",
+    "eslint": "^1.10.1",
+    "mupx": "^1.5.3",
     "shelljs": "^0.5.3"
   },
   "engines": {

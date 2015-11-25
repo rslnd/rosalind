@@ -12,7 +12,7 @@ dependencies:
     # Install Meteor if the cache didn't restore it
     - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
 
-    - npm install --dev
+    - npm install
 
     # Cache Meteor Packages
     - node ./environments/test/cache.js
