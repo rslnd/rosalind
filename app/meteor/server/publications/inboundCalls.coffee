@@ -1,10 +1,8 @@
-Meteor.publishComposite 'inboundCalls', (options = {}) ->
-  check(options, Object)
+Meteor.publishComposite 'inboundCalls', ->
   return unless (@userId and Roles.userIsInRole(@userId, ['inboundCalls', 'admin'], Roles.GLOBAL_GROUP))
-  selector = _.pick(options, 'removed')
 
   {
-    find: -> InboundCalls.find({}, selector)
+    find: -> InboundCalls.find({})
     children: [
       { find: (inboundCall) -> Comments.find({ docId: inboundCall._id }) }
     ]

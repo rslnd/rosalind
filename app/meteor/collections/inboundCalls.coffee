@@ -62,6 +62,7 @@ TabularTables.InboundCalls = new Tabular.Table
   ]
   order: [[5, 'desc'], [7, 'desc']]
   sub: new SubsManager()
+  extraFields: ['removed']
   changeSelector: (selector) ->
     selector.removed = true
     selector
