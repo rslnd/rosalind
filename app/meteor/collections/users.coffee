@@ -172,6 +172,7 @@ TabularTables.Users = new Tabular.Table
   ],
   order: [[0, 'asc'], [2, 'asc']]
   extraFields: ['profile', 'username', 'groupId']
+  stateSave: true
   allow: (userId) ->
     Roles.userIsInRole(userId, ['admin'])
 

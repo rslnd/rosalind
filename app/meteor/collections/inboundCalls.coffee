@@ -47,6 +47,7 @@ InboundCalls.helpers
 TabularTables.InboundCalls = new Tabular.Table
   name: 'ResolvedInboundCalls'
   collection: InboundCalls
+  pub: 'inboundCalls'
   columns: [
     { data: 'firstName', title: 'Vorname' }
     { data: 'lastName', title: 'Nachname' }
@@ -63,6 +64,9 @@ TabularTables.InboundCalls = new Tabular.Table
   order: [[5, 'desc'], [7, 'desc']]
   sub: new SubsManager()
   extraFields: ['removed']
+  responsive: true
+  autoWidth: false
+  stateSave: true
   changeSelector: (selector) ->
     selector.removed = true
     selector
