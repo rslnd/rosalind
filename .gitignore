@@ -27,4 +27,7 @@ app/meteor/tests/cucumber/*.png
 dump.rdb
 
 # Ignore builds
-app/meteor/public/builds/*
+app/electron/build/*
+
+Thumbs.db
+.DS_Store
