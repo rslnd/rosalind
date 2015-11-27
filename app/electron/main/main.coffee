@@ -80,13 +80,12 @@ app.on 'ready', ->
     'min-height': 426,
     'disable-auto-hide-cursor': true,
     'node-integration': false,
-    'preload': require.resolve('./native.js'),
-    'web-preferences': {
+    'preload': require.resolve('../renderer/native.js'),
+    'web-preferences':
       'text-areas-are-resizable': false,
       'experimental-canvas-features': true,
       'subpixel-font-scaling': true,
       'overlay-scrollbars': false
-    }
 
   mainWindow.loadURL('http://127.0.0.1:3000')
   mainWindow.maximize()

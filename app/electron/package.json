@@ -4,7 +4,7 @@
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
-  "main": "lib/main.js",
+  "main": "main/main.js",
   "buildOptions": {
     "electronVersion": "0.35.1"
   },
@@ -13,15 +13,19 @@
     "electron-prebuilt": "^0.35.1",
     "grunt": "^0.4.5",
     "grunt-contrib-coffee": "^0.13.0",
+    "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
     "grunt-electron": "^2.0.1",
     "grunt-electron-installer": "^1.1.0",
+    "grunt-shell": "^1.1.2",
     "shelljs": "^0.5.3",
     "temp": "^0.8.3"
   },
   "dependencies": {
     "electron-cookies": "^1.1.0",
-    "electron-gh-releases": "^2.0.1"
+    "electron-gh-releases": "^2.0.1",
+    "underscore": "^1.8.3"
   },
   "scripts": {
     "client:start": "grunt",

@@ -1,14 +1,43 @@
+_ = require('underscore')
+
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-uglify')
+  grunt.loadNpmTasks('grunt-contrib-watch')
+  grunt.loadNpmTasks('grunt-contrib-copy')
   grunt.loadNpmTasks('grunt-electron-installer')
   grunt.loadNpmTasks('grunt-electron')
+  grunt.loadNpmTasks('grunt-shell')
+
+  options =
+    killCommand: ->
+      'taskkill /F /IM electron.exe' if process.platform is 'win32'
+      'pkill -9 Electron' if process.platform is 'darwin'
+      'pkill -9 electron'
+
+    devDependencies: ->
+      devDependencies = grunt.file.readJSON('package.json').devDependencies
+      _.map(devDependencies, (version, name) -> name)
+
+    dependencies: ->
+      dependencies = grunt.file.readJSON('package.json').dependencies
+      _.map(dependencies, (version, name) -> name)
+
+
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
 
+    watch:
+      coffee:
+        files: ['**/*.coffee', 'package.json']
+        tasks: ['shell:kill', 'coffee:compile', 'shell:electronPrebuilt']
+      node_modules:
+        files: 'node_modules/**/**'
+        tasks: 'copy:node_modules'
+
     coffee:
-      glob_to_multiple:
+      compile:
         expand: true
         flatten: false
         src: [
@@ -22,6 +51,16 @@ module.exports = (grunt) ->
       package:
         options:
           name: 'Rosalind'
+          icon: undefined
+          versionString:
+            CompanyName: ''
+            LegalCopyright: ''
+            FileDescription: ''
+            OriginalFilename: ''
+            FileVersion: ''
+            ProductVersion: ''
+            ProductName: ''
+            InternalName: ''
           dir: 'build/javascript/'
           out: 'build/packaged/'
           version: '<%= pkg.buildOptions.electronVersion %>'
@@ -29,17 +68,36 @@ module.exports = (grunt) ->
           arch: 'all'
           asar: true
           overwrite: true
-          ignore: [
-            'node_modules/electron-prebuilt',
-            'node_modules/electron-packager',
-            'node_modules/grunt',
-            'node_modules/grunt-electron-installer',
-            'node_modules/electron-prebuilt',
-            '.git',
-            'build/',
-            'scripts/',
-            'npm-debug.log'
-          ].join('|')
+          ignore: _.map(options.devDependencies(), (p) -> 'node_modules/' + p).join('|')
 
-  grunt.registerTask('build', ['coffee', 'electron'])
-  grunt.registerTask('default', ['coffee'])
+    copy:
+      node_modules:
+        files: [
+          {
+            src: _.map(options.dependencies(), (p) -> p + '/**')
+            cwd: 'node_modules/'
+            expand: true
+            dest: 'build/javascript/node_modules/'
+          }
+          {
+            src: ['package.json']
+            dest: 'build/javascript/package.json'
+          }
+        ]
+
+    shell:
+      electronPrebuilt:
+        command: './node_modules/.bin/electron build/javascript/'
+        options:
+          failOnError: false
+
+      kill:
+        command: options.killCommand()
+        options:
+          stdout: false
+          stderr: false
+          failOnError: false
+
+
+  grunt.registerTask('build', ['coffee', 'copy:node_modules', 'electron:package'])
+  grunt.registerTask('default', ['shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt', 'watch'])
