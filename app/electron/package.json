@@ -5,6 +5,9 @@
   "description": "Rosalind",
   "author": "Albert Zak",
   "main": "lib/main.js",
+  "buildOptions": {
+    "electronVersion": "0.35.1"
+  },
   "devDependencies": {
     "electron-packager": "^5.1.1",
     "electron-prebuilt": "^0.35.1",

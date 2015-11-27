@@ -4,9 +4,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-electron-installer')
   grunt.loadNpmTasks('grunt-electron')
 
-  options =
-    electronVersion: '0.35.1'
-
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
 
@@ -22,12 +19,12 @@ module.exports = (grunt) ->
         ext: '.js'
 
     electron:
-      osxBuild:
+      package:
         options:
           name: 'Rosalind'
           dir: 'build/javascript/'
           out: 'build/packaged/'
-          version: options.electronVersion
+          version: '<%= pkg.buildOptions.electronVersion %>'
           platform: 'all'
           arch: 'all'
           asar: true
