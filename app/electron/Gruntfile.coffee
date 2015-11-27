@@ -70,6 +70,16 @@ module.exports = (grunt) ->
           overwrite: true
           ignore: _.map(options.devDependencies(), (p) -> 'node_modules/' + p).join('|')
 
+    'create-windows-installer':
+      x64:
+        appDirectory: 'build/packaged/Rosalind-win32-x64'
+        outputDirectory: 'build/installer/Rosalind-win32-x64/'
+        exe: 'Rosalind.exe'
+      ia32:
+        appDirectory: 'build/packaged/Rosalind-win32-ia32'
+        outputDirectory: 'build/installer/Rosalind-win32-ia32/'
+        exe: 'Rosalind.exe'
+
     copy:
       node_modules:
         files: [
@@ -99,5 +109,5 @@ module.exports = (grunt) ->
           failOnError: false
 
 
-  grunt.registerTask('build', ['coffee', 'copy:node_modules', 'electron:package'])
+  grunt.registerTask('build', ['coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer'])
   grunt.registerTask('default', ['shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt', 'watch'])
