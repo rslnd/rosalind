@@ -173,22 +173,18 @@ fi
 
 if [ -n "$CI" ]; then
   echo "** Running test suite on CI"
-  echo "** This is matrix node #$MATRIX_NODE"
+  echo "** This is matrix node $MATRIX_NODE"
+
+  prepare
 
   case $MATRIX_NODE in
   SELENIUM)
-    echo -e "** Running selenium integration tests\n"
-    prepare
     test_meteor_selenium
     ;;
   JASMINE)
-    echo -e "** Running jasmine unit tests\n"
-    prepare
     test_meteor_jasmine
     ;;
   LINT)
-    echo -e "** Running linters\n"
-    prepare
     test_lint
     ;;
   *)
