@@ -20,6 +20,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get -qq install wine mono-devel -y
 
+  - npm install -g grunt-cli
   - npm install
   - cd ./app/electron/; npm install --dev; cd -;
 
@@ -28,4 +29,4 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 
 script:
-  - cd ./app/electron/; grunt build;
+  - npm run client:build
