@@ -3,7 +3,6 @@ _ = require('underscore')
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-uglify')
-  grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-copy')
   grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-electron-installer')
@@ -34,14 +33,6 @@ module.exports = (grunt) ->
         ['build/javascript', 'build/packaged', 'build/installer/']
       full:
         ['build/javascript', 'build/packaged', 'build/installer/', 'build/node_modules']
-
-    watch:
-      coffee:
-        files: ['**/*.coffee', 'package.json']
-        tasks: ['shell:kill', 'coffee:compile', 'shell:electronPrebuilt']
-      node_modules:
-        files: 'node_modules/**/**'
-        tasks: 'copy:node_modules'
 
     coffee:
       compile:
@@ -119,4 +110,4 @@ module.exports = (grunt) ->
 
 
   grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer'])
-  grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt', 'watch'])
+  grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt'])
