@@ -1,5 +1,6 @@
 {
-  "name": "rosalind-native",
+  "name": "rosalind",
+  "productName": "Rosalind",
   "version": "0.0.2",
   "private": true,
   "description": "Rosalind",
@@ -12,6 +13,7 @@
     "electron-packager": "^5.1.1",
     "electron-prebuilt": "^0.35.1",
     "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-coffee": "^0.13.0",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-uglify": "^0.11.0",

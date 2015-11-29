@@ -5,6 +5,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-copy')
+  grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-electron-installer')
   grunt.loadNpmTasks('grunt-electron')
   grunt.loadNpmTasks('grunt-shell')
@@ -27,6 +28,12 @@ module.exports = (grunt) ->
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
+
+    clean:
+      build:
+        ['build/javascript', 'build/packaged', 'build/installer/']
+      full:
+        ['build/javascript', 'build/packaged', 'build/installer/', 'build/node_modules']
 
     watch:
       coffee:
@@ -53,14 +60,14 @@ module.exports = (grunt) ->
           name: 'Rosalind'
           icon: undefined
           versionString:
-            CompanyName: ''
-            LegalCopyright: ''
-            FileDescription: ''
-            OriginalFilename: ''
-            FileVersion: ''
-            ProductVersion: ''
-            ProductName: ''
-            InternalName: ''
+            CompanyName: '<%= pkg.author %>'
+            LegalCopyright: '<%= pkg.author %>'
+            FileDescription: '<%= pkg.productName %>'
+            OriginalFilename: '<%= pkg.productName %>'
+            FileVersion: '<%= pkg.version %>'
+            ProductVersion: '<%= pkg.version %>'
+            ProductName: '<%= pkg.productName %>'
+            InternalName: '<%= pkg.productName %>'
           dir: 'build/javascript/'
           out: 'build/packaged/'
           version: '<%= pkg.buildOptions.electronVersion %>'
@@ -72,13 +79,15 @@ module.exports = (grunt) ->
 
     'create-windows-installer':
       x64:
-        appDirectory: 'build/packaged/Rosalind-win32-x64'
-        outputDirectory: 'build/installer/Rosalind-win32-x64/'
-        exe: 'Rosalind.exe'
+        appDirectory: 'build/packaged/<%= pkg.productName %>-win32-x64'
+        outputDirectory: 'build/installer/<%= pkg.productName %>-win32-x64/'
+        exe: '<%= pkg.productName %>.exe'
+        title: '<%= pkg.productName %>'
       ia32:
-        appDirectory: 'build/packaged/Rosalind-win32-ia32'
-        outputDirectory: 'build/installer/Rosalind-win32-ia32/'
-        exe: 'Rosalind.exe'
+        appDirectory: 'build/packaged/<%= pkg.productName %>-win32-ia32'
+        outputDirectory: 'build/installer/<%= pkg.productName %>-win32-ia32/'
+        exe: '<%= pkg.productName %>.exe'
+        title: '<%= pkg.productName %>'
 
     copy:
       node_modules:
@@ -109,5 +118,5 @@ module.exports = (grunt) ->
           failOnError: false
 
 
-  grunt.registerTask('build', ['coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer'])
-  grunt.registerTask('default', ['shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt', 'watch'])
+  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer'])
+  grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt', 'watch'])
