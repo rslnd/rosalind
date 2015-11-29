@@ -1,0 +1,43 @@
+sudo: required
+language: node_js
+node_js:
+  - "0.12"
+
+env:
+  global:
+    - CI=1
+  matrix:
+    - MATRIX_NODE=SELENIUM
+    - MATRIX_NODE=JASMINE
+    - MATRIX_NODE=LINT
+
+cache:
+  directories:
+    - ~/.meteor
+    - ~/.npm
+    - node_modules
+    - app/meteor/.meteor
+    - app/electron/node_modules
+
+before_install:
+  - if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
+  - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
+  - npm install
+  - node ./environments/test/cache.js
+
+   # Wine and Mono for building Windows installers
+  - sudo add-apt-repository ppa:ubuntu-wine/ppa -y
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  - echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+  - echo "deb http://download.mono-project.com/repo/debian wheezy-libtiff-compat main" | sudo tee -a /etc/apt/sources.list.d/mono-xamarin.list
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install wine mono-devel -y
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+script:
+  - mkdir -p ./app/meteor/.meteor/local/log
+  - chmod +x ./environments/test/test.sh
+  - ./environments/test/test.sh

@@ -173,36 +173,29 @@ fi
 
 if [ -n "$CI" ]; then
   echo "** Running test suite on CI"
-  echo "** Parallelizing to $CIRCLE_NODE_TOTAL nodes"
-  echo "** This is node #$CIRCLE_NODE_INDEX"
+  echo "** This is matrix node #$MATRIX_NODE"
 
-  case $CIRCLE_NODE_INDEX in
-  0)
+  case $MATRIX_NODE in
+  SELENIUM)
     echo -e "** Running selenium integration tests\n"
     prepare
     test_meteor_selenium
     ;;
-  1)
+  JASMINE)
     echo -e "** Running jasmine unit tests\n"
     prepare
     test_meteor_jasmine
     ;;
-  2)
+  LINT)
     echo -e "** Running linters\n"
     prepare
     test_lint
     ;;
   *)
-    echo "** Parallelized testing for $CIRCLE_NODE_TOTAL nodes is not implemented yet"
+    echo "** Parallelized testing for $MATRIX_NODE matrix nodes is not implemented yet"
     exit 0
     ;;
   esac
-
-  cd_app
-  cd meteor/.meteor/local/log/
-  if stat -t *.log >/dev/null 2>&1; then
-    cp *.log "$CIRCLE_ARTIFACTS/"
-  fi
 
   print_logs
 
