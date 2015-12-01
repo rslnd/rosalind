@@ -1,3 +1,3 @@
-console.log('enabling native bindings')
+console.log('[Native] Enabling native bindings')
 
 require('electron-cookies')

@@ -40,7 +40,9 @@ module.exports = (grunt) ->
         flatten: false
         src: [
           'main/*.coffee',
+          'main/**/*.coffee',
           'renderer/*.coffee'
+          'renderer/**/*.coffee'
         ]
         dest: 'build/javascript/'
         ext: '.js'
