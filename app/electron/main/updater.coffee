@@ -6,13 +6,13 @@ githubUpdater = new GhReleases
 
 githubUpdater.on 'update-downloaded', (info) ->
   console.log('[Updater] Update downloaded: ', info)
+  console.log('[Updater] TODO: set a flag to install update on next app launch')
 
 module.exports =
   handleStartupEvent: ->
     return unless process.platform is 'win32'
 
     squirrelCommand = process.argv[1]
-    console.log('[Updater] Squirrel flags:', squirrelCommand)
 
     switch squirrelCommand
       when '--squirrel-install', '--squirrel-updated'
@@ -35,8 +35,9 @@ module.exports =
         electron.quit()
 
   check: ->
+    console.log('[Updater] Checking for updates')
     githubUpdater.check (err, status) ->
-      console.error('[Updater] Error while checking for updates: ', err) if (err)
+      console.log('[Updater] Update check finished: ', err) if (err)
       if not err and status
         console.log('[Updater] Update check finished: ', status)
         console.log('[Updater] Downloading update in background')

@@ -1,10 +1,14 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/albertzak/rosalind"
+  },
   "main": "main/main.js",
   "buildOptions": {
     "electronVersion": "0.35.1"

@@ -2,6 +2,8 @@ _ = require 'underscore'
 electron = require 'app'
 BrowserWindow = require 'browser-window'
 
+DEV = _.contains(process.argv, '--dev')?
+
 module.exports =
   open: ->
     screen = require 'screen'
@@ -15,7 +17,7 @@ module.exports =
       'min-width': 560,
       'min-height': 426,
       'disable-auto-hide-cursor': true,
-      'node-integration': false,
+      'node-integration': DEV,
       'preload': require.resolve('../renderer/native.js'),
       'web-preferences':
         'text-areas-are-resizable': false,
@@ -26,7 +28,7 @@ module.exports =
     mainWindow.loadURL('http://127.0.0.1:3000')
     mainWindow.maximize()
 
-    mainWindow.webContents.openDevTools() if _.contains(process.argv, '--dev')
+    mainWindow.webContents.openDevTools() if DEV?
 
     mainWindow.on 'closed', ->
       electron.quit()
