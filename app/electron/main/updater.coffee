@@ -4,6 +4,10 @@ githubUpdater = new GhReleases
   repo: 'albertzak/rosalind'
   currentVersion: electron.getVersion()
 
+githubUpdater.autoUpdater.on 'error', (err, msg) ->
+  console.error('[Updater] Error: ', err) if err
+  console.log('[Updater]', msg) if msg
+
 githubUpdater.on 'update-downloaded', (info) ->
   console.log('[Updater] Update downloaded: ', info)
   console.log('[Updater] TODO: set a flag to install update on next app launch')

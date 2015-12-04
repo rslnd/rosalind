@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "electron-cookies": "^1.1.0",
-    "electron-gh-releases": "^2.0.1",
+    "electron-gh-releases": "^2.0.2",
     "underscore": "^1.8.3"
   },
   "scripts": {
