@@ -1,5 +1,16 @@
 sidebar = [
   {
+    name: 'appointments.this'
+    icon: 'calendar'
+    countBadge: 'appointments'
+    roles: ['admin', 'appointments']
+    submenu: [
+      { name: 'appointments.day', link: '/appointments' }
+      { name: 'appointments.week', link: '/appointments' }
+      { name: 'appointments.thisInsert', link: '/appointments/new' }
+    ]
+  },
+  {
     name: 'inboundCalls.this'
     icon: 'phone'
     countBadge: 'inboundCalls'
@@ -7,7 +18,7 @@ sidebar = [
     submenu: [
       { name: 'inboundCalls.thisOpen', link: '/inboundCalls' }
       { name: 'inboundCalls.thisResolved', link: '/inboundCalls/resolved' }
-      { name: 'inboundCalls.new', link: '/inboundCalls/new' }
+      { name: 'inboundCalls.thisInsert', link: '/inboundCalls/new' }
     ]
   },
   {
@@ -24,7 +35,7 @@ sidebar = [
     roles: ['admin']
     submenu: [
       { name: 'users.thisAll', link: '/users' }
-      { name: 'users.thisNew', link: '/users/new' }
+      { name: 'users.thisInsert', link: '/users/new' }
     ]
   }
 ]

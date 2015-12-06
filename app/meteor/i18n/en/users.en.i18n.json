@@ -2,9 +2,9 @@
   "users": {
     "this": "Manage users",
     "thisAll": "All users",
-    "thisNew": "New user",
-    "edit": "Edit user",
-    "save": "Save user",
+    "thisInsert": "New user",
+    "thisEdit": "Edit user",
+    "thisSave": "Save user",
     "changePassword": "Change password",
     "setRoles": "Set roles",
     "groups": {

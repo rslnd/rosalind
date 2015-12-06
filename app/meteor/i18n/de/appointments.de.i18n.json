@@ -1,0 +1,10 @@
+{
+  "appointments": {
+    "this": "Termine",
+    "thisUpdate": "Termin bearbeiten",
+    "thisSave": "Termin speichern",
+    "thisInsert": "Neuer Termin",
+    "day": "Tagesplan",
+    "week": "Wochenplan"
+  }
+}
