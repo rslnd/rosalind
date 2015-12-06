@@ -9,7 +9,7 @@ sidebar = [
       { name: 'appointments.week', link: '/appointments' }
       { name: 'appointments.thisInsert', link: '/appointments/new' }
     ]
-  },
+  }
   {
     name: 'inboundCalls.this'
     icon: 'phone'
@@ -20,7 +20,7 @@ sidebar = [
       { name: 'inboundCalls.thisResolved', link: '/inboundCalls/resolved' }
       { name: 'inboundCalls.thisInsert', link: '/inboundCalls/new' }
     ]
-  },
+  }
   {
     name: 'schedules.this'
     icon: 'user-md'
@@ -28,7 +28,15 @@ sidebar = [
     submenu: [
       { name: 'schedules.thisDefault', link: '/schedules/default' }
     ]
-  },
+  }
+  {
+    name: 'reports.this'
+    icon: 'bar-chart'
+    roles: ['admin', 'reports']
+    submenu: [
+      { name: 'reports.dashboard', link: '/reports' }
+    ]
+  }
   {
     name: 'users.this'
     icon: 'unlock-alt'
