@@ -1,0 +1,25 @@
+.box.box-widget
+  .box-header
+    h4.username.enable-select
+      strong {{ time start }}
+      | {{ getFullNameWithTitle patient }}
+      br
+      if privateAppointment
+        small {{_ 'appointments.private'}}
+      else
+        small {{_ 'appointments.insurance'}}
+      | &middot;
+      small {{ getFullNameWithTitle assignee }}
+
+  .box-body
+    blockquote
+      p.enable-select.pre-wrap #{note}
+
+    .text-muted
+      span.pull-left
+        | {{_ 'appointments.createdBy'}} {{getFirstName createdBy}} {{livestamp createdAt}} {{_ 'ui.at'}} {{time createdAt}}
+      if hasComments
+        span.pull-right
+          | {{ humanCommentCount }}
+
+  +comments

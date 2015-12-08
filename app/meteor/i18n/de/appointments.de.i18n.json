@@ -5,6 +5,39 @@
     "thisSave": "Termin speichern",
     "thisInsert": "Neuer Termin",
     "day": "Tagesplan",
-    "week": "Wochenplan"
+    "week": "Wochenplan",
+    "private": "Privat",
+    "insurance": "Kasse",
+    "createdBy": "Eingetragen von",
+    "form": {
+      "start": {
+        "label": "Beginn"
+      },
+      "end": {
+        "label": "Ende"
+      },
+      "type": {
+        "label": "Art"
+      },
+      "show": {
+        "label": "Anwesend"
+      },
+      "patientId": {
+        "label": "Patient"
+      },
+      "assigneeId": {
+        "label": "Spezialist"
+      },
+      "assistentIds": {
+        "label": "Assistenten"
+      },
+      "note": {
+        "label": "Notizen"
+      },
+      "privateAppointment": {
+        "label": "Privattermin"
+      }
+    }
+
   }
 }

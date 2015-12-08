@@ -64,6 +64,8 @@ fortawesome:fontawesome
 fastclick
 sacha:spin
 peppelg:bootstrap-3-modal
+tsega:bootstrap3-datetimepicker@=3.1.3_3
+aldeed:autoform-bs-datetimepicker
 
 # I18n
 tap:i18n
