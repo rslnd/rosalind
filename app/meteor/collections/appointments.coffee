@@ -16,18 +16,22 @@ Schema.Appointments = new SimpleSchema
   admittedAt:
     type: Date
     optional: true
+    index: 1
 
   admittedBy:
     type: SimpleSchema.RegEx.Id
     optional: true
+    index: 1
 
   treatedAt:
     type: Date
     optional: true
+    index: 1
 
   treatedBy:
     type: SimpleSchema.RegEx.Id
     optional: true
+    index: 1
 
   patientId:
     type: SimpleSchema.RegEx.Id
@@ -61,17 +65,84 @@ Schema.Appointments = new SimpleSchema
 
 Appointments.helpers
   privateOrInsurance: ->
-    if @privatePatient
+    if @privateAppointment
       TAPi18n.__('appointments.private')
     else
       TAPi18n.__('appointments.insurance')
+
+  open: ->
+    not @admittedAt? and not @admittedBy? and not @treatedAt? and not @treatedBy?
+
+  admitted: ->
+    @admittedAt? and @admittedBy? and not @treatedAt? and not @treatedBy?
+
+  treated: ->
+    @admittedAt? and @admittedBy? and @treatedAt? and @treatedBy?
 
   collection: ->
     Appointments
 
 Appointments.setAdmitted = (id, time) ->
-  time = if time then time.toDate() else moment().toDate()
-  Appointments.update(id, { $set: { admittedAt: time, admittedBy: Meteor.user()._id } })
+  Appointments.stateChange(id, time, 'admitted')
+
+Appointments.setTreated = (id, time) ->
+  Appointments.stateChange(id, time, 'treated')
+
+Appointments.setResolved = (id, time) ->
+  Appointments.softRemove(id)
+
+Appointments.stateChange = (id, time, state) ->
+  set = {}
+  set[state + 'By'] = Meteor.user()._id
+  set[state + 'At'] = if time then time.toDate() else moment().toDate()
+  Appointments.update(id, { $set: set })
+
+
+Appointments.findOpen = ->
+  Appointments.find
+    admittedAt: null
+    admittedBy: null
+    treatedAt: null
+    treatedBy: null
+
+Appointments.findAdmitted = ->
+  Appointments.find
+    admittedAt: { $ne: null }
+    admittedBy: { $ne: null }
+    treatedAt: null
+    treatedBy: null
+
+Appointments.findTreating = ->
+  Appointments.find
+    admittedAt: { $ne: null }
+    admittedBy: { $ne: null }
+    treatedAt: { $ne: null }
+    treatedBy: { $ne: null }
+
+TabularTables.Appointments = new Tabular.Table
+  name: 'ResolvedAppointments'
+  collection: Appointments
+  pub: 'appointments'
+  columns: [
+    { data: 'note', title: 'Notiz' }
+    { data: 'privateAppointment', title: 'Privat', render: (val, type, doc) -> doc.privateOrInsurance() }
+    { data: 'start', title: 'Termin', render: (val) -> moment(val).calendar() }
+    { data: 'createdBy', title: 'Eintrag', render: (val) -> Helpers.getShortname(val) }
+    { data: 'admittedBy', title: 'Empfang', render: (val) -> Helpers.getShortname(val) }
+    { data: 'treatedBy', title: 'Behandlung', render: (val) -> Helpers.getShortname(val) }
+    { title: '<i class="fa fa-commenting-o"></i>', tmpl: Meteor.isClient and Template.commentCount }
+  ]
+  order: [[0, 'desc']]
+  sub: new SubsManager()
+  extraFields: ['removed']
+  responsive: true
+  autoWidth: false
+  stateSave: true
+  changeSelector: (selector) ->
+    selector.removed = true
+    selector
+
+
 
 Meteor.startup ->
   Schema.Appointments.i18n('appointments.form')

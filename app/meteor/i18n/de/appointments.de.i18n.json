@@ -1,17 +1,24 @@
 {
   "appointments": {
     "this": "Termine",
+    "thisOpen": "Heute bevorstehend",
+    "thisAdmitted": "Warteraum",
+    "thisTreating": "In Behandlung",
+    "thisResolved": "Erledigte Termine",
     "thisUpdate": "Termin bearbeiten",
     "thisSave": "Termin speichern",
     "thisInsert": "Neuer Termin",
-    "day": "Tagesplan",
-    "week": "Wochenplan",
     "private": "Privat",
     "insurance": "Kasse",
     "createdBy": "Eingetragen von",
     "assignedTo": "bei",
     "admit": "Anwesend",
     "admittedBy": "Empfangen von",
+    "treat": "Behandlung",
+    "treatedBy": "Behandelt von",
+    "resolve": "Erledigt",
+    "resolvedBy": "Erledigt von",
+    "resolvedToday": "Heute erledigt",
     "form": {
       "start": {
         "label": "Beginn"

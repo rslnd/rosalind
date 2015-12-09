@@ -5,8 +5,10 @@ sidebar = [
     countBadge: 'appointments'
     roles: ['admin', 'appointments']
     submenu: [
-      { name: 'appointments.day', link: '/appointments' }
-      { name: 'appointments.week', link: '/appointments' }
+      { name: 'appointments.thisOpen', link: '/appointments' }
+      { name: 'appointments.thisAdmitted', link: '/appointments/admitted' }
+      { name: 'appointments.thisTreating', link: '/appointments/treating' }
+      { name: 'appointments.thisResolved', link: '/appointments/resolved' }
       { name: 'appointments.thisInsert', link: '/appointments/new' }
     ]
   }

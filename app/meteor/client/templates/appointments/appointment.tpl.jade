@@ -1,6 +1,12 @@
 .box.box-widget.appointment
   .box-header
-    button.pull-right.btn.btn-success.admit {{_ 'appointments.admit'}}
+    if open
+      button.pull-right.btn.btn-success.admit {{_ 'appointments.admit'}}
+    if admitted
+      button.pull-right.btn.btn-success.treat {{_ 'appointments.treat'}}
+    if treated
+      button.pull-right.btn.btn-success.resolve {{_ 'appointments.resolve'}}
+
 
     h4.username.enable-select
       <b>{{ time start }}</b> {{ getFullNameWithTitle patient }}<br />
