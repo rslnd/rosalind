@@ -12,8 +12,8 @@
     "private": "Privat",
     "resolve": "Als erledigt markieren",
     "unresolve": "Markierung als erledigt entfernen",
-    "resolvedBy": "Erledigt von",
-    "answeredBy": "Angenommen von",
+    "removedBy": "Erledigt von",
+    "createdBy": "Angenommen von",
     "form": {
       "firstName": {
         "label": "Vorname"

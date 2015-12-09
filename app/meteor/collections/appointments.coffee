@@ -13,12 +13,20 @@ Schema.Appointments = new SimpleSchema
   type:
     type: String
 
-  arrivedAt:
+  admittedAt:
     type: Date
     optional: true
 
-  treatmentAt:
+  admittedBy:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+
+  treatedAt:
     type: Date
+    optional: true
+
+  treatedBy:
+    type: SimpleSchema.RegEx.Id
     optional: true
 
   patientId:
@@ -61,6 +69,9 @@ Appointments.helpers
   collection: ->
     Appointments
 
+Appointments.setAdmitted = (id, time) ->
+  time = if time then time.toDate() else moment().toDate()
+  Appointments.update(id, { $set: { admittedAt: time, admittedBy: Meteor.user()._id } })
 
 Meteor.startup ->
   Schema.Appointments.i18n('appointments.form')

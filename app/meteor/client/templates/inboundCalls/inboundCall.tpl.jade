@@ -11,12 +11,8 @@
     blockquote
       p.enable-select.pre-wrap #{note}
 
-    .text-muted
-      span.pull-left
-        | {{_ 'inboundCalls.answeredBy'}} {{getFirstName createdBy}} {{livestamp createdAt}} {{_ 'ui.at'}} {{time createdAt}}
-      if hasComments
-        span.pull-right
-          | {{ humanCommentCount }}
+    | {{> humanCommentCount }}
+    | {{> stamps fields='removed,created' doc=this}}
 
   +comments
 

@@ -1,6 +1,6 @@
 .box.box-widget.appointment
   .box-header
-    button.pull-right.btn.btn-success Anwesend
+    button.pull-right.btn.btn-success.admit {{_ 'appointments.admit'}}
 
     h4.username.enable-select
       <b>{{ time start }}</b> {{ getFullNameWithTitle patient }}<br />
@@ -15,11 +15,7 @@
     blockquote
       p.enable-select.pre-wrap #{note}
 
-    .text-muted
-      span.pull-left
-        | {{_ 'appointments.createdBy'}} {{getFirstName createdBy}} {{livestamp createdAt}} {{_ 'ui.at'}} {{time createdAt}}
-      if hasComments
-        span.pull-right
-          | {{ humanCommentCount }}
+    | {{> humanCommentCount }}
+    | {{> stamps fields='treated,admitted,created' doc=this}}
 
   +comments

@@ -10,6 +10,8 @@
     "insurance": "Kasse",
     "createdBy": "Eingetragen von",
     "assignedTo": "bei",
+    "admit": "Anwesend",
+    "admittedBy": "Empfangen von",
     "form": {
       "start": {
         "label": "Beginn"

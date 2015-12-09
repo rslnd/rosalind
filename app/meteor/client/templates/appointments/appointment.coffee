@@ -4,3 +4,7 @@ Template.appointment.helpers
 
   assignee: ->
     Meteor.users.findOne(@assigneeId)
+
+Template.appointment.events
+  'click .admit': ->
+    Appointments.setAdmitted(@_id)

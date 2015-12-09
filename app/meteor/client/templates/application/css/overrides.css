@@ -17,10 +17,18 @@
   margin-left: 0;
 }
 
+.box-body {
+  padding-bottom: 8px !important;
+}
+
 .appointment .box-header h4 {
   margin-top: 0;
 }
 
 .appointment .box-body {
   padding-top: 0;
+}
+
+.stamp {
+  margin-bottom: 0;
 }
