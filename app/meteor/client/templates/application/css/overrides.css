@@ -16,3 +16,11 @@
 .modal .box-header {
   margin-left: 0;
 }
+
+.appointment .box-header h4 {
+  margin-top: 0;
+}
+
+.appointment .box-body {
+  padding-top: 0;
+}

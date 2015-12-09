@@ -9,6 +9,7 @@
     "private": "Privat",
     "insurance": "Kasse",
     "createdBy": "Eingetragen von",
+    "assignedTo": "bei",
     "form": {
       "start": {
         "label": "Beginn"

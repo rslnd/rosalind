@@ -1,15 +1,15 @@
-.box.box-widget
+.box.box-widget.appointment
   .box-header
+    button.pull-right.btn.btn-success Anwesend
+
     h4.username.enable-select
-      strong {{ time start }}
-      | {{ getFullNameWithTitle patient }}
-      br
+      <b>{{ time start }}</b> {{ getFullNameWithTitle patient }}<br />
       if privateAppointment
         small {{_ 'appointments.private'}}
       else
         small {{_ 'appointments.insurance'}}
-      | &middot;
-      small {{ getFullNameWithTitle assignee }}
+
+      small {{_ 'appointments.assignedTo'}} {{ getFullNameWithTitle assignee }}
 
   .box-body
     blockquote
