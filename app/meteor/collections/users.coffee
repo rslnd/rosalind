@@ -108,9 +108,9 @@ Meteor.users.helpers
     if (@profile and @profile.titleAppend and @profile.titlePrepend)
       @profile.titlePrepend + ' ' + fullName
       + ', ' + @profile.titleAppend
-    if (@profile and @profile.titlePrepend)
+    else if (@profile and @profile.titlePrepend)
       @profile.titlePrepend + ' ' + fullName
-    if (@profile and @profile.titleAppend)
+    else if (@profile and @profile.titleAppend)
       fullName + ', ' + @profile.titleAppend
     else
       @fullName()
