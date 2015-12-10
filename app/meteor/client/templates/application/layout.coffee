@@ -11,5 +11,5 @@ UI.registerHelper 'time', (context, options) ->
 
 UI.registerHelper 'showCount', (context) ->
   return unless context?
-  count = Mongo.Collection.get(context) and Mongo.Collection.get(context).find({}).count()
+  count = Counts.get(context)
   if (count > 0) then count else false

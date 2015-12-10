@@ -3,7 +3,7 @@
     .modal-content
       .modal-header
         button(type='button' class='close' data-dismiss='modal' aria-hidden='true') &times;
-        h4.modal-title {{_ 'ui.comment_plural'}}
+        h4.modal-title modalTitle
       .modal-body
         +UI.dynamic(template=collectionItem data=this)
       .modal-footer

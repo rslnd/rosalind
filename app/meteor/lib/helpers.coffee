@@ -19,6 +19,12 @@ Helpers.getShortname = (user) ->
   user = Meteor.users.findOneByIdOrUsername(user)
   user?.shortname()
 
+Helpers.calendar = (date) ->
+  moment(date).calendar()
+
+Helpers.recent = (date) ->
+  moment().range(date, moment()).diff('hours') < 4
+
 
 # Split phone number at whitespaces. If the word contains a number,
 # replace all letters 'O' or 'o' with zeroes. Join back together.
@@ -41,4 +47,6 @@ if Meteor.isClient
   UI.registerHelper('getFullName', (context) -> Helpers.getFullName(context))
   UI.registerHelper('getFullNameWithTitle', (context) -> Helpers.getFullNameWithTitle(context))
   UI.registerHelper('getShortname', (context) -> Helpers.getShortname(context))
+  UI.registerHelper('calendar', (context) -> Helpers.calendar(context))
+  UI.registerHelper('recent', (context) -> Helpers.recent(context))
   UI.registerHelper('zerofix', (context) -> Helpers.zerofix(context))

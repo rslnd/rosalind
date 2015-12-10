@@ -76,10 +76,12 @@ rzymek:moment-locale-de-at
 # Util
 u2622:persistent-session
 momentjs:moment
+benmgreene:moment-range
 bojicas:inflections
 copleykj:livestamp
 drblue:fullcalendar
 underscorestring:underscore.string
+mizzao:timesync
 
 # Monitoring
 meteorhacks:kadira@2.23.0

@@ -1,6 +1,7 @@
 {
   "appointments": {
     "this": "Termine",
+    "thisSingular": "Termin",
     "thisOpen": "Heute bevorstehend",
     "thisAdmitted": "Warteraum",
     "thisTreating": "In Behandlung",

@@ -63,7 +63,7 @@ TabularTables.InboundCalls = new Tabular.Table
   ]
   order: [[5, 'desc'], [7, 'desc']]
   sub: new SubsManager()
-  extraFields: ['removed']
+  extraFields: Schema.Appointments._firstLevelSchemaKeys
   responsive: true
   autoWidth: false
   stateSave: true

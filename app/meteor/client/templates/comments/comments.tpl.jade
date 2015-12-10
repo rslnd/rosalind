@@ -7,7 +7,10 @@ if hasComments
           span.username
             | {{getFullName createdBy}}
             span.text-muted.pull-right
-              | {{livestamp createdAt}} {{_ 'ui.at'}} {{time createdAt}}
+              if recent createdAt
+                | {{livestamp createdAt}} {{_ 'ui.at'}} {{time createdAt}}
+              else
+                | {{calendar createdAt}}
           p.enable-select.break-word {{ body }}
 .box-footer
   form.add-comment

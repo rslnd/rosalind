@@ -71,13 +71,13 @@ Appointments.helpers
       TAPi18n.__('appointments.insurance')
 
   open: ->
-    not @admittedAt? and not @admittedBy? and not @treatedAt? and not @treatedBy?
+    not @admittedAt? and not @admittedBy? and not @treatedAt? and not @treatedBy? and not @removed
 
   admitted: ->
-    @admittedAt? and @admittedBy? and not @treatedAt? and not @treatedBy?
+    @admittedAt? and @admittedBy? and not @treatedAt? and not @treatedBy? and not @removed
 
   treated: ->
-    @admittedAt? and @admittedBy? and @treatedAt? and @treatedBy?
+    @admittedAt? and @admittedBy? and @treatedAt? and @treatedBy? and not @removed
 
   collection: ->
     Appointments
@@ -134,7 +134,7 @@ TabularTables.Appointments = new Tabular.Table
   ]
   order: [[0, 'desc']]
   sub: new SubsManager()
-  extraFields: ['removed']
+  extraFields: Schema.Appointments._firstLevelSchemaKeys
   responsive: true
   autoWidth: false
   stateSave: true
