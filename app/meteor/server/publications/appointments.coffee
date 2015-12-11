@@ -16,7 +16,7 @@ Meteor.publishComposite 'appointments', (tableName, ids, fields) ->
         {
           find: (doc) ->
             @unblock()
-            Comments.find({ docId: doc._id })
+            Comments.find(docId: doc._id)
         }
       ]
     }
@@ -24,6 +24,6 @@ Meteor.publishComposite 'appointments', (tableName, ids, fields) ->
     {
       find: -> Appointments.find({})
       children: [
-        { find: (doc) -> Comments.find({ docId: doc._id }) }
+        { find: (doc) -> Comments.find(docId: doc._id) }
       ]
     }

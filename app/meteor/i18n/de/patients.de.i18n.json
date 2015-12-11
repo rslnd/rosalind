@@ -1,0 +1,12 @@
+{
+  "patients": {
+    "this": "Patienten",
+    "thisOne": "Patient",
+    "thisAll": "Alle Patienten",
+    "thisInsert": "Neuer Patient",
+    "thisUpdate": "Patient bearbeiten",
+    "thisEdit": "Patient bearbeiten",
+    "thisSave": "Patient speichern",
+    "addedToday": "heute neu eingetragen"
+  }
+}

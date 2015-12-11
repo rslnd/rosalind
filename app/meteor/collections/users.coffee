@@ -1,36 +1,5 @@
 Ground.Collection(Meteor.users)
 
-Schema.UserProfile = new SimpleSchema
-  firstName:
-    type: String
-    optional: true
-
-  lastName:
-    type: String
-    optional: true
-
-  titlePrepend:
-    type: String
-    optional: true
-
-  titleAppend:
-    type: String
-    optional: true
-
-  birthday:
-    type: Date
-    optional: true
-
-  gender:
-    type: String
-    allowedValues: ['Male', 'Female']
-    optional: true
-
-  employee:
-    type: Boolean
-    optional: true
-
-
 Schema.User = new SimpleSchema
   username:
     type: String
@@ -48,7 +17,7 @@ Schema.User = new SimpleSchema
     autoValue: Util.autoCreatedAt
 
   profile:
-    type: Schema.UserProfile
+    type: Schema.Profile
     optional: true
 
   services:
@@ -208,7 +177,7 @@ Schema.UserUpdateRoles = new SimpleSchema
 
 
 Meteor.startup ->
-  Schema.UserProfile.i18n('user.profile')
+  Schema.Profile.i18n('user.profile')
   Schema.User.i18n('user')
   Schema.UserLogin.i18n('login.form')
 

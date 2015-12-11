@@ -1,9 +1,9 @@
-Meteor.publishComposite 'inboundCalls', (tableName, ids, fields) ->
+Meteor.publishComposite 'patients', (tableName, ids, fields) ->
   check(tableName, Match.Optional(String))
   check(ids, Match.Optional(Array))
   check(fields, Match.Optional(Object))
 
-  return unless (@userId and Roles.userIsInRole(@userId, ['inboundCalls', 'admin'], Roles.GLOBAL_GROUP))
+  return unless (@userId and Roles.userIsInRole(@userId, ['patients', 'admin'], Roles.GLOBAL_GROUP))
 
   @unblock()
 
@@ -11,7 +11,7 @@ Meteor.publishComposite 'inboundCalls', (tableName, ids, fields) ->
     {
       find: ->
         @unblock()
-        InboundCalls.find({ _id: { $in: ids } }, { removed: true })
+        Patients.find(_id: { $in: ids })
       children: [
         {
           find: (doc) ->
@@ -22,7 +22,7 @@ Meteor.publishComposite 'inboundCalls', (tableName, ids, fields) ->
     }
   else
     {
-      find: -> InboundCalls.find({})
+      find: -> Patients.find({})
       children: [
         { find: (doc) -> Comments.find(docId: doc._id) }
       ]
