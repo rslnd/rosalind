@@ -2,21 +2,26 @@ electron = require 'app'
 updater = require './updater'
 window = require './window'
 logger = require './logger'
+cli = require './cli'
+
+mainWindow = null
 
 start = ->
-  electron.setAppUserModelId('com.squirrel.rosalind.rosalind')
-
   logger.start()
-  updater.handleStartupEvent()
+
+  return electron.quit() if updater.handleStartupEvent()
+  return electron.quit() if cli.handleStartupEvent(focus)
 
   electron.on 'ready', ->
     setTimeout(updater.check, 15 * 1000)
-    window.open()
+    mainWindow = window.open()
 
   electron.on 'window-all-closed', ->
     electron.quit()
 
-  process.on 'uncaughtException', (err) ->
-    console.error('[Main] Uncaught Exception:', err)
+focus = ->
+  return unless mainWindow
+  mainWindow.restore() if mainWindow.isMinimized()
+  mainWindow.focus()
 
 start()

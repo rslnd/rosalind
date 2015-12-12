@@ -32,3 +32,5 @@ module.exports =
 
     mainWindow.on 'closed', ->
       electron.quit()
+
+    return mainWindow

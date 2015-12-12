@@ -4,6 +4,8 @@ githubUpdater = new GhReleases
   repo: 'albertzak/rosalind'
   currentVersion: electron.getVersion()
 
+electron.setAppUserModelId('com.squirrel.rosalind.rosalind')
+
 githubUpdater.autoUpdater.on 'error', (err, msg) ->
   console.error('[Updater] Error: ', err) if err
   console.log('[Updater]', msg) if msg
@@ -26,17 +28,20 @@ module.exports =
         # - Write to the registry for things like file associations and
         #   explorer context menus
         electron.quit()
+        return true
 
       when '--squirrel-uninstall'
         # Undo anything you did in the --squirrel-install and
         # --squirrel-updated handlers
         electron.quit()
+        return true
 
       when '--squirrel-obsolete'
         # This is called on the outgoing version of your app before
         # we update to the new version - it's the opposite of
         # --squirrel-updated
         electron.quit()
+        return true
 
   check: ->
     console.log('[Updater] Checking for updates')
