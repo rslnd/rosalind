@@ -23,10 +23,12 @@ Schema.Profile = new SimpleSchema
   firstName:
     type: String
     optional: true
+    index: 1
 
   lastName:
     type: String
     optional: true
+    index: 1
 
   titlePrepend:
     type: String
@@ -48,6 +50,7 @@ Schema.Profile = new SimpleSchema
   employee:
     type: Boolean
     optional: true
+    index: 1
 
   address:
     type: Schema.Address

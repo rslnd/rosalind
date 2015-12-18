@@ -36,4 +36,5 @@ TabularTables.Patients = new Tabular.Table
 
 
 Meteor.startup ->
+  Patients.attachSchema(Schema.Patients)
   Patients.attachBehaviour('softRemovable')

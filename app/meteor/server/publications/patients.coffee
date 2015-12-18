@@ -20,10 +20,3 @@ Meteor.publishComposite 'patients', (tableName, ids, fields) ->
         }
       ]
     }
-  else
-    {
-      find: -> Patients.find({})
-      children: [
-        { find: (doc) -> Comments.find(docId: doc._id) }
-      ]
-    }
