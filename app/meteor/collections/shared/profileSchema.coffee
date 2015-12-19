@@ -41,6 +41,7 @@ Schema.Profile = new SimpleSchema
   birthday:
     type: Date
     optional: true
+    index: 1
 
   gender:
     type: String

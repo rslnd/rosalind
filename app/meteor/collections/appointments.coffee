@@ -52,13 +52,21 @@ Schema.Appointments = new SimpleSchema
   privateAppointment:
     type: Boolean
 
+  importedAt:
+    type: Date
+    optional: true
+
+  importedBy:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+
   createdAt:
     type: Date
     autoValue: Util.autoCreatedAt
     optional: true
 
   createdBy:
-    type: String
+    type: SimpleSchema.RegEx.Id
     autoValue: Util.autoCreatedBy
     optional: true
 

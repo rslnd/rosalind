@@ -2,8 +2,26 @@
 Ground.Collection(Patients)
 
 Schema.Patients = new SimpleSchema
+  externalId:
+    type: String
+    optional: true
+    index: 1
+
+  insuranceId:
+    type: String
+    optional: true
+    index: 1
+
   profile:
     type: Schema.Profile
+    optional: true
+
+  importedAt:
+    type: Date
+    optional: true
+
+  importedBy:
+    type: SimpleSchema.RegEx.Id
     optional: true
 
   createdAt:
@@ -12,7 +30,7 @@ Schema.Patients = new SimpleSchema
     optional: true
 
   createdBy:
-    type: String
+    type: SimpleSchema.RegEx.Id
     autoValue: Util.autoCreatedBy
     optional: true
 
