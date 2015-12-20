@@ -1,3 +1,4 @@
 {
-  "elasticsearch": "10.0.1"
+  "elasticsearch": "10.0.1",
+  "node_adt": "0.1.3"
 }
