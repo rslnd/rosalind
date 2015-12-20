@@ -12,6 +12,10 @@ Schema.Patients = new SimpleSchema
     optional: true
     index: 1
 
+  note:
+    type: String
+    optional: true
+
   profile:
     type: Schema.Profile
     optional: true
@@ -33,6 +37,23 @@ Schema.Patients = new SimpleSchema
     type: SimpleSchema.RegEx.Id
     autoValue: Util.autoCreatedBy
     optional: true
+
+Patients.helpers
+  collection: ->
+    Patients
+
+Patients.after.insert (userId, doc) ->
+  console.log('[Patient] inserted:', doc._id)
+  Search.index(doc, 'patient')
+
+Patients.after.update (userId, doc) ->
+  console.log('[Patient] updated:', doc._id)
+  Search.index(doc, 'patient')
+
+Patients.after.remove (userId, doc) ->
+  console.log('[Patient] removed:', doc._id)
+  Search.unindex(doc, 'patient')
+
 
 Meteor.startup ->
   Patients.attachSchema(Schema.Patients)

@@ -46,6 +46,7 @@ aldeed:tabular
 ground:db
 dburles:collection-helpers
 dburles:mongo-collection-instances
+matb33:collection-hooks
 meteorhacks:subs-manager
 tmeasday:publish-counts
 zimme:collection-softremovable
