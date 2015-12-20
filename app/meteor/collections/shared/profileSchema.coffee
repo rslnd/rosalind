@@ -1,3 +1,19 @@
+Schema.Contact = new SimpleSchema
+  value:
+    type: String
+
+  channel:
+    allowedValues: ['Phone', 'Email']
+    type: String
+
+  order:
+    type: Number
+    optional: true
+
+  note:
+    type: String
+    optional: true
+
 Schema.Address = new SimpleSchema
   line1:
     type: String
@@ -52,6 +68,10 @@ Schema.Profile = new SimpleSchema
     type: Boolean
     optional: true
     index: 1
+
+  contacts:
+    type: [Schema.Contact]
+    optional: true
 
   address:
     type: Schema.Address
