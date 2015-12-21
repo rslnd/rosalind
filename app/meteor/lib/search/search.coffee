@@ -6,7 +6,7 @@ Search.options =
 Search.index = (docOrId, type) ->
   return unless Meteor.isServer
   doc = Helpers.findOneByIdAndCollection(docOrId, type)
-  ElasticSearch.index
+  Elasticsearch.index
     index: Search.options.index
     type: type or doc.collection()._name
     id: doc._id
@@ -14,7 +14,7 @@ Search.index = (docOrId, type) ->
 
 Search.unindex = (doc, type) ->
   return unless Meteor.isServer
-  ElasticSearch.delete
+  Elasticsearch.delete
     index: Search.options.index
     type: type or doc.collection()._name
     id: doc._id

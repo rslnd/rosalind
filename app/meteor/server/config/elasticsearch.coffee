@@ -8,4 +8,4 @@ methods = [
   'search'
 ]
 
-@ElasticSearch = Async.wrap esClient, methods
+@Elasticsearch = Async.wrap esClient, methods
