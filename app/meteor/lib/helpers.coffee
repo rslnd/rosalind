@@ -1,5 +1,10 @@
 @Helpers = {}
 
+Helpers.findOneByIdAndCollection = (id, collection) ->
+  return id if typeof id is 'object'
+  collection = Mongo.Collection.get(collection) if typeof collection is 'string'
+  collection.findOne(id)
+
 Helpers.getFirstName = (user) ->
   user = Meteor.users.findOneByIdOrUsername(user)
   user?.firstName()

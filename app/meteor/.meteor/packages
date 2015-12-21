@@ -40,13 +40,13 @@ audit-argument-checks
 ongoworks:security
 
 # Collections
+matb33:collection-hooks
 aldeed:collection2
 aldeed:autoform
 aldeed:tabular
 ground:db
 dburles:collection-helpers
 dburles:mongo-collection-instances
-matb33:collection-hooks
 meteorhacks:subs-manager
 tmeasday:publish-counts
 zimme:collection-softremovable
