@@ -52,6 +52,7 @@ tmeasday:publish-counts
 zimme:collection-softremovable
 reywood:publish-composite
 meteorhacks:unblock
+meteorhacks:search-source
 
 # Users
 alanning:roles

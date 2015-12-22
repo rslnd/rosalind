@@ -2,4 +2,8 @@
 .content
   .box.box-danger
     .box-body
-      | Functionality not implemented yet.
+      input.input-lg(id='patient-search-box')
+      +each getPatients
+        | Patient
+        h3 {{ profile.firstName }} {{ profile.lastName }}
+        | {{ profile.birthday }}

@@ -44,15 +44,15 @@ Patients.helpers
 
 Patients.after.insert (userId, doc) ->
   console.log('[Patient] inserted:', doc._id)
-  Search.index(doc, 'patients')
+  Search.index('patients', @_id)
 
 Patients.after.update (userId, doc) ->
   console.log('[Patient] updated:', doc._id)
-  Search.index(doc, 'patients')
+  Search.index('patients', doc)
 
 Patients.after.remove (userId, doc) ->
   console.log('[Patient] removed:', doc._id)
-  Search.unindex(doc, 'patients')
+  Search.unindex('patients', doc)
 
 
 Meteor.startup ->
