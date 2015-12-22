@@ -12,6 +12,13 @@ options =
 @PatientsSearch = new SearchSource 'patients', filterFields, options
 
 Template.patients.helpers
+  birthday: (date) ->
+    date = moment(date)
+    return if date < moment().subtract(200, 'years')
+    age = date.fromNow(true)
+    formatted = date.format('D. MMMM YYYY')
+    "#{formatted} (#{age})"
+
   getPatients: ->
     PatientsSearch.getData
       sort: { _score: -1 }
