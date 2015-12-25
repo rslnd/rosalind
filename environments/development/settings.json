@@ -8,9 +8,6 @@
     }
   },
   "private": {
-    "elasticsearch": {
-      "host": "localhost:9200"
-    },
     "admin": {
       "defaultAccount": {
         "username": "admin",

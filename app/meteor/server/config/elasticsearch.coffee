@@ -1,6 +1,6 @@
 es = Meteor.npmRequire('elasticsearch')
 esClient = new es.Client
-  host: Meteor?.settings?.private?.elasticsearch?.host or 'localhost:9200'
+  host: process.env.ELASTICSEARCH_URL or 'localhost:9200'
 
 methods = [
   'index'
