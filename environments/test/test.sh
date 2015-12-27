@@ -24,7 +24,7 @@ prepare() {
 
   echo -e "** Using: $(meteor --version $RELEASE) \n"
 
-  clear_logs
+  cleanup
 }
 
 # Run Linters
@@ -48,11 +48,10 @@ kill_zombies () {
   pkill -f 'java -jar' || true
 }
 
-clear_logs() {
+cleanup() {
   cd_app
+  rm -rf meteor/.meteor/local/
   mkdir -p meteor/.meteor/local/log
-  cd meteor/.meteor/local/log/
-  rm -rf *
   cd_app
 }
 
@@ -141,7 +140,7 @@ test_meteor_jasmine () {
 
 # Run test suite in different browsers
 test_all () {
-  clear_logs
+  cleanup
 
   test_lint
 
