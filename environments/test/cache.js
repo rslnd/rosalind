@@ -27,6 +27,7 @@ meteorProcess.stdout.on('data', function (data) {
 
   // watch for Meteor error messages
   if (line.indexOf('Your application is crashing') !== -1) {
+    console.error('Meteor app is crashing with code', code);
     meteorProcess.kill('SIGINT');
     process.exit(1);
   }
@@ -34,5 +35,6 @@ meteorProcess.stdout.on('data', function (data) {
 });
 
 meteorProcess.on('exit', function(code) {
+  console.error('Exiting with code', code);
   process.exit(code);
 });
