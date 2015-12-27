@@ -9,6 +9,10 @@
     "comment": "Comment",
     "comment_plural": "Comments",
     "press_enter_to_post_comment": "Post comment...",
+    "statusMessages": {
+      "connected": "Good, connection is fine again.",
+      "disconnected": "Hang in there, having trouble with the connection. Should be back in a moment."
+    },
     "status": {
       "lastLogin": "Last login",
       "lastActivity": "Last activity",

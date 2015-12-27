@@ -12,6 +12,10 @@
     "comment": "Kommentar",
     "comment_plural": "Kommentare",
     "press_enter_to_post_comment": "Kommentar schreiben...",
+    "statusMessages": {
+      "connected": "Alles klar! Verbindung ist wieder da.",
+      "disconnected": "Entschuldigung! Habe die Verbindung verloren. Keine Sorge, sie sollte gleich wieder da sein."
+    },
     "status": {
       "lastLogin": "Letzter Login",
       "lastActivity": "Letzte Aktivität",

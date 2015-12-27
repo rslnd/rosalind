@@ -9,14 +9,4 @@ AutoForm.hooks
       false
 
     onError: (type, error) ->
-      revalidate = =>
-        vc = AutoForm.getValidationContext(@formId)
-        return unless typeof error.reason is 'string'
-        if (error.reason.indexOf('User not found') is not -1)
-          vc.addInvalidKeys([{ name: 'password', type: 'incorrectPassword' }])
-        else if (error.reason.indexOf('Incorrect password') is not -1)
-          vc.addInvalidKeys([{ name: 'password', type: 'incorrectPassword' }])
-        else if (error.reason.indexOf('User has no password set') is not -1)
-          vc.addInvalidKeys([{ name: 'password', type: 'passwordNotSet' }])
-
-      setTimeout(revalidate, 10)
+      sAlert.error(TAPi18n.__('login.failedMessage'))

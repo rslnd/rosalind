@@ -6,6 +6,7 @@
     "password": "Passwort",
     "loggedIn": "Sie sind momentan angemeldet.",
     "logout": "Abmelden",
+    "failedMessage": "Entschuldigung! Bitte überprüfen Sie das Passwort und den Anmeldenamen.",
     "help": {
       "show": "Ich benötige Hilfe",
       "title": "Entschuldigung!",
