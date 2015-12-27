@@ -1,4 +1,7 @@
 {
   "elasticsearch": "10.0.1",
-  "node_adt": "0.1.4"
+  "node_adt": "0.1.4",
+  "winston": "2.1.1",
+  "winston-sentry": "0.1.1",
+  "winston-loggly": "1.2.0"
 }
