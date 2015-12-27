@@ -26,13 +26,13 @@ if process.env.LOGGLY_KEY?
     tags: ['Meteor']
     json: true
 
-
-Winston.rewriters.push (level, msg, meta) ->
-  if typeof meta is 'object' and meta.userId?
-    user = Meteor.users.findOne(meta.userId)
-    meta.username = user.username
-    meta.fullName = user.fullNameWithTitle()
-  return meta
+unless process.env.IS_MIRROR?
+  Winston.rewriters.push (level, msg, meta) ->
+    if typeof meta is 'object' and meta.userId?
+      user = Meteor.users.findOne(meta.userId)
+      meta.username = user.username
+      meta.fullName = user.fullNameWithTitle()
+    return meta
 
 Meteor.methods
   'winston/log': (args) ->
@@ -41,7 +41,7 @@ Meteor.methods
       msg: String,
       meta: Match.Optional(Object)
 
-    if @userId
+    if @userId and not process.env.IS_MIRROR?
       user = Meteor.users.findOne(@userId)
       args.meta = {} unless args.meta?
       args.meta.userId = user._id
