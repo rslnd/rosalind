@@ -13,8 +13,8 @@
     "comment_plural": "Kommentare",
     "press_enter_to_post_comment": "Kommentar schreiben...",
     "statusMessages": {
-      "connected": "Alles klar! Verbindung ist wieder da.",
-      "disconnected": "Entschuldigung! Habe die Verbindung verloren. Keine Sorge, sie sollte gleich wieder da sein."
+      "connected": "OK, wieder verbunden!",
+      "disconnected": "Hoppla! Die Internetverbindung ist abgerissen. Keine Sorge, sie ist bestimmt gleich wieder da."
     },
     "status": {
       "lastLogin": "Letzter Login",
