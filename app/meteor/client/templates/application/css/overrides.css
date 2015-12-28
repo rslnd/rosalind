@@ -1,3 +1,7 @@
+.s-alert-box {
+  z-index: 25000;
+}
+
 .main-header {
   z-index: 20000;
 }

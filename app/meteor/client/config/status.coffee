@@ -10,11 +10,12 @@ Meteor.startup ->
         sAlert.success(html, { timeout: 2000, html: true })
         window.offline = null
 
-    else if status is 'connecting'
-      console.log('[Meteor] status: connecting')
-
     else
-      console.log('[Meteor] status: disconnected')
+      if status is 'connecting'
+        console.log('[Meteor] status: connecting')
+      else
+        console.log('[Meteor] status: disconnected')
+
       if window?.offline?.since
         if window.offline.since.isBefore(moment().subtract(1, 'minute'))
           console.log('[Meteor] status: force reloading')

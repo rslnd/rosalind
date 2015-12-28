@@ -89,5 +89,5 @@ meteorhacks:npm
 npm-container
 
 # Monitoring
-meteorhacks:kadira@2.23.0
+meteorhacks:kadira
 deepwell:raven
