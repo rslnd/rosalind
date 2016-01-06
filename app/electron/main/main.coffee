@@ -4,8 +4,10 @@ window = require './window'
 logger = require './logger'
 settings = require './settings'
 cli = require './cli'
+bdt = require './bdt'
 
 mainWindow = null
+bdtWatcher = null
 
 start = ->
   logger.start()
@@ -15,9 +17,11 @@ start = ->
 
   electron.on 'ready', ->
     setTimeout(updater.check, 15 * 1000)
+    bdtWatcher = bdt.watch()
     mainWindow = window.open()
 
   electron.on 'window-all-closed', ->
+    bdtWatcher.close()
     electron.quit()
 
 focus = ->

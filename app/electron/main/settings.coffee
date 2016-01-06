@@ -8,7 +8,9 @@ logger = require('./logger')
 settingsPath = path.join(electron.getPath('userData'), 'RosalindSettings.json')
 
 defaultSettings =
-  bdtWatchPath: 'ExamplePath'
+  bdt:
+    watch: '.'
+    delete: true
 
 settings = null
 
@@ -36,7 +38,7 @@ else
 logger.info('[Settings]', settings)
 
 ipc.on 'settings', (e) ->
-  console.log('[Settings] Requested settings via ipc')
+  logger.info('[Settings] Requested settings via ipc')
   e.sender.send('settings', settings)
 
 
