@@ -2,6 +2,7 @@ electron = require 'app'
 updater = require './updater'
 window = require './window'
 logger = require './logger'
+settings = require './settings'
 cli = require './cli'
 
 mainWindow = null

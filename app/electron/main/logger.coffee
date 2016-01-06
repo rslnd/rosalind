@@ -1,10 +1,12 @@
 winston = require('winston')
+path = require('path')
 electron = require('app')
 
 module.exports =
   start: ->
     winston.add winston.transports.File,
-      filename: path.join(electron.getPath('userData'), 'electron.log')
+      filename: path.join(electron.getPath('userData'), 'RosalindElectron.log')
+      level: 'debug'
       json: false
       maxsize: 1024 * 1024 * 10
       maxFiles: 1

@@ -1,4 +1,4 @@
-_ = require 'underscore'
+_ = require 'lodash'
 electron = require 'app'
 BrowserWindow = require 'browser-window'
 
@@ -17,8 +17,8 @@ module.exports =
       'min-width': 560,
       'min-height': 426,
       'disable-auto-hide-cursor': true,
-      'node-integration': DEV,
       'preload': require.resolve('../renderer/native.js'),
+      'node-integration': false,
       'web-preferences':
         'text-areas-are-resizable': false,
         'experimental-canvas-features': true,
