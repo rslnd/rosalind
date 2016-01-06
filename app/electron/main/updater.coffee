@@ -8,8 +8,8 @@ githubUpdater = new GhReleases
 electron.setAppUserModelId('com.squirrel.rosalind.rosalind')
 
 githubUpdater.autoUpdater.on 'error', (err, msg) ->
-  logger.error('[Updater] Error: ', err) if err and not err.indexOf('There is no newer version') > -1
-  logger.info('[Updater]', msg or err)
+  logger.info('[Updater]', msg) if msg?
+  logger.error('[Updater]', err) if err?
 
 githubUpdater.on 'update-downloaded', (info) ->
   logger.info('[Updater] Update downloaded: ', info)
@@ -47,8 +47,11 @@ module.exports =
   check: ->
     logger.info('[Updater] Checking for updates')
     githubUpdater.check (err, status) ->
-      logger.info('[Updater] Update check finished: ', err) if (err)
-      if not err and status
-        logger.info('[Updater] Update check finished: ', status)
+      if err and err?.message?.indexOf('no newer version') > -1
+        logger.info('[Updater] Update check finished: No newer version')
+      else if err
+        logger.error('[Updater] Update check finished with error:', err)
+      else if status
+        logger.info('[Updater] Update check finished successfully: ', status)
         logger.info('[Updater] Downloading update in background')
         githubUpdater.download()
