@@ -17,8 +17,8 @@ start = ->
 
   electron.on 'ready', ->
     setTimeout(updater.check, 15 * 1000)
-    bdtWatcher = bdt.watch()
     mainWindow = window.open()
+    bdtWatcher = bdt.watch(ipcReceiver: mainWindow)
 
   electron.on 'window-all-closed', ->
     bdtWatcher.close()
