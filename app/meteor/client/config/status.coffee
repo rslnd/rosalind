@@ -1,4 +1,4 @@
-Meteor.startup ->
+connectionStatus = ->
   Tracker.autorun ->
     status = Meteor.status().status
 
@@ -26,6 +26,7 @@ Meteor.startup ->
           since: moment()
           alertId: sAlert.warning(html, { timeout: 'none', html: true })
 
+userStatus ->
   Tracker.autorun (t) ->
     try
       TimeSync.loggingEnabled = false
@@ -36,3 +37,7 @@ Meteor.startup ->
       t.stop()
     catch e
       # noop
+
+Meteor.startup ->
+  userStatus
+  Meteor.setTimeout(connectionStatus, 2500)
