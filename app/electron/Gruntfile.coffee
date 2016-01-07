@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
@@ -71,11 +71,6 @@ module.exports = (grunt) ->
           ignore: _.map(options.devDependencies(), (p) -> 'node_modules/' + p).join('|')
 
     'create-windows-installer':
-      x64:
-        appDirectory: 'build/packaged/<%= pkg.productName %>-win32-x64'
-        outputDirectory: 'build/installer/<%= pkg.productName %>-win32-x64/'
-        exe: '<%= pkg.productName %>.exe'
-        title: '<%= pkg.productName %>'
       ia32:
         appDirectory: 'build/packaged/<%= pkg.productName %>-win32-ia32'
         outputDirectory: 'build/installer/<%= pkg.productName %>-win32-ia32/'
