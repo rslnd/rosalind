@@ -1,5 +1,3 @@
-Subs = new SubsManager()
-
 Router.configure
   layoutTemplate: 'layout'
   loadingTemplate: 'loading'
@@ -9,9 +7,6 @@ Router.onBeforeAction ->
   unless Meteor.user()
     @render('login')
   else
-    Subs.subscribe('users')
-    Subs.subscribe('groups')
-    Subs.subscribe('counts')
     @next()
 
 Router.onAfterAction ->

@@ -1,7 +1,15 @@
+Template.schedulesDefault.onCreated ->
+  @autorun =>
+    @subscribe('schedules')
+
 Template.schedulesDefault.helpers
+  schedulesDefault: ->
+    Meteor.users.find({})
+
   viewUser: ->
-    if (@router.viewUser)
-      Meteor.users.findOneByIdOrUsername(@router.viewUser)
+    idOrUsername = Router.current().params.idOrUsername
+    if (idOrUsername)
+      Meteor.users.findOneByIdOrUsername(idOrUsername)
     else
       Meteor.users.findOne({})
 

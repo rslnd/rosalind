@@ -1,3 +1,7 @@
+Template.editUser.helpers
+  user: ->
+    Meteor.users.findOne(Router.current().params._id)
+
 AutoForm.hooks
   editUserForm:
     onSuccess: -> Router.go('/users/')

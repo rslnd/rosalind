@@ -1,3 +1,10 @@
+Template.layout.onCreated ->
+  @autorun =>
+    @subscribe('users')
+    @subscribe('groups')
+    @subscribe('counts')
+    @subscribe('inboundCalls')
+
 UI.registerHelper 'loaded', ->
   Session.get('loaded')
 
