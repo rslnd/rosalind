@@ -39,5 +39,5 @@ userStatus = ->
       # noop
 
 Meteor.startup ->
-  userStatus
+  userStatus()
   Meteor.setTimeout(connectionStatus, 2500)
