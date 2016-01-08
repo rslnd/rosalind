@@ -5,14 +5,14 @@ if loaded
 
 #main
   .disable-select
-    if currentUser
-      +AdminLTE(skin='blue' fixed=true sidebarMini=true)
+    +AdminLTE(skin='blue' fixed=true sidebarMini=true)
+      if currentUser
         +topbar
         +sidebar
         .content-wrapper
           +yield
-    else
-      +AdminLTE(skin='blue')
+      else
         +lockedLayout
+          +login
 
     +modals
