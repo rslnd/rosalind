@@ -10,7 +10,8 @@
 
     var failOnError = function() {
       var lastError = browser.execute(function() { return window.lastError; }).value;
-      expect(lastError).toBeNull(lastError.message);
+      var message = (lastError && lastError.message);
+      expect(lastError).toBeNull(message);
       browser.execute(function() { window.lastError = null; });
     };
 
