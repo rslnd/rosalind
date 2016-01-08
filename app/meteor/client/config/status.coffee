@@ -26,7 +26,7 @@ connectionStatus = ->
           since: moment()
           alertId: sAlert.warning(html, { timeout: 'none', html: true })
 
-userStatus ->
+userStatus = ->
   Tracker.autorun (t) ->
     try
       TimeSync.loggingEnabled = false
