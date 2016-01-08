@@ -3,9 +3,6 @@
 # Do not run this script with npm test on CI.
 # npm test always returns zero exit code even when tests fail.
 
-echo "Skipping tests"
-exit 0
-
 # Exit on first command that fails
 set -e
 

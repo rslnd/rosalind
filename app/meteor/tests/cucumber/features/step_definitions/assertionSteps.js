@@ -8,6 +8,15 @@
       browser.timeoutsImplicitWait(30 * 1000);
     });
 
+    var failOnError = function() {
+      var lastError = browser.execute(function() { return window.lastError; }).value;
+      expect(lastError).toBeNull(lastError.message);
+      browser.execute(function() { window.lastError = null; });
+    };
+
+    this.Before(failOnError);
+    this.After(failOnError);
+
     this.Then('I should see \'$string\'', function (string) {
       browser.waitForExist('#loaded');
       var mainText = browser.getText('body');

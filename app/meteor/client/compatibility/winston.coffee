@@ -23,3 +23,9 @@ Meteor.startup ->
     meta.url = window.location.href
     meta.userAgent = navigator.userAgent
     Meteor.call('winston/log', { level, msg, meta })
+
+
+window.lastError = null
+window.onerror = (message, url, line, col, error) ->
+  window.lastError = { message, url, line, col, error }
+  Winston.error('[Client] ' + message, { url, line, col, error })
