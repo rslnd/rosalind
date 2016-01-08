@@ -5,8 +5,9 @@ Template.layout.onCreated ->
     @subscribe('counts')
     @subscribe('inboundCalls')
 
-UI.registerHelper 'loaded', ->
-  Session.get('loaded')
+Template.layout.helpers
+  loaded: ->
+    Template.instance().subscriptionsReady()
 
 UI.registerHelper 'activeClass', (context) ->
   { class: 'active' } if (context is Router.current().route.path())

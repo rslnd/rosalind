@@ -1,3 +1,7 @@
+Template.login.helpers
+  loggingIn: ->
+    Meteor.loggingIn()
+
 AutoForm.hooks
   loginForm:
     onSubmit: (form) ->

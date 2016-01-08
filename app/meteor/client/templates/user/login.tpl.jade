@@ -17,7 +17,11 @@
             span.help-block {{afFieldMessage name='password'}}
       .form-group.no-mb
         .col-sm-12
-          button.btn.btn-success.btn-block.btn-lg(type='submit') {{_ 'login.button'}}
+          if loggingIn
+            button.btn.btn-default.btn-block.btn-lg(disabled)
+              i.fa.fa-refresh.fa-spin
+          else
+            button.btn.btn-success.btn-block.btn-lg(type='submit') {{_ 'login.button'}}
 
     .panel-footer
       a.text-muted(data-toggle='modal' data-target='#loginHelp') {{_ 'login.help.show'}}

@@ -69,6 +69,7 @@ peppelg:bootstrap-3-modal
 tsega:bootstrap3-datetimepicker@=3.1.3_3
 aldeed:autoform-bs-datetimepicker
 juliancwirko:s-alert-stackslide
+aldeed:template-extension
 
 # I18n
 tap:i18n
