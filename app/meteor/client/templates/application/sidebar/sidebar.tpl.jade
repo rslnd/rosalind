@@ -5,9 +5,9 @@ aside.main-sidebar
       each sidebar
         +if showNav roles
             li.treeview
-              a.pointer.level-0(id='{{toHtmlId name}}' href=link)
+              a.pointer.level-0.link(id='{{toHtmlId name}}')
                 <i class='fa fa-{{icon}}'></i>
-                span {{_ name}}
+                span {{ name }}
                 if showCount countBadge
                   small.label.pull-right.label-primary {{showCount countBadge}}
                 else if submenu
@@ -16,5 +16,5 @@ aside.main-sidebar
                 ul.treeview-menu
                   each submenu
                       li
-                        a.active.level-1(href=link id='{{toHtmlId name}}')
-                          span {{_ name}}
+                        a.active.level-1.link(id='{{toHtmlId name}}')
+                          span {{ name }}

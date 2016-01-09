@@ -10,7 +10,7 @@ if loaded
         +topbar
         +sidebar
         .content-wrapper
-          +yield
+          +Template.dynamic template=main
       else
         +lockedLayout
           +login

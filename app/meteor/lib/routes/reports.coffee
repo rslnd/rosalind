@@ -1,1 +1,4 @@
-Router.route '/reports'
+reports = FlowRouter.group
+  prefix: '/reports'
+
+reports.route '/'

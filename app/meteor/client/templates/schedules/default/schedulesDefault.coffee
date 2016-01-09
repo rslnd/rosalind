@@ -7,7 +7,7 @@ Template.schedulesDefault.helpers
     Meteor.users.find({})
 
   viewUser: ->
-    idOrUsername = Router.current().params.idOrUsername
+    idOrUsername = FlowRouter.current().params.idOrUsername
     if (idOrUsername)
       Meteor.users.findOneByIdOrUsername(idOrUsername)
     else

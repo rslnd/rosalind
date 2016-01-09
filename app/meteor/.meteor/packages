@@ -27,7 +27,8 @@ accounts-password
 standard-minifiers
 
 # Routing
-iron:router
+kadira:flow-router
+kadira:blaze-layout
 
 # Testing
 velocity:console-reporter

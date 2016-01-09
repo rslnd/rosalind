@@ -1,3 +1,3 @@
 AutoForm.hooks
   insertUserForm:
-    onSuccess: (formType, result) -> Router.go('/users/' + result + '/edit')
+    onSuccess: (formType, result) -> FlowRouter.go('/users/' + result + '/edit')

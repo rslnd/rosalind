@@ -1,4 +1,12 @@
-Router.route('/patients')
+patients = FlowRouter.group
+  prefix: '/patients'
 
-Router.route '/patients/new', ->
-  @render('newPatient')
+patients.route '/',
+  name: 'patients.thisAll'
+  action: ->
+    BlazeLayout.render('layout', main: 'patients')
+
+patients.route '/new',
+  name: 'patients.thisNew'
+  action: ->
+    BlazeLayout.render('layout', main: 'newPatient')

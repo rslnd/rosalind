@@ -1,7 +1,18 @@
-Router.route '/appointments/resolved'
+appointments = FlowRouter.group
+  name: 'appointments'
+  prefix: '/appointments'
 
-Router.route '/appointments/new', ->
-  @render('newAppointment')
+appointments.route '/resolved',
+  name: 'appointments.thisResolved'
+  action: ->
+    BlazeLayout.render('layout', main: 'appointmentsResolved')
 
-Router.route '/appointments/:status?',
-  template: 'appointments'
+appointments.route '/new',
+  name: 'appointments.thisInsert'
+  action: ->
+    BlazeLayout.render('layout', main: 'newAppointment')
+
+appointments.route '/:status',
+  name: 'appointments.thisOpen'
+  action: ->
+    BlazeLayout.render('layout', main: 'appointments')

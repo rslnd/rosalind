@@ -1,6 +1,17 @@
-Router.route '/inboundCalls'
+inboundCalls = FlowRouter.group
+  prefix: '/inboundCalls'
 
-Router.route '/inboundCalls/resolved'
+inboundCalls.route '/',
+  name: 'inboundCalls.thisOpen'
+  action: ->
+    BlazeLayout.render('layout', main: 'inboundCalls')
 
-Router.route '/inboundCalls/new', ->
-  @render('newInboundCall')
+inboundCalls.route '/resolved',
+  name: 'inboundCalls.thisResolved'
+  action: ->
+    BlazeLayout.render('layout', main: 'inboundCallsResolved')
+
+inboundCalls.route '/new',
+  name: 'inboundCalls.thisInsert'
+  action: ->
+    BlazeLayout.render('layout', main: 'newInboundCall')

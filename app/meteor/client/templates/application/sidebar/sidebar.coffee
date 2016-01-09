@@ -1,71 +1,100 @@
 sidebar = [
-  {
-    name: 'appointments.this'
+  {} =
+    name: 'appointments'
     icon: 'calendar'
     countBadge: 'appointments'
     roles: ['admin', 'appointments']
     submenu: [
-      { name: 'appointments.thisOpen', link: '/appointments' }
-      { name: 'appointments.thisAdmitted', link: '/appointments/admitted' }
-      { name: 'appointments.thisTreating', link: '/appointments/treating' }
-      { name: 'appointments.thisResolved', link: '/appointments/resolved' }
-      { name: 'appointments.thisInsert', link: '/appointments/new' }
+      { name: 'thisOpen' }
+      { name: 'thisAdmitted', route: '/appointments/:status', params: { status: 'admitted' }, reload: true }
+      { name: 'thisTreating', route: '/appointments/:status', params: { status: 'treating' }, reload: true }
+      { name: 'thisResolved' }
+      { name: 'thisInsert' }
     ]
-  }
-  {
-    name: 'inboundCalls.this'
+
+  {} =
+    name: 'inboundCalls'
     icon: 'phone'
     countBadge: 'inboundCalls'
     roles: ['admin', 'inboundCalls']
     submenu: [
-      { name: 'inboundCalls.thisOpen', link: '/inboundCalls' }
-      { name: 'inboundCalls.thisResolved', link: '/inboundCalls/resolved' }
-      { name: 'inboundCalls.thisInsert', link: '/inboundCalls/new' }
+      { name: 'thisOpen' }
+      { name: 'thisResolved' }
+      { name: 'thisInsert' }
     ]
-  }
-  {
-    name: 'patients.this'
+
+  {} =
+    name: 'patients'
     icon: 'users'
     roles: ['admin', 'patients']
     submenu: [
-      { name: 'patients.thisAll', link: '/patients' }
+      { name: 'thisAll' }
     ]
-  }
-  {
-    name: 'schedules.this'
+
+  {} =
+    name: 'schedules'
     icon: 'user-md'
     roles: ['admin', 'schedules']
     submenu: [
-      { name: 'schedules.thisDefault', link: '/schedules/default' }
+      { name: 'thisDefault' }
     ]
-  }
-  {
-    name: 'reports.this'
+
+  {} =
+    name: 'reports'
     icon: 'bar-chart'
     roles: ['admin', 'reports']
     submenu: [
-      { name: 'reports.dashboard', link: '/reports' }
+      { name: 'dashboard' }
     ]
-  }
-  {
-    name: 'users.this'
+
+  {} =
+    name: 'users'
     icon: 'unlock-alt'
     roles: ['admin']
     submenu: [
-      { name: 'users.thisAll', link: '/users' }
-      { name: 'users.thisInsert', link: '/users/new' }
+      { name: 'thisAll' }
+      { name: 'thisInsert' }
     ]
-  }
 ]
+
+sidebar = _.map sidebar, (m) ->
+  m.submenu = _.map m.submenu, (s) ->
+    s.parent = m
+    return s
+  return m
+
+window.sidebar = sidebar
 
 Template.sidebar.helpers
   sidebar: -> sidebar
-  toHtmlId: (name) -> TAPi18n.__(name).replace(/[^a-z]/ig, '-').toLowerCase()
-  showNav: (roles) ->
-    return true unless roles
-    return true if (roles and Roles.userIsInRole(Meteor.user(), roles))
+
+  name: ->
+    if @submenu
+      TAPi18n.__(@name + '.this')
+    else
+      TAPi18n.__ [Template.parentData().name, @name].join('.')
+
+  toHtmlId: -> TAPi18n.__(@name + '.this').replace(/[^a-z]/ig, '-').toLowerCase()
+
+  showNav: ->
+    return true unless @roles
+    return true if (@roles and Roles.userIsInRole(Meteor.user(), @roles))
     return false
 
 Template.sidebar.events
-  'click .treeview-menu a': ->
+  'click .treeview-menu': ->
     $('body').removeClass('sidebar-open')
+
+  'click .level-0': ->
+    route = [@name, @submenu[0].name].join('.')
+    FlowRouter.go(FlowRouter.path(route))
+
+  'click .level-1': ->
+    if @route
+      FlowRouter.go(@route, @params)
+    else
+      route = [@parent.name, @name].join('.')
+      FlowRouter.go(FlowRouter.path(route))
+
+    if @reload
+      FlowRouter.reload()

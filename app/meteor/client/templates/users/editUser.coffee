@@ -1,13 +1,13 @@
 Template.editUser.helpers
   user: ->
-    Meteor.users.findOne(Router.current().params._id)
+    Meteor.users.findOne(FlowRouter.current().params._id)
 
 AutoForm.hooks
   editUserForm:
-    onSuccess: -> Router.go('/users/')
+    onSuccess: -> FlowRouter.go('/users/')
 
   updatePasswordUserForm:
-    onSuccess: -> Router.go('/users/')
+    onSuccess: -> FlowRouter.go('/users/')
 
   updateRolesUserForm:
-    onSuccess: -> Router.go('/users/')
+    onSuccess: -> FlowRouter.go('/users/')

@@ -1,6 +1,3 @@
-Router.configure
-  layoutTemplate: 'layout'
-  loadingTemplate: 'loading'
-
-Router.route '/', ->
-  @render('dashboard')
+FlowRouter.route '/',
+  action: ->
+    BlazeLayout.render('layout', main: 'dashboard')
