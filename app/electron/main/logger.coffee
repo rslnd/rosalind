@@ -1,6 +1,7 @@
 winston = require('winston')
 path = require('path')
 electron = require('app')
+ipc = require('electron').ipcMain
 
 module.exports =
   start: ->
@@ -21,6 +22,10 @@ module.exports =
 
     electron.on 'quit', ->
       winston.info('[Log] App quit')
+
+    ipc.on 'log', (e, err) ->
+      winston.log(err.level, err.message, err.payload)
+
 
   debug: winston.debug
   info: winston.info

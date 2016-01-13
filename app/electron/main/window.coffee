@@ -1,11 +1,13 @@
 _ = require 'lodash'
 electron = require 'app'
 BrowserWindow = require 'browser-window'
+logger = require './logger'
+settings = require './settings'
 
 DEV = _.contains(process.argv, '--dev')?
 
 module.exports =
-  open: ->
+  open: (callback) ->
     screen = require 'screen'
     display = screen.getPrimaryDisplay().workAreaSize
 
@@ -25,12 +27,36 @@ module.exports =
         'subpixel-font-scaling': true,
         'overlay-scrollbars': false
 
-    mainWindow.loadURL('http://127.0.0.1:3000')
     mainWindow.maximize()
-
-    mainWindow.webContents.openDevTools() if DEV?
 
     mainWindow.on 'closed', ->
       electron.quit()
+
+    webContents = mainWindow.webContents
+    webContents.openDevTools() if DEV?
+
+    callbackCalled = false
+    webContents.on 'did-finish-load', ->
+      callback(null) unless callbackCalled
+      callbackCalled = true
+
+    webContents.on 'did-fail-load', ->
+      Logger.error('[Window] Crashed')
+      callback('did-fail-load')
+
+    webContents.on 'crashed', ->
+      Logger.error('[Window] Crashed')
+      callback('crashed')
+
+    webContents.on 'plugin-crashed', ->
+      Logger.error('[Window] Plugin Crashed')
+      callback('plugin-crashed')
+
+    webContents.on 'certificate-error', ->
+      Logger.error('[Window] Certificate error')
+      callback('certificate-error')
+
+
+    mainWindow.loadURL(settings.url)
 
     return mainWindow

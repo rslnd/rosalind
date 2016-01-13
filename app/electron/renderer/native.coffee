@@ -7,12 +7,17 @@ try
   window.native =
     electron: process.versions.electron
     settings: null
+    log: (options) -> ipc.send('log', options)
     ipc: ipc
-    ipcStream: require('electron-ipc-stream')
     authentication:
       currentUser: null
       onLogin: (u) -> ipc.send('authentication/onLogin', u)
       onLogout: (u) -> ipc.send('authentication/onLogout', u)
+      getToken: (t) -> ipc.send('authentication/getToken', t)
+
+    import:
+      terminiko: -> ipc.send('import/terminiko')
+
   require('./settings')
 
 catch e

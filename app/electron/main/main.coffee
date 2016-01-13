@@ -4,8 +4,8 @@ window = require './window'
 logger = require './logger'
 settings = require './settings'
 cli = require './cli'
-bdt = require './bdt'
 authentication = require './authentication'
+importers = require './importers'
 
 mainWindow = null
 bdtWatcher = null
@@ -18,13 +18,14 @@ start = ->
 
   electron.on 'ready', ->
     setTimeout(updater.check, 15 * 1000)
-    mainWindow = window.open()
-    bdtWatcher = bdt.watch(ipcReceiver: mainWindow)
-
-    authentication.initialize(ipcReceiver: mainWindow)
+    mainWindow = window.open (err) ->
+      return logger.error(err) if err
+      logger.info('[Main] Main window loaded')
+      importers.start(ipcReceiver: mainWindow)
+      authentication.start(ipcReceiver: mainWindow)
 
   electron.on 'window-all-closed', ->
-    bdtWatcher.close()
+    importers.stop()
     electron.quit()
 
 focus = ->
