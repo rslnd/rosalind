@@ -16,3 +16,10 @@ Meteor.startup =>
       @native.authentication.onLogout(lastUser)
       loggedIn = false
       lastUser = null
+
+
+Meteor.startup =>
+  @native.ipc.on 'authentication/getToken', =>
+    Meteor.call 'authentication/getToken', (err, token) =>
+      return Winston.error('[Authentication]', err) if err
+      @native.authentication.getToken(token)

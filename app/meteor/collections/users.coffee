@@ -98,6 +98,9 @@ Meteor.users.helpers
   getRoles: ->
     Roles.getRolesForUser(@_id).join(', ')
 
+  lastToken: ->
+    _(@services?.resume?.loginTokens).last()?.hashedToken
+
   collection: ->
     Meteor.users
 
