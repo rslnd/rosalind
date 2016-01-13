@@ -5,6 +5,7 @@ logger = require './logger'
 settings = require './settings'
 cli = require './cli'
 bdt = require './bdt'
+authentication = require './authentication'
 
 mainWindow = null
 bdtWatcher = null
@@ -19,6 +20,8 @@ start = ->
     setTimeout(updater.check, 15 * 1000)
     mainWindow = window.open()
     bdtWatcher = bdt.watch(ipcReceiver: mainWindow)
+
+    authentication.initialize(ipcReceiver: mainWindow)
 
   electron.on 'window-all-closed', ->
     bdtWatcher.close()
