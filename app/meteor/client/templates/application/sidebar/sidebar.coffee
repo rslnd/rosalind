@@ -76,6 +76,17 @@ Template.sidebar.helpers
 
   toHtmlId: -> TAPi18n.__(@name + '.this').replace(/[^a-z]/ig, '-').toLowerCase()
 
+  hrefLevel0: ->
+    route = [@name, @submenu[0].name].join('.')
+    FlowRouter.path(route)
+
+  hrefLevel1: ->
+    if @route
+      FlowRouter.path(@route, @params)
+    else
+      route = [@parent.name, @name].join('.')
+      FlowRouter.path(route)
+
   showNav: ->
     return true unless @roles
     return true if (@roles and Roles.userIsInRole(Meteor.user(), @roles))
