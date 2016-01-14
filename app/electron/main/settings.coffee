@@ -20,6 +20,10 @@ unless @Settings?
       terminiko:
         enabled: false
         path: 'Arztprax.mdb'
+      eoswin:
+        patients:
+          enabled: false
+          path: 'patient.ADT'
 
   if fs.existsSync(settingsPath)
     logger.info('[Settings] Loading existing settings from', settingsPath)

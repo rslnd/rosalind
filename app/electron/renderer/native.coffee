@@ -17,6 +17,8 @@ try
 
     import:
       terminiko: -> ipc.send('import/terminiko')
+      eoswin:
+        patients: -> ipc.send('import/eoswin/patients')
 
   require('./settings')
 

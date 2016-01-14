@@ -4,6 +4,8 @@ parseUploadedFile = (path, options) ->
   switch options.importer
     when 'terminiko'
       Importers.Terminiko.run(path)
+    when 'eoswinPatients'
+      Importers.Eoswin.Patients.run(path)
     else
       Winston.error('[Import] Upload stream: No suitable importer', options.importer)
 
@@ -24,8 +26,9 @@ post.route '/api/upload/stream', (params, req, res, next) ->
   req
     .on 'end', Meteor.bindEnvironment ->
       res.end()
-      Winston.info('[Import] Upload stream: Done receiving file', { userId: currentUser._id })
-      parseUploadedFile stream.path,
-        importer: req.headers['x-importer']
-        user: currentUser
+      Meteor.defer ->
+        Winston.info('[Import] Upload stream: Done receiving file', { userId: currentUser._id })
+        parseUploadedFile stream.path,
+          importer: req.headers['x-importer']
+          user: currentUser
     .pipe(stream)
