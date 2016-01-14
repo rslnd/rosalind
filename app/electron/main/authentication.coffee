@@ -24,6 +24,7 @@ unless @Authentication
       callback = @tokenCallbacks.pop()
       return unless callback
       return callback('No token') unless token
+      return callback('Not logged in') unless @currentUser
 
       auth =
         token: token

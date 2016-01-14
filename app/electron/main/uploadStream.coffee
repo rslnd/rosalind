@@ -1,3 +1,4 @@
+_ = require('lodash')
 logger = require('./logger')
 settings = require('./settings')
 authentication = require('./authentication')
@@ -6,24 +7,22 @@ fs = require('fs')
 request = require('request')
 
 module.exports =
-  initialize: (options) ->
-    return unless settings?.import?.uploadStream
-    ipc.on 'import/uploadStream', (e) =>
-      @import(e, options)
-
-  upload: (filePath) ->
+  upload: (filePath, options) ->
     logger.info('[Import] Upload stream: Reading file')
 
     authentication.withToken (err, auth) ->
       return logger.error('[Import] Upload stream: Not authenticated', err) if err
 
+      headers = {}
+      headers['X-Importer'] = options.importer if options.importer?
+
       requestOptions =
         url: settings.url + '/api/upload/stream'
-        headers: auth.headers
+        headers: _.merge(auth.headers, headers)
 
       fs.createReadStream(filePath)
-        .pipe(request.put(requestOptions))
-        .on 'error', ->
-          logger.error('[Import] Upload stream: Error reading file')
+        .on 'error', (e) ->
+          logger.error('[Import] Upload stream: Error reading file', e)
         .on 'end', ->
           logger.info('[Import] Upload stream: Done reading file')
+        .pipe(request.post(requestOptions))

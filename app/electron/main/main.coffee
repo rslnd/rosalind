@@ -17,12 +17,13 @@ start = ->
   return electron.quit() if cli.handleStartupEvent(focus)
 
   electron.on 'ready', ->
-    setTimeout(updater.check, 15 * 1000)
     mainWindow = window.open (err) ->
       return logger.error(err) if err
       logger.info('[Main] Main window loaded')
       importers.start(ipcReceiver: mainWindow)
-      authentication.start(ipcReceiver: mainWindow)
+
+    authentication.start(ipcReceiver: mainWindow)
+    setTimeout(updater.check, 15 * 1000)
 
   electron.on 'window-all-closed', ->
     importers.stop()

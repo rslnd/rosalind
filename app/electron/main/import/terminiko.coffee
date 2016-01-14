@@ -14,4 +14,4 @@ module.exports =
     return unless settings.import.terminiko.enabled
 
     logger.info('[Import] Terminiko: Uploading', settings.import.terminiko.path)
-    uploadStream.upload(settings.import.terminiko.path)
+    uploadStream.upload(settings.import.terminiko.path, importer: 'terminiko')
