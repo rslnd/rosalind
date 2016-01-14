@@ -29,6 +29,7 @@ standard-minifiers
 # Routing
 kadira:flow-router
 kadira:blaze-layout
+meteorhacks:picker
 
 # Testing
 velocity:console-reporter

@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "csv-parse": {
+      "version": "http://registry.npmjs.org/csv-parse/-/csv-parse-1.0.1.tgz"
+    },
     "elasticsearch": {
       "version": "http://registry.npmjs.org/elasticsearch/-/elasticsearch-10.0.1.tgz",
       "dependencies": {
@@ -60,6 +63,17 @@
         },
         "iconv-lite": {
           "version": "http://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.11.tgz"
+        }
+      }
+    },
+    "temp": {
+      "version": "http://registry.npmjs.org/temp/-/temp-0.8.3.tgz",
+      "dependencies": {
+        "os-tmpdir": {
+          "version": "http://registry.npmjs.org/os-tmpdir/-/os-tmpdir-1.0.1.tgz"
+        },
+        "rimraf": {
+          "version": "http://registry.npmjs.org/rimraf/-/rimraf-2.2.8.tgz"
         }
       }
     },
@@ -139,15 +153,15 @@
                   "version": "http://registry.npmjs.org/form-data/-/form-data-1.0.0-rc3.tgz",
                   "dependencies": {
                     "async": {
-                      "version": "http://registry.npmjs.org/async/-/async-1.5.0.tgz"
+                      "version": "http://registry.npmjs.org/async/-/async-1.5.2.tgz"
                     }
                   }
                 },
                 "mime-types": {
-                  "version": "http://registry.npmjs.org/mime-types/-/mime-types-2.1.8.tgz",
+                  "version": "http://registry.npmjs.org/mime-types/-/mime-types-2.1.9.tgz",
                   "dependencies": {
                     "mime-db": {
-                      "version": "http://registry.npmjs.org/mime-db/-/mime-db-1.20.0.tgz"
+                      "version": "http://registry.npmjs.org/mime-db/-/mime-db-1.21.0.tgz"
                     }
                   }
                 },
@@ -184,7 +198,7 @@
                       }
                     },
                     "sshpk": {
-                      "version": "http://registry.npmjs.org/sshpk/-/sshpk-1.7.1.tgz",
+                      "version": "http://registry.npmjs.org/sshpk/-/sshpk-1.7.3.tgz",
                       "dependencies": {
                         "asn1": {
                           "version": "http://registry.npmjs.org/asn1/-/asn1-0.2.3.tgz"
@@ -193,7 +207,7 @@
                           "version": "http://registry.npmjs.org/assert-plus/-/assert-plus-0.2.0.tgz"
                         },
                         "dashdash": {
-                          "version": "http://registry.npmjs.org/dashdash/-/dashdash-1.10.1.tgz",
+                          "version": "http://registry.npmjs.org/dashdash/-/dashdash-1.12.1.tgz",
                           "dependencies": {
                             "assert-plus": {
                               "version": "http://registry.npmjs.org/assert-plus/-/assert-plus-0.1.5.tgz"
@@ -204,7 +218,7 @@
                           "version": "http://registry.npmjs.org/jsbn/-/jsbn-0.1.0.tgz"
                         },
                         "tweetnacl": {
-                          "version": "http://registry.npmjs.org/tweetnacl/-/tweetnacl-0.13.2.tgz"
+                          "version": "http://registry.npmjs.org/tweetnacl/-/tweetnacl-0.13.3.tgz"
                         },
                         "jodid25519": {
                           "version": "http://registry.npmjs.org/jodid25519/-/jodid25519-1.0.2.tgz"
@@ -257,7 +271,7 @@
                   "version": "http://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz"
                 },
                 "har-validator": {
-                  "version": "http://registry.npmjs.org/har-validator/-/har-validator-2.0.3.tgz",
+                  "version": "http://registry.npmjs.org/har-validator/-/har-validator-2.0.5.tgz",
                   "dependencies": {
                     "chalk": {
                       "version": "http://registry.npmjs.org/chalk/-/chalk-1.1.1.tgz",
