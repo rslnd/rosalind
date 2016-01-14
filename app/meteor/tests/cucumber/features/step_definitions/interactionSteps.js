@@ -50,7 +50,7 @@
           browser.pause(300);
 
           var foundAndClicked = browser.execute(function(linkText) {
-            var el = $('a,input,button').filter(':contains("' + linkText + '")').sort(function(a, b) {
+            var el = $('a,input,button,span').filter(':contains("' + linkText + '")').sort(function(a, b) {
               return (Number($(b).zIndex()) - Number($(a).zIndex()));
             });
 
@@ -64,7 +64,7 @@
 
           browser.pause(300);
           browser.waitForExist('#loaded');
-          expect(foundAndClicked.value).not.toBe(false, 'Could not find any element (a|input|button) containing text: ' + linkText);
+          expect(foundAndClicked.value).not.toBe(false, 'Could not find any element (a|input|button|span) containing text: ' + linkText);
         }
       }
     });
