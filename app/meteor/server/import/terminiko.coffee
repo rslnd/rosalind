@@ -1,38 +1,80 @@
-spawn = Meteor.npmRequire('child_process').spawn
+{ spawn, exec } = Meteor.npmRequire('child_process')
+temp = Meteor.npmRequire('temp').track()
+fs = Meteor.npmRequire('fs')
+Future = Meteor.npmRequire('fibers/future')
 csvParse = Meteor.npmRequire('csv-parse')
+execSync = Meteor.wrapAsync(exec)
 
-Importers.Terminiko =
-  run: (@path) ->
-    Winston.info('[Import] Terminiko: Running')
-    @toCsv()
+Meteor.startup ->
+  Job.processJobs 'import', 'terminiko', (job, callback) ->
+    job.log('Terminiko: Running')
 
-  toCsv: (callback) ->
     options =
-      mdbExport:
-        table: 'Termine'
-        escape: '\\\\'
-      csvParse:
-        autoParse: true
-        autoParseDate: true
-        skip_empty_lines: true
-        escape: '\\'
+      path: job.data.path
+      table: 'Termine'
 
-    mdbExport = spawn('mdb-export', ['-X', options.mdbExport.escape, '-D', '%F %T', @path, options.mdbExport.table])
+    path = mdbToCsv(options)
+    total = csvRowCount(path)
 
-    mdbExport.stdout.on 'error', Meteor.bindEnvironment (e) ->
-      Winston.error('[Import] Terminiko: mdb export error', e)
+    job.log("Terminiko: Upserting #{total} appointments")
 
+    totalImported = eachRecord path, Meteor.bindEnvironment (row, i) ->
+      job.progress(i, total) if i %% 1000 is 0
 
-    parser = csvParse(options.csvParse)
+    job.log("Terminiko: csv parsing finished, upserted #{totalImported} appointments")
+    job.done() and callback()
 
-    parser.on 'error', Meteor.bindEnvironment (e) ->
-      Winston.error('[Import] Terminiko: csv parsing error', e)
+mdbToCsv = (options) ->
+  future = new Future()
 
-    parser.on 'readable', Meteor.bindEnvironment ->
-      while (record = parser.read())
-        {} #noop
+  options = _.defaults options,
+    escape: '\\\\'
+    date: '%F %T'
+    separator: String.fromCharCode(30)
 
-    parser.on 'finish', Meteor.bindEnvironment ->
-      Winston.info('[Import] Terminiko: csv parsing finished')
+  mdbExport = spawn 'mdb-export', [
+    '-X', options.escape
+    '-D', options.date
+    '-R', options.separator
+    options.path
+    options.table
+  ]
 
-    mdbExport.stdout.pipe(parser)
+  mdbExport.stdout.on('error', (e) -> future.throw('[Import] Terminiko: mdbExport: ' + e))
+  mdbExport.stderr.on('data', future.throw)
+
+  tmpCsv = temp.createWriteStream()
+  mdbExport.stdout
+    .on 'end', -> future.return(tmpCsv.path)
+    .pipe(tmpCsv)
+
+  future.wait()
+
+csvRowCount = (path) ->
+  separator = String.fromCharCode(30)
+  size = execSync("grep -o #{separator} #{path} | wc -l")
+  parseInt(size)
+
+eachRecord = (path, iterator) ->
+  future = new Future()
+
+  options =
+    autoParse: true
+    autoParseDate: true
+    skip_empty_lines: true
+    escape: '\\'
+    rowDelimiter: String.fromCharCode(30)
+
+  parser = csvParse(options)
+  i = 0
+
+  parser.on('error', (e) -> future.throw('[Import] Terminiko: csvParse: ' + e))
+  parser.on('finish', -> future.return(i))
+  parser.on 'readable', ->
+    while (record = parser.read())
+      i += 1
+      iterator(record, i)
+
+  fs.createReadStream(path).pipe(parser)
+
+  future.wait()
