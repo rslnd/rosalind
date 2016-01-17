@@ -1,14 +1,13 @@
 temp = Meteor.npmRequire('temp').track()
 
-parseUploadedFile = (path, options) ->
-  switch options.importer
-    when 'terminiko'
-      Importers.Terminiko.run(path)
-    when 'eoswinPatients'
-      Importers.Eoswin.Patients.run(path)
-    else
-      Winston.error('[Import] Upload stream: No suitable importer', options.importer)
+allowedImporters = [
+  'terminiko'
+  'eoswinPatients'
+]
 
+onUploaded = Meteor.bindEnvironment (options) ->
+  Winston.info('[Import] Upload stream: Done receiving file', { userId: options.user._id })
+  job = new Job(Jobs.Import, options.importer, options).save()
 
 getAuthorizedUser = (headers) ->
   user = Meteor.users.findOne(headers['x-user-id'])
@@ -18,17 +17,24 @@ getAuthorizedUser = (headers) ->
 
 post = Picker.filter (req, res) -> req.method is 'POST'
 post.route '/api/upload/stream', (params, req, res, next) ->
+
   currentUser = getAuthorizedUser(req.headers)
-  return res.end() unless currentUser
+  importer = req.headers['x-importer']
+
+  return res.end('not authorized') unless currentUser
+  return res.end('importer not allowed') unless _.contains(allowedImporters, importer)
+
   Winston.info('[Import] Upload stream: Starting to receive file', { userId: currentUser._id })
 
   stream = temp.createWriteStream()
+
+  options =
+    path: stream.path
+    user: currentUser
+    importer: importer
+
   req
-    .on 'end', Meteor.bindEnvironment ->
+    .on 'end', ->
       res.end()
-      Meteor.defer ->
-        Winston.info('[Import] Upload stream: Done receiving file', { userId: currentUser._id })
-        parseUploadedFile stream.path,
-          importer: req.headers['x-importer']
-          user: currentUser
+      onUploaded(options)
     .pipe(stream)
