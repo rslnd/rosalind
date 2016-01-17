@@ -51,7 +51,7 @@
       }
     },
     "node_adt": {
-      "version": "http://registry.npmjs.org/node_adt/-/node_adt-0.1.4.tgz",
+      "version": "http://registry.npmjs.org/node_adt/-/node_adt-1.1.1.tgz",
       "dependencies": {
         "fs-access": {
           "version": "http://registry.npmjs.org/fs-access/-/fs-access-1.0.0.tgz",

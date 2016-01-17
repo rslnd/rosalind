@@ -21,7 +21,9 @@ Meteor.startup ->
     totalImported = eachRecord path, Meteor.bindEnvironment (row, i) ->
       job.progress(i, total) if i %% 1000 is 0
 
-    job.log("Terminiko: csv parsing finished, upserted #{totalImported} appointments")
+    job.log("Terminiko: Upserted #{totalImported} appointments. Done.")
+    fs.unlinkSync(path)
+    fs.unlinkSync(job.data.path)
     job.done() and callback()
 
 mdbToCsv = (options) ->

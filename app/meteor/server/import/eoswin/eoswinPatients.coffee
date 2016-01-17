@@ -1,22 +1,29 @@
+fs = Meteor.npmRequire('fs')
 Adt = Meteor.npmRequire('node_adt')
 
-Importers.Eoswin = {}
+Meteor.startup ->
+  Job.processJobs 'import', 'eoswinPatients', (job, callback) ->
+    job.log('EoswinPatients: Running')
 
-Importers.Eoswin.Patients =
-  run: (@path) ->
-    Winston.info('[Import] EoswinPatients: Running')
+    path = job.data.path
 
     adt = new Adt()
-    adt.open @path, 'ISO-8859-1', Meteor.bindEnvironment (err, table) ->
-      return Winston.error('[Import] EoswinPatients: adb open error', err) if err
+    openAdt = Meteor.wrapAsync(adt.open, adt)
 
-      total = table.header.recordCount
-      Winston.info("[Import] EoswinPatients: Upserting #{total} patients")
+    table = openAdt(path, 'ISO-8859-1')
+    findRecord = Meteor.wrapAsync(table.findRecord, table)
 
-      count = 0
-      table.forEach Meteor.bindEnvironment (err, record) ->
-        Meteor.defer ->
-          return Winston.error('[Import] EoswinPatients: adb record error', err) if err
-          Winston.info("[Import] EoswinPatients: Upserted #{count} patients") if ((count %% 1000) is 0)
-          Winston.info("[Import] EoswinPatients: Upserted #{count} patients. Done") if (count is total)
-          count += 1
+    job.log("EoswinPatients: Upserting #{table.header.recordCount} patients")
+
+    i = 0
+    for i in [0...table.header.recordCount]
+      record = findRecord(i)
+      job.progress(i, table.header.recordCount) if i %% 1000 is 0
+
+
+    job.log("EoswinPatients: Upserted #{i} patients. Done.")
+
+    fs.unlinkSync(path)
+    table.close()
+
+    job.done() and callback()
