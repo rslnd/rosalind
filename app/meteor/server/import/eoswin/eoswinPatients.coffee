@@ -8,4 +8,4 @@ Meteor.startup ->
       iterator: (record) ->
         {}
 
-    callback()
+    job.done() and callback()
