@@ -101,6 +101,7 @@ mongo-id@1.0.1
 mongo-livedata@1.0.9
 mquandalle:jade@0.4.5
 mquandalle:jade-compiler@0.4.5
+mrt:later@1.6.1
 npm-bcrypt@0.7.8_2
 npm-container@1.2.0
 npm-mongo@1.4.39_1
@@ -158,6 +159,7 @@ velocity:meteor-internals@1.1.0_7
 velocity:meteor-stubs@1.1.1
 velocity:shim@0.1.0
 velocity:source-map-support@0.3.2_1
+vsivsi:job-collection@1.2.3
 webapp@1.2.3
 webapp-hashing@1.0.5
 xolvio:cucumber@0.20.3_1
