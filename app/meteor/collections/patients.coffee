@@ -28,6 +28,14 @@ Schema.Patients = new SimpleSchema
     type: SimpleSchema.RegEx.Id
     optional: true
 
+  externalUpdatedAt:
+    type: Date
+    optional: true
+
+  externalUpdatedBy:
+    type: String
+    optional: true
+
   createdAt:
     type: Date
     autoValue: Util.autoCreatedAt

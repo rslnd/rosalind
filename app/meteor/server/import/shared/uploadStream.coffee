@@ -6,7 +6,7 @@ allowedImporters = [
 ]
 
 onUploaded = Meteor.bindEnvironment (options) ->
-  Winston.info('[Import] Upload stream: Done receiving file', { userId: options.user._id })
+  Winston.info('[Import] Upload stream: Done receiving file', { userId: options.userId })
   job = new Job(Jobs.Import, options.importer, options).save()
 
 getAuthorizedUser = (headers) ->
@@ -30,7 +30,7 @@ post.route '/api/upload/stream', (params, req, res, next) ->
 
   options =
     path: stream.path
-    user: currentUser
+    userId: currentUser._id
     importer: importer
 
   req

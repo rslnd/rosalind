@@ -17,12 +17,28 @@ fs = Meteor.npmRequire('fs')
 
   if options.iterator
     i = 0
+
+    batch = [] if options.bulkInsert
+
     for i in [0...table.header.recordCount]
       record = findRecord(i)
-      options.iterator(record)
-      if options.progress and i %% 1000 is 0
+
+      record = options.iterator(record)
+
+      if options.bulkInsert
+        batch.push(record) if record
+        if batch.length >= 1000
+          options.bulkInsert(batch)
+          batch = []
+
+      if options.progress and i %% 10000 is 0
         options.progress.progress(i, table.header.recordCount)
         options.progress.log("Adt: Parsed #{i} records")
+
+
+  if options.bulkInsert
+    options.bulkInsert(batch)
+    batch = []
 
   options.progress.log("Adt: Parsed #{i} records. Done.") if options.progress
 

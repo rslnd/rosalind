@@ -6,6 +6,9 @@ Util.autoCreatedAt = ->
   @unset()
 
 Util.autoCreatedBy = ->
-  return Meteor.userId() if @isInsert
-  return { $setOnInsert: Meteor.userId() } if @isUpsert
-  @unset()
+  try
+    return Meteor.userId() if @isInsert
+    return { $setOnInsert: Meteor.userId() } if @isUpsert
+    @unset()
+  catch
+    @unset()
