@@ -2,10 +2,22 @@
 Ground.Collection(Patients)
 
 Schema.Patients = new SimpleSchema
-  externalId:
-    type: String
+  external:
     optional: true
-    index: 1
+    type: new SimpleSchema
+      eoswin:
+        optional: true
+        type: new SimpleSchema
+          id:
+            type: String
+            index: 1
+
+      terminiko:
+        optional: true
+        type: new SimpleSchema
+          id:
+            type: String
+            index: 1
 
   insuranceId:
     type: String

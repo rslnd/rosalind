@@ -67,7 +67,9 @@ Meteor.startup ->
         createdAt = moment(row.AnlDat + row.AnlZeit, 'YYYYMMDDHHMM').toDate() unless row.AnlDat is '00000000'
 
         patient =
-          externalId: row.PatId
+          external:
+            eoswin:
+              id: row.PatId
           insuranceId: row.VersNr
           note: note
           createdAt: createdAt
@@ -91,7 +93,7 @@ Meteor.startup ->
 
         return patient
 
-      bulkInsert: (records) ->
+      bulk: (records) ->
         bulk = Patients.rawCollection().initializeUnorderedBulkOp()
 
         for i in [0...records.length]
