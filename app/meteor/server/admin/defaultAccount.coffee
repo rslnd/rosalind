@@ -1,6 +1,5 @@
 Meteor.startup ->
   return if Meteor.users.find({}).count() > 0
-  return if process.env.IS_MIRROR
 
   defaultAccount = Meteor?.settings?.private?.admin?.defaultAccount
   if defaultAccount and defaultAccount?.username

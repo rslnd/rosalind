@@ -32,9 +32,7 @@ kadira:blaze-layout
 meteorhacks:picker
 
 # Testing
-velocity:console-reporter
-xolvio:cucumber
-sanjo:jasmine
+fixtures
 
 # Security
 keyvan:my-force-ssl

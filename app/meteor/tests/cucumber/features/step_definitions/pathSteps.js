@@ -5,7 +5,12 @@
     var url = require('url');
 
     this.Before(function() {
+      browser.windowHandleMaximize();
       browser.url(process.env.ROOT_URL);
+      browser.execute(function() {
+        TAPi18n.setLanguage('en');
+        moment.locale('en-US');
+      });
     });
 
     this.Given('I am on the dashboard', function () {

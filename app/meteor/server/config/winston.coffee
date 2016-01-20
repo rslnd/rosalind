@@ -26,7 +26,7 @@ if process.env.LOGGLY_KEY?
     tags: ['Meteor']
     json: true
 
-unless process.env.IS_MIRROR?
+unless process.env.NODE_ENV is 'development'
   Winston.rewriters.push (level, msg, meta) ->
     if typeof meta is 'object' and meta.userId?
       user = Meteor.users.findOne(meta.userId)
@@ -41,7 +41,7 @@ Meteor.methods
       msg: String,
       meta: Match.Optional(Object)
 
-    if @userId and not process.env.IS_MIRROR?
+    if @userId and process.env.NODE_ENV isnt 'development'
       user = Meteor.users.findOne(@userId)
       args.meta = {} unless args.meta?
       args.meta.userId = user._id
