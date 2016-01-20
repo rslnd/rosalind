@@ -2,4 +2,5 @@
 **/jquery-ui.min.js
 app/meteor/packages/conditional-appcache/**
 app/meteor/packages/npm-container/**
+app/meteor/packages/admin-lte/**
 app/electron/build/
