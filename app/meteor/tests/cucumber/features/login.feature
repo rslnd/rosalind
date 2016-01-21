@@ -6,6 +6,7 @@ Feature: Login
 
   Background:
     Given I am on the dashboard
+    And I am logged out
 
   Scenario: I have to log in
     Then I should be logged out
@@ -27,5 +28,5 @@ Feature: Login
     And I fill in 'Name' with 'callcenter'
     And I fill in 'Password' with 'abcd'
     And I submit the form
-    Then I should not see 'Please log in'
     Then I should be logged in
+    And I should not see 'Please log in'

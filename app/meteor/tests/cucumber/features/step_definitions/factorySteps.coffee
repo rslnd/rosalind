@@ -1,12 +1,6 @@
 _ = require('underscore')
 
 module.exports = ->
-  @Before ->
-    server.call('fixtures/resetDatabase')
-
-  @After ->
-    server.call('fixtures/resetDatabase')
-
   @Given 'this user belongs to the group \'$groupName\'', (groupName) ->
     server.call('fixtures/assignLastCreatedUserToGroup', groupName)
 

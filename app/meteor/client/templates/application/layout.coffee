@@ -8,6 +8,8 @@ Template.layout.onCreated ->
 Template.layout.helpers
   loaded: ->
     FlowRouter.subsReady()
+  locale: ->
+    TAPi18n.getLanguage()
 
 UI.registerHelper 'activeClass', (context) ->
   { class: 'active' } if (context is FlowRouter.current().route.path())

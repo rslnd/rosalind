@@ -7,6 +7,7 @@ Feature: Comments
   Background:
     Given I am a 'call center employee' with the role 'inboundCalls'
     And I am logged in
+    And I am on the dashboard
 
   Scenario: Add comment
     Given an 'inbound call' with the following attributes:

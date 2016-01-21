@@ -13,12 +13,15 @@ module.exports = ->
     browser.waitForExist 'li.user-menu'
 
   @Then 'I should be logged in', ->
+    browser.waitForExist 'li.user-menu'
     user = browser.execute -> Meteor.user()
     expect(user.value).not.toBeNull()
 
   @Then 'I should be logged out', ->
+    browser.waitForExist '#loginForm'
     user = browser.execute -> Meteor.user()
     expect(user.value).toBeNull()
 
-  @Given 'I log out', ->
+  @Given /^I (log|am logged) out/, ->
     browser.execute -> Meteor.logout()
+    browser.waitForExist '#loginForm'

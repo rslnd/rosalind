@@ -1,19 +1,6 @@
 moment = require('moment')
 
 module.exports = ->
-  @Before ->
-    browser.timeoutsImplicitWait(3 * 1000)
-    browser.waitForExist('#loaded')
-
-  failOnError = ->
-    lastError = browser.execute(-> window.lastError).value
-    message = lastError and lastError.message
-    expect(lastError).toBeNull(message)
-    browser.execute(-> window.lastError = null)
-
-  @Before failOnError
-  @After failOnError
-
   @Then 'I should see \'$string\'', (string) ->
     browser.waitForExist('#loaded')
     mainText = browser.getText('body')
