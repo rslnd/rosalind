@@ -74,7 +74,14 @@ Template.sidebar.helpers
     else
       TAPi18n.__ [Template.parentData().name, @name].join('.')
 
-  toHtmlId: -> TAPi18n.__(@name + '.this').replace(/[^a-z]/ig, '-').toLowerCase()
+  htmlId: ->
+    if @parent
+      text = TAPi18n.__(@parent.name + '.' + @name)
+    else
+      text = TAPi18n.__(@name + '.this')
+
+
+    text.replace(/[^a-z]/ig, '-').toLowerCase()
 
   hrefLevel0: ->
     route = [@name, @submenu[0].name].join('.')

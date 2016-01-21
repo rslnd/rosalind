@@ -11,7 +11,7 @@ Feature: Inbound Calls
   @dev
   Scenario: Create inbound call
     Then I should see 'New inbound call'
-    Given I click on 'Inbound Calls > New inbound call'
+    Given I click on 'Inbound calls > New inbound call'
     And I fill in 'Last name' with 'Schwarz'
     And I fill in 'First name' with 'Sabine'
     And I fill in 'Telephone' with '0660 123456789'
