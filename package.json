@@ -4,11 +4,9 @@
   "scripts": {
     "start": "node environments/development/start.js",
     "server:start": "node environments/development/startServer.js",
-    "server:test": "./environments/test/test.sh",
     "tail": "node environments/development/tailCucumber.js",
-    "test": "./environments/test/test.sh",
-    "server:tail:cucumber": "node environments/development/tailCucumber.js",
-    "server:tail:jasmine": "node environments/development/tailJasmine.js",
+    "test": "node ./environments/test/test.js",
+    "test:watch": "node ./environments/development/testWatch.js",
     "client:start": "cd app/electron/ && grunt",
     "client:build": "cd app/electron/ && grunt build"
   },
