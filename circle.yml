@@ -1,9 +1,6 @@
 # Circle CI tests and deploys the server component (Meteor)
 
 machine:
-  environment:
-    VELOCITY_CI: 1
-
   java:
     version: oraclejdk8
 
@@ -15,23 +12,26 @@ dependencies:
     - if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
     - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
     - npm install
-    - node ./environments/test/cache.js
 
   cache_directories:
-    - "~/.meteor"
+    - "node_modules"
     - "~/.npm"
-    - node_modules
-    - app/meteor/.meteor
+    - "~/.meteor"
+    - "app/meteor/.meteor/local/build"
+    - "app/meteor/.meteor/local/bundler-cache"
+    - "app/meteor/.meteor/local/db"
+    - "app/meteor/.meteor/local/isopacks"
+    - "app/meteor/.meteor/local/plugin-cache"
+    - "app/meteor/.meteor/local/mirrors"
 
 test:
+  pre:
+    - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
+
   override:
-    - mkdir -p ./app/meteor/.meteor/local/log
-    - chmod +x ./environments/test/test.sh
-    - ./environments/test/test.sh:
-        parallel: true
+    - npm test
         environment:
-          CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/"
-          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/chrome.json"
+          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/chrome.cucumber"
 
 deployment:
   master:
