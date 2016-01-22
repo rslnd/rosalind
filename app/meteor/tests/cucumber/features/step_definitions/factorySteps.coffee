@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 module.exports = ->
   @Given 'this user belongs to the group \'$groupName\'', (groupName) ->
