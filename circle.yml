@@ -22,6 +22,7 @@ dependencies:
     - "app/meteor/.meteor/local/db"
     - "app/meteor/.meteor/local/isopacks"
     - "app/meteor/.meteor/local/plugin-cache"
+    - "app/meteor/packages/npm-container/.npm/package/node_modules"
 
 test:
   pre:
