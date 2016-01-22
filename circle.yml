@@ -22,7 +22,6 @@ dependencies:
     - "app/meteor/.meteor/local/db"
     - "app/meteor/.meteor/local/isopacks"
     - "app/meteor/.meteor/local/plugin-cache"
-    - "app/meteor/.meteor/local/mirrors"
 
 test:
   pre:
