@@ -1,5 +1,8 @@
 connectionStatus = ->
   Tracker.autorun ->
+
+    forceReloadTimeout = [6, 'minutes']
+
     try
       status = Meteor.status().status
 
@@ -18,7 +21,7 @@ connectionStatus = ->
           console.log('[Meteor] status: disconnected')
 
         if window?.offline?.since
-          if window.offline.since.isBefore(moment().subtract(1, 'minute'))
+          if window.offline.since.isBefore(moment().subtract(forceReloadTimeout[0], forceReloadTimeout[1]))
             console.log('[Meteor] status: force reloading')
             window.location.reload()
         else if not window.offline?
