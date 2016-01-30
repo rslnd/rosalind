@@ -2,33 +2,35 @@ connectionStatus = ->
   Tracker.autorun ->
 
     forceReloadTimeout = [6, 'minutes']
+    messageTimeout = [5, 'seconds']
 
     try
       status = Meteor.status().status
 
       if status is 'connected'
-        console.log('[Meteor] status: connected')
         if window.offline?
-          sAlert.close(window.offline.alertId)
-          html = '<i class="fa fa-thumbs-up"></i> ' + TAPi18n.__('ui.statusMessages.connected')
-          sAlert.success(html, { timeout: 2000, html: true })
+          console.log('[Meteor] status: connected')
+          if window.offline.alertId
+            sAlert.close(window.offline.alertId)
+            html = '<i class="fa fa-thumbs-up"></i> ' + TAPi18n.__('ui.statusMessages.connected')
+            sAlert.success(html, { timeout: 2000, html: true })
           window.offline = null
 
       else
-        if status is 'connecting'
-          console.log('[Meteor] status: connecting')
-        else
-          console.log('[Meteor] status: disconnected')
-
         if window?.offline?.since
           if window.offline.since.isBefore(moment().subtract(forceReloadTimeout[0], forceReloadTimeout[1]))
             console.log('[Meteor] status: force reloading')
             window.location.reload()
+
+          if not window.offline.alertId and window.offline.since.isBefore(moment().subtract(messageTimeout[0], messageTimeout[1]))
+            html = '<i class="fa fa-refresh fa-spin"> </i> ' + TAPi18n.__('ui.statusMessages.disconnected')
+            window.offline.alertId = sAlert.warning(html, { timeout: 'none', html: true })
+            console.log('[Meteor] status:', status)
+
         else if not window.offline?
-          html = '<i class="fa fa-refresh fa-spin"> </i> ' + TAPi18n.__('ui.statusMessages.disconnected')
           window.offline =
             since: moment()
-            alertId: sAlert.warning(html, { timeout: 'none', html: true })
+
     catch e
       Winston.error('[Meteor] status: error', e)
 

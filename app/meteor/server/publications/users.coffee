@@ -1,9 +1,6 @@
 Meteor.publish 'users', ->
   return unless @userId
 
-  Winston.info '[Meteor] users: user connected', { userId: @userId }
-  @onStop => Winston.info '[Meteor] users: user disconnected', { userId: @userId }
-
   Meteor.users.find {}, fields:
     'username': 1
     'groupId': 1
