@@ -11,7 +11,7 @@ unless @Settings?
   settingsPath = path.join(electron.getPath('userData'), 'RosalindSettings.json')
 
   defaultSettings =
-    url: 'http://localhost:3000'
+    url: 'http://docker.dev:3000'
     import:
       bdt:
         enabled: false
