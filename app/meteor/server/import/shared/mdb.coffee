@@ -8,11 +8,17 @@ Future = Meteor.npmRequire('fibers/future')
 @Import.Mdb = (options) ->
   options = _.defaults options,
     delete: true
+    columnDelimiter: ','
+    rowDelimiter: '\n'
+
+  options.progress.log('Mdb: Converting mdb to csv') if options.progress
 
   mdbPath = options.path
   csvPath = mdbToCsv(options)
 
   options.path = csvPath
+
+  options.progress.log('Mdb: Parsing csv') if options.progress
 
   totalParsed = Import.Csv(options)
 
@@ -26,14 +32,14 @@ mdbToCsv = (options) ->
   future = new Future()
 
   options = _.defaults options,
-    escape: '\\\\'
+    escape: String.fromCharCode(27)
     date: '%F %T'
-    separator: String.fromCharCode(30)
 
   mdbExport = spawn 'mdb-export', [
     '-X', options.escape
     '-D', options.date
-    '-R', options.separator
+    '-d', options.columnDelimiter
+    # '-R', options.rowDelimiter
     options.path
     options.table
   ]

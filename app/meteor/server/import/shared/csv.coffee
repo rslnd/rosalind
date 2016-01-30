@@ -1,54 +1,64 @@
 @Import ||= {}
 
-Future = Meteor.npmRequire('fibers/future')
 fs = Meteor.npmRequire('fs')
+csv = Meteor.npmRequire('babyparse')
+iconv = Meteor.npmRequire('iconv-lite')
 exec = Meteor.npmRequire('child_process').exec
-csvParse = Meteor.npmRequire('csv-parse')
 execSync = Meteor.wrapAsync(exec)
+
 
 @Import.Csv = (options) ->
   options = _.defaults options,
     delete: true
+    encoding: 'iso-8859-15'
+    progressFactor: 1
 
-  total = csvRowCount(options.path)
+  approxTotal = csvRowCount(options)
+  options.progress.log("Csv: Parsing ~#{approxTotal} records") if options.progress
 
-  options.progress.log("Csv: Parsing #{total} records") if options.progress
 
-  totalParsed = eachRecord options.path, Meteor.bindEnvironment (row, i) ->
-    options.iterator(row) if options.iterator
-    if options.progress and i %% 1000 is 0
-      options.progress.progress(i, total)
-      options.progress.log("Csv: Parsed #{i} records")
+  parsed = []
+  totalParsed = 0
+
+  csvOptions =
+    delimiter: options.columnDelimiter
+    newline: options.rowDelimiter
+    header: true
+    dynamicTyping: true
+    skipEmptyLines: true
+    fastMode: false
+    step: (record) ->
+      record = record.data[0]
+      record = options.iterator(record)
+
+      if options.progress and parsed.length %% 10000 is 0
+        options.progress.log("Csv: Parsed #{totalParsed} records") if options.progress
+        options.progress.progress(Math.floor(totalParsed * options.progressFactor), approxTotal)
+
+      if options.bulk
+        parsed.push(record)
+
+        if parsed.length >= 1000
+          options.bulk(parsed)
+          parsed = []
+
+      totalParsed++
+
+
+  file = fs.readFileSync(options.path)
+  file = iconv.decode(file, options.encoding)
+
+  csv.parse(file, csvOptions)
+
+  options.bulk(parsed) if options.bulk
 
   options.progress.log("Csv: Parsed #{totalParsed} records. Done.") if options.progress
 
+  fs.unlinkSync(options.path) if options.delete
+
   return totalParsed
 
-csvRowCount = (path) ->
-  separator = String.fromCharCode(30)
-  size = execSync("grep -o #{separator} #{path} | wc -l")
+
+csvRowCount = (options) ->
+  size = execSync("wc -l #{options.path}")
   parseInt(size)
-
-eachRecord = (path, iterator) ->
-  future = new Future()
-
-  options =
-    autoParse: true
-    autoParseDate: true
-    skip_empty_lines: true
-    escape: '\\'
-    rowDelimiter: String.fromCharCode(30)
-
-  parser = csvParse(options)
-  i = 0
-
-  parser.on('error', (e) -> future.throw('[Import] Csv: csvParse: ' + e))
-  parser.on('finish', -> future.return(i))
-  parser.on 'readable', ->
-    while (record = parser.read())
-      i += 1
-      iterator(record, i)
-
-  fs.createReadStream(path).pipe(parser)
-
-  future.wait()
