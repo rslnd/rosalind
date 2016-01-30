@@ -4,6 +4,8 @@ CMD ["/sbin/my_init"]
 
 RUN curl https://install.meteor.com/ | sh
 
+RUN apt-get update && apt-get -y install mdbtools
+
 WORKDIR /app
 
 ENTRYPOINT meteor --settings settings.json
