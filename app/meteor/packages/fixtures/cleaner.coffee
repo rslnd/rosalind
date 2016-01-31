@@ -1,6 +1,6 @@
 # taken from xolvio:cleaner
 Meteor.methods 'fixtures/resetDatabase': (options) ->
-  check(options, Object)
+  check(options, Match.Optional(Object))
 
   if process.env.NODE_ENV isnt 'development'
     throw new Error 'resetDatabase is not allowed outside of a mirror. Something has gone wrong.'

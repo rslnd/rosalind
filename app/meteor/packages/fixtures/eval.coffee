@@ -1,8 +1,7 @@
 if Meteor.isServer
   Meteor.methods
     'fixtures/eval': (command) ->
-
-      check(command, String)
+      check(command, Match.Optional(String))
 
       if process.env.NODE_ENV isnt 'development'
         throw new Error 'Eval not allowed. Testing code somehow made it into production'
@@ -10,9 +9,13 @@ if Meteor.isServer
       unless Roles.userIsInRole(@userId, ['admin'])
         throw new Error 'Eval not allowed'
 
-      console.log("Eval by user #{@userId}: #{command}:")
+      Winston.warn("Eval by user #{@userId}: #{command}")
 
-      output = null
-      eval('output = ' + command + ';')
+      evalCommand = command + ';'
 
-      console.dir(output)
+      Meteor.defer ->
+        try
+          output = eval(evalCommand)
+          console.dir(output)
+        catch e
+          Winston.error('Eval Exception: ' + e.message, e)

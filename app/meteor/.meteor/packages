@@ -35,6 +35,7 @@ meteorhacks:picker
 fixtures
 
 # Security
+browser-policy
 keyvan:my-force-ssl
 audit-argument-checks
 ongoworks:security

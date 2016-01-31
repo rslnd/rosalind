@@ -1,5 +1,5 @@
 Meteor.methods 'fixtures/createRecord': (options) ->
-  check options, Object
+  check(options, Match.Optional(Object))
 
   if process.env.NODE_ENV isnt 'development'
     throw new Error 'Testing code somehow made it into production'
