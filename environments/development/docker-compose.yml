@@ -3,8 +3,9 @@ meteor:
   ports:
     - "3000:3000"
   volumes:
-    - .:/app/
+    - ../../app/meteor:/app/
   environment:
+    - NODE_ENV=development
     - MONGO_URL=mongodb://mongodb:27017/rosalind
     - ELASTICSEARCH_URL=http://elasticsearch:9200
     - ROOT_URL=http://0.0.0.0:3000
@@ -12,20 +13,30 @@ meteor:
     - mongodb
     - elasticsearch
 
+kibana-sense:
+  image: seeruk/docker-kibana-sense
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch
+
+mongodb-admin:
+  image: knickers/mongo-express
+  ports:
+    - "8081:8081"
+  environment:
+    - ME_CONFIG_MONGODB_SERVER=mongodb
+  links:
+    - mongodb
+
 mongodb:
   image: mongo:latest
-  restart: always
-  ports:
-    - "27017"
   volumes_from:
     - persist
 
 elasticsearch:
-  image: liquidautumn/elasticsearch-phonetic
-  restart: always
-  ports:
-    - "9200"
-    - "9300"
+  build: ../shared
+  dockerfile: Elasticsearch-Phonetic.Dockerfile
   volumes_from:
     - persist
 
