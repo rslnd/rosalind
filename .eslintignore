@@ -1,6 +1,7 @@
 **/node_modules/**
 **/jquery-ui.min.js
 app/meteor/packages/conditional-appcache/**
+app/meteor/packages/meteor-simple-schema-i18n/**
 app/meteor/packages/npm-container/**
 app/meteor/packages/admin-lte/**
 app/electron/build/
