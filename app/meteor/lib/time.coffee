@@ -1,7 +1,11 @@
 @Time = {}
 
 Time.startOfToday = ->
-  moment(new Date()).startOf('day').toDate()
+  moment().startOf('day').toDate()
+
+Time.endOfToday = ->
+  moment().endOf('day').toDate()
+
 
 Time.weekdays = ->
   mon: { label: TAPi18n.__('time.monday'), offset: 0 }

@@ -10,7 +10,7 @@ execSync = Meteor.wrapAsync(exec)
 @Import.Csv = (options) ->
   options = _.defaults options,
     delete: true
-    encoding: 'iso-8859-15'
+    encoding: 'utf8'
     progressFactor: 1
 
   approxTotal = csvRowCount(options)
@@ -50,7 +50,7 @@ execSync = Meteor.wrapAsync(exec)
 
   csv.parse(file, csvOptions)
 
-  options.bulk(parsed) if options.bulk
+  options.bulk(parsed) if options.bulk and parsed.length > 0
 
   options.progress.log("Csv: Parsed #{totalParsed} records. Done.") if options.progress
 

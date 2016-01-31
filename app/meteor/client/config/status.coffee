@@ -8,13 +8,12 @@ connectionStatus = ->
       status = Meteor.status().status
 
       if status is 'connected'
-        if window.offline?
+        if window.offline?.alertId
           console.log('[Meteor] status: connected')
-          if window.offline.alertId
-            sAlert.close(window.offline.alertId)
-            html = '<i class="fa fa-thumbs-up"></i> ' + TAPi18n.__('ui.statusMessages.connected')
-            sAlert.success(html, { timeout: 2000, html: true })
-          window.offline = null
+          sAlert.close(window.offline.alertId)
+          html = '<i class="fa fa-thumbs-up"></i> ' + TAPi18n.__('ui.statusMessages.connected')
+          sAlert.success(html, { timeout: 2000, html: true })
+        window.offline = null
 
       else
         if window?.offline?.since

@@ -22,7 +22,11 @@ Meteor.publishComposite 'appointments', (tableName, ids, fields) ->
     }
   else
     {
-      find: -> Appointments.find({})
+      find: (date) -> Appointments.find
+        start:
+          $gte: moment(date).startOf('day').toDate()
+          $lte: moment(date).endOf('day').toDate()
+
       children: [
         { find: (doc) -> Comments.find(docId: doc._id) }
       ]

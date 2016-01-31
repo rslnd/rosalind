@@ -112,12 +112,13 @@ Template.AdminLTE.events({
 });
 
 function cssUrl () {
-  return Meteor.absoluteUrl('packages/mfactory_admin-lte/css/AdminLTE.min.css');
+  var url = Meteor.absoluteUrl('packages/mfactory_admin-lte/css/AdminLTE.min.css');
+  return url.replace('0.0.0.0', 'docker.dev');
 }
 
 function skinUrl (name) {
-  return Meteor.absoluteUrl(
-    'packages/mfactory_admin-lte/css/skins/skin-' + name + '.min.css');
+  var url = Meteor.absoluteUrl('packages/mfactory_admin-lte/css/skins/skin-' + name + '.min.css');
+  return url.replace('0.0.0.0', 'docker.dev');
 }
 
 function waitOnCSS (url, timeout) {

@@ -37,7 +37,7 @@ fs = Meteor.npmRequire('fs')
         options.progress.log("Adt: Parsed #{i} records")
 
 
-  if options.bulk
+  if options.bulk and batch.length > 0
     options.bulk(batch)
     batch = []
 

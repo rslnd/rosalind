@@ -2,23 +2,6 @@
 Ground.Collection(Patients)
 
 Schema.Patients = new SimpleSchema
-  external:
-    optional: true
-    type: new SimpleSchema
-      eoswin:
-        optional: true
-        type: new SimpleSchema
-          id:
-            type: String
-            index: 1
-
-      terminiko:
-        optional: true
-        type: new SimpleSchema
-          id:
-            type: String
-            index: 1
-
   insuranceId:
     type: String
     optional: true
@@ -32,21 +15,9 @@ Schema.Patients = new SimpleSchema
     type: Schema.Profile
     optional: true
 
-  importedAt:
-    type: Date
+  external:
     optional: true
-
-  importedBy:
-    type: SimpleSchema.RegEx.Id
-    optional: true
-
-  externalUpdatedAt:
-    type: Date
-    optional: true
-
-  externalUpdatedBy:
-    type: String
-    optional: true
+    type: Schema.External
 
   createdAt:
     type: Date

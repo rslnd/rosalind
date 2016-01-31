@@ -6,9 +6,10 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
-  api.use('ecmascript');
-  api.addFiles('cleaner.js');
-  api.addFiles('factory.js');
-  api.addFiles('testUtil.js');
-  api.addFiles('users.js');
+  api.use('coffeescript');
+  api.addFiles('cleaner.coffee');
+  api.addFiles('eval.coffee');
+  api.addFiles('factory.coffee');
+  api.addFiles('testUtil.coffee');
+  api.addFiles('users.coffee');
 });

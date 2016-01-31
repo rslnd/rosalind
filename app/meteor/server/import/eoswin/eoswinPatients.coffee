@@ -70,14 +70,16 @@ Meteor.startup ->
           external:
             eoswin:
               id: row.PatId
+              note: note
+              timestamps:
+                importedAt: moment().toDate()
+                importedBy: job.data.userId
+                externalUpdatedAt: moment(row.LastDatum + row.LastZeit, 'YYYYMMDDHHMM').toDate() unless row.LastDatum is '00000000'
+                externalUpdatedBy: row.LastUser
+
           insuranceId: row.VersNr
-          note: note
           createdAt: createdAt
           createdBy: job.data.userId
-          importedAt: moment().toDate()
-          importedBy: job.data.userId
-          externalUpdatedAt: moment(row.LastDatum + row.LastZeit, 'YYYYMMDDHHMM').toDate() unless row.LastDatum is '00000000'
-          externalUpdatedBy: row.LastUser
           profile:
             firstName: row.Vorname
             lastName: row.Zuname
@@ -97,15 +99,15 @@ Meteor.startup ->
 
         return operation
 
-      bulk: (records) ->
+      bulk: (operations) ->
         bulk = Patients.rawCollection().initializeUnorderedBulkOp()
 
-        for i in [0...records.length]
-          record = records[i]
+        for i in [0...operations.length]
+          operation = operations[i]
           bulk
-            .find(record.selector)
+            .find(operation.selector)
             .upsert()
-            .updateOne($set: record.$set)
+            .updateOne($set: operation.$set)
 
         if Meteor.wrapAsync(bulk.execute, bulk)().ok is not 1
           job.log("EoswinPatients: Bulk execute error: #{JSON.stringify(d)}")

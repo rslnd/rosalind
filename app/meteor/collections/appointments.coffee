@@ -52,13 +52,9 @@ Schema.Appointments = new SimpleSchema
   privateAppointment:
     type: Boolean
 
-  importedAt:
-    type: Date
+  external:
     optional: true
-
-  importedBy:
-    type: SimpleSchema.RegEx.Id
-    optional: true
+    type: Schema.External
 
   createdAt:
     type: Date
@@ -106,26 +102,35 @@ Appointments.stateChange = (id, time, state) ->
   Appointments.update(id, { $set: set })
 
 
-Appointments.findOpen = ->
+Appointments.findOpen = (date) ->
   Appointments.find
     admittedAt: null
     admittedBy: null
     treatedAt: null
     treatedBy: null
+    start:
+      $gte: moment(date).startOf('day').toDate()
+      $lte: moment(date).endOf('day').toDate()
 
-Appointments.findAdmitted = ->
+Appointments.findAdmitted = (date) ->
   Appointments.find
     admittedAt: { $ne: null }
     admittedBy: { $ne: null }
     treatedAt: null
     treatedBy: null
+    start:
+      $gte: moment(date).startOf('day').toDate()
+      $lte: moment(date).endOf('day').toDate()
 
-Appointments.findTreating = ->
+Appointments.findTreating = (date) ->
   Appointments.find
     admittedAt: { $ne: null }
     admittedBy: { $ne: null }
     treatedAt: { $ne: null }
     treatedBy: { $ne: null }
+    start:
+      $gte: moment(date).startOf('day').toDate()
+      $lte: moment(date).endOf('day').toDate()
 
 TabularTables.Appointments = new Tabular.Table
   name: 'ResolvedAppointments'
