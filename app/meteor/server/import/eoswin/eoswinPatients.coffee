@@ -91,15 +91,21 @@ Meteor.startup ->
               locality: row.Ort
               country: country
 
-        return patient
+        operation =
+          selector: 'external.eoswin.id': row.PatId
+          $set: patient
+
+        return operation
 
       bulk: (records) ->
         bulk = Patients.rawCollection().initializeUnorderedBulkOp()
 
         for i in [0...records.length]
           record = records[i]
-          record._id = Random.id()
-          bulk.insert(record)
+          bulk
+            .find(record.selector)
+            .upsert()
+            .updateOne($set: record.$set)
 
         if Meteor.wrapAsync(bulk.execute, bulk)().ok is not 1
           job.log("EoswinPatients: Bulk execute error: #{JSON.stringify(d)}")
