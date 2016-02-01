@@ -2,10 +2,25 @@ es = Meteor.npmRequire('elasticsearch')
 esClient = new es.Client
   host: process.env.ELASTICSEARCH_URL or 'localhost:9200'
 
-methods = [
-  'index'
-  'delete'
-  'search'
-]
+methods =
+  global: [
+    'index'
+    'delete'
+    'search'
+    'bulk'
+  ]
 
-@Elasticsearch = Async.wrap esClient, methods
+  indices: [
+    'putSettings'
+    'putMapping'
+    'exists'
+    'create'
+    'putAlias'
+    'existsAlias'
+    'open'
+    'close'
+  ]
+
+
+@Elasticsearch = Async.wrap(esClient, methods.global)
+@Elasticsearch.indices = Async.wrap(esClient.indices, methods.indices)
