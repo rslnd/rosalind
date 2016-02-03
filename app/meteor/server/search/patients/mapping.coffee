@@ -1,4 +1,6 @@
-patientsMapping =
+@Search ||= {}
+@Search.mappings ||= {}
+@Search.mappings.patients =
   properties:
     createdAt:
       type: 'date'
@@ -134,10 +136,3 @@ patientsMapping =
             'profile.fullNameWithTitlePhonetic'
             'profile.fullNameWithTitleAutocomplete'
           ]
-
-
-Meteor.startup ->
-  Elasticsearch.indices.putMapping
-    index: 'rosalind'
-    type: 'patients'
-    body: patientsMapping

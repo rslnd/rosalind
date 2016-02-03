@@ -23,13 +23,18 @@ indexSettings =
         filter: 'phonetic_filter'
         tokenizer: 'standard'
 
+index = 'rosalind_v1'
+name = 'rosalind'
+
 Meteor.startup ->
-  unless Elasticsearch.indices.exists(index: 'rosalind_v1')
-    Elasticsearch.indices.create(index: 'rosalind_v1')
+  unless Elasticsearch.indices.exists({ index })
+    Winston.info("[Search] Creating index #{index}")
+    Elasticsearch.indices.create(index: index, body: indexSettings)
+    Elasticsearch.indices.putMapping
+      index: index
+      type: 'patients'
+      body: Search.mappings.patients
 
-  unless Elasticsearch.indices.existsAlias(name: 'rosalind')
-    Elasticsearch.indices.putAlias(index: 'rosalind_v1', name: 'rosalind')
-
-  Elasticsearch.indices.close(index: 'rosalind')
-  Elasticsearch.indices.putSettings(index: 'rosalind', body: indexSettings)
-  Elasticsearch.indices.open(index: 'rosalind')
+  unless Elasticsearch.indices.existsAlias({ name })
+    Elasticsearch.indices.putAlias({ index, name })
+    Winston.info("[Search] Creating alias #{name}")
