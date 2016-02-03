@@ -12,6 +12,7 @@ meteor:
   links:
     - mongodb
     - elasticsearch
+    - compose-transporter
 
 kibana-sense:
   image: seeruk/docker-kibana-sense
@@ -28,6 +29,15 @@ mongodb-admin:
     - ME_CONFIG_MONGODB_SERVER=mongodb
   links:
     - mongodb
+
+compose-transporter:
+  build: ../shared/compose-transporter
+  entrypoint: transporter run --config /config/config.yml /config/application.js
+  volumes:
+    - ../shared/compose-transporter:/config
+  links:
+    - mongodb
+    - elasticsearch
 
 mongodb:
   image: mongo:latest
