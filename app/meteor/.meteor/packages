@@ -92,6 +92,7 @@ npm-container
 
 # Jobs
 vsivsi:job-collection
+dispatch:tabular-job-collection
 
 # Monitoring
 meteorhacks:kadira

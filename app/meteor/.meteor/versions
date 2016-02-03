@@ -48,6 +48,7 @@ deps@1.0.9
 diff-sequence@1.0.1
 dispatch:kernel@0.0.6
 dispatch:request-animation-frame@0.0.1
+dispatch:tabular-job-collection@0.0.5
 drblue:fullcalendar@2.5.0
 ecmascript@0.1.6
 ecmascript-runtime@0.2.6

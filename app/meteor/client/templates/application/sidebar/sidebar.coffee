@@ -55,6 +55,14 @@ sidebar = [
       { name: 'thisAll' }
       { name: 'thisInsert' }
     ]
+
+  {} =
+    name: 'system'
+    icon: 'server'
+    roles: ['admin']
+    submenu: [
+      { name: 'thisJobs' }
+    ]
 ]
 
 sidebar = _.map sidebar, (m) ->
