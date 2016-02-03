@@ -1,4 +1,6 @@
-@Appointments = new Mongo.Collection('appointments')
+@Appointments = new Mongo.Collection 'appointments',
+  idGeneration: 'MONGO'
+
 Ground.Collection(Appointments)
 
 

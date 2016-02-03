@@ -1,5 +1,5 @@
-@Patients = new Mongo.Collection('patients')
-Ground.Collection(Patients)
+@Patients = new Mongo.Collection 'patients',
+  idGeneration: 'MONGO'
 
 Schema.Patients = new SimpleSchema
   insuranceId:

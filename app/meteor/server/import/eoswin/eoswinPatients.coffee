@@ -63,9 +63,6 @@ Meteor.startup ->
         titlePrepend = row.Titel if row.Titel? and row.Titel.length > 0
         titlePrepend = titlePrepend.split('Dr').join('Dr.').split('Mag').join('Mag.') if titlePrepend and titlePrepend.indexOf('.') is -1
 
-        birthday = moment(row.GebDat, 'YYYYMMDD').toDate() unless row.GebDat is '00000000'
-        createdAt = moment(row.AnlDat + row.AnlZeit, 'YYYYMMDDHHMM').toDate() unless row.AnlDat is '00000000'
-
         patient =
           external:
             eoswin:
@@ -78,14 +75,14 @@ Meteor.startup ->
                 externalUpdatedBy: row.LastUser
 
           insuranceId: row.VersNr
-          createdAt: createdAt
+          createdAt: moment(row.AnlDat + row.AnlZeit, 'YYYYMMDDHHMM').toDate() unless row.AnlDat is '00000000'
           createdBy: job.data.userId
           profile:
             firstName: row.Vorname
             lastName: row.Zuname
             titlePrepend: titlePrepend
             gender: row.Geschl.replace('W', 'Female').replace('M', 'Male') if row.Geschl?
-            birthday: birthday
+            birthday: moment(row.GebDat, 'YYYYMMDD').toDate() unless row.GebDat is '00000000'
             contacts: contacts
             address:
               line1: row.Strasse
@@ -93,24 +90,20 @@ Meteor.startup ->
               locality: row.Ort
               country: country
 
-        operation =
-          selector: 'external.eoswin.id': row.PatId
-          $set: patient
+        delete patient.external.eoswin.timestamps.externalUpdatedAt unless patient.external.eoswin.timestamps.externalUpdatedAt
+        delete patient.profile.birthday unless patient.profile.birthday
+        delete patient.createdAt unless patient.createdAt
 
-        return operation
+        return patient
 
-      bulk: (operations) ->
-        bulk = Patients.rawCollection().initializeUnorderedBulkOp()
-
-        for i in [0...operations.length]
-          operation = operations[i]
-          bulk
-            .find(operation.selector)
-            .upsert()
-            .updateOne($set: operation.$set)
-
-        if Meteor.wrapAsync(bulk.execute, bulk)().ok is not 1
-          job.log("EoswinPatients: Bulk execute error: #{JSON.stringify(d)}")
-          job.fail()
+      bulk: (records) ->
+        Import.Bulk.upsert
+          records: records
+          job: job
+          mongodb:
+            collection: Patients
+            selector: 'external.eoswin.id'
+          elasticsearch:
+            type: 'patients'
 
     job.done() and callback()
