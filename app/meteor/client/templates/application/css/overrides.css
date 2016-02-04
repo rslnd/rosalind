@@ -60,3 +60,7 @@
 .td-bg {
   background-color: #ececec;
 }
+
+.text-larger {
+  font-size: 130%;
+}
