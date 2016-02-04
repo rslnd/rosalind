@@ -1,4 +1,7 @@
 reports = FlowRouter.group
   prefix: '/reports'
 
-reports.route '/'
+reports.route '/',
+  name: 'reports.dashboard'
+  action: ->
+    BlazeLayout.render('layout', main: 'reportsDashboard')

@@ -44,3 +44,19 @@
 .stamp {
   margin-bottom: 0;
 }
+
+.page-actions {
+  margin-top: -10px !important;
+}
+
+.bg-aqua-light {
+  background-color: #cbf5ff;
+}
+
+.table tr td .progress {
+  margin-top: 0 !important;
+}
+
+.td-bg {
+  background-color: #ececec;
+}

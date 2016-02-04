@@ -1,6 +1,8 @@
 {
   "reports": {
     "this": "Berichte",
-    "dashboard": "Übersicht"
+    "dashboard": "Übersicht",
+    "thisSingular": "Bericht",
+    "thisDaySingular": "Tagesbericht"
   }
 }
