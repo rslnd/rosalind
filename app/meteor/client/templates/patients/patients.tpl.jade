@@ -1,9 +1,0 @@
-+contentHeader(title='patients.thisAll')
-.content
-  .box.box-danger
-    .box-body
-      input.form-control.input-lg(id='patient-search-box')
-      +each getPatients
-        h3
-          | {{ profile.firstName }} {{ profile.lastName }}
-          small {{ birthday profile.birthday }}

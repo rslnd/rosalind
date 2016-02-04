@@ -24,14 +24,6 @@ sidebar = [
     ]
 
   {} =
-    name: 'patients'
-    icon: 'users'
-    roles: ['admin', 'patients']
-    submenu: [
-      { name: 'thisAll' }
-    ]
-
-  {} =
     name: 'schedules'
     icon: 'user-md'
     roles: ['admin', 'schedules']
