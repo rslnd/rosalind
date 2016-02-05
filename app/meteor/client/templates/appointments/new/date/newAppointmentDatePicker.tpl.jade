@@ -1,5 +1,9 @@
-.row
-  .col-md-8
-    +newAppointmentDayPicker
-  .col-md-4
-    +newAppointmentTimePicker
+.box(class='{{currentStep}}')
+  .box-header
+    h3.box-title <b>2.</b> Datum und Uhrzeit
+  .box-body
+    .row
+      .col-md-8
+        +newAppointmentDayPicker
+      .col-md-4
+        +newAppointmentTimePicker

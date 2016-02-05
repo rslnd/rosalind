@@ -25,6 +25,7 @@ conditional-appcache
 accounts-base
 accounts-password
 standard-minifiers
+reactive-dict
 
 # Routing
 kadira:flow-router
