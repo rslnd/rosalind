@@ -72,6 +72,7 @@ tsega:bootstrap3-datetimepicker@=3.1.3_3
 aldeed:autoform-bs-datetimepicker
 juliancwirko:s-alert-stackslide
 aldeed:template-extension
+mquandalle:bower
 
 # I18n
 tap:i18n

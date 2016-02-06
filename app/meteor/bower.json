@@ -1,0 +1,22 @@
+{
+  "name": "rosalind",
+  "version": "0.0.1",
+  "dependencies": {
+    "air-datepicker": "1.2.2"
+  },
+  "overrides": {
+    "air-datepicker": {
+      "arch": [ "client" ],
+      "main": [
+        "dist/css/datepicker.min.css",
+        "dist/js/datepicker.min.js",
+        "dist/js/i18n/datepicker.en.js",
+        "dist/js/i18n/datepicker.de.js"
+      ]
+    }
+  },
+  "ignoredDependencies": [
+    "jquery"
+  ],
+  "private": true
+}
