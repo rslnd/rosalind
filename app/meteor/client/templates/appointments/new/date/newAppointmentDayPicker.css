@@ -1,3 +1,7 @@
+#day-picker-1 {
+  margin-right: 15px;
+}
+
 .day-closed,
 .day-closed.-focus- {
   background-color: #d4d4d4;
@@ -25,3 +29,11 @@
   font-weight: normal;
 }
 
+.quick-jump {
+  text-align: right;
+  line-height:2.05;
+}
+
+.quick-jump a {
+  display: block;
+}

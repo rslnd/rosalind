@@ -20,6 +20,14 @@
     "resolve": "Erledigt",
     "resolvedBy": "Erledigt von",
     "resolvedToday": "Heute erledigt",
+    "today": "Heute",
+    "asap": "so bald wie möglich",
+    "in2Weeks": "in 2 Wochen",
+    "in1Month": "in 1 Monat",
+    "in6To8Weeks": "in 6-8 Wochen",
+    "in3Months": "in 3 Monaten",
+    "in6Months": "in 6 Monaten",
+    "in1Year": "in 1 Jahr",
     "form": {
       "start": {
         "label": "Beginn"
