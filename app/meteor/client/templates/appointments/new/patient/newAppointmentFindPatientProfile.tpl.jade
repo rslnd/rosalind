@@ -1,3 +1,7 @@
 with patient
   h2 {{ profile.firstName }} {{ profile.lastName }}
   h4 {{ insuranceId }}
+  p {{ appointments }}
+  ul
+    +each appointments
+      li Termin {{ calendar start }} bei {{ assigneeId }}

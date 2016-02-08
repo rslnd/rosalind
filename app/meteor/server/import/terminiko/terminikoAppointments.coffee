@@ -7,24 +7,27 @@
     table: 'Termine'
     progress: job
     iterator: (record) ->
-      patient = Patients.findOne('external.terminiko.id': record.Patient_Id, fields: '_id') if record.Patient_Id
+      if record.Patient_Id and record.Patient_Id > 0
+        patient = Patients.findOne
+          'external.terminiko.id': record.Patient_Id.toString()
+        patientId = new MongoInternals.NpmModule.ObjectID(patient._id._str) if patient
 
       operation =
         selector:
-          'external.terminiko.id': parseInt(record.Kennummer)
+          'external.terminiko.id': record.Kennummer.toString()
         $set:
           external:
             terminiko:
-              id: parseInt(record.Kennummer)
+              id: record.Kennummer.toString()
               note: record.Info
               timestamps:
                 importedAt: moment().toDate()
                 importedBy: job.data.userId
                 externalUpdatedAt: moment(record.Datum_Bearbeitung).toDate()
 
-          patientId: patient?._id
+          patientId: patientId
           start: moment(record.Datum_Beginn).toDate()
-          end: moment(record.Datum_Beginn).toDate()
+          end: moment(record.Datum_Ende).toDate()
 
     bulk: (operations) ->
       bulk = Appointments.rawCollection().initializeUnorderedBulkOp()

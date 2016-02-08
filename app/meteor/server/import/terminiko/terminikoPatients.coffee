@@ -11,9 +11,9 @@
     iterator: (record) ->
       operation =
         selector:
-          'external.eoswin.id': parseInt(record.pat_id_a)
+          'external.eoswin.id': record.pat_id_a.toString()
         $set:
-          'external.terminiko.id': parseInt(record.Kennummer)
+          'external.terminiko.id': record.Kennummer.toString()
           'external.terminiko.note': record.Info
 
     bulk: (operations) ->

@@ -1,8 +1,6 @@
 @Appointments = new Mongo.Collection 'appointments',
   idGeneration: 'MONGO'
 
-Ground.Collection(Appointments)
-
 
 Schema.Appointments = new SimpleSchema
   start:
@@ -133,6 +131,9 @@ Appointments.findTreating = (date) ->
     start:
       $gte: moment(date).startOf('day').toDate()
       $lte: moment(date).endOf('day').toDate()
+
+Appointments.isAvailable = (options) ->
+  Schedules.isAvailable(options)
 
 TabularTables.Appointments = new Tabular.Table
   name: 'ResolvedAppointments'

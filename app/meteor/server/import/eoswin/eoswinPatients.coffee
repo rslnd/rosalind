@@ -66,7 +66,7 @@ Meteor.startup ->
         patient =
           external:
             eoswin:
-              id: row.PatId
+              id: row.PatId.toString()
               note: note
               timestamps:
                 importedAt: moment().toDate()

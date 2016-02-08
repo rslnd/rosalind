@@ -6,7 +6,7 @@ Meteor.publishComposite 'patients', (ids) ->
   @unblock()
 
   if ids
-    ids = ids.map (str) -> new Meteor.Collection.ObjectID(str)
+    ids = ids.map (str) -> new Mongo.ObjectID(str)
 
     {
       find: -> @unblock(); Patients.find(_id: { $in: ids })

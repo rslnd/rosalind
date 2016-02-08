@@ -33,6 +33,11 @@ Patients.helpers
   collection: ->
     Patients
 
+  appointments: ->
+    Appointments.find patientId: @_id,
+      sort:
+        start: -1
+
 Patients.after.insert (userId, doc) ->
   console.log('[Patient] inserted:', doc._id)
   Search.index('patients', @_id)

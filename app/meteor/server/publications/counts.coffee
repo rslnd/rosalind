@@ -3,10 +3,6 @@ Meteor.publish 'counts', ->
 
   if Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP)
     Counts.publish @, 'appointments', Appointments.findOpen()
-    Counts.publish @, 'appointments-resolvedToday', Appointments.find
-      removed: true
-      removedAt: { $gte: Time.startOfToday() }
-
 
   if Roles.userIsInRole(@userId, ['inboundCalls', 'admin'], Roles.GLOBAL_GROUP)
     Counts.publish @, 'inboundCalls', InboundCalls.find({})
