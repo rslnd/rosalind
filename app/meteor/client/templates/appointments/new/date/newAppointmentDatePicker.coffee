@@ -1,3 +1,7 @@
 Template.newAppointmentDatePicker.helpers
   currentStep: ->
-    if newAppointment.get('step') is 'date' then 'box-info' else 'box-default'
+    if newAppointment.get('patient') and
+      not newAppointment.get('date')
+        'box-info'
+      else
+        'box-default'

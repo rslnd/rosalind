@@ -3,13 +3,13 @@
     h3.box-title <b>1.</b> PatientIn
   .box-body
     input.form-control.input-lg(id='patient-search-box' placeholder='PatientIn suchen: Vorname, Nachname' autocomplete='off')
-    ul.search-results
-      +each getPatients
-        li(data-id='{{ _id }}')
-          h3
-            span.full-name {{ profile.firstName }} {{ profile.lastName }}
-            small.inline-profile {{ birthday profile.birthday }}
-
-      li
-        h3
-          span.new-patient Neuen Patienten anlegen
+    if patientId
+      .row
+        .col-md-6
+          +newAppointmentFindPatientSearchResults
+        .col-md-6
+          +newAppointmentFindPatientProfile
+    else
+      .row
+        .col-md-12
+          +newAppointmentFindPatientSearchResults

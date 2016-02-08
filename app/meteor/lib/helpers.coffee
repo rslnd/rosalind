@@ -30,6 +30,15 @@ Helpers.calendar = (date) ->
 Helpers.recent = (date) ->
   moment().range(date, moment()).diff('hours') < 4
 
+Helpers.birthday = (date) ->
+  return unless date
+  date = moment(date)
+  return if date < moment().subtract(150, 'years')
+
+  age = moment().diff(date, 'years')
+  formatted = date.format('D. MMMM YYYY')
+  "#{formatted} (#{age} Jahre)"
+
 
 # Split phone number at whitespaces. If the word contains a number,
 # replace all letters 'O' or 'o' with zeroes. Join back together.
@@ -54,4 +63,5 @@ if Meteor.isClient
   UI.registerHelper('getShortname', (context) -> Helpers.getShortname(context))
   UI.registerHelper('calendar', (context) -> Helpers.calendar(context))
   UI.registerHelper('recent', (context) -> Helpers.recent(context))
+  UI.registerHelper('birthday', (context) -> Helpers.birthday(context))
   UI.registerHelper('zerofix', (context) -> Helpers.zerofix(context))

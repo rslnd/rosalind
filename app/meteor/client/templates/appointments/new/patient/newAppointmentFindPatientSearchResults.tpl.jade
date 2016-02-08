@@ -1,0 +1,10 @@
+ul.search-results
+  +each getPatients
+    li(data-id='{{ _id }}')
+      h3
+        span.full-name {{ profile.firstName }} {{ profile.lastName }}
+        small.inline-profile {{ birthday profile.birthday }}
+
+  li
+    h3
+      span.new-patient Neuen Patienten anlegen

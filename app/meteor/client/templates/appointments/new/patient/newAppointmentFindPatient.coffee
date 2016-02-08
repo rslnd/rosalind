@@ -5,20 +5,19 @@ getSelected = ->
     selected = $('.selected-result')
   return selected
 
-selectOption = ->
+selectOption = (final) ->
   selected = $('.selected-result')
   _id = selected.data('id')
-  $('.search-results').hide()
 
   if _id
     $('#patient-search-box').val(selected.find('.full-name').text())
+    @newAppointment.set('patient', final)
     @newAppointment.set('patientId', _id)
 
   else
     console.log('creating new patient')
+    @newAppointment.set('patient', final)
     @newAppointment.set('patientName', $('#patient-search-box').val())
-
-  @newAppointment.set('step', 'date')
 
 Template.newAppointmentFindPatient.events
   'keyup #patient-search-box': (->
@@ -60,6 +59,7 @@ Template.newAppointmentFindPatient.events
   'mouseover .search-results li': (e) ->
     $('.search-results li').removeClass('selected-result')
     $(e.currentTarget).addClass('selected-result')
+    selectOption()
 
   'click .search-results li': ->
     selectOption()
@@ -69,24 +69,13 @@ Template.newAppointmentFindPatient.onCreated = ->
 
 Template.newAppointmentFindPatient.helpers
   currentStep: ->
-    if newAppointment.get('step') is 'patient' then 'box-info' else 'box-default'
+    if not newAppointment.get('patient')
+      'box-info'
+    else
+      'box-default'
 
-  birthday: (date) ->
-    return unless date
-    date = moment(date)
-    return if date < moment().subtract(200, 'years')
-    age = date.fromNow(true)
-    formatted = date.format('D. MMMM YYYY')
-    "#{formatted} (#{age})"
-
-  getPatients: ->
-    results = PatientsSearch.getData
-      sort: { _score: -1 }
-      limit: 4
-
-    results.map (r, i) ->
-      r._index = i
-      return r
+  patientId: ->
+    newAppointment.get('patientId')
 
 filterFields = [
   'profile.titlePrepend'
