@@ -36,7 +36,7 @@ execSync = Meteor.wrapAsync(exec)
         options.progress.progress(Math.floor(totalParsed * options.progressFactor), approxTotal)
 
       if options.bulk
-        parsed.push(record)
+        parsed.push(record) if record
 
         if parsed.length >= 1000
           options.bulk(parsed)

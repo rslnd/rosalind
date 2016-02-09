@@ -1,13 +1,16 @@
 @Import ||= {}
 @Import.Terminiko ||= {}
 
-@Import.Terminiko.upsertAppointments = (job) ->
+@Import.Terminiko.upsertAppointments = (job, resources) ->
   Import.Mdb
     path: job.data.path
     table: 'Termine'
     progress: job
     iterator: (record) ->
+      return unless record.PatientId > 0 or record.Info?.length > 0
+
       { patientId, heuristic } = Import.Terminiko.findPatientId({ job, record })
+      assigneeId = getResource({ key: 'D', record, resources })
 
       operation =
         selector:
@@ -26,6 +29,8 @@
           patientId: patientId
           start: moment(record.Datum_Beginn).toDate()
           end: moment(record.Datum_Ende).toDate()
+          privateAppointment: record.Info.match(/(privat|botox)/i)? or record.Status_Id is 8
+          assigneeId: assigneeId
 
     bulk: (operations) ->
       bulk = Appointments.rawCollection().initializeUnorderedBulkOp()
@@ -40,3 +45,8 @@
       if Meteor.wrapAsync(bulk.execute, bulk)().ok is not 1
         job.log("Terminiko: upsertAppointments: Bulk execute error: #{JSON.stringify(d)}")
         job.fail()
+
+getResource = (options) ->
+  resourceIds = options.record.Resources.toString().split(';')
+  resourceId = _.find(resourceIds, (r) -> r.indexOf(options.key) isnt -1)
+  return options.resources[resourceId] if resourceId
