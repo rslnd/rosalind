@@ -53,6 +53,7 @@ sidebar = [
     icon: 'server'
     roles: ['admin']
     submenu: [
+      { name: 'thisStats' }
       { name: 'thisJobs' }
     ]
 ]

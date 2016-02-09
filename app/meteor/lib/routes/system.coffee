@@ -9,4 +9,9 @@ users.route '/',
 users.route '/jobs',
   name: 'system.thisJobs'
   action: ->
-    BlazeLayout.render('layout', main: 'jobs')
+    BlazeLayout.render('layout', main: 'systemJobs')
+
+users.route '/stats',
+  name: 'system.thisStats'
+  action: ->
+    BlazeLayout.render('layout', main: 'systemStats')

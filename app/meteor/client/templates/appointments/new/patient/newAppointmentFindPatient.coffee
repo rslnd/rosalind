@@ -10,8 +10,10 @@ selectOption = (final) ->
   _id = selected.data('id')
 
   if _id
-    $('#patient-search-box').val(selected.find('.full-name').text())
-    @newAppointment.set('patient', final)
+    if final
+      $('#patient-search-box').val(selected.find('.full-name').text())
+      @newAppointment.set('patient', final)
+
     @newAppointment.set('patientId', _id)
 
   else
@@ -31,7 +33,7 @@ Template.newAppointmentFindPatient.events
     if e.keyCode is keyCode.enter
       e.preventDefault()
       if $('.search-results').is(':visible')
-        selectOption()
+        selectOption(true)
       else
         $('.search-results').show()
 
@@ -62,7 +64,7 @@ Template.newAppointmentFindPatient.events
     selectOption()
 
   'click .search-results li': ->
-    selectOption()
+    selectOption(true)
 
 Template.newAppointmentFindPatient.onCreated = ->
   $('#patient-search-box').focus()

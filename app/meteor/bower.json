@@ -2,7 +2,8 @@
   "name": "rosalind",
   "version": "0.0.1",
   "dependencies": {
-    "air-datepicker": "1.2.2"
+    "air-datepicker": "1.2.2",
+    "Chart.js": "2.0.0-beta"
   },
   "overrides": {
     "air-datepicker": {
