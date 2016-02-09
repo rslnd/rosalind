@@ -27,7 +27,7 @@ Meteor.startup ->
         ]
 
         contacts = _.chain(contacts)
-          .filter (c) -> c.value.length > 0
+          .filter (c) -> c.value.length > 4
           .map (c, index) ->
             if c.value and _.contains(noContact, c.value.toLowerCase().split('.').join(' ').replace(/\s\s+/g, ' ').trim())
               return null

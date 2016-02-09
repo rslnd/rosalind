@@ -51,6 +51,7 @@
 
             value:
               type: 'string'
+              analyzer: 'whitespace'
 
         firstName:
           type: 'string'

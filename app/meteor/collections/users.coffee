@@ -125,6 +125,19 @@ Meteor.users.findOneByIdOrUsername = (idOrUsername) ->
        return idOrUsername.fetch()[0]
 
 
+Meteor.users.queryExactlyOne = (query) ->
+  selector = {}
+
+  selector['profile.titlePrepend'] = 'Dr.' if query.match(/Dr\./)
+  query = query.replace('Dr. ', '')
+
+  selector['$or'] = [
+    { 'profile.lastName': query.split(' ')[0] }
+    { 'profile.firstName': query.split(' ')[0] }
+  ]
+
+  Meteor.users.findOne(selector)
+
 
 Meteor.users.byGroup = (selector = {}) ->
   _.map(Groups.all(selector), (g) -> { group: g, users: g.users() })
