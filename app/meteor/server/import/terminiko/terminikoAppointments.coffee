@@ -7,10 +7,7 @@
     table: 'Termine'
     progress: job
     iterator: (record) ->
-      if record.Patient_Id and record.Patient_Id > 0
-        patient = Patients.findOne
-          'external.terminiko.id': record.Patient_Id.toString()
-        patientId = new MongoInternals.NpmModule.ObjectID(patient._id._str) if patient
+      { patientId, heuristic } = Import.Terminiko.findPatientId({ job, record })
 
       operation =
         selector:
@@ -25,6 +22,7 @@
                 importedBy: job.data.userId
                 externalUpdatedAt: moment(record.Datum_Bearbeitung).toDate()
 
+          heuristic: heuristic
           patientId: patientId
           start: moment(record.Datum_Beginn).toDate()
           end: moment(record.Datum_Ende).toDate()

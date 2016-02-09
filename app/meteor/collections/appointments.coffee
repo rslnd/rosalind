@@ -52,6 +52,11 @@ Schema.Appointments = new SimpleSchema
   privateAppointment:
     type: Boolean
 
+  heuristic:
+    type: Boolean
+    optional: true
+    index: 1
+
   external:
     optional: true
     type: Schema.External

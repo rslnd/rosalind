@@ -38,3 +38,12 @@ Search.query = (type, queryObject) ->
   response =
     data: data
     metadata: metadata
+
+Search.queryOne = (type, queryObject) ->
+  response = Search.query(type, queryObject)
+  return response.data[0]
+
+Search.queryExactlyOne = (type, queryObject) ->
+  response = Search.query(type, queryObject)
+  return false if response.metadata.total isnt 1
+  return response.data[0]
