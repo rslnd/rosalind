@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "dependencies": {
     "air-datepicker": "1.2.2",
-    "Chart.js": "2.0.0-beta"
+    "Chart.js": "2.0.0-beta",
+    "mousetrap": "mousetrap-js/mousetrap"
   },
   "overrides": {
     "air-datepicker": {
@@ -13,6 +14,13 @@
         "dist/js/datepicker.min.js",
         "dist/js/i18n/datepicker.en.js",
         "dist/js/i18n/datepicker.de.js"
+      ]
+    },
+    "mousetrap": {
+      "arch": [ "client" ],
+      "main": [
+        "mousetrap.js",
+        "plugins/global-bind/mousetrap-global-bind.min.js"
       ]
     }
   },

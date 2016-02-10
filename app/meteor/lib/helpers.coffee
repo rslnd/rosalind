@@ -65,3 +65,5 @@ if Meteor.isClient
   UI.registerHelper('recent', (context) -> Helpers.recent(context))
   UI.registerHelper('birthday', (context) -> Helpers.birthday(context))
   UI.registerHelper('zerofix', (context) -> Helpers.zerofix(context))
+  UI.registerHelper('true', -> true)
+  UI.registerHelper('false', -> false)

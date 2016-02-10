@@ -1,5 +1,19 @@
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  height: 100%;
+  overflow-y: auto;
+}
+
 .s-alert-box {
   z-index: 25000;
+}
+
+.modal {
+  z-index: 22000;
 }
 
 .main-header {
@@ -8,6 +22,8 @@
 
 .main-sidebar {
   z-index: 10000;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .sidebar-collapse .level-0 {
@@ -81,4 +97,12 @@
 
 .box:hover .box-hover {
   display: block;
+}
+
+.block {
+  display: block;
+}
+
+.more-space {
+  line-height: 2;
 }
