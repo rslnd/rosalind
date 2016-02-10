@@ -88,6 +88,17 @@ Appointments.helpers
   treated: ->
     @admittedAt? and @admittedBy? and @treatedAt? and @treatedBy? and not @removed
 
+
+  patient: ->
+    Meteor.users.findOne(@patientId)
+
+  assignee: ->
+    Meteor.users.findOne(@assigneeId)
+
+  notes: ->
+    n = [@note, @external?.terminiko?.note]
+    return _.filter(n, (s) -> s and s.length >= 1).join('\n')
+
   collection: ->
     Appointments
 
@@ -108,7 +119,7 @@ Appointments.stateChange = (id, time, state) ->
 
 
 Appointments.findOpen = (date) ->
-  Appointments.find
+  selector =
     admittedAt: null
     admittedBy: null
     treatedAt: null
@@ -116,9 +127,11 @@ Appointments.findOpen = (date) ->
     start:
       $gte: moment(date).startOf('day').toDate()
       $lte: moment(date).endOf('day').toDate()
+  Appointments.find(selector, sort: { start: -1 })
+
 
 Appointments.findAdmitted = (date) ->
-  Appointments.find
+  selector =
     admittedAt: { $ne: null }
     admittedBy: { $ne: null }
     treatedAt: null
@@ -126,9 +139,11 @@ Appointments.findAdmitted = (date) ->
     start:
       $gte: moment(date).startOf('day').toDate()
       $lte: moment(date).endOf('day').toDate()
+  Appointments.find(selector, sort: { admittedAt: -1 })
+
 
 Appointments.findTreating = (date) ->
-  Appointments.find
+  selector =
     admittedAt: { $ne: null }
     admittedBy: { $ne: null }
     treatedAt: { $ne: null }
@@ -136,6 +151,7 @@ Appointments.findTreating = (date) ->
     start:
       $gte: moment(date).startOf('day').toDate()
       $lte: moment(date).endOf('day').toDate()
+  Appointments.find(selector, sort: { treatedAt: -1 })
 
 Appointments.isAvailable = (options) ->
   Schedules.isAvailable(options)
@@ -145,9 +161,9 @@ TabularTables.Appointments = new Tabular.Table
   collection: Appointments
   pub: 'appointments'
   columns: [
+    { data: 'start', title: 'Termin', render: (val) -> moment(val).calendar() }
     { data: 'note', title: 'Notiz' }
     { data: 'privateAppointment', title: 'Privat', render: (val, type, doc) -> doc.privateOrInsurance() }
-    { data: 'start', title: 'Termin', render: (val) -> moment(val).calendar() }
     { data: 'createdBy', title: 'Eintrag', render: (val) -> Helpers.getShortname(val) }
     { data: 'admittedBy', title: 'Empfang', render: (val) -> Helpers.getShortname(val) }
     { data: 'treatedBy', title: 'Behandlung', render: (val) -> Helpers.getShortname(val) }
@@ -160,7 +176,12 @@ TabularTables.Appointments = new Tabular.Table
   autoWidth: false
   stateSave: true
   changeSelector: (selector) ->
-    selector.removed = true
+    pastAppointments =
+      end: { $lt: Time.startOfToday() }
+      $or: [ { removed: true }, { removed: null } ]
+
+    resolvedAppointments = { removed: true }
+    selector.$or = [ resolvedAppointments, pastAppointments ]
     selector
 
 

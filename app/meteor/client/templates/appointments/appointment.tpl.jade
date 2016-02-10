@@ -1,11 +1,11 @@
 .box.box-widget.appointment
   .box-header
     if open
-      button.pull-right.btn.btn-success.admit {{_ 'appointments.admit'}}
+      button.box-hover.pull-right.btn.btn-success.admit {{_ 'appointments.admit'}}
     if admitted
-      button.pull-right.btn.btn-success.treat {{_ 'appointments.treat'}}
+      button.box-hover.pull-right.btn.btn-success.treat {{_ 'appointments.treat'}}
     if treated
-      button.pull-right.btn.btn-success.resolve {{_ 'appointments.resolve'}}
+      button.box-hover.pull-right.btn.btn-success.resolve {{_ 'appointments.resolve'}}
 
 
     h4.username.enable-select
@@ -19,7 +19,7 @@
 
   .box-body
     blockquote
-      p.enable-select.pre-wrap #{note}
+      p.enable-select.pre-wrap #{notes}
 
     | {{> humanCommentCount }}
     | {{> stamps fields='treated,admitted,created' doc=this}}

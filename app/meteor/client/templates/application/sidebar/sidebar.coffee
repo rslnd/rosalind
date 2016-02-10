@@ -6,8 +6,8 @@ sidebar = [
     roles: ['admin', 'appointments']
     submenu: [
       { name: 'thisOpen' }
-      { name: 'thisAdmitted', route: '/appointments/:status', params: { status: 'admitted' }, reload: true }
-      { name: 'thisTreating', route: '/appointments/:status', params: { status: 'treating' }, reload: true }
+      { name: 'thisAdmitted', route: '/appointments/:status', params: { status: 'admitted' } }
+      { name: 'thisTreating', route: '/appointments/:status', params: { status: 'treating' } }
       { name: 'thisResolved' }
       { name: 'thisInsert' }
     ]
@@ -114,6 +114,3 @@ Template.sidebar.events
     else
       route = [@parent.name, @name].join('.')
       FlowRouter.go(FlowRouter.path(route))
-
-    if @reload
-      FlowRouter.reload()

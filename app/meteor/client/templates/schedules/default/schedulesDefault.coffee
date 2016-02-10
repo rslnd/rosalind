@@ -7,11 +7,12 @@ Template.schedulesDefault.helpers
     Meteor.users.find({})
 
   viewUser: ->
+    FlowRouter.watchPathChange()
     idOrUsername = FlowRouter.current().params.idOrUsername
     if (idOrUsername)
       Meteor.users.findOneByIdOrUsername(idOrUsername)
     else
-      Meteor.users.findOne({})
+      Meteor.user()
 
   schedulesDefaultOptions: ->
     id: 'schedules-calendar'

@@ -1,4 +1,7 @@
 @newAppointment = new ReactiveDict
 
 Template.newAppointment.onCreated ->
-  newAppointment.clear()
+  try
+    newAppointment.clear()
+  catch e
+    console.warn('Dict Error:' + e)

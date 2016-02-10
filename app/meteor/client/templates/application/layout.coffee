@@ -12,6 +12,7 @@ Template.layout.helpers
     TAPi18n.getLanguage()
 
 UI.registerHelper 'activeClass', (context) ->
+  FlowRouter.watchPathChange()
   { class: 'active' } if (context is FlowRouter.current().route.path())
 
 UI.registerHelper 'time', (context, options) ->
