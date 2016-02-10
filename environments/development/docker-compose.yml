@@ -1,5 +1,6 @@
 meteor:
   build: .
+  command: meteor --settings settings.json
   ports:
     - "3000:3000"
   volumes:

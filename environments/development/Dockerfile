@@ -8,6 +8,4 @@ RUN apt-get update && apt-get -y install mdbtools
 
 WORKDIR /app
 
-ENTRYPOINT meteor --settings settings.json
-
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
