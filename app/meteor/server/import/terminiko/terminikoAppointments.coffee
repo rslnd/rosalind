@@ -9,6 +9,10 @@
     iterator: (record) ->
       return unless record.PatientId > 0 or record.Info?.length > 0
 
+      start = moment(record.Datum_Beginn)
+      end = moment(record.Datum_Ende)
+      return if moment().range(start, end).diff('hours') > 4
+
       { patientId, heuristic } = Import.Terminiko.findPatientId({ job, record })
       assigneeId = getResource({ key: 'D', record, resources })
 
@@ -27,8 +31,8 @@
 
           heuristic: heuristic
           patientId: patientId
-          start: moment(record.Datum_Beginn).toDate()
-          end: moment(record.Datum_Ende).toDate()
+          start: start.toDate()
+          end: end.toDate()
           privateAppointment: record.Info.match(/(privat|botox)/i)? or record.Status_Id is 8
           assigneeId: assigneeId
 
@@ -49,4 +53,4 @@
 getResource = (options) ->
   resourceIds = options.record.Resources.toString().split(';')
   resourceId = _.find(resourceIds, (r) -> r.indexOf(options.key) isnt -1)
-  return options.resources[resourceId] if resourceId
+  options.resources[resourceId] if resourceId

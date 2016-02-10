@@ -5,9 +5,7 @@
 
   resources = {}
   resources = parseDoctors(job, resources)
-
-  console.dir(resources)
-
+  return resources
 
 parseDoctors = (job, resources) ->
   Import.Mdb
