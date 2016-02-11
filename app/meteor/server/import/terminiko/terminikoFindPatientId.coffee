@@ -54,7 +54,7 @@ parseFreetext = (freetext) ->
   freetext = freetext.toString()
   return {} if freetext.length < 4
 
-  numbers = freetext
+  numbers = Helpers.zerofix(freetext)
     .split(/(\s|\,|\/|\-)/).join('')
     .match(/\d+/)
 

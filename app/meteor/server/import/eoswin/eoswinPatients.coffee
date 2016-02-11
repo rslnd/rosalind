@@ -35,7 +35,7 @@ Meteor.startup ->
               return { value: c.value, channel: 'Email', order: index + 1 }
             else if c.value.match(/[0-9]/)
               c.order = index + 1
-              return c
+              return Helpers.zerofix(c)
             else
               contactsNote = 'Kontakt: ' + c.value
               return null
@@ -74,7 +74,7 @@ Meteor.startup ->
                 externalUpdatedAt: moment(row.LastDatum + row.LastZeit, 'YYYYMMDDHHMM').toDate() unless row.LastDatum is '00000000'
                 externalUpdatedBy: row.LastUser
 
-          insuranceId: row.VersNr
+          insuranceId: Helpers.zerofix(row.VersNr)
           createdAt: moment(row.AnlDat + row.AnlZeit, 'YYYYMMDDHHMM').toDate() unless row.AnlDat is '00000000'
           createdBy: job.data.userId
           profile:
