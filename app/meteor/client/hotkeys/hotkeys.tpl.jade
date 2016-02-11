@@ -7,15 +7,15 @@
 
       .modal-body
         .row
-          .col-md-12
-            dl.dl-horizontal.more-space
+          +each groups
+            .col-md-6
               +each hotkeys
-                if show
-                  dt {{ hotkeyName }}
-                  dd
+                unless hidden
+                  p.double-space
                     +each keys
                       kbd {{ this }}
                       span &nbsp;
+                    strong &ensp;{{ hotkeyName }}
 
 
       .modal-footer

@@ -3,19 +3,14 @@ kbd {
   margin: 0 5px;
   padding: 1px 5px;
   font-size: 1.2em;
-  border: 1px #fff;
-  border-radius: 3px;
+  width: 1.8em;
+  height: 1.8em;
+  line-height: 1.8;
+  text-align: center;
+  display: inline-block;
+  font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
   background: -webkit-gradient(linear, left top, right top, color-stop(0%, #fff), color-stop(25%, #fff));
   background: linear-gradient(left, #fff 0%, #fff 25%);
   box-shadow: 1px 0 1px 0 #999, 0 2px 0 2px lightGray, 0 2px 0 3px #666;
   text-transform: uppercase;
-}
-
-.more-space dt,
-.more-space dd {
-  line-height: 2 !important;
-}
-
-.more-space dt {
-  padding-top: 0.15em;
 }
