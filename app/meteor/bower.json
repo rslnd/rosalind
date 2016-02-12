@@ -2,11 +2,19 @@
   "name": "rosalind",
   "version": "0.0.1",
   "dependencies": {
+    "adminlte": "2.3.2",
     "air-datepicker": "1.2.2",
     "Chart.js": "2.0.0-beta",
     "mousetrap": "mousetrap-js/mousetrap"
   },
   "overrides": {
+    "adminlte": {
+      "main": [
+        "dist/css/AdminLTE.css",
+        "dist/css/skins/skin-blue.css",
+        "dist/js/app.js"
+      ]
+    },
     "air-datepicker": {
       "arch": [ "client" ],
       "main": [

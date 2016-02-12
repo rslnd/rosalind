@@ -5,16 +5,14 @@ if loaded
 
 +sAlert
 
-#main
-  .disable-select
-    +AdminLTE(skin='blue' fixed=true sidebarMini=true)
-      if currentUser
-        +topbar
-        +sidebar
-        .content-wrapper
-          +Template.dynamic template=main
-      else
-        +lockedLayout
-          +login
+#main.wrapper.disable-select
+  if currentUser
+    +topbar
+    +sidebar
+    .content-wrapper
+      +Template.dynamic template=main
+  else
+    +lockedLayout
+      +login
 
-    +modals
+  +modals

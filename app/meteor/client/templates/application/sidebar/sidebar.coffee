@@ -114,3 +114,27 @@ Template.sidebar.events
     else
       route = [@parent.name, @name].join('.')
       FlowRouter.go(FlowRouter.path(route))
+
+  'click .sidebar li a': (e, t) ->
+    $this = $(e.currentTarget)
+    checkElement = $this.next()
+
+    if checkElement.is('.treeview-menu') and checkElement.is(':visible')
+      checkElement.slideUp 'normal', ->
+        checkElement.removeClass('menu-open')
+
+      checkElement.parent('li').removeClass('active')
+
+    else if checkElement.is('.treeview-menu') and not checkElement.is(':visible')
+      parent = $this.parents('ul').first()
+      ul = parent.find('ul:visible').slideUp('normal')
+      ul.removeClass('menu-open')
+
+      parent_li = $this.parent('li')
+      checkElement.slideDown 'normal', ->
+        checkElement.addClass('menu-open')
+        parent.find('li.active').removeClass('active')
+        parent_li.addClass('active')
+
+    if checkElement.is('.treeview-menu')
+      e.preventDefault()

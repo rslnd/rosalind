@@ -8,9 +8,9 @@ aside.main-sidebar
               a.pointer.level-0.link(id='{{htmlId}}' href='{{hrefLevel0}}')
                 <i class='fa fa-{{icon}}'></i>
                 span {{ name }}
-                if showCount countBadge
+                +if showCount countBadge
                   small.label.pull-right.label-primary {{showCount countBadge}}
-                else if submenu
+                +else if submenu
                   i.fa.fa-angle-left.pull-right
               if submenu
                 ul.treeview-menu

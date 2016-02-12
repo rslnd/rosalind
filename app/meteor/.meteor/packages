@@ -63,7 +63,6 @@ mizzao:user-status
 # UI
 twbs:bootstrap
 mquandalle:jade
-mfactory:admin-lte
 fortawesome:fontawesome
 fastclick
 sacha:spin
@@ -73,6 +72,7 @@ aldeed:autoform-bs-datetimepicker
 juliancwirko:s-alert-stackslide
 aldeed:template-extension
 mquandalle:bower
+rochal:slimscroll
 
 # I18n
 tap:i18n

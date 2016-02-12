@@ -1,4 +1,22 @@
+@AdminLTEOptions =
+  sidebarExpandOnHover: true
+  navbarMenuSlimscroll: true
+  sidebarSlimScroll: true
+
+Template.layout.screenSizes =
+  xs: 480
+  sm: 768
+  md: 992
+  lg: 1200
+
+Template.layout.events
+  'click .content-wrapper': (e, t) ->
+    if $(window).width() <= (Template.layout.screenSizes.sm - 1) and $('body').hasClass('sidebar-open')
+      $('body').removeClass('sidebar-open')
+
 Template.layout.onCreated ->
+  $('body').addClass('skin-blue fixed sidebar-mini sidebar-open')
+
   @autorun =>
     @subscribe('users')
     @subscribe('groups')
