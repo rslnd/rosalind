@@ -2,7 +2,7 @@ meteor:
   build: .
   command: meteor --settings settings.json
   ports:
-    - "3000:3000"
+    - '3000:3000'
   volumes:
     - ../../app/meteor:/app/
   environment:
@@ -18,40 +18,36 @@ meteor:
 kibana:
   image: seeruk/docker-kibana-sense
   ports:
-    - "5601:5601"
+    - '5601:5601'
   links:
     - elasticsearch
 
 mongo-admin:
   image: knickers/mongo-express
   ports:
-    - "8081:8081"
+    - '8081:8081'
   environment:
     - ME_CONFIG_MONGODB_SERVER=mongodb
   links:
     - mongodb
 
 transporter:
-  build: ../shared/compose-transporter
-  entrypoint: transporter run --config /config/config.yml /config/application.js
-  volumes:
-    - ../shared/compose-transporter:/config
+  image: quay.io/rosalind/mongo2es:latest
+  environment:
+    - M2E_DESTINATION=http://elasticsearch:9200
+    - M2E_NAMESPACE=rosalind.patients
+    - M2E_SOURCE=mongodb://mongodb
   links:
-    - mongodb
     - elasticsearch
-
-mongodb:
-  image: mongo:latest
-  ports:
-    - "27017:27017"
-  volumes_from:
-    - persist
+    - mongodb
+  restart: always
 
 elasticsearch:
-  build: ../shared
-  dockerfile: Elasticsearch-Phonetic.Dockerfile
-  volumes_from:
-    - persist
+  image: quay.io/rosalind/elasticsearch-phonetic:latest
+  restart: always
 
-persist:
-  image: busybox
+mongodb:
+  image: 'mongo:latest'
+  restart: always
+  ports:
+    - '27017:27017'
