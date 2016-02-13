@@ -1,0 +1,49 @@
+nginx-ssl:
+  image: 'eforce21/letsencrypt-nginx-proxy:1.0.2'
+  restart: always
+  environment:
+    - LETSENCRYPT_EMAIL=
+  ports:
+    - '80:80'
+    - '443:443'
+  volumes:
+    - '/var/run/docker.sock:/tmp/docker.sock:ro'
+
+rosalind:
+  image: 'quay.io/rosalind/rosalind:latest'
+  restart: always
+  environment:
+    - NODE_ENV=production
+    - CUSTOMER_NAME=
+    - ELASTICSEARCH_URL=http://elasticsearch:9200
+    - MONGO_URL=mongodb://mongodb/rosalind
+    - PORT=80
+    - ROOT_URL=http://0.0.0.0:80
+    - VIRTUAL_HOST=
+    - LETSENCRYPT_EMAIL=
+    - LETSENCRYPT_HOST=
+  expose:
+    - '80'
+  links:
+    - elasticsearch
+    - mongodb
+    - transporter
+
+transporter:
+  image: 'quay.io/rosalind/mongo2es:latest'
+  restart: always
+  environment:
+    - 'M2E_DESTINATION=http://elasticsearch:9200'
+    - M2E_NAMESPACE=rosalind.patients
+    - 'M2E_SOURCE=mongodb://mongodb'
+  links:
+    - elasticsearch
+    - mongodb
+
+elasticsearch:
+  image: 'quay.io/rosalind/elasticsearch-phonetic:latest'
+  restart: always
+
+mongodb:
+  image: 'mongo:latest'
+  restart: always
