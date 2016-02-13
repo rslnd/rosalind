@@ -9,19 +9,26 @@ Template.layout.screenSizes =
   md: 992
   lg: 1200
 
-Template.layout.events
-  'click .content-wrapper': (e, t) ->
-    if $(window).width() <= (Template.layout.screenSizes.sm - 1) and $('body').hasClass('sidebar-open')
-      $('body').removeClass('sidebar-open')
+@Customer = new ReactiveDict
 
 Template.layout.onCreated ->
   $('body').addClass('skin-blue fixed sidebar-mini sidebar-open')
+
+  Meteor.call 'customer/get', (e, customer) ->
+    Winston.error(e) if e
+    @Customer.set('name', customer.name)
+    document.title = customer.name
 
   @autorun =>
     @subscribe('users')
     @subscribe('groups')
     @subscribe('counts')
     @subscribe('inboundCalls')
+
+Template.layout.events
+  'click .content-wrapper': (e, t) ->
+    if $(window).width() <= (Template.layout.screenSizes.sm - 1) and $('body').hasClass('sidebar-open')
+      $('body').removeClass('sidebar-open')
 
 Template.layout.helpers
   loaded: ->

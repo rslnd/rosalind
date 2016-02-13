@@ -46,7 +46,7 @@ var runCoffeelint = function(callback) {
 var startApp = function(callback) {
   startProcess({
     name: 'Meteor',
-    command: 'cd ./app/meteor/ && meteor --settings ' + appOptions.settings,
+    command: 'cd ./app/meteor/ && meteor',
     waitForMessage: 'App running at',
     failOnMessage: 'Your application has errors',
     options: {

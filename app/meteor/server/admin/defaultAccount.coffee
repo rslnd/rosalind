@@ -1,10 +1,14 @@
 Meteor.startup ->
   return if Meteor.users.find({}).count() > 0
 
-  defaultAccount = Meteor?.settings?.private?.admin?.defaultAccount
-  if defaultAccount and defaultAccount?.username
-    console.log('Creating first admin user', defaultAccount?.username)
-    id = Accounts.createUser(defaultAccount)
-    Roles.addUsersToRoles(id, ['admin'], Roles.GLOBAL_GROUP)
-  else
-    console.warn('Please add credentials for the default admin user in settings.json')
+  defaultAccount =
+    username: 'admin'
+    password: Random.id()
+    email: 'admin@example.com'
+    profile:
+      firstName: 'Admin'
+
+
+  Winston.warn("Creating first user '#{defaultAccount.username}' with password '#{defaultAccount.password}'")
+  id = Accounts.createUser(defaultAccount)
+  Roles.addUsersToRoles(id, ['admin'], Roles.GLOBAL_GROUP)

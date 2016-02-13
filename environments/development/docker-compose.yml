@@ -1,15 +1,18 @@
 meteor:
   build: .
-  command: meteor --settings settings.json
+  command: meteor
   ports:
     - '3000:3000'
   volumes:
     - ../../app/meteor:/app/
+    - /app/.meteor/local
+    - /app/packages/npm-container/.npm/package/node_modules
   environment:
     - NODE_ENV=development
     - MONGO_URL=mongodb://mongodb:27017/rosalind
     - ELASTICSEARCH_URL=http://elasticsearch:9200
     - ROOT_URL=http://0.0.0.0:3000
+    - CUSTOMER_NAME=
   links:
     - mongodb
     - elasticsearch
