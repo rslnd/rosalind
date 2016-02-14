@@ -9,9 +9,6 @@ machine:
 dependencies:
   override:
     - npm install
-    - if [[ -e ~/docker/rosalind-meteor.tar ]]; then docker load -i ~/docker/rosalind-meteor.tar; fi
-    - docker build -t rosalind/meteor ./app/meteor
-    - mkdir -p ~/docker; docker save rosalind/meteor > ~/docker/rosalind-meteor.tar
 
   cache_directories:
     - "node_modules"
