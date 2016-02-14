@@ -1,5 +1,5 @@
 meteor:
-  build: .
+  image: quay.io/rosalind/meteor-development
   command: meteor
   ports:
     - '3000:3000'
@@ -50,7 +50,7 @@ elasticsearch:
   restart: always
 
 mongodb:
-  image: 'mongo:latest'
+  image: mongo:latest
   restart: always
   ports:
     - '27017:27017'
