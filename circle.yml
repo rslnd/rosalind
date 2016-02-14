@@ -1,42 +1,37 @@
-# Circle CI tests and deploys the server component (Meteor)
-
 machine:
+  services:
+    - docker
   java:
     version: oraclejdk8
-
   node:
     version: 0.12.7
 
+  hosts:
+    dev.rslnd.com: $DOCKER_IP
+
 dependencies:
   override:
-    - if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
-    - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
     - npm install
+    - if [[ -e ~/docker/rosalind-meteor.tar ]]; then docker load -i ~/docker/rosalind-meteor.tar; fi
+    - docker build -t rosalind/meteor ./app/meteor
+    - mkdir -p ~/docker; docker save rosalind/meteor > ~/docker/rosalind-meteor.tar
 
   cache_directories:
     - "node_modules"
     - "~/.npm"
-    - "~/.meteor"
-    - "app/meteor/.meteor/local/build"
-    - "app/meteor/.meteor/local/bundler-cache"
-    - "app/meteor/.meteor/local/db"
-    - "app/meteor/.meteor/local/isopacks"
-    - "app/meteor/.meteor/local/plugin-cache"
-    - "app/meteor/packages/npm-container/.npm/package/node_modules"
+    - "~/docker"
 
 test:
   pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
 
   override:
+    - cd ./environments/development && docker-compose up:
+      background: true
+    - for i in {1..5}; do curl "http://dev.rslnd.com:3000" && break; sleep 5; done;
     - npm test:
         environment:
-          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/chrome.cucumber"
+          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/chrome.json"
 
-deployment:
-  master:
-    branch: master
-    owner: albertzak
-    commands:
-      - chmod +x ./environments/production/deploy.sh
-      - ./environments/production/deploy.sh
+    - docker-compose stop
+    - docker-compose rm -f

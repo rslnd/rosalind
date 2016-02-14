@@ -10,9 +10,8 @@ cd(__dirname);
 cd('../../');
 
 var appOptions = {
-  settings: '../../environments/test/settings.json',
   env: {
-    ROOT_URL: 'http://localhost:3000/'
+    ROOT_URL: 'http://dev.rslnd.com:3000/'
   }
 };
 
