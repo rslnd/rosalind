@@ -5,20 +5,21 @@
     "start": "node environments/development/start.js",
     "server:start": "node environments/development/startServer.js",
     "tail": "node environments/development/tailCucumber.js",
-    "test": "node ./environments/test/test.js",
+    "test": "ROOT_URL=http://docker.dev:3000 node ./environments/test/test.js",
     "test:watch": "node ./environments/development/testWatch.js",
     "client:start": "cd app/electron/ && grunt",
     "client:build": "cd app/electron/ && grunt build"
   },
   "dependencies": {
-    "chimp": "^0.25.0",
+    "chimp": "^0.28.1",
+    "coffee-script": "^1.10.0",
     "coffeelint": "^1.14.2",
     "electron-release": "^2.2.0",
-    "eslint": "^1.10.1",
+    "eslint": "^2.0.0",
     "lodash": "^4.0.0",
     "moment": "^2.11.1",
     "mupx": "^1.5.3",
-    "shelljs": "^0.5.3"
+    "shelljs": "^0.6.0"
   },
   "engines": {
     "node": "^0.12.7"

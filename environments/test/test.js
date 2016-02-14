@@ -20,7 +20,8 @@ var chimp = [
   './node_modules/.bin/chimp',
   '--ddp=' + appOptions.env.ROOT_URL,
   '--path=app/meteor/tests/cucumber/features/',
-  '--browser=chrome'
+  '--browser=chrome',
+  '--compiler=coffee:coffee-script/register'
 ];
 
 if (process.env.CUCUMBER_JSON_OUTPUT)

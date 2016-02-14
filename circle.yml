@@ -9,9 +9,11 @@ machine:
 dependencies:
   override:
     - npm install
+    - cd app/meteor/tests/cucumber && npm install
 
   cache_directories:
     - "node_modules"
+    - "app/meteor/tests/cucumber"
     - "~/.npm"
     - "~/docker"
 
@@ -27,6 +29,4 @@ test:
         environment:
           ROOT_URL: "http://$DOCKER_IP:3000/"
           CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/chrome.json"
-
-    - docker-compose stop
-    - docker-compose rm -f
+    - cd ./environments/development && docker-compose stop && docker-compose rm -f

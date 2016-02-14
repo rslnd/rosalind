@@ -1,7 +1,7 @@
 moment = require('moment')
 
 module.exports = ->
-  @Then 'I should see \'$string\'', (string) ->
+  @Then /^I should see '([^']*)'$/, (string) ->
     browser.waitForExist('#loaded')
     mainText = browser.getText('body')
     expect(mainText.toLowerCase()).toContain(string.toLowerCase())
