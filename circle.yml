@@ -24,7 +24,7 @@ test:
 
   override:
     - cd ./environments/development && docker-compose up:
-      background: true
+        background: true
     - for i in {1..5}; do curl "http://$DOCKER_IP:3000" && break; sleep 5; done;
     - npm test:
         environment:
