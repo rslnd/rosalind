@@ -42,18 +42,6 @@ var runCoffeelint = function(callback) {
   }, callback);
 };
 
-var startApp = function(callback) {
-  startProcess({
-    name: 'Meteor',
-    command: 'cd ./app/meteor/ && meteor',
-    waitForMessage: 'App running at',
-    failOnMessage: 'Your application has errors',
-    options: {
-      env: extend(appOptions.env, process.env)
-    }
-  }, callback);
-};
-
 var startChimp = function() {
   startProcess({
     name: 'Chimp',
@@ -114,8 +102,6 @@ var startProcess = function(opts, callback) {
 
 runEslint(function() {
   runCoffeelint(function() {
-    startApp(function() {
-      startChimp();
-    });
+    startChimp();
   });
 });
