@@ -6,9 +6,6 @@ machine:
   node:
     version: 0.12.7
 
-  hosts:
-    dev.rslnd.com: $DOCKER_IP
-
 dependencies:
   override:
     - npm install
@@ -28,9 +25,10 @@ test:
   override:
     - cd ./environments/development && docker-compose up:
       background: true
-    - for i in {1..5}; do curl "http://dev.rslnd.com:3000" && break; sleep 5; done;
+    - for i in {1..5}; do curl "http://$DOCKER_IP:3000" && break; sleep 5; done;
     - npm test:
         environment:
+          ROOT_URL: "http://$DOCKER_IP:3000/"
           CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/chrome.json"
 
     - docker-compose stop
