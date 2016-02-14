@@ -4,7 +4,9 @@ machine:
   java:
     version: oraclejdk8
   node:
-    version: 0.10.42
+    version: 0.12.7
+  post:
+    - sudo service mongodb stop
 
 dependencies:
   override:
@@ -24,9 +26,9 @@ test:
   override:
     - cd ./environments/development && docker-compose up:
         background: true
-    - for i in {1..5}; do curl "http://$DOCKER_IP:3000" && break; sleep 5; done;
+    - for i in {1..6}; do curl "http://0.0.0.0:3000" && break; sleep 10; done;
     - npm test:
         environment:
-          ROOT_URL: "http://$DOCKER_IP:3000/"
+          ROOT_URL: "http://0.0.0.0:3000/"
           CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/chrome.json"
     - cd ./environments/development && docker-compose stop && docker-compose rm -f
