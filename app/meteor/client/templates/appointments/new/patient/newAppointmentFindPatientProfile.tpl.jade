@@ -1,7 +1,21 @@
 with patient
-  h2 {{ profile.firstName }} {{ profile.lastName }}
-  h4 {{ insuranceId }}
-  p {{ appointments }}
-  ul
-    +each appointments
-      li Termin {{ calendar start }} bei {{ assigneeId }}
+  h2 {{ getFullNameWithTitle this }}
+
+  if insuranceId
+    h4 {{ insuranceId }}
+
+  if notes
+    blockquote {{ notes }}
+
+  if profile.contacts
+    h5 Kontakt
+    ul
+      +each profile.contacts
+        li
+          +contactLine
+
+  if hasAppointments
+    h5 Termine
+    ul
+      +each appointments
+        li Termin {{ calendar start }} bei {{ getFullNameWithTitle assignee }}

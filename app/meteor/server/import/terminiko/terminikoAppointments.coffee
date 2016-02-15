@@ -6,8 +6,9 @@
     path: job.data.path
     table: 'Termine'
     progress: job
+    reverseParse: true
     iterator: (record) ->
-      return unless record.PatientId > 0 or record.Info?.length > 0
+      return if record.PatientId < 1 and record.Info?.toString().length < 1
 
       start = moment(record.Datum_Beginn)
       end = moment(record.Datum_Ende)
@@ -23,7 +24,7 @@
           external:
             terminiko:
               id: record.Kennummer.toString()
-              note: record.Info
+              note: record.Info.toString()
               timestamps:
                 importedAt: moment().toDate()
                 importedBy: job.data.userId
@@ -33,7 +34,7 @@
           patientId: patientId
           start: start.toDate()
           end: end.toDate()
-          privateAppointment: record.Info.match(/(privat|botox)/i)? or record.Status_Id is 8
+          privateAppointment: record.Info.toString().match(/(privat|botox)/i)? or record.Status_Id is 8
           assigneeId: assigneeId
 
     bulk: (operations) ->

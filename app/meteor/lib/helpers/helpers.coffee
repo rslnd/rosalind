@@ -1,4 +1,4 @@
-@Helpers = {}
+@Helpers ||= {}
 
 Helpers.findOneByIdAndCollection = (id, collection) ->
   return id if typeof id is 'object'
