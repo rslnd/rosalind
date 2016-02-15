@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "adminlte": "2.3.2",
-    "air-datepicker": "1.2.2",
+    "air-datepicker": "albertzak/air-datepicker",
     "Chart.js": "2.0.0-beta",
     "mousetrap": "mousetrap-js/mousetrap"
   },
