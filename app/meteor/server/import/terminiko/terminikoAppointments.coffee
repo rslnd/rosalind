@@ -10,9 +10,12 @@
     iterator: (record) ->
       return if record.PatientId < 1 and record.Info?.toString().length < 1
 
-      start = moment(record.Datum_Beginn)
-      end = moment(record.Datum_Ende)
+      start = moment(record.Datum_Beginn) if record.Datum_Beginn
+      end = moment(record.Datum_Ende) if record.Datum_Ende
       return if moment().range(start, end).diff('hours') > 4
+      return if moment().range(start, end).diff('seconds') < 1
+
+      externalUpdatedAt = moment(record.Datum_Bearbeitung).toDate() if record.Datum_Bearbeitung
 
       { patientId, heuristic } = Import.Terminiko.findPatientId({ job, record })
       assigneeId = getResource({ key: 'D', record, resources })
@@ -24,17 +27,17 @@
           external:
             terminiko:
               id: record.Kennummer.toString()
-              note: record.Info.toString()
+              note: record.Info?.toString()
               timestamps:
                 importedAt: moment().toDate()
                 importedBy: job.data.userId
-                externalUpdatedAt: moment(record.Datum_Bearbeitung).toDate()
+                externalUpdatedAt: externalUpdatedAt
 
           heuristic: heuristic
           patientId: patientId
-          start: start.toDate()
-          end: end.toDate()
-          privateAppointment: record.Info.toString().match(/(privat|botox)/i)? or record.Status_Id is 8
+          start: start?.toDate()
+          end: end?.toDate()
+          privateAppointment: record.Info?.toString().match(/(privat|botox)/i)? or record.Status_Id is 8
           assigneeId: assigneeId
 
     bulk: (operations) ->
@@ -52,6 +55,7 @@
         job.fail()
 
 getResource = (options) ->
+  return unless options.record.Resources
   resourceIds = options.record.Resources.toString().split(';')
   resourceId = _.find(resourceIds, (r) -> r.indexOf(options.key) isnt -1)
   options.resources[resourceId] if resourceId

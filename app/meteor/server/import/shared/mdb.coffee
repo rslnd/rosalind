@@ -45,7 +45,7 @@ mdbToCsv = (options) ->
   ]
 
   mdbExport.stdout.on('error', (e) -> future.throw('[Import] Mdb: mdbExport: ' + e))
-  mdbExport.stderr.on('data', future.throw)
+  mdbExport.stderr.on('data', (e, d) -> future.throw('[Import] Mdb: mdbExport: ' + e))
 
   tmpCsv = temp.createWriteStream()
   mdbExport.stdout

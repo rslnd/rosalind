@@ -18,7 +18,7 @@
 
 findPatientId = (options) ->
   patient = Patients.findOne
-    'external.terminiko.id': options.record.Patient_Id.toString()
+    'external.terminiko.id': options.record.Patient_Id?.toString()
   if patient
     return new MongoInternals.NpmModule.ObjectID(patient._id._str)
 
@@ -51,6 +51,7 @@ fuzzyFindPatientId = (options) ->
   return new MongoInternals.NpmModule.ObjectID(patient._id) if patient
 
 parseFreetext = (freetext) ->
+  return {} unless freetext
   freetext = freetext.toString()
   return {} if freetext.length < 4
 

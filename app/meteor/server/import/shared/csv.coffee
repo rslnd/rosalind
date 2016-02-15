@@ -5,6 +5,7 @@ csv = Meteor.npmRequire('babyparse')
 iconv = Meteor.npmRequire('iconv-lite')
 exec = Meteor.npmRequire('child_process').exec
 execSync = Meteor.wrapAsync(exec)
+temp = Meteor.npmRequire('temp').track()
 
 
 @Import.Csv = (options) ->
@@ -14,7 +15,7 @@ execSync = Meteor.wrapAsync(exec)
     progressFactor: 1
 
   approxTotal = csvRowCount(options)
-  options.progress.log("Csv: Parsing ~#{approxTotal} records") if options.progress
+  options.progress.log("Csv: Parsing #{approxTotal} records") if options.progress
 
 
   parsed = []
@@ -45,7 +46,13 @@ execSync = Meteor.wrapAsync(exec)
       totalParsed++
 
 
-  file = fs.readFileSync(options.path)
+  if options.reverseParse
+    reversedPath = temp.openSync().path
+    execSync("head -n1 #{options.path} > #{reversedPath}; tail -n+2 #{options.path} | tac >> #{reversedPath}")
+    file = fs.readFileSync(reversedPath)
+  else
+    file = fs.readFileSync(options.path)
+
   file = iconv.decode(file, options.encoding)
 
   csv.parse(file, csvOptions)
@@ -55,6 +62,7 @@ execSync = Meteor.wrapAsync(exec)
   options.progress.log("Csv: Parsed #{totalParsed} records. Done.") if options.progress
 
   fs.unlinkSync(options.path) if options.delete
+  fs.unlinkSync(reversedPath) if options.reverseParse
 
   return totalParsed
 
