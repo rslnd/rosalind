@@ -34,35 +34,6 @@ Schema.Patients = new SimpleSchema
     optional: true
     index: 1
 
-
-Helpers.profile(Patients)
-
-Patients.helpers
-  collection: ->
-    Patients
-
-  notes: ->
-    n = [@note, @external?.eoswin?.note]
-    return _.filter(n, (s) -> s and s.length >= 1).join('\n')
-
-  appointments: ->
-    Appointments.find patientId: @_id,
-      sort:
-        start: -1
-
-Patients.after.insert (userId, doc) ->
-  console.log('[Patient] inserted:', doc._id)
-  Search.index('patients', @_id)
-
-Patients.after.update (userId, doc) ->
-  console.log('[Patient] updated:', doc._id)
-  Search.index('patients', doc)
-
-Patients.after.remove (userId, doc) ->
-  console.log('[Patient] removed:', doc._id)
-  Search.unindex('patients', doc)
-
-
 Meteor.startup ->
   Patients.attachSchema(Schema.Patients)
   Patients.attachBehaviour('softRemovable')

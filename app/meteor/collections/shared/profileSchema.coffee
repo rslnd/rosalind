@@ -76,3 +76,6 @@ Schema.Profile = new SimpleSchema
   address:
     type: Schema.Address
     optional: true
+
+Meteor.startup ->
+  Schema.Profile.i18n('user.profile')

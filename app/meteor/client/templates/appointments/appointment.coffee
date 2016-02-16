@@ -1,5 +1,3 @@
-Template.appointment.helpers
-
 Template.appointment.events
   'click .admit': ->
     Appointments.setAdmitted(@_id)
