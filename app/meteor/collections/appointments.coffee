@@ -71,6 +71,11 @@ Schema.Appointments = new SimpleSchema
     autoValue: Util.autoCreatedBy
     optional: true
 
+  removed:
+    type: Boolean
+    optional: true
+    index: 1
+
 
 Appointments.helpers
   privateOrInsurance: ->
@@ -127,7 +132,7 @@ Appointments.findOpen = (date) ->
     start:
       $gte: moment(date).startOf('day').toDate()
       $lte: moment(date).endOf('day').toDate()
-  Appointments.find(selector, sort: { start: -1 })
+  Appointments.find(selector, sort: { start: 1 })
 
 
 Appointments.findAdmitted = (date) ->
@@ -139,7 +144,7 @@ Appointments.findAdmitted = (date) ->
     start:
       $gte: moment(date).startOf('day').toDate()
       $lte: moment(date).endOf('day').toDate()
-  Appointments.find(selector, sort: { admittedAt: -1 })
+  Appointments.find(selector, sort: { admittedAt: 1 })
 
 
 Appointments.findTreating = (date) ->
@@ -151,7 +156,7 @@ Appointments.findTreating = (date) ->
     start:
       $gte: moment(date).startOf('day').toDate()
       $lte: moment(date).endOf('day').toDate()
-  Appointments.find(selector, sort: { treatedAt: -1 })
+  Appointments.find(selector, sort: { treatedAt: 1 })
 
 Appointments.isAvailable = (options) ->
   Schedules.isAvailable(options)

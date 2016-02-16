@@ -5,6 +5,9 @@
 
   resources = {}
   resources = parseDoctors(job, resources)
+
+  job.log('Terminiko: Parsed Resources: ' + JSON.stringify(resources))
+
   return resources
 
 parseDoctors = (job, resources) ->

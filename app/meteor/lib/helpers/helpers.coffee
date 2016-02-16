@@ -1,28 +1,28 @@
 @Helpers ||= {}
 
+Helpers.person = (idOrUsername, collection) ->
+  if collection
+    collection = Mongo.Collection.get(collection)
+    return collection.findOne(idOrUsername)
+  else
+    Meteor.users.findOneByIdOrUsername(idOrUsername)
+
 Helpers.findOneByIdAndCollection = (id, collection) ->
   return id if typeof id is 'object'
   collection = Mongo.Collection.get(collection) if typeof collection is 'string'
   collection.findOne(id)
 
-Helpers.getFirstName = (user) ->
-  user = Meteor.users.findOneByIdOrUsername(user)
-  user?.firstName()
+Helpers.getFirstName = (user, collection) ->
+  Helpers.person(user, collection)?.firstName()
 
+Helpers.getFullName = (user, collection) ->
+  Helpers.person(user, collection)?.fullName()
 
-Helpers.getFullName = (user) ->
-  user = Meteor.users.findOneByIdOrUsername(user)
-  user?.fullName()
+Helpers.getFullNameWithTitle = (user, collection) ->
+  Helpers.person(user, collection)?.fullNameWithTitle()
 
-
-Helpers.getFullNameWithTitle = (user) ->
-  user = Meteor.users.findOneByIdOrUsername(user)
-  user?.fullNameWithTitle()
-
-
-Helpers.getShortname = (user) ->
-  user = Meteor.users.findOneByIdOrUsername(user)
-  user?.shortname()
+Helpers.getShortname = (user, collection) ->
+  Helpers.person(user, collection)?.shortname()
 
 Helpers.calendar = (date) ->
   moment(date).calendar()

@@ -18,28 +18,31 @@
       externalUpdatedAt = moment(record.Datum_Bearbeitung).toDate() if record.Datum_Bearbeitung
 
       { patientId, heuristic } = Import.Terminiko.findPatientId({ job, record })
-      assigneeId = getResource({ key: 'D', record, resources })
+
+      $set =
+        external:
+          terminiko:
+            id: record.Kennummer.toString()
+            note: record.Info?.toString()
+            timestamps:
+              importedAt: moment().toDate()
+              importedBy: job.data.userId
+              externalUpdatedAt: externalUpdatedAt
+
+        heuristic: heuristic
+        patientId: patientId
+        start: start?.toDate()
+        end: end?.toDate()
+        privateAppointment: record.Info?.toString().match(/(privat|botox)/i)? or record.Status_Id is 8
+
+      $set = _.extend $set,
+        getResource({ key: 'D', record, resources })
+
 
       operation =
         selector:
           'external.terminiko.id': record.Kennummer.toString()
-        $set:
-          external:
-            terminiko:
-              id: record.Kennummer.toString()
-              note: record.Info?.toString()
-              timestamps:
-                importedAt: moment().toDate()
-                importedBy: job.data.userId
-                externalUpdatedAt: externalUpdatedAt
-
-          heuristic: heuristic
-          patientId: patientId
-          start: start?.toDate()
-          end: end?.toDate()
-          privateAppointment: record.Info?.toString().match(/(privat|botox)/i)? or record.Status_Id is 8
-          assigneeId: assigneeId
-
+        $set: $set
     bulk: (operations) ->
       bulk = Appointments.rawCollection().initializeUnorderedBulkOp()
 

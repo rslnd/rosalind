@@ -10,12 +10,11 @@
 
     h4.username.enable-select
       <b>{{ time start }}</b> {{ getFullNameWithTitle patient }}<br />
+
+      small {{ getFullNameWithTitle assignee }}
+
       if privateAppointment
         small {{_ 'appointments.private'}}
-      else
-        small {{_ 'appointments.insurance'}}
-
-      small {{_ 'appointments.assignedTo'}} {{ getFullNameWithTitle assignee }}
 
   .box-body
     blockquote

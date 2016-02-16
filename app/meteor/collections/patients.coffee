@@ -29,6 +29,11 @@ Schema.Patients = new SimpleSchema
     autoValue: Util.autoCreatedBy
     optional: true
 
+  removed:
+    type: Boolean
+    optional: true
+    index: 1
+
 
 Helpers.profile(Patients)
 

@@ -2,7 +2,7 @@ subs = new SubsManager()
 
 Template.newAppointmentFindPatientProfile.helpers
   hasAppointments: ->
-    @appointments.count() > 0
+    @appointments().count() > 0
 
   patient: ->
     ids = PatientsSearch.getData().map (p) -> p._id
