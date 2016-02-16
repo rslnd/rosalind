@@ -39,6 +39,12 @@ Helpers.birthday = (date) ->
   formatted = date.format('D. MMMM YYYY')
   "#{formatted} (#{age} Jahre)"
 
+Helpers.parseNewlines = (text) ->
+  return unless text and typeof text is 'string'
+  text
+    .split('\\r\\n').join('\n')
+    .split('\\r').join('\n')
+    .split('\\n').join('\n')
 
 # Split phone number at whitespaces. If the word contains a number,
 # replace all letters 'O' or 'o' with zeroes. Join back together.

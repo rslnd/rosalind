@@ -23,7 +23,7 @@
         external:
           terminiko:
             id: record.Kennummer.toString()
-            note: record.Info?.toString()
+            note: Helpers.parseNewlines(record.Info?.toString())
             timestamps:
               importedAt: moment().toDate()
               importedBy: job.data.userId
