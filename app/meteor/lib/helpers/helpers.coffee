@@ -1,9 +1,13 @@
 @Helpers ||= {}
 
 Helpers.person = (idOrUsername, collection) ->
-  if collection
+  if idOrUsername?.collection()
+    idOrUsername
+
+  else if collection
     collection = Mongo.Collection.get(collection)
-    return collection.findOne(idOrUsername)
+    collection.findOne(_id: idOrUsername)
+
   else
     Meteor.users.findOneByIdOrUsername(idOrUsername)
 

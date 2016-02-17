@@ -17,10 +17,10 @@ Meteor.startup ->
 
 
     patient: ->
-      Patients.findOne(@patientId)
+      Patients.findOne(_id: new Mongo.ObjectID(@patientId._str)) if @patientId?._str
 
     assignee: ->
-      Meteor.users.findOne(@assigneeId)
+      Meteor.users.findOne(_id: @assigneeId)
 
     notes: ->
       n = [@note, @external?.terminiko?.note]

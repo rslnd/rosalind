@@ -11,23 +11,23 @@ Meteor.publishComposite 'appointments', (tableName, ids, fields) ->
     {
       find: ->
         @unblock()
-        Appointments.find({ _id: { $in: ids } }, { removed: true })
+        Appointments.find({ _id: { $in: ids } }, { removed: true, sort: { start: 1 } })
       children: [
-        {
-          find: (doc) ->
-            @unblock()
-            Comments.find(docId: doc._id)
-        }
+        { find: (doc) -> @unblock(); Comments.find(docId: doc._id) }
       ]
     }
   else
     {
-      find: (date) -> Appointments.find
+      find: (date) -> Appointments.find({
         start:
           $gte: moment(date).startOf('day').toDate()
           $lte: moment(date).endOf('day').toDate()
+      }, {
+        sort: { start: 1 }
+      })
 
       children: [
         { find: (doc) -> Comments.find(docId: doc._id) }
+        { find: (doc) -> Patients.find({ _id: doc.patientId }, { limit: 1 }) if doc.patientId?._str }
       ]
     }
