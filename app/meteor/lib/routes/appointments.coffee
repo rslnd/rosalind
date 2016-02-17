@@ -20,4 +20,4 @@ appointments.route '/new',
 appointments.route '/:status',
   name: 'appointments.thisOpen'
   action: ->
-    BlazeLayout.render('layout', main: 'appointments')
+    BlazeLayout.render('layout', main: 'appointmentsCards')

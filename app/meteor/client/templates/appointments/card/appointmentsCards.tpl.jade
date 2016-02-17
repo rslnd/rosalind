@@ -1,0 +1,10 @@
+.content-header
+  h1 {{ title }}
+    small
+      | {{ currentDate }}
+
+.content
+  .row
+    each appointments
+      .col-md-4
+        +appointmentCard

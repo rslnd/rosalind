@@ -1,4 +1,4 @@
-Template.appointment.events
+Template.appointmentCard.events
   'click .admit': ->
     Appointments.setAdmitted(@_id)
 
@@ -7,3 +7,7 @@ Template.appointment.events
 
   'click .resolve': ->
     Appointments.setResolved(@_id)
+
+Template.appointmentCard.helpers
+  patientIdButNoPatient: ->
+    @patientId?._str and not @patient()

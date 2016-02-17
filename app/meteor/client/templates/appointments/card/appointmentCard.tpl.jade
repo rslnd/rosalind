@@ -9,7 +9,12 @@
 
 
     h4.username.enable-select
-      <b>{{ time start }}</b> {{ getFullNameWithTitle patient }}<br />
+      <b>{{ time start }}</b> {{ getFullNameWithTitle patient }}
+
+      if patientIdButNoPatient
+        i.fa.fa-warning.text-warning
+
+      <br />
 
       small {{ getFullNameWithTitle assignee }}
 

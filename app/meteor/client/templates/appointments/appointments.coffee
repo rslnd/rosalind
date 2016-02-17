@@ -3,13 +3,22 @@ Template.appointments.onCreated ->
     @subscribe('appointments')
 
 Template.appointments.helpers
-  appointments: ->
-    FlowRouter.watchPathChange()
-    status = FlowRouter.current().params?.status
-    switch status
-      when 'admitted' then Appointments.findAdmitted()
-      when 'treating' then Appointments.findTreating()
-      else Appointments.findOpen()
+  byHour: ->
+    [8..22].map (hour) ->
+      time = moment().hour(hour)
+      start = time.startOf('hour').format(TAPi18n.__('time.timeFormat'))
+      appointments = Appointments.findOpen(time, 'hour')
+      appointmentsCount = appointments.count()
+      hasAppointments = appointmentsCount > 0
+      return { start, time, appointments, appointmentsCount, hasAppointments }
+
+  byAssignee: ->
+    object = _.groupBy(@appointments.fetch(), (a) -> a?.assigneeId)
+    _.map object, (appointments, assigneeId) ->
+      if assigneeId
+        { appointments, assignee: Meteor.users.findOne(assigneeId) }
+      else
+        { appointments }
 
   title: ->
     FlowRouter.watchPathChange()

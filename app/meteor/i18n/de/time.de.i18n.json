@@ -6,6 +6,7 @@
     "wednesday": "Mittwoch",
     "thursday": "Thursday",
     "friday": "Friday",
-    "saturday": "Samstag"
+    "saturday": "Samstag",
+    "timeFormat": "H:mm [Uhr]"
   }
 }

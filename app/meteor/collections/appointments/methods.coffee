@@ -15,15 +15,15 @@ Meteor.startup ->
     Appointments.update(id, { $set: set })
 
 
-  Appointments.findOpen = (date) ->
+  Appointments.findOpen = (date, within = 'day') ->
     selector =
       admittedAt: null
       admittedBy: null
       treatedAt: null
       treatedBy: null
       start:
-        $gte: moment(date).startOf('day').toDate()
-        $lte: moment(date).endOf('day').toDate()
+        $gte: moment(date).startOf(within).toDate()
+        $lte: moment(date).endOf(within).toDate()
     Appointments.find(selector, sort: { start: 1 })
 
 
