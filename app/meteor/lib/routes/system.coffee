@@ -15,3 +15,8 @@ users.route '/stats',
   name: 'system.thisStats'
   action: ->
     BlazeLayout.render('layout', main: 'systemStats')
+
+users.route '/tags',
+  name: 'system.thisTags'
+  action: ->
+    BlazeLayout.render('layout', main: 'systemTags')

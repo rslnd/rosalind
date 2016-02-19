@@ -22,6 +22,7 @@ Template.layout.onCreated ->
   @autorun =>
     @subscribe('users')
     @subscribe('groups')
+    @subscribe('tags')
     @subscribe('counts')
     @subscribe('inboundCalls')
 

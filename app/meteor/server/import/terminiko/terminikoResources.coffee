@@ -5,6 +5,7 @@
 
   resources = {}
   resources = parseDoctors(job, resources)
+  resources = parseTags(job, resources)
 
   job.log('Terminiko: Parsed Resources: ' + JSON.stringify(resources))
 
@@ -31,5 +32,19 @@ parseDoctors = (job, resources) ->
         job.log("Terminiko: parseDoctors: Unknown resource #{JSON.stringify(record)}")
       key = 'D' + record.Kennummer
       resources[key] = $set
+
+  return resources
+
+
+parseTags = (job, resources) ->
+  Import.Mdb
+    path: job.data.path
+    table: 'Untersuchungen'
+    delete: false
+    iterator: (record) ->
+      Tags.findOneOrInsert(tag: record.Kurz, description: record.Name)
+
+      key = 'U' + record.Kennummer
+      resources[key] = record.Kurz
 
   return resources

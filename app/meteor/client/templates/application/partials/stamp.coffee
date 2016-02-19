@@ -12,4 +12,5 @@ Template.stamp.helpers
     TAPi18n.__ @doc.collection()._name + '.' + @field + 'By'
 
   name: ->
-    Helpers.getFirstName @doc[@field + 'By']
+    user = Meteor.users.findOne(@doc[@field + 'By'])
+    Helpers.getFirstName(user)

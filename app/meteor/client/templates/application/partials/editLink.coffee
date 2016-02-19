@@ -1,3 +1,6 @@
 Template.editLink.events
   'click a': ->
-    Modal.show('modalAutoForm', { type: 'update', collection: @collection, doc: @ })
+    Modal.show 'modalAutoForm',
+      type: 'update'
+      collection: @collection
+      doc: @

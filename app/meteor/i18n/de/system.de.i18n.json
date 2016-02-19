@@ -2,6 +2,7 @@
   "system": {
     "this": "System",
     "thisJobs": "Background Jobs",
-    "thisStats": "Stats"
+    "thisStats": "Stats",
+    "thisTags": "Tags"
   }
 }

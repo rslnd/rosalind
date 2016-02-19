@@ -55,6 +55,7 @@ sidebar = [
     submenu: [
       { name: 'thisStats' }
       { name: 'thisJobs' }
+      { name: 'thisTags' }
     ]
 ]
 

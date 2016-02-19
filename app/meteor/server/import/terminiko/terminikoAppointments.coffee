@@ -19,6 +19,8 @@
 
       { patientId, heuristic } = Import.Terminiko.findPatientId({ job, record })
 
+      tags = getResources({ key: 'U', record, resources })
+
       $set =
         external:
           terminiko:
@@ -30,6 +32,7 @@
               externalUpdatedAt: externalUpdatedAt
 
         heuristic: heuristic
+        tags: tags
         patientId: patientId
         start: start?.toDate()
         end: end?.toDate()
@@ -58,7 +61,11 @@
         job.fail()
 
 getResource = (options) ->
+  res = getResources(options)
+  res and res[0]
+
+getResources = (options) ->
   return unless options.record.Resources
   resourceIds = options.record.Resources.toString().split(';')
-  resourceId = _.find(resourceIds, (r) -> r.indexOf(options.key) isnt -1)
-  options.resources[resourceId] if resourceId
+  resourceIds = _.filter(resourceIds, (r) -> r.indexOf(options.key) isnt -1)
+  resourceIds.map (id) -> options.resources[id]

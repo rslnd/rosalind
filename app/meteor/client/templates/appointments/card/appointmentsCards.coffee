@@ -9,7 +9,7 @@ Template.appointmentsCards.helpers
     switch status
       when 'admitted' then Appointments.findAdmitted()
       when 'treating' then Appointments.findTreating()
-      else Appointments.findOpen()
+      when '' then Appointments.findOpen()
 
   title: ->
     FlowRouter.watchPathChange()
