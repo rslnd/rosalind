@@ -7,6 +7,7 @@
     "thisUpdate": "Patient bearbeiten",
     "thisEdit": "Patient bearbeiten",
     "thisSave": "Patient speichern",
-    "addedToday": "heute neu eingetragen"
+    "addedToday": "heute neu eingetragen",
+    "insuranceId": "Sozialversicherungsnummer"
   }
 }

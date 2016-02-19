@@ -9,6 +9,8 @@
     "thisUpdate": "Termin bearbeiten",
     "thisSave": "Termin speichern",
     "thisInsert": "Neuer Termin",
+    "thisFuture": "Kommende Termine",
+    "thisPast": "Vergangene Termine",
     "private": "Privat",
     "insurance": "Kasse",
     "createdBy": "Eingetragen von",

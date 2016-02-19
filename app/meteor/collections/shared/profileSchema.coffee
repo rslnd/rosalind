@@ -1,3 +1,16 @@
+Schema.Birthday = new SimpleSchema
+  year:
+    type: Number
+    index: 1
+
+  month:
+    type: Number
+    index: 1
+
+  day:
+    type: Number
+    index: 1
+
 Schema.Contact = new SimpleSchema
   value:
     type: String
@@ -55,7 +68,7 @@ Schema.Profile = new SimpleSchema
     optional: true
 
   birthday:
-    type: Date
+    type: SimpleSchema.Birthday
     optional: true
     index: 1
 

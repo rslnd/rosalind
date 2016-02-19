@@ -1,21 +1,31 @@
 with patient
-  h2 {{ getFullNameWithTitle this }}
+  h3
+    span.full-name {{ getFullNameWithTitle this }}<br/>
+    small.inline-profile
+      {{ birthday profile.birthday }}
+      if insuranceId
+        <br/>{{_ 'patients.insuranceId'}}: {{ insuranceId }}
 
-  if insuranceId
-    h4 {{ insuranceId }}
+  .row
+    if hasContacts
+      .col-md-6
+        +profileContacts
+    if profile.address
+      .col-md-6
+        +profileAddress
+
 
   if notes
     blockquote {{ notes }}
 
-  if profile.contacts
-    h5 Kontakt
-    ul
-      +each profile.contacts
-        li
-          +contactLine
+  if hasFutureAppointments
+    h4 {{_ 'appointments.thisFuture'}}
+    ul.list-unstyled
+      +each futureAppointments
+        +appointmentLine
 
-  if hasAppointments
-    h5 Termine
-    ul
-      +each appointments
-        li Termin {{ calendar start }} bei {{ getFullNameWithTitle assignee }}
+  if hasPastAppointments
+    h4 {{_ 'appointments.thisPast'}}
+    ul.list-unstyled
+      +each pastAppointments
+        +appointmentLine

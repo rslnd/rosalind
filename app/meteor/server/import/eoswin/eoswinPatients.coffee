@@ -48,6 +48,10 @@ Meteor.startup ->
         note.push(contactsNote) if contactsNote?
         note = note.join('\n\n')
 
+        unless row.GebDat is '00000000'
+          birthday = moment(row.GebDat, 'YYYYMMDD').toDate()
+          birthday = Time.dateToBirthday(birthday)
+
         if row.LandCode.length > 0
           country = switch row.LandCode
             when 'A' then 'AT'
@@ -82,7 +86,7 @@ Meteor.startup ->
             lastName: row.Zuname
             titlePrepend: titlePrepend
             gender: row.Geschl.replace('W', 'Female').replace('M', 'Male') if row.Geschl?
-            birthday: moment(row.GebDat, 'YYYYMMDD').toDate() unless row.GebDat is '00000000'
+            birthday: birthday
             contacts: contacts
             address:
               line1: row.Strasse

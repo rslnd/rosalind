@@ -1,0 +1,11 @@
+li
+  | Termin {{ calendar start }}
+  if assignee
+    | bei {{ getFullNameWithTitle assignee }}
+
+  if notes
+    unless heuristic
+      blockquote {{ notes}}
+
+  if tags
+    +tags
