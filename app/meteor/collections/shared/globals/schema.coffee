@@ -1,3 +1,4 @@
-@Schema = {}
+@Schema ||= {}
 
-Template.registerHelper('Schema', Schema) if Meteor.isClient
+Meteor.startup ->
+  Template.registerHelper('Schema', Schema) if Meteor.isClient

@@ -1,6 +1,6 @@
 ul.list-group
   each appointments
     li.list-group-item
-      | <b>{{ time start }}</b> {{ getFullNameWithTitle patient }}
+      | <b>{{ time start }}</b> {{ getFullNameWithTitle patient }} {{> birthdayCake }}
       .pull-right
         +tags

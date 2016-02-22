@@ -2,7 +2,7 @@ with patient
   h3
     span.full-name {{ getFullNameWithTitle this }}<br/>
     small.inline-profile
-      {{ birthday profile.birthday }}
+      {{ birthday profile.birthday }} {{> birthdayCake }}
       if insuranceId
         <br/>{{_ 'patients.insuranceId'}}: {{ insuranceId }}
 

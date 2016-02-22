@@ -6,18 +6,31 @@ Time.startOfToday = ->
 Time.endOfToday = ->
   moment().endOf('day').toDate()
 
-Time.dateToBirthday = (date) ->
+Time.dateToDay = (date) ->
   return unless date
   date = moment(date)
   year = date.year()
   month = date.month() + 1
   day = date.date() # no typo
-  { year, month, date }
+  { year, month, day }
 
-Time.birthdayToDate = (birthday) ->
-  birthday.month -= 1
-  moment(birthday).toDate()
+Time.zeroIndexMonth = (day) ->
+  return unless day
+  if day?.month and not day?.zeroIndexMonth
+    day.month -= 1
+    day.zeroIndexMonth = true
+  return day
 
+Time.dayToDate = (day) ->
+  day = Time.zeroIndexMonth(day)
+  moment(day).toDate()
+
+Time.dayToday = (day) ->
+  return unless day?.day and day?.month
+  day = Time.zeroIndexMonth(day)
+  today = moment()
+  return today.date() is day.day and
+    today.month() is day.month
 
 Time.weekdays = ->
   mon: { label: TAPi18n.__('time.monday'), offset: 0 }

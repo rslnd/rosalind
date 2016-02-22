@@ -36,6 +36,9 @@ Helpers.recent = (date) ->
 
 Helpers.birthday = (date) ->
   return unless date
+
+  date = Time.zeroIndexMonth(date)
+
   date = moment(date)
   return if date < moment().subtract(150, 'years')
 

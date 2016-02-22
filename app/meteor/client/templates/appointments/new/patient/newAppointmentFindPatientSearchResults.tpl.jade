@@ -3,7 +3,7 @@ ul.search-results
     li(data-id='{{ _id }}')
       h3
         span.full-name {{ fullNameWithTitle profile }}
-        small.inline-profile {{ birthday profile.birthday }}
+        small.inline-profile {{ birthday profile.birthday }} {{> birthdayCake }}
 
   li
     h3

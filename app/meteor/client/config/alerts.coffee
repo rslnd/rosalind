@@ -1,7 +1,7 @@
 Meteor.startup ->
   sAlert.config
     effect: 'stackslide'
-    position: 'bottom'
+    position: 'bottom-left'
     timeout: 5000
     html: false
     onRouteClose: false

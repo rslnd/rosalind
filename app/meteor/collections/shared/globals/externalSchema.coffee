@@ -1,3 +1,5 @@
+@Schema ||= {}
+
 Schema.ExternalTimestamps = new SimpleSchema
   importedAt:
     type: Date

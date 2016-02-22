@@ -1,4 +1,6 @@
-Schema.Birthday = new SimpleSchema
+@Schema ||= {}
+
+Schema.Day = new SimpleSchema
   year:
     type: Number
     index: 1
@@ -6,10 +8,14 @@ Schema.Birthday = new SimpleSchema
   month:
     type: Number
     index: 1
+    min: 1
+    max: 12
 
   day:
     type: Number
     index: 1
+    min: 1
+    max: 31
 
 Schema.Contact = new SimpleSchema
   value:
@@ -68,7 +74,7 @@ Schema.Profile = new SimpleSchema
     optional: true
 
   birthday:
-    type: SimpleSchema.Birthday
+    type: SimpleSchema.Day
     optional: true
     index: 1
 
