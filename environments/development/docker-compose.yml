@@ -5,8 +5,6 @@ meteor:
     - '3000:3000'
   volumes:
     - ../../app/meteor:/app/
-    - /app/.meteor/local
-    - /app/packages/npm-container/.npm/package/node_modules
   environment:
     - NODE_ENV=development
     - MONGO_URL=mongodb://mongodb:27017/rosalind
@@ -43,14 +41,11 @@ transporter:
   links:
     - elasticsearch
     - mongodb
-  restart: always
 
 elasticsearch:
   image: quay.io/rosalind/elasticsearch-phonetic:latest
-  restart: always
 
 mongodb:
   image: mongo:latest
-  restart: always
   ports:
     - '27017:27017'
