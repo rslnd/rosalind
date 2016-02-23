@@ -50,7 +50,7 @@ Meteor.startup ->
 
         unless row.GebDat is '00000000'
           birthday = moment(row.GebDat, 'YYYYMMDD').toDate()
-          birthday = Time.dateToBirthday(birthday)
+          birthday = Time.dateToDay(birthday)
 
         if row.LandCode.length > 0
           country = switch row.LandCode

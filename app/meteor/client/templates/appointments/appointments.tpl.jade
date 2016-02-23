@@ -16,7 +16,7 @@ each byHour
             .box.box-default
               .box-header.with-border
                 if assignee
-                  {{ getFullNameWithTitle assignee }}
+                  | {{ getFullNameWithTitle assignee }}
                 else
                   i.text-muted {{_ 'appointments.unassigned' }}
 
