@@ -17,30 +17,29 @@ Schema.ExternalTimestamps = new SimpleSchema
     type: String
     optional: true
 
+Schema.ExternalNode = new SimpleSchema
+  timestamps:
+    type: Schema.ExternalTimestamps
+    optional: true
+
+  id:
+    type: String
+    index: 1
+
+  payload:
+    type: Object
+    blackbox: true
+    optional: true
+
+  note:
+    type: String
+    optional: true
 
 Schema.External = new SimpleSchema
   eoswin:
     optional: true
-    type: new SimpleSchema
-      timestamps:
-        type: Schema.ExternalTimestamps
-        optional: true
-      id:
-        type: String
-        index: 1
-      note:
-        type: String
-        optional: true
+    type: Schema.ExternalNode
 
   terminiko:
     optional: true
-    type: new SimpleSchema
-      timestamps:
-        type: Schema.ExternalTimestamps
-        optional: true
-      id:
-        type: String
-        index: 1
-      note:
-        type: String
-        optional: true
+    type: Schema.ExternalNode

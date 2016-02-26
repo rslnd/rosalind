@@ -7,6 +7,7 @@ fs = Meteor.npmRequire('fs')
   options = _.defaults options,
     delete: true
     progressFactor: 1
+    batchSize: 1000
 
   adt = new Adt()
   openAdt = Meteor.wrapAsync(adt.open, adt)
@@ -16,29 +17,32 @@ fs = Meteor.npmRequire('fs')
 
   options.progress.log("Adt: Parsing #{table.header.recordCount} records") if options.progress
 
-  if options.iterator
-    i = 0
+  i = 0
 
-    batch = [] if options.bulk
+  batch = [] if options.bulk or options.all
 
-    for i in [0...table.header.recordCount]
-      record = findRecord(i)
+  for i in [0...table.header.recordCount]
+    record = findRecord(i)
 
-      record = options.iterator(record)
+    record = options.iterator(record) if options.iterator
 
-      if options.bulk
-        batch.push(record) if record
-        if batch.length >= 1000
-          options.bulk(batch)
-          batch = []
+    if options.bulk or options.all
+      batch.push(record) if record
+      if batch.length >= options.batchSize and not options.all
+        options.bulk(batch)
+        batch = []
 
-      if options.progress and i %% 10000 is 0
-        options.progress.progress(Math.floor(i * options.progressFactor), table.header.recordCount)
-        options.progress.log("Adt: Parsed #{i} records")
+    if options.progress and i %% 10000 is 0
+      options.progress.progress(Math.floor(i * options.progressFactor), table.header.recordCount)
+      options.progress.log("Adt: Parsed #{i} records")
 
 
-  if options.bulk and batch.length > 0
+  if options.bulk and batch.length > 0 and not options.all
     options.bulk(batch)
+    batch = []
+
+  if options.all
+    options.all(batch)
     batch = []
 
   options.progress.log("Adt: Parsed #{i} records. Done.") if options.progress

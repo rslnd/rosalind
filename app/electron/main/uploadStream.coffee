@@ -6,8 +6,16 @@ ipc = require('electron').ipcMain
 fs = require('fs')
 request = require('request')
 
+uploadFile = (path, requestOptions) ->
+  fs.createReadStream(path)
+    .on 'error', (e) ->
+      logger.error('[Import] Upload stream: Error reading file', e)
+    .on 'end', ->
+      logger.info('[Import] Upload stream: Done reading file')
+    .pipe(request.post(requestOptions))
+
 module.exports =
-  upload: (filePath, options) ->
+  upload: (filePaths, options) ->
     logger.info('[Import] Upload stream: Reading file')
 
     authentication.withToken (err, auth) ->
@@ -20,9 +28,10 @@ module.exports =
         url: settings.url + '/api/upload/stream'
         headers: _.merge(auth.headers, headers)
 
-      fs.createReadStream(filePath)
-        .on 'error', (e) ->
-          logger.error('[Import] Upload stream: Error reading file', e)
-        .on 'end', ->
-          logger.info('[Import] Upload stream: Done reading file')
-        .pipe(request.post(requestOptions))
+      if typeof filePaths is 'string'
+        filePath = filePaths
+        uploadFile(filePath, requestOptions)
+
+      else if typeof filePaths is 'object' and filePaths.length > 0
+        filePaths.forEach (filePath) ->
+          uploadFile(filePath, requestOptions)

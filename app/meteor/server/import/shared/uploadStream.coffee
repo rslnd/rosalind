@@ -3,6 +3,7 @@ temp = Meteor.npmRequire('temp').track()
 allowedImporters = [
   'terminiko'
   'eoswinPatients'
+  'eoswinReports'
 ]
 
 onUploaded = Meteor.bindEnvironment (options) ->

@@ -3,6 +3,7 @@ module.exports =
   terminiko: require('./import/terminiko')
   eoswin:
     patients: require('./import/eoswin/eoswinPatients')
+    reports: require('./import/eoswin/eoswinReports')
 
   instances: {}
 
@@ -11,6 +12,7 @@ module.exports =
     @instances.terminiko = @terminiko.start(options)
     @instances.eoswin =
       patients: @eoswin.patients.start(options)
+      reports: @eoswin.reports.start(options)
 
   stop: ->
     @instances.bdt.close()

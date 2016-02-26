@@ -24,6 +24,9 @@ unless @Settings?
         patients:
           enabled: false
           path: 'patient.ADT'
+        reports:
+          enabled: false
+          path: 'DefList'
 
   if fs.existsSync(settingsPath)
     logger.info('[Settings] Loading existing settings from', settingsPath)
