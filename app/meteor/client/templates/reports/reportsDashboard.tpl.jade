@@ -1,7 +1,8 @@
-.content-header
-  h1 {{_ 'reports.thisDaySingular' }} Dienstag, 12. August 2016
-  +reportActions
++with report
+  .content-header
+    h1 {{_ 'reports.thisDaySingular' }} {{ calendarDay day }}
+    +reportActions
 
-.content
-  +bigstats
-  +ranking
+  .content
+    +bigstats
+    +ranking

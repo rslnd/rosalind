@@ -6,7 +6,7 @@
       .info-box-content
         span.info-box-text Umsatz
         span.info-box-number
-          <small class="text-muted">€</small>&nbsp;<span>5.639</span>
+          <small class="text-muted">€</small>&nbsp;<span>{{ floor total.revenue }}</span>
         span.progress-description +8% zum Vorjahr
 
   .col-md-3.col-sm-6.col-xs-12
@@ -36,5 +36,5 @@
       .info-box-content
         span.info-box-text Umsatz pro Arzt
         span.info-box-number
-          <small class="text-muted">€</small>&nbsp;<span>890</span>
+          <small class="text-muted">€</small>&nbsp;<span>{{ floor total.revenuePerAssignee }}</span>
         span.progress-description +11% zum Vorjahr

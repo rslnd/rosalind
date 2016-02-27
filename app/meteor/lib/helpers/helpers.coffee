@@ -1,7 +1,7 @@
 @Helpers ||= {}
 
 Helpers.person = (idOrUsername, collection) ->
-  if idOrUsername?.collection()
+  if idOrUsername and typeof idOrUsername.collection is 'function'
     idOrUsername
 
   else if collection
@@ -28,8 +28,15 @@ Helpers.getFullNameWithTitle = (user, collection) ->
 Helpers.getShortname = (user, collection) ->
   Helpers.person(user, collection)?.shortname()
 
+Helpers.floor = (number) ->
+  Math.floor(number)
+
 Helpers.calendar = (date) ->
   moment(date).calendar()
+
+Helpers.calendarDay = (day) ->
+  date = Time.dayToDate(day)
+  moment(date).format('dddd, D. MMMM YYYY')
 
 Helpers.recent = (date) ->
   moment().range(date, moment()).diff('hours') < 4
@@ -74,7 +81,9 @@ if Meteor.isClient
   UI.registerHelper('getFullName', (context) -> Helpers.getFullName(context))
   UI.registerHelper('getFullNameWithTitle', (context) -> Helpers.getFullNameWithTitle(context))
   UI.registerHelper('getShortname', (context) -> Helpers.getShortname(context))
+  UI.registerHelper('floor', (context) -> Helpers.floor(context))
   UI.registerHelper('calendar', (context) -> Helpers.calendar(context))
+  UI.registerHelper('calendarDay', (context) -> Helpers.calendarDay(context))
   UI.registerHelper('recent', (context) -> Helpers.recent(context))
   UI.registerHelper('birthday', (context) -> Helpers.birthday(context))
   UI.registerHelper('zerofix', (context) -> Helpers.zerofix(context))

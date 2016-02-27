@@ -8,8 +8,13 @@ Meteor.startup ->
       index: true
       unique: true
 
-    assignees:
+    total:
       type: Object
+      blackbox: true
+      optional: true
+
+    assignees:
+      type: [Object]
       blackbox: true
       optional: true
 

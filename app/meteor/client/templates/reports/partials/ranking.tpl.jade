@@ -14,27 +14,16 @@
             th OP
             th Umsatz
         tbody
-          tr
-            td 1
-            td Dr. A
-            td 4,5h
-            td.td-bg
-              .progress.bg-aqua-light
-                .progress-bar.progress-bar-aqua(style='width: 95%') 21 Neu
-            td.td-bg 1
-            td.td-bg 4,7
-            td.td-bg 22
-            td 1
-            td € 815,59
-          tr
-            td 2
-            td Dr. B
-            td 5h
-            td.td-bg
-              .progress.bg-aqua-light
-                .progress-bar.progress-bar-aqua(style='width: 82%') 29 Neu
-            td.td-bg 6
-            td.td-bg 5,8
-            td.td-bg 35
-            td 0
-            td € 781.73
+          +each assigneesWithIndex
+            tr
+              td {{ index }}
+              td {{ getFullNameWithTitle id }}
+              td {{ hours.actual }}
+              td.td-bg
+                .progress.bg-aqua-light
+                  .progress-bar.progress-bar-aqua(style='width: {{ patients.newPercentage }}%') {{ patients.new }} Neu
+              td.td-bg {{ patients.recall }}
+              td.td-bg {{ patients.newPerHour }}
+              td.td-bg {{ patients.total }}
+              td {{ patients.surgeries }}
+              td €{{ revenue }}

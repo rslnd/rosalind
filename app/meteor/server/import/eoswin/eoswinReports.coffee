@@ -47,6 +47,7 @@ parseAssignees = (rows) ->
           patients:
             new: 0
             surgeries: 0
+            recall: 0
             total: 0
 
     else if newPatients = insuranceCodes.match(record.Text, 'newPatients')
@@ -61,8 +62,15 @@ parseAssignees = (rows) ->
     else if record.Kurzz is 'E'
       assignee.revenue += parseFloat(record.Info)
 
-  byAssignee = {}
-  _.each assignees, (assignee, id) ->
-    byAssignee[id] = assignee if assignee.patients.total > 0
+  assignees = _.chain(assignees)
+    .map (assignee, id) ->
+      assignee.id = id
+      return assignee
+    .filter (a) -> a.patients.total > 0
+    .map (a) ->
+      a.patients.recall = a.patients.total - a.patients.new
+      return a
+    .sortBy('revenue').reverse()
+    .value()
 
-  return byAssignee
+  return assignees
