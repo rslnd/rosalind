@@ -33,6 +33,7 @@
     "glob": "^7.0.0",
     "javascript-natural-sort": "^0.7.1",
     "lodash": "^3.10.1",
+    "node_adt": "^1.1.1",
     "request": "^2.67.0",
     "winston": "^2.1.1",
     "xdt": "^0.1.1"

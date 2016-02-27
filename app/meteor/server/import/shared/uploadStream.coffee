@@ -21,6 +21,13 @@ post.route '/api/upload/stream', (params, req, res, next) ->
 
   currentUser = getAuthorizedUser(req.headers)
   importer = req.headers['x-importer']
+  meta = req.headers['x-meta']
+  if meta
+    try
+      meta = JSON.parse(meta)
+    catch e
+      Winston.error('[Import] Upload stream: Illegal meta data: ' + meta)
+
 
   return res.end('not authorized') unless currentUser
   return res.end('importer not allowed') unless _.contains(allowedImporters, importer)
@@ -33,6 +40,7 @@ post.route '/api/upload/stream', (params, req, res, next) ->
     path: stream.path
     userId: currentUser._id
     importer: importer
+    meta: meta
 
   req
     .on 'end', ->

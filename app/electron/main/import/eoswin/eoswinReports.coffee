@@ -4,26 +4,55 @@ uploadStream = require('../../uploadStream')
 ipc = require('electron').ipcMain
 glob = require('glob')
 path = require('path')
+Adt = require('node_adt')
 naturalSort = require('javascript-natural-sort')
+
+parseMeta = (metaPath, callback) ->
+  meta = {}
+
+  adt = new Adt()
+  adt.open metaPath, 'ISO-8859-1', (err, table) ->
+    logger.error('[Import] EoswinReports: ' + err) if err
+
+    iterator = (err, record) ->
+      logger.error('[Import] EoswinReports: ' + err) if err
+      return unless record.VON is record.BIS
+      filename = record.DBFILE.slice(0, record.DBFILE.indexOf('.'))
+      meta[filename] =
+        day: record.VON
+
+    table.eachRecord iterator, ->
+      callback(meta)
+      table.close()
+
 
 module.exports =
   start: ->
-    return unless settings.import.eoswin.reports.enabled
-    logger.info('[Import] EoswinReports: Enabled', settings.import.eoswin.reports.path)
-
+    return unless settings.import.eoswin.modules.reports
+    logger.info('[Import] EoswinReports: Enabled')
     ipc.on('import/eoswin/reports', @import)
 
   import: (options) ->
-    return unless settings.import.eoswin.reports.enabled
+    return unless settings.import.eoswin.modules.reports
 
-    pattern = path.join(settings.import.eoswin.reports.path, 'ARZTSTAT*.adt')
-    glob pattern, (err, files) ->
-      if options.all
-        logger.info("[Import] EoswinReports: Uploading all #{files.count} reports")
-        uploadStream.upload(files, importer: 'eoswinReports')
+    metaPath = path.join(settings.import.eoswin.path, 'DATEN/DListen.ADT')
+    dataPath = path.join(settings.import.eoswin.path, 'EOSWIN/DefList')
 
-      else if files.length > 0
-        files.sort(naturalSort)
-        file = files[files.length - 1]
-        logger.info("[Import] EoswinReports: Uploading latest report #{file}")
-        uploadStream.upload(file, importer: 'eoswinReports')
+    parseMeta metaPath, (meta) ->
+
+      getMeta = (key) ->
+        key = path.basename(key)
+        key = key.slice(0, key.indexOf('.'))
+        meta[key]
+
+      pattern = path.join(dataPath, 'ARZTSTAT*.adt')
+      glob pattern, (err, files) ->
+        if options.all
+          logger.info("[Import] EoswinReports: Uploading all #{files.count} reports")
+          uploadStream.upload(files, importer: 'eoswinReports', meta: (files) -> getMeta(files))
+
+        else if files.length > 0
+          files.sort(naturalSort)
+          file = files[files.length - 1]
+          logger.info("[Import] EoswinReports: Uploading latest report #{file}")
+          uploadStream.upload(file, importer: 'eoswinReports', meta: getMeta(file))

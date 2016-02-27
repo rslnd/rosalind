@@ -7,6 +7,8 @@ fs = require('fs')
 request = require('request')
 
 uploadFile = (path, requestOptions) ->
+  requestOptions.headers['X-Filename'] = path
+
   fs.createReadStream(path)
     .on 'error', (e) ->
       logger.error('[Import] Upload stream: Error reading file', e)
@@ -22,7 +24,7 @@ module.exports =
       return logger.error('[Import] Upload stream: Not authenticated', err) if err
 
       headers = {}
-      headers['X-Importer'] = options.importer if options.importer?
+      headers['X-Importer'] = options.importer if options.importer
 
       requestOptions =
         url: settings.url + '/api/upload/stream'
@@ -30,8 +32,11 @@ module.exports =
 
       if typeof filePaths is 'string'
         filePath = filePaths
+        requestOptions.headers['X-Meta'] = JSON.stringify(options.meta) if options.meta
         uploadFile(filePath, requestOptions)
 
       else if typeof filePaths is 'object' and filePaths.length > 0
         filePaths.forEach (filePath) ->
+          if typeof options.meta is 'function'
+            requestOptions.headers['X-Meta'] = JSON.stringify(options.meta(filePath))
           uploadFile(filePath, requestOptions)
