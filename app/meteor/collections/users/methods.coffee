@@ -20,6 +20,8 @@ Meteor.users.findOneByIdOrUsername = (idOrUsername) ->
 Meteor.users.queryExactlyOne = (query) ->
   selector = {}
 
+  query = query.split(/\s+/).join(' ')
+
   selector['profile.titlePrepend'] = 'Dr.' if query.match(/Dr\./)
   query = query.replace('Dr. ', '')
 

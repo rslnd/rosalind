@@ -7,10 +7,10 @@ Meteor.startup ->
       all: (rows) ->
         assignees = parseAssignees(rows)
         report =
-          day: job.data.meta.day
+          day: Time.dateToDay(moment(job.data.meta.day, 'YYYYMMDD'))
           assignees: assignees
 
-        console.log(report)
+        console.dir(report)
 
     job.done() and callback()
 
@@ -33,21 +33,30 @@ parseAssignees = (rows) ->
     assignee = assignees[currentAssigneeId]
 
     if record.Kurzz.match(/A\d+/)
-      assigneeId = record.Text
-      currentAssigneeId = assigneeId
-      assignees[assigneeId] =
-        patients: {}
+      currentAssigneeId = Meteor.users.queryExactlyOne(record.Text)?._id or null
+
+      unless assignees[currentAssigneeId]?.patients?.total
+        assignees[currentAssigneeId] =
+          revenue: 0
+          patients:
+            new: 0
+            surgeries: 0
+            total: 0
 
     else if newPatients = insuranceCodes.match(record.Text, 'newPatients')
-      assignee.patients.new = newPatients
+      assignee.patients.new += newPatients
 
     else if surgeries = insuranceCodes.match(record.Text, 'surgeries')
-      assignee.patients.surgeries = surgeries
+      assignee.patients.surgeries += surgeries
 
     else if record.Kurzz is 'KS'
-      assignee.patients.total = parseInt(record.Text)
+      assignee.patients.total += parseInt(record.Text)
 
     else if record.Kurzz is 'E'
-      assignee.revenue = parseFloat(record.Info)
+      assignee.revenue += parseFloat(record.Info)
 
-  return assignees
+  byAssignee = {}
+  _.each assignees, (assignee, id) ->
+    byAssignee[id] = assignee if assignee.patients.total > 0
+
+  return byAssignee
