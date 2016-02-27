@@ -7,10 +7,16 @@ Meteor.startup ->
       all: (rows) ->
         assignees = parseAssignees(rows)
         report =
+          external:
+            eoswin:
+              id: job.data.meta.id
+              timestamps:
+                importedAt: moment().toDate()
+                importedBy: job.data.userId
           day: Time.dateToDay(moment(job.data.meta.day, 'YYYYMMDD'))
           assignees: assignees
 
-        console.dir(report)
+        Reports.upsert(report)
 
     job.done() and callback()
 

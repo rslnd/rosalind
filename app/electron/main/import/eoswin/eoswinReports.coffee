@@ -20,6 +20,7 @@ parseMeta = (metaPath, callback) ->
       filename = record.DBFILE.slice(0, record.DBFILE.indexOf('.'))
       meta[filename] =
         day: record.VON
+        id: filename
 
     table.eachRecord iterator, ->
       callback(meta)
