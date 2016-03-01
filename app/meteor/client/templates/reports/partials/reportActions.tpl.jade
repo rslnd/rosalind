@@ -1,9 +1,12 @@
 .breadcrumb.page-actions
-  a.btn.btn-sm.btn-default(title='{{_ "ui.date"}}' data-toggle='tooltip' data-placement='bottom')
-    i.fa.fa-calendar-o
-  a.btn.btn-sm.btn-default(title='{{_ "ui.today"}}' data-toggle='tooltip' data-placement='bottom')
-    i.fa.fa-calendar-times-o
-  a.btn.btn-sm.btn-default(title='{{_ "ui.exportToExcel"}}' data-toggle='tooltip' data-placement='bottom')
-    i.fa.fa-table
-  a.btn.btn-sm.btn-info(title='{{_ "ui.print"}}' rel='print' data-toggle='tooltip' data-placement='bottom')
+  .btn-group
+    a.btn.btn-sm.btn-default
+      i.fa.fa-caret-left
+    a.btn.btn-sm.btn-default {{_ 'ui.today' }}
+    a.btn.btn-sm.btn-default.btn-disabled
+      i.fa.fa-caret-right
+    a.btn.btn-sm.btn-default(title='{{_ "ui.pickDate"}}' rel='pickDate' data-toggle='tooltip' data-placement='bottom')
+      i.fa.fa-calendar
+
+  a.btn.btn-sm.btn-default(title='{{_ "ui.print"}}' rel='print' data-toggle='tooltip' data-placement='bottom')
     i.fa.fa-print

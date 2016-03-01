@@ -10,6 +10,7 @@
     "insert": "Neu",
     "close": "Schließen",
     "date": "Datum",
+    "pickDate": "Datum wählen",
     "print": "Drucken",
     "printedStamp": "Gedruckt von __name__ am __date__ um __time__",
     "today": "Heute",
