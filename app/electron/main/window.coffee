@@ -40,20 +40,27 @@ module.exports =
       callback(null) unless callbackCalled
       callbackCalled = true
 
+
+    webContents.on 'devtools-opened', ->
+      logger.warn('[Window] Developer Tools opened')
+
+    webContents.on 'devtools-closed', ->
+      logger.warn('[Window] Developer Tools closed')
+
     webContents.on 'did-fail-load', ->
-      Logger.error('[Window] Crashed')
+      logger.error('[Window] Failed to load')
       callback('did-fail-load')
 
     webContents.on 'crashed', ->
-      Logger.error('[Window] Crashed')
+      logger.error('[Window] Crashed')
       callback('crashed')
 
     webContents.on 'plugin-crashed', ->
-      Logger.error('[Window] Plugin Crashed')
+      logger.error('[Window] Plugin Crashed')
       callback('plugin-crashed')
 
     webContents.on 'certificate-error', ->
-      Logger.error('[Window] Certificate error')
+      logger.error('[Window] Certificate error')
       callback('certificate-error')
 
 

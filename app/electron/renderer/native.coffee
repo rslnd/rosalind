@@ -14,7 +14,7 @@ try
       onLogin: (u) -> ipc.send('authentication/onLogin', u)
       onLogout: (u) -> ipc.send('authentication/onLogout', u)
       getToken: (t) -> ipc.send('authentication/getToken', t)
-
+    print: (options) -> ipc.send('window/print', options)
     import:
       terminiko: -> ipc.send('import/terminiko')
       eoswin:

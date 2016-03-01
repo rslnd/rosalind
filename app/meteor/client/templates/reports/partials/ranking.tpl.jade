@@ -7,7 +7,8 @@
             th #
             th Arzt
             th Stunden
-            th.td-bg(width='230px') Patienten
+            th.td-bg(width='150px') Patienten
+            th.td-bg Neu
             th.td-bg Kontrolle
             th.td-bg Neu/h
             th.td-bg Gesamt
@@ -17,11 +18,17 @@
           +each assigneesWithIndex
             tr
               td {{ index }}
-              td {{ getFullNameWithTitle id }}
+              td
+                if assignee
+                  | {{ getFullNameWithTitle assignee }}
+                else
+                  i.text-muted {{_ 'reports.unassigned' }}
               td {{ hours.actual }}
-              td.td-bg
+              td.td-bg.on-hover-here
                 .progress.bg-aqua-light
-                  .progress-bar.progress-bar-aqua(style='width: {{ patients.newPercentage }}%') {{ patients.new }} Neu
+                  .progress-bar.progress-bar-aqua(style='width: {{ patients.newPercentage }}%')
+                    .on-hover-show.show-print {{ floor patients.newPercentage }}% {{_ 'reports.newPercentage'}}
+              td.td-bg {{ patients.new }}
               td.td-bg {{ patients.recall }}
               td.td-bg {{ patients.newPerHour }}
               td.td-bg {{ patients.total }}

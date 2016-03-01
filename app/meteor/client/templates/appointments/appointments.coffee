@@ -6,7 +6,7 @@ Template.appointments.helpers
   byHour: ->
     [8..22].map (hour) ->
       time = moment().hour(hour)
-      start = time.startOf('hour').format(TAPi18n.__('time.timeFormat'))
+      start = Time.time(time.startOf('hour'))
       appointments = Appointments.findOpen(time, 'hour')
       appointmentsCount = appointments.count()
       hasAppointments = appointmentsCount > 0

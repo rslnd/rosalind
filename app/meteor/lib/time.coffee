@@ -40,6 +40,15 @@ Time.weekdays = ->
   fri: { label: TAPi18n.__('time.friday'), offset: 4 }
   sat: { label: TAPi18n.__('time.saturday'), offset: 5 }
 
+Time.time = (time) ->
+  moment(time).format(TAPi18n.__('time.timeFormat'))
+
+Time.date = (time, options = {}) ->
+  if options.weekday
+    moment(time).format(TAPi18n.__('time.dateFormatWeekday'))
+  else
+    moment(time).format(TAPi18n.__('time.dateFormat'))
+
 Time.hm = (float) ->
   h = Math.floor(float)
   m = (float - h) * 60

@@ -11,6 +11,7 @@
     "close": "Schließen",
     "date": "Datum",
     "print": "Drucken",
+    "printedStamp": "Gedruckt von __name__ am __date__ um __time__",
     "today": "Heute",
     "exportToExcel": "Nach Excel exportieren",
     "comment": "Kommentar",

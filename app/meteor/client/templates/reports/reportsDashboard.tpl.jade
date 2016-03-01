@@ -1,6 +1,8 @@
 +with report
   .content-header
-    h1 {{_ 'reports.thisDaySingular' }} {{ calendarDay day }}
+    h1
+      | {{_ 'reports.thisDaySingular' }} {{ calendarDay day }}
+      small.no-print {{ optionalRelativeDay day }}
     +reportActions
 
   .content

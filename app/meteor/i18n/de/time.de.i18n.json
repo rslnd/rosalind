@@ -1,5 +1,8 @@
 {
   "time": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "lastWeek": "Letzte Woche",
     "sunday": "Sonntag",
     "monday": "Montag",
     "tuesday": "Dienstag",
@@ -7,6 +10,8 @@
     "thursday": "Thursday",
     "friday": "Friday",
     "saturday": "Samstag",
-    "timeFormat": "H:mm [Uhr]"
+    "timeFormat": "H:mm [Uhr]",
+    "dateFormat": "DD. MMMM YYYY",
+    "dateFormatWeekday": "dddd, DD. MMMM YYYY"
   }
 }

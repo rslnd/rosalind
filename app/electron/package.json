@@ -11,11 +11,11 @@
   },
   "main": "main/main.js",
   "buildOptions": {
-    "electronVersion": "0.36.2"
+    "electronVersion": "0.36.9"
   },
   "devDependencies": {
     "electron-packager": "^5.1.1",
-    "electron-prebuilt": "^0.35.1",
+    "electron-prebuilt": "^0.36.9",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-coffee": "^0.13.0",
@@ -24,8 +24,7 @@
     "grunt-electron": "^2.0.1",
     "grunt-electron-installer": "^1.1.0",
     "grunt-shell": "^1.1.2",
-    "shelljs": "^0.5.3",
-    "temp": "^0.8.3"
+    "shelljs": "^0.5.3"
   },
   "dependencies": {
     "electron-cookies": "^1.1.0",
@@ -34,7 +33,9 @@
     "javascript-natural-sort": "^0.7.1",
     "lodash": "^3.10.1",
     "node_adt": "^1.1.1",
+    "open": "0.0.5",
     "request": "^2.67.0",
+    "temp": "^0.8.3",
     "winston": "^2.1.1",
     "xdt": "^0.1.1"
   },

@@ -1,0 +1,94 @@
+@media screen {
+  .print-footer {
+    display: none;
+  }
+}
+
+@media print {
+  @page { size: landscape; }
+
+  body {
+    zoom: 1;
+  }
+
+  .zoom-1 {
+    zoom: 1;
+  }
+
+  .zoom-2 {
+    zoom: 2;
+  }
+
+  .show-print {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  .content-wrapper.print-no-margin {
+    margin-left: 0 !important;
+  }
+
+  .content-wrapper, .right-side, .main-footer {
+    padding-top: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  .print-footer {
+    display: block;
+  }
+
+  .s-alert-box {
+    display: none;
+  }
+
+  .text-muted {
+    color: #777 !important;
+  }
+
+  #main .content-header {
+    display: block !important;
+  }
+
+  footer.main-footer {
+    border-top: none;
+  }
+
+  .page-actions {
+    display: none;
+  }
+
+  .info-box {
+    padding-left: 29px;
+  }
+
+  .info-box .info-box-icon {
+    display: none;
+  }
+
+  .info-box .info-box-content {
+    margin-left: 0;
+  }
+
+  .box {
+    border-top: 3px solid #d2d6de !important;
+    border-top-color: #d2d6de !important;
+  }
+
+  .progress {
+    border: 1px solid #909090;
+  }
+
+  .progress-bar {
+    border: 9px solid #F1F1F1;
+    outline: 1px solid #909090;
+    line-height: 1;
+  }
+
+  .progress-bar div,
+  .progress-bar p,
+  .progress-bar span {
+    text-align: left;
+    line-height: 0;
+    color: #353535 !important;
+  }
+}

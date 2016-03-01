@@ -91,11 +91,27 @@ body {
 }
 
 .td-bg {
-  background-color: #ececec;
+  background-color: #F9F9F9;
 }
 
 .text-larger {
   font-size: 130%;
+}
+
+.info-box-number {
+  font-size: 24px !important;
+}
+
+.info-box small {
+  font-size: 18px !important;
+}
+
+.info-box-text {
+  text-transform: none !important;
+}
+
+.progress-description {
+  color: #777;
 }
 
 .list-group {

@@ -92,3 +92,11 @@ a, button, .btn {
 .clear {
   clear: both;
 }
+
+.on-hover-show {
+  visibility: hidden;
+}
+
+.on-hover-here:hover .on-hover-show {
+  visibility: visible;
+}

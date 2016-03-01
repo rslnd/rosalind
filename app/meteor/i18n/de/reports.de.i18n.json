@@ -3,6 +3,8 @@
     "this": "Berichte",
     "dashboard": "Übersicht",
     "thisSingular": "Bericht",
-    "thisDaySingular": "Tagesbericht"
+    "thisDaySingular": "Tagesbericht",
+    "unassigned": "Assistenz",
+    "newPercentage": "Neu"
   }
 }

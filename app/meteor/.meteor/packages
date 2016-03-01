@@ -21,7 +21,7 @@ random
 ejson
 spacebars
 check
-conditional-appcache
+appcache
 accounts-base
 accounts-password
 standard-minifiers

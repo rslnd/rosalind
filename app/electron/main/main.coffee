@@ -6,6 +6,7 @@ settings = require './settings'
 cli = require './cli'
 authentication = require './authentication'
 importers = require './importers'
+print = require './print'
 
 mainWindow = null
 bdtWatcher = null
@@ -21,6 +22,7 @@ start = ->
       return logger.error(err) if err
       logger.info('[Main] Main window loaded')
       importers.start(ipcReceiver: mainWindow)
+      print.start(ipcReceiver: mainWindow)
 
     authentication.start(ipcReceiver: mainWindow)
     setTimeout(updater.check, 15 * 1000)

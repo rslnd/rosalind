@@ -35,8 +35,17 @@ Helpers.calendar = (date) ->
   moment(date).calendar()
 
 Helpers.calendarDay = (day) ->
-  date = Time.dayToDate(day)
-  moment(date).format('dddd, D. MMMM YYYY')
+  date = moment(Time.dayToDate(day))
+  Time.date(date, weekday: true)
+
+Helpers.optionalRelativeDay = (day) ->
+  date = moment(Time.dayToDate(day))
+  relative = date.calendar null,
+    sameDay: "[#{TAPi18n.__('time.today')}]"
+    lastDay: "[#{TAPi18n.__('time.yesterday')}]"
+    lastWeek: "[#{TAPi18n.__('time.lastWeek')}]"
+    sameElse: ''
+  return relative if relative.length > 1
 
 Helpers.recent = (date) ->
   moment().range(date, moment()).diff('hours') < 4
@@ -50,7 +59,7 @@ Helpers.birthday = (date) ->
   return if date < moment().subtract(150, 'years')
 
   age = moment().diff(date, 'years')
-  formatted = date.format('D. MMMM YYYY')
+  formatted = Time.date(date, weekday: false)
   "#{formatted} (#{age} Jahre)"
 
 Helpers.parseNewlines = (text) ->
@@ -84,8 +93,10 @@ if Meteor.isClient
   UI.registerHelper('floor', (context) -> Helpers.floor(context))
   UI.registerHelper('calendar', (context) -> Helpers.calendar(context))
   UI.registerHelper('calendarDay', (context) -> Helpers.calendarDay(context))
+  UI.registerHelper('optionalRelativeDay', (context) -> Helpers.optionalRelativeDay(context))
   UI.registerHelper('recent', (context) -> Helpers.recent(context))
   UI.registerHelper('birthday', (context) -> Helpers.birthday(context))
   UI.registerHelper('zerofix', (context) -> Helpers.zerofix(context))
+  UI.registerHelper('customerName', -> Customer?.get('name'))
   UI.registerHelper('true', -> true)
   UI.registerHelper('false', -> false)

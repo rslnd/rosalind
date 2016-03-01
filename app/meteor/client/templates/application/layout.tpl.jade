@@ -9,8 +9,9 @@ if loaded
   if currentUser
     +topbar
     +sidebar
-    .content-wrapper
+    .content-wrapper.print-no-margin
       +Template.dynamic template=main
+    +footer
   else
     +lockedLayout
       +login
