@@ -2,6 +2,10 @@ Meteor.startup ->
   Job.processJobs 'import', 'eoswinReports', (job, callback) ->
     job.log('EoswinReports: Running')
 
+    unless job.data.meta?.id
+      job.log('[Job] eoswinReports: No id provided', level: 'error')
+      job.fail() and callback()
+
     Import.Adt
       path: job.data.path
       all: (rows) ->

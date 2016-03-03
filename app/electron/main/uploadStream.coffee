@@ -5,6 +5,11 @@ authentication = require('./authentication')
 ipc = require('electron').ipcMain
 fs = require('fs')
 request = require('request')
+throttledRequest = require('throttled-request')(request)
+
+throttledRequest.configure
+  requests: 1
+  milliseconds: 30
 
 uploadFile = (path, requestOptions) ->
   requestOptions.headers['X-Filename'] = path
@@ -14,7 +19,7 @@ uploadFile = (path, requestOptions) ->
       logger.error('[Import] Upload stream: Error reading file', e)
     .on 'end', ->
       logger.info('[Import] Upload stream: Done reading file')
-    .pipe(request.post(requestOptions))
+    .pipe(throttledRequest(requestOptions))
 
 module.exports =
   upload: (filePaths, options) ->
@@ -27,6 +32,7 @@ module.exports =
       headers['X-Importer'] = options.importer if options.importer
 
       requestOptions =
+        method: 'POST'
         url: settings.url + '/api/upload/stream'
         headers: _.merge(auth.headers, headers)
 

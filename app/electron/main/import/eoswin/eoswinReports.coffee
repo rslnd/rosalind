@@ -16,8 +16,12 @@ parseMeta = (metaPath, callback) ->
 
     iterator = (err, record) ->
       logger.error('[Import] EoswinReports: ' + err) if err
-      return unless record.VON is record.BIS
+
       filename = record.DBFILE.slice(0, record.DBFILE.indexOf('.'))
+
+      return unless record.VON is record.BIS
+      return unless filename and filename.length > 0
+
       meta[filename] =
         day: record.VON
         id: filename
@@ -31,7 +35,7 @@ module.exports =
   start: ->
     return unless settings.import.eoswin.modules.reports
     logger.info('[Import] EoswinReports: Enabled')
-    ipc.on('import/eoswin/reports', @import)
+    ipc.on('import/eoswin/reports', (e, options) => @import(options))
 
   import: (options) ->
     return unless settings.import.eoswin.modules.reports

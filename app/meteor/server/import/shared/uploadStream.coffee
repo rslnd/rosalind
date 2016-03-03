@@ -8,7 +8,12 @@ allowedImporters = [
 
 onUploaded = Meteor.bindEnvironment (options) ->
   Winston.info('[Import] Upload stream: Done receiving file', { userId: options.userId })
-  job = new Job(Jobs.Import, options.importer, options).save()
+  job = new Job(Jobs.Import, options.importer, options)
+    .retry
+      until: moment().add(1, 'hour').toDate()
+      wait: 1000
+      backoff: 'exponential'
+    .save()
 
 getAuthorizedUser = (headers) ->
   user = Meteor.users.findOne(headers['x-user-id'])
