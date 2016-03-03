@@ -62,6 +62,14 @@ Helpers.birthday = (date) ->
   formatted = Time.date(date, weekday: false)
   "#{formatted} (#{age} Jahre)"
 
+Helpers.weekOfYear = (date) ->
+  return unless date
+  if date.year and date.month and date.day
+    date = Time.dayToDate(date)
+
+  weekOfYear = moment(date).format('W')
+  [TAPi18n.__('ui.weekOfYear'), weekOfYear].join(' ')
+
 Helpers.parseNewlines = (text) ->
   return unless text and typeof text is 'string'
   text
@@ -94,6 +102,7 @@ if Meteor.isClient
   UI.registerHelper('calendar', (context) -> Helpers.calendar(context))
   UI.registerHelper('calendarDay', (context) -> Helpers.calendarDay(context))
   UI.registerHelper('optionalRelativeDay', (context) -> Helpers.optionalRelativeDay(context))
+  UI.registerHelper('weekOfYear', (context) -> Helpers.weekOfYear(context))
   UI.registerHelper('recent', (context) -> Helpers.recent(context))
   UI.registerHelper('birthday', (context) -> Helpers.birthday(context))
   UI.registerHelper('zerofix', (context) -> Helpers.zerofix(context))

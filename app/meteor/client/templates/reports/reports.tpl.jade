@@ -1,0 +1,12 @@
+.content-header
+  h1
+    | {{_ 'reports.thisDaySingular' }} {{ calendarDay day }}
+    small.no-print {{ weekOfYear day }}
+  +reportActions
+
+.content
+  if currentReport
+    +with currentReport
+      +report
+  else
+    +box(class='warning' title='ui.notice' body='reports.empty')

@@ -5,6 +5,7 @@
     "thisSingular": "Bericht",
     "thisDaySingular": "Tagesbericht",
     "unassigned": "Assistenz",
-    "newPercentage": "Neu"
+    "newPercentage": "Neu",
+    "empty": "Für das gewählte Datum sind keine Berichte verfügbar."
   }
 }

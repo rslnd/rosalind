@@ -1,9 +1,9 @@
 .breadcrumb.page-actions
   .btn-group
-    a.btn.btn-sm.btn-default
+    a.btn.btn-sm.btn-default(rel='previous')
       i.fa.fa-caret-left
-    a.btn.btn-sm.btn-default {{_ 'ui.today' }}
-    a.btn.btn-sm.btn-default.btn-disabled
+    a.btn.btn-sm.btn-default(rel='today') {{_ 'ui.today' }}
+    a.btn.btn-sm.btn-default(rel='next')
       i.fa.fa-caret-right
     a.btn.btn-sm.btn-default(title='{{_ "ui.pickDate"}}' rel='pickDate' data-toggle='tooltip' data-placement='bottom')
       i.fa.fa-calendar
