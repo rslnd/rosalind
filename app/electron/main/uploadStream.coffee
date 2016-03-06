@@ -5,26 +5,23 @@ authentication = require('./authentication')
 ipc = require('electron').ipcMain
 fs = require('fs')
 request = require('request')
-throttledRequest = require('throttled-request')(request)
+Bottleneck = require('bottleneck')
 
-throttledRequest.configure
-  requests: 1
-  milliseconds: 30
+rateLimiter = new Bottleneck(1, 60)
 
-uploadFile = (path, requestOptions) ->
+uploadFile = (path, requestOptions, callback) ->
+  logger.info('[Import] Upload stream: Reading file: ' + path, requestOptions)
+
   requestOptions.headers['X-Filename'] = path
 
   fs.createReadStream(path)
     .on 'error', (e) ->
       logger.error('[Import] Upload stream: Error reading file', e)
-    .on 'end', ->
-      logger.info('[Import] Upload stream: Done reading file')
-    .pipe(throttledRequest(requestOptions))
+    .on 'end', -> callback()
+    .pipe(request(requestOptions))
 
 module.exports =
   upload: (filePaths, options) ->
-    logger.info('[Import] Upload stream: Reading file')
-
     authentication.withToken (err, auth) ->
       return logger.error('[Import] Upload stream: Not authenticated', err) if err
 
@@ -45,4 +42,4 @@ module.exports =
         filePaths.forEach (filePath) ->
           if typeof options.meta is 'function'
             requestOptions.headers['X-Meta'] = JSON.stringify(options.meta(filePath))
-          uploadFile(filePath, requestOptions)
+            rateLimiter.submit(uploadFile, filePath, _.cloneDeep(requestOptions), null)

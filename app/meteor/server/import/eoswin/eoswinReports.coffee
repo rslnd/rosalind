@@ -2,9 +2,9 @@ Meteor.startup ->
   Job.processJobs 'import', 'eoswinReports', (job, callback) ->
     job.log('EoswinReports: Running')
 
-    unless job.data.meta?.id
-      job.log('[Job] eoswinReports: No id provided', level: 'error')
-      job.fail() and callback()
+    unless job.data?.meta?.id
+      job.log('[Job] eoswinReports: No id provided')
+      return job.done() and callback()
 
     Import.Adt
       path: job.data.path
@@ -64,7 +64,7 @@ parseAssignees = (rows) ->
       assignee.patients.total += parseInt(record.Text)
 
     else if record.Kurzz is 'E'
-      assignee.revenue += parseFloat(record.Info)
+      assignee.revenue += parseFloat(parseFloat(record.Info).toFixed(2))
 
   assignees = _.chain(assignees)
     .map (assignee, id) ->

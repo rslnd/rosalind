@@ -38,15 +38,6 @@ Helpers.calendarDay = (day) ->
   date = moment(Time.dayToDate(day))
   Time.date(date, weekday: true)
 
-Helpers.optionalRelativeDay = (day) ->
-  date = moment(Time.dayToDate(day))
-  relative = date.calendar null,
-    sameDay: "[#{TAPi18n.__('time.today')}]"
-    lastDay: "[#{TAPi18n.__('time.yesterday')}]"
-    lastWeek: "[#{TAPi18n.__('time.lastWeek')}]"
-    sameElse: ''
-  return relative if relative.length > 1
-
 Helpers.recent = (date) ->
   moment().range(date, moment()).diff('hours') < 4
 
@@ -101,7 +92,6 @@ if Meteor.isClient
   UI.registerHelper('floor', (context) -> Helpers.floor(context))
   UI.registerHelper('calendar', (context) -> Helpers.calendar(context))
   UI.registerHelper('calendarDay', (context) -> Helpers.calendarDay(context))
-  UI.registerHelper('optionalRelativeDay', (context) -> Helpers.optionalRelativeDay(context))
   UI.registerHelper('weekOfYear', (context) -> Helpers.weekOfYear(context))
   UI.registerHelper('recent', (context) -> Helpers.recent(context))
   UI.registerHelper('birthday', (context) -> Helpers.birthday(context))

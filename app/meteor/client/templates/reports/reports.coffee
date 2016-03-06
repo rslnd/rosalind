@@ -1,4 +1,5 @@
 Template.reports.currentView = new ReactiveDict
+Template.reports.subscriptions = new SubsManager()
 
 Template.reports.currentView.watchPathChange = ->
   date = FlowRouter.current().params?.date
@@ -19,11 +20,14 @@ Template.reports.currentView.next = ->
 
 Template.reports.onCreated ->
   Template.reports.currentView.watchPathChange()
-  @autorun =>
+
+  @autorun ->
     date = Template.reports.currentView.get('date')
+
+    Template.reports.subscriptions.subscribe('reports', { date })
+
     date = moment(date).format('YYYY-MM-DD')
     FlowRouter.go('/reports/' + date)
-    @subscribe('reports', { date })
 
 
 Template.reports.helpers

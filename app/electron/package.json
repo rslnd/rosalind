@@ -27,6 +27,8 @@
     "shelljs": "^0.5.3"
   },
   "dependencies": {
+    "async": "^1.5.2",
+    "bottleneck": "^1.10.2",
     "electron-cookies": "^1.1.0",
     "electron-gh-releases": "^2.0.2",
     "glob": "^7.0.0",

@@ -26,7 +26,7 @@ parseMeta = (metaPath, callback) ->
         day: record.VON
         id: filename
 
-    table.eachRecord iterator, ->
+    table.eachRecord iterator, done = ->
       callback(meta)
       table.close()
 
@@ -52,12 +52,16 @@ module.exports =
 
       pattern = path.join(dataPath, 'ARZTSTAT*.adt')
       glob pattern, (err, files) ->
+        return if files.length is 0
+
+        files = files.sort(naturalSort)
+        files = files.reverse()
+
         if options.all
-          logger.info("[Import] EoswinReports: Uploading all #{files.count} reports")
+          logger.info("[Import] EoswinReports: Uploading all #{files.length} reports")
           uploadStream.upload(files, importer: 'eoswinReports', meta: (files) -> getMeta(files))
 
         else if files.length > 0
-          files.sort(naturalSort)
-          file = files[files.length - 1]
+          file = files[0]
           logger.info("[Import] EoswinReports: Uploading latest report #{file}")
           uploadStream.upload(file, importer: 'eoswinReports', meta: getMeta(file))

@@ -7,7 +7,7 @@ allowedImporters = [
 ]
 
 onUploaded = Meteor.bindEnvironment (options) ->
-  Winston.info('[Import] Upload stream: Done receiving file', { userId: options.userId })
+  Winston.info('[Import] Upload stream: Done receiving file', options)
   job = new Job(Jobs.Import, options.importer, options)
     .retry
       until: moment().add(1, 'hour').toDate()
@@ -37,8 +37,6 @@ post.route '/api/upload/stream', (params, req, res, next) ->
   return res.end('not authorized') unless currentUser
   return res.end('importer not allowed') unless _.contains(allowedImporters, importer)
 
-  Winston.info('[Import] Upload stream: Starting to receive file', { userId: currentUser._id })
-
   stream = temp.createWriteStream()
 
   options =
@@ -46,6 +44,8 @@ post.route '/api/upload/stream', (params, req, res, next) ->
     userId: currentUser._id
     importer: importer
     meta: meta
+
+  Winston.info('[Import] Upload stream: Starting to receive file', options)
 
   req
     .on 'end', ->

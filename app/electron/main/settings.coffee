@@ -21,12 +21,10 @@ unless @Settings?
         enabled: false
         path: 'Arztprax.mdb'
       eoswin:
-        patients:
-          enabled: false
-          path: 'patient.ADT'
-        reports:
-          enabled: false
-          path: 'DefList'
+        path: ''
+        modules:
+          patients: true
+          reports: true
 
   if fs.existsSync(settingsPath)
     logger.info('[Settings] Loading existing settings from', settingsPath)

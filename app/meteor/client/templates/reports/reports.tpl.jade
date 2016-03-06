@@ -1,7 +1,7 @@
 .content-header
   h1
     | {{_ 'reports.thisDaySingular' }} {{ calendarDay day }}
-    small.no-print {{ weekOfYear day }}
+    small {{ weekOfYear day }}
   +reportActions
 
 .content

@@ -41,13 +41,15 @@ fs = Meteor.npmRequire('fs')
     options.bulk(batch)
     batch = []
 
+  options.progress.log("Adt: Parsed #{i} records. Done.") if options.progress
+
   if options.all
     options.all(batch)
     batch = []
 
-  options.progress.log("Adt: Parsed #{i} records. Done.") if options.progress
-
+  options.progress.log('Adt: Closing table') if options.progress
   table.close()
   fs.unlinkSync(options.path) if options.delete
+
 
   return i
