@@ -20,6 +20,10 @@
     "comment": "Kommentar",
     "comment_plural": "Kommentare",
     "press_enter_to_post_comment": "Kommentar schreiben...",
+    "experimentalWarning": {
+      "title": "Experimentelle Funktion",
+      "body": "Diese Funktion befindet sich noch in aktiver Entwicklung und ist mit Vorsicht zu benutzen."
+    },
     "statusMessages": {
       "connected": "OK, wieder verbunden!",
       "disconnected": "Hoppla! Die Internetverbindung ist abgerissen. Keine Sorge, sie ist bestimmt gleich wieder da."

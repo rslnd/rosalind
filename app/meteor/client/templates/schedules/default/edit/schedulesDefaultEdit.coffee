@@ -1,4 +1,4 @@
-Template.schedulesDefaultForm.helpers
+Template.schedulesDefaultEdit.helpers
   getDefaultScheduleForViewUser: ->
     doc = Schedules.findOne({ userId: @viewUser._id })
     if doc then doc else { userId: @viewUser._id }

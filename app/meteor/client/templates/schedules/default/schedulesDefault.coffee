@@ -12,6 +12,20 @@ Template.schedulesDefault.onCreated ->
   @autorun =>
     @subscribe('schedules')
 
+Template.schedulesDefault.events
+  'click [rel="edit"]': ->
+    if username = Template.schedulesDefault.currentView.get('username')
+      user = Meteor.users.findOneByIdOrUsername(username)
+    else
+      user = Meteor.user()
+
+    Modal.show 'schedulesDefaultEdit',
+      type: 'update'
+      collection: Schedules
+      doc: user.defaultSchedule()
+      viewUser: user
+
+
 Template.schedulesDefault.helpers
   schedulesDefault: ->
     Meteor.users.find({})

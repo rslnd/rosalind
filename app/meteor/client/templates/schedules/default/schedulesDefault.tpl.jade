@@ -11,12 +11,12 @@
               h3.box-title
                 | {{_ 'schedules.thisDefault'}} {{_ 'ui.for' }}
                 strong {{ getFullNameWithTitle viewUser }}
+              .box-tools.pull-right
+                button.btn.btn-box-tool(rel='edit')
+                  i.fa.fa-pencil
+
             .box-body
               +schedulesDefaultSummary(viewUser=viewUser)
-        .col-md-12
-          .box.box-default
-            .box-body
-              | {{> schedulesDefaultForm viewUser=viewUser }}
 
         .col-md-12
           +schedulesDefaultCalendar
