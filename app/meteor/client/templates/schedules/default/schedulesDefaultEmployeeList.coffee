@@ -5,10 +5,10 @@ Template.schedulesDefaultEmployeeList.helpers
   linkToDefaultScheduleForUser: ->
     '/schedules/default/' + @username
 
-  totalHoursWeek: ->
+  totalHoursPerWeek: ->
     defaultSchedule = Schedules.findOne({ userId: @_id })
     if defaultSchedule
-      hm = Time.hm(defaultSchedule.totalHoursWeek())
+      hm = Time.hm(defaultSchedule.totalHoursPerWeek())
       Time.format('h[h]( m[m])', hm)
     else
       '0h'

@@ -22,6 +22,9 @@ Meteor.users.helpers
     if (group)
       group.name
 
+  defaultSchedule: ->
+    Schedules.findOne(userId: @_id)
+
   getRoles: ->
     Roles.getRolesForUser(@_id).join(', ')
 

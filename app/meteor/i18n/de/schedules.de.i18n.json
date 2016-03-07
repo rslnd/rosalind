@@ -3,6 +3,12 @@
     "this": "Mitarbeitereinteilung",
     "thisCurrent": "Aktueller Wochenplan",
     "thisDefault": "Übliche Arbeitszeiten",
+    "absences": "Abwesenheiten",
+    "overrides": "Abweichende Arbeitszeiten",
+    "businessHours": "Öffnungszeiten",
+    "holidays": "Feiertage",
+    "hoursPerWeek": "Wochenstunden",
+    "totalHoursPerWeek": "Gesamtwochenstunden",
     "employee": "Mitarbeiter",
     "employee_plural": "Mitarbeiter"
   }

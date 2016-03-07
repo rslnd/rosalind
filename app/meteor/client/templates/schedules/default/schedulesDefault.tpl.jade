@@ -1,4 +1,4 @@
-+contentHeader(title='schedules.thisDefault' subtitle='ui.weekOfYear' subtitleAppend=selectedWeekOfYear)
++contentHeader(title='schedules.thisDefault' subtitle='schedules.totalHoursPerWeek' subtitleAppend=totalHoursPerWeek)
 .content.zoom-1
   .row
     .col-md-3 {{> schedulesDefaultEmployeeList }}
@@ -11,8 +11,12 @@
               h3.box-title
                 | {{_ 'schedules.thisDefault'}} {{_ 'ui.for' }}
                 strong {{ getFullNameWithTitle viewUser }}
-            .box-body {{> schedulesDefaultForm viewUser=viewUser }}
-
+            .box-body
+              +schedulesDefaultSummary(viewUser=viewUser)
         .col-md-12
           .box.box-default
-            .box-body.no-padding {{> fullcalendar schedulesDefaultOptions}}
+            .box-body
+              | {{> schedulesDefaultForm viewUser=viewUser }}
+
+        .col-md-12
+          +schedulesDefaultCalendar

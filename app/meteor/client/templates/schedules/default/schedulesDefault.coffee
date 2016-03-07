@@ -1,4 +1,14 @@
+Template.schedulesDefault.currentView = new ReactiveDict
+
+Template.schedulesDefault.watchPathChange = ->
+  @currentView.clear()
+  Tracker.autorun =>
+    FlowRouter.watchPathChange()
+    username = FlowRouter.current()?.params?.username
+    @currentView.set('username', username)
+
 Template.schedulesDefault.onCreated ->
+  Template.schedulesDefault.watchPathChange()
   @autorun =>
     @subscribe('schedules')
 
@@ -7,12 +17,17 @@ Template.schedulesDefault.helpers
     Meteor.users.find({})
 
   viewUser: ->
-    FlowRouter.watchPathChange()
-    idOrUsername = FlowRouter.current().params.idOrUsername
-    if (idOrUsername)
-      Meteor.users.findOneByIdOrUsername(idOrUsername)
+    username = Template.schedulesDefault.currentView.get('username')
+    if (username)
+      Meteor.users.findOneByIdOrUsername(username)
     else
       Meteor.user()
+
+  totalHoursPerWeek: ->
+    _.chain(Schedules.find({}).fetch())
+      .map (s) -> Math.floor(s.totalHoursPerWeek())
+      .reduce ((h, memo) -> memo + h), 0
+      .value()
 
   schedulesDefaultOptions: ->
     id: 'schedules-calendar'

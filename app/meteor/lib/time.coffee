@@ -40,6 +40,11 @@ Time.weekdays = ->
   fri: { label: TAPi18n.__('time.friday'), offset: 4 }
   sat: { label: TAPi18n.__('time.saturday'), offset: 5 }
 
+Time.weekdaysArray = ->
+  _.map Time.weekdays(), (v, k) ->
+    v.short = k
+    return v
+
 Time.time = (time) ->
   moment(time).format(TAPi18n.__('time.timeFormat'))
 
@@ -60,6 +65,11 @@ Time.format = (format, t) ->
     when 'h[h]( m[m])'
       s += t.h + 'h'
       s += ' ' + Math.round(t.m) + 'm' if (t?.m > 0)
+    when 'H:mm'
+      s = moment().hour(t.h or 0).minute(t.m or 0).format('H:mm')
     else
       s = JSON.stringify(data)
   s
+
+if Meteor.isClient
+  UI.registerHelper('weekdays', -> Time.weekdaysArray())

@@ -29,6 +29,9 @@ sidebar = [
     roles: ['admin', 'schedules']
     submenu: [
       { name: 'thisDefault' }
+      { name: 'overrides' }
+      { name: 'businessHours' }
+      { name: 'holidays' }
     ]
 
   {} =

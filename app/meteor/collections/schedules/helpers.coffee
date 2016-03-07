@@ -2,14 +2,14 @@ Meteor.startup ->
   Schedules.helpers
     isValid: (range) -> true
 
-    totalHoursWeek: ->
+    totalHoursPerWeek: ->
       _.reduce(@schedule, (total, day) =>
-        hours = @totalHoursDay(day)
+        hours = @totalHoursPerDay(day)
         hours = 0 if not hours
         total += hours
        , 0)
 
-    totalHoursDay: (day) ->
+    totalHoursPerDay: (day) ->
       day = @getDay(day) if (typeof day is 'string')
       return unless day?
       shifts = _.map(day.shift, (shift) ->
@@ -22,3 +22,13 @@ Meteor.startup ->
 
     getDay: (weekday) ->
       _.find(@schedule, (day) -> day.day is weekday)
+
+    stringify: (weekday) ->
+      return unless shift = @getDay(weekday)?.shift
+      shift = shift.map (s) ->
+        [
+          Time.format('H:mm', s.start)
+          '-'
+          Time.format('H:mm', s.end)
+        ].join('')
+      shift.join('\n')
