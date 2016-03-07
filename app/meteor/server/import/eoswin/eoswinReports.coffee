@@ -72,6 +72,10 @@ parseAssignees = (rows) ->
       return assignee
     .filter (a) -> a.patients.total > 0
     .map (a) ->
+
+      if a.patients.total < a.patients.new
+        a.patients.total = a.patients.new
+
       a.patients.recall = a.patients.total - a.patients.new
       return a
     .sortBy('revenue').reverse()
