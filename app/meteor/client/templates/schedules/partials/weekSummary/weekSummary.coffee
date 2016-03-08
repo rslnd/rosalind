@@ -1,4 +1,4 @@
-Template.schedulesDefaultSummary.helpers
+Template.weekSummary.helpers
   weekdaysWithSchedule: ->
     @schedule = @viewUser.defaultSchedule() if @viewUser
 

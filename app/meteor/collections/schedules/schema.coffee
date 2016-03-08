@@ -2,6 +2,17 @@
 Ground.Collection(Schedules)
 
 Schema.Schedules = new SimpleSchema
+
+  type:
+    type: String
+    allowedValues: [
+      'default'
+      'override'
+      'businessHours'
+      'holiday'
+    ]
+    index: 1
+
   userId:
     type: SimpleSchema.RegEx.Id,
     index: 1

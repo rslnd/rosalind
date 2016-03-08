@@ -1,0 +1,12 @@
++contentHeader(title='schedules.businessHours' subtitle='schedules.totalHoursPerWeek' subtitleAppend=schedule.totalHoursPerWeek)
+.content.zoom-1
+  .row
+    .col-md-12
+      .box.box-default
+        .box-header
+          .box-tools.pull-right
+            button.btn.btn-box-tool(rel='edit')
+              i.fa.fa-pencil
+
+        .box-body.zoom-2
+          +weekSummary(schedule=schedule)

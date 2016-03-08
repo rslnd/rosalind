@@ -12,8 +12,6 @@ Template.schedulesDefault.watchPathChange = ->
 
 Template.schedulesDefault.onCreated ->
   Template.schedulesDefault.watchPathChange()
-  @autorun =>
-    @subscribe('schedules')
 
 Template.schedulesDefault.events
   'click [rel="edit"]': ->
