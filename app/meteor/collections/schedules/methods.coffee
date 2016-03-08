@@ -2,31 +2,33 @@ Meteor.startup ->
   Schedules.getResources = ->
     _.map(_.keys(Meteor.users.byGroup()), (resourceId) -> { id: resourceId, title: resourceId })
 
-  Schedules.getEvents = (range) ->
-    defaultSchedules = Schedules.find({}).fetch()
+  Schedules.getEvents = (options = {}) ->
+    options.selector ||= {}
+    options.range ||= {}
+
+    defaultSchedules = Schedules.find(options.selector).fetch()
     events = []
 
-
     _.each defaultSchedules, (defaultSchedule) ->
-      return unless defaultSchedule.isValid(range)
+      return unless defaultSchedule.isValid(options.range)
       user = Meteor.users.findOne(defaultSchedule.userId)
 
       _.each defaultSchedule.schedule, (dailySchedule) ->
         return unless dailySchedule?
-          currentDay = moment().startOf('isoWeek').add(Time.weekdays()[dailySchedule.day].offset, 'days')
+        currentDay = moment().startOf('isoWeek').add(Time.weekdays()[dailySchedule.day].offset, 'days')
 
-          _.each dailySchedule.shift, (shift) ->
-            return unless (shift and shift.start and shift.end)
-              start = currentDay.clone().add(shift.start.h, 'hours').add(shift.start.m, 'minutes')
-              end = currentDay.clone().add(shift.end.h, 'hours').add(shift.end.m, 'minutes')
+        _.each dailySchedule.shift, (shift) ->
+          return unless (shift and shift.start and shift.end)
+          start = currentDay.clone().add(shift.start.h, 'hours').add(shift.start.m, 'minutes')
+          end = currentDay.clone().add(shift.end.h, 'hours').add(shift.end.m, 'minutes')
 
-              events.push
-                start: start
-                end: end
-                editable: true
-                resourceId: user.group()
-                title: user.fullNameWithTitle()
-                defaultScheduleId: defaultSchedule._id
+          events.push
+            start: start
+            end: end
+            editable: true
+            resourceId: user.group()
+            title: user.fullNameWithTitle()
+            defaultScheduleId: defaultSchedule._id
 
     events
 

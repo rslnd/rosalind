@@ -179,3 +179,8 @@ body {
   top: 20px !important;
   right: 10px !important;
 }
+
+.anonymous-calendar .ui-state-highlight.fc-today,
+.anonymous-calendar .fc-unthemed .fc-today {
+  background: none !important;
+}
