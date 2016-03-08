@@ -88,7 +88,8 @@
   .progress-bar p,
   .progress-bar span {
     text-align: left;
-    line-height: 0;
+    line-height: 1.2;
+    margin-top: -0.5em;
     color: #353535 !important;
   }
 }

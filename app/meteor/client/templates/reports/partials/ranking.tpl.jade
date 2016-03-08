@@ -26,8 +26,9 @@
               td {{ hours.actual }}
               td.td-bg.on-hover-here
                 .progress.bg-aqua-light
-                  .progress-bar.progress-bar-aqua(style='width: {{ patients.newPercentage }}%')
-                    .on-hover-show.show-print {{ floor patients.newPercentage }}% {{_ 'reports.newPercentage'}}
+                  if hasNewPatients
+                    .progress-bar.progress-bar-aqua(style='width: {{ patients.newPercentage }}%')
+                      .on-hover-show.show-print {{ floor patients.newPercentage }}% {{_ 'reports.newPercentage'}}
               td.td-bg {{ patients.new }}
               td.td-bg {{ patients.recall }}
               td.td-bg {{ patients.newPerHour }}

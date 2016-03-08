@@ -6,3 +6,6 @@ Template.ranking.helpers
 
   assignee: ->
     Meteor.users.findOne(@id)
+
+  hasNewPatients: ->
+    @patients.new and @patients.new > 0
