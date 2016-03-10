@@ -1,6 +1,6 @@
 {
   "schedules": {
-    "this": "Mitarbeitereinteilung",
+    "this": "Arbeitszeiten",
     "thisCurrent": "Aktueller Wochenplan",
     "thisDefault": "Übliche Arbeitszeiten",
     "thisDefaultEdit": "Übliche Arbeitszeiten bearbeiten",

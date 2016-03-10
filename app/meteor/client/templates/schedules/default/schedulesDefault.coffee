@@ -17,7 +17,7 @@ Template.schedulesDefault.events
   'click [rel="edit"]': ->
     user = Meteor.users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
 
-    Modal.show 'schedulesDefaultEdit',
+    Modal.show 'scheduleEdit',
       type: 'update'
       collection: Schedules
       doc: user.defaultSchedule()

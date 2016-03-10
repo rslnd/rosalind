@@ -6,14 +6,14 @@ Meteor.startup ->
     options.selector ||= {}
     options.range ||= {}
 
-    defaultSchedules = Schedules.find(options.selector).fetch()
+    schedule = Schedules.find(options.selector).fetch()
     events = []
 
-    _.each defaultSchedules, (defaultSchedule) ->
-      return unless defaultSchedule.isValid(options.range)
-      user = Meteor.users.findOne(defaultSchedule.userId)
+    _.each schedule, (schedule) ->
+      return unless schedule.isValid(options.range)
+      user = Meteor.users.findOne(_id: schedule.userId)
 
-      _.each defaultSchedule.schedule, (dailySchedule) ->
+      _.each schedule.schedule, (dailySchedule) ->
         return unless dailySchedule?
         currentDay = moment().startOf('isoWeek').add(Time.weekdays()[dailySchedule.day].offset, 'days')
 
@@ -22,13 +22,20 @@ Meteor.startup ->
           start = currentDay.clone().add(shift.start.h, 'hours').add(shift.start.m, 'minutes')
           end = currentDay.clone().add(shift.end.h, 'hours').add(shift.end.m, 'minutes')
 
-          events.push
-            start: start
-            end: end
-            editable: true
-            resourceId: user.group()
-            title: user.fullNameWithTitle()
-            defaultScheduleId: defaultSchedule._id
+          if schedule.type is 'businessHours'
+            events.push
+              start: start
+              end: end
+              rendering: 'inverse-background'
+              color: '#fff'
+          else
+            events.push
+              start: start
+              end: end
+              editable: true
+              resourceId: user.group()
+              title: user.fullNameWithTitle()
+              scheduleId: schedule._id
 
     events
 

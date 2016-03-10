@@ -18,7 +18,10 @@ Template.schedulesDefaultCalendar.helpers
     events: (start, end, timezone, callback) ->
       events = Schedules.getEvents
         selector:
-          userId: Template.schedulesDefault.currentView.get('userId')
+          $or: [
+            { userId: Template.schedulesDefault.currentView.get('userId') }
+            { type: 'businessHours' }
+          ]
 
       callback(events)
 
