@@ -45,6 +45,7 @@ Template.newAppointmentFindPatient.events
         selected.siblings().last().addClass('selected-result')
       else
         selected.prev().addClass('selected-result')
+      selectOption()
 
     else if e.keyCode is keyCode.down
       e.preventDefault()
@@ -54,6 +55,7 @@ Template.newAppointmentFindPatient.events
         selected.siblings().first().addClass('selected-result')
       else
         selected.next().addClass('selected-result')
+      selectOption()
 
     else
       $('.search-results').show()
@@ -71,6 +73,9 @@ Template.newAppointmentFindPatient.onCreated = ->
 
 Template.newAppointmentFindPatient.helpers
   currentStep: ->
+    not newAppointment.get('patient')
+
+  currentStepClass: ->
     if not newAppointment.get('patient')
       'box-info'
     else

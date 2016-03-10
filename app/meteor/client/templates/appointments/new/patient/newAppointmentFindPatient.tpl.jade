@@ -1,15 +1,18 @@
-.box(class='{{currentStep}}')
+.box(class='{{currentStepClass}}')
   .box-header
     h3.box-title <b>1.</b> PatientIn
   .box-body
-    input#patient-search-box.form-control.input-lg(placeholder='PatientIn suchen: Vorname, Nachname' autocomplete='off' autofocus)
-    if patientId
-      .row
-        .col-md-6
-          +newAppointmentFindPatientSearchResults
-        .col-md-6
-          +newAppointmentFindPatientProfile
+    if currentStep
+      input#patient-search-box.form-control.input-lg(placeholder='PatientIn suchen: Vorname, Nachname' autocomplete='off' autofocus)
+      if patientId
+        .row
+          .col-md-6
+            +newAppointmentFindPatientSearchResults
+          .col-md-6
+            +newAppointmentFindPatientProfile
+      else
+        .row
+          .col-md-12
+            +newAppointmentFindPatientSearchResults
     else
-      .row
-        .col-md-12
-          +newAppointmentFindPatientSearchResults
+      +newAppointmentFindPatientProfile
