@@ -7,7 +7,7 @@ allowedImporters = [
 ]
 
 onUploaded = Meteor.bindEnvironment (options) ->
-  Winston.info('[Import] Upload stream: Done receiving file', options)
+  console.log('[Import] Upload stream: Done receiving file', options)
   job = new Job(Jobs.Import, options.importer, options)
     .retry
       until: moment().add(1, 'hour').toDate()
@@ -31,7 +31,7 @@ post.route '/api/upload/stream', (params, req, res, next) ->
     try
       meta = JSON.parse(meta)
     catch e
-      Winston.error('[Import] Upload stream: Illegal meta data: ' + meta)
+      console.error('[Import] Upload stream: Illegal meta data: ' + meta)
 
 
   return res.end('not authorized') unless currentUser
@@ -45,7 +45,7 @@ post.route '/api/upload/stream', (params, req, res, next) ->
     importer: importer
     meta: meta
 
-  Winston.info('[Import] Upload stream: Starting to receive file', options)
+  console.log('[Import] Upload stream: Starting to receive file', options)
 
   req
     .on 'end', ->

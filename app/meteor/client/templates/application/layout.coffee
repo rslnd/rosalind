@@ -15,7 +15,7 @@ Template.layout.onCreated ->
   $('body').addClass('skin-blue fixed sidebar-mini sidebar-open')
 
   Meteor.call 'customer/get', (e, customer) ->
-    Winston.error(e) if e
+    console.error(e) if e
     @Customer.set('name', customer.name)
     document.title = customer.name
 

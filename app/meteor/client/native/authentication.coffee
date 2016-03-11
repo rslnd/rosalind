@@ -21,5 +21,5 @@ Meteor.startup =>
 Meteor.startup =>
   @native.ipc.on 'authentication/getToken', =>
     Meteor.call 'authentication/getToken', (err, token) =>
-      return Winston.error('[Authentication]', err) if err
+      return console.error('[Authentication]', err) if err
       @native.authentication.getToken(token)

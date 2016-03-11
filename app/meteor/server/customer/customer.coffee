@@ -4,6 +4,6 @@ Meteor.methods
 
     customer.name = process.env.CUSTOMER_NAME
 
-    Winston.warn('Please set environment variable CUSTOMER_NAME') unless customer.name
+    console.warn('Please set environment variable CUSTOMER_NAME') unless customer.name
 
     return customer

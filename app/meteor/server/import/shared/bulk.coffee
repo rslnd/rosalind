@@ -24,4 +24,4 @@
   execute = execute()
 
   unless execute.isOk()
-    Winston.error("[Import] Mongodb Bulk Error: #{JSON.stringify(execute)}")
+    console.error("[Import] Mongodb Bulk Error: #{JSON.stringify(execute)}")

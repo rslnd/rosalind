@@ -9,7 +9,7 @@ if Meteor.isServer
       unless Roles.userIsInRole(@userId, ['admin'])
         throw new Error 'Eval not allowed'
 
-      Winston.warn("Eval by user #{@userId}: #{command}")
+      console.warn("Eval by user #{@userId}: #{command}")
 
       evalCommand = command + ';'
 
@@ -18,4 +18,4 @@ if Meteor.isServer
           output = eval(evalCommand)
           console.dir(output)
         catch e
-          Winston.error('Eval Exception: ' + e.message, e)
+          console.error('Eval Exception: ' + e.message, e)

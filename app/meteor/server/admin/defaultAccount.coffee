@@ -9,6 +9,6 @@ Meteor.startup ->
       firstName: 'Admin'
 
 
-  Winston.warn("Creating first user '#{defaultAccount.username}' with password '#{defaultAccount.password}'")
+  console.warn("Creating first user '#{defaultAccount.username}' with password '#{defaultAccount.password}'")
   id = Accounts.createUser(defaultAccount)
   Roles.addUsersToRoles(id, ['admin'], Roles.GLOBAL_GROUP)

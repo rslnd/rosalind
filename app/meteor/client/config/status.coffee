@@ -31,7 +31,7 @@ connectionStatus = ->
             since: moment()
 
     catch e
-      Winston.error('[Meteor] status: error', e)
+      console.error('[Meteor] status: error', e)
 
 userStatus = ->
   Tracker.autorun (t) ->

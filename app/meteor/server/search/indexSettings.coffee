@@ -28,7 +28,7 @@ name = 'rosalind'
 
 Meteor.startup ->
   unless Elasticsearch.indices.exists({ index })
-    Winston.info("[Search] Creating index #{index}")
+    console.log("[Search] Creating index #{index}")
     Elasticsearch.indices.create(index: index, body: indexSettings)
     Elasticsearch.indices.putMapping
       index: index
@@ -37,4 +37,4 @@ Meteor.startup ->
 
   unless Elasticsearch.indices.existsAlias({ name })
     Elasticsearch.indices.putAlias({ index, name })
-    Winston.info("[Search] Creating alias #{name}")
+    console.log("[Search] Creating alias #{name}")
