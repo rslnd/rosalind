@@ -1,18 +1,35 @@
 Meteor.startup ->
-  Appointments.setAdmitted = (id, time) ->
-    Appointments.stateChange(id, time, 'admitted')
+  Appointments.toggleAdmitted = (_id, time) ->
+    appointment = Appointments.findOne({ _id })
+    return if appointment.treatedAt
+    if appointment.admittedAt
+      Appointments.update { _id }, $unset:
+        admittedAt: ''
+        admittedBy: ''
+    else
+      Appointments.setAdmitted(_id, time)
 
-  Appointments.setTreated = (id, time) ->
-    Appointments.stateChange(id, time, 'treated')
+  Appointments.setAdmitted = (_id, time) ->
+    Appointments.stateChange(_id, time, 'admitted')
 
-  Appointments.setResolved = (id, time) ->
-    Appointments.softRemove(id)
+  Appointments.setTreated = (_id, time) ->
+    Appointments.stateChange(_id, time, 'treated')
 
-  Appointments.stateChange = (id, time, state) ->
+  Appointments.setResolved = (_id, time) ->
+    Appointments.softRemove(_id)
+
+  Appointments.stateChange = (_id, time, state) ->
     set = {}
     set[state + 'By'] = Meteor.user()._id
     set[state + 'At'] = if time then time.toDate() else moment().toDate()
-    Appointments.update(id, { $set: set })
+    Appointments.update({ _id }, { $set: set })
+
+  Appointments.findAll = (date = moment(), within = 'day') ->
+    selector =
+      start:
+        $gte: moment(date).startOf(within).toDate()
+        $lte: moment(date).endOf(within).toDate()
+    Appointments.find(selector, sort: { start: 1 })
 
 
   Appointments.findOpen = (date, within = 'day') ->

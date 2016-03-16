@@ -1,6 +1,7 @@
 meteor:
   image: quay.io/rosalind/meteor-development
   command: meteor
+  restart: on-failure:10
   ports:
     - '3000:3000'
   volumes:

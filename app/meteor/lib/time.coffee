@@ -16,6 +16,7 @@ Time.dateToDay = (date) ->
 
 Time.zeroIndexMonth = (day) ->
   return unless day
+  day = _.clone(day)
   if day?.month and not day?.zeroIndexMonth
     day.month -= 1
     day.zeroIndexMonth = true

@@ -5,13 +5,13 @@ Template.tags.helpers
 
   attr: ->
 
-    color = if @color then @color else 'gray'
+    color = if @color then @color else 'default'
     return {
       class: 'label label-' + color
       title: @description
       'data-toggle': 'tooltip'
+      'data-placement': 'left'
     }
 
 Template.tags.onCreated ->
-  $('[data-toggle="tooltip"]').tooltip
-    placement: 'left'
+  $('[data-toggle="tooltip"]').tooltip()

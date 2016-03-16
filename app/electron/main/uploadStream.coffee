@@ -36,7 +36,8 @@ module.exports =
       if typeof filePaths is 'string'
         filePath = filePaths
         requestOptions.headers['X-Meta'] = JSON.stringify(options.meta) if options.meta
-        uploadFile(filePath, requestOptions)
+        uploadFile filePath, requestOptions, ->
+          logger.info('[Import] Upload stream: Done reading file')
 
       else if typeof filePaths is 'object' and filePaths.length > 0
         filePaths.forEach (filePath) ->

@@ -29,7 +29,16 @@ Helpers.getShortname = (user, collection) ->
   Helpers.person(user, collection)?.shortname()
 
 Helpers.floor = (number) ->
+  return unless number
   Math.floor(number)
+
+Helpers.roundToTwo = (number) ->
+  return unless number
+  parseFloat(parseFloat(number).toFixed(2))
+
+Helpers.roundToOne = (number) ->
+  return unless number
+  parseFloat(parseFloat(number).toFixed(1))
 
 Helpers.calendar = (date) ->
   moment(date).calendar()
@@ -90,6 +99,8 @@ if Meteor.isClient
   UI.registerHelper('getFullNameWithTitle', (context) -> Helpers.getFullNameWithTitle(context))
   UI.registerHelper('getShortname', (context) -> Helpers.getShortname(context))
   UI.registerHelper('floor', (context) -> Helpers.floor(context))
+  UI.registerHelper('roundToOne', (context) -> Helpers.roundToOne(context))
+  UI.registerHelper('roundToTwo', (context) -> Helpers.roundToTwo(context))
   UI.registerHelper('calendar', (context) -> Helpers.calendar(context))
   UI.registerHelper('calendarDay', (context) -> Helpers.calendarDay(context))
   UI.registerHelper('weekOfYear', (context) -> Helpers.weekOfYear(context))

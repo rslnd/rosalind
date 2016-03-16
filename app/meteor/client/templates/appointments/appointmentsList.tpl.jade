@@ -1,6 +1,6 @@
 ul.list-group
   each appointments
-    li.list-group-item
-      | <b>{{ time start }}</b> {{ getFullNameWithTitle patient }} {{> birthdayCake }}
+    li.list-group-item.hover-background(class='{{klass}}')
+      | <b>{{ time start }}</b> {{ nameOrNote }} {{> birthdayCake }}
       .pull-right
         +tags

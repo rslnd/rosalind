@@ -7,7 +7,7 @@ Template.appointments.helpers
     [8..22].map (hour) ->
       time = moment().hour(hour)
       start = Time.time(time.startOf('hour'))
-      appointments = Appointments.findOpen(time, 'hour')
+      appointments = Appointments.findAll(time, 'hour')
       appointmentsCount = appointments.count()
       hasAppointments = appointmentsCount > 0
       return { start, time, appointments, appointmentsCount, hasAppointments }
@@ -27,4 +27,4 @@ Template.appointments.helpers
     return TAPi18n.__("appointments.this#{status}")
 
   currentDate: ->
-    moment()
+    moment().format(TAPi18n.__('time.dateFormat'))
