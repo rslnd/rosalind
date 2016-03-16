@@ -6,7 +6,24 @@ setStats = (e, res) ->
   redrawChart()
 
 redrawChart = ->
-  chart = new Chart $('#appointments-mapping'),
+  chartPatientsContacts = new Chart $('#patients-contacts'),
+    type: 'doughnut'
+    data:
+      labels: [ 'Telefon', 'Email', 'Keine Kontaktdaten' ]
+      datasets: [{
+        data: [
+          stats.get('patientsPhone')
+          stats.get('patientsEmail')
+          stats.get('patientsNoContact')
+        ]
+        backgroundColor: ['#5c93fc', '#2c63c1', '#F7464A' ]
+        hoverBackgroundColor: ['#689af9', '#356dcc', '#ff6367' ]
+      }]
+    options:
+      legend:
+        display: false
+
+  chartPatientsAppointmentsMapping = new Chart $('#appointments-mapping'),
     type: 'doughnut'
     data:
       labels: [ 'Mapped', 'Heuristically Mapped', 'Unmapped' ]
@@ -23,8 +40,12 @@ redrawChart = ->
       legend:
         display: false
 
+
+
+
 Template.systemStats.refresh = ->
   Meteor.call 'system/stats/appointments', setStats
+  Meteor.call 'system/stats/patients', setStats
 
 Template.systemStats.helpers
   stats: (key) ->

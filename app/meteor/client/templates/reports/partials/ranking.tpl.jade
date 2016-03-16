@@ -23,7 +23,12 @@
                   | {{ getFullNameWithTitle assignee }}
                 else
                   i.text-muted {{_ 'reports.unassigned' }}
-              td {{ hours.actual }}
+              td
+                if hours.actual
+                  | {{ roundToOne hours.actual }}
+                else if hours.scheduled
+                  | {{ roundToOne hours.scheduled }}&nbsp;
+                  small.fa.fa-question-circle.text-quite-muted(data-toggle='tooltip' title='{{_ "reports.scheduledOnly" }}' data-placement='right')
               td.td-bg.on-hover-here
                 .progress.bg-aqua-light
                   if hasNewPatients
@@ -31,7 +36,7 @@
                       .on-hover-show.show-print {{ floor patients.newPercentage }}% {{_ 'reports.newPercentage'}}
               td.td-bg {{ patients.new }}
               td.td-bg {{ patients.recall }}
-              td.td-bg {{ patients.newPerHour }}
+              td.td-bg {{ roundToOne patients.newPerHourScheduled }}
               td.td-bg {{ patients.total }}
               td {{ patients.surgeries }}
               td €{{ revenue }}

@@ -19,3 +19,22 @@
             li.list-group-item
               | Unmapped
               .pull-right.text-red {{ stats 'appointmentsUnmapped' }}
+
+    .col-md-3
+      .box.box-default
+        .box-header.with-border Kontaktdaten
+        .box-body
+          canvas(id='patients-contacts' width='150' height='150')
+          ul.list-group
+            li.list-group-item
+              | Total
+              .pull-right {{ stats 'patientsTotal' }}
+            li.list-group-item
+              | Nur Telefon
+              .pull-right.text-info {{ stats 'patientsPhone' }}
+            li.list-group-item
+              | Nur Email
+              .pull-right.text-success {{ stats 'patientsEmail' }}
+            li.list-group-item
+              | Keine Kontaktdaten
+              .pull-right.text-red {{ stats 'patientsNoContact' }}

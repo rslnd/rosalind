@@ -9,3 +9,6 @@ Template.ranking.helpers
 
   hasNewPatients: ->
     @patients.new and @patients.new > 0
+
+Template.ranking.onCreated ->
+  $('[data-toggle="tooltip"]').tooltip()

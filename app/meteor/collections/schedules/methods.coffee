@@ -1,4 +1,16 @@
 Meteor.startup ->
+
+  Schedules.getScheduledHours = (options = {}) ->
+    defaultSchedule = Schedules.findOne
+      userId: options.userId
+      type: 'default'
+
+    return unless defaultSchedule
+    return unless options.day
+
+    day = moment(Time.dayToDate(options.day)).locale('en').format('ddd').toLowerCase()
+    defaultSchedule.totalHoursPerDay(day)
+
   Schedules.getResources = ->
     _.map(_.keys(Meteor.users.byGroup()), (resourceId) -> { id: resourceId, title: resourceId })
 

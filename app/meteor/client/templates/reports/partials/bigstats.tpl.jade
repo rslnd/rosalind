@@ -25,7 +25,15 @@
         i.fa.fa-calendar
       .info-box-content
         span.info-box-number
-          <span>22</span>&nbsp;<small class="text-muted">h</small>
+          if total.hoursActual
+            <span>{{ floor total.hoursActual }}</span>&nbsp;<small class="text-muted">h</small>
+          else if total.hoursScheduled
+            <span>{{ floor total.hoursScheduled }}</span>&nbsp;
+            small.text-muted
+              | h
+              small.fa.fa-question-circle.text-quite-muted(data-toggle='tooltip' data-placement='right' title='{{_ "reports.scheduledOnly" }}')
+          else
+            span.text-quite-muted.fa.fa-question
         span.info-box-text Arztstunden
         span.progress-description +4% zum Vorjahr
 
