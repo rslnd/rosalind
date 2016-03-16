@@ -3,6 +3,15 @@
     "this": "System",
     "thisJobs": "Background Jobs",
     "thisStats": "Stats",
-    "thisTags": "Tags"
+    "thisTags": "Tags",
+    "thisEvents": "Ereignisse",
+    "events": {
+      "users/login": "hat sich eingeloggt",
+      "users/logout": "hat sich ausgeloggt",
+      "users/loginFailed": "Login fehlgeschlagen",
+      "users/create": "hat einen neuen Benutzer angelegt",
+      "users/updateRoles": "hat die Berechtingungen von __subject__ geändert",
+      "users/updatePassword": "hat das Passwort von __subject__ geändert"
+    }
   }
 }

@@ -93,6 +93,16 @@ Helpers.zerofix = (telephone) ->
   else
     telephone
 
+Helpers.stringify = (blob, pretty = true) ->
+  if blob
+    try
+      if pretty
+        JSON.stringify(blob, null, 2)
+      else
+        JSON.stringify(blob)
+    catch e
+      blob
+
 if Meteor.isClient
   UI.registerHelper('getFirstName', (context) -> Helpers.getFirstName(context))
   UI.registerHelper('getFullName', (context) -> Helpers.getFullName(context))
@@ -107,6 +117,7 @@ if Meteor.isClient
   UI.registerHelper('recent', (context) -> Helpers.recent(context))
   UI.registerHelper('birthday', (context) -> Helpers.birthday(context))
   UI.registerHelper('zerofix', (context) -> Helpers.zerofix(context))
+  UI.registerHelper('stringify', (context) -> Helpers.stringify(context))
   UI.registerHelper('customerName', -> Customer?.get('name'))
   UI.registerHelper('true', -> true)
   UI.registerHelper('false', -> false)

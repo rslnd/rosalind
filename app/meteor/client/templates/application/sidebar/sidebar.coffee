@@ -56,6 +56,7 @@ sidebar = [
     icon: 'server'
     roles: ['admin']
     submenu: [
+      { name: 'thisEvents' }
       { name: 'thisStats' }
       { name: 'thisJobs' }
       { name: 'thisTags' }

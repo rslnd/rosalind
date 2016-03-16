@@ -6,6 +6,11 @@ users.route '/',
   action: ->
     BlazeLayout.render('layout', main: 'systemDashboard')
 
+users.route '/events',
+  name: 'system.thisEvents'
+  action: ->
+    BlazeLayout.render('layout', main: 'systemEvents')
+
 users.route '/jobs',
   name: 'system.thisJobs'
   action: ->

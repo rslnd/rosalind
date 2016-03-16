@@ -6,6 +6,14 @@ Meteor.methods
       throw new Meteor.Error('not-authorized')
 
     console.log('Creating user', form.username)
+
+    Events.insert
+      type: 'users/create'
+      level: 'warning'
+      createdBy: Meteor.userId()
+      createdAt: new Date()
+      payload: form
+
     Accounts.createUser(form)
 
   'users/updatePassword': (form) ->
@@ -16,6 +24,15 @@ Meteor.methods
 
     console.log('Setting password for user', form.userId)
 
+    Events.insert
+      type: 'users/updatePassword'
+      level: 'warning'
+      createdBy: Meteor.userId()
+      createdAt: new Date()
+      payload: _.omit(form, 'password')
+      subject: form.userId
+
+
     Accounts.setPassword(form.userId, form.password, { logout: false })
 
   'users/updateRoles': (form) ->
@@ -23,6 +40,14 @@ Meteor.methods
 
     unless Roles.userIsInRole(Meteor.userId(), ['admin'])
       throw new Meteor.Error('not-authorized')
+
+    Events.insert
+      type: 'users/updateRoles'
+      level: 'warning'
+      createdBy: Meteor.userId()
+      createdAt: new Date()
+      payload: form
+      subject: form.userId
 
     roles = form.roles.replace(/\s/ig, '').split(',')
     console.log('Setting roles for user', form.userId, roles)
