@@ -1,11 +1,7 @@
 li
-  | Termin {{ calendar start }}
+  | {{ date start }} &nbsp;
   if assignee
-    | bei {{ getFullNameWithTitle assignee }}
-
-  if notes
-    unless heuristic
-      blockquote {{ notes}}
+    strong {{ getFullNameWithTitle assignee }}
 
   if tags
-    +tags
+    +tags(data-position='right')

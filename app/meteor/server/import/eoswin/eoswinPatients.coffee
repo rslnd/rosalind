@@ -65,7 +65,14 @@ Meteor.startup ->
 
 
         titlePrepend = row.Titel if row.Titel? and row.Titel.length > 0 and row.Titel
-        titlePrepend = titlePrepend.split('Dr').join('Dr.').split('Mag').join('Mag.') if titlePrepend and titlePrepend.indexOf('.') is -1
+        titlePrepend = titlePrepend
+          .split('Dr').join('Dr.')
+          .split('Mag').join('Mag.')
+          .split('Hr.').join('')
+          .split('Fr.').join('')
+          .split('Herr').join('')
+          .split('Frau').join('') if titlePrepend and titlePrepend.indexOf('.') is -1
+
 
         patient =
           external:

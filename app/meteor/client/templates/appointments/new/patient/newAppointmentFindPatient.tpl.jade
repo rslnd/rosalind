@@ -1,6 +1,10 @@
 .box(class='{{currentStepClass}}')
-  .box-header
+  .box-header.with-border
     h3.box-title <b>1.</b> PatientIn
+    unless currentStep
+      .box-tools.pull-right
+        button.btn.btn-box-tool(rel='clear')
+          i.fa.fa-remove
   .box-body
     if currentStep
       input#patient-search-box.form-control.input-lg(placeholder='PatientIn suchen: Vorname, Nachname' autocomplete='off' autofocus)

@@ -1,7 +1,10 @@
 if phone
-  i.fa.fa-phone &nbsp;{{ value }}
+  dt: i.fa.fa-phone
+  dd {{ value }}
 else
   if email
-    i.fa.fa-envelope &nbsp;{{ value }}
+    dt: i.fa.fa-envelope
+    dd {{ value }}
   else
-    i.fa.fa-share &nbsp;{{ value }}
+    i.fa.fa-share &nbsp;
+    dd {{ value }}

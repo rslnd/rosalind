@@ -1,31 +1,41 @@
 with patient
-  h3
-    span.full-name {{ getFullNameWithTitle this }}<br/>
-    small.inline-profile
-      | {{ birthday profile.birthday }} {{> birthdayCake }}
-      if insuranceId
-        <br/>{{_ 'patients.insuranceId'}}: {{ insuranceId }}
 
   .row
-    if hasContacts
-      .col-md-6
-        +profileContacts
-    if profile.address
-      .col-md-6
-        +profileAddress
+    .col-md-4.col-sm-12
+      h3
+        span.full-name {{ getFullNameWithTitle this }}<br/>
 
+    .col-md-4.col-sm-12
+      dl.dl-horizontal.dl-left
+        if profile.birthday
+          dt: i.fa.fa-asterisk
+          dd {{ birthday profile.birthday }} {{> birthdayCake }}
 
-  if notes
-    blockquote {{ notes }}
+        if insuranceId
+          dt: i.fa.fa-plus-square
+          dd {{ formatInsuranceId insuranceId }}
 
-  if hasFutureAppointments
-    h4 {{_ 'appointments.thisFuture'}}
-    ul.list-unstyled
-      +each futureAppointments
-        +appointmentLine
+        if profile.address
+          dt: i.fa.fa-home
+          dd {{> profileAddress }}
 
-  if hasPastAppointments
-    h4 {{_ 'appointments.thisPast'}}
-    ul.list-unstyled
-      +each pastAppointments
-        +appointmentLine
+        if hasContacts
+          +each profile.contacts
+            +contactLine
+
+        if notes
+          dt: i.fa.fa-note
+          dd {{ notes }}
+
+    .col-md-4.col-sm-12
+      if hasFutureAppointments
+        h5 {{_ 'appointments.thisFuture'}}
+        ul.list-unstyled
+          +each futureAppointments
+            +appointmentLine
+
+      if hasPastAppointments
+        h5 {{_ 'appointments.thisPast'}}
+        ul.list-unstyled
+          +each pastAppointments
+            +appointmentLine

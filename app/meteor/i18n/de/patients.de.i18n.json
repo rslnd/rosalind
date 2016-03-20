@@ -7,8 +7,10 @@
     "thisUpdate": "Patient bearbeiten",
     "thisEdit": "Patient bearbeiten",
     "thisSave": "Patient speichern",
+    "salutationFemale": "Fr.",
+    "salutationMale": "Hr.",
     "addedToday": "heute neu eingetragen",
-    "insuranceId": "Sozialversicherungsnummer",
+    "insuranceId": "Soz.Vers.Nr.",
     "birthdayToday": "Heute Geburtstag"
   }
 }

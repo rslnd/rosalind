@@ -189,3 +189,11 @@ body {
 .anonymous-calendar .fc-unthemed .fc-today {
   background: none !important;
 }
+
+.dl-left dt {
+  width: inherit !important;
+}
+
+.dl-left dd {
+  margin-left: 20px !important;
+}

@@ -11,5 +11,5 @@ if profile.address
   if profile.address.locality
     | {{ profile.address.locality }}
 
-  if profile.address.country
+  if showCountry
     | <br />{{ profile.address.country }}

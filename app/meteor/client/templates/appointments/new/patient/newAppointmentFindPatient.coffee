@@ -68,6 +68,11 @@ Template.newAppointmentFindPatient.events
   'click .search-results li': ->
     selectOption(true)
 
+  'click [rel="clear"]': ->
+    newAppointment.set('patient', null)
+    newAppointment.set('patientId', null)
+    console.log('[Appointments] New: cleared selected patient')
+
 Template.newAppointmentFindPatient.onCreated = ->
   $('#patient-search-box').focus()
 

@@ -73,4 +73,5 @@ Time.format = (format, t) ->
   s
 
 if Meteor.isClient
+  UI.registerHelper('date', Time.date)
   UI.registerHelper('weekdays', -> Time.weekdaysArray())

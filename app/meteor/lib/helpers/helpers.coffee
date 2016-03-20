@@ -103,6 +103,11 @@ Helpers.stringify = (blob, pretty = true) ->
     catch e
       blob
 
+Helpers.formatInsuranceId = (str) ->
+  return unless str
+  return str.slice(0, 4) if str.length is 10
+  return str
+
 Helpers.noValue = ->
   noValue = TAPi18n.__('ui.noValue')
   noValue = '<span class="text-muted">' + noValue + '</span>'
@@ -124,6 +129,7 @@ if Meteor.isClient
   UI.registerHelper('birthday', (context) -> Helpers.birthday(context))
   UI.registerHelper('zerofix', (context) -> Helpers.zerofix(context))
   UI.registerHelper('stringify', (context) -> Helpers.stringify(context))
+  UI.registerHelper('formatInsuranceId', (context) -> Helpers.formatInsuranceId(context))
   UI.registerHelper('customerName', -> Customer?.get('name'))
   UI.registerHelper('true', -> true)
   UI.registerHelper('false', -> false)

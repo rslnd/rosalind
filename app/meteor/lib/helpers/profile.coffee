@@ -8,26 +8,37 @@ Helpers.profile = (collection) ->
       else
         @fullName()
 
-    fullName: ->
+    salutation: ->
+      if @profile?.gender is 'Male'
+        TAPi18n.__('patients.salutationMale')
+      else if @profile?.gender is 'Female'
+        TAPi18n.__('patients.salutationFemale')
+      else
+        ''
+
+    fullName: (prefix) ->
+      prefix ||= if @collection() is Patients then @salutation() + ' ' else ''
+
       if (@profile and @profile.lastName and @profile.firstName)
-        @profile.firstName + ' ' + @profile.lastName
+        prefix + @profile.firstName + ' ' + @profile.lastName
       else if (@profile and @profile.lastName)
-        @profile.lastName
+        prefix + @profile.lastName
       else if (@profile and @profile.firstName)
         @profile.firstName
       else
         @username
 
     fullNameWithTitle: (overrideFullName) ->
-      fullName = overrideFullName or @fullName()
+      fullName = overrideFullName or @fullName('')
+      prefix = if @collection() is Patients then @salutation() + ' ' else ''
 
       if (@profile and @profile.titleAppend and @profile.titlePrepend)
-        @profile.titlePrepend + ' ' + fullName
+        prefix + @profile.titlePrepend + ' ' + fullName
         + ', ' + @profile.titleAppend
       else if (@profile and @profile.titlePrepend)
-        @profile.titlePrepend + ' ' + fullName
+        prefix +  @profile.titlePrepend + ' ' + fullName
       else if (@profile and @profile.titleAppend)
-        fullName + ', ' + @profile.titleAppend
+        prefix + fullName + ', ' + @profile.titleAppend
       else
         @fullName()
 
