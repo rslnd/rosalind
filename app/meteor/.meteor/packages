@@ -83,6 +83,7 @@ rzymek:moment-locale-de-at
 # Util
 u2622:persistent-session
 momentjs:moment
+aldeed:moment-timezone
 benmgreene:moment-range
 oaf:moment-duration-format
 bojicas:inflections
