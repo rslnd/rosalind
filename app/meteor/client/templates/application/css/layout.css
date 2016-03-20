@@ -100,3 +100,14 @@ a, button, .btn {
 .on-hover-here:hover .on-hover-show {
   visibility: visible;
 }
+
+i.circle {
+  display: inline-block;
+  margin-bottom: -4px;
+  margin-right: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  border: 3px solid #fefefe;
+  background-color: #f1f1f1;
+}

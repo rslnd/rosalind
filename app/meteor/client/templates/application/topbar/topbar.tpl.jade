@@ -9,14 +9,21 @@ header.main-header
         li.dropdown.user.user-menu
           a.dropdown-toggle(data-toggle='dropdown')
             span.hidden-xs
+              +with currentUser.lastTimesheet
+                | {{> timesheetStatusIcon }}
               | #{currentUser.fullNameWithTitle}
               i.caret
           ul.dropdown-menu
             li.user-body
-              p #{currentUser.fullNameWithTitle}
-              small
-                +status currentUser
-                | {{_ 'login.loggedIn'}}
+              p
+                | #{currentUser.fullNameWithTitle}
+              +with currentUser.lastTimesheet
+                | {{> timesheetStatusText }}
             li.user-footer
+              .pull-left
+                +with currentUser.lastTimesheet
+                  | {{> timesheetStartStopButton }}
               .pull-right
-                a.btn.btn-default.logout {{_ 'login.logout'}}
+                a.btn.btn-default.logout
+                  | {{_ 'login.logout'}}
+                  i.fa.fa-exit

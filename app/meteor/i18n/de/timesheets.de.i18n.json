@@ -1,0 +1,9 @@
+{
+  "timesheets": {
+    "this": "Arbeitszeiten",
+    "pauseAction": "Pausieren",
+    "resumeAction": "Fortfahren",
+    "youAreWorking": "Sie arbeiten seit <b>%s</b>.",
+    "youHaveWorkedToday": "Sie haben heute <b>%s</b> gearbeitet."
+  }
+}

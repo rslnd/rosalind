@@ -11,7 +11,9 @@
       "users/loginFailed": "Login fehlgeschlagen",
       "users/create": "hat einen neuen Benutzer angelegt",
       "users/updateRoles": "hat die Berechtingungen von __subject__ geändert",
-      "users/updatePassword": "hat das Passwort von __subject__ geändert"
+      "users/updatePassword": "hat das Passwort von __subject__ geändert",
+      "timesheets/startTracking": "hat die Zeiterfassung gestartet",
+      "timesheets/stopTracking": "hat die Zeiterfassung gestoppt"
     }
   }
 }

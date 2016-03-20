@@ -1,4 +1,6 @@
 @Events = new Mongo.Collection('events')
+Events._createCappedCollection(1024 * 1024 * 4) if Meteor.isServer
+
 
 Schema.Events = new SimpleSchema
   type:
@@ -12,6 +14,7 @@ Schema.Events = new SimpleSchema
       'warning'
       'error'
     ]
+    defaultValue: 'info'
     index: 1
 
   subject:

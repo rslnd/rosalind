@@ -25,6 +25,7 @@ Template.layout.onCreated ->
     @subscribe('tags')
     @subscribe('counts')
     @subscribe('schedules')
+    @subscribe('timesheets')
     @subscribe('inboundCalls')
 
 Template.layout.events

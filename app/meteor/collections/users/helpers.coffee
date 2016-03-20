@@ -11,6 +11,18 @@ Meteor.users.helpers
     else
       TAPi18n.__('ui.status.never')
 
+  timesheets: (options = {}) ->
+    options.from ||= Time.startOfToday()
+
+    timesheets = Timesheets.find
+      userId: @_id
+      start: { $gte: options.from }
+
+    timesheets.fetch()
+
+  lastTimesheet: ->
+    Timesheets.findOne({ userId: @_id }, sort: { start: -1 })
+
   shortname: ->
     if (@username.length <= 3)
       @username

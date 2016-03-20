@@ -26,6 +26,7 @@ Template.systemEvents.helpers
 
     icons =
       users: 'fa-user'
+      timesheets: 'fa-clock-o'
 
     level = levels[@level]
     icon = icons[@type.split('/')[0]]

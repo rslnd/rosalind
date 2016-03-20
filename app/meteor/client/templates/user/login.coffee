@@ -7,7 +7,10 @@ AutoForm.hooks
     onSubmit: (form) ->
       if form.name and form.password
         Meteor.loginWithPassword form.name, form.password, (error) =>
-          if error then @done(error) else @done()
+          if error
+            @done(error)
+          else
+            Meteor.call('users/login', => @done())
       else
         @done()
       false
