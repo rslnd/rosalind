@@ -3,6 +3,7 @@ accounts-password@1.1.4
 alanning:roles@1.2.14
 aldeed:autoform@5.8.1
 aldeed:autoform-bs-datetimepicker@1.0.6
+aldeed:autoform-select2@1.0.5
 aldeed:collection2@2.8.0
 aldeed:collection2-core@1.0.0
 aldeed:moment-timezone@0.4.0

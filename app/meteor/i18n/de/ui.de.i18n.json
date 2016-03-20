@@ -20,6 +20,7 @@
     "comment": "Kommentar",
     "comment_plural": "Kommentare",
     "press_enter_to_post_comment": "Kommentar schreiben...",
+    "noValue": "k.A.",
     "experimentalWarning": {
       "title": "Experimentelle Funktion",
       "body": "Diese Funktion befindet sich noch in aktiver Entwicklung und ist mit Vorsicht zu benutzen."

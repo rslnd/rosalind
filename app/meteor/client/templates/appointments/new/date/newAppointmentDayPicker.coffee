@@ -3,17 +3,18 @@ Template.newAppointmentDayPicker.onRendered ->
     language: moment().locale().split('-')[0]
     minDate: Time.startOfToday()
     onRenderCell: (date, cellType) ->
-      if cellType is 'day'
-        rand = parseInt(Math.random()*100)
-        return { classes: 'day-closed' } if rand < 5
-        return { classes: 'day-recommended' } if rand < 30
-        return { classes: 'day-full' } if rand < 60
+      # if cellType is 'day'
+      #   rand = parseInt(Math.random()*100)
+      #   return { classes: 'day-closed' } if rand < 5
+      #   return { classes: 'day-recommended' } if rand < 30
+      #   return { classes: 'day-full' } if rand < 60
 
 
   $('#day-picker-1').datepicker _.extend dayPickerOptions,
     onSelect: _.throttle(((f, date) ->
       return if date is ''
       newAppointment.set('date', date)
+      console.log('[Appointments] New: set date', date)
       $('#day-picker-2').data('datepicker').clear()
     ), 10, trailing: false)
 
@@ -26,6 +27,7 @@ Template.newAppointmentDayPicker.onRendered ->
     onSelect: _.throttle(((f, date) ->
       return if date is ''
       newAppointment.set('date', date)
+      console.log('[Appointments] New: set date', date)
       $('#day-picker-1').data('datepicker').clear()
     ), 10, trailing: false)
 
@@ -44,7 +46,7 @@ Template.newAppointmentDayPicker.events
       days = parseInt(el.data('days'))
 
       newDate = moment().add(days, 'days')
-
+      console.log('[Appointments] New: set date', newDate.toDate())
       $('#day-picker-1').data('datepicker').selectDate(newDate.toDate())
       $('#day-picker-2').data('datepicker').clear()
       $('#day-picker-2').data('datepicker').date = newDate.add(1, 'month').toDate()

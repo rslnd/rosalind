@@ -103,6 +103,12 @@ Helpers.stringify = (blob, pretty = true) ->
     catch e
       blob
 
+Helpers.noValue = ->
+  noValue = TAPi18n.__('ui.noValue')
+  noValue = '<span class="text-muted">' + noValue + '</span>'
+  Spacebars.SafeString(noValue)
+
+
 if Meteor.isClient
   UI.registerHelper('getFirstName', (context) -> Helpers.getFirstName(context))
   UI.registerHelper('getFullName', (context) -> Helpers.getFullName(context))

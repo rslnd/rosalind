@@ -3,5 +3,14 @@
     h3.box-title <b>5.</b> Zusammenfassung
   .box-body
     dl.dl-horizontal
-      dt Uhrzeit
-      dd 13:30
+      dt Name
+      dd {{ summary 'patient' }}
+
+      dt {{_ 'time.date'}}
+      dd {{ summary 'date' }}
+
+      dt {{_ 'time.time'}}
+      dd {{ summary 'time' }}
+
+      dt {{_ 'appointments.assignment'}}
+      dd {{ summary 'assignedTo' }}
