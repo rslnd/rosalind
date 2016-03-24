@@ -34,4 +34,6 @@ Meteor.users.queryExactlyOne = (query) ->
 
 
 Meteor.users.byGroup = (selector = {}) ->
-  _.map(Groups.all(selector), (g) -> { group: g, users: g.users() })
+  _.map Groups.all(selector), (g) ->
+    group: g
+    users: g.users()

@@ -131,5 +131,6 @@ if Meteor.isClient
   UI.registerHelper('stringify', (context) -> Helpers.stringify(context))
   UI.registerHelper('formatInsuranceId', (context) -> Helpers.formatInsuranceId(context))
   UI.registerHelper('customerName', -> Customer?.get('name'))
+  UI.registerHelper('noValue', -> Helpers.noValue())
   UI.registerHelper('true', -> true)
   UI.registerHelper('false', -> false)

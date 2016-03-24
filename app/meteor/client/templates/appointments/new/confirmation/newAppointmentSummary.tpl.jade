@@ -13,4 +13,15 @@
       dd {{ time }}
 
       dt {{_ 'appointments.assignment'}}
-      dd {{ summary 'assignedTo' }}
+      dd {{ assignee }}
+
+      dt {{_ 'appointments.tags' }}
+      dd
+        if hasTags
+          +each tags
+            if color
+              span.label.tag(class='label-{{ color }}') {{ tag }}
+            else
+              span.label.label-default.tag {{ tag }}
+        else
+          | {{ noValue }}

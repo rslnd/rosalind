@@ -111,3 +111,11 @@ i.circle {
   border: 3px solid #fefefe;
   background-color: #f1f1f1;
 }
+
+.tag {
+  margin-right: 4px;
+}
+
+.tag-lg {
+  font-size: 110%;
+}

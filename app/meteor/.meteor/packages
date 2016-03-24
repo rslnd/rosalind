@@ -67,9 +67,6 @@ fortawesome:fontawesome
 fastclick
 sacha:spin
 peppelg:bootstrap-3-modal
-tsega:bootstrap3-datetimepicker@=3.1.3_3
-aldeed:autoform-bs-datetimepicker
-aldeed:autoform-select2
 juliancwirko:s-alert-stackslide
 aldeed:template-extension
 mquandalle:bower

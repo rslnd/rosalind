@@ -1,6 +1,7 @@
 ul.list-group
   each appointments
-    li.list-group-item.hover-background(class='{{klass}}')
+    li.list-group-item.hover-background(class='{{ klass }}' data-id='{{ _id }}')
       | <b>{{ time start }}</b> {{ nameOrNote }} {{> birthdayCake }}
       .pull-right
         +tags
+        +appointmentActionsMenu

@@ -22,6 +22,17 @@ Template.newAppointmentSummary.helpers
     else
       Helpers.noValue()
 
+  assignee: ->
+    if _id = newAppointment.get('assigneeId')
+      Meteor.users.findOne({ _id }).fullNameWithTitle()
+    else
+      Helpers.noValue()
+
+  hasTags: ->
+    newAppointment.get('tags')?.length > 0
+
+  tags: ->
+    Tags.find(_id: { $in: newAppointment.get('tags') }).fetch()
 
   summary: (key) ->
     newAppointment.get(key) or Helpers.noValue()

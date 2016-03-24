@@ -1,7 +1,10 @@
 Meteor.startup ->
   Groups.helpers
     users: ->
-      Meteor.users.find(groupId: @_id).fetch()
+      users = Meteor.users.find { groupId: @_id },
+        sort: { 'profile.lastName': 1 }
+
+      users.fetch()
 
     usersCount: ->
       Meteor.users.find(groupId: @_id).count()

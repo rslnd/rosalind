@@ -5,7 +5,8 @@
     "adminlte": "2.3.2",
     "air-datepicker": "albertzak/air-datepicker",
     "Chart.js": "2.0.0-beta",
-    "mousetrap": "mousetrap-js/mousetrap"
+    "mousetrap": "mousetrap-js/mousetrap",
+    "select2": "4.0.2"
   },
   "overrides": {
     "adminlte": {
@@ -29,6 +30,13 @@
       "main": [
         "mousetrap.js",
         "plugins/global-bind/mousetrap-global-bind.min.js"
+      ]
+    },
+    "select2": {
+      "arch": [ "client" ],
+      "main": [
+        "dist/js/select2.full.min.js",
+        "dist/css/select2.min.css"
       ]
     }
   },
