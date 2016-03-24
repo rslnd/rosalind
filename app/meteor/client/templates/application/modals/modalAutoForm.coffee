@@ -1,9 +1,12 @@
 Template.modalAutoForm.helpers
   title: ->
-    collectionName = @collection?._name
-    collectionName = @collection?()?._name if not collectionName?
+    if @newTitle
+      TAPi18n.__(@newTitle)
+    else
+      collectionName = @collection?._name
+      collectionName = @collection?()?._name if not collectionName?
 
-    TAPi18n.__(collectionName + '.this' + s.capitalize(@type))
+      TAPi18n.__(collectionName + '.this' + s.capitalize(@type))
 
 AutoForm.hooks
   modalAutoForm:

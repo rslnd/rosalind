@@ -9,7 +9,7 @@ Schema.Schedules = new SimpleSchema
       'default'
       'override'
       'businessHours'
-      'holiday'
+      'holidays'
     ]
     index: 1
 
@@ -18,16 +18,21 @@ Schema.Schedules = new SimpleSchema
     index: 1
     optional: true
 
+  note:
+    type: String
+    optional: true
+
   available:
     type: Boolean
     index: 1
     optional: true
+    defaultValue: true
 
-  validFrom:
+  start:
     type: Date
     optional: true
 
-  validUntil:
+  end:
     type: Date
     optional: true
 
@@ -84,3 +89,4 @@ Schema.Schedules = new SimpleSchema
 
 Meteor.startup ->
   Schedules.attachSchema(Schema.Schedules)
+  Schedules.attachBehaviour('softRemovable')

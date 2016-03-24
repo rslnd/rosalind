@@ -32,3 +32,6 @@ Meteor.startup ->
           Time.format('H:mm', s.end)
         ].join('')
       shift.join('\n')
+
+    collection: ->
+      Schedules

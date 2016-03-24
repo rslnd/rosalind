@@ -69,6 +69,8 @@ sacha:spin
 peppelg:bootstrap-3-modal
 juliancwirko:s-alert-stackslide
 aldeed:template-extension
+aldeed:autoform-bs-datetimepicker
+tsega:bootstrap3-datetimepicker@=3.1.3_3
 mquandalle:bower
 rochal:slimscroll
 

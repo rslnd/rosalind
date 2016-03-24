@@ -3,5 +3,8 @@ Template.dataTable.helpers
     TAPi18n.__(@table.collection._name + '.thisInsert')
 
 Template.dataTable.events
-  'click .this-insert': ->
-    Modal.show('modalAutoForm', { type: 'insert', collection: @table.collection })
+  'click [rel="new"]': ->
+    Modal.show 'modalAutoForm',
+      type: 'insert'
+      collection: @table.collection
+      formTemplate: @formTemplate

@@ -1,0 +1,7 @@
++autoForm(collection=collection type=type doc=doc validaion='submit' id='holidaysForm')
+  fieldset
+    +afFieldInput(name='type' value='holidays' type='hidden')
+    +afQuickField(name='note')
+    +afQuickField(name='start' type='bootstrap-datetimepicker')
+    +afQuickField(name='end' type='bootstrap-datetimepicker')
+  button.btn.btn-primary(type='submit') {{_ 'schedules.holidaysSave'}}

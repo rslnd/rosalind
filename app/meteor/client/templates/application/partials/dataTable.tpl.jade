@@ -2,6 +2,9 @@
   .box-header
     h3.box-title {{_ title}}
     .box-tools
-      button.btn.btn-default.this-insert {{thisInsert}}
+      if newTitle
+        button.btn.btn-default(rel='new') {{_ newTitle }}
+      else
+        button.btn.btn-default(rel='new') {{ thisInsert }}
   .box-body
     +tabular(table=table class='table table-striped table-bordered table-condensed')

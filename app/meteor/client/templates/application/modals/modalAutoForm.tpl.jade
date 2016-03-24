@@ -4,5 +4,9 @@
       .modal-header
         button.close(data-dismiss='modal')
           span &times;
-        h4.modal-title {{title}}
-      .modal-body {{> quickForm id='modalAutoForm' type=type doc=doc collection=collection}}
+        h4.modal-title {{ title }}
+      .modal-body
+        if formTemplate
+          +Template.dynamic template=formTemplate
+        else
+          | {{> quickForm id='modalAutoForm' type=type doc=doc collection=collection}}
