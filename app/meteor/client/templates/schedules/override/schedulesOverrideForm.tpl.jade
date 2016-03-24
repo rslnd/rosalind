@@ -1,0 +1,15 @@
++experimentalWarning
++callout(type='info' text='schedules.overrideCallout')
+
++autoForm(collection=collection type=type doc=doc validaion='submit' id='schedulesOverrideForm')
+  fieldset
+    +afFieldInput(name='type' value='override' type='hidden')
+    +afQuickField(name='userId' type='hidden' rel='userIdTarget')
+    .form-group
+      label {{_ 'users.employee'}}
+      +employeeSelect
+    +afQuickField(name='available')
+    +afQuickField(name='note')
+    +afQuickField(name='start' type='bootstrap-datetimepicker')
+    +afQuickField(name='end' type='bootstrap-datetimepicker')
+  button.btn.btn-primary(type='submit') {{_ 'ui.save'}}

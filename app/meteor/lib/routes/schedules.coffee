@@ -6,10 +6,10 @@ schedules.route '/default/:username?',
   action: ->
     BlazeLayout.render('layout', main: 'schedulesDefault')
 
-schedules.route '/overrides/:username?',
-  name: 'schedules.overrides'
+schedules.route '/override',
+  name: 'schedules.override'
   action: ->
-    BlazeLayout.render('layout', main: 'schedulesOverrides')
+    BlazeLayout.render('layout', main: 'schedulesOverride')
 
 schedules.route '/businessHours',
   name: 'schedules.businessHours'

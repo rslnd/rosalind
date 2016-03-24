@@ -8,6 +8,8 @@
     "thisSave": "Mitarbeiter speichern",
     "changePassword": "Passwort ändern",
     "setRoles": "Berechtigungen ändern",
+    "employee": "MitarbeiterIn",
+    "selectEmployee": "MitarbeiterIn auswählen",
     "group": "Gruppe",
     "group_plural": "Gruppen",
     "groups": {
