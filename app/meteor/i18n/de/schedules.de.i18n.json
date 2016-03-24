@@ -7,13 +7,17 @@
     "thisInsert": "Neu",
     "holidaysNew": "Neuen Feiertag eintragen",
     "holidaysSave": "Feiertag speichern",
+    "holidaysCallout": {
+      "title": "Feiertage und Öffnungszeiten",
+      "body": "An Feiertagen die Sie hier eintragen können keine Termine ausgemacht werden."
+    },
     "absences": "Abwesenheiten",
     "overrides": "Abweichende Arbeitszeiten",
     "businessHours": "Öffnungszeiten",
     "businessHoursRegular": "Übliche Öffnungszeiten",
     "businessHoursOverride": "Besondere Öffnungszeiten",
     "businessHoursOverrideNew": "Neue besondere Öffnungszeit eintragen",
-    "businessHoursOverrideWarning": {
+    "businessHoursOverrideCallout": {
       "title": "Besondere Öffnungszeiten haben Vorrang",
       "body": "Wenn für einen Tag eine besondere Öffnungszeit eingetragen ist, überschreibt dieser Eintrag die übliche Öffnungszeit für diesen Tag zur Gänze."
     },
