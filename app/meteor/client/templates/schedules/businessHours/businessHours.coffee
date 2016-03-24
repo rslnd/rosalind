@@ -1,11 +1,12 @@
 Template.businessHours.helpers
-  total: -> 65
-
-  schedule: ->
+  regular: ->
     Schedules.findOne(type: 'businessHours')
 
+  formTemplate: ->
+    'businessHoursOverrideForm'
+
 Template.businessHours.events
-  'click [rel="edit"]': ->
+  'click [rel="editRegular"]': ->
 
     Modal.show 'scheduleEdit',
       type: 'update'

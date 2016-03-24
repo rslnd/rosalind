@@ -1,12 +1,17 @@
-+contentHeader(title='schedules.businessHours' subtitle='schedules.totalHoursPerWeek' subtitleAppend=schedule.totalHoursPerWeek)
++contentHeader(title='schedules.businessHours' subtitle='schedules.totalHoursPerWeek' subtitleAppend=regular.totalHoursPerWeek)
 .content.zoom-1
   .row
     .col-md-12
       .box.box-default
         .box-header
+          h3.box-title {{_ 'schedules.businessHoursRegular' }}
           .box-tools.pull-right
-            button.btn.btn-box-tool(rel='edit')
+            button.btn.btn-box-tool(rel='editRegular')
               i.fa.fa-pencil
 
         .box-body.zoom-2
-          +weekSummary(schedule=schedule)
+          +weekSummary(schedule=regular)
+
+  .row
+    .col-md-12
+      +dataTable(title='schedules.businessHoursOverride' newTitle='schedules.businessHoursOverrideNew' table=TabularTables.Schedules.businessHoursOverride id='businessHoursOverrideTable' formTemplate=formTemplate)

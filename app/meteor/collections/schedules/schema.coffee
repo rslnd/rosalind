@@ -9,6 +9,7 @@ Schema.Schedules = new SimpleSchema
       'default'
       'override'
       'businessHours'
+      'businessHoursOverride'
       'holidays'
     ]
     index: 1

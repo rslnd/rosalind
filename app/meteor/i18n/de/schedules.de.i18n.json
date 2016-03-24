@@ -10,6 +10,13 @@
     "absences": "Abwesenheiten",
     "overrides": "Abweichende Arbeitszeiten",
     "businessHours": "Öffnungszeiten",
+    "businessHoursRegular": "Übliche Öffnungszeiten",
+    "businessHoursOverride": "Besondere Öffnungszeiten",
+    "businessHoursOverrideNew": "Neue besondere Öffnungszeit eintragen",
+    "businessHoursOverrideWarning": {
+      "title": "Besondere Öffnungszeiten haben Vorrang",
+      "body": "Wenn für einen Tag eine besondere Öffnungszeit eingetragen ist, überschreibt dieser Eintrag die übliche Öffnungszeit für diesen Tag zur Gänze."
+    },
     "holidays": "Feiertage",
     "hoursPerWeek": "Wochenstunden",
     "totalHoursPerWeek": "Gesamtwochenstunden",
