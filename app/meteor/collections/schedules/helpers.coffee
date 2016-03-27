@@ -2,6 +2,18 @@ Meteor.startup ->
   Schedules.helpers
     isValid: (range) -> true
 
+
+    isWithin: (time = moment()) ->
+      weekday = Time.toWeekday(time)
+      if day = @getDay(weekday)
+        shifts = _.map day.shift, (s) ->
+          if s?.start and s?.end
+            start = time.clone().hour(s.start.h).minute(s.start.m or 0).second(0)
+            end = time.clone().hour(s.end.h).minute(s.end.m or 0).second(0)
+            range = moment.range(start, end)
+
+        return _.any shifts, (s) -> s.contains(time)
+
     totalHoursPerWeek: ->
       _.reduce(@schedule, (total, day) =>
         hours = @totalHoursPerDay(day)

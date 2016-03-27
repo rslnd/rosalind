@@ -33,6 +33,9 @@ Time.dayToday = (day) ->
   return today.date() is day.day and
     today.month() is day.month
 
+Time.toWeekday = (time) ->
+  moment(time).locale('en').format('ddd').toLowerCase()
+
 Time.weekdays = ->
   mon: { label: TAPi18n.__('time.monday'), offset: 0 }
   tue: { label: TAPi18n.__('time.tuesday'), offset: 1 }

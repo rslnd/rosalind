@@ -8,7 +8,7 @@ Meteor.startup ->
     return unless defaultSchedule
     return unless options.day
 
-    day = moment(Time.dayToDate(options.day)).locale('en').format('ddd').toLowerCase()
+    day = Time.toWeekday(Time.dayToDate(options.day))
     defaultSchedule.totalHoursPerDay(day)
 
   Schedules.getResources = ->
