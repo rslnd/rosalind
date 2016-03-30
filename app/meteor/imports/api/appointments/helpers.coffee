@@ -1,5 +1,5 @@
 { Mongo } = require 'meteor/mongo'
-TAPi18n = require 'meteor/tap:i18n'
+{ TAPi18n } = require 'meteor/tap:i18n'
 { Users } = require '/imports/api/users'
 
 module.exports =

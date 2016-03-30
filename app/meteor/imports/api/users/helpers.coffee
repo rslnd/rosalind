@@ -1,6 +1,6 @@
 { Meteor } = require 'meteor/meteor'
 { Roles } = require 'meteor/alanning:roles'
-TAPi18n = require 'meteor/tap:i18n'
+{ TAPi18n } = require 'meteor/tap:i18n'
 { Timesheets } = require '/imports/api/timesheets'
 
 module.exports =

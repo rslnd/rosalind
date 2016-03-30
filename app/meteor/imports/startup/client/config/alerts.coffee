@@ -1,4 +1,6 @@
-Meteor.startup ->
+{ sAlert } = require 'meteor/juliancwirko:s-alert'
+
+module.exports = ->
   sAlert.config
     effect: 'stackslide'
     position: 'bottom-left'

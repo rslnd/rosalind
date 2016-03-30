@@ -1,6 +1,6 @@
 { Mongo } = require 'meteor/mongo'
 Spacebars = require 'meteor/spacebars'
-TAPi18n = require 'meteor/tap:i18n'
+{ TAPi18n } = require 'meteor/tap:i18n'
 { Users } = require '/imports/api/users'
 { Comments } = require '/imports/api/comments'
 

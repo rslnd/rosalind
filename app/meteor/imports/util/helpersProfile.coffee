@@ -1,4 +1,4 @@
-TAPi18n = require 'meteor/tap:i18n'
+{ TAPi18n } = require 'meteor/tap:i18n'
 
 module.exports =
   firstName: ->

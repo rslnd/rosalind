@@ -1,4 +1,5 @@
 Helpers = require '/imports/util/helpers'
+Time = require '/imports/util/time'
 
 module.exports = ->
   h = Template.registerHelper

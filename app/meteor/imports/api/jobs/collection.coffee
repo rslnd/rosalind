@@ -1,4 +1,4 @@
-{ JobCollection } = require 'vsivsi:job-collection'
+{ JobCollection } = require 'meteor/vsivsi:job-collection'
 
 options = (options) ->
   idGeneration: 'MONGO'

@@ -1,7 +1,9 @@
-import routes from './routes'
+import config from './config'
 import helpers from './helpers'
+import routes from './routes'
 
 export default function() {
-  routes()
   helpers()
+  routes()
+  config()
 }
