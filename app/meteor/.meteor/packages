@@ -43,6 +43,7 @@ ongoworks:security
 
 # Collections
 matb33:collection-hooks
+aldeed:simple-schema
 aldeed:collection2
 aldeed:autoform
 aldeed:tabular
@@ -62,7 +63,7 @@ mizzao:user-status
 
 # UI
 twbs:bootstrap
-mquandalle:jade
+dalgard:jade
 fortawesome:fontawesome
 fastclick
 sacha:spin
@@ -71,7 +72,6 @@ juliancwirko:s-alert-stackslide
 aldeed:template-extension
 aldeed:autoform-bs-datetimepicker
 tsega:bootstrap3-datetimepicker@=3.1.3_3
-mquandalle:bower
 rochal:slimscroll
 
 # I18n
@@ -91,8 +91,7 @@ copleykj:livestamp
 drblue:fullcalendar
 underscorestring:underscore.string
 mizzao:timesync
-meteorhacks:npm
-npm-container
+meteorhacks:async
 
 # Jobs
 vsivsi:job-collection

@@ -1,0 +1,18 @@
++contentHeader(title='system.thisEvents')
+.content
+  .row
+    .col-md-12
+      ul.timeline
+        +each events
+          li(rel='payload')
+            i.fa(class='{{ klass }}')
+            .timeline-item
+              span.time
+                i.fa.fa-clock-o
+                strong &nbsp;{{ relativeTime }}
+                | &middot; {{ time }}
+
+              h3.timeline-header
+                if createdBy
+                  a {{ personName }}
+                | {{ title }}
