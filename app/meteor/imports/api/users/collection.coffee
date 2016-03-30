@@ -10,6 +10,6 @@ Meteor.users.helpers(helpersProfile)
 Meteor.users.helpers(helpers)
 Meteor.users.helpers({ collection: -> Meteor.users })
 
-Meteor.users.methods = methods
+Meteor.users.methods = methods(Meteor.users)
 
 module.exports = Meteor.users

@@ -1,11 +1,11 @@
-module.exports =
+module.exports = (collection) ->
   findOneByIdOrUsername: (idOrUsername) ->
     if (typeof idOrUsername is 'string')
-      byId = Meteor.users.findOne(idOrUsername)
+      byId = collection.findOne(idOrUsername)
       if (byId)
         return byId
 
-      byUsername = Meteor.users.findOne(username: idOrUsername)
+      byUsername = collection.findOne(username: idOrUsername)
       if (byUsername)
         return byUsername
 
@@ -31,7 +31,7 @@ module.exports =
       { 'profile.firstName': query.split(' ')[0] }
     ]
 
-    Meteor.users.findOne(selector)
+    collection.findOne(selector)
 
 
   byGroup: (selector = {}) ->

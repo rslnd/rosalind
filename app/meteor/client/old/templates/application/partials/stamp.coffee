@@ -15,4 +15,4 @@ Template.stamp.helpers
 
   name: ->
     if user = Users.findOne(@doc[@field + 'By'])
-      user.getFirstName()
+      user.firstName()

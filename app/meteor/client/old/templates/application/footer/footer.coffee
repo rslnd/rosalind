@@ -1,3 +1,5 @@
+Time = require '/imports/util/time'
+
 Template.footer.helpers
   printedStamp: ->
     return unless Meteor.user()
