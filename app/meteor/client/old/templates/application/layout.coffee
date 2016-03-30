@@ -23,7 +23,6 @@ Template.layout.onCreated ->
     @subscribe('users')
     @subscribe('groups')
     @subscribe('tags')
-    @subscribe('counts')
     @subscribe('schedules')
     @subscribe('timesheets')
     @subscribe('inboundCalls')

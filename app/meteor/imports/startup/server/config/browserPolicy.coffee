@@ -1,5 +1,4 @@
-Meteor.startup ->
-
+module.exports = ->
   BrowserPolicy.framing.disallow()
   BrowserPolicy.content.disallowInlineScripts()
   BrowserPolicy.content.disallowEval()
