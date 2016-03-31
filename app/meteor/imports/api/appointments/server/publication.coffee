@@ -5,7 +5,6 @@
 { Appointments, Comments } = require '/imports/api'
 
 module.exports = ->
-
   Meteor.publish null, ->
     return unless @userId
 

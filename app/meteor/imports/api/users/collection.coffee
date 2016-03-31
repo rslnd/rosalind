@@ -3,7 +3,7 @@
 helpersProfile = require '/imports/util/helpersProfile'
 helpers = require './helpers'
 methods = require './methods'
-Schema = require './schema'
+Schema = require './schema/users'
 
 Meteor.users.attachSchema(Schema)
 Meteor.users.helpers(helpersProfile)

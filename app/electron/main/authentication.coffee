@@ -1,23 +1,23 @@
 logger = require('./logger')
 ipc = require('electron').ipcMain
 
-unless @Authentication
-  @Authentication =
+unless @Users
+  @Users =
     start: (@options) ->
-      ipc.on('authentication/onLogin', (e, x) => @onLogin(e, x))
-      ipc.on('authentication/onLogout', (e, x) => @onLogout(e, x))
-      ipc.on('authentication/getToken', (e, x) => @getToken(e, x))
+      ipc.on('users/onLogin', (e, x) => @onLogin(e, x))
+      ipc.on('users/onLogout', (e, x) => @onLogout(e, x))
+      ipc.on('users/getToken', (e, x) => @getToken(e, x))
 
     options: {}
     currentUser: null
     tokenCallbacks: []
 
     onLogin: (e, user) ->
-      logger.info('[Authentication] Logged in', { username: user.username })
+      logger.info('[Users] Logged in', { username: user.username })
       @currentUser = user
 
     onLogout: (e, user) ->
-      logger.info('[Authentication] Logged out', { username: user.username })
+      logger.info('[Users] Logged out', { username: user.username })
       @currentUser = null
 
     getToken: (e, token) ->
@@ -35,8 +35,8 @@ unless @Authentication
       return callback(null, auth)
 
     withToken: (callback) ->
-      @options.ipcReceiver.webContents.send('authentication/getToken')
+      @options.ipcReceiver.webContents.send('users/getToken')
       @tokenCallbacks.push(callback)
 
 
-module.exports = @Authentication
+module.exports = @Users

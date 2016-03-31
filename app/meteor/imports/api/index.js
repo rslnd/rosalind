@@ -6,9 +6,10 @@ import { InboundCalls } from './inboundCalls'
 import { Jobs } from './jobs'
 import { Patients } from './patients'
 import { Reports } from './reports'
+import { Schedules } from './schedules'
+import { System } from './system'
 import { Tags } from './tags'
 import { Timesheets } from './timesheets'
-import { Schedules } from './schedules'
 
 export {
   Appointments,
@@ -19,7 +20,8 @@ export {
   Jobs,
   Patients,
   Reports,
+  Schedules,
+  System,
   Tags,
-  Timesheets,
-  Schedules
+  Timesheets
 }

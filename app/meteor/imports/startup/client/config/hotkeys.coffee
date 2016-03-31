@@ -1,4 +1,9 @@
-window.Mousetrap = require('mousetrap')(window, document)
+once = require 'lodash/once'
+Mousetrap = require 'mousetrap'
+require 'mousetrap/plugins/global-bind/mousetrap-global-bind'
+{ FlowRouter } = require 'meteor/kadira:flow-router'
+{ sAlert } = require 'meteor/juliancwirko:s-alert'
+{ Modal } = require 'meteor/peppelg:bootstrap-3-modal'
 
 hotkeys =
   appointments: [
@@ -56,7 +61,7 @@ hotkeys =
   ]
 
 
-Meteor.startup ->
+bindAll = once ->
   Mousetrap.bindGlobal 'esc', ->
     $(document.activeElement).blur()
     if window.hotkeyFlag
@@ -69,18 +74,7 @@ Meteor.startup ->
       else if hotkey.go
         Mousetrap.bind(hotkey.key, -> FlowRouter.go(hotkey.go))
 
-Template.hotkeys.helpers
-  hotkeys: ->
-    hotkeys[@]
 
-  groups: ->
-    Object.keys(hotkeys)
-
-  keys: ->
-    if typeof @key is 'object'
-      @key
-    else
-      @key.split(' ')
-
-  hotkeyName: ->
-    TAPi18n.__('hotkeys.' + @name)
+module.exports = ->
+  bindAll()
+  hotkeys

@@ -9,11 +9,11 @@ try
     settings: null
     log: (options) -> ipc.send('log', options)
     ipc: ipc
-    authentication:
+    users:
       currentUser: null
-      onLogin: (u) -> ipc.send('authentication/onLogin', u)
-      onLogout: (u) -> ipc.send('authentication/onLogout', u)
-      getToken: (t) -> ipc.send('authentication/getToken', t)
+      onLogin: (u) -> ipc.send('users/onLogin', u)
+      onLogout: (u) -> ipc.send('users/onLogout', u)
+      getToken: (t) -> ipc.send('users/getToken', t)
     print: (options) -> ipc.send('window/print', options)
     import:
       terminiko: -> ipc.send('import/terminiko')
