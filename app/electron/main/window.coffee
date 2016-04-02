@@ -4,7 +4,7 @@ BrowserWindow = require 'browser-window'
 logger = require './logger'
 settings = require './settings'
 
-DEV = _.contains(process.argv, '--dev')?
+DEV = _.contains(process.argv, '--dev')
 
 module.exports =
   open: (callback) ->
@@ -33,7 +33,7 @@ module.exports =
       electron.quit()
 
     webContents = mainWindow.webContents
-    webContents.openDevTools() if DEV?
+    webContents.openDevTools() if DEV
 
     callbackCalled = false
     webContents.on 'did-finish-load', ->

@@ -51,7 +51,7 @@ module.exports = (grunt) ->
       package:
         options:
           name: 'Rosalind'
-          icon: undefined
+          icon: 'https://raw.githubusercontent.com/albertzak/rosalind/master/app/electron/assets/appicon.ico'
           versionString:
             CompanyName: '<%= pkg.author %>'
             LegalCopyright: '<%= pkg.author %>'

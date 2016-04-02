@@ -23,8 +23,8 @@ unless @Settings?
       eoswin:
         path: ''
         modules:
-          patients: true
-          reports: true
+          patients: false
+          reports: false
 
   if fs.existsSync(settingsPath)
     logger.info('[Settings] Loading existing settings from', settingsPath)
