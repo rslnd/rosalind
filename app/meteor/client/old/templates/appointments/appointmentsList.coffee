@@ -1,3 +1,5 @@
+{ Appointments } = require '/imports/api/appointments'
+
 Template.appointmentsList.helpers
   nameOrNote: ->
     if patient = @patient()
@@ -10,4 +12,4 @@ Template.appointmentsList.helpers
 
 Template.appointmentsList.events
   'click .list-group-item': ->
-    Appointments.toggleAdmitted(@_id)
+    Appointments.methods.toggleAdmitted(@_id)

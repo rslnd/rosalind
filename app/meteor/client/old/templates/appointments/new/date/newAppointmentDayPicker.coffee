@@ -1,3 +1,5 @@
+Time = require '/imports/util/time'
+
 Template.newAppointmentDayPicker.onRendered ->
   dayPickerOptions =
     language: moment().locale().split('-')[0]

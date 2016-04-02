@@ -1,5 +1,6 @@
 moment = require 'moment'
 temp = require 'temp'
+includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Picker } = require 'meteor/meteorhacks:picker'
 { Users } = require '/imports/api/users'
@@ -43,7 +44,7 @@ module.exports = ->
 
 
     return res.end('not authorized') unless currentUser
-    return res.end('importer not allowed') unless _.contains(allowedImporters, importer)
+    return res.end('importer not allowed') unless includes(allowedImporters, importer)
 
     stream = temp.createWriteStream()
 

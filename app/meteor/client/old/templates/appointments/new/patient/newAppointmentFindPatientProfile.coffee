@@ -1,3 +1,5 @@
+{ Patients } = require '/imports/api/patients'
+
 subs = new SubsManager()
 
 Template.newAppointmentFindPatientProfile.helpers

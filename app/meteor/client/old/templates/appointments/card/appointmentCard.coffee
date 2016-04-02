@@ -1,12 +1,14 @@
+{ Appointments } = require '/imports/api/appointments'
+
 Template.appointmentCard.events
   'click .admit': ->
-    Appointments.setAdmitted(@_id)
+    Appointments.methods.setAdmitted(@_id)
 
   'click .treat': ->
-    Appointments.setTreated(@_id)
+    Appointments.methods.setTreated(@_id)
 
   'click .resolve': ->
-    Appointments.setResolved(@_id)
+    Appointments.methods.setResolved(@_id)
 
 Template.appointmentCard.helpers
   patientIdButNoPatient: ->

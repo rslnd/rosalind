@@ -4,7 +4,7 @@ BrowserWindow = require 'browser-window'
 logger = require './logger'
 settings = require './settings'
 
-DEV = _.contains(process.argv, '--dev')
+DEV = _.includes(process.argv, '--dev')
 
 module.exports =
   open: (callback) ->

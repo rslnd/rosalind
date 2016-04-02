@@ -1,3 +1,5 @@
+{ Tags } = require '/imports/api/tags'
+
 Template.newAppointmentDetails.helpers
 
   tags: ->

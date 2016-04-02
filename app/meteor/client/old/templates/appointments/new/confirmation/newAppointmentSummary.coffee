@@ -1,3 +1,7 @@
+{ Patients } = require '/imports/api/patients'
+{ Users } = require '/imports/api/users'
+Helpers = require '/imports/util/helpers'
+
 Template.newAppointmentSummary.helpers
   name: ->
     if _id = newAppointment.get('patientId')
@@ -24,7 +28,7 @@ Template.newAppointmentSummary.helpers
 
   assignee: ->
     if _id = newAppointment.get('assigneeId')
-      Meteor.users.findOne({ _id }).fullNameWithTitle()
+      Users.findOne({ _id }).fullNameWithTitle()
     else
       Helpers.noValue()
 

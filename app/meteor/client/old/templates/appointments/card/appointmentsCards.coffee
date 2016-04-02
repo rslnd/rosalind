@@ -1,3 +1,5 @@
+{ Appointments } = require '/imports/api/appointments'
+
 Template.appointmentsCards.onCreated ->
   @autorun =>
     @subscribe('appointments')
@@ -7,9 +9,9 @@ Template.appointmentsCards.helpers
     FlowRouter.watchPathChange()
     status = FlowRouter.current().params?.status
     switch status
-      when 'admitted' then Appointments.findAdmitted()
-      when 'treating' then Appointments.findTreating()
-      when '' then Appointments.findOpen()
+      when 'admitted' then Appointments.methods.findAdmitted()
+      when 'treating' then Appointments.methods.findTreating()
+      when '' then Appointments.methods.findOpen()
 
   title: ->
     FlowRouter.watchPathChange()

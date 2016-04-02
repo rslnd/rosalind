@@ -51,7 +51,7 @@ module.exports = (grunt) ->
       package:
         options:
           name: 'Rosalind'
-          icon: 'https://raw.githubusercontent.com/albertzak/rosalind/master/app/electron/assets/appicon.ico'
+          icon: 'assets/appicon.ico'
           versionString:
             CompanyName: '<%= pkg.author %>'
             LegalCopyright: '<%= pkg.author %>'
@@ -64,8 +64,8 @@ module.exports = (grunt) ->
           dir: 'build/javascript/'
           out: 'build/packaged/'
           version: '<%= pkg.buildOptions.electronVersion %>'
-          platform: 'all'
-          arch: 'all'
+          platform: 'win32'
+          arch: 'ia32'
           asar: true
           overwrite: true
           ignore: _.map(options.devDependencies(), (p) -> 'node_modules/' + p).join('|')
@@ -76,6 +76,8 @@ module.exports = (grunt) ->
         outputDirectory: 'build/installer/<%= pkg.productName %>-win32-ia32/'
         exe: '<%= pkg.productName %>.exe'
         title: '<%= pkg.productName %>'
+        iconUrl: 'https://raw.githubusercontent.com/albertzak/rosalind/master/app/electron/assets/appicon.ico'
+        setupIcon: 'assets/appicon.ico'
 
     copy:
       node_modules:
