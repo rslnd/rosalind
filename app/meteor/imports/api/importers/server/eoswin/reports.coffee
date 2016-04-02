@@ -1,28 +1,34 @@
-Meteor.startup ->
-  Job.processJobs 'import', 'eoswinReports', (job, callback) ->
-    job.log('EoswinReports: Running')
+moment = require 'moment'
+chain = require 'lodash/chain'
+Time = require '/imports/util/time'
+adt = require '../shared/adt'
+bulk = require '../shared/bulk'
+{ Reports } = require '/imports/api/reports'
 
-    unless job.data?.meta?.id
-      job.log('[Job] eoswinReports: No id provided')
-      return job.done() and callback()
+module.exports = (job, callback) ->
+  job.log('EoswinReports: Running')
 
-    Import.Adt
-      path: job.data.path
-      all: (rows) ->
-        assignees = parseAssignees(rows)
-        report =
-          external:
-            eoswin:
-              id: job.data.meta.id
-              timestamps:
-                importedAt: moment().toDate()
-                importedBy: job.data.userId
-          day: Time.dateToDay(moment(job.data.meta.day, 'YYYYMMDD'))
-          assignees: assignees
+  unless job.data?.meta?.id
+    job.log('[Job] eoswinReports: No id provided')
+    return job.done() and callback()
 
-        Reports.upsert(report)
+  adt
+    path: job.data.path
+    all: (rows) ->
+      assignees = parseAssignees(rows)
+      report =
+        external:
+          eoswin:
+            id: job.data.meta.id
+            timestamps:
+              importedAt: moment().toDate()
+              importedBy: job.data.userId
+        day: Time.dateToDay(moment(job.data.meta.day, 'YYYYMMDD'))
+        assignees: assignees
 
-    job.done() and callback()
+      Reports.upsert(report)
+
+  job.done() and callback()
 
 
 parseAssignees = (rows) ->
@@ -66,7 +72,7 @@ parseAssignees = (rows) ->
     else if record.Kurzz is 'E'
       assignee.revenue += parseFloat(parseFloat(record.Info).toFixed(2))
 
-  assignees = _.chain(assignees)
+  assignees = chain(assignees)
     .map (assignee, id) ->
       assignee.id = id
       return assignee

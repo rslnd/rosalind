@@ -3,6 +3,7 @@ import comments from '/imports/api/comments/server'
 import customer from '/imports/api/customer/server'
 import events from '/imports/api/events/server'
 import groups from '/imports/api/groups/server'
+import importers from '/imports/api/importers/server'
 import inboundCalls from '/imports/api/inboundCalls/server'
 import patients from '/imports/api/patients/server'
 import reports from '/imports/api/reports/server'
@@ -20,6 +21,7 @@ export default function() {
   customer()
   events()
   groups()
+  importers()
   inboundCalls()
   patients()
   reports()

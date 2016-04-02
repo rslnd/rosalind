@@ -1,11 +1,11 @@
-@Import ||= {}
+{ spawn } = require 'child_process'
+temp = require 'temp'
+fs = require 'fs'
+Future = require 'fibers/future'
 
-spawn = require('child_process').spawn
-temp = require('temp').track()
-fs = require('fs')
-Future = require('fibers/future')
+module.exports = (options) ->
+  temp.track()
 
-@Import.Mdb = (options) ->
   options = _.defaults options,
     delete: true
     columnDelimiter: ','

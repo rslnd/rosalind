@@ -3,6 +3,7 @@ import { Comments } from './comments'
 import { Customer } from './customer'
 import { Events } from './events'
 import { Groups } from './groups'
+import { Importers } from './importers'
 import { InboundCalls } from './inboundCalls'
 import { Jobs } from './jobs'
 import { Patients } from './patients'
@@ -19,6 +20,7 @@ export {
   Customer,
   Events,
   Groups,
+  Importers,
   InboundCalls,
   Jobs,
   Patients,

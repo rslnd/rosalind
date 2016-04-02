@@ -1,9 +1,6 @@
-@Import ||= {}
+{ Meteor } = require 'meteor/meteor'
 
-@Import.Bulk = {}
-
-@Import.Bulk.upsert = (options) ->
-
+upsert = (options) ->
   collection = options.mongodb.collection
   selectorKey = options.mongodb.selector
 
@@ -25,3 +22,5 @@
 
   unless execute.isOk()
     console.error("[Import] Mongodb Bulk Error: #{JSON.stringify(execute)}")
+
+module.exports = { upsert }

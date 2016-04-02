@@ -1,14 +1,16 @@
-@Import ||= {}
-
-fs = require('fs')
-csv = require('babyparse')
-iconv = require('iconv-lite')
-exec = require('child_process').exec
+defaults = require 'lodash/defaults'
+Adt = require 'node_adt'
+fs = require 'fs'
+csv = require 'babyparse'
+iconv = require 'iconv-lite'
+{ exec } = require 'child_process'
+temp = require 'temp'
+{ Meteor } = require 'meteor/meteor'
 execSync = Meteor.wrapAsync(exec)
-temp = require('temp').track()
 
+module.exports = (options) ->
+  temp.track()
 
-@Import.Csv = (options) ->
   options = _.defaults options,
     delete: true
     encoding: 'utf8'

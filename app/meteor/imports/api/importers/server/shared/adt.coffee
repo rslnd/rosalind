@@ -1,10 +1,10 @@
-@Import ||= {}
+defaults = require 'lodash/defaults'
+Adt = require 'node_adt'
+fs = require 'fs'
+{ Meteor } = require 'meteor/meteor'
 
-Adt = require('node_adt')
-fs = require('fs')
-
-@Import.Adt = (options) ->
-  options = _.defaults options,
+module.exports = (options) ->
+  options = defaults options,
     delete: true
     progressFactor: 1
     batchSize: 1000
@@ -50,6 +50,5 @@ fs = require('fs')
   options.progress.log('Adt: Closing table') if options.progress
   table.close()
   fs.unlinkSync(options.path) if options.delete
-
 
   return i
