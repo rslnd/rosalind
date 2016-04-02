@@ -1,7 +1,11 @@
-@Search = {}
+omit = require 'lodash/omit'
+clone = require 'lodash/clone'
+Elasticsearch = require './elasticsearch'
+{ Meteor } = require 'meteor/meteor'
 
-Search.options =
-  index: 'rosalind'
+Search =
+  options:
+    index: 'rosalind'
 
 Search.index = (type, docOrId) ->
   return unless Meteor.isServer
@@ -10,7 +14,7 @@ Search.index = (type, docOrId) ->
     index: Search.options.index
     type: type
     id: doc._id
-    body: _.omit(doc, '_id')
+    body: omit(doc, '_id')
 
 Search.unindex = (type, doc) ->
   return unless Meteor.isServer
@@ -26,7 +30,7 @@ Search.query = (type, queryObject) ->
     body: queryObject
 
   data = result.hits.hits.map (doc) ->
-    sourceDoc = _.clone(doc._source)
+    sourceDoc = clone(doc._source)
     sourceDoc._score = doc._score
     sourceDoc._id = doc._id
     sourceDoc
@@ -47,3 +51,13 @@ Search.queryExactlyOne = (type, queryObject) ->
   response = Search.query(type, queryObject)
   return false if response.metadata.total isnt 1
   return response.data[0]
+
+Search.putMapping = (type, mapping) ->
+  console.warn("[Search] Setting mapping for #{type}")
+  Elasticsearch.indices.putMapping
+    index: Search.options.index
+    type: type
+    body: mapping
+
+
+module.exports = Search

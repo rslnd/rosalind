@@ -21,6 +21,7 @@ methods =
     'close'
   ]
 
+Elasticsearch = Async.wrap(esClient, methods.global)
+Elasticsearch.indices = Async.wrap(esClient.indices, methods.indices)
 
-@Elasticsearch = Async.wrap(esClient, methods.global)
-@Elasticsearch.indices = Async.wrap(esClient.indices, methods.indices)
+module.exports = Elasticsearch
