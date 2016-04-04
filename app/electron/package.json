@@ -35,11 +35,11 @@
     "javascript-natural-sort": "^0.7.1",
     "lodash": "^4.7.0",
     "node_adt": "^1.1.1",
-    "node-win-shortcut": "0.0.2",
     "open": "0.0.5",
     "request": "^2.67.0",
     "temp": "^0.8.3",
     "throttled-request": "^0.1.1",
+    "windows-shortcuts-appid": "^0.3.2",
     "winston": "^2.1.1",
     "xdt": "^0.1.1"
   },

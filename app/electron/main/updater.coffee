@@ -1,19 +1,6 @@
-electron = require('app')
+electron = require 'app'
+autoUpdater = require 'autoUpdater'
 logger = require './logger'
-GhReleases = require('electron-gh-releases')
-githubUpdater = new GhReleases
-  repo: 'albertzak/rosalind'
-  currentVersion: electron.getVersion()
-
-electron.setAppUserModelId('com.squirrel.rosalind.rosalind')
-
-githubUpdater.autoUpdater.on 'error', (err, msg) ->
-  logger.info('[Updater]', msg) if msg?
-  logger.error('[Updater]', err) if err?
-
-githubUpdater.on 'update-downloaded', (info) ->
-  logger.info('[Updater] Update downloaded: ', info)
-  logger.info('[Updater] TODO: set a flag to install update on next app launch')
 
 module.exports =
   handleStartupEvent: ->
@@ -44,14 +31,28 @@ module.exports =
         electron.quit()
         return true
 
+
+  start: ->
+    logger.info('[Updater] Setting feed URL')
+    autoUpdater.setFeedURL(settings?.updateUrl or 'https://update.rslnd.com')
+
+    autoUpdater.on 'error', (err) ->
+      logger.error('[Updater]', err) if err?
+
+    autoUpdater.on 'checking-for-update', ->
+      logger.info('[Updater] Checking for update')
+
+    autoUpdater.on 'update-available', ->
+      logger.info('[Updater] New update available')
+
+    autoUpdater.on 'update-not-available', ->
+      logger.info('[Updater] No update')
+
+    autoUpdater.on 'update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateURL) ->
+      logger.info('[Updater] New update downloaded')
+      logger.info('[Updater]', { event, releaseNotes, releaseName, releaseDate, updateURL })
+
+
   check: ->
     logger.info('[Updater] Checking for updates')
-    githubUpdater.check (err, status) ->
-      if err and err?.message?.indexOf('no newer version') > -1
-        logger.info('[Updater] Update check finished: No newer version')
-      else if err
-        logger.error('[Updater] Update check finished with error:', err)
-      else if status
-        logger.info('[Updater] Update check finished successfully: ', status)
-        logger.info('[Updater] Downloading update in background')
-        githubUpdater.download()
+    githubUpdater.checkForUpdates()

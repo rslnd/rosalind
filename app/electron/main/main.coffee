@@ -25,6 +25,7 @@ start = ->
       print.start(ipcReceiver: mainWindow)
 
     authentication.start(ipcReceiver: mainWindow)
+    updater.start()
     setTimeout(updater.check, 15 * 1000)
 
   electron.on 'window-all-closed', ->
