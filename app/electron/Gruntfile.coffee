@@ -109,6 +109,9 @@ module.exports = (grunt) ->
       tag:
         command: options.tagCommand()
 
+      'push':
+        command: 'git push'
+
       'push-tags':
         command: 'git push --tags'
 
@@ -125,6 +128,6 @@ module.exports = (grunt) ->
           failOnError: false
 
 
-  grunt.registerTask('tag', ['shell:tag', 'shell:push-tags'])
+  grunt.registerTask('tag', ['shell:tag', 'shell:push', 'shell:push-tags'])
   grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer'])
   grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt'])
