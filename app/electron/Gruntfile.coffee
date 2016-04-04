@@ -19,6 +19,10 @@ module.exports = (grunt) ->
       devDependencies = grunt.file.readJSON('package.json').devDependencies
       _.map(devDependencies, (version, name) -> name)
 
+    electronVersion: ->
+      devDependencies = grunt.file.readJSON('package.json').devDependencies
+      _.find(devDependencies, (version, name) -> name is 'electron-prebuilt').version
+
     dependencies: ->
       dependencies = grunt.file.readJSON('package.json').dependencies
       _.map(dependencies, (version, name) -> name)
@@ -63,7 +67,7 @@ module.exports = (grunt) ->
             InternalName: '<%= pkg.productName %>'
           dir: 'build/javascript/'
           out: 'build/packaged/'
-          version: '<%= pkg.devDependencies.electron-prebuilt %>'
+          version: options.electronVersion()
           platform: 'win32'
           arch: 'ia32'
           asar: true
