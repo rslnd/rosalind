@@ -63,7 +63,7 @@ module.exports = (grunt) ->
             InternalName: '<%= pkg.productName %>'
           dir: 'build/javascript/'
           out: 'build/packaged/'
-          version: '<%= pkg.buildOptions.electronVersion %>'
+          version: '<%= pkg.devDependencies.electron-prebuilt %>'
           platform: 'win32'
           arch: 'ia32'
           asar: true
