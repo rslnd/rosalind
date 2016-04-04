@@ -9,28 +9,35 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-electron')
   grunt.loadNpmTasks('grunt-shell')
 
+  packageJSON = grunt.file.readJSON('package.json')
+
   options =
+    tagCommand: ->
+      v = packageJSON.version
+      grunt.log.ok("Tagging latest commit with v#{v} 🐣")
+      "git tag -a v#{v} -m '🐣 v#{v}'"
+
     killCommand: ->
       'taskkill /F /IM electron.exe' if process.platform is 'win32'
       'pkill -9 Electron' if process.platform is 'darwin'
       'pkill -9 electron'
 
     devDependencies: ->
-      devDependencies = grunt.file.readJSON('package.json').devDependencies
+      devDependencies = packageJSON.devDependencies
       _.map(devDependencies, (version, name) -> name)
 
     electronVersion: ->
-      devDependencies = grunt.file.readJSON('package.json').devDependencies
+      devDependencies = packageJSON.devDependencies
       _.find(devDependencies, (version, name) -> name is 'electron-prebuilt').version
 
     dependencies: ->
-      dependencies = grunt.file.readJSON('package.json').dependencies
+      dependencies = packageJSON.dependencies
       _.map(dependencies, (version, name) -> name)
 
 
 
   grunt.initConfig
-    pkg: grunt.file.readJSON('package.json')
+    pkg: packageJSON
 
     clean:
       build:
@@ -99,6 +106,12 @@ module.exports = (grunt) ->
         ]
 
     shell:
+      tag:
+        command: options.tagCommand()
+
+      'push-tags':
+        command: 'git push --tags'
+
       electronPrebuilt:
         command: './node_modules/.bin/electron build/javascript/'
         options:
@@ -112,5 +125,6 @@ module.exports = (grunt) ->
           failOnError: false
 
 
+  grunt.registerTask('tag', ['shell:tag', 'shell:push-tags'])
   grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer'])
   grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt'])
