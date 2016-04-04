@@ -14,7 +14,7 @@ module.exports = (grunt) ->
   options =
     tagCommand: ->
       v = packageJSON.version
-      grunt.log.ok("Tagging latest commit with v#{v} 🐣")
+      grunt.log.ok("Latest release tag is v#{v} 🐣")
       "git tag -a v#{v} -m '🐣 v#{v}'"
 
     killCommand: ->
