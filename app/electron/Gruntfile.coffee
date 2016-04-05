@@ -5,6 +5,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-copy')
   grunt.loadNpmTasks('grunt-contrib-clean')
+  grunt.loadNpmTasks('grunt-rename')
   grunt.loadNpmTasks('grunt-electron-installer')
   grunt.loadNpmTasks('grunt-electron')
   grunt.loadNpmTasks('grunt-shell')
@@ -105,6 +106,15 @@ module.exports = (grunt) ->
           }
         ]
 
+    rename:
+      0:
+        src: 'build/installer/Rosalind-win32-ia32/RosalindSetup.exe'
+        dest: 'build/installer/Rosalind-win32-ia32/RosalindSetup-win-v<%= pkg.version %>.exe'
+
+      1:
+        src: 'build/installer/Rosalind-win32-ia32/RosalindSetup.msi'
+        dest: 'build/installer/Rosalind-win32-ia32/RosalindSetup-win-v<%= pkg.version %>.msi'
+
     shell:
       tag:
         command: options.tagCommand()
@@ -129,5 +139,6 @@ module.exports = (grunt) ->
 
 
   grunt.registerTask('tag', ['shell:tag', 'shell:push', 'shell:push-tags'])
-  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer'])
+  grunt.registerTask('tag', ['shell:tag', 'shell:push', 'shell:push-tags'])
+  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer', 'rename:0', 'rename:1'])
   grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt'])

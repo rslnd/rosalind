@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
@@ -20,6 +20,7 @@
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-electron": "^2.0.1",
     "grunt-electron-installer": "^2.0.0",
+    "grunt-rename": "^0.1.4",
     "grunt-shell": "^1.1.2",
     "shelljs": "^0.6.0"
   },

@@ -1,5 +1,5 @@
 electron = require 'app'
-autoUpdater = require 'autoUpdater'
+autoUpdater = require 'auto-updater'
 logger = require './logger'
 
 module.exports =
