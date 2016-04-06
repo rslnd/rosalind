@@ -44,7 +44,9 @@ module.exports =
 
   start: ->
     logger.info('[Updater] Setting feed URL')
-    autoUpdater.setFeedURL(settings?.updateUrl or 'https://update.rslnd.com')
+    feedUrl = settings?.updateUrl or 'https://update.rslnd.com'
+    feedUrl = feedUrl + '/update/' + process.platform + '/v' + manifest.version
+    autoUpdater.setFeedURL(feedUrl)
 
     autoUpdater.on 'error', (err) ->
       logger.error('[Updater]', err) if err?
