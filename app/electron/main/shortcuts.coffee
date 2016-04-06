@@ -37,7 +37,7 @@ module.exports =
     shortcut.create shortcutPath, @shortcutOptions, (err) ->
       return logger.error('[Updater] Could not create shortcut', { err, shortcutPath }) if err
       logger.info('[Updater] Created shortcut', shortcutPath)
-      shortcut.addAppId shortcutPath, appId, (err) ->
+      shortcut.addAppId shortcutPath, manifest.appId, (err) ->
         logger.error('[Updater] Could not link app id', err) if err
 
   updateShortcut: (shortcutPath) ->
