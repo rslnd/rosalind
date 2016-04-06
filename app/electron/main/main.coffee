@@ -7,6 +7,7 @@ cli = require './cli'
 authentication = require './authentication'
 importers = require './importers'
 print = require './print'
+shortcuts = require './shortcuts'
 
 mainWindow = null
 bdtWatcher = null
@@ -19,10 +20,12 @@ start = ->
 
   electron.on 'ready', ->
     mainWindow = window.open (err) ->
-      return logger.error(err) if err
-      logger.info('[Main] Main window loaded')
+      return logger.error('[Main] Could not load main window', err) if err
+      logger.ready('[Main] Main window loaded')
       importers.start(ipcReceiver: mainWindow)
       print.start(ipcReceiver: mainWindow)
+      shortcuts.updateShortcuts()
+
 
     authentication.start(ipcReceiver: mainWindow)
     updater.start()

@@ -15,4 +15,4 @@ module.exports =
       reports: @eoswin.reports.start(options)
 
   stop: ->
-    @instances.bdt.close()
+    @instances.bdt?.close()

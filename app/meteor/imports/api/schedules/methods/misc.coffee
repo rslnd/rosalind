@@ -5,7 +5,7 @@ keys = require 'lodash/keys'
 Time = require '/imports/util/time'
 
 module.exports = (collection) ->
-  getScheduledHours = (options = {}) ->
+  getScheduledHours: (options = {}) ->
     defaultSchedule = collection.findOne
       userId: options.userId
       type: 'default'
@@ -16,10 +16,10 @@ module.exports = (collection) ->
     day = Time.toWeekday(Time.dayToDate(options.day))
     defaultSchedule.totalHoursPerDay(day)
 
-  getResources = ->
+  getResources: ->
     map(keys(Meteor.users.byGroup()), (resourceId) -> { id: resourceId, title: resourceId })
 
-  getEvents = (options = {}) ->
+  getEvents: (options = {}) ->
     options.selector ||= {}
     options.range ||= {}
 
@@ -56,7 +56,7 @@ module.exports = (collection) ->
 
     events
 
-  updateEvent = (_id, e) ->
+  updateEvent: (_id, e) ->
     console.warn('updating events not implemented')
     # e.schedule.start = e.start.toDate()
     # e.schedule.end = e.end.toDate()

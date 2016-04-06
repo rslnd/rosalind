@@ -1,3 +1,4 @@
+_ = require 'lodash'
 winston = require('winston')
 path = require('path')
 electron = require('app')
@@ -25,6 +26,13 @@ module.exports =
 
     ipc.on 'log', (e, err) ->
       winston.log(err.level, err.message, err.payload)
+
+  ready: (log) ->
+    winston.info(log)
+
+    if _.includes(process.argv, '--debug-quit-on-ready')
+      winston.info('[Log] Debug: App launched successfully; now quitting')
+      electron.quit()
 
 
   debug: winston.debug

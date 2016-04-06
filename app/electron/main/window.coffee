@@ -12,20 +12,20 @@ module.exports =
     display = screen.getPrimaryDisplay().workAreaSize
 
     mainWindow = new BrowserWindow
-      x: display.x,
-      y: display.y,
-      width: display.width,
-      height: display.height,
-      'min-width': 560,
-      'min-height': 426,
-      'disable-auto-hide-cursor': true,
-      'preload': require.resolve('../renderer/native.js'),
-      'node-integration': false,
-      'web-preferences':
-        'text-areas-are-resizable': false,
-        'experimental-canvas-features': true,
-        'subpixel-font-scaling': true,
-        'overlay-scrollbars': false
+      x: display.x
+      y: display.y
+      width: display.width
+      height: display.height
+      minWidth: 560
+      minHeight: 426
+      disableAutoHideCursor: true
+      webPreferences:
+        preload: require.resolve('../renderer/native')
+        nodeIntegration: false
+        textAreasAreResizable: false
+        experimentalCanvasFeatures: true
+        subpixelFontScaling: true
+        overlayScrollbars: false
 
     mainWindow.maximize()
 

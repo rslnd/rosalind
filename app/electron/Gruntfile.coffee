@@ -90,6 +90,7 @@ module.exports = (grunt) ->
         title: '<%= pkg.productName %>'
         iconUrl: 'https://raw.githubusercontent.com/albertzak/rosalind/master/app/electron/assets/appicon.ico'
         setupIcon: 'assets/appicon.ico'
+        noMsi: true
 
     copy:
       node_modules:
@@ -107,23 +108,16 @@ module.exports = (grunt) ->
         ]
 
     rename:
-      0:
+      installerExe:
         src: 'build/installer/Rosalind-win32-ia32/RosalindSetup.exe'
         dest: 'build/installer/Rosalind-win32-ia32/RosalindSetup-win-v<%= pkg.version %>.exe'
-
-      1:
-        src: 'build/installer/Rosalind-win32-ia32/RosalindSetup.msi'
-        dest: 'build/installer/Rosalind-win32-ia32/RosalindSetup-win-v<%= pkg.version %>.msi'
 
     shell:
       tag:
         command: options.tagCommand()
 
-      'push':
-        command: 'git push'
-
-      'push-tags':
-        command: 'git push --tags'
+      push:
+        command: 'git push --follow-tags'
 
       electronPrebuilt:
         command: './node_modules/.bin/electron build/javascript/'
@@ -138,7 +132,7 @@ module.exports = (grunt) ->
           failOnError: false
 
 
-  grunt.registerTask('tag', ['shell:tag', 'shell:push', 'shell:push-tags'])
-  grunt.registerTask('tag', ['shell:tag', 'shell:push', 'shell:push-tags'])
-  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer', 'rename:0', 'rename:1'])
+  grunt.registerTask('tag', ['shell:tag', 'shell:push'])
+  grunt.registerTask('tag', ['shell:tag', 'shell:push'])
+  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer', 'rename:installerExe', ])
   grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt'])

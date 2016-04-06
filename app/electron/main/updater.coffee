@@ -1,10 +1,16 @@
+fs = require 'fs'
+shortcut = require 'windows-shortcuts-appid'
 electron = require 'app'
 autoUpdater = require 'auto-updater'
 logger = require './logger'
+manifest = require './manifest'
+shortcuts = require './shortcuts'
 
 module.exports =
   handleStartupEvent: ->
     return unless process.platform is 'win32'
+
+    electron.setAppUserModelId(manifest.appId)
 
     squirrelCommand = process.argv[1]
 
@@ -15,22 +21,26 @@ module.exports =
         # - Add your .exe to the PATH
         # - Write to the registry for things like file associations and
         #   explorer context menus
-        electron.quit()
+        logger.info('[Updater] Squirrel command: install')
+        shortcuts.updateShortcuts()
+        setTimeout(electron.quit, 600)
         return true
 
       when '--squirrel-uninstall'
         # Undo anything you did in the --squirrel-install and
         # --squirrel-updated handlers
-        electron.quit()
+        logger.info('[Updater] Squirrel command: uninstall')
+        shortcuts.deleteShortcuts()
+        setTimeout(electron.quit, 600)
         return true
 
       when '--squirrel-obsolete'
         # This is called on the outgoing version of your app before
         # we update to the new version - it's the opposite of
         # --squirrel-updated
-        electron.quit()
+        logger.info('[Updater] Squirrel command: obsolete')
+        setTimeout(electron.quit, 600)
         return true
-
 
   start: ->
     logger.info('[Updater] Setting feed URL')
@@ -55,4 +65,7 @@ module.exports =
 
   check: ->
     logger.info('[Updater] Checking for updates')
-    githubUpdater.checkForUpdates()
+    try
+      autoUpdater.checkForUpdates()
+    catch e
+      logger.error('[Updater] Cannot check for updates because app is not installed')
