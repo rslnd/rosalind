@@ -1,9 +1,3 @@
-# Meteor packages used by this project, one per line.
-# Check this file (and the other files in this directory) into your repository.
-#
-# 'meteor add' and 'meteor remove' will edit this file for you,
-# but you can also edit it by hand.
-
 # Core
 es5-shim
 coffeescript
@@ -13,7 +7,6 @@ mobile-experience
 mongo
 blaze-html-templates
 session
-jquery
 tracker
 logging
 reload
@@ -21,7 +14,6 @@ random
 ejson
 spacebars
 check
-appcache
 accounts-base
 accounts-password
 standard-minifiers
@@ -79,17 +71,12 @@ rochal:slimscroll
 tap:i18n
 gwendall:autoform-i18n
 gwendall:simple-schema-i18n
-rzymek:moment-locale-de-at
 
 # Util
-u2622:persistent-session
 momentjs:moment
-aldeed:moment-timezone
-benmgreene:moment-range
-oaf:moment-duration-format
+u2622:persistent-session
 bojicas:inflections
 copleykj:livestamp
-drblue:fullcalendar
 underscorestring:underscore.string
 mizzao:timesync
 meteorhacks:async
