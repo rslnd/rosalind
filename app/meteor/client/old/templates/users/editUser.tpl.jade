@@ -3,7 +3,7 @@
   +with user
     .box.box-default
       .box-body
-        +autoForm(collection='Meteor.users' id='editUserForm' doc=this type='update')
+        +autoForm(collection=collection id='editUserForm' doc=this type='update')
           fieldset
             +afQuickField(name='username')
             +afQuickField(name='groupId')
@@ -18,7 +18,7 @@
 
     .box.box-warning
       .box-body
-        +autoForm(schema='Schema.UserUpdatePassword' meteormethod='users/updatePassword' id='updatePasswordUserForm' type='method')
+        +autoForm(schema=updatePassword meteormethod='users/updatePassword' id='updatePasswordUserForm' type='method')
           fieldset
             +afQuickField(name='password')
             +afFieldInput(name='userId' type='hidden' value=_id)
@@ -26,7 +26,7 @@
 
     .box.box-danger
       .box-body
-        +autoForm(schema='Schema.UserUpdateRoles' meteormethod='users/updateRoles' id='updateRolesUserForm' type='method')
+        +autoForm(schema=updateRoles meteormethod='users/updateRoles' id='updateRolesUserForm' type='method')
           fieldset
             +afQuickField(name='roles' type='text' value=getRoles)
             +afFieldInput(name='userId' type='hidden' value=_id)

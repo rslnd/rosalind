@@ -1,7 +1,7 @@
 { SimpleSchema } = require 'meteor/aldeed:simple-schema'
 Auto = require '/imports/util/schema/auto'
 
-module.exports = new SimpleSchema
+schema = new SimpleSchema
   firstName:
     type: String
     optional: true
@@ -29,3 +29,7 @@ module.exports = new SimpleSchema
     type: String
     autoValue: Auto.createdBy
     optional: true
+
+schema.i18n('inboundCalls.form')
+
+module.exports = schema

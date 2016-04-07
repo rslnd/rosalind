@@ -1,5 +1,5 @@
 { Meteor } = require 'meteor/meteor'
-{ Timesheets } = require '/imports/api/timesheets'
+Timesheets = require '/imports/api/timesheets'
 
 Meteor.methods
   'timesheets/startTracking': ->
@@ -18,7 +18,7 @@ methods =
       .value()
 
   startTracking: (options = {}) ->
-    return if Timesheets.isTracking(options)
+    return if @isTracking(options)
     timesheetId = Timesheets.insert
       userId: options.userId
       start: new Date()
@@ -32,7 +32,7 @@ methods =
       payload: { timesheetId }
 
   stopTracking: (options = {}) ->
-    return unless timesheetId = Timesheets.isTracking(options)?._id
+    return unless timesheetId = @isTracking(options)?._id
     Timesheets.update { _id: timesheetId }, $set:
       end: new Date()
       tracking: false

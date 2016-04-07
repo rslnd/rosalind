@@ -2,47 +2,43 @@
 
 module.exports =
   firstName: ->
-    if (@profile and @profile.firstName)
-      @profile.firstName
-    else
-      @fullName()
+    @profile?.firstName or @fullName()
 
-  salutation: ->
+  prefix: ->
+    return '' if @collection()._name is 'users'
+
     if @profile?.gender is 'Male'
-      TAPi18n.__('patients.salutationMale')
+      TAPi18n.__('patients.salutationMale') + ' '
     else if @profile?.gender is 'Female'
-      TAPi18n.__('patients.salutationFemale')
+      TAPi18n.__('patients.salutationFemale') + ' '
     else
       ''
 
-  fullName: (prefix) ->
-    prefix ||= @salutation()
+  fullName: (options = {}) ->
+    prefix = if options.prefix isnt false then @prefix() else ''
 
-    if (@profile and @profile.lastName and @profile.firstName)
+    if (@profile?.lastName and @profile.firstName)
       prefix + @profile.firstName + ' ' + @profile.lastName
-    else if (@profile and @profile.lastName)
+    else if (@profile?.lastName)
       prefix + @profile.lastName
-    else if (@profile and @profile.firstName)
+    else if (@profile?.firstName)
       @profile.firstName
     else
       @username
 
-  fullNameWithTitle: (overrideFullName) ->
-    fullName = overrideFullName or @fullName('')
-    prefix = @salutation()
-
-    if (@profile and @profile.titleAppend and @profile.titlePrepend)
-      prefix + @profile.titlePrepend + ' ' + fullName
+  fullNameWithTitle: ->
+    if (@profile?.titleAppend and @profile.titlePrepend)
+      @prefix() + @profile.titlePrepend + ' ' + @fullName({ prefix: false })
       + ', ' + @profile.titleAppend
-    else if (@profile and @profile.titlePrepend)
-      prefix +  @profile.titlePrepend + ' ' + fullName
-    else if (@profile and @profile.titleAppend)
-      prefix + fullName + ', ' + @profile.titleAppend
+    else if (@profile?.titlePrepend)
+      @prefix() +  @profile.titlePrepend + ' ' + @fullName({ prefix: false })
+    else if (@profile?.titleAppend)
+      @prefix() + @fullName() + ', ' + @profile.titleAppend
     else
       @fullName()
 
   lastNameWithTitle: ->
-    if (@profile and @profile.lastName)
+    if (@profile?.lastName)
       @fullNameWithTitle(@profile.lastName)
     else
       @fullName()

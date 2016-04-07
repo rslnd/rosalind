@@ -1,6 +1,18 @@
+{ Users } = require '/imports/api/users'
+{ UpdatePassword, UpdateRoles } = require '/imports/api/users/schema/actions'
+
 Template.editUser.helpers
   user: ->
-    Meteor.users.findOne(FlowRouter.current().params._id)
+    Users.findOne(FlowRouter.current().params._id)
+
+  collection: ->
+    Users
+
+  updatePassword: ->
+    UpdatePassword
+
+  updateRoles: ->
+    UpdateRoles
 
 AutoForm.hooks
   editUserForm:

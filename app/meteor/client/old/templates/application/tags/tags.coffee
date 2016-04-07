@@ -1,3 +1,5 @@
+{ Tags } = require '/imports/api/tags'
+
 Template.tags.helpers
   findTags: ->
     if @?.tags and @tags.length > 0

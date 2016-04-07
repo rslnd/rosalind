@@ -1,7 +1,7 @@
 moment = require 'moment'
 require 'moment-range'
 { Mongo } = require 'meteor/mongo'
-Spacebars = require 'meteor/spacebars'
+{ Spacebars } = require 'meteor/spacebars'
 { TAPi18n } = require 'meteor/tap:i18n'
 Time = require '/imports/util/time'
 { Users } = require '/imports/api/users'

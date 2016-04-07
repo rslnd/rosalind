@@ -10,5 +10,5 @@ module.exports = ->
       date: Match.Optional(Date)
 
     Events.find {},
-      limit: 200
+      limit: 20
       sort: { createdAt: -1 }

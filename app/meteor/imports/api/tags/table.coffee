@@ -1,4 +1,8 @@
-TabularTables.Tags = new Tabular.Table
+{ Meteor } = require 'meteor/meteor'
+{ Roles } = require 'meteor/alanning:roles'
+Tags = require './collection'
+
+module.exports = new Tabular.Table
   name: 'Tags'
   collection: Tags
   columns: [

@@ -12,6 +12,8 @@ meteor:
     - ELASTICSEARCH_URL=http://elasticsearch:9200
     - ROOT_URL=http://0.0.0.0:3000
     - CUSTOMER_NAME=
+    - METEOR_WATCH_FORCE_POLLING=t
+    - METEOR_WATCH_POLLING_INTERVAL_MS=1500
   links:
     - mongodb
     - elasticsearch

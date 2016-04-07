@@ -1,3 +1,10 @@
+moment = require 'moment'
+{ ReactiveDict } = require 'meteor/reactive-dict'
+{ SubsManager } = require 'meteor/meteorhacks:subs-manager'
+Time = require '/imports/util/time'
+{ Reports } = require '/imports/api/reports'
+
+
 Template.reports.currentView = new ReactiveDict
 Template.reports.subscriptions = new SubsManager()
 

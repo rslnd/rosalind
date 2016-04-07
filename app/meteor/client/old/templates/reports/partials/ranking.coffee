@@ -1,3 +1,5 @@
+{ Users } = require '/imports/api/users'
+
 Template.ranking.helpers
   assigneesWithIndex: ->
     @assignees.map (a, index) ->
@@ -5,7 +7,7 @@ Template.ranking.helpers
       return a
 
   assignee: ->
-    Meteor.users.findOne(@id)
+    Users.findOne(@id)
 
   hasNewPatients: ->
     @patients.new and @patients.new > 0

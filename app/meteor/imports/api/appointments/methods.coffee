@@ -10,13 +10,13 @@ module.exports = (collection) ->
         admittedAt: ''
         admittedBy: ''
     else
-      collection.setAdmitted(_id, time)
+      collection.methods.setAdmitted(_id, time)
 
   setAdmitted: (_id, time) ->
-    collection.stateChange(_id, time, 'admitted')
+    collection.methods.stateChange(_id, time, 'admitted')
 
   setTreated: (_id, time) ->
-    collection.stateChange(_id, time, 'treated')
+    collection.methods.stateChange(_id, time, 'treated')
 
   setResolved: (_id, time) ->
     collection.softRemove(_id)

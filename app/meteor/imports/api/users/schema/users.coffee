@@ -1,5 +1,6 @@
 { SimpleSchema } = require 'meteor/aldeed:simple-schema'
 { Auto, Profile } = require '/imports/util/schema'
+{ Groups } = require '/imports/api/groups'
 
 Schema = new SimpleSchema
   username:
@@ -9,7 +10,7 @@ Schema = new SimpleSchema
   groupId:
     type: SimpleSchema.RegEx.Id
     autoform:
-      options: -> _.map(Groups.all(), (g) -> { label: g.name, value: g._id })
+      options: -> _.map(Groups.methods.all(), (g) -> { label: g.name, value: g._id })
     optional: true
 
   createdAt:

@@ -5,6 +5,7 @@ import events from '/imports/api/events/server'
 import groups from '/imports/api/groups/server'
 import importers from '/imports/api/importers/server'
 import inboundCalls from '/imports/api/inboundCalls/server'
+import jobs from '/imports/api/jobs/server'
 import patients from '/imports/api/patients/server'
 import reports from '/imports/api/reports/server'
 import roles from '/imports/api/roles/server'
@@ -23,6 +24,7 @@ export default function() {
   groups()
   importers()
   inboundCalls()
+  jobs()
   patients()
   reports()
   roles()

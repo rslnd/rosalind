@@ -1,14 +1,20 @@
+moment = require 'moment'
+{ Meteor } = require 'meteor/meteor'
+{ TAPi18n } = require 'meteor/tap:i18n'
+{ Events } = require '/imports/api/events'
+{ Users } = require '/imports/api/users'
+
 Template.systemEvents.onCreated ->
   @autorun =>
     @subscribe('events')
 
 Template.systemEvents.helpers
   personName: ->
-    Meteor.users.findOne(_id: @createdBy).fullNameWithTitle()
+    Users.findOne(_id: @createdBy).fullNameWithTitle()
 
   title: (options = {}) ->
     if @subject
-      options.subject = Meteor.users.findOne(_id: @subject).fullNameWithTitle()
+      options.subject = Users.findOne(_id: @subject).fullNameWithTitle()
 
     TAPi18n.__('system.events.' + @type, options)
 

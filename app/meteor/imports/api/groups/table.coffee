@@ -1,4 +1,8 @@
-TabularTables.Groups = new Tabular.Table
+{ Meteor } = require 'meteor/meteor'
+{ Roles } = require 'meteor/alanning:roles'
+Groups = require './collection'
+
+module.exports = new Tabular.Table
   name: 'Groups'
   collection: Groups
   columns: [

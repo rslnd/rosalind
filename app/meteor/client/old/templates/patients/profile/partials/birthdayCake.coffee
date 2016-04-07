@@ -1,3 +1,6 @@
+{ TAPi18n } = require 'meteor/tap:i18n'
+Time = require '/imports/util/time'
+
 Template.birthdayCake.helpers
   birthdayToday: ->
     Time.dayToday(@profile?.birthday)

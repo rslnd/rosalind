@@ -1,4 +1,12 @@
-TabularTables.Appointments = new Tabular.Table
+moment = require 'moment'
+{ Meteor } = require 'meteor/meteor'
+{ SubsManager } = require 'meteor/meteorhacks:subs-manager'
+Helpers = require '/imports/util/helpers'
+Time = require '/imports/util/time'
+Schema = require './schema'
+Appointments = require './collection'
+
+module.exports = new Tabular.Table
   name: 'ResolvedAppointments'
   collection: Appointments
   pub: 'appointments'
@@ -13,7 +21,7 @@ TabularTables.Appointments = new Tabular.Table
   ]
   order: [[0, 'desc']]
   sub: new SubsManager()
-  extraFields: Schema.Appointments._firstLevelSchemaKeys
+  extraFields: Schema._firstLevelSchemaKeys
   responsive: true
   autoWidth: false
   stateSave: true
