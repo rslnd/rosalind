@@ -1,0 +1,28 @@
+install:
+- cmd: >-
+    npm install -g grunt-cli
+    npm install
+    cd app\electron\
+    npm install
+
+cache:
+- '%USERPROFILE%\\.electron\\'
+- node_modules\\
+- app\\electron\\node_modules\
+
+build_script:
+- ps: >-
+    $package = Get-Content -Raw -Path package.json | out-string | ConvertFrom-Json
+    $env:ROSALIND_VERSION = "v" + $package.version
+    cmd /c 'npm run client:build 2>&1'
+
+test_script:
+- ps: >-
+    echo "--> Installing app"
+    & ".\build\installer\Rosalind-win32-ia32\RosalindSetup-win-$env:ROSALIND_VERSION.exe"
+    Start-Sleep -s 15
+    taskkill /F /IM Rosalind.exe
+
+    echo "--> Launching app"
+    & Start-Process -Wait -ArgumentList --debug-quit-on-ready "$env:UserProfile\Desktop\Rosalind.lnk"
+    echo "--> Done"
