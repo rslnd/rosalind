@@ -5,11 +5,13 @@ helpers = require './helpers'
 methods = require './methods'
 Schema = require './schema/users'
 
-Meteor.users.attachSchema(Schema)
-Meteor.users.helpers(helpersProfile)
-Meteor.users.helpers(helpers)
-Meteor.users.helpers({ collection: -> Meteor.users })
+Users = Meteor.users
 
-Meteor.users.methods = methods(Meteor.users)
+Users.attachSchema(Schema)
+Users.helpers(helpersProfile)
+Users.helpers(helpers)
+Users.helpers({ collection: -> Users })
 
-module.exports = Meteor.users
+Users.methods = methods(Users)
+
+module.exports = Users

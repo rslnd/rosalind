@@ -1,4 +1,7 @@
-TabularTables.Users = new Tabular.Table
+{ Meteor } = require 'meteor/meteor'
+{ Roles } = require 'meteor/alanning:roles'
+
+module.exports = new Tabular.Table
   name: 'Users',
   collection: Meteor.users
   columns: [

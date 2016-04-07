@@ -1,3 +1,5 @@
+{ Mongo } = require 'meteor/mongo'
+
 Template.deleteLink.events
   'click [rel="delete"]': ->
     console.log('[Meteor] Delete', @)

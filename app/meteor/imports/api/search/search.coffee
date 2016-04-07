@@ -53,7 +53,7 @@ Search.queryExactlyOne = (type, queryObject) ->
   return response.data[0]
 
 Search.putMapping = (type, mapping) ->
-  console.warn("[Search] Setting mapping for #{type}")
+  console.log("[Search] Setting mapping for #{type}")
   Elasticsearch.indices.putMapping
     index: Search.options.index
     type: type

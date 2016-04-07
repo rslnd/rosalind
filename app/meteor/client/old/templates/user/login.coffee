@@ -1,6 +1,11 @@
+{ Login } = require '/imports/api/users/schema/actions'
+
 Template.login.helpers
   loggingIn: ->
     Meteor.loggingIn()
+
+  loginSchema: ->
+    Login
 
 AutoForm.hooks
   loginForm:

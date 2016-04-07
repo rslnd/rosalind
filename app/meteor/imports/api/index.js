@@ -1,3 +1,4 @@
+import { Users } from './users'
 import { Appointments } from './appointments'
 import { Comments } from './comments'
 import { Customer } from './customer'
@@ -14,7 +15,10 @@ import { System } from './system'
 import { Tags } from './tags'
 import { Timesheets } from './timesheets'
 
+console.log(Users)
+
 export {
+  Users,
   Appointments,
   Comments,
   Customer,
@@ -29,5 +33,5 @@ export {
   Search,
   System,
   Tags,
-  Timesheets
+  Timesheets,
 }

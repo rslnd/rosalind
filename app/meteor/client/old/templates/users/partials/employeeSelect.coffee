@@ -1,6 +1,8 @@
+{ Groups } = require '/imports/api/groups'
+
 Template.employeeSelect.helpers
   groups: ->
-    Groups.all()
+    Groups.methods.all()
 
   employees: ->
     @users()

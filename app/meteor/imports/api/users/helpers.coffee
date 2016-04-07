@@ -1,7 +1,14 @@
+moment = require 'moment'
+map = require 'lodash/map'
+last = require 'lodash/last'
 { Meteor } = require 'meteor/meteor'
 { Roles } = require 'meteor/alanning:roles'
 { TAPi18n } = require 'meteor/tap:i18n'
+Time = require '/imports/util/time'
+{ Groups } = require '/imports/api/groups'
+{ Schedules } = require '/imports/api/schedules'
 { Timesheets } = require '/imports/api/timesheets'
+
 
 module.exports =
   lastActivity: ->
@@ -30,7 +37,7 @@ module.exports =
     if (@username.length <= 3)
       @username
     else
-      _.map(@fullName().split(' '), (n) -> n.charAt(0) ).join('')
+      map(@fullName().split(' '), (n) -> n.charAt(0) ).join('')
 
   group: ->
     group = Groups.findOne(@groupId)
@@ -44,4 +51,4 @@ module.exports =
     Roles.getRolesForUser(@_id).join(', ')
 
   lastToken: ->
-    _(@services?.resume?.loginTokens).last()?.hashedToken
+    last(@services?.resume?.loginTokens)?.hashedToken

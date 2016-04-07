@@ -1,3 +1,5 @@
+Time = require '/imports/util/time'
+
 Template.weekSummary.helpers
   weekdaysWithSchedule: ->
     @schedule = @viewUser.defaultSchedule() if @viewUser

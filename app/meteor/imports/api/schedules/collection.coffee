@@ -8,7 +8,8 @@ Schedules = new Mongo.Collection('Schedules')
 Schedules.attachSchema(Schema)
 Schedules.attachBehaviour('softRemovable')
 Schedules.helpers(helpers)
+Schedules.helpers({ collection: -> Schedules })
 
-Schedules.methods = methods(Schedules)
+Schedules.methods = methods.default(Schedules)
 
 module.exports = Schedules

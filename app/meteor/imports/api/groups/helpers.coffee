@@ -1,11 +1,12 @@
-{ Users } = require '/imports/api/users'
+{ Meteor } = require 'meteor/meteor'
 
 module.exports =
-  users: ->
-    users = Users.find { groupId: @_id },
+  users: (selector = {}) ->
+    selector.groupId = @_id
+    users = Meteor.users.find selector,
       sort: { 'profile.lastName': 1 }
 
     users.fetch()
 
   usersCount: ->
-    Users.find(groupId: @_id).count()
+    Meteor.users.find(groupId: @_id).count()

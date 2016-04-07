@@ -1,7 +1,9 @@
+moment = require 'moment'
 reduce = require 'lodash/reduce'
 find = require 'lodash/find'
 some = require 'lodash/some'
 map = require 'lodash/map'
+Time = require '/imports/util/time'
 
 module.exports =
   isValid: (range) -> true

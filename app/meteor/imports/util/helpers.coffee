@@ -1,6 +1,9 @@
+moment = require 'moment'
+require 'moment-range'
 { Mongo } = require 'meteor/mongo'
 Spacebars = require 'meteor/spacebars'
 { TAPi18n } = require 'meteor/tap:i18n'
+Time = require '/imports/util/time'
 { Users } = require '/imports/api/users'
 { Comments } = require '/imports/api/comments'
 
@@ -14,7 +17,7 @@ module.exports =
       collection.findOne(_id: idOrUsername)
 
     else
-      Users.findOneByIdOrUsername(idOrUsername)
+      Users.methods.findOneByIdOrUsername(idOrUsername)
 
   findOneByIdAndCollection: (id, collection) ->
     return id if typeof id is 'object'

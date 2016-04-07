@@ -1,9 +1,15 @@
+{ Schedules } = require '/imports/api/schedules'
+{ businessHoursOverride } = require '/imports/api/schedules/tables'
+
 Template.businessHours.helpers
   regular: ->
     Schedules.findOne(type: 'businessHours')
 
   formTemplate: ->
     'businessHoursOverrideForm'
+
+  businessHoursOverrideTable: ->
+    businessHoursOverride
 
 Template.businessHours.events
   'click [rel="editRegular"]': ->

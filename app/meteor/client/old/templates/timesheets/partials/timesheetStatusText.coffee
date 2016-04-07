@@ -1,3 +1,10 @@
+moment = require 'moment'
+require 'moment-duration-format'
+
+{ Meteor } = require 'meteor/meteor'
+{ Deps } = require 'meteor/deps'
+{ Timesheets } = require '/imports/api/timesheets'
+
 tickerDep = new Deps.Dependency
 tickerInterval = null
 
@@ -11,5 +18,5 @@ Template.timesheetStatusText.onDestroyed ->
 Template.timesheetStatusText.helpers
   workedToday: ->
     tickerDep.depend()
-    duration = Timesheets.sum(Meteor.user().timesheets())
+    duration = Timesheets.methods.sum(Meteor.user().timesheets())
     moment.duration(duration, 'ms').format('h[h] mm[m] ss[s]')

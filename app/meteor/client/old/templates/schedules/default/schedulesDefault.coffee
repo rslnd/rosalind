@@ -1,3 +1,9 @@
+{ Meteor } = require 'meteor/meteor'
+{ Tracker } = require 'meteor/tracker'
+{ ReactiveDict } = require 'meteor/reactive-dict'
+{ Schedules } = require '/imports/api/schedules'
+{ Users } = require '/imports/api/users'
+
 Template.schedulesDefault.currentView = new ReactiveDict
 
 Template.schedulesDefault.watchPathChange = ->
@@ -5,7 +11,7 @@ Template.schedulesDefault.watchPathChange = ->
   Tracker.autorun =>
     FlowRouter.watchPathChange()
     if username = FlowRouter.current()?.params?.username
-      user = Meteor.users.findOneByIdOrUsername(username)
+      user = Users.methods.findOneByIdOrUsername(username)
     else
       user = Meteor.user()
     @currentView.set('userId', user._id)
@@ -15,7 +21,7 @@ Template.schedulesDefault.onCreated ->
 
 Template.schedulesDefault.events
   'click [rel="edit"]': ->
-    user = Meteor.users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
+    user = Users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
 
     Modal.show 'scheduleEdit',
       type: 'update'
@@ -26,10 +32,10 @@ Template.schedulesDefault.events
 
 Template.schedulesDefault.helpers
   schedulesDefault: ->
-    Meteor.users.find({})
+    Users.find({})
 
   viewUser: ->
-    Meteor.users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
+    Users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
 
   totalHoursPerWeek: ->
     _.chain(Schedules.find({}).fetch())

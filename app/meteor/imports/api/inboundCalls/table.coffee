@@ -1,6 +1,9 @@
+{ Meteor } = require 'meteor/meteor'
+Helpers = require '/imports/util/helpers'
+InboundCalls = require './collection'
+Schema = require './schema'
 
-
-modules.export = ->
+module.exports = ->
   new Tabular.Table
     name: 'ResolvedInboundCalls'
     collection: InboundCalls
@@ -20,7 +23,7 @@ modules.export = ->
     ]
     order: [[5, 'desc'], [7, 'desc']]
     sub: new SubsManager()
-    extraFields: Schema.Appointments._firstLevelSchemaKeys
+    extraFields: Schema._firstLevelSchemaKeys
     responsive: true
     autoWidth: false
     stateSave: true

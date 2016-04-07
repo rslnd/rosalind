@@ -1,6 +1,8 @@
-Template.schedulesDefaultCalendar.helpers
-  calendarOptions: ->
-    id: 'schedules-calendar'
+{ Schedules } = require '/imports/api/schedules'
+{ Users } = require '/imports/api/users'
+
+Template.schedulesDefaultCalendar.onRendered ->
+  $('#schedules-default-calendar').fullCalendar
     height: 'auto'
     firstDay: 1
     hiddenDays: [ 0 ]
@@ -16,7 +18,7 @@ Template.schedulesDefaultCalendar.helpers
     timezone: false
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     events: (start, end, timezone, callback) ->
-      events = Schedules.getEvents
+      events = Schedules.methods.getEvents
         selector:
           $or: [
             { userId: Template.schedulesDefault.currentView.get('userId') }
@@ -26,14 +28,12 @@ Template.schedulesDefaultCalendar.helpers
       callback(events)
 
     eventDrop: (event, delta, revertFunc) ->
-      Schedules.updateEvent(event._id, event)
+      Schedules.methods.updateEvent(event._id, event)
 
     eventResize: (event, delta, revertFunc) ->
-      Schedules.updateEvent(event._id, event)
+      Schedules.methods.updateEvent(event._id, event)
 
-
-Template.schedulesDefaultCalendar.onCreated ->
   @autorun ->
-    user = Meteor.users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
+    user = Users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
     Schedules.find({}).fetch()
-    $('#schedules-calendar').fullCalendar('refetchEvents')
+    $('#schedules-default-calendar').fullCalendar('refetchEvents')

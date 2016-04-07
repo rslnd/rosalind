@@ -1,3 +1,5 @@
+{ Groups } = require '/imports/api/groups'
+
 module.exports = (collection) ->
   findOneByIdOrUsername: (idOrUsername) ->
     if (typeof idOrUsername is 'string')
@@ -35,6 +37,6 @@ module.exports = (collection) ->
 
 
   byGroup: (selector = {}) ->
-    _.map Groups.all(selector), (g) ->
+    _.map Groups.methods.all(), (g) ->
       group: g
-      users: g.users()
+      users: g.users(selector)
