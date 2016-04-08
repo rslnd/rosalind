@@ -12,12 +12,14 @@ cache:
 
 build_script:
 - ps: >-
+    cd app\electron\
     $package = Get-Content -Raw -Path package.json | out-string | ConvertFrom-Json
     $env:ROSALIND_VERSION = "v" + $package.version
     cmd /c 'npm run client:build 2>&1'
 
 test_script:
 - ps: >-
+    cd app\electron\
     echo "--> Installing app"
     & ".\build\installer\Rosalind-win32-ia32\RosalindSetup-win-$env:ROSALIND_VERSION.exe"
     Start-Sleep -s 15
