@@ -21,6 +21,7 @@ Template.layout.onCreated ->
 
   @autorun =>
     @subscribe('users')
+    @subscribe('cache')
     @subscribe('groups')
     @subscribe('tags')
     @subscribe('schedules')

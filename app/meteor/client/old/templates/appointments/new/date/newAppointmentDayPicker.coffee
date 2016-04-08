@@ -1,4 +1,5 @@
 { Schedules } = require '/imports/api/schedules'
+{ Cache } = require '/imports/api/cache'
 Time = require '/imports/util/time'
 
 Template.newAppointmentDayPicker.onRendered ->
@@ -12,9 +13,16 @@ Template.newAppointmentDayPicker.onRendered ->
       dp2 = $('#day-picker-2').datepicker().data('datepicker')
       dp1.view = dp2.view = 'days'
     onRenderCell: (date, cellType) ->
-      time = moment(date).hour(12)
-      if cellType is 'day'
-        return { disabled: true } if not Schedules.methods.isOpen({ time, within: 'day' })
+      return unless cellType is 'day'
+
+      day = Time.dateToDay(date)
+      cache = Cache.findOne({ day })
+
+      console.log('Checking', date, 'with cache', cache, 'disabled', not cache?.isOpen)
+
+      return {
+        disabled: not cache?.isOpen
+      }
 
 
   $('#day-picker-1').datepicker _.extend dayPickerOptions,

@@ -18,13 +18,13 @@ module.exports = (Schedules) ->
     return caches
 
 
-  cacheNextDays: (nextDays) ->
+  cacheNextDays: (nextDays = 10) ->
     cache = []
 
-    time = moment().hour(0).minute(0).second(30)
 
-    for day in [0..nextDays]
-      time = time.clone().add(day, 'days')
+    for dayOffset in [0..nextDays]
+      time = moment().hour(0).minute(0).second(30)
+      time = time.clone().add(dayOffset, 'days')
 
       day = {}
       day.day =
