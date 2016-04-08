@@ -5,11 +5,11 @@ module.exports = (collection) ->
     options.time ||= moment()
     options.within ||= 'minute'
 
-    if collection.isBusinessHoursOverride(options)
+    if collection.methods.isBusinessHoursOverride(options)
       true
-    else if collection.isHoliday(options)
+    else if collection.methods.isHoliday(options)
       false
-    else if collection.isRegularBusinessHours(options)
+    else if collection.methods.isRegularBusinessHours(options)
       true
     else
       false

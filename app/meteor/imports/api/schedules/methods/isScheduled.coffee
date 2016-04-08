@@ -5,7 +5,7 @@ module.exports = (collection) ->
   isScheduled: (time = moment(), userId = null) ->
 
     return false unless user = Users.findOne(_id: userId)
-    return false unless collection.isOpen(time)
+    return false unless collection.methods.isOpen(time)
 
     notAvailable = collection.findOne
       type: 'override'

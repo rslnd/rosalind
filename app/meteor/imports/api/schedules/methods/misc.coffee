@@ -3,6 +3,7 @@ each = require 'lodash/each'
 map = require 'lodash/map'
 keys = require 'lodash/keys'
 Time = require '/imports/util/time'
+{ Users } = require '/imports/api/users'
 
 module.exports = (collection) ->
   getScheduledHours: (options = {}) ->
@@ -17,7 +18,7 @@ module.exports = (collection) ->
     defaultSchedule.totalHoursPerDay(day)
 
   getResources: ->
-    map(keys(Meteor.users.byGroup()), (resourceId) -> { id: resourceId, title: resourceId })
+    map(keys(Users.methods.byGroup()), (resourceId) -> { id: resourceId, title: resourceId })
 
   getEvents: (options = {}) ->
     options.selector ||= {}
@@ -28,7 +29,7 @@ module.exports = (collection) ->
 
     each schedule, (schedule) ->
       return unless schedule.isValid(options.range)
-      user = Meteor.users.findOne(_id: schedule.userId)
+      user = Users.findOne(_id: schedule.userId)
 
       each schedule.schedule, (dailySchedule) ->
         return unless dailySchedule?

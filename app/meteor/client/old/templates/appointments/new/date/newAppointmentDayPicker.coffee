@@ -1,3 +1,4 @@
+{ Schedules } = require '/imports/api/schedules'
 Time = require '/imports/util/time'
 
 Template.newAppointmentDayPicker.onRendered ->
@@ -13,7 +14,7 @@ Template.newAppointmentDayPicker.onRendered ->
     onRenderCell: (date, cellType) ->
       time = moment(date)
       if cellType is 'day'
-        return { disabled: true } if not Schedules.isOpen({ time, within: 'day' })
+        return { disabled: true } if not Schedules.methods.isOpen({ time, within: 'day' })
 
 
   $('#day-picker-1').datepicker _.extend dayPickerOptions,
