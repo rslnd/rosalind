@@ -2,9 +2,9 @@
 { check } = require 'meteor/check'
 { Roles } = require 'meteor/alanning:roles'
 { Counts } = require 'meteor/tmeasday:publish-counts'
-{ Appointments } = require '/imports/api/appointments'
 { Comments } = require '/imports/api/comments'
 { Patients } = require '/imports/api/patients'
+Appointments = require '../collection'
 
 module.exports = ->
   Meteor.publish null, ->

@@ -1,7 +1,4 @@
-{ Mongo } = require 'meteor/mongo'
 { TAPi18n } = require 'meteor/tap:i18n'
-{ Patients } = require '/imports/api/patients'
-{ Users } = require '/imports/api/users'
 
 module.exports =
   privateOrInsurance: ->
@@ -18,13 +15,6 @@ module.exports =
 
   treated: ->
     @admittedAt? and @admittedBy? and @treatedAt? and @treatedBy? and not @removed
-
-  patient: ->
-    console.log(Patients)
-    Patients.findOne(_id: new Mongo.ObjectID(@patientId._str)) if @patientId?._str
-
-  assignee: ->
-    Users.findOne(_id: @assigneeId)
 
   notes: ->
     n = [@note, @external?.terminiko?.note]

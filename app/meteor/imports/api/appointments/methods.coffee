@@ -1,38 +1,38 @@
 moment = require 'moment'
 
-module.exports = (collection) ->
+module.exports = ({ Appointments }) ->
 
   toggleAdmitted: (_id, time) ->
-    appointment = collection.findOne({ _id })
+    appointment = Appointments.findOne({ _id })
     return if appointment.treatedAt
     if appointment.admittedAt
-      collection.update { _id }, $unset:
+      Appointments.update { _id }, $unset:
         admittedAt: ''
         admittedBy: ''
     else
-      collection.methods.setAdmitted(_id, time)
+      Appointments.methods.setAdmitted(_id, time)
 
   setAdmitted: (_id, time) ->
-    collection.methods.stateChange(_id, time, 'admitted')
+    Appointments.methods.stateChange(_id, time, 'admitted')
 
   setTreated: (_id, time) ->
-    collection.methods.stateChange(_id, time, 'treated')
+    Appointments.methods.stateChange(_id, time, 'treated')
 
   setResolved: (_id, time) ->
-    collection.softRemove(_id)
+    Appointments.softRemove(_id)
 
   stateChange: (_id, time, state) ->
     set = {}
     set[state + 'By'] = Meteor.user()._id
     set[state + 'At'] = if time then time.toDate() else moment().toDate()
-    collection.update({ _id }, { $set: set })
+    Appointments.update({ _id }, { $set: set })
 
   findAll: (date = moment(), within = 'day') ->
     selector =
       start:
         $gte: moment(date).startOf(within).toDate()
         $lte: moment(date).endOf(within).toDate()
-    collection.find(selector, sort: { start: 1 })
+    Appointments.find(selector, sort: { start: 1 })
 
 
   findOpen: (date, within = 'day') ->
@@ -44,7 +44,7 @@ module.exports = (collection) ->
       start:
         $gte: moment(date).startOf(within).toDate()
         $lte: moment(date).endOf(within).toDate()
-    collection.find(selector, sort: { start: 1 })
+    Appointments.find(selector, sort: { start: 1 })
 
 
   findAdmitted: (date) ->
@@ -56,7 +56,7 @@ module.exports = (collection) ->
       start:
         $gte: moment(date).startOf('day').toDate()
         $lte: moment(date).endOf('day').toDate()
-    collection.find(selector, sort: { admittedAt: 1 })
+    Appointments.find(selector, sort: { admittedAt: 1 })
 
 
   findTreating: (date) ->
@@ -68,4 +68,4 @@ module.exports = (collection) ->
       start:
         $gte: moment(date).startOf('day').toDate()
         $lte: moment(date).endOf('day').toDate()
-    collection.find(selector, sort: { treatedAt: 1 })
+    Appointments.find(selector, sort: { treatedAt: 1 })

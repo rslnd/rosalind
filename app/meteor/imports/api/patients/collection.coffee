@@ -9,6 +9,7 @@ Patients = new Mongo.Collection 'Patients',
 
 Patients.attachSchema(Schema)
 Patients.attachBehaviour('softRemovable')
+Patients.helpers({ collection: -> Patients })
 Patients.helpers(helpers)
 Patients.helpers(helpersProfile)
 hooks(Patients)

@@ -8,6 +8,6 @@ Timesheets.attachSchema(Schema)
 Timesheets.helpers(helpers)
 Timesheets.helpers({ collection: -> Timesheets })
 
-Timesheets.methods = methods
+Timesheets.methods = methods(Timesheets)
 
 module.exports = Timesheets

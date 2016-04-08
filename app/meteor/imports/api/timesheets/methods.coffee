@@ -1,5 +1,4 @@
 { Meteor } = require 'meteor/meteor'
-Timesheets = require '/imports/api/timesheets'
 
 Meteor.methods
   'timesheets/startTracking': ->
@@ -10,7 +9,7 @@ Meteor.methods
     return unless userId = Meteor.userId()
     methods.stopTracking({ userId })
 
-methods =
+methods = (collection) ->
   sum: (timesheets) ->
     duration = _.chain(timesheets)
       .map (t) -> t.duration()
@@ -19,7 +18,7 @@ methods =
 
   startTracking: (options = {}) ->
     return if @isTracking(options)
-    timesheetId = Timesheets.insert
+    timesheetId = collection.insert
       userId: options.userId
       start: new Date()
       tracking: true
@@ -33,7 +32,7 @@ methods =
 
   stopTracking: (options = {}) ->
     return unless timesheetId = @isTracking(options)?._id
-    Timesheets.update { _id: timesheetId }, $set:
+    collection.update { _id: timesheetId }, $set:
       end: new Date()
       tracking: false
 
@@ -46,7 +45,7 @@ methods =
 
 
   isTracking: (options = {}) ->
-    Timesheets.findOne
+    collection.findOne
       userId: options.userId
       tracking: true
 
