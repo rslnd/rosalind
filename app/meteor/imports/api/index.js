@@ -1,5 +1,6 @@
 import { Users } from './users'
 import { Groups } from './groups'
+import { Cache } from './cache'
 import { Comments } from './comments'
 import { Tags } from './tags'
 import { Events } from './events'
@@ -18,6 +19,7 @@ import { Timesheets } from './timesheets'
 export {
   Users,
   Groups,
+  Cache,
   Patients,
   Appointments,
   Comments,

@@ -12,7 +12,7 @@ Template.newAppointmentDayPicker.onRendered ->
       dp2 = $('#day-picker-2').datepicker().data('datepicker')
       dp1.view = dp2.view = 'days'
     onRenderCell: (date, cellType) ->
-      time = moment(date)
+      time = moment(date).hour(12)
       if cellType is 'day'
         return { disabled: true } if not Schedules.methods.isOpen({ time, within: 'day' })
 

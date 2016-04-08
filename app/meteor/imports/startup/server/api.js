@@ -1,4 +1,5 @@
 import appointments from '/imports/api/appointments/server'
+import cache from '/imports/api/cache/server'
 import comments from '/imports/api/comments/server'
 import customer from '/imports/api/customer/server'
 import events from '/imports/api/events/server'
@@ -18,6 +19,7 @@ import users from '/imports/api/users/server'
 
 export default function() {
   appointments()
+  cache()
   comments()
   customer()
   events()
