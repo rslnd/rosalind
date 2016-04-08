@@ -1,8 +1,9 @@
 # Rosalind
 
 ![Unicorn Approved](https://img.shields.io/badge/unicorn-approved-blue.svg)
-[![Circle CI](https://img.shields.io/circleci/project/albertzak/rosalind.svg)](https://circleci.com/gh/albertzak/rosalind)
 [![Latest Release](https://img.shields.io/github/release/albertzak/rosalind.svg?label=version)](https://github.com/albertzak/rosalind/releases)
+[![Circle CI](https://img.shields.io/circleci/project/albertzak/rosalind.svg?label=server build)](https://circleci.com/gh/albertzak/rosalind)
+[![AppVeyor](https://img.shields.io/appveyor/ci/albertzak/rosalind.svg?label=client build)](https://ci.appveyor.com/project/albertzak/rosalind)
 
 ## Prerequisites
 
