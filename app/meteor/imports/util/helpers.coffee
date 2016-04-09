@@ -120,15 +120,3 @@ module.exports =
     noValue = TAPi18n.__('ui.noValue')
     noValue = '<span class="text-muted">' + noValue + '</span>'
     Spacebars.SafeString(noValue)
-
-  commentCount: ->
-    Comments.find({ docId: @_id }).count()
-
-
-  hasComments: ->
-    Comments.find({ docId: @_id }).count() > 0
-
-  humanCommentCount: ->
-    count = Comments.find({ docId: @_id }).count()
-    human = TAPi18n.__('ui.comment', { count })
-    count + ' ' + human

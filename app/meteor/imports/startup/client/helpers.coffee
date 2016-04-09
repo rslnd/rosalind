@@ -22,8 +22,5 @@ module.exports = ->
   h 'noValue', -> Helpers.noValue()
   h 'true', -> true
   h 'false', -> false
-  h 'commentCount', (context) -> Helpers.commentCount(context)
-  h 'hasComments', (context) -> Helpers.hasComments(context)
-  h 'humanCommentCount', (context) -> Helpers.humanCommentCount(context)
   h 'date', Time.date()
   h 'weekdays', -> Time.weekdaysArray()

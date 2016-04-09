@@ -15,7 +15,7 @@ module.exports = ->
         type: 'users/login'
         payload: { userId }
 
-      Timesheets.startTracking({ userId })
+      Timesheets.methods.startTracking({ userId })
 
 
     'users/logout': ->
@@ -25,7 +25,7 @@ module.exports = ->
         type: 'users/logout'
         payload: { userId }
 
-      Timesheets.stopTracking({ userId })
+      Timesheets.methods.stopTracking({ userId })
 
     'users/getToken': ->
       return unless user = Meteor.user()

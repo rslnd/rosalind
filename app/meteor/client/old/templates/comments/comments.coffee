@@ -1,8 +1,12 @@
 { Comments } = require '/imports/api/comments'
+helpers = require './helpers'
 
 Template.comments.helpers
   comments: ->
-    Comments.find({ docId: @_id }).fetch()
+    helpers.comments(@)
+
+  hasComments: ->
+    helpers.hasComments(@)
 
 Template.comments.events
   'submit form.add-comment': (e) ->

@@ -1,4 +1,5 @@
 { Meteor } = require 'meteor/meteor'
+{ Events } = require '/imports/api/events'
 
 Meteor.methods
   'timesheets/startTracking': ->
