@@ -13,12 +13,12 @@ Template.stamps.helpers
     _.chain(@fields.split(','))
       .map (field) => { field, doc: @doc }
       .filter (stamp) => @doc[stamp.field + 'By']? and @doc[stamp.field + 'At']?
-      .rest()
+      .drop()
       .value()
 
   hasOlderStamps: ->
     _.chain(@fields.split(','))
       .map (field) => { field, doc: @doc }
       .filter (stamp) => @doc[stamp.field + 'By']? and @doc[stamp.field + 'At']?
-      .rest()
+      .drop()
       .value().length > 0
