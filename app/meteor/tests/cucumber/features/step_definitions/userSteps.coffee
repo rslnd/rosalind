@@ -1,10 +1,12 @@
+users = require './fixtures/users'
+
 module.exports = ->
 
   lastUsername = null
 
   @Given /^I am an? '(.*)'(?: with the roles? '(.*)')$/, (username, roles) ->
-    lastUsername = server.call('fixtures/users/create', username: username)
-    server.call 'fixtures/users/setRoles',
+    lastUsername = users.create(username: username)
+    users.setRoles
       username: lastUsername
       roles: roles
 

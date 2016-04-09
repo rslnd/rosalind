@@ -1,4 +1,6 @@
-locale = require('./global/localeSteps')
+locale = require('./fixtures/locale')
+database = require('./fixtures/database')
+user = require('./fixtures/user')
 
 module.exports = ->
   failOnError = ->
@@ -12,14 +14,14 @@ module.exports = ->
     browser.windowHandleMaximize()
     browser.timeoutsImplicitWait(3 * 1000)
     browser.waitForExist('#loaded')
-    server.call('logout')
-    server.call('fixtures/resetDatabase')
-    locale.setLocale()
+    user.logout()
+    database.reset()
+    locale.reset()
 
   @Before failOnError
   @After failOnError
 
   @After ->
-    server.call('logout')
-    server.call('fixtures/resetDatabase')
-    locale.setLocale()
+    user.logout()
+    database.reset()
+    locale.reset()

@@ -1,5 +1,5 @@
 module.exports =
-  setLocale: ->
+  reset: ->
     browser.execute ->
       window.testing = true
       Meteor.startup ->

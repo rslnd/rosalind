@@ -1,15 +1,17 @@
-_ = require('lodash')
+factory = require './fixtures/factory'
+users = require './fixtures/users'
 
 module.exports = ->
   @Given 'this user belongs to the group \'$groupName\'', (groupName) ->
-    server.call('fixtures/assignLastCreatedUserToGroup', groupName)
+    users.assignLastCreatedUserToGroup(groupName)
 
   @Given /^an? '([^']*)' with the following attributes:?$/, (collection, attributes) ->
     if collection.match(/^Users?$/i)
-      method = 'fixtures/users/create'
+      method = users.create
     else
-      method = 'fixtures/createRecord'
-    _.each attributes.hashes(), (row) =>
-      @server.call method,
+      method = factory.insert
+
+    attributes.hashes().forEach (row) ->
+      method
         collection: collection
         attributes: row
