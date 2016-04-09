@@ -7,13 +7,17 @@
     "jasmine": true,
     "jquery": true
   },
-  "sourceType": "module",
-  "ecmaFeatures": {
-    "jsx": true
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    },
   },
   "rules": {
     "quotes": [2, "single"],
-    "semi": [2, "always"],
+    "semi": [2, "never"],
     "indent": [2, 2, {"SwitchCase": 1}],
     "eol-last": 2,
     "comma-spacing": 2,

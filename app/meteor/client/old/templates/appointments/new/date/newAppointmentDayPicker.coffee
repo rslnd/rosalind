@@ -18,8 +18,6 @@ Template.newAppointmentDayPicker.onRendered ->
       day = Time.dateToDay(date)
       cache = Cache.findOne({ day })
 
-      console.log('Checking', date, 'with cache', cache, 'disabled', not cache?.isOpen)
-
       return {
         disabled: not cache?.isOpen
       }
