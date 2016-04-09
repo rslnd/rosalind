@@ -29,5 +29,7 @@ dump.rdb
 # Ignore builds
 app/electron/build/*
 
+.screenshots
+
 Thumbs.db
 .DS_Store

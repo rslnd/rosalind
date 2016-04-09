@@ -25,7 +25,8 @@ kadira:blaze-layout
 meteorhacks:picker
 
 # Testing
-fixtures
+xolvio:backdoor
+xolvio:cleaner
 
 # Security
 browser-policy
