@@ -14,6 +14,7 @@ module.exports = ->
       else
         _linkText
 
+
     browser.waitForExist '#loaded'
     if menuPath
       browser.execute ((s0) ->
@@ -41,8 +42,32 @@ module.exports = ->
       else
         browser.pause 300
         foundAndClicked = browser.execute(((linkText) ->
+
+          # Taken from jQuery UI
+          zIndex = (elem) ->
+            elem = $(elem)
+            position = 0
+            value = 0
+
+            while elem.length and elem[0] isnt document
+              # Ignore z-index if position is set to a value where z-index is ignored by the browser
+              # This makes behavior of this function consistent across browsers
+              # WebKit always returns auto if the element is positioned
+              position = elem.css('position')
+              if (position is 'absolute' or position is 'relative' or position is 'fixed')
+                # IE returns 0 when zIndex is not specified
+                # other browsers return a string
+                # we ignore the case of nested elements with an explicit value of 0
+                # <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+                value = parseInt(elem.css('zIndex'), 10)
+                return value if (not isNaN(value) and value isnt 0)
+
+              elem = elem.parent()
+            return 0
+
+          # Sort matched elements by computed zIndex and click on the topmost one
           el = $('a,input,button,span').filter(':contains("' + linkText + '")').sort((a, b) ->
-            Number($(b).zIndex()) - Number($(a).zIndex())
+            Number(zIndex(b)) - Number(zIndex(a))
           )
           if el.length > 0
             el.first().click()

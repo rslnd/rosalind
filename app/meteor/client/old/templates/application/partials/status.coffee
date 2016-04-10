@@ -1,7 +1,9 @@
+{ Users } = require '/imports/api/users'
+
 Template.status.helpers
   userStatus: (user) ->
     if (typeof user is 'string')
-      user = Meteor.users.findOne(user)
+      user = Users.findOne(user)
 
     if (typeof user is 'object' and user.doc)
       user = user.doc

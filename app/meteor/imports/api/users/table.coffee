@@ -1,14 +1,14 @@
 { Meteor } = require 'meteor/meteor'
 { Roles } = require 'meteor/alanning:roles'
+Users = require './collection'
 
 module.exports = new Tabular.Table
   name: 'Users',
-  collection: Meteor.users
+  collection: Users
   columns: [
     { data: 'status', tmpl: Meteor.isClient and Template.status }
     { data: 'profile.lastName', title: 'Name', render: (val, type, doc) -> doc.fullNameWithTitle() }
     { data: 'getRoles()', title: 'Berechtigungen' }
-    { data: 'group()', title: 'Gruppe' }
     { data: 'lastActivity()', title: 'Zuletzt gesehen' }
     { data: '_id', render: (val) -> '<a href="/users/' + val + '/edit">Bearbeiten</a>' }
   ],

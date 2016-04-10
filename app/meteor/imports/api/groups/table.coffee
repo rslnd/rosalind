@@ -8,7 +8,6 @@ module.exports = new Tabular.Table
   columns: [
     { data: 'order', tmpl: Meteor.isClient and Template.groupIcon }
     { data: 'name', title: 'Name' }
-    { data: 'usersCount()', title: 'Benutzer' }
     { tmpl: Meteor.isClient and Template.editLink }
   ]
   order: [[0, 'asc']]

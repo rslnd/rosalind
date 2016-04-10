@@ -1,10 +1,16 @@
+map = require 'lodash/map'
 Time = require '/imports/util/time'
 { Schedules } = require '/imports/api/schedules'
 { Users } = require '/imports/api/users'
+{ Groups } = require '/imports/api/groups'
 
 Template.schedulesDefaultEmployeeList.helpers
   employeeGroups: ->
-    Users.methods.byGroup({ 'profile.employee': true })
+    map Groups.methods.all(), (g) ->
+      group: g
+      users: Users.find
+        'profile.employee': true
+        groupId: g._id
 
   linkToDefaultScheduleForUser: ->
     '/schedules/default/' + @username

@@ -4,6 +4,7 @@ Time = require '/imports/util/time'
 adt = require '../shared/adt'
 bulk = require '../shared/bulk'
 { Reports } = require '/imports/api/reports'
+{ Users } = require '/imports/api/users'
 
 module.exports = (job, callback) ->
   job.log('EoswinReports: Running')
@@ -49,7 +50,7 @@ parseAssignees = (rows) ->
     assignee = assignees[currentAssigneeId]
 
     if record.Kurzz.match(/A\d+/)
-      currentAssigneeId = Meteor.users.queryExactlyOne(record.Text)?._id or null
+      currentAssigneeId = Users.queryExactlyOne(record.Text)?._id or null
 
       unless assignees[currentAssigneeId]?.patients?.total
         assignees[currentAssigneeId] =

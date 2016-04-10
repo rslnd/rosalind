@@ -100,9 +100,22 @@ var startProcess = function(opts, callback) {
   processes.push(proc)
 }
 
+if (process.env.NO_LINT) {
+  console.log('** Skipping Linters')
+  startChimp()
 
-runEslint(function() {
-  runCoffeelint(function() {
-    startChimp()
+} else if (process.env.LINT) {
+  console.log('** Skipping integration tests')
+  runEslint(function() {
+    runCoffeelint(function() {
+      console.log('** Done!')
+    })
   })
-})
+
+} else {
+  runEslint(function() {
+    runCoffeelint(function() {
+      startChimp()
+    })
+  })
+}

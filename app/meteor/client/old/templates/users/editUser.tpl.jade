@@ -3,10 +3,10 @@
   +with user
     .box.box-default
       .box-body
-        +autoForm(collection=collection id='editUserForm' doc=this type='update')
+        +autoForm(collection=collection schema=schema id='editUserForm' doc=this type='update')
           fieldset
             +afQuickField(name='username')
-            +afQuickField(name='groupId')
+            +afQuickField(name='groupId' options=groups)
             +afQuickField(name='profile.employee')
             +afQuickField(name='profile.titlePrepend')
             +afQuickField(name='profile.firstName')

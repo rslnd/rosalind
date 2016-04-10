@@ -8,10 +8,12 @@ module.exports =
       return false if Meteor.users.findOne(username: options.username)
 
       options = TestUtil.transformAttributes(options)
+
       if typeof options.password isnt 'string'
         options.password = '1111'
       unless options.email
         options.email = options.username + '@example.com'
+
       Accounts.createUser(options)
       return options.username
 

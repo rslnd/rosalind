@@ -4,6 +4,7 @@ map = require 'lodash/map'
 keys = require 'lodash/keys'
 Time = require '/imports/util/time'
 { Users } = require '/imports/api/users'
+{ Groups } = require '/imports/api/groups'
 
 module.exports = (collection) ->
   getScheduledHours: (options = {}) ->
@@ -16,9 +17,6 @@ module.exports = (collection) ->
 
     day = Time.toWeekday(Time.dayToDate(options.day))
     defaultSchedule.totalHoursPerDay(day)
-
-  getResources: ->
-    map(keys(Users.methods.byGroup()), (resourceId) -> { id: resourceId, title: resourceId })
 
   getEvents: (options = {}) ->
     options.selector ||= {}
@@ -51,7 +49,7 @@ module.exports = (collection) ->
               start: start
               end: end
               editable: true
-              resourceId: user.group()
+              resourceId: Groups.findOne(user.groupId)?._id
               title: user.fullNameWithTitle()
               scheduleId: schedule._id
 

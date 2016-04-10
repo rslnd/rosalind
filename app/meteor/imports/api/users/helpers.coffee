@@ -5,10 +5,8 @@ last = require 'lodash/last'
 { Roles } = require 'meteor/alanning:roles'
 { TAPi18n } = require 'meteor/tap:i18n'
 Time = require '/imports/util/time'
-{ Groups } = require '/imports/api/groups'
 { Schedules } = require '/imports/api/schedules'
 { Timesheets } = require '/imports/api/timesheets'
-
 
 module.exports =
   lastActivity: ->
@@ -38,11 +36,6 @@ module.exports =
       @username
     else
       map(@fullName().split(' '), (n) -> n.charAt(0) ).join('')
-
-  group: ->
-    group = Groups.findOne(@groupId)
-    if (group)
-      group.name
 
   defaultSchedule: ->
     Schedules.findOne(userId: @_id)

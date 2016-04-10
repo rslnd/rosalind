@@ -8,7 +8,7 @@ Feature: Schedules
     Given I am a 'manager' with the role 'schedules'
     And I am logged in
     Given a 'group' with the following attributes:
-      | name    |
+      | name       |
       | A+ Doctors |
     Given a 'user' with the following attributes:
       | username | profile.firstName | profile.employee |
@@ -18,5 +18,5 @@ Feature: Schedules
     Scenario: View default schedules
       Given I click on 'Schedules > Default Schedules'
       Then I should see 'Dr. Best'
-      Then I should see 'A+ Doctors'
+      And I should see 'A+ Doctors'
       And I should see '0h'
