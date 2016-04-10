@@ -11,7 +11,7 @@ node_js:
 before_install:
   - '/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16'
   - npm install
-  - cd app/meteor/tests/cucumber && npm install && cd ../../../
+  - cd app/meteor/tests/cucumber && npm install && cd ../../../../
 
 cache:
   directories:
