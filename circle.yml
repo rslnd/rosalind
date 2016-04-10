@@ -4,7 +4,7 @@ machine:
   java:
     version: oraclejdk8
   node:
-    version: 0.10.36
+    version: 0.12.13
   post:
     - sudo service mongodb stop
 
@@ -15,20 +15,28 @@ dependencies:
 
   cache_directories:
     - "node_modules"
-    - "app/meteor/tests/cucumber"
+    - "app/meteor/tests/cucumber/node_modules"
     - "~/.npm"
-    - "~/docker"
 
 test:
   pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
 
+    - docker-compose pull:
+        pwd:
+          environments/development
+
+    - docker-compose up -d
+        pwd:
+          environments/development
+
+    - docker-compose run meteor meteor npm install
+        pwd:
+          environments/development
+
   override:
-    - cd ./environments/development && docker-compose up:
-        background: true
     - for i in {1..60}; do curl "http://0.0.0.0:3000" && break; sleep 10; done;
     - npm test:
         environment:
           ROOT_URL: "http://0.0.0.0:3000/"
           CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/chrome.json"
-    - cd ./environments/development && docker-compose stop && docker-compose rm -f
