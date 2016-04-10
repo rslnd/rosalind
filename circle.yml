@@ -25,10 +25,10 @@ test:
     - docker-compose pull:
         pwd: environments/development
 
-    - docker-compose up -d
+    - docker-compose up -d:
         pwd: environments/development
 
-    - docker-compose run meteor meteor npm install
+    - docker-compose run meteor meteor npm install:
         pwd: environments/development
 
   override:
