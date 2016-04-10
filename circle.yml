@@ -23,16 +23,13 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
 
     - docker-compose pull:
-        pwd:
-          environments/development
+        pwd: environments/development
 
     - docker-compose up -d
-        pwd:
-          environments/development
+        pwd: environments/development
 
     - docker-compose run meteor meteor npm install
-        pwd:
-          environments/development
+        pwd: environments/development
 
   override:
     - for i in {1..60}; do curl "http://0.0.0.0:3000" && break; sleep 10; done;
