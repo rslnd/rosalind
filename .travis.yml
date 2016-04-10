@@ -27,9 +27,8 @@ before_script:
   - docker-compose pull
   - docker-compose up -d
   - docker-compose run meteor meteor npm install
+  - cd ../../
   - for i in {1..60}; do curl "http://0.0.0.0:3000" && break; sleep 10; done;
 
 env:
   - ROOT_URL=http://0.0.0.0:3000/
-
-script: 'npm test'
