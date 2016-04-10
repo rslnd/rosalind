@@ -25,8 +25,8 @@ before_script:
   - sleep 3
   - cd environments/development/
   - docker-compose pull
-  - docker-compose up -d
   - docker-compose run meteor meteor npm install
+  - docker-compose up &
   - cd ../../
   - for i in {1..60}; do curl "http://0.0.0.0:3000" && break; sleep 10; done;
 
