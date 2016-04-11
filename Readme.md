@@ -2,6 +2,7 @@
 
 ![Unicorn Approved](https://img.shields.io/badge/unicorn-approved-blue.svg)
 [![Latest Release](https://img.shields.io/github/release/albertzak/rosalind.svg?label=version)](https://github.com/albertzak/rosalind/releases)
+[![npm Dependencies](https://img.shields.io/david/strongloop/express.svg)](https://david-dm.org/albertzak/rosalind)
 [![Travis CI](https://img.shields.io/travis/albertzak/rosalind.svg?label=server build)](https://travis-ci.org/albertzak/rosalind/)
 [![AppVeyor](https://img.shields.io/appveyor/ci/albertzak/rosalind.svg?label=app build)](https://ci.appveyor.com/project/albertzak/rosalind)
 
