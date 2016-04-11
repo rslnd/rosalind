@@ -4,6 +4,6 @@ module.exports =
       console.log('[Fixtures] Cleaning database')
 
       if process.env.NODE_ENV isnt 'development'
-        throw new Error '[Fixtures] resetDatabase is not allowed outside of a mirror. Something has gone wrong.'
+        throw new Error '[Fixtures] resetDatabase is only allowed in development. Something has gone wrong.'
       else
-        Package['xolvio:cleaner'].resetDatabase()
+        Package['xolvio:cleaner'].resetDatabase({ excludedCollections: ['Events'] })
