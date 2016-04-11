@@ -9,16 +9,9 @@ require('shelljs/global')
 cd(__dirname)
 cd('../../')
 
-var appOptions = {
-  env: {
-    ROOT_URL: 'http://dev.rslnd.com:3000/'
-  }
-}
-
-
 var chimp = [
   './node_modules/.bin/chimp',
-  '--ddp=' + appOptions.env.ROOT_URL,
+  '--ddp=' + process.env.ROOT_URL,
   '--path=app/meteor/tests/cucumber/features/',
   '--browser=chrome',
   '--compiler=coffee:coffee-script/register'

@@ -2,11 +2,8 @@
   "name": "rosalind-development",
   "private": true,
   "scripts": {
-    "start": "node environments/development/start.js",
-    "server:start": "node environments/development/startServer.js",
-    "tail": "node environments/development/tailCucumber.js",
-    "test": "ROOT_URL=http://docker.dev:3000 node ./environments/test/test.js",
-    "test:watch": "node ./environments/development/testWatch.js",
+    "start": "cd ./environments/development/ && docker-compose up",
+    "test": "node ./environments/test/test.js",
     "client:start": "cd app/electron/ && grunt",
     "client:build": "cd app/electron/ && grunt build"
   },
