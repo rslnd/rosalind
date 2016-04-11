@@ -1,4 +1,3 @@
-{ Meteor } = require 'meteor/meteor'
 Elasticsearch = require '../elasticsearch'
 
 index = 'rosalind_v1'
@@ -31,11 +30,10 @@ indexSettings =
 
 
 module.exports = ->
-  Meteor.startup ->
-    unless Elasticsearch.indices.exists({ index })
-      console.warn("[Search] Creating index #{index}")
-      Elasticsearch.indices.create(index: index, body: indexSettings)
+  unless Elasticsearch.indices.exists({ index })
+    console.warn("[Search] Creating index #{index}")
+    Elasticsearch.indices.create(index: index, body: indexSettings)
 
-    unless Elasticsearch.indices.existsAlias({ name })
-      Elasticsearch.indices.putAlias({ index, name })
-      console.warn("[Search] Creating alias #{name}")
+  unless Elasticsearch.indices.existsAlias({ name })
+    Elasticsearch.indices.putAlias({ index, name })
+    console.warn("[Search] Creating alias #{name}")

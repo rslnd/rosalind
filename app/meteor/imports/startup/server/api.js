@@ -1,5 +1,6 @@
 import users from '/imports/api/users/server'
 import groups from '/imports/api/groups/server'
+import search from '/imports/api/search/server'
 import patients from '/imports/api/patients/server'
 import appointments from '/imports/api/appointments/server'
 import cache from '/imports/api/cache/server'
@@ -12,7 +13,6 @@ import jobs from '/imports/api/jobs/server'
 import reports from '/imports/api/reports/server'
 import roles from '/imports/api/roles/server'
 import schedules from '/imports/api/schedules/server'
-import search from '/imports/api/search/server'
 import system from '/imports/api/system/server'
 import tags from '/imports/api/tags/server'
 import timesheets from '/imports/api/timesheets/server'
@@ -20,6 +20,7 @@ import timesheets from '/imports/api/timesheets/server'
 export default function() {
   users()
   groups()
+  search()
   patients()
   appointments()
   cache()
@@ -32,7 +33,6 @@ export default function() {
   reports()
   roles()
   schedules()
-  search()
   system()
   tags()
   timesheets()

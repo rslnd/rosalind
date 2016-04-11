@@ -13,6 +13,7 @@ methods =
   indices: [
     'putSettings'
     'putMapping'
+    'getMapping'
     'exists'
     'create'
     'putAlias'
