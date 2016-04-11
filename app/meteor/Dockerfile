@@ -13,10 +13,10 @@ RUN apt-get update && apt-get -y install \
 RUN cd /root/ && \
   git clone https://github.com/albertzak/mdbtools && \
   cd mdbtools && \
-  autoreconf -i -f
+  autoreconf -i -f && \
   ./configure --disable-man && \
   make && \
   make install
 
-RUN apt-get clean \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
