@@ -1,37 +1,34 @@
-# Rosalind
+<div style='text-align: center'>
 
-![Unicorn Approved](https://img.shields.io/badge/unicorn-approved-blue.svg)
-[![Latest Release](https://img.shields.io/github/release/albertzak/rosalind.svg?label=version)](https://github.com/albertzak/rosalind/releases)
-[![npm Dependencies](https://img.shields.io/david/albertzak/rosalind.svg)](https://david-dm.org/albertzak/rosalind)
-[![Travis CI](https://img.shields.io/travis/albertzak/rosalind.svg?label=server build)](https://travis-ci.org/albertzak/rosalind/)
-[![AppVeyor](https://img.shields.io/appveyor/ci/albertzak/rosalind.svg?label=app build)](https://ci.appveyor.com/project/albertzak/rosalind)
+<h1>Rosalind</h1>
+<small>Built with love in Vienna, Austria.</small><br /><br />
 
-## Prerequisites
 
- - Node.js
- - Meteor
+<img src='https://img.shields.io/badge/unicorn-approved-blue.svg' alt='Unicorn Approved' />&nbsp;
+<a href='https://github.com/albertzak/rosalind/releases'><img src='https://img.shields.io/github/release/albertzak/rosalind.svg?label=version' alt='Latest Release' /></a><br />
 
-## Develop
+<a href='https://travis-ci.org/albertzak/rosalind/'><img src='https://img.shields.io/travis/albertzak/rosalind.svg?label=server build' alt='Server build on Travis CI'></a>&nbsp;
+<a href='https://david-dm.org/albertzak/rosalind?path=app/meteor'><img src='https://david-dm.org/albertzak/rosalind.svg?path=app/meteor' alt='Server npm dependencies'></a><br />
 
-`npm install`
-`npm run server:start`
+<a href='https://ci.appveyor.com/project/albertzak/rosalind'><img src='https://img.shields.io/appveyor/ci/albertzak/rosalind.svg?label=app build' alt='Client build on AppVeyor'></a>&nbsp;
+<a href='https://david-dm.org/albertzak/rosalind?path=app/electron'><img src='https://david-dm.org/albertzak/rosalind.svg?path=app/electron' alt='App npm dependencies'></a><br />
 
-Create a new feature branch (eg. `feature/myFeature`)
+</div>
 
-Annotate cucumber scenarios with `@dev` and watch `npm run server:tail:cucumber`. Don't commit files with `@dev` in them - add a [pre-commit hook](https://gist.github.com/albertzak/8d512b923533077f4df5).
+<hr />
 
-You may need to run `cd ./app/server/tests/cucumber/ && npm install`
+## Quickstart
 
-Jasmine test output is displayed inside the Velocity Reporter (blue dot in the bottom left corner)
+### Develop
 
-## Test
+`npm start`
 
-Run the full test suite with `npm test`
+`npm run client:start`
 
-## Deploy
+### Test
 
-Build the native applications with `npm run client:build`
+`npm test`
 
-The `master` branch gets deployed to production automatically when all tests pass. Be careful when merging pull requests.
+### Deploy
 
-Deploy to staging: TODO
+`npm run client:build`
