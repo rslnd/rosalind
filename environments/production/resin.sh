@@ -15,7 +15,7 @@ else
   ssh-add ./id_rsa
   cat resin.id >> ~/.ssh/known_hosts
 
-  sudo chown -R $USER ../build/bundle/
+  sudo chown -R $USER ../../build/bundle/
 
   cp ../../app/meteor/.dockerignore ../../build/bundle/
   cp Dockerfile ../../build/bundle/

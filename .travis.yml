@@ -36,7 +36,7 @@ env:
   global:
     - ROOT_URL=http://0.0.0.0:3000/
   matrix:
-    - CMD=npm test
+    - CMD="npm test"
     - CMD=environments/production/build.sh
 
 script: $CMD
