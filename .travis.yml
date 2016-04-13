@@ -23,6 +23,7 @@ before_script:
   - 'export DISPLAY=:99.0'
   - 'sh -e /etc/init.d/xvfb start'
   - sleep 3
+  - chmod +x environments/production/build.sh
   - cd environments/development/
   - docker-compose pull
   - docker-compose run meteor meteor npm install
@@ -31,8 +32,8 @@ before_script:
   - for i in {1..60}; do curl "http://0.0.0.0:3000" && break; sleep 10; done;
 
 env:
-  - ROOT_URL=http://0.0.0.0:3000/
-  - CI_COMMAND="npm test"
+  - CI_COMMAND="ROOT_URL=http://0.0.0.0:3000/ npm test"
+  - CI_COMMAND="environments/production/build.sh"
 
 script: $CI_COMMAND
 

@@ -28,6 +28,7 @@ dump.rdb
 
 # Ignore builds
 app/electron/build/*
+build/
 
 .screenshots
 
