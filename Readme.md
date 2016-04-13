@@ -1,4 +1,4 @@
-<div style='text-align: center'>
+<div align="center">
 
 <h1>Rosalind</h1>
 <small>Built with love in Vienna, Austria.</small><br /><br />
@@ -15,7 +15,6 @@
 
 </div>
 
-<hr />
 
 ## Quickstart
 
