@@ -2,12 +2,12 @@
 
 set -e
 
+cd "$(dirname "$0")"
+
 if [ ! -e ../../build/bundle/package.json ]; then
   echo "** Skipping push to resin.io"
 else
   echo "** Pushing bundle to resin.io"
-
-  cd "$(dirname "$0")"
 
   if [ ! -z "$CI" ]; then
     echo "** Adding resin.io deploy key"
@@ -34,6 +34,6 @@ else
 
   git remote add resin $RESIN_REMOTE
   git push --force resin master
-
-  cd -
 fi
+
+cd -
