@@ -26,6 +26,7 @@ before_script:
   - 'sh -e /etc/init.d/xvfb start'
   - sleep 3
   - chmod +x environments/production/build.sh
+  - chmod +x environments/production/pack.sh
   - chmod +x environments/production/resin.sh
   - cd environments/development/
   - docker-compose pull
@@ -39,7 +40,7 @@ env:
     - ROOT_URL=http://0.0.0.0:3000/
   matrix:
     - CMD="npm test"
-    - CMD=environments/production/build.sh
+    - CMD=environments/production/pack.sh
 
 script: $CMD
 
