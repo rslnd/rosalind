@@ -26,7 +26,11 @@ else
   cd ../../build/bundle/
   tar -zcvf package.tar.gz . &> /dev/null
 
-  cp ../../environments/production Dockerfile ../../build/bundle/
+  mkdir ../image/
+  mv package.tar.gz ../image/
+  cd ../image/
+
+  cp ../../environments/production/Dockerfile Dockerfile
 
   git init
   git add -A .
