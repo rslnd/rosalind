@@ -24,12 +24,11 @@ else
   cp ../../app/meteor/.dockerignore ../../build/bundle/
 
   cd ../../build/bundle/
-  tar -zcf package.tar.gz .
-
   mkdir ../image/
-  mv package.tar.gz ../image/
-  cd ../image/
 
+  tar -zcf ../image/package.tar.gz .
+
+  cd ../image/
   cp ../../environments/production/Dockerfile Dockerfile
 
   git init
