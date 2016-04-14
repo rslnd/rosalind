@@ -15,7 +15,15 @@ else
   ssh-add ./id_rsa
   cat resin.id >> ~/.ssh/known_hosts
 
-  sudo chown -R $USER ../../build/bundle/
+  echo "** Current permissions"
+  ls -la ../../build/bundle
+  ls -la .
+
+  echo "** Fixing permissions"
+  sudo chown -R $USER:$USER ../../build/bundle
+
+  ls -la ../../build/bundle
+  ls -la .
 
   cp ../../app/meteor/.dockerignore ../../build/bundle/
   cp Dockerfile ../../build/bundle/
