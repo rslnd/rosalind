@@ -20,7 +20,7 @@ else
   ls -la .
 
   echo "** Fixing permissions"
-  sudo chown -R $USER:$USER ../../build/bundle
+  sudo chown -R $USER:$USER ../../build
 
   ls -la ../../build/bundle
   ls -la .
