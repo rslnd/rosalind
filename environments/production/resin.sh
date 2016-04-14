@@ -33,8 +33,8 @@ else
   cd ~/resin/bundle
 
   git init
-  git add -A .
-  git commit -m "🐝 Commit ${TRAVIS_COMMIT:0:12} built by worker $TRAVIS_JOB_NUMBER"
+  git add -A . &> /dev/null
+  git commit -m "🐝 Commit ${TRAVIS_COMMIT:0:12} built by worker $TRAVIS_JOB_NUMBER" &> /dev/null
 
   git remote add resin $RESIN_REMOTE
   git push --force resin master
