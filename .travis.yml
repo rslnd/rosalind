@@ -40,12 +40,6 @@ env:
     - ROOT_URL=http://0.0.0.0:3000/
   matrix:
     - CMD="npm test"
-    - CMD=environments/production/pack.sh
+    - CMD=environments/production/build.sh
 
 script: $CMD
-
-deploy:
-  - provider: script
-    script: environments/production/resin.sh
-    on:
-      branch: master

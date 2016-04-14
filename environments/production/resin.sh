@@ -24,7 +24,7 @@ else
   cp ../../app/meteor/.dockerignore ../../build/bundle/
 
   cd ../../build/bundle/
-  tar -zcvf package.tar.gz . &> /dev/null
+  tar -zcf package.tar.gz .
 
   mkdir ../image/
   mv package.tar.gz ../image/
