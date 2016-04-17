@@ -26,8 +26,6 @@ before_script:
   - 'sh -e /etc/init.d/xvfb start'
   - sleep 3
   - chmod +x environments/production/build.sh
-  - chmod +x environments/production/pack.sh
-  - chmod +x environments/production/resin.sh
   - cd environments/development/
   - docker-compose pull
   - docker-compose run meteor meteor npm install
