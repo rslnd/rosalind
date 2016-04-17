@@ -5,6 +5,7 @@
 #   DOCKER_IMAGE
 #   DOCKER_USERNAME
 #   DOCKER_PASSWORD
+#   DOCKER_EMAIL
 
 set -e
 
@@ -22,7 +23,7 @@ if [ ! -e ../../../build/bundle/package.json ]; then
 else
 
   if [ ! -z $CI ]; then
-    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_SERVER
+    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL $DOCKER_SERVER
   fi
 
   echo "** Building x86 image: $DOCKER_IMAGE"
