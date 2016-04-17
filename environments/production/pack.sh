@@ -10,4 +10,7 @@ docker-compose -f ../development/docker-compose.yml run meteor bash -c 'rm -rf /
   && meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory /build/ \
   && cp /app/package.json /build/bundle/'
 
+cp ../../app/meteor/.dockerignore ../../build/bundle/
+cp ../../app/meteor/.dockerignore ../../build/bundle/.gitignore
+
 cd -

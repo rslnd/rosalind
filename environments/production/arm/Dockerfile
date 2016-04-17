@@ -22,7 +22,7 @@ RUN apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
-ADD package.tar.gz /opt/app
+COPY . /opt/app
 WORKDIR /opt/app/programs/server
 
 RUN npm install -g npm-install-retry \
