@@ -2,7 +2,7 @@
 methods = require './methods'
 Schema = require './schema'
 
-Tags = new Mongo.Collection('Tags')
+Tags = new Mongo.Collection('tags')
 Tags.attachSchema(Schema)
 Tags.attachBehaviour('softRemovable')
 Tags.helpers({ collection: -> Tags })

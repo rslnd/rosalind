@@ -4,7 +4,7 @@ methods = require './methods'
 helpers = require './helpers'
 Schema = require './schema'
 
-Schedules = new Mongo.Collection('Schedules')
+Schedules = new Mongo.Collection('schedules')
 Schedules.attachSchema(Schema)
 Schedules.attachBehaviour('softRemovable')
 Schedules.helpers(helpers)

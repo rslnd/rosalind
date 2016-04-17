@@ -10,5 +10,5 @@ options = (options) ->
     return job
 
 module.exports =
-  Import: new JobCollection('Import', options(jobs: 'Import'))
-  Cache: new JobCollection('Cache', options(jobs: 'Cache'))
+  Import: new JobCollection('import', options(jobs: 'import'))
+  Cache: new JobCollection('cache', options(jobs: 'cache'))

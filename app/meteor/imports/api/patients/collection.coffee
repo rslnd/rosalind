@@ -4,7 +4,7 @@ helpers = require './helpers'
 hooks = require './hooks'
 Schema = require './schema'
 
-Patients = new Mongo.Collection 'Patients',
+Patients = new Mongo.Collection 'patients',
   idGeneration: 'MONGO'
 
 Patients.attachSchema(Schema)

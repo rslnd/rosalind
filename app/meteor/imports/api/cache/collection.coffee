@@ -1,5 +1,5 @@
 { Mongo } = require 'meteor/mongo'
 
-Cache = new Mongo.Collection('Cache')
+Cache = new Mongo.Collection('cache')
 
 module.exports = Cache

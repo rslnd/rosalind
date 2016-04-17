@@ -2,7 +2,7 @@
 helpers = require './helpers'
 Schema = require './schema'
 
-InboundCalls = new Mongo.Collection('InboundCalls')
+InboundCalls = new Mongo.Collection('inboundCalls')
 InboundCalls.attachSchema(Schema)
 InboundCalls.attachBehaviour('softRemovable')
 InboundCalls.helpers(helpers)

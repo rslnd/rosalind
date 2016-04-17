@@ -3,7 +3,7 @@ helpers = require './helpers'
 methods = require './methods'
 Schema = require './schema'
 
-Groups = new Mongo.Collection('Groups')
+Groups = new Mongo.Collection('groups')
 Groups.attachSchema(Schema)
 Groups.attachBehaviour('softRemovable')
 Groups.helpers(helpers)

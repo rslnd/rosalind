@@ -3,7 +3,7 @@ hooks = require './hooks'
 methods = require './methods'
 Schema = require './schema'
 
-Reports = new Mongo.Collection('Reports')
+Reports = new Mongo.Collection('reports')
 Reports.attachSchema(Schema)
 Reports.helpers({ collection: -> Reports })
 Reports.methods = methods(Reports)

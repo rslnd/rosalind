@@ -3,7 +3,7 @@ helpers = require './helpers'
 methods = require './methods'
 Schema = require './schema'
 
-Timesheets = new Mongo.Collection('Timesheets')
+Timesheets = new Mongo.Collection('timesheets')
 Timesheets.attachSchema(Schema)
 Timesheets.helpers(helpers)
 Timesheets.helpers({ collection: -> Timesheets })

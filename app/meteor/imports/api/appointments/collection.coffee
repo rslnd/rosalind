@@ -7,7 +7,7 @@ Patients = require('/imports/api/patients')
 Users = require('/imports/api/users')
 
 
-Appointments = new Mongo.Collection 'Appointments',
+Appointments = new Mongo.Collection 'appointments',
   idGeneration: 'MONGO'
 
 Appointments.attachSchema(Schema)
