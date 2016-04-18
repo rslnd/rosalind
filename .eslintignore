@@ -1,4 +1,0 @@
-**/node_modules/**
-app/meteor/client/compatibility
-app/meteor/packages/meteor-simple-schema-i18n/
-app/electron/build/

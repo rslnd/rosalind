@@ -1,0 +1,11 @@
+meteor:
+  image: quay.io/rosalind/meteor-development:1.3.1
+  working_dir: /rosalind/app/meteor
+  command: meteor
+  restart: 'no'
+  ports:
+    - '3000:3000'
+  volumes:
+    - .:/rosalind
+  environment:
+    - NODE_ENV=development

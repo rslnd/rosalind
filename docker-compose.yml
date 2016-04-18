@@ -1,0 +1,26 @@
+meteor:
+  environment:
+    - MONGO_URL=mongodb://mongodb:27017/rosalind
+    - ELASTICSEARCH_URL=http://elasticsearch:9200
+    - ROOT_URL=http://0.0.0.0:3000
+    - CUSTOMER_NAME=
+  links:
+    - mongodb
+    - elasticsearch
+    - transporter
+
+transporter:
+  image: quay.io/rosalind/mongo2es:latest
+  environment:
+    - M2E_DESTINATION=http://elasticsearch:9200
+    - M2E_NAMESPACE=rosalind.patients
+    - M2E_SOURCE=mongodb://mongodb
+  links:
+    - elasticsearch
+    - mongodb
+
+elasticsearch:
+  image: quay.io/rosalind/elasticsearch-phonetic:2.2.0
+
+mongodb:
+  image: mvertes/alpine-mongo:3.2.3
