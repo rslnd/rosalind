@@ -8,7 +8,6 @@ Feature: Inbound Calls
     Given I am a 'call center employee' with the role 'inboundCalls'
     And I am logged in
 
-  @dev
   Scenario: Create inbound call
     Then I should see 'New inbound call'
     Given I click on 'Inbound calls > New inbound call'
