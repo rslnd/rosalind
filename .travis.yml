@@ -12,7 +12,6 @@ node_js:
 
 before_install:
   - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
-  - npm install
   - cd app/meteor/tests/cucumber && npm install && cd ../../../../
 
 cache:
@@ -28,14 +27,12 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+  - chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
   - chmod +x production/build.sh
   - docker-compose -f docker-compose.yml -f docker-compose.test.yml pull
   - docker-compose -f docker-compose.yml -f docker-compose.test.yml run meteor meteor npm install
   - npm run start:test &
-  - cd ../../
-  - for i in {1..60}; do curl 'http://0.0.0.0:3000' && break; sleep 10; done;
+  - for i in {1..180}; do curl 'http://0.0.0.0:3000' && break; sleep 1; done;
 
 env:
   global:
@@ -43,6 +40,6 @@ env:
     - ROOT_URL=http://0.0.0.0:3000/
   matrix:
     - CMD='npm test'
-    - CMD=production/build.sh
+    - CMD=./production/build.sh
 
 script: $CMD
