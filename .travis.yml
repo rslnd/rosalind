@@ -32,6 +32,7 @@ before_script:
   - sudo mv docker-compose /usr/local/bin
   - chmod +x production/build.sh
   - docker-compose -f docker-compose.yml -f docker-compose.test.yml pull
+  - docker-compose -f docker-compose.yml -f docker-compose.test.yml run meteor meteor npm install
   - npm run start:test &
   - cd ../../
   - for i in {1..60}; do curl 'http://0.0.0.0:3000' && break; sleep 10; done;
