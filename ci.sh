@@ -10,7 +10,7 @@ case "$1" in
 
     sudo apt-get -y install xvfb &
     nvm install ${NODE_VERSION} &
-    (curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose) &
+    ( curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose ) &
     wait
     nvm use ${NODE_VERSION}
     sudo rm /usr/local/bin/docker-compose
@@ -19,15 +19,17 @@ case "$1" in
     export DISPLAY=:99.0
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
 
+    ;;
+
   test)
     if [ -z "$ROOT_URL" ]; then
       echo "Please set ROOT_URL for running integration tests"
       exit 1
     fi
 
-    (docker-compose $YML pull && docker-compose $YML run meteor meteor npm install) &
+    ( docker-compose $YML pull && docker-compose $YML run meteor meteor npm install ) &
     npm install &
-    (cd app/meteor/tests/cucumber && npm install && cd -) &
+    ( cd app/meteor/tests/cucumber && npm install && cd - ) &
     wait
     npm run start:test &
     for i in {1..180}; do curl "$ROOT_URL" && break; sleep 1; done;
