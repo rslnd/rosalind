@@ -11,10 +11,7 @@ matrix:
   fast_finish: true
 
 install:
-  - chmod +x ci.sh && ./ci.sh
-
-before_script:
-  - chmod +x ci.sh
+  - chmod +x ci.sh && ./ci.sh install
 
 env:
   global:
