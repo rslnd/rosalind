@@ -9,8 +9,8 @@ case "$1" in
     echo "Setting up CI environment"
 
     sudo apt-get -y install xvfb &
-    ( npm install n && sudo ./node_modules/.bin/n ${NODE_VERSION} && rm -rf ~/.nvm ) &
-    ( curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose ) &
+    { npm install n; sudo ./node_modules/.bin/n ${NODE_VERSION}; rm -rf ~/.nvm; } &
+    { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     wait
     sudo rm /usr/local/bin/docker-compose
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
@@ -26,9 +26,9 @@ case "$1" in
       exit 1
     fi
 
-    ( docker-compose $YML pull && docker-compose $YML run meteor meteor npm install ) &
+    { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install; } &
     npm install &
-    ( cd app/meteor/tests/cucumber && npm install && cd - ) &
+    { cd app/meteor/tests/cucumber; npm install; cd -; } &
     wait
     npm run start:test &
     for i in {1..180}; do curl "$ROOT_URL" && break; sleep 1; done;
