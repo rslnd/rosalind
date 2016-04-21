@@ -9,10 +9,9 @@ case "$1" in
     echo "Setting up CI environment"
 
     sudo apt-get -y install xvfb &
-    nvm install ${NODE_VERSION} &
+    ( npm install n && sudo ./node_modules/.bin/n ${NODE_VERSION} && rm -rf ~/.nvm ) &
     ( curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose ) &
     wait
-    nvm use ${NODE_VERSION}
     sudo rm /usr/local/bin/docker-compose
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
 
