@@ -8,8 +8,8 @@ case "$1" in
   install)
     echo "Setting up CI environment"
 
+    nvm install ${NODE_VERSION} && nvm use ${NODE_VERSION}
     sudo apt-get -y install xvfb &
-    { npm install n; sudo ./node_modules/.bin/n ${NODE_VERSION}; rm -rf ~/.nvm; } &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     wait
     sudo rm /usr/local/bin/docker-compose
@@ -25,8 +25,7 @@ case "$1" in
       echo "Please set ROOT_URL for running integration tests"
       exit 1
     fi
-    
-    sudo ./node_modules/.bin/n ${NODE_VERSION}
+
     { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install; } &
     npm install &
     { cd app/meteor/tests/cucumber; npm install; cd -; } &
