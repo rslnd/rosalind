@@ -25,13 +25,15 @@ case "$1" in
       echo "Please set ROOT_URL for running integration tests"
       exit 1
     fi
-
+    
+    sudo ./node_modules/.bin/n ${NODE_VERSION}
     { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install; } &
     npm install &
     { cd app/meteor/tests/cucumber; npm install; cd -; } &
     wait
     npm run start:test &
-    for i in {1..180}; do curl "$ROOT_URL" && break; sleep 1; done;
+    for i in {1..180}; do printf "(%03d) " $i && curl -q "$ROOT_URL" && break; sleep 1; done;
+    wait
     npm test
 
     ;;
