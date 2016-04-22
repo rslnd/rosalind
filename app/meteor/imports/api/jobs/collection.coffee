@@ -9,6 +9,9 @@ options = (options) ->
       job = doc
     return job
 
-module.exports =
-  Import: new JobCollection('import', options(jobs: 'import'))
-  Cache: new JobCollection('cache', options(jobs: 'cache'))
+Jobs =
+  import: new JobCollection('import', options(jobs: 'import'))
+  cache: new JobCollection('cache', options(jobs: 'cache'))
+
+
+module.exports = Jobs

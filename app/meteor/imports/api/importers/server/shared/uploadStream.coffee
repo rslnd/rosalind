@@ -4,7 +4,7 @@ includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Picker } = require 'meteor/meteorhacks:picker'
 { Users } = require '/imports/api/users'
-{ Import } = require '/imports/api/jobs'
+Jobs = require '/imports/api/jobs'
 
 module.exports = ->
   temp.track()
@@ -17,7 +17,7 @@ module.exports = ->
 
   onUploaded = Meteor.bindEnvironment (options) ->
     console.log('[Import] Upload stream: Done receiving file', options)
-    job = new Job(Import, options.importer, options)
+    job = new Job(Jobs.import, options.importer, options)
       .retry
         until: moment().add(1, 'hour').toDate()
         wait: 1000

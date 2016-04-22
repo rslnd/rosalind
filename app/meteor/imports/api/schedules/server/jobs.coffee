@@ -1,7 +1,7 @@
 Schedules = require '../collection'
 
 module.exports = ->
-  Job.processJobs 'Cache', 'schedules', (job, callback) ->
+  Job.processJobs 'cache', 'schedules', (job, callback) ->
 
     job.log('Cache: Schedules: Running')
 

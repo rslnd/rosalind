@@ -6,4 +6,4 @@ module.exports = ->
     'schedules/updateCache': ->
       return unless Meteor.userId()
 
-      new Job(Jobs.Cache, 'schedules', {}).save()
+      new Job(Jobs.cache, 'schedules', {}).save()

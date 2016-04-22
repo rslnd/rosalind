@@ -1,5 +1,5 @@
 Jobs = require '../collection'
 
 module.exports = ->
-  Jobs.Import.startJobServer()
-  Jobs.Cache.startJobServer()
+  Jobs.import.startJobServer()
+  Jobs.cache.startJobServer()
