@@ -26,8 +26,8 @@ case "$1" in
     fi
 
     { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install; } &
-    npm install &
-    { cd app/meteor/tests/cucumber; npm install; cd -; } &
+    npm install
+    cd app/meteor/tests/cucumber && npm install && cd -
     wait
     npm run start:test &
     for i in {1..180}; do printf "(%03d) " $i && curl -q "$ROOT_URL" && break; sleep 1; done;
