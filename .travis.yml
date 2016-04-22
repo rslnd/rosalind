@@ -10,6 +10,9 @@ services:
 matrix:
   fast_finish: true
 
+before_install:
+  - nvm install ${NODE_VERSION} && nvm use ${NODE_VERSION}
+
 install:
   - chmod +x ci.sh && ./ci.sh install
 

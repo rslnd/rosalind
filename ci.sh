@@ -8,7 +8,6 @@ case "$1" in
   install)
     echo "Setting up CI environment"
 
-    nvm install ${NODE_VERSION} && nvm use ${NODE_VERSION}
     sudo apt-get -y install xvfb &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     wait
