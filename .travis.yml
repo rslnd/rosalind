@@ -21,8 +21,19 @@ env:
     - DOCKER_COMPOSE_VERSION=1.5.2
     - NODE_VERSION=0.10.43
     - ROOT_URL=http://0.0.0.0:3000/
+    - SAUCE_USER=albertzak-rslnd
+    - SAUCE_HOST=ondemand.saucelabs.com
+    - SAUCE_PORT=80
+    - secure: "CpqQfJK3fC9/LUWgxrU06a9HlydB1/m2K2MVi6CnKwr1SLtltypOStZ9lNE/wkD6+M/5RbamPEicc9WWXc4cxaOOOWFe8YEHg/Mk9dZ0Rp8UMuX6tcCwplmfgsFME4dX2YLD6W6Lq9GyRDUkNCZ291VzV2AZNBw3S4nHZ0PgW2CszzcyqIk1MzooaG6iYYHG6SuJaQn0BUH+itbkdHfiaXK8jZo/uobyX+q/hhZPuK/l1Qc5E0XpMommHP9Z8/AExuhzcvnpgnKUhLio3VPMZF/Wf9GvViEcQ9bQNtezeLy+gKjgBTLAL/ETFfGktB7WVPrsEAiACj7M50kAluJs65jFDuHDqrTEmkzwrwRCi9AOKJiBIGNAv/0cdXB+sIb2QzNHOqclR6qi+D8KESWaOuZ2Spq643eevQAUncZwh45r+gfPw6X9SoyrdnRggm/FZTRGT3L//6RBR+uRSaC3h/zRZglPB3bIxzyx0SbQy9jPH6mvfsY5lGYt2H+vb5zRNus+lHMDTq/KV6dMCULXixPSZEs1+JRiqnD0WUnYhW5Fqa337fVc7s6fn0QK18+PJKdIVJLmEN20aAKKSlQmcWel7y7Qj0drt+6nH8c0SjFKxpe7wTI258nZXo+87cLM22xrTimGU262jNqziLPMQEFwKDE6tbuDPn1B8re5aJY="
+
   matrix:
     - CMD=test
     - CMD=build
 
 script: ./ci.sh $CMD
+
+addons:
+  sauce_connect:
+    username: albertzak-rslnd
+    access_key:
+      secure: "HTOy+FBqCskHvjGkm2GQ6ypapx91QSr4QxnvJrb9lWB/XjT+S4EwbEzP2v1VBFvEIyEswl5/NUMdhi7cDdzn60KK1f8RcgWCPF9g7RIRYAS+4LS0FviGN1n7GHtHdUNZ5d8szPCtZTFojRNz3D0kRKxWdpNG646WXJoLcRwbtQcs+RxCktquIyL+pzckm7TM90jRlV9XVCky1JTQfYzN7UFcRIzN2ocVgUPjL8v50ezRHWJnKGDIO3WMA3DfWajbgFee/aulAErqBuDOEVpC0tQZLUuzeJHqxYu7+nGcTFsowuDzxL2RxjVrer8SJxZ5mL7RdicMH3+p+AB64lHoxrD/yb5kdatI7O8+z2bbqatC/GNIxDmjkn1yYgKdZeal3QO+oxdjsJNlBT0SfU5udH+Y1BODQCz9PfvPT4ldIfZ3UeS2HSRe0DAPgi5aJUFL0Ufj0UbtC7CO57hiAUR+nDjf5ENIzbRjie1k99Fp0rl7D2g+vZi+6iEXRvyrEBaygIhali0498iS/OlpYE3yr5N/BCrhj49kJoHmx7XraMCGLWm1rchZjgVWfwbicivGBoYdMHhsO+d8Dr+5gPr04RYO/ZGsZZchdpXW5sfNUXO8VE/pNnlvTDzRnlvrXuQkYE/mI11LJB1swVS2CEeEIsrSq6wuhImsP02vpr3TwZg="
