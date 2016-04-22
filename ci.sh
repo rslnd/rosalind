@@ -32,7 +32,7 @@ case "$1" in
     wait
     npm run start:test &
     for i in {1..180}; do printf "(%03d) " $i && curl -q "$ROOT_URL" && break; sleep 1; done;
-    npm test
+    SAUCE_NAME="Rosalind ${TRAVIS_COMMIT:0:12} ($TRAVIS_JOB_NUMBER)" npm test
 
     ;;
 

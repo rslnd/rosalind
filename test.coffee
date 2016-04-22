@@ -4,6 +4,10 @@ fs = require 'fs'
 
 processes = []
 
+unless process.env.ROOT_URL
+  console.error('Please set ROOT_URL')
+  process.exit(1)
+
 startChimp = ->
   startProcess
     name: 'Chimp'
@@ -21,6 +25,18 @@ chimpCommand = ->
 
   if process.env.CUCUMBER_JSON_OUTPUT
     chimp.push '--jsonOutput=' + process.env.CUCUMBER_JSON_OUTPUT
+
+  if process.env.SAUCE_HOST
+    chimp.push '--user=' + process.env.SAUCE_USER
+    chimp.push '--key=' + process.env.SAUCE_KEY
+    chimp.push '--host=' + process.env.SAUCE_HOST
+    chimp.push '--port=' + process.env.SAUCE_PORT
+
+    if process.env.SAUCE_NAME
+      chimp.push '--name="' + process.env.SAUCE_NAME + '"'
+    else
+      chimp.push '--name="Rosalind WIP"'
+
 
   chimp.join(' ')
 
