@@ -31,13 +31,13 @@ case "$1" in
     wait
     npm run start:test &
     for i in {1..180}; do printf "(%03d) " $i && curl -q "$ROOT_URL" && break; sleep 1; done;
-    wait
     npm test
 
     ;;
 
   build)
     docker-compose $YML pull meteor
+    docker-compose $YML run meteor meteor npm install
     chmod +x production/build.sh && ./production/build.sh
 
     ;;
