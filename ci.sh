@@ -26,36 +26,36 @@ case "$1" in
       exit 1
     fi
 
-    echo -en "travis_fold:start:Pulling image and installing dependencies\r"
+    echo -en "travis_fold:start:pull_dependencies\r"
     { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install; } &
     npm install
     cd app/meteor/tests/cucumber && npm install && cd -
     wait
-    echo -en "travis_fold:end:Pulling image and installing dependencies\r"
+    echo -en "travis_fold:end:pull_dependencies\r"
 
-    echo -en "travis_fold:start:Installing meteor packages and starting server\r"
+    echo -en "travis_fold:start:start_meteor\r"
     npm run start:test &
     for i in {1..180}; do printf "(%03d) " $i && curl -q "$ROOT_URL" && break; sleep 1; done;
-    echo -en "travis_fold:end:Installing meteor packages and starting server\r"
+    echo -en "travis_fold:end:start_meteor\r"
 
-    echo -en "travis_fold:start:Running integration test suite\r"
+    echo -en "travis_fold:start:test\r"
     SAUCE_NAME="Rosalind ${TRAVIS_COMMIT:0:12} ($TRAVIS_JOB_NUMBER)" npm test
-    echo -en "travis_fold:end:Running integration test suite\r"
+    echo -en "travis_fold:end:test\r"
 
     ;;
 
   build)
-    echo -en "travis_fold:start:Pulling meteor image\r"
+    echo -en "travis_fold:start:pull\r"
     docker-compose $YML pull meteor
-    echo -en "travis_fold:end:Pulling meteor image\r"
+    echo -en "travis_fold:end:pull\r"
 
-    echo -en "travis_fold:start:Installing meteor packages\r"
+    echo -en "travis_fold:start:dependencies\r"
     docker-compose $YML run meteor meteor npm install
-    echo -en "travis_fold:end:Installing meteor packages\r"
+    echo -en "travis_fold:end:dependencies\r"
 
-    echo -en "travis_fold:start:Building production bundle\r"
+    echo -en "travis_fold:start:production_build\r"
     chmod +x production/build.sh && ./production/build.sh
-    echo -en "travis_fold:end:Building production bundle\r"
+    echo -en "travis_fold:end:production_build\r"
 
     ;;
 
