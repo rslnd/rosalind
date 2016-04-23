@@ -26,6 +26,7 @@ else
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL $DOCKER_SERVER
   fi
 
+  echo -en "travis_fold:start:docker_build\r"
   echo "** Building x86 image: $DOCKER_IMAGE"
 
   cp Dockerfile ../../build/bundle/Dockerfile
@@ -35,10 +36,13 @@ else
   docker build -t $DOCKER_IMAGE .
 
   rm Dockerfile
-
   cd -
+  echo -en "travis_fold:end:docker_build\r"
 
+
+  echo -en "travis_fold:start:docker_push\r"
   echo "** Pushing x86 image"
-
   docker push $DOCKER_IMAGE
+  echo -en "travis_fold:end:docker_push\r"
+
 fi
