@@ -11,35 +11,8 @@ unless process.env.ROOT_URL
 startChimp = ->
   startProcess
     name: 'Chimp'
-    command: chimpCommand()
+    command: './node_modules/.bin/chimp'
     failOnMessage: 'Not running'
-
-chimpCommand = ->
-  chimp = [
-    './node_modules/.bin/chimp'
-    '--ddp=' + process.env.ROOT_URL
-    '--path=app/meteor/tests/cucumber/features/'
-    '--browser=chrome'
-    '--compiler=coffee:coffee-script/register'
-  ]
-
-  if process.env.CUCUMBER_JSON_OUTPUT
-    chimp.push '--jsonOutput=' + process.env.CUCUMBER_JSON_OUTPUT
-
-  if process.env.SAUCE_HOST
-    chimp.push '--user=' + process.env.SAUCE_USERNAME
-    chimp.push '--key=' + process.env.SAUCE_ACCESS_KEY
-    chimp.push '--host=' + process.env.SAUCE_HOST
-    chimp.push '--port=' + process.env.SAUCE_PORT
-
-    if process.env.SAUCE_NAME
-      chimp.push '--name="' + process.env.SAUCE_NAME + '"'
-    else
-      chimp.push '--name="Rosalind WIP"'
-
-
-  chimp.join(' ')
-
 
 killProcess = (code) ->
   console.log('** Exiting with code ' + code)
