@@ -2,6 +2,10 @@ browser = process.env.BROWSER || 'chrome:27.0'
 browserName = browser.split(':')[0]
 browserVersion = browser.split(':')[1]
 
+console.log('** OS:', process.env.OS)
+console.log('** Browser:', browserName, browserVersion)
+console.log('** Worker:', process.env.TRAVIS_JOB_NUMBER)
+
 module.exports = {
   watch: false,
 
