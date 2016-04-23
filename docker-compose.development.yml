@@ -6,7 +6,8 @@ meteor:
   ports:
     - '3000:3000'
   volumes:
-    - .:/rosalind
+    - ./app/meteor:/app
+    - ./build:/build
   environment:
     - NODE_ENV=development
     - METEOR_WATCH_FORCE_POLLING=t
