@@ -45,7 +45,7 @@ case "$1" in
     ;;
 
   build)
-    travis_stop_sauce_connect
+    sudo pkill sc
 
     echo -en "travis_fold:start:pull\r"
     docker-compose $YML pull meteor
