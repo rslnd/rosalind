@@ -27,8 +27,8 @@ chimpCommand = ->
     chimp.push '--jsonOutput=' + process.env.CUCUMBER_JSON_OUTPUT
 
   if process.env.SAUCE_HOST
-    chimp.push '--user=' + process.env.SAUCE_USER
-    chimp.push '--key=' + process.env.SAUCE_KEY
+    chimp.push '--user=' + process.env.SAUCE_USERNAME
+    chimp.push '--key=' + process.env.SAUCE_ACCESS_KEY
     chimp.push '--host=' + process.env.SAUCE_HOST
     chimp.push '--port=' + process.env.SAUCE_PORT
 
