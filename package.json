@@ -4,6 +4,7 @@
   "scripts": {
     "start": "docker-compose -f docker-compose.yml -f docker-compose.development.yml up",
     "start:test": "docker-compose -f docker-compose.yml -f docker-compose.test.yml up",
+    "docker-compose": "docker-compose -f docker-compose.yml -f docker-compose.development.yml",
     "server": "docker-compose -f docker-compose.yml -f docker-compose.development.yml run meteor",
     "server:npm": "docker-compose -f docker-compose.yml -f docker-compose.development.yml run meteor meteor npm",
     "test": "./node_modules/coffee-script/bin/coffee ./test.coffee",
