@@ -12,7 +12,7 @@ docker-compose -f '../docker-compose.yml' -f '../docker-compose.test.yml' run me
 
 if [ ! -z "$CI" ]; then
   echo "** Fixing permissions"
-  sudo chown -R $USER:$USER ../../build
+  sudo chown -R $USER:$USER ../build
 fi
 
 cp ../.dockerignore ../build/bundle/

@@ -40,5 +40,5 @@ else
 
   echo "** Pushing x86 image"
 
-docker push $DOCKER_IMAGE
+  docker push $DOCKER_IMAGE
 fi
