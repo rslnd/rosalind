@@ -45,6 +45,8 @@ case "$1" in
     ;;
 
   build)
+    travis_stop_sauce_connect
+
     echo -en "travis_fold:start:pull\r"
     docker-compose $YML pull meteor
     echo -en "travis_fold:end:pull\r"
