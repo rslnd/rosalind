@@ -39,7 +39,7 @@ case "$1" in
     echo -en "travis_fold:end:start_meteor\r"
 
     echo -en "travis_fold:start:test\r"
-    SAUCE_NAME="Rosalind ${TRAVIS_COMMIT:0:12} ($TRAVIS_JOB_NUMBER)" npm test
+    SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}" npm test
     echo -en "travis_fold:end:test\r"
 
     ;;
