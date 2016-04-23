@@ -1,26 +1,29 @@
 FROM node:0.10.44-slim
 
 RUN apt-get update && apt-get -y install \
-    git \
-    curl \
-    gnome-doc-utils \
-    libtool \
-  	automake \
-  	autoconf \
-    build-essential \
-    glib2.0-dev
-
-RUN cd /root/ && \
-  git clone https://github.com/albertzak/mdbtools && \
-  cd mdbtools && \
-  autoreconf -i -f && \
-  ./configure --disable-man && \
-  make && \
-  make install
-
-RUN apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
+      git \
+      curl \
+      gnome-doc-utils \
+      libtool \
+    	automake \
+    	autoconf \
+      build-essential \
+      glib2.0-dev \
+    && cd /root/ && \
+      git clone https://github.com/albertzak/mdbtools && \
+      cd mdbtools && \
+      autoreconf -i -f && \
+      ./configure --disable-man && \
+      make && \
+      make install \
+    && apt-get -y purge \
+      gnome-doc-utils \
+      libtool \
+      automake \
+      autoconf \
+      glib2.0-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY . /opt/app
 WORKDIR /opt/app/programs/server

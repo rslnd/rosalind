@@ -16,7 +16,7 @@ DOCKER_IMAGE="$DOCKER_IMAGE:$DOCKER_TAG"
 
 cd "$(dirname "$0")"
 
-if [ ! -e ../../../build/bundle/package.json ]; then
+if [ ! -e ../../build/bundle/package.json ]; then
   echo "** Skipping x86 build"
   echo "     Please make sure you run ./pack.sh"
   echo "     and build/bundle/package.json exists."
@@ -28,9 +28,9 @@ else
 
   echo "** Building x86 image: $DOCKER_IMAGE"
 
-  cp Dockerfile ../../../build/bundle/Dockerfile
+  cp Dockerfile ../../build/bundle/Dockerfile
 
-  cd ../../../build/bundle/
+  cd ../../build/bundle/
 
   docker build -t $DOCKER_IMAGE .
 
