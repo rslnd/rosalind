@@ -8,13 +8,13 @@ case "$1" in
   install)
     echo "Setting up CI environment"
 
-    sudo apt-get -y install xvfb &
+    sudo apt-get -y install xvfb oracle-java8-installer &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     npm -g install npm@latest-2 &
     wait
     sudo rm /usr/local/bin/docker-compose
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
-
+    java -version
     export DISPLAY=:99.0
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
 
