@@ -33,14 +33,18 @@ case "$1" in
     wait
     echo -en "travis_fold:end:pull_dependencies\r"
 
+    echo -en "travis_fold:start:unit_tests\r"
+    npm test
+    echo -en "travis_fold:end:unit_tests\r"
+
     echo -en "travis_fold:start:start_meteor\r"
     npm run start:test &
     for i in {1..180}; do printf "(%03d) " $i && curl -q "$ROOT_URL" && break; sleep 1; done;
     echo -en "travis_fold:end:start_meteor\r"
 
-    echo -en "travis_fold:start:test\r"
-    SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}" npm test
-    echo -en "travis_fold:end:test\r"
+    echo -en "travis_fold:start:acceptance_tests\r"
+    SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}" npm run test:acceptance
+    echo -en "travis_fold:end:acceptance_tests\r"
 
     ;;
 

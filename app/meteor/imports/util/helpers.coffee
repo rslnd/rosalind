@@ -85,22 +85,6 @@ module.exports =
       .split('\\r').join('\n')
       .split('\\n').join('\n')
 
-  # Split phone number at whitespaces. If the word contains a number,
-  # replace all letters 'O' or 'o' with zeroes. Join back together.
-  zerofix: (telephone) ->
-    return unless telephone?
-    telephone = _.map telephone.split(/\s/g), (word) ->
-      if word.match(/\d/g)
-        word.replace(/o/gi, '0')
-      else word
-    telephone = telephone.join(' ')
-
-    # If it's just a long string of digits, split into groups of 4
-    if (telephone.indexOf(' ') is -1 and telephone.match(/\d/g))
-      telephone.match(/.{1,4}/g).join(' ')
-    else
-      telephone
-
   stringify: (blob, pretty = true) ->
     if blob
       try

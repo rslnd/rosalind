@@ -1,5 +1,6 @@
 { Meteor } = require 'meteor/meteor'
 Helpers = require '/imports/util/helpers'
+{ zerofix } = require '/imports/util/zerofix'
 InboundCalls = require './collection'
 Schema = require './schema'
 
@@ -10,7 +11,7 @@ module.exports = new Tabular.Table
   columns: [
     { data: 'firstName', title: 'Vorname' }
     { data: 'lastName', title: 'Nachname' }
-    { data: 'telephone', title: 'Telefon', render: (val) -> Helpers.zerofix(val) }
+    { data: 'telephone', title: 'Telefon', render: (val) -> zerofix(val) }
     { data: 'note', title: 'Notiz' }
     { data: 'privatePatient', title: 'Privat', render: (val, type, doc) -> doc.privatePatient }
     { data: 'createdAt', title: 'Angenommen', render: (val) -> moment(val).calendar() }
