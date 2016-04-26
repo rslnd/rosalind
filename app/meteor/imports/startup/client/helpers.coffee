@@ -1,4 +1,5 @@
 Helpers = require '/imports/util/helpers'
+{ zerofix } = require '/imports/util/zerofix'
 Time = require '/imports/util/time'
 
 module.exports = ->
@@ -15,7 +16,7 @@ module.exports = ->
   h 'weekOfYear', (context) -> Helpers.weekOfYear(context)
   h 'recent', (context) -> Helpers.recent(context)
   h 'birthday', (context) -> Helpers.birthday(context)
-  h 'zerofix', (context) -> Helpers.zerofix(context)
+  h 'zerofix', (context) -> zerofix(context)
   h 'stringify', (context) -> Helpers.stringify(context)
   h 'formatInsuranceId', (context) -> Helpers.formatInsuranceId(context)
   h 'customerName', -> Customer?.get('name')
