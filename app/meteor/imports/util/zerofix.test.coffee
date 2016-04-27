@@ -1,4 +1,3 @@
-{ expect } = require 'chai'
 { zerofix } = require './zerofix'
 
 describe 'helpers', ->
