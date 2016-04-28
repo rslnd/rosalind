@@ -38,10 +38,12 @@ module.exports =
     ipc.on('import/eoswin/reports', (e, options) => @import(options))
 
   import: (options) ->
-    return unless settings.import.eoswin.modules.reports
+    unless settings.import.eoswin.modules.reports
+      return logger.error('[Import] EoswinReports: Disabled')
 
-    metaPath = path.join(settings.import.eoswin.path, 'DATEN/DListen.ADT')
-    dataPath = path.join(settings.import.eoswin.path, 'EOSWIN/DefList')
+
+    metaPath = path.join(settings.import.eoswin.path, 'DATEN', 'DListen.ADT')
+    dataPath = path.join(settings.import.eoswin.path, 'EOSWIN', 'DefList')
 
     parseMeta metaPath, (meta) ->
 
