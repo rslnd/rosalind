@@ -11,7 +11,8 @@ module.exports =
     ipc.on('import/terminiko', @import)
 
   import: ->
-    return unless settings.import.terminiko.enabled
+    unless settings.import.terminiko.enabled
+      return logger.error('[Import] Terminiko: Disabled')
 
     logger.info('[Import] Terminiko: Uploading', settings.import.terminiko.path)
     uploadStream.upload(settings.import.terminiko.path, importer: 'terminiko')

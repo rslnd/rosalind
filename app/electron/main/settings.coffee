@@ -32,16 +32,19 @@ unless @Settings?
     persistedSettings = {}
 
     try
-      JSON.parse(fs.readFileSync(settingsPath, encoding: 'utf8') )
+      persistedSettings = JSON.parse(fs.readFileSync(settingsPath, encoding: 'utf8') )
+      logger.info('[Settings] Loaded existing settings', settings)
+
     catch e
       logger.error('[Settings] Cannot parse settings file', e)
 
 
-    if _.isEqual(settings, defaultSettings)
+    if _.isEqual(persistedSettings, defaultSettings)
       settings = persistedSettings
     else
-      settings = _.merge(defaultSettings, persistedSettings)
-      logger.info('[Settings] Writing updated settings to', settingsPath)
+      settings = _.merge({}, defaultSettings, persistedSettings)
+      logger.info('[Settings] Merging settings', settings)
+      logger.info('[Settings] Writing updated settings to', settingsPath, )
       fs.writeFile settingsPath, JSON.stringify(settings, null, 2), encoding: 'utf8', (err) ->
         logger.error('[Settings] Cannot write updated settings', err) if err?
 
