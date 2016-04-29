@@ -4,6 +4,7 @@
   "scripts": {
     "start": "docker-compose -f docker-compose.yml -f docker-compose.development.yml up",
     "start:test": "docker-compose -f docker-compose.yml -f docker-compose.test.yml up",
+    "shell": "docker exec -it rosalind_meteor_1 meteor shell",
     "docker-compose": "docker-compose -f docker-compose.yml -f docker-compose.development.yml",
     "server": "docker-compose -f docker-compose.yml -f docker-compose.development.yml run meteor",
     "server:npm": "docker-compose -f docker-compose.yml -f docker-compose.development.yml run meteor meteor npm",
