@@ -5,7 +5,6 @@ last = require 'lodash/last'
 { Roles } = require 'meteor/alanning:roles'
 { TAPi18n } = require 'meteor/tap:i18n'
 Time = require '/imports/util/time'
-{ Schedules } = require '/imports/api/schedules'
 { Timesheets } = require '/imports/api/timesheets'
 
 module.exports =
@@ -36,9 +35,6 @@ module.exports =
       @username
     else
       map(@fullName().split(' '), (n) -> n.charAt(0) ).join('')
-
-  defaultSchedule: ->
-    Schedules.findOne(userId: @_id)
 
   getRoles: ->
     Roles.getRolesForUser(@_id).join(', ')

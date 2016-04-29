@@ -4,7 +4,7 @@ moment = require 'moment'
 module.exports = ({ Schedules, Users }) ->
   getScheduled: (time = moment()) ->
     allUsers = Users.find({}).fetch()
-    filter allUsers, (user) ->
+    filter allUsers, (user) =>
       @isScheduled(time, user._id)
 
   isScheduled: (time = moment(), userId = null) ->
