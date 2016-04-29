@@ -1,8 +1,9 @@
-moment = require 'moment'
+map = require 'lodash/map'
 some = require 'lodash/some'
-{ Cache } = require '/imports/api/cache'
+union = require 'lodash/union'
+moment = require 'moment'
 
-module.exports = (Schedules) ->
+module.exports = ({ Schedules, Appointments, Cache }) ->
   updateCache: (nextDays = 10) ->
     console.log('[Schedules] Caching next ' + nextDays + ' days')
     caches = @cacheNextDays(nextDays)
@@ -22,7 +23,7 @@ module.exports = (Schedules) ->
     cache = []
 
 
-    for dayOffset in [0..nextDays]
+    for dayOffset in [0...nextDays]
       time = moment().hour(0).minute(0).second(30)
       time = time.clone().add(dayOffset, 'days')
 
@@ -41,18 +42,24 @@ module.exports = (Schedules) ->
         day.hours[hh] || = {}
         day.hours[hh].minutes ||= {}
 
-        for minute in [0..59]
-          time = time.clone().minute(minute)
+        for minuteBlock in [0..5]
+          time = time.clone().minute(10 * minuteBlock)
 
           mm = time.minute()
 
           day.hours[hh].minutes[mm] ||= {}
           day.hours[hh].minutes[mm] =
             isOpen: Schedules.methods.isOpen({ time })
+            scheduled: map(Schedules.methods.getScheduled(time), (u) -> u._id)
+            appointments: map(Appointments.methods.findAll(time, 'hour'), (a) -> a._id)
 
         day.hours[hh].isOpen = some(day.hours[hh].minutes, { isOpen: true })
+        day.hours[hh].scheduled = union(map(day.hours[hh].minutes, (m) -> m.scheduled)...)
+        day.hours[hh].appointments = union(map(day.hours[hh].minutes, (m) -> m.appointments)...)
 
       day.isOpen = some(day.hours, { isOpen: true })
+      day.scheduled = union(map(day.hours, (h) -> h.scheduled)...)
+      day.appointments = union(map(day.hours, (h) -> h.appointments)...)
 
       cache.push(day)
 
