@@ -1,8 +1,9 @@
-@Import ||= {}
-@Import.Terminiko ||= {}
+{ Meteor } = require 'meteor/meteor'
+{ Patients } = require '/imports/api/patients'
+mdb = require '../../shared/mdb'
 
-@Import.Terminiko.upsertPatients = (job) ->
-  Import.Mdb
+module.exports = (job) ->
+  mdb
     path: job.data.path
     table: 'Patienten'
     progress: job

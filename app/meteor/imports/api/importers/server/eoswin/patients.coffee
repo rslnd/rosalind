@@ -1,6 +1,5 @@
 moment = require 'moment'
-chain = require 'lodash/chain'
-includes = require 'lodash/includes'
+_ = require 'lodash'
 Time = require '/imports/util/time'
 adt = require '../shared/adt'
 bulk = require '../shared/bulk'
@@ -33,10 +32,10 @@ module.exports = (job, callback) ->
         'no', '#', ',', '-'
       ]
 
-      contacts = chain(contacts)
+      contacts = _.chain(contacts)
         .filter (c) -> c.value.length > 4
         .map (c, index) ->
-          if c.value and includes(noContact, c.value.toLowerCase().split('.').join(' ').replace(/\s\s+/g, ' ').trim())
+          if c.value and _.includes(noContact, c.value.toLowerCase().split('.').join(' ').replace(/\s\s+/g, ' ').trim())
             return null
           else if c.value and c.value.indexOf('@') > 0 and c.value.indexOf('.') > 0
             return { value: c.value, channel: 'Email', order: index + 1 }

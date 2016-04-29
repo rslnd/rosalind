@@ -1,6 +1,7 @@
 import { Users } from './users'
 import { Groups } from './groups'
-import { Cache } from './cache'
+import { Schedules } from './schedules'
+import { Timesheets } from './timesheets'
 import { Comments } from './comments'
 import { Tags } from './tags'
 import { Events } from './events'
@@ -12,9 +13,9 @@ import { Appointments } from './appointments'
 import { Importers } from './importers'
 import { Jobs } from './jobs'
 import { Reports } from './reports'
-import { Schedules } from './schedules'
 import { Search } from './search'
-import { Timesheets } from './timesheets'
+import { Cache } from './cache'
+
 
 export {
   Users,

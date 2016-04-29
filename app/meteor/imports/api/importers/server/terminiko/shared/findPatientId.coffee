@@ -1,7 +1,8 @@
-@Import ||= {}
-@Import.Terminiko ||= {}
+{ zerofix } = require '/imports/util/zerofix'
+{ Patients } = require '/imports/api/patients'
+{ Search } = require '/imports/api/search'
 
-@Import.Terminiko.findPatientId = (options) ->
+module.exports = (options) ->
   record = options.record
 
   if record.Patient_Id and record.Patient_Id > 0
@@ -55,7 +56,7 @@ parseFreetext = (freetext) ->
   freetext = freetext.toString()
   return {} if freetext.length < 4
 
-  numbers = Helpers.zerofix(freetext)
+  numbers = zerofix(freetext)
     .split(/(\s|\,|\/|\-)/).join('')
     .match(/\d+/)
 

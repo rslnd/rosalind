@@ -1,13 +1,18 @@
+filter = require 'lodash/filter'
 moment = require 'moment'
-{ Users } = require '/imports/api/users'
 
-module.exports = (collection) ->
+module.exports = ({ Schedules, Users }) ->
+  getScheduled: (time = moment()) ->
+    allUsers = Users.find({}).fetch()
+    filter allUsers, (user) ->
+      @isScheduled(time, user._id)
+
   isScheduled: (time = moment(), userId = null) ->
 
     return false unless user = Users.findOne(_id: userId)
-    return false unless collection.methods.isOpen(time)
+    return false unless Schedules.methods.isOpen(time)
 
-    notAvailable = collection.findOne
+    notAvailable = Schedules.findOne
       type: 'override'
       available: false
       start: { $lte: time.toDate() }
@@ -18,7 +23,7 @@ module.exports = (collection) ->
     return false if notAvailable
 
 
-    overrideScheduled = collection.findOne
+    overrideScheduled = Schedules.findOne
       type: 'override'
       available: true
       start: { $lte: time.toDate() }
@@ -29,7 +34,7 @@ module.exports = (collection) ->
     return true if overrideScheduled
 
 
-    defaultSchedule = collection.findOne
+    defaultSchedule = Schedules.findOne
       type: 'default'
       userId: userId
       removed: { $ne: true }

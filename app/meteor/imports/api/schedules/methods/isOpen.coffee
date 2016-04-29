@@ -1,15 +1,17 @@
+map = require 'lodash/map'
+some = require 'lodash/some'
 moment = require 'moment'
 
-module.exports = (collection) ->
+module.exports = ({ Schedules }) ->
   isOpen: (options = {}) ->
     options.time ||= moment()
     options.within ||= 'minute'
 
-    if collection.methods.isBusinessHoursOverride(options)
+    if Schedules.methods.isBusinessHoursOverride(options)
       true
-    else if collection.methods.isHoliday(options)
+    else if Schedules.methods.isHoliday(options)
       false
-    else if collection.methods.isRegularBusinessHours(options)
+    else if Schedules.methods.isRegularBusinessHours(options)
       true
     else
       false
@@ -18,7 +20,7 @@ module.exports = (collection) ->
     options.time ||= moment()
     options.within ||= 'minute'
 
-    holidays = collection.find
+    holidays = Schedules.find
       type: 'holidays'
       start: { $lte: options.time.toDate() }
       end: { $gte: options.time.toDate() }
@@ -30,7 +32,7 @@ module.exports = (collection) ->
     options.time ||= moment()
     options.within ||= 'minute'
 
-    overrides = collection.find
+    overrides = Schedules.find
       type: 'businessHoursOverride'
       start: { $gte: options.time.clone().startOf('day').toDate() }
       end: { $lte: options.time.clone().endOf('day').toDate() }
@@ -38,16 +40,16 @@ module.exports = (collection) ->
 
     overrides = overrides.fetch()
     if overrides.length > 0
-      overrides = _.map overrides, (o) ->
+      overrides = map overrides, (o) ->
         moment.range(o.start, o.end)
 
-      _.any overrides, (o) -> o.contains(options.time)
+      some overrides, (o) -> o.contains(options.time)
 
   isRegularBusinessHours: (options = {}) ->
     options.time ||= moment()
     options.within ||= 'minute'
 
-    businessHoursRegular = collection.findOne
+    businessHoursRegular = Schedules.findOne
       type: 'businessHours'
       removed: { $ne: true }
 

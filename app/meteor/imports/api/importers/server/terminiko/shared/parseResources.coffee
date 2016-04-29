@@ -1,7 +1,9 @@
-@Import ||= {}
-@Import.Terminiko ||= {}
+{ Meteor } = require 'meteor/meteor'
+{ Users } = require '/imports/api/users'
+{ Tags } = require '/imports/api/tags'
+mdb = require '../../shared/mdb'
 
-@Import.Terminiko.parseResources = (job) ->
+module.exports = (job) ->
 
   resources = {}
   resources = parseDoctors(job, resources)
@@ -12,7 +14,7 @@
   return resources
 
 parseDoctors = (job, resources) ->
-  Import.Mdb
+  mdb
     path: job.data.path
     table: 'DocRooms'
     delete: false
@@ -25,7 +27,7 @@ parseDoctors = (job, resources) ->
       if record.Name.match(/privat/i)?
         $set.privateAppointment = true
 
-      if assignee = Meteor.users.queryExactlyOne(record.Name)
+      if assignee = Users.methods.queryExactlyOne(record.Name)
         $set.assigneeId = assignee._id
 
       if Object.keys($set).length is 0
@@ -37,12 +39,12 @@ parseDoctors = (job, resources) ->
 
 
 parseTags = (job, resources) ->
-  Import.Mdb
+  mdb
     path: job.data.path
     table: 'Untersuchungen'
     delete: false
     iterator: (record) ->
-      Tags.findOneOrInsert(tag: record.Kurz, description: record.Name)
+      Tags.methods.findOneOrInsert(tag: record.Kurz, description: record.Name)
 
       key = 'U' + record.Kennummer
       resources[key] = record.Kurz

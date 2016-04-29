@@ -1,10 +1,10 @@
-Meteor.startup ->
-  Job.processJobs 'import', 'terminiko', (job, callback) ->
-    job.log('Terminiko: Running')
+{ parseResources, upsertPatients, upsertAppointments } = require './shared'
 
+module.exports = (job, callback) ->
+  job.log('Terminiko: Running')
 
-    resources = Import.Terminiko.parseResources(job)
-    Import.Terminiko.upsertPatients(job, resources)
-    Import.Terminiko.upsertAppointments(job, resources)
+  resources = parseResources(job)
+  upsertPatients(job, resources)
+  upsertAppointments(job, resources)
 
-    job.done() and callback()
+  job.done() and callback()

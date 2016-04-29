@@ -78,12 +78,6 @@ module.exports =
     weekOfYear = moment(date).format('W')
     [TAPi18n.__('ui.weekOfYear'), weekOfYear].join(' ')
 
-  parseNewlines: (text) ->
-    return unless text and typeof text is 'string'
-    text
-      .split('\\r\\n').join('\n')
-      .split('\\r').join('\n')
-      .split('\\n').join('\n')
 
   stringify: (blob, pretty = true) ->
     if blob
