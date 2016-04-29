@@ -1,14 +1,9 @@
-moment = require 'moment'
 each = require 'lodash/each'
-map = require 'lodash/map'
-keys = require 'lodash/keys'
-Time = require '/imports/util/time'
-{ Users } = require '/imports/api/users'
-{ Groups } = require '/imports/api/groups'
+moment = require 'moment'
 
-module.exports = (collection) ->
+module.exports = ({ Schedules, Users, Groups, Time }) ->
   getScheduledHours: (options = {}) ->
-    defaultSchedule = collection.findOne
+    defaultSchedule = Schedules.findOne
       userId: options.userId
       type: 'default'
 
@@ -22,7 +17,7 @@ module.exports = (collection) ->
     options.selector ||= {}
     options.range ||= {}
 
-    schedule = collection.find(options.selector).fetch()
+    schedule = Schedules.find(options.selector).fetch()
     events = []
 
     each schedule, (schedule) ->
@@ -60,6 +55,6 @@ module.exports = (collection) ->
     # e.schedule.start = e.start.toDate()
     # e.schedule.end = e.end.toDate()
     #
-    # e.schedule = _.omit(e.schedule, '_id')
+    # e.schedule = omit(e.schedule, '_id')
     #
-    # collection.update(_id, { $set: e.schedule })
+    # Schedules.update(_id, { $set: e.schedule })

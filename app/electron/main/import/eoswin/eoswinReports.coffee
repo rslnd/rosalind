@@ -27,6 +27,7 @@ parseMeta = (metaPath, callback) ->
         id: filename
 
     table.eachRecord iterator, done = ->
+      logger.info("[Import] EoswinReports: Parsed #{Object.keys(meta).length} meta keys")
       callback(meta)
       table.close()
 
@@ -37,7 +38,7 @@ module.exports =
     logger.info('[Import] EoswinReports: Enabled')
     ipc.on('import/eoswin/reports', (e, options) => @import(options))
 
-  import: (options) ->
+  import: (options = {}) ->
     unless settings.import.eoswin.modules.reports
       return logger.error('[Import] EoswinReports: Disabled')
 
@@ -50,7 +51,8 @@ module.exports =
       getMeta = (key) ->
         key = path.basename(key)
         key = key.slice(0, key.indexOf('.'))
-        meta[key]
+        logger.info("[Import] EoswinReports: Meta for #{key} is #{meta[key]}")
+        return meta[key]
 
       pattern = path.join(dataPath, 'ARZTSTAT*.adt')
       glob pattern, (err, files) ->

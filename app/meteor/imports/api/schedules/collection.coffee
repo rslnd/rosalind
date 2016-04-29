@@ -10,6 +10,6 @@ Schedules.attachBehaviour('softRemovable')
 Schedules.helpers(helpers)
 Schedules.helpers({ collection: -> Schedules })
 
-Schedules.methods = methods.default(Schedules)
+Schedules.methods = methods.default({ Schedules })
 
 module.exports = Schedules

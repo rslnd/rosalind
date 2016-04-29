@@ -4,7 +4,7 @@ includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Picker } = require 'meteor/meteorhacks:picker'
 { Users } = require '/imports/api/users'
-Jobs = require '/imports/api/jobs'
+{ Jobs } = require '/imports/api/jobs'
 
 module.exports = ->
   temp.track()

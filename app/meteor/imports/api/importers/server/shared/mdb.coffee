@@ -2,6 +2,7 @@
 temp = require 'temp'
 fs = require 'fs'
 Future = require 'fibers/future'
+csv = require './csv'
 
 module.exports = (options) ->
   temp.track()
@@ -20,7 +21,7 @@ module.exports = (options) ->
 
   options.progress.log('Mdb: Parsing csv') if options.progress
 
-  totalParsed = Import.Csv(options)
+  totalParsed = csv(options)
 
   options.progress.log("Mdb: Parsed #{totalParsed} records. Done.") if options.progress
 

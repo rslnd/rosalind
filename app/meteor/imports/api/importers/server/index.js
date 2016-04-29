@@ -1,5 +1,7 @@
-import shared from './shared'
-import eoswin from './eoswin'
-import terminiko from './terminiko'
+import { uploadStream } from './shared'
+import processJobs from './processJobs'
 
-export default function() {}
+export default function() {
+  uploadStream()
+  processJobs()
+}

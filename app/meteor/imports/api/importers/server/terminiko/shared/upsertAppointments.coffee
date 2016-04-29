@@ -1,8 +1,12 @@
-@Import ||= {}
-@Import.Terminiko ||= {}
+moment = require 'moment'
+{ Meteor } = require 'meteor/meteor'
+{ Appointments } = require '/imports/api/appointments'
+mdb = require '../../shared/mdb'
+parseNewlines = require '/imports/util/parseNewlines'
+findPatientId = require './findPatientId'
 
-@Import.Terminiko.upsertAppointments = (job, resources) ->
-  Import.Mdb
+module.exports = (job, resources) ->
+  mdb
     path: job.data.path
     table: 'Termine'
     progress: job
@@ -17,7 +21,7 @@
 
       externalUpdatedAt = moment(record.Datum_Bearbeitung).toDate() if record.Datum_Bearbeitung
 
-      { patientId, heuristic } = Import.Terminiko.findPatientId({ job, record })
+      { patientId, heuristic } = findPatientId({ job, record })
 
       tags = getResources({ key: 'U', record, resources })
 
@@ -25,7 +29,7 @@
         external:
           terminiko:
             id: record.Kennummer.toString()
-            note: Helpers.parseNewlines(record.Info?.toString())
+            note: parseNewlines(record.Info?.toString())
             timestamps:
               importedAt: moment().toDate()
               importedBy: job.data.userId

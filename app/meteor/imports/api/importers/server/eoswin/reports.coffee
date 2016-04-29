@@ -1,5 +1,5 @@
+_ = require 'lodash'
 moment = require 'moment'
-chain = require 'lodash/chain'
 Time = require '/imports/util/time'
 adt = require '../shared/adt'
 bulk = require '../shared/bulk'
@@ -27,7 +27,7 @@ module.exports = (job, callback) ->
         day: Time.dateToDay(moment(job.data.meta.day, 'YYYYMMDD'))
         assignees: assignees
 
-      Reports.upsert(report)
+      Reports.methods.upsert(report)
 
   job.done() and callback()
 
@@ -50,7 +50,7 @@ parseAssignees = (rows) ->
     assignee = assignees[currentAssigneeId]
 
     if record.Kurzz.match(/A\d+/)
-      currentAssigneeId = Users.queryExactlyOne(record.Text)?._id or null
+      currentAssigneeId = Users.methods.queryExactlyOne(record.Text)?._id or null
 
       unless assignees[currentAssigneeId]?.patients?.total
         assignees[currentAssigneeId] =
@@ -73,7 +73,7 @@ parseAssignees = (rows) ->
     else if record.Kurzz is 'E'
       assignee.revenue += parseFloat(parseFloat(record.Info).toFixed(2))
 
-  assignees = chain(assignees)
+  assignees = _.chain(assignees)
     .map (assignee, id) ->
       assignee.id = id
       return assignee
