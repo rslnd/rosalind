@@ -1,8 +1,10 @@
 Time = require '/imports/util/time'
+{ Schedules } = require '/imports/api/schedules'
 
 Template.weekSummary.helpers
   weekdaysWithSchedule: ->
-    @schedule = @viewUser.defaultSchedule() if @viewUser
+    if @viewUser
+      @schedule = Schedules.findOne(userId: @viewUser._id, type: 'default')
 
     Time.weekdaysArray().map (day) =>
       day.schedule = @schedule

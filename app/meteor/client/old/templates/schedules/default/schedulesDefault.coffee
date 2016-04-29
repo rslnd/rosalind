@@ -6,18 +6,16 @@
 
 Template.schedulesDefault.currentView = new ReactiveDict
 
-Template.schedulesDefault.watchPathChange = ->
-  @currentView.clear()
-  Tracker.autorun =>
+
+Template.schedulesDefault.onCreated ->
+  Template.schedulesDefault.currentView.clear()
+  Tracker.autorun ->
     FlowRouter.watchPathChange()
     if username = FlowRouter.current()?.params?.username
       user = Users.methods.findOneByIdOrUsername(username)
     else
       user = Meteor.user()
-    @currentView.set('userId', user._id)
-
-Template.schedulesDefault.onCreated ->
-  Template.schedulesDefault.watchPathChange()
+    Template.schedulesDefault.currentView.set('userId', user._id)
 
 Template.schedulesDefault.events
   'click [rel="edit"]': ->
@@ -26,7 +24,7 @@ Template.schedulesDefault.events
     Modal.show 'scheduleEdit',
       type: 'update'
       collection: Schedules
-      doc: user.defaultSchedule()
+      doc: Schedules.findOne(userId: user._id, type: 'default')
       viewUser: user
 
 
