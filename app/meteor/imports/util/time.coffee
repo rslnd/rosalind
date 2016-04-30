@@ -9,6 +9,7 @@ module.exports =
   endOfToday: ->
     moment().endOf('day').toDate()
 
+  # DEPRECATED: use /util/day instead
   dateToDay: (date) ->
     return unless date
     date = moment(date)
@@ -17,6 +18,7 @@ module.exports =
     day = date.date() # no typo
     { year, month, day }
 
+  # DEPRECATED: use /util/day instead
   zeroIndexMonth: (day) ->
     return unless day
     day = clone(day)
@@ -25,6 +27,7 @@ module.exports =
       day.zeroIndexMonth = true
     return day
 
+  # DEPRECATED: use /util/day instead
   dayToDate: (day) ->
     day = @zeroIndexMonth(day)
     moment(day).toDate()
