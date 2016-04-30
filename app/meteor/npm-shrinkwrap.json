@@ -14,7 +14,7 @@
     },
     "babel-core": {
       "version": "6.7.7",
-      "from": "babel-core@>=6.7.0 <7.0.0",
+      "from": "node_shrinkwrap/babel-core-6.7.7.tgz",
       "resolved": "./node_shrinkwrap/babel-core-6.7.7.tgz",
       "dependencies": {
         "babel-code-frame": {
@@ -170,9 +170,9 @@
           "resolved": "./node_shrinkwrap/babel-register-6.7.2.tgz",
           "dependencies": {
             "core-js": {
-              "version": "2.2.2",
+              "version": "2.3.0",
               "from": "core-js@>=2.1.0 <3.0.0",
-              "resolved": "./node_shrinkwrap/core-js-2.2.2.tgz"
+              "resolved": "./node_shrinkwrap/core-js-2.3.0.tgz"
             },
             "home-or-tmp": {
               "version": "1.0.0",
@@ -279,9 +279,9 @@
           "resolved": "./node_shrinkwrap/slash-1.0.0.tgz"
         },
         "source-map": {
-          "version": "0.5.3",
+          "version": "0.5.5",
           "from": "source-map@>=0.5.0 <0.6.0",
-          "resolved": "./node_shrinkwrap/source-map-0.5.3.tgz"
+          "resolved": "./node_shrinkwrap/source-map-0.5.5.tgz"
         }
       }
     },
@@ -909,25 +909,6 @@
             }
           }
         },
-        "babel-helper-replace-supers": {
-          "version": "6.7.0",
-          "from": "babel-helper-replace-supers@6.7.0",
-          "resolved": "./node_shrinkwrap/babel-helper-replace-supers-6.7.0.tgz",
-          "dependencies": {
-            "babel-runtime": {
-              "version": "5.8.38",
-              "from": "babel-runtime@>=5.0.0 <6.0.0",
-              "resolved": "./node_shrinkwrap/babel-runtime-5.8.38.tgz",
-              "dependencies": {
-                "core-js": {
-                  "version": "1.2.6",
-                  "from": "core-js@>=1.0.0 <2.0.0",
-                  "resolved": "./node_shrinkwrap/core-js-1.2.6.tgz"
-                }
-              }
-            }
-          }
-        },
         "babel-helper-regex": {
           "version": "6.6.5",
           "from": "babel-helper-regex@6.6.5",
@@ -949,6 +930,25 @@
               "version": "3.10.1",
               "from": "lodash@>=3.10.0 <4.0.0",
               "resolved": "./node_shrinkwrap/lodash-3.10.1.tgz"
+            }
+          }
+        },
+        "babel-helper-replace-supers": {
+          "version": "6.7.0",
+          "from": "babel-helper-replace-supers@6.7.0",
+          "resolved": "./node_shrinkwrap/babel-helper-replace-supers-6.7.0.tgz",
+          "dependencies": {
+            "babel-runtime": {
+              "version": "5.8.38",
+              "from": "babel-runtime@>=5.0.0 <6.0.0",
+              "resolved": "./node_shrinkwrap/babel-runtime-5.8.38.tgz",
+              "dependencies": {
+                "core-js": {
+                  "version": "1.2.6",
+                  "from": "core-js@>=1.0.0 <2.0.0",
+                  "resolved": "./node_shrinkwrap/core-js-1.2.6.tgz"
+                }
+              }
             }
           }
         }
@@ -1617,6 +1617,11 @@
       "from": "babyparse@>=0.4.3 <0.5.0",
       "resolved": "./node_shrinkwrap/babyparse-0.4.5.tgz"
     },
+    "coffee-script": {
+      "version": "1.10.0",
+      "from": "coffee-script@>=1.10.0 <2.0.0",
+      "resolved": "./node_shrinkwrap/coffee-script-1.10.0.tgz"
+    },
     "elasticsearch": {
       "version": "11.0.1",
       "from": "elasticsearch@>=11.0.1 <12.0.0",
@@ -1699,7 +1704,7 @@
     },
     "fibers": {
       "version": "1.0.10",
-      "from": "fibers@>=1.0.10 <2.0.0",
+      "from": "node_shrinkwrap/fibers-1.0.10.tgz",
       "resolved": "./node_shrinkwrap/fibers-1.0.10.tgz"
     },
     "iconv-lite": {
@@ -2179,6 +2184,16 @@
               "from": "brorand@1.0.5",
               "resolved": "./node_shrinkwrap/brorand-1.0.5.tgz"
             },
+            "evp_bytestokey": {
+              "version": "1.0.0",
+              "from": "evp_bytestokey@1.0.0",
+              "resolved": "./node_shrinkwrap/evp_bytestokey-1.0.0.tgz"
+            },
+            "minimalistic-assert": {
+              "version": "1.0.0",
+              "from": "minimalistic-assert@1.0.0",
+              "resolved": "./node_shrinkwrap/minimalistic-assert-1.0.0.tgz"
+            },
             "bn.js": {
               "version": "4.11.3",
               "from": "bn.js@4.11.3",
@@ -2193,16 +2208,6 @@
               "version": "1.0.2",
               "from": "cipher-base@1.0.2",
               "resolved": "./node_shrinkwrap/cipher-base-1.0.2.tgz"
-            },
-            "minimalistic-assert": {
-              "version": "1.0.0",
-              "from": "minimalistic-assert@1.0.0",
-              "resolved": "./node_shrinkwrap/minimalistic-assert-1.0.0.tgz"
-            },
-            "evp_bytestokey": {
-              "version": "1.0.0",
-              "from": "evp_bytestokey@1.0.0",
-              "resolved": "./node_shrinkwrap/evp_bytestokey-1.0.0.tgz"
             },
             "browserify-aes": {
               "version": "1.0.6",
@@ -2409,6 +2414,11 @@
       "from": "moment-range@>=2.2.0 <3.0.0",
       "resolved": "./node_shrinkwrap/moment-range-2.2.0.tgz"
     },
+    "moment-round": {
+      "version": "1.0.1",
+      "from": "moment-round@latest",
+      "resolved": "./node_shrinkwrap/moment-round-1.0.1.tgz"
+    },
     "mousetrap": {
       "version": "1.5.3",
       "from": "mousetrap@>=1.5.3 <2.0.0",
@@ -2462,6 +2472,158 @@
           "version": "3.1.13",
           "from": "jquery-mousewheel@>=3.1.13 <3.2.0",
           "resolved": "./node_shrinkwrap/jquery-mousewheel-3.1.13.tgz"
+        }
+      }
+    },
+    "shrinkpack": {
+      "version": "0.12.3",
+      "from": "shrinkpack@latest",
+      "resolved": "./node_shrinkwrap/shrinkpack-0.12.3.tgz",
+      "dependencies": {
+        "chalk": {
+          "version": "1.1.3",
+          "from": "chalk@1.1.3",
+          "resolved": "./node_shrinkwrap/chalk-1.1.3.tgz",
+          "dependencies": {
+            "ansi-styles": {
+              "version": "2.2.1",
+              "from": "ansi-styles@>=2.2.1 <3.0.0",
+              "resolved": "./node_shrinkwrap/ansi-styles-2.2.1.tgz"
+            },
+            "escape-string-regexp": {
+              "version": "1.0.5",
+              "from": "escape-string-regexp@>=1.0.2 <2.0.0",
+              "resolved": "./node_shrinkwrap/escape-string-regexp-1.0.5.tgz"
+            },
+            "has-ansi": {
+              "version": "2.0.0",
+              "from": "has-ansi@>=2.0.0 <3.0.0",
+              "resolved": "./node_shrinkwrap/has-ansi-2.0.0.tgz",
+              "dependencies": {
+                "ansi-regex": {
+                  "version": "2.0.0",
+                  "from": "ansi-regex@>=2.0.0 <3.0.0",
+                  "resolved": "./node_shrinkwrap/ansi-regex-2.0.0.tgz"
+                }
+              }
+            },
+            "strip-ansi": {
+              "version": "3.0.1",
+              "from": "strip-ansi@>=3.0.0 <4.0.0",
+              "resolved": "./node_shrinkwrap/strip-ansi-3.0.1.tgz",
+              "dependencies": {
+                "ansi-regex": {
+                  "version": "2.0.0",
+                  "from": "ansi-regex@>=2.0.0 <3.0.0",
+                  "resolved": "./node_shrinkwrap/ansi-regex-2.0.0.tgz"
+                }
+              }
+            },
+            "supports-color": {
+              "version": "2.0.0",
+              "from": "supports-color@>=2.0.0 <3.0.0",
+              "resolved": "./node_shrinkwrap/supports-color-2.0.0.tgz"
+            }
+          }
+        },
+        "glob": {
+          "version": "7.0.3",
+          "from": "glob@7.0.3",
+          "resolved": "./node_shrinkwrap/glob-7.0.3.tgz",
+          "dependencies": {
+            "inflight": {
+              "version": "1.0.4",
+              "from": "inflight@>=1.0.4 <2.0.0",
+              "resolved": "./node_shrinkwrap/inflight-1.0.4.tgz",
+              "dependencies": {
+                "wrappy": {
+                  "version": "1.0.1",
+                  "from": "wrappy@>=1.0.0 <2.0.0",
+                  "resolved": "./node_shrinkwrap/wrappy-1.0.1.tgz"
+                }
+              }
+            },
+            "inherits": {
+              "version": "2.0.1",
+              "from": "inherits@>=2.0.0 <3.0.0",
+              "resolved": "./node_shrinkwrap/inherits-2.0.1.tgz"
+            },
+            "minimatch": {
+              "version": "3.0.0",
+              "from": "minimatch@>=2.0.0 <3.0.0||>=3.0.0 <4.0.0",
+              "resolved": "./node_shrinkwrap/minimatch-3.0.0.tgz",
+              "dependencies": {
+                "brace-expansion": {
+                  "version": "1.1.3",
+                  "from": "brace-expansion@>=1.0.0 <2.0.0",
+                  "resolved": "./node_shrinkwrap/brace-expansion-1.1.3.tgz",
+                  "dependencies": {
+                    "balanced-match": {
+                      "version": "0.3.0",
+                      "from": "balanced-match@>=0.3.0 <0.4.0",
+                      "resolved": "./node_shrinkwrap/balanced-match-0.3.0.tgz"
+                    },
+                    "concat-map": {
+                      "version": "0.0.1",
+                      "from": "concat-map@0.0.1",
+                      "resolved": "./node_shrinkwrap/concat-map-0.0.1.tgz"
+                    }
+                  }
+                }
+              }
+            },
+            "once": {
+              "version": "1.3.3",
+              "from": "once@>=1.3.0 <2.0.0",
+              "resolved": "./node_shrinkwrap/once-1.3.3.tgz",
+              "dependencies": {
+                "wrappy": {
+                  "version": "1.0.1",
+                  "from": "wrappy@>=1.0.0 <2.0.0",
+                  "resolved": "./node_shrinkwrap/wrappy-1.0.1.tgz"
+                }
+              }
+            },
+            "path-is-absolute": {
+              "version": "1.0.0",
+              "from": "path-is-absolute@>=1.0.0 <2.0.0",
+              "resolved": "./node_shrinkwrap/path-is-absolute-1.0.0.tgz"
+            }
+          }
+        },
+        "graceful-fs": {
+          "version": "4.1.3",
+          "from": "graceful-fs@4.1.3",
+          "resolved": "./node_shrinkwrap/graceful-fs-4.1.3.tgz"
+        },
+        "lodash.uniq": {
+          "version": "4.2.1",
+          "from": "lodash.uniq@4.2.1",
+          "resolved": "./node_shrinkwrap/lodash.uniq-4.2.1.tgz",
+          "dependencies": {
+            "lodash._baseuniq": {
+              "version": "4.5.1",
+              "from": "lodash._baseuniq@>=4.5.0 <4.6.0",
+              "resolved": "./node_shrinkwrap/lodash._baseuniq-4.5.1.tgz",
+              "dependencies": {
+                "lodash._createset": {
+                  "version": "4.0.2",
+                  "from": "lodash._createset@>=4.0.0 <4.1.0",
+                  "resolved": "./node_shrinkwrap/lodash._createset-4.0.2.tgz"
+                },
+                "lodash._setcache": {
+                  "version": "4.1.3",
+                  "from": "lodash._setcache@>=4.1.0 <4.2.0",
+                  "resolved": "./node_shrinkwrap/lodash._setcache-4.1.3.tgz"
+                }
+              }
+            }
+          }
+        },
+        "when": {
+          "version": "3.7.7",
+          "from": "when@3.7.7",
+          "resolved": "./node_shrinkwrap/when-3.7.7.tgz"
         }
       }
     },
