@@ -51,7 +51,7 @@ module.exports = ({ Schedules, Appointments, Cache }) ->
           day.hours[hh].minutes[mm] =
             isOpen: Schedules.methods.isOpen({ time })
             scheduled: map(Schedules.methods.getScheduled(time), (u) -> u._id)
-            appointments: map(Appointments.methods.findAll(time, 'hour'), (a) -> a._id)
+            appointments: map(Appointments.methods.findAll(time, 'block').fetch(), (a) -> a._id._str)
 
         day.hours[hh].isOpen = some(day.hours[hh].minutes, { isOpen: true })
         day.hours[hh].scheduled = union(map(day.hours[hh].minutes, (m) -> m.scheduled)...)

@@ -4,6 +4,7 @@ moment = require 'moment'
 
 module.exports = ({ Schedules }) ->
   isOpen: (options = {}) ->
+    options.time = options if options._isAMomentObject
     options.time ||= moment()
     options.within ||= 'minute'
 

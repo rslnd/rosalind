@@ -9,14 +9,10 @@ describe 'schedules', ->
 
       before ->
         context =
-          _:
-            some: require 'lodash/some'
-            union: require 'lodash/union'
-            map: require 'lodash/map'
-          moment: moment
           Appointments:
             methods:
-              findAll: -> [ { _id: 'app' } ]
+              findAll: ->
+                fetch: -> [ { _id: _str: 'app' } ]
           Schedules:
             methods:
               isOpen: -> true
@@ -71,7 +67,7 @@ describe 'schedules', ->
             expect(hour.appointments).to.include.members(['app'])
 
 
-          describe 'minuteBlock', ->
+          describe '10 minute block', ->
             minute = null; before -> minute = hour.minutes[0]
 
             it 'has properties: isOpen, scheduled, appointments', ->
