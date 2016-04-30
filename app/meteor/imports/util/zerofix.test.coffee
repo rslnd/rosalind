@@ -1,6 +1,6 @@
 { zerofix } = require './zerofix'
 
-describe 'helpers', ->
+describe 'util', ->
   describe 'zerofix', ->
 
     it 'should not change correct phone number', ->

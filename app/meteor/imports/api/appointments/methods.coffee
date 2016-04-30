@@ -1,4 +1,5 @@
 moment = require 'moment'
+{ block } = require '/imports/util/time/block'
 
 module.exports = ({ Appointments }) ->
 
@@ -28,22 +29,36 @@ module.exports = ({ Appointments }) ->
     Appointments.update({ _id }, { $set: set })
 
   findAll: (date = moment(), within = 'day') ->
+    if within is 'block'
+      start = block(date).start.toDate()
+      end = block(date).end.toDate()
+    else
+      start = moment(date).startOf(within).toDate()
+      end = moment(date).endOf(within).toDate()
+
     selector =
       start:
-        $gte: moment(date).startOf(within).toDate()
-        $lte: moment(date).endOf(within).toDate()
+        $gte: start
+        $lte: end
     Appointments.find(selector, sort: { start: 1 })
 
 
   findOpen: (date, within = 'day') ->
+    if within is 'block'
+      start = block(date).start.toDate()
+      end = block(date).end.toDate()
+    else
+      start = moment(date).startOf(within).toDate()
+      end = moment(date).endOf(within).toDate()
+
     selector =
       admittedAt: null
       admittedBy: null
       treatedAt: null
       treatedBy: null
       start:
-        $gte: moment(date).startOf(within).toDate()
-        $lte: moment(date).endOf(within).toDate()
+        $gte: start
+        $lte: end
     Appointments.find(selector, sort: { start: 1 })
 
 
