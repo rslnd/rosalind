@@ -42,8 +42,8 @@
     "xdt": "^0.1.1"
   },
   "scripts": {
-    "client:start": "grunt",
-    "client:build": "grunt build",
-    "client:tag": "grunt tag"
+    "client:start": "./node_modules/.bin/grunt",
+    "client:build": "./node_modules/.bin/grunt build",
+    "client:tag": "./node_modules/.bin/grunt tag"
   }
 }
