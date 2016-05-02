@@ -26,3 +26,8 @@ module.exports = ->
     name: 'system.thisTags'
     action: ->
       BlazeLayout.render('layout', main: 'systemTags')
+
+  users.route '/native',
+    name: 'system.thisNative'
+    action: ->
+      BlazeLayout.render('layout', main: 'native')

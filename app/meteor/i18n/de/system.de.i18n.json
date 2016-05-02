@@ -5,6 +5,7 @@
     "thisStats": "Stats",
     "thisTags": "Tags",
     "thisEvents": "Ereignisse",
+    "thisNative": "Arbeitsplatz",
     "events": {
       "users/login": "hat sich eingeloggt",
       "users/logout": "hat sich ausgeloggt",

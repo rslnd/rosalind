@@ -7,6 +7,7 @@ try
   window.native =
     electron: process.versions.electron
     settings: null
+    editSettings: -> ipc.send('settings/edit')
     log: (options) -> ipc.send('log', options)
     ipc: ipc
     users:
