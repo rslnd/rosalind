@@ -1,9 +1,10 @@
-fs = require('fs')
-path = require('path')
-_ = require('lodash')
-electron = require('app')
+fs = require 'fs'
+path = require 'path'
+childProcess = require 'child_process'
+_ = require 'lodash'
+electron = require 'app'
 ipc = require('electron').ipcMain
-logger = require('./logger')
+logger = require './logger'
 
 unless @Settings?
   settings = null
@@ -56,6 +57,7 @@ unless @Settings?
       logger.error('[Settings] Cannot write default settings', err) if err?
     settings = defaultSettings
 
+  settings.settingsPath = settingsPath
   @Settings = settings
 
   logger.info('[Settings] The main entry point is', @Settings.url)
@@ -64,6 +66,12 @@ unless @Settings?
   ipc.on 'settings', (e) =>
     logger.info('[Settings] Requested settings via ipc', @Settings)
     e.sender.send('settings', @Settings)
+
+  ipc.on 'settings/edit', (e) =>
+    logger.info('[Settings] Requested settings edit via ipc', @Settings)
+    editor = 'open' if process.platform is 'darwin'
+    editor = 'notepad' if process.platform is 'win32' or process.platform is 'win64'
+    childProcess.spawn(editor, [ settingsPath ])
 
 
 module.exports = @Settings

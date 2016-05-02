@@ -60,6 +60,7 @@ sidebar = [
       { name: 'thisStats' }
       { name: 'thisJobs' }
       { name: 'thisTags' }
+      { name: 'thisNative' } if window.native
     ]
 ]
 
