@@ -2,12 +2,13 @@ fs = require 'fs'
 shortcut = require 'windows-shortcuts-appid'
 electron = require 'app'
 logger = require './logger'
+settings = require './settings'
 manifest = require './manifest'
 
 module.exports =
   shortcutPaths: [
-    process.env.APPDATA + '\\Microsoft\\Windows\\Start Menu\\Programs\\' + manifest.productName + '.lnk'
-    process.env.USERPROFILE + '\\Desktop\\' + manifest.productName + '.lnk'
+    process.env.APPDATA + '\\Microsoft\\Windows\\Start Menu\\Programs\\' + settings.customer.name + '.lnk'
+    process.env.USERPROFILE + '\\Desktop\\' + settings.customer.name + '.lnk'
   ]
 
   shortcutOptions:
