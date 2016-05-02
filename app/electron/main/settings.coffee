@@ -70,7 +70,7 @@ unless @Settings?
   ipc.on 'settings/edit', (e) =>
     logger.info('[Settings] Requested settings edit via ipc', @Settings)
     editor = 'open' if process.platform is 'darwin'
-    editor = 'notepad' if process.platform is 'win32' or process.platform is 'win64'
+    editor = 'wordpad' if process.platform is 'win32' or process.platform is 'win64'
     childProcess.spawn(editor, [ settingsPath ])
 
 
