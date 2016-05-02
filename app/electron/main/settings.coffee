@@ -13,6 +13,8 @@ unless @Settings?
   defaultSettings =
     url: 'http://dev.rslnd.com:3000'
     updateUrl: 'https://update.rslnd.com'
+    customer:
+      name: 'Rosalind'
     import:
       bdt:
         enabled: false
