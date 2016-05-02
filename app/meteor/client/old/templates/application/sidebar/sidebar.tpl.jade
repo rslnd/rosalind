@@ -4,6 +4,7 @@ aside.main-sidebar
       li.header {{_ 'sidebar_actions'}}
       each sidebar
         +if showNav roles
+          unless disabled
             li.treeview
               a.pointer.level-0.link(id='{{htmlId}}' href='{{hrefLevel0}}')
                 <i class='fa fa-{{icon}}'></i>
@@ -13,8 +14,9 @@ aside.main-sidebar
                 +else if submenu
                   i.fa.fa-angle-left.pull-right
               if submenu
-                ul.treeview-menu
-                  each submenu
-                      li
-                        a.active.level-1.link(id='{{htmlId}}' href='{{hrefLevel1}}')
-                          span {{ name }}
+                unless disabled
+                  ul.treeview-menu
+                    each submenu
+                        li
+                          a.active.level-1.link(id='{{htmlId}}' href='{{hrefLevel1}}')
+                            span {{ name }}
