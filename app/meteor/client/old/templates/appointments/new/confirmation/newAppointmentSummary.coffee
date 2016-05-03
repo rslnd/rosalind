@@ -1,4 +1,4 @@
-moment = require 'moment'
+{ moment } = require '/imports/util/momentLocale'
 { Mongo } = require 'meteor/mongo'
 { TAPi18n } = require 'meteor/tap:i18n'
 { Patients } = require '/imports/api/patients'

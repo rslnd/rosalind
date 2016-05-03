@@ -1,3 +1,4 @@
+{ moment } = require '/imports/util/momentLocale'
 { Schedules } = require '/imports/api/schedules'
 { Cache } = require '/imports/api/cache'
 Time = require '/imports/util/time'
@@ -7,6 +8,7 @@ Template.newAppointmentDayPicker.onRendered ->
     language: moment().locale().split('-')[0]
     toggleSelected: false
     minDate: Time.startOfToday()
+    minDate: moment().startOf('day').toDate()
     onChangeView: (view) ->
       return if view is 'days'
       dp1 = $('#day-picker-1').datepicker().data('datepicker')
@@ -37,6 +39,7 @@ Template.newAppointmentDayPicker.onRendered ->
     ), 10, trailing: false)
 
   $('#day-picker-2').datepicker _.extend dayPickerOptions,
+    minDate: moment().startOf('day').add(1, 'month').toDate()
     onSelect: _.throttle(((f, date) ->
       return if date is ''
       newAppointment.set('date', date)
