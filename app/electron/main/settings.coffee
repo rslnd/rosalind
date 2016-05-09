@@ -69,9 +69,9 @@ unless @Settings?
 
   ipc.on 'settings/edit', (e) =>
     logger.info('[Settings] Requested settings edit via ipc', @Settings)
-    editor = 'open' if process.platform is 'darwin'
-    editor = 'wordpad' if process.platform is 'win32' or process.platform is 'win64'
-    childProcess.spawn(editor, [ settingsPath ])
-
+    if process.platform is 'darwin'
+      childProcess.spawn('open', [ settingsPath ])
+    else if process.platform is 'win32' or process.platform is 'win64'
+      childProcess.spawn('cmd', [ '/s', '/c', 'start', 'wordpad', settingsPath ])
 
 module.exports = @Settings
