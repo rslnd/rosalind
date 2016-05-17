@@ -4,14 +4,12 @@ import { Users } from '/imports/api/users'
 import { Groups } from '/imports/api/groups'
 import { Appointments } from '/imports/api/appointments'
 import { Cache } from '/imports/api/cache'
-import cache from './cache'
 import isOpen from './isOpen'
 import isScheduled from './isScheduled'
 import misc from './misc'
 
 export default function({ Schedules }) {
   return extend({},
-    cache({ Schedules, Cache, Appointments }),
     isOpen({ Schedules }),
     isScheduled({ Schedules, Users }),
     misc({ Schedules, Users, Groups, Time })

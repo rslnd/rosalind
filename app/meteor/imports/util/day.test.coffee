@@ -1,5 +1,5 @@
 each = require 'lodash/each'
-day = require './day'
+{ day } = require './day'
 
 describe 'util', ->
   describe 'day', ->

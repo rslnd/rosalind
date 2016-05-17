@@ -13,29 +13,9 @@
           .row
             .col-md-6.separator-right
               .datepicker--cells.datepicker--timepicker-cells
-                .datepicker--cell.datepicker--cell-h 8
-                .datepicker--cell.datepicker--cell-h 9
-                .datepicker--cell.datepicker--cell-h 10
-                .datepicker--cell.datepicker--cell-h 11
-                .datepicker--cell.datepicker--cell-h 12
-                .datepicker--cell.datepicker--cell-h 13
-                .datepicker--cell.datepicker--cell-h 14
-                .datepicker--cell.datepicker--cell-h 15
-                .datepicker--cell.datepicker--cell-h 16
-                .datepicker--cell.datepicker--cell-h 17
-                .datepicker--cell.datepicker--cell-h 18
-                .datepicker--cell.datepicker--cell-h 19
+                +each hours
+                  .datepicker--cell.datepicker--cell-h(class='{{ className }}' data-hour=hour) {{ hour }}
             .col-md-6
               .datepicker--cells.datepicker--timepicker-cells
-                .datepicker--cell.datepicker--cell-m 00
-                .datepicker--cell.datepicker--cell-m 05
-                .datepicker--cell.datepicker--cell-m 10
-                .datepicker--cell.datepicker--cell-m 15
-                .datepicker--cell.datepicker--cell-m 20
-                .datepicker--cell.datepicker--cell-m 25
-                .datepicker--cell.datepicker--cell-m 30
-                .datepicker--cell.datepicker--cell-m 35
-                .datepicker--cell.datepicker--cell-m 40
-                .datepicker--cell.datepicker--cell-m 45
-                .datepicker--cell.datepicker--cell-m 50
-                .datepicker--cell.datepicker--cell-m 55
+                +each blocks
+                  .datepicker--cell.datepicker--cell-m(class='{{ className }}') {{ block }}
