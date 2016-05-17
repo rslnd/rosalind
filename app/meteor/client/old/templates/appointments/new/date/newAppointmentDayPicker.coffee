@@ -1,13 +1,13 @@
 { moment } = require '/imports/util/momentLocale'
+{ day } = require '/imports/util/day'
 { Schedules } = require '/imports/api/schedules'
 { Cache } = require '/imports/api/cache'
-Time = require '/imports/util/time'
 
 Template.newAppointmentDayPicker.onRendered ->
   dayPickerOptions =
     language: moment().locale().split('-')[0]
     toggleSelected: false
-    minDate: Time.startOfToday()
+    showOtherMonths: false
     minDate: moment().startOf('day').toDate()
     onChangeView: (view) ->
       return if view is 'days'
@@ -17,12 +17,15 @@ Template.newAppointmentDayPicker.onRendered ->
     onRenderCell: (date, cellType) ->
       return unless cellType is 'day'
 
-      day = Time.dateToDay(date)
-      cache = Cache.findOne({ day })
+      key = day.dateToDay(date)
+      cache = Cache.findOne({ day: key })
 
-      return {
+      attr =
         disabled: not cache?.isOpen
-      }
+        classes: 'available-' + parseInt(Math.random() * 11)
+
+      return attr
+
 
 
   $('#day-picker-1').datepicker _.extend dayPickerOptions,
@@ -31,6 +34,8 @@ Template.newAppointmentDayPicker.onRendered ->
       newAppointment.set('date', date)
       console.log('[Appointments] New: set date', date)
       $('#day-picker-2').data('datepicker').clear()
+      newAppointment.set('previousDate', date) if newAppointment.get('previousDate')
+
     ), 10, trailing: false)
 
     onChangeMonth: _.throttle(((month, year) ->
@@ -45,6 +50,7 @@ Template.newAppointmentDayPicker.onRendered ->
       newAppointment.set('date', date)
       console.log('[Appointments] New: set date', date)
       $('#day-picker-1').data('datepicker').clear()
+      newAppointment.set('previousDate', date) if newAppointment.get('previousDate')
     ), 10, trailing: false)
 
     onChangeMonth: _.throttle(((month, year) ->
@@ -56,6 +62,23 @@ Template.newAppointmentDayPicker.onRendered ->
 
 
 Template.newAppointmentDayPicker.events
+  'mouseover .datepicker--cell-day': (e) ->
+    el = $(e.currentTarget)
+    date = new Date(el.data('year'), el.data('month'), el.data('date'))
+
+    unless newAppointment.get('previousDate')
+      console.log('hover setting previousDate to', date)
+      newAppointment.set('previousDate', date)
+
+    newAppointment.set('date', date)
+
+  'mouseleave .datepicker--content': (e) ->
+    return unless previousDate = newAppointment.get('previousDate')
+    console.log('mouseout, previous date was', previousDate)
+    newAppointment.set('date', previousDate)
+    newAppointment.set('previousDate', null)
+
+
   'click .quick-jump a': (e) ->
     el = $(e.currentTarget)
     rel = el.attr('rel')

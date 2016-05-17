@@ -1,12 +1,21 @@
 Schedules = require '../collection'
+{ Cache } = require '/imports/api/cache'
 
 module.exports = ->
   Job.processJobs 'cache', 'schedules', (job, callback) ->
 
-    job.log('Cache: Schedules: Running')
+    date = moment(job.data?.date)
 
-    Schedules.methods.updateCache()
+    job.log("[Schedules] Caching #{date.toDate()}")
 
-    job.log('Cache: Schedules: Done')
+
+    cache = Schedules.methods.cache(date)
+
+    if _id = Cache.findOne({ day: cache.day })?._id
+      Cache.update(_id, { $set: cache })
+    else
+      Cache.insert(cache)
+
+    console.log('[Schedules] Cached')
 
     job.done() and callback()

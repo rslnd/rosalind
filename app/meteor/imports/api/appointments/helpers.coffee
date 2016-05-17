@@ -1,3 +1,4 @@
+moment = require 'moment'
 { TAPi18n } = require 'meteor/tap:i18n'
 
 module.exports =
@@ -19,3 +20,6 @@ module.exports =
   notes: ->
     n = [@note, @external?.terminiko?.note]
     return _.filter(n, (s) -> s and s.length >= 1).join('\n')
+
+  duration: ->
+    moment.duration(@end - @start)
