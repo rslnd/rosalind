@@ -1,9 +1,10 @@
 moment = require 'moment'
+require 'moment/locale/de-at'
+{ Meteor } = require 'meteor/meteor'
 
-require('moment/locale/de-AT')
 moment.locale('de-AT')
 
-if window?.testing
+if Meteor.settings.test
   moment.locale('en-US')
 
 module.exports = { moment }

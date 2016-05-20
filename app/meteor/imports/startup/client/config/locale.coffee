@@ -1,4 +1,6 @@
 moment = require 'moment'
+require 'moment/locale/de-at'
+{ Meteor } = require 'meteor/meteor'
 { Tracker } = require 'meteor/tracker'
 { Session } = require 'meteor/session'
 { TAPi18n } = require 'meteor/tap:i18n'
@@ -10,6 +12,6 @@ module.exports = ->
   moment.locale(locale)
 
   Tracker.autorun ->
-    if Session.get('test')
+    if Meteor.settings.test or Session.get('test')
       TAPi18n.setLanguage('en')
       moment.locale('en-US')
