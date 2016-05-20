@@ -71,7 +71,7 @@ rochal:slimscroll
 # I18n
 tap:i18n
 gwendall:autoform-i18n
-gwendall:simple-schema-i18n
+albertzak:simple-schema-i18n
 
 # Util
 momentjs:moment
