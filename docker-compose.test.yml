@@ -8,4 +8,4 @@ meteor:
     - ./app/meteor:/app
     - ./build:/build
   environment:
-    - NODE_ENV=development
+    - NODE_ENV=test
