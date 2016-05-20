@@ -8,4 +8,5 @@ meteor:
     - ./app/meteor:/app
     - ./build:/build
   environment:
-    - NODE_ENV=test
+    - NODE_ENV=development
+    - 'METEOR_SETTINGS="{ test: true }"'
