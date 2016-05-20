@@ -7,6 +7,9 @@ meteor:
   volumes:
     - ./app/meteor:/app
     - ./build:/build
+    - /app/.meteor/local
+    - /root/.meteor
+    - /root/.npm
   environment:
     - NODE_ENV=development
     - METEOR_WATCH_FORCE_POLLING=t
