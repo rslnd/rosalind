@@ -26,10 +26,14 @@ module.exports = ->
     expect(fieldValue).toEqual('')
 
   @Then 'I should see the current time', ->
-    time = moment().format('HH:mm')
     browser.waitForExist('#loaded')
     bodyText = browser.getText('body')
-    expect(bodyText).toContain(time.slice(0, -1))
+
+    time = moment().format('HH:mm')
+    timeYeahWhatever = moment().subtract(1, 'minute').format('HH:mm')
+
+    contains = bodyText.indexOf(time) >= 0 or bodyText.indexOf(timeYeahWhatever) >= 0
+    expect(contains).toEqual(true, "Expected '#{bodyText}' to contain '#{time}' (or '#{timeYeahWhatever}')")
 
   @Then 'I should see the element \'$selector\'', (selector) ->
     browser.waitForVisible(selector)
