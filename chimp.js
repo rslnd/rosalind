@@ -43,7 +43,10 @@ module.exports = {
       'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
       name: process.env.SAUCE_NAME,
       build: process.env.TRAVIS_BUILD_NUMBER,
-      public: true
+      public: true,
+      after: function() {
+        browser.end()
+      }
     },
     host: process.env.SAUCE_HOST,
     port: process.env.SAUCE_PORT,
