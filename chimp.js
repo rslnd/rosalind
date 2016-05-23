@@ -6,7 +6,7 @@ var browser = {
 var os = {
   long: process.env.OS,
   short: {
-    'Windows 10': 'WIN8',
+    'Windows 10': 'WIN10',
     'Windows 8.1': 'WIN8',
     'Windows 8': 'WIN8',
     'Windows 7': 'VISTA',
@@ -34,6 +34,8 @@ module.exports = {
   port: process.env.SAUCE_PORT,
   user: process.env.SAUCE_USERNAME,
   key: process.env.SAUCE_ACCESS_KEY,
+
+  noSessionReuse: true,
 
   webdriverio: {
     desiredCapabilities: {

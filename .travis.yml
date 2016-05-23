@@ -27,8 +27,8 @@ env:
 
   matrix:
     - CMD=build
-    - CMD=test   OS='Windows 10'   BROWSER='Chrome:49.0'
-    - CMD=test   OS='Windows 7'    BROWSER='Internet Explorer:11.0'
+    - CMD=test   OS='Windows 10'   BROWSER='Chrome:50.0'
+    - CMD=test   OS='Windows 10'    BROWSER='Internet Explorer:11.0'
 
 script: ./ci.sh $CMD
 
