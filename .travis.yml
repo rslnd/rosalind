@@ -27,8 +27,6 @@ env:
 
 script: ./ci.sh $CMD
 
-after_script: echo "leader=$BUILD_LEADER status=$BUILD_AGGREGATE_STATUS"
-
 after_success: ./ci.sh after_success
 
 after_failure: ./ci.sh after_failure

@@ -83,7 +83,7 @@ case "$1" in
 
   after_success)
     python travis_after_all.py
-    export $(cat .to_export_back)
+    export $(cat .to_export_back) > /dev/null 2>&1
     if [ "$BUILD_LEADER" = "YES" ]; then
       if [ "$BUILD_AGGREGATE_STATUS" = "others_succeeded" ]; then
         echo "** All jobs succeeded!"
@@ -97,7 +97,7 @@ case "$1" in
 
   after_failure)
     python travis_after_all.py
-    export $(cat .to_export_back)
+    export $(cat .to_export_back) > /dev/null 2>&1
     if [ "$BUILD_LEADER" = "YES" ]; then
       if [ "$BUILD_AGGREGATE_STATUS" = "others_failed" ]; then
         echo "** All jobs failed"
