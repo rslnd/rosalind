@@ -3,6 +3,7 @@ Adt = require 'node_adt'
 fs = require 'fs'
 { Meteor } = require 'meteor/meteor'
 
+# coffeelint: disable=cyclomatic_complexity
 module.exports = (options) ->
   options = defaults options,
     delete: true

@@ -3,7 +3,7 @@
 
 module.exports = ->
   Meteor.methods
-    'schedules/updateCache': (date)->
+    'schedules/updateCache': (date) ->
       return unless Meteor.userId()
 
       check(date, Match.Optional(Date))

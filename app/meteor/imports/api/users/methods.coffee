@@ -1,23 +1,18 @@
 module.exports = (collection) ->
   findOneByIdOrUsername: (idOrUsername) ->
-    return unless idOrUsername
-
     if (typeof idOrUsername is 'string')
       byId = collection.findOne(idOrUsername)
-      if (byId)
-        return byId
+      return byId if byId
 
       byUsername = collection.findOne(username: idOrUsername)
-      if (byUsername)
-        return byUsername
+      return byUsername if byUsername
 
      else if (typeof idOrUsername is 'object')
        if (idOrUsername.collection and idOrUsername.collection())
          return idOrUsername
 
        byCursor = (idOrUsername and idOrUsername.fetch and idOrUsername.fetch()[0])
-       if (byCursor)
-         return idOrUsername.fetch()[0]
+       return idOrUsername.fetch()[0] if byCursor
 
 
   queryExactlyOne: (query) ->
