@@ -2,16 +2,17 @@
 
 set -e
 
-echo "** Building app"
-
 cd "$(dirname "$0")"
 
-chmod +x ./pack.sh
-./pack.sh
+echo "** Building meteor bundle"
 
-chmod +x ./push.sh
-./push.sh
+docker-compose -f '../docker-compose.yml' -f '../docker-compose.test.yml' run meteor bash -c 'rm -rf /build/* \
+  && meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory /build/ \
+  && cp /app/package.json /build/bundle/'
+
+if [ ! -z "$CI" ]; then
+  echo "** Fixing permissions"
+  sudo chown -R $USER:$USER ../build
+fi
 
 cd -
-
-echo "** Done"
