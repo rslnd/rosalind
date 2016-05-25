@@ -17,6 +17,7 @@ case "$1" in
     java -version
     export DISPLAY=:99.0
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
+    curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py
 
     ;;
 
@@ -56,12 +57,54 @@ case "$1" in
     echo -en "travis_fold:end:pull\r"
 
     echo -en "travis_fold:start:dependencies\r"
-    docker-compose $YML run meteor meteor npm install
+    docker-compose $YML run --no-deps meteor meteor npm install
     echo -en "travis_fold:end:dependencies\r"
 
-    echo -en "travis_fold:start:production_build\r"
-    chmod +x production/build.sh && ./production/build.sh
-    echo -en "travis_fold:end:production_build\r"
+    echo -en "travis_fold:start:build\r"
+    chmod +x production/prepare.sh && ./production/prepare.sh
+    ./production/build.sh
+    echo -en "travis_fold:end:build\r"
+
+    echo -en "travis_fold:start:image\r"
+    ./production/image.sh
+    echo -en "travis_fold:end:image\r"
+
+    echo -en "travis_fold:start:push\r"
+    ./production/push.sh
+    echo -en "travis_fold:end:push\r"
+
+    echo -en "travis_fold:start:deploy\r"
+    ./production/deploy.sh
+    echo -en "travis_fold:end:deploy\r"
+
+    echo "** Done!"
+
+    ;;
+
+  after_success)
+    python travis_after_all.py
+    export $(cat .to_export_back)
+    if [ "$BUILD_LEADER" = "YES" ]; then
+      if [ "$BUILD_AGGREGATE_STATUS" = "others_succeeded" ]; then
+        echo "** All jobs succeeded!"
+        chmod +x production/deploy.sh && production/deploy.sh
+      else
+        echo "** Some jobs failed"
+      fi
+    fi
+
+    ;;
+
+  after_failure)
+    python travis_after_all.py
+    export $(cat .to_export_back)
+    if [ "$BUILD_LEADER" = "YES" ]; then
+      if [ "$BUILD_AGGREGATE_STATUS" = "others_failed" ]; then
+        echo "** All jobs failed"
+      else
+        echo "** Some jobs failed"
+      fi
+    fi
 
     ;;
 

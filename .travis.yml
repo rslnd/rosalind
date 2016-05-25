@@ -27,32 +27,11 @@ env:
 
 script: ./ci.sh $CMD
 
-after_script:
-  - echo leader=$BUILD_LEADER status=$BUILD_AGGREGATE_STATUS
+after_script: echo "Leader: $BUILD_LEADER Status: $BUILD_AGGREGATE_STATUS"
 
-after_success:
-  - python travis_after_all.py
-  - export $(cat .to_export_back)
-  - |
-      if [ "$BUILD_LEADER" = "YES" ]; then
-        if [ "$BUILD_AGGREGATE_STATUS" = "others_succeeded" ]; then
-          echo "All jobs succeeded! PUBLISHING..."
-        else
-          echo "Some jobs failed"
-        fi
-      fi
+after_success: ./ci.sh after_success
 
-after_failure:
-  - python travis_after_all.py
-  - export $(cat .to_export_back)
-  - |
-      if [ "$BUILD_LEADER" = "YES" ]; then
-        if [ "$BUILD_AGGREGATE_STATUS" = "others_failed" ]; then
-          echo "All jobs failed"
-        else
-          echo "Some jobs failed"
-        fi
-      fi
+after_failure: ./ci.sh after_failure
 
 addons:
   sauce_connect: true
