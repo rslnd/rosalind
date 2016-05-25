@@ -2,9 +2,11 @@
 
 set -e
 
-echo "** Packaging meteor bundle"
-
 cd "$(dirname "$0")"
+
+echo -en "travis_fold:start:meteor_pack\r"
+
+echo "** Packaging meteor bundle"
 
 docker-compose -f '../docker-compose.yml' -f '../docker-compose.test.yml' run meteor bash -c 'rm -rf /build/* \
   && meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory /build/ \
@@ -15,7 +17,7 @@ if [ ! -z "$CI" ]; then
   sudo chown -R $USER:$USER ../build
 fi
 
-cp ../.dockerignore ../build/bundle/
-cp ../.dockerignore ../build/bundle/.gitignore
+echo -en "travis_fold:end:meteor_pack\r"
+
 
 cd -

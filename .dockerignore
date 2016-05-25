@@ -1,3 +1,0 @@
-app/meteor/.meteor/local
-app/meteor/packages/*/.build*
-**/node_modules/**
