@@ -6,13 +6,19 @@ electron = require 'app'
 ipc = require('electron').ipcMain
 logger = require './logger'
 
+settingsPath = path.join(electron.getPath('userData'), 'RosalindSettings.json')
+
+editSettings = ->
+  if process.platform is 'darwin'
+    childProcess.spawn('open', [ settingsPath ])
+  else if process.platform is 'win32' or process.platform is 'win64'
+    childProcess.spawn('cmd', [ '/s', '/c', 'start', 'wordpad', settingsPath ])
+
 unless @Settings?
   settings = null
 
-  settingsPath = path.join(electron.getPath('userData'), 'RosalindSettings.json')
-
   defaultSettings =
-    url: 'http://dev.rslnd.com:3000'
+    url: 'https://CHANGE-THIS-URL.rslnd.com'
     updateUrl: 'https://update.rslnd.com'
     customer:
       name: 'Rosalind'
@@ -32,29 +38,20 @@ unless @Settings?
 
   if fs.existsSync(settingsPath)
     logger.info('[Settings] Loading existing settings from', settingsPath)
-    persistedSettings = {}
+    settings = {}
 
     try
-      persistedSettings = JSON.parse(fs.readFileSync(settingsPath, encoding: 'utf8') )
+      settings = JSON.parse(fs.readFileSync(settingsPath, encoding: 'utf8') )
       logger.info('[Settings] Loaded existing settings', settings)
 
     catch e
       logger.error('[Settings] Cannot parse settings file', e)
 
-
-    if _.isEqual(persistedSettings, defaultSettings)
-      settings = persistedSettings
-    else
-      settings = _.merge({}, defaultSettings, persistedSettings)
-      logger.info('[Settings] Merging settings', settings)
-      logger.info('[Settings] Writing updated settings to', settingsPath, )
-      fs.writeFile settingsPath, JSON.stringify(settings, null, 2), encoding: 'utf8', (err) ->
-        logger.error('[Settings] Cannot write updated settings', err) if err?
-
   else
     logger.info('[Settings] Writing default settings to', settingsPath)
     fs.writeFile settingsPath, JSON.stringify(defaultSettings, null, 2), encoding: 'utf8', (err) ->
-      logger.error('[Settings] Cannot write default settings', err) if err?
+      return logger.error('[Settings] Cannot write default settings', err) if err?
+      editSettings()
     settings = defaultSettings
 
   settings.settingsPath = settingsPath
@@ -69,9 +66,6 @@ unless @Settings?
 
   ipc.on 'settings/edit', (e) =>
     logger.info('[Settings] Requested settings edit via ipc', @Settings)
-    if process.platform is 'darwin'
-      childProcess.spawn('open', [ settingsPath ])
-    else if process.platform is 'win32' or process.platform is 'win64'
-      childProcess.spawn('cmd', [ '/s', '/c', 'start', 'wordpad', settingsPath ])
+    editSettings()
 
 module.exports = @Settings
