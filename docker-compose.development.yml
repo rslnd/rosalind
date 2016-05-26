@@ -7,13 +7,9 @@ meteor:
   volumes:
     - ./app/meteor:/app
     - ./build:/build
-    - /app/.meteor/local
-    - /root/.meteor
     - /root/.npm
   environment:
     - NODE_ENV=development
-    - METEOR_WATCH_FORCE_POLLING=t
-    - METEOR_WATCH_POLLING_INTERVAL_MS=1500
 
 kibana:
   image: seeruk/docker-kibana-sense
@@ -21,15 +17,6 @@ kibana:
     - '5601:5601'
   links:
     - elasticsearch
-
-mongo-admin:
-  image: knickers/mongo-express
-  ports:
-    - '8081:8081'
-  environment:
-    - ME_CONFIG_MONGODB_SERVER=mongodb
-  links:
-    - mongodb
 
 mongodb:
   ports:
