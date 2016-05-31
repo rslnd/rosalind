@@ -88,3 +88,6 @@ dispatch:tabular-job-collection
 
 # Monitoring
 meteorhacks:kadira
+
+# Cluster
+meteorhacks:cluster
