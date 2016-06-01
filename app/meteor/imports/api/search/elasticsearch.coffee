@@ -1,6 +1,7 @@
 es = require('elasticsearch')
-esClient = new es.Client
-  host: process.env.ELASTICSEARCH_URL or 'localhost:9200'
+
+esOptions =
+  apiVersion: '2.2'
 
 methods =
   global: [
@@ -21,6 +22,20 @@ methods =
     'open'
     'close'
   ]
+
+url = process.env.ELASTICSEARCH_URL
+if url
+  if url.indexOf(',') > 0
+    hosts = url.substr(url.indexOf('//') + 2).split(',')
+    proto = url.substr(0, url.indexOf('//') + 2)
+    hosts = hosts.map (a) -> proto + a
+    esOptions.hosts = hosts
+  else
+    esOptions.host = url
+else
+  esOptions.host = 'localhost:9200'
+
+esClient = new es.Client(esOptions)
 
 Elasticsearch = Async.wrap(esClient, methods.global)
 Elasticsearch.indices = Async.wrap(esClient.indices, methods.indices)
