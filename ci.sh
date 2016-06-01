@@ -61,20 +61,23 @@ case "$1" in
     echo -en "travis_fold:end:dependencies\r"
 
     echo -en "travis_fold:start:build\r"
-    chmod +x production/prepare.sh && ./production/prepare.sh
-    ./production/build.sh
+    cd production/
+    chmod +x prepare.sh
+    ./prepare.sh
+    ./build.sh
     echo -en "travis_fold:end:build\r"
 
     echo -en "travis_fold:start:image\r"
-    ./production/image.sh
+    image.sh
     echo -en "travis_fold:end:image\r"
 
     echo -en "travis_fold:start:push\r"
-    ./production/push.sh
+    push.sh
     echo -en "travis_fold:end:push\r"
 
     echo -en "travis_fold:start:deploy\r"
-    ./production/deploy.sh
+    deploy.sh
+    cd -
     echo -en "travis_fold:end:deploy\r"
 
     echo "** Done!"
