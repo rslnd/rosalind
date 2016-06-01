@@ -17,11 +17,13 @@ else
 
   echo "** Building docker image"
 
+  source prepare.sh
+
   cp Dockerfile ../build/bundle/Dockerfile
 
   cd ../build/bundle/
 
-  docker build -t $DOCKER_IMAGE .
+  docker build -t $DOCKER_IMAGE_WITH_TAG -t $DOCKER_IMAGE:latest .
 
   rm Dockerfile
   cd -
