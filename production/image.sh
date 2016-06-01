@@ -23,7 +23,8 @@ else
 
   cd ../build/bundle/
 
-  docker build -t $DOCKER_IMAGE_WITH_TAG -t $DOCKER_IMAGE:latest .
+  docker build -t $DOCKER_IMAGE_WITH_TAG .
+  docker tag $DOCKER_IMAGE_WITH_TAG $DOCKER_IMAGE:latest
 
   rm Dockerfile
   cd -
