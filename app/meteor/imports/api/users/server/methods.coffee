@@ -1,6 +1,6 @@
 { Meteor } = require 'meteor/meteor'
 { check } = require 'meteor/check'
-{ Accounts } = require 'meteor/accounts-password'
+{ Accounts } = require 'meteor/accounts-base'
 { Roles } = require 'meteor/alanning:roles'
 { Events } = require '/imports/api/events'
 { Timesheets } = require '/imports/api/timesheets'
