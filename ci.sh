@@ -68,15 +68,15 @@ case "$1" in
     echo -en "travis_fold:end:build\r"
 
     echo -en "travis_fold:start:image\r"
-    image.sh
+    ./image.sh
     echo -en "travis_fold:end:image\r"
 
     echo -en "travis_fold:start:push\r"
-    push.sh
+    ./push.sh
     echo -en "travis_fold:end:push\r"
 
     echo -en "travis_fold:start:deploy\r"
-    deploy.sh
+    ./deploy.sh
     cd -
     echo -en "travis_fold:end:deploy\r"
 
