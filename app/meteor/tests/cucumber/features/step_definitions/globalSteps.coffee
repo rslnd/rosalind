@@ -1,18 +1,9 @@
-locale = require('./fixtures/locale')
-database = require('./fixtures/database')
-user = require('./fixtures/user')
+locale = require './fixtures/locale'
+database = require './fixtures/database'
+user = require './fixtures/user'
+logs = require './fixtures/logs'
 
 module.exports = ->
-  failOnError = ->
-    lastError = browser.execute(-> window.lastError).value
-    message = lastError and lastError.message
-    expect(lastError).toBeNull(message)
-    browser.execute(-> window.lastError = null)
-
-  fetchLogs = ->
-    logs = browser.log('browser')
-    console.log('[Browser]', logs.value) if logs.value.length > 0
-
   @Before ->
     browser.url(process.env.ROOT_URL)
     browser.windowHandleMaximize()
@@ -23,12 +14,12 @@ module.exports = ->
     user.logout()
     database.reset()
     locale.reset()
-    failOnError()
-    fetchLogs()
+    logs.failOnError()
+    logs.fetchLogs()
 
   @After ->
-    fetchLogs()
-    failOnError()
+    logs.fetchLogs()
+    logs.failOnError()
     user.logout()
     database.reset()
     locale.reset()
