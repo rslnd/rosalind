@@ -9,6 +9,10 @@ module.exports = ->
     expect(lastError).toBeNull(message)
     browser.execute(-> window.lastError = null)
 
+  fetchLogs = ->
+    logs = browser.log('browser')
+    console.log('[Browser]', logs.value) if logs.value.length > 0
+
   @Before ->
     browser.url(process.env.ROOT_URL)
     browser.windowHandleMaximize()
@@ -19,11 +23,12 @@ module.exports = ->
     user.logout()
     database.reset()
     locale.reset()
-
-  @Before failOnError
-  @After failOnError
+    failOnError()
+    fetchLogs()
 
   @After ->
+    fetchLogs()
+    failOnError()
     user.logout()
     database.reset()
     locale.reset()
