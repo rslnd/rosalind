@@ -10,7 +10,7 @@
 set -e
 
 DOCKER_TAG="$(git rev-parse --verify HEAD)"
-DOCKER_TAG="${DOCKER_TAG:0:12}"
+DOCKER_TAG="${DOCKER_TAG:0:7}"
 
 export DOCKER_IMAGE_WITH_TAG="$DOCKER_IMAGE:$DOCKER_TAG"
 
