@@ -4,6 +4,30 @@ set -e
 
 YML="-f docker-compose.yml -f docker-compose.test.yml"
 
+ANSI_RED="\033[31;1m"
+ANSI_RESET="\033[0m"
+
+retry() {
+  local result=0
+  local count=1
+  while [ $count -le 3 ]; do
+    [ $result -ne 0 ] && {
+      echo -e "\n${ANSI_RED}The command \"$@\" failed. Retrying, $count of 3.${ANSI_RESET}\n" >&2
+    }
+    "$@"
+    result=$?
+    [ $result -eq 0 ] && break
+    count=$(($count + 1))
+    sleep 1
+  done
+
+  [ $count -gt 3 ] && {
+    echo -e "\n${ANSI_RED}The command \"$@\" failed 3 times.${ANSI_RESET}\n" >&2
+  }
+
+  return $result
+}
+
 case "$1" in
   install)
     echo "Setting up CI environment"
@@ -44,7 +68,7 @@ case "$1" in
     echo -en "travis_fold:end:start_meteor\r"
 
     echo -en "travis_fold:start:acceptance_tests\r"
-    SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}" travis_retry npm run test:acceptance
+    SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}" retry npm run test:acceptance
     echo -en "travis_fold:end:acceptance_tests\r"
 
     ;;
@@ -53,30 +77,30 @@ case "$1" in
     sudo pkill sc
 
     echo -en "travis_fold:start:pull\r"
-    travis_retry docker-compose $YML pull meteor
+    retry docker-compose $YML pull meteor
     echo -en "travis_fold:end:pull\r"
 
     echo -en "travis_fold:start:dependencies\r"
-    travis_retry docker-compose $YML run --no-deps meteor meteor npm install
+    retry docker-compose $YML run --no-deps meteor meteor npm install
     echo -en "travis_fold:end:dependencies\r"
 
     echo -en "travis_fold:start:build\r"
     cd production/
     chmod +x prepare.sh
     ./prepare.sh
-    travis_retry ./build.sh
+    retry ./build.sh
     echo -en "travis_fold:end:build\r"
 
     echo -en "travis_fold:start:image\r"
-    travis_retry ./image.sh
+    retry ./image.sh
     echo -en "travis_fold:end:image\r"
 
     echo -en "travis_fold:start:push\r"
-    travis_retry ./push.sh
+    retry ./push.sh
     echo -en "travis_fold:end:push\r"
 
     echo -en "travis_fold:start:deploy\r"
-    travis_retry ./deploy.sh
+    retry ./deploy.sh
     cd -
     echo -en "travis_fold:end:deploy\r"
 
