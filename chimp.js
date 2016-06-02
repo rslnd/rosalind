@@ -51,6 +51,8 @@ module.exports = {
       }
     },
     services: ['sauce'],
+    user: process.env.SAUCE_USERNAME,
+    key: process.env.SAUCE_ACCESS_KEY,
     host: process.env.SAUCE_HOST,
     port: process.env.SAUCE_PORT,
     waitforTimeout: 30000,

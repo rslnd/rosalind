@@ -12,6 +12,7 @@ if [ ! -e ../build/bundle/package.json ]; then
 else
 
   if [ ! -z $CI ]; then
+    echo "** Logging in to $DOCKER_SERVER"
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL $DOCKER_SERVER
   fi
 
@@ -23,7 +24,10 @@ else
 
   cd ../build/bundle/
 
+  echo "** Building image with tag: $DOCKER_IMAGE_WITH_TAG"
   docker build -t $DOCKER_IMAGE_WITH_TAG .
+
+  echo "** Tagging image $DOCKER_IMAGE_WITH_TAG with $DOCKER_IMAGE:latest"
   docker tag $DOCKER_IMAGE_WITH_TAG $DOCKER_IMAGE:latest
 
   rm Dockerfile
