@@ -33,7 +33,7 @@ Template.schedulesDefaultCalendar.onRendered ->
     eventResize: (event, delta, revertFunc) ->
       Schedules.methods.updateEvent(event._id, event)
 
-  @autorun ->
-    user = Users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
-    Schedules.find({}).fetch()
-    $('#schedules-default-calendar').fullCalendar('refetchEvents')
+Template.schedulesDefaultCalendar.autorun ->
+  user = Users.findOne(_id: Template.schedulesDefault.currentView.get('userId'))
+  Schedules.find({}).fetch()
+  $('#schedules-default-calendar').fullCalendar('refetchEvents')
