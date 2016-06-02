@@ -44,7 +44,7 @@ case "$1" in
     echo -en "travis_fold:end:start_meteor\r"
 
     echo -en "travis_fold:start:acceptance_tests\r"
-    SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}" npm run test:acceptance
+    SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}" travis_retry npm run test:acceptance
     echo -en "travis_fold:end:acceptance_tests\r"
 
     ;;
@@ -53,30 +53,30 @@ case "$1" in
     sudo pkill sc
 
     echo -en "travis_fold:start:pull\r"
-    docker-compose $YML pull meteor
+    travis_retry docker-compose $YML pull meteor
     echo -en "travis_fold:end:pull\r"
 
     echo -en "travis_fold:start:dependencies\r"
-    docker-compose $YML run --no-deps meteor meteor npm install
+    travis_retry docker-compose $YML run --no-deps meteor meteor npm install
     echo -en "travis_fold:end:dependencies\r"
 
     echo -en "travis_fold:start:build\r"
     cd production/
     chmod +x prepare.sh
     ./prepare.sh
-    ./build.sh
+    travis_retry ./build.sh
     echo -en "travis_fold:end:build\r"
 
     echo -en "travis_fold:start:image\r"
-    ./image.sh
+    travis_retry ./image.sh
     echo -en "travis_fold:end:image\r"
 
     echo -en "travis_fold:start:push\r"
-    ./push.sh
+    travis_retry ./push.sh
     echo -en "travis_fold:end:push\r"
 
     echo -en "travis_fold:start:deploy\r"
-    ./deploy.sh
+    travis_retry ./deploy.sh
     cd -
     echo -en "travis_fold:end:deploy\r"
 
