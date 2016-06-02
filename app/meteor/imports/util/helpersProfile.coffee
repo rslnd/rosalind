@@ -5,7 +5,7 @@ module.exports =
     @profile?.firstName or @fullName()
 
   prefix: ->
-    return '' if @collection()._name is 'users'
+    return '' if @?collection()._name is 'users'
 
     if @profile?.gender is 'Male'
       TAPi18n.__('patients.salutationMale') + ' '
