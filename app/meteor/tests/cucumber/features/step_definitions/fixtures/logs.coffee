@@ -1,5 +1,5 @@
 reject = require 'lodash/reject'
-any = require 'lodash/any'
+some = require 'lodash/some'
 
 module.exports =
   fetchLogs: ->
@@ -12,7 +12,7 @@ module.exports =
 
     if logs.value.length > 0
       filteredLogs = reject logs.value, (log) ->
-        any filterList, (filter) ->
+        some filterList, (filter) ->
           log?.message.indexOf(filter) > 0
 
     if filteredLogs.length > 0
