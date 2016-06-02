@@ -50,6 +50,7 @@ module.exports = {
         browser.end()
       }
     },
+    services: ['sauce'],
     host: process.env.SAUCE_HOST,
     port: process.env.SAUCE_PORT,
     waitforTimeout: 30000,

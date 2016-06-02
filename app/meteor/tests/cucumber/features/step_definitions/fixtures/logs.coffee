@@ -7,6 +7,7 @@ module.exports =
 
     filterList = [
       'logged out by the server. Please log in again.'
+      'failed: Error during WebSocket handshake: net::ERR_CONNECTION_RESET'
     ]
 
     if logs.value.length > 0
