@@ -15,8 +15,8 @@ module.exports =
         some filterList, (filter) ->
           log?.message.indexOf(filter) > 0
 
-    if filteredLogs.length > 0
-      console.log('[Browser]', filteredLogs)
+      if filteredLogs.length > 0
+        console.log('[Browser]', filteredLogs)
 
 
   failOnError: ->
