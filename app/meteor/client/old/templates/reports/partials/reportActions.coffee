@@ -15,6 +15,9 @@ Template.reportActions.events
   'click [rel="next"]': ->
     Template.reports.currentView.next()
 
+  'click [rel="toggleRevenue"]': ->
+    Template.reports.currentView.toggleRevenue()
+
   'click [rel="print"]': ->
     if window.native
       console.log('[Client] Printing: native')

@@ -1,48 +1,79 @@
-.row
-  .col-md-3.col-sm-3.col-xs-12
-    .info-box
-      span.info-box-icon.bg-green
-        i.fa.fa-eur
-      .info-box-content
-        span.info-box-number
-          <small class="text-muted">€</small>&nbsp;<span>{{ floor total.revenue }}</span>
-        span.info-box-text Umsatz
-        span.progress-description +8% zum Vorjahr
+if showRevenue
+  .row
+    .col-md-3.col-sm-3.col-xs-12
+      .info-box
+        span.info-box-icon.bg-green
+          i.fa.fa-eur
+        .info-box-content
+          span.info-box-number
+            <small class="text-muted">€</small>&nbsp;<span>{{ floor total.revenue }}</span>
+          span.info-box-text Umsatz
+          span.progress-description +8% zum Vorjahr
 
-  .col-md-3.col-sm-3.col-xs-12
-    .info-box
-      span.info-box-icon.bg-yellow
-        i.fa.fa-user-plus
-      .info-box-content
-        span.info-box-number
-          <span>7,2</span>&nbsp;<small class="text-muted">/h</small>
-        span.info-box-text Neue Patienten
-        span.progress-description +2% zum Vorjahr
+    .col-md-3.col-sm-3.col-xs-12
+      .info-box
+        span.info-box-icon.bg-yellow
+          i.fa.fa-user-plus
+        .info-box-content
+          span.info-box-number
+            <span>7,2</span>&nbsp;<small class="text-muted">/h</small>
+          span.info-box-text Neue Patienten
+          span.progress-description +2% zum Vorjahr
 
-  .col-md-3.col-sm-3.col-xs-12
-    .info-box
-      span.info-box-icon.bg-red
-        i.fa.fa-calendar
-      .info-box-content
-        span.info-box-number
-          if total.hoursActual
-            <span>{{ floor total.hoursActual }}</span>&nbsp;<small class="text-muted">h</small>
-          else if total.hoursScheduled
-            <span>{{ floor total.hoursScheduled }}</span>&nbsp;
-            small.text-muted
-              | h
-              small.fa.fa-question-circle.text-quite-muted(data-toggle='tooltip' data-placement='right' title='{{_ "reports.scheduledOnly" }}')
-          else
-            span.text-quite-muted.fa.fa-question
-        span.info-box-text Arztstunden
-        span.progress-description +4% zum Vorjahr
+    .col-md-3.col-sm-3.col-xs-12
+      .info-box
+        span.info-box-icon.bg-red
+          i.fa.fa-calendar
+        .info-box-content
+          span.info-box-number
+            if total.hoursActual
+              <span>{{ floor total.hoursActual }}</span>&nbsp;<small class="text-muted">h</small>
+            else if total.hoursScheduled
+              <span>{{ floor total.hoursScheduled }}</span>&nbsp;
+              small.text-muted
+                | h
+                small.fa.fa-question-circle.text-quite-muted(data-toggle='tooltip' data-placement='right' title='{{_ "reports.scheduledOnly" }}')
+            else
+              span.text-quite-muted.fa.fa-question
+          span.info-box-text Arztstunden
+          span.progress-description +4% zum Vorjahr
 
-  .col-md-3.col-sm-3.col-xs-12
-    .info-box
-      span.info-box-icon.bg-aqua
-        i.fa.fa-user-md
-      .info-box-content
-        span.info-box-number
-          <small class="text-muted">€</small>&nbsp;<span>{{ floor total.revenuePerAssignee }}</span>
-        span.info-box-text Umsatz pro Arzt
-        span.progress-description +11% zum Vorjahr
+    .col-md-3.col-sm-3.col-xs-12
+      .info-box
+        span.info-box-icon.bg-aqua
+          i.fa.fa-user-md
+        .info-box-content
+          span.info-box-number
+            <small class="text-muted">€</small>&nbsp;<span>{{ floor total.revenuePerAssignee }}</span>
+          span.info-box-text Umsatz pro Arzt
+          span.progress-description +11% zum Vorjahr
+
+else
+  .row
+    .col-md-6.col-sm-6.col-xs-12
+      .info-box
+        span.info-box-icon.bg-yellow
+          i.fa.fa-user-plus
+        .info-box-content
+          span.info-box-number
+            <span>7,2</span>&nbsp;<small class="text-muted">/h</small>
+          span.info-box-text Neue Patienten
+          span.progress-description +2% zum Vorjahr
+
+    .col-md-6.col-sm-6.col-xs-12
+      .info-box
+        span.info-box-icon.bg-red
+          i.fa.fa-calendar
+        .info-box-content
+          span.info-box-number
+            if total.hoursActual
+              <span>{{ floor total.hoursActual }}</span>&nbsp;<small class="text-muted">h</small>
+            else if total.hoursScheduled
+              <span>{{ floor total.hoursScheduled }}</span>&nbsp;
+              small.text-muted
+                | h
+                small.fa.fa-question-circle.text-quite-muted(data-toggle='tooltip' data-placement='right' title='{{_ "reports.scheduledOnly" }}')
+            else
+              span.text-quite-muted.fa.fa-question
+          span.info-box-text Arztstunden
+          span.progress-description +4% zum Vorjahr

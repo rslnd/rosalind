@@ -12,5 +12,8 @@ Template.ranking.helpers
   hasNewPatients: ->
     @patients.new and @patients.new > 0
 
+  showRevenue: ->
+    Template.reports.currentView.get('showRevenue')
+
 Template.ranking.onCreated ->
   $('[data-toggle="tooltip"]').tooltip()

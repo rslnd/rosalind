@@ -24,6 +24,8 @@ Template.reports.currentView.next = ->
   next = moment(@get('date')).add(1, 'day').toDate()
   @set('date', next)
 
+Template.reports.currentView.toggleRevenue = ->
+  @set('showRevenue', not @get('showRevenue'))
 
 Template.reports.onCreated ->
   Template.reports.currentView.watchPathChange()

@@ -7,6 +7,7 @@
     "unassigned": "Assistenz",
     "newPercentage": "Neu",
     "empty": "Für das gewählte Datum sind keine Berichte verfügbar.",
-    "scheduledOnly": "Zeit laut Plan"
+    "scheduledOnly": "Zeit laut Plan",
+    "toggleRevenue": "Umsatz anzeigen oder ausblenden"
   }
 }
