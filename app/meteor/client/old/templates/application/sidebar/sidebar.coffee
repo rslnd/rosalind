@@ -5,6 +5,7 @@ sidebar = [
     countBadge: 'appointments'
     roles: ['admin', 'appointments']
     submenu: [
+      { name: 'thisCalendar' }
       { name: 'thisOpen' }
       { name: 'thisAdmitted', route: '/appointments/:status', params: { status: 'admitted' } }
       { name: 'thisTreating', route: '/appointments/:status', params: { status: 'treating' } }

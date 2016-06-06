@@ -8,6 +8,7 @@ Schema = new SimpleSchema
 
   end:
     type: Date
+    index: -1
 
   type:
     type: String
