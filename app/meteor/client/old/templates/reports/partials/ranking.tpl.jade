@@ -13,7 +13,8 @@
             th.td-bg Neu/h
             th.td-bg Gesamt
             th OP
-            th Umsatz
+            if showRevenue
+              th Umsatz
         tbody
           +each assigneesWithIndex
             tr
@@ -39,4 +40,6 @@
               td.td-bg {{ roundToOne patients.newPerHourScheduled }}
               td.td-bg {{ patients.total }}
               td {{ patients.surgeries }}
-              td €{{ revenue }}
+
+              if showRevenue
+                td €{{ revenue }}
