@@ -3,3 +3,6 @@ Template.topbar.events
     Meteor.call 'users/logout', ->
       Meteor.logout()
       FlowRouter.go('/')
+
+  'click [rel="toggleSidebar"]': ->
+    $('body').toggleClass('sidebar-collapse')
