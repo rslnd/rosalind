@@ -4,6 +4,11 @@ module.exports = ->
     prefix: '/appointments'
 
   appointments.route '/',
+    name: 'appointments.thisCalendar'
+    action: ->
+      BlazeLayout.render('layout', main: 'appointmentsCalendar')
+
+  appointments.route '/open',
     name: 'appointments.thisOpen'
     action: ->
       BlazeLayout.render('layout', main: 'appointments')

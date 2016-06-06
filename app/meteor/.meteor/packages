@@ -18,6 +18,7 @@ accounts-base
 accounts-password
 standard-minifiers
 reactive-dict
+reactive-var
 
 # Routing
 kadira:flow-router
