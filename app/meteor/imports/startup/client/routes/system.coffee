@@ -12,6 +12,11 @@ module.exports = ->
     action: ->
       BlazeLayout.render('layout', main: 'systemEvents')
 
+  users.route '/importers',
+    name: 'system.thisImporters'
+    action: ->
+      BlazeLayout.render('layout', main: 'systemImporters')
+
   users.route '/jobs',
     name: 'system.thisJobs'
     action: ->

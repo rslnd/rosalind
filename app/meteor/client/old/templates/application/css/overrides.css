@@ -43,14 +43,6 @@ body {
   height: 100%;
 }
 
-.sidebar-collapse .level-0 {
-  width: 279px !important;
-}
-
-.sidebar-collapse .treeview-menu {
-  width: 229px !important;
-}
-
 .modal .box, .modal .box.box-widget {
   margin-bottom: -10px;
   margin-top: -20px;
@@ -155,6 +147,10 @@ body {
   display: none;
 }
 
+.display-none {
+  display: none;
+}
+
 .box:hover .box-hover {
   display: block;
 }
@@ -196,4 +192,25 @@ body {
 
 .dl-left dd {
   margin-left: 20px !important;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
 }

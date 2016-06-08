@@ -59,6 +59,7 @@ sidebar = [
     submenu: [
       { name: 'thisEvents' }
       { name: 'thisStats' }
+      { name: 'thisImporters' }
       { name: 'thisJobs' }
       { name: 'thisTags' }
       { name: 'thisNative', disabled: -> not window.native }
