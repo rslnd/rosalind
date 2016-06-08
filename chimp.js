@@ -1,3 +1,21 @@
+requiredEnv = [
+  'ROOT_URL',
+  'BROWSER',
+  'OS',
+  'SAUCE_USERNAME',
+  'SAUCE_ACCESS_KEY',
+  'SAUCE_HOST',
+  'SAUCE_PORT',
+]
+
+requiredEnv.forEach(function(v) {
+  if (! process.env[v]) {
+    console.error('Please set env variables', requiredEnv)
+    console.error('Missing env variable: ' + v)
+    process.exit(1)
+  }
+})
+
 var browser = {
   name: process.env.BROWSER.split(':')[0],
   version: process.env.BROWSER.split(':')[1],
@@ -16,7 +34,7 @@ var os = {
 
 console.log('** OS:', process.env.OS)
 console.log('** Browser:', browser.name, browser.version)
-console.log('** Worker:', process.env.TRAVIS_JOB_NUMBER)
+console.log('** Worker:', process.env.SAUCE_TUNNEL_ID)
 
 module.exports = {
   watch: false,
@@ -42,9 +60,9 @@ module.exports = {
       browserName: browser.name,
       version: browser.version,
       platform: os.long,
-      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+      'tunnel-identifier': process.env.SAUCE_TUNNEL_ID,
       name: process.env.SAUCE_NAME,
-      build: process.env.TRAVIS_BUILD_NUMBER,
+      build: process.env.BUILD_NUMBER,
       public: true,
       after: function() {
         browser.end()
