@@ -1,12 +1,19 @@
 path = require 'path'
 fs = require 'fs'
 { exec } = require 'child_process'
+each = require 'lodash/each'
 
 processes = []
 
-unless process.env.ROOT_URL
-  console.error('Please set ROOT_URL')
-  process.exit(1)
+defaults =
+  ROOT_URL: 'http://0.0.0.0:3000'
+  BROWSER: 'Chrome:50.0'
+  OS: 'Windows 10'
+  SAUCE_HOST: 'localhost'
+  SAUCE_PORT: 4445
+
+each defaults, (v, k) ->
+  process.env[k] = v unless process.env[k]
 
 startChimp = ->
   startProcess
