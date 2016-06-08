@@ -83,6 +83,9 @@ underscorestring:underscore.string
 mizzao:timesync
 meteorhacks:async
 
+# File Upload
+ostrio:files
+
 # Jobs
 vsivsi:job-collection
 dispatch:tabular-job-collection
