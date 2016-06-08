@@ -14,7 +14,7 @@ Template.appointmentsCalendar.onCreated ->
 renderCalendar = ->
   resources = _.map Appointments.find({}).fetch(), (a) ->
     {
-      id: a?.assigneeId.toString()
+      id: a?.assigneeId?.toString()
       title: Users.findOne({ _id: a?.assigneeId })?.fullNameWithTitle()
     }
   resources = _.sortBy(resources, 'title')
