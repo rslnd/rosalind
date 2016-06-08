@@ -36,6 +36,7 @@ case "$1" in
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     npm -g install npm@latest-2 &
     wait
+    npm set registry https://registry.npmjs.org/
     sudo rm /usr/local/bin/docker-compose
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
     java -version
