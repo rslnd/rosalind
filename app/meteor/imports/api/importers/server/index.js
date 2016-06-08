@@ -1,7 +1,9 @@
-import { uploadStream } from './shared'
 import processJobs from './processJobs'
+import uploadStream from './uploadStream'
+import uploadDdp from './uploadDdp'
 
 export default function() {
-  uploadStream()
   processJobs()
+  uploadStream()
+  uploadDdp()
 }

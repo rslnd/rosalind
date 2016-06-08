@@ -1,1 +1,5 @@
-export default function() {}
+import ImportFiles from './collection'
+
+export {
+  ImportFiles
+}
