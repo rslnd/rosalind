@@ -3,7 +3,7 @@ meteor:
     - MONGO_URL=mongodb://mongodb:27017/rosalind
     - ELASTICSEARCH_URL=http://elasticsearch:9200
     - ROOT_URL=http://0.0.0.0:3000
-    - CUSTOMER_NAME=
+    - 'CUSTOMER_NAME=Rosalind Development'
   links:
     - mongodb
     - elasticsearch
