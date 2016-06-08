@@ -68,7 +68,10 @@ case "$1" in
     echo -en "travis_fold:end:start_meteor\r"
 
     echo -en "travis_fold:start:acceptance_tests\r"
-    SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}" retry npm run test:acceptance
+    export SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}"
+    export SAUCE_TUNNEL_ID="$TRAVIS_JOB_NUMBER"
+    export BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"
+    retry npm run test:acceptance
     echo -en "travis_fold:end:acceptance_tests\r"
 
     ;;
