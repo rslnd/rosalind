@@ -1,0 +1,58 @@
++contentHeader(title='system.thisImporters')
+.content
+  .row
+    .col-md-8
+      .box.box-default
+        .box-header.with-border
+          i.fa.fa-tasks
+          h3.box-title Import Jobs
+        .box-body
+          .row
+            .col-md-3
+              h4 Terminiko Appointments
+              p
+                span.label.label-info Running
+                .btn.btn-warning.btn-xs
+                  i.fa.fa-ban
+              p
+                span.text-muted 4 minutes ago
+
+            .col-md-9
+              .progress.active
+                .progress-bar.progress-bar-primary.progress-bar-striped(style="width: 65%")
+              p
+                b 65%
+                | (3514/163569)
+
+              pre
+                | Csv: Parsed 3500 records
+
+
+    .col-md-4
+      .box.box-default
+        .box-header.with-border
+          i.fa.fa-life-saver
+          h3.box-title Manually import a file
+        .box-body
+          .form-group
+            label Importer module
+            select.form-control(name='importer')
+              option(value='terminiko') Terminiko Appointments
+              option(value='eoswinPatients') EOSWin Patients
+              option(value='eoswinReports') EOSWin Reports
+
+          .form-group
+            label Select file
+            label.form-control.btn.btn-default.btn-file(for='file')
+              | Browse
+              input.display-none(type='file' id='file')
+            p.help-block Maximum file size: 40 MB
+
+        .box-footer
+          if currentUpload
+            with currentUpload
+              p Uploading {{file.name}}: {{progress.get}}%
+              .progress.active
+                .progress-bar.progress-bar-success.progress-bar-striped(style="width: {{progress.get}}%")
+          else
+            button.btn.btn-primary(rel='upload') Import now

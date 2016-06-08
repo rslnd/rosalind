@@ -1,6 +1,7 @@
 {
   "system": {
     "this": "System",
+    "thisImporters": "Importers",
     "thisJobs": "Background Jobs",
     "thisStats": "Stats",
     "thisTags": "Tags",
