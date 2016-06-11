@@ -2,12 +2,12 @@ import alerts from './alerts'
 import hotkeys from './hotkeys'
 import locale from './locale'
 import spinner from './spinner'
-import status from './status'
+import userStatus from './userStatus'
 
 export default function() {
   alerts()
   locale()
   spinner()
-  status()
+  userStatus()
   hotkeys()
 }

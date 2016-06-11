@@ -6,7 +6,7 @@ module.exports = new Tabular.Table
   name: 'Users',
   collection: Users
   columns: [
-    { data: 'status', tmpl: Meteor.isClient and Template.status }
+    { data: 'status', tmpl: Meteor.isClient and Template.userStatus }
     { data: 'profile.lastName', title: 'Name', render: (val, type, doc) -> doc.fullNameWithTitle() }
     { data: 'getRoles()', title: 'Berechtigungen' }
     { data: 'lastActivity()', title: 'Zuletzt gesehen' }

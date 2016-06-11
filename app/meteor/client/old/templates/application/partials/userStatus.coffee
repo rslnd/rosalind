@@ -1,6 +1,6 @@
 { Users } = require '/imports/api/users'
 
-Template.status.helpers
+Template.userStatus.helpers
   userStatus: (user) ->
     if (typeof user is 'string')
       user = Users.findOne(user)
@@ -20,5 +20,5 @@ Template.status.helpers
   userPopoverContent: (user) ->
     user?.status?.lastLogin?.userAgent
 
-Template.status.rendered = ->
+Template.userStatus.rendered = ->
   $('[data-toggle="popover"]').popover()
