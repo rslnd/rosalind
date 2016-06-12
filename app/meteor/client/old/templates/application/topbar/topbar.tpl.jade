@@ -2,8 +2,14 @@ header.main-header
   a.logo(href='/')
     img(src='/images/logo.svg')
 
+
   nav.navbar.navbar-static-top
-    a.sidebar-toggle(data-toggle='offcanvas' rel='toggleSidebar')
+    ul.nav.navbar-nav.navbar-left
+      li
+        a(rel='toggleSidebar')
+          i.fa.fa-bars
+          .navbar-title &nbsp;
+
     .navbar-custom-menu
       ul.nav.navbar-nav
         li.dropdown.user.user-menu
