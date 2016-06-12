@@ -83,6 +83,14 @@ pre {
   display: inline;
 }
 
+.navbar-title {
+  font-size: 16px;
+  line-height: 0.1;
+  font-weight: 400;
+  padding-left: 10px;
+  display: inline-block;
+}
+
 .avatar {
   display: block;
   background: #d8e0e8;
