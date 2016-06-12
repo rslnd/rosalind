@@ -1,9 +1,9 @@
-{ day } = require '/imports/util/day'
+{ dateToDay } = require '/imports/util/time/day'
 { Cache } = require '/imports/api/cache'
 
 Template.newAppointmentTimePicker.helpers
   hours: ->
-    key = day.dateToDay(newAppointment.get('date'))
+    key = dateToDay(newAppointment.get('date'))
     cache = Cache.findOne({ day: key })
 
     _.map [7...19], (i) ->
@@ -13,7 +13,7 @@ Template.newAppointmentTimePicker.helpers
 
   blocks: ->
     blocks = (i for i in [0..50] by 10)
-    key = day.dateToDay(newAppointment.get('date'))
+    key = dateToDay(newAppointment.get('date'))
     hour = newAppointment.get('hour') or 11
     cache = Cache.findOne({ day: key })
 

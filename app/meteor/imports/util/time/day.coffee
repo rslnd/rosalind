@@ -1,7 +1,7 @@
 moment = require 'moment'
 clone = require 'lodash/clone'
 
-day =
+module.exports =
   dateToDay: (date) ->
     return unless date
     date = moment(date)
@@ -21,5 +21,3 @@ day =
       day.month -= 1
       day.zeroIndexMonth = true
     return day
-
-module.exports = { day }

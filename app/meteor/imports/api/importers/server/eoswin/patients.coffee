@@ -1,6 +1,6 @@
 moment = require 'moment'
 _ = require 'lodash'
-{ dateToDay } = require '/imports/util/day'
+{ dateToDay } = require '/imports/util/time/day'
 adt = require '../shared/adt'
 bulk = require '../shared/bulk'
 { Patients } = require '/imports/api/patients'

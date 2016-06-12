@@ -1,5 +1,5 @@
 { moment } = require '/imports/util/momentLocale'
-{ day } = require '/imports/util/day'
+{ dateToDay } = require '/imports/util/time/day'
 { Schedules } = require '/imports/api/schedules'
 { Cache } = require '/imports/api/cache'
 
@@ -17,7 +17,7 @@ Template.newAppointmentDayPicker.onRendered ->
     onRenderCell: (date, cellType) ->
       return unless cellType is 'day'
 
-      key = day.dateToDay(date)
+      key = dateToDay(date)
       cache = Cache.findOne({ day: key })
 
       attr =
