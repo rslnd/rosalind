@@ -49,11 +49,16 @@ module.exports =
     isPrevious = @isPrevious(m)
     { year, q, isSame, isNext, isPrevious }
 
-  isPrevious: (date) ->
-    @getQ(date) is @getQ(moment().subtract(3, 'months'))
+  isPrevious: (date, compareWith) ->
+    @getQ(date) is @getQ(moment(compareWith).subtract(3, 'months')) and (
+      moment(date).year() is moment(compareWith).year() or
+      moment(date).year() is moment(compareWith).year() - 1)
 
-  isSame: (date) ->
-    @getQ() is @getQ(date)
+  isSame: (date, compareWith) ->
+    @getQ(compareWith) is @getQ(date) and
+      moment(date).year() is moment(compareWith).year()
 
-  isNext: (date) ->
-    @getQ(date) is @getQ(moment().add(3, 'months'))
+  isNext: (date, compareWith) ->
+    @getQ(date) is @getQ(moment(compareWith).add(3, 'months')) and (
+      moment(date).year() is moment(compareWith).year() or
+      moment(date).year() is moment(compareWith).year() + 1)
