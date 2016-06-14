@@ -31,7 +31,7 @@ retry() {
 case "$1" in
   install)
     echo "Setting up CI environment"
-
+    SECONDS=0
     sudo apt-get -y install xvfb oracle-java8-installer &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     npm -g install npm@latest-2 &
@@ -43,7 +43,7 @@ case "$1" in
     export DISPLAY=:99.0
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py
-
+    echo "[CI] Machine environment setup took $SECONDS seconds"
     ;;
 
   test)
@@ -52,29 +52,57 @@ case "$1" in
       exit 1
     fi
 
+    # Pull dependencies
+    echo "[CI] Pulling dependencies"
     echo -en "travis_fold:start:pull_dependencies\r"
+    SECONDS=0
     { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install; } &
-    npm install
-    cd app/meteor/tests/cucumber && npm install && cd -
+    retry npm install
+    cd app/meteor/tests/cucumber
+    retry npm install
+    cd -
     wait
     echo -en "travis_fold:end:pull_dependencies\r"
+    echo "[CI] Image pull and dependencies installation took $SECONDS seconds"
 
+    # Run unit tests
     echo -en "travis_fold:start:unit_tests\r"
     npm test
     echo -en "travis_fold:end:unit_tests\r"
 
+    # Start environment for acceptance tests
+    echo "[CI] Starting environment for acceptance tests"
     echo -en "travis_fold:start:start_meteor\r"
+    SECONDS=0
+    RETRY=0
     npm run start:test &
-    for i in {1..180}; do printf "(%03d) " $i && curl -q "$ROOT_URL" && break; sleep 1; done;
+    for i in {1..180}; do
+      printf "(%03d) " $i && curl -q "$ROOT_URL" && break;
+      if [ "$SECONDS" -ge 300 ]; then
+        RETRY=$((RETRY + 1))
+        SECONDS=0
+        echo "[CI] Warning: Timed out while waiting for meteor to start"
+        docker-compose -f docker-compose.yml -f docker-compose.test.yml restart meteor
+      fi;
+      sleep 1;
+    done;
     echo -en "travis_fold:end:start_meteor\r"
+    if [ "$RETRY" -ge 1 ]; then
+      echo "[CI] Image pull and dependencies installation took $SECONDS seconds after $RETRY retries"
+    else
+      echo "[CI] Image pull and dependencies installation took $SECONDS seconds"
+    fi;
 
+    # Run acceptance tests
+    echo "[CI] Running acceptance tests"
     echo -en "travis_fold:start:acceptance_tests\r"
+    SECONDS=0
     export SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}"
     export SAUCE_TUNNEL_ID="$TRAVIS_JOB_NUMBER"
     export BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"
     retry npm run test:acceptance
     echo -en "travis_fold:end:acceptance_tests\r"
-
+    echo "[CI] Acceptance tests took $SECONDS seconds"
     ;;
 
   build)
