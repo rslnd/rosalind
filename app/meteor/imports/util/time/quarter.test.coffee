@@ -5,6 +5,15 @@ describe 'util', ->
   describe 'time', ->
     describe 'quarter', ->
       describe 'start and end dates', ->
+        it 'are locale agnostic', ->
+          moment.locale('de')
+          expect(quarter.q1().end.toDate()).to
+            .equalTime(moment().month('März').endOf('month').toDate())
+
+          moment.locale('en')
+          expect(quarter.q1().end.toDate()).to
+            .equalTime(moment().month('march').endOf('month').toDate())
+
         describe 'q1', ->
           it 'starts on jan 1 (start of year)', ->
             expect(quarter.q1().start.toDate()).to
@@ -12,34 +21,34 @@ describe 'util', ->
 
           it 'ends on march 31', ->
             expect(quarter.q1().end.toDate()).to
-              .equalTime(moment().month(2).date(31).endOf('day').toDate())
+              .equalTime(moment().month('mar').date(31).endOf('day').toDate())
 
         describe 'q2', ->
           it 'starts on apr 1', ->
             expect(quarter.q2().start.toDate()).to
-              .equalTime(moment().month(3).date(1).startOf('day').toDate())
+              .equalTime(moment().month('apr').date(1).startOf('day').toDate())
 
           it 'ends on jun 30', ->
             expect(quarter.q2().end.toDate()).to
-              .equalTime(moment().month(5).date(30).endOf('day').toDate())
+              .equalTime(moment().month('jun').date(30).endOf('day').toDate())
 
         describe 'q3', ->
           it 'starts on jul 1', ->
             expect(quarter.q3().start.toDate()).to
-              .equalTime(moment().month(6).date(1).startOf('day').toDate())
+              .equalTime(moment().month('jul').date(1).startOf('day').toDate())
 
           it 'ends on sep 30', ->
             expect(quarter.q3().end.toDate()).to
-              .equalTime(moment().month(8).date(30).endOf('day').toDate())
+              .equalTime(moment().month('sep').date(30).endOf('day').toDate())
 
         describe 'q4', ->
           it 'starts on oct 1', ->
             expect(quarter.q4().start.toDate()).to
-              .equalTime(moment().month(9).date(1).startOf('day').toDate())
+              .equalTime(moment().month('oct').date(1).startOf('day').toDate())
 
           it 'ends on dec 31 (end of year)', ->
             expect(quarter.q4().end.toDate()).to
-              .equalTime(moment().month(11).date(31).endOf('day').toDate())
+              .equalTime(moment().month('dec').date(31).endOf('day').toDate())
 
       describe 'within', ->
         it 'is within q1', ->
