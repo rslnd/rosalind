@@ -76,7 +76,7 @@ case "$1" in
     SECONDS=0
     RETRY=0
     npm run start:test &
-    for i in {1..180}; do
+    for i in {1..900}; do
       printf "(%03d) " $i && curl -q "$ROOT_URL" && break;
       if [ "$SECONDS" -ge 300 ]; then
         RETRY=$((RETRY + 1))
@@ -84,7 +84,12 @@ case "$1" in
         echo "[CI] Warning: Timed out while waiting for meteor to start"
         docker-compose -f docker-compose.yml -f docker-compose.test.yml restart meteor
       fi;
-      sleep 1;
+
+      if [ "$RETRY" -ge 3 ]; then
+        echo "[CI] Error: Timed out while waiting for meteor to start after $RETRY retries. Failing tests."
+        exit 1
+      fi;
+      sleep 3
     done;
     echo -en "travis_fold:end:start_meteor\r"
     if [ "$RETRY" -ge 1 ]; then
