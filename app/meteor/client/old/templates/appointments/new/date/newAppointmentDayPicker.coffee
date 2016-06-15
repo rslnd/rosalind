@@ -84,7 +84,7 @@ Template.newAppointmentDayPicker.events
     rel = el.attr('rel')
     if rel is 'asap'
       console.log('asap')
-    else if rel='jump'
+    else if rel is 'jump'
       days = parseInt(el.data('days'))
 
       newDate = moment().add(days, 'days')
