@@ -2,20 +2,20 @@ moment = require 'moment'
 
 module.exports =
   q1: (m) ->
-    start: moment(m).month('Jan').startOf('month')
-    end: moment(m).month('Mar').endOf('month')
+    start: moment(m).month(0).startOf('month')
+    end: moment(m).month(3 - 1).endOf('month')
 
   q2: (m) ->
-    start: moment(m).month('Apr').startOf('month')
-    end: moment(m).month('Jun').endOf('month')
+    start: moment(m).month(4 - 1).startOf('month')
+    end: moment(m).month(6 - 1).endOf('month')
 
   q3: (m) ->
-    start: moment(m).month('Jul').startOf('month')
-    end: moment(m).month('Sep').endOf('month')
+    start: moment(m).month(7 - 1).startOf('month')
+    end: moment(m).month(9 - 1).endOf('month')
 
   q4: (m) ->
-    start: moment(m).month('Oct').startOf('month')
-    end: moment(m).month('Dec').endOf('month')
+    start: moment(m).month(10 - 1).startOf('month')
+    end: moment(m).month(12 - 1).endOf('month')
 
   isQ1: (m) ->
     q1 = @q1(m)
