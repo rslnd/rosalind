@@ -28,10 +28,10 @@ module.exports =
 
   fullNameWithTitle: ->
     if (@profile?.titleAppend and @profile.titlePrepend)
-      @prefix() + @profile.titlePrepend + ' ' + @fullName({ prefix: false })
-      + ', ' + @profile.titleAppend
+      @prefix() + @profile.titlePrepend + ' ' + @fullName({ prefix: false }) +
+        ', ' + @profile.titleAppend
     else if (@profile?.titlePrepend)
-      @prefix() +  @profile.titlePrepend + ' ' + @fullName({ prefix: false })
+      @prefix() + @profile.titlePrepend + ' ' + @fullName({ prefix: false })
     else if (@profile?.titleAppend)
       @prefix() + @fullName() + ', ' + @profile.titleAppend
     else

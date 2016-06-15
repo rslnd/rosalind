@@ -127,7 +127,7 @@
     "doubleNotLevel": "error"
   },
   "space_operators": {
-    "level": "ignore"
+    "level": "error"
   },
   "spacing_after_comma": {
     "level": "error"
