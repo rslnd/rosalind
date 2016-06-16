@@ -17,4 +17,9 @@ Day = new SimpleSchema
     min: 1
     max: 31
 
+  date:
+    type: Date
+    optional: true
+    index: 1
+
 module.exports = { Day }
