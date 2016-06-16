@@ -16,7 +16,8 @@ module.exports =
     year = date.year()
     month = date.month() + 1
     day = date.date() # no typo
-    { year, month, day }
+    date = date.toDate().startOf('day')
+    { year, month, day, date }
 
   # DEPRECATED: use /util/day instead
   zeroIndexMonth: (day) ->
