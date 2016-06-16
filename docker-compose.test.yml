@@ -1,12 +1,3 @@
 meteor:
-  image: quay.io/rosalind/meteor-development:1.3.3-2
-  command: meteor
-  restart: 'no'
-  ports:
-    - '3000:3000'
-  volumes:
-    - ./app/meteor:/app
-    - ./build:/build
   environment:
-    - NODE_ENV=development
     - 'METEOR_SETTINGS="{ test: true }"'

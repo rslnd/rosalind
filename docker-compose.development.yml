@@ -1,15 +1,5 @@
 meteor:
-  image: quay.io/rosalind/meteor-development:1.3.3-2
-  command: meteor
   restart: on-failure:10
-  ports:
-    - '3000:3000'
-  volumes:
-    - ./app/meteor:/app
-    - ./build:/build
-    - /root/.npm
-  environment:
-    - NODE_ENV=development
 
 kibana:
   image: seeruk/docker-kibana-sense
