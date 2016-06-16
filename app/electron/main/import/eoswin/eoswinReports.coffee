@@ -56,7 +56,8 @@ module.exports =
 
       pattern = path.join(dataPath, 'ARZTSTAT*.adt')
       glob pattern, (err, files) ->
-        return if files.length is 0
+        return logger.error("[Import] EoswinReports: Error #{err}") if err
+        return logger.error("[Import] EoswinReports: Glob empty: #{pattern}") if files.length is 0
 
         files = files.sort(naturalSort)
         files = files.reverse()
