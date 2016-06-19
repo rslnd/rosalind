@@ -6,6 +6,8 @@ logger = require './logger'
 manifest = require './manifest'
 shortcuts = require './shortcuts'
 
+updateDownloaded = false
+
 module.exports =
   handleStartupEvent: ->
     return unless process.platform is 'win32'
@@ -61,9 +63,13 @@ module.exports =
       logger.info('[Updater] No update')
 
     autoUpdater.on 'update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateURL) ->
-      logger.info('[Updater] New update downloaded')
-      logger.info('[Updater]', { event, releaseNotes, releaseName, releaseDate, updateURL })
+      logger.info('[Updater] New update downloaded', { event, releaseNotes, releaseName, releaseDate, updateURL })
+      updateDownloaded = true
 
+  quitAndInstall: ->
+    if updateDownloaded
+      logger.info('[Updater] About to quit and install downloaded update')
+      autoUpdater.quitAndInstall()
 
   check: ->
     logger.info('[Updater] Checking for updates')
