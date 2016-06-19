@@ -2,6 +2,9 @@ electron = require 'app'
 updater = require './updater'
 window = require './window'
 logger = require './logger'
+
+logger.start()
+
 settings = require './settings'
 cli = require './cli'
 authentication = require './authentication'
@@ -13,8 +16,6 @@ mainWindow = null
 bdtWatcher = null
 
 start = ->
-  logger.start()
-
   return electron.quit() if updater.handleStartupEvent()
   return electron.quit() if cli.handleStartupEvent(focus)
 
