@@ -33,6 +33,7 @@ start = ->
     setTimeout(updater.check, 15 * 1000)
 
   electron.on 'window-all-closed', ->
+    updater.quitAndInstall()
     importers.stop()
     electron.quit()
 
