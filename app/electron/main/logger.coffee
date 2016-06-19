@@ -1,7 +1,9 @@
+os = require 'os'
+path = require 'path'
+url = require 'url'
 _ = require 'lodash'
 winston = require 'winston'
 require 'winston-papertrail'
-path = require 'path'
 electron = require 'app'
 { ipcMain } = require 'electron'
 
@@ -19,8 +21,18 @@ module.exports =
     if '@@CI'.indexOf('@@') is -1
       host = '@@PAPERTRAIL_URL'.split(':')[0]
       port = parseInt('@@PAPERTRAIL_URL'.split(':')[1])
-      winston.info('[Log] Enabling papertrail log transport', { host, port })
-      winston.add(winston.transports.Papertrail, { host, port })
+
+      try
+        settings = require './settings'
+        customerHostname = url.parse(settings).hostname
+      catch e
+        winston.error('[Log] Could not parse customer hostname for centralized logging, falling back to "development"', e)
+        customerHostname = 'development'
+
+      hostname = [os.hostname(), customerHostname].join('.')
+      program = [ os.platform(), os.arch(), 'rosalind', electron.getVersion() ].join(' ')
+      winston.info('[Log] Enabling papertrail log transport', { program, hostname })
+      winston.add(winston.transports.Papertrail, { host, port, program, hostname })
 
     winston.info('[Log] App launched')
     winston.info('[Log] App version: ', electron.getVersion())

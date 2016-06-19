@@ -18,7 +18,7 @@ editSettings = ->
 settings = null
 
 defaultSettings =
-  url: 'https://CHANGE-THIS-URL.rslnd.com'
+  url: 'http://0.0.0.0:3000'
   updateUrl: 'https://update.rslnd.com'
   customer:
     name: 'Rosalind'
