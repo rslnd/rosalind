@@ -1,8 +1,9 @@
 _ = require 'lodash'
-winston = require('winston')
-path = require('path')
-electron = require('app')
-ipc = require('electron').ipcMain
+winston = require 'winston'
+require 'winston-papertrail'
+path = require 'path'
+electron = require 'app'
+{ ipcMain } = require 'electron'
 
 module.exports =
   start: ->
@@ -14,6 +15,13 @@ module.exports =
       maxFiles: 1
       eol: '\r\n'
 
+    # This section is set by Grunt on CI
+    if '@@CI'.indexOf('@@') is -1
+      host = '@@PAPERTRAIL_URL'.split(':')[0]
+      port = parseInt('@@PAPERTRAIL_URL'.split(':')[1])
+      winston.info('[Log] Enabling papertrail log transport', { host, port })
+      winston.add(winston.transports.Papertrail, { host, port })
+
     winston.info('[Log] App launched')
     winston.info('[Log] App version: ', electron.getVersion())
     winston.info('[Log] Command line arguments: ', process.argv)
@@ -24,7 +32,7 @@ module.exports =
     electron.on 'quit', ->
       winston.info('[Log] App quit')
 
-    ipc.on 'log', (e, err) ->
+    ipcMain.on 'log', (e, err) ->
       winston.log(err.level, err.message, err.payload)
 
   ready: (log) ->

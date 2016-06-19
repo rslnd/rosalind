@@ -23,6 +23,7 @@
     "grunt-electron-installer": "^2.0.0",
     "grunt-rename": "^0.1.4",
     "grunt-shell": "^1.1.2",
+    "grunt-string-replace": "^1.2.1",
     "shelljs": "^0.6.0"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
     "throttled-request": "^0.1.1",
     "windows-shortcuts-appid": "^0.3.2",
     "winston": "^2.1.1",
+    "winston-papertrail": "^1.0.2",
     "xdt": "^0.1.1"
   },
   "scripts": {
