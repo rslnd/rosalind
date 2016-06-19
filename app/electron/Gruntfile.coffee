@@ -9,6 +9,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-electron-installer')
   grunt.loadNpmTasks('grunt-electron')
   grunt.loadNpmTasks('grunt-shell')
+  grunt.loadNpmTasks('grunt-string-replace')
 
   packageJSON = grunt.file.readJSON('package.json')
 
@@ -112,6 +113,21 @@ module.exports = (grunt) ->
         src: 'build/installer/Rosalind-win32-ia32/RosalindSetup.exe'
         dest: 'build/installer/Rosalind-win32-ia32/RosalindSetup-win-v<%= pkg.version %>.exe'
 
+    'string-replace':
+      env:
+        files:
+          'build/javascript/main/logger.js': 'build/javascript/main/logger.js'
+        options:
+          replacements: [
+            {} =
+              pattern: /\@\@CI/ig
+              replacement: process.env.CI or false
+
+            {} =
+              pattern: /\@\@PAPERTRAIL_URL/ig
+              replacement: process.env.PAPERTRAIL_URL
+          ]
+
     shell:
       tag:
         command: options.tagCommand()
@@ -134,5 +150,5 @@ module.exports = (grunt) ->
 
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
-  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'electron:package', 'create-windows-installer', 'rename:installerExe', ])
+  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'string-replace:env', 'electron:package', 'create-windows-installer', 'rename:installerExe', ])
   grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt'])
