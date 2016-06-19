@@ -30,7 +30,7 @@ module.exports =
         customerHostname = 'development'
 
       hostname = [os.hostname(), customerHostname].join('.')
-      program = [ os.platform(), os.arch(), 'rosalind', electron.getVersion() ].join(' ')
+      program = [ [ 'rosalind', os.platform(), os.arch() ].join('-'), electron.getVersion() ].join('/')
       winston.info('[Log] Enabling papertrail log transport', { program, hostname })
       winston.add(winston.transports.Papertrail, { host, port, program, hostname })
 
