@@ -24,7 +24,7 @@ module.exports =
 
       try
         settings = require './settings'
-        customerHostname = url.parse(settings).hostname
+        customerHostname = url.parse(settings.url).hostname
       catch e
         winston.error('[Log] Could not parse customer hostname for centralized logging, falling back to "development"', e)
         customerHostname = 'development'
