@@ -1,12 +1,10 @@
+{ FlowRouter } = require 'meteor/kadira:flow-router'
+{ BlazeLayout } = require 'meteor/kadira:blaze-layout'
+
 module.exports = ->
   appointments = FlowRouter.group
     name: 'appointments'
     prefix: '/appointments'
-
-  appointments.route '/',
-    name: 'appointments.thisCalendar'
-    action: ->
-      BlazeLayout.render('layout', main: 'appointmentsCalendar')
 
   appointments.route '/open',
     name: 'appointments.thisOpen'
@@ -23,7 +21,12 @@ module.exports = ->
     action: ->
       BlazeLayout.render('layout', main: 'newAppointment')
 
-  appointments.route '/:status',
-    name: 'appointments.thisOpen'
+  appointments.route '/:date',
+    name: 'appointments.this'
     action: ->
-      BlazeLayout.render('layout', main: 'appointmentsCards')
+      BlazeLayout.render('layout', main: 'appointments')
+
+  appointments.route '/',
+    name: 'appointments.this'
+    action: ->
+      BlazeLayout.render('layout', main: 'appointments')

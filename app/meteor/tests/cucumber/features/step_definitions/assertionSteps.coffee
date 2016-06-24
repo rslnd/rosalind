@@ -1,4 +1,4 @@
-moment = require('moment')
+moment = require 'moment'
 
 module.exports = ->
   @Then /^I should see '([^']*)'$/, (string) ->
