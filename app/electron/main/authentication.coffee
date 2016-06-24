@@ -1,12 +1,12 @@
-logger = require('./logger')
-ipc = require('electron').ipcMain
+logger = require './logger'
+{ ipcMain } = require 'electron'
 
 unless @Users
   @Users =
     start: (@options) ->
-      ipc.on('users/onLogin', (e, x) => @onLogin(e, x))
-      ipc.on('users/onLogout', (e, x) => @onLogout(e, x))
-      ipc.on('users/getToken', (e, x) => @getToken(e, x))
+      ipcMain.on('users/onLogin', (e, x) => @onLogin(e, x))
+      ipcMain.on('users/onLogout', (e, x) => @onLogout(e, x))
+      ipcMain.on('users/getToken', (e, x) => @getToken(e, x))
 
     options: {}
     currentUser: null

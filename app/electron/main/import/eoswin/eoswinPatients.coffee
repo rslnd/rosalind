@@ -1,8 +1,8 @@
-logger = require('../../logger')
-settings = require('../../settings')
-uploadStream = require('../../uploadStream')
-ipc = require('electron').ipcMain
-path = require('path')
+path = require 'path'
+{ ipcMain } = require 'electron'
+logger = require '../../logger'
+settings = require '../../settings'
+uploadStream = require '../../uploadStream'
 
 module.exports =
   start: ->
@@ -10,7 +10,7 @@ module.exports =
 
     logger.info('[Import] EoswinPatients: Enabled')
 
-    ipc.on('import/eoswin/patients', @import)
+    ipcMain.on('import/eoswin/patients', @import)
 
   import: ->
     unless settings.import.eoswin.modules.patients

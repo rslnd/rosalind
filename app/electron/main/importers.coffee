@@ -1,9 +1,9 @@
 module.exports =
-  bdt: require('./import/bdt')
-  terminiko: require('./import/terminiko')
+  bdt: require './import/bdt'
+  terminiko: require './import/terminiko'
   eoswin:
-    patients: require('./import/eoswin/eoswinPatients')
-    reports: require('./import/eoswin/eoswinReports')
+    patients: require './import/eoswin/eoswinPatients'
+    reports: require './import/eoswin/eoswinReports'
 
   instances: {}
 

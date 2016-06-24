@@ -1,5 +1,5 @@
-electron = require('app')
-logger = require('./logger')
+electron = require 'app'
+logger = require './logger'
 
 module.exports =
   handleStartupEvent: (callback) ->

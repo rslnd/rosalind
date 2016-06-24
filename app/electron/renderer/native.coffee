@@ -1,33 +1,33 @@
 console.log('[Electron Native] Enabling native bindings')
-try
-  require('electron-cookies')
+{ ipcRenderer } = require 'electron'
 
-  ipc = require('electron').ipcRenderer
+try
+  require 'electron-cookies'
 
   window.native =
     electron: process.versions.electron
     settings: null
-    editSettings: -> ipc.send('settings/edit')
-    log: (options) -> ipc.send('log', options)
-    ipc: ipc
+    editSettings: -> ipcRenderer.send('settings/edit')
+    log: (options) -> ipcRenderer.send('log', options)
+    ipc: ipcRenderer
     users:
       currentUser: null
-      onLogin: (u) -> ipc.send('users/onLogin', u)
-      onLogout: (u) -> ipc.send('users/onLogout', u)
-      getToken: (t) -> ipc.send('users/getToken', t)
-    print: (options) -> ipc.send('window/print', options)
+      onLogin: (u) -> ipcRenderer.send('users/onLogin', u)
+      onLogout: (u) -> ipcRenderer.send('users/onLogout', u)
+      getToken: (t) -> ipcRenderer.send('users/getToken', t)
+    print: (options) -> ipcRenderer.send('window/print', options)
     import:
-      terminiko: -> ipc.send('import/terminiko')
+      terminiko: -> ipcRenderer.send('import/terminiko')
       eoswin:
-        patients: -> ipc.send('import/eoswin/patients')
-        reports: (options) -> ipc.send('import/eoswin/reports', options)
+        patients: -> ipcRenderer.send('import/eoswin/patients')
+        reports: (options) -> ipcRenderer.send('import/eoswin/reports', options)
 
-  require('./settings')
+  require './settings'
 
 catch e
   message = '[Electron Native] Failed to load native bindings'
   console.error(message, e)
-  require('electron').ipcRenderer.send 'log',
+  ipcRenderer.send 'log',
     level: 'error'
     message: message
     payload:

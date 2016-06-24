@@ -1,4 +1,4 @@
-_ = require('lodash')
+_ = require 'lodash'
 
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')

@@ -1,6 +1,6 @@
-logger = require('../logger')
-settings = require('../settings')
-Xdt = require('xdt')
+logger = require '../logger'
+settings = require '../settings'
+Xdt = require 'xdt'
 
 module.exports =
   watch: (options) ->

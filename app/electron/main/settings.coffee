@@ -3,7 +3,7 @@ path = require 'path'
 childProcess = require 'child_process'
 _ = require 'lodash'
 electron = require 'app'
-ipc = require('electron').ipcMain
+{ ipcMain } = require 'electron'
 logger = require './logger'
 
 settingsPath = path.join(electron.getPath('userData'), 'RosalindSettings.json')
@@ -60,11 +60,11 @@ settings.settingsPath = settingsPath
 logger.info('[Settings] The main entry point is', settings.url)
 logger.info('[Settings]', settings)
 
-ipc.on 'settings', (e) ->
+ipcMain.on 'settings', (e) ->
   logger.info('[Settings] Requested settings via ipc')
   e.sender.send('settings', settings)
 
-ipc.on 'settings/edit', (e) ->
+ipcMain.on 'settings/edit', (e) ->
   logger.info('[Settings] Requested settings edit via ipc')
   editSettings()
 

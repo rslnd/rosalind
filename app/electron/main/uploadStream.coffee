@@ -1,11 +1,10 @@
-_ = require('lodash')
-logger = require('./logger')
-settings = require('./settings')
-authentication = require('./authentication')
-ipc = require('electron').ipcMain
-fs = require('fs')
-request = require('request')
-Bottleneck = require('bottleneck')
+_ = require 'lodash'
+logger = require './logger'
+settings = require './settings'
+authentication = require './authentication'
+fs = require 'fs'
+request = require 'request'
+Bottleneck = require 'bottleneck'
 
 rateLimiter = new Bottleneck(1, 60)
 
