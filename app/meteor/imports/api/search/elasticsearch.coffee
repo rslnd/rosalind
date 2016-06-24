@@ -1,4 +1,4 @@
-es = require('elasticsearch')
+es = require 'elasticsearch'
 
 esOptions =
   apiVersion: '2.2'

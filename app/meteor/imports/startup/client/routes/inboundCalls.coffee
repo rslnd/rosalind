@@ -1,3 +1,6 @@
+{ FlowRouter } = require 'meteor/kadira:flow-router'
+{ BlazeLayout } = require 'meteor/kadira:blaze-layout'
+
 module.exports = ->
   inboundCalls = FlowRouter.group
     prefix: '/inboundCalls'

@@ -3,8 +3,8 @@ helpers = require './helpers'
 methods = require './methods'
 Schema = require './schema'
 
-Patients = require('/imports/api/patients')
-Users = require('/imports/api/users')
+Patients = require '/imports/api/patients'
+Users = require '/imports/api/users'
 
 
 Appointments = new Mongo.Collection 'appointments',
