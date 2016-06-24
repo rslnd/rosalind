@@ -1,7 +1,7 @@
-ipc = require('electron').ipcRenderer
+{ ipcRenderer } = require 'electron'
 
-ipc.on 'settings', (e, settings) ->
+ipcRenderer.on 'settings', (e, settings) ->
   window.native.settings = settings
   console.log('[Electron Native] Settings', window.native.settings)
 
-ipc.send('settings')
+ipcRenderer.send('settings')

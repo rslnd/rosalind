@@ -1,11 +1,11 @@
-logger = require('../../logger')
-settings = require('../../settings')
-uploadStream = require('../../uploadStream')
-ipc = require('electron').ipcMain
-glob = require('glob')
-path = require('path')
-Adt = require('node_adt')
-naturalSort = require('javascript-natural-sort')
+glob = require 'glob'
+path = require 'path'
+naturalSort = require 'javascript-natural-sort'
+Adt = require 'node_adt'
+logger = require '../../logger'
+settings = require '../../settings'
+uploadStream = require '../../uploadStream'
+{ ipcMain } = require 'electron'
 
 parseMeta = (metaPath, callback) ->
   meta = {}
@@ -36,7 +36,7 @@ module.exports =
   start: ->
     return unless settings.import.eoswin.modules.reports
     logger.info('[Import] EoswinReports: Enabled')
-    ipc.on('import/eoswin/reports', (e, options) => @import(options))
+    ipcMain.on('import/eoswin/reports', (e, options) => @import(options))
 
   import: (options = {}) ->
     unless settings.import.eoswin.modules.reports

@@ -2,14 +2,14 @@ fs = require 'fs'
 path = require 'path'
 open = require 'open'
 temp = require 'temp'
-ipc = require('electron').ipcMain
+{ ipcMain } = require 'electron'
 logger = require './logger'
 settings = require './settings'
 
 module.exports =
   start: (options) ->
     temp.track()
-    ipc.on 'window/print', (e, printOptions) =>
+    ipcMain.on 'window/print', (e, printOptions) =>
       options.title = printOptions.title
       console.log(options.title)
       @print(options)
