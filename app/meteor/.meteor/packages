@@ -20,6 +20,10 @@ standard-minifiers
 reactive-dict
 reactive-var
 
+# React
+react-meteor-data
+react-template-helper
+
 # Routing
 kadira:flow-router
 kadira:blaze-layout

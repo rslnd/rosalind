@@ -123,6 +123,8 @@ raix:onetimeout@1.0.4
 raix:stubfence@1.0.3
 random@1.0.10
 rate-limit@1.0.5
+react-meteor-data@0.2.9
+react-template-helper@0.2.9
 reactive-dict@1.1.8
 reactive-var@1.0.10
 reload@1.1.10
