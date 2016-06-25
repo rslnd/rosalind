@@ -1,5 +1,10 @@
 { InboundCalls } = require '/imports/api/inboundCalls'
 { Comments } = require '/imports/api/comments'
+{ CommentsContainer } = require '/imports/ui/comments'
+
+Template.inboundCall.helpers
+  CommentsContainer: ->
+    CommentsContainer
 
 Template.inboundCall.events
   'click .resolve': ->

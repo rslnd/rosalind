@@ -14,7 +14,8 @@
     | {{> humanCommentCount }}
     | {{> stamps fields='removed,created' doc=this}}
 
-  +comments
+  div
+    +React(component=CommentsContainer docId=_id)
 
   .box-footer
     unless removedAt
