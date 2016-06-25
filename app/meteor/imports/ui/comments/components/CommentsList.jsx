@@ -1,6 +1,7 @@
 import React from 'react'
-import { RelativeTime } from '/imports/ui/helpers/RelativeTime'
+import { Avatar } from '/imports/ui/users/components/Avatar'
 import { UserHelper } from '/imports/ui/users/components/UserHelper'
+import { RelativeTime } from '/imports/ui/helpers/RelativeTime'
 
 const CommentsList = ({ comments }) => (
   <div>{ comments.length != 0 ?
@@ -8,6 +9,7 @@ const CommentsList = ({ comments }) => (
       { comments.map((comment) => (
 
         <div key={ comment._id } className='box-comment'>
+          <div><Avatar _id={ comment.createdBy } /></div>
           <div className='comment-text'>
             <span className='username'>
               <span><UserHelper _id={ comment.createdBy } helper='fullName' /></span>
