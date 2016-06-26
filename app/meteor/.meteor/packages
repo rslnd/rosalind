@@ -23,6 +23,7 @@ reactive-var
 # React
 react-meteor-data
 react-template-helper
+jhartma:cjsx
 
 # Routing
 kadira:flow-router
