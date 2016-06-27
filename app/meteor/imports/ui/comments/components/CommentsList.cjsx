@@ -6,10 +6,10 @@ React = require 'react'
 class Comment extends React.Component
   render: ->
     <div className='box-comment'>
-      <div><Avatar _id=@props.comment.createdBy /></div>
+      <div><Avatar userId=@props.comment.createdBy /></div>
       <div className='comment-text'>
         <span className='username'>
-          <span><UserHelper _id=@props.comment.createdBy helper='fullName' /></span>
+          <span><UserHelper userId=@props.comment.createdBy helper='fullName' /></span>
           <span className='text-muted pull-right'><RelativeTime time=@props.comment.createdAt /></span>
         </span>
         <p className='enable-select break-word'>{ @props.comment.body }</p>
