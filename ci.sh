@@ -119,7 +119,7 @@ case "$1" in
     echo -en "travis_fold:end:pull\r"
 
     echo -en "travis_fold:start:dependencies\r"
-    retry docker-compose $YML run --no-deps meteor meteor npm install -- --progress=false --depth=0
+    retry docker-compose $YML run --no-deps meteor meteor npm install --progress=false --depth=0
     echo -en "travis_fold:end:dependencies\r"
 
     echo -en "travis_fold:start:build\r"
