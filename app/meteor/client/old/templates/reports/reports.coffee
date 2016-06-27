@@ -1,4 +1,5 @@
 moment = require 'moment'
+omit = require 'lodash/omit'
 { ReactiveDict } = require 'meteor/reactive-dict'
 { SubsManager } = require 'meteor/meteorhacks:subs-manager'
 Time = require '/imports/util/time'
@@ -6,7 +7,7 @@ Time = require '/imports/util/time'
 
 
 Template.reports.currentView = new ReactiveDict
-Template.reports.subscriptions = new SubsManager()
+ReportsManager = new SubsManager()
 
 Template.reports.currentView.watchPathChange = ->
   date = FlowRouter.current().params?.date
@@ -33,7 +34,7 @@ Template.reports.onCreated ->
   @autorun ->
     date = Template.reports.currentView.get('date')
 
-    Template.reports.subscriptions.subscribe('reports', { date })
+    ReportsManager.subscribe('reports', { date })
 
     date = moment(date).format('YYYY-MM-DD')
     FlowRouter.go('/reports/' + date)
@@ -46,4 +47,6 @@ Template.reports.helpers
 
   currentReport: ->
     if date = Template.reports.currentView.get('date')
-      Reports.findOne(day: Time.dateToDay(date))
+      day = Time.dateToDay(date)
+      day = omit(day, 'date')
+      Reports.findOne({ day })

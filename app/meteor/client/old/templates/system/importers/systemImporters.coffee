@@ -3,6 +3,7 @@
 { ImportFiles } = require '/imports/api/importers'
 
 Template.systemImporters.onCreated ->
+  @subscribe('import.jobs')
   @currentUpload = new ReactiveVar(false)
 
 Template.systemImporters.helpers

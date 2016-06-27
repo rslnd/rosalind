@@ -67,6 +67,19 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
   vertical-align: top !important;
 }
 
+.fc-now-indicator {
+  border: 1px solid #68a2ae;
+  z-index: 0 !important;
+}
+
+.fc-axis.fc-time {
+  color: #727272;
+}
+
+.box-body .fc {
+  margin-top: 0 !important
+}
+
 /* Inherits background for each event from Schedule. */
 .fc-event .fc-bg {
   z-index: 1 !important;

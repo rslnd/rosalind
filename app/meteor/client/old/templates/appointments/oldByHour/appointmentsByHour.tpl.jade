@@ -1,0 +1,24 @@
+.content-header
+  h1 {{ title }}
+    small
+      | {{ currentDate }}
+
+each byHour
+  if hasAppointments
+    .content-header
+      h1 {{ start }}
+        small {{ appointmentsCount }} {{_ 'appointments.this'}}
+
+    .content
+      .row
+        each byAssignee
+          .col-md-4
+            .box.box-default
+              .box-header.with-border
+                if assignee
+                  | {{ getFullNameWithTitle assignee }}
+                else
+                  i.text-muted {{_ 'appointments.unassigned' }}
+
+              .box-content
+                +appointmentsList
