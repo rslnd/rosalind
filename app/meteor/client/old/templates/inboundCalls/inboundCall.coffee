@@ -13,9 +13,7 @@ Template.inboundCall.events
   'click .unresolve': (e) ->
     InboundCalls.restore(@_id)
 
-    pendingComment = $(e.target).parents('.modal').find('.add-comment-body').val()
-    if (pendingComment.length > 0)
-      Comments.insert({ body: pendingComment, docId: @_id })
+    $('.modal').find('form [type="submit"]').click()
 
     Modal.hide()
 
