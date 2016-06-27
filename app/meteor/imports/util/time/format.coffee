@@ -1,5 +1,6 @@
 moment = require 'moment'
 { TAPi18n } = require 'meteor/tap:i18n'
+quarter = require './quarter'
 
 module.exports =
   relativeTimeString: (date) ->
@@ -16,3 +17,18 @@ module.exports =
 
   dateWeekday: (date) ->
     moment(date).format(TAPi18n.__('time.dateFormatWeekday'))
+
+  weekOfYear: (date) ->
+    weekOfYear = moment(date).format('W')
+    [TAPi18n.__('ui.weekOfYear'), weekOfYear].join(' ')
+
+  specialDay: (date) ->
+    now = moment()
+    if now.isSame(date, 'day')
+      TAPi18n.__('time.today')
+    else if now.isSame(moment(date).subtract(1, 'day'), 'day')
+      TAPi18n.__('time.tomorrow')
+    else if now.isSame(moment(date).subtract(1, 'week'), 'day')
+      TAPi18n.__('time.todayIn1Week')
+    else if quarter.isNext(date)
+      TAPi18n.__('time.nextQuarter')

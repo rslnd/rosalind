@@ -1,36 +1,46 @@
 moment = require 'moment'
-{ TAPi18n } = require 'meteor/tap:i18n'
+{ ReactiveDict } = require 'meteor/reactive-dict'
+{ SubsManager } = require 'meteor/meteorhacks:subs-manager'
 { Appointments } = require '/imports/api/appointments'
-{ Users } = require '/imports/api/users'
-Time = require '/imports/util/time'
+
+Template.appointments.currentView = new ReactiveDict
+AppointmentsManager = new SubsManager()
+
+Template.appointments.currentView.watchPathChange = ->
+  date = FlowRouter.current().params?.date
+  if date then date = moment(date).toDate() else date = new Date()
+  @set('date', date)
+
+Template.appointments.currentView.today = ->
+  @set('date', new Date())
+
+Template.appointments.currentView.previous = ->
+  console.log('prev')
+  previous = moment(@get('date')).subtract(1, 'day').toDate()
+  @set('date', previous)
+
+Template.appointments.currentView.next = ->
+  console.log('next')
+  next = moment(@get('date')).add(1, 'day').toDate()
+  @set('date', next)
 
 Template.appointments.onCreated ->
-  @autorun =>
-    @subscribe('appointments')
+  Template.appointments.ready = new ReactiveVar()
+  Template.appointments.currentView.watchPathChange()
+
+  @autorun ->
+    date = Template.appointments.currentView.get('date')
+    Template.appointments.ready.set(false)
+    handle = AppointmentsManager.subscribe('appointments', { date })
+    Template.appointments.ready.set(handle.ready())
+
+    date = moment(date).format('YYYY-MM-DD')
+    FlowRouter.go('/appointments/' + date)
+
 
 Template.appointments.helpers
-  byHour: ->
-    [8..22].map (hour) ->
-      time = moment().hour(hour)
-      start = Time.time(time.startOf('hour'))
-      appointments = Appointments.methods.findAll(time, 'hour')
-      appointmentsCount = appointments.count()
-      hasAppointments = appointmentsCount > 0
-      return { start, time, appointments, appointmentsCount, hasAppointments }
+  date: ->
+    Template.appointments.currentView.get('date')
 
-  byAssignee: ->
-    object = _.groupBy(@appointments.fetch(), (a) -> a?.assigneeId)
-    _.map object, (appointments, assigneeId) ->
-      if assigneeId
-        { appointments, assignee: Users.findOne(assigneeId) }
-      else
-        { appointments }
-
-  title: ->
-    FlowRouter.watchPathChange()
-    status = FlowRouter.current().params?.status or ''
-    status = s.capitalize(status)
-    return TAPi18n.__("appointments.this#{status}")
-
-  currentDate: ->
-    moment().format(TAPi18n.__('time.dateFormat'))
+  appointments: ->
+    Appointments.find({})

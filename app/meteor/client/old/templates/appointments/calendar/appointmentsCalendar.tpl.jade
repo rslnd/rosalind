@@ -1,5 +1,18 @@
-+contentHeader(title='appointments.thisCalendar')
 .content
   .box
     .box-body.no-padding
+      .content-header.appointments-calendar-header
+        h1
+          | {{ selectedDay }}
+          small {{ selectedWeek }}
+          if specialDay
+            span.label.label-default {{ specialDay }}
+
+        .breadcrumb
+          +appointmentActions
+
+      +each appointments
+        p
+          pre {{ stringify this }}
+
       #appointments-calendar

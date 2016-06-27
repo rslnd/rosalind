@@ -7,13 +7,13 @@
         label.sr-only(for='nameField') {{_ 'login.name'}}
         .col-sm-12
           +afFieldInput(name='name' id='nameField' class='input-lg' placeholder='schemaLabel')
-          if afFieldIsInvalid name='name'
+          +if afFieldIsInvalid name='name'
             span.help-block {{afFieldMessage name='name'}}
       .form-group(class='{{#if afFieldIsInvalid name="password"}}has-error{{/if}}')
         label.sr-only(for='passwordField') {{_ 'login.password'}}
         .col-sm-12
           +afFieldInput(name='password' id='passwordField' type='password' class='input-lg' placeholder='schemaLabel')
-          if afFieldIsInvalid name='password'
+          +if afFieldIsInvalid name='password'
             span.help-block {{afFieldMessage name='password'}}
       .form-group.no-mb
         .col-sm-12

@@ -1,35 +1,57 @@
 _ = require 'lodash'
+{ dateWeekday, weekOfYear, specialDay } = require '/imports/util/time/format'
 { Appointments } = require '/imports/api/appointments'
 { Patients } = require '/imports/api/patients'
 { Users } = require '/imports/api/users'
 
-AppointmentsManager = new SubsManager()
-
-Template.appointmentsCalendar.onCreated ->
-  @ready = new ReactiveVar()
-  @autorun =>
-    handle = AppointmentsManager.subscribe('appointments')
-    @ready.set(handle.ready())
-
 renderCalendar = ->
-  resources = _.map Appointments.find({}).fetch(), (a) ->
-    {
-      id: a?.assigneeId?.toString()
-      title: Users.findOne({ _id: a?.assigneeId })?.fullNameWithTitle()
-    }
-  resources = _.sortBy(resources, 'title')
+  resources = _.chain(Appointments.find({}).fetch())
+    .map (a) -> a.assigneeId
+    .uniq()
+    .map (_id) ->
+      if _id
+        user = Users.findOne({ _id })
+        {
+          id: user._id
+          title: user.fullNameWithTitle()
+          lastName: user.profile.lastName
+        }
+      else
+        {
+          id: 'unassigned'
+          title: 'Unassigned'
+        }
+    .sortBy 'lastName'
+    .value()
+
+  console.log('resources', resources)
 
   $('#appointments-calendar').fullCalendar
     height: 'auto'
     firstDay: 1
     hiddenDays: [ 0 ]
     slotDuration: '00:05:00'
+    slotWidth: 30
     minTime: '06:00:00'
     maxTime: '22:00:00'
+    displayEventTime: false
+    header: false
     lang: 'de'
     defaultView: 'agendaDay'
     resourceAreaWidth: '0px'
     allDaySlot: true
+    nowIndicator: true
+    viewRender: ->
+      topBarHeight = $('.navbar-static-top').height()
+      headerHeight = $('.appointments-calendar-header').outerHeight()
+
+      $('.appointments-calendar-header').sticky
+        topSpacing: topBarHeight
+        zIndex: 2000
+      $('.fc-head').sticky
+        topSpacing: topBarHeight + headerHeight
+        zIndex: 3000
+
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     resources: resources
     events: (start, end, timezone, callback) ->
@@ -54,11 +76,29 @@ renderCalendar = ->
       Appointments.methods.updateEvent(event._id, event)
 
 Template.appointmentsCalendar.onRendered ->
-  @autorun =>
-    console.log('[Appointments] Rendered calendar, ready', @ready.get())
-    renderCalendar() if @ready.get()
+  @autorun ->
+    console.log('[Appointments] Rendered calendar, ready', Template.appointments.ready.get())
+    renderCalendar() if Template.appointments.ready.get()
 
-  @autorun =>
+  @autorun ->
     Appointments.find({}).fetch()
     console.log('[Appointments] Autorun refetch events')
-    $('#appointments-calendar').fullCalendar('refetchEvents') if @ready.get()
+    $('#appointments-calendar').fullCalendar('refetchEvents') if Template.appointments.ready.get()
+
+
+  @autorun ->
+    date = Template.appointments.currentView.get('date')
+    $('#appointments-calendar').fullCalendar('gotoDate', date)
+
+Template.appointmentsCalendar.helpers
+  selectedDay: ->
+    date = Template.appointments.currentView.get('date')
+    dateWeekday(date)
+
+  selectedWeek: ->
+    date = Template.appointments.currentView.get('date')
+    weekOfYear(date)
+
+  specialDay: ->
+    date = Template.appointments.currentView.get('date')
+    specialDay(date)

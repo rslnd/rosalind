@@ -9,7 +9,7 @@ Appointments = require './collection'
 module.exports = new Tabular.Table
   name: 'ResolvedAppointments'
   collection: Appointments
-  pub: 'appointments'
+  pub: 'appointmentsTable'
   columns: [
     { data: 'start', title: 'Termin', render: (val) -> moment(val).calendar() }
     { data: 'note', title: 'Notiz' }
