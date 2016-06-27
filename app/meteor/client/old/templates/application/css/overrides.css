@@ -216,3 +216,7 @@ body {
   cursor: inherit;
   display: block;
 }
+
+.no-border-radius {
+  border-radius: 0 !important;
+}

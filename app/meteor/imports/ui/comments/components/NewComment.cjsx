@@ -23,14 +23,19 @@ class NewComment extends React.Component
     <div className='box-footer'>
       <form onSubmit={ @handleSubmit }>
         <Avatar />
-        <div className='img-push'>
-          <label className='sr-only' for='add-comment-{ @props.docId }'>
+        <div className='img-push input-group input-group-sm'>
+          <label className='sr-only'>
             { TAPi18n.__('ui.press_enter_to_post_comment') }
           </label>
           <input type='text' className='form-control input-sm'
             placeholder=TAPi18n.__('ui.press_enter_to_post_comment')
             value={ @state.body }
             onChange={ @handleBodyChange } />
+          <span className='input-group-btn'>
+            <button type='submit' className='btn btn-default btn-flat no-border-radius'>
+              <i className='fa fa-mail-forward text-muted'></i>
+            </button>
+          </span>
         </div>
       </form>
     </div>
