@@ -24,10 +24,12 @@ class NewComment extends React.Component
       <form onSubmit={ @handleSubmit }>
         <Avatar />
         <div className='img-push input-group input-group-sm'>
-          <label className='sr-only'>
+          <label className='sr-only' for={ 'new-comment-' + @props.docId } >
             { TAPi18n.__('ui.press_enter_to_post_comment') }
           </label>
-          <input type='text' className='form-control input-sm'
+          <input type='text'
+            className='form-control input-sm'
+            id={ 'new-comment-' + @props.docId }
             placeholder=TAPi18n.__('ui.press_enter_to_post_comment')
             value={ @state.body }
             onChange={ @handleBodyChange } />
