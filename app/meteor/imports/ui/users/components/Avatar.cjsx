@@ -4,8 +4,8 @@ React = require 'react'
 
 class Avatar extends React.Component
   render: ->
-    if @props._id
-      user = Users.findOne({ _id: @props._id })
+    if @props.userId
+      user = Users.findOne({ _id: @props.userId })
     else
       user = Meteor.user()
 
