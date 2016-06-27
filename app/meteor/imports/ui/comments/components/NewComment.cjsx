@@ -24,7 +24,7 @@ class NewComment extends React.Component
       <form onSubmit={ @handleSubmit }>
         <Avatar />
         <div className='img-push input-group input-group-sm'>
-          <label className='sr-only' for={ 'new-comment-' + @props.docId } >
+          <label className='sr-only' htmlFor={ 'new-comment-' + @props.docId } >
             { TAPi18n.__('ui.press_enter_to_post_comment') }
           </label>
           <input type='text'
