@@ -34,7 +34,7 @@ case "$1" in
     SECONDS=0
     sudo apt-get -y install xvfb oracle-java8-installer &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
-    npm -g install npm@latest-2 &
+    npm -g install npm@$NPM_VERSION &
     wait
     npm set registry https://registry.npmjs.org/
     sudo rm /usr/local/bin/docker-compose
@@ -43,6 +43,7 @@ case "$1" in
     export DISPLAY=:99.0
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py
+    npm install -g npm-install-retry
     echo "[CI] Machine environment setup took $SECONDS seconds"
     ;;
 
@@ -56,10 +57,10 @@ case "$1" in
     echo "[CI] Pulling dependencies"
     echo -en "travis_fold:start:pull_dependencies\r"
     SECONDS=0
-    { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install; } &
-    retry npm install
+    { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install -- --progress=false --depth=0; } &
+    npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
     cd app/meteor/tests/cucumber
-    retry npm install
+    npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
     cd -
     wait
     echo -en "travis_fold:end:pull_dependencies\r"
@@ -118,7 +119,7 @@ case "$1" in
     echo -en "travis_fold:end:pull\r"
 
     echo -en "travis_fold:start:dependencies\r"
-    retry docker-compose $YML run --no-deps meteor meteor npm install
+    retry docker-compose $YML run --no-deps meteor meteor npm install -- --progress=false --depth=0
     echo -en "travis_fold:end:dependencies\r"
 
     echo -en "travis_fold:start:build\r"
