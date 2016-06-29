@@ -1,15 +1,15 @@
-requiredEnv = [
+var requiredEnv = [
   'ROOT_URL',
   'BROWSER',
   'OS',
   'SAUCE_USERNAME',
   'SAUCE_ACCESS_KEY',
   'SAUCE_HOST',
-  'SAUCE_PORT',
+  'SAUCE_PORT'
 ]
 
-requiredEnv.forEach(function(v) {
-  if (! process.env[v]) {
+requiredEnv.forEach(function (v) {
+  if (!process.env[v]) {
     console.error('Please set env variables', requiredEnv)
     console.error('Missing env variable: ' + v)
     process.exit(1)
@@ -18,7 +18,7 @@ requiredEnv.forEach(function(v) {
 
 var browser = {
   name: process.env.BROWSER.split(':')[0],
-  version: process.env.BROWSER.split(':')[1],
+  version: process.env.BROWSER.split(':')[1]
 }
 
 var os = {
@@ -64,7 +64,7 @@ module.exports = {
       name: process.env.SAUCE_NAME,
       build: process.env.BUILD_NUMBER,
       public: true,
-      after: function() {
+      after: function () {
         browser.end()
       }
     },
@@ -74,6 +74,6 @@ module.exports = {
     host: process.env.SAUCE_HOST,
     port: process.env.SAUCE_PORT,
     waitforTimeout: 30000,
-    waitforInterval: 250,
+    waitforInterval: 250
   }
 }

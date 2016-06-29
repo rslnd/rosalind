@@ -1,4 +1,4 @@
-chai = require('chai')
+var chai = require('chai')
 
 chai.use(require('chai-datetime'))
 

@@ -1,8 +1,6 @@
-fs = require('fs')
-path = require('path')
+var path = require('path')
 
 module.exports = function (wallaby) {
-
   process.env.NODE_PATH = process.env.NODE_PATH || ''
   process.env.NODE_PATH += ':' + path.join(wallaby.localProjectDir, 'app/meteor/node_modules')
 
@@ -18,7 +16,7 @@ module.exports = function (wallaby) {
 
     bootstrap: function () {
       path = require('path')
-      helper = path.join(wallaby.localProjectDir, 'app/meteor/tests/mocha/helper')
+      var helper = path.join(wallaby.localProjectDir, 'app/meteor/tests/mocha/helper')
       require(helper)
     },
 
@@ -31,6 +29,5 @@ module.exports = function (wallaby) {
     },
 
     testFramework: 'mocha'
-
   }
 }
