@@ -1,11 +1,14 @@
-@Customer = new ReactiveDict
+moment = require 'moment'
+{ Meteor } = require 'meteor/meteor'
+{ Template } = require 'meteor/templating'
+{ TAPi18n } = require 'meteor/tap:i18n'
+{ FlowRouter } = require 'meteor/kadira:flow-router'
+
 
 Template.layout.onCreated ->
-  $('body').addClass('skin-blue fixed sidebar-mini sidebar-open')
 
   Meteor.call 'customer/get', (e, customer) ->
     console.error(e) if e
-    @Customer.set('name', customer.name)
     document.title = customer.name
 
   @autorun =>

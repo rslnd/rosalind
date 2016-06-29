@@ -1,5 +1,5 @@
 without = require 'lodash/without'
-{ Schedules } = require '/imports/api/schedules'
+{ Schedules } = require 'api/schedules'
 
 Template.scheduleEdit.helpers
   formType: ->

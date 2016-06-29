@@ -1,4 +1,4 @@
-table = require '/imports/api/jobs/table'
+table = require 'api/jobs/table'
 
 Template.systemJobs.helpers
   tableImport: ->

@@ -1,7 +1,7 @@
-{ moment } = require '/imports/util/momentLocale'
-{ dateToDay } = require '/imports/util/time/day'
-{ Schedules } = require '/imports/api/schedules'
-{ Cache } = require '/imports/api/cache'
+{ moment } = require 'util/momentLocale'
+{ dateToDay } = require 'util/time/day'
+{ Schedules } = require 'api/schedules'
+{ Cache } = require 'api/cache'
 
 Template.newAppointmentDayPicker.onRendered ->
   dayPickerOptions =

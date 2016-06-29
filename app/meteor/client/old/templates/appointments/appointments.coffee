@@ -1,7 +1,7 @@
 moment = require 'moment'
 { ReactiveDict } = require 'meteor/reactive-dict'
 { SubsManager } = require 'meteor/meteorhacks:subs-manager'
-{ Appointments } = require '/imports/api/appointments'
+{ Appointments } = require 'api/appointments'
 
 Template.appointments.currentView = new ReactiveDict
 AppointmentsManager = new SubsManager()

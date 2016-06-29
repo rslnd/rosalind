@@ -1,4 +1,4 @@
-{ Create } = require '/imports/api/users/schema/actions'
+{ Create } = require 'api/users/schema/actions'
 
 Template.newUser.helpers
   schema:

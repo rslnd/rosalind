@@ -1,4 +1,4 @@
-{ holidays } = require '/imports/api/schedules/tables'
+{ holidays } = require 'api/schedules/tables'
 
 Template.holidays.helpers
   formTemplate: ->

@@ -1,8 +1,8 @@
 map = require 'lodash/map'
-Time = require '/imports/util/time'
-{ Schedules } = require '/imports/api/schedules'
-{ Users } = require '/imports/api/users'
-{ Groups } = require '/imports/api/groups'
+Time = require 'util/time'
+{ Schedules } = require 'api/schedules'
+{ Users } = require 'api/users'
+{ Groups } = require 'api/groups'
 
 Template.schedulesDefaultEmployeeList.helpers
   employeeGroups: ->

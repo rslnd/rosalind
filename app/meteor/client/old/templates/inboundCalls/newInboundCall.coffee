@@ -1,4 +1,4 @@
-{ InboundCalls } = require '/imports/api/inboundCalls'
+{ InboundCalls } = require 'api/inboundCalls'
 
 Template.newInboundCall.helpers
   collection: ->

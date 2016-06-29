@@ -1,8 +1,8 @@
 moment = require 'moment'
 { Meteor } = require 'meteor/meteor'
 { TAPi18n } = require 'meteor/tap:i18n'
-{ Events } = require '/imports/api/events'
-{ Users } = require '/imports/api/users'
+{ Events } = require 'api/events'
+{ Users } = require 'api/users'
 
 Template.systemEvents.onCreated ->
   @autorun =>

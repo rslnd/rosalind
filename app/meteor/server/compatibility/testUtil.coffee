@@ -12,7 +12,7 @@
     if constantName.match(/\W|\d/)
       throw new SyntaxError 'Constant name must be a valid Javascript name'
 
-    constant = require('/imports/api/' + @camelize(constantName, true))
+    constant = require('api/' + @camelize(constantName, true))
     constant = constant[constantName]
 
     return constant

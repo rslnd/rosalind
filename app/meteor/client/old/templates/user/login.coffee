@@ -1,4 +1,4 @@
-{ Login } = require '/imports/api/users/schema/actions'
+{ Login } = require 'api/users/schema/actions'
 
 Template.login.helpers
   loggingIn: ->

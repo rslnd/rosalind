@@ -1,6 +1,6 @@
 { Mongo } = require 'meteor/mongo'
-{ Patients } = require '/imports/api/patients'
-{ Appointments } = require '/imports/api/appointments'
+{ Patients } = require 'api/patients'
+{ Appointments } = require 'api/appointments'
 
 Template.appointmentsList.helpers
   nameOrNote: ->

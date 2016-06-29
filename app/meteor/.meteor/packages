@@ -1,7 +1,5 @@
 # Core
 es5-shim
-coffeescript
-ecmascript
 meteor-base
 mobile-experience
 mongo
@@ -21,9 +19,11 @@ reactive-dict
 reactive-var
 
 # React
+webpack:webpack
+webpack:react
+webpack:coffeescript
 react-meteor-data
 react-template-helper
-jhartma:cjsx
 
 # Routing
 kadira:flow-router

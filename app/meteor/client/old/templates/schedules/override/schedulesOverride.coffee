@@ -1,4 +1,4 @@
-{ override } = require '/imports/api/schedules/tables'
+{ override } = require 'api/schedules/tables'
 
 Template.schedulesOverride.helpers
   formTemplate: ->

@@ -1,5 +1,5 @@
-{ dateToDay } = require '/imports/util/time/day'
-{ Cache } = require '/imports/api/cache'
+{ dateToDay } = require 'util/time/day'
+{ Cache } = require 'api/cache'
 
 Template.newAppointmentTimePicker.helpers
   hours: ->
