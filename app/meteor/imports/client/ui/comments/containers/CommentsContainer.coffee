@@ -1,6 +1,6 @@
 React = require 'react'
-{ Comments } = require '/imports/api/comments'
-{ CommentsBox } = require '../components/CommentsBox.cjsx'
+{ Comments } = require '/app/imports/api/comments'
+{ CommentsBox } = require '../components/CommentsBox'
 { composeWithTracker } = require 'react-komposer'
 
 composer = (props, onData) ->
