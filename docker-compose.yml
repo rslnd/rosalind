@@ -1,5 +1,5 @@
 meteor:
-  image: quay.io/rosalind/meteor-development:1.3.4
+  image: quay.io/rosalind/meteor-development:1.3.4.1
   command: meteor
   ports:
     - '3000:3000'
