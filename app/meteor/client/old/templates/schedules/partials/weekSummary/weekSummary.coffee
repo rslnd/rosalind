@@ -1,5 +1,5 @@
-Time = require '/imports/util/time'
-{ Schedules } = require '/imports/api/schedules'
+Time = require 'util/time'
+{ Schedules } = require 'api/schedules'
 
 Template.weekSummary.helpers
   weekdaysWithSchedule: ->

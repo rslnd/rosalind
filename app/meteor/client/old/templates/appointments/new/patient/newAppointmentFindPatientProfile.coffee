@@ -1,4 +1,4 @@
-{ Patients } = require '/imports/api/patients'
+{ Patients } = require 'api/patients'
 
 subs = new SubsManager()
 

@@ -1,5 +1,5 @@
-{ Schedules } = require '/imports/api/schedules'
-{ Users } = require '/imports/api/users'
+{ Schedules } = require 'api/schedules'
+{ Users } = require 'api/users'
 
 Template.schedulesDefaultCalendar.onRendered ->
   $('#schedules-default-calendar').fullCalendar

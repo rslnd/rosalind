@@ -1,5 +1,5 @@
 { TAPi18n } = require 'meteor/tap:i18n'
-Time = require '/imports/util/time'
+Time = require 'util/time'
 
 Template.birthdayCake.helpers
   birthdayToday: ->

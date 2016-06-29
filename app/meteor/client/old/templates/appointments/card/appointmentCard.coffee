@@ -1,4 +1,4 @@
-{ Appointments } = require '/imports/api/appointments'
+{ Appointments } = require 'api/appointments'
 
 Template.appointmentCard.events
   'click .admit': ->

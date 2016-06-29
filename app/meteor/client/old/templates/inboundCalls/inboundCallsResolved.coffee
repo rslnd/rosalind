@@ -1,4 +1,4 @@
-table = require '/imports/api/inboundCalls/table'
+table = require 'api/inboundCalls/table'
 
 Template.inboundCallsResolved.helpers
   table: ->

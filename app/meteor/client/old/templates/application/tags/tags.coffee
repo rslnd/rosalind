@@ -1,4 +1,4 @@
-{ Tags } = require '/imports/api/tags'
+{ Tags } = require 'api/tags'
 
 Template.tags.helpers
   findTags: ->

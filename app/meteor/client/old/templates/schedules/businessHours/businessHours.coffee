@@ -1,5 +1,5 @@
-{ Schedules } = require '/imports/api/schedules'
-{ businessHoursOverride } = require '/imports/api/schedules/tables'
+{ Schedules } = require 'api/schedules'
+{ businessHoursOverride } = require 'api/schedules/tables'
 
 Template.businessHours.helpers
   regular: ->

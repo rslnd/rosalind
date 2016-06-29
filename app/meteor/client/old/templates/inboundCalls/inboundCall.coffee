@@ -1,6 +1,6 @@
-{ InboundCalls } = require '/imports/api/inboundCalls'
-{ Comments } = require '/imports/api/comments'
-{ CommentsContainer } = require '/imports/ui/comments'
+{ InboundCalls } = require 'api/inboundCalls'
+{ Comments } = require 'api/comments'
+{ CommentsContainer } = require 'client/ui/comments'
 
 Template.inboundCall.helpers
   CommentsContainer: ->

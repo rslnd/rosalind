@@ -1,8 +1,8 @@
 _ = require 'lodash'
-{ dateWeekday, weekOfYear, specialDay } = require '/imports/util/time/format'
-{ Appointments } = require '/imports/api/appointments'
-{ Patients } = require '/imports/api/patients'
-{ Users } = require '/imports/api/users'
+{ dateWeekday, weekOfYear, specialDay } = require 'util/time/format'
+{ Appointments } = require 'api/appointments'
+{ Patients } = require 'api/patients'
+{ Users } = require 'api/users'
 
 renderCalendar = ->
   resources = _.chain(Appointments.find({}).fetch())

@@ -1,4 +1,4 @@
-table = require '/imports/api/tags/table'
+table = require 'api/tags/table'
 
 Template.systemTags.helpers
   table: ->

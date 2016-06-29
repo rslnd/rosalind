@@ -1,4 +1,4 @@
-{ Groups } = require '/imports/api/groups'
+{ Groups } = require 'api/groups'
 
 Template.employeeSelect.helpers
   groups: ->

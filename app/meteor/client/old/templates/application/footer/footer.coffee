@@ -1,4 +1,4 @@
-Time = require '/imports/util/time'
+Time = require 'util/time'
 
 Template.footer.helpers
   printedStamp: ->

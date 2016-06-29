@@ -1,6 +1,6 @@
 { Meteor } = require 'meteor/meteor'
 { sAlert } = require 'meteor/juliancwirko:s-alert'
-{ ImportFiles } = require '/imports/api/importers'
+{ ImportFiles } = require 'api/importers'
 
 Template.systemImporters.onCreated ->
   @subscribe('import.jobs')

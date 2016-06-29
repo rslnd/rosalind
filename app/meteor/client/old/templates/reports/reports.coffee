@@ -2,8 +2,8 @@ moment = require 'moment'
 omit = require 'lodash/omit'
 { ReactiveDict } = require 'meteor/reactive-dict'
 { SubsManager } = require 'meteor/meteorhacks:subs-manager'
-Time = require '/imports/util/time'
-{ Reports } = require '/imports/api/reports'
+Time = require 'util/time'
+{ Reports } = require 'api/reports'
 
 
 Template.reports.currentView = new ReactiveDict

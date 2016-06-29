@@ -1,5 +1,5 @@
 { TAPi18n } = require 'meteor/tap:i18n'
-{ Comments } = require '/imports/api/comments'
+{ Comments } = require 'api/comments'
 
 module.exports =
   comments: (doc) ->

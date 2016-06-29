@@ -1,8 +1,8 @@
 map = require 'lodash/map'
-{ Users } = require '/imports/api/users'
-{ Groups } = require '/imports/api/groups'
-{ UpdatePassword, UpdateRoles } = require '/imports/api/users/schema/actions'
-schema = require '/imports/api/users/schema/users'
+{ Users } = require 'api/users'
+{ Groups } = require 'api/groups'
+{ UpdatePassword, UpdateRoles } = require 'api/users/schema/actions'
+schema = require 'api/users/schema/users'
 
 Template.editUser.helpers
   user: ->

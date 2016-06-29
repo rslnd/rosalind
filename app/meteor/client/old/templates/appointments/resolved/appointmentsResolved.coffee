@@ -1,4 +1,4 @@
-table = require '/imports/api/appointments/table'
+table = require 'api/appointments/table'
 
 Template.appointmentsResolved.helpers
   table: ->

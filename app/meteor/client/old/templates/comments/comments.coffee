@@ -1,4 +1,4 @@
-{ Comments } = require '/imports/api/comments'
+{ Comments } = require 'api/comments'
 helpers = require './helpers'
 
 Template.comments.helpers

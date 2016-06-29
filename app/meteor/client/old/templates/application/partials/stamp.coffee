@@ -1,4 +1,4 @@
-{ Users } = require '/imports/api/users'
+{ Users } = require 'api/users'
 
 Template.stamp.helpers
   show: ->

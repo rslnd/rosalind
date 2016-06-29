@@ -1,5 +1,5 @@
-users = require '/imports/api/users/table'
-groups = require '/imports/api/groups/table'
+users = require 'api/users/table'
+groups = require 'api/groups/table'
 
 Template.users.helpers
   tableUsers: ->

@@ -1,8 +1,8 @@
 moment = require 'moment'
 { TAPi18n } = require 'meteor/tap:i18n'
-{ Appointments } = require '/imports/api/appointments'
-{ Users } = require '/imports/api/users'
-Time = require '/imports/util/time'
+{ Appointments } = require 'api/appointments'
+{ Users } = require 'api/users'
+Time = require 'util/time'
 
 Template.appointments.onCreated ->
   @autorun =>

@@ -1,6 +1,6 @@
 moment = require 'moment'
 { TAPi18n } = require 'meteor/tap:i18n'
-Time = require '/imports/util/time'
+Time = require 'util/time'
 
 Template.reportActions.onCreated ->
   $('[data-toggle="tooltip"]').tooltip()

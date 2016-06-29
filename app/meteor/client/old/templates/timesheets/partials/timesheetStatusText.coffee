@@ -3,7 +3,7 @@ require 'moment-duration-format'
 
 { Meteor } = require 'meteor/meteor'
 { Deps } = require 'meteor/deps'
-{ Timesheets } = require '/imports/api/timesheets'
+{ Timesheets } = require 'api/timesheets'
 
 tickerDep = new Deps.Dependency
 tickerInterval = null

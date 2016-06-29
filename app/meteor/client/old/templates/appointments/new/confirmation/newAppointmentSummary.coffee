@@ -1,10 +1,10 @@
-{ moment } = require '/imports/util/momentLocale'
+{ moment } = require 'util/momentLocale'
 { Mongo } = require 'meteor/mongo'
 { TAPi18n } = require 'meteor/tap:i18n'
-{ Patients } = require '/imports/api/patients'
-{ Tags } = require '/imports/api/tags'
-{ Users } = require '/imports/api/users'
-Helpers = require '/imports/util/helpers'
+{ Patients } = require 'api/patients'
+{ Tags } = require 'api/tags'
+{ Users } = require 'api/users'
+Helpers = require 'util/helpers'
 
 Template.newAppointmentSummary.helpers
   name: ->
