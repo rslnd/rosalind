@@ -1148,9 +1148,9 @@
       "resolved": "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz"
     },
     "jquery": {
-      "version": "3.0.0",
-      "from": "jquery@3.0.0",
-      "resolved": "https://registry.npmjs.org/jquery/-/jquery-3.0.0.tgz"
+      "version": "2.2.4",
+      "from": "jquery@2.2.4",
+      "resolved": "https://registry.npmjs.org/jquery/-/jquery-2.2.4.tgz"
     },
     "jquery-mousewheel": {
       "version": "3.1.13",
@@ -2499,9 +2499,9 @@
       "resolved": "https://registry.npmjs.org/temp/-/temp-0.8.3.tgz"
     },
     "test-util": {
-      "version": "1.0.1",
-      "from": "test-util@>=1.0.1 <2.0.0",
-      "resolved": "https://registry.npmjs.org/test-util/-/test-util-1.0.1.tgz"
+      "version": "1.1.0",
+      "from": "test-util@1.1.0",
+      "resolved": "https://registry.npmjs.org/test-util/-/test-util-1.1.0.tgz"
     },
     "timers-browserify": {
       "version": "1.4.2",
