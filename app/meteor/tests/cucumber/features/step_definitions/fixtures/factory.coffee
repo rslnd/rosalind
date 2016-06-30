@@ -5,7 +5,7 @@ module.exports =
       _.mixin(require('lodash-inflection'))
       TestUtil = require 'test-util'
 
-      collectionName = _.pluralize(options.collectionName)
+      collectionName = _.pluralize(options.collection)
       collectionName = TestUtil.camelize(collectionName)
       collection = require('api/' + TestUtil.camelize(collectionName, true))
       collection = collection[collectionName]
