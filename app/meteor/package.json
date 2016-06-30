@@ -57,7 +57,7 @@
     "redbox-react": "^1.2.9",
     "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
-    "test-util": "^1.0.1",
+    "test-util": "^1.1.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.1",
     "webpack-hot-middleware": "^2.12.0"

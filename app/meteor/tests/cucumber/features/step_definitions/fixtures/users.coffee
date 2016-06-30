@@ -32,7 +32,7 @@ module.exports =
 
   assignLastCreatedUserToGroup: (groupName) ->
     fn = (groupName) ->
-      Groups = TestUtil.constantize('Groups')
+      { Groups } = require('api/groups')
       groupId = Groups.findOne(name: groupName)._id
       user = Meteor.users.find({}, sort: { createdAt: -1 }).fetch()[0]
       Meteor.users.update(user._id, $set: { groupId: groupId })
