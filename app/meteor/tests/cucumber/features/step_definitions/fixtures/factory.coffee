@@ -1,6 +1,7 @@
 module.exports =
   insert: (options) ->
     fn = (options) ->
+      TestUtil = require 'test-util'
 
       collection = _.pluralize(options.collection)
       collection = TestUtil.camelize(collection)
