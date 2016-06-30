@@ -6,8 +6,7 @@ module.exports =
       TestUtil = require 'test-util'
 
       collectionName = _.pluralize(options.collection)
-      collectionName = TestUtil.camelize(collectionName)
-      collection = require('api/' + TestUtil.camelize(collectionName, true))
+      collection = require('/api/' + TestUtil.camelize(collectionName, true))
       collection = collection[collectionName]
 
       attributes = TestUtil.transformAttributes(options.attributes)
