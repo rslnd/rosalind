@@ -15,7 +15,7 @@
     "iconv-lite": "^0.4.13",
     "jquery": "^2.2.3",
     "lodash": "^4.6.1",
-    "lodash-inflection": "^1.3.2",
+    "lodash-inflection": "^1.4.0",
     "meteor-node-stubs": "^0.2.1",
     "moment": "^2.12.0",
     "moment-duration-format": "^1.3.0",
