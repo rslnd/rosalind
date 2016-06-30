@@ -8,6 +8,11 @@ module.exports =
     filterList = [
       'logged out by the server. Please log in again.'
       'failed: Error during WebSocket handshake: net::ERR_CONNECTION_RESET'
+      '[HMR] connected'
+      'Download the React DevTools'
+      '[Users] Logged'
+      '[Timesheets] Start tracking'
+      '[Timesheets] Stop tracking'
     ]
 
     if logs.value.length > 0
