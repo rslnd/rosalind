@@ -57,7 +57,7 @@ case "$1" in
     echo "[CI] Pulling dependencies"
     echo -en "travis_fold:start:pull_dependencies\r"
     SECONDS=0
-    { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install -- --progress=false --depth=0; } &
+    { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install --progress=false --depth=0; } &
     npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
     cd app/meteor/tests/cucumber
     npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
