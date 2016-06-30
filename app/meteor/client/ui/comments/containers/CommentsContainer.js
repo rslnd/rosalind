@@ -1,5 +1,5 @@
 import { Comments } from 'api/comments'
-import { CommentsBox } from '../components/Commentsbox'
+import { CommentsBox } from '../components/CommentsBox'
 import { composeWithTracker } from 'react-komposer'
 
 const composer = (props, onData) => {

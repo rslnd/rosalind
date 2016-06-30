@@ -29,22 +29,22 @@ export class NewComment extends React.Component {
 
   render () {
     return (
-      <div className='box-footer'>
+      <div className="box-footer">
         <form onSubmit={this.handleSubmit}>
           <Avatar />
-          <div className='img-push input-group input-group-sm'>
-            <label className='sr-only' htmlFor={'new-comment-' + this.props.docId} >
+          <div className="img-push input-group input-group-sm">
+            <label className="sr-only" htmlFor={'new-comment-' + this.props.docId} >
               {TAPi18n.__('ui.press_enter_to_post_comment')}
             </label>
-            <input type='text'
-              className='form-control input-sm'
+            <input type="text"
+              className="form-control input-sm"
               id={'new-comment-' + this.props.docId}
               placeholder={TAPi18n.__('ui.press_enter_to_post_comment')}
               value={this.state.body}
               onChange={this.handleBodyChange} />
-            <span className='input-group-btn'>
-              <button type='submit' className='btn btn-default btn-flat no-border-radius'>
-                <i className='fa fa-arrow-right text-muted'></i>
+            <span className="input-group-btn">
+              <button type="submit" className="btn btn-default btn-flat no-border-radius">
+                <i className="fa fa-arrow-right text-muted"></i>
               </button>
             </span>
           </div>
