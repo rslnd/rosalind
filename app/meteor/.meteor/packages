@@ -22,8 +22,8 @@ reactive-var
 webpack:webpack
 webpack:react
 webpack:coffeescript
-react-meteor-data
 react-template-helper
+gadicc:blaze-react-component
 
 # Routing
 kadira:flow-router

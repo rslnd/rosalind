@@ -1,5 +1,9 @@
+React = require 'react'
 { FlowRouter } = require 'meteor/kadira:flow-router'
 { BlazeLayout } = require 'meteor/kadira:blaze-layout'
+{ mount } = require 'react-mounter'
+{ MainLayoutContainer } = require 'client/ui/layout'
+{ InboundCallsContainer } = require 'client/ui/inboundCalls'
 
 module.exports = ->
   inboundCalls = FlowRouter.group
@@ -8,7 +12,7 @@ module.exports = ->
   inboundCalls.route '/',
     name: 'inboundCalls.thisOpen'
     action: ->
-      BlazeLayout.render('layout', main: 'inboundCalls')
+      mount(MainLayoutContainer, main: -> React.createElement(InboundCallsContainer))
 
   inboundCalls.route '/resolved',
     name: 'inboundCalls.thisResolved'
