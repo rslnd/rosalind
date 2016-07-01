@@ -1,6 +1,6 @@
 import React from 'react'
+import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Comments } from 'api/comments'
 import { Avatar } from 'client/ui/users/Avatar'
 
 export class NewComment extends React.Component {
@@ -22,7 +22,7 @@ export class NewComment extends React.Component {
     e.preventDefault()
     let body = this.state.body.trim()
     if (body) {
-      Comments.methods.post({ body, docId: this.props.docId })
+      Meteor.call('comments/post', { body, docId: this.props.docId })
       this.setState({ body: '' })
     }
   }

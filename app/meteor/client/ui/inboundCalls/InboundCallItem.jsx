@@ -4,7 +4,7 @@ import { zerofix } from 'util/zerofix'
 import { Stamps } from 'client/ui/helpers/Stamps'
 import { CommentsContainer, HumanCommentCount } from 'client/ui/comments'
 
-export const InboundCallItem = ({ inboundCall }) => {
+export const InboundCallItem = ({ inboundCall, resolve, unresolve }) => {
   return (
     <div className="box box-widget">
       <div className="box-header">
@@ -25,8 +25,8 @@ export const InboundCallItem = ({ inboundCall }) => {
       <div className="box-footer">
         {
           inboundCall.removed
-            ? <a>{TAPi18n.__('inboundCalls.unresolve')}</a>
-            : <a>{TAPi18n.__('inboundCalls.resolve')}</a>
+            ? <a onClick={() => unresolve(inboundCall._id)}>{TAPi18n.__('inboundCalls.unresolve')}</a>
+          : <a onClick={() => resolve(inboundCall._id)}>{TAPi18n.__('inboundCalls.resolve')}</a>
         }
       </div>
     </div>
