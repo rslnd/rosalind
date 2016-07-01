@@ -7,7 +7,10 @@ const composer = (props, onData) => {
   const handle = Meteor.subscribe('inboundCalls')
   if (handle.ready()) {
     const inboundCalls = InboundCalls.find({}, { sort: { createdAt: 1 } }).fetch()
-    onData(null, { inboundCalls })
+    const resolve = (_id) => InboundCalls.methods.resolve(_id)
+    const unresolve = (_id) => InboundCalls.methods.unresolve(_id)
+
+    onData(null, { inboundCalls, resolve, unresolve })
   }
 }
 

@@ -11,7 +11,7 @@ module.exports = ->
     'users/login': ->
       return unless userId = Meteor.userId()
       console.log('[Users] Logged in', { userId })
-      Events.insert
+      Meteor.call 'events/post',
         type: 'users/login'
         payload: { userId }
 
@@ -21,7 +21,7 @@ module.exports = ->
     'users/logout': ->
       return unless userId = Meteor.userId()
       console.log('[Users] Logged out', { userId })
-      Events.insert
+      Meteor.call 'events/post',
         type: 'users/logout'
         payload: { userId }
 
@@ -41,11 +41,9 @@ module.exports = ->
 
       console.log('[Users] Creating user', form.username)
 
-      Events.insert
+      Meteor.call 'events/post',
         type: 'users/create'
         level: 'warning'
-        createdBy: Meteor.userId()
-        createdAt: new Date()
         payload: form
 
       Accounts.createUser(form)
@@ -59,13 +57,12 @@ module.exports = ->
 
       console.log('[Users] Setting password for user', form.userId)
 
-      Events.insert
+      Meteor.call 'events/post',
         type: 'users/updatePassword'
         level: 'warning'
         createdBy: Meteor.userId()
         createdAt: new Date()
         payload: _.omit(form, 'password')
-        subject: form.userId
 
 
       Accounts.setPassword(form.userId, form.password, { logout: false })
@@ -76,13 +73,10 @@ module.exports = ->
       unless Roles.userIsInRole(Meteor.userId(), ['admin'])
         throw new Meteor.Error('not-authorized')
 
-      Events.insert
+      Meteor.call 'events/post',
         type: 'users/updateRoles'
         level: 'warning'
-        createdBy: Meteor.userId()
-        createdAt: new Date()
         payload: form
-        subject: form.userId
 
       roles = form.roles.replace(/\s/ig, '').split(',')
       console.log('[Users] Setting roles for user', form.userId, roles)
