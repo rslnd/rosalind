@@ -1,9 +1,9 @@
 import React from 'react'
-import { Avatar } from 'client/ui/users/components/Avatar'
-import { UserHelper } from 'client/ui/users/components/UserHelper'
+import { Avatar } from 'client/ui/users/Avatar'
+import { UserHelper } from 'client/ui/users/UserHelper'
 import { RelativeTime } from 'client/ui/helpers/RelativeTime'
 
-export const Comment = ({ comment }) => {
+export const CommentItem = ({ comment }) => {
   return (
     <div className="box-comment">
       <div><Avatar userId={comment.createdBy} /></div>
@@ -16,18 +16,4 @@ export const Comment = ({ comment }) => {
       </div>
     </div>
   )
-}
-
-export const CommentsList = ({ comments }) => {
-  if (comments.length === 0) {
-    return null
-  } else {
-    return (
-      <div className="box-footer box-comments">
-        {comments.map((comment) => {
-          return <Comment key={comment._id} comment={comment} />
-        })}
-      </div>
-    )
-  }
 }

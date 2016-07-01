@@ -1,3 +1,4 @@
-import { CommentsContainer } from './containers/CommentsContainer'
+import { CommentsContainer } from './CommentsContainer'
+import { HumanCommentCount } from './HumanCommentCount'
 
-export { CommentsContainer }
+export { CommentsContainer, HumanCommentCount }

@@ -1,4 +1,5 @@
 { InboundCalls } = require 'api/inboundCalls'
+{ InboundCallsContainer } = require 'client/ui/inboundCalls'
 
 Template.inboundCalls.onCreated ->
   @autorun =>
@@ -7,3 +8,6 @@ Template.inboundCalls.onCreated ->
 Template.inboundCalls.helpers
   inboundCalls: ->
     InboundCalls.find({})
+
+  InboundCallsContainer: ->
+    InboundCallsContainer

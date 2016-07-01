@@ -1,7 +1,7 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Comments } from 'api/comments'
-import { Avatar } from 'client/ui/users/components/Avatar'
+import { Avatar } from 'client/ui/users/Avatar'
 
 export class NewComment extends React.Component {
   constructor (props) {
