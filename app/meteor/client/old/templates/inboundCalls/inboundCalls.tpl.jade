@@ -1,10 +1,2 @@
-if inboundCalls.count
-  +contentHeader(title='inboundCalls.thisOpen')
-  .content
-    .row
-      each inboundCalls
-        .col-md-6
-          +inboundCall
-else
-  .content
-    +box(class='success' title='ui.allDone' body='inboundCalls.empty')
+div
+  +React(component=InboundCallsContainer)
