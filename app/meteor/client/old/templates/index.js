@@ -1,5 +1,4 @@
 import './application'
-import './appointments'
 import './comments'
 import './inboundCalls'
 import './patients'
