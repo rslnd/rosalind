@@ -3,7 +3,7 @@ Helpers = require 'util/helpers'
 Schedules = require './collection'
 Schema = require './schema'
 
-module.exports = ->
+module.exports =
   holidays: new Tabular.Table
     name: 'Holidays'
     collection: Schedules
