@@ -21,6 +21,7 @@ reactive-var
 # React
 webpack:webpack
 webpack:react
+webpack:html
 webpack:coffeescript
 react-template-helper
 gadicc:blaze-react-component
