@@ -1,4 +1,5 @@
 map = require 'lodash/map'
+{ browserHistory } = require 'react-router'
 { Users } = require 'api/users'
 { Groups } = require 'api/groups'
 { UpdatePassword, UpdateRoles } = require 'api/users/schema/actions'
@@ -6,7 +7,8 @@ schema = require 'api/users/schema/users'
 
 Template.editUser.helpers
   user: ->
-    Users.findOne(FlowRouter.current().params._id)
+    console.error('Not Implemented: Get _id param from url')
+    Users.findOne(@params?._id)
 
   collection: ->
     Users
@@ -25,10 +27,10 @@ Template.editUser.helpers
 
 AutoForm.hooks
   editUserForm:
-    onSuccess: -> FlowRouter.go('/users/')
+    onSuccess: -> browserHistory.push('/users/')
 
   updatePasswordUserForm:
-    onSuccess: -> FlowRouter.go('/users/')
+    onSuccess: -> browserHistory.push('/users/')
 
   updateRolesUserForm:
-    onSuccess: -> FlowRouter.go('/users/')
+    onSuccess: -> browserHistory.push('/users/')

@@ -1,3 +1,4 @@
+{ browserHistory } = require 'react-router'
 { Create } = require 'api/users/schema/actions'
 
 Template.newUser.helpers
@@ -6,4 +7,4 @@ Template.newUser.helpers
 
 AutoForm.hooks
   insertUserForm:
-    onSuccess: (formType, result) -> FlowRouter.go('/users/' + result + '/edit')
+    onSuccess: (formType, result) -> browserHistory.push('/users/' + result + '/edit')

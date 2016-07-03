@@ -10,8 +10,8 @@ Template.schedulesDefault.currentView = new ReactiveDict
 Template.schedulesDefault.onCreated ->
   Template.schedulesDefault.currentView.clear()
   Tracker.autorun ->
-    FlowRouter.watchPathChange()
-    if username = FlowRouter.current()?.params?.username
+    console.error('Not Implemented: Get username param from url')
+    if username = @params?.username
       user = Users.methods.findOneByIdOrUsername(username)
     else
       user = Meteor.user()

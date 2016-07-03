@@ -1,13 +1,16 @@
+{ browserHistory } = require 'react-router'
+
 sidebar = [
   {} =
     name: 'inboundCalls'
+    path: '/inboundCalls'
     icon: 'phone'
     countBadge: 'inboundCalls'
     roles: ['admin', 'inboundCalls']
     submenu: [
-      { name: 'thisOpen' }
-      { name: 'thisResolved' }
-      { name: 'thisInsert' }
+      { name: 'thisOpen', path: '/inboundCalls' }
+      { name: 'thisResolved', path: '/inboundCalls/resolved' }
+      { name: 'thisInsert', path: '/inboundCalls/new' }
     ]
 
   {} =
@@ -80,14 +83,12 @@ Template.sidebar.helpers
 
   hrefLevel0: ->
     route = [@name, @submenu[0].name].join('.')
-    FlowRouter.path(route)
 
   hrefLevel1: ->
     if @route
-      FlowRouter.path(@route, @params)
+      @route
     else
       route = [@parent.name, @name].join('.')
-      FlowRouter.path(route)
 
   showNav: ->
     return true unless @roles
@@ -99,15 +100,10 @@ Template.sidebar.events
     $('body').removeClass('sidebar-open')
 
   'click .level-0': ->
-    route = [@name, @submenu[0].name].join('.')
-    FlowRouter.go(FlowRouter.path(route))
+    browserHistory.push(@path)
 
   'click .level-1': ->
-    if @route
-      FlowRouter.go(@route, @params)
-    else
-      route = [@parent.name, @name].join('.')
-      FlowRouter.go(FlowRouter.path(route))
+    browserHistory.push(@path)
 
   'click .sidebar li a': (e, t) ->
     $this = $(e.currentTarget)
