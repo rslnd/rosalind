@@ -6,7 +6,7 @@ aside.main-sidebar
         +if showNav roles
           unless disabled
             li.treeview
-              a.pointer.level-0.link(id='{{htmlId}}' href='{{hrefLevel0}}')
+              span.pointer.level-0.link(id='{{htmlId}}' href='{{path}}')
                 <i class='fa fa-{{icon}}'></i>
                 span {{ name }}
                 +if showCount countBadge
@@ -18,5 +18,5 @@ aside.main-sidebar
                   ul.treeview-menu
                     each submenu
                         li
-                          a.active.level-1.link(id='{{htmlId}}' href='{{hrefLevel1}}')
+                          span.active.level-1.link(id='{{htmlId}}' href='{{path}}')
                             span {{ name }}

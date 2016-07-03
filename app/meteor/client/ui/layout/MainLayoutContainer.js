@@ -16,7 +16,7 @@ const composer = (props, onData) => {
 
   if (handles.every((h) => h.ready())) {
     const currentUser = Meteor.user()
-    onData(null, { currentUser, main: props.main })
+    onData(null, { ...props, currentUser })
   }
 }
 

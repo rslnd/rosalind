@@ -1,5 +1,6 @@
 moment = require 'moment'
 omit = require 'lodash/omit'
+{ browserHistory } = require 'react-router'
 { ReactiveDict } = require 'meteor/reactive-dict'
 { SubsManager } = require 'meteor/meteorhacks:subs-manager'
 Time = require 'util/time'
@@ -10,7 +11,7 @@ Template.reports.currentView = new ReactiveDict
 ReportsManager = new SubsManager()
 
 Template.reports.currentView.watchPathChange = ->
-  date = FlowRouter.current().params?.date
+  console.error('Not Implemented: Get data param from url')
   if date then date = moment(date).toDate() else date = new Date()
   @set('date', date)
 
@@ -37,7 +38,7 @@ Template.reports.onCreated ->
     ReportsManager.subscribe('reports', { date })
 
     date = moment(date).format('YYYY-MM-DD')
-    FlowRouter.go('/reports/' + date)
+    browserHistory.push('/reports/' + date)
 
 
 Template.reports.helpers

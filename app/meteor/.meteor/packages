@@ -26,11 +26,6 @@ webpack:coffeescript
 react-template-helper
 gadicc:blaze-react-component
 
-# Routing
-kadira:flow-router
-kadira:blaze-layout
-meteorhacks:picker
-
 # Testing
 xolvio:backdoor
 xolvio:cleaner
@@ -91,6 +86,7 @@ meteorhacks:async
 
 # File Upload
 ostrio:files
+meteorhacks:picker
 
 # Jobs
 vsivsi:job-collection

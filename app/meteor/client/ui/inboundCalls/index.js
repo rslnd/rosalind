@@ -1,3 +1,5 @@
 import { InboundCallsContainer } from './InboundCallsContainer'
+import { InboundCallsResolvedContainer } from './InboundCallsResolvedContainer'
+import { NewInboundCallContainer } from './NewInboundCallContainer'
 
-export { InboundCallsContainer }
+export { InboundCallsContainer, InboundCallsResolvedContainer, NewInboundCallContainer }

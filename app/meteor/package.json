@@ -28,6 +28,7 @@
     "react-dom": "^15.1.0",
     "react-komposer": "^1.11.0",
     "react-mounter": "^1.2.0",
+    "react-router": "^2.5.2",
     "select2": "^4.0.3",
     "temp": "^0.8.3"
   },

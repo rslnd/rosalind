@@ -2,7 +2,6 @@ moment = require 'moment'
 { Meteor } = require 'meteor/meteor'
 { Template } = require 'meteor/templating'
 { TAPi18n } = require 'meteor/tap:i18n'
-{ FlowRouter } = require 'meteor/kadira:flow-router'
 
 
 Template.layout.onCreated ->
@@ -22,13 +21,12 @@ Template.layout.onCreated ->
 
 Template.layout.helpers
   loaded: ->
-    FlowRouter.subsReady()
+    true
   locale: ->
     TAPi18n.getLanguage()
 
 UI.registerHelper 'activeClass', (context) ->
-  FlowRouter.watchPathChange()
-  { class: 'active' } if (context is FlowRouter.current().route.path())
+  {}
 
 UI.registerHelper 'time', (context, options) ->
   return unless context?

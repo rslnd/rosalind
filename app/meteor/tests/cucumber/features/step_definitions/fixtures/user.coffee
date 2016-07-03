@@ -3,4 +3,4 @@ module.exports =
     browser.execute ->
       Meteor.call 'users/logout', ->
         Meteor.logout()
-        FlowRouter.go('/')
+        window.location.href = '/'

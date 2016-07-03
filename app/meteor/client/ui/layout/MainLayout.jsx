@@ -1,12 +1,12 @@
 import React from 'react'
 import Blaze from 'meteor/gadicc:blaze-react-component'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Topbar } from './topbar'
-import { Sidebar } from './sidebar'
+import { TopbarContainer } from './topbarContainer'
+import { SidebarContainer } from './sidebarContainer'
 import { Login } from 'client/ui/users/login'
 
-export const MainLayout = ({ main, currentUser }) => {
-  if (!main) { return null }
+export const MainLayout = ({ children, currentUser }) => {
+  if (!children) { return <h1>No this.props.children passed!</h1> }
 
   const alwaysRender = () => (
     <div id="loaded" className={TAPi18n.getLanguage()}>
@@ -17,10 +17,10 @@ export const MainLayout = ({ main, currentUser }) => {
   if (currentUser) {
     return (
       <div className="wrapper disable-select">
-        <Topbar />
-        <Sidebar />
+        <TopbarContainer />
+        <SidebarContainer />
         <div className="content-wrapper print-no-margin">
-          {main()}
+          {children}
         </div>
         {alwaysRender()}
       </div>
