@@ -3,18 +3,23 @@ import { render } from 'react-dom'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { MainLayoutContainer } from 'client/ui/layout'
 import { Dashboard } from 'client/ui/dashboard/Dashboard'
-import { InboundCallsContainer, NewInboundCallContainer, InboundCallsResolvedContainer } from 'client/ui/inboundCalls'
+
+import { SchedulesRoutes } from './SchedulesRoutes'
+import { InboundCallsRoutes } from './InboundCallsRoutes'
+import { ReportsRoutes } from './ReportsRoutes'
+import { SystemRoutes } from './SystemRoutes'
+import { UsersRoutes } from './UsersRoutes'
 
 export default () => {
   render(
     <Router history={browserHistory}>
       <Route path="/" component={MainLayoutContainer}>
         <IndexRoute component={Dashboard} />
-        <Route path="inboundCalls">
-          <IndexRoute component={InboundCallsContainer} />
-          <Route path="new" component={NewInboundCallContainer} />
-          <Route path="resolved" component={InboundCallsResolvedContainer} />
-        </Route>
+        {InboundCallsRoutes()}
+        {SchedulesRoutes()}
+        {ReportsRoutes()}
+        {SystemRoutes()}
+        {UsersRoutes()}
       </Route>
     </Router>,
     document.getElementById('react-root')

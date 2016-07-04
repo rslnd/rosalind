@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, withRouter } from 'react-router'
+import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { RandomMotivationalQuote } from 'client/ui/components/RandomMotivationalQuote'
 
 const SidebarItem = withRouter(({ item, router }) => {
   return (
@@ -50,7 +50,7 @@ export class Sidebar extends React.Component {
     return (
       <aside className="main-sidebar sidebar">
         <ul className="sidebar-menu">
-          <li className="header text-center"><RandomMotivationalQuote maxLength={25} /></li>
+          <li className="header text-center">{Meteor.settings.customerName || 'Rosalind Development'}</li>
           {this.props.items.map((item) => (
             <SidebarItem key={item.name} item={item} handleItemClick={this.handleItemClick} handleSubItemClick={this.handleSubItemClick} />
           ))}

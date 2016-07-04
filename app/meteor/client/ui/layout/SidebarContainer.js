@@ -14,19 +14,40 @@ const sidebarItems = () => {
     },
     {
       name: 'schedules',
-      icon: 'user-md'
+      icon: 'user-md',
+      subItems: [
+        { name: 'thisDefault', path: '/' },
+        { name: 'override', path: '/override' },
+        { name: 'businessHours', path: '/businessHours' },
+        { name: 'holidays', path: '/holidays' }
+      ]
     },
     {
       name: 'reports',
-      icon: 'bar-chart'
+      icon: 'bar-chart',
+      subItems: [
+        { name: 'dashboard', path: '/' }
+      ]
     },
     {
       name: 'users',
-      icon: 'unlock-alt'
+      icon: 'unlock-alt',
+      subItems: [
+        { name: 'thisAll', path: '/' },
+        { name: 'thisNew', path: '/new' }
+      ]
     },
     {
       name: 'system',
-      icon: 'server'
+      icon: 'server',
+      subItems: [
+        { name: 'thisEvents', path: '/events' },
+        { name: 'thisStats', path: '/stats' },
+        { name: 'thisImporters', path: '/importers' },
+        { name: 'thisJobs', path: '/jobs' },
+        { name: 'thisTags', path: '/tags' },
+        { name: 'thisNative', path: '/native', only: () => window.native }
+      ]
     }
   ]
 }
