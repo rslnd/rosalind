@@ -8,7 +8,7 @@ export const CommentsList = ({ comments }) => {
   } else {
     return (
       <div className="box-footer box-comments">
-        <FlipMove>
+        <FlipMove enterAnimation="fade" leaveAnimation="fade">
           {comments.map((comment) => {
             return <CommentItem key={comment._id} comment={comment} />
           })}
