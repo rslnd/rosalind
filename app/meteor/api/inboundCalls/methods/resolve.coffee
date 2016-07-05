@@ -1,6 +1,17 @@
 { Meteor } = require 'meteor/meteor'
 
 module.exports = ({ InboundCalls }) ->
-  resolve: (_id) ->
-    console.log('[InboundCalls] Resolve', { userId: Meteor.userId(), inboundCallId: _id })
-    InboundCalls.softRemove(_id)
+  methods =
+    resolve: (_id) ->
+      check(_id, String)
+
+      Meteor.call 'events/post',
+        type: 'inboundCalls/resolve'
+        level: 'info'
+        payload: { inboundCallId: _id, userId: Meteor.userId() }
+
+      InboundCalls.softRemove(_id)
+
+  Meteor.methods({ 'inboundCalls/resolve': methods.resolve })
+
+  return methods
