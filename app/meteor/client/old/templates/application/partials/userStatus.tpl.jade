@@ -1,8 +1,0 @@
-+if isInRole 'admin'
-  .disable-select.inline(rel='popover' data-placement='bottom' title='{{ userPopoverTitle this }}' data-trigger='hover focus' data-toggle='popover' data-content='{{ userPopoverContent this }}' )
-    i.fa.fa-circle.user-status(class='{{userStatus this}}')
-    | {{ username }}
-+else
-  .disable-select.inline
-    i.fa.fa-circle.user-status(class='{{userStatus this}}')
-    | {{ username }}
