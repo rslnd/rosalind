@@ -4,31 +4,33 @@ import { zerofix } from 'util/zerofix'
 import { Stamps } from 'client/ui/helpers/Stamps'
 import { CommentsContainer, HumanCommentCount } from 'client/ui/comments'
 
-export const InboundCallItem = ({ inboundCall, resolve, unresolve }) => {
-  return (
-    <div className="box box-widget">
-      <div className="box-header">
-        <h4 className="username enable-select">
-          <b>{inboundCall.lastName}</b> {inboundCall.firstName}&ensp;
-          <small>{TAPi18n.__(`inboundCalls.${inboundCall.privatePatient ? 'private' : 'insurance'}`)}</small>
-        </h4>
-        <h3 className="description enable-select">{zerofix(inboundCall.telephone)}</h3>
+export class InboundCallItem extends React.Component {
+  render () {
+    return (
+      <div className="box box-widget">
+        <div className="box-header">
+          <h4 className="username enable-select">
+            <b>{this.props.inboundCall.lastName}</b> {this.props.inboundCall.firstName}&ensp;
+            <small>{TAPi18n.__(`inboundCalls.${this.props.inboundCall.privatePatient ? 'private' : 'insurance'}`)}</small>
+          </h4>
+          <h3 className="description enable-select">{zerofix(this.props.inboundCall.telephone)}</h3>
+        </div>
+        <div className="box-body">
+          <blockquote>
+            <p className="enable-select pre-wrap">{this.props.inboundCall.note}</p>
+          </blockquote>
+          <HumanCommentCount docId={this.props.inboundCall._id} />
+          <Stamps fields={['removed', 'created']} doc={this.props.inboundCall} />
+        </div>
+        <CommentsContainer docId={this.props.inboundCall._id} />
+        <div className="box-footer">
+          {
+            this.props.inboundCall.removed
+              ? <a onClick={() => this.props.unresolve(this.props.inboundCall._id)}>{TAPi18n.__('inboundCalls.unresolve')}</a>
+            : <a onClick={() => this.props.resolve(this.props.inboundCall._id)}>{TAPi18n.__('inboundCalls.resolve')}</a>
+          }
+        </div>
       </div>
-      <div className="box-body">
-        <blockquote>
-          <p className="enable-select pre-wrap">{inboundCall.note}</p>
-        </blockquote>
-        <HumanCommentCount docId={inboundCall._id} />
-        <Stamps fields={['removed', 'created']} doc={inboundCall} />
-      </div>
-      <CommentsContainer docId={inboundCall._id} />
-      <div className="box-footer">
-        {
-          inboundCall.removed
-            ? <a onClick={() => unresolve(inboundCall._id)}>{TAPi18n.__('inboundCalls.unresolve')}</a>
-          : <a onClick={() => resolve(inboundCall._id)}>{TAPi18n.__('inboundCalls.resolve')}</a>
-        }
-      </div>
-    </div>
-  )
+    )
+  }
 }
