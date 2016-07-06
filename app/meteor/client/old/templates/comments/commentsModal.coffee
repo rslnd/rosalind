@@ -6,7 +6,11 @@ Template.commentsModal.helpers
   modalTitle: ->
     TAPi18n.__(@collection()._name + '.thisSingular')
 
-  collectionItem: ->
+  blazeTemplate: ->
     template = _.singularize(@collection()._name)
     template = template.charAt(0).toLowerCase() + template.slice(1)
-    return template
+    if Template[template]
+      return template
+    else
+      console.warn('Could not find template ' + template)
+      console.warn('Maybe you are trying to render a react component?')
