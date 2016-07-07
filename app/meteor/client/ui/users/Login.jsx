@@ -1,4 +1,6 @@
 import React from 'react'
+import Modal from 'react-bootstrap/lib/Modal'
+import Button from 'react-bootstrap/lib/Button'
 import { Meteor } from 'meteor/meteor'
 import { sAlert } from 'meteor/juliancwirko:s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -9,24 +11,23 @@ export class Login extends React.Component {
 
     this.state = {
       name: '',
-      password: ''
+      password: '',
+      showLoginHelpModal: false
     }
 
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleOpenLoginHelpModal = this.handleOpenLoginHelpModal.bind(this)
+    this.handleCloseLoginHelpModal = this.handleCloseLoginHelpModal.bind(this)
   }
 
   handleNameChange (e) {
-    this.setState(Object.assign({}, this.state, {
-      name: e.target.value
-    }))
+    this.setState({ ...this.state, name: e.target.value })
   }
 
   handlePasswordChange (e) {
-    this.setState(Object.assign({}, this.state, {
-      password: e.target.value
-    }))
+    this.setState({ ...this.state, password: e.target.value })
   }
 
   handleSubmit (e) {
@@ -52,55 +53,78 @@ export class Login extends React.Component {
     }
   }
 
+  handleOpenLoginHelpModal () {
+    this.setState({ ...this.state, showLoginHelpModal: true })
+  }
+
+  handleCloseLoginHelpModal () {
+    this.setState({ ...this.state, showLoginHelpModal: false })
+  }
+
   render () {
     return (
-      <form className="login form-horizontal" onSubmit={this.handleSubmit}>
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            <h3 className="panel-title">{TAPi18n.__('login.heading')}</h3>
-          </div>
-          <div className="panel-body">
-            <div className="form-group">
-              <label className="sr-only" for="nameField">{TAPi18n.__('login.name')}</label>
-              <div className="col-sm-12">
-                <input
-                  name="name"
-                  id="nameField"
-                  className="input-lg form-control"
-                  onChange={this.handleNameChange}
-                  placeholder={TAPi18n.__('login.form.name.placeholder')} />
+      <div>
+        <form className="login form-horizontal" onSubmit={this.handleSubmit}>
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              <h3 className="panel-title">{TAPi18n.__('login.heading')}</h3>
+            </div>
+            <div className="panel-body">
+              <div className="form-group">
+                <label className="sr-only" for="nameField">{TAPi18n.__('login.name')}</label>
+                <div className="col-sm-12">
+                  <input
+                    name="name"
+                    id="nameField"
+                    className="input-lg form-control"
+                    onChange={this.handleNameChange}
+                    placeholder={TAPi18n.__('login.form.name.placeholder')} />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="sr-only" for="passwordField">{TAPi18n.__('login.password')}</label>
+                <div className="col-sm-12">
+                  <input
+                    type="password"
+                    name="password"
+                    id="passwordField"
+                    className="input-lg form-control"
+                    onChange={this.handlePasswordChange}
+                    placeholder={TAPi18n.__('login.form.password.placeholder')} />
+                </div>
+              </div>
+              <div className="form-group no-mb">
+                <div className="col-sm-12">
+                  {
+                    this.props.loggingIn
+                    ? (
+                      <button className="btn btn-default btn-block btn-lg" disabled="disabled">
+                        <i className="fa fa-refresh fa-spin"></i>
+                      </button>
+                    ) : <button className="btn btn-success btn-block btn-lg" type="submit">{TAPi18n.__('login.button')}</button>
+                  }
+                </div>
               </div>
             </div>
-            <div className="form-group">
-              <label className="sr-only" for="passwordField">{TAPi18n.__('login.password')}</label>
-              <div className="col-sm-12">
-                <input
-                  type="password"
-                  name="password"
-                  id="passwordField"
-                  className="input-lg form-control"
-                  onChange={this.handlePasswordChange}
-                  placeholder={TAPi18n.__('login.form.password.placeholder')} />
-              </div>
-            </div>
-            <div className="form-group no-mb">
-              <div className="col-sm-12">
-                {
-                  this.props.loggingIn
-                  ? (
-                    <button className="btn btn-default btn-block btn-lg" disabled="disabled">
-                      <i className="fa fa-refresh fa-spin"></i>
-                    </button>
-                  ) : <button className="btn btn-success btn-block btn-lg" type="submit">{TAPi18n.__('login.button')}</button>
-                }
-              </div>
+            <div className="panel-footer">
+              <a onClick={this.handleOpenLoginHelpModal} className="text-muted">{TAPi18n.__('login.help.show')}</a>
             </div>
           </div>
-          <div className="panel-footer">
-            <a className="text-muted">{TAPi18n.__('login.help.show')}</a>
-          </div>
-        </div>
-      </form>
+        </form>
+
+        <Modal show={this.state.showLoginHelpModal} onHide={this.handleCloseLoginHelpModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>{TAPi18n.__('login.help.title')}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{TAPi18n.__('login.help.body')}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <span className="text-very-muted pull-left">{Meteor.settings.commit || 'Development'}</span>
+            <Button onClick={this.handleCloseLoginHelpModal} bsStyle="primary" pullRight>{TAPi18n.__('login.help.ok')}</Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     )
   }
 }
