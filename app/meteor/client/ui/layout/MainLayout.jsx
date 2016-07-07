@@ -3,11 +3,9 @@ import Blaze from 'meteor/gadicc:blaze-react-component'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { TopbarContainer } from './topbarContainer'
 import { SidebarContainer } from './sidebarContainer'
-import { Login } from 'client/ui/users/login'
+import { Login } from 'client/ui/users/Login'
 
-export const MainLayout = ({ children, currentUser }) => {
-  if (!children) { return <h1>No this.props.children passed!</h1> }
-
+export const MainLayout = ({ children, currentUser, loggingIn }) => {
   const alwaysRender = () => (
     <div id="loaded" className={TAPi18n.getLanguage()}>
       <Blaze template="sAlert" />
@@ -34,7 +32,7 @@ export const MainLayout = ({ children, currentUser }) => {
               <img src="/images/logo.svg" />
             </div>
             <div className="locked-content">
-              <Login />
+              <Login loggingIn={loggingIn} />
             </div>
           </div>
         </div>
