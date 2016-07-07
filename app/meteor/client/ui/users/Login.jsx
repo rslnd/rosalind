@@ -1,9 +1,9 @@
 import React from 'react'
-import Modal from 'react-bootstrap/lib/Modal'
-import Button from 'react-bootstrap/lib/Button'
+import { Modal, Button } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
 import { sAlert } from 'meteor/juliancwirko:s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { Icon } from 'client/ui/components/Icon'
 
 export class Login extends React.Component {
   constructor (props) {
@@ -38,18 +38,18 @@ export class Login extends React.Component {
     if (name && password) {
       Meteor.loginWithPassword(name, password, (err) => {
         if (err) {
-          console.error('Failed to log in')
+          console.error('[Users] Login failed', err)
           sAlert.error(TAPi18n.__('login.failedMessage'))
           throw err
         } else {
           Meteor.call('users/login', () => {
-            console.log('Done after login call')
+            console.log('[Users] Logged in successfully')
           })
         }
       })
     } else {
+      console.error('[Users] Login failed: No username or password provided')
       sAlert.error(TAPi18n.__('login.failedMessage'))
-      console.log('Not done at all')
     }
   }
 
@@ -98,10 +98,12 @@ export class Login extends React.Component {
                   {
                     this.props.loggingIn
                     ? (
-                      <button className="btn btn-default btn-block btn-lg" disabled="disabled">
-                        <i className="fa fa-refresh fa-spin"></i>
-                      </button>
-                    ) : <button className="btn btn-success btn-block btn-lg" type="submit">{TAPi18n.__('login.button')}</button>
+                      <Button bsSize="large" block disabled>
+                        <Icon name="refresh" spin />
+                      </Button>
+                    ) : <Button bsStyle="success" bsSize="large" type="submit" block>
+                      {TAPi18n.__('login.button')}
+                    </Button>
                   }
                 </div>
               </div>

@@ -20,7 +20,8 @@ const composer = (props, onData) => {
       onData(null, { ...props, currentUser })
     }
   } else {
-    onData(null, { ...props, currentUser })
+    const loggingIn = Meteor.loggingIn()
+    onData(null, { ...props, currentUser, loggingIn })
   }
 }
 
