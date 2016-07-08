@@ -14,6 +14,4 @@ const composer = (props, onData) => {
   }
 }
 
-const InboundCallsContainer = composeWithTracker(composer)(InboundCallsScreen)
-
-export { InboundCallsContainer }
+export const InboundCallsContainer = composeWithTracker(composer)(InboundCallsScreen)
