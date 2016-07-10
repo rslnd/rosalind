@@ -1,4 +1,5 @@
 import startup from 'startup/client'
+import 'client/css'
 import 'client/old'
 import 'client/compatibility'
 import { sAlert } from 'meteor/juliancwirko:s-alert'
