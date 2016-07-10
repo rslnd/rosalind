@@ -35,7 +35,7 @@ class DateNavigationButtons extends React.Component {
 
   render () {
     return (
-      <div className="breadcrumbs page-actions">
+      <div className={`breadcrumbs page-actions ${this.props.pullRight && 'pull-right'}`}>
         <ButtonGroup>
           <Button onClick={this.handlePreviousClick} bsSize="small">
             <Icon name="caret-left" />
