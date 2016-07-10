@@ -47,34 +47,6 @@ var getCompilerResult = function (compileStep, fileMode) {
   }
 };
 
-var fileModeHandler = function (compileStep) {
-  var results = getCompilerResult(compileStep, true);
-
-  // Head
-  if (results.head !== null) {
-    compileStep.appendDocument({
-      section: "head",
-      data: HTML.toHTML(results.head)
-    });
-  }
-
-  var jsContent = "";
-  if (results.body !== null) {
-    jsContent += bodyGen(results.body, results.bodyAttrs);
-  }
-  if (! _.isEmpty(results.templates)) {
-    jsContent += _.map(results.templates, templateGen).join("");
-  }
-
-  if (jsContent !== "") {
-    compileStep.addJavaScript({
-      path: compileStep.inputPath + '.js',
-      sourcePath: compileStep.inputPath,
-      data: jsContent
-    });
-  }
-};
-
 var templateModeHandler = function (compileStep) {
   var result = getCompilerResult(compileStep, false);
   var templateName = path.basename(compileStep.inputPath, '.tpl.jade');
@@ -106,5 +78,5 @@ var pluginOptions = {
   archMatching: "web"
 };
 
-Plugin.registerSourceHandler("jade", pluginOptions, fileModeHandler);
+Plugin.registerSourceHandler("jade", pluginOptions, function() {});
 Plugin.registerSourceHandler("tpl.jade", pluginOptions, templateModeHandler);
