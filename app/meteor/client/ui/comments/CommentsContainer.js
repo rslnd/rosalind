@@ -1,6 +1,5 @@
 import { Comments } from 'api/comments'
 import { CommentsBox } from './CommentsBox'
-import { HumanCommentCount } from './HumanCommentCount'
 import { composeWithTracker } from 'react-komposer'
 
 const commentsBoxComposer = (props, onData) => {
