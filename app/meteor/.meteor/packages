@@ -58,7 +58,6 @@ mizzao:user-status
 
 # UI
 dalgard:jade
-fortawesome:fontawesome
 fastclick
 sacha:spin
 peppelg:bootstrap-3-modal
