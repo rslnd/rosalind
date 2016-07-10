@@ -1,4 +1,3 @@
-import './css'
 import './footer/footer'
 import './hotkeys/hotkeys.coffee'
 import './hotkeys/hotkeys.css'
