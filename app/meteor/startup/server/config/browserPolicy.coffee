@@ -11,3 +11,4 @@ module.exports = ->
   if process.env.NODE_ENV isnt 'production'
     BrowserPolicy.content.allowEval()
     BrowserPolicy.content.allowScriptOrigin('http://localhost:3500')
+    BrowserPolicy.content.allowFontOrigin('http://localhost:3500')
