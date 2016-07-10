@@ -57,7 +57,6 @@ alanning:roles
 mizzao:user-status
 
 # UI
-twbs:bootstrap
 dalgard:jade
 fortawesome:fontawesome
 fastclick
@@ -66,8 +65,6 @@ peppelg:bootstrap-3-modal
 juliancwirko:s-alert
 juliancwirko:s-alert-stackslide
 aldeed:template-extension
-aldeed:autoform-bs-datetimepicker
-tsega:bootstrap3-datetimepicker@=3.1.3_3
 rochal:slimscroll
 
 # I18n

@@ -1,5 +1,6 @@
-import 'admin-lte/dist/css/AdminLTE.min.css'
-import 'admin-lte/dist/css/skins/skin-blue.min.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'admin-lte/dist/css/AdminLTE.css'
+import 'admin-lte/dist/css/skins/skin-blue.css'
 import './layout.css'
 import './overrides.css'
 import './print.css'
