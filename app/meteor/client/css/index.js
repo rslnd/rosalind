@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css'
+import 'font-awesome-webpack'
 import 'admin-lte/dist/css/AdminLTE.css'
 import 'admin-lte/dist/css/skins/skin-blue.css'
 import './layout.css'
