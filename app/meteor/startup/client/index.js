@@ -1,10 +1,9 @@
-import 'client/index.html'
+import client from 'client/index.jsx'
 import config from './config'
 import native from './native'
-import routes from './routes'
 
 export default function () {
-  routes()
+  client()
   config()
   native()
 }
