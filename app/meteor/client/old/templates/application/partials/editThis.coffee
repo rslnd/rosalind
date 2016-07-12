@@ -1,4 +1,4 @@
-Template.editLink.events
+Template.editThis.events
   'click [rel="edit"]': ->
     Modal.show 'modalAutoForm',
       type: 'update'

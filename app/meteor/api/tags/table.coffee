@@ -9,7 +9,7 @@ module.exports = new Tabular.Table
     { data: 'tag', title: 'Tag' }
     { data: 'description', title: 'Description' }
     { data: 'color', title: 'Color' }
-    { tmpl: Meteor.isClient and Template.editLink }
+    { tmpl: Meteor.isClient and Template.editThis }
   ]
   order: [[0, 'asc']]
   allow: (userId) ->

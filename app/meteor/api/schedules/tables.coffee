@@ -11,7 +11,7 @@ module.exports =
       { data: 'note', title: 'Feiertag' }
       { data: 'start', title: 'von' }
       { data: 'end', title: 'bis' }
-      { tmpl: Meteor.isClient and Template.deleteLink }
+      { tmpl: Meteor.isClient and Template.deleteThis }
     ]
     order: [[1, 'desc']]
     sub: new SubsManager()
@@ -30,7 +30,7 @@ module.exports =
       { data: 'note', title: 'Notiz' }
       { data: 'start', title: 'von' }
       { data: 'end', title: 'bis' }
-      { tmpl: Meteor.isClient and Template.deleteLink }
+      { tmpl: Meteor.isClient and Template.deleteThis }
     ]
     order: [[1, 'desc']]
     sub: new SubsManager()
@@ -53,7 +53,7 @@ module.exports =
       { data: 'note', title: 'Notiz' }
       { data: 'start', title: 'von' }
       { data: 'end', title: 'bis' }
-      { tmpl: Meteor.isClient and Template.deleteLink }
+      { tmpl: Meteor.isClient and Template.deleteThis }
     ]
     order: [[1, 'desc']]
     sub: new SubsManager()
