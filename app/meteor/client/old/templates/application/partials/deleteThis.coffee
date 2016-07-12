@@ -1,6 +1,6 @@
 { Mongo } = require 'meteor/mongo'
 
-Template.deleteLink.events
+Template.deleteThis.events
   'click [rel="delete"]': ->
     console.log('[Meteor] Delete', @)
     collection = Mongo.Collection.get(@collection) if typeof @collection is 'string'

@@ -8,7 +8,7 @@ module.exports = new Tabular.Table
   columns: [
     { data: 'order', tmpl: Meteor.isClient and Template.groupIcon }
     { data: 'name', title: 'Name' }
-    { tmpl: Meteor.isClient and Template.editLink }
+    { tmpl: Meteor.isClient and Template.editThis }
   ]
   order: [[0, 'asc']]
   extraFields: ['color', 'icon']
