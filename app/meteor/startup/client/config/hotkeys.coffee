@@ -1,6 +1,7 @@
 once = require 'lodash/once'
 Mousetrap = require 'mousetrap'
 require 'mousetrap/plugins/global-bind/mousetrap-global-bind'
+{ browserHistory } = require 'react-router'
 { sAlert } = require 'meteor/juliancwirko:s-alert'
 { Modal } = require 'meteor/peppelg:bootstrap-3-modal'
 
@@ -71,7 +72,7 @@ bindAll = once ->
       if hotkey.fn
         Mousetrap.bind(hotkey.key, hotkey.fn)
       else if hotkey.go
-        Mousetrap.bind(hotkey.key, -> console.error('TODO: Redirect to: ' + hotkey.go))
+        Mousetrap.bind(hotkey.key, -> browserHistory.push(hotkey.go))
 
 
 module.exports = ->
