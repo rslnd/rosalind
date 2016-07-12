@@ -1,8 +1,6 @@
 import './footer/footer'
 import './hotkeys/hotkeys.coffee'
 import './hotkeys/hotkeys.css'
-import './loading/loading.coffee'
-import './loading/loading.css'
 import './locked/lockedLayout.css'
 import './modals/loginHelp'
 import './modals/modalAutoForm'

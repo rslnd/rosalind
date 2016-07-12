@@ -59,11 +59,9 @@ mizzao:user-status
 # UI
 dalgard:jade
 fastclick
-sacha:spin
 peppelg:bootstrap-3-modal
 juliancwirko:s-alert
 juliancwirko:s-alert-stackslide
-aldeed:template-extension
 rochal:slimscroll
 
 # I18n
