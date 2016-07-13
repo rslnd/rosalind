@@ -35,6 +35,7 @@ browser-policy
 keyvan:my-force-ssl
 audit-argument-checks
 ongoworks:security
+mdg:validated-method
 
 # Collections
 matb33:collection-hooks
