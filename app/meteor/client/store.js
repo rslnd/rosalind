@@ -7,7 +7,3 @@ const reducers = {
 
 const reducer = combineReducers(reducers)
 export const store = createStore(reducer, window.devToolsExtension && window.devToolsExtension())
-
-store.subscribe(() => {
-  console.log('[Store] New state', store.getState())
-})
