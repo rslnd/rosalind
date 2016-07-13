@@ -34,8 +34,10 @@ class NewInboundCallFormComponent extends React.Component {
 
     return (
       <FormGroup controlId={fieldName}>
-        {fieldConfig.type === 'checkbox' && <Checkbox {...field} {...fieldConfig} />}
-        <ControlLabel>{fieldConfig.label}</ControlLabel>
+        {fieldConfig.type === 'checkbox'
+          ? <Checkbox {...field} {...fieldConfig}>{fieldConfig.label}</Checkbox>
+          : <ControlLabel>{fieldConfig.label}</ControlLabel>
+        }
         {fieldConfig.type === 'text' && <FormControl type="text" {...field} {...fieldConfig} />}
         {fieldConfig.type === 'textarea' && <FormControl componentClass="textarea" {...field} {...fieldConfig} />}
       </FormGroup>
