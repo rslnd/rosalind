@@ -11,11 +11,11 @@ body {
 }
 
 .s-alert-box {
-  z-index: 25000;
+  z-index: 400;
 }
 
 .modal {
-  z-index: 22000;
+  z-index: 300;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -36,11 +36,11 @@ body {
 }
 
 .main-header {
-  z-index: 20000;
+  z-index: 200;
 }
 
 .main-sidebar {
-  z-index: 10000;
+  z-index: 100;
   overflow-y: auto;
   height: 100%;
 }
