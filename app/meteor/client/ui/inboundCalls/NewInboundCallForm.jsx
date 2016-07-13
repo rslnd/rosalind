@@ -3,11 +3,6 @@ import { reduxForm } from 'redux-form'
 import { FormGroup, ControlLabel, FormControl, Checkbox, Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
 
-const form = {
-
-}
-
-
 const fields = {
   firstName: {
     type: 'text',
@@ -25,6 +20,10 @@ const fields = {
     type: 'textarea',
     label: TAPi18n.__('inboundCalls.form.note.label'),
     rows: 6
+  },
+  privatePatient: {
+    type: 'checkbox',
+    label: TAPi18n.__('inboundCalls.form.privatePatient.label')
   }
 }
 
@@ -35,6 +34,7 @@ class NewInboundCallFormComponent extends React.Component {
 
     return (
       <FormGroup controlId={fieldName}>
+        {fieldConfig.type === 'checkbox' && <Checkbox {...field} {...fieldConfig} />}
         <ControlLabel>{fieldConfig.label}</ControlLabel>
         {fieldConfig.type === 'text' && <FormControl type="text" {...field} {...fieldConfig} />}
         {fieldConfig.type === 'textarea' && <FormControl componentClass="textarea" {...field} {...fieldConfig} />}
@@ -43,22 +43,13 @@ class NewInboundCallFormComponent extends React.Component {
   }
 
   render () {
-    const { fields: { privatePatient }, handleSubmit } = this.props
-
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={this.props.handleSubmit}>
         {this.renderField(fields.lastName, 'lastName')}
         {this.renderField(fields.firstName, 'firstName')}
         {this.renderField(fields.telephone, 'telephone')}
         {this.renderField(fields.note, 'note')}
-
-        <FormGroup controlId="privatePatient">
-          <ControlLabel>
-            <Checkbox {...privatePatient}>
-            Private Patient
-            </Checkbox>
-          </ControlLabel>
-        </FormGroup>
+        {this.renderField(fields.privatePatient, 'privatePatient')}
 
         <Button type="submit" bsStyle="primary">{TAPi18n.__('inboundCalls.thisSave')}</Button>
       </form>
