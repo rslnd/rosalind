@@ -18,6 +18,7 @@ schema = new SimpleSchema
 
   privatePatient:
     type: Boolean
+    autoValue: -> false
 
   createdAt:
     type: Date

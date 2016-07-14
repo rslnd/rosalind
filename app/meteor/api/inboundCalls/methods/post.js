@@ -1,5 +1,6 @@
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { Events } from 'api/events'
 
 export const post = ({ InboundCalls }) => {
   return new ValidatedMethod({
@@ -13,10 +14,9 @@ export const post = ({ InboundCalls }) => {
       privatePatient: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ lastName, firstName, telephone, note, privatePatient }) {
-      InboundCalls.insert({ lastName, firstName, telephone, note, privatePatient })
-
-      console.log('[InboundCalls] Inserted', { lastName, firstName, telephone, note, privatePatient })
+    run (data) {
+      InboundCalls.insert(data)
+      Events.post('inboundCalls/post', data)
     }
   })
 }
