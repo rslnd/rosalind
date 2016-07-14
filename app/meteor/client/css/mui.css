@@ -1,0 +1,17 @@
+form.mui {
+  zoom: 1.29;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.mui button {
+  text-transform: uppercase;
+  color: white;
+  font-weight: 700;
+}
+
+.form-row {
+  margin-top: 24px;
+}

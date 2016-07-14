@@ -3,7 +3,7 @@ html, body {
 }
 
 body {
-  zoom: 1.1;
+  zoom: 1.11;
 }
 
 .zoom-1 {
@@ -40,6 +40,10 @@ a, button, .btn {
   cursor: pointer;
 }
 
+label {
+  font-weight: 400;
+}
+
 .enable-select {
   -webkit-touch-callout: text;
   -webkit-user-select: text;
@@ -73,7 +77,6 @@ pre {
 .pre-wrap {
   white-space: pre-wrap;
 }
-
 
 .break-word {
   word-wrap: break-word;
