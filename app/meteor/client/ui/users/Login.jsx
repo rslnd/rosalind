@@ -71,7 +71,7 @@ export class Login extends React.Component {
             </div>
             <div className="panel-body">
               <div className="form-group">
-                <label className="sr-only" for="nameField">{TAPi18n.__('login.name')}</label>
+                <label className="sr-only" htmlFor="nameField">{TAPi18n.__('login.name')}</label>
                 <div className="col-sm-12">
                   <input
                     name="name"
@@ -82,7 +82,7 @@ export class Login extends React.Component {
                 </div>
               </div>
               <div className="form-group">
-                <label className="sr-only" for="passwordField">{TAPi18n.__('login.password')}</label>
+                <label className="sr-only" htmlFor="passwordField">{TAPi18n.__('login.password')}</label>
                 <div className="col-sm-12">
                   <input
                     type="password"

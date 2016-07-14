@@ -1,5 +1,7 @@
 import { render } from 'react-dom'
-import { Provider } from 'react-redux'
+import { Provider as ReduxProvider } from 'react-redux'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { muiTheme } from './css/muiTheme'
 import { store } from './store'
 import routes from './routes'
 
@@ -7,7 +9,9 @@ import './index.html'
 
 export default () => {
   render(
-    <Provider store={store}>
-      {routes()}
-    </Provider>, document.getElementById('react-root'))
+    <ReduxProvider store={store}>
+      <MuiThemeProvider muiTheme={muiTheme}>
+        {routes()}
+      </MuiThemeProvider>
+    </ReduxProvider>, document.getElementById('react-root'))
 }
