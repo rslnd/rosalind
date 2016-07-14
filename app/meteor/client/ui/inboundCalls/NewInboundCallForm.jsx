@@ -2,21 +2,16 @@ import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { RaisedButton } from 'material-ui'
 import { TextField, Checkbox } from 'redux-form-material-ui'
+import SST from 'meteor-simple-schema-transform'
 import { TAPi18n } from 'meteor/tap:i18n'
+import schema from 'api/inboundCalls/schema'
 
 class NewInboundCallFormComponent extends React.Component {
-
-  componentWillMount () {
-    // this.refs.note            // the Field
-    //   .getRenderedComponent() // on Field, returns ReduxFormMaterialUITextField
-    //   .getRenderedComponent() // on ReduxFormMaterialUITextField, returns TextField
-    //   .focus()                // on TextField
-  }
-
   render () {
-    return (
-      <form onSubmit={this.props.handleSubmit} className="mui" autoComplete="nope">
+    const { pristine, submitting, handleSubmit } = this.props
 
+    return (
+      <form onSubmit={handleSubmit} className="mui" autoComplete="nope">
         <div className="row">
           <div className="col-md-12">
             <div className="row">
@@ -41,6 +36,7 @@ class NewInboundCallFormComponent extends React.Component {
               <div className="col-md-6">
                 <Field name="note"
                   component={TextField}
+                  autoFocus
                   multiLine rows={7} fullWidth
                   floatingLabelText={TAPi18n.__('inboundCalls.form.note.label')} />
               </div>
@@ -50,7 +46,12 @@ class NewInboundCallFormComponent extends React.Component {
 
         <div className="row form-row">
           <div className="col-md-12">
-            <RaisedButton type="submit" fullWidth primary>{TAPi18n.__('inboundCalls.thisSave')}</RaisedButton>
+            <RaisedButton type="submit"
+              fullWidth
+              primary={!submitting && !pristine}
+              disabled={pristine || submitting}>
+              {TAPi18n.__('inboundCalls.thisSave')}
+            </RaisedButton>
           </div>
         </div>
 
@@ -61,5 +62,6 @@ class NewInboundCallFormComponent extends React.Component {
 
 export const NewInboundCallForm = reduxForm({
   form: 'newInboundCall',
-  fields: ['lastName', 'firstName', 'telephone', 'note']
+  fields: ['lastName', 'firstName', 'telephone', 'note'],
+  validate: SST.forReduxForm.buildValidate(schema)
 })(NewInboundCallFormComponent)
