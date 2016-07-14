@@ -1,8 +1,9 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form/immutable'
+import { Field } from 'redux-form'
 import { RaisedButton } from 'material-ui'
 import { TextField, Checkbox } from 'redux-form-material-ui'
-import SST from 'meteor-simple-schema-transform'
+import sst from 'meteor-simple-schema-transform'
 import { TAPi18n } from 'meteor/tap:i18n'
 import schema from 'api/inboundCalls/schema'
 
@@ -11,7 +12,7 @@ class NewInboundCallFormComponent extends React.Component {
     const { pristine, submitting, handleSubmit } = this.props
 
     return (
-      <form onSubmit={handleSubmit} className="mui" autoComplete="nope">
+      <form onSubmit={handleSubmit} className="mui" autoComplete="off">
         <div className="row">
           <div className="col-md-12">
             <div className="row">
@@ -62,6 +63,6 @@ class NewInboundCallFormComponent extends React.Component {
 
 export const NewInboundCallForm = reduxForm({
   form: 'newInboundCall',
-  fields: ['lastName', 'firstName', 'telephone', 'note'],
-  validate: SST.forReduxForm.buildValidate(schema)
+  fields: ['lastName', 'firstName', 'telephone', 'note', 'privatePatient'],
+  validate: sst.forReduxForm.buildValidate(schema)
 })(NewInboundCallFormComponent)
