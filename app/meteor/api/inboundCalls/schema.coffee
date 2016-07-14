@@ -15,6 +15,7 @@ schema = new SimpleSchema
 
   note:
     type: String
+    optional: true
 
   privatePatient:
     type: Boolean
