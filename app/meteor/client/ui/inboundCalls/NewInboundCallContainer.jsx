@@ -4,8 +4,6 @@ import { InboundCalls } from 'api/inboundCalls'
 import { Box } from 'client/ui/components/Box'
 import { NewInboundCallForm } from './NewInboundCallForm'
 
-window.InboundCalls = InboundCalls
-
 const handleSubmit = (data) => {
   console.log('submit', data)
   InboundCalls.methods.post.call(data, (err, res) => {

@@ -1,5 +1,5 @@
-{ Meteor } = require 'meteor/meteor'
+{ InboundCalls } = require 'api/inboundCalls'
 
 Template.inboundCallsUnresolve.events
   'click .unresolve': ->
-    Meteor.call('inboundCalls/unresolve', @_id)
+    InboundCalls.methods.unresolve({ _id: @_id })

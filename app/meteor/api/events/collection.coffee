@@ -8,4 +8,8 @@ Events._createCappedCollection(1024 * 1024 * 4) if Meteor.isServer
 Events.attachSchema(Schema)
 Events.methods = methods({ Events })
 
+# Shortcut method
+Events.post = (type, payload) ->
+  Events.methods.post.call({ type, payload })
+
 module.exports = Events

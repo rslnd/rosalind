@@ -1,12 +1,11 @@
-import extend from 'lodash/extend'
-import resolve from './resolve'
-import unresolve from './unresolve'
+import { resolve } from './resolve'
+import { unresolve } from './unresolve'
 import { post } from './post'
 
 export default function ({ InboundCalls }) {
-  return extend({},
-    resolve({ InboundCalls }),
-    unresolve({ InboundCalls }),
+  return Object.assign({},
+    { resolve: resolve({ InboundCalls }) },
+    { unresolve: unresolve({ InboundCalls }) },
     { post: post({ InboundCalls }) }
   )
 }
