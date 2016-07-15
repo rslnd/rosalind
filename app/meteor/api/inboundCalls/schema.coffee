@@ -19,7 +19,7 @@ schema = new SimpleSchema
 
   privatePatient:
     type: Boolean
-    autoValue: -> false
+    defaultValue: false
 
   createdAt:
     type: Date
