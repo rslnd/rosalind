@@ -1,8 +1,8 @@
 import React from 'react'
 import Blaze from 'meteor/gadicc:blaze-react-component'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { TopbarContainer } from './topbarContainer'
-import { SidebarContainer } from './sidebarContainer'
+import { TopbarContainer } from './TopbarContainer'
+import { SidebarContainer } from './SidebarContainer'
 import { Login } from 'client/ui/users/Login'
 
 export const MainLayout = ({ children, currentUser, loggingIn }) => {
