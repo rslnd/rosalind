@@ -1,9 +1,11 @@
 import { composeWithTracker } from 'react-komposer'
 import { Meteor } from 'meteor/meteor'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { MainLayout } from './MainLayout'
 
 const composer = (props, onData) => {
   const currentUser = Meteor.user()
+  const locale = TAPi18n.getLanguage()
 
   if (currentUser) {
     let handles = []
@@ -17,11 +19,11 @@ const composer = (props, onData) => {
     handles.push(Meteor.subscribe('inboundCalls'))
 
     if (handles.every((h) => h.ready())) {
-      onData(null, { ...props, currentUser })
+      onData(null, { ...props, currentUser, locale })
     }
   } else {
     const loggingIn = Meteor.loggingIn()
-    onData(null, { ...props, currentUser, loggingIn })
+    onData(null, { ...props, currentUser, locale, loggingIn })
   }
 }
 
