@@ -15,7 +15,7 @@ body {
 }
 
 .modal {
-  z-index: 300;
+  z-index: 1050;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

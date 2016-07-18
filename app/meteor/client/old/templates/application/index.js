@@ -1,6 +1,7 @@
 import './footer/footer'
 import './hotkeys/hotkeys.coffee'
 import './hotkeys/hotkeys.css'
+import './modals/blazeModal'
 import './modals/loginHelp'
 import './modals/modalAutoForm'
 import './partials'
