@@ -1,3 +1,4 @@
+{ Modal } = require 'client/old/templates/application/modals/blazeModal'
 helpers = require './helpers'
 
 Template.commentCount.helpers
