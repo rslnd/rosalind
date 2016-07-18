@@ -1,5 +1,5 @@
 import { composeWithTracker } from 'react-komposer'
-import { Sidebar } from './sidebar'
+import { Sidebar } from './Sidebar'
 
 const sidebarItems = () => {
   return [

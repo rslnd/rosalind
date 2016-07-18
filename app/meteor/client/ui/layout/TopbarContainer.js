@@ -1,7 +1,7 @@
 import React from 'react'
 import { composeWithTracker } from 'react-komposer'
 import { Meteor } from 'meteor/meteor'
-import { Topbar } from './topbar'
+import { Topbar } from './Topbar'
 
 class TopbarContainerComponent extends React.Component {
   constructor (props) {
