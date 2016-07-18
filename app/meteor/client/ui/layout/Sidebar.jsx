@@ -6,7 +6,10 @@ import { TAPi18n } from 'meteor/tap:i18n'
 const SidebarItem = withRouter(({ item, router }) => {
   return (
     <li className={router.isActive(`/${item.name}`) && 'active'}>
-      <Link to={`/${item.name}`} className="pointer level-0 link">
+      <Link
+        to={`/${item.name}`}
+        className="pointer level-0 link"
+        title={TAPi18n.__(`${item.name}.this`)}>
         <i className={`fa fa-${item.icon}`}></i>
         <span>{TAPi18n.__(`${item.name}.this`)}</span>
         {item.subItems && <i className="i fa fa-angle-left pull-right"></i>}
@@ -15,7 +18,10 @@ const SidebarItem = withRouter(({ item, router }) => {
         <ul className="treeview-menu">
           {item.subItems.map((subItem) => (
             <li key={subItem.name} className={router.isActive(`/${item.name}${subItem.path}`, true) && 'active level-1 link'}>
-              <Link to={`/${item.name}${subItem.path}`} className="level-1 link">
+              <Link
+                to={`/${item.name}${subItem.path}`}
+                className="level-1 link"
+                title={TAPi18n.__([item.name, subItem.name].join('.'))}>
                 <span>{TAPi18n.__([item.name, subItem.name].join('.'))}</span>
               </Link>
             </li>

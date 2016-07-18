@@ -8,24 +8,17 @@ module.exports = ->
   @When 'I click on \'$linkText\'', (linkText) ->
     menuPath = linkText.indexOf('>') isnt -1
 
-    getSelector = (_linkText, level) ->
-      if typeof level is 'number'
-        '#' + _linkText.replace(/[^a-z]/ig, '-').toLowerCase() + '.level-' + level
-      else
-        _linkText
-
-
     browser.waitForExist '#loaded'
     if menuPath
-      browser.execute ((s0) ->
-        $(s0).click()
+      browser.execute(((s0) ->
+        $(".level-0[title=#{s0}]").click()
         return
-      ), getSelector(linkText.split(' > ')[0], 0)
+      ), linkText.split(' > ')[0])
       browser.pause 300
-      browser.execute ((s1) ->
-        $(s1).click()
+      browser.execute(((s1) ->
+        $(".level-1[title=#{s1}]").click()
         return
-      ), getSelector(linkText.split(' > ')[1], 1)
+      ), linkText.split(' > ')[1])
       browser.pause 300
       browser.waitForExist '#loaded'
     else if browser.isExisting('//a[@title="' + linkText + '"]')
