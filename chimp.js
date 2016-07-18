@@ -32,6 +32,8 @@ var os = {
   }[process.env.OS]
 }
 
+var buildName = process.env.SAUCE_NAME || 'Test run in development mode'
+
 console.log('** OS:', process.env.OS)
 console.log('** Browser:', browser.name, browser.version)
 console.log('** Worker:', process.env.SAUCE_TUNNEL_ID)
@@ -47,7 +49,7 @@ module.exports = {
   browser: browser.name.toLowerCase(),
   platform: os.short,
 
-  name: process.env.SAUCE_NAME,
+  name: buildName,
   host: process.env.SAUCE_HOST,
   port: process.env.SAUCE_PORT,
   user: process.env.SAUCE_USERNAME,
@@ -61,7 +63,7 @@ module.exports = {
       version: browser.version,
       platform: os.long,
       'tunnel-identifier': process.env.SAUCE_TUNNEL_ID,
-      name: process.env.SAUCE_NAME,
+      name: buildName,
       build: process.env.BUILD_NUMBER,
       public: true,
       after: function () {
