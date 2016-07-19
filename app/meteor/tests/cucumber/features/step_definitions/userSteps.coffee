@@ -11,8 +11,9 @@ module.exports = ->
       roles: roles
 
   @Given 'I am logged in', ->
+    browser.waitForExist('#locale.en')
     browser.execute(((name) -> Meteor.loginWithPassword(name, '1111')), lastUsername)
-    browser.waitForExist 'li.user-menu'
+    browser.waitForExist('li.user-menu')
 
   @Then 'I should be logged in', ->
     browser.waitForExist 'li.user-menu'
