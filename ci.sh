@@ -77,9 +77,9 @@ case "$1" in
     SECONDS=0
     RETRY=0
     npm run start:test &
-    for i in {1..900}; do
+    for i in {1..2700}; do
       printf "(%03d) " $i && curl -q "$ROOT_URL" && break;
-      if [ "$SECONDS" -ge 300 ]; then
+      if [ "$SECONDS" -ge 900 ]; then
         RETRY=$((RETRY + 1))
         SECONDS=0
         echo "[CI] Warning: Timed out while waiting for meteor to start"
