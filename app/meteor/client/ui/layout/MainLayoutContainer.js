@@ -5,7 +5,9 @@ import { MainLayout } from './MainLayout'
 
 const composer = (props, onData) => {
   const currentUser = Meteor.user()
+  const loggingIn = Meteor.loggingIn()
   const locale = TAPi18n.getLanguage()
+  let subscriptionsReady = false
 
   if (currentUser) {
     let handles = []
@@ -19,12 +21,11 @@ const composer = (props, onData) => {
     handles.push(Meteor.subscribe('inboundCalls'))
 
     if (handles.every((h) => h.ready())) {
-      onData(null, { ...props, currentUser, locale })
+      subscriptionsReady = true
     }
-  } else {
-    const loggingIn = Meteor.loggingIn()
-    onData(null, { ...props, currentUser, locale, loggingIn })
   }
+
+  onData(null, { ...props, currentUser, locale, loggingIn, subscriptionsReady })
 }
 
 const MainLayoutContainer = composeWithTracker(composer)(MainLayout)
