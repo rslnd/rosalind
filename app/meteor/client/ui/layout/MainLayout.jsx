@@ -4,7 +4,7 @@ import { TopbarContainer } from './TopbarContainer'
 import { SidebarContainer } from './SidebarContainer'
 import { Login } from 'client/ui/users/Login'
 
-export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
+export const MainLayout = ({ children, currentUser, loggingIn, locale, subscriptionsReady }) => {
   const alwaysRender = () => (
     <div id="loaded">
       <span id="locale" className={locale}></span>
@@ -12,7 +12,7 @@ export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
     </div>
   )
 
-  if (currentUser) {
+  if (currentUser && subscriptionsReady) {
     return (
       <div className="wrapper disable-select">
         <TopbarContainer />
@@ -32,7 +32,7 @@ export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
               <img src="/images/logo.svg" />
             </div>
             <div className="locked-content">
-              <Login loggingIn={loggingIn} />
+              <Login loggingIn={loggingIn || (currentUser && !subscriptionsReady)} />
             </div>
           </div>
         </div>
