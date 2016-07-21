@@ -4,7 +4,7 @@ module.exports =
       _ = require 'lodash'
       inflection = require 'lodash-inflection'
       TestUtil = require 'test-util'
-      Api = require('api')
+      Api = require('/api')
       _.mixin(inflection)
 
       collectionName = _.pluralize(options.collection)
