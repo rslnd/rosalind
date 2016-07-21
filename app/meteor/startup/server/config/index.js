@@ -1,3 +1,4 @@
+import development from './development'
 import accounts from './accounts'
 import appcache from './appcache'
 import defaultAccount from './defaultAccount'
@@ -8,4 +9,5 @@ export default function () {
   appcache()
   defaultAccount()
   browserPolicy()
+  development()
 }
