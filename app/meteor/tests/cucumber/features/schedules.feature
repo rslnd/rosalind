@@ -5,7 +5,8 @@ Feature: Schedules
   So that they can work at full capacity
 
   Background:
-    Given I am a 'manager' with the role 'schedules'
+    Given I am on the dashboard
+    And I am a 'manager' with the role 'schedules'
     And I am logged in
     Given a 'group' with the following attributes:
       | name       |
@@ -15,8 +16,8 @@ Feature: Schedules
       | db       | Dr. Best          | true             |
     And this user belongs to the group 'A+ Doctors'
 
-    Scenario: View default schedules
-      Given I click on 'Schedules > Default Schedules'
-      Then I should see 'Dr. Best'
-      And I should see 'A+ Doctors'
-      And I should see '0h'
+  Scenario: View default schedules
+    Given I click on 'Schedules > Default Schedules'
+    Then I should see 'Dr. Best'
+    And I should see 'A+ Doctors'
+    And I should see '0h'
