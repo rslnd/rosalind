@@ -18,8 +18,6 @@ const composer = (props, onData) => {
     Meteor.subscribe('inboundCalls')
   }
 
-  console.debug('Called composer with', { currentUser, loggingIn, locale })
-
   onData(null, { ...props, currentUser, locale, loggingIn })
 }
 
