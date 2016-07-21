@@ -4,10 +4,6 @@ Feature: Login
   I want my employees to be able to log in
   So that their time spent working is tracked
 
-  Background:
-    Given I am on the dashboard
-    And I am logged out
-
   Scenario: I have to log in
     Then I should be logged out
     And I should see 'Please log in'
