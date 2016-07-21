@@ -5,8 +5,7 @@ Feature: Inbound Calls
   So that the receptionists can schedule appointments
 
   Background:
-    Given I am on the dashboard
-    And I am a 'call center employee' with the role 'inboundCalls'
+    Given I am a 'call center employee' with the role 'inboundCalls'
     And I am logged in
 
   Scenario: Create inbound call

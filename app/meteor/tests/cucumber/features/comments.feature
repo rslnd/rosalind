@@ -5,8 +5,7 @@ Feature: Comments
   So that colleagues can see what is happening
 
   Background:
-    Given I am on the dashboard
-    And I am a 'call center employee' with the role 'inboundCalls'
+    Given I am a 'call center employee' with the role 'inboundCalls'
     And I am logged in
 
   Scenario: Add comment

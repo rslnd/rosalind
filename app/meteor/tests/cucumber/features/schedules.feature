@@ -5,8 +5,7 @@ Feature: Schedules
   So that they can work at full capacity
 
   Background:
-    Given I am on the dashboard
-    And I am a 'manager' with the role 'schedules'
+    Given I am a 'manager' with the role 'schedules'
     And I am logged in
     Given a 'group' with the following attributes:
       | name       |
