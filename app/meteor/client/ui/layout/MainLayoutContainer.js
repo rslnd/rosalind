@@ -7,25 +7,20 @@ const composer = (props, onData) => {
   const currentUser = Meteor.user()
   const loggingIn = Meteor.loggingIn()
   const locale = TAPi18n.getLanguage()
-  let subscriptionsReady = false
 
   if (currentUser) {
-    let handles = []
-
-    handles.push(Meteor.subscribe('users'))
-    handles.push(Meteor.subscribe('cache'))
-    handles.push(Meteor.subscribe('groups'))
-    handles.push(Meteor.subscribe('tags'))
-    handles.push(Meteor.subscribe('schedules'))
-    handles.push(Meteor.subscribe('timesheets'))
-    handles.push(Meteor.subscribe('inboundCalls'))
-
-    if (handles.every((h) => h.ready())) {
-      subscriptionsReady = true
-    }
+    Meteor.subscribe('users')
+    Meteor.subscribe('cache')
+    Meteor.subscribe('groups')
+    Meteor.subscribe('tags')
+    Meteor.subscribe('schedules')
+    Meteor.subscribe('timesheets')
+    Meteor.subscribe('inboundCalls')
   }
 
-  onData(null, { ...props, currentUser, locale, loggingIn, subscriptionsReady })
+  console.debug('Called composer with', { currentUser, loggingIn, locale })
+
+  onData(null, { ...props, currentUser, locale, loggingIn })
 }
 
 const MainLayoutContainer = composeWithTracker(composer)(MainLayout)
