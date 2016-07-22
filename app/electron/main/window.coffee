@@ -31,6 +31,9 @@ module.exports =
     mainWindow.on 'closed', ->
       app.quit()
 
+    mainWindow.on 'unresponsive', ->
+      logger.warn('[Window] Unresponsive')
+
     webContents = mainWindow.webContents
     webContents.openDevTools() if DEV
 
@@ -38,7 +41,6 @@ module.exports =
     webContents.on 'did-finish-load', ->
       callback(null) unless callbackCalled
       callbackCalled = true
-
 
     webContents.on 'devtools-opened', ->
       logger.warn('[Window] Developer Tools opened')
