@@ -12,7 +12,7 @@ Feature: Comments
     Given an 'inbound call' with the following attributes:
       | Last name | First name | Telephone | Note | Private Patient |
       | Schwarz   | Alex       | 123 456   | Test | false           |
-    And I click on 'Inbound Calls > Open inbound calls'
+    And I click on 'Inbound calls > Open inbound calls'
     And I fill in 'Post comment...' with 'This is a comment'
     And I press 'Enter'
     Then I should see the current time
@@ -24,10 +24,10 @@ Feature: Comments
     Given an 'inbound call' with the following attributes:
       | Last name | First name | Telephone | Note | Private Patient |
       | Schwarz   | Alex       | 123 456   | Test | false           |
-    And I click on 'Inbound Calls > Open inbound calls'
+    And I click on 'Inbound calls > Open inbound calls'
     And I click on 'Mark as resolved'
     Then I should not see 'Alex'
-    And I click on 'Inbound Calls > Resolved inbound calls'
+    And I click on 'Inbound calls > Resolved inbound calls'
     And I click on '0'
     Then I should see the element '.modal'
     And I fill in 'Post comment...' with 'Commented from modal'
@@ -35,5 +35,5 @@ Feature: Comments
     And I should see 'Commented from modal'
     When I fill in 'Post comment...' with 'Another comment from modal'
     And I click on 'Mark as unresolved'
-    And I click on 'Inbound Calls > Open inbound calls'
+    And I click on 'Inbound calls > Open inbound calls'
     Then I should see 'Another comment from modal'
