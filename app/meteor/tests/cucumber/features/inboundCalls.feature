@@ -18,7 +18,7 @@ Feature: Inbound Calls
     And I submit the form
     Then the field 'Last name' should be empty
     Given I click on 'Inbound calls > Open inbound calls'
-    Then I should see 'Sabine Schwarz'
+    Then I should see 'Schwarz Sabine'
     And I should see '0660 123456789'
     And I should see 'Move appt. for today from 18:00 to 19:00'
     And I should see the current time
@@ -28,8 +28,8 @@ Feature: Inbound Calls
       | Last name | First name | Telephone | Note | Private Patient |
       | Schwarz   | Lisa       | 123 456   | Test | false           |
     Given I click on 'Inbound calls > Open inbound calls'
-    Then I should see 'Lisa Schwarz'
+    Then I should see 'Schwarz Lisa'
     And I should see 'Insurance'
     Given I click on 'Mark as resolved'
-    Then I should not see 'Lisa Schwarz'
+    Then I should not see 'Schwarz Lisa'
     And I should see 'No open inbound calls'
