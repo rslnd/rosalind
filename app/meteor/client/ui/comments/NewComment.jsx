@@ -34,16 +34,19 @@ export class NewComment extends React.Component {
           <Avatar />
           <div className="img-push input-group input-group-sm">
             <label className="sr-only" htmlFor={'new-comment-' + this.props.docId} >
-              {TAPi18n.__('ui.press_enter_to_post_comment')}
+              {TAPi18n.__('ui.newCommentPlaceholder')}
             </label>
             <input type="text"
               className="form-control input-sm"
               id={'new-comment-' + this.props.docId}
-              placeholder={TAPi18n.__('ui.press_enter_to_post_comment')}
+              placeholder={TAPi18n.__('ui.newCommentPlaceholder')}
               value={this.state.body}
               onChange={this.handleBodyChange} />
             <span className="input-group-btn">
-              <button type="submit" className="btn btn-default btn-flat no-border-radius">
+              <button
+                type="submit"
+                title={TAPi18n.__('ui.newCommentPost')}
+                className="btn btn-default btn-flat no-border-radius">
                 <i className="fa fa-arrow-right text-muted"></i>
               </button>
             </span>
