@@ -11,6 +11,8 @@ module.exports =
       '[HMR] connected'
       'Download the React DevTools'
       '[Users] Logged'
+      '[Users] Login failed'
+      'Error: User not found [403]'
       '[Timesheets] Start tracking'
       '[Timesheets] Stop tracking'
     ]

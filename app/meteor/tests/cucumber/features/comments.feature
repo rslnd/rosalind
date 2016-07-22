@@ -13,7 +13,7 @@ Feature: Comments
       | Last name | First name | Telephone | Note | Private Patient |
       | Schwarz   | Alex       | 123 456   | Test | false           |
     And I click on 'Inbound calls > Open inbound calls'
-    And I fill in 'Post comment...' with 'This is a comment'
+    And I fill in 'Add comment...' with 'This is a comment'
     And I press 'Enter'
     Then I should see the current time
     And I should see 'callcenteremployee' in '.username'
@@ -30,10 +30,13 @@ Feature: Comments
     And I click on 'Inbound calls > Resolved inbound calls'
     And I click on '0'
     Then I should see the element '.modal'
-    And I fill in 'Post comment...' with 'Commented from modal'
+    And I fill in 'Add comment...' with 'Commented from modal'
     And I press 'Enter'
     And I should see 'Commented from modal'
-    When I fill in 'Post comment...' with 'Another comment from modal'
+    When I fill in 'Add comment...' with 'Another comment from modal'
+    And I click on 'Send'
     And I click on 'Mark as unresolved'
+    And I click on 'Close'
     And I click on 'Inbound calls > Open inbound calls'
-    Then I should see 'Another comment from modal'
+    Then I should see 'Commented from modal'
+    And I should see 'Another comment from modal'
