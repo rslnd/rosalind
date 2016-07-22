@@ -7,7 +7,7 @@ module.exports =
       _.mixin(inflection)
 
       collectionName = _.pluralize(options.collection)
-      collectionName = TestUtil.camelize(collectionName, true)
+      collectionName = TestUtil.camelize(collectionName)
       collection = Api[collectionName]
 
       attributes = TestUtil.transformAttributes(options.attributes)

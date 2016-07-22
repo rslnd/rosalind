@@ -1,4 +1,4 @@
-import Api from 'api'
+import * as Api from 'api'
 
 export default () => {
   if (process.env.NODE_ENV === 'production') { return }
