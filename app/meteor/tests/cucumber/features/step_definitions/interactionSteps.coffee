@@ -38,8 +38,8 @@ module.exports = ->
     browser.click('=' + linkText)
 
   @When /^I click on the (button|link|element) titled '([^']*)'/, (element, titleText) ->
-    browser.waitForVisible("[title=\"#{linkText}\"]")
-    browser.click("[title=\"#{linkText}\"]")
+    browser.waitForVisible("[title=\"#{titleText}\"]")
+    browser.click("[title=\"#{titleText}\"]")
 
   @When 'I fill in \'$labelText\' with \'$fieldValue\'', (labelText, fieldValue) ->
     selector = 'label=' + labelText
