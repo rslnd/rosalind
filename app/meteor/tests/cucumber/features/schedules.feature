@@ -16,7 +16,7 @@ Feature: Schedules
     And this user belongs to the group 'A+ Doctors'
 
   Scenario: View default schedules
-    Given I click on 'Schedules > Default Schedules'
+    Given I click on 'Schedules > Default schedules'
     Then I should see 'Dr. Best'
     And I should see 'A+ Doctors'
     And I should see '0h'

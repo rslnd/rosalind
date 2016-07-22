@@ -5,6 +5,7 @@
     "thisResolved": "Resolved inbound calls",
     "thisInsert": "New inbound call",
     "thisSave": "Save new inbound call",
+    "thisNew": "New inbound call",
     "empty": "No open inbound calls",
     "emptyResolved": "Couldn't find any resolved calls",
     "insurance": "Insurance",
