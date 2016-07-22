@@ -17,15 +17,11 @@ module.exports = ->
       level1 = ".level-1[title=\"#{linkText.split(' > ')[1]}\"]"
       browser.waitForVisible(level1)
       browser.click(level1)
-    else if browser.isVisibleWithinViewport('<button>=' + linkText)
-      browser.click('<button>=' + linkText)
-    else if browser.isVisibleWithinViewport("[title=\"#{linkText}\"]")
-      browser.click("[title=\"#{linkText}\"]")
-    else if browser.isVisibleWithinViewport('=' + linkText)
+    else if browser.isExisting('=' + linkText)
       browser.click('=' + linkText)
-    else if browser.isVisibleWithinViewport(linkText)
+    else if browser.isExisting(linkText)
       browser.click(linkText)
-    else if browser.isVisibleWithinViewport('*=' + linkText)
+    else if browser.isExisting('*=' + linkText)
       console.warn("DEPRECATED: Found element by partial text match `#{linkText}`")
       browser.click('*=' + linkText)
     else
@@ -33,6 +29,17 @@ module.exports = ->
 
     browser.pause(500)
 
+  @When 'I click on the button \'$buttonText\'', (buttonText) ->
+    browser.waitForVisible('button=' + buttonText)
+    browser.click('button=' + buttonText)
+
+  @When 'I click on the link \'$linkText\'', (linkText) ->
+    browser.waitForVisible('=' + linkText)
+    browser.click('=' + linkText)
+
+  @When /^I click on the (button|link|element) titled '([^']*)'/, (element, titleText) ->
+    browser.waitForVisible("[title=\"#{linkText}\"]")
+    browser.click("[title=\"#{linkText}\"]")
 
   @When 'I fill in \'$labelText\' with \'$fieldValue\'', (labelText, fieldValue) ->
     selector = 'label=' + labelText
