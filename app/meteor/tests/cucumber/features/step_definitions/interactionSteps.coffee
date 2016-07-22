@@ -17,22 +17,17 @@ module.exports = ->
       level1 = ".level-1[title=\"#{linkText.split(' > ')[1]}\"]"
       browser.waitForVisible(level1)
       browser.click(level1)
-    else if browser.isExisting('//a[@title="' + linkText + '"]')
-      browser.execute ((title) ->
-        $('a[title="' + title + '"]').click()
-        return
-      ), linkText
-    else if linkText.match(/(^\.|^\#)/ig)
-      browser.waitForVisible linkText
-      browser.click linkText
+    else if browser.isExisting("[title=\"#{linkText}\"]")
+      browser.click("[title=\"#{linkText}\"]")
     else if browser.isExisting('=' + linkText)
       browser.click('=' + linkText)
-    else if browser.isExisting('*=' + linkText)
-      browser.click('*=' + linkText)
     else if browser.isExisting(linkText)
       browser.click(linkText)
+    else if browser.isExisting('*=' + linkText)
+      console.warn("DEPRECATED: Found element by partial text match `#{linkText}`")
+      browser.click('*=' + linkText)
     else
-      throw new Error('Could not find any element (a|input|button|span) containing text: ' + linkText)
+      throw new Error('Could not find any element containing text: ' + linkText)
 
     browser.pause(500)
 
