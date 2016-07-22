@@ -22,7 +22,8 @@
     "exportToExcel": "Nach Excel exportieren",
     "comment": "Kommentar",
     "comment_plural": "Kommentare",
-    "press_enter_to_post_comment": "Kommentar schreiben...",
+    "newCommentPlaceholder": "Kommentar schreiben...",
+    "newCommentPost": "Senden",
     "noValue": "k.A.",
     "experimentalWarning": {
       "title": "Experimentelle Funktion",
