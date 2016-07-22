@@ -11,12 +11,12 @@ module.exports = ->
     browser.waitForExist '#loaded'
     if menuPath
       level0 = ".level-0[title=\"#{linkText.split(' > ')[0]}\"]"
-      browser.waitForVisible(linkText)
-      browser.click(linkText)
+      browser.waitForVisible(level0)
+      browser.click(level0)
 
       level1 = ".level-1[title=\"#{linkText.split(' > ')[1]}\"]"
-      browser.waitForVisible(linkText)
-      browser.click(linkText)
+      browser.waitForVisible(level1)
+      browser.click(level1)
     else if browser.isExisting('//a[@title="' + linkText + '"]')
       browser.execute ((title) ->
         $('a[title="' + title + '"]').click()
