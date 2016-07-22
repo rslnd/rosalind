@@ -12,10 +12,6 @@ install:
     cd app\electron\
 
     npm-install-retry --wait 500 --attempts 10
-cache:
-- '%USERPROFILE%\.electron\'
-- node_modules\
-- app\electron\node_modules\
 build_script:
 - ps: >-
     $package = Get-Content -Raw -Path package.json | out-string | ConvertFrom-Json
