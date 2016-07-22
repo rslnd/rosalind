@@ -1,7 +1,7 @@
-electron = require 'app'
+{ app } = require 'electron'
 
 module.exports =
   appId: 'com.squirrel.rslnd.rosalind'
   name: 'Rosalind'
   productName: 'Rosalind'
-  version: electron.getVersion()
+  version: app.getVersion()

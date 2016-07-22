@@ -1,6 +1,5 @@
 _ = require 'lodash'
-electron = require 'app'
-BrowserWindow = require 'browser-window'
+{ app, BrowserWindow } = require 'electron'
 logger = require './logger'
 settings = require './settings'
 
@@ -8,7 +7,7 @@ DEV = _.includes(process.argv, '--dev')
 
 module.exports =
   open: (callback) ->
-    screen = require 'screen'
+    { screen } = require 'electron'
     display = screen.getPrimaryDisplay().workAreaSize
 
     mainWindow = new BrowserWindow
@@ -30,7 +29,7 @@ module.exports =
     mainWindow.maximize()
 
     mainWindow.on 'closed', ->
-      electron.quit()
+      app.quit()
 
     webContents = mainWindow.webContents
     webContents.openDevTools() if DEV

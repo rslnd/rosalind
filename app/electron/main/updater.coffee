@@ -1,7 +1,6 @@
 fs = require 'fs'
 shortcut = require 'windows-shortcuts-appid'
-electron = require 'app'
-autoUpdater = require 'auto-updater'
+{ app, autoUpdater } = require 'electron'
 logger = require './logger'
 manifest = require './manifest'
 shortcuts = require './shortcuts'
@@ -12,7 +11,7 @@ module.exports =
   handleStartupEvent: ->
     return unless process.platform is 'win32'
 
-    electron.setAppUserModelId(manifest.appId)
+    app.setAppUserModelId(manifest.appId)
 
     squirrelCommand = process.argv[1]
 
@@ -25,7 +24,7 @@ module.exports =
         #   explorer context menus
         logger.info('[Updater] Squirrel command: install')
         shortcuts.updateShortcuts()
-        setTimeout(electron.quit, 600)
+        setTimeout(app.quit, 600)
         return true
 
       when '--squirrel-uninstall'
@@ -33,7 +32,7 @@ module.exports =
         # --squirrel-updated handlers
         logger.info('[Updater] Squirrel command: uninstall')
         shortcuts.deleteShortcuts()
-        setTimeout(electron.quit, 600)
+        setTimeout(app.quit, 600)
         return true
 
       when '--squirrel-obsolete'
@@ -41,7 +40,7 @@ module.exports =
         # we update to the new version - it's the opposite of
         # --squirrel-updated
         logger.info('[Updater] Squirrel command: obsolete')
-        setTimeout(electron.quit, 600)
+        setTimeout(app.quit, 600)
         return true
 
   start: ->

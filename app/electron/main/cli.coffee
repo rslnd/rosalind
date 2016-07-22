@@ -1,9 +1,9 @@
-electron = require 'app'
+{ app } = require 'electron'
 logger = require './logger'
 
 module.exports =
   handleStartupEvent: (callback) ->
-    shouldQuit = electron.makeSingleInstance (argv, cwd) ->
+    shouldQuit = app.makeSingleInstance (argv, cwd) ->
       logger.info('[CLI] Other instance was launched in', cwd, argv)
       callback(argv, cwd)
 
