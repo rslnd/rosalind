@@ -22,14 +22,11 @@ module.exports = ->
         $('a[title="' + title + '"]').click()
         return
       ), linkText
-      browser.pause 300
-      browser.waitForExist '#loaded'
     else
       if linkText.match(/(^\.|^\#)/ig)
         browser.waitForVisible linkText
         browser.click linkText
       else
-        browser.pause 300
         foundAndClicked = browser.execute(((linkText) ->
 
           # Taken from jQuery UI
@@ -64,9 +61,9 @@ module.exports = ->
           else
             false
         ), linkText)
-        browser.pause 300
-        browser.waitForExist '#loaded'
         expect(foundAndClicked.value).not.toBe false, 'Could not find any element (a|input|button|span) containing text: ' + linkText
+
+    browser.pause(500)
     return
 
 
