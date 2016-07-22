@@ -1,4 +1,4 @@
-electron = require 'app'
+{ app } = require 'electron'
 updater = require './updater'
 window = require './window'
 logger = require './logger'
@@ -16,10 +16,10 @@ mainWindow = null
 bdtWatcher = null
 
 start = ->
-  return electron.quit() if updater.handleStartupEvent()
-  return electron.quit() if cli.handleStartupEvent(focus)
+  return app.quit() if updater.handleStartupEvent()
+  return app.quit() if cli.handleStartupEvent(focus)
 
-  electron.on 'ready', ->
+  app.on 'ready', ->
     mainWindow = window.open (err) ->
       return logger.error('[Main] Could not load main window', err) if err
       logger.ready('[Main] Main window loaded')
@@ -32,10 +32,10 @@ start = ->
     updater.start()
     setTimeout(updater.check, 15 * 1000)
 
-  electron.on 'window-all-closed', ->
+  app.on 'window-all-closed', ->
     updater.quitAndInstall()
     importers.stop()
-    electron.quit()
+    app.quit()
 
 focus = ->
   return unless mainWindow

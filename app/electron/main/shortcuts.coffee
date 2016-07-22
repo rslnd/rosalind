@@ -1,6 +1,5 @@
 fs = require 'fs'
 shortcut = require 'windows-shortcuts-appid'
-electron = require 'app'
 logger = require './logger'
 settings = require './settings'
 manifest = require './manifest'

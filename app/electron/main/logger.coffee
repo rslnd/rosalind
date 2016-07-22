@@ -4,13 +4,12 @@ url = require 'url'
 _ = require 'lodash'
 winston = require 'winston'
 require 'winston-papertrail'
-electron = require 'app'
-{ ipcMain } = require 'electron'
+{ ipcMain, app } = require 'electron'
 
 module.exports =
   start: ->
     winston.add winston.transports.File,
-      filename: path.join(electron.getPath('userData'), 'RosalindElectron.log')
+      filename: path.join(app.getPath('userData'), 'RosalindElectron.log')
       level: 'debug'
       json: false
       maxsize: 1024 * 1024 * 10
@@ -30,18 +29,18 @@ module.exports =
         customerHostname = 'development'
 
       hostname = [os.hostname(), customerHostname].join('.')
-      program = [ [ 'rosalind', os.platform(), os.arch() ].join('-'), electron.getVersion() ].join('/')
+      program = [ [ 'rosalind', os.platform(), os.arch() ].join('-'), app.getVersion() ].join('/')
       winston.info('[Log] Enabling papertrail log transport', { program, hostname })
       winston.add(winston.transports.Papertrail, { host, port, program, hostname })
 
     winston.info('[Log] App launched')
-    winston.info('[Log] App version: ', electron.getVersion())
+    winston.info('[Log] App version: ', app.getVersion())
     winston.info('[Log] Command line arguments: ', process.argv)
 
     process.on 'uncaughtException', (err) ->
       winston.error('[Main] Uncaught Exception:', err)
 
-    electron.on 'quit', ->
+    app.on 'quit', ->
       winston.info('[Log] App quit')
 
     ipcMain.on 'log', (e, err) ->
@@ -52,7 +51,7 @@ module.exports =
 
     if _.includes(process.argv, '--debug-quit-on-ready')
       winston.info('[Log] Debug: App launched successfully; now quitting')
-      electron.quit()
+      app.quit()
 
 
   debug: winston.debug
