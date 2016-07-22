@@ -10,6 +10,8 @@
     "resolvedToday": "heute erledigt",
     "empty": "Es sind momentan keine offenen eingehenden Anrufe zu bearbeiten.",
     "emptyResolved": "Keine eingehenden Anrufe sind als erledigt markiert.",
+    "postError": "Hoppla! Bitte noch einmal versuchen.",
+    "postSuccess": "Anruf eingetragen",
     "insurance": "Kasse",
     "private": "Privat",
     "resolve": "Als erledigt markieren",

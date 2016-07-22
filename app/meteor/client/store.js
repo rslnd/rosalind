@@ -2,7 +2,16 @@ import { createStore, combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form'
 
 const reducers = {
-  form: formReducer
+  form: formReducer.plugin({
+    newInboundCall: (state, action) => {
+      switch (action.type) {
+        case 'INBOUND_CALL_POST_SUCCESS':
+          return undefined
+        default:
+          return state
+      }
+    }
+  })
 }
 
 const reducer = combineReducers(reducers)
