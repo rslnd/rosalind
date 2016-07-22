@@ -2,11 +2,10 @@ fs = require 'fs'
 path = require 'path'
 childProcess = require 'child_process'
 _ = require 'lodash'
-electron = require 'app'
-{ ipcMain } = require 'electron'
+{ ipcMain, app } = require 'electron'
 logger = require './logger'
 
-settingsPath = path.join(electron.getPath('userData'), 'RosalindSettings.json')
+settingsPath = path.join(app.getPath('userData'), 'RosalindSettings.json')
 
 editSettings = ->
   logger.info('[Settings] Spawning settings editor')
