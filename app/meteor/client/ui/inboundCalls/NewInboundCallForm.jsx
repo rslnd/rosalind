@@ -9,10 +9,10 @@ import schema from 'api/inboundCalls/schema'
 
 class NewInboundCallFormComponent extends React.Component {
   render () {
-    const { pristine, submitting, handleSubmit } = this.props
+    const { pristine, submitting, handleSubmit, onSubmit } = this.props
 
     return (
-      <form onSubmit={handleSubmit} className="mui" autoComplete="off">
+      <form onSubmit={handleSubmit(onSubmit)} className="mui" autoComplete="off">
         <div className="row">
           <div className="col-md-12">
             <div className="row">
