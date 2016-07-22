@@ -22,49 +22,19 @@ module.exports = ->
         $('a[title="' + title + '"]').click()
         return
       ), linkText
+    else if linkText.match(/(^\.|^\#)/ig)
+      browser.waitForVisible linkText
+      browser.click linkText
+    else if browser.isExisting('=' + linkText)
+      browser.click('=' + linkText)
+    else if browser.isExisting('*=' + linkText)
+      browser.click('*=' + linkText)
+    else if browser.isExisting(linkText)
+      browser.click(linkText)
     else
-      if linkText.match(/(^\.|^\#)/ig)
-        browser.waitForVisible linkText
-        browser.click linkText
-      else
-        foundAndClicked = browser.execute(((linkText) ->
-
-          # Taken from jQuery UI
-          zIndex = (elem) ->
-            elem = $(elem)
-            position = 0
-            value = 0
-
-            while elem.length and elem[0] isnt document
-              # Ignore z-index if position is set to a value where z-index is ignored by the browser
-              # This makes behavior of this function consistent across browsers
-              # WebKit always returns auto if the element is positioned
-              position = elem.css('position')
-              if (position is 'absolute' or position is 'relative' or position is 'fixed')
-                # IE returns 0 when zIndex is not specified
-                # other browsers return a string
-                # we ignore the case of nested elements with an explicit value of 0
-                # <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
-                value = parseInt(elem.css('zIndex'), 10)
-                return value if (not isNaN(value) and value isnt 0)
-
-              elem = elem.parent()
-            return 0
-
-          # Sort matched elements by computed zIndex and click on the topmost one
-          el = $('a,input,button,span').filter(':contains("' + linkText + '")').sort((a, b) ->
-            Number(zIndex(b)) - Number(zIndex(a))
-          )
-          if el.length > 0
-            el.first().click()
-            true
-          else
-            false
-        ), linkText)
-        expect(foundAndClicked.value).not.toBe false, 'Could not find any element (a|input|button|span) containing text: ' + linkText
+      throw new Error('Could not find any element (a|input|button|span) containing text: ' + linkText)
 
     browser.pause(500)
-    return
 
 
   @When 'I fill in \'$labelText\' with \'$fieldValue\'', (labelText, fieldValue) ->
