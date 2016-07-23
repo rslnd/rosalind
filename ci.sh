@@ -137,11 +137,6 @@ case "$1" in
     retry ./push.sh
     echo -en "travis_fold:end:push\r"
 
-    echo -en "travis_fold:start:deploy\r"
-    retry ./deploy.sh
-    cd -
-    echo -en "travis_fold:end:deploy\r"
-
     echo "** Done!"
 
     ;;
