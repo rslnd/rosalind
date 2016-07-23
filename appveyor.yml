@@ -10,7 +10,17 @@ environment:
   nodejs_version: '6.1.0'
 
 install:
-- ps: Install-Product node $env:nodejs_version
+- ps: >-
+    Install-Product node $env:nodejs_version
+
+    echo "node version"
+
+    node --version
+
+    echo "npm version"
+
+    npm --version
+
 - cmd: >-
     npm install -g npm-install-retry
 
@@ -32,11 +42,6 @@ build_script:
 
 test_script:
 - ps: >-
-    echo "node version"
-    node --version
-    echo "npm version"
-    npm --version
-
     echo "--> Installing app"
 
 
