@@ -1,8 +1,14 @@
 version: '{build}'
+
 branches:
   only:
   - master
+
 shallow_clone: true
+
+environment:
+  nodejs_version: '6.1.0'
+
 install:
 - cmd: >-
     npm install -g npm-install-retry
@@ -12,6 +18,7 @@ install:
     cd app\electron\
 
     npm-install-retry --wait 500 --attempts 10
+
 build_script:
 - ps: >-
     $package = Get-Content -Raw -Path package.json | out-string | ConvertFrom-Json
@@ -21,6 +28,7 @@ build_script:
 
 
     cmd /c 'npm run client:build 2>&1'
+
 test_script:
 - ps: >-
     echo "--> Installing app"
@@ -42,6 +50,7 @@ test_script:
 
 
     echo "--> Done"
+
 artifacts:
 - path: app\electron\build\installer\Rosalind-win32-ia32\RELEASES
   name: RELEASES-win-ia32
@@ -49,6 +58,7 @@ artifacts:
   name: RosalindSetup-win-ia32.exe
 - path: app\electron\build\installer\Rosalind-win32-ia32\*.nupkg
   name: rosalind-win-ia32.nupkg
+
 deploy:
 - provider: GitHub
   tag: $(ROSALIND_VERSION)
