@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'font-awesome-webpack'
 import 'admin-lte/dist/css/AdminLTE.css'
 import 'admin-lte/dist/css/skins/skin-blue.css'
+import adminlte from './adminlte'
 import './layout.css'
 import './lockedLayout.css'
 import './overrides.css'
@@ -12,3 +13,4 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 // Material UI
 injectTapEventPlugin()
+adminlte()
