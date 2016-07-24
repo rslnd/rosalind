@@ -19,7 +19,9 @@
     "storybook": "docker-compose -f docker-compose.yml -f docker-compose.development.yml run --service-ports storybook",
     "client:start": "cd app/electron/ && node_modules/.bin/grunt",
     "client:build": "cd app/electron/ && node_modules/.bin/grunt build",
-    "client:tag": "cd app/electron/ && node_modules/.bin/grunt tag"
+    "client:tag": "cd app/electron/ && node_modules/.bin/grunt tag",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "chai": "^3.5.0",
@@ -31,7 +33,8 @@
     "mocha": "^2.4.5",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
-    "standard": "^7.1.2"
+    "standard": "^7.1.2",
+    "snyk": "^1.17.1"
   },
   "engines": {
     "node": "^0.12.7"
@@ -41,5 +44,6 @@
       "/app/meteor/client/compatibility/",
       "/app/meteor/packages/"
     ]
-  }
+  },
+  "snyk": true
 }
