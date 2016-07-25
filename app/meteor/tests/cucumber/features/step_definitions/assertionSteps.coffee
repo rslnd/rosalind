@@ -29,8 +29,8 @@ module.exports = ->
     browser.waitForExist('#loaded')
     bodyText = browser.getText('body')
 
-    time = moment().format('HH:mm')
-    timeYeahWhatever = moment().subtract(1, 'minute').format('HH:mm')
+    time = moment().format('H:mm')
+    timeYeahWhatever = moment().subtract(1, 'minute').format('H:mm')
 
     contains = bodyText.indexOf(time) >= 0 or bodyText.indexOf(timeYeahWhatever) >= 0
     expect(contains).toEqual(true, "Expected '#{bodyText}' to contain '#{time}' (or '#{timeYeahWhatever}')")
