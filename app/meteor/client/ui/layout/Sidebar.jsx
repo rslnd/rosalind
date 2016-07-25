@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, withRouter } from 'react-router'
+import FlipMove from 'react-flip-move'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
 
@@ -12,11 +13,13 @@ const SidebarItem = withRouter(({ item, router }) => {
         title={TAPi18n.__(`${item.name}.this`)}>
         <i className={`fa fa-${item.icon}`}></i>
         <span>{TAPi18n.__(`${item.name}.this`)}</span>
-        {
-          item.count && item.count > 0
-          ? <small className="label pull-right label-primary">{item.count}</small>
-          : (item.subItems && <i className="i fa fa-angle-left pull-right"></i>)
-        }
+        <FlipMove typeName="span">
+          {
+            item.count && item.count > 0
+            ? <small key={item.count} className="label pull-right label-primary">{item.count}</small>
+          : (item.subItems && <i key="subItems" className="i fa fa-angle-left pull-right">&emsp;</i>)
+          }
+        </FlipMove>
       </Link>
       {item.subItems &&
         <ul className="treeview-menu">
