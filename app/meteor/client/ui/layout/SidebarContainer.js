@@ -1,6 +1,7 @@
 import { composeWithTracker } from 'react-komposer'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
+import { Counts } from 'meteor/tmeasday:publish-counts'
 import { Sidebar } from './Sidebar'
 
 const sidebarItems = () => {
@@ -9,6 +10,7 @@ const sidebarItems = () => {
       name: 'inboundCalls',
       icon: 'phone',
       roles: ['admin', 'inboundCalls'],
+      countBadge: 'inboundCalls',
       subItems: [
         { name: 'thisOpen', path: '/' },
         { name: 'thisResolved', path: '/resolved' },
@@ -62,6 +64,13 @@ const sidebarItems = () => {
 const composer = (props, onData) => {
   const items = sidebarItems().filter((item) => {
     return (!item.roles || item.roles && Roles.userIsInRole(Meteor.user(), item.roles))
+  }).map((item) => {
+    if (item.countBadge) {
+      const count = Counts.get(item.countBadge)
+      return { ...item, count }
+    } else {
+      return item
+    }
   })
 
   onData(null, { items })
