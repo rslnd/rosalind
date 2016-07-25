@@ -1,0 +1,8 @@
+version: v1.5.0
+ignore: {}
+patch:
+  'npm:tough-cookie:20160722':
+    - chimp > request > tough-cookie:
+        patched: '2016-07-25T09:34:38.462Z'
+    - chimp > xolvio-sync-webdriverio > webdriverio > request > tough-cookie:
+        patched: '2016-07-25T09:34:38.462Z'
