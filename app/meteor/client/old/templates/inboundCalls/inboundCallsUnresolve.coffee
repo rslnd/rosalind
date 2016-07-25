@@ -2,4 +2,4 @@
 
 Template.inboundCallsUnresolve.events
   'click .unresolve': ->
-    InboundCalls.methods.unresolve({ _id: @_id })
+    InboundCalls.methods.unresolve.call({ _id: @_id })
