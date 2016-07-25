@@ -12,7 +12,11 @@ const SidebarItem = withRouter(({ item, router }) => {
         title={TAPi18n.__(`${item.name}.this`)}>
         <i className={`fa fa-${item.icon}`}></i>
         <span>{TAPi18n.__(`${item.name}.this`)}</span>
-        {item.subItems && <i className="i fa fa-angle-left pull-right"></i>}
+        {
+          item.count && item.count > 0
+          ? <small className="label pull-right label-primary">{item.count}</small>
+          : (item.subItems && <i className="i fa fa-angle-left pull-right"></i>)
+        }
       </Link>
       {item.subItems &&
         <ul className="treeview-menu">
