@@ -1,22 +1,21 @@
 # Core
-es5-shim
-meteor-base
-mobile-experience
-mongo
-blaze-html-templates
-session
-tracker
-logging
-reload
-random
-ejson
-spacebars
-check
-accounts-base
-accounts-password
-standard-minifiers
-reactive-dict
-reactive-var
+es5-shim@4.6.13
+meteor-base@1.0.4
+mobile-experience@1.0.4
+mongo@1.1.10
+blaze-html-templates@1.0.4
+session@1.1.6
+tracker@1.1.0
+logging@1.1.14
+reload@1.1.10
+random@1.0.10
+ejson@1.0.12
+spacebars@1.0.12
+check@1.2.3
+accounts-base@1.2.9
+accounts-password@1.2.12
+reactive-dict@1.1.8
+reactive-var@1.0.10
 
 # React
 webpack:webpack
@@ -31,9 +30,9 @@ xolvio:backdoor
 xolvio:cleaner
 
 # Security
-browser-policy
+browser-policy@1.0.9
 keyvan:my-force-ssl
-audit-argument-checks
+audit-argument-checks@1.0.7
 ongoworks:security
 mdg:validated-method
 
@@ -59,7 +58,7 @@ mizzao:user-status
 
 # UI
 dalgard:jade
-fastclick
+fastclick@1.0.12
 juliancwirko:s-alert
 juliancwirko:s-alert-stackslide
 rochal:slimscroll
@@ -91,3 +90,5 @@ meteorhacks:kadira
 
 # Cluster
 meteorhacks:cluster
+standard-minifier-css
+standard-minifier-js
