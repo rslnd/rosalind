@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import { Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { Avatar } from 'client/ui/users/Avatar'
 import { Icon } from 'client/ui/components/Icon'
 
 export class Topbar extends React.Component {
@@ -43,12 +44,15 @@ export class Topbar extends React.Component {
               <li className={`dropdown user user-menu ${this.state.userMenuOpen && 'open'}`}>
                 <a onClick={this.toggleUserMenu}>
                   <span >
-                    {this.props.username}
+                    {this.props.currentUser.fullNameWithTitle()}
                     <i className="caret" />
                   </span>
                 </a>
                 <ul className="dropdown-menu">
-                  <li className="user-body">{this.props.username}</li>
+                  <li className="user-body">
+                    <Avatar userId={this.props.currentUser._id} />&emsp;
+                    <span>{this.props.currentUser.fullNameWithTitle()}</span>
+                  </li>
                   <li className="user-footer">
                     {
                       this.props.loggingOut
