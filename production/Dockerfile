@@ -1,4 +1,4 @@
-FROM node:0.10.44-slim
+FROM node:4.4.7-slim
 
 RUN echo \
    'deb ftp://ftp.us.debian.org/debian/ jessie main\n \
