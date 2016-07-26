@@ -1,6 +1,7 @@
 import { composeWithTracker } from 'react-komposer'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { Loading } from 'client/ui/components/Loading'
 import { MainLayout } from './MainLayout'
 
 const composer = (props, onData) => {
@@ -21,6 +22,6 @@ const composer = (props, onData) => {
   onData(null, { ...props, currentUser, locale, loggingIn })
 }
 
-const MainLayoutContainer = composeWithTracker(composer)(MainLayout)
+const MainLayoutContainer = composeWithTracker(composer, Loading)(MainLayout)
 
 export { MainLayoutContainer }
