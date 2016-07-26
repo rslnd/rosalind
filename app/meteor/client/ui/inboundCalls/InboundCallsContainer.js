@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { InboundCalls } from 'api/inboundCalls'
+import { Loading } from 'client/ui/components/Loading'
 import { InboundCallsScreen } from './InboundCallsScreen'
 import { composeWithTracker } from 'react-komposer'
 
@@ -14,4 +15,4 @@ const composer = (props, onData) => {
   }
 }
 
-export const InboundCallsContainer = composeWithTracker(composer)(InboundCallsScreen)
+export const InboundCallsContainer = composeWithTracker(composer, Loading)(InboundCallsScreen)
