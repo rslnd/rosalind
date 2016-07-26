@@ -33,3 +33,7 @@ Feature: Inbound Calls
     Given I click on 'Mark as resolved'
     Then I should not see 'Schwarz Lisa'
     And I should see 'No open inbound calls'
+    Given I click in 'Inbound calls > Resolved inbound calls'
+    Then I should see 'Schwarz'
+    Given I click on 'Mark as unresolved'
+    Then I should not see 'Schwarz'
