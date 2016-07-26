@@ -28,7 +28,7 @@ class TopbarContainerComponent extends React.Component {
   render () {
     return (
       <Topbar
-        username={this.props.username}
+        currentUser={this.props.currentUser}
         handleLogout={this.handleLogout}
         loggingOut={this.state.loggingOut} />
     )
@@ -36,8 +36,8 @@ class TopbarContainerComponent extends React.Component {
 }
 
 const composer = (props, onData) => {
-  const username = Meteor.user().fullNameWithTitle()
-  onData(null, { username })
+  const currentUser = Meteor.user()
+  onData(null, { currentUser })
 }
 
 const TopbarContainer = composeWithTracker(composer)(TopbarContainerComponent)
