@@ -8,6 +8,6 @@
       ul.nav.nav-pills.nav-stacked
         +each users
           li
-            a(href='{{ linkToDefaultScheduleForUser }}')
+            a(href='{{ linkToDefaultScheduleForUser }}' ref='interceptClick')
               | {{ this.fullNameWithTitle }}
               span.label.label-primary.pull-right {{ totalHoursPerWeek }}

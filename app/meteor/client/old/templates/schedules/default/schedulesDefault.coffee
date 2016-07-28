@@ -10,11 +10,14 @@ Template.schedulesDefault.currentView = new ReactiveDict
 Template.schedulesDefault.onCreated ->
   Template.schedulesDefault.currentView.clear()
   Tracker.autorun ->
-    console.error('Not Implemented: Get username param from url')
-    if username = @params?.username
+    Template.schedulesDefault.currentView.get('refresh')
+
+    dirtyHack = window.location.pathname.split('/')
+
+    if username = dirtyHack[dirtyHack.length - 1]
       user = Users.methods.findOneByIdOrUsername(username)
-    else
-      user = Meteor.user()
+
+    user ||= Meteor.user()
     Template.schedulesDefault.currentView.set('userId', user._id)
 
 Template.schedulesDefault.events
