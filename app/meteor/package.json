@@ -49,7 +49,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@kadira/storybook": "^1.37.0",
     "babel": "^6.5.2",
     "babel-core": "^6.3.26",
     "babel-loader": "^6.2.4",
