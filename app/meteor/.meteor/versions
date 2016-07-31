@@ -32,6 +32,7 @@ caching-html-compiler@1.0.6
 callback-hook@1.0.9
 cfs:http-methods@0.0.32
 check@1.2.3
+clinical:env@3.2.2
 coffeescript@1.2.3
 copleykj:livestamp@1.1.7
 dalgard:jade@0.5.4_1
@@ -83,8 +84,10 @@ mdg:validated-method@1.1.0
 mdg:validation-error@0.4.0
 meteor@1.2.16
 meteor-base@1.0.4
+meteor-platform@1.2.6
 meteorhacks:async@1.0.0
 meteorhacks:cluster@1.6.9
+meteorhacks:inject-initial@1.0.4
 meteorhacks:kadira@2.30.0
 meteorhacks:meteorx@1.4.1
 meteorhacks:picker@1.0.3

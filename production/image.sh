@@ -24,6 +24,11 @@ else
 
   cd ../build/bundle/
 
+  if [ ! -z $TRAVIS_COMMIT ]; then
+    echo "ENV COMMIT_HASH $TRAVIS_COMMIT" >> Dockerfile
+    echo "ENV BUILD_NUMBER $TRAVIS_BUILD_NUMBER" >> Dockerfile
+  fi
+
   echo "** Building image with tag: $DOCKER_IMAGE_WITH_TAG"
   docker build -t $DOCKER_IMAGE_WITH_TAG .
 

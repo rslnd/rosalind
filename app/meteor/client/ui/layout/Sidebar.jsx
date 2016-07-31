@@ -63,7 +63,7 @@ export class Sidebar extends React.Component {
     return (
       <aside className="main-sidebar sidebar">
         <ul className="sidebar-menu">
-          <li className="header text-center">{Meteor.settings.customerName || 'Rosalind Development'}</li>
+          <li className="header text-center">{process.env.CUSTOMER_NAME || 'Rosalind Development'}</li>
           {this.props.items.map((item) => (
             <SidebarItem key={item.name} item={item} handleItemClick={this.handleItemClick} handleSubItemClick={this.handleSubItemClick} />
           ))}

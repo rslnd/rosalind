@@ -121,7 +121,7 @@ export class Login extends React.Component {
             <p>{TAPi18n.__('login.help.body')}</p>
           </Modal.Body>
           <Modal.Footer>
-            <span className="text-very-muted pull-left">{Meteor.settings.commit || 'Development'}</span>
+            <span className="text-very-muted pull-left">{(process.env.COMMIT_HASH && process.env.COMMIT_HASH.substring(0, 7)) || 'Development'}</span>
             <Button onClick={this.handleCloseLoginHelpModal} bsStyle="primary" pullRight>{TAPi18n.__('login.help.ok')}</Button>
           </Modal.Footer>
         </Modal>
