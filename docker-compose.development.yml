@@ -2,7 +2,7 @@ meteor:
   restart: on-failure:10
 
 storybook:
-  image: quay.io/rosalind/meteor-development:1.4
+  image: quay.io/rosalind/meteor-development:1.4.0.1
   command: ./node_modules/.bin/start-storybook -p 3001
   ports:
     - '3001:3001'
