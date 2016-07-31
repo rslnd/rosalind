@@ -38,9 +38,8 @@ export class Login extends React.Component {
     if (name && password) {
       Meteor.loginWithPassword(name, password, (err) => {
         if (err) {
-          console.error('[Users] Login failed', err)
+          console.warn('[Users] Login failed', err)
           sAlert.error(TAPi18n.__('login.failedMessage'))
-          throw err
         } else {
           Meteor.call('users/login', () => {
             console.log('[Users] Logged in successfully')
@@ -48,7 +47,7 @@ export class Login extends React.Component {
         }
       })
     } else {
-      console.error('[Users] Login failed: No username or password provided')
+      console.warn('[Users] Login failed: No username or password provided')
       sAlert.error(TAPi18n.__('login.failedMessage'))
     }
   }
