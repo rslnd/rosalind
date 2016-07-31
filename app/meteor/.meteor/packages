@@ -90,5 +90,5 @@ meteorhacks:kadira
 
 # Cluster
 meteorhacks:cluster
-standard-minifier-css
-standard-minifier-js
+standard-minifier-css@1.1.8
+standard-minifier-js@1.1.8
