@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Avatar } from 'client/ui/users/Avatar'
 import { Icon } from 'client/ui/components/Icon'
+import { TimesheetSummaryContainer } from 'client/ui/timesheets/TimesheetSummaryContainer'
 
 export class Topbar extends React.Component {
   constructor (props) {
@@ -52,6 +53,9 @@ export class Topbar extends React.Component {
                   <li className="user-body">
                     <Avatar userId={this.props.currentUser._id} />&emsp;
                     <span>{this.props.currentUser.fullNameWithTitle()}</span>
+                    <div className="clear"></div>
+                    <hr />
+                    <TimesheetSummaryContainer userId={this.props.currentUser._id} />
                   </li>
                   <li className="user-footer">
                     {
