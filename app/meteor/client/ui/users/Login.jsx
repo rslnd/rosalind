@@ -1,4 +1,5 @@
 import React from 'react'
+import { process as server } from 'meteor/clinical:env'
 import { Modal, Button } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
 import { sAlert } from 'meteor/juliancwirko:s-alert'
@@ -121,7 +122,15 @@ export class Login extends React.Component {
             <p>{TAPi18n.__('login.help.body')}</p>
           </Modal.Body>
           <Modal.Footer>
-            <span className="text-very-muted pull-left">{(process.env.COMMIT_HASH && process.env.COMMIT_HASH.substring(0, 7)) || 'Development'}</span>
+            <span className="text-very-muted pull-left">
+              {
+                (server.env.COMMIT_HASH && server.env.COMMIT_HASH.substring(0, 7)) || 'Development'
+              }
+              &nbsp;
+              {
+                (server.env.BUILD_NUMBER && `Build ${process.env.BUILD_NUMBER}`)
+              }
+            </span>
             <Button onClick={this.handleCloseLoginHelpModal} bsStyle="primary" pullRight>{TAPi18n.__('login.help.ok')}</Button>
           </Modal.Footer>
         </Modal>
