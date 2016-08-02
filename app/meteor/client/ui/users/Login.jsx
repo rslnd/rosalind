@@ -128,7 +128,7 @@ export class Login extends React.Component {
               }
               &nbsp;
               {
-                (server.env.BUILD_NUMBER && `Build ${process.env.BUILD_NUMBER}`)
+                (server.env.BUILD_NUMBER && `build ${server.env.BUILD_NUMBER}`)
               }
             </span>
             <Button onClick={this.handleCloseLoginHelpModal} bsStyle="primary" pullRight>{TAPi18n.__('login.help.ok')}</Button>
