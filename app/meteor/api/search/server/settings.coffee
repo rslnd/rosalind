@@ -1,4 +1,4 @@
-Elasticsearch = require '../elasticsearch'
+Elasticsearch = require './elasticsearch'
 
 index = 'rosalind_v1'
 name = 'rosalind'
@@ -30,10 +30,13 @@ indexSettings =
 
 
 module.exports = ->
-  unless Elasticsearch.indices.exists({ index })
-    console.warn("[Search] Creating index #{index}")
-    Elasticsearch.indices.create(index: index, body: indexSettings)
+  try
+    unless Elasticsearch.indices.exists({ index })
+      console.warn("[Search] Creating index #{index}")
+      Elasticsearch.indices.create(index: index, body: indexSettings)
 
-  unless Elasticsearch.indices.existsAlias({ name })
-    Elasticsearch.indices.putAlias({ index, name })
-    console.warn("[Search] Creating alias #{name}")
+    unless Elasticsearch.indices.existsAlias({ name })
+      Elasticsearch.indices.putAlias({ index, name })
+      console.warn("[Search] Creating alias #{name}")
+  catch e
+    console.warn(e)
