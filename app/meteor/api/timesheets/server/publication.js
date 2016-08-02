@@ -7,7 +7,7 @@ export default () => {
     if (this.userId) {
       return Timesheets.find({
         userId: this.userId,
-        start: { $gt: moment().subtract(1, 'day').toDate() }
+        start: { $gt: moment().startOf('day').toDate() }
       }, { sort: { end: -1 } })
     }
   })

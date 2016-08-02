@@ -37,7 +37,7 @@ const composer = (props, onData) => {
   const update = () => {
     const timesheets = Timesheets.find({
       userId,
-      start: { $gt: moment().subtract(1, 'day').toDate() }
+      start: { $gt: moment().startOf('day').toDate() }
     }).fetch()
     const tracking = Timesheets.methods.isTracking.call({ userId })
     const sum = Timesheets.methods.sum.call({ userId })

@@ -13,7 +13,7 @@ export const isTracking = ({ Timesheets }) => {
     run ({ userId }) {
       return Timesheets.findOne({
         userId,
-        start: { $gt: moment().subtract(1, 'day').toDate() },
+        start: { $gt: moment().startOf('day').toDate() },
         tracking: true
       })
     }

@@ -14,7 +14,7 @@ export const sum = ({ Timesheets }) => {
     run ({ userId }) {
       const timesheets = Timesheets.find({
         userId,
-        start: { $gt: moment().subtract(1, 'day').toDate() }
+        start: { $gt: moment().startOf('day').toDate() }
       })
       return add(timesheets.map((t) => t.duration()))
     }
