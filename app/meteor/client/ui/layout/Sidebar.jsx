@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link, withRouter } from 'react-router'
 import FlipMove from 'react-flip-move'
-import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
 
 const SidebarItem = withRouter(({ item, router }) => {
@@ -63,7 +62,7 @@ export class Sidebar extends React.Component {
     return (
       <aside className="main-sidebar sidebar">
         <ul className="sidebar-menu">
-          <li className="header text-center">{process.env.CUSTOMER_NAME || 'Rosalind Development'}</li>
+          <li className="header text-center">{this.props.customerName}</li>
           {this.props.items.map((item) => (
             <SidebarItem key={item.name} item={item} handleItemClick={this.handleItemClick} handleSubItemClick={this.handleSubItemClick} />
           ))}
