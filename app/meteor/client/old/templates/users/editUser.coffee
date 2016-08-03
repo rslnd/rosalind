@@ -27,10 +27,16 @@ Template.editUser.helpers
 
 AutoForm.hooks
   editUserForm:
-    onSuccess: -> browserHistory.push('/users/')
+    onSuccess: ->
+      browserHistory.push('/users/')
+      sAlert.success(TAPi18n.__('users.editSuccess'))
 
   updatePasswordUserForm:
-    onSuccess: -> browserHistory.push('/users/')
+    onSuccess: ->
+      browserHistory.push('/users/')
+      sAlert.success(TAPi18n.__('users.editSuccess'))
 
   updateRolesUserForm:
-    onSuccess: -> browserHistory.push('/users/')
+    onSuccess: ->
+      browserHistory.push('/users/')
+      sAlert.success(TAPi18n.__('users.editSuccess'))

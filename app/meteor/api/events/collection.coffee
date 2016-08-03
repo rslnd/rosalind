@@ -9,7 +9,7 @@ Events.attachSchema(Schema)
 Events.methods = methods({ Events })
 
 # Shortcut method
-Events.post = (type, payload) ->
-  Events.methods.post.call({ type, payload })
+Events.post = (type, payload, level = 'info') ->
+  Events.methods.post.call({ type, payload, level })
 
 module.exports = Events
