@@ -7,8 +7,8 @@ schema = require 'api/users/schema/users'
 
 Template.editUser.helpers
   user: ->
-    console.error('Not Implemented: Get _id param from url')
-    Users.findOne(@params?._id)
+    _id = window.location.pathname.split('/')[2]
+    Users.findOne(_id)
 
   collection: ->
     Users
