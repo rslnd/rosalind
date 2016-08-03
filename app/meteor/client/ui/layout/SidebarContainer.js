@@ -23,7 +23,8 @@ const sidebarItems = () => {
       icon: 'user-md',
       roles: ['admin', 'schedules'],
       subItems: [
-        { name: 'thisDefault', path: '/' },
+        { name: 'statusBoard', path: '/' },
+        { name: 'thisDefault', path: '/default' },
         { name: 'override', path: '/override' },
         { name: 'businessHours', path: '/businessHours' },
         { name: 'holidays', path: '/holidays' }

@@ -31,6 +31,7 @@
     "totalHoursPerWeek": "Gesamtwochenstunden",
     "employee": "Mitarbeiter",
     "employee_plural": "Mitarbeiter",
-    "weekView": "Wochenansicht"
+    "weekView": "Wochenansicht",
+    "statusBoard": "Übersicht"
   }
 }
