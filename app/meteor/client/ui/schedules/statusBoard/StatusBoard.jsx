@@ -12,10 +12,10 @@ export const StatusBoard = ({ groups, weekday }) => (
       {groups.map((g) => (
         <List key={g.group._id}>
           <Subheader>{g.group.name}</Subheader>
-          {g.users.map(([user, schedule]) => (
+          {g.users.map(([user, schedule, isTracking]) => (
             <ListItem
               key={user._id}
-              leftAvatar={<Avatar icon={<ActionFace />} />}
+              leftAvatar={<Avatar backgroundColor={isTracking ? '#00a65a' : '#f39c12'}>{user.shortname()}</Avatar>}
               rightIcon={<span>ON</span>}
               primaryText={user.fullNameWithTitle()}
               secondaryText={<span>
