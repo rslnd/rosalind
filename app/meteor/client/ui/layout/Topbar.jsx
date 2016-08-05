@@ -5,6 +5,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { Avatar } from 'client/ui/users/Avatar'
 import { Icon } from 'client/ui/components/Icon'
 import { TimesheetSummaryContainer } from 'client/ui/timesheets/TimesheetSummaryContainer'
+import { TimesheetIndicatorContainer } from 'client/ui/timesheets/TimesheetIndicatorContainer'
 
 export class Topbar extends React.Component {
   constructor (props) {
@@ -44,7 +45,9 @@ export class Topbar extends React.Component {
             <ul className="nav navbar-nav">
               <li className={`dropdown user user-menu ${this.state.userMenuOpen && 'open'}`}>
                 <a onClick={this.toggleUserMenu}>
-                  <span >
+                  <span>
+                    <TimesheetIndicatorContainer userId={this.props.currentUser._id} />
+                    &ensp;
                     {this.props.currentUser.fullNameWithTitle()}
                     <i className="caret" />
                   </span>
