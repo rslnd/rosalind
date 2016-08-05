@@ -3,6 +3,7 @@ accounts-password@1.2.12
 alanning:roles@1.2.15
 albertzak:simple-schema-i18n@0.2.1
 aldeed:autoform@5.8.1
+aldeed:autoform-bs-datetimepicker@1.0.6
 aldeed:collection2@2.9.1
 aldeed:collection2-core@1.1.1
 aldeed:schema-deny@1.0.1
@@ -146,6 +147,7 @@ templating-tools@1.0.4
 tmeasday:check-npm-versions@0.2.0
 tmeasday:publish-counts@0.7.3
 tracker@1.1.0
+tsega:bootstrap3-datetimepicker@3.1.3_3
 u2622:persistent-session@0.4.4
 ui@1.0.11
 underscore@1.0.9
