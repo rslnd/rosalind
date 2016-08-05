@@ -32,6 +32,11 @@ schema = new SimpleSchema
     autoValue: Auto.createdBy
     optional: true
 
+  removed:
+    type: Boolean
+    optional: true
+    index: 1
+
 schema.i18n('inboundCalls.form')
 
 module.exports = schema
