@@ -1,11 +1,8 @@
 import React from 'react'
-import moment from 'moment'
-import 'moment-duration-format'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { List, ListItem } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import Avatar from 'material-ui/Avatar'
-import ActionFace from 'material-ui/svg-icons/action/face'
-import { Icon } from 'client/ui/components/Icon'
 import { Box } from 'client/ui/components/Box'
 
 export const StatusBoard = ({ groups, weekday }) => (
