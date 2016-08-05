@@ -62,7 +62,9 @@ export class Sidebar extends React.Component {
     return (
       <aside className="main-sidebar sidebar">
         <ul className="sidebar-menu">
-          <li className="header text-center">{this.props.customerName}</li>
+          <li className="header text-center">{this.props.customerName.split(' - ').map((name, i) => (
+            <span key={i}>{name}<br /></span>
+          ))}</li>
           {this.props.items.map((item) => (
             <SidebarItem key={item.name} item={item} handleItemClick={this.handleItemClick} handleSubItemClick={this.handleSubItemClick} />
           ))}
