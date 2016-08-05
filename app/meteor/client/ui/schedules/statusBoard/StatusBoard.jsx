@@ -1,4 +1,6 @@
 import React from 'react'
+import moment from 'moment'
+import 'moment-duration-format'
 import { List, ListItem } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import Avatar from 'material-ui/Avatar'
@@ -12,14 +14,30 @@ export const StatusBoard = ({ groups, weekday }) => (
       {groups.map((g) => (
         <List key={g.group._id}>
           <Subheader>{g.group.name}</Subheader>
-          {g.users.map(([user, schedule, isTracking]) => (
+          {g.users.map(({ user, schedule, timesheets }) => (
             <ListItem
               key={user._id}
-              leftAvatar={<Avatar backgroundColor={isTracking ? '#00a65a' : '#f39c12'}>{user.shortname()}</Avatar>}
+              leftAvatar={<Avatar backgroundColor={
+                timesheets.isTracking ? '#00a65a' : (
+                  timesheets.sum > 0 ? '#f39c12' : (
+                    schedule.unavailableToday && '#dd4b39'
+                  )
+                )
+              }>{user.shortname}</Avatar>}
               rightIcon={<span>ON</span>}
-              primaryText={user.fullNameWithTitle()}
+              primaryText={user.fullNameWithTitle}
               secondaryText={<span>
-                {parseFloat(schedule.totalHoursPerDay(weekday).toFixed(1))}h &middot; {schedule.stringify(weekday)}
+                {timesheets.sum > 0 &&
+                  <span>
+                    {timesheets.sumFormatted}
+                    &nbsp;({timesheets.stringified})
+                    &nbsp;{TAPi18n.__('timesheets.actual')}
+                    <br />
+                  </span>
+                }
+                {schedule.sum}h
+                &nbsp;({schedule.stringified})
+                &nbsp;{TAPi18n.__('schedules.planned')}
               </span>}
             />
           ))}

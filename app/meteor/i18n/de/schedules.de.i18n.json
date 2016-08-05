@@ -32,6 +32,7 @@
     "employee": "Mitarbeiter",
     "employee_plural": "Mitarbeiter",
     "weekView": "Wochenansicht",
-    "statusBoard": "Übersicht"
+    "statusBoard": "Übersicht",
+    "planned": "lt. Plan"
   }
 }

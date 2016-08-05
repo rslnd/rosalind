@@ -14,28 +14,53 @@ import { Groups } from 'api/groups'
 const compose = (props, onData) => {
   if (!Meteor.subscribe('timesheets-allToday').ready()) { return }
 
-  const weekday = moment().locale('en').format('ddd').toLowerCase()
-  const defaultSchedules = Schedules.find({ type: 'default', 'schedule.day': weekday }).fetch()
+  const update = () => {
+    const weekday = moment().locale('en').format('ddd').toLowerCase()
+    const defaultSchedules = Schedules.find({ type: 'default', 'schedule.day': weekday }).fetch()
 
-  const defaultScheduledUsers = defaultSchedules.map((s) => {
-    return Users.findOne(s.userId)
-  })
+    const defaultScheduledUsers = defaultSchedules.map((s) => {
+      return Users.findOne(s.userId)
+    })
 
-  const scheduledUsers = unionBy(defaultScheduledUsers, '_id')
+    const scheduledUsers = unionBy(defaultScheduledUsers, '_id')
 
-  const groups = Groups.methods.all().map((g) => {
-    return {
-      group: g,
-      users: sortBy(intersectionBy(scheduledUsers, g.users(), '_id'), (u) => u.profile.lastName).map((user) => {
-        const userId = user._id
-        const schedule = Schedules.findOne({ type: 'default', 'schedule.day': weekday, userId })
-        const isTracking = Timesheets.methods.isTracking.call({ userId })
-        return [ user, schedule, isTracking ]
-      })
-    }
-  }).filter((g) => g.users.length > 0)
+    const groups = Groups.methods.all().map((g) => {
+      return {
+        group: g,
+        users: sortBy(intersectionBy(scheduledUsers, g.users(), '_id'), (u) => u.profile.lastName).map((user) => {
+          const userId = user._id
+          const schedule = Schedules.findOne({ type: 'default', 'schedule.day': weekday, userId })
+          const isTracking = Timesheets.methods.isTracking.call({ userId })
+          const sum = Timesheets.methods.sum.call({ userId })
 
-  onData(null, { defaultSchedules, groups, weekday })
+          return {
+            user: {
+              _id: user._id,
+              shortname: user.shortname(),
+              fullNameWithTitle: user.fullNameWithTitle()
+            },
+            timesheets: {
+              sum,
+              sumFormatted: moment.duration(sum).format('H[h] mm[m]'),
+              stringified: Timesheets.methods.stringify.call({ userId }),
+              isTracking
+            },
+            schedule: {
+              sum: parseFloat(schedule.totalHoursPerDay(weekday).toFixed(1)),
+              stringified: schedule.stringify(weekday)
+            }
+          }
+        })
+      }
+    }).filter((g) => g.users.length > 0)
+
+    onData(null, { defaultSchedules, groups, weekday })
+  }
+
+  update()
+  const tick = setInterval(update, 60 * 1000)
+  const cleanup = () => clearInterval(tick)
+  return cleanup
 }
 
 export const StatusBoardContainer = composeWithTracker(compose, Loading)(StatusBoard)
