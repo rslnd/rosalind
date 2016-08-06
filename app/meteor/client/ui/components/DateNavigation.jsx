@@ -48,6 +48,8 @@ class DateNavigationButtons extends React.Component {
           </Button>
 
           <Button bsSize="small"><Icon name="calendar" /></Button>
+
+          {this.props.children}
         </ButtonGroup>
       </div>
     )

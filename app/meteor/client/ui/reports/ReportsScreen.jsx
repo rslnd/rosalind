@@ -1,28 +1,55 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
+import moment from 'moment'
+import { Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
+import { dayToDate } from 'util/time/day'
+import { Icon } from 'client/ui/components/Icon'
 import { DateNavigation } from 'client/ui/components/DateNavigation'
 import { Box } from 'client/ui/components/Box'
 import { Report } from './Report'
 
-export const ReportsScreen = ({ date, report }) => (
-  <div>
-    <div className="content-header">
-      <h1>
-        {TAPi18n.__('reports.thisDaySingular')} {date.calendar()}
-        <small>{weekOfYear(date)}</small>
-      </h1>
-      <DateNavigation date={date} basePath="reports" pullRight />
-    </div>
-    <div className="content">
-      <FlipMove duration={230}>
-        {
-          report
-          ? <div key="reportTable"><Report report={report} /></div>
-        : <div key="noReports"><Box type="warning" title={TAPi18n.__('ui.notice')} body={TAPi18n.__('reports.empty')} /></div>
-        }
-      </FlipMove>
-    </div>
-  </div>
-)
+export class ReportsScreen extends React.Component {
+  constructor (props) {
+    super(props)
+    this.handlePrint = this.handlePrint.bind(this)
+  }
+
+  handlePrint () {
+    if (window.native) {
+      console.log('[Client] Printing: native')
+      const title = moment(dayToDate(this.props.day))
+        .format("YYYY-MM-DD-[#{TAPi18n.__('reports.thisDaySingular')}]")
+      window.native.print({ title })
+    } else {
+      console.log('[Client] Printing: default')
+      window.print()
+    }
+  }
+
+  render () {
+    return (
+      <div>
+        <div className="content-header">
+          <h1>
+            {TAPi18n.__('reports.thisDaySingular')} {this.props.date.calendar()}
+            <small>{weekOfYear(this.props.date)}</small>
+          </h1>
+          <DateNavigation date={this.props.date} basePath="reports" pullRight>
+            <Button bsSize="small" onClick={this.handlePrint}><Icon name="print" /></Button>
+          </DateNavigation>
+        </div>
+        <div className="content">
+          <FlipMove duration={230}>
+            {
+              this.props.report
+              ? <div key="reportTable"><Report report={this.props.report} /></div>
+            : <div key="noReports"><Box type="warning" title={TAPi18n.__('ui.notice')} body={TAPi18n.__('reports.empty')} /></div>
+            }
+          </FlipMove>
+        </div>
+      </div>
+    )
+  }
+}
