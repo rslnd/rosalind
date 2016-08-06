@@ -22,15 +22,16 @@ export const ReportTableHeader = ({ showRevenue }) => (
 
 export const ReportTableBody = ({ showRevenue, report }) => (
   <FlipMove
-    duration={260}
+    duration={200}
     typeName="tbody"
-    leaveAnimation="fade"
-    staggerDelayBy={70}
-    staggerDurationBy={70}>
+    leaveAnimation="none"
+    enterAnimation="none"
+    staggerDelayBy={160}
+    staggerDurationBy={60}>
     {report.assignees.map((assignee, index) => (
       <tr key={assignee.id}>
         <td>{index + 1}</td>
-        <td>
+        <td style={{backgroundColor: 'white'}}>
           {
             assignee.id
             ? <UserHelper userId={assignee.id} />
