@@ -3,6 +3,10 @@ import FlipMove from 'react-flip-move'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import { TAPi18n } from 'meteor/tap:i18n'
 
+const Nil = () => (
+  <span className="text-quite-muted">&ndash;</span>
+)
+
 export const ReportTableHeader = ({ showRevenue }) => (
   <thead>
     <tr>
@@ -29,9 +33,9 @@ export const ReportTableBody = ({ showRevenue, report }) => (
     staggerDelayBy={160}
     staggerDurationBy={60}>
     {report.assignees.map((assignee, index) => (
-      <tr key={assignee.id}>
+      <tr key={assignee.id} className="bg-white">
         <td>{index + 1}</td>
-        <td style={{backgroundColor: 'white'}}>
+        <td>
           {
             assignee.id
             ? <UserHelper userId={assignee.id} />
@@ -54,11 +58,11 @@ export const ReportTableBody = ({ showRevenue, report }) => (
             </div>
           </div>
         </td>
-        <td className="td-bg">{assignee.patients.new}</td>
-        <td className="td-bg">{assignee.patients.recall}</td>
+        <td className="td-bg">{assignee.patients.new || <Nil />}</td>
+        <td className="td-bg">{assignee.patients.recall || <Nil />}</td>
         <td className="td-bg">{assignee.patients.newPerHourScheduled.toFixed(1)}</td>
         <td className="td-bg">{assignee.patients.total}</td>
-        <td>{assignee.patients.surgeries}</td>
+        <td>{assignee.patients.surgeries || <Nil />}</td>
         {showRevenue && <td>€{assignee.revenue}</td>}
       </tr>
     ))}

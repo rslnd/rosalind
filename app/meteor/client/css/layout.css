@@ -150,3 +150,7 @@ i.circle {
   animation: fadeIn ease-in 1s;
   animation-fill-mode:forwards;
 }
+
+.bg-white {
+  background-color: white;
+}
