@@ -37,7 +37,6 @@ case "$1" in
     npm -g install npm@$NPM_VERSION &
     wait
     npm set registry https://registry.npmjs.org/
-    sudo rm /usr/local/bin/docker-compose
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
     java -version
     export DISPLAY=:99.0
