@@ -9,5 +9,9 @@ node_modules
 app/electron/build/*
 build/
 
+# Ignore env variables
+.envrc
+.env
+
 Thumbs.db
 .DS_Store

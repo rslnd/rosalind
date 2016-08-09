@@ -1,3 +1,4 @@
+/* global Accounts */
 import React from 'react'
 import { process as server } from 'meteor/clinical:env'
 import { Modal, Button } from 'react-bootstrap'
@@ -34,19 +35,37 @@ export class Login extends React.Component {
   handleSubmit (e) {
     e.preventDefault()
 
-    const name = this.state.name
+    const username = this.state.name
     const password = this.state.password
-    if (name && password) {
-      Meteor.loginWithPassword(name, password, (err) => {
-        if (err) {
-          console.warn('[Users] Login failed', err)
-          sAlert.error(TAPi18n.__('login.failedMessage'))
-        } else {
-          Meteor.call('users/login', () => {
-            console.log('[Users] Logged in successfully')
-          })
+
+    const callback = (err) => {
+      if (err) {
+        console.warn('[Users] Login failed', err)
+
+        switch (err.error) {
+          case 'passwordless-login-disallowed-for-network':
+            sAlert.error(TAPi18n.__('login.passwordlessDisallowedNetworkMessage'))
+            break
+          case 'passwordless-login-disallowed-for-user':
+            sAlert.error(TAPi18n.__('login.passwordlessDisallowedUserMessage'))
+            break
+          default:
+            sAlert.error(TAPi18n.__('login.failedMessage'))
         }
+      } else {
+        Meteor.call('users/login', () => {
+          console.log('[Users] Logged in successfully')
+        })
+      }
+    }
+
+    if (username && !password) {
+      Accounts.callLoginMethod({
+        methodArguments: [{ username, passwordless: true }],
+        userCallback: callback
       })
+    } else if (username && password) {
+      Meteor.loginWithPassword(username, password, callback)
     } else {
       console.warn('[Users] Login failed: No username or password provided')
       sAlert.error(TAPi18n.__('login.failedMessage'))

@@ -7,6 +7,8 @@
     "loggedIn": "Sie sind momentan angemeldet.",
     "logout": "Abmelden",
     "failedMessage": "Entschuldigung! Bitte überprüfen Sie das Passwort und den Anmeldenamen.",
+    "passwordlessDisallowedNetworkMessage": "Entschuldigung! Sie benötigen ein eigenes Passwort, um sich außerhalb der Ordination anzumelden.",
+    "passwordlessDisallowedUserMessage": "Entschuldigung! Sie benötigen ein eigenes Passwort, um sich anzumelden.",
     "help": {
       "show": "Ich benötige Hilfe",
       "title": "Entschuldigung!",
