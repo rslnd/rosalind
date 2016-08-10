@@ -93,6 +93,7 @@ dispatch:tabular-job-collection
 
 # Monitoring
 meteorhacks:kadira
+meteorhacks:zones
 
 # Cluster
 meteorhacks:cluster
