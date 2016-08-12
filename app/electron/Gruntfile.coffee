@@ -4,7 +4,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-copy')
   grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.loadNpmTasks('grunt-rename')
+  grunt.loadNpmTasks('grunt-contrib-rename')
   grunt.loadNpmTasks('grunt-electron-installer')
   grunt.loadNpmTasks('grunt-electron')
   grunt.loadNpmTasks('grunt-shell')
@@ -109,8 +109,10 @@ module.exports = (grunt) ->
 
     rename:
       installerExe:
-        src: 'build/installer/Rosalind-win32-ia32/RosalindSetup.exe'
-        dest: 'build/installer/Rosalind-win32-ia32/RosalindSetup-win-v<%= pkg.version %>.exe'
+        files: [
+          src: 'build/installer/Rosalind-win32-ia32/RosalindSetup.exe'
+          dest: 'build/installer/Rosalind-win32-ia32/RosalindSetup-win-v<%= pkg.version %>.exe'
+        ]
 
     'string-replace':
       env:
