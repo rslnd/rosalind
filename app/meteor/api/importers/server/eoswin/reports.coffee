@@ -27,7 +27,7 @@ module.exports = (job, callback) ->
         day: Time.dateToDay(moment(job.data.meta.day, 'YYYYMMDD'))
         assignees: assignees
 
-      Reports.methods.upsert(report)
+      Reports.methods.upsert.call(report)
 
   job.done() and callback()
 
