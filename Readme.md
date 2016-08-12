@@ -13,7 +13,7 @@
 <a href='https://ci.appveyor.com/project/albertzak/rosalind'><img src='https://img.shields.io/appveyor/ci/albertzak/rosalind.svg?label=app%20build' alt='Client build on AppVeyor'></a>&nbsp;
 <a href='https://david-dm.org/rslnd/rosalind?path=app/electron'><img src='https://david-dm.org/rslnd/rosalind.svg?path=app/electron' alt='App npm dependencies'></a><br />
 
-<a href='https://david-dm.org/rslnd/rosalind'><img src='https://img.shields.io/david/rslnd/rosalind.svg?label=devDependencies' alt='Development npm dependecies'></a><br />
+<a href='https://dependencyci.com/github/rslnd/rosalind'><img src='https://dependencyci.com/github/rslnd/rosalind/badge' alt='Dependency Status'/></a><br />
 
 </div>
 
