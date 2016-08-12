@@ -8,6 +8,7 @@
     "newPercentage": "Neu",
     "empty": "Für das gewählte Datum sind keine Berichte verfügbar.",
     "scheduledOnly": "Zeit laut Plan",
-    "toggleRevenue": "Umsatz anzeigen oder ausblenden"
+    "toggleRevenue": "Umsatz anzeigen oder ausblenden",
+    "revenue": "Umsatz"
   }
 }
