@@ -33,12 +33,12 @@ export const ReportTableBody = ({ showRevenue, report }) => (
     staggerDelayBy={160}
     staggerDurationBy={60}>
     {report.assignees.map((assignee, index) => (
-      <tr key={assignee.id} className="bg-white">
+      <tr key={assignee.userId} className="bg-white">
         <td>{index + 1}</td>
         <td>
           {
-            assignee.id
-            ? <UserHelper userId={assignee.id} />
+            assignee.userId
+            ? <UserHelper userId={assignee.userId} />
             : <i className="text-muted">{TAPi18n.__('reports.unassigned')}</i>
           }
         </td>
