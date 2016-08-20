@@ -48,7 +48,7 @@ export const eoswinReports = ({ Importers }) => {
         }
       }
 
-      Reports.methods.upsert.call({ report })
+      return Reports.methods.upsert.call({ report })
     }
   })
 }

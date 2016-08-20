@@ -18,12 +18,14 @@ export const upsert = ({ Reports }) => {
       if (existingReport) {
         Reports.update({ _id: existingReport._id }, { $set: report })
         Events.post('reports/upsert', { reportId: existingReport._id })
+        return existingReport._id
       } else {
         try {
           const reportId = Reports.insert(report, (err) => {
             if (err) { throw err }
             Events.post('reports/insert', { reportId })
           })
+          return reportId
         } catch (e) {
           console.error('[Reports] Insert failed with error', e, 'of report', report)
         }

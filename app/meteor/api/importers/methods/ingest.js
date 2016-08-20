@@ -25,7 +25,7 @@ export const ingest = ({ Importers }) => {
       }
 
       if (importer) {
-        Importers.methods.importWith.call({ importer, name, content })
+        return Importers.methods.importWith.call({ importer, name, content })
       } else {
         throw new Meteor.Error('no-importer-found', `Could not determine importer from filename ${name}`)
       }

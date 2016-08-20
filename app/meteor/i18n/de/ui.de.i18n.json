@@ -20,6 +20,7 @@
     "printedStamp": "Gedruckt von __name__ am __date__ um __time__",
     "today": "Heute",
     "exportToExcel": "Nach Excel exportieren",
+    "importSuccessMessage": "Erfolgreich importiert!",
     "comment": "Kommentar",
     "comment_plural": "Kommentare",
     "newCommentPlaceholder": "Kommentar schreiben...",
