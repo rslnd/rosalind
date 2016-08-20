@@ -1,7 +1,7 @@
 module.exports =
   insert: (options) ->
     fn = (options) ->
-      { pluralize } = require 'lodash-inflection'
+      { pluralize } = require 'inflected'
       TestUtil = require 'test-util'
 
       collectionName = pluralize(options.collection)

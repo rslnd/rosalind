@@ -1,4 +1,4 @@
-{ singularize } = require 'lodash-inflection'
+{ singularize } = require 'inflected'
 { TAPi18n } = require 'meteor/tap:i18n'
 ReactComponents =
   inboundCalls: require 'client/ui/inboundCalls'
