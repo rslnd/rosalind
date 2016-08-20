@@ -1,3 +1,5 @@
+require('babel-polyfill')
+
 var chai = require('chai')
 
 chai.use(require('chai-datetime'))

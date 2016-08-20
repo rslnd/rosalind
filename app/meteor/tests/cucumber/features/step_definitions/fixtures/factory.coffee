@@ -1,10 +1,10 @@
 module.exports =
   insert: (options) ->
     fn = (options) ->
-      { pluralize } = require 'inflected'
+      inflector = require 'inflected'
       TestUtil = require 'test-util'
 
-      collectionName = pluralize(options.collection)
+      collectionName = inflector.pluralize(options.collection)
       collectionName = TestUtil.camelize(collectionName)
       collection = Api[collectionName]
 

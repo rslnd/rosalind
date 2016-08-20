@@ -1,4 +1,4 @@
-{ singularize } = require 'inflected'
+inflector = require 'inflected'
 { TAPi18n } = require 'meteor/tap:i18n'
 ReactComponents =
   inboundCalls: require 'client/ui/inboundCalls'
@@ -14,8 +14,8 @@ Template.commentsModal.helpers
 
   reactComponent: ->
     api = @collection()._name
-    component = singularize(@collection()._name)
-    component = singularize(@collection()._name)
+    component = inflector.singularize(@collection()._name)
+    component = inflector.singularize(@collection()._name)
     component = component.charAt(0).toUpperCase() + component.slice(1)
     component = component + 'Container'
 
