@@ -1,5 +1,8 @@
 moment = require 'moment'
-_ = require 'lodash'
+flow = require 'lodash/fp/flow'
+filter = require 'lodash/fp/filter'
+map = require 'lodash/fp/map'
+includes = require 'lodash/includes'
 { dateToDay } = require 'util/time/day'
 adt = require '../shared/adt'
 bulk = require '../shared/bulk'
@@ -23,10 +26,10 @@ parseContacts = (row) ->
     'no', '#', ',', '-'
   ]
 
-  contacts = _.chain(contacts)
-    .filter (c) -> c.value.length > 4
-    .map (c, index) ->
-      if c.value and _.includes(noContact, c.value.toLowerCase().split('.').join(' ').replace(/\s\s+/g, ' ').trim())
+  contacts = flow(
+    filter((c) -> c.value.length > 4),
+    map((c, index) ->
+      if c.value and includes(noContact, c.value.toLowerCase().split('.').join(' ').replace(/\s\s+/g, ' ').trim())
         return null
       else if c.value and c.value.indexOf('@') > 0 and c.value.indexOf('.') > 0
         return { value: c.value, channel: 'Email', order: index + 1 }
@@ -35,8 +38,9 @@ parseContacts = (row) ->
         return c
       else
         return { value: c.value, channel: 'Other', order: index + 1 }
-    .filter (c) -> c?
-    .value()
+    )
+    filter((c) -> c?)
+  )(contacts)
 
 parseCoutry = (code) ->
   if code and code.length > 0

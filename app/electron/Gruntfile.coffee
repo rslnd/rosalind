@@ -1,4 +1,5 @@
-_ = require 'lodash'
+find = require 'lodash/find'
+map = require 'lodash/map'
 
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
@@ -25,15 +26,15 @@ module.exports = (grunt) ->
 
     devDependencies: ->
       devDependencies = packageJSON.devDependencies
-      _.map(devDependencies, (version, name) -> name)
+      map(devDependencies, (version, name) -> name)
 
     electronVersion: ->
       devDependencies = packageJSON.devDependencies
-      _.find(devDependencies, (version, name) -> name is 'electron-prebuilt').version
+      find(devDependencies, (version, name) -> name is 'electron-prebuilt').version
 
     dependencies: ->
       dependencies = packageJSON.dependencies
-      _.map(dependencies, (version, name) -> name)
+      map(dependencies, (version, name) -> name)
 
 
 
@@ -80,7 +81,7 @@ module.exports = (grunt) ->
           arch: 'ia32'
           asar: true
           overwrite: true
-          ignore: _.map(options.devDependencies(), (p) -> 'node_modules/' + p).join('|')
+          ignore: map(options.devDependencies(), (p) -> 'node_modules/' + p).join('|')
 
     'create-windows-installer':
       ia32:
@@ -96,7 +97,7 @@ module.exports = (grunt) ->
       node_modules:
         files: [
           {
-            src: _.map(options.dependencies(), (p) -> p + '/**')
+            src: map(options.dependencies(), (p) -> p + '/**')
             cwd: 'node_modules/'
             expand: true
             dest: 'build/javascript/node_modules/'

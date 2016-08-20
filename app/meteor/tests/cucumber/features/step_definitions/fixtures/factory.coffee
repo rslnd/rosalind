@@ -1,12 +1,10 @@
 module.exports =
   insert: (options) ->
     fn = (options) ->
-      _ = require 'lodash'
-      inflection = require 'lodash-inflection'
+      { pluralize } = require 'lodash-inflection'
       TestUtil = require 'test-util'
-      _.mixin(inflection)
 
-      collectionName = _.pluralize(options.collection)
+      collectionName = pluralize(options.collection)
       collectionName = TestUtil.camelize(collectionName)
       collection = Api[collectionName]
 

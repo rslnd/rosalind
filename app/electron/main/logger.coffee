@@ -1,7 +1,7 @@
 os = require 'os'
 path = require 'path'
 url = require 'url'
-_ = require 'lodash'
+includes = require 'lodash/includes'
 winston = require 'winston'
 require 'winston-papertrail'
 { ipcMain, app } = require 'electron'
@@ -49,7 +49,7 @@ module.exports =
   ready: (log) ->
     winston.info(log)
 
-    if _.includes(process.argv, '--debug-quit-on-ready')
+    if includes(process.argv, '--debug-quit-on-ready')
       winston.info('[Log] Debug: App launched successfully; now quitting')
       app.quit()
 

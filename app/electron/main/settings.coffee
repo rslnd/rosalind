@@ -1,7 +1,6 @@
 fs = require 'fs'
 path = require 'path'
 childProcess = require 'child_process'
-_ = require 'lodash'
 { ipcMain, app } = require 'electron'
 logger = require './logger'
 

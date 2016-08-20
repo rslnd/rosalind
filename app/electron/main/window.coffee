@@ -1,9 +1,9 @@
-_ = require 'lodash'
+includes = require 'lodash/includes'
 { app, BrowserWindow } = require 'electron'
 logger = require './logger'
 settings = require './settings'
 
-DEV = _.includes(process.argv, '--dev')
+DEV = includes(process.argv, '--dev')
 
 module.exports =
   open: (callback) ->

@@ -1,4 +1,5 @@
-_ = require 'lodash'
+merge = require 'lodash/merge'
+cloneDeep = require 'lodash/cloneDeep'
 logger = require './logger'
 settings = require './settings'
 authentication = require './authentication'
@@ -30,7 +31,7 @@ module.exports =
       requestOptions =
         method: 'POST'
         url: settings.url + '/api/upload/stream'
-        headers: _.merge(auth.headers, headers)
+        headers: merge(auth.headers, headers)
 
       if typeof filePaths is 'string'
         filePath = filePaths
@@ -42,4 +43,4 @@ module.exports =
         filePaths.forEach (filePath) ->
           if typeof options.meta is 'function'
             requestOptions.headers['X-Meta'] = JSON.stringify(options.meta(filePath))
-            rateLimiter.submit(uploadFile, filePath, _.cloneDeep(requestOptions), null)
+            rateLimiter.submit(uploadFile, filePath, cloneDeep(requestOptions), null)

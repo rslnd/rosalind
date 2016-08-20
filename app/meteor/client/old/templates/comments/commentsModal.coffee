@@ -1,5 +1,4 @@
-_ = require 'lodash'
-_.mixin require 'lodash-inflection'
+{ singularize } = require 'lodash-inflection'
 { TAPi18n } = require 'meteor/tap:i18n'
 ReactComponents =
   inboundCalls: require 'client/ui/inboundCalls'
@@ -9,14 +8,14 @@ Template.commentsModal.helpers
     TAPi18n.__(@collection()._name + '.thisSingular')
 
   blazeTemplate: ->
-    template = _.singularize(@collection()._name)
+    template = singularize(@collection()._name)
     template = template.charAt(0).toLowerCase() + template.slice(1)
     return template if Template[template]
 
   reactComponent: ->
     api = @collection()._name
-    component = _.singularize(@collection()._name)
-    component = _.singularize(@collection()._name)
+    component = singularize(@collection()._name)
+    component = singularize(@collection()._name)
     component = component.charAt(0).toUpperCase() + component.slice(1)
     component = component + 'Container'
 

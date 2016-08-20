@@ -1,4 +1,8 @@
-import _ from 'lodash'
+import flow from 'lodash/fp/flow'
+import filter from 'lodash/fp/filter'
+import map from 'lodash/fp/map'
+import sum from 'lodash/fp/sum'
+import mean from 'lodash/fp/mean'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Schedules } from 'api/schedules'
@@ -22,34 +26,34 @@ export const tally = new ValidatedMethod({
       return a
     })
 
-    let ax = _.chain(report.assignees)
-      .filter((a) => a.patients.newPerHourScheduled > 0)
-      .map((a) => a.patients.newPerHourScheduled)
-      .value()
-    report.total.patientsNewPerHourScheduled = _.reduce(ax, (a, b) => (a + b), 0.0) / ax.length
+    report.total.patientsNewPerHourScheduled = flow(
+      filter((a) => a.patients.newPerHourScheduled > 0),
+      map((a) => a.patients.newPerHourScheduled),
+      mean
+    )(report.assignees)
 
-    report.total.revenue = _.chain(report.assignees)
-      .map((a) => a.revenue)
-      .reduce((a, b) => (a + b), 0.0)
-      .value()
+    report.total.revenue = flow(
+      map((a) => a.revenue),
+      sum
+    )(report.assignees)
 
-    report.total.hoursScheduled = _.chain(report.assignees)
-      .map((a) => a && a.hours && a.hours.scheduled || 0)
-      .reduce((a, b) => (a + b), 0.0)
-      .value()
+    report.total.hoursScheduled = flow(
+      map((a) => a && a.hours && a.hours.scheduled || 0),
+      sum
+    )(report.assignees)
 
     report.total.revenuePerAssignee =
       report.total.revenue / report.assignees.length
 
-    report.total.patients = _.chain(report.assignees)
-      .map((a) => a.patients.total)
-      .reduce((a, b) => (a + b), 0.0)
-      .value()
+    report.total.patients = flow(
+      map((a) => a.patients.total),
+      sum
+    )(report.assignees)
 
-    report.total.patientsNew = _.chain(report.assignees)
-      .map((a) => a.patients.new)
-      .reduce((a, b) => (a + b), 0.0)
-      .value()
+    report.total.patientsNew = flow(
+      map((a) => a.patients.new),
+      sum
+    )(report.assignees)
 
     report.total.assignees = report.assignees.filter((a) => a.id).length
 
