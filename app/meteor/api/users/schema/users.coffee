@@ -1,5 +1,5 @@
 { SimpleSchema } = require 'meteor/aldeed:simple-schema'
-{ Auto, Profile } = require 'util/schema'
+{ Auto, Profile, External } = require 'util/schema'
 
 Schema = new SimpleSchema
   username:
@@ -17,6 +17,10 @@ Schema = new SimpleSchema
 
   profile:
     type: Profile
+    optional: true
+
+  external:
+    type: External
     optional: true
 
   services:

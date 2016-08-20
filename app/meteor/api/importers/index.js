@@ -1,5 +1,5 @@
-import ImportFiles from './collection'
+import Importers from './collection'
 
 export {
-  ImportFiles
+  Importers
 }
