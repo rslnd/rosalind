@@ -13,7 +13,7 @@
     "server:npm:shrink": "npm run server:npm:shrinkwrap && npm run server:npm:shrinkpack",
     "server:npm:shrinkwrap": "docker-compose -f docker-compose.yml -f docker-compose.development.yml run --no-deps meteor meteor npm shrinkwrap --dev",
     "server:npm:shrinkpack": "docker-compose -f docker-compose.yml -f docker-compose.development.yml run --no-deps meteor ./node_modules/.bin/shrinkpack",
-    "test": "NODE_PATH=./app/meteor/node_modules node_modules/mocha/bin/mocha 'app/meteor/**/*.test.coffee' --recursive --require app/meteor/tests/mocha/helper.js --compilers coffee:coffee-script/register",
+    "test": "cd ./app/meteor && npm run test",
     "test:acceptance": "./node_modules/coffee-script/bin/coffee ./test.coffee",
     "lint": "./node_modules/coffeelint/bin/coffeelint --quiet . && ./node_modules/.bin/standard",
     "storybook": "docker-compose -f docker-compose.yml -f docker-compose.development.yml run --service-ports storybook",
