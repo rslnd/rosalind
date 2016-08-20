@@ -7,6 +7,7 @@ import { Login } from 'client/ui/users/Login'
 export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
   const alwaysRender = () => (
     <div id="loaded">
+      <div className="dropzone"></div>
       <span id="locale" className={locale}></span>
       <Blaze template="sAlert" />
     </div>

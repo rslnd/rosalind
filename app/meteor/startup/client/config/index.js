@@ -4,6 +4,7 @@ import hotkeys from './hotkeys'
 import locale from './locale'
 import userStatus from './userStatus'
 import livechat from './livechat'
+import dataTransfer from './dataTransfer'
 
 export default function () {
   development()
@@ -12,4 +13,5 @@ export default function () {
   livechat()
   userStatus()
   hotkeys()
+  dataTransfer()
 }

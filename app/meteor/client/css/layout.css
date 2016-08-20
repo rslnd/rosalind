@@ -154,3 +154,20 @@ i.circle {
 .bg-white {
   background-color: white;
 }
+
+.dropzone {
+  position: fixed;
+  display: none;
+  top: 0;
+  bottom: 0;
+  z-index: 300;
+  width: 100%;
+  height: 100vh;
+  opacity: 0.8;
+  background-color: #9f9f9f;
+  border: 8px dashed #464646;
+}
+
+body.drag .dropzone {
+  display: block;
+}
