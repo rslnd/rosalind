@@ -37,7 +37,7 @@ export const renderEmail = ({ Reports }) => {
 
       const body = report.assignees.map((assignee, rank) => {
         return dedent`
-          Platz ${rank + 1}: ${assignee.id ? Users.findOne(assignee.id).fullNameWithTitle() : 'Assistenz'}
+          Platz ${rank + 1}: ${assignee.userId ? Users.findOne(assignee.userId).fullNameWithTitle() : 'Assistenz'}
           Umsatz: ${currency(assignee.revenue)}
           Neue PatientInnen pro Stunde: ${assignee.patients.newPerHourScheduled}
           ${assignee.patients.surgeries ? `OPs: ${assignee.patients.surgeries}\n\n` : ''}

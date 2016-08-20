@@ -21,9 +21,16 @@ export const tally = ({ Reports }) => {
       report.assignees = report.assignees.map((a) => {
         a.hours || (a.hours = {})
         a.patients.newPercentage = 100.0 * a.patients.new / a.patients.total
-        a.hours.scheduled = Schedules.methods.getScheduledHours({ userId: a.id, day: report.day })
-        a.patients.perHourScheduled = a.patients.total / a.hours.scheduled
-        a.patients.newPerHourScheduled = a.patients.new / a.hours.scheduled
+
+        if (a.userId) {
+          a.hours.scheduled = Schedules.methods.getScheduledHours({ userId: a.userId, day: report.day })
+          if (a.hours.scheduled) {
+            a.patients.perHourScheduled = a.patients.total / a.hours.scheduled
+            a.patients.newPerHourScheduled = a.patients.new / a.hours.scheduled
+          }
+
+          // TODO: Fetch actual hours from timesheets
+        }
         return a
       })
 
@@ -56,7 +63,7 @@ export const tally = ({ Reports }) => {
         sum
       )(report.assignees)
 
-      report.total.assignees = report.assignees.filter((a) => a.id).length
+      report.total.assignees = report.assignees.filter((a) => a.userId).length
 
       return report
     }

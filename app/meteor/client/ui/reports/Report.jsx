@@ -46,8 +46,11 @@ export const ReportTableBody = ({ showRevenue, report }) => (
           {assignee.hours.actual && assignee.hours.actual.toFixed(1)}
           {assignee.hours.scheduled && (
             <span>
-              {assignee.hours.scheduled.toFixed(1)}
-              <small className="fa fa-question-circle text-quite-muted">{TAPi18n.__('reports.scheduledOnly')}</small>
+              {assignee.hours.scheduled.toFixed(1)}&nbsp;
+              <small className="text-muted">
+                <i className="fa fa-question-circle text-quite-muted"></i>&nbsp;
+                {TAPi18n.__('reports.scheduledOnly')}
+              </small>
             </span>
           )}
         </td>
@@ -60,7 +63,7 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         </td>
         <td className="td-bg">{assignee.patients.new || <Nil />}</td>
         <td className="td-bg">{assignee.patients.recall || <Nil />}</td>
-        <td className="td-bg">{assignee.patients.newPerHourScheduled.toFixed(1)}</td>
+        <td className="td-bg">{assignee.patients.newPerHourScheduled && assignee.patients.newPerHourScheduled.toFixed(1) || <Nil />}</td>
         <td className="td-bg">{assignee.patients.total}</td>
         <td>{assignee.patients.surgeries || <Nil />}</td>
         {showRevenue && <td>€{assignee.revenue}</td>}

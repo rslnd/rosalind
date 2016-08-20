@@ -7,12 +7,9 @@ module.exports = ({ Schedules, Users }) ->
     filter allUsers, (user) =>
       @isScheduled(time, user._id)
 
-  isScheduled: (time = moment(), userId = null) ->
 
-    return false unless user = Users.findOne(_id: userId)
-    return false unless Schedules.methods.isOpen(time)
-
-    notAvailable = Schedules.findOne
+  isOverrideUnavailable: (time = moment(), userId = null) ->
+    Schedules.findOne
       type: 'override'
       available: false
       start: { $lte: time.toDate() }
@@ -20,9 +17,8 @@ module.exports = ({ Schedules, Users }) ->
       userId: userId
       removed: { $ne: true }
 
-    return false if notAvailable
 
-
+  isOverrideAvailable: (time = moment(), userId = null) ->
     overrideScheduled = Schedules.findOne
       type: 'override'
       available: true
@@ -31,12 +27,22 @@ module.exports = ({ Schedules, Users }) ->
       userId: userId
       removed: { $ne: true }
 
-    return true if overrideScheduled
 
-
+  isScheduledDefault: (time = moment(), userId = null) ->
     defaultSchedule = Schedules.findOne
       type: 'default'
       userId: userId
       removed: { $ne: true }
 
     return defaultSchedule and defaultSchedule.isWithin(time)
+
+
+  isScheduled: (time = moment(), userId = null) ->
+
+    return false unless user = Users.findOne(_id: userId)
+    return false unless Schedules.methods.isOpen(time)
+
+    return false if @isOverrideUnavailable(time, userId)
+    return true if @isOverrideAvailable(time, userId)
+
+    return @isScheduledDefault(time, userId)
