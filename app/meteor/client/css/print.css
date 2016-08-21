@@ -24,6 +24,11 @@
     visibility: visible !important;
   }
 
+  .hide-print {
+    display: none !important;
+    visibility: none !important;
+  }
+
   .content-wrapper.print-no-margin {
     margin-left: 0 !important;
   }
@@ -91,5 +96,9 @@
     line-height: 1.2;
     margin-top: -0.5em;
     color: #353535 !important;
+  }
+
+  #__resend_root {
+    display: none
   }
 }

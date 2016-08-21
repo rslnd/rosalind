@@ -14,6 +14,11 @@ export class ReportsScreen extends React.Component {
   constructor (props) {
     super(props)
     this.handlePrint = this.handlePrint.bind(this)
+    this.handleToggleRevenue = this.handleToggleRevenue.bind(this)
+
+    this.state = {
+      showRevenue: true
+    }
   }
 
   handlePrint () {
@@ -28,23 +33,31 @@ export class ReportsScreen extends React.Component {
     }
   }
 
+  handleToggleRevenue () {
+    this.setState({
+      ...this.state,
+      showRevenue: !this.state.showRevenue
+    })
+  }
+
   render () {
     return (
       <div>
         <div className="content-header">
           <h1>
-            {TAPi18n.__('reports.thisDaySingular')} {this.props.date.calendar()}
+            {TAPi18n.__('reports.thisDaySingular')} {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
             <small>{weekOfYear(this.props.date)}</small>
           </h1>
           <DateNavigation date={this.props.date} basePath="reports" pullRight>
-            <Button bsSize="small" onClick={this.handlePrint}><Icon name="print" /></Button>
+            <Button bsSize="small" onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name="print" /></Button>
+            <Button bsSize="small" onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.showRevenue')}><Icon name="euro" /></Button>
           </DateNavigation>
         </div>
         <div className="content">
           <FlipMove duration={230}>
             {
               this.props.report
-              ? <div key="reportTable"><Report report={this.props.report} /></div>
+              ? <div key="reportTable"><Report report={this.props.report} showRevenue={this.state.showRevenue} /></div>
             : <div key="noReports"><Box type="warning" title={TAPi18n.__('ui.notice')} body={TAPi18n.__('reports.empty')} /></div>
             }
           </FlipMove>
