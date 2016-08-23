@@ -49,6 +49,7 @@ export class Topbar extends React.Component {
                     <TimesheetIndicatorContainer userId={this.props.currentUser._id} />
                     &ensp;
                     {this.props.currentUser.fullNameWithTitle()}
+                    &ensp;
                     <i className="caret" />
                   </span>
                 </a>
