@@ -29,26 +29,29 @@ export const renderEmail = ({ Reports }) => {
       const header = dedent`
         Tagesbericht für ${moment().locale('de-AT').format(__('time.dateFormatWeekday'))}
         Kalenderwoche ${moment().isoWeek()}
+      `
 
+      const summary = dedent`
         Gesamtumsatz: ${currency(report.total.revenue)}
         ÄrztInnen: ${report.total.assignees}
-        Neue PatientInnen pro Stunde: ${report.total.patientsNewPerHourScheduled}
+        ${report.total.patientsNewPerHourScheduled ? `Neue PatientInnen pro Stunde (laut Plan): ${report.total.patientsNewPerHourScheduled}` : ''}
       `
 
       const body = report.assignees.map((assignee, rank) => {
         return dedent`
           Platz ${rank + 1}: ${assignee.userId ? Users.findOne(assignee.userId).fullNameWithTitle() : 'Assistenz'}
           Umsatz: ${currency(assignee.revenue)}
-          Neue PatientInnen pro Stunde: ${assignee.patients.newPerHourScheduled}
+          ${assignee.patients.newPerHourScheduled ? `Neue PatientInnen pro Stunde (laut Plan): ${assignee.patients.newPerHourScheduled}` : ''}
           ${assignee.patients.surgeries ? `OPs: ${assignee.patients.surgeries}\n\n` : ''}
-        `
+        `.replace(/(\n+)/g, '\n')
       }).join('\n\n')
 
       const footer = dedent`
         Gratulation!
+
       `
 
-      const text = [header, body, footer, '\n'].join('\n\n')
+      const text = [header, summary, body, footer].join('\n\n')
 
       return { title, text }
     }
