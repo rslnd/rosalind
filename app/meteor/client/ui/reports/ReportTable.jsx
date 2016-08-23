@@ -11,15 +11,15 @@ export const ReportTableHeader = ({ showRevenue }) => (
   <thead>
     <tr>
       <th>#</th>
-      <th className="col-md-2">Arzt</th>
-      <th>Stunden</th>
-      <th className="td-bg" width="150px">Patienten</th>
-      <th className="td-bg">Neu</th>
-      <th className="td-bg">Kontrolle</th>
-      <th className="td-bg">Neu/h</th>
-      <th className="td-bg">Gesamt</th>
-      <th className="OP">OP</th>
-      {showRevenue && <th>Umsatz</th>}
+      <th className="col-md-2">{TAPi18n.__('reports.assignee')}</th>
+      <th>{TAPi18n.__('reports.hours')}</th>
+      <th className="td-bg" width="150px">{TAPi18n.__('reports.patients')}</th>
+      <th className="td-bg">{TAPi18n.__('reports.new')}</th>
+      <th className="td-bg">{TAPi18n.__('reports.recall')}</th>
+      <th className="td-bg">{TAPi18n.__('reports.newPerHour')}</th>
+      <th className="td-bg">{TAPi18n.__('reports.total')}</th>
+      <th>{TAPi18n.__('reports.surgeries')}</th>
+      {showRevenue && <th>{TAPi18n.__('reports.revenue')}</th>}
     </tr>
   </thead>
 )
@@ -33,7 +33,7 @@ export const ReportTableBody = ({ showRevenue, report }) => (
     staggerDelayBy={160}
     staggerDurationBy={60}>
     {report.assignees.map((assignee, index) => (
-      <tr key={assignee.userId} className="bg-white">
+      <tr key={assignee.userId || assignee.external.eoswin.id} className="bg-white">
         <td>{index + 1}</td>
         <td>
           {

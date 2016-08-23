@@ -4,11 +4,23 @@
     "dashboard": "Übersicht",
     "thisSingular": "Bericht",
     "thisDaySingular": "Tagesbericht",
+    "assignee": "ÄrztIn",
     "unassigned": "Assistenz",
     "newPercentage": "Neu",
+    "new": "Neu",
+    "recall": "Kontrolle",
+    "newPerHour": "Neu/h",
+    "total": "Gesamt",
+    "hours": "Stunden",
+    "surgeries": "OPs",
     "empty": "Für das gewählte Datum sind keine Berichte verfügbar.",
     "scheduledOnly": "Zeit laut Plan",
     "toggleRevenue": "Umsatz anzeigen oder ausblenden",
-    "revenue": "Umsatz"
+    "revenue": "Umsatz",
+    "revenuePerAssignee": "Umsatz pro ÄrztIn",
+    "patients": "PatientInnen",
+    "patientsNew": "Neue PatientInnen",
+    "patientsNewPerHour": "Neue PatientInnen",
+    "assigneeHours": "Arbeitszeit"
   }
 }
