@@ -8,7 +8,7 @@ Template.commentsModal.helpers
     TAPi18n.__(@collection()._name + '.thisSingular')
 
   blazeTemplate: ->
-    template = singularize(@collection()._name)
+    template = inflector.singularize(@collection()._name)
     template = template.charAt(0).toLowerCase() + template.slice(1)
     return template if Template[template]
 
