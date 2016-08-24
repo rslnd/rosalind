@@ -1,4 +1,4 @@
-hotkeys = require 'startup/client/config/hotkeys'
+hotkeys = require 'startup/client/hotkeys'
 
 Template.hotkeys.helpers
   hotkeys: ->

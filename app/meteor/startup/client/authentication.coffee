@@ -18,7 +18,7 @@ module.exports = ->
       lastUser = null
 
 
-  window.native.ipc.on 'users/getToken', ->
+  window.native.events.on 'users/getToken', ->
     Meteor.call 'users/getToken', (err, token) ->
       return console.error('[Users] Token', err) if err
       window.native.users.getToken(token)
