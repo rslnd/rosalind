@@ -2,6 +2,10 @@ import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
 
+const Nil = () => (
+  <span className="text-quite-muted">?</span>
+)
+
 export const InfoBox = ({ color = 'green', icon = 'eur', children, text, description }) => (
   <div className="info-box">
     <span className={`info-box-icon bg-${color}`}>
@@ -18,14 +22,19 @@ export const InfoBox = ({ color = 'green', icon = 'eur', children, text, descrip
 export const Unit = ({ prepend, append, children }) => (
   <span>
     {prepend && <small className="text-muted">{prepend}&nbsp;</small>}
-    {children}
+    {
+      (typeof children === 'number' ||
+      typeof children === 'string')
+      ? children
+      : <span className="text-muted">?</span>
+    }
     {append && <small className="text-muted">&nbsp;{append}</small>}
   </span>
 )
 
 export const TotalRevenueBox = ({ report }) => (
   <InfoBox text={TAPi18n.__('reports.revenue')} color="green" icon="euro">
-    <Unit prepend="€">{Math.floor(report.total.revenue)}</Unit>
+    <Unit prepend="€">{report.total.revenue ? Math.floor(report.total.revenue) : <Nil />}</Unit>
   </InfoBox>
 )
 
@@ -35,8 +44,9 @@ export const NewPatientsPerHourBox = ({ report }) => (
     {
       report.total.patientsNewPerHourActual
       ? <Unit append="/h">{report.total.patientsNewPerHourActual.toFixed(1)}</Unit>
-      : (report.total.patientsNewPerHourScheduled &&
-        <Unit append="/h">{report.total.patientsNewPerHourScheduled.toFixed(1)}</Unit>
+      : (report.total.patientsNewPerHourScheduled
+        ? <Unit append="/h">{report.total.patientsNewPerHourScheduled.toFixed(1)}</Unit>
+        : <Nil />
       )
     }
   </InfoBox>
@@ -48,8 +58,9 @@ export const TotalHoursBox = ({ report }) => (
       report.total.hoursActual
       ? <Unit append="h">{report.total.hoursActual.toFixed(1)}</Unit>
       : (
-        report.total.hoursScheduled &&
-          <Unit append="h">{report.total.hoursScheduled.toFixed(1)}</Unit>
+        report.total.hoursScheduled
+          ? <Unit append="h">{report.total.hoursScheduled.toFixed(1)}</Unit>
+          : <Nil />
       )
     }
   </InfoBox>
@@ -57,7 +68,7 @@ export const TotalHoursBox = ({ report }) => (
 
 export const RevenuePerAssigneeBox = ({ report }) => (
   <InfoBox text={TAPi18n.__('reports.revenuePerAssignee')} color="aqua" icon="user-md">
-    <Unit prepend="€">{Math.floor(report.total.revenuePerAssignee)}</Unit>
+    <Unit prepend="€">{report.total.revenuePerAssignee ? Math.floor(report.total.revenuePerAssignee) : <Nil />}</Unit>
   </InfoBox>
 )
 
