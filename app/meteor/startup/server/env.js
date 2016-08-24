@@ -6,6 +6,6 @@ export default () => {
     COMMIT_HASH: true,
     BUILD_NUMBER: true,
     CUSTOMER_NAME: true,
-    RESEND_IO_KEY: false
+    SMOOCH_APP_TOKEN: true
   })
 }

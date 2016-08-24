@@ -20,6 +20,7 @@
     "iconv-lite": "^0.4.13",
     "inflected": "^1.1.7",
     "jquery": "^2.2.4",
+    "jsonwebtoken": "^7.1.9",
     "lodash": "^4.13.1",
     "material-ui": "^0.15.2",
     "meteor-node-stubs": "^0.2.3",
@@ -46,6 +47,7 @@
     "redux-form": "^6.0.0-rc.3",
     "redux-form-material-ui": "^3.0.0",
     "redux-thunk": "^2.1.0",
+    "scriptjs": "^2.5.8",
     "select2": "^4.0.3",
     "temp": "^0.8.3"
   },
