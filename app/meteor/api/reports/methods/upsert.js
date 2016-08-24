@@ -1,5 +1,8 @@
+import moment from 'moment'
+import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { dayToDate } from 'util/time/day'
 import { Events } from 'api/events'
 
 export const upsert = ({ Reports }) => {
@@ -11,6 +14,10 @@ export const upsert = ({ Reports }) => {
     }).validator(),
 
     run ({ report }) {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Not authorized')
+      }
+
       report = Reports.methods.tally.call({ report })
 
       const existingReport = Reports.findOne({ day: report.day })
@@ -24,6 +31,10 @@ export const upsert = ({ Reports }) => {
           const reportId = Reports.insert(report, (err) => {
             if (err) { throw err }
             Events.post('reports/insert', { reportId })
+
+            if (Meteor.isServer && moment().isSame(dayToDate(report.day), 'day')) {
+              Meteor.call('reports/sendEmail')
+            }
           })
           return reportId
         } catch (e) {
