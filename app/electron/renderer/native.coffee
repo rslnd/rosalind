@@ -3,8 +3,6 @@ console.log('[Electron Native] Enabling native bindings')
 EventEmitter = require 'eventemitter3'
 
 try
-  require 'electron-cookies'
-
   window.native =
     electron: process.versions.electron
     settings: null
