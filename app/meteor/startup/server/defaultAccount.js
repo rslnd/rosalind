@@ -1,4 +1,4 @@
-import Random from 'meteor/random'
+import { Random } from 'meteor/random'
 import { Accounts } from 'meteor/accounts-base'
 import { Users } from 'api/users'
 import { Roles } from 'meteor/alanning:roles'
