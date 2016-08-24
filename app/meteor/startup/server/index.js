@@ -1,7 +1,17 @@
+import env from './env'
+import browserPolicy from './browserPolicy'
+import passwordlessLogin from './passwordlessLogin'
+import appcache from './appcache'
+import defaultAccount from './defaultAccount'
+import development from './development'
 import api from './api'
-import config from './config'
 
 export default function () {
-  config()
+  env()
+  passwordlessLogin()
+  appcache()
+  defaultAccount()
+  browserPolicy()
+  development()
   api()
 }

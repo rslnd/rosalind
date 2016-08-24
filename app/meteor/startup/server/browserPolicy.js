@@ -1,4 +1,6 @@
-module.exports = ->
+import { BrowserPolicy } from 'meteor/browser-policy-common'
+
+export default () => {
   BrowserPolicy.framing.disallow()
   BrowserPolicy.content.allowInlineScripts()
   BrowserPolicy.content.allowEval()
@@ -14,7 +16,8 @@ module.exports = ->
   BrowserPolicy.content.allowFontOrigin('https://resend.io')
   BrowserPolicy.content.allowImageOrigin('https://s3.amazonaws.com')
 
-
-  if process.env.NODE_ENV isnt 'production'
+  if (process.env.NODE_ENV !== 'production') {
     BrowserPolicy.content.allowScriptOrigin('http://localhost:3500')
     BrowserPolicy.content.allowFontOrigin('http://localhost:3500')
+  }
+}

@@ -5,6 +5,7 @@ export default () => {
     NODE_ENV: true,
     COMMIT_HASH: true,
     BUILD_NUMBER: true,
-    CUSTOMER_NAME: true
+    CUSTOMER_NAME: true,
+    RESEND_IO_KEY: false
   })
 }
