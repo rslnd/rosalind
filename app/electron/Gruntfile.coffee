@@ -94,6 +94,18 @@ module.exports = (grunt) ->
         noMsi: true
 
     copy:
+      js:
+        files: [
+          {
+            src: [
+              'main/*.js',
+              'main/**/*.js',
+              'renderer/*.js'
+              'renderer/**/*.js'
+            ]
+            dest: 'build/javascript/'
+          }
+        ]
       node_modules:
         files: [
           {
@@ -152,5 +164,5 @@ module.exports = (grunt) ->
 
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
-  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:node_modules', 'string-replace:env', 'electron:package', 'create-windows-installer', 'rename:installerExe', ])
-  grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:node_modules', 'shell:electronPrebuilt'])
+  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:js', 'copy:node_modules', 'string-replace:env', 'electron:package', 'create-windows-installer', 'rename:installerExe', ])
+  grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:js', 'copy:node_modules', 'shell:electronPrebuilt'])
