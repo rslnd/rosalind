@@ -8,12 +8,10 @@ logger.start()
 settings = require './settings'
 cli = require './cli'
 authentication = require './authentication'
-importers = require './importers'
 print = require './print'
 shortcuts = require './shortcuts'
-
+watch = require './watch'
 mainWindow = null
-bdtWatcher = null
 
 start = ->
   return app.quit() if updater.handleStartupEvent()
@@ -23,7 +21,7 @@ start = ->
     mainWindow = window.open (err) ->
       return logger.error('[Main] Could not load main window', err) if err
       logger.ready('[Main] Main window loaded')
-      importers.start(ipcReceiver: mainWindow)
+      watch.start(ipcReceiver: mainWindow)
       print.start(ipcReceiver: mainWindow)
       shortcuts.updateShortcuts()
 
@@ -34,7 +32,7 @@ start = ->
 
   app.on 'window-all-closed', ->
     updater.quitAndInstall()
-    importers.stop()
+    watch.stop()
     app.quit()
 
 focus = ->

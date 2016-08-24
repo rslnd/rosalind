@@ -20,6 +20,9 @@ defaultSettings =
   updateUrl: 'https://update.rslnd.com'
   customer:
     name: 'Rosalind'
+  watch: [
+    { path: 'S:\\Export', importer: 'eoswinReports', enabled: true }
+  ]
   import:
     bdt:
       enabled: false

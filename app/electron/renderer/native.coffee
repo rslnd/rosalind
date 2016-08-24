@@ -1,5 +1,6 @@
 console.log('[Electron Native] Enabling native bindings')
 { ipcRenderer } = require 'electron'
+EventEmitter = require 'eventemitter3'
 
 try
   require 'electron-cookies'
@@ -9,20 +10,25 @@ try
     settings: null
     editSettings: -> ipcRenderer.send('settings/edit')
     log: (options) -> ipcRenderer.send('log', options)
-    ipc: ipcRenderer
     users:
       currentUser: null
       onLogin: (u) -> ipcRenderer.send('users/onLogin', u)
       onLogout: (u) -> ipcRenderer.send('users/onLogout', u)
       getToken: (t) -> ipcRenderer.send('users/getToken', t)
     print: (options) -> ipcRenderer.send('window/print', options)
-    import:
-      terminiko: -> ipcRenderer.send('import/terminiko')
-      eoswin:
-        patients: -> ipcRenderer.send('import/eoswin/patients')
-        reports: (options) -> ipcRenderer.send('import/eoswin/reports', options)
+    events: new EventEmitter()
 
   require './settings'
+
+  allowedEvents = [
+    'import/dataTransfer'
+    'users/getToken'
+  ]
+
+  allowedEvents.map (name) ->
+    ipcRenderer.on name, (event, args) ->
+      console.log('[Electron Native] Received event', name, event, args)
+      window.native.events.emit(name, args)
 
 catch e
   message = '[Electron Native] Failed to load native bindings'
