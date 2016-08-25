@@ -6,7 +6,7 @@ import { Meteor } from 'meteor/meteor'
 export default () => {
   Accounts.config({
     forbidClientAccountCreation: true,
-    loginExpirationInDays: 1
+    loginExpirationInDays: (5 * 365)
   })
 
   Accounts.registerLoginHandler((loginRequest) => {
