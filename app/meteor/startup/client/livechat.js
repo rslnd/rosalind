@@ -37,8 +37,9 @@ export default () => {
           const user = Meteor.user()
           if (user) {
             if (!currentUserId) {
-              // The `USER-` prefix is needed, don't ask why...
-              Smooch.login(`USER-${Meteor.userId()}`, {
+              const env = server.env.NODE_ENV.toUpperCase()
+              const smoochUserId = `USER-${Meteor.userId()}${env === 'PRODUCTION' ? '' : `-${env}`}`
+              Smooch.login(smoochUserId, {
                 givenName: user.profile.firstName,
                 surname: user.profile.lastName,
                 email: user.email,
