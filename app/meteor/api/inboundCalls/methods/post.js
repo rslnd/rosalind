@@ -15,8 +15,9 @@ export const post = ({ InboundCalls }) => {
     }).validator(),
 
     run (data) {
-      InboundCalls.insert(data)
-      Events.post('inboundCalls/post', data)
+      const _id = InboundCalls.insert(data)
+      Events.post('inboundCalls/post', { _id })
+      return _id
     }
   })
 }
