@@ -19,6 +19,8 @@ export const importWith = ({ Importers }) => {
       switch (importer) {
         case 'eoswinReports':
           return Importers.methods.eoswin.reports.call({ name, content })
+        case 'eoswinPatients':
+          return Importers.methods.eoswin.patients.call({ name, content })
         default:
           throw new Meteor.Error('no-importer-found', `Unknown importer ${importer}`)
       }

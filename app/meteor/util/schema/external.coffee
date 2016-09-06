@@ -13,7 +13,23 @@ ExternalTimestamps = new SimpleSchema
     type: Date
     optional: true
 
+  externalCreatedAt:
+    type: Date
+    optional: true
+
+  externalRemovedAt:
+    type: Date
+    optional: true
+
   externalUpdatedBy:
+    type: String
+    optional: true
+
+  externalCreatedBy:
+    type: String
+    optional: true
+
+  externalRemovedBy:
     type: String
     optional: true
 
@@ -34,6 +50,11 @@ ExternalNode = new SimpleSchema
   note:
     type: String
     optional: true
+
+  removed:
+    type: Boolean
+    optional: true
+    index: 1
 
 External = new SimpleSchema
   eoswin:

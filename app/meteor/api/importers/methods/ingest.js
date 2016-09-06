@@ -6,6 +6,7 @@ import { allowedImporters } from '../allowedImporters'
 export const ingest = ({ Importers }) => {
   const determineImporter = ({ name, content }) => {
     if (name && name.includes('Ärzte Statistik Umsätze')) { return 'eoswinReports' }
+    if (name && name.match(/\.PAT$/)) { return 'eoswinPatients' }
   }
 
   return new ValidatedMethod({

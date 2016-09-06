@@ -2,7 +2,6 @@ import moment from 'moment'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { allowedImporters } from '../../../allowedImporters'
 import { dateToDay } from 'util/time/day'
 import { parseReportDate, parseReport } from './parseReport'
 import { Reports } from 'api/reports'
@@ -13,7 +12,7 @@ export const eoswinReports = ({ Importers }) => {
     name: 'importers/eoswinReports',
 
     validate: new SimpleSchema({
-      importer: { type: String, optional: true, allowedValues: allowedImporters },
+      importer: { type: String, optional: true, allowedValues:  [ 'eoswinReports' ] },
       name: { type: String },
       content: { type: String }
     }).validator(),

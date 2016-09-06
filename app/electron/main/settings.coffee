@@ -22,6 +22,7 @@ defaultSettings =
     name: 'Rosalind'
   watch: [
     { path: 'S:\\Export', importer: 'eoswinReports', enabled: true }
+    { path: 'S:\\Export\\Patients', importer: 'eoswinPatients', enabled: true }
   ]
   import:
     bdt:
