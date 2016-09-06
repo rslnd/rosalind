@@ -3,5 +3,6 @@
   "devServer": {
     "host": "localhost"
   },
-  "devtool": "eval"
+  "devtool": "eval",
+  "sassResources": "client/css/global.scss"
 }

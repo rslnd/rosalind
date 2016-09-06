@@ -6,6 +6,21 @@ body {
   min-height: 100%;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: $font-stack;
+}
+
 .main-header {
   right: initial;
 }
@@ -45,7 +60,8 @@ body {
   height: 100%;
 }
 
-.modal .box, .modal .box.box-widget {
+.modal .box,
+.modal .box.box-widget {
   margin-bottom: -10px;
   margin-top: -20px;
   border: 0;

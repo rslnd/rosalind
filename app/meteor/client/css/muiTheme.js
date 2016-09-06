@@ -1,7 +1,10 @@
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 export const muiTheme = getMuiTheme({
-  fontFamily: '"Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif',
+  fontFamily: `-apple-system, BlinkMacSystemFont,
+      "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+      "Fira Sans", "Droid Sans", "Helvetica Neue",
+      sans-serif`,
   palette: {
     primary1Color: '#3c8dbc',
     primary2Color: '#39CCCC',
