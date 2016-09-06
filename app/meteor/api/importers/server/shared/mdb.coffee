@@ -1,7 +1,7 @@
 { spawn } = require 'child_process'
 temp = require 'temp'
 fs = require 'fs'
-# Future = require 'fibers/future'
+Future = Npm.require('fibers/future')
 csv = require './csv'
 
 module.exports = (options) ->

@@ -13,8 +13,6 @@ module.exports = ->
     @unblock()
 
     if ids
-      ids = ids.map (str) -> new Mongo.ObjectID(str)
-
       {
         find: -> @unblock(); Patients.find(_id: { $in: ids })
         children: [

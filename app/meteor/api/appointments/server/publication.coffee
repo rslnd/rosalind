@@ -37,7 +37,7 @@ module.exports = ->
 
       children: [
         { find: (doc) -> @unblock(); Comments.find(docId: doc._id) }
-        { find: (doc) -> @unblock(); Patients.find({ _id: doc.patientId }, { limit: 1 }) if doc.patientId?._str }
+        { find: (doc) -> @unblock(); Patients.find({ _id: doc.patientId }, { limit: 1 }) if doc.patientId }
       ]
     }
 
@@ -75,6 +75,6 @@ module.exports = ->
 
         children: [
           { find: (doc) -> @unblock(); Comments.find(docId: doc._id) }
-          { find: (doc) -> @unblock(); Patients.find({ _id: doc.patientId }, { limit: 1 }) if doc.patientId?._str }
+          { find: (doc) -> @unblock(); Patients.find({ _id: doc.patientId }, { limit: 1 }) if doc.patientId }
         ]
       }

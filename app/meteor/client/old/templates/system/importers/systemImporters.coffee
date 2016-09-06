@@ -1,6 +1,6 @@
 { Meteor } = require 'meteor/meteor'
 { sAlert } = require 'meteor/juliancwirko:s-alert'
-{ ImportFiles } = require 'api/importers'
+{ Importers } = require 'api/importers'
 
 Template.systemImporters.onCreated ->
   @subscribe('import.jobs')
@@ -21,7 +21,7 @@ Template.systemImporters.events
         meta:
           importer: $('select[name="importer"]').val()
 
-      upload = ImportFiles.insert(options, false)
+      upload = Importers.insert(options, false)
 
       upload.on 'start', ->
         console.log('[System][Importers] Start Upload')

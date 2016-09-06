@@ -1,7 +1,6 @@
 { JobCollection } = require 'meteor/vsivsi:job-collection'
 
 options = (options) ->
-  idGeneration: 'MONGO'
   transform: (doc) ->
     try
       job = new Job(Jobs[options.jobs], doc)

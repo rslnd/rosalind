@@ -12,6 +12,7 @@ module.exports = (job, resources) ->
     progress: job
     reverseParse: true
     iterator: (record) ->
+      return unless record
       return if record.PatientId < 1 and record.Info?.toString().length < 1
 
       start = moment(record.Datum_Beginn) if record.Datum_Beginn

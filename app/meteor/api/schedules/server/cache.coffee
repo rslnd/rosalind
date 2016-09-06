@@ -13,7 +13,7 @@ module.exports = ({ Schedules, Appointments }) ->
     block = {}
     block.isOpen = Schedules.methods.isOpen({ time })
     block.scheduled = map(Schedules.methods.getScheduled(time), (u) -> u._id)
-    block.appointments = map(appointments, (a) -> a._id._str)
+    block.appointments = map(appointments, (a) -> a._id)
     block.available = available
     return block
 

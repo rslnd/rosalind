@@ -6,10 +6,7 @@ Schema = require './schema'
 Patients = require 'api/patients'
 Users = require 'api/users'
 
-
-Appointments = new Mongo.Collection 'appointments',
-  idGeneration: 'MONGO'
-
+Appointments = new Mongo.Collection 'appointments'
 Appointments.attachSchema(Schema)
 Appointments.attachBehaviour('softRemovable')
 Appointments.helpers({ collection: -> Appointments })

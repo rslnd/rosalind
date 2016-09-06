@@ -2,7 +2,7 @@
 { Jobs } = require 'api/jobs'
 { Users } = require 'api/users'
 { isAllowedImporter } = require '../allowedImporters'
-ImportFiles = require '../collection'
+Importers = require '../collection'
 
 onAfterUpload = (fileRef) ->
   console.log('[Import] Upload stream: Done receiving file', fileRef)
@@ -29,4 +29,4 @@ onAfterUpload = (fileRef) ->
     .save()
 
 module.exports = ->
-  ImportFiles.addListener('afterUpload', onAfterUpload)
+  Importers.addListener('afterUpload', onAfterUpload)
