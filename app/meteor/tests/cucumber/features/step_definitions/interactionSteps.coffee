@@ -12,11 +12,13 @@ module.exports = ->
     if menuPath
       level0 = ".level-0[title=\"#{linkText.split(' > ')[0]}\"]"
       browser.waitForVisible(level0)
-      browser.click(level0)
+      browser.moveToObject(level0)
+      browser.leftClick()
 
       level1 = ".level-1[title=\"#{linkText.split(' > ')[1]}\"]"
       browser.waitForVisible(level1)
-      browser.click(level1)
+      browser.moveToObject(level1)
+      browser.leftClick()
     else if browser.isExisting('=' + linkText)
       browser.click('=' + linkText)
     else if browser.isExisting(linkText)
