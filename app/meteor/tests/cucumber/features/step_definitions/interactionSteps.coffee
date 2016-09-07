@@ -20,8 +20,11 @@ module.exports = ->
       browser.moveToObject(level1)
       browser.leftClick()
     else if browser.isExisting('=' + linkText)
-      browser.moveToObject('=' + linkText)
-      browser.leftClick()
+      try
+        browser.click('=' + linkText)
+      catch e
+        browser.moveToObject('=' + linkText)
+        browser.leftClick()
     else if browser.isExisting(linkText)
       browser.click(linkText)
     else if browser.isExisting('*=' + linkText)
