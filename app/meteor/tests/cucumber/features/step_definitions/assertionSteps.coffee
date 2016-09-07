@@ -8,6 +8,7 @@ module.exports = ->
 
   @Then 'I should not see \'$string\'', (string) ->
     browser.waitForExist('#loaded')
+    browser.pause(500)
     mainText = browser.getText('body')
     expect(mainText.toLowerCase()).not.toContain(string.toLowerCase())
 
