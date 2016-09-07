@@ -19,7 +19,6 @@ module.exports = new SimpleSchema
     type: Date
     index: 1
     optional: true
-    # coffeelint: disable=cyclomatic_complexity
     custom: ->
       if shouldBeRequired = @field('tracking').value is false
         unless @operator
