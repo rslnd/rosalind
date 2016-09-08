@@ -39,6 +39,7 @@ export default () => {
             if (!currentUserId) {
               const env = server.env.NODE_ENV.toUpperCase()
               const smoochUserId = `USER-${Meteor.userId()}${env === 'PRODUCTION' ? '' : `-${env}`}`
+              const group = user.groupId && Groups.findOne({ _id: user.groupId })
               Smooch.login(smoochUserId, {
                 givenName: user.profile.firstName,
                 surname: user.profile.lastName,
@@ -47,7 +48,7 @@ export default () => {
                   username: user.username,
                   fullNameWithTitle: user.fullNameWithTitle(),
                   employee: user.profile.employee,
-                  group: user.groupId && Groups.findOne({ _id: user.groupId }).name,
+                  group: group && group.name,
                   roles: user.getRoles()
                 }
               })
