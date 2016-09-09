@@ -24,7 +24,7 @@ const getTranslation = () => {
 }
 
 export default () => {
-  if (server.env.SMOOCH_APP_TOKEN) {
+  if (server.env.SMOOCH_APP_TOKEN && !server.env.TEST) {
     scriptjs('https://cdn.smooch.io/smooch.min.js', () => {
       Smooch.init({
         appToken: server.env.SMOOCH_APP_TOKEN,
@@ -48,7 +48,7 @@ export default () => {
                   username: user.username,
                   fullNameWithTitle: user.fullNameWithTitle(),
                   employee: user.profile.employee,
-                  group: group && group.name,
+                  group: group && group,
                   roles: user.getRoles()
                 }
               })
