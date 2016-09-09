@@ -35,7 +35,7 @@ Feature: Comments
     And I should see 'Commented from modal'
     When I fill in 'Add comment...' with 'Another comment from modal'
     And I click on the button titled 'Send'
-    And I click on the link 'Mark as unresolved'
+    And inside the modal I click on 'Mark as unresolved'
     And I click on the button 'Close'
     And I click on 'Inbound calls > Open inbound calls'
     Then I should see 'Commented from modal'

@@ -23,7 +23,6 @@ Feature: Inbound Calls
     And I should see 'Move appt. for today from 18:00 to 19:00'
     And I should see the current time
 
-  @watch
   Scenario: Mark inbound call as resolved
     Given an 'inbound call' with the following attributes:
       | Last name | First name | Telephone | Note | Private Patient |

@@ -50,6 +50,10 @@ module.exports = ->
     browser.waitForVisible("[title=\"#{titleText}\"]")
     browser.click("[title=\"#{titleText}\"]")
 
+  @When 'inside the modal I click on \'$linkText\'', (linkText) ->
+    browser.waitForVisible('.modal')
+    browser.element('.modal').click('=' + linkText)
+
   @When 'I fill in \'$labelText\' with \'$fieldValue\'', (labelText, fieldValue) ->
     selector = 'label=' + labelText
     lastFormField = selector
