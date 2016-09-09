@@ -34,6 +34,8 @@ RUN apt-get update && apt-get -y install \
 COPY . /opt/app
 WORKDIR /opt/app/programs/server
 
+ENV NPM_CONFIG_LOGLEVEL warn
+
 RUN npm install -g npm-install-retry \
   && npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0 \
   && npm cache clear \

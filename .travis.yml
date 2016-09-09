@@ -21,6 +21,7 @@ env:
   global:
     - DOCKER_COMPOSE_VERSION=1.5.2
     - NPM_VERSION=3.10.6
+    - NPM_CONFIG_LOGLEVEL=warn
     - ROOT_URL=http://0.0.0.0:3000/
     - PHANTOMJS_CDNURL=http://cnpmjs.org/downloads
 
