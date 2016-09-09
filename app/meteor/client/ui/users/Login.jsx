@@ -143,7 +143,7 @@ export class Login extends React.Component {
           <Modal.Footer>
             <span className="text-very-muted pull-left">
               {
-                (server.env.COMMIT_HASH && server.env.COMMIT_HASH.substring(0, 7)) || 'Development'
+                (server.env.COMMIT_HASH && server.env.COMMIT_HASH.substring(0, 7)) || server.env.TEST && 'Test' || 'Development'
               }
               &nbsp;
               {
