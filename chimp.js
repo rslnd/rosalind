@@ -18,7 +18,8 @@ requiredEnv.forEach(function (v) {
 
 var browser = {
   name: process.env.BROWSER.split(':')[0],
-  version: process.env.BROWSER.split(':')[1]
+  version: process.env.BROWSER.split(':')[1],
+  resolution: process.env.SCREEN_RESOLUTION || '1280x1024'
 }
 
 var os = {
@@ -39,7 +40,7 @@ console.log('** Browser:', browser.name, browser.version)
 console.log('** Worker:', process.env.SAUCE_TUNNEL_ID)
 
 module.exports = {
-  watch: false,
+  watch: process.env.WATCH || false,
 
   path: 'app/meteor/tests/cucumber/features/',
   ddp: process.env.ROOT_URL,
@@ -62,6 +63,7 @@ module.exports = {
       browserName: browser.name,
       version: browser.version,
       platform: os.long,
+      screenResolution: browser.resolution,
       'tunnel-identifier': process.env.SAUCE_TUNNEL_ID,
       name: buildName,
       build: process.env.BUILD_NUMBER,
