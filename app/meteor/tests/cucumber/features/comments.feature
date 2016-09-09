@@ -11,7 +11,7 @@ Feature: Comments
   Scenario: Add comment
     Given an 'inbound call' with the following attributes:
       | Last name | First name | Telephone | Note | Private Patient |
-      | Schwarz   | Alex       | 123 456   | Test | false           |
+      | Weisser   | Alex       | 123 456   | Test | false           |
     And I click on 'Inbound calls > Open inbound calls'
     And I fill in 'Add comment...' with 'This is a comment'
     And I press 'Enter'
@@ -23,7 +23,7 @@ Feature: Comments
   Scenario: Add comment in modal
     Given an 'inbound call' with the following attributes:
       | Last name | First name | Telephone | Note | Private Patient |
-      | Schwarz   | Alex       | 123 456   | Test | false           |
+      | Weisser   | Alex       | 123 456   | Test | false           |
     And I click on 'Inbound calls > Open inbound calls'
     And I click on 'Mark as resolved'
     Then I should not see 'Alex'

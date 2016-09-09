@@ -19,6 +19,9 @@ module.exports = ->
       browser.waitForVisible(level1)
       browser.moveToObject(level1)
       browser.leftClick()
+    else if browser.isExisting("[title=\"#{linkText}\"]")
+      browser.moveToObject("[title=\"#{linkText}\"]")
+      browser.leftClick()
     else if browser.isExisting('=' + linkText)
       try
         browser.click('=' + linkText)
