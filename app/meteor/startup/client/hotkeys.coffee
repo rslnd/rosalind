@@ -57,7 +57,10 @@ hotkeys =
         'up up down down left right left right b a enter',
         'u n i c o r n',
       ]
-      fn: -> sAlert.success('Hello, Unicorn!')
+      fn: ->
+        deg = Math.floor(40 + Math.random() * 280)
+        document.body.style.filter = "hue-rotate(#{deg}deg) saturate(3) sepia(0.1)"
+        setTimeout((-> document.body.style.filter = null), 3500)
   ]
 
 

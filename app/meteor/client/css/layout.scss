@@ -6,6 +6,7 @@ body {
 
 body {
   zoom: 1.11;
+  transition: filter 1s cubic-bezier(.17,.67,.83,.67);
 }
 
 .zoom-1 {
