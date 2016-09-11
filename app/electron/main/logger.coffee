@@ -10,6 +10,8 @@ module.exports =
   start: ->
     winston.add winston.transports.File,
       filename: path.join(app.getPath('userData'), 'RosalindElectron.log')
+      handleExceptions: true
+      humanReadableUnhandledException: true
       level: 'debug'
       json: false
       maxsize: 1024 * 1024 * 10

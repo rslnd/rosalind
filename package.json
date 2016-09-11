@@ -33,7 +33,7 @@
     "standard": "^8.0.0"
   },
   "engines": {
-    "node": "^0.12.7"
+    "node": "^4.5.0"
   },
   "standard": {
     "ignore": [

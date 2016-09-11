@@ -53,6 +53,8 @@ const handleStartupEvent = () => {
 }
 
 const start = () => {
+  if (process.platform !== 'win32') { return }
+
   logger.info('[Updater] Setting feed URL')
   const feedBaseUrl = (settings && settings.updateUrl) || 'https://update.rslnd.com'
   const feedUrl = feedBaseUrl + '/update/' + process.platform + '/v' + manifest.version
