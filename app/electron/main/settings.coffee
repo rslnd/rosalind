@@ -17,28 +17,15 @@ settings = null
 
 defaultSettings =
   url: 'http://0.0.0.0:3000'
-  updateUrl: 'https://update.rslnd.com'
   customer:
     name: 'Rosalind'
   watch: [
     { path: 'S:\\Export', importer: 'eoswinReports', enabled: true }
     { path: 'S:\\Export\\Patients', importer: 'eoswinPatients', enabled: true }
+    { path: 'S:\\Export\\xdt', importer: 'xdt', enabled: false }
   ]
-  import:
-    bdt:
-      enabled: false
-      path: ''
-      delete: true
-    terminiko:
-      enabled: false
-      path: 'Arztprax.mdb'
-    eoswin:
-      path: ''
-      modules:
-        patients: false
-        reports: false
 
-if fs.existsSync(settingsPath)
+if fs.existsSync(settingsPath) and fs.readFileSync(settingsPath).length > 3
   logger.info('[Settings] Loading existing settings from', settingsPath)
   settings = {}
 
@@ -49,12 +36,14 @@ if fs.existsSync(settingsPath)
   catch e
     logger.error('[Settings] Cannot parse settings file', e)
     editSettings()
+    app.quit()
 
 else
   logger.info('[Settings] Writing default settings to', settingsPath)
   fs.writeFile settingsPath, JSON.stringify(defaultSettings, null, 2), encoding: 'utf8', (err) ->
     return logger.error('[Settings] Cannot write default settings', err) if err?
     editSettings()
+    app.quit()
   settings = defaultSettings
 
 settings.settingsPath = settingsPath
