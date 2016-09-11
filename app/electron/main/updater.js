@@ -24,14 +24,20 @@ const handleStartupEvent = () => {
       // - Write to the registry for things like file associations and
       //   explorer context menus
       logger.info('[Updater] Squirrel command: install')
-      shortcuts.updateShortcuts(() => app.quit)
+      shortcuts
+        .updateShortcuts()
+        .then(app.quit)
+
       return true
 
     case '--squirrel-uninstall':
       // Undo anything you did in the --squirrel-install and
       // --squirrel-updated handlers
       logger.info('[Updater] Squirrel command: uninstall')
-      shortcuts.deleteShortcuts(() => app.quit)
+      shortcuts
+        .deleteShortcuts()
+        .then(app.quit)
+
       return true
 
     case '--squirrel-obsolete':

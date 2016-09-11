@@ -20,7 +20,7 @@ watch = require './watch'
 mainWindow = null
 
 start = ->
-  return app.quit() if updater.handleStartupEvent()
+  return if updater.handleStartupEvent()
   return app.quit() if cli.handleStartupEvent(focus)
 
   app.on 'ready', ->
