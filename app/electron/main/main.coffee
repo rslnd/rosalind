@@ -15,6 +15,7 @@ settings = require './settings'
 cli = require './cli'
 authentication = require './authentication'
 print = require './print'
+shortcuts = require './shortcuts'
 watch = require './watch'
 mainWindow = null
 
@@ -28,6 +29,7 @@ start = ->
       logger.ready('[Main] Main window loaded')
       watch.start(ipcReceiver: mainWindow)
       print.start(ipcReceiver: mainWindow)
+      shortcuts.updateShortcuts()
 
     authentication.start(ipcReceiver: mainWindow)
     updater.start()
