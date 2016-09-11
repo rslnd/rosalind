@@ -76,7 +76,6 @@ const composer = (props, onData) => {
   })
 
   const customerName = server.env.CUSTOMER_NAME || 'Rosalind Development'
-  document.title = customerName
 
   onData(null, { items, customerName })
 }
