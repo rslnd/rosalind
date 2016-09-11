@@ -7,7 +7,7 @@ branches:
 shallow_clone: true
 
 environment:
-  nodejs_version: '6.1.0'
+  nodejs_version: '6.3.0'
 
 install:
 - ps: >-

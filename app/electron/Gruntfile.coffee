@@ -106,14 +106,23 @@ module.exports = (grunt) ->
             dest: 'build/javascript/'
           }
         ]
-      node_modules:
+
+      nodeModules:
         files: [
           {
-            src: map(options.dependencies(), (p) -> p + '/**')
+            src: (->
+              src = [ '*/**' ]
+              map(options.devDependencies(), (p) -> src.push('!' + p + '/**'))
+              return src
+            )()
             cwd: 'node_modules/'
             expand: true
             dest: 'build/javascript/node_modules/'
           }
+        ]
+
+      packageJson:
+        files: [
           {
             src: ['package.json']
             dest: 'build/javascript/package.json'
@@ -154,6 +163,9 @@ module.exports = (grunt) ->
         options:
           failOnError: false
 
+      npmInstallProduction:
+        command: 'cd ./build/javascript && npm i --production'
+
       kill:
         command: options.killCommand()
         options:
@@ -164,5 +176,5 @@ module.exports = (grunt) ->
 
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
-  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:js', 'copy:node_modules', 'string-replace:env', 'electron:package', 'create-windows-installer', 'rename:installerExe', ])
-  grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:js', 'copy:node_modules', 'shell:electronPrebuilt'])
+  grunt.registerTask('build', ['clean:full', 'coffee', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'electron:package', 'create-windows-installer', 'rename:installerExe', ])
+  grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:js', 'copy:packageJson', 'copy:nodeModules', 'shell:electronPrebuilt'])
