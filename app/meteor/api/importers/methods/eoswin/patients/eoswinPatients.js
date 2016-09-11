@@ -11,11 +11,14 @@ export const eoswinPatients = ({ Importers }) => {
     validate: new SimpleSchema({
       importer: { type: String, optional: true, allowedValues: [ 'eoswinPatients' ] },
       name: { type: String },
-      content: { type: String }
+      content: { type: String },
+      quiet: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ name, content }) {
-      if (!Meteor.userId()) { return }
+    run ({ name, content, quiet }) {
+      if (this.connection && !this.userId) {
+        throw new Meteor.Error(403, 'not-authorized')
+      }
 
       let patients = parsePatients(content)
 
@@ -23,7 +26,7 @@ export const eoswinPatients = ({ Importers }) => {
         switch (action) {
           case 'insert':
           case 'update':
-            Patients.methods.upsert.call({ patient })
+            Patients.methods.upsert.call({ patient, quiet })
             break
           case 'softRemove':
             // TODO: Add method to soft remove patients

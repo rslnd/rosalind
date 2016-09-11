@@ -54,7 +54,7 @@ export const parsePatient = (row) => {
   const expectedFieldsCount = 17
   if (row.length < 2) { return }
   if (row.length !== expectedFieldsCount) {
-    throw new Error(`Expected row to have ${expectedFieldsCount} fields, got ${row.length}`)
+    throw new Error(`Expected row to have ${expectedFieldsCount} fields, got ${row.length}: ${row}`)
   }
 
   const action = parseAction(row[12])
@@ -71,7 +71,7 @@ export const parsePatient = (row) => {
       lastName: row[1],
       titlePrepend: row[2],
       gender: parseGender(row[3]),
-      birthday: dateToDay(moment(row[14], 'DD.MM.YYYY')),
+      birthday: row[14] && dateToDay(moment(row[14], 'DD.MM.YYYY')),
       address: {
         line1: row[4],
         postalCode: row[5],
@@ -85,7 +85,9 @@ export const parsePatient = (row) => {
 }
 
 export const parsePatients = (csv) => {
-  const data = csvToJson(csv).data
+  const data = csvToJson(csv, {
+    delimiter: '|'
+  }).data
   const patients = data.map(parsePatient).filter((p) => p)
   return patients
 }

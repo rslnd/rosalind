@@ -8,11 +8,14 @@ export const upsert = ({ Patients }) => {
     name: 'patients/upsert',
 
     validate: new SimpleSchema({
-      patient: { type: Object, blackbox: true }
+      patient: { type: Object, blackbox: true },
+      quiet: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ patient }) {
-      if (!this.userId) {
+    // FIXME: Clients can quietly upsert patients
+    // this flag is set when bulk importing patients
+    run ({ patient, quiet }) {
+      if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
@@ -23,13 +26,13 @@ export const upsert = ({ Patients }) => {
 
       if (existingPatient) {
         Patients.update({ _id: existingPatient._id }, { $set: patient })
-        Events.post('patients/upsert', { patientId: existingPatient._id })
+        if (!quiet) { Events.post('patients/upsert', { patientId: existingPatient._id }) }
         return existingPatient._id
       } else {
         try {
           const patientId = Patients.insert(patient, (err) => {
             if (err) { throw err }
-            Events.post('patients/insert', { patientId })
+            if (!quiet) { Events.post('patients/insert', { patientId }) }
           })
           return patientId
         } catch (e) {

@@ -3,8 +3,8 @@ import { sAlert } from 'meteor/juliancwirko:s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Importers } from 'api/importers'
 
-export const ingest = ({ name, content, importer }, callback = () => {}) => {
-  Importers.methods.ingest.call({ name, content, importer }, (err, res) => {
+export const ingest = ({ name, content, buffer, importer }, callback = () => {}) => {
+  Importers.methods.ingest.call({ name, content, buffer: { blob: buffer }, importer }, (err, res) => {
     if (err) {
       callback(err)
       throw err
@@ -18,7 +18,7 @@ export const ingest = ({ name, content, importer }, callback = () => {}) => {
 export const setupDragdrop = () => {
   dragDrop('body', (files) => {
     files.forEach((file) => {
-      ingest({ name: file.name, content: file.toString() }, (err, res) => {
+      ingest({ name: file.name, buffer: file }, (err, res) => {
         if (err) {
           sAlert.error(err.message)
         } else {
