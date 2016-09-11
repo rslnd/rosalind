@@ -29,10 +29,13 @@ const start = ({ ipcReceiver }) => {
     logger.info('[Watch] Watching paths', settings.watch)
 
     watchers = settings.watch.map((watch) => {
+      if (!watch.enabled) { return }
+
       let watcher = chokidar.watch(watch.path, {
         persistent: true,
         ignored: /[\/\\]\./,
         depth: 0,
+        usePolling: true,
         awaitWriteFinish: {
           stabilityThreshold: 2000,
           pollInterval: 500
