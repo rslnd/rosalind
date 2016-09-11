@@ -32,6 +32,7 @@ const start = ({ ipcReceiver }) => {
       let watcher = chokidar.watch(watch.path, {
         persistent: true,
         ignored: /[\/\\]\./,
+        depth: 0,
         awaitWriteFinish: {
           stabilityThreshold: 2000,
           pollInterval: 500
