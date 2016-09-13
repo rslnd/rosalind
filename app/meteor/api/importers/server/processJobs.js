@@ -1,5 +1,5 @@
 import { Job } from 'meteor/vsivsi:job-collection'
-import terminiko from './terminiko'
+import { terminiko } from './terminiko'
 import { eoswinPatients } from './eoswin'
 
 export default () => {
