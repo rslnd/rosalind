@@ -6,6 +6,7 @@ import sortBy from 'lodash/fp/sortBy'
 import { composeWithTracker } from 'react-komposer'
 import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { Users } from 'api/users'
+import { Patients } from 'api/patients'
 import { Appointments } from 'api/appointments'
 import { Loading } from 'client/ui/components/Loading'
 import { AppointmentsScreen } from './AppointmentsScreen'
@@ -41,7 +42,10 @@ const composer = (props, onData) => {
           lastName: user && user.profile.lastName,
           schedule: '8:00-14:00',
           assigneeId,
-          appointments
+          appointments: appointments.map((appointment) => {
+            const patient = Patients.findOne({ _id: appointment.patientId })
+            return { ...appointment, patient }
+          })
         }
       }),
       sortBy('lastName')

@@ -2,6 +2,8 @@ import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
 import { DateNavigation } from 'client/ui/components/DateNavigation'
+import { Box } from 'client/ui/components/Box'
+import { AppointmentsView } from './AppointmentsView'
 
 export class AppointmentsScreen extends React.Component {
   render () {
@@ -15,16 +17,9 @@ export class AppointmentsScreen extends React.Component {
           <DateNavigation date={this.props.date} basePath="appointments" pullRight />
         </div>
         <div className="content">
-          Assignees: {this.props.assignees.length}<br />
-          Assignees: {this.props.assignees.length}<br />
-          <ul>
-            {this.props.assignees.map((assignee) => (
-              <li key={assignee.assigneeId}>
-                Assignee: {assignee.fullNameWithTitle}
-                # Appointments: {assignee.appointments.length}
-              </li>
-            ))}
-          </ul>
+          <Box noPadding>
+            <AppointmentsView assignees={this.props.assignees} />
+          </Box>
         </div>
       </div>
     )
