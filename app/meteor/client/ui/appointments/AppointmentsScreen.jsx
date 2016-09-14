@@ -15,13 +15,13 @@ export class AppointmentsScreen extends React.Component {
           <DateNavigation date={this.props.date} basePath="appointments" pullRight />
         </div>
         <div className="content">
-          Count: {this.props.appointments.length}
+          Assignees: {this.props.assignees.length}<br />
+          Assignees: {this.props.assignees.length}<br />
           <ul>
-            {this.props.appointments.map((appointment) => (
-              <li key={appointment._id}>
-                Start: {appointment.start.toString()}
-                Assignee: {appointment.assigneeId}
-                Patient: {appointment.patientId}
+            {this.props.assignees.map((assignee) => (
+              <li key={assignee.assigneeId}>
+                Assignee: {assignee.name}
+                # Appointments: {assignee.appointments.length}
               </li>
             ))}
           </ul>

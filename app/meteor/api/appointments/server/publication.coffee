@@ -19,8 +19,16 @@ module.exports = ->
   Meteor.publishComposite 'appointments', (options = {}) ->
     check options, Match.Optional
       date: Match.Optional(Date)
+      start: Match.Optional(Date)
+      end: Match.Optional(Date)
+      within: Match.Optional(String)
 
+    options.within ||= 'day'
     options.date ||= new Date()
+    unless (options.start and options.end)
+      options.start = moment(options.date).startOf(within).toDate()
+      options.end = moment(options.date).endOf(within).toDate()
+
 
     return unless (@userId and Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
 
@@ -30,10 +38,17 @@ module.exports = ->
       find: ->
         @unblock()
         selector = start:
-          $gte: moment(options.date).startOf('day').toDate()
-          $lte: moment(options.date).endOf('day').toDate()
+          $gte: options.start
+          $lte: options.end
         cursor = Appointments.find(selector, { sort: { start: 1 } })
-        console.log('[Appointments] Publishing', { count: cursor.count(), date: options.date, userId: @userId })
+        console.log('[Appointments] Publishing', {
+          count: cursor.count(),
+          date: options.date,
+          within: options.within,
+          start: options.start,
+          end: options.end,
+          userId: @userId
+        })
         return cursor
 
       children: [
