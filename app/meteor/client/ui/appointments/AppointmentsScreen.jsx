@@ -20,7 +20,7 @@ export class AppointmentsScreen extends React.Component {
           <ul>
             {this.props.assignees.map((assignee) => (
               <li key={assignee.assigneeId}>
-                Assignee: {assignee.name}
+                Assignee: {assignee.fullNameWithTitle}
                 # Appointments: {assignee.appointments.length}
               </li>
             ))}

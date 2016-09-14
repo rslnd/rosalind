@@ -1,5 +1,8 @@
 import moment from 'moment'
-import groupBy from 'lodash/groupBy'
+import flow from 'lodash/fp/flow'
+import map from 'lodash/fp/map'
+import groupBy from 'lodash/fp/groupBy'
+import sortBy from 'lodash/fp/sortBy'
 import { composeWithTracker } from 'react-komposer'
 import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { Users } from 'api/users'
@@ -16,31 +19,33 @@ const composer = (props, onData) => {
   const date = moment(props.params && props.params.date || undefined)
 
   const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments', {
-    start: date.clone().startOf('week').toDate(),
-    end: date.clone().add(2, 'weeks').endOf('week').toDate()
+    start: date.clone().startOf('day').toDate(),
+    end: date.clone().endOf('day').toDate()
   })
 
   if (appointmentsSubscription.ready()) {
-    const selector = {
+    const appointmentsSelector = {
       start: {
         $gte: date.clone().startOf('day').toDate(),
         $lte: date.clone().endOf('day').toDate()
       }
     }
 
-    const cursor = Appointments.find(selector, { sort: { start: 1 } })
-
-    const appointments = cursor.fetch()
-    const appointmentsByAssignee = groupBy(appointments, 'assigneeId')
-    const assignees = Object.keys(appointmentsByAssignee).map((assigneeId) => {
-      const user = Users.findOne({ _id: assigneeId })
-      return {
-        assigneeId,
-        name: user && user.fullNameWithTitle() || 'Unassigned',
-        schedule: '8:00-14:00',
-        appointments: appointmentsByAssignee[assigneeId]
-      }
-    })
+    const mapUncapped = map.convert({ cap: false })
+    const assignees = flow(
+      groupBy('assigneeId'),
+      mapUncapped((appointments, assigneeId) => {
+        const user = Users.findOne({ _id: assigneeId })
+        return {
+          fullNameWithTitle: user && user.fullNameWithTitle() || 'Unassigned',
+          lastName: user && user.profile.lastName,
+          schedule: '8:00-14:00',
+          assigneeId,
+          appointments
+        }
+      }),
+      sortBy('lastName')
+    )(Appointments.find(appointmentsSelector, { sort: { start: 1 } }).fetch())
 
     onData(null, { assignees, date })
   } else {
