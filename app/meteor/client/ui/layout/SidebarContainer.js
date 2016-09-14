@@ -8,6 +8,14 @@ import { Sidebar } from './Sidebar'
 const sidebarItems = () => {
   return [
     {
+      name: 'appointments',
+      icon: 'calendar',
+      roles: ['admin', 'appointments'],
+      subItems: [
+        { name: 'thisCalendar', path: '/' }
+      ]
+    },
+    {
       name: 'inboundCalls',
       icon: 'phone',
       roles: ['admin', 'inboundCalls'],

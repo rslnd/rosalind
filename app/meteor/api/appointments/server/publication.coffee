@@ -24,16 +24,17 @@ module.exports = ->
 
     return unless (@userId and Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
 
-    console.log('[Appointments] publishing date', options.date, 'to user', @userId)
-
     @unblock()
 
     {
       find: ->
         @unblock()
         selector = start:
-          $gte: moment(options.date).subtract(2, 'days').startOf('day').toDate()
-        Appointments.find(selector, { sort: { start: 1 } })
+          $gte: moment(options.date).startOf('day').toDate()
+          $lte: moment(options.date).endOf('day').toDate()
+        cursor = Appointments.find(selector, { sort: { start: 1 } })
+        console.log('[Appointments] Publishing', { count: cursor.count(), date: options.date, userId: @userId })
+        return cursor
 
       children: [
         { find: (doc) -> @unblock(); Comments.find(docId: doc._id) }
