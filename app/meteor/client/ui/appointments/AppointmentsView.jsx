@@ -1,5 +1,5 @@
 import moment from 'moment'
-import range from 'lodash/range'
+import 'moment-range'
 import React from 'react'
 import style from './style'
 
@@ -7,18 +7,24 @@ export class AppointmentsView extends React.Component {
   // row name    | column names
   // ---------------------------------------------------------------
   // [header]    | [time] [assignee-1] [assignee-2] ... [assignee-n]
-  // [time-800]  | [time] [assignee-1] [assignee-2] ... [assignee-n]
-  // [time-805]  | [time] [assignee-1] [assignee-2] ... [assignee-n]
-  // [time-810]  | [time] [assignee-1] [assignee-2] ... [assignee-n]
+  // [time-0800] | [time] [assignee-1] [assignee-2] ... [assignee-n]
+  // [time-0805] | [time] [assignee-1] [assignee-2] ... [assignee-n]
+  // [time-0810] | [time] [assignee-1] [assignee-2] ... [assignee-n]
   // ...         | ...
   // [time-2100] | [time] [assignee-1] [assignee-2] ... [assignee-n]
   grid () {
-    const timeRange = range(700, 2200, 5)
+    const options = {
+      start: moment().hour(7).startOf('hour'),
+      end: moment().hour(22).endOf('hour')
+    }
+
+    const timeRange = moment.range(options.start, options.end).toArray('minutes')
+
     return {
       display: 'grid',
       gridTemplateColumns: `[time] 60px ${this.props.assignees.map((assignee) =>
         `[assignee-${assignee.assigneeId}] auto`).join(' ')}`,
-      gridTemplateRows: `[header] 40px [subheader] 40px ${timeRange.map((time) => `[time-${time}] 18px`).join(' ')}`
+      gridTemplateRows: `[header] 40px [subheader] 40px ${timeRange.map((time) => `[time-${moment(time).format('HHmm')}] 4px`).join(' ')}`
     }
   }
 
@@ -36,7 +42,8 @@ export class AppointmentsView extends React.Component {
         {this.props.assignees.map((assignee) => (
           assignee.appointments.map((appointment) => (
             <div key={appointment._id} className={style.appointment} style={{
-              gridRow: moment(appointment.start).format('[time-]Hmm'),
+              gridRowStart: moment(appointment.start).format('[time-]HHmm'),
+              gridRowEnd: moment(appointment.end).format('[time-]HHmm'),
               gridColumn: `assignee-${assignee.assigneeId}`
             }}>
               {appointment.start.toString().substr(15, 9)}
