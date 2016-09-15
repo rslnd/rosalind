@@ -1,13 +1,8 @@
 :local(.grid) {
-  display: grid;
-  grid-template-columns: 60px auto;
-  grid-template-rows: 40px auto;
 }
 
 :local(.header) {
-  display: flex;
 }
 
-:local(.header .headerCell) {
-  flex-grow: 1;
+:local(.headerCell) {
 }
