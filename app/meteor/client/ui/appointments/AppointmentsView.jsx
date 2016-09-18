@@ -4,6 +4,7 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { Sticky } from 'react-sticky'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { Appointment } from './Appointment'
 import style from './style'
 
 export class AppointmentsView extends React.Component {
@@ -50,12 +51,6 @@ export class AppointmentsView extends React.Component {
     this.setState({ ...this.state, appointmentModalOpen: false })
   }
 
-  stripNumbers (text) {
-    if (typeof text === 'string') {
-      return text.replace(/\d/g, '')
-    }
-  }
-
   render () {
     return (
       <div>
@@ -74,31 +69,10 @@ export class AppointmentsView extends React.Component {
         <div style={this.grid()}>
           {this.props.assignees.map((assignee) => (
             assignee.appointments.map((appointment) => (
-              <div
+              <Appointment
                 key={appointment._id}
-                data-id={appointment._id}
-                className={style.appointment}
-                onClick={() => this.handleAppointmentModalOpen(appointment)}
-                style={{
-                  gridRowStart: moment(appointment.start).format('[time-]HHmm'),
-                  gridRowEnd: moment(appointment.end).format('[time-]HHmm'),
-                  gridColumn: `assignee-${assignee.assigneeId}`
-                }}>
-                {
-                  appointment.patient
-                  ? (
-                    <span>
-                      <span className={style.prefix}>{appointment.patient.prefix}&#8202;</span>
-                      <b>{appointment.patient.profile.lastName}</b>&thinsp;
-                      {appointment.patient.profile.firstName}
-                    </span>
-                  ) : (
-                    <span>
-                      {this.stripNumbers(appointment.notes)}
-                    </span>
-                  )
-                }
-              </div>
+                appointment={appointment}
+                handleAppointmentModalOpen={this.handleAppointmentModalOpen} />
             ))
           ))}
 
