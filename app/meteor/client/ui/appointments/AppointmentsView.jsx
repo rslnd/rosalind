@@ -50,6 +50,12 @@ export class AppointmentsView extends React.Component {
     this.setState({ ...this.state, appointmentModalOpen: false })
   }
 
+  stripNumbers (text) {
+    if (typeof text === 'string') {
+      return text.replace(/\d/g, '')
+    }
+  }
+
   render () {
     return (
       <div>
@@ -87,7 +93,7 @@ export class AppointmentsView extends React.Component {
                     </span>
                   ) : (
                     <span>
-                      {appointment.notes}
+                      {this.stripNumbers(appointment.notes)}
                     </span>
                   )
                 }
