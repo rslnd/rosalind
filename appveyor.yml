@@ -24,8 +24,6 @@ install:
 - cmd: >-
     npm install -g npm-install-retry
 
-    npm-install-retry --wait 500 --attempts 10
-
     cd app\electron\
 
     npm-install-retry --wait 500 --attempts 10
