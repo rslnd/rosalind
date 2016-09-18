@@ -13,8 +13,10 @@ module.exports = ->
   @Given 'I am logged in', ->
     browser.waitForExist('#locale.en')
     browser.execute(((name) -> Meteor.loginWithPassword(name, '1111')), lastUsername)
+    browser.waitForExist('#logged-in')
 
   @Then 'I should be logged in', ->
+    browser.waitForExist('#logged-in')
     user = browser.execute -> Meteor.user()
     expect(user.value).not.toBeNull()
 

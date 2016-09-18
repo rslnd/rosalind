@@ -18,6 +18,7 @@ export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
   if (currentUser) {
     return (
       <div className="wrapper disable-select">
+        <div id="logged-in"></div>
         <header className={`main-header ${style.mainHeader}`}>
           <Link to="/" className="logo">
             <img src="/images/logo.svg" />

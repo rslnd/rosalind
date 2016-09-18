@@ -3,6 +3,7 @@ moment = require 'moment'
 module.exports = ->
   @Then /^I should see '([^']*)'$/, (string) ->
     browser.waitForExist('#loaded')
+    browser.pause(500)
     mainText = browser.getText('body')
     expect(mainText.toLowerCase()).toContain(string.toLowerCase())
 
