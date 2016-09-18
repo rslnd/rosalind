@@ -5,6 +5,6 @@
 
 :local(.customerName) {
   bottom: 0;
-  position: fixed;
+  position: fixed !important;
   width: 230px;
 }
