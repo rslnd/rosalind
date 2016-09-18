@@ -76,6 +76,7 @@ export class AppointmentsView extends React.Component {
             assignee.appointments.map((appointment) => (
               <div
                 key={appointment._id}
+                data-id={appointment._id}
                 className={style.appointment}
                 onClick={() => this.handleAppointmentModalOpen(appointment)}
                 style={{
@@ -107,11 +108,13 @@ export class AppointmentsView extends React.Component {
               .filter((t) => t.minute() % 15 === 0)
               .map((time) => {
                 const fullHour = time.minute() === 0
+                const timeKey = time.format('[time-]HHmm')
                 return (
                   <span
+                    key={timeKey}
                     className={`${style.timeLegend} ${fullHour && style.fullHour}`}
                     style={{
-                      gridRow: time.format('[time-]HHmm'),
+                      gridRow: timeKey,
                       gridColumn: 'time'
                     }}>
                     {time.format('H:mm')}
