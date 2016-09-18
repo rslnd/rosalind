@@ -43,8 +43,13 @@ const composer = (props, onData) => {
           schedule: '8:00-14:00',
           assigneeId,
           appointments: appointments.map((appointment) => {
-            const patient = Patients.findOne({ _id: appointment.patientId })
-            return { ...appointment, patient }
+            let patient = Patients.findOne({ _id: appointment.patientId })
+            if (patient) {
+              patient.prefix = patient.prefix()
+            }
+
+            const notes = appointment.notes()
+            return { ...appointment, patient, notes }
           })
         }
       }),

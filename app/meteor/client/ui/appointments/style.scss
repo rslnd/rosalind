@@ -1,8 +1,35 @@
-:local(.grid) {
+:local(.contentHeader) {
+  background-color: $background;
+  z-index: 100;
 }
 
-:local(.header) {
+:local(.headerRow) {
+  background-color: $background;
+  display: flex;
+  width: 100%;
+}
+
+:local(.headerRowSticky) {
+  padding-top: 60px;
 }
 
 :local(.headerCell) {
+  flex: 1;
+}
+
+:local(.appointment) {
+  overflow: hidden;
+}
+
+:local(.prefix) {
+  color: $dark-gray;
+}
+
+:local(.timeLegend) {
+  color: $dark-gray-disabled;
+}
+
+:local(.fullHour) {
+  color: $dark-gray-active;
+  font-weight: bold;
 }
