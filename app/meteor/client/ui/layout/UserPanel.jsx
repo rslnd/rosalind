@@ -6,23 +6,6 @@ import { TimesheetSummaryContainer } from 'client/ui/timesheets/TimesheetSummary
 import style from './userPanelStyle.scss'
 
 export class UserPanel extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      userMenuOpen: false
-    }
-
-    this.toggleUserMenu = this.toggleUserMenu.bind(this)
-  }
-
-  toggleUserMenu () {
-    this.setState({
-      ...this.state,
-      userMenuOpen: !this.state.userMenuOpen
-    })
-  }
-
   render () {
     return (
       <div className={style.userPanel}>
@@ -30,10 +13,10 @@ export class UserPanel extends React.Component {
           {this.props.currentUser.fullNameWithTitle()}
         </b>
         <div className={style.hidden}>
-          <p>
+          <div className={style.button}>
             <TimesheetSummaryContainer userId={this.props.currentUser._id} />
-          </p>
-          <p>
+          </div>
+          <div className={style.button}>
             {
               this.props.loggingOut
               ? <Button bsStyle="default" block disabled>
@@ -43,7 +26,7 @@ export class UserPanel extends React.Component {
                 <Icon name="sign-out" /> {TAPi18n.__('login.logout')}
               </Button>
             }
-          </p>
+          </div>
         </div>
       </div>
     )

@@ -4,6 +4,7 @@ import Blaze from 'meteor/gadicc:blaze-react-component'
 import { SidebarContainer } from './SidebarContainer'
 import { UserPanelContainer } from './UserPanelContainer'
 import { Login } from 'client/ui/users/Login'
+import style from './mainLayoutStyle'
 
 export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
   const alwaysRender = () => (
@@ -17,7 +18,7 @@ export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
   if (currentUser) {
     return (
       <div className="wrapper disable-select">
-        <header className="main-header">
+        <header className={`main-header ${style.mainHeader}`}>
           <Link to="/" className="logo">
             <img src="/images/logo.svg" />
           </Link>
