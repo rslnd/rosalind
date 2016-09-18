@@ -66,6 +66,8 @@ export class Sidebar extends React.Component {
             <SidebarItem key={item.name} item={item} userMenuOpen={this.state.userMenuOpen} />
           ))}
 
+          {/* TODO: Replace with flexbox */}
+          <li style={{height: '70px'}}></li>
           <li className={`header text-center ${style.customerName}`}>{this.props.customerName.split(' - ').map((name, i) => (
             <span key={i}>{name}<br /></span>
           ))}</li>
