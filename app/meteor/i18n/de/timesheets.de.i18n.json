@@ -3,8 +3,8 @@
     "this": "Arbeitszeiten",
     "pauseAction": "Pausieren",
     "resumeAction": "Fortfahren",
-    "youAreWorking": "Sie arbeiten seit %s.",
-    "youHaveWorkedToday": "Sie haben heute %s gearbeitet.",
+    "youAreWorking": "Sie arbeiten seit %s",
+    "youHaveWorkedToday": "Sie haben heute %s gearbeitet",
     "now": "jetzt",
     "actual": "Anwesend"
   }

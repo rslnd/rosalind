@@ -12,15 +12,15 @@ export const TimesheetSummary = ({ timesheets, tracking, sum, stopTracking, star
     {
       tracking
       ? <div>
-        <p>{TAPi18n.__('timesheets.youAreWorking', moment.duration(sum).format('H[h] mm[m] ss[s]'))}</p>
-        <Button bsStyle="warning" onClick={stopTracking}>
+        <p>{TAPi18n.__('timesheets.youAreWorking', moment.duration(sum).format('H[h] mm[m]'))}</p>
+        <Button bsStyle="warning" block onClick={stopTracking}>
           <Icon name="pause" />&ensp;
           {TAPi18n.__('timesheets.pauseAction')}
         </Button>
       </div>
       : <div>
-        <p>{TAPi18n.__('timesheets.youHaveWorkedToday', moment.duration(sum).format('H[h] mm[m] ss[s]'))}</p>
-        <Button bsStyle="success" onClick={startTracking}>
+        <p>{TAPi18n.__('timesheets.youHaveWorkedToday', moment.duration(sum).format('H[h] mm[m]'))}</p>
+        <Button bsStyle="success" block onClick={startTracking}>
           <Icon name="play" />&ensp;
           {TAPi18n.__('timesheets.resumeAction')}
         </Button>

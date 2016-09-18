@@ -1,7 +1,8 @@
 import React from 'react'
+import { Link } from 'react-router'
 import Blaze from 'meteor/gadicc:blaze-react-component'
-import { TopbarContainer } from './TopbarContainer'
 import { SidebarContainer } from './SidebarContainer'
+import { UserPanelContainer } from './UserPanelContainer'
 import { Login } from 'client/ui/users/Login'
 
 export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
@@ -16,8 +17,12 @@ export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
   if (currentUser) {
     return (
       <div className="wrapper disable-select">
-        <TopbarContainer />
-        <SidebarContainer />
+        <header className="main-header">
+          <Link to="/" className="logo">
+            <img src="/images/logo.svg" />
+          </Link>
+        </header>
+        <SidebarContainer userPanel={<UserPanelContainer />} />
         <div className="content-wrapper print-no-margin">
           {children}
         </div>

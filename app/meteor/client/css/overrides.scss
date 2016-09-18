@@ -6,6 +6,10 @@ body {
   min-height: 100%;
 }
 
+.fixed .content-wrapper, .fixed .right-side {
+  padding-top: 0 !important;
+}
+
 h1,
 h2,
 h3,

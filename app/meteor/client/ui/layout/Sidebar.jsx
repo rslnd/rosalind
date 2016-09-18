@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, withRouter } from 'react-router'
 import FlipMove from 'react-flip-move'
 import { TAPi18n } from 'meteor/tap:i18n'
+import style from './sidebarStyle.scss'
 
 const SidebarItem = withRouter(({ item, router }) => {
   return (
@@ -42,32 +43,32 @@ export class Sidebar extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: null,
-      activeSubItem: null
+      userMenuOpen: false
     }
 
-    this.handleItemClick = this.handleItemClick.bind(this)
-    this.handleSubItemClick = this.handleSubItemClick.bind(this)
+    this.handleUserMenuToggle = this.handleUserMenuToggle.bind(this)
   }
 
-  handleItemClick (itemName) {
-    this.setState({ ...this.getState(), activeItem: itemName })
-  }
-
-  handleSubItemClick (itemName) {
-    this.setState({ ...this.getState(), activeSubItem: itemName })
+  handleUserMenuToggle () {
+    this.setState({ ...this.state, userMenuOpen: !this.state.userMenuOpen })
   }
 
   render () {
     return (
       <aside className="main-sidebar sidebar">
-        <ul className="sidebar-menu">
-          <li className="header text-center">{this.props.customerName.split(' - ').map((name, i) => (
+        <ul className={`sidebar-menu ${style.sidebar}`}>
+
+          <li className="header text-center">
+            {this.props.userPanel}
+          </li>
+
+          {this.props.items.map((item) => (
+            <SidebarItem key={item.name} item={item} userMenuOpen={this.state.userMenuOpen} />
+          ))}
+
+          <li className={`header text-center ${style.customerName}`}>{this.props.customerName.split(' - ').map((name, i) => (
             <span key={i}>{name}<br /></span>
           ))}</li>
-          {this.props.items.map((item) => (
-            <SidebarItem key={item.name} item={item} handleItemClick={this.handleItemClick} handleSubItemClick={this.handleSubItemClick} />
-          ))}
         </ul>
       </aside>
     )

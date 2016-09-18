@@ -1,0 +1,10 @@
+:local(.sidebar) {
+  min-height: 100%;
+  padding-bottom: 70px;
+}
+
+:local(.customerName) {
+  bottom: 0;
+  position: fixed;
+  width: 230px;
+}

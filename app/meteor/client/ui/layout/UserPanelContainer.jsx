@@ -1,9 +1,9 @@
 import React from 'react'
 import { composeWithTracker } from 'react-komposer'
 import { Meteor } from 'meteor/meteor'
-import { Topbar } from './Topbar'
+import { UserPanel } from './UserPanel'
 
-class TopbarContainerComponent extends React.Component {
+class UserPanelContainerComponent extends React.Component {
   constructor (props) {
     super(props)
 
@@ -27,7 +27,7 @@ class TopbarContainerComponent extends React.Component {
 
   render () {
     return (
-      <Topbar
+      <UserPanel
         currentUser={this.props.currentUser}
         handleLogout={this.handleLogout}
         loggingOut={this.state.loggingOut} />
@@ -40,6 +40,6 @@ const composer = (props, onData) => {
   onData(null, { currentUser })
 }
 
-const TopbarContainer = composeWithTracker(composer)(TopbarContainerComponent)
+const UserPanelContainer = composeWithTracker(composer)(UserPanelContainerComponent)
 
-export { TopbarContainer }
+export { UserPanelContainer }
