@@ -76,6 +76,21 @@ Schema = new SimpleSchema
     optional: true
     index: 1
 
+  canceled:
+    type: Boolean
+    optional: true
+    index: 1
+
+  admitted:
+    type: Boolean
+    optional: true
+    index: 1
+
+  treated:
+    type: Boolean
+    optional: true
+    index: 1
+
 Schema.i18n('appointments.form')
 
 module.exports = Schema

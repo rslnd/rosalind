@@ -1,4 +1,5 @@
 moment = require 'moment'
+includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Appointments } = require 'api/appointments'
 mdb = require '../../shared/mdb'
@@ -13,7 +14,12 @@ module.exports = (job, resources) ->
     reverseParse: true
     iterator: (record) ->
       return unless record
-      return if record.PatientId < 1 and record.Info?.toString().length < 1
+      return if (not record.PatientId or record.PatientId < 1) and (not record.Info or record.Info.toString().length < 1)
+
+      # TODO: Implement parsing schedules
+      return if includes([2, 3, 4, 6, 23], record.Status_Id)
+
+      return if (not includes([1, 8], record.Status_Id))
 
       start = moment(record.Datum_Beginn) if record.Datum_Beginn
       end = moment(record.Datum_Ende) if record.Datum_Ende
@@ -36,21 +42,26 @@ module.exports = (job, resources) ->
               importedBy: job.data.userId
               externalUpdatedAt: externalUpdatedAt
 
-        heuristic: heuristic
-        tags: tags
-        patientId: patientId
-        start: start?.toDate()
-        end: end?.toDate()
-        privateAppointment: record.Info?.toString().match(/(privat|botox)/i)? or record.Status_Id is 8
-
+      $set.heuristic = heuristic if heuristic
+      $set.tags = tags if tags and tags.length
+      $set.patientId = patientId if patientId
+      $set.start = start.toDate() if start
+      $set.end = end.toDate() if end
+      $set.privateAppointment = record.Status_Id is 8
       $set = _.extend $set,
         getResource({ key: 'D', record, resources })
 
+      $set.removed = true if record.Anwesend is 254
+      $set.canceled = true if record.Anwesend is 3
+      $set.admitted = true if record.Anwesend is 1
+      $set.treated = true if record.Anwesend is 2
+      $set.treated = true if $set.admitted and moment.range($set.start, moment()).diff('hours') > 4
 
       operation =
         selector:
           'external.terminiko.id': record.Kennummer.toString()
         $set: $set
+
     bulk: (operations) ->
       bulk = Appointments.rawCollection().initializeUnorderedBulkOp()
 
