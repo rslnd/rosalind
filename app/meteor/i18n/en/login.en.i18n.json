@@ -7,12 +7,7 @@
     "password": "Password",
     "loggedIn": "You are currently logged in.",
     "logout": "Log out",
-    "help": {
-      "show": "I need help",
-      "title": "Sorry!",
-      "body": "Please call <b>Albert Zak: 0660 9911994</b>",
-      "ok": "Ok"
-    },
+    "help": "I need help",
     "form": {
       "name": {
         "label": "Name",

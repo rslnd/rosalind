@@ -9,12 +9,7 @@
     "failedMessage": "Entschuldigung! Bitte überprüfen Sie das Passwort und den Anmeldenamen.",
     "passwordlessDisallowedNetworkMessage": "Entschuldigung! Sie benötigen ein eigenes Passwort, um sich außerhalb der Ordination anzumelden.",
     "passwordlessDisallowedUserMessage": "Entschuldigung! Sie benötigen ein eigenes Passwort, um sich anzumelden.",
-    "help": {
-      "show": "Ich benötige Hilfe",
-      "title": "Entschuldigung!",
-      "body": "Bitte rufen Sie Albert Zak unter folgender Numer an: 0660 9911994",
-      "ok": "Ok"
-    },
+    "help": "Ich benötige Hilfe",
     "form": {
       "name": {
         "label": "Name",

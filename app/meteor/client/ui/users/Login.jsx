@@ -1,7 +1,7 @@
 /* global Accounts */
 import React from 'react'
 import { process as server } from 'meteor/clinical:env'
-import { Modal, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
 import { sAlert } from 'meteor/juliancwirko:s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -13,15 +13,12 @@ export class Login extends React.Component {
 
     this.state = {
       name: '',
-      password: '',
-      showLoginHelpModal: false
+      password: ''
     }
 
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleOpenLoginHelpModal = this.handleOpenLoginHelpModal.bind(this)
-    this.handleCloseLoginHelpModal = this.handleCloseLoginHelpModal.bind(this)
   }
 
   handleNameChange (e) {
@@ -30,6 +27,20 @@ export class Login extends React.Component {
 
   handlePasswordChange (e) {
     this.setState({ ...this.state, password: e.target.value })
+  }
+
+  handleOpenLoginHelp () {
+    console.log('[Login] Requested Login help')
+    console.log({
+      commit: server.env.COMMIT_HASH,
+      env: server.env.NODE_ENV,
+      test: server.env.TEST,
+      build: server.env.BUILD_NUMBER
+    })
+
+    if (window.Smooch) {
+      window.Smooch.open()
+    }
   }
 
   handleSubmit (e) {
@@ -70,14 +81,6 @@ export class Login extends React.Component {
       console.warn('[Users] Login failed: No username or password provided')
       sAlert.error(TAPi18n.__('login.failedMessage'))
     }
-  }
-
-  handleOpenLoginHelpModal () {
-    this.setState({ ...this.state, showLoginHelpModal: true })
-  }
-
-  handleCloseLoginHelpModal () {
-    this.setState({ ...this.state, showLoginHelpModal: false })
   }
 
   render () {
@@ -128,31 +131,10 @@ export class Login extends React.Component {
               </div>
             </div>
             <div className="panel-footer">
-              <a onClick={this.handleOpenLoginHelpModal} className="text-muted">{TAPi18n.__('login.help.show')}</a>
+              <a onClick={this.handleOpenLoginHelp} className="text-muted">{TAPi18n.__('login.help')}</a>
             </div>
           </div>
         </form>
-
-        <Modal show={this.state.showLoginHelpModal} onHide={this.handleCloseLoginHelpModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{TAPi18n.__('login.help.title')}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>{TAPi18n.__('login.help.body')}</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <span className="text-very-muted pull-left">
-              {
-                (server.env.COMMIT_HASH && server.env.COMMIT_HASH.substring(0, 7)) || server.env.TEST && 'Test' || 'Development'
-              }
-              &nbsp;
-              {
-                (server.env.BUILD_NUMBER && `build ${server.env.BUILD_NUMBER}`)
-              }
-            </span>
-            <Button onClick={this.handleCloseLoginHelpModal} bsStyle="primary" pullRight>{TAPi18n.__('login.help.ok')}</Button>
-          </Modal.Footer>
-        </Modal>
       </div>
     )
   }
