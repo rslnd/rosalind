@@ -5,6 +5,8 @@
 
 :local(.headerRow) {
   background-color: $background;
+  padding-bottom: 6px;
+  border-bottom: 1px solid $gray-disabled;
   display: flex;
   width: 100%;
 }
@@ -19,6 +21,8 @@
 
 :local(.appointment) {
   overflow: hidden;
+  border-left: 3px solid $primary-active;
+  padding-left: 5px;
 }
 
 :local(.prefix) {

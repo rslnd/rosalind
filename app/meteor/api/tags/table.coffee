@@ -6,9 +6,10 @@ module.exports = new Tabular.Table
   name: 'Tags'
   collection: Tags
   columns: [
+    { data: 'order', title: '#' }
     { data: 'tag', title: 'Tag' }
     { data: 'description', title: 'Description' }
-    { data: 'color', title: 'Color' }
+    { data: 'color', title: 'Color', render: (val) -> "<span style='background-color: #{val}; color: white; padding 2px; border-radius: 3px;'>#{val}</span>" }
     { tmpl: Meteor.isClient and Template.editThis }
   ]
   order: [[0, 'asc']]

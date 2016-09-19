@@ -1,11 +1,31 @@
 import React from 'react'
 import moment from 'moment'
+import flow from 'lodash/fp/flow'
+import map from 'lodash/fp/map'
+import sortBy from 'lodash/fp/sortBy'
+import { Tags } from 'api/tags'
 import style from './style'
 
 export class Appointment extends React.Component {
   stripNumbers (text) {
     if (typeof text === 'string') {
       return text.replace(/\d{3,}/g, '')
+    }
+  }
+
+  getColor (tags = []) {
+    if (tags.length === 0) {
+      return '#ccc'
+    } else {
+      return flow(
+        map((tag) => {
+          return Tags.findOne({ tag: tag })
+        }),
+        sortBy('order'),
+        map((tag) => {
+          return tag.color || '#ccc'
+        })
+      )(tags)[0]
     }
   }
 
@@ -19,7 +39,8 @@ export class Appointment extends React.Component {
         style={{
           gridRowStart: moment(appointment.start).format('[time-]HHmm'),
           gridRowEnd: moment(appointment.end).format('[time-]HHmm'),
-          gridColumn: `assignee-${appointment.assigneeId}`
+          gridColumn: `assignee-${appointment.assigneeId}`,
+          borderColor: this.getColor(appointment.tags)
         }}>
         {
           appointment.patient

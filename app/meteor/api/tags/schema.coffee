@@ -7,6 +7,10 @@ module.exports = new SimpleSchema
     unique: true
     index: 1
 
+  order:
+    type: Number
+    optional: true
+
   description:
     type: String
     optional: true
