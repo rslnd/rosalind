@@ -11,6 +11,7 @@
     "friday": "Freitag",
     "saturday": "Samstag",
     "timeFormat": "H:mm [Uhr]",
+    "at": "um",
     "date": "Datum",
     "time": "Uhrzeit",
     "dateFormat": "DD. MMMM YYYY",

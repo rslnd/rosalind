@@ -5,6 +5,7 @@ import { Modal, Button } from 'react-bootstrap'
 import { Sticky } from 'react-sticky'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointment } from './Appointment'
+import { AppointmentInfo } from './AppointmentInfo'
 import style from './style'
 
 export class AppointmentsView extends React.Component {
@@ -98,13 +99,8 @@ export class AppointmentsView extends React.Component {
           }
         </div>
         <Modal show={this.state.appointmentModalOpen} onHide={this.handleAppointmentModalClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>{TAPi18n.__('appointments.thisSingular')}</Modal.Title>
-          </Modal.Header>
           <Modal.Body>
-            <pre>
-              {JSON.stringify(this.state.appointmentModalContent, null, 2)}
-            </pre>
+            <AppointmentInfo appointment={this.state.appointmentModalContent} />
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.handleAppointmentModalClose} bsStyle="primary" pullRight>{TAPi18n.__('ui.close')}</Button>
