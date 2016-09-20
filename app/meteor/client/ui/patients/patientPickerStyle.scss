@@ -1,0 +1,11 @@
+:local(.name) {
+  display: inline-block;
+  width: 50%;
+}
+
+:local(.birthday) {
+  color: $dark-gray;
+  display: inline-block;
+  text-align: right;
+  width: 50%;
+}
