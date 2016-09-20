@@ -2,7 +2,7 @@ import React from 'react'
 import { Tags } from 'api/tags'
 import style from './style'
 
-export const TagsList = ({ tags }) => (
+export const TagsList = ({ tags = [] }) => (
   <span>
     {tags.map((slug) => {
       const tag = Tags.findOne({ tag: slug })

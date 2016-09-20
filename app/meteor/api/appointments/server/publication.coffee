@@ -58,6 +58,14 @@ module.exports = ->
     }
 
 
+  Meteor.publish 'appointmentsPatient', (options = {}) ->
+    check options,
+      patientId: String
+
+    return unless (@userId and Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
+
+    return Appointments.find({ patientId: options.patientId }, { sort: { start: 1 } })
+
 
   Meteor.publishComposite 'appointmentsTable', (tableName, ids, fields) ->
     check(tableName, Match.Optional(String))

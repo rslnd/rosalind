@@ -20,9 +20,16 @@
 }
 
 :local(.appointment) {
-  overflow: hidden;
   border-left: 3px solid $primary-active;
-  padding-left: 5px;
+  overflow: hidden;
+  white-space: pre-wrap;
+  padding-left: 6px;
+  margin-left: 0;
+  transition: margin-left .1s ease-out;
+}
+
+:local(.appointment:hover) {
+  margin-left: 2px;
 }
 
 :local(.prefix) {

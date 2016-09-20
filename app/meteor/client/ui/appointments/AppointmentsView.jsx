@@ -98,7 +98,11 @@ export class AppointmentsView extends React.Component {
               })
           }
         </div>
-        <Modal show={this.state.appointmentModalOpen} onHide={this.handleAppointmentModalClose}>
+        <Modal
+          enforceFocus={false}
+          show={this.state.appointmentModalOpen}
+          onHide={this.handleAppointmentModalClose}
+          bsSize="large">
           <Modal.Body>
             <AppointmentInfo appointment={this.state.appointmentModalContent} />
           </Modal.Body>
