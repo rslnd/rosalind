@@ -12,19 +12,32 @@ describe('patients', function () {
       }
 
       it('parses DD.MM.YYYY', function () {
-        expect(parseBirthday('12.06.1994')).to.eql(parsed)
+        expect(parseBirthday('12.06.1994').result).to.eql(parsed)
+      })
+
+      it('returns remaining query and result', function () {
+        expect(parseBirthday('12.06.1994 hello hello').result).to.eql(parsed)
+        expect(parseBirthday('12.06.1994 hello hello').remainingQuery).to.eql('hello hello')
+
+        expect(parseBirthday('unicorn walrus 12.06.1994').result).to.eql(parsed)
+        expect(parseBirthday('unicorn walrus 12.06.1994').remainingQuery).to.eql('unicorn walrus')
+      })
+
+      it('returns full query and no result if not parseable', function () {
+        expect(parseBirthday('hello hello').result).to.eql(false)
+        expect(parseBirthday('hello hello').remainingQuery).to.eql('hello hello')
       })
 
       it('parses DD MM YYYY', function () {
-        expect(parseBirthday('12 06 1994')).to.eql(parsed)
+        expect(parseBirthday('12 06 1994').result).to.eql(parsed)
       })
 
       it('parses DD MM YY', function () {
-        expect(parseBirthday('12 06 94')).to.eql(parsed)
+        expect(parseBirthday('12 06 94').result).to.eql(parsed)
       })
 
       it('parses DD MM 00', function () {
-        expect(parseBirthday('12 06 00')).to.eql({
+        expect(parseBirthday('12 06 00').result).to.eql({
           'profile.birthday.day': 12,
           'profile.birthday.month': 6,
           'profile.birthday.year': 2000
@@ -32,7 +45,7 @@ describe('patients', function () {
       })
 
       it('parses DD MM 12', function () {
-        expect(parseBirthday('12 06 12')).to.eql({
+        expect(parseBirthday('12 06 12').result).to.eql({
           'profile.birthday.day': 12,
           'profile.birthday.month': 6,
           'profile.birthday.year': 2012
@@ -40,22 +53,22 @@ describe('patients', function () {
       })
 
       it('skips incomplete date', function () {
-        expect(parseBirthday('june')).to.eql(false)
+        expect(parseBirthday('june').result).to.eql(false)
       })
 
       it('skips invalid day', function () {
-        expect(parseBirthday('66.12.1994')).to.eql({})
+        expect(parseBirthday('66.12.1994').result).to.eql(false)
       })
 
       it('parses DD Jun YY', function () {
-        expect(parseBirthday('12 jun 12')).to.eql({
+        expect(parseBirthday('12 jun 12').result).to.eql({
           'profile.birthday.day': 12,
           'profile.birthday.month': 6,
           'profile.birthday.year': 2012
         })
       })
       it('parses DD Juni YY', function () {
-        expect(parseBirthday('12 juni 12')).to.eql({
+        expect(parseBirthday('12 juni 12').result).to.eql({
           'profile.birthday.day': 12,
           'profile.birthday.month': 6,
           'profile.birthday.year': 2012
@@ -63,7 +76,7 @@ describe('patients', function () {
       })
 
       it('parses DD Januar YY', function () {
-        expect(parseBirthday('12 Januar 12')).to.eql({
+        expect(parseBirthday('12 Januar 12').result).to.eql({
           'profile.birthday.day': 12,
           'profile.birthday.month': 1,
           'profile.birthday.year': 2012
@@ -71,7 +84,7 @@ describe('patients', function () {
       })
 
       it('parses DD Feb YY', function () {
-        expect(parseBirthday('12 Feb 12')).to.eql({
+        expect(parseBirthday('12 Feb 12').result).to.eql({
           'profile.birthday.day': 12,
           'profile.birthday.month': 2,
           'profile.birthday.year': 2012
@@ -79,7 +92,7 @@ describe('patients', function () {
       })
 
       it('parses DD 02 YY', function () {
-        expect(parseBirthday('12 02 12')).to.eql({
+        expect(parseBirthday('12 02 12').result).to.eql({
           'profile.birthday.day': 12,
           'profile.birthday.month': 2,
           'profile.birthday.year': 2012

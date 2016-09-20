@@ -18,12 +18,15 @@ export const search = ({ Patients }) => {
       }
 
       const selector = parseQuery(query)
-      const patients = Patients.find(selector, {
-        sort: { 'profile.lastName': 1 },
-        limit: 20
-      }).fetch()
 
-      return patients
+      if (selector) {
+        const patients = Patients.find(selector, {
+          sort: { 'profile.lastName': 1 },
+          limit: 20
+        }).fetch()
+
+        return patients
+      }
     }
   })
 }

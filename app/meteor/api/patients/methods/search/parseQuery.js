@@ -1,17 +1,29 @@
-import moment from 'moment'
 import { parseBirthday } from './parseBirthday'
+import { parseExactLastName } from './parseExactLastName'
 
 export const parseQuery = (query) => {
   if (!query) {
-    return {}
+    return false
   }
 
   let parsed = {}
 
-  const birthday = parseBirthday(query)
-  if (birthday) {
-    parsed = Object.assign(parsed, birthday)
+  const { result, remainingQuery } = parseBirthday(query)
+
+  if (result) {
+    return { ...parsed, ...result }
   }
 
-  return parsed
+  console.log(result)
+
+  if (remainingQuery && remainingQuery.length > 0) {
+    const { result } = parseExactLastName(remainingQuery)
+    if (result) {
+      return { ...parsed, ...result }
+    } else {
+      return false
+    }
+  }
+
+  return false
 }
