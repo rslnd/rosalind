@@ -37,9 +37,12 @@ module.exports = ->
     {
       find: ->
         @unblock()
-        selector = start:
-          $gte: options.start
-          $lte: options.end
+        selector =
+          start:
+            $gte: options.start
+            $lte: options.end
+          removed: { $ne: true }
+
         cursor = Appointments.find(selector, { sort: { start: 1 } })
         console.log('[Appointments] Publishing', {
           count: cursor.count(),

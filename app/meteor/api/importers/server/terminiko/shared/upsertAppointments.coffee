@@ -3,8 +3,10 @@ includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Appointments } = require 'api/appointments'
 mdb = require '../../shared/mdb'
-parseNewlines = require 'util/parseNewlines'
+{ parseNewlines } = require './parseNewlines'
 findPatientId = require './findPatientId'
+{ upsertSchedules } = require './upsertSchedules'
+{ getResource, getResources } = require './getResources'
 
 module.exports = (job, resources) ->
   mdb
@@ -14,10 +16,12 @@ module.exports = (job, resources) ->
     reverseParse: true
     iterator: (record) ->
       return unless record
-      return if (not record.PatientId or record.PatientId < 1) and (not record.Info or record.Info.toString().length < 1)
 
-      # TODO: Implement parsing schedules
-      return if includes([2, 3, 4, 6, 23], record.Status_Id)
+      if includes([2, 3, 4, 6, 23], record.Status_Id)
+        upsertSchedules({ record, resources, job })
+        return
+
+      return if (not record.PatientId or record.PatientId < 1) and (not record.Info or record.Info.toString().length < 1)
 
       return if (not includes([1, 8], record.Status_Id))
 
@@ -75,13 +79,3 @@ module.exports = (job, resources) ->
       if Meteor.wrapAsync(bulk.execute, bulk)().ok is not 1
         job.log("Terminiko: upsertAppointments: Bulk execute error: #{JSON.stringify(d)}")
         job.fail()
-
-getResource = (options) ->
-  res = getResources(options)
-  res and res[0]
-
-getResources = (options) ->
-  return unless options.record.Resources
-  resourceIds = options.record.Resources.toString().split(';')
-  resourceIds = _.filter(resourceIds, (r) -> r.indexOf(options.key) isnt -1)
-  resourceIds.map (id) -> options.resources[id]

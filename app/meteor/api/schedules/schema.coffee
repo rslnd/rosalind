@@ -2,6 +2,7 @@ map = require 'lodash/map'
 { SimpleSchema } = require 'meteor/aldeed:simple-schema'
 Auto = require 'util/schema/auto'
 Time = require 'util/time'
+{ External } = require 'util/schema/external'
 
 module.exports = new SimpleSchema
   type:
@@ -37,6 +38,10 @@ module.exports = new SimpleSchema
   end:
     type: Date
     optional: true
+
+  external:
+    optional: true
+    type: External
 
   schedule:
     type: Array
