@@ -42,9 +42,12 @@ Profile = new SimpleSchema
   firstName:
     type: String
     optional: true
-    index: 1
 
   lastName:
+    type: String
+    optional: true
+
+  lastNameNormalized:
     type: String
     optional: true
     index: 1

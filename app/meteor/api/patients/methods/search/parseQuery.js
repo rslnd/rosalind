@@ -10,8 +10,6 @@ export const parseQuery = (query) => {
 
   const { result, remainingQuery } = parseBirthday(query)
 
-  console.log({ ...result })
-
   if (result) {
     parsed = { ...parsed, ...result }
   }

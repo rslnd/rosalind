@@ -8,9 +8,9 @@ describe('patients', function () {
       it('tokenizes', function () {
         expect(parseExactLastName('Don vito corleone').result).to.eql({
           $or: [
-            { 'profile.lastName': 'Don' },
-            { 'profile.lastName': 'vito' },
-            { 'profile.lastName': 'corleone' }
+            { 'profile.lastNameNormalized': 'DON' },
+            { 'profile.lastNameNormalized': 'VITO' },
+            { 'profile.lastNameNormalized': 'CORLEONE' }
           ]
         })
       })
@@ -18,7 +18,7 @@ describe('patients', function () {
       it('skips tiny tokens', function () {
         expect(parseExactLastName('don i i i').result).to.eql({
           $or: [
-            { 'profile.lastName': 'don' }
+            { 'profile.lastNameNormalized': 'DON' }
           ]
         })
       })

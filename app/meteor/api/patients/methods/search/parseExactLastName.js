@@ -1,4 +1,5 @@
 import map from 'lodash/fp/map'
+import { normalizeName } from '../../util/normalizeName'
 
 export const parseExactLastName = (query) => {
   const pattern = /(\w{2,})/g
@@ -6,7 +7,8 @@ export const parseExactLastName = (query) => {
   const remainingQuery = query.replace(pattern, '')
 
   const $or = map((token) => {
-    return { 'profile.lastName': token }
+    token = normalizeName(token)
+    return { 'profile.lastNameNormalized': token }
   })(match)
 
   if ($or.length > 0) {

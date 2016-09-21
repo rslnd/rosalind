@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from 'api/events'
+import { normalizeName } from '../util/normalizeName'
 
 export const upsert = ({ Patients }) => {
   return new ValidatedMethod({
@@ -19,19 +20,26 @@ export const upsert = ({ Patients }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      if (patient.profile && patient.profile.lastName) {
+        patient.profile.lastNameNormalized = normalizeName(patient.profile.lastName)
+      }
+
       // TODO: Split into separate method
       let existingPatient = null
       if (patient.insuranceId) { existingPatient = Patients.findOne({ insuranceId: patient.insuranceId }) }
       if (!existingPatient && patient.external.eoswin.id) { existingPatient = Patients.findOne({ 'external.eoswin.id': patient.external.eoswin.id }) }
 
       if (existingPatient) {
+        // FIXME: CRITICAL: Don't $set-override any contacts that only exist in this system
+        // TODO: Factor contacts into own model
         Patients.update({ _id: existingPatient._id }, { $set: patient })
+
         if (!quiet) { Events.post('patients/upsert', { patientId: existingPatient._id }) }
         return existingPatient._id
       } else {
         try {
-          const patientId = Patients.insert(patient, (err) => {
-            if (err) { throw err }
+          const patientId = Patients.insert(patient, (e) => {
+            if (e) { console.error('[Patients] Insert failed with error', e, 'of patient', patient) }
             if (!quiet) { Events.post('patients/insert', { patientId }) }
           })
           return patientId
