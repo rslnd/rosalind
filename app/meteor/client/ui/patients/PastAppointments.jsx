@@ -1,6 +1,5 @@
 import moment from 'moment'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { dayToDate } from 'util/time/day'
 import { Users } from 'api/users'
 
 export const PastAppointments = ({ pastAppointments, futureAppointments }) => {
@@ -19,7 +18,6 @@ export const PastAppointments = ({ pastAppointments, futureAppointments }) => {
               <ul>
                 {section.appointments.map((appointment) => {
                   const assignee = Users.findOne({ _id: appointment.assigneeId })
-                  console.log({assignee, assigneeId: appointment.assigneeId})
                   return (
                     <li key={appointment._id}>
                       {moment(appointment.start).format(TAPi18n.__('time.dateFormatShort'))} {moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}&emsp;

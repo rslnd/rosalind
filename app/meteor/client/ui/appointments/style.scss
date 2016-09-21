@@ -32,6 +32,15 @@
   margin-left: 2px;
 }
 
+:local(.canceled) {
+  color: $dark-gray-disabled;
+  text-decoration: line-through;
+}
+
+:local(.show) {
+  border-width: 0;
+}
+
 :local(.prefix) {
   color: $dark-gray;
 }

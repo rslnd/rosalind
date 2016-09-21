@@ -14,7 +14,7 @@ export class AppointmentsView extends React.Component {
 
     const options = {
       start: moment().hour(7).startOf('hour'),
-      end: moment().hour(22).endOf('hour')
+      end: moment().hour(19).endOf('hour')
     }
 
     this.state = {

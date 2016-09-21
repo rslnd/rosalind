@@ -13,6 +13,7 @@
     "babyparse": "^0.4.6",
     "bcrypt": "^0.8.7",
     "byline": "^5.0.0",
+    "classnames": "^2.2.5",
     "dedent": "^0.6.0",
     "drag-drop": "^2.12.1",
     "elasticsearch": "^11.0.1",
