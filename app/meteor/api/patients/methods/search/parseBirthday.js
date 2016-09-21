@@ -24,7 +24,7 @@ export const parseBirthday = (query) => {
 }
 
 export const parseDayMonthYear = (query) => {
-  const pattern = /(\d\d?)[ .-/\\]((\d\d?)|(\w+))[ .-/\\](\d\d\d?\d?)?/
+  const pattern = /(\d\d?)[ .-/\\,]*((\d\d?)|(\w+))[ .-/\\,]*(\d\d\d?\d?)?/
   const match = query.match(pattern)
   const remainingQuery = query.replace(pattern, '').trim()
 

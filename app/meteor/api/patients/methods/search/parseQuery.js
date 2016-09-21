@@ -10,20 +10,22 @@ export const parseQuery = (query) => {
 
   const { result, remainingQuery } = parseBirthday(query)
 
-  if (result) {
-    return { ...parsed, ...result }
-  }
+  console.log({ ...result })
 
-  console.log(result)
+  if (result) {
+    parsed = { ...parsed, ...result }
+  }
 
   if (remainingQuery && remainingQuery.length > 0) {
     const { result } = parseExactLastName(remainingQuery)
     if (result) {
-      return { ...parsed, ...result }
-    } else {
-      return false
+      parsed = { ...parsed, ...result }
     }
   }
 
-  return false
+  if (Object.keys(parsed).length > 0) {
+    return parsed
+  } else {
+    return false
+  }
 }
