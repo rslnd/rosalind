@@ -3,9 +3,11 @@ import 'moment-range'
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { Sticky } from 'react-sticky'
+import Popover from 'material-ui/Popover'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointment } from './Appointment'
 import { AppointmentInfo } from './AppointmentInfo'
+import { NewAppointmentContainer } from './NewAppointmentContainer'
 import style from './style'
 
 export class AppointmentsView extends React.Component {
@@ -13,18 +15,24 @@ export class AppointmentsView extends React.Component {
     super(props)
 
     const options = {
-      start: moment().hour(7).startOf('hour'),
-      end: moment().hour(19).endOf('hour')
+      start: moment(props.date).hour(7).startOf('hour'),
+      end: moment(props.date).hour(19).endOf('hour')
     }
 
     this.state = {
       timeRange: moment.range(options.start, options.end).toArray('minutes').map((t) => moment(t)),
+      selectedTime: null,
+      selectedAssigneeId: null,
+      popoverOpen: false,
+      popoverAnchor: null,
       appointmentModalOpen: false,
       appointmentModalContent: {}
     }
 
     this.handleAppointmentModalOpen = this.handleAppointmentModalOpen.bind(this)
     this.handleAppointmentModalClose = this.handleAppointmentModalClose.bind(this)
+    this.handlePopoverOpen = this.handlePopoverOpen.bind(this)
+    this.handlePopoverClose = this.handlePopoverClose.bind(this)
     this.grid = this.grid.bind(this)
   }
   // row name    | column names
@@ -50,6 +58,20 @@ export class AppointmentsView extends React.Component {
 
   handleAppointmentModalClose () {
     this.setState({ ...this.state, appointmentModalOpen: false })
+  }
+
+  handlePopoverClose () {
+    this.setState({ ...this.state, popoverOpen: false })
+  }
+
+  handlePopoverOpen ({ event, time, assigneeId }) {
+    event.preventDefault()
+    this.setState({ ...this.state,
+      popoverOpen: true,
+      popoverAnchor: event.currentTarget,
+      selectedTime: time,
+      selectedAssigneeId: assigneeId
+    })
   }
 
   render () {
@@ -85,14 +107,15 @@ export class AppointmentsView extends React.Component {
               .filter((t) => t.minute() % 5 === 0)
               .map((time) => {
                 const timeKey = time.format('[time-]HHmm')
-
+                const assigneeId = assignee.assigneeId
                 return (
                   <span
-                    key={`new-${assignee.assigneeId}-${timeKey}`}
+                    key={`new-${assigneeId}-${timeKey}`}
                     className={style.newAppointmentTrigger}
+                    onClick={(event) => this.handlePopoverOpen({ event, assigneeId, time })}
                     style={{
                       gridRow: timeKey,
-                      gridColumn: `assignee-${assignee.assigneeId}`
+                      gridColumn: `assignee-${assigneeId}`
                     }}>
                     &nbsp;
                   </span>
@@ -133,6 +156,16 @@ export class AppointmentsView extends React.Component {
             <Button onClick={this.handleAppointmentModalClose} bsStyle="primary" pullRight>{TAPi18n.__('ui.close')}</Button>
           </Modal.Footer>
         </Modal>
+
+        <Popover
+          open={this.state.popoverOpen}
+          anchorEl={this.state.popoverAnchor}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.handlePopoverClose}
+          >
+          <NewAppointmentContainer assigneeId={this.state.selectedAssigneeId} time={this.state.selectedTime} />
+        </Popover>
       </div>
     )
   }
