@@ -18,7 +18,7 @@ export class AppointmentsView extends React.Component {
     }
 
     this.state = {
-      timeRange: moment.range(options.start, options.end).toArray('minutes'),
+      timeRange: moment.range(options.start, options.end).toArray('minutes').map((t) => moment(t)),
       appointmentModalOpen: false,
       appointmentModalContent: {}
     }
@@ -40,7 +40,7 @@ export class AppointmentsView extends React.Component {
       display: 'grid',
       gridTemplateColumns: `[time] 60px ${this.props.assignees.map((assignee, index) =>
         `[assignee-${assignee.assigneeId}] 1fr`).join(' ')}`,
-      gridTemplateRows: `[header] 40px [subheader] 40px ${this.state.timeRange.map((time) => `[time-${moment(time).format('HHmm')}] 4px`).join(' ')}`
+      gridTemplateRows: `[header] 40px [subheader] 40px ${this.state.timeRange.map((time) => `[time-${time.format('HHmm')}] 4px`).join(' ')}`
     }
   }
 
@@ -55,6 +55,7 @@ export class AppointmentsView extends React.Component {
   render () {
     return (
       <div>
+        {/* Assignees */}
         <Sticky
           className={style.headerRow}
           stickyClassName={style.headerRowSticky}
@@ -68,6 +69,7 @@ export class AppointmentsView extends React.Component {
         </Sticky>
 
         <div style={this.grid()}>
+          {/* Appointments */}
           {this.props.assignees.map((assignee) => (
             assignee.appointments.map((appointment) => (
               <Appointment
@@ -77,9 +79,30 @@ export class AppointmentsView extends React.Component {
             ))
           ))}
 
+          {/* New Appointment Triggers */}
+          {this.props.assignees.map((assignee) => (
+            this.state.timeRange
+              .filter((t) => t.minute() % 5 === 0)
+              .map((time) => {
+                const timeKey = time.format('[time-]HHmm')
+
+                return (
+                  <span
+                    key={`new-${assignee.assigneeId}-${timeKey}`}
+                    className={style.newAppointmentTrigger}
+                    style={{
+                      gridRow: timeKey,
+                      gridColumn: `assignee-${assignee.assigneeId}`
+                    }}>
+                    &nbsp;
+                  </span>
+                )
+              })
+          ))}
+
+          {/* Time Legend */}
           {
             this.state.timeRange
-              .map((t) => moment(t))
               .filter((t) => t.minute() % 15 === 0)
               .map((time) => {
                 const fullHour = time.minute() === 0

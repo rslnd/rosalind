@@ -1,6 +1,6 @@
 :local(.contentHeader) {
   background-color: $background;
-  z-index: 100;
+  z-index: 50;
 }
 
 :local(.headerRow) {
@@ -9,6 +9,7 @@
   border-bottom: 1px solid $gray-disabled;
   display: flex;
   width: 100%;
+  z-index: 40;
 }
 
 :local(.headerRowSticky) {
@@ -25,11 +26,13 @@
   white-space: pre-wrap;
   padding-left: 6px;
   margin-left: 0;
-  transition: margin-left .1s ease-out;
+  transition: margin-left .1s ease-out,
+    background-color .18s ease-out;
 }
 
 :local(.appointment:hover) {
   margin-left: 2px;
+  background-color: lighten($background, 3%);
 }
 
 :local(.canceled) {
@@ -52,4 +55,14 @@
 :local(.fullHour) {
   color: $dark-gray-active;
   font-weight: bold;
+}
+
+:local(.newAppointmentTrigger) {
+  background-color: $background;
+  margin-left: 2px;
+  transition: background-color .18s ease-out;
+}
+
+:local(.newAppointmentTrigger:hover) {
+  background-color: lighten($background, 5%);
 }

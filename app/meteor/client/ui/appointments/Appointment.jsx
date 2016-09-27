@@ -52,7 +52,8 @@ export class Appointment extends React.Component {
           gridRowStart: moment(appointment.start).format('[time-]HHmm'),
           gridRowEnd: moment(appointment.end).format('[time-]HHmm'),
           gridColumn: `assignee-${appointment.assigneeId}`,
-          borderColor: tagColor
+          borderColor: tagColor,
+          zIndex: 30
         }}>
 
         {
