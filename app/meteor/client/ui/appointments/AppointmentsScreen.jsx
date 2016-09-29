@@ -19,7 +19,11 @@ export class AppointmentsScreen extends React.Component {
         </Sticky>
 
         <div className="content">
-          <AppointmentsView assignees={this.props.assignees} date={this.props.date} />
+          <AppointmentsView
+            assignees={this.props.assignees}
+            date={this.props.date}
+            onPopoverOpen={this.props.onPopoverOpen}
+            onPopoverClose={this.props.onPopoverClose} />
         </div>
 
       </StickyContainer>

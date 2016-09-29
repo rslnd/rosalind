@@ -61,11 +61,23 @@ export class AppointmentsView extends React.Component {
   }
 
   handlePopoverClose () {
+    if (this.props.onPopoverClose) {
+      this.props.onPopoverClose({
+        time: this.state.selectedTime,
+        assigneeId: this.state.selectedAssigneeId
+      })
+    }
+
     this.setState({ ...this.state, popoverOpen: false })
   }
 
   handlePopoverOpen ({ event, time, assigneeId }) {
     event.preventDefault()
+
+    if (this.props.onPopoverOpen) {
+      this.props.onPopoverOpen({ time, assigneeId })
+    }
+
     this.setState({ ...this.state,
       popoverOpen: true,
       popoverAnchor: event.currentTarget,
@@ -112,7 +124,7 @@ export class AppointmentsView extends React.Component {
                   <span
                     key={`new-${assigneeId}-${timeKey}`}
                     className={style.newAppointmentTrigger}
-                    onClick={(event) => this.handlePopoverOpen({ event, assigneeId, time })}
+                    onClick={(event) => this.handlePopoverOpen({ event, assigneeId, time: time.toDate() })}
                     style={{
                       gridRow: timeKey,
                       gridColumn: `assignee-${assigneeId}`
@@ -162,9 +174,12 @@ export class AppointmentsView extends React.Component {
           anchorEl={this.state.popoverAnchor}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          autoCloseWhenOffScreen={false}
           onRequestClose={this.handlePopoverClose}
           >
-          <NewAppointmentContainer assigneeId={this.state.selectedAssigneeId} time={this.state.selectedTime} />
+          <div className={style.popover}>
+            <NewAppointmentContainer assigneeId={this.state.selectedAssigneeId} time={this.state.selectedTime} />
+          </div>
         </Popover>
       </div>
     )

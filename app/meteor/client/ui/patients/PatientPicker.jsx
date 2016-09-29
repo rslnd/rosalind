@@ -1,7 +1,6 @@
 import map from 'lodash/fp/map'
 import identity from 'lodash/identity'
 import React from 'react'
-import { TAPi18n } from 'meteor/tap:i18n'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import { Patients } from 'api/patients'
@@ -72,25 +71,21 @@ const PatientNameSelected = ({ value }) => (
 )
 
 export class PatientPicker extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      query: ''
-    }
-  }
-
   handleQueryChange (query) {
-    this.setState({ ...this.state, query })
+    if (this.props.input.onChange) {
+      this.props.input.onChange(query.value)
+    }
   }
 
   render () {
     return (
       <Select.Async
-        value={this.state.query}
+        value={this.props.input.value || ''}
         loadOptions={findPatients}
         onChange={(q) => this.handleQueryChange(q)}
+        onBlur={() => this.props.input.onBlur(this.props.input.value)}
         cache={false}
+        autofocus={this.props.autofocus}
         filterOptions={identity}
         optionComponent={PatientSearchResult}
         valueComponent={PatientNameSelected} />

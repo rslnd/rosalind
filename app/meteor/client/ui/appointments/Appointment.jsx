@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
 import sortBy from 'lodash/fp/sortBy'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Tags } from 'api/tags'
 import { Icon } from 'client/ui/components/Icon'
 import style from './style'
@@ -38,7 +39,8 @@ export class Appointment extends React.Component {
       [ style.appointment ]: true,
       [ style.canceled ]: appointment.canceled,
       [ style.admitted ]: appointment.admitted,
-      [ style.treated ]: appointment.treated
+      [ style.treated ]: appointment.treated,
+      [ style.locked ]: appointment.lockedAt
     })
 
     const tagColor = this.getColor(appointment.tags)
@@ -70,6 +72,14 @@ export class Appointment extends React.Component {
                 <Icon name="refresh" />&nbsp;
               </span>
           )
+        }
+
+        {
+          appointment.lockedAt &&
+            <span className="text-muted">
+              <i className="fa fa-clock-o fa-fw"></i>
+              {TAPi18n.__('appointments.lockedBy', { name: appointment.lockedByFirstName })}
+            </span>
         }
 
         {

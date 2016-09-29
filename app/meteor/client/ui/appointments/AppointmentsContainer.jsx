@@ -49,17 +49,25 @@ const composer = (props, onData) => {
             }
 
             const notes = appointment.notes()
-            return { ...appointment, patient, notes }
+            const lockedBy = Users.findOne({ _id: appointment.lockedBy })
+            const lockedByFirstName = lockedBy && lockedBy.firstName()
+            return { ...appointment, patient, notes, lockedByFirstName }
           })
         }
       }),
       sortBy('lastName')
     )(Appointments.find(appointmentsSelector, { sort: { start: 1 } }).fetch())
 
-    onData(null, { assignees, date })
+    const onPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
+    const onPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
+
+    onData(null, { assignees, date, onPopoverOpen, onPopoverClose })
   } else {
     onData(null, null)
   }
+
+  // Cleanup
+  return () => Appointments.actions.releaseLock.call({})
 }
 
 export const AppointmentsContainer = composeWithTracker(composer, Loading)(AppointmentsScreen)

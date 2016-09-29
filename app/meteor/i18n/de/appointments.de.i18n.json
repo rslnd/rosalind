@@ -12,6 +12,7 @@
     "thisInsert": "Neuer Termin",
     "thisFuture": "Kommende Termine",
     "thisPast": "Letzte Termine",
+    "lockedBy": "Reserviert von __name__",
     "tags": "Behandlung",
     "private": "Privat",
     "insurance": "Kasse",

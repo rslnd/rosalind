@@ -10,8 +10,27 @@ Schema = new SimpleSchema
     type: Date
     index: -1
 
-  type:
+  patientId:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+    index: 1
+
+  assigneeId:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+    index: 1
+
+  assistantIds:
+    type: [SimpleSchema.RegEx.Id]
+    optional: true
+
+  note:
     type: String
+    optional: true
+
+  privateAppointment:
+    type: Boolean
+    defaultValue: false
 
   admittedAt:
     type: Date
@@ -32,25 +51,6 @@ Schema = new SimpleSchema
     type: SimpleSchema.RegEx.Id
     optional: true
     index: 1
-
-  patientId:
-    type: SimpleSchema.RegEx.Id
-    index: 1
-
-  assigneeId:
-    type: SimpleSchema.RegEx.Id
-    index: 1
-
-  assistantIds:
-    type: [SimpleSchema.RegEx.Id]
-    optional: true
-
-  note:
-    type: String
-    optional: true
-
-  privateAppointment:
-    type: Boolean
 
   heuristic:
     type: Boolean
@@ -88,6 +88,17 @@ Schema = new SimpleSchema
 
   treated:
     type: Boolean
+    optional: true
+    index: 1
+
+  lockedAt:
+    type: Date
+    optional: true
+    index: 1
+
+  lockedBy:
+    type: SimpleSchema.RegEx.Id
+    autoValue: Auto.createdBy
     optional: true
     index: 1
 
