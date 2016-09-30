@@ -28,7 +28,7 @@ export const releaseLock = ({ Appointments }) => {
         selector.start = time
       }
 
-      const locks = Appointments.find(seletor).fetch().map((lock) => {
+      const locks = Appointments.find(selector).fetch().map((lock) => {
         Appointments.remove({ _id: lock._id })
         return lock._id
       })

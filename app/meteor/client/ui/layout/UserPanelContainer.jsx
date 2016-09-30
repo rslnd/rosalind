@@ -1,5 +1,6 @@
 import React from 'react'
 import { composeWithTracker } from 'react-komposer'
+import { browserHistory } from 'react-router'
 import { Meteor } from 'meteor/meteor'
 import { UserPanel } from './UserPanel'
 
@@ -20,8 +21,12 @@ class UserPanelContainerComponent extends React.Component {
       loggingOut: true
     })
 
-    Meteor.call('users/logout', () => {
-      Meteor.logout()
+    browserHistory.push('/')
+
+    Meteor.defer(() => {
+      Meteor.call('users/logout', () => {
+        Meteor.logout()
+      })
     })
   }
 

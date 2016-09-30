@@ -72,7 +72,7 @@ const PatientNameSelected = ({ value }) => (
 
 export class PatientPicker extends React.Component {
   handleQueryChange (query) {
-    if (this.props.input.onChange) {
+    if (this.props.input.onChange && query && query.value) {
       this.props.input.onChange(query.value)
     }
   }
