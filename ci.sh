@@ -60,9 +60,9 @@ case "$1" in
     echo -en "travis_fold:end:meteor\r"
     echo "[CI] Meteor installation took $SECONDS seconds"
 
-    # Pull dependencies
-    echo "[CI] Pulling dependencies"
-    echo -en "travis_fold:start:pull_dependencies\r"
+    # Installing npm dependencies
+    echo "[CI] Installing dependencies from npm"
+    echo -en "travis_fold:start:install_dependencies\r"
     SECONDS=0
 
     npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
@@ -75,8 +75,8 @@ case "$1" in
     meteor npm i --progress=false
     cd -
 
-    echo -en "travis_fold:end:pull_dependencies\r"
-    echo "[CI] Image pull and dependencies installation took $SECONDS seconds"
+    echo -en "travis_fold:end:install_dependencies\r"
+    echo "[CI] Dependencies installation took $SECONDS seconds"
 
     # Run unit tests
     echo -en "travis_fold:start:unit_tests\r"
@@ -90,6 +90,7 @@ case "$1" in
     RETRY=0
 
     export TEST=true
+    cd app/meteor
     meteor &
     METEOR_PID=$!
 
