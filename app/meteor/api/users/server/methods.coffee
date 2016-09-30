@@ -12,14 +12,14 @@ module.exports = ->
       return unless userId = Meteor.userId()
       console.log('[Users] Logged in', { userId })
       Events.post('users/login', { userId })
-      Timesheets.methods.startTracking.call({ userId })
+      Timesheets.actions.startTracking.call({ userId })
 
 
     'users/logout': ->
       return unless userId = Meteor.userId()
       console.log('[Users] Logged out', { userId })
       Events.post('users/logout', { userId })
-      Timesheets.methods.stopTracking.call({ userId })
+      Timesheets.actions.stopTracking.call({ userId })
 
     'users/getToken': ->
       return unless user = Meteor.user()

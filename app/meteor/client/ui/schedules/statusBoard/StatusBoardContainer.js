@@ -30,8 +30,8 @@ const compose = (props, onData) => {
         users: sortBy(intersectionBy(scheduledUsers, g.users(), '_id'), (u) => u.profile.lastName).map((user) => {
           const userId = user._id
           const schedule = Schedules.findOne({ type: 'default', 'schedule.day': weekday, userId })
-          const isTracking = Timesheets.methods.isTracking.call({ userId })
-          const sum = Timesheets.methods.sum.call({ userId })
+          const isTracking = Timesheets.methods.isTracking({ userId })
+          const sum = Timesheets.methods.sum({ userId })
 
           return {
             user: {
@@ -42,7 +42,7 @@ const compose = (props, onData) => {
             timesheets: {
               sum,
               sumFormatted: moment.duration(sum).format('H[h] mm[m]'),
-              stringified: Timesheets.methods.stringify.call({ userId }),
+              stringified: Timesheets.methods.stringify({ userId }),
               isTracking
             },
             schedule: {

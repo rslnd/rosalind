@@ -31,16 +31,16 @@ export const TimesheetSummary = ({ timesheets, tracking, sum, stopTracking, star
 
 const composer = (props, onData) => {
   const { userId } = props
-  const stopTracking = () => Timesheets.methods.stopTracking.call({ userId: Meteor.userId() })
-  const startTracking = () => Timesheets.methods.startTracking.call({ userId: Meteor.userId() })
+  const stopTracking = () => Timesheets.actions.stopTracking.call({ userId: Meteor.userId() })
+  const startTracking = () => Timesheets.actions.startTracking.call({ userId: Meteor.userId() })
 
   const update = () => {
     const timesheets = Timesheets.find({
       userId,
       start: { $gt: moment().startOf('day').toDate() }
     }).fetch()
-    const tracking = Timesheets.methods.isTracking.call({ userId })
-    const sum = Timesheets.methods.sum.call({ userId })
+    const tracking = Timesheets.methods.isTracking({ userId })
+    const sum = Timesheets.methods.sum({ userId })
     onData(null, { timesheets, tracking, sum, stopTracking, startTracking })
   }
 
