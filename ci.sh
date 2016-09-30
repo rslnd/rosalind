@@ -52,16 +52,29 @@ case "$1" in
       exit 1
     fi
 
+    # Install meteor
+    echo "[CI] Installing meteor"
+    echo -en "travis_fold:start:meteor\r"
+    SECONDS=0
+    curl https://install.meteor.com | /bin/sh
+    echo -en "travis_fold:end:meteor\r"
+    echo "[CI] Meteor installation took $SECONDS seconds"
+
     # Pull dependencies
     echo "[CI] Pulling dependencies"
     echo -en "travis_fold:start:pull_dependencies\r"
     SECONDS=0
-    { docker-compose $YML pull; docker-compose $YML run meteor meteor npm install --progress=false --depth=0; } &
+
     npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
+
     cd app/meteor/tests/cucumber
     npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
     cd -
-    wait
+
+    cd app/meteor
+    meteor npm i --progress=false
+    cd -
+
     echo -en "travis_fold:end:pull_dependencies\r"
     echo "[CI] Image pull and dependencies installation took $SECONDS seconds"
 
@@ -75,14 +88,20 @@ case "$1" in
     echo -en "travis_fold:start:start_meteor\r"
     SECONDS=0
     RETRY=0
-    npm run start:test &
+
+    export TEST=true
+    meteor &
+    METEOR_PID=$!
+
     for i in {1..2700}; do
       printf "(%03d) " $i && curl -q "$ROOT_URL" && break;
       if [ "$SECONDS" -ge 900 ]; then
         RETRY=$((RETRY + 1))
         SECONDS=0
         echo "[CI] Warning: Timed out while waiting for meteor to start"
-        docker-compose -f docker-compose.yml -f docker-compose.test.yml restart meteor
+        kill $METEOR_PID
+        meteor &
+        METEOR_PID=$!
       fi;
 
       if [ "$RETRY" -ge 3 ]; then
@@ -93,9 +112,9 @@ case "$1" in
     done;
     echo -en "travis_fold:end:start_meteor\r"
     if [ "$RETRY" -ge 1 ]; then
-      echo "[CI] Image pull and dependencies installation took $SECONDS seconds after $RETRY retries"
+      echo "[CI] Dependencies installation took $SECONDS seconds after $RETRY retries"
     else
-      echo "[CI] Image pull and dependencies installation took $SECONDS seconds"
+      echo "[CI] Dependencies installation took $SECONDS seconds"
     fi;
 
     # Run acceptance tests
