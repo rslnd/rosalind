@@ -59,8 +59,9 @@ case "$1" in
 
     RELEASE=`cat app/meteor/.meteor/release`
     RELEASE="${RELEASE:7}"
-
-    curl "https://install.meteor.com/?release=${RELEASE}" | /bin/sh
+    METEOR_INSTALL_URL="https://install.meteor.com/?release=${RELEASE}"
+    echo "Installing meteor from $METEOR_INSTALL_URL"
+    curl $METEOR_INSTALL_URL | /bin/sh
 
     echo -en "travis_fold:end:meteor\r"
     echo "[CI] Meteor installation took $SECONDS seconds"
