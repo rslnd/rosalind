@@ -56,7 +56,12 @@ case "$1" in
     echo "[CI] Installing meteor"
     echo -en "travis_fold:start:meteor\r"
     SECONDS=0
-    curl https://install.meteor.com | /bin/sh
+
+    RELEASE=`cat app/meteor/.meteor/release`
+    RELEASE="${RELEASE:7}"
+
+    curl "https://install.meteor.com/?release=${RELEASE}" | /bin/sh
+
     echo -en "travis_fold:end:meteor\r"
     echo "[CI] Meteor installation took $SECONDS seconds"
 
