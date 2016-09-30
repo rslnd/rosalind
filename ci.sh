@@ -124,6 +124,8 @@ case "$1" in
       echo "[CI] Dependencies installation took $SECONDS seconds"
     fi;
 
+    cd -
+
     # Run acceptance tests
     echo "[CI] Running acceptance tests"
     echo -en "travis_fold:start:acceptance_tests\r"
