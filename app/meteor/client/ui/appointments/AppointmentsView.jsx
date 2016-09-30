@@ -97,7 +97,11 @@ export class AppointmentsView extends React.Component {
           <div style={{width: '60px'}}></div>
           {this.props.assignees.map((assignee) => (
             <div key={assignee.assigneeId} className={style.headerCell}>
-              {assignee.fullNameWithTitle}
+              {
+                assignee.fullNameWithTitle
+                ? assignee.fullNameWithTitle
+                : TAPi18n.__('appointments.unassigned')
+              }
             </div>
           ))}
         </Sticky>

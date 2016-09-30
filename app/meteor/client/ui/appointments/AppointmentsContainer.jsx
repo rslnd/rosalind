@@ -33,12 +33,12 @@ const composer = (props, onData) => {
     }
 
     const mapUncapped = map.convert({ cap: false })
-    const assignees = flow(
+    let assignees = flow(
       groupBy('assigneeId'),
       mapUncapped((appointments, assigneeId) => {
         const user = Users.findOne({ _id: assigneeId })
         return {
-          fullNameWithTitle: user && user.fullNameWithTitle() || 'Unassigned',
+          fullNameWithTitle: user && user.fullNameWithTitle(),
           lastName: user && user.profile.lastName,
           schedule: '8:00-14:00',
           assigneeId,
@@ -57,6 +57,10 @@ const composer = (props, onData) => {
       }),
       sortBy('lastName')
     )(Appointments.find(appointmentsSelector, { sort: { start: 1 } }).fetch())
+
+    if (assignees.length === 0) {
+      assignees.push({ assigneeId: null, appointments: [] })
+    }
 
     const onPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
     const onPopoverClose = (args) => Appointments.actions.releaseLock.call(args)

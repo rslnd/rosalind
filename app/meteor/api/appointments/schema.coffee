@@ -91,14 +91,14 @@ Schema = new SimpleSchema
     optional: true
     index: 1
 
+  # This field is TTL indexed
+  # see collection.js for details
   lockedAt:
     type: Date
     optional: true
-    index: 1
 
   lockedBy:
     type: SimpleSchema.RegEx.Id
-    autoValue: Auto.createdBy
     optional: true
     index: 1
 

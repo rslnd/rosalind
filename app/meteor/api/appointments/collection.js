@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
 import helpers from './helpers'
 import methods from './methods'
@@ -11,5 +12,11 @@ Appointments.helpers({ collection: () => Appointments })
 Appointments.helpers(helpers)
 Appointments.methods = methods({ Appointments })
 Appointments.actions = actions({ Appointments })
+
+if (Meteor.isServer) {
+  Meteor.startup(() => {
+    Appointments._ensureIndex({ lockedAt: 1 }, { expireAfterSeconds: 60 * 10 })
+  })
+}
 
 export default Appointments

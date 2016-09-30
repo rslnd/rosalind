@@ -1,4 +1,3 @@
-import moment from 'moment'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
@@ -19,12 +18,17 @@ export const releaseLock = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const locks = Appointments.find({
+      let selector = {
         lockedAt: { $ne: null },
         lockedBy: this.userId,
-        start: time,
         assigneeId
-      }).fetch().map((lock) => {
+      }
+
+      if (time) {
+        selector.start = time
+      }
+
+      const locks = Appointments.find(seletor).fetch().map((lock) => {
         Appointments.remove({ _id: lock._id })
         return lock._id
       })
