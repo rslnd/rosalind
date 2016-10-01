@@ -83,3 +83,6 @@ module.exports = ->
     key.replace('Pagedown', '\uE00F')
     key.replace('Space', '\uE00D')
     browser.keys(key)
+
+  @When 'I close the browser', ->
+    browser.close()
