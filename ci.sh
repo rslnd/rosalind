@@ -11,6 +11,8 @@ export COMMIT_HASH="${TRAVIS_COMMIT:-$CIRCLE_SHA1}"
 export BUILD_NUMBER="${TRAVIS_JOB_NUMBER:-$CIRCLE_BUILD_NUM}"
 export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
+java -version
+
 
 export METEOR_PRETTY_OUTPUT=0
 export METEOR_WATCH_FORCE_POLLING=true
