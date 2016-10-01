@@ -4,7 +4,7 @@
   "scripts": {
     "start": "cd ./app/meteor && npm start",
     "test": "cd ./app/meteor && npm run test",
-    "test:acceptance": "cd ./app/meteor && node ./test.js",
+    "test:acceptance": "cd ./app/meteor && npm run test:acceptance",
     "lint": "standard",
     "client:start": "cd app/electron/ && npm run client:start",
     "client:build": "cd app/electron/ && npm run client:build",

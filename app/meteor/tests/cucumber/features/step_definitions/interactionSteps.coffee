@@ -85,4 +85,4 @@ module.exports = ->
     browser.keys(key)
 
   @When 'I close the browser', ->
-    browser.close()
+    browser.end()

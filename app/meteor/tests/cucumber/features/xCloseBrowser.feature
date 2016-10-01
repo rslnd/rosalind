@@ -5,4 +5,4 @@ Feature: Close Browser
   So that the selenium grid session is closed properly
 
   Scenario: Goodbye
-    Then I close the browser
+    Given I close the browser

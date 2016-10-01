@@ -103,6 +103,7 @@
   },
   "scripts": {
     "start": "meteor",
-    "test": "./node_modules/mocha/bin/mocha --recursive --require ./tests/mocha/helper.js --compilers coffee:coffee-script/register,js:babel-core/register './api/**/*.test.*' './util/**/*.test.*'"
+    "test": "./node_modules/mocha/bin/mocha --recursive --require ./tests/mocha/helper.js --compilers coffee:coffee-script/register,js:babel-core/register './api/**/*.test.*' './util/**/*.test.*'",
+    "test:acceptance": "node ./test.js"
   }
 }
