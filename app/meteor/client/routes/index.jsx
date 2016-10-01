@@ -10,6 +10,12 @@ import { ReportsRoutes } from './ReportsRoutes'
 import { SystemRoutes } from './SystemRoutes'
 import { UsersRoutes } from './UsersRoutes'
 
+const getAdmin = (nextState, cb) => {
+  require.ensure([], function (require) {
+    cb(null, require('client/ui/admin'))
+  })
+}
+
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={MainLayoutContainer}>
@@ -20,6 +26,7 @@ export default () => (
       {ReportsRoutes()}
       {SystemRoutes()}
       {UsersRoutes()}
+      <Route path="admin" getComponents={getAdmin} />
     </Route>
   </Router>
 )
