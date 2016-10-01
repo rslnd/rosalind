@@ -20,7 +20,7 @@ dependencies:
 
 test:
   override:
-    - cd sc-*-linux && ./bin/sc --no-ssl-bump-domains * --tunnel-identifier $CIRCLE_BUILD_NUM:
+    - cd sc-*-linux && ./bin/sc --no-ssl-bump-domains all --tunnel-identifier $CIRCLE_BUILD_NUM:
         background: true
     - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
     - ./ci.sh test:

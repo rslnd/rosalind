@@ -9,7 +9,10 @@ ANSI_RESET="\033[0m"
 
 export COMMIT_HASH="${TRAVIS_COMMIT:-$CIRCLE_SHA1}"
 export BUILD_NUMBER="${TRAVIS_JOB_NUMBER:-$CIRCLE_BUILD_NUM}"
+export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
+
+mkdir -p ARTIFACTS_PATH
 
 retry() {
   local result=0
@@ -68,7 +71,7 @@ case "$1" in
       RELEASE="${RELEASE:7}"
       METEOR_INSTALL_URL="https://install.meteor.com/?release=${RELEASE}"
       echo "Installing meteor from $METEOR_INSTALL_URL"
-      curl $METEOR_INSTALL_URL | /bin/sh
+      curl $METEOR_INSTALL_URL | /bin/sh > $ARTIFACTS_PATH/meteor_installation.log
     fi
 
     echo -en "travis_fold:end:meteor\r"
