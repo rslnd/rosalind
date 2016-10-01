@@ -46,7 +46,7 @@ case "$1" in
   install)
     echo "Setting up CI environment"
     SECONDS=0
-    sudo apt-get -y install xvfb oracle-java8-installer &
+    sudo apt-get -y install xvfb oracle-java8-installer bzip2 &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     npm -g install npm@$NPM_VERSION &
     wait

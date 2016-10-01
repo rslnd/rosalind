@@ -15,6 +15,7 @@ RUN apt-get update && apt-get -y install \
     	autoconf \
       build-essential \
       glib2.0-dev \
+      bzip2 \
     && cd /root/ && \
       git clone https://github.com/albertzak/mdbtools && \
       cd mdbtools && \
