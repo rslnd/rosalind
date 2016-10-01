@@ -57,11 +57,15 @@ case "$1" in
     echo -en "travis_fold:start:meteor\r"
     SECONDS=0
 
-    RELEASE=`cat app/meteor/.meteor/release`
-    RELEASE="${RELEASE:7}"
-    METEOR_INSTALL_URL="https://install.meteor.com/?release=${RELEASE}"
-    echo "Installing meteor from $METEOR_INSTALL_URL"
-    curl $METEOR_INSTALL_URL | /bin/sh
+    if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
+
+    if [ ! -e $HOME/.meteor/meteor ]; then
+      RELEASE=`cat app/meteor/.meteor/release`
+      RELEASE="${RELEASE:7}"
+      METEOR_INSTALL_URL="https://install.meteor.com/?release=${RELEASE}"
+      echo "Installing meteor from $METEOR_INSTALL_URL"
+      curl $METEOR_INSTALL_URL | /bin/sh
+    fi
 
     echo -en "travis_fold:end:meteor\r"
     echo "[CI] Meteor installation took $SECONDS seconds"
