@@ -1,6 +1,3 @@
-reject = require 'lodash/reject'
-some = require 'lodash/some'
-
 module.exports =
   fetchLogs: ->
     logs = browser.log('browser')
@@ -18,9 +15,14 @@ module.exports =
     ]
 
     if logs.value.length > 0
-      filteredLogs = reject logs.value, (log) ->
-        some filterList, (filter) ->
-          log?.message.indexOf(filter) > 0
+
+      filteredLogs = logs.value.filter (log) ->
+        keep = true
+        filterList.forEach (filter) ->
+          if (log and log.message and log.message.indexOf(filter) > 0)
+            keep = false
+
+        return keep
 
       if filteredLogs.length > 0
         console.log('[Browser]', filteredLogs)
