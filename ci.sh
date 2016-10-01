@@ -7,6 +7,10 @@ YML="-f docker-compose.yml -f docker-compose.test.yml"
 ANSI_RED="\033[31;1m"
 ANSI_RESET="\033[0m"
 
+export COMMIT_HASH="${TRAVIS_COMMIT:-$CIRCLE_SHA1}"
+export BUILD_NUMBER="${TRAVIS_JOB_NUMBER:-$CIRCLE_BUILD_NUM}"
+echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
+
 retry() {
   local result=0
   local count=1
@@ -134,9 +138,10 @@ case "$1" in
     echo "[CI] Running acceptance tests"
     echo -en "travis_fold:start:acceptance_tests\r"
     SECONDS=0
-    export SAUCE_NAME="Rosalind build $TRAVIS_JOB_NUMBER of commit ${TRAVIS_COMMIT:0:6}"
-    export SAUCE_TUNNEL_ID="$TRAVIS_JOB_NUMBER"
-    export BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"
+
+    export SAUCE_NAME="Rosalind build $BUILD_NUMBER of commit ${COMMIT_HASH:0:6}"
+    export SAUCE_TUNNEL_ID=$BUILD_NUMBER
+    export BUILD_NUMBER=$BUILD_NUMBER
     retry npm run test:acceptance
     echo -en "travis_fold:end:acceptance_tests\r"
     echo "[CI] Acceptance tests took $SECONDS seconds"

@@ -8,6 +8,7 @@ machine:
     OS: 'Windows 10'
     BROWSER: 'Chrome:50.0'
     NPM_VERSION: 3.10.8
+    ROOT_URL: http://0.0.0.0:3000/
 
 dependencies:
   override:
@@ -19,7 +20,7 @@ dependencies:
 
 test:
   override:
-    - cd sc-*-linux && ./bin/sc:
+    - cd sc-*-linux && ./bin/sc --no-ssl-bump-domains * --tunnel-identifier $CIRCLE_BUILD_NUM:
         background: true
     - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
     - ./ci.sh test:
