@@ -12,6 +12,8 @@ export BUILD_NUMBER="${TRAVIS_JOB_NUMBER:-$CIRCLE_BUILD_NUM}"
 export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
+export METEOR_PRETTY_OUTPUT=0
+
 mkdir -p ARTIFACTS_PATH
 
 retry() {
