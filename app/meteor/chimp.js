@@ -42,7 +42,7 @@ console.log('** Worker:', process.env.SAUCE_TUNNEL_ID)
 module.exports = {
   watch: process.env.WATCH || false,
 
-  path: 'app/meteor/tests/cucumber/features/',
+  path: './tests/cucumber/features/',
   ddp: process.env.ROOT_URL,
 
   compiler: 'coffee:coffee-script/register',

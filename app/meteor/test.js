@@ -1,4 +1,6 @@
-const { exec } = require('child_process')
+'use strict'
+
+const exec = require('child_process').exec
 
 let processes = []
 

@@ -73,7 +73,7 @@ case "$1" in
       echo "Installing meteor from $METEOR_INSTALL_URL"
       curl -o install_meteor.sh $METEOR_INSTALL_URL
       chmod +x install_meteor.sh
-      ./install_meteor.sh &> $ARTIFACTS_PATH/meteor_installation.log
+      ./install_meteor.sh &>$ARTIFACTS_PATH/meteor_installation.log
     fi
 
     echo -en "travis_fold:end:meteor\r"
