@@ -13,6 +13,8 @@ export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
 export METEOR_PRETTY_OUTPUT=0
+export METEOR_WATCH_FORCE_POLLING=true
+export METEOR_WATCH_POLLING_INTERVAL_MS=1800000
 
 mkdir -p ARTIFACTS_PATH
 
@@ -73,6 +75,7 @@ case "$1" in
       RELEASE="${RELEASE:7}"
       METEOR_INSTALL_URL="https://install.meteor.com/?release=${RELEASE}"
       echo "Installing meteor from $METEOR_INSTALL_URL"
+      touch $ARTIFACTS_PATH/meteor_installation.log
       curl -o install_meteor.sh $METEOR_INSTALL_URL
       chmod +x install_meteor.sh
       ./install_meteor.sh &>$ARTIFACTS_PATH/meteor_installation.log
