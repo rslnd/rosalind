@@ -58,6 +58,9 @@ case "$1" in
     curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py
     npm install -g npm-install-retry
     echo "[CI] Machine environment setup took $SECONDS seconds"
+
+    echo "npm $(npm --version)"
+    echo "node $(node --version)"
     ;;
 
   test)
