@@ -1,0 +1,30 @@
+machine:
+  java:
+    version: oraclejdk8
+  node:
+    version: 4.5.0
+
+  environment:
+    OS: 'Windows 10'
+    BROWSER: 'Chrome:50.0'
+    NPM_VERSION: 3.10.8
+
+dependencies:
+  override:
+    - sudo service mongodb stop:
+        background: true
+    - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz && tar -xzf sc-latest-linux.tar.gz:
+        background: true
+    - chmod +x ci.sh && ./ci.sh install
+
+test:
+  override:
+    - cd sc-*-linux && ./bin/sc:
+        background: true
+    - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
+    - ./ci.sh test:
+        environment:
+          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/cucumber/chrome.cucumber"
+
+  post:
+    - killall --wait sc
