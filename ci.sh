@@ -13,6 +13,7 @@ export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 java -version
 
+export NPM_CONFIG_LOGLEVEL=warn
 
 export METEOR_PRETTY_OUTPUT=0
 export METEOR_WATCH_FORCE_POLLING=true
@@ -100,7 +101,7 @@ case "$1" in
     cd -
 
     echo -en "travis_fold:end:install_dependencies\r"
-    echo "[CI] Dependencies installation took $SECONDS seconds"
+    echo "[CI] Dependencies installation from npm took $SECONDS seconds"
 
     # Run unit tests
     echo -en "travis_fold:start:unit_tests\r"
@@ -137,9 +138,9 @@ case "$1" in
     done;
     echo -en "travis_fold:end:start_meteor\r"
     if [ "$RETRY" -ge 1 ]; then
-      echo "[CI] Dependencies installation took $SECONDS seconds after $RETRY retries"
+      echo "[CI] Meteor took $SECONDS seconds to start after $RETRY retries"
     else
-      echo "[CI] Dependencies installation took $SECONDS seconds"
+      echo "[CI] Meteor took $SECONDS seconds to start"
     fi;
 
     cd -
