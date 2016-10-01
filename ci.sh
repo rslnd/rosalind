@@ -71,7 +71,9 @@ case "$1" in
       RELEASE="${RELEASE:7}"
       METEOR_INSTALL_URL="https://install.meteor.com/?release=${RELEASE}"
       echo "Installing meteor from $METEOR_INSTALL_URL"
-      curl $METEOR_INSTALL_URL | /bin/sh > $ARTIFACTS_PATH/meteor_installation.log
+      curl -o install_meteor.sh $METEOR_INSTALL_URL
+      chmod +x install_meteor.sh
+      ./install_meteor.sh > $ARTIFACTS_PATH/meteor_installation.log
     fi
 
     echo -en "travis_fold:end:meteor\r"
@@ -81,8 +83,6 @@ case "$1" in
     echo "[CI] Installing dependencies from npm"
     echo -en "travis_fold:start:install_dependencies\r"
     SECONDS=0
-
-    npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
 
     cd app/meteor/tests/cucumber
     npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
