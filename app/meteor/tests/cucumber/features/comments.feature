@@ -25,7 +25,7 @@ Feature: Comments
       | Last name | First name | Telephone | Note | Private Patient |
       | Weisser   | Alex       | 123 456   | Test | false           |
     And I click on 'Inbound calls > Open inbound calls'
-    And I click on 'Mark as resolved'
+    And I click on the link 'Mark as resolved'
     Then I should not see 'Alex'
     And I click on 'Inbound calls > Resolved inbound calls'
     And I click on '0'
