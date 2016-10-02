@@ -12,6 +12,13 @@ export BUILD_NUMBER="${TRAVIS_JOB_NUMBER:-$CIRCLE_BUILD_NUM}"
 export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
+PATH=/usr/local/phantomjs:$PATH
+export DISPLAY=:99.0
+export NPM_CONFIG_LOGLEVEL=warn
+export METEOR_PRETTY_OUTPUT=0
+export METEOR_WATCH_FORCE_POLLING=true
+export METEOR_WATCH_POLLING_INTERVAL_MS=1800000
+
 retry() {
   local result=0
   local count=1
@@ -50,17 +57,6 @@ case "$1" in
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     npm install -g npm-install-retry
     mkdir -p $ARTIFACTS_PATH
-
-    PATH=/usr/local/phantomjs:$PATH
-
-    export DISPLAY=:99.0
-
-    export NPM_CONFIG_LOGLEVEL=warn
-
-    export METEOR_PRETTY_OUTPUT=0
-    export METEOR_WATCH_FORCE_POLLING=true
-    export METEOR_WATCH_POLLING_INTERVAL_MS=1800000
-
 
     java -version
     echo "npm $(npm --version)"
