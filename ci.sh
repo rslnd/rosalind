@@ -72,13 +72,6 @@ case "$1" in
     echo "node $(node --version)"
 
     echo "[CI] Machine environment setup took $SECONDS seconds"
-    ;;
-
-  test)
-    if [ -z "$ROOT_URL" ]; then
-      echo "Please set ROOT_URL for running integration tests"
-      exit 1
-    fi
 
     # Install meteor
     echo "[CI] Installing meteor"
@@ -116,6 +109,13 @@ case "$1" in
 
     echo -en "travis_fold:end:install_dependencies\r"
     echo "[CI] Dependencies installation from npm took $SECONDS seconds"
+    ;;
+
+  test)
+    if [ -z "$ROOT_URL" ]; then
+      echo "Please set ROOT_URL for running integration tests"
+      exit 1
+    fi
 
     # Run unit tests
     echo -en "travis_fold:start:unit_tests\r"
@@ -174,12 +174,6 @@ case "$1" in
 
   build)
     sudo pkill sc
-
-
-    cd app/meteor
-    meteor npm i --progress=false
-    cd -
-
 
     echo -en "travis_fold:start:build\r"
     cd production/
