@@ -12,7 +12,10 @@ export BUILD_NUMBER="${TRAVIS_JOB_NUMBER:-$CIRCLE_BUILD_NUM}"
 export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
-PATH=/usr/local/phantomjs:$PATH
+export DOCKER_COMPOSE_VERSION=1.5.2
+export NPM_VERSION=3.10.8
+export PHANTOMJS_VERSION=2.1.1
+
 export DISPLAY=:99.0
 export NPM_CONFIG_LOGLEVEL=warn
 export METEOR_PRETTY_OUTPUT=0
@@ -47,9 +50,17 @@ case "$1" in
     sudo apt-get -y install xvfb oracle-java8-installer bzip2 &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     npm -g install npm@$NPM_VERSION &
-    sudo rm $(which phantomjs)
-    sudo mkdir -p /usr/local/phantomjs/
-    sudo curl --output /usr/local/phantomjs/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1 &
+
+    echo "phantomjs $(phantomjs --version)"
+    export PATH=$PWD/phantomjs_bin/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/bin:$PATH
+    echo "phantomjs $(phantomjs --version)"
+    if [ $(phantomjs --version) != '$PHANTOMJS_VERSION' ]; then
+      rm -rf $PWD/phantomjs_bin; mkdir -p $PWD/phantomjs_bin
+      wget https://github.com/Medium/phantomjs/releases/download/v$PHANTOMJS_VERSION/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -O $PWD/phantomjs_bin/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2
+      tar -xvf $PWD/phantomjs_bin/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -C $PWD/phantomjs_bin
+    fi
+    echo "phantomjs $(phantomjs --version)"
+
     curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py &
     wait
     npm set registry https://registry.npmjs.org/
