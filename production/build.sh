@@ -12,11 +12,9 @@ cd ../app/meteor/
 meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory ../../build
 cd -
 
-cp app/meteor/package.json build/bundle/
+cp ../app/meteor/package.json ../build/bundle/
 
 if [ ! -z "$CI" ]; then
   echo "** Fixing permissions"
-  sudo chown -R $USER:$USER build/
+  sudo chown -R $USER:$USER ../build/
 fi
-
-cd -
