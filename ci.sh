@@ -47,7 +47,6 @@ case "$1" in
   install)
     echo "Setting up CI environment"
     SECONDS=0
-    sudo apt-get -y install xvfb oracle-java8-installer bzip2 &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     npm -g install npm@$NPM_VERSION &
 
@@ -65,7 +64,6 @@ case "$1" in
     wait
     npm set registry https://registry.npmjs.org/
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
-    /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     npm install -g npm-install-retry
     mkdir -p $ARTIFACTS_PATH
 
