@@ -7,8 +7,6 @@ machine:
   environment:
     OS: 'Windows 10'
     BROWSER: 'Chrome:50.0'
-    NPM_VERSION: 3.10.8
-    ROOT_URL: http://0.0.0.0:3000/
 
 dependencies:
   override:
