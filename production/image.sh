@@ -5,8 +5,8 @@ set -e
 cd "$(dirname "$0")"
 
 if [ ! -e ../build/bundle/package.json ]; then
-  echo "** Skipping image build"
-  echo "     Please make sure you run ./pack.sh"
+  echo "** Skipping image"
+  echo "     Please make sure you run ./build.sh"
   echo "     and build/bundle/package.json exists."
   exit 1
 else

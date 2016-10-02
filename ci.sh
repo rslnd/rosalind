@@ -2,8 +2,6 @@
 
 set -e
 
-YML="-f docker-compose.yml -f docker-compose.test.yml"
-
 ANSI_RED="\033[31;1m"
 ANSI_RESET="\033[0m"
 
@@ -177,13 +175,11 @@ case "$1" in
   build)
     sudo pkill sc
 
-    echo -en "travis_fold:start:pull\r"
-    retry docker-compose $YML pull meteor
-    echo -en "travis_fold:end:pull\r"
 
-    echo -en "travis_fold:start:dependencies\r"
-    retry docker-compose $YML run --no-deps meteor meteor npm install --progress=false --depth=0
-    echo -en "travis_fold:end:dependencies\r"
+    cd app/meteor
+    meteor npm i --progress=false
+    cd -
+
 
     echo -en "travis_fold:start:build\r"
     cd production/
