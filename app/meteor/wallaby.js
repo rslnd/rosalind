@@ -7,19 +7,15 @@ module.exports = function (wallaby) {
   return {
     files: [
       './**/*.js',
-      './**/*.coffee',
       '!./**/*.test.js',
-      '!./**/*.test.coffee',
       '!./node_modules/**/*.js',
-      '!./node_modules/**/*.coffee',
+      '!./client/compatibility/**/*.js',
       '!./tests/**/*'
     ],
 
     tests: [
-      './**/*.test.coffee',
       './**/*.test.js',
       '!./node_modules/**/*.test.js',
-      '!./node_modules/**/*.test.coffee',
       '!./tests/**/*'
     ],
 
@@ -30,7 +26,6 @@ module.exports = function (wallaby) {
     },
 
     compilers: {
-      '**/*.coffee': wallaby.compilers.coffeeScript(),
       '**/*.js': wallaby.compilers.babel()
     },
 

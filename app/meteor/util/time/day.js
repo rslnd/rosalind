@@ -26,3 +26,9 @@ export const dayToDate = (day) => {
   const d = zeroIndexMonth(day)
   return moment(d).toDate()
 }
+
+export default {
+  zeroIndexMonth,
+  dateToDay,
+  dayToDate
+}

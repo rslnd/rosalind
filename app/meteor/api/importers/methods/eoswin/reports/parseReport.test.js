@@ -1,7 +1,11 @@
 /* eslint-env mocha */
-import { expect } from 'chai'
+import chai from 'chai'
+import chaiDatetime from 'chai-datetime'
 import { matchInsuranceCode, parseReportDate, parseReport } from './parseReport'
 import { REPORT } from './report.fixture'
+
+const expect = chai.expect
+chai.use(chaiDatetime)
 
 describe('importers', function () {
   describe('eoswin', function () {
