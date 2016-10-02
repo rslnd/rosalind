@@ -9,7 +9,7 @@ echo "** Building meteor bundle"
 rm -rf ../build/
 mkdir -p ../build/
 cd ../app/meteor/
-meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory ../../build
+time meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory ../../build
 cd -
 
 cp ../app/meteor/package.json ../build/bundle/
