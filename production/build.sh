@@ -12,7 +12,12 @@ cd ../app/meteor/
 time meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory ../../build
 cd -
 
+cp ../app/meteor/node_modules/ ../build/bundle/node_modules
 cp ../app/meteor/package.json ../build/bundle/
+
+cd ../build/bundle/
+npm prune --production
+cd -
 
 if [ ! -z "$CI" ]; then
   echo "** Fixing permissions"

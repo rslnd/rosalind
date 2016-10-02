@@ -42,15 +42,11 @@ ENV NPM_CONFIG_LOGLEVEL warn
 RUN bash -c "time bash -c 'npm install -g npm-install-retry \
   && npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0 \
   && npm cache clear \
-  && mv /opt/app/programs/server/node_modules /opt/'"
-
-
-RUN mv /opt/app/package.json /opt
+  && mv /opt/app/node_modules /opt/node_modules/
+  && cp /opt/app/programs/server/node_modules/. /opt/node_modules/' \
+  && mv /opt/app/package.json /opt/"
 
 WORKDIR /opt
-
-RUN bash -c "time bash -c 'npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0 \
-  && npm cache clear'"
 
 RUN ln -s node_modules app/programs/server/node_modules \
   && ln -s node_modules app/programs/web.browser/node_modules
