@@ -99,12 +99,14 @@ case "$1" in
     echo -en "travis_fold:start:install_dependencies\r"
     SECONDS=0
 
+    echo "[CI] Installing cucumber npm dependencies"
     cd app/meteor/tests/cucumber
     npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
     cd -
 
+    echo "[CI] Installing meteor npm dependencies"
     cd app/meteor
-    meteor npm i --progress=false
+    npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
     cd -
 
     echo -en "travis_fold:end:install_dependencies\r"
@@ -129,6 +131,8 @@ case "$1" in
     RETRY=0
 
     export TEST=true
+
+    echo "[CI] Starting meteor"
     cd app/meteor
     meteor &
     METEOR_PID=$!
@@ -173,8 +177,6 @@ case "$1" in
     ;;
 
   build)
-    sudo pkill sc
-
     echo -en "travis_fold:start:build\r"
     cd production/
     chmod +x prepare.sh

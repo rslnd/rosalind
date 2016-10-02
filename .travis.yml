@@ -25,6 +25,18 @@ env:
     - CMD=build
     - CMD=test   OS='Windows 10'   BROWSER='Chrome:50.0'
 
+cache:
+  directories:
+    - $HOME/.npm/
+    - $HOME/.meteor/
+    - app/meteor/node_modules/
+    - app/meteor/tests/cucumber/node_modules
+    - app/meteor/.meteor/local/build
+    - app/meteor/.meteor/local/bundler-cache
+    - app/meteor/.meteor/local/db
+    - app/meteor/.meteor/local/isopacks
+    - app/meteor/.meteor/local/plugin-cache
+
 script: ./ci.sh $CMD
 
 after_success: ./ci.sh after_success
