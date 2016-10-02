@@ -11,15 +11,6 @@ export COMMIT_HASH="${TRAVIS_COMMIT:-$CIRCLE_SHA1}"
 export BUILD_NUMBER="${TRAVIS_JOB_NUMBER:-$CIRCLE_BUILD_NUM}"
 export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
-java -version
-
-export NPM_CONFIG_LOGLEVEL=warn
-
-export METEOR_PRETTY_OUTPUT=0
-export METEOR_WATCH_FORCE_POLLING=true
-export METEOR_WATCH_POLLING_INTERVAL_MS=1800000
-
-mkdir -p $ARTIFACTS_PATH
 
 retry() {
   local result=0
@@ -49,18 +40,32 @@ case "$1" in
     sudo apt-get -y install xvfb oracle-java8-installer bzip2 &
     { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     npm -g install npm@$NPM_VERSION &
+    rm $(which phantomjs)
+    sudo curl --output /usr/local/phantomjs/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1 &
+    curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py &
     wait
     npm set registry https://registry.npmjs.org/
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
-    java -version
-    export DISPLAY=:99.0
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
-    curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py
     npm install -g npm-install-retry
-    echo "[CI] Machine environment setup took $SECONDS seconds"
+    mkdir -p $ARTIFACTS_PATH
 
+    PATH=/usr/local/phantomjs:$PATH
+
+    export DISPLAY=:99.0
+
+    export NPM_CONFIG_LOGLEVEL=warn
+
+    export METEOR_PRETTY_OUTPUT=0
+    export METEOR_WATCH_FORCE_POLLING=true
+    export METEOR_WATCH_POLLING_INTERVAL_MS=1800000
+
+
+    java -version
     echo "npm $(npm --version)"
     echo "node $(node --version)"
+
+    echo "[CI] Machine environment setup took $SECONDS seconds"
     ;;
 
   test)
