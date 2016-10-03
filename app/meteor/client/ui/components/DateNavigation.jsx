@@ -18,13 +18,18 @@ class DateNavigationButtons extends React.Component {
     return `/${this.props.basePath}/${date.format('YYYY-MM-DD')}`
   }
 
+  // TODO: Make less hacky and look at Schedules/holidays
   handlePreviousClick () {
-    const path = this.dateToPath(moment(this.props.date).subtract(1, 'day'))
+    let previousDay = moment(this.props.date).subtract(1, 'day')
+    if (previousDay.isoWeekday() === 7) { previousDay = previousDay.subtract(1, 'day') }
+    const path = this.dateToPath(previousDay)
     this.props.router.replace(path)
   }
 
   handleNextClick () {
-    const path = this.dateToPath(moment(this.props.date).add(1, 'day'))
+    let nextDay = moment(this.props.date).add(1, 'day')
+    if (nextDay.isoWeekday() === 7) { nextDay = nextDay.add(1, 'day') }
+    const path = this.dateToPath(nextDay)
     this.props.router.replace(path)
   }
 
