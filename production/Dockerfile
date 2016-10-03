@@ -5,6 +5,17 @@ WORKDIR /opt/app/programs/server
 
 ENV NPM_CONFIG_LOGLEVEL warn
 
+ENV LD_LIBRARY_PATH /lib/mdbtools
+RUN bash -c "time bash -c 'apt-get update && \
+  apt-get -y --no-install-recommends install libglib2.0-0 && \
+  wget -O /tmp/mdbtools.tar.gz https://github.com/albertzak/mdbtools/releases/download/0.7.1-fix-newlines/mdbtools-20161003.tar.gz && \
+  tar -xzvf /tmp/mdbtools.tar.gz -C /usr/src/ && \
+  mv /usr/src/lib /lib/mdbtools && \
+  mv /usr/src/bin/* /bin/ && \
+  ldconfig && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*'"
+
 RUN bash -c "time bash -c 'npm install -g npm-install-retry \
   && npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0 \
   && npm cache clear \
