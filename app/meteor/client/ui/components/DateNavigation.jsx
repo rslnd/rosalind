@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { withRouter } from 'react-router'
 import { Button, ButtonGroup } from 'react-bootstrap'
+import DatePicker from 'material-ui/DatePicker'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from './Icon'
 
@@ -12,6 +13,8 @@ class DateNavigationButtons extends React.Component {
     this.handlePreviousClick = this.handlePreviousClick.bind(this)
     this.handleNextClick = this.handleNextClick.bind(this)
     this.handleTodayClick = this.handleTodayClick.bind(this)
+    this.handleCalendarToggle = this.handleCalendarToggle.bind(this)
+    this.handleCalendarDayChange = this.handleCalendarDayChange.bind(this)
   }
 
   dateToPath (date) {
@@ -38,6 +41,15 @@ class DateNavigationButtons extends React.Component {
     this.props.router.push(path)
   }
 
+  handleCalendarToggle () {
+    this.refs.datePicker.openDialog()
+  }
+
+  handleCalendarDayChange (e, date) {
+    const path = this.dateToPath(moment(date))
+    this.props.router.replace(path)
+  }
+
   render () {
     return (
       <div className={`breadcrumbs page-actions ${this.props.pullRight && 'pull-right'}`}>
@@ -52,10 +64,23 @@ class DateNavigationButtons extends React.Component {
             <Icon name="caret-right" />
           </Button>
 
-          <Button bsSize="small"><Icon name="calendar" /></Button>
+          <Button onClick={this.handleCalendarToggle} bsSize="small"><Icon name="calendar" /></Button>
 
           {this.props.children}
         </ButtonGroup>
+
+        <DatePicker
+          name="datePicker"
+          ref="datePicker"
+          autoOk
+          value={this.props.date}
+          onChange={this.handleCalendarDayChange}
+          DateTimeFormat={Intl && Intl.DateTimeFormat}
+          locale={'de-AT'}
+          textFieldStyle={{ display: 'none' }}
+          dialogContainerStyle={{ zoom: 0.9090, marginTop: '10px' }}
+          container="inline" />
+
       </div>
     )
   }
