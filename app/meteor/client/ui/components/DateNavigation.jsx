@@ -2,18 +2,25 @@ import React from 'react'
 import moment from 'moment'
 import { withRouter } from 'react-router'
 import { Button, ButtonGroup } from 'react-bootstrap'
-import DatePicker from 'material-ui/DatePicker'
+import { DayPicker } from 'react-dates'
+import Popover from 'material-ui/Popover'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from './Icon'
+import './dateNavigationStyles'
 
 class DateNavigationButtons extends React.Component {
   constructor (props) {
     super(props)
 
+    this.state = {
+      calendarOpen: false
+    }
+
     this.handlePreviousClick = this.handlePreviousClick.bind(this)
     this.handleNextClick = this.handleNextClick.bind(this)
     this.handleTodayClick = this.handleTodayClick.bind(this)
-    this.handleCalendarToggle = this.handleCalendarToggle.bind(this)
+    this.handleCalendarOpen = this.handleCalendarOpen.bind(this)
+    this.handleCalendarClose = this.handleCalendarClose.bind(this)
     this.handleCalendarDayChange = this.handleCalendarDayChange.bind(this)
   }
 
@@ -41,12 +48,20 @@ class DateNavigationButtons extends React.Component {
     this.props.router.push(path)
   }
 
-  handleCalendarToggle () {
-    this.refs.datePicker.openDialog()
+  handleCalendarOpen (e) {
+    this.setState({
+      ...this.state,
+      calendarOpen: true,
+      calendarAnchor: e.currentTarget
+    })
   }
 
-  handleCalendarDayChange (e, date) {
-    const path = this.dateToPath(moment(date))
+  handleCalendarClose () {
+    this.setState({ ...this.state, calendarOpen: false })
+  }
+
+  handleCalendarDayChange (date) {
+    const path = this.dateToPath(date)
     this.props.router.replace(path)
   }
 
@@ -64,23 +79,36 @@ class DateNavigationButtons extends React.Component {
             <Icon name="caret-right" />
           </Button>
 
-          <Button onClick={this.handleCalendarToggle} bsSize="small"><Icon name="calendar" /></Button>
+          <Button
+            onClick={this.handleCalendarOpen}
+            ref="calendarToggle"
+            bsSize="small">
+            <Icon name="calendar" />
+          </Button>
 
           {this.props.children}
         </ButtonGroup>
 
-        <DatePicker
-          name="datePicker"
-          ref="datePicker"
-          autoOk
-          value={this.props.date}
-          onChange={this.handleCalendarDayChange}
-          DateTimeFormat={Intl && Intl.DateTimeFormat}
-          locale={'de-AT'}
-          textFieldStyle={{ display: 'none' }}
-          dialogContainerStyle={{ zoom: 0.9090, marginTop: '10px' }}
-          container="inline" />
-
+        <Popover
+          open={this.state.calendarOpen}
+          anchorEl={this.state.calendarAnchor}
+          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          autoCloseWhenOffScreen={false}
+          onRequestClose={this.handleCalendarClose}
+          >
+          <div style={{ zoom: 0.9090 }}>
+            <DayPicker
+              onDayMouseDown={this.handleCalendarDayChange}
+              date={this.props.date}
+              initialVisibleMonth={this.props.date}
+              enableOutsideDays
+              modifiers={{
+                current: (day) => day.isSame(this.props.date, 'day')
+              }}
+            />
+          </div>
+        </Popover>
       </div>
     )
   }

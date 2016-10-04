@@ -10,6 +10,7 @@ import './print.css'
 import './materialFullCalendar.css'
 import './mui.css'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import 'react-dates/css/styles.scss'
 
 // Material UI
 injectTapEventPlugin()
