@@ -24,7 +24,7 @@ export const parseBirthday = (query) => {
 }
 
 export const parseDayMonthYear = (query) => {
-  const pattern = /(\d\d?)[ .-/\\,]*((\d\d?)|(\w+))[ .-/\\,]*(\d\d\d?\d?)?/
+  const pattern = /(\d\d?)[ .\-\/\\,]*((\d\d?)|([a-zA-Z]+))[ .\-\/\\,]*(\d\d\d?\d?)?/
   const match = query.match(pattern)
   const remainingQuery = query.replace(pattern, '').trim()
 
@@ -59,6 +59,7 @@ export const parseMonth = (month) => {
     }
   } else {
     const lookup = {
+      jnn: 1,
       jan: 1,
       jän: 1,
       jae: 1,

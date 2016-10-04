@@ -15,6 +15,38 @@ describe('patients', function () {
         expect(parseBirthday('12.06.1994').result).to.eql(parsed)
       })
 
+      it('parses DDMMYYYY', function () {
+        expect(parseBirthday('12061994').result).to.eql(parsed)
+      })
+
+      it('parses DDMMYY', function () {
+        expect(parseBirthday('120694').result).to.eql(parsed)
+      })
+
+      it('parses DDMMMMYY', function () {
+        expect(parseBirthday('12jun94').result).to.eql(parsed)
+      })
+
+      it('parses DDMMMMYYYY', function () {
+        expect(parseBirthday('12jun1994').result).to.eql(parsed)
+      })
+
+      it('parses DD-MMMM-YYYY', function () {
+        expect(parseBirthday('12-jun-1994').result).to.eql(parsed)
+      })
+
+      it('parses DD.junYYYY', function () {
+        expect(parseBirthday('12.jun1994').result).to.eql(parsed)
+      })
+
+      it('parses DD. M. YY', function () {
+        expect(parseBirthday('12. 6. 94').result).to.eql(parsed)
+      })
+
+      it('parses DD-m-YY', function () {
+        expect(parseBirthday('12-6-94').result).to.eql(parsed)
+      })
+
       it('returns remaining query and result', function () {
         expect(parseBirthday('12.06.1994 hello hello').result).to.eql(parsed)
         expect(parseBirthday('12.06.1994 hello hello').remainingQuery).to.eql('hello hello')
