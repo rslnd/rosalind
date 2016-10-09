@@ -1,3 +1,4 @@
+import kadira from './kadira'
 import env from './env'
 import browserPolicy from './browserPolicy'
 import passwordlessLogin from './passwordlessLogin'
@@ -7,6 +8,7 @@ import development from './development'
 import api from './api'
 
 export default function () {
+  kadira()
   env()
   passwordlessLogin()
   appcache()

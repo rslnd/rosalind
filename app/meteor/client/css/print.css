@@ -101,4 +101,9 @@
   #__resend_root {
     display: none
   }
+
+  #sk-holder {
+    display: none;
+  }
+
 }

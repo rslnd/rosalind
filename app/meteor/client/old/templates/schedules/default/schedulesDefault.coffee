@@ -18,7 +18,8 @@ Template.schedulesDefault.onCreated ->
       user = Users.methods.findOneByIdOrUsername(username)
 
     user ||= Meteor.user()
-    Template.schedulesDefault.currentView.set('userId', user._id)
+    if (user)
+      Template.schedulesDefault.currentView.set('userId', user._id)
 
 Template.schedulesDefault.events
   'click [rel="edit"]': ->

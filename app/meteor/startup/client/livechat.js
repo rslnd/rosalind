@@ -38,7 +38,7 @@ export default () => {
           if (user) {
             if (!currentUserId) {
               const env = server.env.NODE_ENV.toUpperCase()
-              const smoochUserId = `USER-${Meteor.userId()}${env === 'PRODUCTION' ? '' : `-${env}`}`
+              const smoochUserId = `USER-${user._id}${env === 'PRODUCTION' ? '' : `-${env}`}`
               const group = user.groupId && Groups.findOne({ _id: user.groupId })
               Smooch.login(smoochUserId, {
                 givenName: user.profile.firstName,
@@ -51,14 +51,26 @@ export default () => {
                   group: group && group,
                   roles: user.getRoles()
                 }
+              }).then(() => {
+                console.log('[Livechat] Logged in')
+              }).catch((e) => {
+                console.error('[Livechat] Failed to login', e)
               })
             }
             currentUserId = user._id
           } else {
             currentUserId = null
-            Smooch.logout()
+            Smooch.logout().then(() => {
+              console.log('[Livechat] Logged out')
+            }).catch((e) => {
+              console.error('[Livechat] Failed to logout', e)
+            })
           }
         })
+      }).then(() => {
+        console.log('[Livechat] Initialized')
+      }).catch((e) => {
+        console.error('[Livechat] Failed to initialize', e)
       })
     })
   }
