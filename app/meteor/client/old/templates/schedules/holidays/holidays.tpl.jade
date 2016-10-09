@@ -1,3 +1,8 @@
-+contentHeader(title='schedules.holidays')
 .content
-  +dataTable(title='schedules.holidays' newTitle='schedules.holidaysNew' table=table id='holidaysTable' formTemplate=formTemplate)
+  +dataTable(
+    title='schedules.holidays'
+    newTitle='schedules.holidaysNew'
+    newRoles='schedules-edit,admin'
+    table=table
+    id='holidaysTable'
+    formTemplate=formTemplate)

@@ -5,7 +5,7 @@ import { RequestItem } from './RequestItem'
 import { NewRequestContainer } from './NewRequestContainer'
 import { Box } from 'client/ui/components/Box'
 
-export const RequestsScreen = ({ requests, approve, decline }) => (
+export const RequestsScreen = ({ requests, approve, decline, canEdit }) => (
   <div className="content">
     <div className="row">
       <FlipMove>
@@ -14,14 +14,10 @@ export const RequestsScreen = ({ requests, approve, decline }) => (
         </div>
         {requests.map((request) => (
           <div key={request._id} className="col-md-6">
-            <RequestItem request={request} approve={approve} decline={decline} />
+            <RequestItem request={request} approve={approve} decline={decline} canEdit={canEdit} />
           </div>
         ))}
       </FlipMove>
-    </div>
-
-    <div className="row">
-
     </div>
   </div>
 )

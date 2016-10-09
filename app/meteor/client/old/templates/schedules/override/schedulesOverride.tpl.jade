@@ -2,4 +2,11 @@
 .content
   .row
     .col-md-12
-      +dataTable(title='schedules.override' newTitle='schedules.overrideNew' table=table id='overrideTable' formTemplate=formTemplate)
+      +dataTable(
+        title='schedules.override'
+        newTitle='schedules.overrideNew'
+        newRoles='schedules-edit,admin'
+        table=table
+        id='overrideTable'
+        formTemplate=formTemplate
+      )

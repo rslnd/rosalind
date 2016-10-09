@@ -12,8 +12,9 @@
                 | {{_ 'schedules.thisDefault'}} {{_ 'ui.for' }}
                 strong {{ getFullNameWithTitle viewUser }}
               .box-tools.pull-right
-                button.btn.btn-box-tool(rel='edit')
-                  i.fa.fa-pencil
+                +if isInRole 'schedules-edit,admin'
+                  button.btn.btn-box-tool(rel='edit')
+                    i.fa.fa-pencil
 
             .box-body
               +weekSummary(viewUser=viewUser)

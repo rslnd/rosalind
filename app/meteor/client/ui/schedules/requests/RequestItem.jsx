@@ -21,17 +21,20 @@ export class RequestItem extends React.Component {
 
     const footer = <div>
       <CommentsContainer docId={_id} />
-      <div className="box-footer">
-        <FlatButton
-          label={TAPi18n.__('schedules.requests.approve')}
-          onClick={() => this.props.approve(_id)}
-          disabled={accepted} />
+      {
+        this.props.canEdit &&
+          <div className="box-footer">
+            <FlatButton
+              label={TAPi18n.__('schedules.requests.approve')}
+              onClick={() => this.props.approve(_id)}
+              disabled={accepted} />
 
-        <FlatButton
-          label={TAPi18n.__('schedules.requests.decline')}
-          onClick={() => this.props.decline(_id)}
-          disabled={declined} />
-      </div>
+            <FlatButton
+              label={TAPi18n.__('schedules.requests.decline')}
+              onClick={() => this.props.decline(_id)}
+              disabled={declined} />
+          </div>
+      }
     </div>
 
     return (

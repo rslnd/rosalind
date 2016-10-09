@@ -6,12 +6,20 @@
         .box-header
           h3.box-title {{_ 'schedules.businessHoursRegular' }}
           .box-tools.pull-right
-            button.btn.btn-box-tool(rel='editRegular')
-              i.fa.fa-pencil
+            +if isInRole 'schedules-edit,admin'
+              button.btn.btn-box-tool(rel='editRegular')
+                i.fa.fa-pencil
 
         .box-body.zoom-2
           +weekSummary(schedule=regular)
 
   .row
     .col-md-12
-      +dataTable(title='schedules.businessHoursOverride' newTitle='schedules.businessHoursOverrideNew' table=businessHoursOverrideTable id='businessHoursOverrideTable' formTemplate=formTemplate)
+      +dataTable(
+        title='schedules.businessHoursOverride'
+        newTitle='schedules.businessHoursOverrideNew'
+        newRoles='schedules-edit,admin'
+        table=businessHoursOverrideTable
+        id='businessHoursOverrideTable'
+        formTemplate=formTemplate
+      )
