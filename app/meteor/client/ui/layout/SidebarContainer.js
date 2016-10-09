@@ -32,6 +32,7 @@ const sidebarItems = () => {
       roles: ['admin', 'schedules'],
       subItems: [
         { name: 'statusBoard', path: '/' },
+        { name: 'requests.this', path: '/requests' },
         { name: 'thisDefault', path: '/default' },
         { name: 'override', path: '/override' },
         { name: 'businessHours', path: '/businessHours' },

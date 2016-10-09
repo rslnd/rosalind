@@ -6,7 +6,7 @@ import { DayPicker } from 'react-dates'
 import Popover from 'material-ui/Popover'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from './Icon'
-import './dateNavigationStyles'
+import './datePickerStyles'
 
 class DateNavigationButtons extends React.Component {
   constructor (props) {

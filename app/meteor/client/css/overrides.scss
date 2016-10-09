@@ -6,6 +6,10 @@ body {
   min-height: 100%;
 }
 
+.content {
+  min-height: 550px;
+}
+
 .fixed .content-wrapper, .fixed .right-side {
   padding-top: 0 !important;
 }

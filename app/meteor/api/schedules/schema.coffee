@@ -16,6 +16,15 @@ module.exports = new SimpleSchema
     ]
     index: 1
 
+  reason:
+    type: String
+    optional: true
+    allowedValues: [
+      'vacation'
+      'compensatory'
+      'sick'
+    ]
+
   userId:
     type: SimpleSchema.RegEx.Id,
     index: 1
@@ -90,6 +99,45 @@ module.exports = new SimpleSchema
     optional: true
 
   createdBy:
-    type: String
+    type: SimpleSchema.RegEx.Id
     autoValue: Auto.createdBy
+    optional: true
+
+  valid:
+    type: Boolean
+    defaultValue: true
+
+  requestedAt:
+    type: Date
+    index: 1
+    optional: true
+
+  requestedBy:
+    type: SimpleSchema.RegEx.Id
+    index: 1
+    optional: true
+
+  resolvedAt:
+    type: Date
+    index: 1
+    optional: true
+
+  resolvedBy:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+
+  approvedAt:
+    type: Date
+    optional: true
+
+  approvedBy:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+
+  declinedAt:
+    type: Date
+    optional: true
+
+  declinedBy:
+    type: SimpleSchema.RegEx.Id
     optional: true

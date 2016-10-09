@@ -26,6 +26,9 @@
       "title": "Besondere Öffnungszeiten haben Vorrang",
       "body": "Wenn für einen Tag eine besondere Öffnungszeit eingetragen ist, überschreibt dieser Eintrag die übliche Öffnungszeit für diesen Tag zur Gänze."
     },
+    "requestedBy": "Erstellt von",
+    "approvedBy": "Akzeptiert von",
+    "declinedBy": "Abgelehnt von",
     "holidays": "Feiertage",
     "hoursPerWeek": "Wochenstunden",
     "totalHoursPerWeek": "Gesamtwochenstunden",
@@ -33,6 +36,22 @@
     "employee_plural": "Mitarbeiter",
     "weekView": "Wochenansicht",
     "statusBoard": "Übersicht",
-    "planned": "lt. Plan"
+    "planned": "lt. Plan",
+    "openRequests": "Offene Anträge",
+    "newRequest": "Neuer Antrag",
+    "note": "Bemerkungen",
+    "postRequest": "Antrag stellen",
+    "postRequestError": "Entschuldigung! Bitte noch einmal versuchen.",
+    "postRequestSuccess": "Danke für den Antrag",
+    "requests": {
+      "acceptSuccess": "Antrag erfolgreich akzeptiert.",
+      "declineSuccess": "Antrag abgelehnt.",
+      "this": "Anträge",
+      "approve": "Akzeptieren",
+      "decline": "Ablehnen",
+      "vacation": "Urlaub",
+      "compensatory": "Zeitausgleich",
+      "sick": "Krankenstand"
+    }
   }
 }
