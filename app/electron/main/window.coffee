@@ -20,6 +20,7 @@ module.exports =
       disableAutoHideCursor: true
       webPreferences:
         preload: require.resolve('../renderer/native')
+        experimentalFeatures: true
         nodeIntegration: false
         textAreasAreResizable: false
         experimentalCanvasFeatures: true
