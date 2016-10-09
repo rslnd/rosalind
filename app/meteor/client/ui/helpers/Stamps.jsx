@@ -13,7 +13,7 @@ const Stamp = ({ stamp }) => {
 const StampsList = ({ stamps }) => (
   <div>
     {stamps.map((stamp) => (
-      <Stamp key={stamp.time} stamp={stamp} />
+      <Stamp key={[stamp.time, stamp.verb, stamp.userId].join()} stamp={stamp} />
     ))}
   </div>
 )
