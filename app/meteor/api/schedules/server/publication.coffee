@@ -11,7 +11,12 @@ module.exports = ->
     return unless (@userId and Roles.userIsInRole(@userId, ['schedules', 'admin'], Roles.GLOBAL_GROUP))
 
     {
-      find: -> Schedules.find({})
+      find: -> Schedules.find({ $or: [
+          { type: 'default' },
+          { type: 'businessHours' },
+          { type: 'businessHoursOverride' },
+          { type: 'holidays' }
+        ] }, { limit: 300 })
       children: [
         { find: (schedule) -> Users.find({ _id: schedule.userId }) }
         { find: (schedule) -> Comments.find({ docId: schedule._id }) }
