@@ -4,7 +4,7 @@ export default () => {
   BrowserPolicy.framing.disallow()
   BrowserPolicy.content.allowInlineScripts()
   BrowserPolicy.content.allowEval()
-  BrowserPolicy.content.allowConnectOrigin('*')
+  BrowserPolicy.content.allowSameOriginForAll()
 
   BrowserPolicy.content.allowInlineStyles()
   BrowserPolicy.content.allowStyleOrigin('https://fonts.googleapis.com')
