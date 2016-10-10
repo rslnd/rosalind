@@ -4,7 +4,8 @@ export default () => {
   BrowserPolicy.framing.disallow()
   BrowserPolicy.content.allowInlineScripts()
   BrowserPolicy.content.allowEval()
-  BrowserPolicy.content.allowSameOriginForAll()
+  BrowserPolicy.content.allowConnectOrigin('wss://*')
+  BrowserPolicy.content.allowConnectOrigin('https://*')
 
   BrowserPolicy.content.allowInlineStyles()
   BrowserPolicy.content.allowStyleOrigin('https://fonts.googleapis.com')
@@ -19,8 +20,11 @@ export default () => {
   BrowserPolicy.content.allowImageOrigin('https://app.smooch.io')
   BrowserPolicy.content.allowImageOrigin('https://www.gravatar.com')
   BrowserPolicy.content.allowImageOrigin('https://media.smooch.io')
+  BrowserPolicy.content.allowConnectOrigin('wss://api.smooch.io')
+  BrowserPolicy.content.allowConnectOrigin('https://api.smooch.io')
 
   if (process.env.NODE_ENV !== 'production') {
+    BrowserPolicy.content.allowConnectOrigin('ws://*')
     BrowserPolicy.content.allowScriptOrigin('http://localhost:3500')
     BrowserPolicy.content.allowFontOrigin('http://localhost:3500')
     BrowserPolicy.content.allowFontOrigin('http://*.bootstrapcdn.com')
