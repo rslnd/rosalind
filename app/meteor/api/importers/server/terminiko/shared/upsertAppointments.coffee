@@ -24,7 +24,9 @@ module.exports = (job, resources) ->
         upsertSchedules({ record, resources, job })
         return
 
-      return if (not record.PatientId or record.PatientId < 1) and (not record.Info or record.Info.toString().length < 1)
+      if (not record.Patient_Id or record.Patient_Id < 1) and (not record.Info or record.Info.toString().length < 1)
+        console.error('[Importers] terminiko: upsertAppointments: No patient ID or info text', record)
+        return
 
       if (not includes([1, 8], record.Status_Id))
         console.error('[Importers] terminiko: upsertAppointments: Status ID is not 1 or 8', record)
@@ -37,9 +39,12 @@ module.exports = (job, resources) ->
       start = tz(moment(record.Datum_Beginn), timezone)
       end = tz(moment(record.Datum_Ende), timezone)
 
-      if ((moment().range(start, end).diff('hours') > 20) or (moment().range(start, end).diff('seconds') < 1))
-        console.error('[Importers] terminiko: upsertAppointments: Appointment has invalid duration', record)
+      if (moment().range(start, end).diff('hours') > 20)
+        console.error('[Importers] terminiko: upsertAppointments: Appointment duration is too long', record)
         return
+
+      if (moment().range(start, end).diff('seconds') < 1)
+        end = end.clone().add(5, 'minutes')
 
       externalUpdatedAt = tz(moment(record.Datum_Bearbeitung), timezone).toDate() if record.Datum_Bearbeitung
 
