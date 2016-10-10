@@ -1,4 +1,5 @@
 moment = require 'moment'
+tz = require 'moment-timezone'
 includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Appointments } = require 'api/appointments'
@@ -17,20 +18,30 @@ module.exports = (job, resources) ->
     iterator: (record) ->
       return unless record
 
+      timezone = job.meta?.timezone or 'Europe/Vienna'
+
       if includes([2, 3, 4, 6, 23], record.Status_Id)
         upsertSchedules({ record, resources, job })
         return
 
       return if (not record.PatientId or record.PatientId < 1) and (not record.Info or record.Info.toString().length < 1)
 
-      return if (not includes([1, 8], record.Status_Id))
+      if (not includes([1, 8], record.Status_Id))
+        console.error('[Importers] terminiko: upsertAppointments: Status ID is not 1 or 8', record)
+        return
 
-      start = moment(record.Datum_Beginn) if record.Datum_Beginn
-      end = moment(record.Datum_Ende) if record.Datum_Ende
-      return if moment().range(start, end).diff('hours') > 4
-      return if moment().range(start, end).diff('seconds') < 1
+      if (not record.Datum_Beginn or not record.Datum_Ende)
+        console.error('[Importers] terminiko: upsertAppointments: Appointment has no start or end date', record)
+        return
 
-      externalUpdatedAt = moment(record.Datum_Bearbeitung).toDate() if record.Datum_Bearbeitung
+      start = tz(moment(record.Datum_Beginn), timezone)
+      end = tz(moment(record.Datum_Ende), timezone)
+
+      if ((moment().range(start, end).diff('hours') > 20) or (moment().range(start, end).diff('seconds') < 1))
+        console.error('[Importers] terminiko: upsertAppointments: Appointment has invalid duration', record)
+        return
+
+      externalUpdatedAt = tz(moment(record.Datum_Bearbeitung), timezone).toDate() if record.Datum_Bearbeitung
 
       { patientId, heuristic } = findPatientId({ job, record })
 
@@ -67,15 +78,7 @@ module.exports = (job, resources) ->
         $set: $set
 
     bulk: (operations) ->
-      bulk = Appointments.rawCollection().initializeUnorderedBulkOp()
 
       for i in [0...operations.length]
         operation = operations[i]
-        bulk
-          .find(operation.selector)
-          .upsert()
-          .updateOne($set: operation.$set)
-
-      if Meteor.wrapAsync(bulk.execute, bulk)().ok is not 1
-        job.log("Terminiko: upsertAppointments: Bulk execute error: #{JSON.stringify(d)}")
-        job.fail()
+        Appointments.upsert(operation.selector, { $set: operation.$set })

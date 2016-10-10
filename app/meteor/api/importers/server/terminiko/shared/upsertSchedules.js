@@ -1,13 +1,14 @@
 import moment from 'moment'
+import tz from 'moment-timezone'
 import { Schedules } from 'api/schedules'
 import { getResource } from './getResources'
 import { parseNewlines } from './parseNewlines'
 
-export const upsertSchedules = ({ record, resources, job }) => {
+export const upsertSchedules = ({ record, resources, job, timezone = 'Europe/Vienna' }) => {
   if (!record.Datum_Beginn || !record.Datum_Ende) { return }
 
-  const start = moment(record.Datum_Beginn).toDate()
-  const end = moment(record.Datum_Ende).toDate()
+  const start = tz(moment(record.Datum_Beginn), timezone).toDate()
+  const end = tz(moment(record.Datum_Ende), timezone).toDate()
   if (moment().range(start, end).diff('seconds') < 1) { return }
 
   const assignees = getResource({ key: 'D', record, resources })
@@ -28,7 +29,7 @@ export const upsertSchedules = ({ record, resources, job }) => {
         timestamps: {
           importedAt: moment().toDate(),
           importedBy: job.data.userId,
-          externalUpdatedAt: record.Datum_Bearbeitung && moment(record.Datum_Bearbeitung).toDate()
+          externalUpdatedAt: record.Datum_Bearbeitung && tz(moment(record.Datum_Bearbeitung), timezone).toDate()
         }
       }
     }

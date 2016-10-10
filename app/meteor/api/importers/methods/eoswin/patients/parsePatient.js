@@ -1,4 +1,5 @@
 import moment from 'moment'
+import tz from 'moment-timezone'
 import { parse as csvToJson } from 'papaparse'
 import { dateToDay } from 'util/time/day'
 
@@ -50,7 +51,7 @@ export const parseExternal = ({ id, note, timestamp, action }) => {
   return { eoswin }
 }
 
-export const parsePatient = (row) => {
+export const parsePatient = (row, timezone) => {
   const expectedFieldsCount = 17
   if (row.length < 2) { return }
   if (row.length !== expectedFieldsCount) {
@@ -63,7 +64,7 @@ export const parsePatient = (row) => {
     insuranceId: row[7],
     external: parseExternal({
       id: row[11],
-      timestamp: moment(row[15], 'DD.MM.YYYY H:m:s').toDate(),
+      timestamp: tz(moment(row[15], 'DD.MM.YYYY H:m:s'), timezone).toDate(),
       action,
       note: row[10] }),
     profile: {
@@ -71,7 +72,7 @@ export const parsePatient = (row) => {
       lastName: row[1],
       titlePrepend: row[2],
       gender: parseGender(row[3]),
-      birthday: row[14] && dateToDay(moment(row[14], 'DD.MM.YYYY')),
+      birthday: row[14] && dateToDay(tz(moment(row[14], 'DD.MM.YYYY'), timezone)),
       address: {
         line1: row[4],
         postalCode: row[5],
@@ -84,10 +85,10 @@ export const parsePatient = (row) => {
   return { patient, action }
 }
 
-export const parsePatients = (csv) => {
+export const parsePatients = (csv, timezone = 'Europe/Vienna') => {
   const data = csvToJson(csv, {
     delimiter: '|'
   }).data
-  const patients = data.map(parsePatient).filter((p) => p)
+  const patients = data.map((p) => parsePatient(p, timezone)).filter((p) => p)
   return patients
 }
