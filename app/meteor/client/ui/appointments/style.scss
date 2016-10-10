@@ -5,9 +5,9 @@
 
 :local(.headerRow) {
   background-color: $background;
-  padding-bottom: 6px;
   border-bottom: 1px solid $gray-disabled;
   display: flex;
+  padding-bottom: 6px;
   width: 100%;
   z-index: 40;
 }
@@ -23,17 +23,17 @@
 :local(.appointment) {
   border-left: 3px solid $primary-active;
   cursor: pointer;
-  overflow: hidden;
-  white-space: pre-wrap;
-  padding-left: 6px;
   margin-left: 0;
+  overflow: hidden;
+  padding-left: 6px;
   transition: margin-left .1s ease-out,
     background-color .18s ease-out;
+  white-space: pre-wrap;
 }
 
 :local(.appointment:hover) {
-  margin-left: 2px;
   background-color: lighten($background, 3%);
+  margin-left: 2px;
 }
 
 :local(.canceled) {
@@ -68,9 +68,15 @@
   background-color: lighten($background, 5%);
 }
 
+:local(.scheduledUnavailable) {
+  background-color: $dark-gray-disabled;
+  border: 1px solid $dark-gray;
+  opacity: .2;
+}
+
 :local(.popover) {
-  min-width: 400px;
   min-height: 300px;
+  min-width: 400px;
 }
 
 :local(.form) {

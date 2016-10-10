@@ -8,6 +8,7 @@ import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { Users } from 'api/users'
 import { Patients } from 'api/patients'
 import { Appointments } from 'api/appointments'
+import { Schedules } from 'api/schedules'
 import { Loading } from 'client/ui/components/Loading'
 import { AppointmentsScreen } from './AppointmentsScreen'
 
@@ -18,13 +19,15 @@ const appointmentsSubsManager = new SubsManager({
 
 const composer = (props, onData) => {
   const date = moment(props.params && props.params.date || undefined)
-
-  const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments', {
+  const dateRange = {
     start: date.clone().startOf('day').toDate(),
     end: date.clone().endOf('day').toDate()
-  })
+  }
 
-  if (appointmentsSubscription.ready()) {
+  const schedulesSubscriptions = appointmentsSubsManager.subscribe('schedules', dateRange)
+  const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments', dateRange)
+
+  if (schedulesSubscriptions.ready() && appointmentsSubscription.ready()) {
     const appointmentsSelector = {
       start: {
         $gte: date.clone().startOf('day').toDate(),
@@ -42,6 +45,7 @@ const composer = (props, onData) => {
           lastName: user && user.profile.lastName,
           schedule: '8:00-14:00',
           assigneeId,
+          schedules: Schedules.find({ userId: assigneeId }).fetch(),
           appointments: appointments.map((appointment) => {
             let patient = Patients.findOne({ _id: appointment.patientId })
             if (patient) {

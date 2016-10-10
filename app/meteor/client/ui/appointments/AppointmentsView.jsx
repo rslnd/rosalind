@@ -139,6 +139,33 @@ export class AppointmentsView extends React.Component {
               })
           ))}
 
+          {/* Schedules */}
+          {
+            this.props.assignees.map((assignee) => (
+              assignee.schedules.map((schedule) => {
+                if (!schedule.start && !schedule.end) {
+                  return null
+                }
+                const timeStart = moment(schedule.start).format('[time-]HHmm')
+                const timeEnd = moment(schedule.end).format('[time-]HHmm')
+
+                return (
+                  <div
+                    key={`schedule-${schedule._id}`}
+                    data-scheduleId={schedule._id}
+                    className={style.scheduledUnavailable}
+                    style={{
+                      gridRowStart: timeStart,
+                      gridRowEnd: timeEnd,
+                      gridColumn: `assignee-${assignee.assigneeId}`
+                    }}>
+                    &nbsp;
+                  </div>
+                )
+              })
+            ))
+          }
+
           {/* Time Legend */}
           {
             this.state.timeRange

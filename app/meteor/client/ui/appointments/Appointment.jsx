@@ -47,7 +47,7 @@ export class Appointment extends React.Component {
 
     return (
       <div
-        data-id={appointment._id}
+        data-appointmentId={appointment._id}
         className={classes}
         onClick={() => this.props.handleAppointmentModalOpen(appointment)}
         style={{
@@ -92,7 +92,7 @@ export class Appointment extends React.Component {
             </span>
           ) : (
             <span>
-              {this.stripNumbers(appointment.notes)}
+              {this.stripNumbers(appointment.notes) || <Icon name="question-circle" />}
             </span>
           )
         }
