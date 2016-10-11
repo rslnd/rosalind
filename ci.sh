@@ -63,8 +63,8 @@ case "$1" in
     curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py &
     wait
     npm set registry https://registry.npmjs.org/
+    npm -g install yarnpkg
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
-    npm install -g npm-install-retry
     mkdir -p $ARTIFACTS_PATH
 
     java -version
@@ -101,12 +101,12 @@ case "$1" in
 
     echo "[CI] Installing cucumber npm dependencies"
     cd app/meteor/tests/cucumber
-    npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
+    yarn
     cd -
 
     echo "[CI] Installing meteor npm dependencies"
     cd app/meteor
-    npm-install-retry --wait 500 --attempts 10 -- --progress=false --depth=0
+    yarn
     cd -
 
     echo -en "travis_fold:end:install_dependencies\r"
@@ -121,7 +121,7 @@ case "$1" in
 
     # Run unit tests
     echo -en "travis_fold:start:unit_tests\r"
-    npm test
+    yarn run test
     echo -en "travis_fold:end:unit_tests\r"
 
     # Start environment for acceptance tests
@@ -171,7 +171,7 @@ case "$1" in
     export SAUCE_NAME="Rosalind build $BUILD_NUMBER of commit ${COMMIT_HASH:0:6}"
     export SAUCE_TUNNEL_ID=$BUILD_NUMBER
     export BUILD_NUMBER=$BUILD_NUMBER
-    retry npm run test:acceptance
+    yarn run test:acceptance
     echo -en "travis_fold:end:acceptance_tests\r"
     echo "[CI] Acceptance tests took $SECONDS seconds"
     ;;

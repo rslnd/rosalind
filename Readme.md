@@ -22,14 +22,14 @@
 
 ### Develop
 
-`npm start`
+`yarn run start`
 
-`npm run client:start`
+`yarn run client:start`
 
 ### Test
 
-`npm test`
+`yarn run test`
 
 ### Deploy
 
-`npm run client:build`
+`yarn run client:build`
