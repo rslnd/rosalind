@@ -23,11 +23,11 @@ export class NewAppointmentContainer extends React.Component {
     return Appointments.actions.insert.callPromise({ appointment })
       .then(() => {
         dispatch({ type: 'APPOINTMENT_INSERT_SUCCESS' })
-        sAlert.success(TAPi18n.__('appointments.postSuccess'))
+        sAlert.success(TAPi18n.__('appointments.insertSuccess'))
       })
       .catch((e) => {
         console.error(e)
-        sAlert.error(TAPi18n.__('appointments.postError'))
+        sAlert.error(TAPi18n.__('appointments.insertError'))
       })
   }
 

@@ -90,7 +90,7 @@ export class Appointment extends React.Component {
               <b>{appointment.patient.profile.lastName}</b>&thinsp;
               {appointment.patient.profile.firstName}
             </span>
-          ) : (
+          ) : !appointment.lockedAt && (
             <span>
               {this.stripNumbers(appointment.notes) || <Icon name="question-circle" />}
             </span>
