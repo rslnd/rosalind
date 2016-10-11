@@ -4973,9 +4973,9 @@ react-bootstrap@^0.30.3:
     uncontrollable "^4.0.1"
     warning "^3.0.0"
 
-react-dates@^3.1.1:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/react-dates/-/react-dates-3.2.0.tgz#bc27a4a6f50147128e3fc5592718e2bceae9d0ca"
+react-dates@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-dates/-/react-dates-3.3.0.tgz#d61a5af9af36d1e44ae03b0c259ae7e32a025606"
   dependencies:
     array-includes "^3.0.2"
     classnames "^2.2.5"
