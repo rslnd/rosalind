@@ -47,5 +47,7 @@ export class NewAppointmentFormComponent extends React.Component {
 export const NewAppointment = reduxForm({
   form: 'newAppointment',
   fields: ['note'],
-  validate: sst.forReduxForm.buildValidate(schema)
+  validate: (data) => {
+    return true
+  }
 })(NewAppointmentFormComponent)
