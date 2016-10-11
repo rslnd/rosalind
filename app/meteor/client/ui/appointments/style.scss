@@ -20,6 +20,11 @@
   flex: 1;
 }
 
+:local(.grid) {
+  display: grid;
+  margin-top: -130px;
+}
+
 :local(.appointment) {
   border-left: 3px solid $primary-active;
   cursor: pointer;
@@ -70,7 +75,6 @@
 
 :local(.scheduledUnavailable) {
   background-color: $dark-gray-disabled;
-  border: 1px solid $dark-gray;
   opacity: .2;
 }
 

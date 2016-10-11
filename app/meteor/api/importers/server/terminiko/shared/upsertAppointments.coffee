@@ -20,12 +20,11 @@ module.exports = (job, resources) ->
 
       timezone = job.meta?.timezone or 'Europe/Vienna'
 
-      if includes([2, 3, 4, 6, 23], record.Status_Id)
-        upsertSchedules({ record, resources, job })
-        return
+      # if includes([2, 3, 4, 6, 23], record.Status_Id)
+      #   upsertSchedules({ record, resources, job })
+      #   return
 
       if (not record.Patient_Id or record.Patient_Id < 1) and (not record.Info or record.Info.toString().length < 1)
-        console.error('[Importers] terminiko: upsertAppointments: No patient ID or info text', record)
         return
 
       if (not includes([1, 8], record.Status_Id))

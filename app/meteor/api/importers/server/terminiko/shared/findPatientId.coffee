@@ -15,6 +15,7 @@ module.exports = (options) ->
     if patientId
       return { patientId }
     else
+      console.warn('[Importers] terminiko: findPatientId: Not found', record.Patient_Id)
       return {}
   else
     return {}

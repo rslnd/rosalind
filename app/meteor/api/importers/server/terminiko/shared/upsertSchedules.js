@@ -9,7 +9,10 @@ export const upsertSchedules = ({ record, resources, job, timezone = 'Europe/Vie
 
   const start = tz(moment(record.Datum_Beginn), timezone).toDate()
   const end = tz(moment(record.Datum_Ende), timezone).toDate()
-  if (moment().range(start, end).diff('seconds') < 1) { return }
+  const duration = moment().range(start, end)
+  if (duration.diff('seconds') < 1) { return }
+
+  if (duration.diff('hours') > 12) { return }
 
   const assignees = getResource({ key: 'D', record, resources })
   if (!assignees || !assignees.assigneeId) { return }

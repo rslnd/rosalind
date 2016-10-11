@@ -10,13 +10,15 @@ import { AppointmentInfo } from './AppointmentInfo'
 import { NewAppointmentContainer } from './NewAppointmentContainer'
 import style from './style'
 
+import { Schedules } from 'api/schedules'
+
 export class AppointmentsView extends React.Component {
   constructor (props) {
     super(props)
 
     const options = {
-      start: moment(props.date).hour(7).startOf('hour'),
-      end: moment(props.date).hour(21).endOf('hour')
+      start: moment(props.date).hour(7).minute(30).startOf('minute'),
+      end: moment(props.date).hour(20).endOf('hour')
     }
 
     this.state = {
@@ -45,7 +47,6 @@ export class AppointmentsView extends React.Component {
   // [time-2100] | [time] [assignee-1] [assignee-2] ... [assignee-n]
   grid () {
     return {
-      display: 'grid',
       gridTemplateColumns: `[time] 60px ${this.props.assignees.map((assignee, index) =>
         `[assignee-${assignee.assigneeId}] 1fr`).join(' ')}`,
       gridTemplateRows: `[header] 40px [subheader] 40px ${this.state.timeRange.map((time) => `[time-${time.format('HHmm')}] 4px`).join(' ')}`
@@ -106,7 +107,7 @@ export class AppointmentsView extends React.Component {
           ))}
         </Sticky>
 
-        <div style={this.grid()}>
+        <div className={style.grid} style={this.grid()}>
           {/* Appointments */}
           {this.props.assignees.map((assignee) => (
             assignee.appointments.map((appointment) => (
