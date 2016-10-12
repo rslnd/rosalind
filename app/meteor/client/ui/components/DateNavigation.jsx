@@ -96,17 +96,15 @@ class DateNavigationButtons extends React.Component {
           <div
             className={style.portal}
             style={this.state.calendarPosition}>
-            <div className={style.static}>
-              <DayPicker
-                onDayMouseDown={this.handleCalendarDayChange}
-                date={this.props.date}
-                initialVisibleMonth={() => this.props.date}
-                enableOutsideDays
-                modifiers={{
-                  current: (day) => day.isSame(this.props.date, 'day')
-                }}
-              />
-            </div>
+            <DayPicker
+              onDayMouseDown={this.handleCalendarDayChange}
+              date={this.props.date}
+              initialVisibleMonth={() => this.props.date}
+              enableOutsideDays
+              modifiers={{
+                current: (day) => day.isSame(this.props.date, 'day')
+              }}
+            />
           </div>
         </Portal>
       </div>
