@@ -1,7 +1,7 @@
 import React from 'react'
 import { reduxForm } from 'redux-form/immutable'
 import { Field } from 'redux-form'
-import { RaisedButton } from 'material-ui'
+import RaisedButton from 'material-ui/RaisedButton'
 import { TextField } from 'redux-form-material-ui'
 import sst from 'meteor-simple-schema-transform'
 import { TAPi18n } from 'meteor/tap:i18n'

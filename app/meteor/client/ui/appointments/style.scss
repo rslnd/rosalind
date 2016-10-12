@@ -31,14 +31,11 @@
   margin-left: 0;
   overflow: hidden;
   padding-left: 6px;
-  transition: margin-left .1s ease-out,
-    background-color .18s ease-out;
   white-space: pre-wrap;
 }
 
 :local(.appointment:hover) {
   background-color: lighten($background, 3%);
-  margin-left: 2px;
 }
 
 :local(.canceled) {
@@ -66,7 +63,6 @@
 :local(.newAppointmentTrigger) {
   background-color: $background;
   margin-left: 2px;
-  transition: background-color .18s ease-out;
 }
 
 :local(.newAppointmentTrigger:hover) {
