@@ -47,6 +47,7 @@
     "react-flip-move": "^2.4.2",
     "react-komposer": "^1.13.1",
     "react-mounter": "^1.2.0",
+    "react-portal": "^2.2.1",
     "react-redux": "^4.4.5",
     "react-router": "^2.5.2",
     "react-router-bootstrap": "^0.23.1",

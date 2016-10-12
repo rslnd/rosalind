@@ -3,10 +3,10 @@ import moment from 'moment'
 import { withRouter } from 'react-router'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { DayPicker } from 'react-dates'
-import Popover from 'material-ui/Popover'
+import Portal from 'react-portal'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from './Icon'
-import './datePickerStyles'
+import style from './datePickerStyles'
 
 class DateNavigationButtons extends React.Component {
   constructor (props) {
@@ -19,8 +19,7 @@ class DateNavigationButtons extends React.Component {
     this.handlePreviousClick = this.handlePreviousClick.bind(this)
     this.handleNextClick = this.handleNextClick.bind(this)
     this.handleTodayClick = this.handleTodayClick.bind(this)
-    this.handleCalendarOpen = this.handleCalendarOpen.bind(this)
-    this.handleCalendarClose = this.handleCalendarClose.bind(this)
+    this.handleCalendarToggle = this.handleCalendarToggle.bind(this)
     this.handleCalendarDayChange = this.handleCalendarDayChange.bind(this)
   }
 
@@ -48,16 +47,18 @@ class DateNavigationButtons extends React.Component {
     this.props.router.push(path)
   }
 
-  handleCalendarOpen (e) {
+  handleCalendarToggle (e) {
+    const bodyRect = document.body.getBoundingClientRect()
+    const targetRect = e.currentTarget.getBoundingClientRect()
+
     this.setState({
       ...this.state,
-      calendarOpen: true,
-      calendarAnchor: e.currentTarget
+      calendarOpen: !this.state.calendarOpen,
+      calendarPosition: {
+        top: targetRect.bottom,
+        right: targetRect.right - bodyRect.right
+      }
     })
-  }
-
-  handleCalendarClose () {
-    this.setState({ ...this.state, calendarOpen: false })
   }
 
   handleCalendarDayChange (date) {
@@ -80,8 +81,7 @@ class DateNavigationButtons extends React.Component {
           </Button>
 
           <Button
-            onClick={this.handleCalendarOpen}
-            ref="calendarToggle"
+            onClick={this.handleCalendarToggle}
             bsSize="small">
             <Icon name="calendar" />
           </Button>
@@ -89,26 +89,26 @@ class DateNavigationButtons extends React.Component {
           {this.props.children}
         </ButtonGroup>
 
-        <Popover
-          open={this.state.calendarOpen}
-          anchorEl={this.state.calendarAnchor}
-          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'right', vertical: 'top'}}
-          autoCloseWhenOffScreen={false}
-          onRequestClose={this.handleCalendarClose}
-          >
-          <div style={{ zoom: 0.9090 }}>
-            <DayPicker
-              onDayMouseDown={this.handleCalendarDayChange}
-              date={this.props.date}
-              initialVisibleMonth={() => this.props.date}
-              enableOutsideDays
-              modifiers={{
-                current: (day) => day.isSame(this.props.date, 'day')
-              }}
-            />
+        <Portal
+          closeOnEsc
+          closeOnOutsideClick
+          isOpened={this.state.calendarOpen}>
+          <div
+            className={style.portal}
+            style={this.state.calendarPosition}>
+            <div className={style.static}>
+              <DayPicker
+                onDayMouseDown={this.handleCalendarDayChange}
+                date={this.props.date}
+                initialVisibleMonth={() => this.props.date}
+                enableOutsideDays
+                modifiers={{
+                  current: (day) => day.isSame(this.props.date, 'day')
+                }}
+              />
+            </div>
           </div>
-        </Popover>
+        </Portal>
       </div>
     )
   }

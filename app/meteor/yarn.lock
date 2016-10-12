@@ -5038,7 +5038,7 @@ react-overlays@^0.6.10:
     react-prop-types "^0.4.0"
     warning "^3.0.0"
 
-react-portal@^2.2.1:
+react-portal, react-portal@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-portal/-/react-portal-2.2.1.tgz#0cde8c35eeb0cce9a67b1e1255d5e4a2d147d1cf"
 
