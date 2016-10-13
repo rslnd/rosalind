@@ -1,42 +1,66 @@
 import React from 'react'
+import moment from 'moment'
 import { reduxForm } from 'redux-form/immutable'
 import { Field } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
+import Divider from 'material-ui/Divider'
 import { TextField } from 'redux-form-material-ui'
-import sst from 'meteor-simple-schema-transform'
 import { TAPi18n } from 'meteor/tap:i18n'
-import schema from 'api/appointments/schema'
 import { PatientPickerContainer } from 'client/ui/patients/PatientPickerContainer'
+import { UserHelper } from 'client/ui/users/UserHelper'
 import style from './style'
+
+const summary = ({ time, assigneeId }) => (
+  <div className={style.summary}>
+    <span className="text-muted">Termin</span>&nbsp;
+    {moment(time).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
+
+    <span className="text-muted">um</span>&nbsp;
+    <b>{moment(time).format(TAPi18n.__('time.timeFormat'))}</b><br />
+
+    <span className="text-muted">bei</span>&nbsp;
+    <UserHelper helper="fullNameWithTitle" userId={assigneeId} /><br />
+  </div>
+)
 
 export class NewAppointmentFormComponent extends React.Component {
   render () {
-    const { pristine, submitting, handleSubmit, onSubmit } = this.props
+    const { time, assigneeId, pristine, submitting, handleSubmit, onSubmit } = this.props
 
     return (
-      <form onSubmit={handleSubmit(onSubmit)} className={style.form} autoComplete="off">
-        <div className="container-fluid">
-          <div className="row">
-            <Field
-              name="patientId"
-              component={PatientPickerContainer}
-              autofocus />
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <div className={style.padded}>
+          <div className="container-fluid">
+            <div className="row">
+              <Field
+                name="patientId"
+                component={PatientPickerContainer}
+                autofocus />
+            </div>
           </div>
-          <div className="row">
-            <Field
-              name="note"
-              component={TextField}
-              multiLine rows={1} fullWidth
-              floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
-          </div>
-          <div className="row">
-            <RaisedButton type="submit"
-              onClick={this.handleSubmit}
-              fullWidth
-              primary={!submitting && !pristine}
-              disabled={pristine || submitting}>
-              {TAPi18n.__('appointments.thisSave')}
-            </RaisedButton>
+        </div>
+        <Divider />
+        <div className={style.padded}>
+          <div className="container-fluid">
+            <div className="row" style={{ marginTop: '-25px' }}>
+              <Field
+                name="note"
+                component={TextField}
+                multiLine rows={1} fullWidth
+                floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
+            </div>
+            <div className="row">
+              {summary({ time, assigneeId })}
+            </div>
+            <div className="row">
+              <RaisedButton type="submit"
+                onClick={this.handleSubmit}
+                fullWidth
+                primary={!submitting && !pristine}
+                disabled={pristine || submitting}>
+                {TAPi18n.__('appointments.thisSave')}
+              </RaisedButton>
+            </div>
           </div>
         </div>
       </form>

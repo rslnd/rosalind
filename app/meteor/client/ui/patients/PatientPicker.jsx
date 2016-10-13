@@ -3,7 +3,9 @@ import identity from 'lodash/identity'
 import React from 'react'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Patients } from 'api/patients'
+import { Icon } from 'client/ui/components/Icon'
 import { PatientName } from './PatientName'
 import { Birthday } from './Birthday'
 import style from './patientPickerStyle'
@@ -17,7 +19,11 @@ const findPatients = (query) => {
         patient
       }
     })).then((options) => {
-      return { options }
+      return {
+        options: [ ...options, {
+          value: 'newPatient'
+        } ]
+      }
     })
 }
 
@@ -55,8 +61,17 @@ class PatientSearchResult extends React.Component {
         onMouseMove={this.handleMouseMove}
         title={this.props.option.title}>
 
-        <span className={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
-        <span className={style.birthday}>{patient && <Birthday day={patient.profile.birthday} />}</span>
+        {
+          patient
+          ? (
+            <span>
+              <span className={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
+              <span className={style.birthday}>{patient && <Birthday day={patient.profile.birthday} />}</span>
+            </span>
+          ) : (
+            <span><Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisInsert')}</span>
+          )
+        }
       </div>
     )
   }
@@ -65,30 +80,77 @@ class PatientSearchResult extends React.Component {
 const PatientNameSelected = ({ value }) => (
   <div className="Select-value">
     <span className="Select-value-label">
-      <PatientName patient={value.patient} />
+      {
+        value.patient
+        ? <PatientName patient={value.patient} />
+        : <span>Creating new patient</span>
+      }
     </span>
   </div>
 )
 
 export class PatientPicker extends React.Component {
-  handleQueryChange (query) {
-    if (this.props.input.onChange && query && query.value) {
-      this.props.input.onChange(query.value)
+  constructor (props) {
+    super(props)
+    this.state = {
+      newPatient: false
     }
+    this.handleQueryChange = this.handleQueryChange.bind(this)
+
+    this.handleCloseNewPatient = this.handleCloseNewPatient.bind(this)
+    this.handleOpenNewPatient = this.handleOpenNewPatient.bind(this)
+  }
+
+  handleQueryChange (query) {
+    if (query && query.value) {
+      if (query.value === 'newPatient') {
+        this.handleOpenNewPatient()
+      }
+
+      if (this.props.input.onChange) {
+        this.props.input.onChange(query.value)
+      }
+    }
+  }
+
+  handleOpenNewPatient () {
+    this.setState({
+      ...this.state,
+      newPatient: true
+    })
+  }
+
+  handleCloseNewPatient () {
+    this.setState({
+      ...this.state,
+      newPatient: false
+    })
   }
 
   render () {
     return (
-      <Select.Async
-        value={this.props.input.value || ''}
-        loadOptions={findPatients}
-        onChange={(q) => this.handleQueryChange(q)}
-        onBlur={() => this.props.input.onBlur(this.props.input.value)}
-        cache={false}
-        autofocus={this.props.autofocus}
-        filterOptions={identity}
-        optionComponent={PatientSearchResult}
-        valueComponent={PatientNameSelected} />
+      <div>
+        <Select.Async
+          value={this.props.input.value || ''}
+          ref={(c) => { this._select = c }}
+          loadOptions={findPatients}
+          onChange={this.handleQueryChange}
+          onBlur={() => this.props.input.onBlur(this.props.input.value)}
+          cache={false}
+          autofocus={this.props.autofocus}
+          placeholder={TAPi18n.__('patients.search')}
+          filterOptions={identity}
+          optionComponent={PatientSearchResult}
+          valueComponent={PatientNameSelected} />
+        {/* <Popover
+          open={this.state.newPatient}
+          onRequestClose={this.handleCloseNewPatient}
+          anchorEl={this._select}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          targetOrigin={{ horizontal: 'left', vertical: 'top' }}>
+          Create new patient
+        </Popover> */}
+      </div>
     )
   }
 }

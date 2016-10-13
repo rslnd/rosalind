@@ -143,7 +143,7 @@ export class AppointmentsView extends React.Component {
           {/* Schedules */}
           {
             this.props.assignees.map((assignee) => (
-              assignee.schedules.map((schedule) => {
+              assignee.schedules && assignee.schedules.map((schedule) => {
                 if (!schedule.start && !schedule.end) {
                   return null
                 }

@@ -47,6 +47,7 @@ export class Appointment extends React.Component {
 
     return (
       <div
+        id={appointment._id}
         data-appointmentId={appointment._id}
         className={classes}
         onClick={() => this.props.handleAppointmentModalOpen(appointment)}

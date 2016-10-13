@@ -75,10 +75,13 @@
 }
 
 :local(.popover) {
-  min-height: 300px;
   min-width: 400px;
 }
 
-:local(.form) {
+:local(.padded) {
   padding: 10px;
+}
+
+:local(.summary) {
+  margin-bottom: 5px;
 }
