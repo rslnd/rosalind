@@ -22,7 +22,17 @@ const reducers = {
     newAppointment: (state, action) => {
       switch (action.type) {
         case 'OPEN_NEW_PATIENT':
-          return state
+          return { ...state,
+            values: {
+              ...state.values,
+              gender: action.autofill.gender,
+              firstName: action.autofill.firstName,
+              lastName: action.autofill.lastName,
+              telephone: null,
+              email: null,
+              birthday: null
+            }
+          }
         case 'CLOSE_NEW_PATIENT':
           return { ...state,
             values: {
@@ -32,6 +42,14 @@ const reducers = {
               telephone: null,
               email: null,
               birthday: null
+            }
+          }
+        case 'NEW_PATIENT_SWAP_NAME_FIELDS':
+          return { ...state,
+            values: {
+              ...state.values,
+              firstName: state.values.lastName,
+              lastName: state.values.firstName
             }
           }
         default:

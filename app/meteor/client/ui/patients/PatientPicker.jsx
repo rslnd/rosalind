@@ -1,5 +1,6 @@
 import map from 'lodash/fp/map'
 import identity from 'lodash/identity'
+import startCase from 'lodash/startCase'
 import React from 'react'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
@@ -9,7 +10,7 @@ import { Icon } from 'client/ui/components/Icon'
 import { PatientName } from './PatientName'
 import { Birthday } from './Birthday'
 import style from './patientPickerStyle'
-import { NewPatientFormFields } from './NewPatientFormFields'
+import { NewPatientFormFieldsContainer } from './NewPatientFormFieldsContainer'
 
 const findPatients = (query) => {
   return Patients.methods.search.callPromise({ query })
@@ -22,7 +23,9 @@ const findPatients = (query) => {
     })).then((options) => {
       return {
         options: [ ...options, {
-          value: 'newPatient'
+          createNew: true,
+          value: 'createNew',
+          query
         } ]
       }
     })
@@ -53,7 +56,7 @@ class PatientSearchResult extends React.Component {
   }
 
   render () {
-    const patient = this.props.option.patient
+    const { patient, createNew, query } = this.props.option
 
     return (
       <div className={this.props.className}
@@ -63,15 +66,18 @@ class PatientSearchResult extends React.Component {
         title={this.props.option.title}>
 
         {
-          patient
-          ? (
-            <span>
-              <span className={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
-              <span className={style.birthday}>{patient && <Birthday day={patient.profile.birthday} />}</span>
-            </span>
-          ) : (
-            <span><Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisInsert')}</span>
-          )
+          patient && <span>
+            <span className={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
+            <span className={style.birthday}>{patient && <Birthday day={patient.profile.birthday} />}</span>
+          </span>
+        }
+        {
+          createNew && <span>
+            <Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisInsert')}
+            {
+              query && <span>:&nbsp;{query}</span>
+            }
+          </span>
         }
       </div>
     )
@@ -81,11 +87,8 @@ class PatientSearchResult extends React.Component {
 const PatientNameSelected = ({ value }) => (
   <div className="Select-value">
     <span className="Select-value-label">
-      {
-        value.patient
-        ? <PatientName patient={value.patient} />
-        : <span><Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisNew')}</span>
-      }
+      {value.patient && <PatientName patient={value.patient} />}
+      {value.createNew && <span><Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisNew')}</span>}
     </span>
   </div>
 )
@@ -101,18 +104,53 @@ export class PatientPicker extends React.Component {
     this.handleOpenNewPatient = this.handleOpenNewPatient.bind(this)
   }
 
+  // Fuzzy-parse query for pre-filling new patient form
+  // TODO: Extract to method on Patients, merge with fuzzy birthday parsing
+  parseQueryForAutofill (query = '') {
+    const regexFemale = /^(fr\b|frau\b)/i
+    const regexMale = /^(hr\b|herr\b)/i
+    let autofill = {}
+    let restQuery = ''
+
+    if (query.match(regexFemale)) {
+      autofill.gender = 'Female'
+      restQuery = query.replace(regexFemale, '').trim()
+    } else if (query.match(regexMale)) {
+      autofill.gender = 'Male'
+      restQuery = query.replace(regexMale, '').trim()
+    } else {
+      restQuery = query
+    }
+
+    const splitQuery = restQuery.split(' ')
+
+    const possibleLastName = splitQuery[0]
+    if (possibleLastName && possibleLastName.match(/[a-zA-Z]/)) {
+      autofill.lastName = startCase(possibleLastName)
+    }
+
+    const possibleFirstName = splitQuery[1]
+    if (possibleFirstName && possibleFirstName.match(/[a-zA-Z]/)) {
+      autofill.firstName = startCase(possibleFirstName)
+    }
+
+    console.log('[PatientPicker] Autofill', { query, autofill })
+    return autofill
+  }
+
   handleQueryChange (query) {
-    if (query && query.value) {
-      if (query.value === 'newPatient') {
+    if (query) {
+      if (query.createNew) {
+        const autofill = this.parseQueryForAutofill(query.query)
         this.handleOpenNewPatient()
-        this.props.dispatch({ type: 'OPEN_NEW_PATIENT' })
+        this.props.dispatch({ type: 'OPEN_NEW_PATIENT', autofill })
       } else {
         this.handleCloseNewPatient()
         this.props.dispatch({ type: 'CLOSE_NEW_PATIENT' })
       }
 
       if (this.props.input.onChange) {
-        this.props.input.onChange(query.value)
+        this.props.input.onChange(query.value ? query.value : '')
       }
     } else {
       if (this.props.input.onChange) {
@@ -137,23 +175,6 @@ export class PatientPicker extends React.Component {
   }
 
   render () {
-    // Fuzzy-parse query for pre-filling new patient form
-    let lastName, firstName
-    if (this.state.newPatient) {
-      const splitQuery = this.props.input.value && this.props.input.value.split(' ')
-      if (splitQuery) {
-        const possibleLastName = splitQuery[0]
-        if (possibleLastName && possibleLastName.match(/[a-zA-Z]/)) {
-          lastName = possibleLastName
-        }
-
-        const possibleFirstName = splitQuery[1]
-        if (possibleFirstName && possibleFirstName.match(/[a-zA-Z]/)) {
-          firstName = possibleFirstName
-        }
-      }
-    }
-
     return (
       <div>
         <Select.Async
@@ -163,6 +184,7 @@ export class PatientPicker extends React.Component {
           onChange={this.handleQueryChange}
           onBlur={() => this.props.input.onBlur(this.props.input.value)}
           cache={false}
+          ignoreCase={false}
           autofocus={this.props.autofocus}
           placeholder={TAPi18n.__('patients.search')}
           filterOptions={identity}
@@ -170,9 +192,7 @@ export class PatientPicker extends React.Component {
           valueComponent={PatientNameSelected} />
         {
           this.state.newPatient && <div>
-            <NewPatientFormFields
-              lastName={lastName}
-              firstName={firstName} />
+            <NewPatientFormFieldsContainer />
           </div>
         }
       </div>

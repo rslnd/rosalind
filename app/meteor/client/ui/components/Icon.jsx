@@ -1,9 +1,11 @@
 import React from 'react'
+import classnames from 'classnames'
 
-export const Icon = ({ name, spin }) => {
-  if (spin) {
-    return <i className={`fa fa-${name} fa-spin`}></i>
-  } else {
-    return <i className={`fa fa-${name}`}></i>
-  }
+export const Icon = ({ name, spin, flipHorizontal }) => {
+  return <i className={classnames({
+    [`fa-${name}`]: true,
+    'fa': true,
+    'fa-spin': spin,
+    'fa-flip-horizontal': flipHorizontal
+  })}></i>
 }
