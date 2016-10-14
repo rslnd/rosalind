@@ -187,6 +187,7 @@ export class PatientPicker extends React.Component {
           ignoreCase={false}
           autofocus={this.props.autofocus}
           placeholder={TAPi18n.__('patients.search')}
+          loadingPlaceholder={TAPi18n.__('patients.searching')}
           filterOptions={identity}
           optionComponent={PatientSearchResult}
           valueComponent={PatientNameSelected} />

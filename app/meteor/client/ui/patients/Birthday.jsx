@@ -5,7 +5,7 @@ import { dayToDate } from 'util/time/day'
 export const Birthday = ({ day }) => {
   if (day) {
     const birthday = dayToDate(day)
-    const formatted = moment(birthday).format(TAPi18n.__('time.dateFormat'))
+    const formatted = moment(birthday).format(TAPi18n.__('time.dateFormatShort'))
     const age = moment().diff(birthday, 'years')
 
     return (

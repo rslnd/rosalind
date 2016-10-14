@@ -4,59 +4,16 @@ import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import FlatButton from 'material-ui/FlatButton'
 import { Icon } from 'client/ui/components/Icon'
-
-class ToggleField extends React.Component {
-  constructor (props) {
-    super(props)
-
-    const possibleValues = this.props.values.map((v) => v.value)
-    let currentIndex = possibleValues.indexOf(this.props.input.value)
-    if (currentIndex === -1) {
-      currentIndex = 0
-    }
-
-    this.state = { currentIndex }
-
-    this.toggle = this.toggle.bind(this)
-  }
-
-  toggle () {
-    const newIndex = 1 - this.state.currentIndex
-
-    this.setState({
-      currentIndex: newIndex
-    })
-
-    this.props.input.onChange(this.props.values[newIndex].value)
-  }
-
-  render () {
-    return <FlatButton
-      onClick={this.toggle}
-      style={{ ...this.props.style }}>
-      {this.props.values[this.state.currentIndex].label}</FlatButton>
-  }
-}
+import { ToggleField } from 'client/ui/components/ToggleField'
 
 export class NewPatientFormFields extends React.Component {
-  constructor (props) {
-    super(props)
-
-    if (props.lastName) {
-
-    }
-
-    if (props.firstName) {
-    }
-  }
-
   render () {
     return (
       <div>
         {/* Name */}
         <div className="row">
           <div className="col-md-12">
-            <div className="row no-pad">
+            <div className="row no-pad" style={{ marginTop: -10, zIndex: 19 }}>
               <div className="col-md-1">
                 <Field
                   name="gender"
@@ -98,7 +55,7 @@ export class NewPatientFormFields extends React.Component {
             {/* Birthday */}
             <div className="row">
               <div className="col-md-12">
-                <div className="row no-pad">
+                <div className="row no-pad" style={{ minWidth: 31, marginTop: -15, textAlign: 'center', zIndex: 18 }}>
                   <div className="col-md-1">
                     <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
                       <Icon name="birthday-cake" />
@@ -106,7 +63,11 @@ export class NewPatientFormFields extends React.Component {
                   </div>
                   <div className="col-md-10">
                     <div>
-                      <Field name="birthday" component={TextField} fullWidth
+                      <Field
+                        name="birthday"
+                        component={TextField}
+                        fullWidth
+                        autoFocus
                         floatingLabelText={TAPi18n.__('patients.birthday')} />
                     </div>
                   </div>
@@ -117,7 +78,7 @@ export class NewPatientFormFields extends React.Component {
             {/* Phone */}
             <div className="row">
               <div className="col-md-12">
-                <div className="row no-pad">
+                <div className="row no-pad" style={{ marginTop: -15, zIndex: 17 }}>
                   <div className="col-md-1">
                     <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
                       <Icon name="phone" />
@@ -131,14 +92,6 @@ export class NewPatientFormFields extends React.Component {
                   </div>
                 </div>
               </div>
-
-              {/* <div>
-                <Field name="note"
-                  component={TextField}
-                  autoFocus
-                  multiLine rows={1} fullWidth
-                  floatingLabelText={TAPi18n.__('inboundCalls.form.note.label')} />
-              </div> */}
             </div>
           </div>
         </div>

@@ -1,16 +1,17 @@
 import React from 'react'
 import { Tags } from 'api/tags'
-import style from './style'
+import css from './style'
 
-export const TagsList = ({ tags = [] }) => (
+export const TagsList = ({ tags = [], onClick, style = {} }) => (
   <span>
     {tags.map((slug) => {
-      const tag = Tags.findOne({ tag: slug })
+      const tag = slug.tag ? slug : Tags.findOne({ tag: slug })
       return (
         <span
           key={tag._id}
-          style={{backgroundColor: tag.color || '#ccc'}}
-          className={style.tag}>{tag.tag}
+          onClick={() => onClick && onClick(tag._id)}
+          style={{ ...style, backgroundColor: tag.color || '#ccc' }}
+          className={css.tag}>{tag.tag}
         </span>
       )
     })}

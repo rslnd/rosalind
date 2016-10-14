@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { TagsField } from 'client/ui/tags/TagsField'
 import { PatientPickerContainer } from 'client/ui/patients/PatientPickerContainer'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import style from './style'
@@ -42,13 +43,33 @@ export class NewAppointmentFormComponent extends React.Component {
         <Divider />
         <div className={style.padded}>
           <div className="container-fluid">
-            <div className="row" style={{ marginTop: '-25px' }}>
-              <Field
-                name="note"
-                component={TextField}
-                multiLine rows={1} fullWidth
-                floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
+
+          {/* Tags and Note */}
+            <div className="row" style={{ marginTop: -25 }}>
+              <div className="col-md-12">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="row">
+                      <div className="col-md-6" style={{ marginTop: 30, paddingLeft: 0, paddingRight: 0 }}>
+                        <Field
+                          name="tags"
+                          component={TagsField}
+                          fullWidth />
+                      </div>
+                      <div className="col-md-6">
+                        <div>
+                          <Field name="patientNote"
+                            component={TextField}
+                            multiLine rows={1} fullWidth
+                            floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
             <div className="row">
               {summary({ time, assigneeId })}
             </div>
@@ -57,9 +78,8 @@ export class NewAppointmentFormComponent extends React.Component {
                 onClick={this.handleSubmit}
                 fullWidth
                 primary={!submitting && !pristine}
-                disabled={pristine || submitting}>
-                {TAPi18n.__('appointments.thisSave')}
-              </RaisedButton>
+                disabled={pristine || submitting}
+                label={TAPi18n.__('appointments.thisSave')} />
             </div>
           </div>
         </div>
@@ -70,10 +90,10 @@ export class NewAppointmentFormComponent extends React.Component {
 
 export const NewAppointment = reduxForm({
   form: 'newAppointment',
-  fields: ['note', 'patientId',
+  fields: ['note', 'patientId', 'tags', 'appointmentNote',
     // The following fields may be filled within NewPatientFormFields
     // This allows creating a new patient at the same time as an appointment
-    'firstName', 'lastName', 'telephone', 'email', 'birthday'],
+    'firstName', 'lastName', 'telephone', 'email', 'birthday', 'patientNote'],
   validate: (data) => {
     return true
   }
