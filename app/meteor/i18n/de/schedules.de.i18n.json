@@ -52,6 +52,7 @@
       "vacation": "Urlaub",
       "compensatory": "Zeitausgleich",
       "sick": "Krankenstand"
-    }
+    },
+    "timesheets": "Zeiterfassung"
   }
 }
