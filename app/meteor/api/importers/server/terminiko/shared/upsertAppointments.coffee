@@ -3,6 +3,7 @@ tz = require 'moment-timezone'
 includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Appointments } = require 'api/appointments'
+{ Tags } = require 'api/tags'
 mdb = require '../../shared/mdb'
 { parseNewlines } = require './parseNewlines'
 findPatientId = require './findPatientId'
@@ -61,6 +62,7 @@ module.exports = (job, resources) ->
         external:
           terminiko:
             id: record.Kennummer.toString()
+            patientId: record.Patient_Id.toString()
             note: parseNewlines(record.Info?.toString())
             timestamps:
               importedAt: moment().toDate()

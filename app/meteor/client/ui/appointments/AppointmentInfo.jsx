@@ -1,15 +1,15 @@
 import React from 'react'
 import moment from 'moment'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Users } from 'api/users'
+import RaisedButton from 'material-ui/RaisedButton'
 import { TagsList } from 'client/ui/tags/TagsList'
+import { Icon } from 'client/ui/components/Icon'
 import { PatientProfileContainer } from 'client/ui/patients/PatientProfileContainer'
 import { PastAppointmentsContainer } from 'client/ui/patients/PastAppointmentsContainer'
 
 export class AppointmentInfo extends React.Component {
   render () {
     const appointment = this.props.appointment
-    const assignee = Users.findOne({ _id: appointment.assigneeId })
 
     return (
       <div className="row">
@@ -19,8 +19,8 @@ export class AppointmentInfo extends React.Component {
           </h4>
           <h4 className="text-muted">
             {
-              assignee
-              ? <span>{TAPi18n.__('appointments.assignedTo')} <b>{assignee.fullNameWithTitle()}</b></span>
+              this.props.assignee
+              ? <span>{TAPi18n.__('appointments.assignedTo')} <b>{this.props.assignee.fullNameWithTitle()}</b></span>
               : TAPi18n.__('appointments.unassigned')
             }
           </h4>
@@ -29,6 +29,16 @@ export class AppointmentInfo extends React.Component {
             appointment.notes &&
               <blockquote>{appointment.notes}</blockquote>
           }
+
+          <RaisedButton
+            label={<span><Icon name="check" />&emsp;{TAPi18n.__('appointments.admit')}</span>}
+            backgroundColor={appointment.admitted ? '#C5E1A5' : ''}
+            onClick={this.props.setAdmitted} />
+          <RaisedButton
+            label={<span>{TAPi18n.__('appointments.cancel')}&emsp;<Icon name="times" /></span>}
+            backgroundColor={appointment.canceled ? '#e4e3e3' : ''}
+            onClick={this.props.setCanceled} />
+
         </div>
 
         {

@@ -1,12 +1,13 @@
 import moment from 'moment'
 import 'moment-range'
 import React from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import { Sticky } from 'react-sticky'
 import Popover from 'material-ui/Popover'
+import FlatButton from 'material-ui/FlatButton'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointment } from './Appointment'
-import { AppointmentInfo } from './AppointmentInfo'
+import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { NewAppointmentContainer } from './NewAppointmentContainer'
 import style from './style'
 
@@ -28,7 +29,7 @@ export class AppointmentsView extends React.Component {
       popoverOpen: false,
       popoverAnchor: null,
       appointmentModalOpen: false,
-      appointmentModalContent: {}
+      selectedAppointmentId: null
     }
 
     this.handleAppointmentModalOpen = this.handleAppointmentModalOpen.bind(this)
@@ -54,7 +55,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleAppointmentModalOpen (appointment) {
-    this.setState({ ...this.state, appointmentModalOpen: true, appointmentModalContent: appointment })
+    this.setState({ ...this.state, appointmentModalOpen: true, selectedAppointmentId: appointment._id })
   }
 
   handleAppointmentModalClose () {
@@ -194,10 +195,16 @@ export class AppointmentsView extends React.Component {
           onHide={this.handleAppointmentModalClose}
           bsSize="large">
           <Modal.Body>
-            <AppointmentInfo appointment={this.state.appointmentModalContent} />
+            <AppointmentInfoContainer
+              appointmentId={this.state.selectedAppointmentId}
+              onClose={this.handleAppointmentModalClose} />
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.handleAppointmentModalClose} bsStyle="primary" pullRight>{TAPi18n.__('ui.close')}</Button>
+            <div className="pull-right">
+              <FlatButton
+                onClick={this.handleAppointmentModalClose}
+                label={TAPi18n.__('ui.close')} />
+            </div>
           </Modal.Footer>
         </Modal>
 

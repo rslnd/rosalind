@@ -8,14 +8,14 @@ module.exports =
     else
       TAPi18n.__('appointments.insurance')
 
-  open: ->
-    not @admittedAt? and not @admittedBy? and not @treatedAt? and not @treatedBy? and not @removed
+  # open: ->
+  #   not @admittedAt? and not @admittedBy? and not @treatedAt? and not @treatedBy? and not @removed
 
-  admitted: ->
-    @admittedAt? and @admittedBy? and not @treatedAt? and not @treatedBy? and not @removed
+  # admitted: ->
+  #   @admittedAt? and @admittedBy? and not @treatedAt? and not @treatedBy? and not @removed
 
-  treated: ->
-    @admittedAt? and @admittedBy? and @treatedAt? and @treatedBy? and not @removed
+  # treated: ->
+  #   @admittedAt? and @admittedBy? and @treatedAt? and @treatedBy? and not @removed
 
   notes: ->
     n = [@note, @external?.terminiko?.note]
