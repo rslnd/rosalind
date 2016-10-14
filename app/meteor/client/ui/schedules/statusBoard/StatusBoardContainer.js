@@ -15,7 +15,12 @@ const compose = (props, onData) => {
   if (!Meteor.subscribe('timesheets-allToday').ready()) { return }
 
   const update = () => {
-    const weekday = moment().locale('en').format('ddd').toLowerCase()
+    // HACK: See schedules from monday if today's a sunday
+    let viewDay = moment()
+    if (moment().day() === 0) {
+      viewDay = moment().add(1, 'day')
+    }
+    const weekday = viewDay.locale('en').format('ddd').toLowerCase()
     const defaultSchedules = Schedules.find({ type: 'default', 'schedule.day': weekday }).fetch()
 
     const defaultScheduledUsers = defaultSchedules.map((s) => {
@@ -58,7 +63,7 @@ const compose = (props, onData) => {
   }
 
   update()
-  const tick = setInterval(update, 60 * 1000)
+  const tick = setInterval(update, 15 * 1000)
   const cleanup = () => clearInterval(tick)
   return cleanup
 }
