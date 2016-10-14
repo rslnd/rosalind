@@ -1,16 +1,15 @@
 import moment from 'moment'
 import 'moment-duration-format'
-import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'react-komposer'
 import { Button } from 'react-bootstrap'
 import { Icon } from 'client/ui/components/Icon'
 import { Timesheets } from 'api/timesheets'
 
-export const TimesheetSummary = ({ timesheets, tracking, sum, stopTracking, startTracking }) => (
+export const TimesheetSummary = ({ timesheets, isTracking, sum, stopTracking, startTracking }) => (
   <div>
     {
-      tracking
+      isTracking
       ? <div>
         <p>{TAPi18n.__('timesheets.youAreWorking', moment.duration(sum).format('H[h] mm[m]'))}</p>
         <Button bsStyle="warning" block onClick={stopTracking}>
@@ -31,17 +30,17 @@ export const TimesheetSummary = ({ timesheets, tracking, sum, stopTracking, star
 
 const composer = (props, onData) => {
   const { userId } = props
-  const stopTracking = () => Timesheets.actions.stopTracking.call({ userId: Meteor.userId() })
-  const startTracking = () => Timesheets.actions.startTracking.call({ userId: Meteor.userId() })
+  const stopTracking = () => Timesheets.actions.stopTracking.call()
+  const startTracking = () => Timesheets.actions.startTracking.call()
 
   const update = () => {
     const timesheets = Timesheets.find({
       userId,
       start: { $gt: moment().startOf('day').toDate() }
     }).fetch()
-    const tracking = Timesheets.methods.isTracking({ userId })
+    const isTracking = Timesheets.methods.isTracking({ userId })
     const sum = Timesheets.methods.sum({ userId })
-    onData(null, { timesheets, tracking, sum, stopTracking, startTracking })
+    onData(null, { timesheets, isTracking, sum, stopTracking, startTracking })
   }
 
   update()

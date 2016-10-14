@@ -1,5 +1,5 @@
+import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from 'api/events'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 
@@ -7,11 +7,13 @@ export const startTracking = ({ Timesheets }) => {
   return new ValidatedMethod({
     name: 'timesheets/startTracking',
     mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
-      userId: { type: SimpleSchema.RegEx.Id, optional: true }
-    }).validator(),
+    validate () {},
+    run () {
+      if (this.connection && !this.userId) {
+        throw new Meteor.Error(403, 'Not authorized')
+      }
 
-    run ({ userId }) {
+      const userId = this.userId
       Timesheets.actions.isTracking.callPromise({ userId })
         .then((isTracking) => {
           if (!isTracking) {

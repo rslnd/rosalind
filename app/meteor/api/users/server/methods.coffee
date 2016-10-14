@@ -3,7 +3,6 @@
 { Accounts } = require 'meteor/accounts-base'
 { Roles } = require 'meteor/alanning:roles'
 { Events } = require 'api/events'
-{ Timesheets } = require 'api/timesheets'
 Actions = require 'api/users/schema/actions'
 
 module.exports = ->
@@ -12,14 +11,11 @@ module.exports = ->
       return unless userId = Meteor.userId()
       console.log('[Users] Logged in', { userId })
       Events.post('users/login', { userId })
-      Timesheets.actions.startTracking.call({ userId })
-
 
     'users/logout': ->
       return unless userId = Meteor.userId()
       console.log('[Users] Logged out', { userId })
       Events.post('users/logout', { userId })
-      Timesheets.actions.stopTracking.call({ userId })
 
     'users/getToken': ->
       return unless user = Meteor.user()
