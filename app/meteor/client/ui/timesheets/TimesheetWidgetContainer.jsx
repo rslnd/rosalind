@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap'
 import { Icon } from 'client/ui/components/Icon'
 import { Timesheets } from 'api/timesheets'
 
-export const TimesheetSummary = ({ timesheets, isTracking, sum, stopTracking, startTracking }) => (
+export const TimesheetWidget = ({ timesheets, isTracking, sum, stopTracking, startTracking }) => (
   <div>
     {
       isTracking
@@ -49,4 +49,4 @@ const composer = (props, onData) => {
   return cleanup
 }
 
-export const TimesheetSummaryContainer = composeWithTracker(composer)(TimesheetSummary)
+export const TimesheetWidgetContainer = composeWithTracker(composer)(TimesheetWidget)
