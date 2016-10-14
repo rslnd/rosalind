@@ -12,7 +12,6 @@ export class NewAppointmentContainer extends React.Component {
   }
 
   handleSubmit (data, dispatch) {
-    console.log('data', data)
     const appointment = {
       ...data,
       start: moment(this.props.time).toDate(),

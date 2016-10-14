@@ -70,7 +70,10 @@ export class NewAppointmentFormComponent extends React.Component {
 
 export const NewAppointment = reduxForm({
   form: 'newAppointment',
-  fields: ['note'],
+  fields: ['note', 'patientId',
+    // The following fields may be filled within NewPatientFormFields
+    // This allows creating a new patient at the same time as an appointment
+    'firstName', 'lastName', 'telephone', 'email', 'birthday'],
   validate: (data) => {
     return true
   }

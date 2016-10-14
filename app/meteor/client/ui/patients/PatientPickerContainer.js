@@ -1,10 +1,6 @@
-import { composeWithTracker } from 'react-komposer'
+import { connect } from 'react-redux'
 import { PatientPicker } from './PatientPicker'
 
-const composer = (props, onData) => {
-  onData(null, { ...props })
-}
-
-const PatientPickerContainer = composeWithTracker(composer)(PatientPicker)
+const PatientPickerContainer = connect()(PatientPicker)
 
 export { PatientPickerContainer }

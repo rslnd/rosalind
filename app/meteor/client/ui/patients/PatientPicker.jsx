@@ -9,6 +9,7 @@ import { Icon } from 'client/ui/components/Icon'
 import { PatientName } from './PatientName'
 import { Birthday } from './Birthday'
 import style from './patientPickerStyle'
+import { NewPatientFormFields } from './NewPatientFormFields'
 
 const findPatients = (query) => {
   return Patients.methods.search.callPromise({ query })
@@ -83,7 +84,7 @@ const PatientNameSelected = ({ value }) => (
       {
         value.patient
         ? <PatientName patient={value.patient} />
-        : <span>Creating new patient</span>
+        : <span><Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisNew')}</span>
       }
     </span>
   </div>
@@ -96,7 +97,6 @@ export class PatientPicker extends React.Component {
       newPatient: false
     }
     this.handleQueryChange = this.handleQueryChange.bind(this)
-
     this.handleCloseNewPatient = this.handleCloseNewPatient.bind(this)
     this.handleOpenNewPatient = this.handleOpenNewPatient.bind(this)
   }
@@ -105,11 +105,20 @@ export class PatientPicker extends React.Component {
     if (query && query.value) {
       if (query.value === 'newPatient') {
         this.handleOpenNewPatient()
+        this.props.dispatch({ type: 'OPEN_NEW_PATIENT' })
+      } else {
+        this.handleCloseNewPatient()
+        this.props.dispatch({ type: 'CLOSE_NEW_PATIENT' })
       }
 
       if (this.props.input.onChange) {
         this.props.input.onChange(query.value)
       }
+    } else {
+      if (this.props.input.onChange) {
+        this.props.input.onChange('')
+      }
+      this.handleCloseNewPatient()
     }
   }
 
@@ -128,6 +137,23 @@ export class PatientPicker extends React.Component {
   }
 
   render () {
+    // Fuzzy-parse query for pre-filling new patient form
+    let lastName, firstName
+    if (this.state.newPatient) {
+      const splitQuery = this.props.input.value && this.props.input.value.split(' ')
+      if (splitQuery) {
+        const possibleLastName = splitQuery[0]
+        if (possibleLastName && possibleLastName.match(/[a-zA-Z]/)) {
+          lastName = possibleLastName
+        }
+
+        const possibleFirstName = splitQuery[1]
+        if (possibleFirstName && possibleFirstName.match(/[a-zA-Z]/)) {
+          firstName = possibleFirstName
+        }
+      }
+    }
+
     return (
       <div>
         <Select.Async
@@ -142,14 +168,13 @@ export class PatientPicker extends React.Component {
           filterOptions={identity}
           optionComponent={PatientSearchResult}
           valueComponent={PatientNameSelected} />
-        {/* <Popover
-          open={this.state.newPatient}
-          onRequestClose={this.handleCloseNewPatient}
-          anchorEl={this._select}
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          targetOrigin={{ horizontal: 'left', vertical: 'top' }}>
-          Create new patient
-        </Popover> */}
+        {
+          this.state.newPatient && <div>
+            <NewPatientFormFields
+              lastName={lastName}
+              firstName={firstName} />
+          </div>
+        }
       </div>
     )
   }
