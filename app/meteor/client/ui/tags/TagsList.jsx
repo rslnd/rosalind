@@ -5,7 +5,7 @@ import css from './style'
 export const TagsList = ({ tags = [], onClick, style = {} }) => (
   <span>
     {tags.map((slug) => {
-      const tag = slug.tag ? slug : Tags.findOne({ tag: slug })
+      const tag = slug.tag ? slug : Tags.findOne({ _id: slug })
       return (
         <span
           key={tag._id}

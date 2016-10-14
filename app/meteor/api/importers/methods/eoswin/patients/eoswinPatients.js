@@ -26,7 +26,7 @@ export const eoswinPatients = ({ Importers }) => {
         switch (action) {
           case 'insert':
           case 'update':
-            Patients.methods.upsert.call({ patient, quiet })
+            Patients.actions.upsert.call({ patient, quiet })
             break
           case 'softRemove':
             // TODO: Add method to soft remove patients

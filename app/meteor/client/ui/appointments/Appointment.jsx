@@ -21,12 +21,12 @@ export class Appointment extends React.Component {
       return '#ccc'
     } else {
       return flow(
-        map((tag) => {
-          return Tags.findOne({ tag: tag })
+        map((tagId) => {
+          return Tags.findOne({ _id: tagId })
         }),
         sortBy('order'),
         map((tag) => {
-          return tag.color || '#ccc'
+          return (tag && tag.color) || '#ccc'
         })
       )(tags)[0]
     }

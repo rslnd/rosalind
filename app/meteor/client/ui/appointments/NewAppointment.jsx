@@ -93,7 +93,7 @@ export const NewAppointment = reduxForm({
   fields: ['note', 'patientId', 'tags', 'appointmentNote',
     // The following fields may be filled within NewPatientFormFields
     // This allows creating a new patient at the same time as an appointment
-    'firstName', 'lastName', 'telephone', 'email', 'birthday', 'patientNote'],
+    'firstName', 'lastName', 'gender', 'telephone', 'email', 'birthday', 'patientNote'],
   validate: (data) => {
     return true
   }

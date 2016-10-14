@@ -13,7 +13,7 @@ import style from './patientPickerStyle'
 import { NewPatientFormFieldsContainer } from './NewPatientFormFieldsContainer'
 
 const findPatients = (query) => {
-  return Patients.methods.search.callPromise({ query })
+  return Patients.actions.search.callPromise({ query })
     .then(map((patient) => {
       return {
         label: `${patient.profile.lastName} ${patient.profile.firstName}`,

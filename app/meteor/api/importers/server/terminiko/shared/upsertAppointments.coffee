@@ -50,6 +50,12 @@ module.exports = (job, resources) ->
       { patientId, heuristic } = findPatientId({ job, record })
 
       tags = getResources({ key: 'U', record, resources })
+      if (tags)
+        tags = tags.map (tag) ->
+          tag = Tags.findOne({ tag })
+          if (tag)
+            return tag._id
+
 
       $set =
         external:

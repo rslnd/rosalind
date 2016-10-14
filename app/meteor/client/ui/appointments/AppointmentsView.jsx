@@ -210,7 +210,10 @@ export class AppointmentsView extends React.Component {
           onRequestClose={this.handlePopoverClose}
           >
           <div className={style.popover}>
-            <NewAppointmentContainer assigneeId={this.state.selectedAssigneeId} time={this.state.selectedTime} />
+            <NewAppointmentContainer
+              assigneeId={this.state.selectedAssigneeId}
+              time={this.state.selectedTime}
+              onClose={this.handlePopoverClose} />
           </div>
         </Popover>
       </div>

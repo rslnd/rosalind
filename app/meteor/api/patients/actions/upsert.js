@@ -1,13 +1,14 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from 'api/events'
 import { normalizeName } from '../util/normalizeName'
 
 export const upsert = ({ Patients }) => {
   return new ValidatedMethod({
     name: 'patients/upsert',
-
+    mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       patient: { type: Object, blackbox: true },
       quiet: { type: Boolean, optional: true }
@@ -27,7 +28,7 @@ export const upsert = ({ Patients }) => {
       // TODO: Split into separate method
       let existingPatient = null
       if (patient.insuranceId) { existingPatient = Patients.findOne({ insuranceId: patient.insuranceId }) }
-      if (!existingPatient && patient.external.eoswin.id) { existingPatient = Patients.findOne({ 'external.eoswin.id': patient.external.eoswin.id }) }
+      if (!existingPatient && patient.external && patient.external.eoswin.id) { existingPatient = Patients.findOne({ 'external.eoswin.id': patient.external.eoswin.id }) }
 
       if (existingPatient) {
         // FIXME: CRITICAL: Don't $set-override any contacts that only exist in this system

@@ -11,18 +11,36 @@ export class NewAppointmentContainer extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleSubmit (data, dispatch) {
+  handleSubmit (formData, dispatch) {
+    console.log({ formData })
+
+    // FIXME: CRITICAL: Parse birthday and telephone (contacts)
+    const newPatient = {
+      profile: {
+        lastName: formData.lastName,
+        firstName: formData.firstName,
+        gender: formData.gender,
+        note: formData.patientNote,
+        birthday: null
+      }
+    }
+
     const appointment = {
-      ...data,
+      patientId: formData.patientId === 'newPatient' ? undefined : formData.patientId,
+      note: formData.appointmentNote,
+      tags: formData.tags,
       start: moment(this.props.time).toDate(),
       end: moment(this.props.time).add(5, 'minutes').toDate(),
       assigneeId: this.props.assigneeId
     }
 
-    return Appointments.actions.insert.callPromise({ appointment })
+    console.log({ newPatient, appointment })
+
+    return Appointments.actions.insert.callPromise({ appointment, newPatient })
       .then(() => {
         dispatch({ type: 'APPOINTMENT_INSERT_SUCCESS' })
         sAlert.success(TAPi18n.__('appointments.insertSuccess'))
+        if (this.props.onClose) { this.props.onClose() }
       })
       .catch((e) => {
         console.error(e)

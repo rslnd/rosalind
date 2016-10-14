@@ -24,6 +24,10 @@ Schema = new SimpleSchema
     type: [SimpleSchema.RegEx.Id]
     optional: true
 
+  tags:
+    type: [SimpleSchema.RegEx.Id]
+    optional: true
+
   note:
     type: String
     optional: true

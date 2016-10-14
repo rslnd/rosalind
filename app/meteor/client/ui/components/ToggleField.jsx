@@ -12,8 +12,11 @@ export class ToggleField extends React.Component {
     }
 
     this.state = { currentIndex }
-
     this.toggle = this.toggle.bind(this)
+  }
+
+  componentDidMount () {
+    this.props.input.onChange(this.props.values[0].value)
   }
 
   toggle () {

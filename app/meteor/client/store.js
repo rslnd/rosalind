@@ -21,6 +21,8 @@ const reducers = {
     },
     newAppointment: (state, action) => {
       switch (action.type) {
+        case 'APPOINTMENT_INSERT_SUCCESS':
+          return undefined
         case 'OPEN_NEW_PATIENT':
           return { ...state,
             values: {
