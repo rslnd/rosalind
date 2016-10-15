@@ -27,9 +27,11 @@ export class AppointmentInfo extends React.Component {
           </h4>
           <p><TagsList tags={appointment.tags} />&nbsp;</p>
           {
-            appointment.notes &&
+            appointment.notes && appointment.notes.length > 1 &&
               <blockquote>{appointment.notes}</blockquote>
           }
+
+          <br />
 
           <RaisedButton
             label={<span><Icon name="check" />&emsp;{TAPi18n.__('appointments.admit')}</span>}

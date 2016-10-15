@@ -14,7 +14,8 @@
     "at": "um",
     "date": "Datum",
     "time": "Uhrzeit",
-    "dateFormatShort": "DD. MMM YY",
+    "dateFormatVeryShort": "DD. MMM YY",
+    "dateFormatShort": "DD. MMM YYYY",
     "dateFormat": "DD. MMMM YYYY",
     "dateFormatWeekday": "dddd, DD. MMMM YYYY"
   }
