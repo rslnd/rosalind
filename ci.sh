@@ -114,6 +114,8 @@ case "$1" in
     ;;
 
   test)
+    echo "[CI] Running test suite"
+
     if [ -z "$ROOT_URL" ]; then
       echo "Please set ROOT_URL for running integration tests"
       exit 1
