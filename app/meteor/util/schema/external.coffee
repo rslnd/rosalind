@@ -45,6 +45,7 @@ ExternalNode = new SimpleSchema
   patientId:
     type: String
     index: 1
+    optional: true
 
   payload:
     type: Object
