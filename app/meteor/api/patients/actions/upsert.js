@@ -35,7 +35,7 @@ export const upsert = ({ Patients }) => {
         // TODO: Factor contacts into own model
         Patients.update({ _id: existingPatient._id }, { $set: patient })
 
-        if (!quiet) { Events.post('patients/upsert', { patientId: existingPatient._id }) }
+        if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
         return existingPatient._id
       } else {
         try {

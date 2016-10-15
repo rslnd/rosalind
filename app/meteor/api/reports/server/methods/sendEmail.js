@@ -38,6 +38,6 @@ export const sendEmail = new ValidatedMethod({
       text: rendered.text
     })
 
-    Events.post('reports/email', { reportId: todaysReport._id })
+    Events.post('reports/sendEmail', { reportId: todaysReport._id })
   }
 })

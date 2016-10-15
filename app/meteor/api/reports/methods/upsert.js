@@ -24,7 +24,7 @@ export const upsert = ({ Reports }) => {
 
       if (existingReport) {
         Reports.update({ _id: existingReport._id }, { $set: report })
-        Events.post('reports/upsert', { reportId: existingReport._id })
+        Events.post('reports/update', { reportId: existingReport._id })
         return existingReport._id
       } else {
         try {
