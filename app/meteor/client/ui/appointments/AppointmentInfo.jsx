@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { TAPi18n } from 'meteor/tap:i18n'
 import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 import { TagsList } from 'client/ui/tags/TagsList'
 import { Icon } from 'client/ui/components/Icon'
 import { PatientProfileContainer } from 'client/ui/patients/PatientProfileContainer'
@@ -38,6 +39,11 @@ export class AppointmentInfo extends React.Component {
             label={<span>{TAPi18n.__('appointments.cancel')}&emsp;<Icon name="times" /></span>}
             backgroundColor={appointment.canceled ? '#e4e3e3' : ''}
             onClick={this.props.setCanceled} />
+
+          <br /><br />
+          <FlatButton
+            label={<span><Icon name="trash-o" />&emsp;{TAPi18n.__('appointments.softRemove')}</span>}
+            onClick={this.props.softRemove} />
 
         </div>
 

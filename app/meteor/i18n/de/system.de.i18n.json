@@ -13,6 +13,7 @@
       "appointments/releaseLock": "hat eine vorübergehende Terminreservierung aufgehoben",
       "appointments/setAdmitted": "hat einen Termin als 'anwesend' markiert",
       "appointments/setCanceled": "hat einen Termin als 'abgesagt' markiert",
+      "appointments/softRemove": "hat einen Termin gelöscht",
       "inboundCalls/post": "hat einen eingehenden Anruf als erledigt markiert",
       "inboundCalls/resolve": "hat einen eingehenden Anruf als erledigt markiert",
       "comments/post": "hat einen Kommentar geschrieben",

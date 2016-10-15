@@ -80,6 +80,14 @@ Schema = new SimpleSchema
     optional: true
     index: 1
 
+  removedAt:
+    type: Date
+    optional: true
+
+  removedBy:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+
   canceled:
     type: Boolean
     optional: true

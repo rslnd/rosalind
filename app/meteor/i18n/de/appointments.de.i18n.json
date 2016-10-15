@@ -20,6 +20,7 @@
     "assignedTo": "bei",
     "assignment": "Zuweisung",
     "unassigned": "Keine Zuweisung",
+    "softRemove": "Löschen",
     "cancel": "Absage",
     "admit": "Anwesend",
     "admittedBy": "Empfangen von",
