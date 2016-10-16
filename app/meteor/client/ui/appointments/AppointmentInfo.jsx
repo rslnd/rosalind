@@ -27,8 +27,8 @@ export class AppointmentInfo extends React.Component {
           </h4>
           <p><TagsList tags={appointment.tags} />&nbsp;</p>
           {
-            appointment.notes && appointment.notes.length > 1 &&
-              <blockquote>{appointment.notes}</blockquote>
+            appointment.notes() && appointment.notes().length > 1 &&
+              <blockquote>{appointment.notes()}</blockquote>
           }
 
           <br />
