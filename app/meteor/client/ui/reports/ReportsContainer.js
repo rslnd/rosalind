@@ -2,6 +2,7 @@ import omit from 'lodash/omit'
 import moment from 'moment'
 import { composeWithTracker } from 'react-komposer'
 import { Meteor } from 'meteor/meteor'
+import { Roles } from 'meteor/alanning:roles'
 import { dateToDay } from 'util/time/day'
 import { Reports } from 'api/reports'
 import { Loading } from 'client/ui/components/Loading'
@@ -12,7 +13,8 @@ const composer = (props, onData) => {
     const date = moment(props.params && props.params.date)
     const day = omit(dateToDay(date), 'date')
     const report = Reports.findOne({ day })
-    onData(null, { date, report })
+    const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ])
+    onData(null, { date, report, canShowRevenue })
   }
 }
 

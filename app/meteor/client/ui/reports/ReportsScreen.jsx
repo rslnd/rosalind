@@ -17,7 +17,7 @@ export class ReportsScreen extends React.Component {
     this.handleToggleRevenue = this.handleToggleRevenue.bind(this)
 
     this.state = {
-      showRevenue: true
+      showRevenue: props.canShowRevenue || false
     }
   }
 
@@ -50,7 +50,10 @@ export class ReportsScreen extends React.Component {
           </h1>
           <DateNavigation date={this.props.date} basePath="reports" pullRight>
             <Button bsSize="small" onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name="print" /></Button>
-            <Button bsSize="small" onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.showRevenue')}><Icon name="euro" /></Button>
+            {
+              this.props.canShowRevenue &&
+                <Button bsSize="small" onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.showRevenue')}><Icon name="euro" /></Button>
+            }
           </DateNavigation>
         </div>
         <div className="content">
