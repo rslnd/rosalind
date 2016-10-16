@@ -14,13 +14,9 @@ const composer = (props, onData) => {
     let selector = {
       requestedAt: { $ne: null },
       $or: [
-        { end: { $gt: moment().startOf('day').subtract(30, 'days').toDate() } },
+        { end: { $gt: moment().endOf('day').toDate() } },
         { resolvedAt: null }
       ]
-    }
-
-    if (!Roles.userIsInRole(Meteor.userId(), ['schedules-edit', 'admin'])) {
-      selector.userId = Meteor.userId()
     }
 
     const requests = Schedules.find(selector, { sort: { start: -1 } }).fetch()
