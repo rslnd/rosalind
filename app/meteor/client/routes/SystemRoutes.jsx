@@ -7,8 +7,6 @@ export const SystemRoutes = () => (
     <IndexRoute component={() => <Blaze template="systemEvents" />} />
     <Route path="events" component={() => <Blaze template="systemEvents" />} />
     <Route path="importers" component={() => <Blaze template="systemImporters" />} />
-    <Route path="jobs" component={() => <Blaze template="systemJobs" />} />
-    <Route path="stats" component={() => <Blaze template="systemStats" />} />
     <Route path="tags" component={() => <Blaze template="systemTags" />} />
     <Route path="native" component={() => <Blaze template="native" />} />
   </Route>

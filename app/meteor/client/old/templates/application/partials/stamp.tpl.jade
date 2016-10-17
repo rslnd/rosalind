@@ -1,7 +1,0 @@
-if show
-  p.stamp.text-muted.pull-left
-    | {{ verb }} {{ name }}
-    if recent
-      | {{livestamp fieldAt}} {{_ 'ui.at'}} {{time fieldAt}}
-    else
-      | &middot; {{calendar fieldAt}}

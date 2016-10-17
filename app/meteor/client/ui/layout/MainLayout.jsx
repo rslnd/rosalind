@@ -3,10 +3,11 @@ import { Link } from 'react-router'
 import Blaze from 'meteor/gadicc:blaze-react-component'
 import { SidebarContainer } from './SidebarContainer'
 import { UserPanelContainer } from './UserPanelContainer'
+import { FooterContainer } from './FooterContainer'
 import { Login } from 'client/ui/users/Login'
 import style from './mainLayoutStyle'
 
-export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
+export const MainLayout = ({ children, currentUser, loggingIn, locale, customerName, printedStamp }) => {
   const alwaysRender = () => (
     <div id="loaded">
       <div className="dropzone"></div>
@@ -28,6 +29,7 @@ export const MainLayout = ({ children, currentUser, loggingIn, locale }) => {
         <div className="content-wrapper print-no-margin">
           {children}
         </div>
+        <FooterContainer />
         {alwaysRender()}
       </div>
     )

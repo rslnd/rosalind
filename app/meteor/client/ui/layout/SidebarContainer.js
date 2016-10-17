@@ -63,9 +63,7 @@ const sidebarItems = () => {
       roles: ['admin', 'system'],
       subItems: [
         { name: 'thisEvents', path: '/events' },
-        { name: 'thisStats', path: '/stats' },
         { name: 'thisImporters', path: '/importers' },
-        { name: 'thisJobs', path: '/jobs' },
         { name: 'thisTags', path: '/tags' },
         { name: 'thisNative', path: '/native', only: () => window.native }
       ]

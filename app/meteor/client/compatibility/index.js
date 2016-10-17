@@ -1,5 +1,2 @@
 import 'script!jquery'
-import './datepicker'
 import './fullcalendar'
-import './scheduler'
-import 'script!./stickyjs/jquery.sticky.js'

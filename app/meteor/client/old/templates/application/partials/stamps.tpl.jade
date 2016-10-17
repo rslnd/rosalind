@@ -1,9 +1,0 @@
-if hasOlderStamps
-  a(data-toggle='collapse' href='#{{id}}' aria-expanded='false' aria-controls=id)
-    | {{> stamp mostRecentStamp }}
-    <br/>
-    .collapse(id=id)
-      each olderStamps
-        | {{> stamp }}
-else
-  | {{> stamp mostRecentStamp }}
