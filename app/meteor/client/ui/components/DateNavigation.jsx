@@ -70,19 +70,19 @@ class DateNavigationButtons extends React.Component {
     return (
       <div className={`breadcrumbs page-actions ${this.props.pullRight && 'pull-right'}`}>
         <ButtonGroup>
-          <Button onClick={this.handlePreviousClick} bsSize="small">
+          {this.props.before}
+
+          <Button onClick={this.handlePreviousClick}>
             <Icon name="caret-left" />
           </Button>
 
-          <Button onClick={this.handleTodayClick} bsSize="small">{TAPi18n.__('ui.today')}</Button>
+          <Button onClick={this.handleTodayClick}>{TAPi18n.__('ui.today')}</Button>
 
-          <Button onClick={this.handleNextClick} bsSize="small">
+          <Button onClick={this.handleNextClick}>
             <Icon name="caret-right" />
           </Button>
 
-          <Button
-            onClick={this.handleCalendarToggle}
-            bsSize="small">
+          <Button onClick={this.handleCalendarToggle}>
             <Icon name="calendar" />
           </Button>
 

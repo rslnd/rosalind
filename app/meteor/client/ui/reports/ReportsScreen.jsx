@@ -49,10 +49,10 @@ export class ReportsScreen extends React.Component {
             <small>{weekOfYear(this.props.date)}</small>
           </h1>
           <DateNavigation date={this.props.date} basePath="reports" pullRight>
-            <Button bsSize="small" onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name="print" /></Button>
+            <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name="print" /></Button>
             {
               this.props.canShowRevenue &&
-                <Button bsSize="small" onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.showRevenue')}><Icon name="euro" /></Button>
+                <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.showRevenue')}><Icon name="euro" /></Button>
             }
           </DateNavigation>
         </div>
