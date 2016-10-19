@@ -1,5 +1,6 @@
 :local(.contentHeader) {
   background-color: $background;
+  display: flex;
   z-index: 50;
 }
 
@@ -22,7 +23,7 @@
 
 :local(.grid) {
   display: grid;
-  margin-top: 0px;
+  margin-top: -130px;
 }
 
 :local(.appointment) {

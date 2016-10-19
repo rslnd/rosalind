@@ -39,6 +39,8 @@
     "in1Year": "in 1 Jahr",
     "insertSuccess": "Termin erfolgreich eingetragen",
     "insertError": "Entschuldigung! Bitte noch einmal versuchen.",
+    "search": "Suche...",
+    "searching": "Suche...",
     "form": {
       "start": {
         "label": "Beginn"

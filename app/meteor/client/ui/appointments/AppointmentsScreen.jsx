@@ -4,6 +4,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
 import { DateNavigation } from 'client/ui/components/DateNavigation'
 import { AppointmentsView } from './AppointmentsView'
+import { AppointmentsSearchContainer } from './AppointmentsSearchContainer'
 import style from './style'
 
 export class AppointmentsScreen extends React.Component {
@@ -13,9 +14,19 @@ export class AppointmentsScreen extends React.Component {
         <Sticky className={`content-header ${style.contentHeader}`}>
           <h1>
             {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
-            <small>{weekOfYear(this.props.date)}</small>
+            <small>{weekOfYear(this.props.date, { short: true })}</small>
           </h1>
-          <DateNavigation date={this.props.date} basePath="appointments" pullRight />
+
+          <div style={{ marginLeft: 15, marginRight: 15, flexGrow: 1 }}>
+            <AppointmentsSearchContainer />
+          </div>
+
+          <div>
+            <DateNavigation
+              date={this.props.date}
+              basePath="appointments"
+              pullRight />
+          </div>
         </Sticky>
 
         <div className="content">
