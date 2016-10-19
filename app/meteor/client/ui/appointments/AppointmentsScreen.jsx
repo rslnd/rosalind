@@ -17,11 +17,11 @@ export class AppointmentsScreen extends React.Component {
             <small>{weekOfYear(this.props.date, { short: true })}</small>
           </h1>
 
-          <div style={{ marginLeft: 15, marginRight: 15, flexGrow: 1 }}>
+          <div style={{ marginLeft: 30, marginRight: 15, flexGrow: 1 }}>
             <AppointmentsSearchContainer />
           </div>
 
-          <div>
+          <div style={{ marginTop: 27 }}>
             <DateNavigation
               date={this.props.date}
               basePath="appointments"

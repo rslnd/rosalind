@@ -1,34 +1,15 @@
 import React from 'react'
 import moment from 'moment'
 import classnames from 'classnames'
-import flow from 'lodash/fp/flow'
-import map from 'lodash/fp/map'
-import sortBy from 'lodash/fp/sortBy'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Tags } from 'api/tags'
 import { Icon } from 'client/ui/components/Icon'
+import { getColor } from './getColor'
 import style from './style'
 
 export class Appointment extends React.Component {
   stripNumbers (text) {
     if (typeof text === 'string') {
       return text.replace(/\d{3,}/g, '')
-    }
-  }
-
-  getColor (tags = []) {
-    if (tags.length === 0) {
-      return '#ccc'
-    } else {
-      return flow(
-        map((tagId) => {
-          return Tags.findOne({ _id: tagId })
-        }),
-        sortBy('order'),
-        map((tag) => {
-          return (tag && tag.color) || '#ccc'
-        })
-      )(tags)[0]
     }
   }
 
@@ -43,7 +24,7 @@ export class Appointment extends React.Component {
       [ style.locked ]: appointment.lockedAt
     })
 
-    const tagColor = this.getColor(appointment.tags)
+    const tagColor = getColor(appointment.tags)
 
     return (
       <div

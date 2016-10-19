@@ -6,35 +6,43 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointments } from 'api/appointments'
 import { Users } from 'api/users'
 import { Icon } from 'client/ui/components/Icon'
-import { TagsList } from 'client/ui/tags/TagsList'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import { PatientName } from 'client/ui/patients/PatientName'
 import { Birthday } from 'client/ui/patients/Birthday'
+import { getColor } from './getColor'
 import style from './appointmentsSearchStyle'
 
 const findAppointments = (query) => {
   if (query && query.length > 1) {
     return Appointments.actions.search.callPromise({ query }).then((patientsWithAppointments) => {
       let options = []
+      let lastPatient = null
 
       patientsWithAppointments.forEach((result) => {
+        if (lastPatient !== result.patient) {
+          lastPatient = result.patient
+          options.push({
+            value: `patient-${result.patient && result.patient._id}`,
+            patient: result.patient
+          })
+        }
+
         result.appointments.forEach((appointment) => {
           options.push({
-            label: `${appointment._id}`,
+            label: `appointment-${appointment._id}`,
             assignee: appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId }),
             value: appointment._id,
-            patient: result.patient,
             appointment
           })
         })
       })
 
-      console.log(options)
-
       return { options }
     })
   } else {
-    return null
+    return new Promise((resolve) => {
+      resolve([])
+    })
   }
 }
 
@@ -64,6 +72,11 @@ class AppointmentSearchResult extends React.Component {
 
   render () {
     const { patient, appointment } = this.props.option
+    let tagColor, start
+    if (appointment) {
+      tagColor = getColor(appointment.tags)
+      start = moment(appointment.start)
+    }
 
     return (
       <div className={this.props.className}
@@ -81,13 +94,18 @@ class AppointmentSearchResult extends React.Component {
           </span>
         }
         {
-          appointment && <span>
-            {appointment.tags && <TagsList tags={appointment.tags} />}
-            <span>{moment(appointment.start).format(TAPi18n.__('time.dateFormat'))}</span>
+          appointment && <span className={style.appointment} style={{borderColor: tagColor}}>
+            <span>
+              {start.format(TAPi18n.__('time.dateFormat'))}
+              &nbsp;
+              {TAPi18n.__('time.at')}
+              &nbsp;
+              {start.format(TAPi18n.__('time.timeFormat'))}
+            </span>
+            &emsp;
             {
-              appointment.assigneeId
-              ? <UserHelper userId={appointment.assigneeId} helper="fullNameWithTitle" />
-              : 'Unassigned'
+              appointment.assigneeId &&
+                <UserHelper userId={appointment.assigneeId} helper="fullNameWithTitle" />
             }
           </span>
         }

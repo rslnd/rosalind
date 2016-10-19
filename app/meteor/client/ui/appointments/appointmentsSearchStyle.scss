@@ -7,3 +7,21 @@ $select-menu-max-height: 400px;
 @import '~react-select/scss/mixins';
 @import '~react-select/scss/multi';
 @import '~react-select/scss/spinner';
+
+:local(.name) {
+  display: inline-block;
+  width: 50%;
+}
+
+:local(.birthday) {
+  color: $dark-gray;
+  display: inline-block;
+  text-align: right;
+  width: 50%;
+}
+
+:local(.appointment) {
+  border-left: 3px solid $primary-active;
+  margin-left: 25px;
+  padding-left: 6px;
+}
