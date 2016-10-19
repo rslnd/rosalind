@@ -18,9 +18,9 @@ module.exports =
   dateWeekday: (date) ->
     moment(date).format(TAPi18n.__('time.dateFormatWeekday'))
 
-  weekOfYear: (date, { short }) ->
+  weekOfYear: (date, options = {}) ->
     weekOfYear = moment(date).format('W')
-    if short
+    if options?.short
       [TAPi18n.__('ui.weekOfYear_short'), weekOfYear].join(' ')
     else
       [TAPi18n.__('ui.weekOfYear'), weekOfYear].join(' ')
