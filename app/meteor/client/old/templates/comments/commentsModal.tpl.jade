@@ -1,0 +1,14 @@
+.modal.fade(tabindex='-1')
+  .modal-dialog.disable-selection
+    .modal-content
+      .modal-header
+        button(type='button' class='close' data-dismiss='modal' aria-hidden='true') &times;
+        h4.modal-title {{ modalTitle }}
+      .modal-body
+        if blazeTemplate
+          +UI.dynamic(template=docTemplate data=this)
+        else
+          div
+            +React(component=reactComponent _id=_id)
+      .modal-footer
+        button(type='button' class='btn btn-default' data-dismiss='modal') {{_ 'ui.close' }}
