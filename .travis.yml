@@ -19,6 +19,7 @@ install:
 env:
   global:
     - PHANTOMJS_CDNURL=http://cnpmjs.org/downloads
+    - METEOR_WAREHOUSE_URLBASE=https://d3fm2vapipm3k9.cloudfront.net
 
   matrix:
     - CMD=build
