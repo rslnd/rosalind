@@ -5,6 +5,8 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { Button } from 'react-bootstrap'
 import { Icon } from 'client/ui/components/Icon'
 import { DateNavigation } from 'client/ui/components/DateNavigation'
+import { UserPickerContainer } from 'client/ui/users/UserPickerContainer'
+import { UserHelper } from 'client/ui/users/UserHelper'
 import { Box } from 'client/ui/components/Box'
 
 const Nil = () => (
@@ -24,39 +26,35 @@ const End = ({ end, isToday }) => (
   </span>
 )
 
-const Duration = ({ start, end, isToday, duration }) => (
-  <span>
-    {
-      start && (end || isToday)
-      ? moment.duration(duration).format('H[h] mm[m]')
-      : '0h'
-    }
-  </span>
-)
-
 class TimesheetTableRow extends React.Component {
   render () {
-    const { timesheet } = this.props
+    const { timesheet, scheduledHours } = this.props
     const start = moment(timesheet.start)
     const end = timesheet.end ? moment(timesheet.end) : undefined
     const isToday = moment().isSame(start, 'day')
     const duration = moment(end).diff(start)
     return (
       <tr>
+        {/* date */}
         <td>{start.format('ddd')}</td>
         <td style={{ textAlign: 'right' }}>
           {start.format('D')}.&nbsp;
           <span className="text-muted">{start.format('MMM YYYY')}</span>
         </td>
 
+        {/* from-to */}
         <td style={{ textAlign: 'right' }}>{start.format('H:mm')}</td>
         <td className="text-muted">-</td>
         <td><End {...{ end, isToday }} /></td>
 
-        <td style={{ textAlign: 'right' }}>
+        {/* scheduled */}
+        <td className="text-muted" style={{ width: 120 }}>{scheduledHours && moment.duration(scheduledHours, 'hours').format(TAPi18n.__('time.durationFormat'))}</td>
+
+        {/* actual */}
+        <td style={{ textAlign: 'right', width: 120 }}>
           {
             start && (end || isToday)
-            ? moment.duration(duration).format('H[ Std] m[ Min]')
+            ? moment.duration(duration).format(TAPi18n.__('time.durationFormat'))
             : <Nil />
           }
         </td>
@@ -64,7 +62,6 @@ class TimesheetTableRow extends React.Component {
     )
   }
 }
-
 
 const TimesheetsTableHeader = () => (
   <thead>
@@ -74,16 +71,20 @@ const TimesheetsTableHeader = () => (
       <th style={{ textAlign: 'right' }}>von</th>
       <th style={{ width: 5 }} className="text-muted">-</th>
       <th>bis</th>
-      <th style={{ textAlign: 'right' }}>Gesamt</th>
+      <th>Geplant (soll)</th>
+      <th style={{ textAlign: 'right' }}>Gesamt (ist)</th>
     </tr>
   </thead>
 )
 
-const TimesheetsTableBody = ({ timesheets }) => (
+const TimesheetsTableBody = ({ days }) => (
   <tbody>
     {
-      timesheets.map((timesheet) => (
-        <TimesheetTableRow key={timesheet._id} timesheet={timesheet} />
+      days.map((day) => (
+        <TimesheetTableRow
+          key={day.timesheet._id}
+          timesheet={day.timesheet}
+          scheduledHours={day.scheduledHours} />
       ))
     }
   </tbody>
@@ -92,6 +93,7 @@ const TimesheetsTableBody = ({ timesheets }) => (
 export class TimesheetsScreen extends React.Component {
   constructor (props) {
     super(props)
+
     this.handlePrint = this.handlePrint.bind(this)
   }
 
@@ -108,7 +110,7 @@ export class TimesheetsScreen extends React.Component {
   }
 
   render () {
-    const { timesheets, sum } = this.props
+    const { days, sum, start, userId } = this.props
     return (
       <div>
         <div className="content-header">
@@ -125,10 +127,20 @@ export class TimesheetsScreen extends React.Component {
         </div>
         <div className="content">
           <Box>
+            <div style={{ width: 300 }}>
+              <UserPickerContainer
+                onChange={this.props.onChangeUserId}
+                value={this.props.userId} />
+            </div>
+
+            <h4>
+              <UserHelper helper="fullNameWithTitle" userId={userId} /> hat im {moment(start).format('MMMM YYYY')} gesamt {moment.duration(sum).format(TAPi18n.__('time.durationFormat'))} gearbeitet.
+            </h4>
+
             <div className="table-responsive">
               <table className="table no-margin">
                 <TimesheetsTableHeader />
-                <TimesheetsTableBody timesheets={timesheets} />
+                <TimesheetsTableBody days={days} />
               </table>
             </div>
           </Box>

@@ -37,7 +37,6 @@ module.exports = ->
         })
         return cursor
       children: [
-        { find: (schedule) -> Users.find({ _id: schedule.userId }) }
         { find: (schedule) -> Comments.find({ docId: schedule._id }) }
       ]
     }

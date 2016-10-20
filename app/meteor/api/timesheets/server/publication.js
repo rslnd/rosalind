@@ -14,13 +14,23 @@ export default () => {
     }
   })
 
-  Meteor.publish('timesheets-month', function (date) {
-    check(date, Match.Optional(Date))
+  Meteor.publish('timesheets-range', function (options) {
+    check(options, Match.Optional({
+      userId: Match.Optional(String),
+      start: Match.Optional(Date),
+      end: Match.Optional(Date)
+    }))
+
     if (this.userId) {
-      return Timesheets.find({
-        userId: this.userId,
-        start: { $gt: moment(date).startOf('month').toDate() }
-      }, { sort: { end: -1 } })
+      const userId = options.userId || this.userId
+      const start = { $gt: moment(options.start).startOf('day').toDate() }
+      let selector = { userId, start }
+
+      if (options.end) {
+        selector.end = { $lt: moment(options.end).endOf('day').toDate() }
+      }
+
+      return Timesheets.find(selector, { sort: { end: -1 } })
     }
   })
 
