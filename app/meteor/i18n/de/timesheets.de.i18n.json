@@ -1,6 +1,6 @@
 {
   "timesheets": {
-    "this": "Arbeitszeiten",
+    "this": "Zeiterfassung",
     "pauseAction": "Pausieren",
     "resumeAction": "Fortfahren",
     "youAreWorking": "Sie arbeiten seit %s",

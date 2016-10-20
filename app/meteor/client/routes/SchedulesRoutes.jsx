@@ -11,7 +11,10 @@ export const SchedulesRoutes = () => (
     <Route path="default" component={() => <Blaze template="schedulesDefault" />} />
     <Route path="override" component={() => <Blaze template="schedulesOverride" />} />
     <Route path="requests" component={RequestsContainer} />
-    <Route path="timesheets" component={TimesheetsContainer} />
+    <Route path="timesheets">
+      <IndexRoute component={TimesheetsContainer} />
+      <Route path=":dateRange" component={TimesheetsContainer} />
+    </Route>
     <Route path="businessHours" component={() => <Blaze template="businessHours" />} />
     <Route path="holidays" component={() => <Blaze template="holidays" />} />
     <Route path="default/:username" component={() => <Blaze template="schedulesDefault" />} />

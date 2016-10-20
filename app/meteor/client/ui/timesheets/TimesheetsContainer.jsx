@@ -1,48 +1,36 @@
 import moment from 'moment'
 import 'moment-duration-format'
 import { Meteor } from 'meteor/meteor'
-import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'react-komposer'
-import { Box } from 'client/ui/components/Box'
-import { Icon } from 'client/ui/components/Icon'
+import { Loading } from 'client/ui/components/Loading'
 import { Timesheets } from 'api/timesheets'
+import { TimesheetsScreen } from './TimesheetsScreen'
 
-const TimesheetItem = ({ timesheet }) => (
-  <span>
-    <span>{moment(timesheet.start).format('H:mm')}</span>
-    -
-    <span>{timesheet.end ? moment(timesheet.end).format('H:mm') : TAPi18n.__('timesheets.now')}</span>
-  </span>
-)
-
-const TimesheetsScreen = ({ timesheets, sum }) => (
-  <div className="content">
-    <Box>
-      <h3>{TAPi18n.__('timesheets.youHaveWorkedThisMonth', moment.duration(sum).format('H[h] mm[m]'))}</h3>
-      {timesheets.map((timesheet) => (
-        <p key={timesheet._id}>
-          <TimesheetItem timesheet={timesheet} />
-        </p>
-      ))}
-    </Box>
-  </div>
-)
+const parseDateRange = (dateRange) => {
+  const date = dateRange ? moment(dateRange, 'YYYY-MM-DD') : moment()
+  return {
+    start: date.clone().startOf('month'),
+    end: date.clone().endOf('month')
+  }
+}
 
 const composer = (props, onData) => {
+  const { start, end } = parseDateRange(props && props.dateRange)
   const subscription = Meteor.subscribe('timesheets-month')
 
   if (subscription.ready()) {
     const userId = Meteor.userId()
-    const start = moment().startOf('month')
 
     const update = () => {
       const timesheets = Timesheets.find({
         userId,
         start: { $gt: start.toDate() }
+      }, {
+        sort: { start: -1 }
       }).fetch()
       const isTracking = Timesheets.methods.isTracking({ userId })
       const sum = Timesheets.methods.sum({ userId, start })
-      onData(null, { timesheets, isTracking, sum })
+      onData(null, { timesheets, isTracking, sum, start, end })
     }
 
     update()
@@ -52,4 +40,4 @@ const composer = (props, onData) => {
   }
 }
 
-export const TimesheetsContainer = composeWithTracker(composer)(TimesheetsScreen)
+export const TimesheetsContainer = composeWithTracker(composer, Loading)(TimesheetsScreen)
