@@ -24,7 +24,8 @@ module.exports = ->
         { type: 'default' },
         { type: 'businessHours' },
         { type: 'businessHoursOverride' },
-        { type: 'holidays' }
+        { type: 'holidays' },
+        { type: 'override' }
       ] }
 
     {
