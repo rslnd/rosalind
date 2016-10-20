@@ -13,9 +13,11 @@ export class Login extends React.Component {
 
     this.state = {
       name: '',
-      password: ''
+      password: '',
+      showVersionInfo: false
     }
 
+    this.handleOpenLoginHelp = this.handleOpenLoginHelp.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -30,6 +32,11 @@ export class Login extends React.Component {
   }
 
   handleOpenLoginHelp () {
+    this.setState({
+      ...this.state,
+      showVersionInfo: true
+    })
+
     console.log('[Login] Requested Login help')
     console.log({
       commit: server.env.COMMIT_HASH,
@@ -135,6 +142,9 @@ export class Login extends React.Component {
             </div>
           </div>
         </form>
+        {
+          this.state.showVersionInfo && <small style={{ color: '#a5afbb'}}>{server.env.COMMIT_HASH || 'Development'}</small>
+        }
       </div>
     )
   }
