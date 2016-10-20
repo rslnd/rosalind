@@ -16,7 +16,7 @@ RUN bash -c "time bash -c 'apt-get update && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*'"
 
-RUN bash -c "time bash -c 'npm install -g yarnpkg \
+RUN bash -c "time bash -c 'npm install -g yarn \
   && yarn \
   && npm cache clear \
   && mv /opt/app/node_modules /opt/node_modules/ \

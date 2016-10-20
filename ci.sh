@@ -63,7 +63,7 @@ case "$1" in
     curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py &
     wait
     npm set registry https://registry.npmjs.org/
-    npm -g install yarnpkg
+    npm -g install yarn
     chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
     mkdir -p $ARTIFACTS_PATH
 
