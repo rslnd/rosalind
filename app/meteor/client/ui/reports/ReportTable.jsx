@@ -1,5 +1,7 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
+import moment from 'moment'
+import 'moment-duration-format'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import { TAPi18n } from 'meteor/tap:i18n'
 
@@ -43,16 +45,19 @@ export const ReportTableBody = ({ showRevenue, report }) => (
           }
         </td>
         <td>
-          {assignee.hours.actual && assignee.hours.actual.toFixed(1)}
-          {assignee.hours.scheduled && (
-            <span>
-              {assignee.hours.scheduled.toFixed(1)}&nbsp;
-              <small className="text-muted">
-                <i className="fa fa-question-circle text-quite-muted hide-print"></i>&nbsp;
-                {TAPi18n.__('reports.scheduledOnly')}
-              </small>
-            </span>
-          )}
+          {
+            assignee.hours.actual
+            ? moment.duration(assignee.hours.actual, 'hours').format(TAPi18n.__('time.durationFormat'))
+            : assignee.hours.scheduled && (
+              <span>
+                {moment.duration(assignee.hours.scheduled, 'hours').format(TAPi18n.__('time.durationFormat'))}&nbsp;
+                <small className="text-muted">
+                  <i className="fa fa-question-circle text-quite-muted hide-print"></i>&nbsp;
+                  {TAPi18n.__('reports.scheduledOnly')}
+                </small>
+              </span>
+            )
+          }
         </td>
         <td className="td-bg on-hover-here">
           <div className="progress bg-aqua-light">
@@ -63,7 +68,11 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         </td>
         <td className="td-bg">{assignee.patients.new || <Nil />}</td>
         <td className="td-bg">{assignee.patients.recall || <Nil />}</td>
-        <td className="td-bg">{assignee.patients.newPerHourScheduled && assignee.patients.newPerHourScheduled.toFixed(1) || <Nil />}</td>
+        <td className="td-bg">{
+          assignee.patients.newPerHourScheduled
+          ? assignee.patients.newPerHourScheduled.toFixed(1)
+          : (assignee.patients.newPerHourActual && assignee.patients.newPerHourActual.toFixed(1) || <Nil />)
+        }</td>
         <td className="td-bg">{assignee.patients.total}</td>
         <td>{assignee.patients.surgeries || <Nil />}</td>
         {showRevenue && <td>€{assignee.revenue}</td>}

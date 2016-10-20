@@ -1,3 +1,4 @@
+import moment from 'moment'
 import flow from 'lodash/fp/flow'
 import filter from 'lodash/fp/filter'
 import map from 'lodash/fp/map'
@@ -5,7 +6,9 @@ import sum from 'lodash/fp/sum'
 import mean from 'lodash/fp/mean'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { dayToDate } from 'util/time/day'
 import { Schedules } from 'api/schedules'
+import { Timesheets } from 'api/timesheets'
 
 export const tally = ({ Reports }) => {
   return new ValidatedMethod({
@@ -23,13 +26,22 @@ export const tally = ({ Reports }) => {
         a.patients.newPercentage = 100.0 * a.patients.new / a.patients.total
 
         if (a.userId) {
+          // Scheduled hours
           a.hours.scheduled = Schedules.methods.getScheduledHours({ userId: a.userId, day: report.day })
           if (a.hours.scheduled) {
             a.patients.perHourScheduled = a.patients.total / a.hours.scheduled
             a.patients.newPerHourScheduled = a.patients.new / a.hours.scheduled
           }
 
-          // TODO: Fetch actual hours from timesheets
+          // Actual hours
+          const start = moment(dayToDate(report.day)).startOf('day')
+          const end = moment(dayToDate(report.day)).endOf('day')
+          a.hours.actual = Timesheets.methods.sum({ userId: a.userId, start, end })
+          if (a.hours.actual) {
+            a.hours.actual = a.hours.actual / 1000 / 60 / 60
+            a.patients.perHourActual = a.patients.total / a.hours.actual
+            a.patients.newPerHourActual = a.patients.new / a.hours.actual
+          }
         }
         return a
       })
@@ -40,6 +52,12 @@ export const tally = ({ Reports }) => {
         mean
       )(report.assignees)
 
+      report.total.patientsNewPerHourActual = flow(
+        filter((a) => a.patients.newPerHourActual > 0),
+        map((a) => a.patients.newPerHourActual),
+        mean
+      )(report.assignees)
+
       report.total.revenue = flow(
         map((a) => a.revenue),
         sum
@@ -47,6 +65,11 @@ export const tally = ({ Reports }) => {
 
       report.total.hoursScheduled = flow(
         map((a) => a && a.hours && a.hours.scheduled || 0),
+        sum
+      )(report.assignees)
+
+      report.total.hoursActual = flow(
+        map((a) => a && a.hours && a.hours.actual || 0),
         sum
       )(report.assignees)
 
