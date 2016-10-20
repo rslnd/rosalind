@@ -32,6 +32,7 @@ gadicc:blaze-react-component
 # Testing
 xolvio:backdoor
 xolvio:cleaner
+seed
 
 # Security
 browser-policy@1.0.9
