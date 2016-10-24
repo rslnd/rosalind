@@ -36,7 +36,7 @@ build_script:
     $env:ROSALIND_VERSION = "v" + $package.version
 
 
-    cmd /c 'yarn run client:build 2>&1'
+    cmd /c 'npm run client:build 2>&1'
 
 test_script:
 - ps: >-
