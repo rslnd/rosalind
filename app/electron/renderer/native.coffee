@@ -8,11 +8,6 @@ try
     settings: null
     editSettings: -> ipcRenderer.send('settings/edit')
     log: (options) -> ipcRenderer.send('log', options)
-    users:
-      currentUser: null
-      onLogin: (u) -> ipcRenderer.send('users/onLogin', u)
-      onLogout: (u) -> ipcRenderer.send('users/onLogout', u)
-      getToken: (t) -> ipcRenderer.send('users/getToken', t)
     print: (options) -> ipcRenderer.send('window/print', options)
     events: new EventEmitter()
 
@@ -20,7 +15,6 @@ try
 
   allowedEvents = [
     'import/dataTransfer'
-    'users/getToken'
   ]
 
   allowedEvents.map (name) ->

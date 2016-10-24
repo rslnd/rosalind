@@ -13,7 +13,6 @@ logger.start()
 
 settings = require './settings'
 cli = require './cli'
-authentication = require './authentication'
 print = require './print'
 shortcuts = require './shortcuts'
 watch = require './watch'
@@ -31,7 +30,6 @@ start = ->
       print.start(ipcReceiver: mainWindow)
       shortcuts.updateShortcuts()
 
-    authentication.start(ipcReceiver: mainWindow)
     updater.start()
     setTimeout(updater.check, 15 * 1000)
 

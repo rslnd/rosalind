@@ -22,11 +22,11 @@ install:
     npm --version
 
 - cmd: >-
-    npm install -g npm-install-retry
+    npm install -g yarn
 
     cd app\electron\
 
-    npm-install-retry --wait 500 --attempts 10
+    yarn install
 
 build_script:
 - ps: >-
@@ -36,7 +36,7 @@ build_script:
     $env:ROSALIND_VERSION = "v" + $package.version
 
 
-    cmd /c 'npm run client:build 2>&1'
+    cmd /c 'yarn run client:build 2>&1'
 
 test_script:
 - ps: >-

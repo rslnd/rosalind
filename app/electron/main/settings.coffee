@@ -22,7 +22,7 @@ defaultSettings =
   watch: [
     { path: 'S:\\Export', importer: 'eoswinReports', enabled: true }
     { path: 'S:\\Export\\Patients', importer: 'eoswinPatients', enabled: true }
-    { path: 'S:\\Export\\xdt', importer: 'xdt', enabled: false }
+    { path: 'C:\\xdt', importer: 'xdt', enabled: false }
   ]
 
 if fs.existsSync(settingsPath) and fs.readFileSync(settingsPath).length > 3

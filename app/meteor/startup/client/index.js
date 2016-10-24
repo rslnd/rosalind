@@ -1,7 +1,6 @@
 import kadira from './kadira'
 import development from './development'
 import alerts from './alerts'
-import authentication from './authentication'
 import hotkeys from './hotkeys'
 import locale from './locale'
 import userStatus from './userStatus'
@@ -12,7 +11,6 @@ import entry from 'client/index.jsx'
 export default function () {
   kadira()
   development()
-  authentication()
   alerts()
   locale()
   livechat()
