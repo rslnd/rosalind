@@ -20,6 +20,14 @@ standard-minifier-css@1.3.2-rc.3
 standard-minifier-js@1.2.1-rc.3
 shell-server@0.2.1
 
+# Testing
+# While these packages should have the debug-only flag set,
+# they are removed before building just to make sure.
+# Keep this section synced with production/build.sh
+xolvio:backdoor
+xolvio:cleaner
+seed
+
 # React
 webpack:webpack
 webpack:react
@@ -28,11 +36,6 @@ webpack:coffeescript
 webpack:sass
 react-template-helper
 gadicc:blaze-react-component
-
-# Testing
-xolvio:backdoor
-xolvio:cleaner
-seed
 
 # Security
 browser-policy@1.0.9
@@ -100,6 +103,3 @@ meteorhacks:kadira
 meteorhacks:zones
 kadira:debug
 meteorhacks:kadira-profiler
-
-# Cluster
-meteorhacks:cluster
