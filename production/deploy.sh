@@ -2,6 +2,11 @@
 
 set -e
 
-echo "** Deploying to production"
+echo "** Branch is $BRANCH"
 
-curl -sSXPOST "$PRODUCTION_DEPLOY_HOOK" > /dev/null
+if [[ $BRANCH =~ (^master$|^hotfix) ]]; then
+  echo "** Deploying to production"
+  curl -sSXPOST "$PRODUCTION_DEPLOY_HOOK" > /dev/null
+else
+  echo "** Skipping production deploy"
+fi
