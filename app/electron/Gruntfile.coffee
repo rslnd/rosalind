@@ -30,7 +30,7 @@ module.exports = (grunt) ->
 
     electronVersion: ->
       devDependencies = packageJSON.devDependencies
-      find(devDependencies, (version, name) -> name is 'electron-prebuilt').version
+      find(devDependencies, (version, name) -> name is 'electron').version
 
     dependencies: ->
       dependencies = packageJSON.dependencies
