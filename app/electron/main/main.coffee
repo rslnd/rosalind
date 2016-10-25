@@ -31,7 +31,7 @@ start = ->
       shortcuts.updateShortcuts()
 
     updater.start()
-    setTimeout(updater.check, 15 * 1000)
+    setInterval(updater.check, 30 * 1000)
 
   app.on 'window-all-closed', ->
     updater.quitAndInstall()
