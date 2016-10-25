@@ -12,7 +12,7 @@ export const eoswinReports = ({ Importers }) => {
     name: 'importers/eoswinReports',
 
     validate: new SimpleSchema({
-      importer: { type: String, optional: true, allowedValues:  [ 'eoswinReports' ] },
+      importer: { type: String, optional: true, allowedValues: [ 'eoswinReports' ] },
       name: { type: String },
       content: { type: String }
     }).validator(),

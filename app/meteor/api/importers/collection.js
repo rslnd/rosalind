@@ -1,5 +1,5 @@
 import { FilesCollection } from 'meteor/ostrio:files'
-import methods from './methods'
+import actions from './actions'
 
 let Importers = new FilesCollection({
   collectionName: 'import.files',
@@ -7,6 +7,6 @@ let Importers = new FilesCollection({
   storagePath: '/tmp'
 })
 
-Importers.methods = methods({ Importers })
+Importers.actions = actions({ Importers })
 
 export default Importers

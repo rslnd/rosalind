@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { allowedImporters } from '../allowedImporters'
+import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 
 export const ingest = ({ Importers }) => {
   const determineImporter = ({ name, content }) => {
@@ -14,12 +15,13 @@ export const ingest = ({ Importers }) => {
     switch (importer) {
       case 'eoswinReports': return 'ISO-8859-1'
       case 'eoswinPatients': return 'WINDOWS-1252'
+      case 'xdt': return 'ISO-8859-15'
     }
   }
 
   return new ValidatedMethod({
     name: 'importers/ingest',
-
+    mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       importer: { type: String, optional: true, allowedValues: allowedImporters },
       name: { type: String },
@@ -40,7 +42,7 @@ export const ingest = ({ Importers }) => {
       }
 
       if (importer) {
-        return Importers.methods.importWith.call({ importer, name, content })
+        return Importers.actions.importWith.call({ importer, name, content })
       } else {
         throw new Meteor.Error('no-importer-found', `Could not determine importer from filename ${name}`)
       }

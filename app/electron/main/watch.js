@@ -6,8 +6,8 @@ const logger = require('./logger')
 
 let watchers = []
 
-const onAdd = ({ ipcReceiver, watch, path }) => {
-  logger.info('[Watch] New file was added', { path, watch })
+const onAdd = ({ ipcReceiver, watch, path, importer, remove }) => {
+  logger.info('[Watch] New file was added', { path, watch, importer, remove })
 
   fs.readFile(path, (err, buffer) => {
     if (err) { return logger.error('[Watch] Error reading file to buffer', err) }
@@ -16,10 +16,10 @@ const onAdd = ({ ipcReceiver, watch, path }) => {
       const encoding = watch.encoding || 'ISO-8859-1'
       logger.info('[Watch] Transferring file with encoding', { path, encoding })
       const content = iconv.decode(buffer, encoding)
-      ipcReceiver.send('import/dataTransfer', { path, watch, content })
+      ipcReceiver.send('import/dataTransfer', { path, watch, content, importer, remove })
     } else {
       logger.info('[Watch] Transferring file as binary', { path })
-      ipcReceiver.send('import/dataTransfer', { path, watch, buffer })
+      ipcReceiver.send('import/dataTransfer', { path, watch, buffer, importer, remove })
     }
   })
 }
@@ -30,6 +30,8 @@ const start = ({ ipcReceiver }) => {
 
     watchers = settings.watch.map((watch) => {
       if (!watch.enabled) { return }
+
+      const { importer, remove } = watch
 
       let watcher = chokidar.watch(watch.path, {
         persistent: true,
@@ -42,8 +44,8 @@ const start = ({ ipcReceiver }) => {
         }
       })
 
-      watcher.on('add', (path) => onAdd({ ipcReceiver, watch, path }))
-      watcher.on('change', (path) => onAdd({ ipcReceiver, watch, path }))
+      watcher.on('add', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
+      watcher.on('change', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
 
       return watcher
     })

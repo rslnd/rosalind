@@ -23,7 +23,7 @@ export const eoswinPatients = (job, callback) => {
     .on('data', Meteor.bindEnvironment((content) => {
       lineStream.pause()
 
-      Importers.methods.eoswin.patients.call({
+      Importers.actions.eoswin.patients.call({
         content,
         name: job.data.path,
         quiet: true
