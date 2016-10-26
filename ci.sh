@@ -81,17 +81,8 @@ case "$1" in
     if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
 
     if [ ! -e $HOME/.meteor/meteor ]; then
-      RELEASE=`cat app/meteor/.meteor/release`
-      RELEASE="${RELEASE:7}"
-
-      # Check if pre-release
-      if [[ $RELEASE =~ - ]]; then
-        METEOR_INSTALL_URL="https://install.meteor.com/"
-        echo "Installing latest meteor from $METEOR_INSTALL_URL"
-      else
-        echo "Installing fixed meteor from $METEOR_INSTALL_URL"
-        METEOR_INSTALL_URL="https://install.meteor.com/?release=${RELEASE}"
-      fi
+      METEOR_INSTALL_URL="https://install.meteor.com/"
+      echo "Installing latest meteor from $METEOR_INSTALL_URL"
 
       touch $ARTIFACTS_PATH/meteor_installation.log
       curl -o install_meteor.sh $METEOR_INSTALL_URL
