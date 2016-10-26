@@ -87,7 +87,7 @@ case "$1" in
       touch $ARTIFACTS_PATH/meteor_installation.log
       curl -o install_meteor.sh $METEOR_INSTALL_URL
       chmod +x install_meteor.sh
-      ./install_meteor.sh &>$ARTIFACTS_PATH/meteor_installation.log
+      ./install_meteor.sh
     fi
 
     echo -en "travis_fold:end:meteor\r"
