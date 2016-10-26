@@ -1,5 +1,4 @@
 moment = require 'moment'
-require 'moment-timezone'
 
 module.exports = ->
   @Then /^I should see '([^']*)'$/, (string) ->
@@ -32,10 +31,8 @@ module.exports = ->
     browser.waitForExist('#loaded')
     bodyText = browser.getText('body')
 
-    moment.tz.setDefault('Europe/Vienna')
-
-    time = moment().format('H:mm')
-    timeYeahWhatever = moment().subtract(1, 'minute').format('H:mm')
+    time = moment().format('mm')
+    timeYeahWhatever = moment().subtract(1, 'minute').format('mm')
 
     contains = bodyText.indexOf(time) >= 0 or bodyText.indexOf(timeYeahWhatever) >= 0
     expect(contains).toEqual(true, "Expected '#{bodyText}' to contain '#{time}' (or '#{timeYeahWhatever}')")
