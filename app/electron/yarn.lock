@@ -448,13 +448,6 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
 
-electron-debug:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/electron-debug/-/electron-debug-1.0.1.tgz#1f3050d619fc552218f0773657240544479f2008"
-  dependencies:
-    electron-is-dev "^0.1.0"
-    electron-localshortcut "^0.6.0"
-
 electron-download@^3.0.0, electron-download@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/electron-download/-/electron-download-3.0.1.tgz#27045028ee78b3b3dca9fdb35d4bb1262afa4d29"
@@ -469,11 +462,7 @@ electron-download@^3.0.0, electron-download@^3.0.1:
     semver "^5.3.0"
     sumchecker "^1.2.0"
 
-electron-is-dev@^0.1.0:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-0.1.2.tgz#8a1043e32b3a1da1c3f553dce28ce764246167e3"
-
-electron-localshortcut@^0.6.0:
+electron-localshortcut:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/electron-localshortcut/-/electron-localshortcut-0.6.1.tgz#c4e268c38a6e42f40de5618fc906d1ed608f11aa"
 
