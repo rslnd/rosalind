@@ -106,7 +106,7 @@
     "webpack-hot-middleware": "^2.12.1"
   },
   "engines": {
-    "node": "^4.6.0"
+    "node": "^4.6.1"
   },
   "scripts": {
     "start": "meteor",

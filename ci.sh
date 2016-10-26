@@ -11,7 +11,7 @@ export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
 export DOCKER_COMPOSE_VERSION=1.5.2
-export NPM_VERSION=3.10.8
+export NPM_VERSION=3.10.9
 export PHANTOMJS_VERSION=2.1.1
 
 export ROOT_URL=http://0.0.0.0:3000/
