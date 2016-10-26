@@ -88,7 +88,7 @@ const quitAndInstall = () => {
   }
 }
 
-ipcMain.webContents.on('update/quitAndInstall', quitAndInstall)
+ipcMain.on('update/quitAndInstall', quitAndInstall)
 
 const check = () => {
   if (process.platform !== 'win32') { return }
