@@ -143,7 +143,13 @@ export class Login extends React.Component {
           </div>
         </form>
         {
-          this.state.showVersionInfo && <small style={{ color: '#a5afbb'}}>{server.env.COMMIT_HASH || 'Development'}</small>
+          this.state.showVersionInfo &&
+            <small style={{ color: '#bfcbd9' }}>
+              {(server.env.COMMIT_HASH && server.env.COMMIT_HASH.substr(0, 7)) || 'Development'}
+              {
+                window.native.version && <span><br />v{window.native.version}</span>
+              }
+            </small>
         }
       </div>
     )

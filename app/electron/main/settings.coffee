@@ -51,12 +51,11 @@ settings.settingsPath = settingsPath
 logger.info('[Settings] The main entry point is', settings.url)
 logger.info('[Settings]', settings)
 
-ipcMain.on 'settings', (e) ->
-  logger.info('[Settings] Requested settings via ipc')
-  e.sender.send('settings', settings)
-
 ipcMain.on 'settings/edit', (e) ->
   logger.info('[Settings] Requested settings edit via ipc')
   editSettings()
+
+settings.send = ({ ipcReceiver }) ->
+  ipcReceiver.webContents.send('settings', settings)
 
 module.exports = settings

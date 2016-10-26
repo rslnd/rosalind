@@ -1,5 +1,3 @@
-const path = require('path')
-const { spawn } = require('child_process')
 const { app, autoUpdater } = require('electron')
 const logger = require('./logger')
 const manifest = require('./manifest')
@@ -7,6 +5,12 @@ const settings = require('./settings')
 const shortcuts = require('./shortcuts')
 
 let updateDownloaded = false
+let mainWindow = null
+
+const send = ({ ipcReceiver }) => {
+  mainWindow = ipcReceiver
+  mainWindow.webContents.send('version', app.getVersion())
+}
 
 const handleStartupEvent = () => {
   if (process.platform !== 'win32') { return }
@@ -96,4 +100,4 @@ const check = () => {
   }
 }
 
-module.exports = { handleStartupEvent, start, quitAndInstall, check }
+module.exports = { handleStartupEvent, start, quitAndInstall, check, send }

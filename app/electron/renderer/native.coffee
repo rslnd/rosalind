@@ -1,5 +1,5 @@
 console.log('[Electron Native] Enabling native bindings')
-{ ipcRenderer } = require 'electron'
+{ ipcRenderer, app } = require 'electron'
 EventEmitter = require 'eventemitter3'
 
 try
@@ -11,7 +11,14 @@ try
     print: (options) -> ipcRenderer.send('window/print', options)
     events: new EventEmitter()
 
-  require './settings'
+  ipcRenderer.on 'settings', (e, settings) ->
+    window.native.settings = settings
+    console.log('[Electron Native] Settings', window.native.settings)
+
+  ipcRenderer.on 'version', (e, version) ->
+    window.native.version = version
+    console.log('[Electron Native] Version', window.native.version)
+
 
   allowedEvents = [
     'import/dataTransfer'
