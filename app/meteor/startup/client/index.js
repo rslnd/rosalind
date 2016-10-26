@@ -7,6 +7,7 @@ import locale from './locale'
 import userStatus from './userStatus'
 import livechat from './livechat'
 import dataTransfer from './dataTransfer'
+import nativeUpdate from './nativeUpdate'
 import entry from 'client/index.jsx'
 
 export default function () {
@@ -19,5 +20,6 @@ export default function () {
   userStatus()
   hotkeys()
   dataTransfer()
+  nativeUpdate()
   entry()
 }

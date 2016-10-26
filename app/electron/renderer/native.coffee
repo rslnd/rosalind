@@ -10,6 +10,7 @@ try
     log: (options) -> ipcRenderer.send('log', options)
     print: (options) -> ipcRenderer.send('window/print', options)
     events: new EventEmitter()
+    quitAndInstall: -> ipcRenderer.send('update/quitAndInstall')
 
   ipcRenderer.on 'settings', (e, settings) ->
     window.native.settings = settings
@@ -21,7 +22,8 @@ try
 
 
   allowedEvents = [
-    'import/dataTransfer'
+    'import/dataTransfer',
+    'update/available'
   ]
 
   allowedEvents.map (name) ->

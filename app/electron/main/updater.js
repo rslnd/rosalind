@@ -1,4 +1,4 @@
-const { app, autoUpdater } = require('electron')
+const { app, autoUpdater, ipcMain } = require('electron')
 const logger = require('./logger')
 const manifest = require('./manifest')
 const settings = require('./settings')
@@ -7,7 +7,7 @@ const shortcuts = require('./shortcuts')
 let updateDownloaded = false
 let mainWindow = null
 
-const send = ({ ipcReceiver }) => {
+const sendVersion = ({ ipcReceiver }) => {
   mainWindow = ipcReceiver
   mainWindow.webContents.send('version', app.getVersion())
 }
@@ -66,30 +66,29 @@ const start = () => {
     if (err) { logger.error('[Updater]', err) }
   })
 
-  autoUpdater.on('checking-for-update', () => {
-    logger.info('[Updater] Checking for update')
-  })
-
   autoUpdater.on('update-available', () => {
     logger.info('[Updater] New update available')
   })
 
-  autoUpdater.on('update-not-available', () => {
-    logger.info('[Updater] No update')
-  })
-
   autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateURL) => {
     logger.info('[Updater] New update downloaded', { event, releaseNotes, releaseName, releaseDate, updateURL })
+
+    if (mainWindow) {
+      mainWindow.webContents.send('update/available', { newVersion: releaseName })
+    }
+
     updateDownloaded = true
   })
 }
 
 const quitAndInstall = () => {
   if (updateDownloaded) {
-    logger.info('[Updater] About to quit and install downloaded update')
+    logger.info('[Updater] About to quit/restart and install downloaded update')
     autoUpdater.quitAndInstall()
   }
 }
+
+ipcMain.webContents.on('update/quitAndInstall', quitAndInstall)
 
 const check = () => {
   if (process.platform !== 'win32') { return }
@@ -100,4 +99,4 @@ const check = () => {
   }
 }
 
-module.exports = { handleStartupEvent, start, quitAndInstall, check, send }
+module.exports = { handleStartupEvent, start, quitAndInstall, check, sendVersion }

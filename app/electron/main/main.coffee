@@ -28,13 +28,14 @@ start = ->
       return logger.error('[Main] Could not load main window', err) if err
       logger.ready('[Main] Main window loaded')
       settings.send(ipcReceiver: mainWindow)
-      updater.send(ipcReceiver: mainWindow)
+      updater.sendVersion(ipcReceiver: mainWindow)
       watch.start(ipcReceiver: mainWindow)
       print.start(ipcReceiver: mainWindow)
       shortcuts.updateShortcuts()
 
     updater.start()
-    setInterval(updater.check, 5 * 60 * 1000)
+    setTimeout(updater.check, 5 * 1000)
+    setInterval(updater.check, 60 * 1000)
 
   app.on 'window-all-closed', ->
     updater.quitAndInstall()

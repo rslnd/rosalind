@@ -32,17 +32,6 @@ module.exports = (grunt) ->
       devDependencies = packageJSON.devDependencies
       find(devDependencies, (version, name) -> name is 'electron').version
 
-    dependencies: ->
-      dependencies = packageJSON.dependencies
-      map(dependencies, (version, name) -> name)
-
-
-    ignoreDevDependencies: ->
-      ignored = map(options.devDependencies(), ((p) ->
-        'node_modules/' + p + '$'
-      ))
-      console.log('Ignored devDependencies for packaging', ignored)
-      return ignored.join('|')
 
 
 
@@ -89,7 +78,6 @@ module.exports = (grunt) ->
           arch: 'ia32'
           asar: true
           overwrite: true
-          ignore: options.ignoreDevDependencies()
 
     'create-windows-installer':
       ia32:
