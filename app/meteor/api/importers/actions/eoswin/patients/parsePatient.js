@@ -1,5 +1,5 @@
 import moment from 'moment'
-import tz from 'moment-timezone'
+import 'moment-timezone'
 import { parse as csvToJson } from 'papaparse'
 import { dateToDay } from 'util/time/day'
 
@@ -64,7 +64,7 @@ export const parsePatient = (row, timezone) => {
     insuranceId: row[7],
     external: parseExternal({
       id: row[11],
-      timestamp: tz(moment(row[15], 'DD.MM.YYYY H:m:s'), timezone).toDate(),
+      timestamp: moment.tz(row[15], 'DD.MM.YYYY H:m:s', timezone).toDate(),
       action,
       note: row[10] }),
     profile: {
@@ -72,7 +72,7 @@ export const parsePatient = (row, timezone) => {
       lastName: row[1],
       titlePrepend: row[2],
       gender: parseGender(row[3]),
-      birthday: row[14] && dateToDay(tz(moment(row[14], 'DD.MM.YYYY'), timezone)),
+      birthday: row[14] && dateToDay(moment.tz(row[14], 'DD.MM.YYYY', timezone)),
       address: {
         line1: row[4],
         postalCode: row[5],

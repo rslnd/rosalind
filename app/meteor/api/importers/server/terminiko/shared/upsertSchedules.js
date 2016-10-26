@@ -7,8 +7,8 @@ import { parseNewlines } from './parseNewlines'
 export const upsertSchedules = ({ record, resources, job, timezone = 'Europe/Vienna' }) => {
   if (!record.Datum_Beginn || !record.Datum_Ende) { return }
 
-  const start = tz(moment(record.Datum_Beginn), timezone).toDate()
-  const end = tz(moment(record.Datum_Ende), timezone).toDate()
+  const start = moment.tz(record.Datum_Beginn, timezone).toDate()
+  const end = moment.tz(record.Datum_Ende, timezone).toDate()
   const duration = moment().range(start, end)
   if (duration.diff('seconds') < 1) { return }
 
@@ -32,7 +32,7 @@ export const upsertSchedules = ({ record, resources, job, timezone = 'Europe/Vie
         timestamps: {
           importedAt: moment().toDate(),
           importedBy: job.data.userId,
-          externalUpdatedAt: record.Datum_Bearbeitung && tz(moment(record.Datum_Bearbeitung), timezone).toDate()
+          externalUpdatedAt: record.Datum_Bearbeitung && moment.tz(record.Datum_Bearbeitung, timezone).toDate()
         }
       }
     }

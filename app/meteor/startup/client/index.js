@@ -1,3 +1,4 @@
+import timezone from './timezone'
 import kadira from './kadira'
 import development from './development'
 import alerts from './alerts'
@@ -9,6 +10,7 @@ import dataTransfer from './dataTransfer'
 import entry from 'client/index.jsx'
 
 export default function () {
+  timezone()
   kadira()
   development()
   alerts()

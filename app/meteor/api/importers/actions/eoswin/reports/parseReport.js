@@ -1,5 +1,5 @@
 import moment from 'moment'
-import tz from 'moment-timezone'
+import 'moment-timezone'
 import { parse as csvToJson } from 'papaparse'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
@@ -18,7 +18,7 @@ export const parseReportDate = (name, timezone = 'Europe/Vienna') => {
   if (matchDate && matchTime) {
     const [day, month, year] = matchDate.splice(1)
     const [hour, minute] = matchTime.splice(1)
-    const date = tz(moment({ day, month: month - 1, year, hour, minute }), timezone).toDate()
+    const date = moment.tz({ day, month: month - 1, year, hour, minute }, timezone).toDate()
     return date
   } else {
     throw new Error('Report filename must contain date and time')

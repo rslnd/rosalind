@@ -1,3 +1,4 @@
+import timezone from './timezone'
 import kadira from './kadira'
 import env from './env'
 import browserPolicy from './browserPolicy'
@@ -8,6 +9,7 @@ import development from './development'
 import api from './api'
 
 export default function () {
+  timezone()
   kadira()
   env()
   passwordlessLogin()
