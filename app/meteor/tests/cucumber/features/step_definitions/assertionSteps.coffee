@@ -1,4 +1,5 @@
 moment = require 'moment'
+require 'moment-timezone'
 
 module.exports = ->
   @Then /^I should see '([^']*)'$/, (string) ->
@@ -30,6 +31,8 @@ module.exports = ->
   @Then 'I should see the current time', ->
     browser.waitForExist('#loaded')
     bodyText = browser.getText('body')
+
+    moment.tz.setDefault('Europe/Vienna')
 
     time = moment().format('H:mm')
     timeYeahWhatever = moment().subtract(1, 'minute').format('H:mm')
