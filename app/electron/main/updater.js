@@ -89,8 +89,6 @@ const quitAndInstall = () => {
 
 const check = () => {
   if (process.platform !== 'win32') { return }
-
-  logger.info('[Updater] Checking for updates')
   try {
     autoUpdater.checkForUpdates()
   } catch (e) {

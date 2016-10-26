@@ -5,6 +5,8 @@ module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', '
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app.asar', 'node_modules'))
 
 { app } = require 'electron'
+require('electron-debug')({ enabled: true })
+
 updater = require './updater'
 window = require './window'
 logger = require './logger'

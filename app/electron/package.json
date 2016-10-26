@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
@@ -28,6 +28,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "chokidar": "1.6.0",
+    "electron-debug": "^1.0.1",
     "eventemitter3": "^2.0.0",
     "fs-promise": "^0.5.0",
     "glob": "^7.0.6",
