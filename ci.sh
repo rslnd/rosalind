@@ -136,7 +136,6 @@ case "$1" in
 
     # Start environment for acceptance tests
     echo "[CI] Starting environment for acceptance tests"
-    echo -en "travis_fold:start:start_meteor\r"
     SECONDS=0
     RETRY=0
 
@@ -164,7 +163,7 @@ case "$1" in
       fi;
       sleep 3
     done;
-    echo -en "travis_fold:end:start_meteor\r"
+
     if [ "$RETRY" -ge 1 ]; then
       echo "[CI] Meteor took $SECONDS seconds to start after $RETRY retries"
     else
