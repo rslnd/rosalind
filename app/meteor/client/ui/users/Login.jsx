@@ -147,7 +147,7 @@ export class Login extends React.Component {
             <small style={{ color: '#bfcbd9' }}>
               {(server.env.COMMIT_HASH && server.env.COMMIT_HASH.substr(0, 7)) || 'Development'}
               {
-                window.native.version && <span><br />v{window.native.version}</span>
+                window.native && window.native.version && <span><br />v{window.native.version}</span>
               }
             </small>
         }
