@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
@@ -48,6 +48,7 @@
   "scripts": {
     "client:start": "./node_modules/.bin/grunt",
     "client:build": "./node_modules/.bin/grunt build",
+    "client:package": "./node_modules/.bin/grunt package",
     "client:tag": "./node_modules/.bin/grunt tag"
   }
 }

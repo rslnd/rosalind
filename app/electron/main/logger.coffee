@@ -23,17 +23,18 @@ module.exports =
       host = '@@PAPERTRAIL_URL'.split(':')[0]
       port = parseInt('@@PAPERTRAIL_URL'.split(':')[1])
 
-      try
-        settings = require './settings'
-        customerHostname = url.parse(settings.url).hostname
-      catch e
-        winston.error('[Log] Could not parse customer hostname for centralized logging, falling back to "development"', e)
-        customerHostname = 'development'
+      if host and port
+        try
+          settings = require './settings'
+          customerHostname = url.parse(settings.url).hostname
+        catch e
+          winston.error('[Log] Could not parse customer hostname for centralized logging, falling back to "development"', e)
+          customerHostname = 'development'
 
-      hostname = [os.hostname(), customerHostname].join('.')
-      program = [ [ 'rosalind', os.platform(), os.arch() ].join('-'), app.getVersion() ].join('/')
-      winston.info('[Log] Enabling papertrail log transport', { program, hostname })
-      winston.add(winston.transports.Papertrail, { host, port, program, hostname })
+        hostname = [os.hostname(), customerHostname].join('.')
+        program = [ [ 'rosalind', os.platform(), os.arch() ].join('-'), app.getVersion() ].join('/')
+        winston.info('[Log] Enabling papertrail log transport', { program, hostname })
+        winston.add(winston.transports.Papertrail, { host, port, program, hostname })
 
     winston.info('[Log] App launched')
     winston.info('[Log] App version: ', app.getVersion())

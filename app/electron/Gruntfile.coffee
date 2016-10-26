@@ -37,6 +37,14 @@ module.exports = (grunt) ->
       map(dependencies, (version, name) -> name)
 
 
+    ignoreDevDependencies: ->
+      ignored = map(options.devDependencies(), ((p) ->
+        'node_modules/' + p + '$'
+      ))
+      console.log('Ignored devDependencies for packaging', ignored)
+      return ignored.join('|')
+
+
 
   grunt.initConfig
     pkg: packageJSON
@@ -81,7 +89,7 @@ module.exports = (grunt) ->
           arch: 'ia32'
           asar: true
           overwrite: true
-          ignore: map(options.devDependencies(), (p) -> 'node_modules/' + p).join('|')
+          ignore: options.ignoreDevDependencies()
 
     'create-windows-installer':
       ia32:
@@ -175,6 +183,6 @@ module.exports = (grunt) ->
 
 
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
-  grunt.registerTask('tag', ['shell:tag', 'shell:push'])
+  grunt.registerTask('package', ['clean:full', 'coffee', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'electron:package' ])
   grunt.registerTask('build', ['clean:full', 'coffee', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'electron:package', 'create-windows-installer', 'rename:installerExe', ])
   grunt.registerTask('default', ['clean:full', 'shell:kill', 'coffee', 'copy:js', 'copy:packageJson', 'copy:nodeModules', 'shell:electronPrebuilt'])
