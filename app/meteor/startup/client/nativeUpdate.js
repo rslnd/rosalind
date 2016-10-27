@@ -1,4 +1,4 @@
-import { sAlert } from 'meteor/juliancwirko:s-alert'
+import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 
 export default () => {
@@ -21,7 +21,7 @@ export default () => {
           </div>
         `
 
-        sAlert.info(text, { timeout: false, html: true })
+        Alert.info(text, { timeout: false, html: true })
       }
 
       didNotify = true

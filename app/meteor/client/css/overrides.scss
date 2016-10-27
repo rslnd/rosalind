@@ -33,10 +33,6 @@ h6,
   right: initial;
 }
 
-.s-alert-box {
-  z-index: 400;
-}
-
 .modal {
   z-index: 1050;
   -webkit-touch-callout: none;
@@ -189,23 +185,6 @@ h6,
   line-height: 2;
 }
 
-
-.s-alert-bottom-left {
-  bottom: 0;
-  left: 0;
-  width: 230px;
-  padding: 10px !important;
-}
-
-.s-alert-stackslide p {
-  padding: 0 1.5em 0 2.2em !important;
-  text-indent: -0.6em !important;
-}
-
-.s-alert-close {
-  top: 20px !important;
-  right: 10px !important;
-}
 
 .anonymous-calendar .ui-state-highlight.fc-today,
 .anonymous-calendar .fc-unthemed .fc-today {

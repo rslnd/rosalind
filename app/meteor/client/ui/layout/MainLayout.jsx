@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router'
-import Blaze from 'meteor/gadicc:blaze-react-component'
 import { SidebarContainer } from './SidebarContainer'
 import { UserPanelContainer } from './UserPanelContainer'
 import { FooterContainer } from './FooterContainer'
+import { Alerts } from './Alerts'
 import { Login } from 'client/ui/users/Login'
 import style from './mainLayoutStyle'
 
@@ -12,7 +12,7 @@ export const MainLayout = ({ children, currentUser, loggingIn, locale, customerN
     <div id="loaded">
       <div className="dropzone"></div>
       <span id="locale" className={locale}></span>
-      <Blaze template="sAlert" />
+      <Alerts />
     </div>
   )
 

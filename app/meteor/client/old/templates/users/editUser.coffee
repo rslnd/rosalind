@@ -1,5 +1,6 @@
 map = require 'lodash/map'
 { browserHistory } = require 'react-router'
+Alert = require('react-s-alert').default
 { Users } = require 'api/users'
 { Groups } = require 'api/groups'
 { UpdatePassword, UpdateRoles } = require 'api/users/schema/actions'
@@ -29,14 +30,15 @@ AutoForm.hooks
   editUserForm:
     onSuccess: ->
       browserHistory.push('/users/')
-      sAlert.success(TAPi18n.__('users.editSuccess'))
+      Alert.success(TAPi18n.__('users.editSuccess'))
 
   updatePasswordUserForm:
     onSuccess: ->
       browserHistory.push('/users/')
-      sAlert.success(TAPi18n.__('users.editSuccess'))
+      Alert.success(TAPi18n.__('users.editSuccess'))
 
   updateRolesUserForm:
     onSuccess: ->
       browserHistory.push('/users/')
-      sAlert.success(TAPi18n.__('users.editSuccess'))
+      console.log(Alert)
+      Alert.success(TAPi18n.__('users.editSuccess'))
