@@ -211,6 +211,7 @@ export class AppointmentsView extends React.Component {
         <Popover
           open={this.state.popoverOpen}
           anchorEl={this.state.popoverAnchor}
+          animated
           anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
           targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
           autoCloseWhenOffScreen={false}
