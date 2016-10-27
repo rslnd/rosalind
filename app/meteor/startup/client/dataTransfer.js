@@ -1,5 +1,5 @@
 import dragDrop from 'drag-drop/buffer'
-import { sAlert } from 'meteor/juliancwirko:s-alert'
+import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Importers } from 'api/importers'
 
@@ -16,9 +16,9 @@ export const setupDragdrop = () => {
   dragDrop('body', (files) => {
     files.forEach((file) => {
       ingest({ name: file.name, buffer: file }).then(() => {
-        sAlert.success(TAPi18n.__('ui.importSuccessMessage'))
+        Alert.success(TAPi18n.__('ui.importSuccessMessage'))
       }).catch((err) => {
-        sAlert.error(err.message)
+        Alert.error(err.message)
       })
     })
   })

@@ -2,7 +2,6 @@ once = require 'lodash/once'
 Mousetrap = require 'mousetrap'
 require 'mousetrap/plugins/global-bind/mousetrap-global-bind'
 { browserHistory } = require 'react-router'
-{ sAlert } = require 'meteor/juliancwirko:s-alert'
 { Modal } = require 'client/old/templates/application/modals/blazeModal'
 
 hotkeys =

@@ -1,5 +1,5 @@
 { Meteor } = require 'meteor/meteor'
-{ sAlert } = require 'meteor/juliancwirko:s-alert'
+Alert = require('react-s-alert').default
 { Importers } = require 'api/importers'
 
 Template.systemImporters.onCreated ->
@@ -30,10 +30,10 @@ Template.systemImporters.events
       upload.on 'end', (error, result) ->
         if error
           console.log('[System][Importers] Upload failed', error)
-          sAlert.error('Error during upload: ' + error)
+          Alert.error('Error during upload: ' + error)
         else
           console.log('[System][Importers] Upload succeeded')
-          sAlert.success('File "' + result.name + '" successfully uploaded')
+          Alert.success('File "' + result.name + '" successfully uploaded')
 
         template.currentUpload.set(false)
 

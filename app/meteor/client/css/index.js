@@ -9,7 +9,6 @@ import './overrides.scss'
 import './print.css'
 import './materialFullCalendar.css'
 import './mui.css'
-import './sAlert.css'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import 'react-dates/css/styles.scss'
 

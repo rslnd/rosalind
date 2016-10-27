@@ -1,7 +1,6 @@
 import timezone from './timezone'
 import kadira from './kadira'
 import development from './development'
-import alerts from './alerts'
 import hotkeys from './hotkeys'
 import locale from './locale'
 import userStatus from './userStatus'
@@ -14,7 +13,6 @@ export default function () {
   timezone()
   kadira()
   development()
-  alerts()
   locale()
   livechat()
   userStatus()

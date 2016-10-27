@@ -3,7 +3,7 @@ import moment from 'moment'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { NewAppointment } from './NewAppointment'
 import { Appointments } from 'api/appointments'
-import { sAlert } from 'meteor/juliancwirko:s-alert'
+import Alert from 'react-s-alert'
 
 export class NewAppointmentContainer extends React.Component {
   constructor (props) {
@@ -42,12 +42,12 @@ export class NewAppointmentContainer extends React.Component {
     return Appointments.actions.insert.callPromise({ appointment, newPatient })
       .then(() => {
         dispatch({ type: 'APPOINTMENT_INSERT_SUCCESS' })
-        sAlert.success(TAPi18n.__('appointments.insertSuccess'))
+        Alert.success(TAPi18n.__('appointments.insertSuccess'))
         if (this.props.onClose) { this.props.onClose() }
       })
       .catch((e) => {
         console.error(e)
-        sAlert.error(TAPi18n.__('appointments.insertError'))
+        Alert.error(TAPi18n.__('appointments.insertError'))
       })
   }
 

@@ -1,9 +1,9 @@
 /* global Accounts */
 import React from 'react'
+import Alert from 'react-s-alert'
 import { process as server } from 'meteor/clinical:env'
 import { Button } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
-import { sAlert } from 'meteor/juliancwirko:s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
 
@@ -62,13 +62,13 @@ export class Login extends React.Component {
 
         switch (err.error) {
           case 'passwordless-login-disallowed-for-network':
-            sAlert.error(TAPi18n.__('login.passwordlessDisallowedNetworkMessage'))
+            Alert.error(TAPi18n.__('login.passwordlessDisallowedNetworkMessage'))
             break
           case 'passwordless-login-disallowed-for-user':
-            sAlert.error(TAPi18n.__('login.passwordlessDisallowedUserMessage'))
+            Alert.error(TAPi18n.__('login.passwordlessDisallowedUserMessage'))
             break
           default:
-            sAlert.error(TAPi18n.__('login.failedMessage'))
+            Alert.error(TAPi18n.__('login.failedMessage'))
         }
       } else {
         Meteor.call('users/login', () => {
@@ -86,7 +86,7 @@ export class Login extends React.Component {
       Meteor.loginWithPassword(username, password, callback)
     } else {
       console.warn('[Users] Login failed: No username or password provided')
-      sAlert.error(TAPi18n.__('login.failedMessage'))
+      Alert.error(TAPi18n.__('login.failedMessage'))
     }
   }
 
