@@ -19,7 +19,7 @@ const AlertIcon = ({ classNames, icon }) => (
   </div>
 )
 
-const CustomAlert = ({ classNames, id, styles, message, handleClose, icon }) => (
+const CustomAlert = ({ classNames, id, styles, message, handleClose, customFields }) => (
   <div
     className={classNames}
     id={id}
@@ -33,7 +33,7 @@ const CustomAlert = ({ classNames, id, styles, message, handleClose, icon }) => 
       paddingTop: 15,
       paddingBottom: 15
     }}>
-    <AlertIcon {...{ classNames, icon }} />
+    <AlertIcon {...{ classNames, icon: customFields.icon }} />
     <span
       style={{
         order: 2,
@@ -56,6 +56,6 @@ export const Alerts = () => (
     stack={false}
     offset={0}
     beep={false}
-    contentTemplate={CustomAlert}
+    contentTemplate={(...args) => { console.log(args); return CustomAlert(...args) }}
   />
 )
