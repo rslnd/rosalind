@@ -2,6 +2,9 @@
 
 set -e
 
-echo "** Deploying to production"
-
-curl -sSXPOST "$PRODUCTION_DEPLOY_HOOK" > /dev/null
+if [ $BRANCH == "master" ]; then
+  echo "** Deploying to production"
+  curl -sSXPOST "$PRODUCTION_DEPLOY_HOOK" > /dev/null
+else
+  echo "** Skipping production deploy"
+fi
