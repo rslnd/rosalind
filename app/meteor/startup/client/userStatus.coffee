@@ -1,3 +1,5 @@
+React = require 'react'
+{ Icon } = require 'client/ui/components/Icon'
 moment = require 'moment'
 Alert = require('react-s-alert').default
 { Meteor } = require 'meteor/meteor'
@@ -9,9 +11,7 @@ Alert = require('react-s-alert').default
 module.exports = ->
   connectionStatus = ->
     Tracker.autorun ->
-
-      forceReloadTimeout = [6, 'minutes']
-      messageTimeout = [5, 'seconds']
+      messageTimeout = [10, 'seconds']
 
       try
         status = Meteor.status().status
@@ -20,19 +20,15 @@ module.exports = ->
           if window.offline?.alertId
             console.log('[Meteor] status: connected')
             Alert.close(window.offline.alertId)
-            html = '<i class="fa fa-thumbs-up"></i> ' + TAPi18n.__('ui.statusMessages.connected')
-            Alert.success(html, { timeout: 2000, html: true })
+            icon = React.createElement(Icon, { name: 'thumbs-up' }, null)
+            Alert.success(TAPi18n.__('ui.statusMessages.connected'), { timeout: 2000, customFields: { icon } })
           window.offline = null
 
         else
-          if window?.offline?.since
-            if window.offline.since.isBefore(moment().subtract(forceReloadTimeout[0], forceReloadTimeout[1]))
-              console.log('[Meteor] status: force reloading')
-              window.location.reload()
-
+          if window?.offline
             if not window.offline.alertId and window.offline.since.isBefore(moment().subtract(messageTimeout[0], messageTimeout[1]))
-              html = '<i class="fa fa-refresh fa-spin"> </i> ' + TAPi18n.__('ui.statusMessages.disconnected')
-              window.offline.alertId = Alert.warning(html, { timeout: 'none', html: true })
+              icon = React.createElement(Icon, { name: 'refresh', spin: true }, null)
+              window.offline.alertId = Alert.warning(TAPi18n.__('ui.statusMessages.disconnected'), { timeout: 'none', customFields: { icon } })
               console.log('[Meteor] status:', status)
 
           else if not window.offline?
