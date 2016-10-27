@@ -1,7 +1,10 @@
+React = require 'react'
 once = require 'lodash/once'
 Mousetrap = require 'mousetrap'
 require 'mousetrap/plugins/global-bind/mousetrap-global-bind'
 { browserHistory } = require 'react-router'
+Alert = require('react-s-alert').default
+{ SpecialUnicorn } = require 'client/ui/components/Emoji'
 { Modal } = require 'client/old/templates/application/modals/blazeModal'
 
 hotkeys =
@@ -57,9 +60,17 @@ hotkeys =
         'u n i c o r n',
       ]
       fn: ->
-        deg = Math.floor(40 + Math.random() * 280)
-        document.body.style.filter = "hue-rotate(#{deg}deg) saturate(3) sepia(0.1)"
-        setTimeout((-> document.body.style.filter = null), 3500)
+        if (Math.random() < 0.9)
+          deg = Math.floor(40 + Math.random() * 280)
+          document.body.style.filter = "hue-rotate(#{deg}deg) saturate(3) sepia(0.1)"
+          setTimeout((-> document.body.style.filter = null), 3500)
+        else
+          Alert.info('', {
+            timeout: 4500,
+            customFields: {
+              emoji: React.createElement(SpecialUnicorn, {}, null)
+            }
+          })
   ]
 
 

@@ -38,7 +38,10 @@ const CustomAlert = ({ classNames, id, styles, message, handleClose, customField
       style={{
         order: 2,
         flexGrow: 1
-      }}>{message}</span>
+      }}>
+      {message}
+      &nbsp;{customFields.emoji || null}
+    </span>
     <span
       className="s-alert-close"
       onClick={handleClose}
@@ -56,6 +59,6 @@ export const Alerts = () => (
     stack={false}
     offset={0}
     beep={false}
-    contentTemplate={(...args) => { console.log(args); return CustomAlert(...args) }}
+    contentTemplate={CustomAlert}
   />
 )
