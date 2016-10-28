@@ -3,8 +3,9 @@ import FlipMove from 'react-flip-move'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { InboundCallItem } from './InboundCallItem'
 import { Box } from 'client/ui/components/Box'
+import { HugeEmoji } from 'client/ui/components/Emoji'
 
-export const InboundCallsScreen = ({ inboundCalls, resolve, unresolve }) => (
+export const InboundCallsScreen = ({ inboundCalls, resolve, unresolve, showEncouragement }) => (
   <div className="content">
     <div className="row">
       <FlipMove>
@@ -17,7 +18,17 @@ export const InboundCallsScreen = ({ inboundCalls, resolve, unresolve }) => (
           (inboundCalls.length === 0)
           ? (
             <div key="inboundCallsEmpty" className="col-md-12">
-              <Box type="success" title={TAPi18n.__('ui.allDone')} body={TAPi18n.__('inboundCalls.empty')} />
+              <Box type="success" title={TAPi18n.__('ui.allDone')}>
+                {TAPi18n.__('inboundCalls.empty')}
+              </Box>
+
+              {
+                showEncouragement &&
+                  <div style={{ width: 100, margin: 'auto auto' }}>
+                    <HugeEmoji pseudorandom="day" />
+                  </div>
+              }
+
             </div>
           ) : null
         }
