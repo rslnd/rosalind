@@ -3,7 +3,7 @@ import 'moment-range'
 import React from 'react'
 import { Modal } from 'react-bootstrap'
 import { Sticky } from 'react-sticky'
-import Popover from 'material-ui/Popover'
+import { Popover, PopoverAnimationVertical } from 'material-ui/Popover'
 import FlatButton from 'material-ui/FlatButton'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointment } from './Appointment'
@@ -212,8 +212,10 @@ export class AppointmentsView extends React.Component {
           open={this.state.popoverOpen}
           anchorEl={this.state.popoverAnchor}
           animated
+          animation={PopoverAnimationVertical}
           anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
           targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
+          style={{ overflowY: 'visible' }}
           autoCloseWhenOffScreen={false}
           onRequestClose={this.handlePopoverClose}
           >
