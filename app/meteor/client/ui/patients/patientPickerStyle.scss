@@ -9,3 +9,18 @@
   text-align: right;
   width: 50%;
 }
+
+:local(.appointment) {
+  border-left: 3px solid $primary-active;
+  display: flex;
+  margin-bottom: 4px;
+  margin-left: 25px;
+  padding-left: 6px;
+}
+
+:local(.assigneeName) {
+  align-self: flex-end;
+  color: $dark-gray-disabled;
+  flex-grow: 1;
+  text-align: right;
+}

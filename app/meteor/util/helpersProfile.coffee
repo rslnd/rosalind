@@ -4,6 +4,9 @@ module.exports =
   firstName: ->
     @profile?.firstName or @fullName()
 
+  lastName: ->
+    @profile?.lastName or @fullName()
+
   prefix: ->
     return '' if @?collection()._name is 'users'
 
@@ -39,6 +42,12 @@ module.exports =
 
   lastNameWithTitle: ->
     if (@profile?.lastName)
-      @fullNameWithTitle(@profile.lastName)
+      if (@profile?.titleAppend and @profile.titlePrepend)
+        @prefix() + @profile.titlePrepend + ' ' + @lastName() +
+          ', ' + @profile.titleAppend
+      else if (@profile?.titlePrepend)
+        @prefix() + @profile.titlePrepend + ' ' + @lastName()
+      else if (@profile?.titleAppend)
+        @prefix() + @fullName() + ', ' + @profile.titleAppend
     else
-      @fullName()
+      @fullNameWithTitle()
