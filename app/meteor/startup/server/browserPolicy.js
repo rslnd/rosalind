@@ -23,6 +23,9 @@ export default () => {
   BrowserPolicy.content.allowConnectOrigin('wss://api.smooch.io')
   BrowserPolicy.content.allowConnectOrigin('https://api.smooch.io')
 
+  BrowserPolicy.content.allowScriptOrigin('https://cdn.jsdelivr.net/emojione/2.2.4/lib/js/emojione.min.js')
+  BrowserPolicy.content.allowImageOrigin('https://cdn.jsdelivr.net/emojione')
+
   if (process.env.NODE_ENV !== 'production') {
     BrowserPolicy.content.allowConnectOrigin('ws://*')
     BrowserPolicy.content.allowScriptOrigin('http://localhost:3500')
