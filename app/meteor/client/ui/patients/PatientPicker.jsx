@@ -1,6 +1,7 @@
 import map from 'lodash/fp/map'
 import identity from 'lodash/identity'
 import startCase from 'lodash/startCase'
+import moment from 'moment'
 import React from 'react'
 import Select from 'react-select'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -8,6 +9,8 @@ import { Patients } from 'api/patients'
 import { Icon } from 'client/ui/components/Icon'
 import { PatientName } from './PatientName'
 import { Birthday } from './Birthday'
+import { getColor } from 'client/ui/tags/getColor'
+import { UserHelper } from 'client/ui/users/UserHelper'
 import style from './patientPickerStyle'
 import { NewPatientFormFieldsContainer } from './NewPatientFormFieldsContainer'
 
@@ -68,6 +71,34 @@ class PatientSearchResult extends React.Component {
           patient && <span>
             <span className={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
             <span className={style.birthday}>{patient && <Birthday day={patient.profile.birthday} veryShort />}</span>
+            {
+              patient.appointments &&
+                <span className={style.appointments}>
+                  {patient.appointments.map((appointment) => {
+                    const start = moment(appointment.start)
+
+                    return (
+                      <span
+                        key={appointment._id}
+                        className={style.appointment}
+                        style={{ borderColor: getColor(appointment.tags) }}>
+                        <span>
+                          {start.format(TAPi18n.__('time.dateFormatShort'))}
+                          &nbsp;
+                          {start.format(TAPi18n.__('time.timeFormat'))}
+                        </span>
+                        &emsp;
+                        {
+                          appointment.assigneeId &&
+                            <span className={style.assigneeName}>
+                              <UserHelper userId={appointment.assigneeId} helper="lastNameWithTitle" />
+                            </span>
+                        }
+                      </span>
+                    )
+                  })}
+                </span>
+            }
           </span>
         }
         {
@@ -177,6 +208,7 @@ export class PatientPicker extends React.Component {
     return (
       <div>
         <Select.Async
+          name="patientPicker"
           value={this.props.input.value || ''}
           ref={(c) => { this._select = c }}
           loadOptions={findPatients}

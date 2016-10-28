@@ -25,3 +25,10 @@ $select-menu-max-height: 400px;
   margin-left: 25px;
   padding-left: 6px;
 }
+
+:local(.assigneeName) {
+  align-self: flex-end;
+  color: $dark-gray-disabled;
+  flex-grow: 1;
+  text-align: right;
+}

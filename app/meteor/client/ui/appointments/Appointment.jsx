@@ -3,7 +3,7 @@ import moment from 'moment'
 import classnames from 'classnames'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
-import { getColor } from './getColor'
+import { getColor } from 'client/ui/tags/getColor'
 import style from './style'
 
 export class Appointment extends React.Component {

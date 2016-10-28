@@ -5,11 +5,10 @@ import Select from 'react-select'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointments } from 'api/appointments'
 import { Users } from 'api/users'
-import { Icon } from 'client/ui/components/Icon'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import { PatientName } from 'client/ui/patients/PatientName'
 import { Birthday } from 'client/ui/patients/Birthday'
-import { getColor } from './getColor'
+import { getColor } from 'client/ui/tags/getColor'
 import style from './appointmentsSearchStyle'
 
 const findAppointments = (query) => {
@@ -36,7 +35,7 @@ const findAppointments = (query) => {
           })
         })
       })
-
+      console.log(options)
       return { options }
     })
   } else {
@@ -105,7 +104,9 @@ class AppointmentSearchResult extends React.Component {
             &emsp;
             {
               appointment.assigneeId &&
-                <UserHelper userId={appointment.assigneeId} helper="fullNameWithTitle" />
+                <span className={style.assigneeName}>
+                  <UserHelper userId={appointment.assigneeId} helper="fullNameWithTitle" />
+                </span>
             }
           </span>
         }
@@ -143,6 +144,7 @@ export class AppointmentsSearch extends React.Component {
   render () {
     return (
       <Select.Async
+        name="appointmentsSearch"
         value={this.state.query}
         onChange={this.handleQueryChange}
         loadOptions={findAppointments}
