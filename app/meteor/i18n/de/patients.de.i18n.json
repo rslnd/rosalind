@@ -16,6 +16,7 @@
     "searching": "Suche...",
     "birthday": "Geburtsdatum",
     "birthdayToday": "Heute Geburtstag",
-    "yearsOld": "__age__ Jahre"
+    "yearsOld": "__age__ Jahre",
+    "patientNotFound": "PatientIn nicht gefunden"
   }
 }

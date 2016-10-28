@@ -9,7 +9,7 @@ export class PatientProfile extends React.Component {
   render () {
     const patient = this.props.patient
     if (!patient) {
-      return <div>Patient not found</div>
+      return <div>{TAPi18n.__('patients.patientNotFound')}</div>
     } else {
       return (
         <div>
