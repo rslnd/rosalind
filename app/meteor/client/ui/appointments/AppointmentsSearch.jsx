@@ -3,8 +3,8 @@ import identity from 'lodash/identity'
 import React from 'react'
 import Select from 'react-select'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Appointments } from 'api/appointments'
 import { Users } from 'api/users'
+import { Search } from 'api/search'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import { PatientName } from 'client/ui/patients/PatientName'
 import { Birthday } from 'client/ui/patients/Birthday'
@@ -13,16 +13,16 @@ import style from './appointmentsSearchStyle'
 
 const findAppointments = (query) => {
   if (query && query.length > 1) {
-    return Appointments.actions.search.callPromise({ query }).then((patientsWithAppointments) => {
+    return Search.actions.patientsWithAppointments.callPromise({ query }).then((patientsWithAppointments) => {
       let options = []
-      let lastPatient = null
+      let lastPatientId = null
 
       patientsWithAppointments.forEach((result) => {
-        if (lastPatient !== result.patient) {
-          lastPatient = result.patient
+        if (lastPatientId !== result._id) {
+          lastPatientId = result._id
           options.push({
-            value: `patient-${result.patient && result.patient._id}`,
-            patient: result.patient
+            value: `patient-${result._id}`,
+            patient: { ...result, appointments: undefined }
           })
         }
 
@@ -35,7 +35,6 @@ const findAppointments = (query) => {
           })
         })
       })
-      console.log(options)
       return { options }
     })
   } else {

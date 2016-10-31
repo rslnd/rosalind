@@ -5,7 +5,7 @@ import moment from 'moment'
 import React from 'react'
 import Select from 'react-select'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Patients } from 'api/patients'
+import { Search } from 'api/search'
 import { Icon } from 'client/ui/components/Icon'
 import { PatientName } from './PatientName'
 import { Birthday } from './Birthday'
@@ -15,7 +15,7 @@ import style from './patientPickerStyle'
 import { NewPatientFormFieldsContainer } from './NewPatientFormFieldsContainer'
 
 const findPatients = (query) => {
-  return Patients.actions.search.callPromise({ query })
+  return Search.actions.patientsWithAppointments.callPromise({ query })
     .then(map((patient) => {
       return {
         label: `${patient.profile.lastName} ${patient.profile.firstName}`,
