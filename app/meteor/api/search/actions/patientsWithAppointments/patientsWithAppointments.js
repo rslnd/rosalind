@@ -4,9 +4,9 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { parseQuery } from './parseQuery'
 
-export const search = ({ Patients, Appointments }) => {
+export const patientsWithAppointments = ({ Patients, Appointments }) => {
   return new ValidatedMethod({
-    name: 'patients/search',
+    name: 'search/patientsWithAppointments',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       query: { type: String }
