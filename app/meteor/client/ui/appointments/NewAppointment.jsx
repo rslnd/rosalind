@@ -1,7 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { reduxForm } from 'redux-form/immutable'
-import { Field } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
 import { TextField } from 'redux-form-material-ui'
@@ -94,7 +93,5 @@ export const NewAppointment = reduxForm({
     // The following fields may be filled within NewPatientFormFields
     // This allows creating a new patient at the same time as an appointment
     'firstName', 'lastName', 'gender', 'telephone', 'email', 'birthday', 'patientNote'],
-  validate: (data) => {
-    return true
-  }
+  validate: () => { return {} }
 })(NewAppointmentFormComponent)

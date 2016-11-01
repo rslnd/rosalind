@@ -11,30 +11,32 @@ export class NewAppointmentContainer extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleSubmit (formData, dispatch) {
-    console.log({ formData })
+  handleSubmit (values, dispatch) {
+    console.log('[Appointments] Submitting new Appointment', { values })
     let newPatient = null
 
-    if (formData.patientId === 'newPatient') {
-      // FIXME: CRITICAL: Parse birthday and telephone (contacts)
+    if (values.patientId === 'newPatient') {
       newPatient = {
         profile: {
-          lastName: formData.lastName,
-          firstName: formData.firstName,
-          gender: formData.gender,
-          note: formData.patientNote,
-          birthday: formData.birthday,
-          contacts: [
-            { channel: 'Phone', value: formData.telephone }
-          ]
+          lastName: values.lastName,
+          firstName: values.firstName,
+          gender: values.gender,
+          note: values.patientNote,
+          birthday: values.birthday
         }
+      }
+
+      if (values.telephone) {
+        newPatient.profile.contacts = [
+          { channel: 'Phone', value: values.telephone }
+        ]
       }
     }
 
     const appointment = {
-      patientId: newPatient ? undefined : formData.patientId,
-      note: formData.appointmentNote,
-      tags: formData.tags,
+      patientId: newPatient ? undefined : values.patientId,
+      note: values.appointmentNote,
+      tags: values.tags,
       start: moment(this.props.time).toDate(),
       end: moment(this.props.time).add(5, 'minutes').toDate(),
       assigneeId: this.props.assigneeId

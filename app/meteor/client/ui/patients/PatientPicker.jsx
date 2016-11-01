@@ -25,8 +25,8 @@ const findPatients = (query) => {
     })).then((options) => {
       return {
         options: [ ...options, {
-          createNew: true,
-          value: 'createNew',
+          newPatient: true,
+          value: 'newPatient',
           query
         } ]
       }
@@ -58,7 +58,7 @@ class PatientSearchResult extends React.Component {
   }
 
   render () {
-    const { patient, createNew, query } = this.props.option
+    const { patient, newPatient, query } = this.props.option
 
     return (
       <div className={this.props.className}
@@ -102,7 +102,7 @@ class PatientSearchResult extends React.Component {
           </span>
         }
         {
-          createNew && <span>
+          newPatient && <span>
             <Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisInsert')}
             {
               query && <span>:&nbsp;{query}</span>
@@ -118,7 +118,7 @@ const PatientNameSelected = ({ value }) => (
   <div className="Select-value">
     <span className="Select-value-label">
       {value.patient && <PatientName patient={value.patient} />}
-      {value.createNew && <span><Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisNew')}</span>}
+      {value.newPatient && <span><Icon name="user-plus" />&nbsp;{TAPi18n.__('patients.thisNew')}</span>}
     </span>
   </div>
 )
@@ -170,7 +170,7 @@ export class PatientPicker extends React.Component {
 
   handleQueryChange (query) {
     if (query) {
-      if (query.createNew) {
+      if (query.newPatient) {
         const autofill = this.parseQueryForAutofill(query.query)
         this.handleOpenNewPatient()
         this.props.dispatch({ type: 'OPEN_NEW_PATIENT', autofill })
