@@ -1,5 +1,4 @@
 import React from 'react'
-import { StickyContainer, Sticky } from 'react-sticky'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
 import { DateNavigation } from 'client/ui/components/DateNavigation'
@@ -10,8 +9,8 @@ import style from './style'
 export class AppointmentsScreen extends React.Component {
   render () {
     return (
-      <StickyContainer>
-        <Sticky className={`content-header ${style.contentHeader}`}>
+      <div>
+        <div className={`content-header ${style.contentHeader}`}>
           <h1>
             {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
             <small>{weekOfYear(this.props.date, { short: true })}</small>
@@ -27,7 +26,7 @@ export class AppointmentsScreen extends React.Component {
               basePath="appointments"
               pullRight />
           </div>
-        </Sticky>
+        </div>
 
         <div className="content">
           <AppointmentsView
@@ -37,7 +36,7 @@ export class AppointmentsScreen extends React.Component {
             onPopoverClose={this.props.onPopoverClose} />
         </div>
 
-      </StickyContainer>
+      </div>
     )
   }
 }

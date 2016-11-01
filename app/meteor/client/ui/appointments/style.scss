@@ -1,6 +1,9 @@
 :local(.contentHeader) {
-  background-color: $background;
+  background: $background !important;
   display: flex;
+  left: 230px;
+  position: fixed;
+  right: 0;
   z-index: 50;
 }
 
@@ -8,14 +11,18 @@
   background-color: $background;
   border-bottom: 1px solid $gray-disabled;
   display: flex;
+  left: 245px;
   padding-bottom: 6px;
-  width: 100%;
+  padding-top: 10px;
+  position: fixed;
+  right: 15px;
+  top: 50px;
   z-index: 40;
 }
 
-:local(.headerRowSticky) {
-  padding-top: 60px;
-}
+// :local(.headerRowSticky) {
+  // padding-top: 60px;
+// }
 
 :local(.headerCell) {
   flex: 1;
@@ -23,7 +30,7 @@
 
 :local(.grid) {
   display: grid;
-  margin-top: -130px;
+  // margin-top: -130px;
 }
 
 :local(.appointment) {
