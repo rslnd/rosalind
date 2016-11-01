@@ -1,7 +1,8 @@
 :local(.contentHeader) {
   background: $background !important;
-  display: flex;
+  display: flex !important;
   left: 230px;
+  padding: 15px 15px 0;
   position: fixed;
   right: 0;
   z-index: 50;
