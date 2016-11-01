@@ -2,7 +2,6 @@ import moment from 'moment'
 import 'moment-range'
 import React from 'react'
 import { Modal } from 'react-bootstrap'
-import { Sticky } from 'react-sticky'
 import { Popover, PopoverAnimationVertical } from 'material-ui/Popover'
 import FlatButton from 'material-ui/FlatButton'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -92,10 +91,7 @@ export class AppointmentsView extends React.Component {
     return (
       <div>
         {/* Assignees */}
-        <Sticky
-          className={style.headerRow}
-          stickyClassName={style.headerRowSticky}
-          topOffset={-60}>
+        <div className={style.headerRow}>
           <div style={{width: '60px'}}></div>
           {this.props.assignees.map((assignee) => (
             <div key={assignee.assigneeId} className={style.headerCell}>
@@ -106,7 +102,7 @@ export class AppointmentsView extends React.Component {
               }
             </div>
           ))}
-        </Sticky>
+        </div>
 
         <div className={style.grid} style={this.grid()}>
           {/* Appointments */}
