@@ -16,7 +16,7 @@ export class ToggleField extends React.Component {
   }
 
   componentDidMount () {
-    this.props.input.onChange(this.props.values[0].value)
+    this.props.input.onChange(this.props.input.value || this.props.values[0].value)
   }
 
   toggle () {
