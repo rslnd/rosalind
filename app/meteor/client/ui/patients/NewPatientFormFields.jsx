@@ -5,6 +5,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import FlatButton from 'material-ui/FlatButton'
 import { Icon } from 'client/ui/components/Icon'
 import { ToggleField } from 'client/ui/components/ToggleField'
+import { BirthdayField } from 'client/ui/components/BirthdayField'
 
 export class NewPatientFormFields extends React.Component {
   render () {
@@ -45,6 +46,7 @@ export class NewPatientFormFields extends React.Component {
               </div>
               <div className="col-md-1">
                 <FlatButton
+                  tabIndex={-1}
                   style={{ minWidth: 31, marginTop: 32, color: '#bebebe' }}
                   onClick={this.props.swapNameFields}>
                   <Icon name="random" flipHorizontal />
@@ -65,7 +67,7 @@ export class NewPatientFormFields extends React.Component {
                     <div>
                       <Field
                         name="birthday"
-                        component={TextField}
+                        component={BirthdayField}
                         fullWidth
                         autoFocus
                         floatingLabelText={TAPi18n.__('patients.birthday')} />

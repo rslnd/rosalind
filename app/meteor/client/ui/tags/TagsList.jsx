@@ -9,6 +9,7 @@ export const TagsList = ({ tags = [], onClick, style = {} }) => (
       return (
         <span
           key={tag._id}
+          title={tag.description}
           onClick={() => onClick && onClick(tag._id)}
           style={{ ...style, backgroundColor: tag.color || '#ccc' }}
           className={css.tag}>{tag.tag}

@@ -52,6 +52,8 @@ export const upsert = ({ Patients }) => {
           patient.profile.contacts = [ ...existingPatient.profile.contacts, ...newContacts ]
         }
 
+        console.log('[Patients] Updating', { patient })
+
         Patients.update({ _id: existingPatient._id }, dot.flatten(patient), (err) => {
           if (err) { throw err }
           if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
