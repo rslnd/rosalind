@@ -23,7 +23,10 @@ export class NewAppointmentContainer extends React.Component {
           firstName: formData.firstName,
           gender: formData.gender,
           note: formData.patientNote,
-          birthday: null
+          birthday: formData.birthday,
+          contacts: [
+            { channel: 'Phone', value: formData.telephone }
+          ]
         }
       }
     }
@@ -37,7 +40,7 @@ export class NewAppointmentContainer extends React.Component {
       assigneeId: this.props.assigneeId
     }
 
-    console.log({ newPatient, appointment })
+    console.log('[Appointments] Inserting appointment with new patient', { newPatient, appointment })
 
     return Appointments.actions.insert.callPromise({ appointment, newPatient })
       .then(() => {

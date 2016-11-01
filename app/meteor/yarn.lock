@@ -3927,6 +3927,10 @@ moment@^2.14.1, "moment@>= 2.6.0", moment@>=1.6.0, moment@2.x.x:
   version "2.15.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.15.2.tgz#1bfdedf6a6e345f322fe956d5df5bd08a8ce84dc"
 
+mongo-dot-notation:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/mongo-dot-notation/-/mongo-dot-notation-1.0.5.tgz#f38404d0edaaf6560e1034ba14c6fb9fd150a620"
+
 mousetrap@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.0.tgz#0168fcabb11d07669e87490324c981208121ac4d"

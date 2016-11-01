@@ -1,3 +1,4 @@
+import dot from 'mongo-dot-notation'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
@@ -14,11 +15,13 @@ export const upsert = ({ Patients }) => {
       quiet: { type: Boolean, optional: true }
     }).validator(),
 
-    // FIXME: Clients can quietly upsert patients
-    // this flag is set when bulk importing patients
     run ({ patient, quiet }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
+      }
+
+      if (this.connection) {
+        quiet = false
       }
 
       if (patient.profile && patient.profile.lastName) {
@@ -27,15 +30,33 @@ export const upsert = ({ Patients }) => {
 
       // TODO: Split into separate method
       let existingPatient = null
-      if (patient.insuranceId) { existingPatient = Patients.findOne({ insuranceId: patient.insuranceId }) }
-      if (!existingPatient && patient.external && patient.external.eoswin.id) { existingPatient = Patients.findOne({ 'external.eoswin.id': patient.external.eoswin.id }) }
+      if (patient.insuranceId) {
+        existingPatient = Patients.findOne({ insuranceId: patient.insuranceId })
+      }
+
+      if (!existingPatient && patient.external && patient.external.eoswin.id) {
+        existingPatient = Patients.findOne({ 'external.eoswin.id': patient.external.eoswin.id })
+      }
 
       if (existingPatient) {
-        // FIXME: CRITICAL: Don't $set-override any contacts that only exist in this system
         // TODO: Factor contacts into own model
-        Patients.update({ _id: existingPatient._id }, { $set: patient })
+        if (existingPatient.profile && existingPatient.profile.contacts && patient.profile && patient.profile.contacts) {
+          let newContacts = []
 
-        if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
+          patient.profile.contacts.forEach((c) => {
+            if (!existingPatient.profile.contacts.map((c) => c.value).includes(c.value)) {
+              newContacts.push(c)
+            }
+          })
+
+          patient.profile.contacts = [ ...existingPatient.profile.contacts, ...newContacts ]
+        }
+
+        Patients.update({ _id: existingPatient._id }, dot.flatten(patient), (err) => {
+          if (err) { throw err }
+          if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
+        })
+
         return existingPatient._id
       } else {
         try {
