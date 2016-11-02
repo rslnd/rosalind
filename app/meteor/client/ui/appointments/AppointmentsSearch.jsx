@@ -17,7 +17,7 @@ const findAppointments = (query) => {
       let options = []
       let lastPatientId = null
 
-      patientsWithAppointments.forEach((result) => {
+      patientsWithAppointments && patientsWithAppointments.forEach((result) => {
         if (lastPatientId !== result._id) {
           lastPatientId = result._id
           options.push({
@@ -26,7 +26,7 @@ const findAppointments = (query) => {
           })
         }
 
-        result.appointments.forEach((appointment) => {
+        result.appointments && result.appointments.forEach((appointment) => {
           options.push({
             label: `appointment-${appointment._id}`,
             assignee: appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId }),
