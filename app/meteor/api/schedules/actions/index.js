@@ -2,6 +2,7 @@ import { Users } from 'api/users'
 import { postRequest } from './postRequest'
 import { approveRequest } from './approveRequest'
 import { declineRequest } from './declineRequest'
+import { softRemove } from './softRemove'
 import { upsert } from './upsert'
 
 export default ({ Schedules }) => {
@@ -9,6 +10,7 @@ export default ({ Schedules }) => {
     postRequest: postRequest({ Schedules, Users }),
     approveRequest: approveRequest({ Schedules, Users }),
     declineRequest: declineRequest({ Schedules, Users }),
+    softRemove: softRemove({ Schedules }),
     upsert: upsert({ Schedules, Users })
   }
 }

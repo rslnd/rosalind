@@ -5,6 +5,7 @@ import React from 'react'
 import { Modal } from 'react-bootstrap'
 import { Popover, PopoverAnimationVertical } from 'material-ui/Popover'
 import FlatButton from 'material-ui/FlatButton'
+import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
 import { Appointment } from './Appointment'
@@ -44,6 +45,9 @@ export class AppointmentsView extends React.Component {
     this.handleNewAppointmentClick = this.handleNewAppointmentClick.bind(this)
     this.handleNewAppointmentHover = this.handleNewAppointmentHover.bind(this)
     this.handleOverrideHover = this.handleOverrideHover.bind(this)
+    this.handleScheduleModalOpen = this.handleScheduleModalOpen.bind(this)
+    this.handleScheduleModalClose = this.handleScheduleModalClose.bind(this)
+    this.handleScheduleSoftRemove = this.handleScheduleSoftRemove.bind(this)
     this.grid = this.grid.bind(this)
   }
   // row name    | column names
@@ -170,6 +174,29 @@ export class AppointmentsView extends React.Component {
     }
   }
 
+  handleScheduleModalOpen ({ scheduleId }) {
+    this.setState({...this.state,
+      scheduleModalOpen: true,
+      scheduleModalId: scheduleId
+    })
+  }
+
+  handleScheduleModalClose () {
+    this.setState({...this.state,
+      scheduleModalOpen: false,
+      scheduleModalId: null
+    })
+  }
+
+  handleScheduleSoftRemove () {
+    if (this.state.scheduleModalOpen && this.state.scheduleModalId) {
+      Schedules.actions.softRemove.callPromise({ scheduleId: this.state.scheduleModalId }).then(() => {
+        this.handleScheduleModalClose()
+        Alert.success(TAPi18n.__('schedules.softRemoveSuccess'))
+      })
+    }
+  }
+
   render () {
     return (
       <div>
@@ -264,6 +291,7 @@ export class AppointmentsView extends React.Component {
                     key={`schedule-${schedule._id}`}
                     data-scheduleId={schedule._id}
                     className={style.scheduledUnavailable}
+                    onClick={() => this.handleScheduleModalOpen({ scheduleId: schedule._id })}
                     style={{
                       gridRowStart: timeStart,
                       gridRowEnd: timeEnd,
@@ -297,6 +325,7 @@ export class AppointmentsView extends React.Component {
               })
           }
         </div>
+
         <Modal
           enforceFocus={false}
           show={this.state.appointmentModalOpen}
@@ -311,6 +340,28 @@ export class AppointmentsView extends React.Component {
             <div className="pull-right">
               <FlatButton
                 onClick={this.handleAppointmentModalClose}
+                label={TAPi18n.__('ui.close')} />
+            </div>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal
+          enforceFocus={false}
+          show={this.state.scheduleModalOpen}
+          onHide={this.handleScheduleModalClose}
+          bsSize="large">
+          <Modal.Body>
+            <FlatButton
+              onClick={this.handleScheduleSoftRemove}
+              label={<span>
+                <Icon name="trash-o" />&emsp;
+                {TAPi18n.__('schedules.softRemove')}
+              </span>} />
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="pull-right">
+              <FlatButton
+                onClick={this.handleScheduleModalClose}
                 label={TAPi18n.__('ui.close')} />
             </div>
           </Modal.Footer>

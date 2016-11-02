@@ -53,6 +53,8 @@
       "compensatory": "Zeitausgleich",
       "sick": "Krankenstand"
     },
-    "timesheets": "Zeiterfassung"
+    "timesheets": "Zeiterfassung",
+    "softRemove": "Löschen",
+    "softRemoveSuccess": "Gelöscht"
   }
 }
