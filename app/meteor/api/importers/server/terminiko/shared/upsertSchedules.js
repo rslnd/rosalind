@@ -38,5 +38,5 @@ export const upsertSchedules = ({ record, resources, job, timezone = 'Europe/Vie
     }
   }
 
-  Schedules.methods.upsert.call({ schedule, quiet: true })
+  Schedules.actions.upsert.call({ schedule, quiet: true })
 }

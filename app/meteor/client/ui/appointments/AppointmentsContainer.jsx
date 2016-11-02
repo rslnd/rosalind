@@ -19,9 +19,12 @@ const appointmentsSubsManager = new SubsManager({
 
 const composer = (props, onData) => {
   const date = moment(props.params && props.params.date || undefined)
+  const startOfDay = date.clone().startOf('day').toDate()
+  const endOfDay = date.clone().endOf('day').toDate()
+
   const dateRange = {
-    start: date.clone().startOf('day').toDate(),
-    end: date.clone().endOf('day').toDate()
+    start: startOfDay,
+    end: endOfDay
   }
 
   const schedulesSubscriptions = appointmentsSubsManager.subscribe('schedules', dateRange)
@@ -30,8 +33,8 @@ const composer = (props, onData) => {
   if (schedulesSubscriptions.ready() && appointmentsSubscription.ready()) {
     const appointmentsSelector = {
       start: {
-        $gte: date.clone().startOf('day').toDate(),
-        $lte: date.clone().endOf('day').toDate()
+        $gte: startOfDay,
+        $lte: endOfDay
       }
     }
 
@@ -45,7 +48,11 @@ const composer = (props, onData) => {
           lastName: user && user.profile.lastName,
           schedule: '8:00-14:00',
           assigneeId,
-          schedules: Schedules.find({ userId: assigneeId }).fetch(),
+          schedules: Schedules.find({
+            userId: assigneeId,
+            start: { $gte: startOfDay },
+            end: { $lte: endOfDay }
+          }).fetch(),
           appointments: appointments.map((appointment) => {
             let patient = Patients.findOne({ _id: appointment.patientId })
             if (patient) {

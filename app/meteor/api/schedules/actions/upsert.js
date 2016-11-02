@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor'
+import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from 'api/events'
@@ -6,7 +7,7 @@ import { Events } from 'api/events'
 export const upsert = ({ Schedules, Users }) => {
   return new ValidatedMethod({
     name: 'schedules/upsert',
-
+    mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       schedule: { type: Object, blackbox: true },
       quiet: { type: Boolean, optional: true }
@@ -15,6 +16,10 @@ export const upsert = ({ Schedules, Users }) => {
     run ({ schedule, quiet }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
+      }
+
+      if (this.connection) {
+        quiet = false
       }
 
       let selector = {}
@@ -27,7 +32,7 @@ export const upsert = ({ Schedules, Users }) => {
 
       if (existingSchedule) {
         Schedules.update({ _id: existingSchedule._id }, { $set: schedule })
-        if (!quiet) { Events.post('schedules/upsert', { scheduleId: existingSchedule._id }) }
+        if (!quiet) { Events.post('schedules/update', { scheduleId: existingSchedule._id }) }
         return existingSchedule._id
       } else {
         try {

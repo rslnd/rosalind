@@ -1,10 +1,12 @@
 import moment from 'moment'
 import 'moment-range'
+import 'moment-round'
 import React from 'react'
 import { Modal } from 'react-bootstrap'
 import { Popover, PopoverAnimationVertical } from 'material-ui/Popover'
 import FlatButton from 'material-ui/FlatButton'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { Icon } from 'client/ui/components/Icon'
 import { Appointment } from './Appointment'
 import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { NewAppointmentContainer } from './NewAppointmentContainer'
@@ -35,6 +37,13 @@ export class AppointmentsView extends React.Component {
     this.handleAppointmentModalClose = this.handleAppointmentModalClose.bind(this)
     this.handlePopoverOpen = this.handlePopoverOpen.bind(this)
     this.handlePopoverClose = this.handlePopoverClose.bind(this)
+    this.handleOverrideModeToggle = this.handleOverrideModeToggle.bind(this)
+    this.handleOverrideStart = this.handleOverrideStart.bind(this)
+    this.handleOverrideEnd = this.handleOverrideEnd.bind(this)
+    this.handleOverrideStartOrEnd = this.handleOverrideStartOrEnd.bind(this)
+    this.handleNewAppointmentClick = this.handleNewAppointmentClick.bind(this)
+    this.handleNewAppointmentHover = this.handleNewAppointmentHover.bind(this)
+    this.handleOverrideHover = this.handleOverrideHover.bind(this)
     this.grid = this.grid.bind(this)
   }
   // row name    | column names
@@ -59,6 +68,20 @@ export class AppointmentsView extends React.Component {
 
   handleAppointmentModalClose () {
     this.setState({ ...this.state, appointmentModalOpen: false })
+  }
+
+  handleNewAppointmentClick (options) {
+    if (this.state.override) {
+      this.handleOverrideStartOrEnd(options)
+    } else {
+      this.handlePopoverOpen(options)
+    }
+  }
+
+  handleNewAppointmentHover (options) {
+    if (this.state.override) {
+      this.handleOverrideHover(options)
+    }
   }
 
   handlePopoverClose () {
@@ -87,6 +110,66 @@ export class AppointmentsView extends React.Component {
     })
   }
 
+  handleOverrideModeToggle ({ assigneeId }) {
+    this.setState({ ...this.state,
+      override: !this.state.override,
+      overrideAssigneeId: assigneeId
+    })
+  }
+
+  handleOverrideStart ({ time }) {
+    if (this.state.override) {
+      this.setState({ ...this.state,
+        overrideStart: time,
+        overrideEnd: time
+      })
+    }
+  }
+
+  handleOverrideHover ({ time }) {
+    this.setState({ ...this.state,
+      overrideEnd: moment(time).add(5, 'minutes').subtract(1, 'second').toDate()
+    })
+  }
+
+  handleOverrideEnd ({ time }) {
+    if (this.state.override) {
+      let start = this.state.overrideStart
+      let end = moment(time).add(5, 'minutes').subtract(1, 'second').toDate()
+
+      if (this.state.overrideStart > this.state.overrideEnd) {
+        [ start, end ] = [ end, start ]
+      }
+
+      const newSchedule = {
+        userId: this.state.overrideAssigneeId,
+        start,
+        end,
+        available: false,
+        type: 'override'
+      }
+
+      console.log('[Appointments] Schedules override end event', { newSchedule })
+
+      Schedules.actions.upsert.callPromise({ schedule: newSchedule }).then(() => {
+        this.setState({ ...this.state,
+          override: false,
+          overrideStart: null,
+          overrideEnd: null,
+          overrideAssigneeId: null
+        })
+      })
+    }
+  }
+
+  handleOverrideStartOrEnd ({ time, assigneeId }) {
+    if (this.state.overrideStart) {
+      this.handleOverrideEnd({ time, assigneeId })
+    } else {
+      this.handleOverrideStart({ time, assigneeId })
+    }
+  }
+
   render () {
     return (
       <div>
@@ -100,6 +183,12 @@ export class AppointmentsView extends React.Component {
                 ? assignee.fullNameWithTitle
                 : TAPi18n.__('appointments.unassigned')
               }
+
+              <div
+                className={`pull-right ${style.assigneeHeaderEllipsis}`}
+                onClick={(event) => this.handleOverrideModeToggle({ event, assigneeId: assignee.assigneeId })}>
+                <Icon name="caret-down" />
+              </div>
             </div>
           ))}
         </div>
@@ -126,7 +215,8 @@ export class AppointmentsView extends React.Component {
                   <span
                     key={`new-${assigneeId}-${timeKey}`}
                     className={style.newAppointmentTrigger}
-                    onClick={(event) => this.handlePopoverOpen({ event, assigneeId, time: time.toDate() })}
+                    onClick={(event) => this.handleNewAppointmentClick({ event, assigneeId, time: time.toDate() })}
+                    onMouseEnter={(event) => this.handleNewAppointmentHover({ event, assigneeId, time: time.toDate() })}
                     style={{
                       gridRow: timeKey,
                       gridColumn: `assignee-${assigneeId}`
@@ -137,6 +227,28 @@ export class AppointmentsView extends React.Component {
               })
           ))}
 
+          {/* New Override Mode */}
+          {
+            this.state.overrideStart && (() => {
+              const start = moment(this.state.overrideStart)
+              const end = moment(this.state.overrideEnd).add(1, 'second')
+
+              return (
+                <div
+                  key="override-start"
+                  className={style.overrideOverlay}
+                  style={{
+                    gridRowStart: start.format('[time-]HHmm'),
+                    gridRowEnd: end.format('[time-]HHmm'),
+                    gridColumn: `assignee-${this.state.overrideAssigneeId}`
+                  }}>
+                  <div>{start.format('H:mm')}</div>
+                  <div>{end.format('H:mm')}</div>
+                </div>
+              )
+            })()
+          }
+
           {/* Schedules */}
           {
             this.props.assignees.map((assignee) => (
@@ -144,8 +256,8 @@ export class AppointmentsView extends React.Component {
                 if (!schedule.start && !schedule.end) {
                   return null
                 }
-                const timeStart = moment(schedule.start).format('[time-]HHmm')
-                const timeEnd = moment(schedule.end).format('[time-]HHmm')
+                const timeStart = moment(schedule.start).floor(5, 'minutes').format('[time-]HHmm')
+                const timeEnd = moment(schedule.end).ceil(5, 'minutes').format('[time-]HHmm')
 
                 return (
                   <div
@@ -155,7 +267,7 @@ export class AppointmentsView extends React.Component {
                     style={{
                       gridRowStart: timeStart,
                       gridRowEnd: timeEnd,
-                      gridColumn: `assignee-${assignee.assigneeId}`
+                      gridColumn: `assignee-${schedule.userId}`
                     }}>
                     &nbsp;
                   </div>

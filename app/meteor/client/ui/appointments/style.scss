@@ -20,17 +20,24 @@
   z-index: 40;
 }
 
-// :local(.headerRowSticky) {
-  // padding-top: 60px;
-// }
-
 :local(.headerCell) {
   flex: 1;
 }
 
+:local(.assigneeHeaderEllipsis) {
+  color: $dark-gray-active;
+  display: none;
+  margin-right: 10px;
+  padding: 0 6px 0;
+}
+
+:local(.headerCell:hover .assigneeHeaderEllipsis) {
+  display: block;
+  background-color: lighten($background, 3%);
+}
+
 :local(.grid) {
   display: grid;
-  // margin-top: -130px;
 }
 
 :local(.appointment) {
@@ -93,4 +100,13 @@
 
 :local(.summary) {
   margin-bottom: 5px;
+}
+
+:local(.overrideOverlay) {
+  background-color: rgb(226, 214, 227);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  text-align: center;
 }
