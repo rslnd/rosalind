@@ -9,6 +9,7 @@ export default () => {
     if (!error && (
         message === "Cannot read property 'status' of undefined" ||
         message === "Cannot read property 'appUser' of undefined" ||
+        message === "Cannot read property 'conversationUpdated' of undefined" ||
         message === 'Not found')) {
       return false
     }
