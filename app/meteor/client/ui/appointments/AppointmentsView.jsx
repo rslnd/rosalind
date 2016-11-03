@@ -294,7 +294,7 @@ export class AppointmentsView extends React.Component {
           {/* Time Legend */}
           {
             this.state.timeRange
-              .filter((t) => t.minute() % 15 === 0)
+              .filter((t) => t.minute() % 5 === 0)
               .map((time) => {
                 const fullHour = time.minute() === 0
                 const timeKey = time.format('[time-]HHmm')

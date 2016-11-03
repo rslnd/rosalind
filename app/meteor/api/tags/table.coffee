@@ -9,6 +9,7 @@ module.exports = new Tabular.Table
     { data: 'order', title: '#' }
     { data: 'tag', title: 'Tag' }
     { data: 'description', title: 'Description' }
+    { data: 'length', title: 'Length' }
     { data: 'color', title: 'Color', render: (val) -> "<span style='background-color: #{val}; color: white; padding 2px; border-radius: 3px;'>#{val}</span>" }
     { tmpl: Meteor.isClient and Template.editThis }
   ]

@@ -1,8 +1,10 @@
 import React from 'react'
 import moment from 'moment'
+import max from 'lodash/max'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { NewAppointment } from './NewAppointment'
 import { Appointments } from 'api/appointments'
+import { Tags } from 'api/tags'
 import Alert from 'react-s-alert'
 
 export class NewAppointmentContainer extends React.Component {
@@ -33,12 +35,14 @@ export class NewAppointmentContainer extends React.Component {
       }
     }
 
+    const length = max(Tags.find({ _id: { $in: values.tags } }).fetch().map((t) => t.length)) || 5
+
     const appointment = {
       patientId: newPatient ? undefined : values.patientId,
       note: values.appointmentNote,
       tags: values.tags,
       start: moment(this.props.time).toDate(),
-      end: moment(this.props.time).add(5, 'minutes').toDate(),
+      end: moment(this.props.time).add(length, 'minutes').toDate(),
       assigneeId: this.props.assigneeId
     }
 

@@ -11,6 +11,10 @@ module.exports = new SimpleSchema
     type: Number
     optional: true
 
+  length:
+    type: Number
+    optional: true
+
   description:
     type: String
     optional: true
