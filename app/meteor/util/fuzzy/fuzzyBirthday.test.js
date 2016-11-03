@@ -64,6 +64,17 @@ describe('util', function () {
         expect(fuzzyBirthday('12 06 94')).to.eql(parsed)
       })
 
+      it('parses and zero-fixes', function () {
+        expect(fuzzyBirthday('12o694')).to.eql(parsed)
+        expect(fuzzyBirthday('12. O6. 1994')).to.eql(parsed)
+        expect(fuzzyBirthday('12.o6.1994')).to.eql(parsed)
+        expect(fuzzyBirthday('1o.1O.199o')).to.eql({
+          day: 10,
+          month: 10,
+          year: 1990
+        })
+      })
+
       it('parses DD MM 00', function () {
         expect(fuzzyBirthday('12 06 00')).to.eql({
           day: 12,

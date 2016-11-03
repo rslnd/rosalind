@@ -1,14 +1,17 @@
 import moment from 'moment'
+import { zerofix } from '../zerofix'
 
 export const pattern = /(\d\d?)[ .\-\/\\,]*((\d\d?)|([a-zA-Z]+))[ .\-\/\\,]*(\d\d\d?\d?)?/
 
 export const fuzzyBirthday = (query) => {
+  const zerofixed = zerofix(query, { dontSplit: true })
+
   // Expect at least 1 digits
-  if (!query.match(/\d+/)) {
+  if (!zerofixed.match(/\d+/)) {
     return false
   }
 
-  return fuzzyDayMonthYear(query)
+  return fuzzyDayMonthYear(zerofixed)
 }
 
 export const fuzzyDayMonthYear = (query) => {
