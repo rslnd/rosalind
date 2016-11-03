@@ -47,29 +47,23 @@ export class NewAppointmentFormComponent extends React.Component {
         <div className={style.padded}>
           <div className="container-fluid">
 
-          {/* Tags and Note */}
+            {/* Tags */}
             <div className="row" style={{ marginTop: -25 }}>
-              <div className="col-md-12">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="row">
-                      <div className="col-md-6" style={{ marginTop: 30, paddingLeft: 0, paddingRight: 0 }}>
-                        <Field
-                          name="tags"
-                          component={TagsField}
-                          fullWidth />
-                      </div>
-                      <div className="col-md-6">
-                        <div>
-                          <Field name="appointmentNote"
-                            component={TextField}
-                            multiLine rows={1} fullWidth
-                            floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="col-md-12" style={{ marginTop: 30, paddingLeft: 0, paddingRight: 0 }}>
+                <Field
+                  name="tags"
+                  component={TagsField}
+                  fullWidth />
+              </div>
+            </div>
+
+            {/* Note */}
+            <div className="row" style={{ marginTop: -40 }}>
+              <div className="col-md-12" style={{ marginTop: 0, paddingLeft: 0, paddingRight: 0 }}>
+                <Field name="appointmentNote"
+                  component={TextField}
+                  multiLine rows={1} fullWidth
+                  floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
               </div>
             </div>
 
