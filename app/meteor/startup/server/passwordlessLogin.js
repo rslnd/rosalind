@@ -12,7 +12,7 @@ export default () => {
   Accounts.registerLoginHandler((loginRequest) => {
     if (loginRequest.passwordless) {
       const username = loginRequest.username
-      const user = Users.findOne({ username })
+      const user = Users.findOne({ username: username.toLowerCase() })
       if (user) {
         const userId = user._id
         console.log('[Login] Passwordless login request', { userId, username })
