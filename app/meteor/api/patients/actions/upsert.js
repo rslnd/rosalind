@@ -5,6 +5,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from 'api/events'
 import { normalizeName } from '../util/normalizeName'
+import { zerofix } from 'util/zerofix'
 
 export const upsert = ({ Patients }) => {
   return new ValidatedMethod({
@@ -45,6 +46,9 @@ export const upsert = ({ Patients }) => {
 
           patient.profile.contacts.forEach((c) => {
             if (!existingPatient.profile.contacts.map((c) => c.value).includes(c.value)) {
+              if (c.channel === 'Phone') {
+                c.value = zerofix(c.value)
+              }
               newContacts.push(c)
             }
           })

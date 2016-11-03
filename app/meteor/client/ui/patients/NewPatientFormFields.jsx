@@ -88,7 +88,10 @@ export class NewPatientFormFields extends React.Component {
                   </div>
                   <div className="col-md-10">
                     <div>
-                      <Field name="telephone" component={TextField} fullWidth
+                      <Field
+                        name="telephone"
+                        component={TextField}
+                        fullWidth
                         floatingLabelText={TAPi18n.__('inboundCalls.form.telephone.label')} />
                     </div>
                   </div>

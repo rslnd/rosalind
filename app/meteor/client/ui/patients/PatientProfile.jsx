@@ -3,7 +3,7 @@ import map from 'lodash/map'
 import identity from 'lodash/identity'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Birthday } from './Birthday'
-import { PastAppointmentsContainer } from './PastAppointmentsContainer'
+import { zerofix } from 'util/zerofix'
 
 export class PatientProfile extends React.Component {
   render () {
@@ -15,7 +15,11 @@ export class PatientProfile extends React.Component {
         <div>
           <h4>{patient.fullNameWithTitle()}</h4>
           {patient.profile.contacts && patient.profile.contacts.map((contact) => (
-            <h4 key={contact.value}>{contact.value}</h4>
+            <h4 key={contact.value}>{
+              contact.channel === 'Phone'
+              ? zerofix(contact.value)
+              : contact.value
+            }</h4>
           ))}
           <p><Birthday day={patient.profile.birthday} /></p>
           {

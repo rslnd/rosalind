@@ -35,7 +35,8 @@ export class NewAppointmentContainer extends React.Component {
       }
     }
 
-    const length = max(Tags.find({ _id: { $in: values.tags } }).fetch().map((t) => t.length)) || 5
+    const defaultLength = 5
+    const length = (values.tags && max(Tags.find({ _id: { $in: values.tags } }).fetch().map((t) => t.length))) || defaultLength
 
     const appointment = {
       patientId: newPatient ? undefined : values.patientId,
