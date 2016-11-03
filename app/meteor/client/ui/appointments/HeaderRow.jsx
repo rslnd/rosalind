@@ -99,7 +99,9 @@ export class HeaderRow extends React.Component {
             onRequestClose={this.handleAddUserPopoverClose}
             style={{ overflowY: 'visible' }}>
             <div className={style.modal}>
-              <UserPickerContainer onChange={this.handleAddUser} />
+              <UserPickerContainer
+                autofocus
+                onChange={this.handleAddUser} />
             </div>
 
           </Popover>

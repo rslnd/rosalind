@@ -44,7 +44,7 @@ export class UserPicker extends React.Component {
         onChange={this.handleQueryChange}
         options={this.options()}
         ignoreCase
-        autofocus={false}
+        autofocus={this.props.autofocus || false}
         placeholder={TAPi18n.__('users.selectEmployee')} />
     )
   }
