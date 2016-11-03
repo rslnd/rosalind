@@ -12,14 +12,18 @@ import style from './style'
 
 const summary = ({ time, assigneeId }) => (
   <div className={style.summary}>
-    <span className="text-muted">Termin</span>&nbsp;
+    <span className="text-muted">{TAPi18n.__('appointments.thisSingular')}</span>&nbsp;
     {moment(time).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
 
-    <span className="text-muted">um</span>&nbsp;
+    <span className="text-muted">{TAPi18n.__('time.at')}</span>&nbsp;
     <b>{moment(time).format(TAPi18n.__('time.timeFormat'))}</b><br />
 
-    <span className="text-muted">bei</span>&nbsp;
-    <UserHelper helper="fullNameWithTitle" userId={assigneeId} /><br />
+    {
+      assigneeId && <div>
+        <span className="text-muted">{TAPi18n.__('appointments.assignedTo')}</span>&nbsp;
+        <UserHelper helper="fullNameWithTitle" userId={assigneeId} /><br />
+      </div>
+    }
   </div>
 )
 
