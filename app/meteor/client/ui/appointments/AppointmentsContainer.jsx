@@ -60,7 +60,8 @@ const composer = (props, onData) => {
         const user = Users.findOne({ _id: assigneeId })
         return {
           fullNameWithTitle: user && user.fullNameWithTitle(),
-          lastName: user && user.profile.lastName,
+          lastName: user && user.profile && user.profile.lastName,
+          employee: user && user.profile && user.profile.employee,
           assigneeId
         }
       }),

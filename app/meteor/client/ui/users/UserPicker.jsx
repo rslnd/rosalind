@@ -27,7 +27,7 @@ export class UserPicker extends React.Component {
   }
 
   options () {
-    return Users.find({ groupId: { $ne: null } }, {
+    return Users.find({ groupId: { $ne: null }, 'profile.employee': true }, {
       sort: { 'profile.lastName': 1 }
     }).fetch().map((user) => {
       return {

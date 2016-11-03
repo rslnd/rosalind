@@ -114,9 +114,14 @@ export class HeaderRow extends React.Component {
             key={assignee.assigneeId}
             className={style.headerCell}
             onClick={(event) => this.handleUserDropdownOpen({ event, assigneeId: assignee.assigneeId })}>
+
             {
               assignee.fullNameWithTitle
-              ? assignee.fullNameWithTitle
+              ? (
+                assignee.employee
+                ? assignee.fullNameWithTitle
+                : <span className="text-muted">{assignee.fullNameWithTitle}</span>
+              )
               : TAPi18n.__('appointments.unassigned')
             }
 
