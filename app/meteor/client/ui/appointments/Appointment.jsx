@@ -45,13 +45,13 @@ export class Appointment extends React.Component {
           ? (
             <span
               style={{ color: tagColor }}>
-              <Icon name="check" />&nbsp;
+              <Icon name="check-circle" />&nbsp;
             </span>
           ) : (
             appointment.admitted &&
               <span
                 style={{ color: tagColor }}>
-                <Icon name="refresh" />&nbsp;
+                <Icon name="check" />&nbsp;
               </span>
           )
         }
