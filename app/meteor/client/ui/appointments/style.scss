@@ -7,35 +7,6 @@
   z-index: 50;
 }
 
-:local(.headerRow) {
-  background-color: $background;
-  border-bottom: 1px solid $gray-disabled;
-  display: flex;
-  left: 245px;
-  padding-bottom: 6px;
-  padding-top: 10px;
-  position: fixed;
-  right: 15px;
-  top: 50px;
-  z-index: 40;
-}
-
-:local(.headerCell) {
-  flex: 1;
-}
-
-:local(.assigneeHeaderEllipsis) {
-  color: $dark-gray-active;
-  display: none;
-  margin-right: 10px;
-  padding: 0 6px 0;
-}
-
-:local(.headerCell:hover .assigneeHeaderEllipsis) {
-  display: block;
-  background-color: lighten($background, 3%);
-}
-
 :local(.grid) {
   display: grid;
 }

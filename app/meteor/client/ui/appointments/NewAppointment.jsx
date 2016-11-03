@@ -57,7 +57,7 @@ export class NewAppointmentFormComponent extends React.Component {
                       </div>
                       <div className="col-md-6">
                         <div>
-                          <Field name="patientNote"
+                          <Field name="appointmentNote"
                             component={TextField}
                             multiLine rows={1} fullWidth
                             floatingLabelText={TAPi18n.__('appointments.form.note.label')} />

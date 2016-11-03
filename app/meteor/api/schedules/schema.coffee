@@ -3,6 +3,7 @@ map = require 'lodash/map'
 Auto = require 'util/schema/auto'
 Time = require 'util/time'
 { External } = require 'util/schema/external'
+{ Day } = require 'util/schema/day'
 
 module.exports = new SimpleSchema
   type:
@@ -13,6 +14,7 @@ module.exports = new SimpleSchema
       'businessHours'
       'businessHoursOverride'
       'holidays'
+      'day'
     ]
     index: 1
 
@@ -27,6 +29,11 @@ module.exports = new SimpleSchema
 
   userId:
     type: SimpleSchema.RegEx.Id,
+    index: 1
+    optional: true
+
+  userIds:
+    type: [SimpleSchema.RegEx.Id]
     index: 1
     optional: true
 
@@ -46,6 +53,10 @@ module.exports = new SimpleSchema
 
   end:
     type: Date
+    optional: true
+
+  day:
+    type: Day
     optional: true
 
   external:

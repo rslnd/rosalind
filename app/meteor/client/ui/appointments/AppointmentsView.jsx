@@ -11,6 +11,7 @@ import { Icon } from 'client/ui/components/Icon'
 import { Appointment } from './Appointment'
 import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { NewAppointmentContainer } from './NewAppointmentContainer'
+import { HeaderRowContainer } from './HeaderRowContainer'
 import style from './style'
 
 import { Schedules } from 'api/schedules'
@@ -38,7 +39,7 @@ export class AppointmentsView extends React.Component {
     this.handleAppointmentModalClose = this.handleAppointmentModalClose.bind(this)
     this.handlePopoverOpen = this.handlePopoverOpen.bind(this)
     this.handlePopoverClose = this.handlePopoverClose.bind(this)
-    this.handleOverrideModeToggle = this.handleOverrideModeToggle.bind(this)
+    this.handleToggleOverrideMode = this.handleToggleOverrideMode.bind(this)
     this.handleOverrideStart = this.handleOverrideStart.bind(this)
     this.handleOverrideEnd = this.handleOverrideEnd.bind(this)
     this.handleOverrideStartOrEnd = this.handleOverrideStartOrEnd.bind(this)
@@ -75,7 +76,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleNewAppointmentClick (options) {
-    if (this.state.override) {
+    if (this.state.overrideMode) {
       this.handleOverrideStartOrEnd(options)
     } else {
       this.handlePopoverOpen(options)
@@ -83,7 +84,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleNewAppointmentHover (options) {
-    if (this.state.override) {
+    if (this.state.overrideMode) {
       this.handleOverrideHover(options)
     }
   }
@@ -114,15 +115,15 @@ export class AppointmentsView extends React.Component {
     })
   }
 
-  handleOverrideModeToggle ({ assigneeId }) {
+  handleToggleOverrideMode ({ assigneeId }) {
     this.setState({ ...this.state,
-      override: !this.state.override,
+      overrideMode: !this.state.overrideMode,
       overrideAssigneeId: assigneeId
     })
   }
 
   handleOverrideStart ({ time }) {
-    if (this.state.override) {
+    if (this.state.overrideMode) {
       this.setState({ ...this.state,
         overrideStart: time,
         overrideEnd: time
@@ -137,7 +138,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleOverrideEnd ({ time }) {
-    if (this.state.override) {
+    if (this.state.overrideMode) {
       let start = this.state.overrideStart
       let end = moment(time).add(5, 'minutes').subtract(1, 'second').toDate()
 
@@ -157,7 +158,7 @@ export class AppointmentsView extends React.Component {
 
       Schedules.actions.upsert.callPromise({ schedule: newSchedule }).then(() => {
         this.setState({ ...this.state,
-          override: false,
+          overrideMode: false,
           overrideStart: null,
           overrideEnd: null,
           overrideAssigneeId: null
@@ -200,25 +201,11 @@ export class AppointmentsView extends React.Component {
   render () {
     return (
       <div>
-        {/* Assignees */}
-        <div className={style.headerRow}>
-          <div style={{width: '60px'}}></div>
-          {this.props.assignees.map((assignee) => (
-            <div key={assignee.assigneeId} className={style.headerCell}>
-              {
-                assignee.fullNameWithTitle
-                ? assignee.fullNameWithTitle
-                : TAPi18n.__('appointments.unassigned')
-              }
-
-              <div
-                className={`pull-right ${style.assigneeHeaderEllipsis}`}
-                onClick={(event) => this.handleOverrideModeToggle({ event, assigneeId: assignee.assigneeId })}>
-                <Icon name="caret-down" />
-              </div>
-            </div>
-          ))}
-        </div>
+        <HeaderRowContainer
+          date={this.props.date}
+          assignees={this.props.assignees}
+          onToggleOverrideMode={this.handleToggleOverrideMode}
+          overrideMode={this.state.overrideMode} />
 
         <div className={style.grid} style={this.grid()}>
           {/* Appointments */}

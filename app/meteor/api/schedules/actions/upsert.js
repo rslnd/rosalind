@@ -25,6 +25,7 @@ export const upsert = ({ Schedules, Users }) => {
       let selector = {}
       if (schedule.start) { selector.start = schedule.start }
       if (schedule.end) { selector.end = schedule.end }
+      if (schedule.day) { selector.day = schedule.day }
       if (schedule.userId) { selector.userId = schedule.userId }
       if (schedule.type) { selector.type = schedule.type }
 

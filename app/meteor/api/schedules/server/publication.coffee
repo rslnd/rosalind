@@ -8,17 +8,22 @@
 module.exports = ->
   Meteor.publishComposite 'schedules', (range) ->
     check(range, Match.Optional({
-      start: Date,
-      end: Date
+      start: Match.Optional(Date),
+      end: Match.Optional(Date),
+      day: Match.Optional(Number),
+      month: Match.Optional(Number),
+      year: Match.Optional(Number)
     }))
 
     return unless (@userId and Roles.userIsInRole(@userId, ['schedules', 'admin'], Roles.GLOBAL_GROUP))
 
-    if (range)
+    if (range and (range.start or range.end))
       selector = {
         start: { $gt: moment(range.start).startOf('day').toDate() }
         end: { $gt: moment(range.end).endOf('day').toDate() }
       }
+    else if (range and range.day)
+      selector = { day: range }
     else
       selector = { $or: [
         { type: 'default' },
