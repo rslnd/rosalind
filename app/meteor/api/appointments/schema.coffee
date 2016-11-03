@@ -93,6 +93,14 @@ Schema = new SimpleSchema
     optional: true
     index: 1
 
+  canceledAt:
+    type: Date
+    optional: true
+
+  canceledBy:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+
   admitted:
     type: Boolean
     optional: true

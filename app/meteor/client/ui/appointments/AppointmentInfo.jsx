@@ -33,14 +33,26 @@ export class AppointmentInfo extends React.Component {
 
           <br />
 
-          <RaisedButton
-            label={<span><Icon name="check" />&emsp;{TAPi18n.__('appointments.admit')}</span>}
-            backgroundColor={appointment.admitted ? '#C5E1A5' : ''}
-            onClick={this.props.setAdmitted} />
-          <RaisedButton
-            label={<span>{TAPi18n.__('appointments.cancel')}&emsp;<Icon name="times" /></span>}
-            backgroundColor={appointment.canceled ? '#e4e3e3' : ''}
-            onClick={this.props.setCanceled} />
+          {
+            appointment.admitted
+            ? <RaisedButton
+              label={<span><Icon name="check" />&emsp;{TAPi18n.__('appointments.admit')}</span>}
+              backgroundColor={'#C5E1A5'}
+              onClick={this.props.unsetAdmitted} />
+            : <RaisedButton
+              label={<span><Icon name="check" />&emsp;{TAPi18n.__('appointments.admit')}</span>}
+              onClick={this.props.setAdmitted} />
+          }
+          {
+            appointment.canceled
+            ? <RaisedButton
+              label={<span>{TAPi18n.__('appointments.cancel')}&emsp;<Icon name="times" /></span>}
+              backgroundColor={'#e4e3e3'}
+              onClick={this.props.unsetCanceled} />
+            : <RaisedButton
+              label={<span>{TAPi18n.__('appointments.cancel')}&emsp;<Icon name="times" /></span>}
+              onClick={this.props.setCanceled} />
+          }
 
           <br /><br />
           <FlatButton

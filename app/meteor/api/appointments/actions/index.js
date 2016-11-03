@@ -4,6 +4,8 @@ import { releaseLock } from './releaseLock'
 import { setAdmitted } from './setAdmitted'
 import { setCanceled } from './setCanceled'
 import { softRemove } from './softRemove'
+import { unsetAdmitted } from './unsetAdmitted'
+import { unsetCanceled } from './unsetCanceled'
 
 export default function ({ Appointments }) {
   return {
@@ -12,6 +14,8 @@ export default function ({ Appointments }) {
     releaseLock: releaseLock({ Appointments }),
     setAdmitted: setAdmitted({ Appointments }),
     setCanceled: setCanceled({ Appointments }),
-    softRemove: softRemove({ Appointments })
+    softRemove: softRemove({ Appointments }),
+    unsetAdmitted: unsetAdmitted({ Appointments }),
+    unsetCanceled: unsetCanceled({ Appointments })
   }
 }
