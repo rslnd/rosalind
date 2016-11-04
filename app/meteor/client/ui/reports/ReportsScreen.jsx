@@ -48,7 +48,14 @@ export class ReportsScreen extends React.Component {
             {TAPi18n.__('reports.thisDaySingular')} {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
             <small>{weekOfYear(this.props.date)}</small>
           </h1>
-          <DateNavigation date={this.props.date} basePath="reports" pullRight>
+          <DateNavigation
+            date={this.props.date}
+            basePath="reports"
+            pullRight
+            jumpWeekBackward
+            jumpMonthBackward
+            jumpWeekForward
+            jumpMonthForward>
             <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name="print" /></Button>
             {
               this.props.canShowRevenue &&

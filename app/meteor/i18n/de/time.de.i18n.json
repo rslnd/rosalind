@@ -18,6 +18,13 @@
     "dateFormatVeryShort": "D. MMM YY",
     "dateFormatShort": "D. MMM YYYY",
     "dateFormat": "D. MMMM YYYY",
-    "dateFormatWeekday": "dddd, D. MMMM YYYY"
+    "dateFormatWeekday": "dddd, D. MMMM YYYY",
+    "calendar": "Kalender",
+    "oneDayForward": "Einen Tag vorwärts",
+    "oneDayBackward": "Einen Tag zurück",
+    "oneWeekForward": "Eine Woche vorwärts",
+    "oneWeekBackward": "Eine Woche zurück",
+    "oneMonthForward": "Einen Monat vorwärts",
+    "oneMonthBackward": "Einen Monat zurück"
   }
 }

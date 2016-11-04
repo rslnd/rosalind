@@ -24,7 +24,9 @@ export class AppointmentsScreen extends React.Component {
             <DateNavigation
               date={this.props.date}
               basePath="appointments"
-              pullRight />
+              pullRight
+              jumpWeekForward
+              jumpMonthForward />
           </div>
         </div>
 

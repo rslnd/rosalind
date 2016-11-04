@@ -16,9 +16,15 @@ class DateNavigationButtons extends React.Component {
       calendarOpen: false
     }
 
-    this.handlePreviousClick = this.handlePreviousClick.bind(this)
-    this.handleNextClick = this.handleNextClick.bind(this)
+    this.goToDate = this.goToDate.bind(this)
+    this.dateToPath = this.dateToPath.bind(this)
+    this.handleBackwardMonthClick = this.handleBackwardMonthClick.bind(this)
+    this.handleBackwardWeekClick = this.handleBackwardWeekClick.bind(this)
+    this.handleBackwardDayClick = this.handleBackwardDayClick.bind(this)
     this.handleTodayClick = this.handleTodayClick.bind(this)
+    this.handleForwardDayClick = this.handleForwardDayClick.bind(this)
+    this.handleForwardWeekClick = this.handleForwardWeekClick.bind(this)
+    this.handleForwardMonthClick = this.handleForwardMonthClick.bind(this)
     this.handleCalendarToggle = this.handleCalendarToggle.bind(this)
     this.handleCalendarDayChange = this.handleCalendarDayChange.bind(this)
   }
@@ -28,23 +34,46 @@ class DateNavigationButtons extends React.Component {
   }
 
   // TODO: Make less hacky and look at Schedules/holidays
-  handlePreviousClick () {
-    let previousDay = moment(this.props.date).subtract(1, 'day')
-    if (previousDay.isoWeekday() === 7) { previousDay = previousDay.subtract(1, 'day') }
-    const path = this.dateToPath(previousDay)
+  goToDate (date, round = 'next') {
+    let targetDay = date
+    if (targetDay.isoWeekday() === 7) {
+      if (round === 'next') {
+        targetDay = targetDay.add(1, 'day')
+      } else {
+        targetDay = targetDay.subtract(1, 'day')
+      }
+    }
+    const path = this.dateToPath(targetDay)
     this.props.router.replace(path)
   }
 
-  handleNextClick () {
-    let nextDay = moment(this.props.date).add(1, 'day')
-    if (nextDay.isoWeekday() === 7) { nextDay = nextDay.add(1, 'day') }
-    const path = this.dateToPath(nextDay)
-    this.props.router.replace(path)
+  handleBackwardMonthClick () {
+    this.goToDate(moment(this.props.date).subtract(1, 'month'), 'previous')
+  }
+
+  handleBackwardWeekClick () {
+    this.goToDate(moment(this.props.date).subtract(1, 'week'), 'previous')
+  }
+
+  handleBackwardDayClick () {
+    this.goToDate(moment(this.props.date).subtract(1, 'day'), 'previous')
   }
 
   handleTodayClick () {
     const path = this.dateToPath(moment())
     this.props.router.push(path)
+  }
+
+  handleForwardDayClick () {
+    this.goToDate(moment(this.props.date).add(1, 'day'))
+  }
+
+  handleForwardWeekClick () {
+    this.goToDate(moment(this.props.date).add(1, 'week'))
+  }
+
+  handleForwardMonthClick () {
+    this.goToDate(moment(this.props.date).add(1, 'month'))
   }
 
   handleCalendarToggle (e) {
@@ -72,18 +101,67 @@ class DateNavigationButtons extends React.Component {
         <ButtonGroup>
           {this.props.before}
 
-          <Button onClick={this.handlePreviousClick}>
+          {
+            this.props.jumpMonthBackward &&
+              <Button
+                onClick={this.handleForwardMonthClick}
+                title={TAPi18n.__('time.oneMonthBackward')}>
+                <Icon name="angle-left" />
+                <Icon name="angle-left" />
+              </Button>
+          }
+          {
+            this.props.jumpWeekBackward &&
+              <Button
+                onClick={this.handleForwardWeekClick}
+                title={TAPi18n.__('time.oneWeekBackward')}>
+                <Icon name="angle-double-left" />
+              </Button>
+          }
+
+          <Button
+            onClick={this.handleBackwardDayClick}
+            title={TAPi18n.__('time.oneDayBackward')}>
             <Icon name="caret-left" />
           </Button>
 
-          <Button onClick={this.handleTodayClick}>{TAPi18n.__('ui.today')}</Button>
+          <Button
+            onClick={this.handleTodayClick}>
+            {TAPi18n.__('ui.today')}
+          </Button>
 
-          <Button onClick={this.handleNextClick}>
+          <Button
+            onClick={this.handleForwardDayClick}
+            title={TAPi18n.__('time.oneDayForward')}>
             <Icon name="caret-right" />
           </Button>
 
-          <Button onClick={this.handleCalendarToggle}>
-            <Icon name="calendar" />
+          {
+            this.props.jumpWeekForward &&
+              <Button
+                onClick={this.handleForwardWeekClick}
+                title={TAPi18n.__('time.oneWeekForward')}>
+                <Icon name="angle-double-right" />
+              </Button>
+          }
+          {
+            this.props.jumpMonthForward &&
+              <Button
+                onClick={this.handleForwardMonthClick}
+                title={TAPi18n.__('time.oneMonthForward')}>
+                <Icon name="angle-right" />
+                <Icon name="angle-right" />
+              </Button>
+          }
+
+        </ButtonGroup>
+        &nbsp;
+        <ButtonGroup>
+
+          <Button
+            onClick={this.handleCalendarToggle}
+            title={TAPi18n.__('time.calendar')}>
+            <Icon name="calendar" />&nbsp;
           </Button>
 
           {this.props.children}
