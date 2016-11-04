@@ -24,11 +24,11 @@ const findPatients = (query) => {
       }
     })).then((options) => {
       return {
-        options: [ ...options, {
+        options: [ {
           newPatient: true,
           value: 'newPatient',
           query
-        } ]
+        }, ...options ]
       }
     })
 }
