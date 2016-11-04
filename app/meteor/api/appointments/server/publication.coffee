@@ -44,14 +44,7 @@ module.exports = ->
           removed: { $ne: true }
 
         cursor = Appointments.find(selector, { sort: { start: 1 } })
-        console.log('[Appointments] Publishing', {
-          count: cursor.count(),
-          date: options.date,
-          within: options.within,
-          start: options.start,
-          end: options.end,
-          userId: @userId
-        })
+
         return cursor
 
       children: [

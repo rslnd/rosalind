@@ -42,10 +42,7 @@ module.exports = ->
           },
           limit: 600
         })
-        console.log('[Schedules] Publishing', {
-          count: cursor.count(),
-          selector
-        })
+
         return cursor
       children: [
         { find: (schedule) -> Comments.find({ docId: schedule._id }) }
