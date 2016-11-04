@@ -59,7 +59,7 @@ export class Appointment extends React.Component {
         {
           appointment.lockedAt &&
             <span className="text-muted">
-              <i className="fa fa-clock-o fa-fw"></i>
+              <i className="fa fa-clock-o fa-fw"></i>&nbsp;
               {TAPi18n.__('appointments.lockedBy', { name: appointment.lockedByFirstName })}
             </span>
         }
