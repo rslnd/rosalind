@@ -52,7 +52,10 @@ const composer = (props, onData) => {
     // appointments scheduled yet). Make sure the 'null' assignee is added here as well.
     const assigneeIdsScheduled = uniq(flatten(Schedules.find({ day }).fetch().map((s) => s.userIds)))
     const assigneeIdsAppointments = uniq(appointments.map((a) => a.assigneeId))
-    const assigneeIds = union(assigneeIdsScheduled, assigneeIdsAppointments, [ null ])
+
+    // HACK: Merge undefined to null
+    const assigneeIdsNullOrUndefined = union(assigneeIdsScheduled, assigneeIdsAppointments, [ null ])
+    const assigneeIds = assigneeIdsNullOrUndefined.filter((id) => id !== undefined)
 
     // Now turn the assigneeIds array into an array of assignee objects
     let assignees = flow(
@@ -62,7 +65,7 @@ const composer = (props, onData) => {
           fullNameWithTitle: user && user.fullNameWithTitle(),
           lastName: user && user.profile && user.profile.lastName,
           employee: user && user.profile && user.profile.employee,
-          assigneeId
+          assigneeId: assigneeId || null
         }
       }),
       sortBy('lastName'),
