@@ -22,7 +22,8 @@ describe('patients', function () {
         expect(parseQuery('walrus unicorn i')).to.eql({
           $or: [
             { 'profile.lastNameNormalized': 'WALRUS' },
-            { 'profile.lastNameNormalized': 'UNICORN' }
+            { 'profile.lastNameNormalized': 'UNICORN' },
+            { 'profile.lastNameNormalized': 'WALRUSUNICORN' }
           ]
         })
       })
@@ -34,7 +35,8 @@ describe('patients', function () {
           'profile.birthday.year': 1994,
           $or: [
             { 'profile.lastNameNormalized': 'WALRUS' },
-            { 'profile.lastNameNormalized': 'UNICORN' }
+            { 'profile.lastNameNormalized': 'UNICORN' },
+            { 'profile.lastNameNormalized': 'WALRUSUNICORN' }
           ]
         })
       })

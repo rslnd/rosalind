@@ -10,7 +10,8 @@ describe('patients', function () {
           $or: [
             { 'profile.lastNameNormalized': 'DON' },
             { 'profile.lastNameNormalized': 'VITO' },
-            { 'profile.lastNameNormalized': 'CORLEONE' }
+            { 'profile.lastNameNormalized': 'CORLEONE' },
+            { 'profile.lastNameNormalized': 'DONVITOCORLEONE' }
           ]
         })
       })
@@ -19,6 +20,16 @@ describe('patients', function () {
         expect(parseExactLastName('don i i i').result).to.eql({
           $or: [
             { 'profile.lastNameNormalized': 'DON' }
+          ]
+        })
+      })
+
+      it('removes hyphens', function () {
+        expect(parseExactLastName('alpha-beta').result).to.eql({
+          $or: [
+            { 'profile.lastNameNormalized': 'ALPHA' },
+            { 'profile.lastNameNormalized': 'BETA' },
+            { 'profile.lastNameNormalized': 'ALPHABETA' }
           ]
         })
       })
