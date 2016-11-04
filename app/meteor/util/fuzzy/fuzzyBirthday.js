@@ -7,7 +7,7 @@ export const fuzzyBirthday = (query) => {
   const zerofixed = zerofix(query, { dontSplit: true })
 
   // Expect at least 1 digits
-  if (!zerofixed.match(/\d+/)) {
+  if (!zerofixed || !zerofixed.match(/\d+/)) {
     return false
   }
 
