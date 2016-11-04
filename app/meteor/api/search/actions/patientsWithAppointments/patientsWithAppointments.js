@@ -13,6 +13,8 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
     }).validator(),
 
     run ({ query }) {
+      this.unblock()
+
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }

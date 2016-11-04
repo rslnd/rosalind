@@ -14,6 +14,8 @@ export const releaseLock = ({ Appointments }) => {
     }).validator(),
 
     run ({ assigneeId, time }) {
+      this.unblock()
+
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
