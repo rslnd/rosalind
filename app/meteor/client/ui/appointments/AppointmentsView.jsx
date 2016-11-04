@@ -72,7 +72,7 @@ export class AppointmentsView extends React.Component {
   grid () {
     return {
       gridTemplateColumns: `[time] 60px ${this.props.assignees.map((assignee, index) =>
-        `[assignee-${assignee.assigneeId}] 1fr`).join(' ')}`,
+        `[assignee-${assignee.assigneeId || 'none'}] 1fr`).join(' ')}`,
       gridTemplateRows: `[header] 40px [subheader] 40px ${this.timeRange().map((time) => `[time-${time.format('HHmm')}] 4px`).join(' ')}`
     }
   }
@@ -237,13 +237,13 @@ export class AppointmentsView extends React.Component {
                 const assigneeId = assignee.assigneeId
                 return (
                   <span
-                    key={`new-${assigneeId}-${timeKey}`}
+                    key={`new-${assigneeId || 'none'}-${timeKey}`}
                     className={style.newAppointmentTrigger}
                     onClick={(event) => this.handleNewAppointmentClick({ event, assigneeId, time: time.toDate() })}
                     onMouseEnter={(event) => this.handleNewAppointmentHover({ event, assigneeId, time: time.toDate() })}
                     style={{
                       gridRow: timeKey,
-                      gridColumn: `assignee-${assigneeId}`
+                      gridColumn: `assignee-${assigneeId || 'none'}`
                     }}>
                     &nbsp;
                   </span>
@@ -264,7 +264,7 @@ export class AppointmentsView extends React.Component {
                   style={{
                     gridRowStart: start.format('[time-]HHmm'),
                     gridRowEnd: end.format('[time-]HHmm'),
-                    gridColumn: `assignee-${this.state.overrideAssigneeId}`
+                    gridColumn: `assignee-${this.state.overrideAssigneeId || 'none'}`
                   }}>
                   <div>{start.format('H:mm')}</div>
                   <div>{end.format('H:mm')}</div>

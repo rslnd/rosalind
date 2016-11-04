@@ -111,7 +111,7 @@ export class HeaderRow extends React.Component {
         {/* Scheduled assignees */}
         {this.props.assignees.map((assignee) => (
           <div
-            key={assignee.assigneeId}
+            key={`assignee-${assignee.assigneeId || 'none'}`}
             className={style.headerCell}
             onClick={(event) => this.handleUserDropdownOpen({ event, assigneeId: assignee.assigneeId })}>
 
