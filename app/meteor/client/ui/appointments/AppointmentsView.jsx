@@ -23,8 +23,7 @@ const calculateTimeRange = memoize((date) => {
     end: moment(date).hour(20).endOf('hour')
   }
 
-  const range = moment.range(options.start, options.end).toArray('minutes').map((t) => moment(t))
-  return range
+  return moment.range(options.start, options.end).toArray('minutes').map((t) => moment(t))
 })
 
 export class AppointmentsView extends React.Component {
@@ -59,14 +58,7 @@ export class AppointmentsView extends React.Component {
   }
 
   timeRange () {
-    const a = new Date()
-
-    const range = calculateTimeRange(this.props.date)
-
-    const b = new Date()
-
-    console.log('timeRange benchmark', b - a)
-    return range
+    return calculateTimeRange(this.props.date)
   }
 
   // row name    | column names
