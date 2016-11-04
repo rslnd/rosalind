@@ -1,3 +1,4 @@
+import memoize from 'lodash/memoize'
 import moment from 'moment'
 import 'moment-range'
 import 'moment-round'
@@ -16,17 +17,21 @@ import style from './style'
 
 import { Schedules } from 'api/schedules'
 
+const calculateTimeRange = memoize((date) => {
+  const options = {
+    start: moment(date).hour(7).minute(30).startOf('minute'),
+    end: moment(date).hour(20).endOf('hour')
+  }
+
+  const range = moment.range(options.start, options.end).toArray('minutes').map((t) => moment(t))
+  return range
+})
+
 export class AppointmentsView extends React.Component {
   constructor (props) {
     super(props)
 
-    const options = {
-      start: moment(props.date).hour(7).minute(30).startOf('minute'),
-      end: moment(props.date).hour(20).endOf('hour')
-    }
-
     this.state = {
-      timeRange: moment.range(options.start, options.end).toArray('minutes').map((t) => moment(t)),
       selectedTime: null,
       selectedAssigneeId: null,
       popoverOpen: false,
@@ -49,8 +54,21 @@ export class AppointmentsView extends React.Component {
     this.handleScheduleModalOpen = this.handleScheduleModalOpen.bind(this)
     this.handleScheduleModalClose = this.handleScheduleModalClose.bind(this)
     this.handleScheduleSoftRemove = this.handleScheduleSoftRemove.bind(this)
+    this.timeRange = this.timeRange.bind(this)
     this.grid = this.grid.bind(this)
   }
+
+  timeRange () {
+    const a = new Date()
+
+    const range = calculateTimeRange(this.props.date)
+
+    const b = new Date()
+
+    console.log('timeRange benchmark', b - a)
+    return range
+  }
+
   // row name    | column names
   // ---------------------------------------------------------------
   // [header]    | [time] [assignee-1] [assignee-2] ... [assignee-n]
@@ -63,7 +81,7 @@ export class AppointmentsView extends React.Component {
     return {
       gridTemplateColumns: `[time] 60px ${this.props.assignees.map((assignee, index) =>
         `[assignee-${assignee.assigneeId}] 1fr`).join(' ')}`,
-      gridTemplateRows: `[header] 40px [subheader] 40px ${this.state.timeRange.map((time) => `[time-${time.format('HHmm')}] 4px`).join(' ')}`
+      gridTemplateRows: `[header] 40px [subheader] 40px ${this.timeRange().map((time) => `[time-${time.format('HHmm')}] 4px`).join(' ')}`
     }
   }
 
@@ -220,7 +238,7 @@ export class AppointmentsView extends React.Component {
 
           {/* New Appointment Triggers */}
           {this.props.assignees.map((assignee) => (
-            this.state.timeRange
+            this.timeRange()
               .filter((t) => t.minute() % 5 === 0)
               .map((time) => {
                 const timeKey = time.format('[time-]HHmm')
@@ -293,7 +311,7 @@ export class AppointmentsView extends React.Component {
 
           {/* Time Legend */}
           {
-            this.state.timeRange
+            this.timeRange()
               .filter((t) => t.minute() % 5 === 0)
               .map((time) => {
                 const fullHour = time.minute() === 0
