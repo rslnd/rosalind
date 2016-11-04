@@ -35,7 +35,13 @@ module.exports = ->
 
     {
       find: ->
-        cursor = Schedules.find(selector, { limit: 300 })
+        cursor = Schedules.find(selector, {
+          sort: {
+            'day.year': -1,
+            start: -1
+          },
+          limit: 600
+        })
         console.log('[Schedules] Publishing', {
           count: cursor.count(),
           selector
