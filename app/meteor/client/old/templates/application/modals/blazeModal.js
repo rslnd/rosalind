@@ -3,12 +3,11 @@ import { Blaze } from 'meteor/blaze'
 import 'bootstrap/dist/js/bootstrap.js'
 
 let $soloModal = null
+const allowMultiple = false
 
 export const Modal = {
-  allowMultiple: false,
-
   show: (templateName, data, options) => {
-    if ($soloModal === null || this.allowMultiple) {
+    if ($soloModal === null || allowMultiple) {
       let parentNode = document.body
       let view = Blaze.renderWithData(Template[templateName], data, parentNode)
       let domRange = view._domrange
