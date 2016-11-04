@@ -67,10 +67,10 @@ export class Appointment extends React.Component {
         {
           appointment.patient
           ? (
-            <span>
+            <span style={{ hyphens: 'auto' }}>
               <span className={style.prefix}>{appointment.patient.prefix}&#8202;</span>
-              <b>{appointment.patient.profile.lastName}</b>&thinsp;
-              {appointment.patient.profile.firstName}
+              <b>{appointment.patient.profile.lastName} &thinsp;</b>
+              <span>{appointment.patient.profile.firstName}</span>
             </span>
           ) : !appointment.lockedAt && (
             <span>
