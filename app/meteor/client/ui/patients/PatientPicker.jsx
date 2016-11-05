@@ -210,12 +210,12 @@ export class PatientPicker extends React.Component {
         <Select.Async
           name="patientPicker"
           value={this.props.input.value || ''}
-          ref={(c) => { this._select = c }}
           loadOptions={findPatients}
           onChange={this.handleQueryChange}
           onBlur={() => this.props.input.onBlur(this.props.input.value)}
           cache={false}
           ignoreCase={false}
+          ignoreAccents={false}
           autofocus={this.props.autofocus}
           placeholder={TAPi18n.__('patients.search')}
           loadingPlaceholder={TAPi18n.__('patients.searching')}

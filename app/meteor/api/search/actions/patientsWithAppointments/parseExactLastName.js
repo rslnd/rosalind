@@ -4,7 +4,7 @@ import { normalizeName } from '../../../patients/util/normalizeName'
 
 export const parseExactLastName = (query) => {
   // Split query into single words
-  const pattern = /(\w{2,})/g
+  const pattern = /([^-\s]{2,})/g
   const match = query.match(pattern)
   const remainingQuery = query.replace(pattern, '')
 

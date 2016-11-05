@@ -149,6 +149,7 @@ export class AppointmentsSearch extends React.Component {
         loadOptions={findAppointments}
         cache={false}
         ignoreCase={false}
+        ignoreAccents={false}
         autofocus={false}
         placeholder={TAPi18n.__('appointments.search')}
         loadingPlaceholder={TAPi18n.__('appointments.searching')}

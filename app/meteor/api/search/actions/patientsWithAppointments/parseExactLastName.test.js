@@ -24,6 +24,14 @@ describe('patients', function () {
         })
       })
 
+      it('parses umlauts', function () {
+        expect(parseExactLastName('dön').result).to.eql({
+          $or: [
+            { 'profile.lastNameNormalized': 'DN' }
+          ]
+        })
+      })
+
       it('removes hyphens', function () {
         expect(parseExactLastName('alpha-beta').result).to.eql({
           $or: [

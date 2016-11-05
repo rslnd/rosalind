@@ -28,6 +28,16 @@ describe('patients', function () {
         })
       })
 
+      it('removes umlauts', function () {
+        expect(parseQuery('walrüs unicörn')).to.eql({
+          $or: [
+            { 'profile.lastNameNormalized': 'WALRS' },
+            { 'profile.lastNameNormalized': 'UNICRN' },
+            { 'profile.lastNameNormalized': 'WALRSUNICRN' }
+          ]
+        })
+      })
+
       it('parses birthday and names', function () {
         expect(parseQuery('walrus unicorn 12 jun 1994')).to.eql({
           'profile.birthday.day': 12,
