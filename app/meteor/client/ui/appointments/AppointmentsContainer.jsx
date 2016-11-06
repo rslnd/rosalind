@@ -32,11 +32,18 @@ const composer = (props, onData) => {
     end: endOfDay
   }
 
-  const schedulesDaySubscriptions = appointmentsSubsManager.subscribe('schedules', day)
-  const schedulesOverrideSubscriptions = appointmentsSubsManager.subscribe('schedules', dateRange)
-  const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments', dateRange)
+  // Appointments and schedules for future dates are cached as global subscriptions
+  let subsReady = false
+  if (date.toDate() < moment().startOf('day').toDate()) {
+    const schedulesDaySubscriptions = appointmentsSubsManager.subscribe('schedules', day)
+    const schedulesOverrideSubscriptions = appointmentsSubsManager.subscribe('schedules', dateRange)
+    const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments', dateRange)
+    subsReady = schedulesDaySubscriptions.ready() && schedulesOverrideSubscriptions.ready() && appointmentsSubscription.ready()
+  } else {
+    subsReady = true
+  }
 
-  if (schedulesDaySubscriptions.ready() && schedulesOverrideSubscriptions.ready() && appointmentsSubscription.ready()) {
+  if (subsReady) {
     const appointmentsSelector = {
       start: {
         $gte: startOfDay,
@@ -113,7 +120,7 @@ const composer = (props, onData) => {
     const onPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
     const onPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
 
-    onData(null, { assignees, date, onPopoverOpen, onPopoverClose })
+    onData(null, { assignees, date, onPopoverOpen, onPopoverClose, subsReady })
   } else {
     onData(null, null)
   }

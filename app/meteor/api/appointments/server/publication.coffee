@@ -2,6 +2,7 @@
 { check } = require 'meteor/check'
 { Roles } = require 'meteor/alanning:roles'
 { Counts } = require 'meteor/tmeasday:publish-counts'
+{ isTrustedNetwork } = require 'api/customer/server/isTrustedNetwork'
 { Comments } = require 'api/comments'
 { Patients } = require 'api/patients'
 Appointments = require '../collection'
@@ -23,14 +24,21 @@ module.exports = ->
       end: Match.Optional(Date)
       within: Match.Optional(String)
 
+    return unless (@userId and Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP)) or
+      (@connection and isTrustedNetwork(@connection.clientAddress))
+
+    options ||= {}
     options.within ||= 'day'
-    options.date ||= new Date()
-    unless (options.start and options.end)
-      options.start = moment(options.date).startOf(within).toDate()
-      options.end = moment(options.date).endOf(within).toDate()
 
-
-    return unless (@userId and Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
+    # If no argument are supplied, publish future appointments
+    if (not options.date and not options.start and not options.end)
+      options.start = moment().startOf(options.within).toDate()
+      options.end = moment().add(6, 'months').endOf(options.within).toDate()
+    else
+      options.date ||= new Date()
+      unless (options.start and options.end)
+        options.start = moment(options.date).startOf(options.within).toDate()
+        options.end = moment(options.date).endOf(options.within).toDate()
 
     @unblock()
 

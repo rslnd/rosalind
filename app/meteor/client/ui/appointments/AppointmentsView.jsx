@@ -296,13 +296,6 @@ export class AppointmentsView extends React.Component {
                 const timeStart = moment(schedule.start).floor(5, 'minutes')
                 const timeEnd = moment(schedule.end).ceil(5, 'minutes')
 
-                if (timeEnd.format('H:mm') === '21:00') {
-                  console.log({
-                    vrangeend: viewRange(timeEnd).end,
-                    timeEnd
-                  })
-                }
-
                 return (
                   <div
                     key={`schedule-${schedule._id}`}

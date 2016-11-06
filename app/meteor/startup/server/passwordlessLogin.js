@@ -1,5 +1,5 @@
 /* global Accounts */
-import includes from 'lodash/includes'
+import { isTrustedNetwork } from 'api/customer/server/isTrustedNetwork'
 import { Users } from 'api/users'
 import { Meteor } from 'meteor/meteor'
 
@@ -31,19 +31,10 @@ export default () => {
     const userAllowed = user.services.passwordless
     const ipAddress = loginAttempt.connection.clientAddress
     const passwordlessAttempt = loginAttempt.methodArguments[0].passwordless
-    const checkIpAllowed = (ip) => {
-      let allowedIps = process.env.PASSWORDLESS_LOGIN_IP
-      if (allowedIps) {
-        allowedIps = allowedIps.split(',')
-        return includes(allowedIps, ip)
-      } else {
-        return false
-      }
-    }
 
     if (passwordlessAttempt) {
       console.log('[Login] Passwordless login attempt', { username, userId, ipAddress })
-      if (checkIpAllowed(ipAddress)) {
+      if (isTrustedNetwork(ipAddress)) {
         if (userAllowed) {
           console.error('[Login] Allowing passwordless login', { username, userId, ipAddress })
           return true
