@@ -16,7 +16,8 @@ export class AppointmentInfo extends React.Component {
       <div className="row">
         <div className="col-md-6">
           <h4>
-            {moment(appointment.start).format(TAPi18n.__('time.dateFormatWeekday'))} {TAPi18n.__('time.at')} <b>{moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}</b>
+            {moment(appointment.start).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
+            {TAPi18n.__('time.at')} <b>{moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}</b> - {moment(appointment.end).format(TAPi18n.__('time.timeFormat'))}
           </h4>
           <h4 className="text-muted">
             {
