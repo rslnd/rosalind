@@ -161,7 +161,7 @@ class DateNavigationButtons extends React.Component {
           <Button
             onClick={this.handleCalendarToggle}
             title={TAPi18n.__('time.calendar')}>
-            <Icon name="calendar" />&nbsp;
+            <Icon name="calendar" />
           </Button>
 
           {this.props.children}
