@@ -11,54 +11,32 @@
   display: grid;
 }
 
-:local(.appointment) {
-  border-left: 3px solid $primary-active;
-  cursor: pointer;
-  margin-left: 0;
-  overflow: hidden;
-  padding-left: 6px;
-  white-space: pre-wrap;
-}
-
-:local(.appointment:hover) {
-  background-color: lighten($background, 3%);
-}
-
-:local(.canceled) {
-  color: $dark-gray-disabled;
-  text-decoration: line-through;
-}
-
-:local(.show) {
-  border-width: 0;
-}
-
-:local(.prefix) {
-  color: $dark-gray;
-}
-
 :local(.timeLegend) {
-  color: $dark-gray-disabled;
+  color: $gray-disabled;
 }
 
-:local(.fullHour) {
-  color: $dark-gray-active;
+:local(.timeLegend.fullHour) {
+  color: darken($dark-gray-active, 15%) !important;
   font-weight: bold;
 }
 
+:local(.timeLegend.quarterHour) {
+  color: $dark-gray-disabled;
+}
+
 :local(.newAppointmentTrigger) {
-  background-color: $background;
-  border-top: 1px solid darken($background, 4%);
+  background-color: lighten($background, 10%);
+  min-height: 24px;
   margin-left: 2px;
 }
 
 :local(.newAppointmentTrigger:hover) {
-  background-color: lighten($background, 5%);
+  background-color: lighten($background, 3%);
 }
 
 :local(.scheduledUnavailable) {
   background-color: $dark-gray-disabled;
-  opacity: .2;
+  opacity: .5;
 }
 
 :local(.popover) {

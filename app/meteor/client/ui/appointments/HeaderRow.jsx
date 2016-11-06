@@ -90,7 +90,15 @@ export class HeaderRow extends React.Component {
           <FlatButton
             style={{ minWidth: 30, height: 28, lineHeight: '28px' }}
             onClick={this.handleAddUserPopoverOpen}
-            label={<span className="text-muted"><Icon name="plus" /></span>} />
+            label={<span
+              className="text-muted"
+              style={{
+                display: 'inline-block',
+                paddingLeft: 6,
+                paddingRight: 6
+              }}>
+              <Icon name="plus" />
+            </span>} />
 
           {/* Popover to add users to day's schedule */}
           <Popover
@@ -124,11 +132,6 @@ export class HeaderRow extends React.Component {
               )
               : TAPi18n.__('appointments.unassigned')
             }
-
-            <div
-              className={`pull-right ${style.assigneeHeaderEllipsis}`}>
-              <Icon name="caret-down" />
-            </div>
           </div>
         ))}
 
@@ -137,8 +140,8 @@ export class HeaderRow extends React.Component {
           open={this.state.userDropdownOpen}
           anchorEl={this.state.userDropdownAnchor}
           onRequestClose={this.handleUserDropdownClose}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'top' }}>
+          anchorOrigin={{ horizontal: 'middle', vertical: 'bottom' }}
+          targetOrigin={{ horizontal: 'middle', vertical: 'top' }}>
           <Menu>
             <MenuItem primaryText="Zeitraum blockieren" onClick={this.handleToggleOverrideModeClick} />
             <MenuItem primaryText="Löschen" onClick={this.handleRemoveUser} />

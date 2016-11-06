@@ -3,6 +3,7 @@ import moment from 'moment'
 import 'moment-range'
 import 'moment-round'
 import React from 'react'
+import classnames from 'classnames'
 import { Modal } from 'react-bootstrap'
 import { Popover, PopoverAnimationVertical } from 'material-ui/Popover'
 import FlatButton from 'material-ui/FlatButton'
@@ -71,9 +72,17 @@ export class AppointmentsView extends React.Component {
   // [time-2100] | [time] [assignee-1] [assignee-2] ... [assignee-n]
   grid () {
     return {
-      gridTemplateColumns: `[time] 60px ${this.props.assignees.map((assignee, index) =>
-        `[assignee-${assignee.assigneeId }] 1fr`).join(' ')}`,
-      gridTemplateRows: `[header] 40px [subheader] 40px ${this.timeRange().map((time) => `[time-${time.format('HHmm')}] 4px`).join(' ')}`
+      gridTemplateColumns: `
+        [time] 60px
+        ${this.props.assignees.map((assignee, index) =>
+          `[assignee-${assignee.assigneeId}] 1fr`).join(' ')
+        }`,
+      gridTemplateRows: `
+        [header] 40px
+        [subheader] 40px
+        ${this.timeRange().map((time) =>
+          `[time-${time.format('HHmm')}] 5px`).join(' ')
+        }`
     }
   }
 
@@ -307,11 +316,18 @@ export class AppointmentsView extends React.Component {
               .filter((t) => t.minute() % 5 === 0)
               .map((time) => {
                 const fullHour = time.minute() === 0
+                const quarterHour = time.minute() % 15 === 0
                 const timeKey = time.format('[time-]HHmm')
+                const classes = classnames({
+                  [ style.fullHour ]: fullHour,
+                  [ style.quarterHour ]: quarterHour,
+                  [ style.timeLegend ]: true
+                })
+
                 return (
                   <span
                     key={timeKey}
-                    className={`${style.timeLegend} ${fullHour && style.fullHour}`}
+                    className={classes}
                     style={{
                       gridRow: timeKey,
                       gridColumn: 'time'

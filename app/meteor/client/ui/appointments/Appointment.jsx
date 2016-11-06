@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
 import { getColor } from 'client/ui/tags/getColor'
-import style from './style'
+import style from './appointmentStyle'
 
 export class Appointment extends React.Component {
   stripNumbers (text) {
@@ -36,24 +36,16 @@ export class Appointment extends React.Component {
           gridRowStart: moment(appointment.start).format('[time-]HHmm'),
           gridRowEnd: moment(appointment.end).format('[time-]HHmm'),
           gridColumn: `assignee-${appointment.assigneeId}`,
-          borderColor: tagColor,
-          zIndex: 30
+          borderLeftColor: tagColor,
+          zIndex: appointment.lockedAt ? 29 : 30
         }}>
 
         {
-          appointment.treated
-          ? (
+          (appointment.treated || appointment.admitted) &&
             <span
-              style={{ color: tagColor }}>
+              style={{ color: '#acacac' }}>
               <Icon name="check-circle" />&nbsp;
             </span>
-          ) : (
-            appointment.admitted &&
-              <span
-                style={{ color: tagColor }}>
-                <Icon name="check" />&nbsp;
-              </span>
-          )
         }
 
         {

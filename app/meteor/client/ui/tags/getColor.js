@@ -3,9 +3,9 @@ import map from 'lodash/fp/map'
 import sortBy from 'lodash/fp/sortBy'
 import { Tags } from 'api/tags'
 
-export const getColor = (tags = []) => {
+export const getColor = (tags = [], defaultColor = '#dddddd') => {
   if (tags.length === 0) {
-    return '#ccc'
+    return defaultColor
   } else {
     return flow(
       map((tagId) => {
@@ -13,7 +13,7 @@ export const getColor = (tags = []) => {
       }),
       sortBy('order'),
       map((tag) => {
-        return (tag && tag.color) || '#ccc'
+        return (tag && tag.color) || defaultColor
       })
     )(tags)[0]
   }
