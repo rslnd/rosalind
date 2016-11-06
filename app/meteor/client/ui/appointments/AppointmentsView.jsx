@@ -253,6 +253,7 @@ export class AppointmentsView extends React.Component {
                     className={style.newAppointmentTrigger}
                     onClick={(event) => this.handleNewAppointmentClick({ event, assigneeId, time: time.toDate() })}
                     onMouseEnter={(event) => this.handleNewAppointmentHover({ event, assigneeId, time: time.toDate() })}
+                    title={time.format('H:mm')}
                     style={{
                       gridRow: timeKey,
                       gridColumn: `assignee-${assigneeId}`

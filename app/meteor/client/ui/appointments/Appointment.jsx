@@ -15,7 +15,7 @@ export class Appointment extends React.Component {
 
   render () {
     const appointment = this.props.appointment
-
+    const start = moment(appointment.start)
     const classes = classnames({
       [ style.appointment ]: true,
       [ style.canceled ]: appointment.canceled,
@@ -32,8 +32,9 @@ export class Appointment extends React.Component {
         data-appointmentId={appointment._id}
         className={classes}
         onClick={() => this.props.handleAppointmentModalOpen(appointment)}
+        title={start.format('H:mm')}
         style={{
-          gridRowStart: moment(appointment.start).format('[time-]HHmm'),
+          gridRowStart: start.format('[time-]HHmm'),
           gridRowEnd: moment(appointment.end).format('[time-]HHmm'),
           gridColumn: `assignee-${appointment.assigneeId}`,
           borderLeftColor: tagColor,
