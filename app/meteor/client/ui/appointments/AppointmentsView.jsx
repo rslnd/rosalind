@@ -18,13 +18,16 @@ import style from './style'
 
 import { Schedules } from 'api/schedules'
 
-const calculateTimeRange = memoize((date) => {
-  const options = {
+const viewRange = (date) => {
+  return {
     start: moment(date).hour(7).minute(30).startOf('minute'),
     end: moment(date).hour(20).endOf('hour')
   }
+}
 
-  return moment.range(options.start, options.end).toArray('minutes').map((t) => moment(t))
+const calculateTimeRange = memoize((date) => {
+  const range = viewRange(date)
+  return moment.range(range.start, range.end).toArray('minutes').map((t) => moment(t))
 })
 
 export class AppointmentsView extends React.Component {
@@ -289,8 +292,15 @@ export class AppointmentsView extends React.Component {
                 if (!schedule.start && !schedule.end) {
                   return null
                 }
-                const timeStart = moment(schedule.start).floor(5, 'minutes').format('[time-]HHmm')
-                const timeEnd = moment(schedule.end).ceil(5, 'minutes').format('[time-]HHmm')
+                const timeStart = moment(schedule.start).floor(5, 'minutes')
+                const timeEnd = moment(schedule.end).ceil(5, 'minutes')
+
+                if (timeEnd.format('H:mm') === '21:00') {
+                  console.log({
+                    vrangeend: viewRange(timeEnd).end,
+                    timeEnd
+                  })
+                }
 
                 return (
                   <div
@@ -299,11 +309,17 @@ export class AppointmentsView extends React.Component {
                     className={style.scheduledUnavailable}
                     onClick={() => this.handleScheduleModalOpen({ scheduleId: schedule._id })}
                     style={{
-                      gridRowStart: timeStart,
-                      gridRowEnd: timeEnd,
+                      gridRowStart: timeStart.format('[time-]HHmm'),
+                      gridRowEnd: timeEnd.format('[time-]HHmm'),
                       gridColumn: `assignee-${schedule.userId}`
                     }}>
-                    &nbsp;
+
+                    <div className={style.schedulesText}>
+                      {!timeStart.isSame(moment(viewRange(timeStart).start).floor(5, 'minutes'), 'minute') && timeStart.format('H:mm')}
+                    </div>
+                    <div className={style.schedulesText}>
+                      {!timeEnd.isSame(moment(viewRange(timeEnd).end).ceil(5, 'minutes'), 'minute') && timeEnd.format('H:mm')}
+                    </div>
                   </div>
                 )
               })
