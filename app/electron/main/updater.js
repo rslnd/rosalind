@@ -63,7 +63,11 @@ const start = () => {
   autoUpdater.setFeedURL(feedUrl)
 
   autoUpdater.on('error', (err) => {
-    if (err) { logger.error('[Updater]', err) }
+    if (err) {
+      if (typeof err === 'string' && err.indexOf('Remote release File is empty or corrupted') > -1) { return }
+      if (typeof err === 'object' && err.message && err.message.indexOf('Remote release File is empty or corrupted') > -1) { return }
+      logger.error('[Updater]', err)
+    }
   })
 
   autoUpdater.on('update-available', () => {
