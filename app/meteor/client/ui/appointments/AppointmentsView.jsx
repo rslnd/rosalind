@@ -301,7 +301,7 @@ export class AppointmentsView extends React.Component {
                     key={`schedule-${schedule._id}`}
                     data-scheduleId={schedule._id}
                     className={style.scheduledUnavailable}
-                    onClick={() => this.handleScheduleModalOpen({ scheduleId: schedule._id })}
+                    onDoubleClick={() => this.handleScheduleModalOpen({ scheduleId: schedule._id })}
                     style={{
                       gridRowStart: timeStart.format('[time-]HHmm'),
                       gridRowEnd: timeEnd.format('[time-]HHmm'),
