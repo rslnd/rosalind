@@ -16,14 +16,17 @@ export const ingest = ({ name, content, buffer, importer }) => {
 export const setupDragdrop = () => {
   dragDrop('body', (files) => {
     files.forEach((file) => {
-      ingest({ name: file.name, buffer: file }).then(({ result, importer }) => {
+      ingest({ name: file.name, buffer: file }).then((response) => {
         Alert.success(TAPi18n.__('ui.importSuccessMessage'))
-        console.log('[Importers] Successfully ingested dragdrop data transfer', { importer, result })
-        store.dispatch({
-          type: 'DATA_TRANSFER_SUCCESS',
-          importer,
-          result
-        })
+        if (typeof response === 'object') {
+          const { result, importer } = response
+          console.log('[Importers] Successfully ingested dragdrop data transfer', { importer, result })
+          store.dispatch({
+            type: 'DATA_TRANSFER_SUCCESS',
+            importer,
+            result
+          })
+        }
       }).catch((err) => {
         Alert.error(err.message)
         throw err
@@ -37,12 +40,15 @@ export const setupNative = () => {
     window.native.events.on('import/dataTransfer', (file) => {
       console.log('[Importers] Received data transfer event from native binding', file)
       ingest({ name: file.path, content: file.content, importer: file.importer })
-        .then(({ result, importer }) => {
-          store.dispatch({
-            type: 'DATA_TRANSFER_SUCCESS',
-            importer,
-            result
-          })
+        .then((response) => {
+          if (typeof response === 'object') {
+            const { result, importer } = response
+            store.dispatch({
+              type: 'DATA_TRANSFER_SUCCESS',
+              importer,
+              result
+            })
+          }
         })
     })
   }
