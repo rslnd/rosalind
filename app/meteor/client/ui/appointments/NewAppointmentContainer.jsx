@@ -18,7 +18,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     console.log('[Appointments] Submitting new Appointment', { values })
     let newPatient = null
 
-    if (values.patientId === 'newPatient') {
+    if ((values.patientId === 'newPatient' || !values.patientId) && values.lastName) {
       newPatient = {
         profile: {
           lastName: values.lastName,
