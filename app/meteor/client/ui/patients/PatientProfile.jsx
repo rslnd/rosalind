@@ -1,5 +1,6 @@
 import React from 'react'
 import map from 'lodash/map'
+import uniqBy from 'lodash/uniqBy'
 import identity from 'lodash/identity'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Birthday } from './Birthday'
@@ -14,7 +15,7 @@ export class PatientProfile extends React.Component {
       return (
         <div>
           <h4>{patient.fullNameWithTitle()}</h4>
-          {patient.profile.contacts && patient.profile.contacts.map((contact) => (
+          {patient.profile.contacts && uniqBy(patient.profile.contacts, 'value').map((contact) => (
             <h4 key={contact.value}>{
               contact.channel === 'Phone'
               ? zerofix(contact.value)
