@@ -219,6 +219,7 @@ export class PatientPicker extends React.Component {
           autofocus={this.props.autofocus}
           placeholder={TAPi18n.__('patients.search')}
           loadingPlaceholder={TAPi18n.__('patients.searching')}
+          clearValueText={TAPi18n.__('ui.clear')}
           filterOptions={identity}
           optionComponent={PatientSearchResult}
           valueComponent={PatientNameSelected} />

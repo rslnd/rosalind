@@ -154,6 +154,7 @@ export class AppointmentsSearch extends React.Component {
         placeholder={TAPi18n.__('appointments.search')}
         loadingPlaceholder={TAPi18n.__('appointments.searching')}
         searchPromptText={'Suche nach PatientInnen, Geburtsdatum'}
+        clearValueText={TAPi18n.__('ui.clear')}
         filterOptions={identity}
         optionComponent={AppointmentSearchResult}
         valueComponent={AppointmentSelected} />
