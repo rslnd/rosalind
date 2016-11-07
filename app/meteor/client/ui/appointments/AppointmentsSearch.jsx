@@ -11,39 +11,6 @@ import { Birthday } from 'client/ui/patients/Birthday'
 import { getColor } from 'client/ui/tags/getColor'
 import style from './appointmentsSearchStyle'
 
-const findAppointments = (query) => {
-  if (query && query.length > 1) {
-    return Search.actions.patientsWithAppointments.callPromise({ query }).then((patientsWithAppointments) => {
-      let options = []
-      let lastPatientId = null
-
-      patientsWithAppointments && patientsWithAppointments.forEach((result) => {
-        if (lastPatientId !== result._id) {
-          lastPatientId = result._id
-          options.push({
-            value: `patient-${result._id}`,
-            patient: { ...result, appointments: undefined }
-          })
-        }
-
-        result.appointments && result.appointments.forEach((appointment) => {
-          options.push({
-            label: `appointment-${appointment._id}`,
-            assignee: appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId }),
-            value: appointment._id,
-            appointment
-          })
-        })
-      })
-      return { options }
-    })
-  } else {
-    return new Promise((resolve) => {
-      resolve([])
-    })
-  }
-}
-
 class AppointmentSearchResult extends React.Component {
   constructor (props) {
     super(props)
@@ -126,6 +93,7 @@ export class AppointmentsSearch extends React.Component {
   constructor (props) {
     super(props)
     this.handleQueryChange = this.handleQueryChange.bind(this)
+    this.loadOptions = this.loadOptions.bind(this)
   }
 
   handleQueryChange (query) {
@@ -135,13 +103,20 @@ export class AppointmentsSearch extends React.Component {
     })
   }
 
+  loadOptions () {
+    return new Promise((resolve) => {
+      resolve(this.props.options)
+    })
+  }
+
   render () {
     return (
       <Select.Async
         name="appointmentsSearch"
         value={this.props.query}
+        options={this.props.options}
+        loadOptions={!this.props.options ? this.props.findAppointments : this.loadOptions}
         onChange={this.handleQueryChange}
-        loadOptions={findAppointments}
         cache={false}
         ignoreCase={false}
         ignoreAccents={false}

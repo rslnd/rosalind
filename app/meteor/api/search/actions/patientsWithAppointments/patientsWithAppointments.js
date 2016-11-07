@@ -19,7 +19,13 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const selector = parseQuery(query)
+      let selector
+
+      if (query.match(SimpleSchema.RegEx.Id)) {
+        selector = { _id: query }
+      } else {
+        selector = parseQuery(query)
+      }
 
       if (selector) {
         const patients = Patients.find(selector, {
