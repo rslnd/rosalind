@@ -15,22 +15,24 @@ export class AppointmentInfo extends React.Component {
     return (
       <div className="row">
         <div className="col-md-6">
-          <h4>
-            {moment(appointment.start).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
-            {TAPi18n.__('time.at')} <b>{moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}</b> - {moment(appointment.end).format(TAPi18n.__('time.timeFormat'))}
-          </h4>
-          <h4 className="text-muted">
+          <div className="enable-select">
+            <h4>
+              {moment(appointment.start).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
+              {TAPi18n.__('time.at')} <b>{moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}</b> - {moment(appointment.end).format(TAPi18n.__('time.timeFormat'))}
+            </h4>
+            <h4 className="text-muted">
+              {
+                this.props.assignee
+                ? <span>{TAPi18n.__('appointments.assignedTo')} <b>{this.props.assignee.fullNameWithTitle()}</b></span>
+                : TAPi18n.__('appointments.unassigned')
+              }
+            </h4>
+            <p><TagsList tags={appointment.tags} />&nbsp;</p>
             {
-              this.props.assignee
-              ? <span>{TAPi18n.__('appointments.assignedTo')} <b>{this.props.assignee.fullNameWithTitle()}</b></span>
-              : TAPi18n.__('appointments.unassigned')
+              appointment.notes() && appointment.notes().length > 1 &&
+                <blockquote>{appointment.notes()}</blockquote>
             }
-          </h4>
-          <p><TagsList tags={appointment.tags} />&nbsp;</p>
-          {
-            appointment.notes() && appointment.notes().length > 1 &&
-              <blockquote>{appointment.notes()}</blockquote>
-          }
+          </div>
 
           <br />
 
@@ -64,7 +66,7 @@ export class AppointmentInfo extends React.Component {
 
         {
           appointment.patientId &&
-            <div className="col-md-6">
+            <div className="col-md-6 enable-select">
               <PatientProfileContainer patientId={appointment.patientId} />
               <PastAppointmentsContainer patientId={appointment.patientId} excludeAppointmentId={appointment._id} />
             </div>
