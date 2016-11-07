@@ -37,6 +37,13 @@ export const setupNative = () => {
     window.native.events.on('import/dataTransfer', (file) => {
       console.log('[Importers] Received data transfer event from native binding', file)
       ingest({ name: file.path, content: file.content, importer: file.importer })
+        .then(({ result, importer }) => {
+          store.dispatch({
+            type: 'DATA_TRANSFER_SUCCESS',
+            importer,
+            result
+          })
+        })
     })
   }
 }
