@@ -8,7 +8,8 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 export const ingest = ({ Importers }) => {
   const determineImporter = ({ name, content }) => {
     if (name && name.includes('Ärzte Statistik Umsätze')) { return 'eoswinReports' }
-    if (name && name.match(/\.PAT$/)) { return 'eoswinPatients' }
+    if (name && name.match(/\.PAT$/i)) { return 'eoswinPatients' }
+    if (name && name.match(/(\.gdt)$|(\.bdt$)|(\.xdt$)/i)) { return 'xdt' }
   }
 
   const determineEncoding = ({ importer }) => {
@@ -42,7 +43,10 @@ export const ingest = ({ Importers }) => {
       }
 
       if (importer) {
-        return Importers.actions.importWith.call({ importer, name, content })
+        return {
+          importer,
+          result: Importers.actions.importWith.call({ importer, name, content })
+        }
       } else {
         throw new Meteor.Error('no-importer-found', `Could not determine importer from filename ${name}`)
       }

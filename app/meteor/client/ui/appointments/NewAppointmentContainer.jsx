@@ -1,13 +1,14 @@
 import React from 'react'
 import moment from 'moment'
 import max from 'lodash/max'
+import { connect } from 'react-redux'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { NewAppointment } from './NewAppointment'
 import { Appointments } from 'api/appointments'
 import { Tags } from 'api/tags'
 import Alert from 'react-s-alert'
 
-export class NewAppointmentContainer extends React.Component {
+export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -65,8 +66,11 @@ export class NewAppointmentContainer extends React.Component {
     return (
       <NewAppointment
         onSubmit={this.handleSubmit}
-        assigneeId={this.props.assigneeId}
+        defaultValues={{ patientId: this.props.patientId }}
+        patientId={this.props.patientId}
         time={this.props.time} />
     )
   }
 }
+
+export const NewAppointmentContainer = connect(() => { return {} })(NewAppointmentContainerComponent)

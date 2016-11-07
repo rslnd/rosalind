@@ -114,7 +114,7 @@ class AppointmentSearchResult extends React.Component {
   }
 }
 
-const AppointmentSelected = ({ value }) => (
+const SelectedResult = ({ value }) => (
   <div className="Select-value">
     <span className="Select-value-label">
       {value.patient && <PatientName patient={value.patient} />}
@@ -125,17 +125,12 @@ const AppointmentSelected = ({ value }) => (
 export class AppointmentsSearch extends React.Component {
   constructor (props) {
     super(props)
-
-    this.state = {
-      query: ''
-    }
-
     this.handleQueryChange = this.handleQueryChange.bind(this)
   }
 
   handleQueryChange (query) {
-    this.setState({
-      ...this.state,
+    this.props.dispatch({
+      type: 'APPOINTMENTS_SEARCH_QUERY_CHANGE',
       query: query
     })
   }
@@ -144,20 +139,21 @@ export class AppointmentsSearch extends React.Component {
     return (
       <Select.Async
         name="appointmentsSearch"
-        value={this.state.query}
+        value={this.props.query}
         onChange={this.handleQueryChange}
         loadOptions={findAppointments}
         cache={false}
         ignoreCase={false}
         ignoreAccents={false}
         autofocus={false}
+        onCloseResetsInput={false}
         placeholder={TAPi18n.__('appointments.search')}
         loadingPlaceholder={TAPi18n.__('appointments.searching')}
         searchPromptText={'Suche nach PatientInnen, Geburtsdatum'}
         clearValueText={TAPi18n.__('ui.clear')}
         filterOptions={identity}
         optionComponent={AppointmentSearchResult}
-        valueComponent={AppointmentSelected} />
+        valueComponent={SelectedResult} />
     )
   }
 }
