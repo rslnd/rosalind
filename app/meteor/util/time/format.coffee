@@ -5,7 +5,7 @@ quarter = require './quarter'
 module.exports =
   relativeTimeString: (date) ->
     date = moment(date)
-    isRecent = moment().range(date, moment()).diff('hours') < 4
+    isRecent = moment().range(date, moment()).diff('week') < 1
     [
       if isRecent then date.fromNow() else date.calendar(),
       TAPi18n.__('ui.at'),

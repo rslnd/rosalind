@@ -28,6 +28,7 @@
     "treatedBy": "Behandelt von",
     "resolve": "Erledigt",
     "resolvedBy": "Erledigt von",
+    "canceledBy": "Storniert von",
     "resolvedToday": "Heute erledigt",
     "today": "Heute",
     "asap": "so bald wie möglich",

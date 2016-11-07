@@ -5,8 +5,8 @@ import { RelativeTime } from './RelativeTime'
 import { UserHelper } from 'client/ui/users/UserHelper'
 
 const Stamp = ({ stamp }) => {
-  return <p className="stamp text-muted pull-left">
-    {stamp.verb} <UserHelper userId={stamp.userId} helper="firstName" /> <RelativeTime time={stamp.time} />
+  return <p className="stamp text-muted">
+    {stamp.verb} <UserHelper userId={stamp.userId} helper="firstName" /> <RelativeTime time={stamp.time} /><br />
   </p>
 }
 
