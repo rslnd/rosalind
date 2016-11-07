@@ -68,7 +68,12 @@ module.exports = ->
 
     return unless (@userId and Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
 
-    return Appointments.find({ patientId: options.patientId }, { sort: { start: 1 } })
+    return Appointments.find({
+      patientId: options.patientId,
+      removed: { $ne: true }
+    }, {
+      sort: { start: 1 }
+    })
 
 
   Meteor.publishComposite 'appointmentsTable', (tableName, ids, fields) ->
