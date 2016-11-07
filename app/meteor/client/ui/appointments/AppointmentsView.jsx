@@ -356,6 +356,7 @@ export class AppointmentsView extends React.Component {
           bsSize="large">
           <Modal.Body>
             <AppointmentInfoContainer
+              onRequestClose={this.handleAppointmentModalClose}
               appointmentId={this.state.selectedAppointmentId}
               onClose={this.handleAppointmentModalClose} />
           </Modal.Body>
