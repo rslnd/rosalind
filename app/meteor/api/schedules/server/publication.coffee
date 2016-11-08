@@ -29,6 +29,9 @@ module.exports = ->
           },
           {
             type: 'override' # FIXME: Limit schedules sent to client
+          },
+          {
+            type: 'day'
           }
         ]
       }
