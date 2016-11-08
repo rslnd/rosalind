@@ -33,6 +33,7 @@ class UserPanelContainerComponent extends React.Component {
   render () {
     return (
       <UserPanel
+        {...this.props}
         currentUser={this.props.currentUser}
         handleLogout={this.handleLogout}
         loggingOut={this.state.loggingOut} />

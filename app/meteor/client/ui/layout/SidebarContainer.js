@@ -1,4 +1,5 @@
 import { composeWithTracker } from 'react-komposer'
+import { withRouter } from 'react-router'
 import { process as server } from 'meteor/clinical:env'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
@@ -85,7 +86,7 @@ const composer = (props, onData) => {
 
   const customerName = server.env.CUSTOMER_NAME || 'Rosalind Development'
 
-  onData(null, { items, customerName })
+  onData(null, { ...props, items, customerName })
 }
 
-export const SidebarContainer = composeWithTracker(composer)(Sidebar)
+export const SidebarContainer = composeWithTracker(composer)(withRouter(Sidebar))

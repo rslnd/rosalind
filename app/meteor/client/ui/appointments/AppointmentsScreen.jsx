@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
 import { DateNavigation } from 'client/ui/components/DateNavigation'
@@ -8,9 +9,15 @@ import style from './style'
 
 export class AppointmentsScreen extends React.Component {
   render () {
+    const contentHeaderClasses = classnames({
+      [ style.contentHeader ]: true,
+      [ style.contentHeaderSidebarClosed ]: true,
+      'content-header': true
+    })
+
     return (
       <div>
-        <div className={`content-header ${style.contentHeader}`}>
+        <div className={contentHeaderClasses}>
           <h1>
             {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
             <small>{weekOfYear(this.props.date, { short: true })}</small>

@@ -1,4 +1,5 @@
 import { composeWithTracker } from 'react-komposer'
+import { withRouter } from 'react-router'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Loading } from 'client/ui/components/Loading'
@@ -24,9 +25,11 @@ const composer = (props, onData) => {
   Meteor.subscribe('appointments')
   Meteor.subscribe('schedules')
 
-  onData(null, { ...props, currentUser, locale, loggingIn })
+  const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments/)
+
+  onData(null, { ...props, currentUser, locale, loggingIn, sidebarOpen })
 }
 
-const MainLayoutContainer = composeWithTracker(composer, Loading)(MainLayout)
+const MainLayoutContainer = withRouter(composeWithTracker(composer, Loading)(MainLayout))
 
 export { MainLayoutContainer }

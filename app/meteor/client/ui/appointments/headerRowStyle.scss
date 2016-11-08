@@ -11,6 +11,10 @@
   z-index: 40;
 }
 
+:local(.headerRowSidebarClosed) {
+  left: 60px !important;
+}
+
 :local(.headerCell) {
   flex: 1;
   font-weight: bold;

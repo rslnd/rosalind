@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import classnames from 'classnames'
 import { Popover } from 'material-ui/Popover'
 import FlatButton from 'material-ui/FlatButton'
 import Menu from 'material-ui/Menu'
@@ -82,8 +83,13 @@ export class HeaderRow extends React.Component {
   }
 
   render () {
+    const classes = classnames({
+      [ style.headerRowSidebarClosed ]: true,
+      [ style.headerRow ]: true
+    })
+
     return (
-      <div className={style.headerRow}>
+      <div className={classes}>
 
         {/* Top-left cell for adding assignees */}
         <div style={{ width: '60px' }}>

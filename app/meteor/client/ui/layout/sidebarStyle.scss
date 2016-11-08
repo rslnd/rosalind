@@ -3,8 +3,29 @@
   padding-bottom: 70px;
 }
 
+:local(.sidebarOpen) {
+  width: 230px;
+}
+
+:local(.sidebarClosed) {
+  width: 45px !important;
+}
+
 :local(.customerName) {
   bottom: 0;
   position: fixed !important;
   width: 230px;
+}
+
+:local(.hidden) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+:local(.fade) {
+  transition: opacity .1s cubic-bezier(1, 0, 1, 0);
+}
+
+:local(.username) {
+  padding: 10px 0 10px 0 !important;
 }

@@ -1,10 +1,16 @@
 import React from 'react'
-import { Link, withRouter } from 'react-router'
+import classnames from 'classnames'
+import { Link } from 'react-router'
 import FlipMove from 'react-flip-move'
 import { TAPi18n } from 'meteor/tap:i18n'
 import style from './sidebarStyle.scss'
 
-const SidebarItem = withRouter(({ item, router }) => {
+const SidebarItem = ({ item, router, sidebarOpen }) => {
+  const hideWhenClosed = classnames({
+    [ style.hidden ]: !sidebarOpen,
+    [ style.fade ]: true
+  })
+
   return (
     <li className={router.isActive(`/${item.name}`) && 'active'}>
       <Link
@@ -12,16 +18,16 @@ const SidebarItem = withRouter(({ item, router }) => {
         className="pointer level-0 link"
         title={TAPi18n.__(`${item.name}.this`)}>
         <i className={`fa fa-${item.icon}`}></i>
-        <span>{TAPi18n.__(`${item.name}.this`)}</span>
+        <span className={hideWhenClosed}>{TAPi18n.__(`${item.name}.this`)}</span>
         <FlipMove typeName="span">
           {
             item.count && item.count > 0
-            ? <small key={item.count} className="label pull-right label-primary">{item.count}</small>
-          : (item.subItems && <i key="subItems" className="i fa fa-angle-left pull-right">&emsp;</i>)
+            ? <small key={item.count} className={`label pull-right label-primary ${hideWhenClosed}`}>{item.count}</small>
+          : (item.subItems && <i key="subItems" className={`i fa fa-angle-left pull-right ${hideWhenClosed}`}>&emsp;</i>)
           }
         </FlipMove>
       </Link>
-      {item.subItems &&
+      {sidebarOpen && item.subItems &&
         <ul className="treeview-menu">
           {item.subItems.map((subItem) => (
             <li key={subItem.name} className={router.isActive(`/${item.name}${subItem.path}`, true) && 'active level-1 link'}>
@@ -37,7 +43,7 @@ const SidebarItem = withRouter(({ item, router }) => {
       }
     </li>
   )
-})
+}
 
 export class Sidebar extends React.Component {
   constructor (props) {
@@ -54,23 +60,41 @@ export class Sidebar extends React.Component {
   }
 
   render () {
+    const asideClasses = classnames({
+      'main-sidebar': true,
+      'sidebar': true,
+      [ style.sidebarOpen ]: this.props.isOpen,
+      [ style.sidebarClosed ]: !this.props.isOpen
+    })
+
+    const userPanelClasses = classnames({
+      'header': true,
+      'text-center': true,
+      [ style.username ]: !this.props.isOpen
+    })
+
     return (
-      <aside className="main-sidebar sidebar">
+      <aside className={asideClasses}>
         <ul className={`sidebar-menu ${style.sidebar}`}>
 
-          <li className="header text-center">
+          <li className={userPanelClasses}>
             {this.props.userPanel}
           </li>
 
           {this.props.items.map((item) => (
-            <SidebarItem key={item.name} item={item} userMenuOpen={this.state.userMenuOpen} />
+            <SidebarItem
+              key={item.name}
+              item={item}
+              router={this.props.router}
+              sidebarOpen={this.props.isOpen} />
           ))}
 
           {/* TODO: Replace with flexbox */}
           <li style={{height: '70px'}}></li>
-          <li className={`header text-center ${style.customerName}`}>{this.props.customerName.split(' - ').map((name, i) => (
+
+          {/* <li className={`header text-center ${style.customerName} ${this.props.isOpen && style.hidden}`}>{this.props.customerName.split(' - ').map((name, i) => (
             <span key={i}>{name}<br /></span>
-          ))}</li>
+          ))}</li> */}
         </ul>
       </aside>
     )
