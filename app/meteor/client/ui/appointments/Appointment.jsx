@@ -42,14 +42,6 @@ export class Appointment extends React.Component {
         }}>
 
         {
-          (appointment.treated || appointment.admitted) &&
-            <span
-              style={{ color: '#acacac' }}>
-              <Icon name="check-circle" />&nbsp;
-            </span>
-        }
-
-        {
           appointment.lockedAt &&
             <span className="text-muted">
               <i className="fa fa-clock-o fa-fw"></i>&nbsp;
@@ -71,6 +63,23 @@ export class Appointment extends React.Component {
             </span>
           )
         }
+
+        {
+          (appointment.treated || appointment.admitted)
+            ? <span
+              className="pull-right"
+              style={{ display: 'inline-block', color: '#8fc6ae' }}>
+              <Icon name="check" />&nbsp;
+            </span>
+            : ((moment().diff(appointment.end, 'hours') >= 4) &&
+              <span
+                className="pull-right"
+                style={{ display: 'inline-block', color: '#e37067' }}>
+                <Icon name="times" />&nbsp;
+              </span>
+            )
+        }
+
       </div>
     )
   }
