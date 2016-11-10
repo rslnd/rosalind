@@ -6,7 +6,7 @@ import { Icon } from 'client/ui/components/Icon'
 import { getColor } from 'client/ui/tags/getColor'
 import style from './appointmentStyle'
 
-const Indicator = ({ appointment }) => (
+export const Indicator = ({ appointment }) => (
   <span className="pull-right">
     {
       (appointment.treated || appointment.admitted)

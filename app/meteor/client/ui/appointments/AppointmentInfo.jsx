@@ -16,7 +16,7 @@ export class AppointmentInfo extends React.Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-5">
             <div className="enable-select">
               <h4>
                 {moment(appointment.start).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
@@ -70,7 +70,7 @@ export class AppointmentInfo extends React.Component {
 
           {
             appointment.patientId &&
-              <div className="col-md-6 enable-select">
+              <div className="col-md-7 enable-select">
                 <PatientProfileContainer patientId={appointment.patientId} />
                 <PastAppointmentsContainer patientId={appointment.patientId} excludeAppointmentId={appointment._id} />
               </div>

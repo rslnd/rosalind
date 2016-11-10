@@ -1,6 +1,27 @@
 import moment from 'moment'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Users } from 'api/users'
+import { getColor } from 'client/ui/tags/getColor'
+import { Indicator } from 'client/ui/appointments/Appointment'
+
+const Appointment = ({ appointment }) => {
+  const assignee = Users.findOne({ _id: appointment.assigneeId })
+  const color = getColor(appointment.tags)
+  return (
+    <li
+      style={{
+        borderLeft: `4px solid ${color}`,
+        paddingLeft: 10,
+        listStyleType: 'none',
+        textDecoration: appointment.canceled && 'line-through',
+        color: appointment.canceled && '#ccc'
+      }}>
+      {moment(appointment.start).format(TAPi18n.__('time.dateFormatShort'))} {moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}&emsp;
+      {assignee && assignee.fullNameWithTitle()}
+      <Indicator appointment={appointment} />
+    </li>
+  )
+}
 
 export const PastAppointments = ({ pastAppointments, futureAppointments }) => {
   const sections = [
@@ -15,16 +36,12 @@ export const PastAppointments = ({ pastAppointments, futureAppointments }) => {
           section.appointments.length > 0 &&
             <div key={section.title}>
               <h6>{section.title}</h6>
-              <ul>
-                {section.appointments.map((appointment) => {
-                  const assignee = Users.findOne({ _id: appointment.assigneeId })
-                  return (
-                    <li key={appointment._id}>
-                      {moment(appointment.start).format(TAPi18n.__('time.dateFormatShort'))} {moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}&emsp;
-                      {assignee && assignee.fullNameWithTitle()}
-                    </li>
-                  )
-                })}
+              <ul style={{ paddingLeft: 10 }}>
+                {section.appointments.map((appointment) => (
+                  <Appointment
+                    key={appointment._id}
+                    appointment={appointment} />
+                ))}
               </ul>
             </div>
         ))
