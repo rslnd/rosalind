@@ -26,6 +26,8 @@ class DateNavigationButtons extends React.Component {
     this.handleForwardWeekClick = this.handleForwardWeekClick.bind(this)
     this.handleForwardMonthClick = this.handleForwardMonthClick.bind(this)
     this.handleCalendarToggle = this.handleCalendarToggle.bind(this)
+    this.handleCalendarClose = this.handleCalendarClose.bind(this)
+    this.handleCalendarOpen = this.handleCalendarOpen.bind(this)
     this.handleCalendarDayChange = this.handleCalendarDayChange.bind(this)
   }
 
@@ -77,12 +79,27 @@ class DateNavigationButtons extends React.Component {
   }
 
   handleCalendarToggle (e) {
+    if (this.state.calendarOpen) {
+      this.handleCalendarClose()
+    } else {
+      this.handleCalendarOpen(e)
+    }
+  }
+
+  handleCalendarClose () {
+    this.setState({
+      ...this.state,
+      calendarOpen: false
+    })
+  }
+
+  handleCalendarOpen (e) {
     const bodyRect = document.body.getBoundingClientRect()
     const targetRect = e.currentTarget.getBoundingClientRect()
 
     this.setState({
       ...this.state,
-      calendarOpen: !this.state.calendarOpen,
+      calendarOpen: true,
       calendarPosition: {
         top: targetRect.bottom,
         right: targetRect.right - bodyRect.right
@@ -159,7 +176,8 @@ class DateNavigationButtons extends React.Component {
         <ButtonGroup>
 
           <Button
-            onClick={this.handleCalendarToggle}
+            onMouseEnter={this.handleCalendarOpen}
+            onClick={this.handleCalendarOpen}
             title={TAPi18n.__('time.calendar')}>
             <Icon name="calendar" />
           </Button>
@@ -170,19 +188,22 @@ class DateNavigationButtons extends React.Component {
         <Portal
           closeOnEsc
           closeOnOutsideClick
+          onClose={this.handleCalendarClose}
           isOpened={this.state.calendarOpen}>
           <div
             className={style.portal}
             style={this.state.calendarPosition}>
-            <DayPicker
-              onDayMouseDown={this.handleCalendarDayChange}
-              date={this.props.date}
-              initialVisibleMonth={() => this.props.date}
-              enableOutsideDays
-              modifiers={{
-                current: (day) => day.isSame(this.props.date, 'day')
-              }}
-            />
+            <div onMouseLeave={this.handleCalendarClose}>
+              <DayPicker
+                onDayMouseDown={this.handleCalendarDayChange}
+                date={this.props.date}
+                initialVisibleMonth={() => this.props.date}
+                enableOutsideDays
+                modifiers={{
+                  current: (day) => day.isSame(this.props.date, 'day')
+                }}
+              />
+            </div>
           </div>
         </Portal>
       </div>
