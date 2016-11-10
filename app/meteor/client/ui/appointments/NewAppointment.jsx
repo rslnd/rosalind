@@ -74,8 +74,8 @@ export class NewAppointmentFormComponent extends React.Component {
               <RaisedButton type="submit"
                 onClick={this.handleSubmit}
                 fullWidth
-                primary={!submitting && !pristine}
-                disabled={pristine || submitting}
+                primary
+                disabled={submitting || (pristine && !this.props.initialValues.patientId)}
                 label={TAPi18n.__('appointments.thisSave')} />
             </div>
           </div>
