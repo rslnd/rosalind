@@ -1,4 +1,6 @@
 import React from 'react'
+import moment from 'moment'
+import 'moment-round'
 import classnames from 'classnames'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
@@ -8,6 +10,22 @@ import { AppointmentsSearchContainer } from './AppointmentsSearchContainer'
 import style from './style'
 
 export class AppointmentsScreen extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.scrollToCurrentTime = this.scrollToCurrentTime.bind(this)
+  }
+
+  scrollToCurrentTime () {
+    const now = moment()
+    if (now.isSame(this.props.date, 'day')) {
+      const elemId = now.floor(5, 'minutes').format('[time-]HHmm')
+      const offset = document.getElementById(elemId).offsetTop
+      window.scrollTo({ top: offset })
+      console.log('scrolledto', document.getElementById(elemId), offset)
+    }
+  }
+
   render () {
     const contentHeaderClasses = classnames({
       [ style.contentHeader ]: true,
@@ -30,6 +48,7 @@ export class AppointmentsScreen extends React.Component {
           <div style={{ marginTop: 27 }}>
             <DateNavigation
               date={this.props.date}
+              onTodayClick={this.scrollToCurrentTime}
               basePath="appointments"
               pullRight
               jumpWeekForward

@@ -353,6 +353,7 @@ export class AppointmentsView extends React.Component {
                 return (
                   <span
                     key={timeKey}
+                    id={timeKey}
                     className={classes}
                     style={{
                       gridRow: timeKey,

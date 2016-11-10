@@ -64,6 +64,8 @@ class DateNavigationButtons extends React.Component {
   handleTodayClick () {
     const path = this.dateToPath(moment())
     this.props.router.push(path)
+
+    this.props.onTodayClick && this.props.onTodayClick()
   }
 
   handleForwardDayClick () {
