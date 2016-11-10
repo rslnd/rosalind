@@ -22,8 +22,18 @@ const SidebarItem = ({ item, router, sidebarOpen }) => {
         <FlipMove typeName="span">
           {
             item.count && item.count > 0
-            ? <small key={item.count} className={`label pull-right label-primary ${hideWhenClosed}`}>{item.count}</small>
-          : (item.subItems && <i key="subItems" className={`i fa fa-angle-left pull-right ${hideWhenClosed}`}>&emsp;</i>)
+            ? <small
+              key={item.count}
+              className={`label pull-right label-primary ${!sidebarOpen && style.badgeWhenClosed}`}>
+              {item.count}
+            </small>
+            : (item.subItems &&
+              <i
+                key="subItems"
+                className={`i fa fa-angle-left pull-right ${hideWhenClosed}`}>
+                &emsp;
+              </i>
+            )
           }
         </FlipMove>
       </Link>

@@ -29,3 +29,8 @@
 :local(.username) {
   padding: 10px 0 10px 0 !important;
 }
+
+:local(.badgeWhenClosed) {
+  opacity: 1;
+  transform: scale(0.65) translateX(10px) translateY(-35px);
+}
