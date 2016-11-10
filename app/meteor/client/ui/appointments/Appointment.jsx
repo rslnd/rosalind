@@ -6,6 +6,22 @@ import { Icon } from 'client/ui/components/Icon'
 import { getColor } from 'client/ui/tags/getColor'
 import style from './appointmentStyle'
 
+const Indicator = ({ appointment }) => (
+  <span className="pull-right">
+    {
+      (appointment.treated || appointment.admitted)
+        ? <span key="show" style={{ display: 'inline-block', color: '#8fc6ae' }}>
+          <Icon name="check" />&nbsp;
+        </span>
+        : ((moment().diff(appointment.end, 'hours') >= 4) &&
+          <span key="noShow" style={{ display: 'inline-block', color: '#e37067' }}>
+            <Icon name="times" />&nbsp;
+          </span>
+        )
+    }
+  </span>
+)
+
 export class Appointment extends React.Component {
   stripNumbers (text) {
     if (typeof text === 'string') {
@@ -32,6 +48,7 @@ export class Appointment extends React.Component {
         data-appointmentId={appointment._id}
         className={classes}
         onClick={() => this.props.handleAppointmentModalOpen(appointment)}
+        // onClick={() => this.props.handleSetAdmitted(appointment._id)}
         title={start.format('H:mm')}
         style={{
           gridRowStart: start.format('[time-]HHmm'),
@@ -49,6 +66,8 @@ export class Appointment extends React.Component {
             </span>
         }
 
+        <Indicator appointment={appointment} />
+
         {
           appointment.patient
           ? (
@@ -63,23 +82,6 @@ export class Appointment extends React.Component {
             </span>
           )
         }
-
-        {
-          (appointment.treated || appointment.admitted)
-            ? <span
-              className="pull-right"
-              style={{ display: 'inline-block', color: '#8fc6ae' }}>
-              <Icon name="check" />&nbsp;
-            </span>
-            : ((moment().diff(appointment.end, 'hours') >= 4) &&
-              <span
-                className="pull-right"
-                style={{ display: 'inline-block', color: '#e37067' }}>
-                <Icon name="times" />&nbsp;
-              </span>
-            )
-        }
-
       </div>
     )
   }
