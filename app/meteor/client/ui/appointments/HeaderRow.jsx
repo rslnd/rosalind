@@ -80,6 +80,7 @@ export class HeaderRow extends React.Component {
     if (assigneeId && this.props.onToggleOverrideMode) {
       this.props.onToggleOverrideMode({ assigneeId })
     }
+    this.handleUserDropdownClose()
   }
 
   render () {
