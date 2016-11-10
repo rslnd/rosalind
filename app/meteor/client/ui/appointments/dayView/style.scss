@@ -55,14 +55,6 @@
   max-width: 400px;
 }
 
-:local(.padded) {
-  padding: 10px;
-}
-
-:local(.summary) {
-  margin-bottom: 5px;
-}
-
 :local(.overrideOverlay) {
   background-color: rgb(226, 214, 227);
   display: flex;

@@ -2,7 +2,7 @@ import moment from 'moment'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Users } from 'api/users'
 import { getColor } from 'client/ui/tags/getColor'
-import { Indicator } from 'client/ui/appointments/Appointment'
+import { Indicator } from 'client/ui/appointments/appointment/Indicator'
 
 const Appointment = ({ appointment }) => {
   const assignee = Users.findOne({ _id: appointment.assigneeId })

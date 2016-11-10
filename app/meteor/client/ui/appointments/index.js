@@ -1,1 +1,1 @@
-export { AppointmentsContainer } from './AppointmentsContainer'
+export { AppointmentsContainer } from './dayView/AppointmentsContainer'

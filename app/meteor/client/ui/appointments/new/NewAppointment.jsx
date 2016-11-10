@@ -8,7 +8,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { TagsField } from 'client/ui/tags/TagsField'
 import { PatientPickerContainer } from 'client/ui/patients/PatientPickerContainer'
 import { UserHelper } from 'client/ui/users/UserHelper'
-import style from './style'
+import style from './newAppointmentStyle'
 
 const summary = ({ time, assigneeId }) => (
   <div className={style.summary}>

@@ -6,7 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
 import { DateNavigation } from 'client/ui/components/DateNavigation'
 import { AppointmentsView } from './AppointmentsView'
-import { AppointmentsSearchContainer } from './AppointmentsSearchContainer'
+import { AppointmentsSearchContainer } from 'client/ui/appointments/search/AppointmentsSearchContainer'
 import style from './style'
 
 export class AppointmentsScreen extends React.Component {

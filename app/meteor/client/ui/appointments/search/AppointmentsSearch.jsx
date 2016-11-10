@@ -3,9 +3,7 @@ import identity from 'lodash/identity'
 import React from 'react'
 import Select from 'react-select'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Users } from 'api/users'
-import { Search } from 'api/search'
-import { Indicator } from 'client/ui/appointments/Appointment'
+import { Indicator } from 'client/ui/appointments/appointment/Indicator'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import { PatientName } from 'client/ui/patients/PatientName'
 import { Birthday } from 'client/ui/patients/Birthday'
@@ -67,7 +65,7 @@ class AppointmentSearchResult extends React.Component {
               textDecoration: appointment.canceled && 'line-through'
             }}>
             <span>
-              {start.format(TAPi18n.__('time.dateFormat'))}
+              {start.format(TAPi18n.__('time.dateFormatShort'))}
               &nbsp;
               {TAPi18n.__('time.at')}
               &nbsp;
@@ -77,7 +75,7 @@ class AppointmentSearchResult extends React.Component {
             {
               appointment.assigneeId &&
                 <span className={style.assigneeName}>
-                  <UserHelper userId={appointment.assigneeId} helper="fullNameWithTitle" />
+                  <UserHelper userId={appointment.assigneeId} helper="lastNameWithTitle" />
                 </span>
             }
             <Indicator appointment={appointment} />
