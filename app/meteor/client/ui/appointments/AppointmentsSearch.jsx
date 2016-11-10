@@ -5,6 +5,7 @@ import Select from 'react-select'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Users } from 'api/users'
 import { Search } from 'api/search'
+import { Indicator } from 'client/ui/appointments/Appointment'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import { PatientName } from 'client/ui/patients/PatientName'
 import { Birthday } from 'client/ui/patients/Birthday'
@@ -59,7 +60,12 @@ class AppointmentSearchResult extends React.Component {
           </span>
         }
         {
-          appointment && <span className={style.appointment} style={{borderColor: tagColor}}>
+          appointment && <span
+            className={style.appointment}
+            style={{
+              borderColor: tagColor,
+              textDecoration: appointment.canceled && 'line-through'
+            }}>
             <span>
               {start.format(TAPi18n.__('time.dateFormat'))}
               &nbsp;
@@ -74,6 +80,7 @@ class AppointmentSearchResult extends React.Component {
                   <UserHelper userId={appointment.assigneeId} helper="fullNameWithTitle" />
                 </span>
             }
+            <Indicator appointment={appointment} />
           </span>
         }
       </div>

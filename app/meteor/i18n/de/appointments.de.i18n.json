@@ -38,6 +38,8 @@
     "in3Months": "in 3 Monaten",
     "in6Months": "in 6 Monaten",
     "in1Year": "in 1 Jahr",
+    "show": "Anwesend",
+    "noShow": "Nicht Erschienen",
     "insertSuccess": "Termin erfolgreich eingetragen",
     "insertError": "Entschuldigung! Bitte noch einmal versuchen.",
     "search": "Suche...",

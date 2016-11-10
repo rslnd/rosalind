@@ -10,11 +10,17 @@ export const Indicator = ({ appointment }) => (
   <span className="pull-right">
     {
       (appointment.treated || appointment.admitted)
-        ? <span key="show" style={{ display: 'inline-block', color: '#8fc6ae' }}>
+        ? (<span
+          key="show"
+          title={TAPi18n.__('appointments.show')}
+          style={{ display: 'inline-block', color: '#8fc6ae' }}>
           <Icon name="check" />&nbsp;
         </span>
-        : ((moment().diff(appointment.end, 'hours') >= 4) &&
-          <span key="noShow" style={{ display: 'inline-block', color: '#e37067' }}>
+        ) : ((moment().diff(appointment.end, 'hours') >= 4) &&
+          <span
+            key="noShow"
+            title={TAPi18n.__('appointments.noShow')}
+            style={{ display: 'inline-block', color: '#e37067' }}>
             <Icon name="times" />&nbsp;
           </span>
         )
