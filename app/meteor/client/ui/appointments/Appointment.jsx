@@ -47,8 +47,8 @@ export class Appointment extends React.Component {
         id={appointment._id}
         data-appointmentId={appointment._id}
         className={classes}
-        onClick={() => this.props.handleAppointmentModalOpen(appointment)}
-        // onClick={() => this.props.handleSetAdmitted(appointment._id)}
+        onClick={(e) => this.props.onClick(e, appointment)}
+        onContextMenu={(e) => this.props.onClick(e, appointment)}
         title={start.format('H:mm')}
         style={{
           gridRowStart: start.format('[time-]HHmm'),

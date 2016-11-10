@@ -43,6 +43,7 @@ export class AppointmentsView extends React.Component {
       selectedAppointmentId: null
     }
 
+    this.handleAppointmentClick = this.handleAppointmentClick.bind(this)
     this.handleAppointmentModalOpen = this.handleAppointmentModalOpen.bind(this)
     this.handleAppointmentModalClose = this.handleAppointmentModalClose.bind(this)
     this.handlePopoverOpen = this.handlePopoverOpen.bind(this)
@@ -57,6 +58,7 @@ export class AppointmentsView extends React.Component {
     this.handleScheduleModalOpen = this.handleScheduleModalOpen.bind(this)
     this.handleScheduleModalClose = this.handleScheduleModalClose.bind(this)
     this.handleScheduleSoftRemove = this.handleScheduleSoftRemove.bind(this)
+    this.handleSetAdmitted = this.handleSetAdmitted.bind(this)
     this.timeRange = this.timeRange.bind(this)
     this.grid = this.grid.bind(this)
   }
@@ -86,6 +88,16 @@ export class AppointmentsView extends React.Component {
         ${this.timeRange().map((time) =>
           `[time-${time.format('HHmm')}] 5px`).join(' ')
         }`
+    }
+  }
+
+  handleAppointmentClick (event, appointment) {
+    console.log(event)
+    if (event.type === 'contextmenu') {
+      event.preventDefault()
+      this.handleSetAdmitted(appointment)
+    } else {
+      this.handleAppointmentModalOpen(appointment)
     }
   }
 
@@ -220,6 +232,10 @@ export class AppointmentsView extends React.Component {
     }
   }
 
+  handleSetAdmitted (appointment) {
+    this.props.onSetAdmitted({ appointmentId: appointment._id })
+  }
+
   render () {
     return (
       <div>
@@ -236,7 +252,7 @@ export class AppointmentsView extends React.Component {
               <Appointment
                 key={appointment._id}
                 appointment={appointment}
-                handleAppointmentModalOpen={this.handleAppointmentModalOpen} />
+                onClick={this.handleAppointmentClick} />
             ))
           ))}
 
