@@ -18,12 +18,12 @@ Template.schedulesDefaultCalendar.onRendered ->
     timezone: false
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     events: (start, end, timezone, callback) ->
-      events = Schedules.methods.getEvents
-        selector:
-          $or: [
-            { userId: Template.schedulesDefault.currentView.get('userId') }
-            { type: 'businessHours' }
-          ]
+      # events = Schedules.methods.getEvents
+      #   selector:
+      #     $or: [
+      #       { userId: Template.schedulesDefault.currentView.get('userId') }
+      #       { type: 'businessHours' }
+      #     ]
 
       callback(events)
 
