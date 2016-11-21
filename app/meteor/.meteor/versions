@@ -34,7 +34,7 @@ callback-hook@1.0.10
 cfs:http-methods@0.0.32
 check@1.2.4
 clinical:env@3.2.2
-coffeescript@1.11.1_3
+coffeescript@1.11.1_4
 copleykj:livestamp@1.1.7
 dalgard:jade@0.5.4_1
 dalgard:jade-compiler@0.5.4_1
@@ -102,14 +102,14 @@ meteorspark:util@0.2.0
 minifier-css@1.2.15
 minifier-js@1.2.15
 minifiers@1.1.7
-minimongo@1.0.18
+minimongo@1.0.19
 mizzao:timesync@0.4.0
 mizzao:user-status@0.6.6
 mobile-experience@1.0.4
 mobile-status-bar@1.0.13
 modules@0.7.7
 modules-runtime@0.7.7
-momentjs:moment@2.15.2
+momentjs:moment@2.16.0
 mongo@1.1.14
 mongo-id@1.0.6
 mongo-livedata@1.0.12
