@@ -31,6 +31,8 @@ export const ingest = ({ Importers }) => {
     }).validator(),
 
     run ({ importer, name, content, buffer }) {
+      this.unblock()
+
       if (!Meteor.userId()) { return }
 
       if (!importer) {
