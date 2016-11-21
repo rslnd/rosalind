@@ -12,7 +12,7 @@ export default () => {
     }
 
     // Ignore errors thrown by Smooch
-    if (!error && (
+    if (message && (
         message.includes("Cannot read property 'status' of undefined") ||
         message.includes("Cannot read property 'appUser' of undefined") ||
         message.includes("Cannot read property 'conversationUpdated' of undefined") ||
