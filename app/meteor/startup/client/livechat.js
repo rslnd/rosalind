@@ -1,4 +1,5 @@
 /* global Smooch */
+import throttle from 'lodash/throttle'
 import scriptjs from 'scriptjs'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
@@ -33,7 +34,7 @@ export default () => {
         customText: getTranslation()
       }).then(() => {
         let currentUserId = null
-        Tracker.autorun(() => {
+        Tracker.autorun(throttle(() => {
           const user = Meteor.user()
           if (user) {
             if (!currentUserId) {
@@ -41,15 +42,15 @@ export default () => {
               const smoochUserId = `USER-${user._id}${env === 'PRODUCTION' ? '' : `-${env}`}`
               const group = user.groupId && Groups.findOne({ _id: user.groupId })
               Smooch.login(smoochUserId, {
-                givenName: user.profile.firstName,
-                surname: user.profile.lastName,
+                givenName: user.profile && user.profile.firstName,
+                surname: user.profile && user.profile.lastName,
                 email: user.email,
                 properties: {
                   username: user.username,
                   fullNameWithTitle: user.fullNameWithTitle(),
-                  employee: user.profile.employee,
-                  group: group && group,
-                  roles: user.getRoles()
+                  employee: user.profile && user.profile.employee,
+                  roles: user.getRoles(),
+                  group
                 }
               }).then(() => {
                 console.log('[Livechat] Logged in')
@@ -66,7 +67,7 @@ export default () => {
               console.error('[Livechat] Failed to logout', e)
             })
           }
-        })
+        }), 1500)
       }).then(() => {
         console.log('[Livechat] Initialized')
       }).catch((e) => {
