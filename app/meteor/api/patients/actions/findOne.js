@@ -12,6 +12,8 @@ export const findOne = ({ Patients }) => {
     }).validator(),
 
     run ({ _id }) {
+      this.unblock()
+
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
