@@ -92,7 +92,6 @@ export class AppointmentsView extends React.Component {
   }
 
   handleAppointmentClick (event, appointment) {
-    console.log(event)
     if (event.type === 'contextmenu') {
       event.preventDefault()
       this.handleSetAdmitted(appointment)
