@@ -8,7 +8,6 @@ module.exports = new Tabular.Table
   columns: [
     { data: 'profile.lastName', title: 'Name', render: (val, type, doc) -> doc.fullNameWithTitle() }
     { data: 'getRoles()', title: 'Berechtigungen' }
-    { data: 'lastActivity()', title: 'Zuletzt gesehen' }
     { data: '_id', render: (val) -> '<a href="/users/' + val + '/edit">Bearbeiten</a>' }
   ],
   order: [[0, 'asc'], [2, 'asc']]

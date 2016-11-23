@@ -37,12 +37,6 @@
       "connected": "OK, wieder verbunden!",
       "disconnected": "Hoppla! Die Internetverbindung ist abgerissen. Keine Sorge, sie ist bestimmt gleich wieder da."
     },
-    "status": {
-      "lastLogin": "Letzter Login",
-      "lastActivity": "Letzte Aktivität",
-      "online": "Jetzt",
-      "never": "Nie"
-    },
     "required": "Erforderlich"
   }
 }

@@ -8,16 +8,6 @@ Time = require 'util/time'
 { Timesheets } = require 'api/timesheets'
 
 module.exports =
-  lastActivity: ->
-    if (@status and @status.lastActivity)
-      TAPi18n.__('ui.status.lastActivity') + ' ' + moment(@status.lastActivity).fromNow()
-    else if (@status and @status.online)
-      TAPi18n.__('ui.status.online')
-    else if (@status and @status.lastLogin and @status.lastLogin.date)
-      TAPi18n.__('ui.status.lastLogin') + ' ' + moment(@status.lastLogin.date).fromNow()
-    else
-      TAPi18n.__('ui.status.never')
-
   timesheets: (options = {}) ->
     options.from ||= Time.startOfToday()
 

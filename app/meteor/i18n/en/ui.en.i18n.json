@@ -13,12 +13,6 @@
     "statusMessages": {
       "connected": "Good, connection is fine again.",
       "disconnected": "Hang in there, having trouble with the connection. Should be back in a moment."
-    },
-    "status": {
-      "lastLogin": "Last login",
-      "lastActivity": "Last activity",
-      "online": "Now",
-      "never": "Never"
     }
   }
 }

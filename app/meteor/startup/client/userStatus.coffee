@@ -5,8 +5,6 @@ Alert = require('react-s-alert').default
 { Meteor } = require 'meteor/meteor'
 { Tracker } = require 'meteor/tracker'
 { TAPi18n } = require 'meteor/tap:i18n'
-{ UserStatus } = require 'meteor/mizzao:user-status'
-{ TimeSync } = require 'meteor/mizzao:timesync'
 
 module.exports = ->
   connectionStatus = ->
@@ -38,17 +36,4 @@ module.exports = ->
       catch e
         console.error('[Meteor] status: error', e)
 
-  userStatus = ->
-    Tracker.autorun (t) ->
-      try
-        TimeSync.loggingEnabled = false
-        UserStatus.startMonitor
-          threshold: 30 * 1000
-          idleOnBlur: false
-
-        t.stop()
-      catch e
-        # noop
-
-  userStatus()
   Meteor.setTimeout(connectionStatus, 2500)
