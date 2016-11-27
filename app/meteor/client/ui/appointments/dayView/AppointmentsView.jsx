@@ -1,7 +1,7 @@
 import memoize from 'lodash/memoize'
 import moment from 'moment'
 import 'moment-range'
-import 'spotoninc-moment-round'
+import { monkey } from 'spotoninc-moment-round'
 import React from 'react'
 import classnames from 'classnames'
 import { Modal } from 'react-bootstrap'
@@ -15,8 +15,9 @@ import { AppointmentInfoContainer } from 'client/ui/appointments/info/Appointmen
 import { NewAppointmentContainer } from 'client/ui/appointments/new/NewAppointmentContainer'
 import { HeaderRowContainer } from 'client/ui/appointments/dayView/header/HeaderRowContainer'
 import style from './style'
-
 import { Schedules } from 'api/schedules'
+
+monkey(moment)
 
 const viewRange = (date) => {
   return {

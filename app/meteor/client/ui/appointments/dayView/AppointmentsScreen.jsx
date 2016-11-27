@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import 'spotoninc-moment-round'
+import { monkey } from 'spotoninc-moment-round'
 import classnames from 'classnames'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
@@ -8,6 +8,8 @@ import { DateNavigation } from 'client/ui/components/DateNavigation'
 import { AppointmentsView } from './AppointmentsView'
 import { AppointmentsSearchContainer } from 'client/ui/appointments/search/AppointmentsSearchContainer'
 import style from './style'
+
+monkey(moment)
 
 export class AppointmentsScreen extends React.Component {
   constructor (props) {

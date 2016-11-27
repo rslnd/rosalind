@@ -1,5 +1,7 @@
 import moment from 'moment'
-import 'spotoninc-moment-round'
+import { monkey } from 'spotoninc-moment-round'
+
+monkey(moment)
 
 export const block = (time) => {
   const start = moment(time).floor(10, 'minutes')
