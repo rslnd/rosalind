@@ -1,4 +1,4 @@
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { withRouter } from 'react-router'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { browserHistory } from 'react-router'
 import { Meteor } from 'meteor/meteor'
 import { UserPanel } from './UserPanel'

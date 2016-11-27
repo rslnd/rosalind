@@ -1,4 +1,4 @@
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { withRouter } from 'react-router'
 import { process as server } from 'meteor/clinical:env'
 import { Meteor } from 'meteor/meteor'

@@ -4,7 +4,7 @@ import { Counts } from 'meteor/tmeasday:publish-counts'
 import { InboundCalls } from 'api/inboundCalls'
 import { Loading } from 'client/ui/components/Loading'
 import { InboundCallsScreen } from './InboundCallsScreen'
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 
 const composer = (props, onData) => {
   const handle = Meteor.subscribe('inboundCalls')

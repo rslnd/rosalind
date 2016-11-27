@@ -1,6 +1,6 @@
 import omit from 'lodash/omit'
 import moment from 'moment'
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { dateToDay } from 'util/time/day'

@@ -1,4 +1,4 @@
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Schedules } from 'api/schedules'
 import { dateToDay } from 'util/time/day'
 import { HeaderRow } from './HeaderRow'

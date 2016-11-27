@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Patients } from 'api/patients'
 import { PatientPicker } from './PatientPicker'
 

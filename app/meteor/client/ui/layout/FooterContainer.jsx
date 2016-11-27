@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Meteor } from 'meteor/meteor'
 import { process as server } from 'meteor/clinical:env'
 import { TAPi18n } from 'meteor/tap:i18n'

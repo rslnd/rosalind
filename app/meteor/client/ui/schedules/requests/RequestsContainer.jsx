@@ -6,7 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { Schedules } from 'api/schedules'
 import { Loading } from 'client/ui/components/Loading'
 import { RequestsScreen } from './RequestsScreen'
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 
 const composer = (props, onData) => {
   const handle = Meteor.subscribe('schedules')

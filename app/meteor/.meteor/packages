@@ -38,6 +38,7 @@ webpack:coffeescript
 webpack:sass
 react-template-helper
 gadicc:blaze-react-component
+nicocrm:react-komposer-tracker
 
 # Security
 browser-policy@1.0.9

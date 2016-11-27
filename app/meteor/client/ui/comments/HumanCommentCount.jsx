@@ -1,7 +1,7 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Comments } from 'api/comments'
-import { composeWithTracker } from 'react-komposer'
+import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 
 const HumanCommentCountSpan = ({ commentCount }) => (
   <span className="pull-right text-muted">
