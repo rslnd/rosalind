@@ -21,20 +21,29 @@ describe('patients', function () {
       it('parses names', function () {
         expect(parseQuery('walrus unicorn i')).to.eql({
           $or: [
+            { 'profile.lastNameNormalized': 'WALRUSUNICORNI' },
             { 'profile.lastNameNormalized': 'WALRUS' },
             { 'profile.lastNameNormalized': 'UNICORN' },
-            { 'profile.lastNameNormalized': 'WALRUSUNICORN' }
-          ]
+            { 'profile.lastNameNormalized': 'I' }
+          ],
+          'profile.firstName': {
+            $regex: '^i',
+            $options: 'i'
+          }
         })
       })
 
       it('removes umlauts', function () {
         expect(parseQuery('walrüs unicörn')).to.eql({
           $or: [
+            { 'profile.lastNameNormalized': 'WALRSUNICRN' },
             { 'profile.lastNameNormalized': 'WALRS' },
-            { 'profile.lastNameNormalized': 'UNICRN' },
-            { 'profile.lastNameNormalized': 'WALRSUNICRN' }
-          ]
+            { 'profile.lastNameNormalized': 'UNICRN' }
+          ],
+          'profile.firstName': {
+            $regex: '^unicörn',
+            $options: 'i'
+          }
         })
       })
 
@@ -44,10 +53,14 @@ describe('patients', function () {
           'profile.birthday.month': 6,
           'profile.birthday.year': 1994,
           $or: [
+            { 'profile.lastNameNormalized': 'WALRUSUNICORN' },
             { 'profile.lastNameNormalized': 'WALRUS' },
-            { 'profile.lastNameNormalized': 'UNICORN' },
-            { 'profile.lastNameNormalized': 'WALRUSUNICORN' }
-          ]
+            { 'profile.lastNameNormalized': 'UNICORN' }
+          ],
+          'profile.firstName': {
+            $regex: '^unicorn',
+            $options: 'i'
+          }
         })
       })
     })

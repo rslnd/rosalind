@@ -1,5 +1,5 @@
 import { parseBirthday } from './parseBirthday'
-import { parseExactLastName } from './parseExactLastName'
+import { parseExactName } from './parseExactName'
 
 export const parseQuery = (query) => {
   if (!query) {
@@ -15,7 +15,7 @@ export const parseQuery = (query) => {
   }
 
   if (remainingQuery && remainingQuery.length > 0) {
-    const { result } = parseExactLastName(remainingQuery)
+    const { result } = parseExactName(remainingQuery)
     if (result) {
       parsed = { ...parsed, ...result }
     }
