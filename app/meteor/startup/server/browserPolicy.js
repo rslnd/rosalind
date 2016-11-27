@@ -22,6 +22,7 @@ export default () => {
   BrowserPolicy.content.allowImageOrigin('https://media.smooch.io')
   BrowserPolicy.content.allowConnectOrigin('wss://api.smooch.io')
   BrowserPolicy.content.allowConnectOrigin('https://api.smooch.io')
+  BrowserPolicy.content.allowMediaOrigin('https://cdn.smooch.io')
 
   BrowserPolicy.content.allowScriptOrigin('https://cdn.jsdelivr.net/emojione/2.2.4/lib/js/emojione.min.js')
   BrowserPolicy.content.allowImageOrigin('https://cdn.jsdelivr.net/emojione')
