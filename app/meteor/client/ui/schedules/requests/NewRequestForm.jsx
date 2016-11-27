@@ -1,6 +1,5 @@
 import React from 'react'
-import { reduxForm } from 'redux-form/immutable'
-import { Field, Fields } from 'redux-form'
+import { reduxForm, Field, Fields } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
 import RadioButton from 'material-ui/RadioButton'
 import { TextField, RadioButtonGroup } from 'redux-form-material-ui'
