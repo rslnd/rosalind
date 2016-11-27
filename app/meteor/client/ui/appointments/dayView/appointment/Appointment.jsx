@@ -22,10 +22,24 @@ export class Appointment extends React.Component {
       [ style.canceled ]: appointment.canceled,
       [ style.admitted ]: appointment.admitted,
       [ style.treated ]: appointment.treated,
-      [ style.locked ]: appointment.lockedAt
+      [ style.locked ]: appointment.lockedAt,
+      [ style.moving ]: this.props.isMoving
     })
-
     const tagColor = getColor(appointment.tags)
+
+    let timeStart, timeEnd, assigneeId
+
+    if (!this.props.isMoving) {
+      timeStart = start.format('[time-]HHmm')
+      timeEnd = moment(appointment.end).format('[time-]HHmm')
+      assigneeId = appointment.assigneeId
+    } else {
+      const duration = (appointment.end - appointment.start)
+      const newStartTime = moment(this.props.moveToTime)
+      timeStart = newStartTime.format('[time-]HHmm')
+      timeEnd = newStartTime.add(duration, 'milliseconds').format('[time-]HHmm')
+      assigneeId = this.props.moveToAssigneeId
+    }
 
     return (
       <div
@@ -36,9 +50,9 @@ export class Appointment extends React.Component {
         onContextMenu={(e) => this.props.onClick(e, appointment)}
         title={start.format('H:mm')}
         style={{
-          gridRowStart: start.format('[time-]HHmm'),
-          gridRowEnd: moment(appointment.end).format('[time-]HHmm'),
-          gridColumn: `assignee-${appointment.assigneeId}`,
+          gridRowStart: timeStart,
+          gridRowEnd: timeEnd,
+          gridColumn: `assignee-${assigneeId}`,
           borderLeftColor: tagColor,
           zIndex: appointment.lockedAt ? 29 : 30
         }}>

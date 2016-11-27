@@ -35,7 +35,20 @@ const composer = (props, onData) => {
       closeModal()
     }
 
-    onData(null, { appointment, assignee, setAdmitted, unsetAdmitted, setCanceled, unsetCanceled, softRemove })
+    const startMove = () => {
+      props.onStartMove(args)
+    }
+
+    onData(null, {
+      appointment,
+      assignee,
+      setAdmitted,
+      unsetAdmitted,
+      setCanceled,
+      unsetCanceled,
+      softRemove,
+      startMove
+    })
   }
 }
 

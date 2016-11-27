@@ -25,3 +25,7 @@
 :local(.prefix) {
   color: $dark-gray;
 }
+
+:local(.moving) {
+  opacity: .5;
+}

@@ -120,8 +120,9 @@ const composer = (props, onData) => {
     const onPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
     const onPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
     const handleSetAdmitted = (args) => Appointments.actions.setAdmitted.call(args)
+    const handleMove = (args) => Appointments.actions.move.call(args)
 
-    onData(null, { assignees, date, onPopoverOpen, onPopoverClose, handleSetAdmitted, subsReady })
+    onData(null, { assignees, date, onPopoverOpen, onPopoverClose, handleSetAdmitted, handleMove, subsReady })
   } else {
     onData(null, null)
   }

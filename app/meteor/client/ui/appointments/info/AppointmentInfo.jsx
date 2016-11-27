@@ -63,6 +63,13 @@ export class AppointmentInfo extends React.Component {
             <br />
 
             <FlatButton
+              label={<span><Icon name="arrows" />&emsp;{TAPi18n.__('appointments.move')}</span>}
+              onClick={this.props.startMove} />
+
+            <br />
+            <br />
+
+            <FlatButton
               label={<span><Icon name="trash-o" />&emsp;{TAPi18n.__('appointments.softRemove')}</span>}
               onClick={this.props.softRemove} />
 

@@ -6,6 +6,7 @@ import { setCanceled } from './setCanceled'
 import { softRemove } from './softRemove'
 import { unsetAdmitted } from './unsetAdmitted'
 import { unsetCanceled } from './unsetCanceled'
+import { move } from './move'
 
 export default function ({ Appointments }) {
   return {
@@ -16,6 +17,7 @@ export default function ({ Appointments }) {
     setCanceled: setCanceled({ Appointments }),
     softRemove: softRemove({ Appointments }),
     unsetAdmitted: unsetAdmitted({ Appointments }),
-    unsetCanceled: unsetCanceled({ Appointments })
+    unsetCanceled: unsetCanceled({ Appointments }),
+    move: move({ Appointments })
   }
 }
