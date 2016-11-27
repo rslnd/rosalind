@@ -1,5 +1,5 @@
 import moment from 'moment'
-import 'moment-round'
+import 'spotoninc-moment-round'
 
 export const block = (time) => {
   const start = moment(time).floor(10, 'minutes')

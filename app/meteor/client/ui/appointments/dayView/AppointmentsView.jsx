@@ -1,7 +1,7 @@
 import memoize from 'lodash/memoize'
 import moment from 'moment'
 import 'moment-range'
-import 'moment-round'
+import 'spotoninc-moment-round'
 import React from 'react'
 import classnames from 'classnames'
 import { Modal } from 'react-bootstrap'

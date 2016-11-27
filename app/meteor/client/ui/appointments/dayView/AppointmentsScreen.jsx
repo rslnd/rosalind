@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import 'moment-round'
+import 'spotoninc-moment-round'
 import classnames from 'classnames'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'

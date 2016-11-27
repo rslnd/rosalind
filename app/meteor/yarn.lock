@@ -3848,10 +3848,6 @@ moment-range@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/moment-range/-/moment-range-2.2.0.tgz#b02575778a4ac50a65777939f5c5d757f83fcd85"
 
-moment-round@SpotOnInc/moment-round:
-  version "2.0.0"
-  resolved "https://codeload.github.com/SpotOnInc/moment-round/tar.gz/e760391c8f2d25e8f313fbdb38b960f399259d6d"
-
 moment-timezone@^0.5.6:
   version "0.5.9"
   resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.9.tgz#e0ea82036d67d21d793544a91b5057f480eda2dd"
@@ -5706,6 +5702,10 @@ split@0.3:
   resolved "https://registry.yarnpkg.com/split/-/split-0.3.3.tgz#cd0eea5e63a211dfff7eb0f091c4133e2d0dd28f"
   dependencies:
     through "2"
+
+spotoninc-moment-round@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/spotoninc-moment-round/-/spotoninc-moment-round-2.0.0.tgz#51366809bd1cc27bb94494dc78dee9fd897e4d39"
 
 sprintf-js@~1.0.2:
   version "1.0.3"
