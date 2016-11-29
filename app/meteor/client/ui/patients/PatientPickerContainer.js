@@ -6,16 +6,21 @@ import { PatientPicker } from './PatientPicker'
 const composer = (props, onData) => {
   if (props.input.value) {
     const patientId = props.input.value
-    Patients.actions.findOne.callPromise({ _id: patientId })
-      .then((patient) => {
-        onData(null, {
-          ...props,
-          value: {
-            value: `patient-${patientId}`,
-            patient
-          }
+
+    if (patientId === 'newPatient' || !patientId) {
+      return onData(null, { ...props })
+    } else {
+      Patients.actions.findOne.callPromise({ _id: patientId })
+        .then((patient) => {
+          onData(null, {
+            ...props,
+            value: {
+              value: `patient-${patientId}`,
+              patient
+            }
+          })
         })
-      })
+    }
   } else {
     onData(null, { ...props })
   }

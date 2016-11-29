@@ -235,11 +235,13 @@ h6,
 .row.no-pad {
   margin-left: 0;
   margin-right: 0;
+  text-align: left;
 }
 
 .row.no-pad > [class*='col-'] {
   padding-left: 0;
   padding-right: 0;
+  text-align: left;
 }
 
 #sk-holder {

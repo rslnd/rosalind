@@ -18,7 +18,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     console.log('[Appointments] Submitting new Appointment', { values })
     let newPatient = null
 
-    if ((values.patientId === 'newPatient' || !values.patientId) && values.lastName) {
+    if ((values.patientId === 'newPatient') && values.lastName) {
       newPatient = {
         profile: {
           lastName: values.lastName,
@@ -66,7 +66,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     return (
       <NewAppointment
         onSubmit={this.handleSubmit}
-        initialValues={{ patientId: this.props.patientId }}
+        initialValues={this.props.patientId ? { patientId: this.props.patientId } : {}}
         time={this.props.time} />
     )
   }

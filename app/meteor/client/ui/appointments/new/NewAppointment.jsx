@@ -9,6 +9,7 @@ import { TagsField } from 'client/ui/tags/TagsField'
 import { PatientPickerContainer } from 'client/ui/patients/PatientPickerContainer'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import style from './newAppointmentStyle'
+import { validate } from './newAppointmentValidators'
 
 const summary = ({ time, assigneeId }) => (
   <div className={style.summary}>
@@ -85,11 +86,19 @@ export class NewAppointmentFormComponent extends React.Component {
   }
 }
 
+export const translateObject = (obj) => {
+  let translated = {}
+  Object.keys(obj).map((key) => {
+    translated[key] = TAPi18n.__(obj[key])
+  })
+  return translated
+}
+
 export const NewAppointment = reduxForm({
   form: 'newAppointment',
   fields: ['note', 'patientId', 'tags', 'appointmentNote',
     // The following fields may be filled within NewPatientFormFields
     // This allows creating a new patient at the same time as an appointment
     'firstName', 'lastName', 'gender', 'telephone', 'email', 'birthday', 'patientNote'],
-  validate: () => { return {} }
+  validate: (values) => translateObject(validate(values))
 })(NewAppointmentFormComponent)
