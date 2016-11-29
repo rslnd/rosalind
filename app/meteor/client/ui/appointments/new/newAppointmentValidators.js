@@ -22,7 +22,7 @@ export const validate = (values) => {
       errors.lastName = 'patients.lastNameRequired'
     }
 
-    if (!values.birthday || !validateDay(values.birthday)) {
+    if (values.birthday && !validateDay(values.birthday)) {
       errors.birthday = 'patients.birthdayRequired'
     }
 
