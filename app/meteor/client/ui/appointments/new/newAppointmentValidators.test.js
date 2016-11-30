@@ -54,6 +54,8 @@ describe('ui', () => {
           expect(validateNameCase('de Bruijn')).to.equal(true)
           expect(validateNameCase('van der Bellen')).to.equal(true)
           expect(validateNameCase('deMarco')).to.equal(true)
+          expect(validateNameCase('Österreicher')).to.equal(true)
+          expect(validateNameCase('Römer')).to.equal(true)
         })
       })
     })
