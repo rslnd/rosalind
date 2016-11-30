@@ -1,6 +1,6 @@
 import map from 'lodash/fp/map'
 import identity from 'lodash/identity'
-import startCase from 'lodash/startCase'
+import { startCase } from 'util/fuzzy/startCase'
 import moment from 'moment'
 import React from 'react'
 import Select from 'react-select'
