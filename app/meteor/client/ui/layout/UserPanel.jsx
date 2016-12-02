@@ -2,7 +2,6 @@ import React from 'react'
 import { Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
-import { TimesheetWidgetContainer } from 'client/ui/timesheets/TimesheetWidgetContainer'
 import style from './userPanelStyle.scss'
 
 export class UserPanel extends React.Component {
@@ -17,9 +16,6 @@ export class UserPanel extends React.Component {
           }
         </b>
         <div className={style.hidden}>
-          <div className={style.button}>
-            <TimesheetWidgetContainer userId={this.props.currentUser._id} />
-          </div>
           <div className={style.button}>
             {
               this.props.loggingOut
