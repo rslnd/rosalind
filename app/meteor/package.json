@@ -80,7 +80,7 @@
     "bootstrap": "^3.3.6",
     "chai": "^3.5.0",
     "chai-datetime": "^1.4.1",
-    "chimp": "^0.42.0",
+    "chimp": "^0.43.0",
     "coffee-loader": "^0.7.2",
     "coffee-script": "^1.10.0",
     "css-loader": "^0.26.0",
