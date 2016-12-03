@@ -71,6 +71,9 @@ export class AppointmentInfo extends React.Component {
               label={<span><Icon name="arrows" />&emsp;{TAPi18n.__('appointments.move')}</span>}
               onClick={this.props.startMove} />
 
+            {/* TODO: Fix moving appointments between days (with big refactor of appointments view) */}
+            <small className="text-muted"> innerhalb des selben Tages</small>
+
             <br />
             <br />
 
