@@ -4,8 +4,8 @@ import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import FlatButton from 'material-ui/FlatButton'
 import { Icon } from 'client/ui/components/Icon'
-import { ToggleField } from 'client/ui/components/ToggleField'
-import { BirthdayField } from 'client/ui/components/BirthdayField'
+import { ToggleField } from 'client/ui/components/form/ToggleField'
+import { BirthdayField } from 'client/ui/components/form/BirthdayField'
 
 export class NewPatientFormFields extends React.Component {
   render () {

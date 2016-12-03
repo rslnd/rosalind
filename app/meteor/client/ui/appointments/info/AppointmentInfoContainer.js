@@ -39,6 +39,13 @@ const composer = (props, onData) => {
       props.onStartMove(args)
     }
 
+    const editNote = (newNote) => {
+      Appointments.actions.editNote.call({
+        ...args,
+        newNote: newNote
+      })
+    }
+
     onData(null, {
       appointment,
       assignee,
@@ -47,7 +54,8 @@ const composer = (props, onData) => {
       setCanceled,
       unsetCanceled,
       softRemove,
-      startMove
+      startMove,
+      editNote
     })
   }
 }

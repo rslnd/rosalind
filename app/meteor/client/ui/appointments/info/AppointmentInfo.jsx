@@ -8,6 +8,7 @@ import { Stamps } from 'client/ui/helpers/Stamps'
 import { Icon } from 'client/ui/components/Icon'
 import { PatientProfileContainer } from 'client/ui/patients/PatientProfileContainer'
 import { PastAppointmentsContainer } from 'client/ui/patients/PastAppointmentsContainer'
+import { InlineEdit } from 'client/ui/components/form/InlineEdit'
 
 export class AppointmentInfo extends React.Component {
   render () {
@@ -30,10 +31,14 @@ export class AppointmentInfo extends React.Component {
                 }
               </h4>
               <p><TagsList tags={appointment.tags} />&nbsp;</p>
-              {
-                appointment.notes() && appointment.notes().length > 1 &&
-                  <blockquote>{appointment.notes()}</blockquote>
-              }
+              <blockquote>
+                <InlineEdit
+                  onChange={this.props.editNote}
+                  value={appointment.notes()}
+                  rows={3}
+                  label={TAPi18n.__('appointments.form.note.label')}
+                  />
+              </blockquote>
             </div>
 
             <br />

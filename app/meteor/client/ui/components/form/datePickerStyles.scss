@@ -5,9 +5,3 @@
 .DateRangePicker__picker {
   z-index: 10 !important;
 }
-
-:local(.portal) {
-  position: fixed;
-  z-index: 50;
-  margin-right: 30px;
-}

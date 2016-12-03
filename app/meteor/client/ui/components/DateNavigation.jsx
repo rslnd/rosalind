@@ -6,7 +6,6 @@ import { DayPicker } from 'react-dates'
 import Portal from 'react-portal'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from './Icon'
-import style from './datePickerStyles'
 
 class DateNavigationButtons extends React.Component {
   constructor (props) {
@@ -193,8 +192,12 @@ class DateNavigationButtons extends React.Component {
           onClose={this.handleCalendarClose}
           isOpened={this.state.calendarOpen}>
           <div
-            className={style.portal}
-            style={this.state.calendarPosition}>
+            style={{
+              position: 'fixed',
+              zIndex: 50,
+              marginRight: 30,
+              ...this.state.calendarPosition
+            }}>
             <div onMouseLeave={this.handleCalendarClose}>
               <DayPicker
                 onDayMouseDown={this.handleCalendarDayChange}

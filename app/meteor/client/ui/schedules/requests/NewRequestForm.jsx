@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import RadioButton from 'material-ui/RadioButton'
 import { TextField, RadioButtonGroup } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { DateRangePicker } from 'client/ui/components/DateRangePicker'
+import { DateRangePicker } from 'client/ui/components/form/DateRangePicker'
 
 class NewRequestFormComponent extends React.Component {
   render () {
