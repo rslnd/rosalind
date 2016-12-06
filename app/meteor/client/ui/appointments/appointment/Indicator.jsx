@@ -13,7 +13,7 @@ export const Indicator = ({ appointment }) => (
           style={{ display: 'inline-block', color: '#8fc6ae' }}>
           <Icon name="check" />&nbsp;
         </span>
-        ) : ((moment().diff(appointment.end, 'hours') >= 4) &&
+      ) : ((moment().diff(appointment.end, 'minutes') >= 90) &&
           <span
             key="noShow"
             title={TAPi18n.__('appointments.noShow')}
