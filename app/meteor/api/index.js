@@ -12,6 +12,7 @@ import { InboundCalls } from './inboundCalls'
 import { Appointments } from './appointments'
 import { Importers } from './importers'
 import { Jobs } from './jobs'
+import { Messages } from './messages'
 import { Reports } from './reports'
 import { Search } from './search'
 import { Cache } from './cache'
@@ -28,6 +29,7 @@ export {
   Importers,
   InboundCalls,
   Jobs,
+  Messages,
   Reports,
   Schedules,
   Search,
