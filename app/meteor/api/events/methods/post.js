@@ -12,8 +12,8 @@ export const post = ({ Events }) => {
       payload: { type: Object, blackbox: true, optional: true }
     }).validator(),
 
-    run ({ type, level, payload }) {
-      console.log(`[Event] ${level || 'info'}: ${type}`, { payload: payload })
+    run ({ type, level, payload = {} }) {
+      console.log(`[Event] ${level || 'info'}: ${type}`, { payload })
 
       if (!Meteor.userId() && !payload.userId) { return }
       if (Object.keys(payload).length === 0) { payload = null }
@@ -21,9 +21,9 @@ export const post = ({ Events }) => {
       Events.insert({
         type: type,
         level: level || 'info',
-        createdBy: Meteor.userId() || payload.userId,
+        createdBy: Meteor.userId() || (payload && payload.userId),
         createdAt: new Date(),
-        payload: payload
+        payload
       })
     }
   })

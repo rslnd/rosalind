@@ -10,6 +10,7 @@ import events from 'api/events/server'
 import importers from 'api/importers/server'
 import inboundCalls from 'api/inboundCalls/server'
 import jobs from 'api/jobs/server'
+import messages from 'api/messages/server'
 import reports from 'api/reports/server'
 import roles from 'api/roles/server'
 import schedules from 'api/schedules/server'
@@ -30,6 +31,7 @@ export default function () {
   importers()
   inboundCalls()
   jobs()
+  messages()
   reports()
   roles()
   schedules()
