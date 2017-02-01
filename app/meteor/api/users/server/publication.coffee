@@ -17,3 +17,4 @@ module.exports = ->
       'profile.group': 1
       'profile.employee': 1
       'roles': 1
+      'settings': 1

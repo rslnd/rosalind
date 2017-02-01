@@ -7,6 +7,7 @@ import { NewAppointment } from './NewAppointment'
 import { Appointments } from 'api/appointments'
 import { Tags } from 'api/tags'
 import Alert from 'react-s-alert'
+import { getDefaultLength } from 'api/appointments/methods/getDefaultLength'
 
 export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {
@@ -36,8 +37,10 @@ export class NewAppointmentContainerComponent extends React.Component {
       }
     }
 
-    const defaultLength = 5
-    const length = (values.tags && max(Tags.find({ _id: { $in: values.tags } }).fetch().map((t) => t.length))) || defaultLength
+    const length = getDefaultLength({
+      assigneeId: this.props.assigneeId,
+      tags: values.tags
+    })
 
     const appointment = {
       patientId: newPatient ? undefined : values.patientId,
