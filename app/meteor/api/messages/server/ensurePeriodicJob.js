@@ -9,6 +9,7 @@ export const ensurePeriodicJob = () => {
       wait: 5 * 1000
     })
     .retry({
+      retries: Job.forever,
       wait: 10 * 1000
     })
     .save({

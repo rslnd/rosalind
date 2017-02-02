@@ -23,25 +23,47 @@ export const findUpcomingAppointments = () => {
 
     if (appointment.patientId) {
       patient = Patients.findOne({ _id: appointment.patientId })
-      if (patient && patient.profile.contacts) {
+      if (patient && patient.profile && patient.profile.contacts) {
         contacts = patient.profile.contacts
       }
     }
 
-    const assigneeName = appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId }).fullNameWithTitle()
+    const assignee = appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId })
 
-    return {
-      appointmentId: appointment._id,
-      start: appointment.start,
-      patient,
-      assigneeName,
-      contacts
+    let result = {
+      _id: appointment._id,
+      assigneeId: assignee && appointment.assigneeId,
+      start: appointment.start
     }
+
+    if (patient) {
+      result.patient = {
+        _id: patient._id,
+        profile: {
+          lastName: patient && patient.lastName(),
+          prefix: patient && patient.prefix(),
+          gender: patient && patient.profile.gender
+        }
+      }
+
+      if (contacts) {
+        result.patient.profile.contacts = contacts
+      }
+    }
+
+    return result
   })
 }
 
 export const isMobileNumber = (number) => {
   return true
+}
+
+export const isSameMessage = (a, b) => {
+  return (
+    (a.text === b.text) &&
+    (a.to === b.to)
+  )
 }
 
 export const createReminders = ({ Messages }) => {
@@ -58,7 +80,7 @@ export const createReminders = ({ Messages }) => {
 
       const appointments = findUpcomingAppointments()
       const appointmentsWithMobile = appointments.filter((a) => {
-        if (a.patient && a.patient.profile.contacts) {
+        if (a.patient && a.patient.profile && a.patient.profile.contacts) {
           return some(a.patient.profile.contacts, (c) =>
             (c.channel === 'Phone' && isMobileNumber(c.value))
           )
@@ -68,11 +90,53 @@ export const createReminders = ({ Messages }) => {
         a.patient.profile.contacts[0].value
       ))
 
-      Events.post('messages/createReminders', {
-        appointmentsCount: appointments.length,
-        appointmentsWithMobileCount: appointmentsWithMobile.length,
-        uniqueAppointmentsWithMobileCount: uniqueAppointmentsWithMobile.length
+      let insertedCount = 0
+      uniqueAppointmentsWithMobile.map((a) => {
+        const message = {
+          type: 'appointmentReminder',
+          channel: 'SMS',
+          direction: 'outbound',
+          status: 'scheduled',
+
+          to: a.patient.profile.contacts[0].value,
+          text: 'Sollten Sie verhindert sein, antworten Sie STORNO. Ihr Team vom Hautzentrum Wien freut sich auf Sie!',
+
+          scheduled: moment(a.start).subtract(24, 'hours').toDate(),
+
+          payload: {
+            appointmentId: a._id,
+            assigneeId: a.assigneeId,
+            patientId: a.patient._id,
+            start: a.start,
+            lastName: a.patient.profile.lastName,
+            prefix: a.patient.profile.prefix,
+            gender: a.patient.profile.gender,
+            contacts: a.patient.profile.contacts
+          }
+        }
+
+        const existingMessage = Messages.findOne({ 'payload.appointmentId': a._id })
+        if (existingMessage) {
+          if (!isSameMessage(existingMessage, message)) {
+            Messages.update({ 'payload.appointmentId': a._id }, { $set: message })
+          }
+        } else {
+          Messages.insert({
+            ...message,
+            createdAt: new Date()
+          })
+          insertedCount++
+        }
       })
+
+      if (insertedCount > 0) {
+        Events.post('messages/createReminders', {
+          appointmentsCount: appointments.length,
+          appointmentsWithMobileCount: appointmentsWithMobile.length,
+          uniqueAppointmentsWithMobileCount: uniqueAppointmentsWithMobile.length,
+          insertedCount
+        })
+      }
     }
   })
 }
