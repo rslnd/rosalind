@@ -15,9 +15,20 @@ const cleanOldJobs = (job) => {
 }
 
 export const worker = (job, callback) => {
-  Messages.actions.createReminders.call()
+  Messages.actions.createReminders.callPromise()
+    .catch((e) => {
+      console.error('Messages worker: createReminders errored with', e)
+      job.fail()
+    })
+
+  Messages.actions.sendScheduled.callPromise()
+    .catch((e) => {
+      console.error('Messages worker: sendScheduled errored with', e)
+      job.fail()
+    })
 
   cleanOldJobs(job)
+
   job.done()
   callback()
 }

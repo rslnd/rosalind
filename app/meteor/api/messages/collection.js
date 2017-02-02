@@ -1,6 +1,7 @@
 import { Mongo } from 'meteor/mongo'
 import { JobCollection, Job } from 'meteor/vsivsi:job-collection'
 import actions from './actions'
+import schema from './schema'
 
 const jobs = new JobCollection('messages', {
   transform: (doc) => {
@@ -15,6 +16,7 @@ const jobs = new JobCollection('messages', {
 })
 
 let Messages = new Mongo.Collection('messages')
+Messages.attachSchema(schema)
 Messages.attachBehaviour('softRemovable')
 Messages.helpers({ collection: () => Messages })
 Messages.jobs = jobs
