@@ -8,6 +8,7 @@ import { Events } from 'api/events'
 import { Appointments } from 'api/appointments'
 import { Patients } from 'api/patients'
 import { Users } from 'api/users'
+import { isMobileNumber } from '../methods/isMobileNumber'
 
 // TODO: Replace with GraphQL
 export const findUpcomingAppointments = () => {
@@ -53,10 +54,6 @@ export const findUpcomingAppointments = () => {
 
     return result
   })
-}
-
-export const isMobileNumber = (number) => {
-  return true
 }
 
 export const isSameMessage = (a, b) => {
