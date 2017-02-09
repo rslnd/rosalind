@@ -40,7 +40,7 @@ export const sendScheduled = ({ Messages }) => {
           case 'SMS':
             return SMS.send(message)
           default:
-            throw new Meteor.Error(500, `Unknown channel ${message.channel} of message ${message._id}`)
+            throw new Meteor.Error(500, `[Messages] sendScheduled: Unknown channel ${message.channel} of message ${message._id}`)
         }
       })
 

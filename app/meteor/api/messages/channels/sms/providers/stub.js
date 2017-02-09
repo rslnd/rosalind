@@ -1,5 +1,5 @@
 export const send = (message) => {
-  console.log('Stubbing SMS delivery to', message.to)
+  console.log('[Messages] channels/sms/stub: Sending SMS to', message.to, `"${message.text}"`, message._id)
 
   return new Promise((resolve, reject) => {
     if (Math.random() < 0.05) {
