@@ -2,6 +2,7 @@ import some from 'lodash/some'
 import uniqBy from 'lodash/uniqBy'
 import identity from 'lodash/identity'
 import moment from 'moment'
+import 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
@@ -16,8 +17,11 @@ import { getAppointmentReminderText } from '../methods/getAppointmentReminderTex
 export const findUpcomingAppointments = () => {
   const appointments = Appointments.find({
     start: {
-      $gt: moment().add(1, 'day').startOf('day').toDate(),
-      $lt: moment().add(1, 'day').toDate()
+      $gt: moment.tz(process.env.TZ).add(1, 'day').startOf('day').toDate(),
+      $lt: moment.tz(process.env.TZ_CLIENT).add(1, 'day').toDate()
+    },
+    sort: {
+      start: 1
     }
   }).fetch()
 
