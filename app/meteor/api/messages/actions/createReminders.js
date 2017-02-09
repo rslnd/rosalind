@@ -1,5 +1,6 @@
 import some from 'lodash/some'
 import uniqBy from 'lodash/uniqBy'
+import identity from 'lodash/identity'
 import moment from 'moment'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
@@ -9,6 +10,7 @@ import { Appointments } from 'api/appointments'
 import { Patients } from 'api/patients'
 import { Users } from 'api/users'
 import { isMobileNumber } from '../methods/isMobileNumber'
+import { getAppointmentReminderText } from '../methods/getAppointmentReminderText'
 
 // TODO: Replace with GraphQL
 export const findUpcomingAppointments = () => {
@@ -88,34 +90,45 @@ export const createReminders = ({ Messages }) => {
       ))
 
       let insertedCount = 0
-      uniqueAppointmentsWithMobile.map((a) => {
-        const message = {
+      const messagePayloads = uniqueAppointmentsWithMobile.map((a) => {
+        return {
+          appointmentId: a._id,
+          assigneeId: a.assigneeId,
+          patientId: a.patient._id,
+          start: a.start,
+          lastName: a.patient.profile.lastName,
+          prefix: a.patient.profile.prefix,
+          gender: a.patient.profile.gender,
+          contacts: a.patient.profile.contacts
+        }
+      })
+
+      const messages = messagePayloads.map((payload) => {
+        const templates = {
+          dayFormat: 'dd., D.M.',
+          timeFormat: 'HH:mm',
+          timezone: process.env.TZ_CLIENT,
+          body: 'Ihr Termin ist am %day um %time Uhr.',
+          footer: process.env.SMS_REMINDER_FOOTER
+        }
+
+        return {
           type: 'appointmentReminder',
           channel: 'SMS',
           direction: 'outbound',
           status: 'scheduled',
-
-          to: a.patient.profile.contacts[0].value,
-          text: 'Sollten Sie verhindert sein, antworten Sie STORNO. Ihr Team vom Hautzentrum Wien freut sich auf Sie!',
-
-          scheduled: moment(a.start).subtract(24, 'hours').toDate(),
-
-          payload: {
-            appointmentId: a._id,
-            assigneeId: a.assigneeId,
-            patientId: a.patient._id,
-            start: a.start,
-            lastName: a.patient.profile.lastName,
-            prefix: a.patient.profile.prefix,
-            gender: a.patient.profile.gender,
-            contacts: a.patient.profile.contacts
-          }
+          to: payload.contacts[0].value,
+          scheduled: moment(payload.start).subtract(24, 'hours').toDate(),
+          text: getAppointmentReminderText(templates, payload),
+          payload
         }
+      }).filter(identity)
 
-        const existingMessage = Messages.findOne({ 'payload.appointmentId': a._id })
+      messages.map((message) => {
+        const existingMessage = Messages.findOne({ 'payload.appointmentId': message.payload.appointmentId })
         if (existingMessage) {
           if (!isSameMessage(existingMessage, message)) {
-            Messages.update({ 'payload.appointmentId': a._id }, { $set: message })
+            Messages.update({ 'payload.appointmentId': message.payload.appointmentId }, { $set: message })
           }
         } else {
           Messages.insert({
@@ -131,6 +144,8 @@ export const createReminders = ({ Messages }) => {
           appointmentsCount: appointments.length,
           appointmentsWithMobileCount: appointmentsWithMobile.length,
           uniqueAppointmentsWithMobileCount: uniqueAppointmentsWithMobile.length,
+          messagePayloadsCount: messagePayloads.length,
+          messagesCount: messages.length,
           insertedCount
         })
       }

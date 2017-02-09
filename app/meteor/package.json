@@ -21,6 +21,7 @@
     "fibers": "^1.0.14",
     "font-awesome": "^4.6.3",
     "font-awesome-webpack": "0.0.4",
+    "gsm": "^0.1.4",
     "iconv-lite": "^0.4.13",
     "inflected": "^1.1.7",
     "jquery": "^3.1.1",
