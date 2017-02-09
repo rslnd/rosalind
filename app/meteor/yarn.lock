@@ -1902,7 +1902,7 @@ ctype@0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/ctype/-/ctype-0.5.3.tgz#82c18c2461f74114ef16c135224ad0b9144ca12f"
 
-"cucumber@github:xolvio/cucumber-js#v1.3.0-chimp.1":
+cucumber@xolvio/cucumber-js#v1.3.0-chimp.1:
   version "1.3.0"
   resolved "https://codeload.github.com/xolvio/cucumber-js/tar.gz/299dd554fe9392ddebf3de773c56530ed4f93dec"
   dependencies:
@@ -2680,6 +2680,10 @@ graceful-fs@^4.1.0, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.1.9:
 growl@1.9.2:
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/growl/-/growl-1.9.2.tgz#0ea7743715db8d8de2c5ede1775e1b45ac85c02f"
+
+gsm:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/gsm/-/gsm-0.1.4.tgz#f827624d8a24762fa50bc49bfca82c2006d1eb0a"
 
 h2o2@4.x.x:
   version "4.0.2"
