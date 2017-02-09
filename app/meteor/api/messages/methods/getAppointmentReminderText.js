@@ -9,7 +9,7 @@ export const validateMaxLength = (text) => {
 
 export const formatDate = (format, date, options = {}) => {
   if (!date || !format) {
-    throw new Error('Message for appointment reminder text has no date')
+    throw new Error('[Messages] getAppointmentReminderText: Message has no date field')
   }
 
   const tz = options.tz || process.env.TZ_CLIENT || 'Europe/Vienna'
@@ -38,6 +38,6 @@ export const getAppointmentReminderText = (templates = {}, payload) => {
     return text
   } else {
     const gsmInfo = gsm(text)
-    throw new Error(`Appointment reminder text exceeds maximum length: ${text} ${JSON.stringify(gsmInfo)}`)
+    throw new Error(`[Messages] getAppointmentReminderText: Text exceeds maximum length: ${text} ${JSON.stringify(gsmInfo)}`)
   }
 }

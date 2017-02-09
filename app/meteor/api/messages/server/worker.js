@@ -1,6 +1,11 @@
+import once from 'lodash/once'
 import moment from 'moment'
 import { Job } from 'meteor/vsivsi:job-collection'
 import { Messages } from 'api/messages'
+
+const hello = once(() => {
+  console.log('[Messages] worker: running')
+})
 
 const cleanOldJobs = (job) => {
   const ids = Messages.jobs.find({
@@ -10,25 +15,21 @@ const cleanOldJobs = (job) => {
 
   if (ids.length > 0) {
     Messages.jobs.removeJobs(ids)
-    job.log(`Removed ${ids.length} old jobs`)
   }
 }
 
 export const worker = (job, callback) => {
-  Messages.actions.createReminders.callPromise()
-    .catch((e) => {
-      console.error('Messages worker: createReminders errored with', e)
-      job.fail()
-    })
+  hello()
 
-  Messages.actions.sendScheduled.callPromise()
-    .catch((e) => {
-      console.error('Messages worker: sendScheduled errored with', e)
-      job.fail()
-    })
-
-  cleanOldJobs(job)
-
-  job.done()
-  callback()
+  Promise.all([
+    Messages.actions.createReminders.callPromise(),
+    Messages.actions.sendScheduled.callPromise()
+  ]).catch((e) => {
+    console.error('[Messages] worker: errored with', e)
+    job.fail()
+  }).then(() => {
+    cleanOldJobs(job)
+    job.done()
+    callback()
+  })
 }
