@@ -1,5 +1,4 @@
-moment = require 'moment'
-require 'moment-timezone'
+moment = require 'moment-timezone'
 includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Appointments } = require 'api/appointments'

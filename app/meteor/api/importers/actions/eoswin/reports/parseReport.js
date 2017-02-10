@@ -1,5 +1,4 @@
-import moment from 'moment'
-import 'moment-timezone'
+import moment from 'moment-timezone'
 import { parse as csvToJson } from 'papaparse'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'

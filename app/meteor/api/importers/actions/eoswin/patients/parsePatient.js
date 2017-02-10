@@ -1,5 +1,4 @@
-import moment from 'moment'
-import 'moment-timezone'
+import moment from 'moment-timezone'
 import { parse as csvToJson } from 'papaparse'
 import { dateToDay } from 'util/time/day'
 

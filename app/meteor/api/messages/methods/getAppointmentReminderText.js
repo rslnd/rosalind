@@ -1,6 +1,5 @@
 import gsm from 'gsm'
-import moment from 'moment'
-import 'moment-timezone'
+import moment from 'moment-timezone'
 import identity from 'lodash/identity'
 
 export const validateMaxLength = (text) => {

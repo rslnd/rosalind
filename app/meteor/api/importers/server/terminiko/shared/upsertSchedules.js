@@ -1,5 +1,4 @@
-import moment from 'moment'
-import tz from 'moment-timezone'
+import moment from 'moment-timezone'
 import { Schedules } from 'api/schedules'
 import { getResource } from './getResources'
 import { parseNewlines } from './parseNewlines'
