@@ -7,17 +7,25 @@ describe('api', () => {
   describe('messages', () => {
     describe('formatDate', () => {
       it('handles locales', () => {
-        const date = new Date(2016, 11, 23, 14, 30)
+        const date = moment.tz('2016-12-23T16:18:31.265+00:00', 'UTC').toDate()
         const formatted = formatDate('dd., D.M.', date, { locale: 'de-AT' })
         expect(formatted).to.equal('Fr., 23.12.')
       })
 
-      it('displays in client time zone', () => {
-        const tz = 'Vienna/Austria'
-        const date = new Date(2016, 11, 23, 14, 30)
+      it('displays in client time zone CET', () => {
+        const tz = 'Europe/Vienna'
+        const date = moment.tz('2016-12-23T14:30:31.265+00:00', 'UTC').toDate()
         const formatted = formatDate('HH:mm', date, { tz, locale: 'de-AT' })
-        expect(formatted).to.equal('13:30')
+        expect(formatted).to.equal('15:30')
       })
+
+      it('displays in client time zone CEST', () => {
+        const tz = 'Europe/Vienna'
+        const date = moment.tz('2016-06-23T14:30:31.265+00:00', 'UTC').toDate()
+        const formatted = formatDate('HH:mm', date, { tz, locale: 'de-AT' })
+        expect(formatted).to.equal('16:30')
+      })
+
     })
 
     describe('getAppointmentReminderText', () => {
