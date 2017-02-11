@@ -1,1 +1,1 @@
-export { SMS } from './sms'
+export { send, receive } from './sms'

@@ -7,7 +7,7 @@ import { Events } from 'api/events'
 // TODO: Figure out better way to import server-only modules in isomorphic code
 let SMS
 if (Meteor.isServer) {
-  SMS = require('api/messages/channels/sms').SMS
+  SMS = require('api/messages/channels/sms')
 }
 
 export const sendScheduled = ({ Messages }) => {
