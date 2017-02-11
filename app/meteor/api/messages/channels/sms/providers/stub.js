@@ -10,4 +10,12 @@ export const send = (message) => {
   })
 }
 
-export default { send }
+export const receive = (payload) => {
+  console.log('[Messages] channels/sms/stub: Receiving payload', payload)
+  return {
+    from: '0043123456789',
+    text: 'Inbound SMS stub test text'
+  }
+}
+
+export default { send, receive }
