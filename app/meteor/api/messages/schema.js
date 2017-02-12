@@ -4,7 +4,7 @@ import Auto from 'util/schema/auto'
 const schema = new SimpleSchema({
   type: {
     type: String,
-    allowedValues: ['appointmentReminder']
+    allowedValues: ['appointmentReminder', 'inbound', 'intentToCancel']
   },
 
   channel: {
@@ -19,7 +19,7 @@ const schema = new SimpleSchema({
 
   status: {
     type: String,
-    allowedValues: ['scheduled', 'sent']
+    allowedValues: ['unread', 'read', 'answered', 'draft', 'scheduled', 'sent']
   },
 
   to: {
@@ -48,12 +48,26 @@ const schema = new SimpleSchema({
     optional: true
   },
 
+  parentMessageId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     autoValue: Auto.createdAt,
     optional: true
-  }
+  },
 
+  sentAt: {
+    type: Date,
+    optional: true
+  },
+
+  retries: {
+    type: Number,
+    optional: true
+  }
 })
 
 export default schema

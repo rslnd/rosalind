@@ -1,3 +1,5 @@
+export const name = 'stub'
+
 export const send = (message) => {
   console.log('[Messages] channels/sms/stub: Sending SMS to', message.to, `"${message.text}"`, message._id)
 
@@ -11,11 +13,40 @@ export const send = (message) => {
 }
 
 export const receive = (payload) => {
-  console.log('[Messages] channels/sms/stub: Receiving payload', payload)
-  return {
-    from: '0043123456789',
-    text: 'Inbound SMS stub test text'
+  payload = {
+    messageType: 'text',
+    notificationId: 'c27f015a2eade38ca85f',
+    senderAddress: '436601111111',
+    recipientAddress: '08289999999',
+    recipientAddressType: 'national',
+    senderAddressType: 'international',
+    textMessageContent: 'STORNO'
   }
+
+  console.log('[Messages] channels/sms/stub: Receiving payload', payload)
+
+  const message = {
+    type: 'inbound',
+    channel: 'SMS',
+    direction: 'inbound',
+    status: 'unread',
+    to: payload.recipientAddress,
+    from: payload.senderAddress,
+    text: payload.textMessageContent,
+    external: {
+      stub: {
+        id: payload.notificationId,
+        payload: payload
+      }
+    }
+  }
+
+  const response = {
+    statusCode: 2000,
+    statusMessage: 'OK, Thanks!'
+  }
+
+  return { response, message }
 }
 
 export default { send, receive }

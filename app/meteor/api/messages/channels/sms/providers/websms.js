@@ -1,5 +1,8 @@
 import memoize from 'lodash/memoize'
 import websms from 'shebang!websmscom'
+import { normalizePhoneNumber } from 'api/messages/methods/normalizePhoneNumber'
+
+export const name = 'websms'
 
 const getClient = memoize(() => {
   return new websms.Client(
@@ -9,11 +12,20 @@ const getClient = memoize(() => {
 })
 
 export const send = (message) => {
-  console.log('[Messages] channels/sms/websms: Sending SMS to', message.to, `"${message.text}"`, message._id)
+  const to = normalizePhoneNumber(message.to)
+  const text = message.text
 
-  const { to, text } = message
+  console.log('[Messages] channels/sms/websms: Sending SMS to', to, `"${text}"`, message._id)
+
   const maxSmsPerMessage = 1
-  const isTest = true
+
+  let isTest = true
+
+  // FIXME: Remove whitelisting before going into production
+  if (process.env.SMS_WHITELIST && to.indexOf(process.env.SMS_WHITELIST) !== -1) {
+    isTest = false
+    console.log('DEBUG: Disabling SMS test mode for', to)
+  }
 
   return new Promise((resolve, reject) => {
     const sms = new websms.TextMessage([to], text, (err) => {
@@ -24,6 +36,7 @@ export const send = (message) => {
       if (err) {
         reject(err)
       } else {
+        delete res.messageObject
         resolve(res)
       }
     })
@@ -31,17 +44,27 @@ export const send = (message) => {
 }
 
 export const receive = (payload) => {
-  const from = payload.senderAddress
-  const text = payload.textMessageContent
+  console.log('[Messages] channels/sms/websms: Received payload', payload)
 
-  console.log('[Messages] channels/sms/websms: Received SMS from', from, `"${text}"`)
+  const message = {
+    type: 'inbound',
+    channel: 'SMS',
+    direction: 'inbound',
+    status: 'unread',
+    to: payload.recipientAddress,
+    from: payload.senderAddress,
+    text: payload.textMessageContent,
+    payload: {
+      websms: payload
+    }
+  }
 
-  return new Promise((resolve, reject) => {
-    resolve({
-      statusCode: 2000,
-      statusMessage: 'OK, Thanks!'
-    })
-  })
+  const response = {
+    statusCode: 2000,
+    statusMessage: 'OK, Thanks!'
+  }
+
+  return { response, message }
 }
 
 export default { send, receive }

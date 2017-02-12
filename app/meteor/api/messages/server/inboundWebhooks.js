@@ -12,12 +12,14 @@ export const inboundWebhooks = () => {
 
     res.setHeader('Content-Type', 'application/json; charset=utf8')
 
-    receive(payload).then((success) => {
+    try {
+      const { response } = receive(payload)
       res.writeHead(200)
-      res.end(JSON.stringify(success))
-    }).catch((err) => {
+      res.end(JSON.stringify(response))
+    } catch (err) {
+      console.log('[Messages] server/inboundWebhooks: Error processing webhook', err)
       res.writeHead(500)
-      res.end(JSON.stringify(err))
-    })
+      res.end('Error processing webhook')
+    }
   })
 }

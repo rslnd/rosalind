@@ -14,11 +14,17 @@ import { getAppointmentReminderText } from '../methods/getAppointmentReminderTex
 
 // TODO: Replace with GraphQL
 export const findUpcomingAppointments = () => {
-  const appointments = Appointments.find({
-    start: {
-      $gt: moment.tz(process.env.TZ).add(1, 'day').startOf('day').toDate(),
-      $lt: moment.tz(process.env.TZ_CLIENT).add(1, 'day').toDate()
-    },
+  const start = {
+    $gt: moment.tz(process.env.TZ).add(1, 'day').startOf('day').toDate(),
+    $lt: moment.tz(process.env.TZ_CLIENT).add(1, 'day').toDate()
+  }
+
+  const selector = {
+    start,
+    removed: { $ne: true }
+  }
+
+  const appointments = Appointments.find(selector, {
     sort: {
       start: 1
     }
