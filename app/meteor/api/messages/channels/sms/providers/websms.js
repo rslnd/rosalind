@@ -25,6 +25,8 @@ export const send = (message) => {
   if (process.env.SMS_WHITELIST && to.indexOf(process.env.SMS_WHITELIST) !== -1) {
     isTest = false
     console.log('DEBUG: Disabling SMS test mode for', to)
+  } else {
+    console.log('DEBUG: Test mode is enabled, not actually sending SMS message')
   }
 
   return new Promise((resolve, reject) => {
