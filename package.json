@@ -8,7 +8,8 @@
     "lint": "standard",
     "client:start": "cd app/electron/ && npm run client:start",
     "client:build": "cd app/electron/ && npm run client:build",
-    "client:tag": "cd app/electron/ && npm run client:tag"
+    "client:tag": "cd app/electron/ && npm run client:tag",
+    "licenses": "cd app/electron && yarn licenses generate-disclaimer > ../../licenses.txt && cd ../meteor && yarn licenses generate-disclaimer >> ../../licenses.txt"
   },
   "standard": {
     "ignore": [
