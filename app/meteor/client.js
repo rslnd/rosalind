@@ -1,7 +1,6 @@
 import startup from 'startup/client'
 import 'client/css'
 import 'client/old'
-import 'client/compatibility'
 import Alert from 'react-s-alert'
 
 if (module && module.hot && module.hot.accept) {
