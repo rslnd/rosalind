@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from 'api/events'
+import { isQuietTime } from 'api/messages/methods/isQuietTime'
 
 // TODO: Figure out better way to import server-only modules in isomorphic code
 let SMS
@@ -36,14 +37,18 @@ export const sendScheduled = ({ Messages }) => {
         removed: { $ne: true }
       }).fetch()
 
-      scheduledMessages.map((message) => {
-        switch (message.channel) {
-          case 'SMS':
-            return SMS.send(message)
-          default:
-            throw new Meteor.Error(500, `[Messages] sendScheduled: Unknown channel ${message.channel} of message ${message._id}`)
-        }
-      })
+      if (scheduledMessages.length > 0 && isQuietTime()) {
+        throw new Meteor.Error(500, `[Messages] sendScheduled: Not sending ${scheduledMessages.length} messages during quiet time`)
+      } else {
+        scheduledMessages.map((message) => {
+          switch (message.channel) {
+            case 'SMS':
+              return SMS.send(message)
+            default:
+              throw new Meteor.Error(500, `[Messages] sendScheduled: Unknown channel ${message.channel} of message ${message._id}`)
+          }
+        })
+      }
 
       return Promise.all(scheduledMessages)
     }
