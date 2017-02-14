@@ -16,12 +16,13 @@ import { getAppointmentReminderText } from '../methods/getAppointmentReminderTex
 export const findUpcomingAppointments = () => {
   const start = {
     $gt: moment.tz(process.env.TZ).add(1, 'day').startOf('day').toDate(),
-    $lt: moment.tz(process.env.TZ_CLIENT).add(1, 'day').toDate()
+    $lt: moment.tz(process.env.TZ_CLIENT).add(1, 'day').endOf('day').toDate()
   }
 
   const selector = {
     start,
-    removed: { $ne: true }
+    removed: { $ne: true },
+    canceled: { $ne: true }
   }
 
   const appointments = Appointments.find(selector, {
@@ -134,7 +135,11 @@ export const createReminders = ({ Messages }) => {
       }).filter(identity)
 
       messages.map((message) => {
-        const existingMessage = Messages.findOne({ 'payload.appointmentId': message.payload.appointmentId })
+        const existingMessage = Messages.findOne({
+          'payload.appointmentId': message.payload.appointmentId,
+          removed: { $ne: true }
+        })
+
         if (existingMessage) {
           if (!isSameMessage(existingMessage, message)) {
             Messages.update({ 'payload.appointmentId': message.payload.appointmentId }, { $set: message })

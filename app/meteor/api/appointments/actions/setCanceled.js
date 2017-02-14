@@ -3,6 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from 'api/events'
+import { Messages } from 'api/messages'
 
 export const setCanceled = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -30,6 +31,8 @@ export const setCanceled = ({ Appointments }) => {
           canceledBy: this.userId
         }
       })
+
+      Messages.actions.removeReminder.call({ appointmentId })
 
       Events.post('appointments/setCanceled', { appointmentId })
 

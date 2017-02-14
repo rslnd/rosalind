@@ -4,6 +4,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from 'api/events'
+import { Messages } from 'api/messages'
 
 export const move = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -34,6 +35,8 @@ export const move = ({ Appointments }) => {
             assigneeId: newAssigneeId
           }
         })
+
+        Messages.actions.removeReminder.call({ appointmentId })
 
         Events.post('appointments/move', {
           appointmentId,

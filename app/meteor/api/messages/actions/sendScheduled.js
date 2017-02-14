@@ -32,7 +32,8 @@ export const sendScheduled = ({ Messages }) => {
       const scheduledMessages = Messages.find({
         status: 'scheduled',
         direction: 'outbound',
-        scheduled: timeWindow
+        scheduled: timeWindow,
+        removed: { $ne: true }
       }).fetch()
 
       scheduledMessages.map((message) => {
