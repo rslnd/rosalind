@@ -25,27 +25,32 @@ describe('api', () => {
         const formatted = formatDate('HH:mm', date, { tz, locale: 'de-AT' })
         expect(formatted).to.equal('16:30')
       })
-
     })
 
     describe('getAppointmentReminderText', () => {
+      const templates = {
+        dayFormat: 'dddd, M/D/Y',
+        timeFormat: 'HH:mm',
+        body: 'Your appointment is on %day at %time.',
+        footer: '<3',
+        tz: 'UTC',
+        locale: 'en-US'
+      }
+
+      const payload = {
+        start: moment.tz('2016-12-23T16:18:31.265+00:00', 'UTC').toDate()
+      }
+
       it('builds text with UTC', () => {
-        const templates = {
-          dayFormat: 'dddd, M/D/Y',
-          timeFormat: 'HH:mm',
-          body: 'Your appointment is on %day at %time.',
-          footer: '<3',
-          tz: 'UTC',
-          locale: 'en-US'
-        }
-
-        const payload = {
-          start: moment.tz('2016-12-23T16:18:31.265+00:00', 'UTC').toDate()
-        }
-
         const expected = 'Your appointment is on Friday, 12/23/2016 at 16:18. <3'
-
         expect(getAppointmentReminderText(templates, payload)).to.equal(expected)
+      })
+
+      it('fails when text ist too long to fit', () => {
+        expect(() => getAppointmentReminderText({
+          ...templates,
+          footer: 'A very long text would split up the sms message into multiple parts, which we do not want to happen because we would be billed for mutiple messages.'
+        }, payload)).to.throw('length')
       })
     })
   })
