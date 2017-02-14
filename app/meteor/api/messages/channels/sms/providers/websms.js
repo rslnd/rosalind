@@ -1,4 +1,5 @@
 import memoize from 'lodash/memoize'
+import some from 'lodash/some'
 import websms from 'shebang!websmscom'
 import { normalizePhoneNumber } from 'api/messages/methods/normalizePhoneNumber'
 
@@ -22,7 +23,7 @@ export const send = (message) => {
   let isTest = true
 
   // FIXME: Remove whitelisting before going into production
-  if (process.env.SMS_WHITELIST && to.indexOf(process.env.SMS_WHITELIST) !== -1) {
+  if (process.env.SMS_WHITELIST && some(process.env.SMS_WHITELIST.split(','), n => to.indexOf(n) !== -1)) {
     isTest = false
     console.log('DEBUG: Disabling SMS test mode for', to)
   } else {
