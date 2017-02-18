@@ -20,7 +20,7 @@ export const receive = (payload) => {
     recipientAddress: '08289999999',
     recipientAddressType: 'national',
     senderAddressType: 'international',
-    textMessageContent: 'STORNO'
+    textMessageContent: 'NEIN'
   }
 
   console.log('[Messages] channels/sms/stub: Receiving payload', payload)

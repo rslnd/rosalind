@@ -20,6 +20,10 @@ describe('api', () => {
       it('with typo', () => {
         expect(isIntentToCancel('Strono .!!!\n')).to.equal(true)
       })
+
+      it('alternative word', () => {
+        expect(isIntentToCancel('NEIN, danke!!\n')).to.equal(true)
+      })
     })
   })
 })
