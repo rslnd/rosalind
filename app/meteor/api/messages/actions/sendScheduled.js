@@ -34,8 +34,8 @@ export const sendScheduled = ({ Messages }) => {
         status: 'scheduled',
         direction: 'outbound',
         scheduled: timeWindow,
-        invalidBefore: { $gt: moment().toDate() },
-        invalidAfter: { $lt: moment().toDate() },
+        invalidBefore: { $lt: moment().toDate() },
+        invalidAfter: { $gt: moment().toDate() },
         removed: { $ne: true }
       }).fetch()
 
