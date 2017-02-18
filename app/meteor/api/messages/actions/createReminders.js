@@ -142,6 +142,8 @@ export const createReminders = ({ Messages }) => {
           to: payload.contacts[0].value,
           scheduled: moment(payload.start).subtract(sendHoursBeforeAppointment, 'hours').toDate(),
           text: getAppointmentReminderText(templates, payload),
+          invalidBefore: moment(payload.start).subtract(1, 'week').toDate(),
+          invalidAfter: moment(payload.start).startOf('day').subtract(8, 'hours').toDate(),
           payload
         }
       }).filter(identity)

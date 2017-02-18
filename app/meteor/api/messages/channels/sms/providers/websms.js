@@ -5,7 +5,14 @@ import { normalizePhoneNumber } from 'api/messages/methods/normalizePhoneNumber'
 
 export const name = 'websms'
 
+let isTest = false
+
 const getClient = memoize(() => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn('[Messages] channels/sms/websms: Not running in production environment, enabling test mode')
+    isTest = true
+  }
+
   return new websms.Client(
     'https://api.websms.com',
     process.env.WEBSMS_USER,
@@ -20,9 +27,8 @@ export const send = (message) => {
 
   const maxSmsPerMessage = 1
 
-  let isTest = true
-
   // FIXME: Remove whitelisting before going into production
+  isTest = true
   if (process.env.SMS_WHITELIST && some(process.env.SMS_WHITELIST.split(','), n => to.indexOf(n) !== -1)) {
     isTest = false
     console.log('DEBUG: Disabling SMS test mode for', to)
@@ -70,4 +76,4 @@ export const receive = (payload) => {
   return { response, message }
 }
 
-export default { send, receive }
+export default { send, receive, name }

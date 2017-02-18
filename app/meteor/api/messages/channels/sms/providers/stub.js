@@ -49,4 +49,4 @@ export const receive = (payload) => {
   return { response, message }
 }
 
-export default { send, receive }
+export default { send, receive, name }

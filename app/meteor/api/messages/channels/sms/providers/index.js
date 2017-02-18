@@ -1,3 +1,4 @@
+import once from 'lodash/once'
 import { Meteor } from 'meteor/meteor'
 import stub from './stub'
 import websms from './websms'
@@ -11,8 +12,11 @@ const isProduction = (
   process.env.NODE_ENV === 'production'
 )
 
+const warning = once((p) => console.warn(`[Messages] channels/sms/providers: Using provider ${p} in production mode`))
+
 if (isProduction) {
   provider = websms
+  warning(provider.name)
 } else {
   provider = stub
 }

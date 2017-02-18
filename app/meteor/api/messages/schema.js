@@ -67,6 +67,16 @@ const schema = new SimpleSchema({
   retries: {
     type: Number,
     optional: true
+  },
+
+  invalidBefore: {
+    type: Date,
+    optional: true
+  },
+
+  invalidAfter: {
+    type: Date,
+    optional: true
   }
 })
 
