@@ -11,7 +11,8 @@ export const post = ({ InboundCalls }) => {
       firstName: { type: String, optional: true },
       telephone: { type: String, optional: true },
       note: { type: String, optional: true },
-      privatePatient: { type: Boolean, optional: true }
+      privatePatient: { type: Boolean, optional: true },
+      payload: { type: Object, blackbox: true, optional: true }
     }).validator(),
 
     run (data) {

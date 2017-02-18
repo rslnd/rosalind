@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { Messages } from 'api/messages'
 import { Appointments } from 'api/appointments'
+import { InboundCalls } from 'api/inboundCalls'
 import provider from './providers'
 import { findParentMessage } from 'api/messages/methods/findParentMessage'
 import { isIntentToCancel } from 'api/messages/methods/isIntentToCancel'
@@ -70,7 +71,7 @@ export const receive = (payload) => {
     })
 
     const cancelAppointment = isIntentToCancel(message.text)
-    if (cancelAppointment) {
+    if (appointmentId && cancelAppointment) {
       console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
       Appointments.actions.setCanceled.call({ appointmentId })
 
@@ -109,8 +110,15 @@ export const receive = (payload) => {
 
   // If we couldn't match this incoming message to a message we sent,
   // or if it is not an intent to cancel, create an inbound call
-  // console.log('[Messages] channels/sms: Creating inbound call of received message', messageId)
-  // TODO: Implement inbound call creation
+  const inboundCallId = InboundCalls.methods.post.call({
+    lastName: 'SMS',
+    telephone: message.from,
+    note: message.text,
+    payload: {
+      messageId
+    }
+  })
+  console.log('[Messages] channels/sms: Created inbound call', inboundCallId, 'of received message', messageId)
 
   return { message, response }
 }
