@@ -38,7 +38,7 @@ export const sendScheduled = ({ Messages }) => {
       }).fetch()
 
       if (scheduledMessages.length > 0 && isQuietTime()) {
-        throw new Meteor.Error(500, `[Messages] sendScheduled: Not sending ${scheduledMessages.length} messages during quiet time`)
+        throw new Meteor.Error(500, `[Messages] sendScheduled: Not sending ${scheduledMessages.length} messages during quiet time ${JSON.stringify(scheduledMessages)}`)
       } else {
         scheduledMessages.map((message) => {
           switch (message.channel) {

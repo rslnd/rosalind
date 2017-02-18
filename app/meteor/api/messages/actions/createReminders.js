@@ -12,15 +12,24 @@ import { Users } from 'api/users'
 import { isMobileNumber } from '../methods/isMobileNumber'
 import { getAppointmentReminderText } from '../methods/getAppointmentReminderText'
 
+export const sendHoursBeforeAppointment = 48
+
+// Don't immediately send out reminder if appointment is very soon,
+// We don't want the patient to receive the reminder while still
+// on the phone with the clinic.
+// TODO: Increase before going into production
+export const waitMinutesAfterNewAppointment = 1
+
 // TODO: Replace with GraphQL
 export const findUpcomingAppointments = () => {
   const start = {
-    $gt: moment.tz(process.env.TZ).add(1, 'day').startOf('day').toDate(),
-    $lt: moment.tz(process.env.TZ_CLIENT).add(1, 'day').endOf('day').toDate()
+    $gt: moment.tz(process.env.TZ_CLIENT).add(sendHoursBeforeAppointment, 'hours').startOf('day').toDate(),
+    $lt: moment.tz(process.env.TZ_CLIENT).add(sendHoursBeforeAppointment, 'hours').endOf('day').toDate()
   }
 
   const selector = {
     start,
+    createdAt: { $lt: moment.tz(process.env.TZ_CLIENT).subtract(waitMinutesAfterNewAppointment, 'minutes').toDate() },
     removed: { $ne: true },
     canceled: { $ne: true }
   }
@@ -122,7 +131,7 @@ export const createReminders = ({ Messages }) => {
           dayFormat: 'dd., D.M.',
           timeFormat: 'HH:mm',
           timezone: process.env.TZ_CLIENT,
-          body: process.env.SMS_REMINDER_TEXT
+          text: process.env.SMS_REMINDER_TEXT
         }
 
         return {
@@ -131,7 +140,7 @@ export const createReminders = ({ Messages }) => {
           direction: 'outbound',
           status: 'scheduled',
           to: payload.contacts[0].value,
-          scheduled: moment(payload.start).subtract(24, 'hours').toDate(),
+          scheduled: moment(payload.start).subtract(sendHoursBeforeAppointment, 'hours').toDate(),
           text: getAppointmentReminderText(templates, payload),
           payload
         }
