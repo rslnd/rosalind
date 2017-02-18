@@ -5,7 +5,6 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from 'api/events'
 import { isQuietTime } from 'api/messages/methods/isQuietTime'
 
-// TODO: Figure out better way to import server-only modules in isomorphic code
 let SMS
 if (Meteor.isServer) {
   SMS = require('api/messages/channels/sms')
@@ -37,20 +36,17 @@ export const sendScheduled = ({ Messages }) => {
         invalidBefore: { $lt: moment().toDate() },
         invalidAfter: { $gt: moment().toDate() },
         removed: { $ne: true }
-      }).fetch()
-
-      if (scheduledMessages.length > 0 && isQuietTime()) {
-        throw new Meteor.Error(500, `[Messages] sendScheduled: Not sending ${scheduledMessages.length} messages during quiet time ${JSON.stringify(scheduledMessages)}`)
-      } else {
-        scheduledMessages.map((message) => {
-          switch (message.channel) {
-            case 'SMS':
-              return SMS.send(message)
-            default:
-              throw new Meteor.Error(500, `[Messages] sendScheduled: Unknown channel ${message.channel} of message ${message._id}`)
-          }
-        })
-      }
+      }).fetch().filter((message) => {
+        // Only allow confirmation of cancelation to be sent during quiet time
+        return (!isQuietTime() || (isQuietTime() && message.type === 'intentToCancelConfirmation'))
+      }).map((message) => {
+        switch (message.channel) {
+          case 'SMS':
+            return SMS.send(message._id)
+          default:
+            throw new Meteor.Error(500, `[Messages] sendScheduled: Unknown channel ${message.channel} of message ${message._id}`)
+        }
+      })
 
       return Promise.all(scheduledMessages)
     }

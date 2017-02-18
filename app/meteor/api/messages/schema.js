@@ -4,7 +4,7 @@ import Auto from 'util/schema/auto'
 const schema = new SimpleSchema({
   type: {
     type: String,
-    allowedValues: ['appointmentReminder', 'inbound', 'intentToCancel']
+    allowedValues: ['appointmentReminder', 'inbound', 'intentToCancel', 'intentToCancelConfirmation']
   },
 
   channel: {
