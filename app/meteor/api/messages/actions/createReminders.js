@@ -87,6 +87,10 @@ export const createReminders = ({ Messages }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      if (!process.env.SMS_REMINDER_TEXT) {
+        throw new Meteor.Error(500, 'SMS_REMINDER_TEXT not set')
+      }
+
       const appointments = findUpcomingAppointments()
       const appointmentsWithMobile = appointments.filter((a) => {
         if (a.patient && a.patient.profile && a.patient.profile.contacts) {
@@ -118,8 +122,7 @@ export const createReminders = ({ Messages }) => {
           dayFormat: 'dd., D.M.',
           timeFormat: 'HH:mm',
           timezone: process.env.TZ_CLIENT,
-          body: 'Ihr Termin ist am %day um %time Uhr.',
-          footer: process.env.SMS_REMINDER_FOOTER
+          body: process.env.SMS_REMINDER_TEXT
         }
 
         return {

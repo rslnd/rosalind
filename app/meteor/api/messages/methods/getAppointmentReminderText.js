@@ -1,6 +1,5 @@
 import gsm from 'gsm'
 import moment from 'moment-timezone'
-import identity from 'lodash/identity'
 
 export const validateMaxLength = (text) => {
   return (gsm(text).sms_count === 1)
@@ -22,11 +21,10 @@ export const formatDate = (format, date, options = {}) => {
 export const getBodyText = (templates, payload) => {
   const { tz, locale } = templates
 
-  const body = templates.body
+  const text = templates.text
     .replace('%day', formatDate(templates.dayFormat || 'dd., D.M.', payload.start, { tz, locale }))
     .replace('%time', formatDate(templates.timeFormat || 'HH:mm', payload.start, { tz, locale }))
 
-  const text = [body, templates.footer].filter(identity).join(' ')
   return text
 }
 

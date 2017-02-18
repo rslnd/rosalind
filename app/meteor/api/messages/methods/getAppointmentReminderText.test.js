@@ -31,8 +31,7 @@ describe('api', () => {
       const templates = {
         dayFormat: 'dddd, M/D/Y',
         timeFormat: 'HH:mm',
-        body: 'Your appointment is on %day at %time.',
-        footer: '<3',
+        text: 'Your appointment is on %day at %time. <3',
         tz: 'UTC',
         locale: 'en-US'
       }
@@ -49,7 +48,7 @@ describe('api', () => {
       it('fails when text ist too long to fit', () => {
         expect(() => getAppointmentReminderText({
           ...templates,
-          footer: 'A very long text would split up the sms message into multiple parts, which we do not want to happen because we would be billed for mutiple messages.'
+          text: 'A very long text would split up the sms message into multiple parts, which we do not want to happen because we would be billed for mutiple messages. Make this string more than 160 characters long to see it throw.'
         }, payload)).to.throw('length')
       })
     })
