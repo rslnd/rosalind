@@ -68,7 +68,9 @@ const Contacts = ({ patient }) => (
     {uniqBy(patient.profile.contacts, 'value').map((contact) => (
       contact.channel === 'Phone'
       ? <ListItem key={contact.value} icon="phone">{zerofix(contact.value)}</ListItem>
-      : <ListItem key={contact.value} icon="envelope-o">{contact.value}</ListItem>
+      : <ListItem key={contact.value} icon="envelope-o">
+        <a href={`mailto:${contact.value}`} title={TAPi18n.__('ui.composeEmail')}>{contact.value}</a>
+      </ListItem>
     ))}
   </div> || null
 )

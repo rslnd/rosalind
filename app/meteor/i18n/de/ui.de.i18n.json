@@ -38,6 +38,7 @@
       "connected": "OK, wieder verbunden!",
       "disconnected": "Hoppla! Die Internetverbindung ist abgerissen. Keine Sorge, sie ist bestimmt gleich wieder da."
     },
-    "required": "Erforderlich"
+    "required": "Erforderlich",
+    "composeEmail": "Email schreiben"
   }
 }
