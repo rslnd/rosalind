@@ -8,6 +8,7 @@ export const AppointmentInfoModal = ({ appointmentId, onStartMove, show, onClose
     show={show}
     onHide={onClose}
     enforceFocus={false}
+    animation={false}
     bsSize="large">
     <Modal.Body>
       <AppointmentInfoContainer

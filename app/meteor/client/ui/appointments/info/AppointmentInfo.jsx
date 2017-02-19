@@ -10,6 +10,7 @@ import { InlineEdit } from 'client/ui/components/form/InlineEdit'
 import { Birthday as BirthdayWithAge } from 'client/ui/patients/Birthday'
 import { Stamps } from 'client/ui/helpers/Stamps'
 import { PastAppointmentsContainer } from 'client/ui/patients/PastAppointmentsContainer'
+import { EnlargeText } from 'client/ui/components/EnlargeText'
 
 const ListItem = ({ icon, children, last = false, style }) => (
   <div style={style}>
@@ -68,10 +69,15 @@ const Contacts = ({ patient }) => (
   patient && patient.profile && patient.profile.contacts && <div>
     {uniqBy(patient.profile.contacts, 'value').map((contact) => (
       contact.channel === 'Phone'
-      ? <ListItem key={contact.value} icon="phone">{zerofix(contact.value)}</ListItem>
-      : <ListItem key={contact.value} icon="envelope-o">
-        <a href={`mailto:${contact.value}`} title={TAPi18n.__('ui.composeEmail')}>{contact.value}</a>
-      </ListItem>
+      ? (
+        <ListItem key={contact.value} icon="phone">
+          <EnlargeText>{zerofix(contact.value)}</EnlargeText>
+        </ListItem>
+      ) : (
+        <ListItem key={contact.value} icon="envelope-o">
+          <a href={`mailto:${contact.value}`} title={TAPi18n.__('ui.composeEmail')}>{contact.value}</a>
+        </ListItem>
+      )
     ))}
   </div> || null
 )
