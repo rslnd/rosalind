@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import uniqBy from 'lodash/uniqBy'
-import { Toggle } from 'belle'
+import { Toggle, Choice } from 'belle'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from 'util/zerofix'
 import { Icon } from 'client/ui/components/Icon'
@@ -95,7 +95,14 @@ const Reminders = ({ patient }) => (
       right: 5,
       top: -5
     }}>
-      <Toggle style={{ transform: 'scale(0.6)' }} />
+
+      <Toggle
+        style={{transform: 'scale(0.6)'}}
+        firstChoiceStyle={{backgroundColor: '#8fc6ae'}}
+        secondChoiceStyle={{backgroundColor: '#e37067'}}>
+        <Choice value><Icon name="check" /></Choice>
+        <Choice value={false}><Icon name="times" /></Choice>
+      </Toggle>
     </div>
   </ListItem> || null
 )
