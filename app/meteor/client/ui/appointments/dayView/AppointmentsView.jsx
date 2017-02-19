@@ -11,7 +11,7 @@ import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
 import { Appointment } from './appointment/Appointment'
-import { AppointmentInfoContainer } from 'client/ui/appointments/info/AppointmentInfoContainer'
+import { AppointmentInfoModal } from 'client/ui/appointments/info/AppointmentInfoModal'
 import { NewAppointmentContainer } from 'client/ui/appointments/new/NewAppointmentContainer'
 import { HeaderRowContainer } from 'client/ui/appointments/dayView/header/HeaderRowContainer'
 import style from './style'
@@ -413,26 +413,11 @@ export class AppointmentsView extends React.Component {
           }
         </div>
 
-        <Modal
-          enforceFocus={false}
+        <AppointmentInfoModal
+          appointmentId={this.state.selectedAppointmentId}
+          onStartMove={this.handleMoveStart}
           show={this.state.appointmentModalOpen}
-          onHide={this.handleAppointmentModalClose}
-          bsSize="large">
-          <Modal.Body>
-            <AppointmentInfoContainer
-              onRequestClose={this.handleAppointmentModalClose}
-              onStartMove={this.handleMoveStart}
-              appointmentId={this.state.selectedAppointmentId}
-              onClose={this.handleAppointmentModalClose} />
-          </Modal.Body>
-          <Modal.Footer>
-            <div className="pull-right">
-              <FlatButton
-                onClick={this.handleAppointmentModalClose}
-                label={TAPi18n.__('ui.close')} />
-            </div>
-          </Modal.Footer>
-        </Modal>
+          onClose={this.handleAppointmentModalClose} />
 
         <Modal
           enforceFocus={false}

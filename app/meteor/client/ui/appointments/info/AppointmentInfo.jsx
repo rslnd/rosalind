@@ -11,8 +11,8 @@ import { Birthday as BirthdayWithAge } from 'client/ui/patients/Birthday'
 import { Stamps } from 'client/ui/helpers/Stamps'
 import { PastAppointmentsContainer } from 'client/ui/patients/PastAppointmentsContainer'
 
-const ListItem = ({ icon, children, last = false }) => (
-  <div>
+const ListItem = ({ icon, children, last = false, style }) => (
+  <div style={style}>
     <div className="row">
       <div className="col-md-1">
         {icon && <Icon name={icon} style={{
@@ -29,7 +29,7 @@ const ListItem = ({ icon, children, last = false }) => (
 
 const PatientName = ({ patient }) => (
   patient && patient.profile && <div>
-    <h4 className="enable-select">
+    <h4 className="enable-select" style={{ paddingLeft: 10 }}>
       <span className="text-muted">{patient.prefix()}&#8202; </span>
       <b>{patient.profile.lastName}</b> &thinsp;{patient.profile.firstName}
     </h4>
@@ -111,7 +111,7 @@ const Reminders = ({ patient }) => (
 )
 
 const AppointmentNotes = ({ appointment, onChange }) => (
-  <ListItem icon="info-circle">
+  <ListItem icon="info-circle" last style={{ marginBottom: 30 }}>
     <InlineEdit
       onChange={onChange}
       value={appointment.notes()}
@@ -142,8 +142,7 @@ export class AppointmentInfo extends React.Component {
             <ListItem last>
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}
-                doc={appointment}
-                style={{ fontSize: '90%' }} />
+                doc={appointment} />
             </ListItem>
           </div>
 
