@@ -6,6 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from 'util/zerofix'
 import { Icon } from 'client/ui/components/Icon'
 import { TagsList } from 'client/ui/tags/TagsList'
+import { InlineEdit } from 'client/ui/components/form/InlineEdit'
 import { Birthday as BirthdayWithAge } from 'client/ui/patients/Birthday'
 import { Stamps } from 'client/ui/helpers/Stamps'
 import { PastAppointmentsContainer } from 'client/ui/patients/PastAppointmentsContainer'
@@ -109,9 +110,21 @@ const Reminders = ({ patient }) => (
   </ListItem> || null
 )
 
+const AppointmentNotes = ({ appointment, onChange }) => (
+  <ListItem icon="info-circle">
+    <InlineEdit
+      onChange={onChange}
+      value={appointment.notes()}
+      placeholder={<span className="text-muted">{TAPi18n.__('appointments.form.note.placeholder')}</span>}
+      rows={3}
+      label={TAPi18n.__('appointments.form.note.label')}
+      />
+  </ListItem>
+)
+
 export class AppointmentInfo extends React.Component {
   render () {
-    const { appointment, patient, assignee } = this.props
+    const { appointment, patient, assignee, handleEditNote } = this.props
 
     return (
       <div>
@@ -125,6 +138,7 @@ export class AppointmentInfo extends React.Component {
             <Day appointment={appointment} />
             <Time appointment={appointment} />
             <Assignee assignee={assignee} appointment={appointment} />
+            <AppointmentNotes appointment={appointment} onChange={handleEditNote} />
             <ListItem last>
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}

@@ -3,6 +3,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import { Icon } from 'client/ui/components/Icon'
+import styles from './inlineEditStyles'
 
 export const TinyButton = (props) => (
   <FlatButton
@@ -11,7 +12,7 @@ export const TinyButton = (props) => (
       ...props.style,
       minWidth: 40
     }}
-/>
+  />
 )
 
 export class InlineEdit extends React.Component {
@@ -62,14 +63,22 @@ export class InlineEdit extends React.Component {
 
   render () {
     if (!this.state.editing) {
-      return <span>
+      return <div
+        className={styles.field}
+        onClick={this.setEditing}>
+        <div className="pull-right">
+          <TinyButton
+            onClick={this.setEditing}
+            className={styles.startEdit}
+            title={TAPi18n.__('ui.edit')}>
+            <Icon name="pencil-square-o" />
+          </TinyButton>
+        </div>
+
         {this.props.children || (this.props.value && this.props.value.split('\n').map((t, i) => (
           <span key={i}>{t}<br /></span>
-        )))}
-        <TinyButton onClick={this.setEditing}>
-          <Icon name="pencil" />
-        </TinyButton>
-      </span>
+        ))) || this.props.placeholder}
+      </div>
     } else {
       return <span>
         <TextField
@@ -82,18 +91,18 @@ export class InlineEdit extends React.Component {
           floatingLabelText={this.props.label}
           />
 
-        {this.props.rows && <br />}
-
-        <TinyButton
-          onClick={this.handleAccept}
-          title={TAPi18n.__('ui.save')}>
-          <Icon name="check" />
-        </TinyButton>
-        <TinyButton
-          onClick={this.handleCancel}
-          title={TAPi18n.__('ui.cancel')}>
-          <Icon name="times" />
-        </TinyButton>
+        <div className="pull-right">
+          <TinyButton
+            onClick={this.handleAccept}
+            title={TAPi18n.__('ui.save')}>
+            <Icon name="check" />
+          </TinyButton>
+          <TinyButton
+            onClick={this.handleCancel}
+            title={TAPi18n.__('ui.cancel')}>
+            <Icon name="times" />
+          </TinyButton>
+        </div>
       </span>
     }
   }

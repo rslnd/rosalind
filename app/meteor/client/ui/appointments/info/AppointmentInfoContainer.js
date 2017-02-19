@@ -41,7 +41,7 @@ const composer = (props, onData) => {
       props.onStartMove(args)
     }
 
-    const editNote = (newNote) => {
+    const handleEditNote = (newNote) => {
       Appointments.actions.editNote.call({
         ...args,
         newNote: newNote
@@ -58,7 +58,7 @@ const composer = (props, onData) => {
       unsetCanceled,
       softRemove,
       startMove,
-      editNote
+      handleEditNote
     })
   }
 }

@@ -1,0 +1,11 @@
+:local(.field) {
+  cursor: pointer;
+}
+
+:local(.field .startEdit) {
+  opacity: 0 !important;
+}
+
+:local(.field:hover .startEdit) {
+  opacity: 1 !important;
+}
