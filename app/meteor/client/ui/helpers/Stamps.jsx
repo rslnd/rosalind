@@ -4,16 +4,16 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { RelativeTime } from './RelativeTime'
 import { UserHelper } from 'client/ui/users/UserHelper'
 
-const Stamp = ({ stamp }) => {
-  return <p className="stamp text-muted">
+const Stamp = ({ stamp, style }) => {
+  return <p className="stamp text-muted" style={style}>
     {stamp.verb} <UserHelper userId={stamp.userId} helper="firstName" /> <RelativeTime time={stamp.time} /><br />
   </p>
 }
 
-const StampsList = ({ stamps }) => (
+const StampsList = ({ stamps, style }) => (
   <div>
     {stamps.map((stamp) => (
-      <Stamp key={[stamp.time, stamp.verb, stamp.userId].join()} stamp={stamp} />
+      <Stamp key={[stamp.time, stamp.verb, stamp.userId].join()} stamp={stamp} style={style} />
     ))}
   </div>
 )
