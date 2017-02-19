@@ -5,12 +5,12 @@ import { Toggle } from 'belle'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from 'util/zerofix'
 import { Icon } from 'client/ui/components/Icon'
-import { TagsListText } from 'client/ui/tags/TagsListText'
+import { TagsList } from 'client/ui/tags/TagsList'
 import { Birthday as BirthdayWithAge } from 'client/ui/patients/Birthday'
 import { Stamps } from 'client/ui/helpers/Stamps'
 import { PastAppointmentsContainer } from 'client/ui/patients/PastAppointmentsContainer'
 
-const ListItem = ({ icon, children }) => (
+const ListItem = ({ icon, children, last = false }) => (
   <div>
     <div className="row">
       <div className="col-md-1">
@@ -22,7 +22,7 @@ const ListItem = ({ icon, children }) => (
       </div>
       <div className="col-md-11 enable-select">{children}</div>
     </div>
-    <hr />
+    {!last && <hr />}
   </div>
 )
 
@@ -50,9 +50,16 @@ const Time = ({ appointment }) => (
   </ListItem>
 )
 
-const Assignee = ({ assignee }) => (
+const Assignee = ({ assignee, appointment }) => (
   assignee && <ListItem icon="user-md">
     {assignee.fullNameWithTitle()}
+
+    <div className="pull-right" style={{
+      position: 'relative',
+      top: -6
+    }}>
+      <Tags appointment={appointment} />
+    </div>
   </ListItem> || null
 )
 
@@ -73,9 +80,11 @@ const Birthday = ({ patient }) => (
 )
 
 const Tags = ({ appointment }) => (
-  appointment.tags && <ListItem icon="info-circle">
-    <TagsListText tags={appointment.tags} />
-  </ListItem> || null
+  appointment.tags && <div>
+    <TagsList tags={appointment.tags} last style={{
+      marginRight: 10
+    }} />
+  </div> || null
 )
 
 const Reminders = ({ patient }) => (
@@ -106,9 +115,8 @@ export class AppointmentInfo extends React.Component {
           <div className="col-md-6">
             <Day appointment={appointment} />
             <Time appointment={appointment} />
-            <Assignee assignee={assignee} />
-            <Tags appointment={appointment} />
-            <ListItem>
+            <Assignee assignee={assignee} appointment={appointment} />
+            <ListItem last>
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}
                 doc={appointment}
