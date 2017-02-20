@@ -25,7 +25,7 @@ export const sendScheduled = ({ Messages }) => {
       if (!Meteor.isServer) { return }
 
       const timeWindow = {
-        $gt: moment().subtract(6, 'hours').toDate(),
+        $gt: moment().subtract(12, 'hours').toDate(),
         $lt: moment().toDate()
       }
 

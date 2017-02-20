@@ -10,6 +10,10 @@ export const isDayTime = (time) => {
   return now.isBetween(from, to)
 }
 
+export const isSunday = (time) => {
+  return (moment(time).isoWeekday() === 7)
+}
+
 export const isQuietTime = (time) => {
-  return !isDayTime(time)
+  return !isDayTime(time) || isSunday(time)
 }
