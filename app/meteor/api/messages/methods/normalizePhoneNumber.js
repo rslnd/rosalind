@@ -1,4 +1,5 @@
 import flow from 'lodash/flow'
+import { zerofix } from '../../../util/zerofix'
 
 const countryPrefix = '43'
 const minimumLength = 9
@@ -33,6 +34,7 @@ export const ensureMinimumLength = (s) => {
 
 export const normalizePhoneNumber = flow(
   checkArgument,
+  zerofix,
   stripNonNumber,
   stripLeadingZeroes,
   addCountryCode,
