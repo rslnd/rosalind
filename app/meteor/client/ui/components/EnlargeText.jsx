@@ -1,6 +1,6 @@
 import React from 'react'
 import { Overlay } from 'react-bootstrap'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { Icon } from 'client/ui/components/Icon'
 
 const largeStyle = {
   fontSize: 70,
@@ -14,7 +14,7 @@ const largeStyle = {
 }
 
 const modalStyle = {
-  position: 'absolute',
+  position: 'fixed',
   bottom: 0,
   left: 0,
   right: 0,
@@ -55,10 +55,12 @@ export class EnlargeText extends React.Component {
       <span>
         <span
           onMouseEnter={this.handleShow}
-          onMouseLeave={this.handleHide}
-          style={{ cursor: 'pointer' }}
-          title={TAPi18n.__('ui.enlargeText')}>
+          onMouseLeave={this.handleHide}>
           {this.props.children}
+
+          <span className="pull-right text-muted" style={{ cursor: 'pointer' }}>
+            <Icon name="search-plus" />
+          </span>
         </span>
 
         <Overlay
