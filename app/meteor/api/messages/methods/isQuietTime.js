@@ -1,13 +1,14 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 
-export const dayTimeFrom = (m) => m.hour(6).minute(59)
-export const dayTimeTo = (m) => m.hour(20).minute(31)
+export const dayTimeFrom = (m) => m.hour(9).startOf('hour')
+export const dayTimeTo = (m) => m.hour(15).endOf('hour')
 
 export const isDayTime = (time) => {
   const now = moment(time).clone().tz(process.TZ_CLIENT || 'Europe/Vienna')
-  const from = dayTimeFrom(now.clone())
-  const to = dayTimeTo(now.clone())
-  return now.isBetween(from, to)
+  const from = dayTimeFrom(now.clone()).subtract(1, 'second')
+  const to = dayTimeTo(now.clone()).add(1, 'second')
+
+  return (from.isSameOrBefore(now) && to.isSameOrAfter(now))
 }
 
 export const isSunday = (time) => {
