@@ -10,7 +10,7 @@ import { Appointments } from 'api/appointments'
 import { Patients } from 'api/patients'
 import { Users } from 'api/users'
 import { isMobileNumber } from '../methods/isMobileNumber'
-import { getAppointmentReminderText } from '../methods/getAppointmentReminderText'
+import { buildMessageText } from '../methods/buildMessageText'
 
 export const sendHoursBeforeAppointment = 48
 
@@ -127,13 +127,6 @@ export const createReminders = ({ Messages }) => {
       })
 
       const messages = messagePayloads.map((payload) => {
-        const templates = {
-          dayFormat: 'dd., D.M.',
-          timeFormat: 'HH:mm',
-          timezone: process.env.TZ_CLIENT,
-          text: process.env.SMS_REMINDER_TEXT
-        }
-
         return {
           type: 'appointmentReminder',
           channel: 'SMS',
@@ -141,7 +134,11 @@ export const createReminders = ({ Messages }) => {
           status: 'scheduled',
           to: payload.contacts[0].value,
           scheduled: moment(payload.start).subtract(sendHoursBeforeAppointment, 'hours').toDate(),
-          text: getAppointmentReminderText(templates, payload),
+          text: buildMessageText({
+            text: process.env.SMS_REMINDER_TEXT
+          }, {
+            date: payload.start
+          }),
           invalidBefore: moment(payload.start).subtract(1, 'week').toDate(),
           invalidAfter: moment(payload.start).startOf('day').subtract(8, 'hours').toDate(),
           payload

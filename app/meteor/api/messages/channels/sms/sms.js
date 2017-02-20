@@ -5,6 +5,7 @@ import { InboundCalls } from 'api/inboundCalls'
 import provider from './providers'
 import { findParentMessage } from 'api/messages/methods/findParentMessage'
 import { isIntentToCancel } from 'api/messages/methods/isIntentToCancel'
+import { buildMessageText } from 'api/messages/methods/buildMessageText'
 
 export const send = (messageId) => {
   const message = Messages.findOne({ _id: messageId })
@@ -60,6 +61,7 @@ export const receive = (payload) => {
     console.log('[Messages] channels/sms: Matched message', messageId, 'as reply to', parentMessage._id)
 
     const appointmentId = parentMessage.payload.appointmentId
+    const appointment = Appointments.findOne({ _id: appointmentId })
     const patientId = parentMessage.payload.patientId
 
     Messages.update({ _id: messageId }, {
@@ -71,7 +73,7 @@ export const receive = (payload) => {
     })
 
     const cancelAppointment = isIntentToCancel(message.text)
-    if (appointmentId && cancelAppointment) {
+    if (appointment && cancelAppointment) {
       console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
       Appointments.actions.setCanceled.call({ appointmentId })
 
@@ -87,7 +89,11 @@ export const receive = (payload) => {
           type: 'intentToCancelConfirmation',
           channel: 'SMS',
           direction: 'outbound',
-          text: process.env.SMS_REMINDER_CANCELATION_CONFIRMATION_TEXT,
+          text: buildMessageText({
+            text: process.env.SMS_REMINDER_CANCELATION_CONFIRMATION_TEXT
+          }, {
+            date: appointment.start
+          }),
           to: message.from,
           status: 'scheduled',
           scheduled: new Date(),

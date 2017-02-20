@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import { expect } from 'chai'
 import moment from 'moment'
-import { getAppointmentReminderText, formatDate } from './getAppointmentReminderText'
+import { buildMessageText, formatDate } from './buildMessageText'
 
 describe('api', () => {
   describe('messages', () => {
@@ -27,7 +27,7 @@ describe('api', () => {
       })
     })
 
-    describe('getAppointmentReminderText', () => {
+    describe('buildMessageText', () => {
       const templates = {
         dayFormat: 'dddd, M/D/Y',
         timeFormat: 'HH:mm',
@@ -37,17 +37,22 @@ describe('api', () => {
       }
 
       const payload = {
-        start: moment.tz('2016-12-23T16:18:31.265+00:00', 'UTC').toDate()
+        date: moment.tz('2016-12-23T16:18:31.265+00:00', 'UTC').toDate()
       }
 
       it('builds text with UTC', () => {
         const expected = 'Your appointment is on Friday, 12/23/2016 at 16:18. <3'
-        expect(getAppointmentReminderText(templates, payload)).to.equal(expected)
+        expect(buildMessageText(templates, payload)).to.equal(expected)
+      })
+
+      it('fails when not all placeholders are substituted', () => {
+        expect(() => buildMessageText({
+          text: 'this %placeholder is not replaced'
+        }, payload)).to.throw('contains remaining placeholders')
       })
 
       it('fails when text ist too long to fit', () => {
-        expect(() => getAppointmentReminderText({
-          ...templates,
+        expect(() => buildMessageText({
           text: 'A very long text would split up the sms message into multiple parts, which we do not want to happen because we would be billed for mutiple messages. Make this string more than 160 characters long to see it throw.'
         }, payload)).to.throw('length')
       })
