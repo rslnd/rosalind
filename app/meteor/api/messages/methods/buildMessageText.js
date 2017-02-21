@@ -1,8 +1,8 @@
 import gsm from 'gsm'
 import moment from 'moment-timezone'
 
-export const validateMaxLength = (text) => {
-  return (gsm(text).sms_count === 1)
+export const validateLength = (text) => {
+  return ((gsm(text).sms_count === 1) && (text.length > 20))
 }
 
 const validateNoRemainingPlaceholders = (text) => (
@@ -35,7 +35,7 @@ export const getBodyText = (templates, { date }) => {
 export const buildMessageText = (templates = {}, { date }) => {
   const text = getBodyText(templates, { date })
 
-  if (validateMaxLength(text)) {
+  if (validateLength(text)) {
     if (validateNoRemainingPlaceholders(text)) {
       return text
     } else {

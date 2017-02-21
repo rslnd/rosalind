@@ -2,21 +2,21 @@
 import chai from 'chai'
 import chaiDatetime from 'chai-datetime'
 import moment from 'moment'
-import { calculateReminderDate, calculateFutureCutoff } from './calculateReminderDate'
+import { skipBackwards, skipForwards } from './skipBackwards'
 
 chai.use(chaiDatetime)
 const expect = chai.expect
 
 describe('api', () => {
   describe('messages', () => {
-    describe('calculateReminderDate', () => {
+    describe('skipBackwards', () => {
       context('counts backwards two working days', () => {
         it('counts continuous weekdays', () => {
           const fri = moment('2017-02-23T10:15:00').toDate()
           const wed = moment('2017-02-21T10:15:00').toDate()
           const daysBefore = 2
 
-          const reminder = calculateReminderDate(fri, daysBefore).toDate()
+          const reminder = skipBackwards(fri, daysBefore).toDate()
           expect(reminder).to.equalDate(wed)
         })
 
@@ -25,7 +25,7 @@ describe('api', () => {
           const thuBefore = moment('2017-02-16T10:15:00').toDate()
           const daysBefore = 2
 
-          const reminder = calculateReminderDate(mon, daysBefore).toDate()
+          const reminder = skipBackwards(mon, daysBefore).toDate()
           expect(reminder).to.equalDate(thuBefore)
         })
 
@@ -35,7 +35,7 @@ describe('api', () => {
           const skipDay = (d) => d.month() === 1
           const daysBefore = 2
 
-          const reminder = calculateReminderDate(mon, daysBefore, skipDay).toDate()
+          const reminder = skipBackwards(mon, daysBefore, skipDay).toDate()
           expect(reminder).to.equalDate(lastJanuary)
         })
 
@@ -45,7 +45,7 @@ describe('api', () => {
           const skipDay = (d) => (d.month() === 1 || d.isoWeekday() === 6 || d.isoWeekday() === 7)
           const daysBefore = 3
 
-          const reminder = calculateReminderDate(mon, daysBefore, skipDay).toDate()
+          const reminder = skipBackwards(mon, daysBefore, skipDay).toDate()
           expect(reminder).to.equalDate(lastJanuaryBeforeWeekend)
         })
 
@@ -55,7 +55,7 @@ describe('api', () => {
           const skipDay = (d) => (d.month() === 1 || d.isoWeekday() === 6 || d.isoWeekday() === 7)
           const daysBefore = 3
 
-          const reminder = calculateFutureCutoff(lastJanuaryBeforeWeekend, daysBefore, skipDay).toDate()
+          const reminder = skipForwards(lastJanuaryBeforeWeekend, daysBefore, skipDay).toDate()
           expect(reminder).to.equalDate(firstMarch)
         })
       })

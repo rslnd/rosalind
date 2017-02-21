@@ -9,10 +9,12 @@ import { Events } from 'api/events'
 import { Appointments } from 'api/appointments'
 import { Patients } from 'api/patients'
 import { Users } from 'api/users'
+import { Schedules } from 'api/schedules'
 import { isMobileNumber } from '../methods/isMobileNumber'
 import { buildMessageText } from '../methods/buildMessageText'
+import { reminderDateCalculator } from '../methods/reminderDateCalculator'
 
-export const sendHoursBeforeAppointment = 48
+export const sendDaysBeforeAppointment = 2
 
 // Don't immediately send out reminder if appointment is very soon,
 // We don't want the patient to receive the reminder while still
@@ -21,10 +23,10 @@ export const sendHoursBeforeAppointment = 48
 export const waitMinutesAfterNewAppointment = 1
 
 // TODO: Replace with GraphQL
-export const findUpcomingAppointments = () => {
+export const findUpcomingAppointments = (cutoffDate) => {
   const start = {
-    $gt: moment.tz(process.env.TZ_CLIENT).add(sendHoursBeforeAppointment, 'hours').startOf('day').toDate(),
-    $lt: moment.tz(process.env.TZ_CLIENT).add(sendHoursBeforeAppointment, 'hours').endOf('day').toDate()
+    $gt: cutoffDate.clone().startOf('day').toDate(),
+    $lt: cutoffDate.toDate()
   }
 
   const selector = {
@@ -100,7 +102,18 @@ export const createReminders = ({ Messages }) => {
         throw new Meteor.Error(500, 'SMS_REMINDER_TEXT not set')
       }
 
-      const appointments = findUpcomingAppointments()
+      const holidays = Schedules.find({
+        type: 'holidays',
+        removed: { $ne: true }
+      }).fetch()
+
+      const { calculateReminderDate, calculateFutureCutoff } = reminderDateCalculator({
+        holidays,
+        days: sendDaysBeforeAppointment
+      })
+
+      const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
+      const appointments = findUpcomingAppointments(cutoffDate)
       const appointmentsWithMobile = appointments.filter((a) => {
         if (a.patient && a.patient.profile && a.patient.profile.contacts) {
           return some(a.patient.profile.contacts, (c) =>
@@ -133,14 +146,14 @@ export const createReminders = ({ Messages }) => {
           direction: 'outbound',
           status: 'scheduled',
           to: payload.contacts[0].value,
-          scheduled: moment(payload.start).subtract(sendHoursBeforeAppointment, 'hours').toDate(),
+          scheduled: calculateReminderDate(payload.start).toDate(),
           text: buildMessageText({
             text: process.env.SMS_REMINDER_TEXT
           }, {
             date: payload.start
           }),
-          invalidBefore: moment(payload.start).subtract(1, 'week').toDate(),
-          invalidAfter: moment(payload.start).startOf('day').subtract(8, 'hours').toDate(),
+          invalidBefore: moment(payload.start).subtract(3, 'weeks').toDate(),
+          invalidAfter: moment(payload.start).startOf('day').subtract(12, 'hours').toDate(),
           payload
         }
       }).filter(identity)
