@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { DateRangePicker as DateRangePickerComponent } from 'react-dates'
 import { START_DATE, END_DATE } from 'react-dates/constants'
 import './datePickerStyles.scss'
@@ -46,6 +47,10 @@ export class DateRangePicker extends React.Component {
       <div>
         <DateRangePickerComponent
           {...this.props}
+          showDefaultInputIcon
+          showClearDates
+          startDatePlaceholderText={TAPi18n.__('ui.startDate')}
+          endDatePlaceholderText={TAPi18n.__('ui.endDate')}
           onDatesChange={this.onDatesChange}
           onFocusChange={this.onFocusChange}
           focusedInput={this.state.focusedInput}

@@ -9,12 +9,10 @@
       "title": "Abweichende Arbeitszeiten haben Vorrang",
       "body": "Wenn für einen Tag für einen Mitarbeiter eine abweichende Arbeitszeit eingetragen ist, überschreibt dieser Eintrag die übliche Arbeitszeit für diesen Tag und Mitarbeiter zur Gänze."
     },
+    "holidaysDateRange": "Zeitraum",
     "holidaysNew": "Neuen Feiertag eintragen",
     "holidaysSave": "Feiertag speichern",
-    "holidaysCallout": {
-      "title": "Feiertage und Öffnungszeiten",
-      "body": "An Feiertagen die Sie hier eintragen können keine Termine ausgemacht werden."
-    },
+    "holidaysNote": "Bezeichnung",
     "absences": "Abwesenheiten",
     "override": "Abweichende Arbeitszeiten",
     "overrideNew": "Neue abweichende Arbeitszeit",

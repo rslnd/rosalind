@@ -2,17 +2,18 @@
   .box-header
     h3.box-title {{_ title}}
     .box-tools
-      if newRoles
-        +if isInRole newRoles
+      unless noNew
+        if newRoles
+          +if isInRole newRoles
+            if newTitle
+              button.btn.btn-default(rel='new') {{_ newTitle }}
+            else
+              button.btn.btn-default(rel='new') {{ thisInsert }}
+        else
           if newTitle
             button.btn.btn-default(rel='new') {{_ newTitle }}
           else
             button.btn.btn-default(rel='new') {{ thisInsert }}
-      else
-        if newTitle
-          button.btn.btn-default(rel='new') {{_ newTitle }}
-        else
-          button.btn.btn-default(rel='new') {{ thisInsert }}
 
   .box-body
     +tabular(table=table class='table table-striped table-bordered table-condensed')

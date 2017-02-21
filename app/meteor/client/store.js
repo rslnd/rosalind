@@ -20,6 +20,14 @@ const reducers = {
     }
   },
   form: formReducer.plugin({
+    newHolidays: (state, action) => {
+      switch (action.type) {
+        case 'HOLIDAYS_INSERT_SUCCESS':
+          return undefined
+        default:
+          return state
+      }
+    },
     newSchedulesRequest: (state, action) => {
       switch (action.type) {
         case 'SCHEDULES_POST_REQUEST_SUCCESS':

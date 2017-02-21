@@ -4,6 +4,7 @@ import Blaze from 'meteor/gadicc:blaze-react-component'
 import { StatusBoardContainer } from 'client/ui/schedules/statusBoard/StatusBoardContainer'
 import { TimesheetsContainer } from 'client/ui/timesheets/TimesheetsContainer'
 import { RequestsContainer } from 'client/ui/schedules/requests/RequestsContainer'
+import { HolidaysContainer } from 'client/ui/schedules/holidays/HolidaysContainer'
 
 export const SchedulesRoutes = () => (
   <Route path="schedules">
@@ -16,7 +17,7 @@ export const SchedulesRoutes = () => (
       <Route path=":dateRange" component={TimesheetsContainer} />
     </Route>
     <Route path="businessHours" component={() => <Blaze template="businessHours" />} />
-    <Route path="holidays" component={() => <Blaze template="holidays" />} />
+    <Route path="holidays" component={HolidaysContainer} />
     <Route path="default/:username" component={() => <Blaze template="schedulesDefault" />} />
   </Route>
 )

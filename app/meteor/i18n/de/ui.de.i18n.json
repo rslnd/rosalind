@@ -39,6 +39,8 @@
       "disconnected": "Hoppla! Die Internetverbindung ist abgerissen. Keine Sorge, sie ist bestimmt gleich wieder da."
     },
     "required": "Erforderlich",
-    "composeEmail": "Email schreiben"
+    "composeEmail": "Email schreiben",
+    "startDate": "von",
+    "endDate": "bis"
   }
 }
