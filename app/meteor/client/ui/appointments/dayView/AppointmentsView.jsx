@@ -1,6 +1,6 @@
 import memoize from 'lodash/memoize'
-import moment from 'moment'
-import 'moment-range'
+import _moment from 'moment'
+import { extendMoment } from 'moment-range'
 import { monkey } from 'spotoninc-moment-round'
 import React from 'react'
 import classnames from 'classnames'
@@ -17,6 +17,7 @@ import { HeaderRowContainer } from 'client/ui/appointments/dayView/header/Header
 import style from './style'
 import { Schedules } from 'api/schedules'
 
+const moment = extendMoment(_moment)
 monkey(moment)
 
 const viewRange = (date) => {
@@ -28,7 +29,7 @@ const viewRange = (date) => {
 
 const calculateTimeRange = memoize((date) => {
   const range = viewRange(date)
-  return moment.range(range.start, range.end).toArray('minutes').map((t) => moment(t))
+  return Array.from(moment.range(range.start, range.end).by('minutes')).map((t) => moment(t))
 })
 
 export class AppointmentsView extends React.Component {

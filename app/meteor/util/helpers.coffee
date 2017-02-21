@@ -1,5 +1,4 @@
 moment = require 'moment'
-require 'moment-range'
 { Mongo } = require 'meteor/mongo'
 { Spacebars } = require 'meteor/spacebars'
 { TAPi18n } = require 'meteor/tap:i18n'
@@ -54,9 +53,6 @@ module.exports =
   calendarDay: (day) ->
     date = moment(Time.dayToDate(day))
     Time.date(date, weekday: true)
-
-  recent: (date) ->
-    moment().range(date, moment()).diff('hours') < 4
 
   birthday: (date) ->
     return unless date
