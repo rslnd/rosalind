@@ -24,9 +24,12 @@ export const waitMinutesAfterNewAppointment = 1
 
 // TODO: Replace with GraphQL
 export const findUpcomingAppointments = (cutoffDate) => {
+  // It's important not to use a closing-sliding window here, as
+  // that could lead to two reminders being sent out for
+  // back-to-back appointments for the same patient
   const start = {
     $gt: cutoffDate.clone().startOf('day').toDate(),
-    $lt: cutoffDate.toDate()
+    $lt: cutoffDate.endOf('day').toDate()
   }
 
   const selector = {
