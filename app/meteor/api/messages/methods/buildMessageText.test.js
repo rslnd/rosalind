@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import { expect } from 'chai'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { buildMessageText, formatDate } from './buildMessageText'
 
 describe('api', () => {

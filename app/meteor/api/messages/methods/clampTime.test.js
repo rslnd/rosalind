@@ -14,26 +14,26 @@ describe('api', () => {
       const upper = (m) => m.hour(15).endOf('hour')
       const bounds = { lower, upper }
 
-      const okay = moment.tz('2017-02-24T14:35:00.000+01:00')
+      const okay = moment.parseZone('2017-02-24T14:35:00.000+01:00')
 
-      const tooEarly = moment.tz('2017-02-24T07:35:00.000+01:00')
-      const clampedEarly = moment.tz('2017-02-24T09:35:00.000+01:00')
+      const tooEarly = moment.parseZone('2017-02-24T07:35:00.000+01:00')
+      const clampedEarly = moment.parseZone('2017-02-24T09:35:00.000+01:00').toDate()
 
-      const tooLate = moment.tz('2017-02-24T18:55:00.000+01:00')
-      const clampedLate = moment.tz('2017-02-24T15:55:00.000+01:00')
+      const tooLate = moment.parseZone('2017-02-24T18:55:00.000+01:00')
+      const clampedLate = moment.parseZone('2017-02-24T15:55:00.000+01:00').toDate()
 
       it('return original reference when unchanged', () => {
-        expect(moment(clampTime(okay, bounds)).isSame(okay)).to.equal(true)
+        expect(clampTime(okay, bounds).toDate()).to.equalTime(okay.toDate())
       })
 
       it('clamps lower bound', () => {
-        const result = clampTime(tooEarly.clone(), bounds)
-        expect(result.isSame(clampedEarly)).to.equal(true)
+        const result = clampTime(tooEarly.clone(), bounds).toDate()
+        expect(result).to.equalTime(clampedEarly)
       })
 
       it('clamps to upper bound', () => {
-        const result = clampTime(tooLate.clone(), bounds)
-        expect(result.isSame(clampedLate)).to.equal(true)
+        const result = clampTime(tooLate.clone(), bounds).toDate()
+        expect(result).to.equalTime(clampedLate)
       })
     })
   })
