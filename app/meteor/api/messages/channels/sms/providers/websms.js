@@ -37,18 +37,23 @@ export const send = (message) => {
   }
 
   return new Promise((resolve, reject) => {
-    const sms = new websms.TextMessage([to], text, (err) => {
-      reject(err)
-    })
+    // Hacky way to avoid hitting rate limit
+    const delay = Math.random() * 15000
 
-    getClient().send(sms, maxSmsPerMessage, isTest, (err, res) => {
-      if (err) {
+    setTimeout(() => {
+      const sms = new websms.TextMessage([to], text, (err) => {
         reject(err)
-      } else {
-        delete res.messageObject
-        resolve(res)
-      }
-    })
+      })
+
+      getClient().send(sms, maxSmsPerMessage, isTest, (err, res) => {
+        if (err) {
+          reject(err)
+        } else {
+          delete res.messageObject
+          resolve(res)
+        }
+      })
+    }, delay)
   })
 }
 
