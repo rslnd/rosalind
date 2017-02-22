@@ -21,15 +21,15 @@ const cleanOldJobs = (job) => {
 export const worker = (job, callback) => {
   hello()
 
-  // Promise.all([
-  //   Messages.actions.createReminders.callPromise(),
-  //   Messages.actions.sendScheduled.callPromise()
-  // ]).catch((e) => {
-  //   console.error('[Messages] worker: errored with', e)
-  //   job.fail()
-  // }).then(() => {
+  Promise.all([
+    Messages.actions.createReminders.callPromise(),
+    Messages.actions.sendScheduled.callPromise()
+  ]).catch((e) => {
+    console.error('[Messages] worker: errored with', e)
+    setTimeout(() => job.fail(), 5000)
+  }).then(() => {
     cleanOldJobs(job)
     job.done()
     callback()
-  // })
+  })
 }
