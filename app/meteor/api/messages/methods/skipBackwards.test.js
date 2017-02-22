@@ -16,7 +16,10 @@ describe('api', () => {
           const wed = moment('2017-02-21T10:15:00').toDate()
           const daysBefore = 2
 
-          const reminder = skipBackwards(fri, daysBefore).toDate()
+          const reminder = skipBackwards({
+            start: fri,
+            count: daysBefore
+          }).toDate()
           expect(reminder).to.equalDate(wed)
         })
 
@@ -25,27 +28,38 @@ describe('api', () => {
           const thuBefore = moment('2017-02-16T10:15:00').toDate()
           const daysBefore = 2
 
-          const reminder = skipBackwards(mon, daysBefore).toDate()
+          const reminder = skipBackwards({
+            start: mon,
+            count: daysBefore
+          }).toDate()
           expect(reminder).to.equalDate(thuBefore)
         })
 
         it('skips whole month', () => {
           const mon = moment('2017-02-20T10:15:00').toDate()
           const lastJanuary = moment('2017-01-30T10:15:00').toDate()
-          const skipDay = (d) => d.month() === 1
+          const skipFebruary = (d) => d.month() === 1
           const daysBefore = 2
 
-          const reminder = skipBackwards(mon, daysBefore, skipDay).toDate()
+          const reminder = skipBackwards({
+            start: mon,
+            count: daysBefore,
+            skip: skipFebruary
+          }).toDate()
           expect(reminder).to.equalDate(lastJanuary)
         })
 
         it('skips whole month and weekends', () => {
           const mon = moment('2017-02-20T10:15:00').toDate()
           const lastJanuaryBeforeWeekend = moment('2017-01-27T10:15:00').toDate()
-          const skipDay = (d) => (d.month() === 1 || d.isoWeekday() === 6 || d.isoWeekday() === 7)
+          const skipMultiple = (d) => (d.month() === 1 || d.isoWeekday() === 6 || d.isoWeekday() === 7)
           const daysBefore = 3
 
-          const reminder = skipBackwards(mon, daysBefore, skipDay).toDate()
+          const reminder = skipBackwards({
+            start: mon,
+            count: daysBefore,
+            skip: skipMultiple
+          }).toDate()
           expect(reminder).to.equalDate(lastJanuaryBeforeWeekend)
         })
 
@@ -55,7 +69,11 @@ describe('api', () => {
           const skipDay = (d) => (d.month() === 1 || d.isoWeekday() === 6 || d.isoWeekday() === 7)
           const daysBefore = 3
 
-          const reminder = skipForwards(lastJanuaryBeforeWeekend, daysBefore, skipDay).toDate()
+          const reminder = skipForwards({
+            start: lastJanuaryBeforeWeekend,
+            count: daysBefore,
+            skip: skipDay
+          }).toDate()
           expect(reminder).to.equalDate(firstMarch)
         })
       })

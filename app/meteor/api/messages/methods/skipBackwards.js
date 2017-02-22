@@ -4,16 +4,16 @@ import { isWeekend } from './isQuietTime'
 
 const applyN = compose(reduceRight(compose, identity), repeat)
 
-const next = (d) => d.clone().add(1, 'day')
-const prev = (d) => d.clone().subtract(1, 'day')
+const next = (unit) => (d) => d.clone().add(1, unit)
+const prev = (unit) => (d) => d.clone().subtract(1, unit)
 
-export const skipOneForwards = (skipDay) => (date) => until(complement(skipDay), next)(next(date))
-export const skipOneBackwards = (skipDay) => (date) => until(complement(skipDay), prev)(prev(date))
+export const skipOneForwards = (skip, unit) => (date) => until(complement(skip), next(unit))(next(unit)(date))
+export const skipOneBackwards = (skip, unit) => (date) => until(complement(skip), prev(unit))(prev(unit)(date))
 
-export const skipBackwards = (start = moment(), daysBefore = 1, skipDay = isWeekend) => {
-  return applyN(skipOneBackwards(skipDay), daysBefore)(moment(start).clone())
+export const skipBackwards = ({ start = moment(), count = 1, skip = isWeekend, unit = 'day' }) => {
+  return applyN(skipOneBackwards(skip, unit), count)(moment(start).clone())
 }
 
-export const skipForwards = (start = moment(), daysAfter = 1, skipDay = isWeekend) => {
-  return applyN(skipOneForwards(skipDay), daysAfter)(moment(start).clone())
+export const skipForwards = ({ start = moment(), count = 1, skip = isWeekend, unit = 'day' }) => {
+  return applyN(skipOneForwards(skip, unit), count)(moment(start).clone())
 }

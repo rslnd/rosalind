@@ -4,14 +4,25 @@ import { clampTime } from './clampTime'
 
 export const reminderDateCalculator = ({ holidays = [], days = 1 }) => {
   const isWithinHolidays = isHolidays(holidays)
-  const skip = (m) => (isWeekend(m) || isWithinHolidays(m))
+  const weekendsOrHolidays = (m) => (isWeekend(m) || isWithinHolidays(m))
   const clamp = (m) => clampTime(m, {
     lower: dayTimeFrom,
-    upper: dayTimeTo,
-    pad: 15
+    upper: dayTimeTo
   })
 
-  const calculateReminderDate = (m) => clamp(skipBackwards(m, days, skip))
-  const calculateFutureCutoff = (m) => skipForwards(m, days, skip)
+  const calculateReminderDate = (m) => clamp(skipBackwards({
+    start: m,
+    count: days,
+    unit: 'days',
+    skip: weekendsOrHolidays
+  }))
+
+  const calculateFutureCutoff = (m) => skipForwards({
+    start: m,
+    count: days,
+    unit: 'days',
+    skip: weekendsOrHolidays
+  })
+
   return { calculateReminderDate, calculateFutureCutoff }
 }

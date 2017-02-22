@@ -19,17 +19,27 @@ describe('api', () => {
 
       const now = moment('2017-12-20T19:30:00.000')
       const expectedCutoffDate = moment('2018-01-08T19:30:00.000')
-      const appointmentDate = moment('2018-01-08T18:30:15.000')
-      const expectedReminderDate = moment('2017-12-20T15:44:59.999')
+      const appointmentDate = moment('2018-01-08T18:35:00.000')
+      const expectedReminderDate = moment('2017-12-20T15:35:00.000')
 
       it('skips backwards over holidays, weekends, and clamps time', () => {
-        expect(calculateReminderDate(appointmentDate).toDate())
+        expect(
+          calculateReminderDate(appointmentDate).toDate())
           .to.equalTime(expectedReminderDate.toDate())
       })
 
       it('skips forwards over holidays and weekends', () => {
         expect(calculateFutureCutoff(now).toDate())
           .to.equalTime(expectedCutoffDate.toDate())
+      })
+
+      it('counts weekdays continuously', () => {
+        const appointmentDate2 = moment('2017-02-24T11:35:00.000+01:00')
+        const expectedReminderDate2 = moment('2017-02-21T11:35:00.000+01:00')
+
+        expect(
+          calculateReminderDate(appointmentDate2).toDate())
+          .to.equalTime(expectedReminderDate2.toDate())
       })
     })
   })
