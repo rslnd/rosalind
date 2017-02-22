@@ -29,6 +29,19 @@ export const sendScheduled = ({ Messages }) => {
         $lt: moment().toDate()
       }
 
+      const maxSentPerRecipientLimit = 3
+
+      const sentToNumbersToday = Messages.find({
+        status: 'sent',
+        direction: 'outbound',
+        type: 'appointmentReminder',
+        removed: { $ne: true },
+        sentAt: {
+          $gt: moment().startOf('day').toDate(),
+          $lt: moment().endOf('day').toDate()
+        }
+      }).fetch().map((m) => m.to)
+
       const scheduledMessages = Messages.find({
         status: 'scheduled',
         direction: 'outbound',
@@ -38,7 +51,15 @@ export const sendScheduled = ({ Messages }) => {
         removed: { $ne: true }
       }).fetch().filter((message) => {
         // Only allow confirmation of cancelation to be sent during quiet time
-        return (!isQuietTime() || (isQuietTime() && message.type === 'intentToCancelConfirmation'))
+        const quietTimeRespected = (!isQuietTime() || (isQuietTime() && message.type === 'intentToCancelConfirmation'))
+        const withinSentPerRecipientLimit = (sentToNumbersToday.filter((n) => n === message.to).length <= maxSentPerRecipientLimit)
+        const ok = quietTimeRespected && withinSentPerRecipientLimit
+
+        if (!ok) {
+          console.warn('[Messages] sendScheduled: Sanity checks failed, message not sent', { quietTimeRespected, withinSentPerRecipientLimit, message })
+        }
+
+        return ok
       }).map((message) => {
         switch (message.channel) {
           case 'SMS':
