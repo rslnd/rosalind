@@ -1,5 +1,6 @@
 import once from 'lodash/once'
 import moment from 'moment'
+import { Meteor } from 'meteor/meteor'
 import { Job } from 'meteor/vsivsi:job-collection'
 import { Messages } from 'api/messages'
 
@@ -26,7 +27,7 @@ export const worker = (job, callback) => {
     Messages.actions.sendScheduled.callPromise()
   ]).catch((e) => {
     console.error('[Messages] worker: errored with', e)
-    setTimeout(() => job.fail(), 5000)
+    Meteor.setTimeout(() => job.fail(), 5000)
   }).then(() => {
     cleanOldJobs(job)
     job.done()

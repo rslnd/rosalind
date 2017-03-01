@@ -102,7 +102,8 @@ export const createReminders = ({ Messages }) => {
       }
 
       if (!process.env.SMS_REMINDER_TEXT) {
-        throw new Meteor.Error(500, 'SMS_REMINDER_TEXT not set')
+        console.error('[Messages] createReminders: Skipping because SMS_REMINDER_TEXT not set')
+        return
       }
 
       const holidays = Schedules.find({
