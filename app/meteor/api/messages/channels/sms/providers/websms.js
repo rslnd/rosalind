@@ -27,13 +27,14 @@ export const send = (message) => {
 
   const maxSmsPerMessage = 1
 
-  // FIXME: Remove whitelisting before going into production
-  isTest = true
-  if (process.env.SMS_WHITELIST && some(process.env.SMS_WHITELIST.split(','), n => to.indexOf(n) !== -1)) {
-    isTest = false
-    console.log('DEBUG: Disabling SMS test mode for', to)
-  } else {
-    console.log('DEBUG: Test mode is enabled, not actually sending SMS message')
+  if (process.env.SMS_ENABLE_WHITELIST) {
+    isTest = true
+    if (process.env.SMS_WHITELIST && some(process.env.SMS_WHITELIST.split(','), n => to.indexOf(n) !== -1)) {
+      isTest = false
+      console.log('DEBUG: Disabling SMS test mode for', to)
+    } else {
+      console.log('DEBUG: Test mode is enabled, not actually sending SMS message')
+    }
   }
 
   return new Promise((resolve, reject) => {
