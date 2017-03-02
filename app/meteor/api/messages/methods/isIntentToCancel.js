@@ -11,8 +11,10 @@ export const isIntentToCancel = (text) => {
     if (lower.indexOf(cancelKeyword.toLowerCase()) === 0) {
       return true
     } else {
-      const trimmed = lower.replace(/[^a-z]/g, '')
-      return (leven(trimmed, cancelKeyword.toLowerCase()) <= fuzzyness)
+      const tokens = lower.split(/[^a-z]/g)
+      return some(tokens.map((token) => {
+        return (leven(token, cancelKeyword.toLowerCase()) <= fuzzyness)
+      }))
     }
   }))
 }
