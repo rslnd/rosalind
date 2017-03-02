@@ -12,6 +12,8 @@ module.exports =
       'Error: User not found [403]'
       '[Timesheets] Start tracking'
       '[Timesheets] Stop tracking'
+      'This page includes a password or credit card input in a non-secure context'
+      'WebSocket is closed before the connection is established'
     ]
 
     if logs.value.length > 0
