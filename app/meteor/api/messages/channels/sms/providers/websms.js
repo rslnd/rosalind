@@ -1,9 +1,12 @@
 import memoize from 'lodash/memoize'
 import some from 'lodash/some'
 import websms from 'shebang!websmscom'
+import Bottleneck from 'bottleneck'
 import { normalizePhoneNumber } from 'api/messages/methods/normalizePhoneNumber'
 
 export const name = 'websms'
+
+const limiter = new Bottleneck(1, 5000)
 
 let isTest = false
 
@@ -19,7 +22,7 @@ const getClient = memoize(() => {
     process.env.WEBSMS_PASSWORD)
 })
 
-export const send = (message) => {
+export const sendUnthrottled = (message) => {
   const to = normalizePhoneNumber(message.to)
   const text = message.text
 
@@ -31,31 +34,33 @@ export const send = (message) => {
     isTest = true
     if (process.env.SMS_WHITELIST && some(process.env.SMS_WHITELIST.split(','), n => to.indexOf(n) !== -1)) {
       isTest = false
-      console.log('DEBUG: Disabling SMS test mode for', to)
-    } else {
-      console.log('DEBUG: Test mode is enabled, not actually sending SMS message')
+      console.log('[Messages] channels/sms/websms: Not running in production environment, enabling test mode')
     }
   }
 
+  if (process.env.NODE_ENV !== 'production') {
+    isTest = true
+    console.log('[Messages] channels/sms/websms: Not running in production environment, enabling test mode')
+  }
+
   return new Promise((resolve, reject) => {
-    // Hacky way to avoid hitting rate limit
-    const delay = Math.random() * 15000
+    const sms = new websms.TextMessage([to], text, (err) => {
+      reject(err)
+    })
 
-    setTimeout(() => {
-      const sms = new websms.TextMessage([to], text, (err) => {
+    getClient().send(sms, maxSmsPerMessage, isTest, (err, res) => {
+      if (err) {
         reject(err)
-      })
-
-      getClient().send(sms, maxSmsPerMessage, isTest, (err, res) => {
-        if (err) {
-          reject(err)
-        } else {
-          delete res.messageObject
-          resolve(res)
-        }
-      })
-    }, delay)
+      } else {
+        delete res.messageObject
+        resolve(res)
+      }
+    })
   })
+}
+
+export const send = (message) => {
+  limiter.schedule(sendUnthrottled, message)
 }
 
 export const receive = (payload) => {
