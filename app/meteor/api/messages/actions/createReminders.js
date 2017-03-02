@@ -119,6 +119,10 @@ export const createReminders = ({ Messages }) => {
       const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
       const appointments = findUpcomingAppointments(cutoffDate)
       const appointmentsWithMobile = appointments.filter((a) => {
+        if (a.patient && a.patient.profile && a.patient.profile.noSMS) {
+          return false
+        }
+
         if (a.patient && a.patient.profile && a.patient.profile.contacts) {
           return some(a.patient.profile.contacts, (c) =>
             (c.channel === 'Phone' && isMobileNumber(c.value))

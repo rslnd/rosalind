@@ -1,3 +1,5 @@
+import Alert from 'react-s-alert'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from 'api/appointments'
 import { Patients } from 'api/patients'
@@ -19,11 +21,29 @@ const composer = (props, onData) => {
       })
     }
 
+    const handleSetMessagePreferences = (newValue) => {
+      const noSMS = !newValue.value
+
+      if (patient) {
+        if (noSMS) {
+          Alert.success(TAPi18n.__('patients.messagesDisabledSuccess'))
+        } else {
+          Alert.success(TAPi18n.__('patients.messagesEnabledSuccess'))
+        }
+
+        Patients.actions.setMessagePreferences.call({
+          patientId: patient._id,
+          noSMS
+        })
+      }
+    }
+
     onData(null, {
       appointment,
       patient,
       assignee,
-      handleEditNote
+      handleEditNote,
+      handleSetMessagePreferences
     })
   }
 }

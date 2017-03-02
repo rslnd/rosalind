@@ -21,6 +21,8 @@
     "nameCaseWarning": "Bitte den ersten Buchstaben groß schreiben, und den Rest klein. Danke!",
     "birthdayRequired": "Bitte bei neuen PatientInnen das Geburtsdatum eintragen",
     "telephoneRequired": "Bitte bei neuen PatientInnen eine Telefonnummer eintragen",
-    "lastNameRequired": "Erforderlich"
+    "lastNameRequired": "Erforderlich",
+    "messagesDisabledSuccess": "PatientIn bekommt ab sofort keine Terminerinnerungen mehr.",
+    "messagesEnabledSuccess": "PatientIn wird wieder Terminerinnerungen bekommen."
   }
 }

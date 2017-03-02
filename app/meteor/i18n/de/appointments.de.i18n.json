@@ -45,6 +45,7 @@
     "insertError": "Entschuldigung! Bitte noch einmal versuchen.",
     "search": "Suche...",
     "searching": "Suche...",
+    "appointmentReminderSMS": "SMS-Terminerinnerung",
     "form": {
       "start": {
         "label": "Beginn"

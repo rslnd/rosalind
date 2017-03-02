@@ -2,7 +2,7 @@ import moment from 'moment'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { Events } from 'api/events'
+import { Patients } from 'api/patients'
 import { isQuietTime } from 'api/messages/methods/isQuietTime'
 
 let SMS
@@ -50,6 +50,11 @@ export const sendScheduled = ({ Messages }) => {
         invalidAfter: { $gt: moment().toDate() },
         removed: { $ne: true }
       }).fetch().filter((message) => {
+        const patient = Patients.findOne({ _id: message.patientId })
+        if (patient && patient.profile && patient.profile.noSMS) {
+          return false
+        }
+
         // Only allow confirmation of cancelation to be sent during quiet time
         const quietTimeRespected = (!isQuietTime() || (isQuietTime() && message.type === 'intentToCancelConfirmation'))
         const withinSentPerRecipientLimit = (sentToNumbersToday.filter((n) => n === message.to).length <= maxSentPerRecipientLimit)

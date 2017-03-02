@@ -79,6 +79,14 @@ Profile = new SimpleSchema
     type: [ Contact ]
     optional: true
 
+  noSMS:
+    type: Boolean
+    optional: true
+
+  noCall:
+    type: Boolean
+    optional: true
+
   address:
     type: Address
     optional: true

@@ -96,9 +96,9 @@ const Tags = ({ appointment }) => (
   </div> || null
 )
 
-const Reminders = ({ patient }) => (
+const Reminders = ({ patient, onChange }) => (
   patient && patient.profile && patient.profile.contacts && <ListItem icon="paper-plane">
-    SMS-Terminerinnerung
+    {TAPi18n.__('appointments.appointmentReminderSMS')}
     <div className="pull-right" style={{
       position: 'absolute',
       right: 5,
@@ -108,7 +108,9 @@ const Reminders = ({ patient }) => (
       <Toggle
         style={{transform: 'scale(0.6)'}}
         firstChoiceStyle={{backgroundColor: '#8fc6ae'}}
-        secondChoiceStyle={{backgroundColor: '#e37067'}}>
+        secondChoiceStyle={{backgroundColor: '#e37067'}}
+        value={!patient.profile.noSMS}
+        onUpdate={onChange}>
         <Choice value><Icon name="check" /></Choice>
         <Choice value={false}><Icon name="times" /></Choice>
       </Toggle>
@@ -130,7 +132,7 @@ const AppointmentNotes = ({ appointment, onChange }) => (
 
 export class AppointmentInfo extends React.Component {
   render () {
-    const { appointment, patient, assignee, handleEditNote } = this.props
+    const { appointment, patient, assignee, handleEditNote, handleSetMessagePreferences } = this.props
 
     return (
       <div>
@@ -155,7 +157,7 @@ export class AppointmentInfo extends React.Component {
           <div className="col-md-6">
             <Contacts patient={patient} />
             <Birthday patient={patient} />
-            <Reminders patient={patient} />
+            <Reminders patient={patient} onChange={handleSetMessagePreferences} />
 
             {patient && <PastAppointmentsContainer patientId={appointment.patientId} excludeAppointmentId={appointment._id} />}
           </div>
