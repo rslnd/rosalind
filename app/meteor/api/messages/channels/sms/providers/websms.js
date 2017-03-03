@@ -60,7 +60,7 @@ export const sendUnthrottled = (message) => {
 }
 
 export const send = (message) => {
-  limiter.schedule(sendUnthrottled, message)
+  return limiter.schedule(sendUnthrottled, message)
 }
 
 export const receive = (payload) => {
