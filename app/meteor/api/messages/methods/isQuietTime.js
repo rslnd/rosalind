@@ -27,5 +27,5 @@ export const isHolidays = (holidays = []) => {
 
 export const isQuietTime = (time) => {
   const m = moment(time)
-  return false
+  return !isDayTime(m) || isWeekend(m)
 }
