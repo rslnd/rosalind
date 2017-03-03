@@ -1,6 +1,5 @@
 import users from 'api/users/server'
 import groups from 'api/groups/server'
-import search from 'api/search/server'
 import patients from 'api/patients/server'
 import appointments from 'api/appointments/server'
 import cache from 'api/cache/server'
@@ -21,7 +20,6 @@ import timesheets from 'api/timesheets/server'
 export default function () {
   users()
   groups()
-  search()
   patients()
   appointments()
   cache()
