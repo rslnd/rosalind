@@ -29,6 +29,8 @@ module.exports = ->
           },
           {
             type: 'override' # FIXME: Limit schedules sent to client
+            start: { $gt: moment().subtract(1, 'week').startOf('day').toDate() }
+            end: { $lt: moment().add(12, 'months').endOf('day').toDate() }
           },
           {
             type: 'day'
@@ -38,8 +40,8 @@ module.exports = ->
 
     else if (range and (range.start or range.end))
       selector = {
-        start: { $gt: moment(range.start).startOf('day').toDate() }
-        end: { $gt: moment(range.end).endOf('day').toDate() }
+        start: { $gt: moment(range.start).subtract(1, 'day').startOf('day').toDate() }
+        end: { $gt: moment(range.end).add(1, 'day').endOf('day').toDate() }
       }
     else if (range and range.day)
       selector = { day: range }
@@ -59,7 +61,7 @@ module.exports = ->
             'day.year': -1,
             start: -1
           },
-          limit: 600
+          limit: 1200 # BUG: Figure out how to make sure no schedules are left out
         })
 
         return cursor
