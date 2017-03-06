@@ -7,7 +7,8 @@ export default () => {
 
     if (message && (
       message.includes('been logged out by the server. Please log in again') ||
-      message.includes('Server sent add for existing id'))) {
+      message.includes('Server sent add for existing id') ||
+      message.includes('Clock discrepancy detected'))) {
       return false
     }
 
