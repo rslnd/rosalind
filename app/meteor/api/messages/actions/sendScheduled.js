@@ -61,7 +61,7 @@ export const sendScheduled = ({ Messages }) => {
         const ok = quietTimeRespected && withinSentPerRecipientLimit
 
         if (!ok) {
-          console.warn('[Messages] sendScheduled: Sanity checks failed, message not sent', { quietTimeRespected, withinSentPerRecipientLimit, message })
+          console.warn(`[Messages] sendScheduled: Sanity checks failed, message ${message._id} not sent`, { quietTimeRespected, withinSentPerRecipientLimit })
         }
 
         return ok

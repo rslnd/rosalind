@@ -6,11 +6,11 @@ export const ensurePeriodicJob = () => {
     .repeat({
       repeats: Job.forever,
       until: Job.foreverDate,
-      wait: 15 * 1000
+      wait: 60 * 1000
     })
     .retry({
       retries: Job.forever,
-      wait: 30 * 1000,
+      wait: 120 * 1000,
       backoff: 'exponential'
     })
     .save({
