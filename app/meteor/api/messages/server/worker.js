@@ -1,11 +1,6 @@
-import once from 'lodash/once'
 import moment from 'moment'
 import { Job } from 'meteor/vsivsi:job-collection'
 import { Messages } from 'api/messages'
-
-const hello = once(() => {
-  console.log('[Messages] worker: running')
-})
 
 const cleanOldJobs = (job) => {
   const ids = Messages.jobs.find({
@@ -19,17 +14,21 @@ const cleanOldJobs = (job) => {
 }
 
 export const worker = (job, callback) => {
-  hello()
+  console.log('[Messages] worker: running')
 
-  Promise.all([
-    Messages.actions.createReminders.callPromise(),
-    Messages.actions.sendScheduled.callPromise()
-  ]).catch((e) => {
-    console.error('[Messages] worker: errored with', e)
-    job.fail()
-  }).then(() => {
-    cleanOldJobs(job)
-    job.done()
-    callback()
-  })
+  // We can't check for quiet time here, because doing so would
+  // postpone the cancelation confirmation until next morning
+  // when a patient wants to cancel her appointment at night
+  Messages.actions.createReminders.callPromise()
+    .then(() => console.log('[Messages] worker: Finished creating reminders'))
+    .then(() => Messages.actions.sendScheduled.callPromise())
+    .then(() => console.log('[Messages] worker: Finished sending scheduled messages'))
+    .then(() => {
+      cleanOldJobs(job)
+      job.done()
+      callback()
+    }).catch((e) => {
+      console.error('[Messages] worker: errored with', e)
+      job.fail()
+    })
 }
