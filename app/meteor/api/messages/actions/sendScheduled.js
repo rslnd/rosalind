@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Patients } from 'api/patients'
-import { isQuietTime } from 'api/messages/methods/isQuietTime'
+import { isQuietTimeRespected } from 'api/messages/methods/isQuietTimeRespected'
 
 let SMS
 if (Meteor.isServer) {
@@ -56,12 +56,13 @@ export const sendScheduled = ({ Messages }) => {
         }
 
         // Only allow confirmation of cancelation to be sent during quiet time
-        const quietTimeRespected = (!isQuietTime() || (isQuietTime() && message.type === 'intentToCancelConfirmation'))
+        const quietTimeRespected = isQuietTimeRespected(message)
+
         const withinSentPerRecipientLimit = (sentToNumbersToday.filter((n) => n === message.to).length <= maxSentPerRecipientLimit)
         const ok = quietTimeRespected && withinSentPerRecipientLimit
 
-        if (!ok) {
-          console.warn(`[Messages] sendScheduled: Sanity checks failed, message ${message._id} not sent`, { quietTimeRespected, withinSentPerRecipientLimit })
+        if (!withinSentPerRecipientLimit) {
+          console.warn(`[Messages] sendScheduled: Sent count per recipient exceeded, message ${message._id} not sent`, { quietTimeRespected, withinSentPerRecipientLimit })
         }
 
         return ok
