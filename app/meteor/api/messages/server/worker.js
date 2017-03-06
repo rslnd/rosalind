@@ -14,15 +14,11 @@ const cleanOldJobs = (job) => {
 }
 
 export const worker = (job, callback) => {
-  console.log('[Messages] worker: running')
-
   // We can't check for quiet time here, because doing so would
   // postpone the cancelation confirmation until next morning
   // when a patient wants to cancel her appointment at night
   Messages.actions.createReminders.callPromise()
-    .then(() => console.log('[Messages] worker: Finished creating reminders'))
     .then(() => Messages.actions.sendScheduled.callPromise())
-    .then(() => console.log('[Messages] worker: Finished sending scheduled messages'))
     .then(() => {
       cleanOldJobs(job)
       job.done()
