@@ -1,4 +1,5 @@
 import moment from 'moment'
+import Bottleneck from 'bottleneck'
 import { Messages } from 'api/messages'
 import { Appointments } from 'api/appointments'
 import { InboundCalls } from 'api/inboundCalls'
@@ -7,7 +8,9 @@ import { findParentMessage } from 'api/messages/methods/findParentMessage'
 import { isIntentToCancel } from 'api/messages/methods/isIntentToCancel'
 import { buildMessageText } from 'api/messages/methods/buildMessageText'
 
-export const send = (messageId) => {
+const limiter = new Bottleneck(1, 10 * 1000)
+
+const sendUnthrottled = (messageId) => {
   const message = Messages.findOne({ _id: messageId })
   if (message) {
     console.log('[Messages] channels/sms: Sending message', message)
@@ -34,6 +37,10 @@ export const send = (messageId) => {
   } else {
     throw new Error('[Messages] channels/sms: Could not find message to send', messageId)
   }
+}
+
+export const send = (messageId) => {
+  return limiter.schedule(sendUnthrottled, messageId)
 }
 
 export const receive = (payload) => {

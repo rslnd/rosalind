@@ -6,7 +6,7 @@ import { normalizePhoneNumber } from 'api/messages/methods/normalizePhoneNumber'
 
 export const name = 'websms'
 
-const limiter = new Bottleneck(1, 5000)
+const limiter = new Bottleneck(1, 10 * 1000)
 
 let isTest = false
 
