@@ -106,7 +106,14 @@ const composer = (props, onData) => {
           const notes = appointment.notes()
           const lockedBy = Users.findOne({ _id: appointment.lockedBy })
           const lockedByFirstName = lockedBy && lockedBy.firstName()
-          return { ...appointment, patient, notes, lockedByFirstName }
+          return {
+            ...appointment,
+            patient,
+            notes,
+            lockedByFirstName,
+            timeStart: moment(appointment.start).format('[T]HHmm'),
+            timeEnd: moment(appointment.end).format('[T]HHmm')
+          }
         })
 
         return {
@@ -117,12 +124,12 @@ const composer = (props, onData) => {
       })
     )(assigneeIds)
 
-    const onPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
-    const onPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
+    const onNewAppointmentPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
+    const onNewAppointmentPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
     const handleSetAdmitted = (args) => Appointments.actions.setAdmitted.call(args)
     const handleMove = (args) => Appointments.actions.move.call(args)
 
-    onData(null, { assignees, date, onPopoverOpen, onPopoverClose, handleSetAdmitted, handleMove, subsReady })
+    onData(null, { assignees, date, onNewAppointmentPopoverOpen, onNewAppointmentPopoverClose, handleSetAdmitted, handleMove, subsReady })
   } else {
     onData(null, null)
   }
