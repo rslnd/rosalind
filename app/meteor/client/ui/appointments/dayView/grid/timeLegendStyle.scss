@@ -1,0 +1,12 @@
+:local(.timeLegend) {
+  color: $gray-disabled;
+}
+
+:local(.timeLegend.fullHour) {
+  color: darken($dark-gray-active, 15%) !important;
+  font-weight: bold;
+}
+
+:local(.timeLegend.quarterHour) {
+  color: $dark-gray-disabled;
+}

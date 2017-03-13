@@ -7,7 +7,7 @@ import { weekOfYear } from 'util/time/format'
 import { DateNavigation } from 'client/ui/components/DateNavigation'
 import { AppointmentsView } from './AppointmentsView'
 import { AppointmentsSearchContainer } from 'client/ui/appointments/search/AppointmentsSearchContainer'
-import style from './style'
+import style from './appointmentsScreenStyle'
 
 monkey(moment)
 
@@ -21,7 +21,7 @@ export class AppointmentsScreen extends React.Component {
   scrollToCurrentTime () {
     const now = moment()
     if (now.isSame(this.props.date, 'day')) {
-      const elemId = now.floor(5, 'minutes').format('[time-]HHmm')
+      const elemId = now.floor(5, 'minutes').format('H:mm')
       const offset = document.getElementById(elemId).offsetTop
       window.scrollTo({ top: offset })
       console.log('scrolledto', document.getElementById(elemId), offset)

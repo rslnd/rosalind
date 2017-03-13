@@ -6,6 +6,7 @@ import { Icon } from 'client/ui/components/Icon'
 import { getColor } from 'client/ui/tags/getColor'
 import { Indicator } from 'client/ui/appointments/appointment/Indicator'
 import style from './appointmentStyle'
+import { format } from '../grid/timeSlots'
 
 export class Appointment extends React.Component {
   stripNumbers (text) {
@@ -29,16 +30,16 @@ export class Appointment extends React.Component {
 
     let timeStart, timeEnd, assigneeId
 
-    if (!this.props.isMoving) {
-      timeStart = start.format('[time-]HHmm')
-      timeEnd = moment(appointment.end).format('[time-]HHmm')
-      assigneeId = appointment.assigneeId
-    } else {
+    if (this.props.isMoving) {
       const duration = (appointment.end - appointment.start)
       const newStartTime = moment(this.props.moveToTime)
-      timeStart = newStartTime.format('[time-]HHmm')
-      timeEnd = newStartTime.add(duration, 'milliseconds').format('[time-]HHmm')
+      timeStart = newStartTime.format('[T]HHmm')
+      timeEnd = newStartTime.add(duration, 'milliseconds').format('[T]HHmm')
       assigneeId = this.props.moveToAssigneeId
+    } else {
+      timeStart = appointment.timeStart || start.format('[T]HHmm')
+      timeEnd = appointment.timeEnd || moment(appointment.end).format('[T]HHmm')
+      assigneeId = appointment.assigneeId
     }
 
     return (
@@ -48,7 +49,7 @@ export class Appointment extends React.Component {
         className={classes}
         onClick={(e) => this.props.onClick(e, appointment)}
         onContextMenu={(e) => this.props.onClick(e, appointment)}
-        title={start.format('H:mm')}
+        title={format(timeStart)}
         style={{
           gridRowStart: timeStart,
           gridRowEnd: timeEnd,

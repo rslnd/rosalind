@@ -1,36 +1,14 @@
-import memoize from 'lodash/memoize'
-import _moment from 'moment'
-import { extendMoment } from 'moment-range'
-import { monkey } from 'spotoninc-moment-round'
+import moment from 'moment-timezone'
 import React from 'react'
-import classnames from 'classnames'
-import { Modal } from 'react-bootstrap'
-import { Popover, PopoverAnimationVertical } from 'material-ui/Popover'
-import FlatButton from 'material-ui/FlatButton'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Icon } from 'client/ui/components/Icon'
-import { Appointment } from './appointment/Appointment'
-import { AppointmentInfoModal } from 'client/ui/appointments/info/AppointmentInfoModal'
-import { NewAppointmentContainer } from 'client/ui/appointments/new/NewAppointmentContainer'
-import { HeaderRowContainer } from 'client/ui/appointments/dayView/header/HeaderRowContainer'
-import style from './style'
 import { Schedules } from 'api/schedules'
-
-const moment = extendMoment(_moment)
-monkey(moment)
-
-const viewRange = (date) => {
-  return {
-    start: moment(date).hour(7).minute(30).startOf('minute'),
-    end: moment(date).hour(20).endOf('hour')
-  }
-}
-
-const calculateTimeRange = memoize((date) => {
-  const range = viewRange(date)
-  return Array.from(moment.range(range.start, range.end).by('minutes')).map((t) => moment(t))
-})
+import { AppointmentInfoModal } from 'client/ui/appointments/info/AppointmentInfoModal'
+import { HeaderRowContainer } from './header/HeaderRowContainer'
+import { AppointmentsGrid } from './grid/AppointmentsGrid'
+import { ScheduleModal } from './schedules/ScheduleModal'
+import { NewAppointmentPopover } from './new/NewAppointmentPopover'
+import { setTime } from './grid/timeSlots'
 
 export class AppointmentsView extends React.Component {
   constructor (props) {
@@ -52,14 +30,14 @@ export class AppointmentsView extends React.Component {
     this.handleAppointmentClick = this.handleAppointmentClick.bind(this)
     this.handleAppointmentModalOpen = this.handleAppointmentModalOpen.bind(this)
     this.handleAppointmentModalClose = this.handleAppointmentModalClose.bind(this)
-    this.handlePopoverOpen = this.handlePopoverOpen.bind(this)
-    this.handlePopoverClose = this.handlePopoverClose.bind(this)
+    this.handleNewAppointmentPopoverOpen = this.handleNewAppointmentPopoverOpen.bind(this)
+    this.handleNewAppointmentPopoverClose = this.handleNewAppointmentPopoverClose.bind(this)
     this.handleToggleOverrideMode = this.handleToggleOverrideMode.bind(this)
     this.handleOverrideStart = this.handleOverrideStart.bind(this)
     this.handleOverrideEnd = this.handleOverrideEnd.bind(this)
     this.handleOverrideStartOrEnd = this.handleOverrideStartOrEnd.bind(this)
-    this.handleNewAppointmentClick = this.handleNewAppointmentClick.bind(this)
-    this.handleNewAppointmentHover = this.handleNewAppointmentHover.bind(this)
+    this.handleBlankClick = this.handleBlankClick.bind(this)
+    this.handleBlankHover = this.handleBlankHover.bind(this)
     this.handleOverrideHover = this.handleOverrideHover.bind(this)
     this.handleScheduleModalOpen = this.handleScheduleModalOpen.bind(this)
     this.handleScheduleModalClose = this.handleScheduleModalClose.bind(this)
@@ -68,36 +46,6 @@ export class AppointmentsView extends React.Component {
     this.handleMoveStart = this.handleMoveStart.bind(this)
     this.handleMoveHover = this.handleMoveHover.bind(this)
     this.handleMoveEnd = this.handleMoveEnd.bind(this)
-    this.timeRange = this.timeRange.bind(this)
-    this.grid = this.grid.bind(this)
-  }
-
-  timeRange () {
-    return calculateTimeRange(this.props.date)
-  }
-
-  // row name    | column names
-  // ---------------------------------------------------------------
-  // [header]    | [time] [assignee-1] [assignee-2] ... [assignee-n]
-  // [time-0800] | [time] [assignee-1] [assignee-2] ... [assignee-n]
-  // [time-0805] | [time] [assignee-1] [assignee-2] ... [assignee-n]
-  // [time-0810] | [time] [assignee-1] [assignee-2] ... [assignee-n]
-  // ...         | ...
-  // [time-2100] | [time] [assignee-1] [assignee-2] ... [assignee-n]
-  grid () {
-    return {
-      gridTemplateColumns: `
-        [time] 60px
-        ${this.props.assignees.map((assignee, index) =>
-          `[assignee-${assignee.assigneeId}] 1fr`).join(' ')
-        }`,
-      gridTemplateRows: `
-        [header] 40px
-        [subheader] 40px
-        ${this.timeRange().map((time) =>
-          `[time-${time.format('HHmm')}] 5px`).join(' ')
-        }`
-    }
   }
 
   handleAppointmentClick (event, appointment) {
@@ -121,15 +69,15 @@ export class AppointmentsView extends React.Component {
     this.setState({ ...this.state, appointmentModalOpen: false })
   }
 
-  handleNewAppointmentClick (options) {
+  handleBlankClick (options) {
     if (this.state.overrideMode) {
       this.handleOverrideStartOrEnd(options)
     } else {
-      this.handlePopoverOpen(options)
+      this.handleNewAppointmentPopoverOpen(options)
     }
   }
 
-  handleNewAppointmentHover (options) {
+  handleBlankHover (options) {
     if (this.state.overrideMode) {
       this.handleOverrideHover(options)
     } else if (this.state.move) {
@@ -137,9 +85,9 @@ export class AppointmentsView extends React.Component {
     }
   }
 
-  handlePopoverClose () {
-    if (this.props.onPopoverClose) {
-      this.props.onPopoverClose({
+  handleNewAppointmentPopoverClose () {
+    if (this.props.onNewAppointmentPopoverClose) {
+      this.props.onNewAppointmentPopoverClose({
         time: this.state.selectedTime,
         assigneeId: this.state.selectedAssigneeId
       })
@@ -148,7 +96,7 @@ export class AppointmentsView extends React.Component {
     this.setState({ ...this.state, popoverOpen: false })
   }
 
-  handlePopoverOpen ({ event, time, assigneeId }) {
+  handleNewAppointmentPopoverOpen ({ event, time, assigneeId }) {
     event.preventDefault()
 
     if (this.props.onPopoverOpen) {
@@ -161,6 +109,10 @@ export class AppointmentsView extends React.Component {
       selectedTime: time,
       selectedAssigneeId: assigneeId
     })
+  }
+
+  selectedDateTime () {
+    return setTime(this.state.selectedTime)(moment(this.props.date))
   }
 
   handleToggleOverrideMode ({ assigneeId }) {
@@ -290,129 +242,12 @@ export class AppointmentsView extends React.Component {
           onToggleOverrideMode={this.handleToggleOverrideMode}
           overrideMode={this.state.overrideMode} />
 
-        <div className={style.grid} style={this.grid()}>
-          {/* Appointments */}
-          {this.props.assignees.map((assignee) => (
-            assignee.appointments.map((appointment) => (
-              <Appointment
-                key={appointment._id}
-                appointment={appointment}
-                isMoving={this.state.moveAppointmentId === appointment._id}
-                moveToAssigneeId={this.state.moveToAssigneeId}
-                moveToTime={this.state.moveToTime}
-                onClick={this.handleAppointmentClick} />
-            ))
-          ))}
-
-          {/* New Appointment Triggers */}
-          {this.props.assignees.map((assignee) => (
-            this.timeRange()
-              .filter((t) => t.minute() % 5 === 0)
-              .map((time) => {
-                const timeKey = time.format('[time-]HHmm')
-                const assigneeId = assignee.assigneeId
-                return (
-                  <span
-                    key={`new-${assigneeId}-${timeKey}`}
-                    className={style.newAppointmentTrigger}
-                    onClick={(event) => this.handleNewAppointmentClick({ event, assigneeId, time: time.toDate() })}
-                    onMouseEnter={(event) => this.handleNewAppointmentHover({ event, assigneeId, time: time.toDate() })}
-                    title={time.format('H:mm')}
-                    style={{
-                      gridRow: timeKey,
-                      gridColumn: `assignee-${assigneeId}`
-                    }}>
-                    &nbsp;
-                  </span>
-                )
-              })
-          ))}
-
-          {/* New Override Mode */}
-          {
-            this.state.overrideStart && (() => {
-              const start = moment(this.state.overrideStart)
-              const end = moment(this.state.overrideEnd).add(1, 'second')
-
-              return (
-                <div
-                  key="override-start"
-                  className={style.overrideOverlay}
-                  style={{
-                    gridRowStart: start.format('[time-]HHmm'),
-                    gridRowEnd: end.format('[time-]HHmm'),
-                    gridColumn: `assignee-${this.state.overrideAssigneeId}`
-                  }}>
-                  <div>{start.format('H:mm')}</div>
-                  <div>{end.format('H:mm')}</div>
-                </div>
-              )
-            })()
-          }
-
-          {/* Schedules */}
-          {
-            this.props.assignees.map((assignee) => (
-              assignee.schedules && assignee.schedules.map((schedule) => {
-                if (!schedule.start && !schedule.end) {
-                  return null
-                }
-                const timeStart = moment(schedule.start).floor(5, 'minutes')
-                const timeEnd = moment(schedule.end).ceil(5, 'minutes')
-
-                return (
-                  <div
-                    key={`schedule-${schedule._id}`}
-                    data-scheduleId={schedule._id}
-                    className={style.scheduledUnavailable}
-                    onDoubleClick={() => this.handleScheduleModalOpen({ scheduleId: schedule._id })}
-                    style={{
-                      gridRowStart: timeStart.format('[time-]HHmm'),
-                      gridRowEnd: timeEnd.format('[time-]HHmm'),
-                      gridColumn: `assignee-${schedule.userId}`
-                    }}>
-
-                    <div className={style.schedulesText}>
-                      {!timeStart.isSame(moment(viewRange(timeStart).start).floor(5, 'minutes'), 'minute') && timeStart.format('H:mm')}
-                    </div>
-                    <div className={style.schedulesText}>
-                      {!timeEnd.isSame(moment(viewRange(timeEnd).end).ceil(5, 'minutes'), 'minute') && timeEnd.format('H:mm')}
-                    </div>
-                  </div>
-                )
-              })
-            ))
-          }
-
-          {/* Time Legend */}
-          {
-            this.timeRange()
-              .filter((t) => t.minute() % 5 === 0)
-              .map((time) => {
-                const fullHour = time.minute() === 0
-                const quarterHour = time.minute() % 15 === 0
-                const timeKey = time.format('[time-]HHmm')
-                const classes = classnames({
-                  [ style.fullHour ]: fullHour,
-                  [ style.quarterHour ]: quarterHour,
-                  [ style.timeLegend ]: true
-                })
-
-                return (
-                  <span
-                    key={timeKey}
-                    id={timeKey}
-                    className={classes}
-                    style={{
-                      gridRow: timeKey,
-                      gridColumn: 'time'
-                    }}>
-                    {time.format('H:mm')}
-                  </span>
-                )
-              })
-          }
-        </div>
+        <AppointmentsGrid
+          date={this.props.date}
+          assignees={this.props.assignees}
+          onAppointmentClick={this.handleAppointmentClick}
+          onBlankClick={this.handleBlankClick}
+          onBlankMouseEnter={this.handleBlankHover} />
 
         <AppointmentInfoModal
           appointmentId={this.state.selectedAppointmentId}
@@ -420,52 +255,17 @@ export class AppointmentsView extends React.Component {
           show={this.state.appointmentModalOpen}
           onClose={this.handleAppointmentModalClose} />
 
-        <Modal
-          enforceFocus={false}
+        <ScheduleModal
           show={this.state.scheduleModalOpen}
-          onHide={this.handleScheduleModalClose}
-          bsSize="large">
-          <Modal.Body>
-            <FlatButton
-              onClick={this.handleScheduleSoftRemove}
-              label={<span>
-                <Icon name="trash-o" />&emsp;
-                {TAPi18n.__('schedules.softRemove')}
-              </span>} />
-          </Modal.Body>
-          <Modal.Footer>
-            <div className="pull-right">
-              <FlatButton
-                onClick={this.handleScheduleModalClose}
-                label={TAPi18n.__('ui.close')} />
-            </div>
-          </Modal.Footer>
-        </Modal>
+          onClose={this.handleScheduleModalClose}
+          onClickScheduleSoftRemove={this.handleScheduleSoftRemove} />
 
-        <Popover
+        <NewAppointmentPopover
           open={this.state.popoverOpen}
           anchorEl={this.state.popoverAnchor}
-          animated
-          animation={PopoverAnimationVertical}
-          anchorOrigin={{
-            horizontal: this.state.selectedAssigneeId ? 'middle' : 'right',
-            vertical: 'top'
-          }}
-          targetOrigin={{
-            horizontal: this.state.selectedAssigneeId ? 'middle' : 'right',
-            vertical: 'bottom'
-          }}
-          style={{ overflowY: 'visible' }}
-          autoCloseWhenOffScreen={false}
-          onRequestClose={this.handlePopoverClose}
-          >
-          <div className={style.popover}>
-            <NewAppointmentContainer
-              assigneeId={this.state.selectedAssigneeId}
-              time={this.state.selectedTime}
-              onClose={this.handlePopoverClose} />
-          </div>
-        </Popover>
+          assigneeId={this.state.selectedAssigneeId}
+          time={this.state.selectedTime}
+          onClose={this.handleNewAppointmentPopoverClose} />
       </div>
     )
   }
