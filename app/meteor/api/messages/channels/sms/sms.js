@@ -3,6 +3,7 @@ import Bottleneck from 'bottleneck'
 import { Messages } from 'api/messages'
 import { Appointments } from 'api/appointments'
 import { InboundCalls } from 'api/inboundCalls'
+import { Settings } from 'api/settings'
 import provider from './providers'
 import { findParentMessage } from 'api/messages/methods/findParentMessage'
 import { isIntentToCancel } from 'api/messages/methods/isIntentToCancel'
@@ -91,13 +92,13 @@ export const receive = (payload) => {
         }
       })
 
-      if (process.env.SMS_REMINDER_CANCELATION_CONFIRMATION_TEXT) {
+      if (Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')) {
         const confirmationId = Messages.insert({
           type: 'intentToCancelConfirmation',
           channel: 'SMS',
           direction: 'outbound',
           text: buildMessageText({
-            text: process.env.SMS_REMINDER_CANCELATION_CONFIRMATION_TEXT
+            text: Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')
           }, {
             date: appointment.start
           }),

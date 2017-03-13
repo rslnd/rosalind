@@ -2,6 +2,7 @@ import memoize from 'lodash/memoize'
 import some from 'lodash/some'
 import websms from 'shebang!websmscom'
 import Bottleneck from 'bottleneck'
+import { Settings } from 'api/settings'
 import { normalizePhoneNumber } from 'api/messages/methods/normalizePhoneNumber'
 
 export const name = 'websms'
@@ -18,8 +19,8 @@ const getClient = memoize(() => {
 
   return new websms.Client(
     'https://api.websms.com',
-    process.env.WEBSMS_USER,
-    process.env.WEBSMS_PASSWORD)
+    Settings.get('messages.sms.websms.username'),
+    Settings.get('messages.sms.websms.password'))
 })
 
 export const sendUnthrottled = (message) => {
@@ -30,9 +31,9 @@ export const sendUnthrottled = (message) => {
 
   const maxSmsPerMessage = 1
 
-  if (process.env.SMS_ENABLE_WHITELIST) {
+  if (Settings.get('messages.sms.whitelist.enabled')) {
     isTest = true
-    if (process.env.SMS_WHITELIST && some(process.env.SMS_WHITELIST.split(','), n => to.indexOf(n) !== -1)) {
+    if (Settings.get('messages.sms.whitelist.numbers') && some(Settings.get('messages.sms.whitelist.numbers').split(','), n => to.indexOf(n) !== -1)) {
       isTest = false
       console.log('[Messages] channels/sms/websms: Not running in production environment, enabling test mode')
     }

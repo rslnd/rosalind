@@ -10,6 +10,7 @@ import { Appointments } from 'api/appointments'
 import { Patients } from 'api/patients'
 import { Users } from 'api/users'
 import { Schedules } from 'api/schedules'
+import { Settings } from 'api/settings'
 import { isMobileNumber } from '../methods/isMobileNumber'
 import { buildMessageText } from '../methods/buildMessageText'
 import { reminderDateCalculator } from '../methods/reminderDateCalculator'
@@ -101,8 +102,8 @@ export const createReminders = ({ Messages }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!process.env.SMS_REMINDER_TEXT) {
-        console.error('[Messages] createReminders: Skipping because SMS_REMINDER_TEXT not set')
+      if (!Settings.get('messages.sms.appointmentReminder.text')) {
+        console.error('[Messages] createReminders: Skipping because messages.sms.appointmentReminder.text not set')
         return
       }
 
@@ -156,7 +157,7 @@ export const createReminders = ({ Messages }) => {
           to: payload.contacts[0].value,
           scheduled: calculateReminderDate(payload.start).toDate(),
           text: buildMessageText({
-            text: process.env.SMS_REMINDER_TEXT
+            text: Settings.get('messages.sms.appointmentReminder.text')
           }, {
             date: payload.start
           }),

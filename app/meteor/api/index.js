@@ -15,6 +15,7 @@ import { Jobs } from './jobs'
 import { Messages } from './messages'
 import { Reports } from './reports'
 import { Search } from './search'
+import { Settings } from './settings'
 import { Cache } from './cache'
 
 export {
@@ -34,6 +35,7 @@ export {
   Schedules,
   Search,
   System,
+  Settings,
   Tags,
   Timesheets
 }
