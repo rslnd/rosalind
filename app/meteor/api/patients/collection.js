@@ -1,7 +1,6 @@
 import { Mongo } from 'meteor/mongo'
 import helpersProfile from 'util/helpersProfile'
 import helpers from './helpers'
-import hooks from './hooks'
 import actions from './actions'
 import Schema from './schema'
 
@@ -12,6 +11,5 @@ Patients.helpers({ collection: () => Patients })
 Patients.actions = actions({ Patients })
 Patients.helpers(helpers)
 Patients.helpers(helpersProfile)
-hooks(Patients)
 
 export default Patients

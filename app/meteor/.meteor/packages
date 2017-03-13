@@ -49,7 +49,6 @@ mdg:validated-method
 clinical:env
 
 # Collections
-matb33:collection-hooks
 aldeed:simple-schema
 aldeed:collection2
 aldeed:autoform
