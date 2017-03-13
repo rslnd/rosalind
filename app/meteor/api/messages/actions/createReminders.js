@@ -102,6 +102,8 @@ export const createReminders = ({ Messages }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      if (!Settings.get('messages.sms.enabled')) { return }
+
       if (!Settings.get('messages.sms.appointmentReminder.text')) {
         console.error('[Messages] createReminders: Skipping because messages.sms.appointmentReminder.text not set')
         return

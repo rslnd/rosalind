@@ -1,9 +1,11 @@
 import { Mongo } from 'meteor/mongo'
 import methods from './methods'
+import actions from './actions'
 
 let Settings = new Mongo.Collection('settings')
 Settings.helpers({ collection: () => Settings })
 Settings.methods = methods({ Settings })
+Settings.actions = actions({ Settings })
 
 // Shortcut methods
 Settings.get = Settings.methods.get

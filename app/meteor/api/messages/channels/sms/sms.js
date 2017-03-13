@@ -12,6 +12,8 @@ import { buildMessageText } from 'api/messages/methods/buildMessageText'
 const limiter = new Bottleneck(1, 10 * 1000)
 
 const sendUnthrottled = (messageId) => {
+  if (!Settings.get('messages.sms.enabled')) { return }
+
   const message = Messages.findOne({ _id: messageId })
   if (message) {
     console.log('[Messages] channels/sms: Sending message', message)

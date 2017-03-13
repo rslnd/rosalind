@@ -1,6 +1,7 @@
 {
   "system": {
     "this": "System",
+    "thisSettings": "Einstellungen",
     "thisImporters": "Importers",
     "thisJobs": "Background Jobs",
     "thisStats": "Stats",

@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Patients } from 'api/patients'
+import { Settings } from 'api/settings'
 import { isQuietTimeRespected } from 'api/messages/methods/isQuietTimeRespected'
 
 let SMS
@@ -21,6 +22,8 @@ export const sendScheduled = ({ Messages }) => {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
+
+      if (!Settings.get('messages.sms.enabled')) { return }
 
       if (!Meteor.isServer) { return }
 

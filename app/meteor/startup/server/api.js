@@ -1,3 +1,4 @@
+import settings from 'api/settings/server'
 import users from 'api/users/server'
 import groups from 'api/groups/server'
 import patients from 'api/patients/server'
@@ -18,6 +19,7 @@ import tags from 'api/tags/server'
 import timesheets from 'api/timesheets/server'
 
 export default function () {
+  settings()
   users()
   groups()
   patients()
