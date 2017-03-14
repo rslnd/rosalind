@@ -19,7 +19,8 @@ export const setCanceled = ({ Appointments }) => {
       }
 
       if (Appointments.findOne({ _id: appointmentId }).canceled) {
-        console.warn('[Appointments] setCanceled: Appointment is already set to canceled', { appointmentId })
+        console.log('[Appointments] setCanceled: Appointment is already set to canceled', { appointmentId })
+        Messages.actions.removeReminder.call({ appointmentId })
         return
       }
 

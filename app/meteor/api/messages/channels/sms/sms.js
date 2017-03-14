@@ -8,12 +8,13 @@ import provider from './providers'
 import { findParentMessage } from 'api/messages/methods/findParentMessage'
 import { isIntentToCancel } from 'api/messages/methods/isIntentToCancel'
 import { buildMessageText } from 'api/messages/methods/buildMessageText'
+import { okToSend } from 'api/messages/methods/okToSend'
 
 const sendUnthrottled = (messageId) => {
   if (!Settings.get('messages.sms.enabled')) { return }
 
   const message = Messages.findOne({ _id: messageId })
-  if (message) {
+  if (message && okToSend(message)) {
     console.log('[Messages] channels/sms: Sending message', message)
     return provider.send(message).then((res) => {
       console.log('[Messages] channels/sms: Successfully sent SMS', message._id, res)
@@ -37,7 +38,7 @@ const sendUnthrottled = (messageId) => {
         } })
     })
   } else {
-    throw new Error('[Messages] channels/sms: Could not find message to send', messageId)
+    throw new Error('[Messages] channels/sms: Could not find message to send or failed sanity checks', messageId, { okToSend: okToSend(message) })
   }
 }
 
@@ -110,8 +111,7 @@ export const receive = (payload) => {
             date: appointment.start
           }),
           to: message.from,
-          status: 'scheduled',
-          scheduled: new Date(),
+          status: 'final',
           invalidBefore: new Date(),
           invalidAfter: moment().add(15, 'minutes').toDate(),
           parentMessageId: messageId,
@@ -120,7 +120,9 @@ export const receive = (payload) => {
             patientId
           }
         })
-        console.log('[Messages] channels/sms: Scheduled cancelation confirmation', confirmationId, 'for received message', messageId)
+
+        console.log('[Messages] channels/sms: Sending cancelation confirmation', confirmationId, 'for received message', messageId)
+        send(confirmationId)
       }
 
       return { message, response }

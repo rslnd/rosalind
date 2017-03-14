@@ -13,7 +13,7 @@ export const send = (message) => {
 }
 
 export const receive = (payload) => {
-  payload = {
+  payload = payload || {
     messageType: 'text',
     notificationId: 'c27f015a2eade38ca85f',
     senderAddress: '436601111111',
