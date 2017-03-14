@@ -29,6 +29,10 @@ describe('api', () => {
         it('misspelling and additional text', () => {
           expect(isIntentToCancel('Neiun, lg christina')).to.equal(true)
         })
+
+        it('only additional text', () => {
+          expect(isIntentToCancel('was glauben sie denn?')).to.equal(false)
+        })
       })
 
       context('rejects', () => {
