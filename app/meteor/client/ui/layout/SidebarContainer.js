@@ -64,6 +64,7 @@ const sidebarItems = () => {
       roles: ['admin', 'system'],
       subItems: [
         { name: 'thisEvents', path: '/events' },
+        { name: 'thisMessages', path: '/messages' },
         { name: 'thisSettings', path: '/settings' },
         { name: 'thisImporters', path: '/importers' },
         { name: 'thisTags', path: '/tags' },
