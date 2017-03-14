@@ -16,6 +16,24 @@ module.exports = ->
 
     return undefined
 
+  Meteor.publishComposite 'appointment', (_id) ->
+    check _id, Match.Optional(String)
+    return unless (@userId and Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
+
+    @unblock()
+
+    {
+      find: ->
+        @unblock()
+        Appointments.find({ _id }, { limit: 1 })
+
+      children: [
+        { find: (doc) -> @unblock(); Comments.find(docId: doc._id) }
+        { find: (doc) -> @unblock(); Patients.find({ _id: doc.patientId }, { limit: 1 }) if doc.patientId }
+      ]
+    }
+
+
 
   Meteor.publishComposite 'appointments', (options = {}) ->
     check options, Match.Optional

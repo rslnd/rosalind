@@ -2,6 +2,7 @@ import moment from 'moment'
 import { rateLimit } from 'meteor/dandv:rate-limit'
 import { Messages } from 'api/messages'
 import { Appointments } from 'api/appointments'
+import { Patients } from 'api/patients'
 import { InboundCalls } from 'api/inboundCalls'
 import { Settings } from 'api/settings'
 import provider from './providers'
@@ -56,6 +57,13 @@ export const receive = (payload) => {
   const { message, response } = provider.receive(payload)
   const messageId = Messages.insert(message)
 
+  let parentMessage
+  let appointmentId
+  let appointment
+  let patientId
+  let patient
+  let cancelAppointment
+
   console.log('[Messages] channels/sms: Received message', messageId, message)
 
   // Try to match received reply with a message sent by the system
@@ -72,13 +80,14 @@ export const receive = (payload) => {
     }
   ).fetch()
 
-  const parentMessage = findParentMessage({ messages: sentMessages, message })
+  parentMessage = findParentMessage({ messages: sentMessages, message })
   if (parentMessage) {
     console.log('[Messages] channels/sms: Matched message', messageId, 'as reply to', parentMessage._id)
 
-    const appointmentId = parentMessage.payload.appointmentId
-    const appointment = Appointments.findOne({ _id: appointmentId })
-    const patientId = parentMessage.payload.patientId
+    appointmentId = parentMessage.payload.appointmentId
+    appointment = Appointments.findOne({ _id: appointmentId })
+    patientId = parentMessage.payload.patientId
+    patient = Patients.findOne({ _id: patientId })
 
     Messages.update({ _id: messageId }, {
       $set: {
@@ -88,7 +97,7 @@ export const receive = (payload) => {
       }
     })
 
-    const cancelAppointment = isIntentToCancel(message.text)
+    cancelAppointment = isIntentToCancel(message.text)
     if (appointment && cancelAppointment) {
       console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
       Appointments.actions.setCanceled.call({ appointmentId })
@@ -134,11 +143,15 @@ export const receive = (payload) => {
   // If we couldn't match this incoming message to a message we sent,
   // or if it is not an intent to cancel, create an inbound call
   const inboundCallId = InboundCalls.methods.post.call({
-    lastName: 'SMS',
+    lastName: patient && patient.profile && patient.profile.lastName || 'SMS',
+    firstName: patient && patient.profile && patient.profile.firstName || undefined,
     telephone: message.from,
     note: message.text,
     payload: {
-      messageId
+      channel: 'SMS',
+      messageId,
+      appointmentId,
+      patientId
     }
   })
   console.log('[Messages] channels/sms: Created inbound call', inboundCallId, 'of received message', messageId)

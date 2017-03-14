@@ -33,8 +33,11 @@ const composer = (props, onData) => {
     closeModal()
   }
 
-  const startMove = () => {
-    props.onStartMove(args)
+  let startMove
+  if (props.onStartMove) {
+    startMove = () => {
+      props.onStartMove(args)
+    }
   }
 
   onData(null, {

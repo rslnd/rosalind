@@ -18,6 +18,10 @@
     "unresolve": "Markierung als erledigt entfernen",
     "removedBy": "Erledigt von",
     "createdBy": "Angenommen von",
+    "isSmsFromPatient": "SMS von PatientIn",
+    "isSmsFromPatientAsReplyToAppointmentReminder": "SMS von PatientIn als Antwort auf die Terminerinnerung für den",
+    "isSmsFromPatientAsReplyToAppointmentReminderLinkText": "Termin am __date__ um __time__",
+    "isSmsFromPatientAsReplyToAppointmentReminderLinkTextWithAssigneeName": "Termin am __date__ um __time__ bei __assigneeName__",
     "form": {
       "firstName": {
         "label": "Vorname"

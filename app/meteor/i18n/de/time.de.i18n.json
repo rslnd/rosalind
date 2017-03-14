@@ -20,6 +20,7 @@
     "dateFormatShort": "D. MMM YYYY",
     "dateFormat": "D. MMMM YYYY",
     "dateFormatWeekday": "dddd, D. MMMM YYYY",
+    "dateFormatWeekdayShort": "dd., D. MMMM YYYY",
     "calendar": "Kalender",
     "oneDayForward": "Einen Tag vorwärts",
     "oneDayBackward": "Einen Tag zurück",

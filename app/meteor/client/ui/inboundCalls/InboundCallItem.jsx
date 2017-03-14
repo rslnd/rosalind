@@ -3,6 +3,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from 'util/zerofix'
 import { Stamps } from 'client/ui/helpers/Stamps'
 import { CommentsContainer, HumanCommentCount } from 'client/ui/comments'
+import { LinkToAppointmentContainer } from './LinkToAppointmentContainer'
 
 export class InboundCallItem extends React.Component {
   render () {
@@ -19,6 +20,8 @@ export class InboundCallItem extends React.Component {
           <blockquote>
             <p className="enable-select pre-wrap">{this.props.inboundCall.note}</p>
           </blockquote>
+
+          <LinkToAppointmentContainer inboundCall={this.props.inboundCall} />
           <HumanCommentCount docId={this.props.inboundCall._id} />
           <Stamps fields={['removed', 'created']} doc={this.props.inboundCall} />
         </div>

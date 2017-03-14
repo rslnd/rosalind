@@ -29,10 +29,13 @@ export const AppointmentActions = (props) => (
           onClick={props.setCanceled} />
       }
 
-      <FlatButton
-        style={{ marginLeft: 20 }}
-        label={<span><Icon name="arrows" />&emsp;{TAPi18n.__('appointments.move')}</span>}
-        onClick={props.startMove} />
+      {
+        props.startMove &&
+          <FlatButton
+            style={{ marginLeft: 20 }}
+            label={<span><Icon name="arrows" />&emsp;{TAPi18n.__('appointments.move')}</span>}
+            onClick={props.startMove} />
+      }
 
       <FlatButton
         style={{ marginLeft: 20 }}
