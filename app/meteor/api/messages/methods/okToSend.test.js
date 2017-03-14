@@ -1,17 +1,21 @@
 /* eslint-env mocha */
 import moment from 'moment'
 import { expect } from 'chai'
-import { okToSend, notSent, notExpired } from './okToSend'
+import { okToSend, statusOk, notExpired } from './okToSend'
 
 describe('api', () => {
   describe('messages', () => {
     describe('okToSend', () => {
       it('true if not already sent', () => {
-        expect(notSent({ status: 'final' })).to.equal(true)
+        expect(statusOk({ status: 'final' })).to.equal(true)
       })
 
       it('false if already sent', () => {
-        expect(notSent({ status: 'sent' })).to.equal(false)
+        expect(statusOk({ status: 'sent' })).to.equal(false)
+      })
+
+      it('false if draft', () => {
+        expect(statusOk({ status: 'draft' })).to.equal(false)
       })
 
       it('false if past valid window', () => {
@@ -31,6 +35,8 @@ describe('api', () => {
 
       it('true if ok to send', () => {
         expect(okToSend({
+          direction: 'outbound',
+          status: 'final',
           to: '1234567',
           text: 'Hello'
         })).to.equal(true)

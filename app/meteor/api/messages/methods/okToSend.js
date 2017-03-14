@@ -7,13 +7,16 @@ export const hasRequiredKeys = (message) => {
 }
 
 export const statusOk = (message) => (
-  message.direction === 'outbound' &&
   (
     message.status === 'scheduled' ||
     message.status === 'final'
   ) &&
   message.status !== 'sent' &&
   message.status !== 'draft'
+)
+
+export const isOutbound = (message) => (
+  message.direction === 'outbound'
 )
 
 export const hasNoRemainingPlaceholders = (message) => (
@@ -36,6 +39,7 @@ export const okToSend = (message) => {
   return (
     hasRequiredKeys(message) &&
     statusOk(message) &&
+    isOutbound(message) &&
     hasNoRemainingPlaceholders(message) &&
     notExpired(message)
   )
