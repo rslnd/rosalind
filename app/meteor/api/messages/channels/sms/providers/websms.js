@@ -6,7 +6,7 @@ import { normalizePhoneNumber } from 'api/messages/methods/normalizePhoneNumber'
 
 export const name = 'websms'
 
-let isTest = true
+let isTest = false
 
 const getClient = memoize(() => {
   if (process.env.NODE_ENV !== 'production') {
