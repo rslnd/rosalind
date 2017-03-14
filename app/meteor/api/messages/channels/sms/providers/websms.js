@@ -1,15 +1,12 @@
 import memoize from 'lodash/memoize'
 import some from 'lodash/some'
 import websms from 'shebang!websmscom'
-import Bottleneck from 'bottleneck'
 import { Settings } from 'api/settings'
 import { normalizePhoneNumber } from 'api/messages/methods/normalizePhoneNumber'
 
 export const name = 'websms'
 
-const limiter = new Bottleneck(1, 10 * 1000)
-
-let isTest = false
+let isTest = true
 
 const getClient = memoize(() => {
   if (process.env.NODE_ENV !== 'production') {
@@ -23,7 +20,7 @@ const getClient = memoize(() => {
     Settings.get('messages.sms.websms.password'))
 })
 
-export const sendUnthrottled = (message) => {
+export const send = (message) => {
   const to = normalizePhoneNumber(message.to)
   const text = message.text
 
@@ -58,10 +55,6 @@ export const sendUnthrottled = (message) => {
       }
     })
   })
-}
-
-export const send = (message) => {
-  return limiter.schedule(sendUnthrottled, message)
 }
 
 export const receive = (payload) => {

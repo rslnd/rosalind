@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import { Messages } from 'api/messages'
 import { worker } from './worker'
 
@@ -15,6 +16,8 @@ export const processJobs = () => {
     console.log('[Messages] Job:', msg.params[2])
   })
 
-  Messages.jobs.startJobServer()
-  Messages.jobs.processJobs('appointmentReminder', options, worker)
+  Meteor.setTimeout(() => {
+    Messages.jobs.startJobServer()
+    Messages.jobs.processJobs('appointmentReminder', options, worker)
+  }, process.env.NODE_ENV === 'production' ? 60 * 1000 : 1000)
 }

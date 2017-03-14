@@ -17,7 +17,8 @@ export const worker = (job, callback) => {
   // We can't check for quiet time here, because doing so would
   // postpone the cancelation confirmation until next morning
   // when a patient wants to cancel her appointment at night
-  Messages.actions.createReminders.callPromise()
+  try {
+    Messages.actions.createReminders.callPromise()
     .then(() => Messages.actions.sendScheduled.callPromise())
     .then(() => {
       cleanOldJobs(job)
@@ -27,4 +28,7 @@ export const worker = (job, callback) => {
       console.error('[Messages] worker: errored with', e)
       job.fail()
     })
+  } catch (e) {
+    console.error('[Messages] worker: hard errored with', e)
+  }
 }

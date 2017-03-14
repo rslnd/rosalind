@@ -1,5 +1,5 @@
 import moment from 'moment'
-import Bottleneck from 'bottleneck'
+import { rateLimit } from 'meteor/dandv:rate-limit'
 import { Messages } from 'api/messages'
 import { Appointments } from 'api/appointments'
 import { InboundCalls } from 'api/inboundCalls'
@@ -8,8 +8,6 @@ import provider from './providers'
 import { findParentMessage } from 'api/messages/methods/findParentMessage'
 import { isIntentToCancel } from 'api/messages/methods/isIntentToCancel'
 import { buildMessageText } from 'api/messages/methods/buildMessageText'
-
-const limiter = new Bottleneck(1, 10 * 1000)
 
 const sendUnthrottled = (messageId) => {
   if (!Settings.get('messages.sms.enabled')) { return }
@@ -26,6 +24,7 @@ const sendUnthrottled = (messageId) => {
           [`payload.${provider.name}`]: res
         }
       })
+      return res
     }).catch((err) => {
       console.log('[Messages] channels/sms: Failed to send SMS', message._id, err)
       Messages.update({ _id: message._id }, {
@@ -42,8 +41,14 @@ const sendUnthrottled = (messageId) => {
   }
 }
 
+const sendThrottled = rateLimit(sendUnthrottled, 2000)
+
 export const send = (messageId) => {
-  return limiter.schedule(sendUnthrottled, messageId)
+  return new Promise((resolve) => {
+    const response = sendThrottled(messageId)
+    Promise.await(response)
+    resolve(response)
+  })
 }
 
 export const receive = (payload) => {
