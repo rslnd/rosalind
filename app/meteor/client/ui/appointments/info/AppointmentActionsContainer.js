@@ -1,3 +1,5 @@
+import moment from 'moment'
+import { withRouter } from 'react-router'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from 'api/appointments'
 import { AppointmentActions } from './AppointmentActions'
@@ -40,6 +42,15 @@ const composer = (props, onData) => {
     }
   }
 
+  let viewInCalendar
+  if (props.viewInCalendar) {
+    viewInCalendar = () => {
+      closeModal()
+      const slug = moment(appointment.start).format('YYYY-MM-DD')
+      props.router.push(`/appointments/${slug}#${props.appointmentId}`)
+    }
+  }
+
   onData(null, {
     canceled,
     admitted,
@@ -48,8 +59,9 @@ const composer = (props, onData) => {
     setCanceled,
     unsetCanceled,
     softRemove,
-    startMove
+    startMove,
+    viewInCalendar
   })
 }
 
-export const AppointmentActionsContainer = composeWithTracker(composer)(AppointmentActions)
+export const AppointmentActionsContainer = withRouter(composeWithTracker(composer)(AppointmentActions))

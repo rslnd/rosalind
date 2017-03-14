@@ -95,6 +95,7 @@ class LinkToAppointmentWrapper extends React.Component {
               show={this.state.modalOpen}
               onClose={this.handleModalClose}
               appointmentId={this.props.appointmentId}
+              viewInCalendar
             />
         }
       </div>

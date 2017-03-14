@@ -37,6 +37,14 @@ export const AppointmentActions = (props) => (
             onClick={props.startMove} />
       }
 
+      {
+        props.viewInCalendar &&
+          <FlatButton
+            style={{ marginLeft: 20 }}
+            label={<span><Icon name="calendar" />&emsp;{TAPi18n.__('appointments.viewInCalendar')}</span>}
+            onClick={props.viewInCalendar} />
+      }
+
       <FlatButton
         style={{ marginLeft: 20 }}
         label={<span><Icon name="trash-o" />&emsp;{TAPi18n.__('appointments.softRemove')}</span>}
