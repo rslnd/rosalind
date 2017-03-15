@@ -33,6 +33,7 @@ describe('api', () => {
         it('only additional text', () => {
           expect(isIntentToCancel('was glauben sie denn?')).to.equal(false)
           expect(isIntentToCancel('Ich habe keinen termin!')).to.equal(false)
+          expect(isIntentToCancel('El')).to.equal(false)
         })
       })
 
