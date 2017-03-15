@@ -5,33 +5,44 @@ import { RelativeTime } from 'client/ui/helpers/RelativeTime'
 
 export class Message extends React.Component {
   render () {
-    const { message } = this.props
+    const { message, onCreateInboundCall } = this.props
     return (
-      <div>
-        {message.text}
-        <span className="text-muted pull-right">
-          <RelativeTime time={message.createdAt} />
-        </span>
-        <hr />
+      <div className="row">
+        <div className="col-md-6">
+          <span className="enable-select">{message.text}</span>
+        </div>
+        <div className="col-md-6 text-right text-muted">
+          <p>
+            +{message.from}<br />
+            <RelativeTime time={message.createdAt} /><br />
+            {
+              onCreateInboundCall &&
+                <a onClick={() => onCreateInboundCall(message)}>Create Inbound Call</a>
+            }
+          </p>
+        </div>
+        <div className="col-md-12">
+          <hr />
+        </div>
       </div>
     )
   }
 }
 
-const List = ({ messages }) => (
+const List = ({ messages, onCreateInboundCall }) => (
   <FlipMove>
     {messages.map((message) => (
-      <Message message={message} key={message._id} />
+      <Message message={message} key={message._id} onCreateInboundCall={onCreateInboundCall} />
     ))}
   </FlipMove>
 )
 
-export const MessagesScreen = ({ inbound, intentToCancel }) => (
+export const MessagesScreen = ({ inbound, intentToCancel, onCreateInboundCall }) => (
   <div className="content">
     <div className="row">
       <div className="col-md-6">
         <Box title="Inbound messages matched as intent to cancel" icon="calendar-times-o">
-          <List messages={intentToCancel} />
+          <List messages={intentToCancel} onCreateInboundCall={onCreateInboundCall} />
         </Box>
       </div>
 
