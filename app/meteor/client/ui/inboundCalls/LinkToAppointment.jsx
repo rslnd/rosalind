@@ -1,4 +1,5 @@
 import React from 'react'
+import { AppointmentInfoModal } from 'client/ui/appointments/info/AppointmentInfoModal'
 
 export const LinkToAppointment = ({ text, linkText, onClick }) => (
   text &&
@@ -17,3 +18,41 @@ export const LinkToAppointment = ({ text, linkText, onClick }) => (
       <br />
     </div> || null
 )
+
+export class LinkToAppointmentWrapper extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { modalOpen: false }
+    this.handleModalOpen = this.handleModalOpen.bind(this)
+    this.handleModalClose = this.handleModalClose.bind(this)
+  }
+
+  handleModalOpen () {
+    this.setState({
+      modalOpen: true
+    })
+  }
+
+  handleModalClose () {
+    this.setState({
+      modalOpen: false
+    })
+  }
+
+  render () {
+    return (
+      <div>
+        <LinkToAppointment {...this.props} onClick={this.handleModalOpen} />
+        {
+          this.props.appointmentId &&
+            <AppointmentInfoModal
+              show={this.state.modalOpen}
+              onClose={this.handleModalClose}
+              appointmentId={this.props.appointmentId}
+              viewInCalendar
+            />
+        }
+      </div>
+    )
+  }
+}
