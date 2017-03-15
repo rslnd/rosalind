@@ -2,7 +2,7 @@ import leven from 'leven'
 import some from 'lodash/some'
 
 export const cancelKeywords = ['STORNO', 'NEIN']
-const fuzzyness = 2
+const fuzzyness = 1
 
 export const isIntentToCancel = (text) => {
   const lower = text.toLowerCase().trim()

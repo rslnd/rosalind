@@ -14,12 +14,20 @@ describe('api', () => {
           expect(isIntentToCancel('storno')).to.equal(true)
         })
 
+        it('lowercase in quotes', () => {
+          expect(isIntentToCancel('"storno"')).to.equal(true)
+        })
+
         it('punctuation and newlines', () => {
           expect(isIntentToCancel('Storno.\n')).to.equal(true)
         })
 
         it('with typo', () => {
-          expect(isIntentToCancel('Strono .!!!\n')).to.equal(true)
+          expect(isIntentToCancel('Strno .!!!\n')).to.equal(true)
+        })
+
+        it('lowercase', () => {
+          expect(isIntentToCancel('neinnnnnnnnnnnnnnnnnnnn')).to.equal(true)
         })
 
         it('alternative word', () => {
@@ -34,6 +42,7 @@ describe('api', () => {
           expect(isIntentToCancel('was glauben sie denn?')).to.equal(false)
           expect(isIntentToCancel('Ich habe keinen termin!')).to.equal(false)
           expect(isIntentToCancel('El')).to.equal(false)
+          expect(isIntentToCancel('Wir kommen')).to.equal(false)
         })
       })
 
