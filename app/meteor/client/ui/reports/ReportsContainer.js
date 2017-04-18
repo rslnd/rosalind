@@ -12,8 +12,27 @@ const composer = (props, onData) => {
   if (Meteor.subscribe('reports').ready()) {
     const date = moment(props.params && props.params.date)
     const day = omit(dateToDay(date), 'date')
-    const report = Reports.findOne({ day })
+    const rawReport = Reports.findOne({ day })
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ])
+
+    const report = {
+      assignees: rawReport.assignees.map((a) => ({
+        ...a,
+        slots: {
+          target: 69,
+          actual: 60
+        }
+      })),
+      total: {
+        ...rawReport.total,
+        workload: {
+          target: 198,
+          actual: 130
+        }
+      }
+    }
+
+
     onData(null, { date, report, canShowRevenue })
   }
 }

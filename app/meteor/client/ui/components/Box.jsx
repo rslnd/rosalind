@@ -24,6 +24,7 @@ export class Box extends React.Component {
           <div className={headerClasses}>
             {this.props.icon && <Icon name={this.props.icon} />}
             <h3 className="box-title">{this.props.title}</h3>
+            {this.props.buttons && <div className="pull-right">{this.props.buttons}</div>}
           </div>
         }
         <div className={bodyClasses}>{this.props.body || this.props.children}</div>
