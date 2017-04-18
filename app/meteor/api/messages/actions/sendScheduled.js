@@ -78,7 +78,7 @@ export const sendScheduled = ({ Messages }) => {
         }
       })
 
-      return Promise.all(scheduledMessages)
+      return Promise.awaitAll(scheduledMessages)
     }
   })
 }

@@ -1,21 +1,21 @@
 import moment from 'moment'
-import Bottleneck from 'bottleneck'
+import { rateLimit } from 'meteor/dandv:rate-limit'
 import { Messages } from 'api/messages'
 import { Appointments } from 'api/appointments'
+import { Patients } from 'api/patients'
 import { InboundCalls } from 'api/inboundCalls'
 import { Settings } from 'api/settings'
 import provider from './providers'
 import { findParentMessage } from 'api/messages/methods/findParentMessage'
 import { isIntentToCancel } from 'api/messages/methods/isIntentToCancel'
 import { buildMessageText } from 'api/messages/methods/buildMessageText'
-
-const limiter = new Bottleneck(1, 10 * 1000)
+import { okToSend } from 'api/messages/methods/okToSend'
 
 const sendUnthrottled = (messageId) => {
   if (!Settings.get('messages.sms.enabled')) { return }
 
   const message = Messages.findOne({ _id: messageId })
-  if (message) {
+  if (message && okToSend(message)) {
     console.log('[Messages] channels/sms: Sending message', message)
     return provider.send(message).then((res) => {
       console.log('[Messages] channels/sms: Successfully sent SMS', message._id, res)
@@ -26,6 +26,7 @@ const sendUnthrottled = (messageId) => {
           [`payload.${provider.name}`]: res
         }
       })
+      return res
     }).catch((err) => {
       console.log('[Messages] channels/sms: Failed to send SMS', message._id, err)
       Messages.update({ _id: message._id }, {
@@ -38,17 +39,30 @@ const sendUnthrottled = (messageId) => {
         } })
     })
   } else {
-    throw new Error('[Messages] channels/sms: Could not find message to send', messageId)
+    throw new Error('[Messages] channels/sms: Could not find message to send or failed sanity checks', messageId, { okToSend: okToSend(message) })
   }
 }
 
+const sendThrottled = rateLimit(sendUnthrottled, 2000)
+
 export const send = (messageId) => {
-  return limiter.schedule(sendUnthrottled, messageId)
+  return new Promise((resolve) => {
+    const response = sendThrottled(messageId)
+    Promise.await(response)
+    resolve(response)
+  })
 }
 
 export const receive = (payload) => {
   const { message, response } = provider.receive(payload)
   const messageId = Messages.insert(message)
+
+  let parentMessage
+  let appointmentId
+  let appointment
+  let patientId
+  let patient
+  let cancelAppointment
 
   console.log('[Messages] channels/sms: Received message', messageId, message)
 
@@ -66,13 +80,14 @@ export const receive = (payload) => {
     }
   ).fetch()
 
-  const parentMessage = findParentMessage({ messages: sentMessages, message })
+  parentMessage = findParentMessage({ messages: sentMessages, message })
   if (parentMessage) {
     console.log('[Messages] channels/sms: Matched message', messageId, 'as reply to', parentMessage._id)
 
-    const appointmentId = parentMessage.payload.appointmentId
-    const appointment = Appointments.findOne({ _id: appointmentId })
-    const patientId = parentMessage.payload.patientId
+    appointmentId = parentMessage.payload.appointmentId
+    appointment = Appointments.findOne({ _id: appointmentId })
+    patientId = parentMessage.payload.patientId
+    patient = Patients.findOne({ _id: patientId })
 
     Messages.update({ _id: messageId }, {
       $set: {
@@ -82,7 +97,7 @@ export const receive = (payload) => {
       }
     })
 
-    const cancelAppointment = isIntentToCancel(message.text)
+    cancelAppointment = isIntentToCancel(message.text)
     if (appointment && cancelAppointment) {
       console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
       Appointments.actions.setCanceled.call({ appointmentId })
@@ -105,8 +120,7 @@ export const receive = (payload) => {
             date: appointment.start
           }),
           to: message.from,
-          status: 'scheduled',
-          scheduled: new Date(),
+          status: 'final',
           invalidBefore: new Date(),
           invalidAfter: moment().add(15, 'minutes').toDate(),
           parentMessageId: messageId,
@@ -115,7 +129,9 @@ export const receive = (payload) => {
             patientId
           }
         })
-        console.log('[Messages] channels/sms: Scheduled cancelation confirmation', confirmationId, 'for received message', messageId)
+
+        console.log('[Messages] channels/sms: Sending cancelation confirmation', confirmationId, 'for received message', messageId)
+        send(confirmationId)
       }
 
       return { message, response }
@@ -127,11 +143,15 @@ export const receive = (payload) => {
   // If we couldn't match this incoming message to a message we sent,
   // or if it is not an intent to cancel, create an inbound call
   const inboundCallId = InboundCalls.methods.post.call({
-    lastName: 'SMS',
+    lastName: patient && patient.profile && patient.profile.lastName || 'SMS',
+    firstName: patient && patient.profile && patient.profile.firstName || undefined,
     telephone: message.from,
     note: message.text,
     payload: {
-      messageId
+      channel: 'SMS',
+      messageId,
+      appointmentId,
+      patientId
     }
   })
   console.log('[Messages] channels/sms: Created inbound call', inboundCallId, 'of received message', messageId)

@@ -4989,6 +4989,12 @@ react-s-alert@^1.2.0:
   dependencies:
     babel-runtime "^6.18.0"
 
+react-scroll@^1.4.7:
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/react-scroll/-/react-scroll-1.4.7.tgz#e2823d0977ed76d5d5b9fd8dc8e1afb43ebb88fe"
+  dependencies:
+    object-assign "^4.0.1"
+
 react-select@^1.0.0-rc.2:
   version "1.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/react-select/-/react-select-1.0.0-rc.3.tgz#94ade090522153067eff09282d0525249ea1d9e3"

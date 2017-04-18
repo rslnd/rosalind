@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap'
 import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { AppointmentActionsContainer } from './AppointmentActionsContainer'
 
-export const AppointmentInfoModal = ({ appointmentId, onStartMove, show, onClose }) => (
+export const AppointmentInfoModal = ({ appointmentId, onStartMove, show, onClose, viewInCalendar }) => (
   <Modal
     show={show}
     onHide={onClose}
@@ -19,7 +19,8 @@ export const AppointmentInfoModal = ({ appointmentId, onStartMove, show, onClose
       <AppointmentActionsContainer
         appointmentId={appointmentId}
         onStartMove={onStartMove}
-        onClose={onClose} />
+        onClose={onClose}
+        viewInCalendar={viewInCalendar} />
     </Modal.Footer>
   </Modal>
 )

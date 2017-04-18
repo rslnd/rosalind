@@ -46,6 +46,7 @@
     "search": "Suche...",
     "searching": "Suche...",
     "appointmentReminderSMS": "SMS-Terminerinnerung",
+    "viewInCalendar": "Termin im Kalender zeigen",
     "form": {
       "start": {
         "label": "Beginn"

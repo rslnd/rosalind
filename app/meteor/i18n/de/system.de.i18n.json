@@ -2,6 +2,7 @@
   "system": {
     "this": "System",
     "thisSettings": "Einstellungen",
+    "thisMessages": "Messages",
     "thisImporters": "Importers",
     "thisJobs": "Background Jobs",
     "thisStats": "Stats",

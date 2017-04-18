@@ -29,10 +29,21 @@ export const AppointmentActions = (props) => (
           onClick={props.setCanceled} />
       }
 
-      <FlatButton
-        style={{ marginLeft: 20 }}
-        label={<span><Icon name="arrows" />&emsp;{TAPi18n.__('appointments.move')}</span>}
-        onClick={props.startMove} />
+      {
+        props.startMove &&
+          <FlatButton
+            style={{ marginLeft: 20 }}
+            label={<span><Icon name="arrows" />&emsp;{TAPi18n.__('appointments.move')}</span>}
+            onClick={props.startMove} />
+      }
+
+      {
+        props.viewInCalendar &&
+          <FlatButton
+            style={{ marginLeft: 20 }}
+            label={<span><Icon name="calendar" />&emsp;{TAPi18n.__('appointments.viewInCalendar')}</span>}
+            onClick={props.viewInCalendar} />
+      }
 
       <FlatButton
         style={{ marginLeft: 20 }}
