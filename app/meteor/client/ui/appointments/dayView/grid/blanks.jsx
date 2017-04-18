@@ -1,6 +1,7 @@
+import moment from 'moment'
 import React from 'react'
 import blanksStyle from './blanksStyle'
-import { timeSlots, format } from './timeSlots'
+import { setTime, timeSlots, format } from './timeSlots'
 
 class Blank extends React.Component {
   constructor (props) {
@@ -12,7 +13,7 @@ class Blank extends React.Component {
   handleClick (event) {
     this.props.onClick({
       event,
-      time: this.props.time,
+      time: setTime(this.props.time)(moment(this.props.date)).toDate(),
       assigneeId: this.props.assigneeId
     })
   }
@@ -45,11 +46,12 @@ class Blank extends React.Component {
   }
 }
 
-export const blanks = ({ assignees, onClick, onMouseEnter }) => (
+export const blanks = ({ date, assignees, onClick, onMouseEnter }) => (
   assignees.map((assignee) => (
     timeSlots
       .map((time) => (
         <Blank
+          date={date}
           time={time}
           assigneeId={assignee.assigneeId}
           onClick={onClick}

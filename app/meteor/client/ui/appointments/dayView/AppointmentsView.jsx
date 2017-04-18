@@ -99,8 +99,8 @@ export class AppointmentsView extends React.Component {
   handleNewAppointmentPopoverOpen ({ event, time, assigneeId }) {
     event.preventDefault()
 
-    if (this.props.onPopoverOpen) {
-      this.props.onPopoverOpen({ time, assigneeId })
+    if (this.props.onNewAppointmentPopoverOpen) {
+      this.props.onNewAppointmentPopoverOpen({ time, assigneeId })
     }
 
     this.setState({ ...this.state,
