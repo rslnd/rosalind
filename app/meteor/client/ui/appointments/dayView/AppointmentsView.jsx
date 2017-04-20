@@ -21,10 +21,12 @@ export class AppointmentsView extends React.Component {
       popoverAnchor: null,
       appointmentModalOpen: false,
       selectedAppointmentId: null,
-      move: false,
-      moveAppointmentId: null,
-      moveToAssigneeId: null,
-      moveToTime: null
+      move: {
+        isMoving: false,
+        moveAppointmentId: null,
+        moveToAssigneeId: null,
+        moveToTime: null
+      }
     }
 
     this.handleAppointmentClick = this.handleAppointmentClick.bind(this)
@@ -49,7 +51,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleAppointmentClick (event, appointment) {
-    if (this.state.move) {
+    if (this.state.move.isMoving) {
       return this.handleMoveEnd()
     }
 
@@ -72,6 +74,8 @@ export class AppointmentsView extends React.Component {
   handleBlankClick (options) {
     if (this.state.overrideMode) {
       this.handleOverrideStartOrEnd(options)
+    } else if (this.state.move.isMoving) {
+      this.handleMoveEnd(options)
     } else {
       this.handleNewAppointmentPopoverOpen(options)
     }
@@ -80,7 +84,7 @@ export class AppointmentsView extends React.Component {
   handleBlankHover (options) {
     if (this.state.overrideMode) {
       this.handleOverrideHover(options)
-    } else if (this.state.move) {
+    } else if (this.state.move.isMoving) {
       this.handleMoveHover(options)
     }
   }
@@ -202,34 +206,46 @@ export class AppointmentsView extends React.Component {
     this.props.onSetAdmitted({ appointmentId: appointment._id })
   }
 
-  handleMoveStart ({ appointmentId }) {
+  handleMoveStart ({ appointmentId, assigneeId, time }) {
     this.setState({
       ...this.state,
       appointmentModalOpen: false,
-      move: true,
-      moveAppointmentId: appointmentId
+      move: {
+        ...this.state.move,
+        isMoving: true,
+        moveAppointmentId: appointmentId,
+        moveToAssigneeId: assigneeId,
+        moveToTime: time
+      }
     })
   }
 
   handleMoveHover ({ assigneeId, time }) {
     this.setState({
       ...this.state,
-      moveToAssigneeId: assigneeId,
-      moveToTime: time
+      move: {
+        ...this.state.move,
+        moveToAssigneeId: assigneeId,
+        moveToTime: time
+      }
     })
   }
 
   handleMoveEnd () {
     this.props.onMove({
-      appointmentId: this.state.moveAppointmentId,
-      newStart: this.state.moveToTime,
-      newAssigneeId: this.state.moveToAssigneeId
-    })
-
-    this.setState({
-      ...this.state,
-      move: false,
-      moveAppointmentId: null
+      appointmentId: this.state.move.moveAppointmentId,
+      newStart: this.state.move.moveToTime,
+      newAssigneeId: this.state.move.moveToAssigneeId
+    }).then(() => {
+      this.setState({
+        ...this.state,
+        move: {
+          isMoving: false,
+          moveAppointmentId: null,
+          moveToAssigneeId: null,
+          moveToTime: null
+        }
+      })
     })
   }
 
@@ -247,7 +263,11 @@ export class AppointmentsView extends React.Component {
           assignees={this.props.assignees}
           onAppointmentClick={this.handleAppointmentClick}
           onBlankClick={this.handleBlankClick}
-          onBlankMouseEnter={this.handleBlankHover} />
+          onBlankMouseEnter={this.handleBlankHover}
+          isMoving={this.state.move.isMoving}
+          moveAppointmentId={this.state.move.moveAppointmentId}
+          moveToTime={this.state.move.moveToTime}
+          moveToAssigneeId={this.state.move.moveToAssigneeId} />
 
         <AppointmentInfoModal
           appointmentId={this.state.selectedAppointmentId}

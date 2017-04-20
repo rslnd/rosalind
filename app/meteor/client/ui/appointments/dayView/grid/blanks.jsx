@@ -21,7 +21,7 @@ class Blank extends React.Component {
   handleOnMouseEnter (event) {
     this.props.onMouseEnter({
       event,
-      time: this.props.time,
+      time: setTime(this.props.time)(moment(this.props.date)).toDate(),
       assigneeId: this.props.assigneeId
     })
   }
@@ -34,7 +34,7 @@ class Blank extends React.Component {
         key={`new-${assigneeId}-${time}`}
         className={blanksStyle.blank}
         onClick={this.handleClick}
-        onMouseEnter={this.onMouseEnter}
+        onMouseEnter={this.handleOnMouseEnter}
         title={format(time)}
         style={{
           gridRow: time,
