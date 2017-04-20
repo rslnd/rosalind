@@ -1,5 +1,6 @@
 import moment from 'moment'
 import Alert from 'react-s-alert'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { withRouter } from 'react-router'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from 'api/appointments'
@@ -41,7 +42,11 @@ const composer = (props, onData) => {
   let startMove
   if (props.onStartMove) {
     startMove = () => {
-      props.onStartMove(args)
+      props.onStartMove({
+        ...args,
+        time: appointment.start,
+        assigneeId: appointment.assigneeId
+      })
     }
   }
 

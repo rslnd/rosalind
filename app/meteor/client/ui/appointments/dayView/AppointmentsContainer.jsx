@@ -5,6 +5,8 @@ import sortBy from 'lodash/fp/sortBy'
 import uniq from 'lodash/uniq'
 import flatten from 'lodash/flatten'
 import union from 'lodash/union'
+import Alert from 'react-s-alert'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { dateToDay } from 'util/time/day'
@@ -127,7 +129,9 @@ const composer = (props, onData) => {
     const onNewAppointmentPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
     const onNewAppointmentPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
     const handleSetAdmitted = (args) => Appointments.actions.setAdmitted.call(args)
-    const handleMove = (args) => Appointments.actions.move.call(args)
+    const handleMove = (args) => Appointments.actions.move.callPromise(args).then(() => {
+      Alert.success(TAPi18n.__('appointments.moveSuccess'))
+    })
 
     onData(null, { assignees, date, onNewAppointmentPopoverOpen, onNewAppointmentPopoverClose, handleSetAdmitted, handleMove, subsReady })
   } else {
