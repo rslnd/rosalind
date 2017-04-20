@@ -21,6 +21,7 @@
     "assignment": "Zuweisung",
     "unassigned": "Keine Zuweisung",
     "softRemove": "Löschen",
+    "softRemoveSuccess": "Termin gelöscht",
     "cancel": "Absage",
     "admit": "Anwesend",
     "admittedBy": "Empfangen von",
