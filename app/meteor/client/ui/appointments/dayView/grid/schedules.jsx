@@ -4,7 +4,7 @@ import schedulesStyle from './schedulesStyle'
 
 monkey(moment)
 
-export const schedules = ({ assignees }) => (
+export const schedules = ({ assignees, onDoubleClick }) => (
   assignees.map((assignee) => (
     assignee.schedules && assignee.schedules.map((schedule) => {
       if (!schedule.start && !schedule.end) {
@@ -18,7 +18,7 @@ export const schedules = ({ assignees }) => (
           key={`schedule-${schedule._id}`}
           data-scheduleId={schedule._id}
           className={schedulesStyle.scheduledUnavailable}
-          onDoubleClick={() => false && this.handleScheduleModalOpen({ scheduleId: schedule._id })}
+          onDoubleClick={(event) => onDoubleClick({ event, scheduleId: schedule._id })}
           style={{
             gridRowStart: timeStart.format('[T]HHmm'),
             gridRowEnd: timeEnd.format('[T]HHmm'),

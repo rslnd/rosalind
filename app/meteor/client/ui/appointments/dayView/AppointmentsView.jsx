@@ -281,6 +281,7 @@ export class AppointmentsView extends React.Component {
           onBlankClick={this.handleBlankClick}
           onBlankMouseEnter={this.handleBlankHover}
           override={this.state.override}
+          onScheduleModalOpen={this.handleScheduleModalOpen}
           isMoving={this.state.move.isMoving}
           moveAppointmentId={this.state.move.moveAppointmentId}
           moveToTime={this.state.move.moveToTime}
