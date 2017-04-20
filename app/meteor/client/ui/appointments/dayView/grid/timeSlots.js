@@ -26,7 +26,7 @@ export const isQuarterHour = (t) => {
   return (m === '00' || m === '15' || m === '30' || m === '45')
 }
 
-const label = (t) => t.format('[T]HHmm')
+export const label = (t) => t.format('[T]HHmm')
 
 export const timeRange = Array.from(moment.range(start, end).by('minutes')).map(t => moment(t))
 

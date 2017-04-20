@@ -21,6 +21,12 @@ export class AppointmentsView extends React.Component {
       popoverAnchor: null,
       appointmentModalOpen: false,
       selectedAppointmentId: null,
+      override: {
+        isOverriding: false,
+        overrideAssigneeId: null,
+        start: null,
+        end: null
+      },
       move: {
         isMoving: false,
         moveAppointmentId: null,
@@ -72,7 +78,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleBlankClick (options) {
-    if (this.state.overrideMode) {
+    if (this.state.override.isOverriding) {
       this.handleOverrideStartOrEnd(options)
     } else if (this.state.move.isMoving) {
       this.handleMoveEnd(options)
@@ -82,7 +88,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleBlankHover (options) {
-    if (this.state.overrideMode) {
+    if (this.state.override.isOverriding) {
       this.handleOverrideHover(options)
     } else if (this.state.move.isMoving) {
       this.handleMoveHover(options)
@@ -121,37 +127,45 @@ export class AppointmentsView extends React.Component {
 
   handleToggleOverrideMode ({ assigneeId }) {
     this.setState({ ...this.state,
-      overrideMode: !this.state.overrideMode,
-      overrideAssigneeId: assigneeId
+      override: {
+        isOverriding: !this.state.override.isOverriding,
+        overrideAssigneeId: assigneeId
+      }
     })
   }
 
   handleOverrideStart ({ time }) {
-    if (this.state.overrideMode) {
+    if (this.state.override.isOverriding) {
       this.setState({ ...this.state,
-        overrideStart: time,
-        overrideEnd: time
+        override: {
+          ...this.state.override,
+          start: time,
+          end: time
+        }
       })
     }
   }
 
   handleOverrideHover ({ time }) {
     this.setState({ ...this.state,
-      overrideEnd: moment(time).add(5, 'minutes').subtract(1, 'second').toDate()
+      override: {
+        ...this.state.override,
+        end: moment(time).add(5, 'minutes').subtract(1, 'second').toDate()
+      }
     })
   }
 
   handleOverrideEnd ({ time }) {
-    if (this.state.overrideMode) {
-      let start = this.state.overrideStart
+    if (this.state.override.isOverriding) {
+      let start = this.state.override.start
       let end = moment(time).add(5, 'minutes').subtract(1, 'second').toDate()
 
-      if (this.state.overrideStart > this.state.overrideEnd) {
+      if (this.state.override.start > this.state.override.end) {
         [ start, end ] = [ end, start ]
       }
 
       const newSchedule = {
-        userId: this.state.overrideAssigneeId,
+        userId: this.state.override.overrideAssigneeId,
         start,
         end,
         available: false,
@@ -162,17 +176,19 @@ export class AppointmentsView extends React.Component {
 
       Schedules.actions.upsert.callPromise({ schedule: newSchedule }).then(() => {
         this.setState({ ...this.state,
-          overrideMode: false,
-          overrideStart: null,
-          overrideEnd: null,
-          overrideAssigneeId: null
+          override: {
+            isOverriding: false,
+            start: null,
+            end: null,
+            overrideAssigneeId: null
+          }
         })
       })
     }
   }
 
   handleOverrideStartOrEnd ({ time, assigneeId }) {
-    if (this.state.overrideStart) {
+    if (this.state.override.start) {
       this.handleOverrideEnd({ time, assigneeId })
     } else {
       this.handleOverrideStart({ time, assigneeId })
@@ -256,7 +272,7 @@ export class AppointmentsView extends React.Component {
           date={this.props.date}
           assignees={this.props.assignees}
           onToggleOverrideMode={this.handleToggleOverrideMode}
-          overrideMode={this.state.overrideMode} />
+          overrideMode={this.state.override.isOverriding} />
 
         <AppointmentsGrid
           date={this.props.date}
@@ -264,6 +280,7 @@ export class AppointmentsView extends React.Component {
           onAppointmentClick={this.handleAppointmentClick}
           onBlankClick={this.handleBlankClick}
           onBlankMouseEnter={this.handleBlankHover}
+          override={this.state.override}
           isMoving={this.state.move.isMoving}
           moveAppointmentId={this.state.move.moveAppointmentId}
           moveToTime={this.state.move.moveToTime}
