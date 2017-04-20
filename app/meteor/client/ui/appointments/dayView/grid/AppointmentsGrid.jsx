@@ -3,7 +3,7 @@ import { appointments } from './appointments'
 import { timeLegend } from './timeLegend.jsx'
 import { blanks } from './blanks'
 import { schedules } from './schedules'
-// import { overrideOverlay } from './overrideOverlay'
+import { overrideOverlay } from './overrideOverlay'
 
 
 // row name    | column names
@@ -23,7 +23,7 @@ const gridTemplateRows = `
   ${gridTimeSlots}
 `
 
-export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankMouseEnter, onBlankClick, isMoving, moveToTime, moveToAssigneeId, moveAppointmentId}) => {
+export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, isMoving, moveToTime, moveToAssigneeId, moveAppointmentId }) => {
   const style = {
     display: 'grid',
     gridTemplateRows,
@@ -38,7 +38,7 @@ export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankM
     <div style={style}>
       {appointments({ assignees, onClick: onAppointmentClick, isMoving, moveToTime, moveToAssigneeId, moveAppointmentId })}
       {blanks({ date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
-      {/* {overrideOverlay({ overrideStart, overrideEnd })} */}
+      {overrideOverlay(override)}
       {schedules({ assignees })}
       {timeLegend()}
     </div>
