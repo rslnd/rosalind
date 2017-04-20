@@ -10,6 +10,14 @@ import routes from './routes'
 import { Loading } from 'client/ui/components/Loading'
 import './index.html'
 
+export const Rosalind = () => (
+  <ReduxProvider store={store}>
+    <MuiThemeProvider muiTheme={muiTheme}>
+      {routes()}
+    </MuiThemeProvider>
+  </ReduxProvider>
+)
+
 export default () => {
   setDefaults({
     loadingHandler: () => <Loading />,
@@ -19,11 +27,5 @@ export default () => {
   const customerName = server.env.CUSTOMER_NAME || 'Rosalind Development'
   document.title = customerName
 
-  mount(() => (
-    <ReduxProvider store={store}>
-      <MuiThemeProvider muiTheme={muiTheme}>
-        {routes()}
-      </MuiThemeProvider>
-    </ReduxProvider>
-  ))
+  mount(Rosalind)
 }
