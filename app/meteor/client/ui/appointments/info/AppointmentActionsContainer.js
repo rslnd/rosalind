@@ -1,4 +1,5 @@
 import moment from 'moment'
+import Alert from 'react-s-alert'
 import { withRouter } from 'react-router'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from 'api/appointments'
@@ -31,7 +32,9 @@ const composer = (props, onData) => {
   }
 
   const softRemove = () => {
-    Appointments.actions.softRemove.call(args)
+    Appointments.actions.softRemove.callPromise(args).then(() => {
+      Alert.success(TAPi18n.__('appointments.softRemoveSuccess'))
+    })
     closeModal()
   }
 
