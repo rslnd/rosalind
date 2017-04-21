@@ -21,10 +21,10 @@ export class AppointmentsScreen extends React.Component {
   scrollToCurrentTime () {
     const now = moment()
     if (now.isSame(this.props.date, 'day')) {
-      const elemId = now.floor(5, 'minutes').format('H:mm')
+      const elemId = now.floor(5, 'minutes').format('[T]HHmm')
       const offset = document.getElementById(elemId).offsetTop
       window.scrollTo({ top: offset })
-      console.log('scrolledto', document.getElementById(elemId), offset)
+      console.log('[AppointmentsScreen] Scrolled to', document.getElementById(elemId), offset)
     }
   }
 
