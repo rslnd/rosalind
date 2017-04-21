@@ -1,6 +1,7 @@
 import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
-import schedulesStyle from './schedulesStyle'
+import { isFirstSlot, isLastSlot } from './timeSlots'
+import style from './schedulesStyle'
 
 monkey(moment)
 
@@ -17,7 +18,7 @@ export const schedules = ({ assignees, onDoubleClick }) => (
         <div
           key={`schedule-${schedule._id}`}
           data-scheduleId={schedule._id}
-          className={schedulesStyle.scheduledUnavailable}
+          className={style.scheduledUnavailable}
           onDoubleClick={(event) => onDoubleClick({ event, scheduleId: schedule._id })}
           style={{
             gridRowStart: timeStart.format('[T]HHmm'),
@@ -25,12 +26,12 @@ export const schedules = ({ assignees, onDoubleClick }) => (
             gridColumn: `assignee-${schedule.userId}`
           }}>
 
-          {/* <div className={style.schedulesText}>
-            {!timeStart.isSame(moment(viewRange(timeStart).start).floor(5, 'minutes'), 'minute') && timeStart.format('H:mm')}
+          <div className={style.schedulesText}>
+            {!isFirstSlot(timeStart) && timeStart.format('H:mm')}
           </div>
           <div className={style.schedulesText}>
-            {!timeEnd.isSame(moment(viewRange(timeEnd).end).ceil(5, 'minutes'), 'minute') && timeEnd.format('H:mm')}
-          </div> */}
+            {!isLastSlot(timeEnd) && timeEnd.format('H:mm')}
+          </div>
         </div>
       )
     })
