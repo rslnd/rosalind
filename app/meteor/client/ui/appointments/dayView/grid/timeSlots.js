@@ -6,8 +6,17 @@ import { monkey } from 'spotoninc-moment-round'
 const moment = extendMoment(momentTz)
 monkey(moment)
 
-const start = moment().hour(7).minute(30).startOf('minute')
-const end = moment().hour(20).endOf('hour')
+export const start = () => moment().hour(7).minute(30).startOf('minute')
+export const end = () => moment().hour(20).endOf('hour')
+
+export const isFirstSlot = (m) => {
+  const first = start().floor(5, 'minutes')
+  return first.hour() === m.hour() && first.minute() === m.minute()
+}
+export const isLastSlot = (m) => {
+  const last = end().ceil(5, 'minutes')
+  return last.hour() === m.hour() && last.minute() === m.minute()
+}
 
 export const hour = (t) => t.substr(1, 2)
 export const minute = (t) => t.substr(-2, 2)
@@ -28,7 +37,7 @@ export const isQuarterHour = (t) => {
 
 export const label = (t) => t.format('[T]HHmm')
 
-export const timeRange = Array.from(moment.range(start, end).by('minutes')).map(t => moment(t))
+export const timeRange = Array.from(moment.range(start(), end()).by('minutes')).map(t => moment(t))
 
 export const timeSlots = timeRange.map(label).filter(isSlot)
 
