@@ -7,7 +7,7 @@ group: deprecated
 language: node_js
 
 node_js:
-  - '4.7.3'
+  - '4.8.1'
 
 services:
   - docker
