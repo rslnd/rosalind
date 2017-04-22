@@ -39,7 +39,8 @@ export class NewAppointmentContainerComponent extends React.Component {
 
     const length = getDefaultLength({
       assigneeId: this.props.assigneeId,
-      tags: values.tags
+      tags: values.tags,
+      date: moment(this.props.time)
     })
 
     const appointment = {
