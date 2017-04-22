@@ -54,6 +54,7 @@ export class NewAppointmentFormComponent extends React.Component {
                 <Field
                   name="tags"
                   component={TagsField}
+                  allowedTags={this.props.allowedTags}
                   fullWidth />
               </div>
             </div>

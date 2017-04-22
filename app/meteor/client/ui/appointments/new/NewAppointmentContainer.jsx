@@ -1,11 +1,10 @@
 import React from 'react'
 import moment from 'moment'
-import max from 'lodash/max'
 import { connect } from 'react-redux'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { NewAppointment } from './NewAppointment'
 import { Appointments } from 'api/appointments'
-import { Tags } from 'api/tags'
+import { Schedules } from 'api/schedules'
 import Alert from 'react-s-alert'
 import { getDefaultLength } from 'api/appointments/methods/getDefaultLength'
 
@@ -13,6 +12,7 @@ export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.allowedTags = this.allowedTags.bind(this)
   }
 
   handleSubmit (values, dispatch) {
@@ -66,12 +66,25 @@ export class NewAppointmentContainerComponent extends React.Component {
       })
   }
 
+  allowedTags () {
+    const constraint = Schedules.findOne({
+      type: 'constraint',
+      userId: this.props.assigneeId,
+      weekdays: moment(this.props.time).clone().locale('en').format('ddd').toLowerCase(),
+      start: { $lte: moment(this.props.time).toDate() },
+      end: { $gte: moment(this.props.time).toDate() }
+    })
+
+    return constraint && constraint.tags
+  }
+
   render () {
     return (
       <NewAppointment
         onSubmit={this.handleSubmit}
         initialValues={this.props.patientId ? { patientId: this.props.patientId } : {}}
-        time={this.props.time} />
+        time={this.props.time}
+        allowedTags={this.allowedTags()} />
     )
   }
 }
