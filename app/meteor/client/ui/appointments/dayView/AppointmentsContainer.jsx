@@ -40,6 +40,7 @@ const composer = (props, onData) => {
     const schedulesDaySubscriptions = appointmentsSubsManager.subscribe('schedules', day)
     const schedulesOverrideSubscriptions = appointmentsSubsManager.subscribe('schedules', dateRange)
     const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments', dateRange)
+    appointmentsSubsManager.subscribe('schedules-constraints')
     subsReady = schedulesDaySubscriptions.ready() && schedulesOverrideSubscriptions.ready() && appointmentsSubscription.ready()
   } else {
     subsReady = true
@@ -81,15 +82,24 @@ const composer = (props, onData) => {
 
       // Add override schedules to assignee
       mapUncapped((assignee) => {
-        const schedules = Schedules.find({
+        const overrides = Schedules.find({
+          type: 'override',
           userId: assignee.assigneeId,
           start: { $gte: startOfDay },
           end: { $lte: endOfDay }
         }).fetch()
 
+        const constraints = Schedules.find({
+          type: 'constraint',
+          userId: assignee.assigneeId,
+          start: { $lte: startOfDay },
+          end: { $gte: endOfDay }
+        }).fetch()
+
         return {
           ...assignee,
-          schedules
+          schedules: overrides,
+          constraints
         }
       }),
 
