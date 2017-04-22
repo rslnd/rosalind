@@ -24,6 +24,7 @@ const composer = (props, onData) => {
   // a trusted network
   Meteor.subscribe('appointments')
   Meteor.subscribe('schedules')
+  Meteor.subscribe('schedules-constraints')
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments/)
 

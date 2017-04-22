@@ -40,7 +40,6 @@ const composer = (props, onData) => {
     const schedulesDaySubscriptions = appointmentsSubsManager.subscribe('schedules', day)
     const schedulesOverrideSubscriptions = appointmentsSubsManager.subscribe('schedules', dateRange)
     const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments', dateRange)
-    appointmentsSubsManager.subscribe('schedules-constraints')
     subsReady = schedulesDaySubscriptions.ready() && schedulesOverrideSubscriptions.ready() && appointmentsSubscription.ready()
   } else {
     subsReady = true
