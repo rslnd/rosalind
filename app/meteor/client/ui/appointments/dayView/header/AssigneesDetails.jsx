@@ -21,7 +21,15 @@ const cell = {
 
 const Constraint = ({ constraint }) => (
   <div>
-    <Icon name="info-circle" /> {constraint.note}
+    {
+      constraint.length
+      ? <span>
+        <Icon name="clock-o" /> {constraint.length} min {constraint.note && <span>&middot; {constraint.note}</span>}
+      </span>
+      : <span>
+        <Icon name="info-circle" /> {constraint.note}
+      </span>
+    }
   </div>
 )
 
