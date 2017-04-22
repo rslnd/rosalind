@@ -92,6 +92,7 @@ const composer = (props, onData) => {
         const constraints = Schedules.find({
           type: 'constraint',
           userId: assignee.assigneeId,
+          weekdays: date.clone().locale('en').format('ddd').toLowerCase(),
           start: { $lte: startOfDay },
           end: { $gte: endOfDay }
         }).fetch()

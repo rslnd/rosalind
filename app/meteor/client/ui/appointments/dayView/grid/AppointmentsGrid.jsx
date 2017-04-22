@@ -26,6 +26,8 @@ const gridTemplateRows = `
 export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, onScheduleModalOpen, isMoving, moveToTime, moveToAssigneeId, moveAppointmentId }) => {
   const style = {
     display: 'grid',
+    position: 'relative',
+    top: 0,
     gridTemplateRows,
     gridTemplateColumns: `
       [time] 60px
