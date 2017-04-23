@@ -95,7 +95,7 @@
     "coffee-script": "^1.10.0",
     "css-loader": "^0.28.0",
     "expose-loader": "^0.7.1",
-    "extract-text-webpack-plugin": "^2.1.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "faker": "^4.1.0",
     "file-loader": "^0.8.5",
     "html-loader": "^0.4.0",
