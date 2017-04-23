@@ -1,7 +1,7 @@
 import moment from 'moment'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from 'api/appointments'
 import { AppointmentActions } from './AppointmentActions'
@@ -55,7 +55,7 @@ const composer = (props, onData) => {
     viewInCalendar = () => {
       closeModal()
       const slug = moment(appointment.start).format('YYYY-MM-DD')
-      props.router.push(`/appointments/${slug}#${props.appointmentId}`)
+      props.history.push(`/appointments/${slug}#${props.appointmentId}`)
     }
   }
 

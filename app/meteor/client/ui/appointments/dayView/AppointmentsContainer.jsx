@@ -24,7 +24,7 @@ const appointmentsSubsManager = new SubsManager({
 })
 
 const composer = (props, onData) => {
-  const date = moment(props.params && props.params.date || undefined)
+  const date = moment(props.match && props.match.params && props.match.params.date || undefined)
   const day = dateToDay(date)
   const startOfDay = date.clone().startOf('day').toDate()
   const endOfDay = date.clone().endOf('day').toDate()

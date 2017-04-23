@@ -1,6 +1,6 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
-import { browserHistory } from 'react-router'
 import { Meteor } from 'meteor/meteor'
 import { UserPanel } from './UserPanel'
 
@@ -21,7 +21,7 @@ class UserPanelContainerComponent extends React.Component {
       loggingOut: true
     })
 
-    browserHistory.push('/')
+    this.props.history.push('/')
 
     Meteor.defer(() => {
       Meteor.call('users/logout', () => {
@@ -46,6 +46,6 @@ const composer = (props, onData) => {
   onData(null, { currentUser })
 }
 
-const UserPanelContainer = composeWithTracker(composer)(UserPanelContainerComponent)
+const UserPanelContainer = composeWithTracker(composer)(withRouter(UserPanelContainerComponent))
 
 export { UserPanelContainer }

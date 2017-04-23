@@ -1,18 +1,22 @@
 import React from 'react'
 import classnames from 'classnames'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import FlipMove from 'react-flip-move'
 import { TAPi18n } from 'meteor/tap:i18n'
 import style from './sidebarStyle.scss'
 
-const SidebarItem = ({ item, router, sidebarOpen }) => {
+const isActive = (path, location) => {
+  return location.pathname.indexOf(path) === 0
+}
+
+const SidebarItem = ({ item, location, sidebarOpen }) => {
   const hideWhenClosed = classnames({
     [ style.hidden ]: !sidebarOpen,
     [ style.fade ]: true
   })
 
   return (
-    <li className={router.isActive(`/${item.name}`) && 'active'}>
+    <li className={isActive(`/${item.name}`, location) && 'active'}>
       <Link
         to={`/${item.name}`}
         className="pointer level-0 link"
@@ -40,9 +44,9 @@ const SidebarItem = ({ item, router, sidebarOpen }) => {
       {sidebarOpen && item.subItems &&
         <ul className="treeview-menu">
           {item.subItems.map((subItem) => (
-            <li key={subItem.name} className={router.isActive(`/${item.name}${subItem.path}`, true) && 'active level-1 link'}>
+            <li key={subItem.name} className={isActive(`/${item.name}${subItem.path || ''}`, location) && 'active level-1 link'}>
               <Link
-                to={`/${item.name}${subItem.path}`}
+                to={`/${item.name}${subItem.path || ''}`}
                 className="level-1 link"
                 title={TAPi18n.__([item.name, subItem.name].join('.'))}>
                 <span>{TAPi18n.__([item.name, subItem.name].join('.'))}</span>
@@ -95,7 +99,7 @@ export class Sidebar extends React.Component {
             <SidebarItem
               key={item.name}
               item={item}
-              router={this.props.router}
+              location={this.props.location}
               sidebarOpen={this.props.isOpen} />
           ))}
 

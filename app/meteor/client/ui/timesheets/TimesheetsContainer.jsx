@@ -20,7 +20,7 @@ const parseDateRange = (dateRange) => {
 let userIdStore = new ReactiveVar()
 
 const composer = (props, onData) => {
-  const { start, end } = parseDateRange(props.params.dateRange)
+  const { start, end } = parseDateRange(props.match && props.match.params.dateRange)
   const userId = userIdStore.get() || Meteor.userId()
   const subscription = Meteor.subscribe('timesheets-range', {
     userId,

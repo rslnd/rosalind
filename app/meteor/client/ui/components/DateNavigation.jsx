@@ -1,8 +1,8 @@
 import React from 'react'
 import moment from 'moment'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { Button, ButtonGroup } from 'react-bootstrap'
-import { DayPicker } from 'react-dates'
+import { DayPickerRangeController } from 'react-dates'
 import Portal from 'react-portal'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from './Icon'
@@ -45,7 +45,7 @@ class DateNavigationButtons extends React.Component {
       }
     }
     const path = this.dateToPath(targetDay)
-    this.props.router.replace(path)
+    this.props.history.replace(path)
   }
 
   handleBackwardMonthClick () {
@@ -62,7 +62,7 @@ class DateNavigationButtons extends React.Component {
 
   handleTodayClick () {
     const path = this.dateToPath(moment())
-    this.props.router.push(path)
+    this.props.history.push(path)
 
     this.props.onTodayClick && this.props.onTodayClick()
   }
@@ -109,8 +109,8 @@ class DateNavigationButtons extends React.Component {
   }
 
   handleCalendarDayChange (date) {
-    const path = this.dateToPath(date)
-    this.props.router.replace(path)
+    const path = this.dateToPath(moment(date))
+    this.props.history.replace(path)
   }
 
   render () {
@@ -199,14 +199,15 @@ class DateNavigationButtons extends React.Component {
               ...this.state.calendarPosition
             }}>
             <div onMouseLeave={this.handleCalendarClose}>
-              <DayPicker
-                onDayMouseDown={this.handleCalendarDayChange}
-                date={this.props.date}
+              <DayPickerRangeController
+                onDatesChange={this.handleCalendarDayChange}
+                // onFocusChange={(x) => console.log(x)}
+                // date={this.props.date}
+                // focused
                 initialVisibleMonth={() => this.props.date}
                 enableOutsideDays
-                modifiers={{
-                  current: (day) => day.isSame(this.props.date, 'day')
-                }}
+                numberOfMonths={1}
+                isDayHighlighted={(day) => day.isSame(this.props.date, 'day')}
               />
             </div>
           </div>
