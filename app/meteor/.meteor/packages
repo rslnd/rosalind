@@ -29,7 +29,6 @@ promise@0.8.8
 # Keep this section synced with production/build.sh
 xolvio:backdoor
 xolvio:cleaner
-seed
 
 # React
 webpack:webpack
@@ -88,7 +87,7 @@ copleykj:livestamp
 underscorestring:underscore.string
 mizzao:timesync
 meteorhacks:async
-dandv:rate-limit 
+dandv:rate-limit
 
 # File Upload
 ostrio:files

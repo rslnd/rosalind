@@ -14,7 +14,7 @@ mkdir -p ../build/
 cd ../app/meteor/
 
 echo "** Removing debug packages"
-time meteor remove xolvio:backdoor xolvio:cleaner seed || true
+time meteor remove xolvio:backdoor xolvio:cleaner || true
 
 echo "** Building"
 time meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory ../../build
