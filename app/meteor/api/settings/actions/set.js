@@ -10,7 +10,7 @@ export const set = ({ Settings }) => {
     name: 'settings/set',
     mixins: [CallPromiseMixin],
     validate: () => {},
-    run ({ key, value }) {
+    run ({ key, value, isPublic }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -19,7 +19,7 @@ export const set = ({ Settings }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      Settings.set(key, value)
+      Settings.set(key, value, isPublic)
 
       const valueSanitized = (
           key.includes('secret') ||
@@ -29,7 +29,7 @@ export const set = ({ Settings }) => {
         ? value.substr(0, 2) + '...' + value.substr(-1, 2)
         : value
 
-      Events.post('settings/set', { key, value: valueSanitized })
+      Events.post('settings/set', { key, value: valueSanitized, isPublic })
     }
   })
 }

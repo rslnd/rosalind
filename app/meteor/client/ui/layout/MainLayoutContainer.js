@@ -30,6 +30,7 @@ const composer = (props, onData) => {
   Meteor.subscribe('appointments')
   Meteor.subscribe('schedules')
   Meteor.subscribe('schedules-constraints')
+  Meteor.subscribe('settings')
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments/)
 

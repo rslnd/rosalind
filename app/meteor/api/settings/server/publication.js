@@ -6,6 +6,8 @@ export default () => {
   Meteor.publish('settings', function () {
     if (this.userId && Roles.userIsInRole(this.userId, [ 'admin', 'settings-edit' ])) {
       return Settings.find({})
+    } else {
+      return Settings.find({ isPublic: true })
     }
   })
 }
