@@ -18,7 +18,7 @@ export const upsert = ({ Reports }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      report = Reports.methods.tally.call({ report })
+      report = Reports.actions.tally.call({ report })
 
       const existingReport = Reports.findOne({ day: report.day })
 
