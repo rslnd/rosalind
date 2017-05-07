@@ -30,7 +30,8 @@ module.exports = function (wallaby) {
     },
 
     env: {
-      type: 'node'
+      type: 'node',
+      runner: '~/.nvm/versions/node/v4.7.3/bin/node'
     },
 
     testFramework: 'mocha'
