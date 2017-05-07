@@ -1,8 +1,16 @@
-import flow from 'lodash/fp/flow'
-import mapKeys from 'lodash/fp/mapKeys'
 import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
 import { calculateScheduledHours } from '../../schedules/methods/getScheduledHours'
+
+const mapWorkload = ({ hours, appointments }) => {
+  const available = hours.planned * 12
+  const planned = appointments.length
+
+  return {
+    available,
+    planned
+  }
+}
 
 const mapHours = ({ assigneeId, overrideSchedules }) => {
   return {
@@ -10,7 +18,7 @@ const mapHours = ({ assigneeId, overrideSchedules }) => {
   }
 }
 
-const mapPatients = ({ assigneeId, appointments }) => {
+const mapAppointments = ({ assigneeId, appointments }) => {
   const appointmentsByTags = groupBy('tag')(appointments)
 
   const byTags = mapValues((appointments) => {
@@ -28,10 +36,15 @@ const mapPatients = ({ assigneeId, appointments }) => {
 }
 
 const mapAssignee = ({ assigneeId, appointments, overrideSchedules }) => {
+  const patients = mapAppointments({ assigneeId, appointments })
+  const hours = mapHours({ assigneeId, overrideSchedules })
+  const workload = mapWorkload({ hours, appointments })
+
   return {
     assigneeId,
-    patients: mapPatients({ assigneeId, appointments }),
-    hours: mapHours({ assigneeId, overrideSchedules })
+    patients,
+    hours,
+    workload
   }
 }
 
@@ -43,7 +56,7 @@ const mapAssignees = ({ appointments, overrideSchedules }) => {
     return mapAssignee({
       assigneeId,
       appointments: appointmentsByAssignees[assigneeId],
-      overrideSchedules: overrideSchedulesByAssignees[assigneeId],
+      overrideSchedules: overrideSchedulesByAssignees[assigneeId]
     })
   })
 }

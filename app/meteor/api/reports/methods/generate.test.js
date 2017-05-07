@@ -50,6 +50,10 @@ describe('reports', () => {
             },
             hours: {
               planned: 11.5
+            },
+            workload: {
+              available: 138,
+              planned: 3
             }
           },
           {
@@ -70,6 +74,10 @@ describe('reports', () => {
             },
             hours: {
               planned: 8.5
+            },
+            workload: {
+              available: 102,
+              planned: 3
             }
           }
         ],
