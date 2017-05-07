@@ -1,11 +1,13 @@
-moment = require 'moment'
+momentTz = require 'moment-timezone'
+{ extendMoment } = require 'moment-range'
 { TAPi18n } = require 'meteor/tap:i18n'
+moment = extendMoment(momentTz)
 quarter = require './quarter'
 
 module.exports =
   relativeTimeString: (date) ->
     date = moment(date)
-    isRecent = moment().range(date, moment()).diff('week') < 1
+    isRecent = moment.range(date, moment()).diff('week') < 1
     [
       if isRecent then date.fromNow() else date.calendar(),
       TAPi18n.__('ui.at'),

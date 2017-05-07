@@ -1,4 +1,6 @@
-moment = require 'moment-timezone'
+momentTz = require 'moment-timezone'
+{ extendMoment } = require 'moment-range'
+moment = extendMoment(momentTz)
 includes = require 'lodash/includes'
 { Meteor } = require 'meteor/meteor'
 { Appointments } = require 'api/appointments'
@@ -38,11 +40,11 @@ module.exports = (job, resources) ->
       start = moment.tz(record.Datum_Beginn, timezone)
       end = moment.tz(record.Datum_Ende, timezone)
 
-      if (moment().range(start, end).diff('hours') > 20)
+      if (moment.range(start, end).diff('hours') > 20)
         console.error('[Importers] terminiko: upsertAppointments: Appointment duration is too long', record)
         return
 
-      if (moment().range(start, end).diff('seconds') < 1)
+      if (moment.range(start, end).diff('seconds') < 1)
         end = end.clone().add(5, 'minutes')
 
       externalUpdatedAt = moment.tz(record.Datum_Bearbeitung, timezone).toDate() if record.Datum_Bearbeitung

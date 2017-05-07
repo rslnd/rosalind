@@ -1,4 +1,6 @@
-import moment from 'moment'
+import momentTz from 'moment-timezone'
+import { extendMoment } from 'moment-range'
+const moment = extendMoment(momentTz)
 
 export default ({ Schedules }) => {
   const isOpen = ({ time = moment(), within = 'minute' } = {}) => {

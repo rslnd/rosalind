@@ -1,4 +1,6 @@
-moment = require 'moment'
+momentTz = require 'moment-timezone'
+{ extendMoment } = require 'moment-range'
+moment = extendMoment(momentTz)
 reduce = require 'lodash/reduce'
 find = require 'lodash/find'
 some = require 'lodash/some'
