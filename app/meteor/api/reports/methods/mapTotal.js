@@ -19,10 +19,28 @@ const mapPatients = ({ report }) => {
   return fromPairs(byTag)
 }
 
-export const mapTotal = ({ report }) => {
-  const patients = mapPatients({ report })
+const mapAssignees = ({ report }) => {
+  return report.assignees.length
+}
+
+const mapHours = ({ report }) => {
+  const planned = report.assignees.map((assignee) => {
+    return assignee.hours.planned
+  }).reduce(add, 0)
 
   return {
+    planned
+  }
+}
+
+export const mapTotal = ({ report }) => {
+  const patients = mapPatients({ report })
+  const assignees = mapAssignees({ report })
+  const hours = mapHours({ report })
+
+  return {
+    assignees,
+    hours,
     patients
   }
 }
