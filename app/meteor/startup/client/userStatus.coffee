@@ -1,6 +1,6 @@
 React = require 'react'
 { Icon } = require 'client/ui/components/Icon'
-moment = require 'moment'
+moment = require 'moment-timezone'
 Alert = require('react-s-alert').default
 { Meteor } = require 'meteor/meteor'
 { Tracker } = require 'meteor/tracker'

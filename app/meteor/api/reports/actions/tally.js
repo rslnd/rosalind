@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import flow from 'lodash/fp/flow'
 import filter from 'lodash/fp/filter'
 import map from 'lodash/fp/map'

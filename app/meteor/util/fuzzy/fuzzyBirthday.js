@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { zerofix } from '../zerofix'
 
 export const pattern = /(\d\d?)[ .\-\/\\,]*((\d\d?)|([a-zA-Z]+))[ .\-\/\\,]*(\d\d\d?\d?)?/

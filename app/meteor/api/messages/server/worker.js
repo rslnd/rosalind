@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Job } from 'meteor/vsivsi:job-collection'
 import { Messages } from 'api/messages'
 

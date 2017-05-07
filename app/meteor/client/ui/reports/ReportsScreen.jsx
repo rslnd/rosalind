@@ -1,6 +1,6 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'

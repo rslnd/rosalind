@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import dedent from 'dedent'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'

@@ -1,5 +1,5 @@
 import add from 'lodash/sum'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import 'moment-duration-format'
 import { Meteor } from 'meteor/meteor'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'

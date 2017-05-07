@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'

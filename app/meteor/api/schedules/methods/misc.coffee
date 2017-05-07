@@ -1,5 +1,5 @@
 each = require 'lodash/each'
-moment = require 'moment'
+moment = require 'moment-timezone'
 
 module.exports = ({ Schedules, Users, Groups, Time }) ->
   getScheduledHours: (options = {}) ->

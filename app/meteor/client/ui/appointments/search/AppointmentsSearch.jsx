@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import identity from 'lodash/identity'
 import React from 'react'
 import Select from 'react-select'

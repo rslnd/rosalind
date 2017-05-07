@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'

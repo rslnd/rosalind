@@ -3,7 +3,7 @@ import { Box } from 'client/ui/components/Box'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import './heatmap.css'
 
-import moment from 'moment'
+import moment from 'moment-timezone'
 const values = (nudge, selected) => {
   let v = []
   for (let i = 0; i <= 365; i++) {

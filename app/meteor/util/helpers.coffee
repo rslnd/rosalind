@@ -1,4 +1,4 @@
-moment = require 'moment'
+moment = require 'moment-timezone'
 { Mongo } = require 'meteor/mongo'
 { Spacebars } = require 'meteor/spacebars'
 { TAPi18n } = require 'meteor/tap:i18n'

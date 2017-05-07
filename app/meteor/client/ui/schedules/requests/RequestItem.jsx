@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import classnames from 'classnames'
 import FlatButton from 'material-ui/FlatButton'
 import { TAPi18n } from 'meteor/tap:i18n'

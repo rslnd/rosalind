@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import intersectionBy from 'lodash/intersectionBy'
 import unionBy from 'lodash/unionBy'
 import sortBy from 'lodash/sortBy'

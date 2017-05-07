@@ -1,4 +1,4 @@
-moment = require 'moment'
+moment = require 'moment-timezone'
 { Meteor } = require 'meteor/meteor'
 { TAPi18n } = require 'meteor/tap:i18n'
 { Events } = require 'api/events'

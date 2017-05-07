@@ -2,7 +2,7 @@ map = require 'lodash/map'
 some = require 'lodash/some'
 union = require 'lodash/union'
 reduce = require 'lodash/reduce'
-moment = require 'moment'
+moment = require 'moment-timezone'
 
 module.exports = ({ Schedules, Appointments }) ->
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { reduxForm, Field } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
