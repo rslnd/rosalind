@@ -13,12 +13,12 @@ const day = {
 }
 
 const appointments = [
-  { id: '101', assigneeId: '1', tag: 'A' },
-  { id: '102', assigneeId: '1', tag: 'A' },
-  { id: '103', assigneeId: '1', tag: 'B' },
-  { id: '104', assigneeId: '2', tag: 'A' },
-  { id: '105', assigneeId: '2', tag: 'B' },
-  { id: '106', assigneeId: '2', tag: 'B' }
+  { id: '101', assigneeId: '1', tag: 'new' },
+  { id: '102', assigneeId: '1', tag: 'surgery' },
+  { id: '103', assigneeId: '1', tag: 'surgery' },
+  { id: '104', assigneeId: '2', tag: 'new' },
+  { id: '105', assigneeId: '2', tag: 'recall' },
+  { id: '106', assigneeId: '2', tag: 'surgery' }
 ]
 
 describe('reports', () => {
@@ -34,6 +34,12 @@ describe('reports', () => {
             patients: {
               total: {
                 planned: 3
+              },
+              new: {
+                planned: 1
+              },
+              surgery: {
+                planned: 2
               }
             }
           },
@@ -42,6 +48,15 @@ describe('reports', () => {
             patients: {
               total: {
                 planned: 3
+              },
+              new: {
+                planned: 1
+              },
+              recall: {
+                planned: 1
+              },
+              surgery: {
+                planned: 1
               }
             }
           }

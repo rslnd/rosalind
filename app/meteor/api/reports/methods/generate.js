@@ -1,14 +1,25 @@
 import flow from 'lodash/fp/flow'
-import map from 'lodash/fp/map'
+import mapKeys from 'lodash/fp/mapKeys'
+import mapValues from 'lodash/fp/mapValues'
+
 import groupBy from 'lodash/fp/groupBy'
 
 const mapAssignee = ({ assigneeId, appointments }) => {
+  const appointmentsByTags = groupBy('tag')(appointments)
+
+  const byTags = mapValues((appointments) => {
+    return {
+      planned: appointments.length
+    }
+  })(appointmentsByTags)
+
   return {
     assigneeId,
     patients: {
       total: {
         planned: appointments.length
-      }
+      },
+      ...byTags
     }
   }
 }
