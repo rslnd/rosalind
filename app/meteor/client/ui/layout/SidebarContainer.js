@@ -1,5 +1,5 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { process as server } from 'meteor/clinical:env'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
@@ -13,7 +13,7 @@ const sidebarItems = () => {
       icon: 'calendar',
       roles: ['admin', 'appointments'],
       subItems: [
-        { name: 'thisCalendar', path: '/' }
+        { name: 'thisCalendar' }
       ]
     },
     {
@@ -22,7 +22,7 @@ const sidebarItems = () => {
       roles: ['admin', 'inboundCalls'],
       countBadge: 'inboundCalls',
       subItems: [
-        { name: 'thisOpen', path: '/' },
+        { name: 'thisOpen' },
         { name: 'thisResolved', path: '/resolved' },
         { name: 'thisNew', path: '/new' }
       ]
@@ -32,7 +32,7 @@ const sidebarItems = () => {
       icon: 'user-md',
       roles: ['admin', 'schedules'],
       subItems: [
-        { name: 'statusBoard', path: '/' },
+        { name: 'statusBoard' },
         { name: 'timesheets', path: '/timesheets' },
         { name: 'requests.this', path: '/requests' },
         { name: 'thisDefault', path: '/default' },
@@ -46,7 +46,7 @@ const sidebarItems = () => {
       icon: 'bar-chart',
       roles: ['admin', 'reports'],
       subItems: [
-        { name: 'dashboard', path: '/' }
+        { name: 'dashboard' }
       ]
     },
     {
@@ -54,7 +54,7 @@ const sidebarItems = () => {
       icon: 'unlock-alt',
       roles: ['admin', 'users'],
       subItems: [
-        { name: 'thisAll', path: '/' },
+        { name: 'thisAll' },
         { name: 'thisNew', path: '/new' }
       ]
     },

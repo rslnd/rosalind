@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 echo "** Pulling base image in background"
-docker pull node:4.7.3 &
+docker pull node:4.8.1 &
 
 echo "** Building meteor bundle"
 
@@ -14,7 +14,7 @@ mkdir -p ../build/
 cd ../app/meteor/
 
 echo "** Removing debug packages"
-time meteor remove xolvio:backdoor xolvio:cleaner seed || true
+time meteor remove xolvio:backdoor xolvio:cleaner || true
 
 echo "** Building"
 time meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory ../../build

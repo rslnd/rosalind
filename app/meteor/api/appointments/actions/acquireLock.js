@@ -22,7 +22,7 @@ export const acquireLock = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const length = getDefaultLength({ assigneeId })
+      const length = getDefaultLength({ assigneeId, date: moment(time) })
 
       const appointmentId = Appointments.insert({
         start: time,

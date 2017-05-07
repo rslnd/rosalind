@@ -22,7 +22,8 @@ export class TagsField extends React.Component {
   }
 
   render () {
-    const tags = Tags.find({}, { sort: { order: 1 } }).fetch().map((t) => {
+    const selector = this.props.allowedTags ? { _id: { $in: this.props.allowedTags } } : {}
+    const tags = Tags.find(selector, { sort: { order: 1 } }).map((t) => {
       const selected = this.props.input.value && this.props.input.value.includes(t._id)
       return {
         ...t,

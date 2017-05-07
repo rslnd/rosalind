@@ -2,7 +2,6 @@ React = require 'react'
 once = require 'lodash/once'
 Mousetrap = require 'mousetrap'
 require 'mousetrap/plugins/global-bind/mousetrap-global-bind'
-{ browserHistory } = require 'react-router'
 Alert = require('react-s-alert').default
 { SpecialUnicorn } = require 'client/ui/components/Emoji'
 { Modal } = require 'client/old/templates/application/modals/blazeModal'
@@ -78,14 +77,14 @@ bindAll = once ->
   Mousetrap.bindGlobal 'esc', ->
     $(document.activeElement).blur()
     if window.hotkeyFlag
-      history.back()
+      window.__deprecated_history_go_back()
 
   Object.keys(hotkeys).forEach (group) ->
     hotkeys[group].forEach (hotkey) ->
       if hotkey.fn
         Mousetrap.bind(hotkey.key, hotkey.fn)
       else if hotkey.go
-        Mousetrap.bind(hotkey.key, -> browserHistory.push(hotkey.go))
+        Mousetrap.bind(hotkey.key, -> window.__deprecated_history_push(hotkey.go))
 
 
 module.exports = ->

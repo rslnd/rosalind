@@ -11,6 +11,7 @@ module.exports = new SimpleSchema
     allowedValues: [
       'default'
       'override'
+      'constraint'
       'businessHours'
       'businessHoursOverride'
       'holidays'

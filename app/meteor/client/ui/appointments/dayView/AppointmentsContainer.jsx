@@ -5,6 +5,8 @@ import sortBy from 'lodash/fp/sortBy'
 import uniq from 'lodash/uniq'
 import flatten from 'lodash/flatten'
 import union from 'lodash/union'
+import Alert from 'react-s-alert'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { dateToDay } from 'util/time/day'
@@ -22,7 +24,7 @@ const appointmentsSubsManager = new SubsManager({
 })
 
 const composer = (props, onData) => {
-  const date = moment(props.params && props.params.date || undefined)
+  const date = moment(props.match && props.match.params && props.match.params.date || undefined)
   const day = dateToDay(date)
   const startOfDay = date.clone().startOf('day').toDate()
   const endOfDay = date.clone().endOf('day').toDate()
@@ -79,15 +81,25 @@ const composer = (props, onData) => {
 
       // Add override schedules to assignee
       mapUncapped((assignee) => {
-        const schedules = Schedules.find({
+        const overrides = Schedules.find({
+          type: 'override',
           userId: assignee.assigneeId,
           start: { $gte: startOfDay },
           end: { $lte: endOfDay }
         }).fetch()
 
+        const constraints = Schedules.find({
+          type: 'constraint',
+          userId: assignee.assigneeId,
+          weekdays: date.clone().locale('en').format('ddd').toLowerCase(),
+          start: { $lte: startOfDay },
+          end: { $gte: endOfDay }
+        }).fetch()
+
         return {
           ...assignee,
-          schedules
+          schedules: overrides,
+          constraints
         }
       }),
 
@@ -106,7 +118,14 @@ const composer = (props, onData) => {
           const notes = appointment.notes()
           const lockedBy = Users.findOne({ _id: appointment.lockedBy })
           const lockedByFirstName = lockedBy && lockedBy.firstName()
-          return { ...appointment, patient, notes, lockedByFirstName }
+          return {
+            ...appointment,
+            patient,
+            notes,
+            lockedByFirstName,
+            timeStart: moment(appointment.start).format('[T]HHmm'),
+            timeEnd: moment(appointment.end).format('[T]HHmm')
+          }
         })
 
         return {
@@ -117,12 +136,14 @@ const composer = (props, onData) => {
       })
     )(assigneeIds)
 
-    const onPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
-    const onPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
+    const onNewAppointmentPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
+    const onNewAppointmentPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
     const handleSetAdmitted = (args) => Appointments.actions.setAdmitted.call(args)
-    const handleMove = (args) => Appointments.actions.move.call(args)
+    const handleMove = (args) => Appointments.actions.move.callPromise(args).then(() => {
+      Alert.success(TAPi18n.__('appointments.moveSuccess'))
+    })
 
-    onData(null, { assignees, date, onPopoverOpen, onPopoverClose, handleSetAdmitted, handleMove, subsReady })
+    onData(null, { assignees, date, onNewAppointmentPopoverOpen, onNewAppointmentPopoverClose, handleSetAdmitted, handleMove, subsReady })
   } else {
     onData(null, null)
   }

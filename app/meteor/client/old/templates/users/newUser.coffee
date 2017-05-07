@@ -1,4 +1,3 @@
-{ browserHistory } = require 'react-router'
 { Create } = require 'api/users/schema/actions'
 
 Template.newUser.helpers
@@ -7,4 +6,4 @@ Template.newUser.helpers
 
 AutoForm.hooks
   insertUserForm:
-    onSuccess: (formType, result) -> browserHistory.push('/users/' + result + '/edit')
+    onSuccess: (formType, result) -> window.__deprecated_history_push('/users/' + result + '/edit')

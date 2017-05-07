@@ -1,11 +1,12 @@
 import React from 'react'
 import classnames from 'classnames'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { SidebarContainer } from './SidebarContainer'
 import { UserPanelContainer } from './UserPanelContainer'
 import { FooterContainer } from './FooterContainer'
 import { Alerts } from './Alerts'
 import { Login } from 'client/ui/users/Login'
+import { MaintenanceMessageContainer } from './MaintenanceMessageContainer'
 import style from './mainLayoutStyle'
 
 export class MainLayout extends React.Component {
@@ -57,6 +58,7 @@ export class MainLayout extends React.Component {
         <div className="dropzone"></div>
         <span id="locale" className={locale}></span>
         <Alerts />
+        <MaintenanceMessageContainer />
       </div>
     )
 

@@ -251,3 +251,12 @@ h6,
 .s-alert-box {
   z-index: 1060 !important;
 }
+
+// hide react-dates accessibility modal
+.DayPickerKeyboardShortcuts__show {
+  display: none;
+}
+
+.DayPickerKeyboardShortcuts__panel {
+  display: none;
+}

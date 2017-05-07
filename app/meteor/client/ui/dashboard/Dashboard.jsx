@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 

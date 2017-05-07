@@ -10,7 +10,7 @@ import { ReportsScreen } from './ReportsScreen'
 
 const composer = (props, onData) => {
   if (Meteor.subscribe('reports').ready()) {
-    const date = moment(props.params && props.params.date)
+    const date = moment(props.match && props.match.params && props.match.params.date)
     const day = omit(dateToDay(date), 'date')
     const rawReport = Reports.findOne({ day })
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ])

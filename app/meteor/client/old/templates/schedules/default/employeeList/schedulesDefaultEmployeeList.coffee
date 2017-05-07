@@ -1,6 +1,5 @@
 map = require 'lodash/map'
 Time = require 'util/time'
-{ browserHistory } = require 'react-router'
 { Schedules } = require 'api/schedules'
 { Users } = require 'api/users'
 { Groups } = require 'api/groups'
@@ -29,4 +28,4 @@ Template.schedulesDefaultEmployeeList.events
     e.preventDefault()
     url = $(e.target).attr('href')
     Template.schedulesDefault.currentView.set('refresh', url)
-    browserHistory.replace(url)
+    window.__deprecated_history_replace(url)

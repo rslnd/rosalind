@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { DayPicker } from 'react-dates'
 import Portal from 'react-portal'
@@ -12,7 +12,8 @@ class DateNavigationButtons extends React.Component {
     super(props)
 
     this.state = {
-      calendarOpen: false
+      calendarOpen: false,
+      hoverDate: null
     }
 
     this.goToDate = this.goToDate.bind(this)
@@ -28,6 +29,11 @@ class DateNavigationButtons extends React.Component {
     this.handleCalendarClose = this.handleCalendarClose.bind(this)
     this.handleCalendarOpen = this.handleCalendarOpen.bind(this)
     this.handleCalendarDayChange = this.handleCalendarDayChange.bind(this)
+    this.isToday = this.isToday.bind(this)
+    this.isSelected = this.isSelected.bind(this)
+    this.isHovered = this.isHovered.bind(this)
+    this.handleCalendarDayMouseEnter = this.handleCalendarDayMouseEnter.bind(this)
+    this.handleCalendarDayMouseLeave = this.handleCalendarDayMouseLeave.bind(this)
   }
 
   dateToPath (date) {
@@ -45,7 +51,7 @@ class DateNavigationButtons extends React.Component {
       }
     }
     const path = this.dateToPath(targetDay)
-    this.props.router.replace(path)
+    this.props.history.replace(path)
   }
 
   handleBackwardMonthClick () {
@@ -62,7 +68,7 @@ class DateNavigationButtons extends React.Component {
 
   handleTodayClick () {
     const path = this.dateToPath(moment())
-    this.props.router.push(path)
+    this.props.history.push(path)
 
     this.props.onTodayClick && this.props.onTodayClick()
   }
@@ -109,8 +115,32 @@ class DateNavigationButtons extends React.Component {
   }
 
   handleCalendarDayChange (date) {
-    const path = this.dateToPath(date)
-    this.props.router.replace(path)
+    const path = this.dateToPath(moment(date))
+    this.props.history.replace(path)
+  }
+
+  isToday (day) {
+    return day.isSame(moment(), 'day')
+  }
+
+  isSelected (day) {
+    return day.isSame(this.props.date, 'day')
+  }
+
+  isHovered (day) {
+    return day.isSame(this.state.hoverDate, 'day')
+  }
+
+  handleCalendarDayMouseEnter (day) {
+    this.setState({
+      hoverDate: day
+    })
+  }
+
+  handleCalendarDayMouseLeave () {
+    this.setState({
+      hoverDate: null
+    })
   }
 
   render () {
@@ -200,12 +230,19 @@ class DateNavigationButtons extends React.Component {
             }}>
             <div onMouseLeave={this.handleCalendarClose}>
               <DayPicker
-                onDayMouseDown={this.handleCalendarDayChange}
-                date={this.props.date}
+                onDayClick={this.handleCalendarDayChange}
+                onDayMouseEnter={this.handleCalendarDayMouseEnter}
+                onDayMouseLeave={this.handleCalendarDayMouseLeave}
+                // onFocusChange={(x) => console.log(x)}
+                // date={this.props.date}
+                // focused
                 initialVisibleMonth={() => this.props.date}
                 enableOutsideDays
+                numberOfMonths={1}
                 modifiers={{
-                  current: (day) => day.isSame(this.props.date, 'day')
+                  today: (day) => this.isToday(day),
+                  'hovered-span': (day) => this.isSelected(day),
+                  hovered: (day) => this.isHovered(day)
                 }}
               />
             </div>

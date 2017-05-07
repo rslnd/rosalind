@@ -1,5 +1,7 @@
 import moment from 'moment'
-import { withRouter } from 'react-router'
+import Alert from 'react-s-alert'
+import { TAPi18n } from 'meteor/tap:i18n'
+import { withRouter } from 'react-router-dom'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from 'api/appointments'
 import { AppointmentActions } from './AppointmentActions'
@@ -31,14 +33,20 @@ const composer = (props, onData) => {
   }
 
   const softRemove = () => {
-    Appointments.actions.softRemove.call(args)
+    Appointments.actions.softRemove.callPromise(args).then(() => {
+      Alert.success(TAPi18n.__('appointments.softRemoveSuccess'))
+    })
     closeModal()
   }
 
   let startMove
   if (props.onStartMove) {
     startMove = () => {
-      props.onStartMove(args)
+      props.onStartMove({
+        ...args,
+        time: appointment.start,
+        assigneeId: appointment.assigneeId
+      })
     }
   }
 
@@ -47,7 +55,7 @@ const composer = (props, onData) => {
     viewInCalendar = () => {
       closeModal()
       const slug = moment(appointment.start).format('YYYY-MM-DD')
-      props.router.push(`/appointments/${slug}#${props.appointmentId}`)
+      props.history.push(`/appointments/${slug}#${props.appointmentId}`)
     }
   }
 

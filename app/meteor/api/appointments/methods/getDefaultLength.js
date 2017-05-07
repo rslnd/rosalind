@@ -1,10 +1,27 @@
 import max from 'lodash/max'
 import { Users } from 'api/users'
+import { Schedules } from 'api/schedules'
 import { Tags } from 'api/tags'
 
 const defaultLength = 5
 
-export const getDefaultLength = ({ assigneeId, tags }) => {
+const getLengthConstraint = ({ assigneeId, date }) => {
+  if (!date || !assigneeId) {
+    return defaultLength
+  }
+
+  const constraint = Schedules.findOne({
+    type: 'constraint',
+    userId: assigneeId,
+    weekdays: date.clone().locale('en').format('ddd').toLowerCase(),
+    start: { $lte: date.toDate() },
+    end: { $gte: date.toDate() }
+  })
+
+  return constraint && constraint.length || defaultLength
+}
+
+export const getDefaultLength = ({ assigneeId, date, tags }) => {
   let assigneeLength
   let tagLengths = []
 
@@ -19,7 +36,7 @@ export const getDefaultLength = ({ assigneeId, tags }) => {
     tagLengths = Tags.find({ _id: { $in: tags } }).fetch().map(t => t.length)
   }
 
-  const maxLength = max([ assigneeLength, ...tagLengths ])
+  const maxLength = max([ assigneeLength, ...tagLengths, getLengthConstraint({ assigneeId, date }) ])
 
   return maxLength || defaultLength
 }
