@@ -21,10 +21,16 @@ const appointments = [
   { id: '106', assigneeId: '2', tag: 'surgery' }
 ]
 
+const overrideSchedules = [
+  { assigneeId: '1', start: moment('2017-02-01T10:15:00.000'), end: moment('2017-02-01T12:15:00.000') },
+  { assigneeId: '2', start: moment('2017-02-01T10:15:00.000'), end: moment('2017-02-01T14:15:00.000') },
+  { assigneeId: '2', start: moment('2017-02-01T16:15:00.000'), end: moment('2017-02-01T17:15:00.000') }
+]
+
 describe('reports', () => {
   describe('generate', () => {
     it('generates report', () => {
-      const generatedReport = generate({ day, appointments })
+      const generatedReport = generate({ day, appointments, overrideSchedules })
 
       const expectedReport = {
         day,
@@ -41,6 +47,9 @@ describe('reports', () => {
               surgery: {
                 planned: 2
               }
+            },
+            hours: {
+              planned: 11.5
             }
           },
           {
@@ -58,6 +67,9 @@ describe('reports', () => {
               surgery: {
                 planned: 1
               }
+            },
+            hours: {
+              planned: 8.5
             }
           }
         ],
