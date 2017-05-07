@@ -39,13 +39,16 @@ describe('reports', () => {
             assigneeId: '1',
             patients: {
               total: {
-                planned: 3
+                planned: 3,
+                plannedPerHour: 3 / 11.5
               },
               new: {
-                planned: 1
+                planned: 1,
+                plannedPerHour: 1 / 11.5
               },
               surgery: {
-                planned: 2
+                planned: 2,
+                plannedPerHour: 2 / 11.5
               }
             },
             hours: {
@@ -60,16 +63,20 @@ describe('reports', () => {
             assigneeId: '2',
             patients: {
               total: {
-                planned: 3
+                planned: 3,
+                plannedPerHour: 3 / 8.5
               },
               new: {
-                planned: 1
+                planned: 1,
+                plannedPerHour: 1 / 8.5
               },
               recall: {
-                planned: 1
+                planned: 1,
+                plannedPerHour: 1 / 8.5
               },
               surgery: {
-                planned: 1
+                planned: 1,
+                plannedPerHour: 1 / 8.5
               }
             },
             hours: {

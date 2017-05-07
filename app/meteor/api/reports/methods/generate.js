@@ -18,27 +18,36 @@ const mapHours = ({ assigneeId, overrideSchedules }) => {
   }
 }
 
-const mapAppointments = ({ assigneeId, appointments }) => {
+const mapAppointments = ({ assigneeId, appointments, hours }) => {
   const appointmentsByTags = groupBy('tag')(appointments)
 
   const byTags = mapValues((appointments) => {
+
+    const planned = appointments.length
+    const plannedPerHour = planned / hours.planned
+
     return {
-      planned: appointments.length
+      planned,
+      plannedPerHour
     }
   })(appointmentsByTags)
 
+  const planned = appointments.length
+  const plannedPerHour = planned / hours.planned
+
   return {
     total: {
-      planned: appointments.length
+      planned,
+      plannedPerHour
     },
     ...byTags
   }
 }
 
 const mapAssignee = ({ assigneeId, appointments, overrideSchedules }) => {
-  const patients = mapAppointments({ assigneeId, appointments })
   const hours = mapHours({ assigneeId, overrideSchedules })
   const workload = mapWorkload({ hours, appointments })
+  const patients = mapAppointments({ assigneeId, appointments, hours })
 
   return {
     assigneeId,
