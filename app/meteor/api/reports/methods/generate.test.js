@@ -88,7 +88,22 @@ describe('reports', () => {
             }
           }
         ],
-        total: {}
+        total: {
+          patients: {
+            total: {
+              planned: 6
+            },
+            new: {
+              planned: 2
+            },
+            surgery: {
+              planned: 3
+            },
+            recall: {
+              planned: 1
+            }
+          }
+        }
       }
 
       expect(generatedReport).to.eql(expectedReport)
