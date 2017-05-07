@@ -90,6 +90,9 @@ describe('reports', () => {
         ],
         total: {
           assignees: 2,
+          hours: {
+            planned: 20
+          },
           patients: {
             total: {
               planned: 6
