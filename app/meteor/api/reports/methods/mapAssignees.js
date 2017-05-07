@@ -19,7 +19,9 @@ const mapHours = ({ assigneeId, overrideSchedules }) => {
 }
 
 const mapAppointments = ({ assigneeId, appointments, hours }) => {
-  const appointmentsByTags = groupBy('tag')(appointments)
+  // Group by first tag
+  // TOOD: Check if the first tag is also the one with the highest priority
+  const appointmentsByTags = groupBy((a) => a.tags && a.tags[0] || null)(appointments)
 
   const byTags = mapValues((appointments) => {
     const planned = appointments.length

@@ -13,13 +13,13 @@ const day = {
 }
 
 const appointments = [
-  { id: '101', assigneeId: '1', tag: 'new' },
-  { id: '102', assigneeId: '1', tag: 'surgery' },
-  { id: '103', assigneeId: '1', tag: 'surgery' },
-  { id: '104', assigneeId: '2', tag: 'new' },
-  { id: '105', assigneeId: '2', tag: 'recall' },
-  { id: '106', assigneeId: '2', tag: 'surgery' },
-  { id: '107', tag: 'new' }
+  { id: '101', assigneeId: '1', tags: ['new', 'tag2'] },
+  { id: '102', assigneeId: '1', tags: ['surgery'] },
+  { id: '103', assigneeId: '1', tags: ['surgery'] },
+  { id: '104', assigneeId: '2', tags: ['new'] },
+  { id: '105', assigneeId: '2', tags: ['recall'] },
+  { id: '106', assigneeId: '2', tags: ['surgery', 'tag3'] },
+  { id: '107', tags: ['new', 'tag3'] }
 ]
 
 const overrideSchedules = [
