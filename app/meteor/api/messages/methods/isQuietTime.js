@@ -22,7 +22,7 @@ export const isWeekend = (m) => {
 export const isHolidays = (holidays = []) => {
   const ranges = holidays.map((h) => moment.range(h.start, h.end))
 
-  return (m) => some(ranges, (range) => m.within(range))
+  return (m) => some(ranges, (range) => moment(m).within(range))
 }
 
 export const isQuietTime = (time) => {

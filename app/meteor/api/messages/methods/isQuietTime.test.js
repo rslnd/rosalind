@@ -1,7 +1,10 @@
 /* eslint-env mocha */
 import { expect } from 'chai'
-import moment from 'moment'
+import momentTz from 'moment-timezone'
+import { extendMoment } from 'moment-range'
 import { isQuietTime, isHolidays } from './isQuietTime'
+
+const moment = extendMoment(momentTz)
 
 describe('api', () => {
   describe('messages', () => {
