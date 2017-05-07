@@ -1,5 +1,6 @@
 import { Schedules } from 'api/schedules'
 import { Appointments } from 'api/appointments'
+import { Tags } from 'api/tags'
 import { renderEmail } from './renderEmail'
 import { upsert } from './upsert'
 import { tally } from './tally'
@@ -10,6 +11,6 @@ export default function ({ Reports }) {
     { renderEmail: renderEmail({ Reports }) },
     { upsert: upsert({ Reports }) },
     { tally: tally({ Reports }) },
-    { generate: generate({ Reports, Schedules, Appointments }) }
+    { generate: generate({ Reports, Schedules, Appointments, Tags }) }
   )
 }

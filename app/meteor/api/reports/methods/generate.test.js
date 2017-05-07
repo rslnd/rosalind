@@ -13,13 +13,13 @@ const day = {
 }
 
 const appointments = [
-  { id: '101', assigneeId: '1', tags: ['new', 'tag2'] },
-  { id: '102', assigneeId: '1', tags: ['surgery'] },
-  { id: '103', assigneeId: '1', tags: ['surgery'] },
-  { id: '104', assigneeId: '2', tags: ['new'] },
-  { id: '105', assigneeId: '2', tags: ['recall'] },
-  { id: '106', assigneeId: '2', tags: ['surgery', 'tag3'] },
-  { id: '107', tags: ['new', 'tag3'] }
+  { id: '101', assigneeId: '1', tags: ['n3w', 'should_not_show_up_tag2'] },
+  { id: '102', assigneeId: '1', tags: ['2rg'] },
+  { id: '103', assigneeId: '1', tags: ['2rg'] },
+  { id: '104', assigneeId: '2', tags: ['n3w'] },
+  { id: '105', assigneeId: '2', tags: ['rc1'] },
+  { id: '106', assigneeId: '2', tags: ['2rg', 'should_not_show_up_tag3'] },
+  { id: '107', tags: ['n3w', 'should_not_show_up_tag1'] }
 ]
 
 const overrideSchedules = [
@@ -28,10 +28,16 @@ const overrideSchedules = [
   { assigneeId: '2', start: moment('2017-02-01T16:15:00.000'), end: moment('2017-02-01T17:15:00.000') }
 ]
 
+const tagMapping = {
+  'n3w': 'new',
+  '2rg': 'surgery',
+  'rc1': 'recall'
+}
+
 describe('reports', () => {
   describe('generate', () => {
     it('generates report', () => {
-      const generatedReport = generate({ day, appointments, overrideSchedules })
+      const generatedReport = generate({ day, appointments, overrideSchedules, tagMapping })
 
       const expectedReport = {
         day,

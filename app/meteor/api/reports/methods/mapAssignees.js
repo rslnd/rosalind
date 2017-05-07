@@ -18,10 +18,18 @@ const mapHours = ({ assigneeId, overrideSchedules }) => {
   }
 }
 
-const mapAppointments = ({ assigneeId, appointments, hours }) => {
+const mapAppointments = ({ assigneeId, appointments, hours, tagMapping }) => {
   // Group by first tag
   // TOOD: Check if the first tag is also the one with the highest priority
-  const appointmentsByTags = groupBy((a) => a.tags && a.tags[0] || null)(appointments)
+  const applyTagMapping = (appointment) => {
+    if (appointment.tags && appointment.tags[0]) {
+      return tagMapping[appointment.tags[0]] || null
+    } else {
+      return null
+    }
+  }
+
+  const appointmentsByTags = groupBy(applyTagMapping)(appointments)
 
   const byTags = mapValues((appointments) => {
     const planned = appointments.length
@@ -45,10 +53,10 @@ const mapAppointments = ({ assigneeId, appointments, hours }) => {
   }
 }
 
-const mapAssignee = ({ assigneeId, appointments, overrideSchedules }) => {
+const mapAssignee = ({ assigneeId, appointments, overrideSchedules, tagMapping }) => {
   const hours = mapHours({ assigneeId, overrideSchedules })
   const workload = mapWorkload({ hours, appointments })
-  const patients = mapAppointments({ assigneeId, appointments, hours })
+  const patients = mapAppointments({ assigneeId, appointments, hours, tagMapping })
 
   return {
     assigneeId,
@@ -58,7 +66,7 @@ const mapAssignee = ({ assigneeId, appointments, overrideSchedules }) => {
   }
 }
 
-export const mapAssignees = ({ appointments, overrideSchedules }) => {
+export const mapAssignees = ({ appointments, overrideSchedules, tagMapping }) => {
   const appointmentsByAssignees = groupBy('assigneeId')(appointments)
 
   // Set id of unassigned appointments to the string 'null'
@@ -73,7 +81,8 @@ export const mapAssignees = ({ appointments, overrideSchedules }) => {
     return mapAssignee({
       assigneeId,
       appointments: appointmentsByAssignees[assigneeId],
-      overrideSchedules: overrideSchedulesByAssignees[assigneeId]
+      overrideSchedules: overrideSchedulesByAssignees[assigneeId],
+      tagMapping
     })
   })
 }
