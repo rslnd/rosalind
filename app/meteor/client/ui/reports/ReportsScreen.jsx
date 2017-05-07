@@ -67,10 +67,20 @@ export class ReportsScreen extends React.Component {
           <FlipMove duration={230}>
             {
               this.props.report
-              ? <div key="reportTable"><Report report={this.props.report} showRevenue={this.state.showRevenue} /></div>
-            : <div key="noReports"><Box type="warning" title={TAPi18n.__('ui.notice')} body={TAPi18n.__('reports.empty')} /></div>
+              ? <div key="reportTable">
+                  <Report report={this.props.report} showRevenue={this.state.showRevenue} />
+                </div>
+              : <div key="noReports">
+                  <Box type="warning" title={TAPi18n.__('ui.notice')}>
+                    <p>{TAPi18n.__('reports.empty')}</p>
+                  </Box>
+                </div>
             }
           </FlipMove>
+
+          <Button onClick={this.props.generateReport}>
+              Diesen Bericht neu generieren
+          </Button>
         </div>
       </div>
     )
