@@ -18,7 +18,8 @@ const appointments = [
   { id: '103', assigneeId: '1', tag: 'surgery' },
   { id: '104', assigneeId: '2', tag: 'new' },
   { id: '105', assigneeId: '2', tag: 'recall' },
-  { id: '106', assigneeId: '2', tag: 'surgery' }
+  { id: '106', assigneeId: '2', tag: 'surgery' },
+  { id: '107', tag: 'new' }
 ]
 
 const overrideSchedules = [
@@ -86,10 +87,29 @@ describe('reports', () => {
               available: 102,
               planned: 3
             }
+          }, {
+            assigneeId: 'null',
+            patients: {
+              total: {
+                planned: 1,
+                plannedPerHour: 1 / 13.5
+              },
+              new: {
+                planned: 1,
+                plannedPerHour: 1 / 13.5
+              }
+            },
+            hours: {
+              planned: 13.5
+            },
+            workload: {
+              available: 162,
+              planned: 1
+            }
           }
         ],
         total: {
-          assignees: 2,
+          assignees: 3,
           hours: {
             planned: 20
           },

@@ -10,8 +10,11 @@ const mapPatients = ({ report }) => {
 
   const byTag = tags.map((tag) => {
     const sum = report.assignees.map((assignee) => {
+      // Don't count any hours for unassigned appointments
+      if (assignee.assigneeId === 'null') { return 0 }
+
       return (assignee.patients[tag] && assignee.patients[tag].planned || 0)
-    }).reduce(add)
+    }).reduce(add, 0)
 
     return [ tag, { planned: sum } ]
   })
@@ -25,6 +28,9 @@ const mapAssignees = ({ report }) => {
 
 const mapHours = ({ report }) => {
   const planned = report.assignees.map((assignee) => {
+    // Don't count any hours for unassigned appointments
+    if (assignee.assigneeId === 'null') { return 0 }
+
     return assignee.hours.planned
   }).reduce(add, 0)
 

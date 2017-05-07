@@ -1,7 +1,14 @@
 import moment from 'moment-timezone'
 import { dayToDate } from '../../../util/time/day'
 
+// TODO: Get rid of the hard coded duration of 13.5 hours
+const DAY_HOURS = 13.5
+
 export const calculateScheduledHours = ({ overrideSchedules }) => {
+  if (!overrideSchedules) {
+    return DAY_HOURS
+  }
+
   // Calculate the durations of each blocking override
   const blockedDurations = overrideSchedules.map((schedule) =>
     (schedule.end - schedule.start) / 1000 / 60
@@ -11,8 +18,7 @@ export const calculateScheduledHours = ({ overrideSchedules }) => {
   const blockedMinutes = blockedDurations.reduce((prev, curr) => (prev + curr), 0)
 
   // Subtract the blocked minutes from the duration of the day
-  // TODO: Get rid of the hard coded duration of 13.5 hours
-  const dayDuration = 60 * 13.5
+  const dayDuration = 60 * DAY_HOURS
 
   // Convert minutes to decimal hours
   const scheduledHours = (dayDuration - blockedMinutes) / 60

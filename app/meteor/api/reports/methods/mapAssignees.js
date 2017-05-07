@@ -22,7 +22,6 @@ const mapAppointments = ({ assigneeId, appointments, hours }) => {
   const appointmentsByTags = groupBy('tag')(appointments)
 
   const byTags = mapValues((appointments) => {
-
     const planned = appointments.length
     const plannedPerHour = planned / hours.planned
 
@@ -59,6 +58,13 @@ const mapAssignee = ({ assigneeId, appointments, overrideSchedules }) => {
 
 export const mapAssignees = ({ appointments, overrideSchedules }) => {
   const appointmentsByAssignees = groupBy('assigneeId')(appointments)
+
+  // Set id of unassigned appointments to the string 'null'
+  if (appointmentsByAssignees['undefined']) {
+    appointmentsByAssignees.null = appointmentsByAssignees['undefined']
+    delete appointmentsByAssignees['undefined']
+  }
+
   const overrideSchedulesByAssignees = groupBy('assigneeId')(overrideSchedules)
 
   return Object.keys(appointmentsByAssignees).map((assigneeId) => {
