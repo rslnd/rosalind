@@ -31,7 +31,7 @@ export const ReportTableHeader = ({ showRevenue }) => (
       <th style={{ textAlign: 'center' }} colSpan={2}>Kontrolle</th>
       <th style={{ textAlign: 'center' }} colSpan={2}>OP</th>
       <th style={{ textAlign: align }} colSpan={2}>Neu/Std.</th>
-      <th style={{ textAlign: align }} colSpan={2}>Umsatz</th>
+      {showRevenue && <th style={{ textAlign: align }} colSpan={2}>Umsatz</th>}
     </tr>
 
     <tr className="text-muted" style={{ backgroundColor: '#f7f8f9' }}>
@@ -49,8 +49,8 @@ export const ReportTableHeader = ({ showRevenue }) => (
       <th style={{ textAlign: align }}>Ist</th>
       <th style={{ textAlign: align, borderLeft: colDivider }}>Plan</th>
       <th style={{ textAlign: align }}>Ist</th>
-      <th style={{ textAlign: align }}>pro Std.</th>
-      <th style={{ textAlign: align }}>Gesamt</th>
+      {showRevenue && <th style={{ textAlign: align }}>pro Std.</th>}
+      {showRevenue && <th style={{ textAlign: align }}>Gesamt</th>}
     </tr>
   </thead>
 )
@@ -112,21 +112,24 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         }</Td>
  
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
-        <Td style={{ textAlign: align }}>{assignee.assigneeId &&
-          <Nil />
-        }</Td>
+        {
+          showRevenue && 
+            <Td style={{ textAlign: align }}>{assignee.assigneeId &&
+              <Nil />
+            }</Td>
+        }
 
         {/* Umsatz gesamt */}
-        <Td style={{ textAlign: align }}><Nil /></Td>
+        {showRevenue && <Td style={{ textAlign: align }}><Nil /></Td>}
       </tr>
     ))}
-    <SummaryRow report={report} />
+    <SummaryRow report={report} showRevenue={showRevenue} />
   </FlipMove>
 )
 
 class SummaryRow extends React.Component {
   render () {
-    const { report } = this.props
+    const { report, showRevenue } = this.props
     return (
       <tr style={{ borderTop: '2px solid #ebf1f2', backgroundColor: '#f7f8f9' }} className="bg-white">
         <td><b>∑</b></td>
@@ -159,11 +162,12 @@ class SummaryRow extends React.Component {
         <Td borderLeft>⌀ <Round number={idx(report, (_) => _.average.patients.new.plannedPerHour)} /></Td>
         <Td><Nil /></Td>
 
+        
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
-        <Td style={{ textAlign: align }}><Nil /></Td>
+        {showRevenue && <Td style={{ textAlign: align }}><Nil /></Td>}
 
         {/* Umsatz gesamt */}
-        <Td style={{ textAlign: align }}><Nil /></Td>
+        {showRevenue && <Td style={{ textAlign: align }}><Nil /></Td>}
       </tr>
     )
   }
