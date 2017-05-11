@@ -23,9 +23,9 @@ const appointments = [
 ]
 
 const overrideSchedules = [
-  { assigneeId: '1', start: moment('2017-02-01T10:15:00.000'), end: moment('2017-02-01T12:15:00.000') },
-  { assigneeId: '2', start: moment('2017-02-01T10:15:00.000'), end: moment('2017-02-01T14:15:00.000') },
-  { assigneeId: '2', start: moment('2017-02-01T16:15:00.000'), end: moment('2017-02-01T17:15:00.000') }
+  { userId: '1', start: moment('2017-02-01T10:15:00.000'), end: moment('2017-02-01T12:15:00.000') },
+  { userId: '2', start: moment('2017-02-01T10:15:00.000'), end: moment('2017-02-01T14:15:00.000') },
+  { userId: '2', start: moment('2017-02-01T16:15:00.000'), end: moment('2017-02-01T17:15:00.000') }
 ]
 
 const tagMapping = {
@@ -94,7 +94,6 @@ describe('reports', () => {
               planned: 3
             }
           }, {
-            assigneeId: 'null',
             patients: {
               total: {
                 planned: 1,
@@ -115,22 +114,42 @@ describe('reports', () => {
           }
         ],
         total: {
-          assignees: 3,
+          assignees: 2,
           hours: {
             planned: 20
           },
           patients: {
             total: {
-              planned: 6
+              planned: 7
             },
             new: {
-              planned: 2
+              planned: 3
             },
             surgery: {
               planned: 3
             },
             recall: {
               planned: 1
+            }
+          },
+          workload: {
+            available: 240,
+            planned: 6
+          }
+        },
+        average: {
+          patients: {
+            total: {
+              plannedPerHour: 7 / 20
+            },
+            new: {
+              plannedPerHour: 3 / 20
+            },
+            surgery: {
+              plannedPerHour: 3 / 20
+            },
+            recall: {
+              plannedPerHour: 1 / 20
             }
           }
         }

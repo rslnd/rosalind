@@ -69,20 +69,29 @@ const mapAssignee = ({ assigneeId, appointments, overrideSchedules, tagMapping }
 export const mapAssignees = ({ appointments, overrideSchedules, tagMapping }) => {
   const appointmentsByAssignees = groupBy('assigneeId')(appointments)
 
-  // Set id of unassigned appointments to the string 'null'
+  // Group unassigned appointments under 'null' and remove assigneeId field
   if (appointmentsByAssignees['undefined']) {
     appointmentsByAssignees.null = appointmentsByAssignees['undefined']
     delete appointmentsByAssignees['undefined']
   }
 
-  const overrideSchedulesByAssignees = groupBy('assigneeId')(overrideSchedules)
+  const overrideSchedulesByAssignees = groupBy('userId')(overrideSchedules)
 
   return Object.keys(appointmentsByAssignees).map((assigneeId) => {
-    return mapAssignee({
+    const appointments = appointmentsByAssignees[assigneeId]
+    const overrideSchedules = overrideSchedulesByAssignees[assigneeId]
+
+    const assignee = mapAssignee({
       assigneeId,
-      appointments: appointmentsByAssignees[assigneeId],
-      overrideSchedules: overrideSchedulesByAssignees[assigneeId],
+      appointments,
+      overrideSchedules,
       tagMapping
     })
+
+    if (assignee.assigneeId === 'null') {
+      delete assignee.assigneeId
+    }
+
+    return assignee
   })
 }

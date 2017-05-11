@@ -17,6 +17,11 @@ module.exports = new SimpleSchema
     blackbox: true
     optional: true
 
+  average:
+    type: Object
+    blackbox: true
+    optional: true
+
   external:
     optional: true
     type: External
