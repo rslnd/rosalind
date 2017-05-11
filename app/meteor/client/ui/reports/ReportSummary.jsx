@@ -6,6 +6,11 @@ const Nil = () => (
   <span className="text-quite-muted">?</span>
 )
 
+const BigPercent = (props) => {
+  const percentage = Math.round(100 * props.part / props.of)
+  return <Unit append="%">{percentage}</Unit>
+}
+
 export const InfoBox = ({ color = 'green', icon = 'eur', children, text, description }) => (
   <div className="info-box">
     <span className={`info-box-icon bg-${color}`}>
@@ -34,7 +39,11 @@ export const Unit = ({ prepend, append, children }) => (
 
 export const TotalRevenueBox = ({ report }) => (
   <InfoBox text={TAPi18n.__('reports.revenue')} color="green" icon="euro">
-    <Unit prepend="€">7.250</Unit>
+    {
+      report.total.revenue
+      ? <Unit prepend="€">{report.total.revenue}</Unit>
+      : <Nil /> 
+    }
   </InfoBox>
 )
 
@@ -42,31 +51,32 @@ export const NewPatientsPerHourBox = ({ report }) => (
   <InfoBox
     text={TAPi18n.__('reports.patientsNewPerHour')} color="purple" icon="user-plus">
     {
-      report.total.patientsNewPerHourActual
-      ? <Unit append="/h">{report.total.patientsNewPerHourActual.toFixed(1)}</Unit>
-      : (report.total.patientsNewPerHourScheduled
-        ? <Unit append="/h">{report.total.patientsNewPerHourScheduled.toFixed(1)}</Unit>
-        : <Nil />
-      )
+      idx(report, (_) => _.average.patients.new.plannedPerHour)
+      ? <Unit append="/h">{report.average.patients.new.plannedPerHour.toFixed(1)}</Unit>
+      : <Nil />
     }
   </InfoBox>
 )
 
 export const Workload = ({ report }) => (
   <InfoBox text="Auslastung" color="aqua" icon="calendar">
-    <Unit append="%">97.2</Unit>
+    {
+      report.total.workload.planned
+      ? <BigPercent part={report.total.workload.planned} of={report.total.workload.available} />
+      : <Nil />
+    }
   </InfoBox>
 )
 
 export const NoShowsBox = ({ report }) => (
   <InfoBox text="Nicht erschienen" color="red" icon="user-o">
-    <Unit append="%">2.4</Unit>
+    {<Nil /> || <Unit append="%">2.4</Unit>}
   </InfoBox>
 )
 
 export const TotalPatientsBox = ({ report }) => (
   <InfoBox text={TAPi18n.__('reports.patients')} color="green" icon="users">
-    {report.total.patients}
+    {idx(report, (_) => _.total.patients.total.planned) || <Nil />}
   </InfoBox>
 )
 

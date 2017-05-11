@@ -46,7 +46,7 @@ export class ReportsScreen extends React.Component {
         <div className="content-header">
           <h1>
             {TAPi18n.__('reports.thisDaySingular')} {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
-            <small>{weekOfYear(this.props.date)}</small>
+            <small>{weekOfYear(this.props.date, { short: true })}</small>
           </h1>
           <DateNavigation
             date={this.props.date}
