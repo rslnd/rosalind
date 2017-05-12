@@ -3,7 +3,8 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { dateToDay } from 'util/time/day'
-import { parseReportDate, parseReport } from './parseReport'
+import { parseReportDate, parseReport } from 'api/reports/methods/external/eoswin/parseReport'
+import { merge } from 'api/reports/methods/merge'
 import { Reports } from 'api/reports'
 import { Users } from 'api/users'
 
@@ -18,36 +19,43 @@ export const eoswinReports = ({ Importers }) => {
     }).validator(),
 
     run ({ name, content }) {
+      if (this.isSimulation) { return }
       if (!Meteor.userId()) { return }
 
       const day = dateToDay(parseReportDate(name))
-      let { assignees } = parseReport(content)
 
-      assignees.map((assignee) => {
-        if (assignee.external && assignee.external.eoswin.id) {
-          const user = Users.findOne({ 'external.eoswin.id': assignee.external.eoswin.id })
-          if (user) {
-            assignee.userId = user._id
-          }
-        }
-        return assignee
-      })
+      Reports.actions.generate.call({ day })
 
-      const report = {
-        day,
-        assignees,
-        external: {
-          eoswin: {
-            id: name,
-            timestamps: {
-              importedAp: moment().toDate(),
-              importedBy: Meteor.userId()
+      try {
+        const originalReport = Reports.findOne()
+        const users = Users.find({}).fetch()
+        const addendum = parseReport({ day, content, users })
+
+        console.log('[Importers] eoswinReports: parsed addendum', addendum)
+
+        let mergedReport
+        mergedReport = merge(originalReport, addendum)
+
+        const report = {
+          ...mergedReport,
+          day,
+          external: {
+            eoswin: {
+              id: name,
+              timestamps: {
+                importedAp: moment().toDate(),
+                importedBy: Meteor.userId()
+              }
             }
           }
         }
-      }
 
-      return Reports.actions.upsert.call({ report })
+        Reports.actions.upsert.call({ report })
+
+        return report
+      } catch (e) {
+        console.error(e.message, e.stack)
+      }
     }
   })
 }

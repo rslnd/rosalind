@@ -4,6 +4,10 @@ import { merge } from './merge'
 
 describe('reports', () => {
   describe('merge', () => {
+    it('handles empty addendum', () => {
+      expect(merge({ assignees: [] }, { assignees: [] })).to.eql({ assignees: [] })
+    })
+
     it('merges assignees', () => {
       const originalReport = {
         assignees: [

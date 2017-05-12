@@ -108,24 +108,24 @@ export const ReportTableBody = ({ showRevenue, report }) => (
 
 
         {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
-        <Td>{idx(assignee, (_) => _.patients.total.planned)}</Td>
-        <Td><Nil /></Td>
+        <Td>{idx(assignee, _ => _.patients.total.planned)}</Td>
+        <Td>{idx(assignee, _ => _.patients.total.actual) || <Nil />}</Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={assignee.patients.new.planned} of={assignee.patients.total.planned} /></Td>
-        <Td><Nil /></Td>
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.planned)} of={assignee.patients.total.planned} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.new.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={assignee.patients.recall.planned} of={assignee.patients.total.planned} /></Td>
-        <Td><Nil /></Td>
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.recall.planned)} of={assignee.patients.total.planned} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.recall.actual)} of={assignee.patients.total.actual} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, (_) => _.patients.surgery.planned)} of={assignee.patients.total.planned} /></Td>
-        <Td><Nil /></Td>
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.surgery.planned)} of={assignee.patients.total.planned} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.surgery.actual)} of={assignee.patients.total.actual} /></Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft>{assignee.assigneeId &&
-          <Round number={idx(assignee, (_) => _.patients.new.plannedPerHour)} />
+          <Round number={idx(assignee, _ => _.patients.new.plannedPerHour)} />
         }</Td>
         <Td>{assignee.assigneeId &&
           <Nil />
@@ -140,7 +140,12 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         }
 
         {/* Umsatz gesamt */}
-        {showRevenue && <Td style={align}><Nil /></Td>}
+        {
+          showRevenue &&
+            <Td style={align}>{
+              <Round number={idx(assignee, _ => _.revenue.total.actual)} /> || <Nil />
+            }</Td>
+        }
       </tr>
     ))}
     <SummaryRow report={report} showRevenue={showRevenue} />
@@ -179,7 +184,7 @@ class SummaryRow extends React.Component {
         <Td><Nil /></Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft>⌀ <Round number={idx(report, (_) => _.average.patients.new.plannedPerHour)} /></Td>
+        <Td borderLeft>⌀ <Round number={idx(report, _ => _.average.patients.new.plannedPerHour)} /></Td>
         <Td><Nil /></Td>
 
         

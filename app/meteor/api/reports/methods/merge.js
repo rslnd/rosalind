@@ -31,7 +31,7 @@ const mergeAssignees = (report, addendum) => {
 }
 
 export const merge = (report, addendum) => {
-  if (addendum.day && isEqual(addendum.day, report.day)) {
+  if (addendum.day && !isEqual(addendum.day, report.day)) {
     throw new Error(`Attempting to merge reports of different days:
       Original: ${JSON.stringify(report.day)},
       Addendum: ${JSON.stringify(addendum.day)}`)

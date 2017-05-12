@@ -1,5 +1,6 @@
 import moment from 'moment-timezone'
 import { parse as csvToJson } from 'papaparse'
+import fromPairs from 'lodash/fromPairs'
 import set from 'lodash/set'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
@@ -48,10 +49,26 @@ export const getTagBilledCount = (rawLine, tag) => {
 // - E   | - Ergebnis             | - total revenue
 // WERT  | Wert                   | revenue of one line item
 // BEZ   | Bezeichnung            | assignee's name or insurance code
+export const matchAssigneeId = ({ row, users }) => {
+  const eoswinId = row.KZ
+  const id = eoswinId && eoswinId.match(/^A\d+$/)
+  if (!id) {
+    return null
+  }
 
-export const matchAssigneeId = (slug) => {
-  const id = slug && slug.match(/^A(\d+)$/)
-  return id && id[1]
+  if (users) {
+    const assigneeMapping = mapAssigneeIds({ users })
+
+    if (assigneeMapping[eoswinId]) {
+      return assigneeMapping[eoswinId]
+    } else {
+      console.error(`[Reports] external/eoswin/parseReport:
+        Could not match assignee with EOSWIN id "${eoswinId}" "${row.BEZ}" to any user`)
+      return null
+    }
+  } else {
+    return eoswinId
+  }
 }
 
 const initializeNewAssignee = () => {
@@ -64,14 +81,14 @@ const initializeNewAssignee = () => {
   return assignee
 }
 
-export const parseAssignees = (rows) => {
+export const parseAssignees = ({ rows, users }) => {
   let assignees = {}
   let currentAssigneeId = null
 
   rows.map((row) => {
     let assignee = assignees[currentAssigneeId]
 
-    const newAssigneeId = matchAssigneeId(row.KZ)
+    const newAssigneeId = matchAssigneeId({ row, users })
     if (newAssigneeId) {
       currentAssigneeId = newAssigneeId
       assignees[currentAssigneeId] = initializeNewAssignee()
@@ -117,9 +134,21 @@ export const parseAssignees = (rows) => {
   return asArray
 }
 
-export const parseReport = (csv) => {
-  const json = csvToJson(csv, { header: true }).data
-  const assignees = parseAssignees(json)
+const mapAssigneeIds = ({ users }) => {
+  if (users) {
+    return fromPairs(users.map(user => {
+      const eoswinId = (user.external && user.external.eoswin && user.external.eoswin.id)
+      return [ eoswinId, user._id ]
+    }))
+  }
+}
 
-  return { assignees }
+export const parseReport = ({ content, users, ...rest }) => {
+  const rows = csvToJson(content, { header: true }).data
+  const assignees = parseAssignees({ rows, users })
+
+  return {
+    ...rest,
+    assignees
+  }
 }

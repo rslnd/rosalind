@@ -29,14 +29,8 @@ describe('api', function () {
         })
       })
 
-      it('parses assignee id', function () {
-        expect(matchAssigneeId('A14')).to.equal('14')
-        expect(matchAssigneeId('A0')).to.equal('0')
-        expect(matchAssigneeId('A')).to.equal(null)
-      })
-
       describe('parseReport with fixture', function () {
-        const { assignees } = parseReport(REPORT)
+        const { assignees } = parseReport({ content: REPORT })
 
         it('contains two assignees', function () {
           expect(assignees.length).to.equal(2)
