@@ -40,7 +40,7 @@ export const merge = (report, addendum) => {
   const assignees = mergeAssignees(report, addendum)
 
   return {
-    day: report.day,
+    ...report,
     assignees
   }
 }

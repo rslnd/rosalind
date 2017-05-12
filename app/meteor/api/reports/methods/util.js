@@ -17,3 +17,19 @@ export const byTags = (assignees, iterator) => {
 export const assignedOnly = (assignees) => (
   assignees.filter(a => a.assigneeId)
 )
+
+export const sumByKeys = (array, properties) => {
+  return array.reduce((prev, curr) => {
+    const parts = { ...prev }
+
+    properties.map((property) => {
+      if (curr[property] && parts[property]) {
+        parts[property] += curr[property]
+      } else if (curr[property]) {
+        parts[property] = curr[property]
+      }
+    })
+
+    return parts
+  }, {})
+}

@@ -1,12 +1,17 @@
+import identity from 'lodash/identity'
 import add from 'lodash/add'
-import { assignedOnly, byTags } from './util'
+import { assignedOnly, byTags, sumByKeys } from './util'
 
 const mapPatients = ({ report }) => (
   byTags(report.assignees, (tag) => {
-    const sum = report.assignees.map((assignee) => (
-      assignee.patients[tag] && assignee.patients[tag].planned || 0
-    )).reduce(add, 0)
-    return [ tag, { planned: sum } ]
+    const perAssignee = report.assignees.map((assignee) => ({
+      planned: assignee.patients[tag] && assignee.patients[tag].planned,
+      actual: assignee.patients[tag] && assignee.patients[tag].actual
+    }))
+
+    const sum = sumByKeys(perAssignee, ['planned', 'actual'])
+
+    return [ tag, sum ]
   })
 )
 
@@ -16,7 +21,7 @@ const mapAssignees = ({ report }) => {
 
 const mapHours = ({ report }) => {
   const planned = assignedOnly(report.assignees)
-    .map((a) => a.hours.planned)
+    .map((a) => a.hours && a.hours.planned || 0)
     .reduce(add, 0)
 
   return {
@@ -25,7 +30,7 @@ const mapHours = ({ report }) => {
 }
 
 const mapWorkload = ({ report }) => {
-  const workloads = assignedOnly(report.assignees).map(a => a.workload)
+  const workloads = assignedOnly(report.assignees).map(a => a.workload).filter(identity)
   const { available, planned } = workloads.reduce((prev, curr) => {
     return {
       available: prev.available + curr.available,
