@@ -10,11 +10,31 @@ import { Nil } from './shared/Nil'
 import { Percent } from './shared/Percent'
 import { Round } from './shared/Round'
 
-const align = 'right'
-const colDivider = '0.5px solid #ebf1f2'
+const align = { 
+  textAlign: 'right'
+}
+
+const center = {
+  textAlign: 'center'
+}
+
+const summaryRowStyle = {
+  borderTop: '2px solid #ebf1f2',
+  backgroundColor: '#f7f8f9'
+}
+
+const colDivider = {
+  borderTop: '2px solid #ebf1f2',
+  backgroundColor: '#f7f8f9'
+}
+
+const borderLeftStyle = {
+  ...align,
+  borderLeft: '0.5px solid #ebf1f2'
+}
 
 const Td = ({ children, borderLeft }) => (
-  <td style={{ textAlign: align, borderLeft: borderLeft && colDivider }}>
+  <td style={borderLeft ? borderLeftStyle : align}>
     {children}
   </td>
 )
@@ -24,14 +44,14 @@ export const ReportTableHeader = ({ showRevenue }) => (
     <tr>
       <th>#</th>
       <th className="col-md-2">{TAPi18n.__('reports.assignee')}</th>
-      <th style={{ textAlign: align }}>Std.</th>
-      <th style={{ textAlign: align }}>Ausl.</th>
-      <th style={{ textAlign: align }} colSpan={2}>PatientInnen</th>
-      <th style={{ textAlign: 'center' }} colSpan={2}>Neu</th>
-      <th style={{ textAlign: 'center' }} colSpan={2}>Kontrolle</th>
-      <th style={{ textAlign: 'center' }} colSpan={2}>OP</th>
-      <th style={{ textAlign: align }} colSpan={2}>Neu/Std.</th>
-      {showRevenue && <th style={{ textAlign: align }} colSpan={2}>Umsatz</th>}
+      <th style={align}>Std.</th>
+      <th style={align}>Ausl.</th>
+      <th style={align} colSpan={2}>PatientInnen</th>
+      <th style={center} colSpan={2}>Neu</th>
+      <th style={center} colSpan={2}>Kontrolle</th>
+      <th style={center} colSpan={2}>OP</th>
+      <th style={align} colSpan={2}>Neu/Std.</th>
+      {showRevenue && <th style={align} colSpan={2}>Umsatz</th>}
     </tr>
 
     <tr className="text-muted" style={{ backgroundColor: '#f7f8f9' }}>
@@ -39,18 +59,18 @@ export const ReportTableHeader = ({ showRevenue }) => (
       <th></th>
       <th></th>
       <th></th>
-      <th style={{ textAlign: align }}>Plan</th>
-      <th style={{ textAlign: align }}>Ist</th>
-      <th style={{ textAlign: align, borderLeft: colDivider }}>Plan</th>
-      <th style={{ textAlign: align }}>Ist</th>
-      <th style={{ textAlign: align, borderLeft: colDivider }}>Plan</th>
-      <th style={{ textAlign: align }}>Ist</th>
-      <th style={{ textAlign: align, borderLeft: colDivider }}>Plan</th>
-      <th style={{ textAlign: align }}>Ist</th>
-      <th style={{ textAlign: align, borderLeft: colDivider }}>Plan</th>
-      <th style={{ textAlign: align }}>Ist</th>
-      {showRevenue && <th style={{ textAlign: align }}>pro Std.</th>}
-      {showRevenue && <th style={{ textAlign: align }}>Gesamt</th>}
+      <th style={align}>Plan</th>
+      <th style={align}>Ist</th>
+      <th style={colDivider}>Plan</th>
+      <th style={align}>Ist</th>
+      <th style={colDivider}>Plan</th>
+      <th style={align}>Ist</th>
+      <th style={colDivider}>Plan</th>
+      <th style={align}>Ist</th>
+      <th style={colDivider}>Plan</th>
+      <th style={align}>Ist</th>
+      {showRevenue && <th style={align}>pro Std.</th>}
+      {showRevenue && <th style={align}>Gesamt</th>}
     </tr>
   </thead>
 )
@@ -79,10 +99,10 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         </td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
-        <td style={{ textAlign: align }}>{assignee.assigneeId && durationFormat(assignee.hours.planned)}</td>
+        <td style={align}>{assignee.assigneeId && durationFormat(assignee.hours.planned)}</td>
 
         {/* Auslastung */}
-        <td style={{ textAlign: align }}>{assignee.assigneeId &&
+        <td style={align}>{assignee.assigneeId &&
           <Percent slash bigPercent part={assignee.workload.planned} of={assignee.workload.available} />
         }</td>
 
@@ -114,13 +134,13 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
         {
           showRevenue && 
-            <Td style={{ textAlign: align }}>{assignee.assigneeId &&
+            <Td style={align}>{assignee.assigneeId &&
               <Nil />
             }</Td>
         }
 
         {/* Umsatz gesamt */}
-        {showRevenue && <Td style={{ textAlign: align }}><Nil /></Td>}
+        {showRevenue && <Td style={align}><Nil /></Td>}
       </tr>
     ))}
     <SummaryRow report={report} showRevenue={showRevenue} />
@@ -131,7 +151,7 @@ class SummaryRow extends React.Component {
   render () {
     const { report, showRevenue } = this.props
     return (
-      <tr style={{ borderTop: '2px solid #ebf1f2', backgroundColor: '#f7f8f9' }} className="bg-white">
+      <tr style={summaryRowStyle} className="bg-white">
         <td><b>∑</b></td>
 
         <td>{report.total.assignees} {TAPi18n.__('reports.assignees')}</td>
@@ -164,10 +184,10 @@ class SummaryRow extends React.Component {
 
         
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
-        {showRevenue && <Td style={{ textAlign: align }}><Nil /></Td>}
+        {showRevenue && <Td style={align}><Nil /></Td>}
 
         {/* Umsatz gesamt */}
-        {showRevenue && <Td style={{ textAlign: align }}><Nil /></Td>}
+        {showRevenue && <Td style={align}><Nil /></Td>}
       </tr>
     )
   }
