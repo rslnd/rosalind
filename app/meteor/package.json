@@ -128,7 +128,7 @@
   },
   "scripts": {
     "start": "meteor",
-    "test": "./node_modules/mocha/bin/mocha --recursive --require coffee-script --compilers js:babel-core/register './api/**/*.test.js' './util/**/*.test.js' './client/**/*.test.js'",
+    "test": "./node_modules/mocha/bin/mocha --recursive --require babel-polyfill --require coffee-script --compilers js:babel-core/register './api/**/*.test.js' './util/**/*.test.js' './client/**/*.test.js'",
     "test:acceptance": "node ./test.js"
   }
 }
