@@ -81,6 +81,10 @@ export class ReportsScreen extends React.Component {
           <Button onClick={this.props.generateReport}>
               Diesen Bericht neu generieren
           </Button>
+
+          <Button onClick={this.props.viewAppointments}>
+              Terminkalender für diesen Tag ansehen
+          </Button>
         </div>
       </div>
     )
