@@ -1,5 +1,6 @@
 import identity from 'lodash/identity'
 import add from 'lodash/add'
+import some from 'lodash/fp/some'
 import idx from 'idx'
 import { assignedOnly, byTags, sumByKeys } from './util'
 
@@ -49,6 +50,10 @@ const mapWorkload = ({ report }) => {
 }
 
 const mapRevenue = ({ report }) => {
+  if (!some(a => idx(a, _ => _.revenue.total.actual))(report.assignees)) {
+    return {}
+  }
+
   const actual = report.assignees
     .map(a => idx(a, _ => _.revenue.total.actual) || 0)
     .reduce(add, 0)

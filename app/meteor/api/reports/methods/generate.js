@@ -1,6 +1,7 @@
 import { mapAssignees } from './mapAssignees'
 import { mapTotal } from './mapTotal'
 import { mapAverage } from './mapAverage'
+import { mapHours } from './mapHours'
 import { merge as mergeReport } from './merge'
 
 export const generate = ({ day, appointments, overrideSchedules, tagMapping, addendum }) => {
@@ -15,6 +16,8 @@ export const generate = ({ day, appointments, overrideSchedules, tagMapping, add
       console.log('Merging report to produce', report)
     })
   }
+
+  report = mergeReport(report, mapHours({ report, appointments, overrideSchedules }))
 
   report.total = mapTotal({ report })
   report.average = mapAverage({ report })

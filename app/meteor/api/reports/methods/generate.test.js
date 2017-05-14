@@ -96,20 +96,11 @@ describe('reports', () => {
           }, {
             patients: {
               total: {
-                planned: 1,
-                plannedPerHour: 1 / 13.5
+                planned: 1
               },
               new: {
-                planned: 1,
-                plannedPerHour: 1 / 13.5
+                planned: 1
               }
-            },
-            hours: {
-              planned: 13.5
-            },
-            workload: {
-              available: 162,
-              planned: 1
             }
           }
         ],
@@ -135,7 +126,8 @@ describe('reports', () => {
           workload: {
             available: 240,
             planned: 6
-          }
+          },
+          revenue: {}
         },
         average: {
           patients: {

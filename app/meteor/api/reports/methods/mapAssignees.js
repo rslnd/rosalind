@@ -1,22 +1,5 @@
 import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
-import { calculateScheduledHours } from '../../schedules/methods/getScheduledHours'
-
-const mapWorkload = ({ hours, appointments }) => {
-  const available = hours.planned * 12
-  const planned = appointments.length
-
-  return {
-    available,
-    planned
-  }
-}
-
-const mapHours = ({ assigneeId, overrideSchedules }) => {
-  return {
-    planned: calculateScheduledHours({ overrideSchedules })
-  }
-}
 
 const mapAppointments = ({ assigneeId, appointments, hours, tagMapping }) => {
   // Group by first tag
@@ -33,36 +16,28 @@ const mapAppointments = ({ assigneeId, appointments, hours, tagMapping }) => {
 
   const byTags = mapValues((appointments) => {
     const planned = appointments.length
-    const plannedPerHour = planned / hours.planned
 
     return {
-      planned,
-      plannedPerHour
+      planned
     }
   })(appointmentsByTags)
 
   const planned = appointments.length
-  const plannedPerHour = planned / hours.planned
 
   return {
     total: {
-      planned,
-      plannedPerHour
+      planned
     },
     ...byTags
   }
 }
 
 const mapAssignee = ({ assigneeId, appointments, overrideSchedules, tagMapping }) => {
-  const hours = mapHours({ assigneeId, overrideSchedules })
-  const workload = mapWorkload({ hours, appointments })
-  const patients = mapAppointments({ assigneeId, appointments, hours, tagMapping })
+  const patients = mapAppointments({ assigneeId, appointments, tagMapping })
 
   return {
     assigneeId,
-    patients,
-    hours,
-    workload
+    patients
   }
 }
 
