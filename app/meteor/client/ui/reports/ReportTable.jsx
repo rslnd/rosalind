@@ -108,7 +108,7 @@ export const ReportTableBody = ({ showRevenue, report }) => (
 
 
         {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
-        <Td>{idx(assignee, _ => _.patients.total.planned)}</Td>
+        <Td borderLeft>{idx(assignee, _ => _.patients.total.planned)}</Td>
         <Td>{idx(assignee, _ => _.patients.total.actual) || <Nil />}</Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
@@ -134,7 +134,7 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
         {
           showRevenue && 
-            <Td style={align}>{assignee.assigneeId &&
+            <Td borderLeft style={align}>{assignee.assigneeId &&
               <Nil />
             }</Td>
         }
@@ -143,7 +143,7 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         {
           showRevenue &&
             <Td style={align}>{
-              <Round number={idx(assignee, _ => _.revenue.total.actual)} /> || <Nil />
+              <Round to={0} number={idx(assignee, _ => _.revenue.total.actual)} /> || <Nil />
             }</Td>
         }
       </tr>
@@ -168,11 +168,11 @@ class SummaryRow extends React.Component {
         <Td><Percent slash bigPercent part={report.total.workload.planned} of={report.total.workload.available} /></Td>
 
         {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
-        <Td>{report.total.patients.total.planned}</Td>
+        <Td borderLeft>{report.total.patients.total.planned}</Td>
         <Td><Nil /></Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td><Percent borderLeft part={report.total.patients.new.planned} of={report.total.patients.total.planned} /></Td>
+        <Td borderLeft><Percent part={report.total.patients.new.planned} of={report.total.patients.total.planned} /></Td>
         <Td><Nil /></Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
@@ -189,10 +189,10 @@ class SummaryRow extends React.Component {
 
         
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
-        {showRevenue && <Td style={align}><Nil /></Td>}
+        {showRevenue && <Td borderLeft style={align}><Nil /></Td>}
 
         {/* Umsatz gesamt */}
-        {showRevenue && <Td style={align}><Nil /></Td>}
+        {showRevenue && <Td style={align}><Round to={0} number={idx(report, _ => _.total.revenue.actual)} /></Td>}
       </tr>
     )
   }

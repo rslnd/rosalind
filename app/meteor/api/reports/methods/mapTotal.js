@@ -1,5 +1,6 @@
 import identity from 'lodash/identity'
 import add from 'lodash/add'
+import idx from 'idx'
 import { assignedOnly, byTags, sumByKeys } from './util'
 
 const mapPatients = ({ report }) => (
@@ -47,16 +48,28 @@ const mapWorkload = ({ report }) => {
   }
 }
 
+const mapRevenue = ({ report }) => {
+  const actual = report.assignees
+    .map(a => idx(a, _ => _.revenue.total.actual) || 0)
+    .reduce(add, 0)
+
+  return {
+    actual
+  }
+}
+
 export const mapTotal = ({ report }) => {
   const patients = mapPatients({ report })
   const assignees = mapAssignees({ report })
   const hours = mapHours({ report })
   const workload = mapWorkload({ report })
+  const revenue = mapRevenue({ report })
 
   return {
     assignees,
     hours,
     patients,
-    workload
+    workload,
+    revenue
   }
 }

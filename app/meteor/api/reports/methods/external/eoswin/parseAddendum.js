@@ -62,7 +62,7 @@ export const matchAssigneeId = ({ row, users }) => {
     if (assigneeMapping[eoswinId]) {
       return assigneeMapping[eoswinId]
     } else {
-      console.error(`[Reports] external/eoswin/parseReport:
+      console.error(`[Reports] external/eoswin/parseAddendum:
         Could not match assignee with EOSWIN id "${eoswinId}" "${row.BEZ}" to any user`)
       return null
     }
@@ -143,7 +143,7 @@ const mapAssigneeIds = ({ users }) => {
   }
 }
 
-export const parseReport = ({ content, users, ...rest }) => {
+export const parseAddendum = ({ content, users, ...rest }) => {
   const rows = csvToJson(content, { header: true }).data
   const assignees = parseAssignees({ rows, users })
 

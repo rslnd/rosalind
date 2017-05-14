@@ -10,10 +10,11 @@ export const generate = ({ Reports, Appointments, Schedules, Tags }) => {
     name: 'reports/generate',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
-      day: { type: Object, blackbox: true }
+      day: { type: Object, blackbox: true },
+      addendum: { type: [Object], blackbox: true, optional: true }
     }).validator(),
 
-    run ({ day }) {
+    run ({ day, addendum }) {
       const date = moment(dayToDate(day))
 
       const appointments = Appointments.find({
@@ -38,7 +39,7 @@ export const generate = ({ Reports, Appointments, Schedules, Tags }) => {
         overrideSchedules: overrideSchedules.length
       })
 
-      const report = generateReport({ day, appointments, overrideSchedules, tagMapping })
+      const report = generateReport({ day, appointments, overrideSchedules, tagMapping, addendum })
 
       console.log('[Reports] generate: Generated report', report)
 

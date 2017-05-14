@@ -40,8 +40,8 @@ export const Unit = ({ prepend, append, children }) => (
 export const TotalRevenueBox = ({ report }) => (
   <InfoBox text={TAPi18n.__('reports.revenue')} color="green" icon="euro">
     {
-      report.total.revenue
-      ? <Unit prepend="€">{report.total.revenue}</Unit>
+      idx(report, _ => _.total.revenue.actual)
+      ? <Unit prepend="€">{Math.round(report.total.revenue.actual)}</Unit>
       : <Nil /> 
     }
   </InfoBox>

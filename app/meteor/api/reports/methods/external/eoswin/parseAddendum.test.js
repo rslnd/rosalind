@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import chai from 'chai'
 import chaiDatetime from 'chai-datetime'
-import { getTagBilledCount, parseReportDate, matchAssigneeId, parseReport } from './parseReport'
+import { getTagBilledCount, parseReportDate, parseAddendum } from './parseAddendum'
 import { REPORT } from './report.fixture'
 
 const expect = chai.expect
@@ -29,8 +29,8 @@ describe('api', function () {
         })
       })
 
-      describe('parseReport with fixture', function () {
-        const { assignees } = parseReport({ content: REPORT })
+      describe('parseAddendum with fixture', function () {
+        const { assignees } = parseAddendum({ content: REPORT })
 
         it('contains two assignees', function () {
           expect(assignees.length).to.equal(2)
