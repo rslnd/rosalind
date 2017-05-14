@@ -59,7 +59,7 @@ export class ReportsScreen extends React.Component {
             <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name="print" /></Button>
             {
               this.props.canShowRevenue &&
-                <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.showRevenue')}><Icon name="euro" /></Button>
+                <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.toggleRevenue')}><Icon name="euro" /></Button>
             }
           </DateNavigation>
         </div>

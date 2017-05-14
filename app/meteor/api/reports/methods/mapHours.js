@@ -26,9 +26,7 @@ const calculatePerHour = ({ hours }) => {
 
     Object.keys(fields).map((key) => {
       newFields = Object.assign(newFields, {
-        // TODO: Take into account planned/actual hours,
-        // TODO: Maybe rename to ${key}PerPlannedHour / ${key}PerActualHour, or figure out from 'key'
-        [`${key}PerHour`]: fields[key] / hours.planned
+        [`${key}PerHour`]: fields[key] / (hours[key] || hours.actual || hours.planned)
       })
     })
 
@@ -38,6 +36,10 @@ const calculatePerHour = ({ hours }) => {
 
 const mapPatients = ({ patients, hours }) => (
   mapValues(calculatePerHour({ hours }))(patients)
+)
+
+const mapRevenue = ({ revenue, hours }) => (
+  mapValues(calculatePerHour({ hours }))(revenue)
 )
 
 const mapWorkload = ({ hours, appointments }) => {
@@ -63,6 +65,7 @@ const mapAssignees = ({ report, overrideSchedules, appointments }) => {
       return {
         ...assignee,
         patients: mapPatients({ patients: assignee.patients, hours }),
+        revenue: mapRevenue({ revenue: assignee.revenue, hours }),
         hours,
         workload: mapWorkload({ hours, appointments })
       }

@@ -1,4 +1,4 @@
-export const Round = ({ number, to }) => {
+export const Round = ({ number, to, unit }) => {
   if (!number) {
     return null
   }
@@ -9,6 +9,12 @@ export const Round = ({ number, to }) => {
   } else {
     rounded = number.toFixed(to || 1)
   }
+
+  let prepend = null
+
+  if (unit) {
+    prepend = <small className="text-muted">{unit}&thinsp;</small>
+  }
   
-  return <span>{rounded}</span>
+  return <span>{prepend}{rounded}</span>
 }

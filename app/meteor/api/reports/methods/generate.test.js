@@ -58,6 +58,7 @@ describe('reports', () => {
                 plannedPerHour: 2 / 11.5
               }
             },
+            revenue: {},
             hours: {
               planned: 11.5
             },
@@ -86,6 +87,7 @@ describe('reports', () => {
                 plannedPerHour: 1 / 8.5
               }
             },
+            revenue: {},
             hours: {
               planned: 8.5
             },
@@ -143,7 +145,8 @@ describe('reports', () => {
             recall: {
               plannedPerHour: 1 / 20
             }
-          }
+          },
+          revenue: {}
         }
       }
 

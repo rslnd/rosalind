@@ -128,14 +128,14 @@ export const ReportTableBody = ({ showRevenue, report }) => (
           <Round number={idx(assignee, _ => _.patients.new.plannedPerHour)} />
         }</Td>
         <Td>{assignee.assigneeId &&
-          <Nil />
+          <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} />
         }</Td>
  
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
         {
           showRevenue && 
             <Td borderLeft style={align}>{assignee.assigneeId &&
-              <Nil />
+              <Round to={0} unit="€" number={idx(assignee, _ => _.revenue.total.actualPerHour)} /> || <Nil />
             }</Td>
         }
 
@@ -143,7 +143,7 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         {
           showRevenue &&
             <Td style={align}>{
-              <Round to={0} number={idx(assignee, _ => _.revenue.total.actual)} /> || <Nil />
+              <Round to={0} unit="€" number={idx(assignee, _ => _.revenue.total.actual)} /> || <Nil />
             }</Td>
         }
       </tr>
@@ -169,30 +169,30 @@ class SummaryRow extends React.Component {
 
         {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
         <Td borderLeft>{report.total.patients.total.planned}</Td>
-        <Td><Nil /></Td>
+        <Td>{idx(report, _ => _.total.patients.total.actual) || <Nil />}</Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={report.total.patients.new.planned} of={report.total.patients.total.planned} /></Td>
-        <Td><Nil /></Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.new.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={report.total.patients.recall.planned} of={report.total.patients.total.planned} /></Td>
-        <Td><Nil /></Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.recall.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={report.total.patients.surgery.planned} of={report.total.patients.total.planned} /></Td>
-        <Td><Nil /></Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.surgery.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft>⌀ <Round number={idx(report, _ => _.average.patients.new.plannedPerHour)} /></Td>
-        <Td><Nil /></Td>
+        <Td borderLeft><Round unit="⌀" number={idx(report, _ => _.average.patients.new.plannedPerHour)} /></Td>
+        <Td><Round unit="⌀" number={idx(report, _ => _.average.patients.new.actualPerHour)} /></Td>
 
         
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
-        {showRevenue && <Td borderLeft style={align}><Nil /></Td>}
+        {showRevenue && <Td borderLeft style={align}><Round to={0} unit="⌀ €" number={idx(report, _ => _.average.revenue.actualPerHour)} /></Td>}
 
         {/* Umsatz gesamt */}
-        {showRevenue && <Td style={align}><Round to={0} number={idx(report, _ => _.total.revenue.actual)} /></Td>}
+        {showRevenue && <Td style={align}><Round to={0} unit="€" number={idx(report, _ => _.total.revenue.actual)} /></Td>}
       </tr>
     )
   }
