@@ -53,7 +53,7 @@ const start = ({ ipcReceiver }) => {
 }
 
 const stop = () => {
-  logger.info('[Watch] Start')
+  logger.info('[Watch] Stop')
 
   watchers.forEach((watcher) => {
     if (watcher) {
