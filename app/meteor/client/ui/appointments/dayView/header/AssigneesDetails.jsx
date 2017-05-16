@@ -3,8 +3,9 @@ import { Icon } from 'client/ui/components/Icon'
 
 const bar = {
   height: 40,
+  marginTop: 43,
   position: 'relative',
-  top: 80,
+  top: 60,
   paddingLeft: 60,
   display: 'flex'
 }

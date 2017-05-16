@@ -18,8 +18,8 @@ import { overrideOverlay } from './overrideOverlay'
 const gridTimeSlots = timeSlots.map((time) => `[${time}] 25px`).join(' ')
 
 const gridTemplateRows = `
-  [header] 40px
-  [subheader] 40px
+  [header] 60px
+  [subheader] 0px
   ${gridTimeSlots}
 `
 

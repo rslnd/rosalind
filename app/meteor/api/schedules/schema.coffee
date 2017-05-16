@@ -16,6 +16,7 @@ module.exports = new SimpleSchema
       'businessHoursOverride'
       'holidays'
       'day'
+      'note'
     ]
     index: 1
 
