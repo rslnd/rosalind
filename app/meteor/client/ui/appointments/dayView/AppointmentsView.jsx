@@ -196,10 +196,12 @@ export class AppointmentsView extends React.Component {
   }
 
   handleScheduleModalOpen ({ scheduleId }) {
-    this.setState({...this.state,
-      scheduleModalOpen: true,
-      scheduleModalId: scheduleId
-    })
+    if (this.props.canEditSchedules) {
+      this.setState({...this.state,
+        scheduleModalOpen: true,
+        scheduleModalId: scheduleId
+      })
+    }
   }
 
   handleScheduleModalClose () {

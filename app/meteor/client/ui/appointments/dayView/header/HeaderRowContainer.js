@@ -1,4 +1,6 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { Meteor } from 'meteor/meteor'
+import { Roles } from 'meteor/alanning:roles'
 import { Schedules } from 'api/schedules'
 import { dateToDay } from 'util/time/day'
 import { HeaderRow } from './HeaderRow'
@@ -14,7 +16,9 @@ const composer = (props, onData) => {
     return Schedules.actions.removeUserFromDay.callPromise({ userId, day })
   }
 
-  onData(null, { ...props, onAddUser, onRemoveUser })
+  const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
+
+  onData(null, { ...props, onAddUser, onRemoveUser, canEditSchedules })
 }
 
 export const HeaderRowContainer = composeWithTracker(composer)(HeaderRow)

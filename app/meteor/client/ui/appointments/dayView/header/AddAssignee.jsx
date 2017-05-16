@@ -43,21 +43,19 @@ export class AddAssignee extends React.Component {
   render () {
     return (
       <div>
-        <div style={{ width: '60px' }}>
-          <FlatButton
-            style={{ minWidth: 30, height: 28, lineHeight: '28px' }}
-            onClick={this.handleAddUserPopoverOpen}
-            label={<span
-              className="text-muted"
-              style={{
-                display: 'inline-block',
-                paddingLeft: 6,
-                paddingRight: 6
-              }}>
-              <Icon name="plus" />
-            </span>} />
-
-        </div>
+        <FlatButton
+          style={{ minWidth: 30, height: 28, lineHeight: '28px' }}
+          onClick={this.handleAddUserPopoverOpen}
+          label={<span
+            className="text-muted"
+            style={{
+              display: 'inline-block',
+              paddingLeft: 6,
+              paddingRight: 6
+            }}>
+            <Icon name="plus" />
+          </span>}
+        />
 
         <Popover
           open={this.state.isPopoverOpen}
