@@ -64,8 +64,8 @@ const AppointmentsSearchComposed = composeWithTracker(compose)(AppointmentsSearc
 
 const mapStateToProps = (store) => {
   return {
-    patientId: store.appointmentsSearch.patientId,
-    query: store.appointmentsSearch.query
+    patientId: store.appointments.search.patientId,
+    query: store.appointments.search.query
   }
 }
 
