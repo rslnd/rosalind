@@ -5,6 +5,7 @@ import sortBy from 'lodash/fp/sortBy'
 import uniq from 'lodash/uniq'
 import flatten from 'lodash/flatten'
 import union from 'lodash/union'
+import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
@@ -147,6 +148,8 @@ const composer = (props, onData) => {
       Alert.success(TAPi18n.__('appointments.moveSuccess'))
     })
 
+    const { dispatch, move } = props
+
     onData(null, {
       assignees,
       date,
@@ -155,7 +158,9 @@ const composer = (props, onData) => {
       handleSetAdmitted,
       handleMove,
       subsReady,
-      canEditSchedules
+      canEditSchedules,
+      move,
+      dispatch
     })
   } else {
     onData(null, null)
@@ -165,4 +170,10 @@ const composer = (props, onData) => {
   return () => Appointments.actions.releaseLock.call({})
 }
 
-export const AppointmentsContainer = composeWithTracker(composer, Loading)(AppointmentsScreen)
+export const AppointmentsContainerComposed = composeWithTracker(composer, Loading)(AppointmentsScreen)
+
+const mapStateToProps = (store) => ({
+  move: store.appointments.move
+})
+
+export const AppointmentsContainer = connect(mapStateToProps)(AppointmentsContainerComposed)

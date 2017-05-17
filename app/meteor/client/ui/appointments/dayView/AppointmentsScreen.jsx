@@ -66,7 +66,9 @@ export class AppointmentsScreen extends React.Component {
             onSetAdmitted={this.props.handleSetAdmitted}
             onMove={this.props.handleMove}
             onNewAppointmentPopoverOpen={this.props.onNewAppointmentPopoverOpen}
-            onNewAppointmentPopoverClose={this.props.onNewAppointmentPopoverClose} />
+            onNewAppointmentPopoverClose={this.props.onNewAppointmentPopoverClose}
+            move={this.props.move}
+            dispatch={this.props.dispatch} />
         </div>
 
       </div>

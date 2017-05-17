@@ -43,9 +43,7 @@ const composer = (props, onData) => {
   if (props.onStartMove) {
     startMove = () => {
       props.onStartMove({
-        ...args,
-        time: appointment.start,
-        assigneeId: appointment.assigneeId
+        appointment
       })
     }
   }
