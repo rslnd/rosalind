@@ -23,7 +23,7 @@ const gridTemplateRows = `
   ${gridTimeSlots}
 `
 
-export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, onScheduleModalOpen, isMoving, moveToTime, moveToAssigneeId, moveAppointmentId }) => {
+export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, onScheduleModalOpen, move }) => {
   const style = {
     display: 'grid',
     position: 'relative',
@@ -38,7 +38,7 @@ export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankM
 
   return (
     <div style={style}>
-      {appointments({ assignees, onClick: onAppointmentClick, isMoving, moveToTime, moveToAssigneeId, moveAppointmentId })}
+      {appointments({ assignees, onClick: onAppointmentClick, move })}
       {blanks({ date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
       {overrideOverlay(override)}
       {schedules({ assignees, onDoubleClick: onScheduleModalOpen })}

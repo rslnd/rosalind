@@ -42,6 +42,8 @@ export class Appointment extends React.Component {
       assigneeId = appointment.assigneeId
     }
 
+    const patient = appointment.patient || this.props.patient
+
     return (
       <div
         id={appointment._id}
@@ -69,12 +71,12 @@ export class Appointment extends React.Component {
         <Indicator appointment={appointment} />
 
         {
-          appointment.patient
+          patient
           ? (
             <span style={{ hyphens: 'auto' }}>
-              <span className={style.prefix}>{appointment.patient.prefix}&#8202;</span>
-              <b>{appointment.patient.profile.lastName} &thinsp;</b>
-              <span>{appointment.patient.profile.firstName}</span>
+              <span className={style.prefix}>{patient.prefix}&#8202;</span>
+              <b>{patient.profile.lastName} &thinsp;</b>
+              <span>{patient.profile.firstName}</span>
             </span>
           ) : !appointment.lockedAt && (
             <span>

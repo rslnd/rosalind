@@ -218,7 +218,7 @@ export class AppointmentsView extends React.Component {
     this.props.onSetAdmitted({ appointmentId: appointment._id })
   }
 
-  handleMoveStart ({ appointment }) {
+  handleMoveStart (args) {
     this.setState({
       ...this.state,
       appointmentModalOpen: false
@@ -226,7 +226,7 @@ export class AppointmentsView extends React.Component {
 
     this.props.dispatch({
       type: 'APPOINTMENT_MOVE_START',
-      appointment
+      ...args
     })
   }
 
@@ -267,10 +267,7 @@ export class AppointmentsView extends React.Component {
           onBlankMouseEnter={this.handleBlankHover}
           override={this.state.override}
           onScheduleModalOpen={this.handleScheduleModalOpen}
-          isMoving={this.props.move.isMoving}
-          moveAppointmentId={this.props.move.moveAppointmentId}
-          moveToTime={this.props.move.moveToTime}
-          moveToAssigneeId={this.props.move.moveToAssigneeId} />
+          move={this.props.move} />
 
         <AppointmentInfoModal
           appointmentId={this.state.selectedAppointmentId}

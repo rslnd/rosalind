@@ -1,5 +1,7 @@
 const initialState = {
   isMoving: false,
+  appointment: {},
+  patient: {},
   moveAppointmentId: null,
   moveToAssigneeId: null,
   moveToTime: null
@@ -11,7 +13,9 @@ export const move = (state = initialState, action) => {
       return {
         ...state,
         isMoving: true,
-        moveAppointmentId: action.appointment._id
+        moveAppointmentId: action.appointment._id,
+        appointment: action.appointment,
+        patient: action.patient
       }
 
     case 'APPOINTMENT_MOVE_HOVER':
