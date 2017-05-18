@@ -1,4 +1,4 @@
-moment = require 'moment'
+moment = require 'moment-timezone'
 { TAPi18n } = require 'meteor/tap:i18n'
 
 module.exports =

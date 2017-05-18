@@ -1,0 +1,38 @@
+.react-calendar-heatmap text {
+  font-size: 10px;
+  fill: #aaa;
+}
+
+.react-calendar-heatmap rect:hover {
+  stroke: #555;
+  stroke-width: 1px;
+}
+
+.react-calendar-heatmap .color-empty {
+  fill: #eeeeee;
+}
+
+.react-calendar-heatmap .color-filled {
+  fill: #8cc665;
+}
+
+.react-calendar-heatmap .color-scale-revenue-1 { fill: #d6e685; }
+.react-calendar-heatmap .color-scale-revenue-2 { fill: #8cc665; }
+.react-calendar-heatmap .color-scale-revenue-3 { fill: #44a340; }
+.react-calendar-heatmap .color-scale-revenue-4 { fill: #1e6823; }
+
+.react-calendar-heatmap .color-scale-workload-1 { fill: #85b1e6; }
+.react-calendar-heatmap .color-scale-workload-2 { fill: #65a6c6; }
+.react-calendar-heatmap .color-scale-workload-3 { fill: #4077a3; }
+.react-calendar-heatmap .color-scale-workload-4 { fill: #1e5569; }
+
+
+.react-calendar-heatmap .color-scale-cancelations-1 { fill: #edceae; }
+.react-calendar-heatmap .color-scale-cancelations-2 { fill: #d4a893; }
+.react-calendar-heatmap .color-scale-cancelations-3 { fill: #b87b73; }
+.react-calendar-heatmap .color-scale-cancelations-4 { fill: #9e4e42; }
+
+.react-calendar-heatmap .color-scale-newpatients-1 { fill: #b0a3e6; }
+.react-calendar-heatmap .color-scale-newpatients-2 { fill: #9a8bc4; }
+.react-calendar-heatmap .color-scale-newpatients-3 { fill: #9578b1; }
+.react-calendar-heatmap .color-scale-newpatients-4 { fill: #5b3a6a; }

@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Indicator } from 'client/ui/appointments/appointment/Indicator'
 import { Birthday } from '../Birthday'

@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import clone from 'lodash/clone'
 
 export const zeroIndexMonth = (day) => {

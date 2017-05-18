@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { Email } from 'meteor/email'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
@@ -28,7 +28,7 @@ export const sendEmail = new ValidatedMethod({
       throw new Meteor.Error(404, 'There is no report for today, and no email will be sent')
     }
 
-    const rendered = Reports.methods.renderEmail.call({ report: todaysReport })
+    const rendered = Reports.actions.renderEmail.call({ report: todaysReport })
 
     Email.send({
       from: process.env.MAIL_REPORTS_FROM,

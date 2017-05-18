@@ -6,6 +6,11 @@ const Nil = () => (
   <span className="text-quite-muted">?</span>
 )
 
+const BigPercent = (props) => {
+  const percentage = Math.round(100 * props.part / props.of)
+  return <Unit append="%">{percentage}</Unit>
+}
+
 export const InfoBox = ({ color = 'green', icon = 'eur', children, text, description }) => (
   <div className="info-box">
     <span className={`info-box-icon bg-${color}`}>
@@ -14,7 +19,7 @@ export const InfoBox = ({ color = 'green', icon = 'eur', children, text, descrip
     <div className="info-box-content">
       <span className="info-box-number">{children}</span>
       <span className="info-box-text">{text}</span>
-      <span className="info-box-description">{description}</span>
+      <span className="info-box-description text-muted">{description}</span>
     </div>
   </div>
 )
@@ -34,53 +39,44 @@ export const Unit = ({ prepend, append, children }) => (
 
 export const TotalRevenueBox = ({ report }) => (
   <InfoBox text={TAPi18n.__('reports.revenue')} color="green" icon="euro">
-    <Unit prepend="€">{report.total.revenue ? Math.floor(report.total.revenue) : <Nil />}</Unit>
+    {
+      idx(report, _ => _.total.revenue.actual)
+      ? <Unit prepend="€">{Math.round(report.total.revenue.actual)}</Unit>
+      : <Nil /> 
+    }
   </InfoBox>
 )
 
 export const NewPatientsPerHourBox = ({ report }) => (
   <InfoBox
-    text={TAPi18n.__('reports.patientsNewPerHour')} color="yellow" icon="user-plus">
+    text={TAPi18n.__('reports.patientsNewPerHour')} color="purple" icon="user-plus">
     {
-      report.total.patientsNewPerHourActual
-      ? <Unit append="/h">{report.total.patientsNewPerHourActual.toFixed(1)}</Unit>
-      : (report.total.patientsNewPerHourScheduled
-        ? <Unit append="/h">{report.total.patientsNewPerHourScheduled.toFixed(1)}</Unit>
-        : <Nil />
-      )
+      idx(report, (_) => _.average.patients.new.plannedPerHour)
+      ? <Unit append="/h">{report.average.patients.new.plannedPerHour.toFixed(1)}</Unit>
+      : <Nil />
     }
   </InfoBox>
 )
 
-export const TotalHoursBox = ({ report }) => (
-  <InfoBox text={TAPi18n.__('reports.assigneeHours')} color="red" icon="calendar">
+export const Workload = ({ report }) => (
+  <InfoBox text="Auslastung" color="aqua" icon="calendar">
     {
-      report.total.hoursActual
-      ? <Unit append="h">{report.total.hoursActual.toFixed(1)}</Unit>
-      : (
-        report.total.hoursScheduled
-          ? <Unit append="h">{report.total.hoursScheduled.toFixed(1)}</Unit>
-          : <Nil />
-      )
+      report.total.workload.planned
+      ? <BigPercent part={report.total.workload.planned} of={report.total.workload.available} />
+      : <Nil />
     }
   </InfoBox>
 )
 
-export const RevenuePerAssigneeBox = ({ report }) => (
-  <InfoBox text={TAPi18n.__('reports.revenuePerAssignee')} color="aqua" icon="user-md">
-    <Unit prepend="€">{report.total.revenuePerAssignee ? Math.floor(report.total.revenuePerAssignee) : <Nil />}</Unit>
+export const NoShowsBox = ({ report }) => (
+  <InfoBox text="Nicht erschienen" color="red" icon="user-o">
+    {<Nil /> || <Unit append="%">2.4</Unit>}
   </InfoBox>
 )
 
 export const TotalPatientsBox = ({ report }) => (
-  <InfoBox text={TAPi18n.__('reports.patients')} color="purple" icon="users">
-    {report.total.patients}
-  </InfoBox>
-)
-
-export const NewPatientsPercentageBox = ({ report }) => (
-  <InfoBox text={TAPi18n.__('reports.patientsNew')} color="teal" icon="plus">
-    <Unit append="%">{Math.floor(report.total.patientsNew / report.total.patients * 100)}</Unit>
+  <InfoBox text={TAPi18n.__('reports.patients')} color="green" icon="users">
+    {idx(report, (_) => _.total.patients.total.planned) || <Nil />}
   </InfoBox>
 )
 
@@ -89,14 +85,14 @@ export const ReportSummary = ({ report, showRevenue }) => {
     (<div key="TotalRevenueBox" className="col-md-3 col-sm-3 col-xs-12">
       <TotalRevenueBox report={report} />
     </div>),
+    (<div key="WorkloadBox" className="col-md-3 col-sm-3 col-xs-12">
+      <Workload report={report} />
+    </div>),
+    (<div key="NoShowsBox" className="col-md-3 col-sm-3 col-xs-12">
+      <NoShowsBox report={report} />
+    </div>),
     (<div key="NewPatientsPerHourBox" className="col-md-3 col-sm-3 col-xs-12">
       <NewPatientsPerHourBox report={report} />
-    </div>),
-    (<div key="TotalHoursBox" className="col-md-3 col-sm-3 col-xs-12">
-      <TotalHoursBox report={report} />
-    </div>),
-    (<div key="RevenuePerAssigneeBox" className="col-md-3 col-sm-3 col-xs-12">
-      <RevenuePerAssigneeBox report={report} />
     </div>)
   ]
 
@@ -104,14 +100,14 @@ export const ReportSummary = ({ report, showRevenue }) => {
     (<div key="TotalPatientsBox" className="col-md-3 col-sm-3 col-xs-12">
       <TotalPatientsBox report={report} />
     </div>),
+    (<div key="WorkloadBox" className="col-md-3 col-sm-3 col-xs-12">
+      <Workload report={report} />
+    </div>),
+    (<div key="NoShowsBox" className="col-md-3 col-sm-3 col-xs-12">
+      <NoShowsBox report={report} />
+    </div>),
     (<div key="NewPatientsPerHourBox" className="col-md-3 col-sm-3 col-xs-12">
       <NewPatientsPerHourBox report={report} />
-    </div>),
-    (<div key="TotalHoursBox" className="col-md-3 col-sm-3 col-xs-12">
-      <TotalHoursBox report={report} />
-    </div>),
-    (<div key="NewPatientsPercentageBox" className="col-md-3 col-sm-3 col-xs-12">
-      <NewPatientsPercentageBox report={report} />
     </div>)
   ]
 

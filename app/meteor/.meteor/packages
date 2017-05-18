@@ -102,3 +102,4 @@ meteorhacks:kadira
 meteorhacks:zones
 kadira:debug
 meteorhacks:kadira-profiler
+mdg:meteor-apm-agent

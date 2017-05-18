@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Roles } from 'meteor/alanning:roles'
 import { Job } from 'meteor/vsivsi:job-collection'
 import { Jobs } from 'api/jobs'

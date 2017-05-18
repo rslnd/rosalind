@@ -1,4 +1,4 @@
-moment = require 'moment'
+moment = require 'moment-timezone'
 { Meteor } = require 'meteor/meteor'
 { SubsManager } = require 'meteor/meteorhacks:subs-manager'
 Helpers = require 'util/helpers'

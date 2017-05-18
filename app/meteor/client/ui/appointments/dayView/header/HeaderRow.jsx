@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import classnames from 'classnames'
 import { Popover } from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'

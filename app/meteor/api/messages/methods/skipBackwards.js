@@ -1,5 +1,5 @@
 import { until, complement, reduceRight, compose, identity, repeat } from 'ramda'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { isWeekend } from './isQuietTime'
 
 const applyN = compose(reduceRight(compose, identity), repeat)

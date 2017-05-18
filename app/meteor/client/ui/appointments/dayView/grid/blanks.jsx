@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import React from 'react'
 import blanksStyle from './blanksStyle'
 import { setTime, timeSlots, format } from './timeSlots'

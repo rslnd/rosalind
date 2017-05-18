@@ -22,6 +22,11 @@ module.exports = new SimpleSchema
   color:
     type: String
     optional: true
+  
+  reportAs:
+    type: String
+    allowedValues: [ 'surgery', 'new', 'recall' ] 
+    optional: true
 
   external:
     type: [ String ]

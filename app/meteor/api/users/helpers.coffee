@@ -1,4 +1,4 @@
-moment = require 'moment'
+moment = require 'moment-timezone'
 map = require 'lodash/map'
 last = require 'lodash/last'
 { Meteor } = require 'meteor/meteor'

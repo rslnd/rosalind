@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { DateRangePicker as DateRangePickerComponent } from 'react-dates'
 import { START_DATE, END_DATE } from 'react-dates/constants'

@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import chai from 'chai'
 import chaiDatetime from 'chai-datetime'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { skipBackwards, skipForwards } from './skipBackwards'
 
 chai.use(chaiDatetime)

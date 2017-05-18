@@ -1,13 +1,41 @@
 import React from 'react'
+import { Box } from 'client/ui/components/Box'
 import { ReportTable } from './ReportTable'
 import { ReportSummary } from './ReportSummary'
+import { Cancelations } from './Cancelations'
+import { TimelineBeforeAppointment } from './TimelineBeforeAppointment'
+import { SquaresContainer } from './Squares'
+import { Week } from './Week'
 
 export const Report = ({ report, showRevenue }) => (
   <div>
     <ReportSummary report={report} showRevenue={showRevenue} />
-    <div className="box box-info">
-      <div className="box-body no-padding">
-        <ReportTable report={report} showRevenue={showRevenue} />
+    <Box type="info" noPadding>
+      <ReportTable report={report} showRevenue={showRevenue} />
+    </Box>
+
+    <div className="row">
+      <div className="col-md-4">
+        <Box title="Absagen" noPadding icon="calendar-times-o">
+          <Cancelations report={report} />
+        </Box>
+      </div>
+      <div className="col-md-8">
+        <TimelineBeforeAppointment report={report} />
+      </div>
+    </div>
+
+    <div className="row">
+      <div className="col-md-12">
+        <Box title="Auslastung und Dienstplan" icon="users">
+          <Week report={report} />
+        </Box>
+      </div>
+    </div>
+
+    <div className="row">
+      <div className="col-md-9">
+        <SquaresContainer report={report} />
       </div>
     </div>
   </div>

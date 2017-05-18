@@ -1,12 +1,42 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
-import moment from 'moment'
 import 'moment-duration-format'
+import idx from 'idx'
 import { UserHelper } from 'client/ui/users/UserHelper'
 import { TAPi18n } from 'meteor/tap:i18n'
 
-const Nil = () => (
-  <span className="text-quite-muted">&ndash;</span>
+import { durationFormat } from './shared/durationFormat'
+import { Nil } from './shared/Nil'
+import { Percent } from './shared/Percent'
+import { Round } from './shared/Round'
+
+const align = { 
+  textAlign: 'right'
+}
+
+const center = {
+  textAlign: 'center'
+}
+
+const summaryRowStyle = {
+  borderTop: '2px solid #ebf1f2',
+  backgroundColor: '#f7f8f9'
+}
+
+const colDivider = {
+  borderTop: '2px solid #ebf1f2',
+  backgroundColor: '#f7f8f9'
+}
+
+const borderLeftStyle = {
+  ...align,
+  borderLeft: '0.5px solid #ebf1f2'
+}
+
+const Td = ({ children, borderLeft }) => (
+  <td style={borderLeft ? borderLeftStyle : align}>
+    {children}
+  </td>
 )
 
 export const ReportTableHeader = ({ showRevenue }) => (
@@ -14,14 +44,33 @@ export const ReportTableHeader = ({ showRevenue }) => (
     <tr>
       <th>#</th>
       <th className="col-md-2">{TAPi18n.__('reports.assignee')}</th>
-      <th>{TAPi18n.__('reports.hours')}</th>
-      <th className="td-bg" width="150px">{TAPi18n.__('reports.patients')}</th>
-      <th className="td-bg">{TAPi18n.__('reports.new')}</th>
-      <th className="td-bg">{TAPi18n.__('reports.recall')}</th>
-      <th className="td-bg">{TAPi18n.__('reports.newPerHour')}</th>
-      <th className="td-bg">{TAPi18n.__('reports.total')}</th>
-      <th>{TAPi18n.__('reports.surgeries')}</th>
-      {showRevenue && <th>{TAPi18n.__('reports.revenue')}</th>}
+      <th style={align}>Std.</th>
+      <th style={align}>Ausl.</th>
+      <th style={align} colSpan={2}>PatientInnen</th>
+      <th style={center} colSpan={2}>Neu</th>
+      <th style={center} colSpan={2}>Kontrolle</th>
+      <th style={center} colSpan={2}>OP</th>
+      <th style={align} colSpan={2}>Neu/Std.</th>
+      {showRevenue && <th style={align} colSpan={2}>Umsatz</th>}
+    </tr>
+
+    <tr className="text-muted" style={{ backgroundColor: '#f7f8f9' }}>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th style={align}>Plan</th>
+      <th style={align}>Ist</th>
+      <th style={colDivider}>Plan</th>
+      <th style={align}>Ist</th>
+      <th style={colDivider}>Plan</th>
+      <th style={align}>Ist</th>
+      <th style={colDivider}>Plan</th>
+      <th style={align}>Ist</th>
+      <th style={colDivider}>Plan</th>
+      <th style={align}>Ist</th>
+      {showRevenue && <th style={align}>pro Std.</th>}
+      {showRevenue && <th style={align}>Gesamt</th>}
     </tr>
   </thead>
 )
@@ -35,54 +84,122 @@ export const ReportTableBody = ({ showRevenue, report }) => (
     staggerDelayBy={160}
     staggerDurationBy={60}>
     {report.assignees.map((assignee, index) => (
-      <tr key={assignee.userId || assignee.external.eoswin.id} className="bg-white">
-        <td>{index + 1}</td>
+      <tr key={assignee.assigneeId || 'unassigned'} className="bg-white">
+
+        {/* Rank */}
+        <td className="text-muted">{index + 1}</td>
+
+        {/* Name */}
         <td>
           {
-            assignee.userId
-            ? <UserHelper userId={assignee.userId} />
+            assignee.assigneeId
+            ? <UserHelper userId={assignee.assigneeId} />
             : <i className="text-muted">{TAPi18n.__('reports.unassigned')}</i>
           }
         </td>
-        <td>
-          {
-            assignee.hours.actual
-            ? moment.duration(assignee.hours.actual, 'hours').format(TAPi18n.__('time.durationFormat'))
-            : assignee.hours.scheduled && (
-              <span>
-                {moment.duration(assignee.hours.scheduled, 'hours').format(TAPi18n.__('time.durationFormat'))}&nbsp;
-                <small className="text-muted">
-                  <i className="fa fa-question-circle text-quite-muted hide-print"></i>&nbsp;
-                  {TAPi18n.__('reports.scheduledOnly')}
-                </small>
-              </span>
-            )
-          }
-        </td>
-        <td className="td-bg on-hover-here">
-          <div className="progress bg-aqua-light">
-            <div className="progress-bar progress-bar-aqua" style={{width: `${assignee.patients.newPercentage}%`}}>
-              <div className="on-hover-show show-print">{Math.floor(assignee.patients.newPercentage)}% {TAPi18n.__('reports.newPercentage')}</div>
-            </div>
-          </div>
-        </td>
-        <td className="td-bg">{assignee.patients.new || <Nil />}</td>
-        <td className="td-bg">{assignee.patients.recall || <Nil />}</td>
-        <td className="td-bg">{
-          assignee.patients.newPerHourScheduled
-          ? assignee.patients.newPerHourScheduled.toFixed(1)
-          : (assignee.patients.newPerHourActual && assignee.patients.newPerHourActual.toFixed(1) || <Nil />)
+
+        {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
+        <td style={align}>{assignee.assigneeId && durationFormat(assignee.hours.planned)}</td>
+
+        {/* Auslastung */}
+        <td style={align}>{assignee.assigneeId &&
+          <Percent slash bigPercent part={assignee.workload.planned} of={assignee.workload.available} />
         }</td>
-        <td className="td-bg">{assignee.patients.total}</td>
-        <td>{assignee.patients.surgeries || <Nil />}</td>
-        {showRevenue && <td>€{assignee.revenue}</td>}
+
+
+        {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
+        <Td borderLeft>{idx(assignee, _ => _.patients.total.planned)}</Td>
+        <Td>{idx(assignee, _ => _.patients.total.actual) || <Nil />}</Td>
+
+        {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.planned)} of={assignee.patients.total.planned} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.new.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
+
+        {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.recall.planned)} of={assignee.patients.total.planned} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.recall.actual)} of={assignee.patients.total.actual} /></Td>
+
+        {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.surgery.planned)} of={assignee.patients.total.planned} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.surgery.actual)} of={assignee.patients.total.actual} /></Td>
+
+        {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
+        <Td borderLeft>{assignee.assigneeId &&
+          <Round number={idx(assignee, _ => _.patients.new.plannedPerHour)} />
+        }</Td>
+        <Td>{assignee.assigneeId &&
+          <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} />
+        }</Td>
+ 
+        {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
+        {
+          showRevenue && 
+            <Td borderLeft style={align}>{assignee.assigneeId &&
+              <Round to={0} unit="€" number={idx(assignee, _ => _.revenue.total.actualPerHour)} /> || <Nil />
+            }</Td>
+        }
+
+        {/* Umsatz gesamt */}
+        {
+          showRevenue &&
+            <Td style={align}>{
+              <Round to={0} unit="€" number={idx(assignee, _ => _.revenue.total.actual)} /> || <Nil />
+            }</Td>
+        }
       </tr>
     ))}
+    <SummaryRow report={report} showRevenue={showRevenue} />
   </FlipMove>
 )
 
+class SummaryRow extends React.Component {
+  render () {
+    const { report, showRevenue } = this.props
+    return (
+      <tr style={summaryRowStyle} className="bg-white">
+        <td><b>∑</b></td>
+
+        <td>{report.total.assignees} {TAPi18n.__('reports.assignees')}</td>
+
+        {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
+        <Td>{durationFormat(report.total.hours.planned)}</Td>
+
+        {/* Auslatung */}
+        <Td><Percent slash bigPercent part={report.total.workload.planned} of={report.total.workload.available} /></Td>
+
+        {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
+        <Td borderLeft>{report.total.patients.total.planned}</Td>
+        <Td>{idx(report, _ => _.total.patients.total.actual) || <Nil />}</Td>
+
+        {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
+        <Td borderLeft><Percent part={report.total.patients.new.planned} of={report.total.patients.total.planned} /></Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.new.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+
+        {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
+        <Td borderLeft><Percent part={report.total.patients.recall.planned} of={report.total.patients.total.planned} /></Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.recall.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+
+        {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
+        <Td borderLeft><Percent part={report.total.patients.surgery.planned} of={report.total.patients.total.planned} /></Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.surgery.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+
+        {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
+        <Td borderLeft><Round unit="⌀" number={idx(report, _ => _.average.patients.new.plannedPerHour)} /></Td>
+        <Td><Round unit="⌀" number={idx(report, _ => _.average.patients.new.actualPerHour)} /></Td>
+
+        
+        {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
+        {showRevenue && <Td borderLeft style={align}><Round to={0} unit="⌀ €" number={idx(report, _ => _.average.revenue.actualPerHour)} /></Td>}
+
+        {/* Umsatz gesamt */}
+        {showRevenue && <Td style={align}><Round to={0} unit="€" number={idx(report, _ => _.total.revenue.actual)} /></Td>}
+      </tr>
+    )
+  }
+}
+
 export const ReportTable = ({ report, showRevenue }) => (
-  <div className="table-responsive">
+  <div className="table-responsive enable-select">
     <table className="table no-margin">
       <ReportTableHeader showRevenue={showRevenue} />
       <ReportTableBody report={report} showRevenue={showRevenue} />

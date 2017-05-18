@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "admin-lte": "^2.3.5",
+    "babel-plugin-idx": "^1.5.1",
+    "babel-preset-latest": "^6.24.1",
     "babyparse": "^0.4.6",
     "bcrypt": "^1.0.2",
     "belle": "^3.0.1",
@@ -26,6 +28,7 @@
     "font-awesome-webpack": "^0.0.5-beta.2",
     "gsm": "^0.1.4",
     "iconv-lite": "^0.4.16",
+    "idx": "^1.5.0",
     "inflected": "^2.0.1",
     "jquery": "^3.1.1",
     "jsonwebtoken": "^7.4.0",
@@ -48,6 +51,7 @@
     "react-addons-pure-render-mixin": "^15.1.0",
     "react-addons-shallow-compare": "^15.3.2",
     "react-bootstrap": "^0.31.0",
+    "react-calendar-heatmap": "^1.1.0",
     "react-dates": "^10.1.1",
     "react-dom": "^15.1.0",
     "react-flip-move": "^2.9.3",
@@ -62,6 +66,7 @@
     "react-select": "^1.0.0-rc.3",
     "react-sticky": "^5.0.5",
     "react-tap-event-plugin": "^2.0.1",
+    "react-vis": "^1.0.1",
     "redux": "^3.6.0",
     "redux-form": "^6.0.2",
     "redux-form-material-ui": "^4.0.1",
@@ -123,7 +128,7 @@
   },
   "scripts": {
     "start": "meteor",
-    "test": "./node_modules/mocha/bin/mocha --recursive --require coffee-script --compilers js:babel-core/register './api/**/*.test.js' './util/**/*.test.js' './client/**/*.test.js'",
+    "test": "./node_modules/mocha/bin/mocha --recursive --require babel-polyfill --require coffee-script --compilers js:babel-core/register './api/**/*.test.js' './util/**/*.test.js' './client/**/*.test.js'",
     "test:acceptance": "node ./test.js"
   }
 }

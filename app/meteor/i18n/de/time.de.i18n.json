@@ -16,6 +16,7 @@
     "timeFormat": "HH:mm [Uhr]",
     "timeFormatShort": "HH:mm",
     "durationFormat": "h [Std] m [Min]",
+    "durationFormatShort": "h:m",
     "dateFormatVeryShort": "D. MMM YY",
     "dateFormatShort": "D. MMM YYYY",
     "dateFormat": "D. MMMM YYYY",

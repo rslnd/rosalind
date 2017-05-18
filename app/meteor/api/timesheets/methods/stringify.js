@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { TAPi18n } from 'meteor/tap:i18n'
 
 export const stringify = ({ Timesheets }) => {

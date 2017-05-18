@@ -1,0 +1,1 @@
+export { parseAddendum } from './parseAddendum'

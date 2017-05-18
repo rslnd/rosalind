@@ -1,14 +1,17 @@
-import moment from 'moment-timezone'
+import momentTz from 'moment-timezone'
+import { extendMoment } from 'moment-range'
 import { Schedules } from 'api/schedules'
 import { getResource } from './getResources'
 import { parseNewlines } from './parseNewlines'
+
+const moment = extendMoment(momentTz)
 
 export const upsertSchedules = ({ record, resources, job, timezone = 'Europe/Vienna' }) => {
   if (!record.Datum_Beginn || !record.Datum_Ende) { return }
 
   const start = moment.tz(record.Datum_Beginn, timezone).toDate()
   const end = moment.tz(record.Datum_Ende, timezone).toDate()
-  const duration = moment().range(start, end)
+  const duration = moment.range(start, end)
   if (duration.diff('seconds') < 1) { return }
 
   if (duration.diff('hours') > 12) { return }

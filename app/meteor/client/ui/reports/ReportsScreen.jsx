@@ -1,6 +1,6 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from 'util/time/format'
@@ -46,7 +46,7 @@ export class ReportsScreen extends React.Component {
         <div className="content-header">
           <h1>
             {TAPi18n.__('reports.thisDaySingular')} {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
-            <small>{weekOfYear(this.props.date)}</small>
+            <small>{weekOfYear(this.props.date, { short: true })}</small>
           </h1>
           <DateNavigation
             date={this.props.date}
@@ -59,7 +59,7 @@ export class ReportsScreen extends React.Component {
             <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name="print" /></Button>
             {
               this.props.canShowRevenue &&
-                <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.showRevenue')}><Icon name="euro" /></Button>
+                <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.toggleRevenue')}><Icon name="euro" /></Button>
             }
           </DateNavigation>
         </div>
@@ -67,10 +67,24 @@ export class ReportsScreen extends React.Component {
           <FlipMove duration={230}>
             {
               this.props.report
-              ? <div key="reportTable"><Report report={this.props.report} showRevenue={this.state.showRevenue} /></div>
-            : <div key="noReports"><Box type="warning" title={TAPi18n.__('ui.notice')} body={TAPi18n.__('reports.empty')} /></div>
+              ? <div key="reportTable">
+                  <Report report={this.props.report} showRevenue={this.state.showRevenue} />
+                </div>
+              : <div key="noReports">
+                  <Box type="warning" title={TAPi18n.__('ui.notice')}>
+                    <p>{TAPi18n.__('reports.empty')}</p>
+                  </Box>
+                </div>
             }
           </FlipMove>
+
+          <Button onClick={this.props.generateReport}>
+              Diesen Bericht neu generieren
+          </Button>
+
+          <Button onClick={this.props.viewAppointments}>
+              Terminkalender für diesen Tag ansehen
+          </Button>
         </div>
       </div>
     )

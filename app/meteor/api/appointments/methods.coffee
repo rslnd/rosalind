@@ -1,4 +1,4 @@
-moment = require 'moment'
+moment = require 'moment-timezone'
 { block } = require 'util/time/block'
 
 module.exports = ({ Appointments }) ->

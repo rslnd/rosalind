@@ -1,4 +1,4 @@
-moment = require 'moment'
+moment = require 'moment-timezone'
 temp = require 'temp'
 { Meteor } = require 'meteor/meteor'
 { Picker } = require 'meteor/meteorhacks:picker'

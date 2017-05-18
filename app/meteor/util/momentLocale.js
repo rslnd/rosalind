@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { process as server } from 'meteor/clinical:env'
 import 'moment/locale/de-at'
 

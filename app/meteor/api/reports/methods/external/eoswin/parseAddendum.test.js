@@ -1,18 +1,18 @@
 /* eslint-env mocha */
 import chai from 'chai'
 import chaiDatetime from 'chai-datetime'
-import { matchInsuranceCode, parseReportDate, parseReport } from './parseReport'
+import { getTagBilledCount, parseReportDate, parseAddendum } from './parseAddendum'
 import { REPORT } from './report.fixture'
 
 const expect = chai.expect
 chai.use(chaiDatetime)
 
-describe('importers', function () {
-  describe('eoswin', function () {
-    describe('eoswinPatients', function () {
-      it('knows about insurance codes', function () {
-        expect(matchInsuranceCode('blahblah', 'insurance')).to.equal(null)
-        expect(matchInsuranceCode('[502] * 42   -> Ordination', 'surgeries')).to.equal(42)
+describe('api', function () {
+  describe('reports', function () {
+    describe('eoswin', function () {
+      it('parses how often a given tag was billed', function () {
+        expect(getTagBilledCount('blahblah', 'insurance')).to.equal(null)
+        expect(getTagBilledCount('[502] * 42   -> Ordination', 'surgery')).to.equal(42)
       })
 
       describe('parseReportDate', function () {
@@ -29,16 +29,11 @@ describe('importers', function () {
         })
       })
 
-      describe('parseReport with fixture', function () {
-        const { assignees } = parseReport(REPORT)
+      describe('parseAddendum with fixture', function () {
+        const { assignees } = parseAddendum({ content: REPORT })
 
         it('contains two assignees', function () {
           expect(assignees.length).to.equal(2)
-        })
-
-        it('assignees have ids', function () {
-          expect(assignees[0].external.eoswin.id).to.equal('A11')
-          expect(assignees[1].external.eoswin.id).to.equal('A12')
         })
       })
     })

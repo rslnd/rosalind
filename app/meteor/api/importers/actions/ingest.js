@@ -41,7 +41,7 @@ export const ingest = ({ Importers }) => {
 
       if (!content && buffer) {
         const encoding = determineEncoding({ importer })
-        content = iconv.decode(buffer.blob, encoding)
+        content = iconv.decode(Buffer.from(buffer.blob), encoding)
       }
 
       if (importer) {

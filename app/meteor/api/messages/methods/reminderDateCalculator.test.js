@@ -1,11 +1,13 @@
 /* eslint-env mocha */
 import chai from 'chai'
 import chaiDatetime from 'chai-datetime'
-import moment from 'moment-timezone'
+import momentTz from 'moment-timezone'
+import { extendMoment } from 'moment-range'
 import { reminderDateCalculator } from './reminderDateCalculator'
 
 chai.use(chaiDatetime)
 const expect = chai.expect
+const moment = extendMoment(momentTz)
 
 describe('api', () => {
   describe('messages', () => {

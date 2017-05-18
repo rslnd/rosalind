@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { withRouter } from 'react-router-dom'

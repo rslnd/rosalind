@@ -1,5 +1,5 @@
 import publication from './publication'
-import './methods'
+import './actions'
 
 export default function () {
   publication()

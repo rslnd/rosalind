@@ -6,17 +6,18 @@ module.exports = function (wallaby) {
 
   return {
     files: [
-      './**/*.js',
-      '!./**/*.test.js',
-      '!./node_modules/**/*.js',
-      '!./client/compatibility/**/*.js',
-      '!./tests/**/*'
+      './api/**/*.js',
+      './client/**/*.js',
+      './util/**/*.js',
+      '!./api/**/*.test.js',
+      '!./client/**/*.test.js',
+      '!./util/**/*.test.js'
     ],
 
     tests: [
-      './**/*.test.js',
-      '!./node_modules/**/*.test.js',
-      '!./tests/**/*'
+      './api/**/*.test.js',
+      './client/**/*.test.js',
+      './util/**/*.test.js'
     ],
 
     bootstrap: function () {
@@ -30,7 +31,8 @@ module.exports = function (wallaby) {
     },
 
     env: {
-      type: 'node'
+      type: 'node',
+      runner: '/Users/albertzak/.nvm/versions/node/v4.7.3/bin/node'
     },
 
     testFramework: 'mocha'
