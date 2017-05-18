@@ -172,15 +172,15 @@ class SummaryRow extends React.Component {
         <Td>{idx(report, _ => _.total.patients.total.actual) || <Nil />}</Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={report.total.patients.new.planned} of={report.total.patients.total.planned} /></Td>
+        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.new.planned)} of={report.total.patients.total.planned} /></Td>
         <Td><Percent part={idx(report, _ => _.total.patients.new.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={report.total.patients.recall.planned} of={report.total.patients.total.planned} /></Td>
+        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.recall.planned)} of={report.total.patients.total.planned} /></Td>
         <Td><Percent part={idx(report, _ => _.total.patients.recall.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={report.total.patients.surgery.planned} of={report.total.patients.total.planned} /></Td>
+        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.surgery.planned)} of={report.total.patients.total.planned} /></Td>
         <Td><Percent part={idx(report, _ => _.total.patients.surgery.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}

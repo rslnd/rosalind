@@ -15,6 +15,8 @@ export const generate = ({ Reports, Appointments, Schedules, Tags }) => {
     }).validator(),
 
     run ({ day, addendum }) {
+      if (this.isSimulation) { return }
+
       const date = moment(dayToDate(day))
 
       const appointments = Appointments.find({
@@ -41,7 +43,7 @@ export const generate = ({ Reports, Appointments, Schedules, Tags }) => {
 
       const report = generateReport({ day, appointments, overrideSchedules, tagMapping, addendum })
 
-      console.log('[Reports] generate: Generated report', report)
+      console.log('[Reports] generate: Generated report', JSON.stringify(report, null, 2))
 
       return Reports.actions.upsert.callPromise({ report })
     }
