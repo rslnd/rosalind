@@ -1,3 +1,4 @@
+import React from 'react'
 import classnames from 'classnames'
 import timeLegendStyle from './timeLegendStyle'
 import { timeSlots, format, isFullHour, isQuarterHour } from './timeSlots'

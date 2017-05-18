@@ -5,7 +5,10 @@ import sortBy from 'lodash/fp/sortBy'
 import uniq from 'lodash/uniq'
 import flatten from 'lodash/flatten'
 import union from 'lodash/union'
+import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
+import { Meteor } from 'meteor/meteor'
+import { Roles } from 'meteor/alanning:roles'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { SubsManager } from 'meteor/meteorhacks:subs-manager'
@@ -135,6 +138,8 @@ const composer = (props, onData) => {
         }
       })
     )(assigneeIds)
+  
+    const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
 
     const onNewAppointmentPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
     const onNewAppointmentPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
@@ -143,7 +148,20 @@ const composer = (props, onData) => {
       Alert.success(TAPi18n.__('appointments.moveSuccess'))
     })
 
-    onData(null, { assignees, date, onNewAppointmentPopoverOpen, onNewAppointmentPopoverClose, handleSetAdmitted, handleMove, subsReady })
+    const { dispatch, move } = props
+
+    onData(null, {
+      assignees,
+      date,
+      onNewAppointmentPopoverOpen,
+      onNewAppointmentPopoverClose,
+      handleSetAdmitted,
+      handleMove,
+      subsReady,
+      canEditSchedules,
+      move,
+      dispatch
+    })
   } else {
     onData(null, null)
   }
@@ -152,4 +170,10 @@ const composer = (props, onData) => {
   return () => Appointments.actions.releaseLock.call({})
 }
 
-export const AppointmentsContainer = composeWithTracker(composer, Loading)(AppointmentsScreen)
+export const AppointmentsContainerComposed = composeWithTracker(composer, Loading)(AppointmentsScreen)
+
+const mapStateToProps = (store) => ({
+  move: store.appointments.move
+})
+
+export const AppointmentsContainer = connect(mapStateToProps)(AppointmentsContainerComposed)

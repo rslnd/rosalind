@@ -45,7 +45,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
             ...patient,
             appointments: Appointments.find({ patientId: patient._id }, {
               sort: { start: -1 },
-              limit: 5,
+              limit: 1,
               fields: {
                 '_id': 1,
                 'tags': 1,

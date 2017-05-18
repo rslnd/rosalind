@@ -26,12 +26,6 @@ export class AppointmentsView extends React.Component {
         overrideAssigneeId: null,
         start: null,
         end: null
-      },
-      move: {
-        isMoving: false,
-        moveAppointmentId: null,
-        moveToAssigneeId: null,
-        moveToTime: null
       }
     }
 
@@ -57,7 +51,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleAppointmentClick (event, appointment) {
-    if (this.state.move.isMoving) {
+    if (this.props.move.isMoving) {
       return this.handleMoveEnd()
     }
 
@@ -80,7 +74,7 @@ export class AppointmentsView extends React.Component {
   handleBlankClick (options) {
     if (this.state.override.isOverriding) {
       this.handleOverrideStartOrEnd(options)
-    } else if (this.state.move.isMoving) {
+    } else if (this.props.move.isMoving) {
       this.handleMoveEnd(options)
     } else {
       this.handleNewAppointmentPopoverOpen(options)
@@ -90,7 +84,7 @@ export class AppointmentsView extends React.Component {
   handleBlankHover (options) {
     if (this.state.override.isOverriding) {
       this.handleOverrideHover(options)
-    } else if (this.state.move.isMoving) {
+    } else if (this.props.move.isMoving) {
       this.handleMoveHover(options)
     }
   }
@@ -196,10 +190,12 @@ export class AppointmentsView extends React.Component {
   }
 
   handleScheduleModalOpen ({ scheduleId }) {
-    this.setState({...this.state,
-      scheduleModalOpen: true,
-      scheduleModalId: scheduleId
-    })
+    if (this.props.canEditSchedules) {
+      this.setState({...this.state,
+        scheduleModalOpen: true,
+        scheduleModalId: scheduleId
+      })
+    }
   }
 
   handleScheduleModalClose () {
@@ -222,45 +218,34 @@ export class AppointmentsView extends React.Component {
     this.props.onSetAdmitted({ appointmentId: appointment._id })
   }
 
-  handleMoveStart ({ appointmentId, assigneeId, time }) {
+  handleMoveStart (args) {
     this.setState({
       ...this.state,
-      appointmentModalOpen: false,
-      move: {
-        ...this.state.move,
-        isMoving: true,
-        moveAppointmentId: appointmentId,
-        moveToAssigneeId: assigneeId,
-        moveToTime: time
-      }
+      appointmentModalOpen: false
+    })
+
+    this.props.dispatch({
+      type: 'APPOINTMENT_MOVE_START',
+      ...args
     })
   }
 
   handleMoveHover ({ assigneeId, time }) {
-    this.setState({
-      ...this.state,
-      move: {
-        ...this.state.move,
-        moveToAssigneeId: assigneeId,
-        moveToTime: time
-      }
+    this.props.dispatch({
+      type: 'APPOINTMENT_MOVE_HOVER',
+      assigneeId,
+      time
     })
   }
 
   handleMoveEnd () {
     this.props.onMove({
-      appointmentId: this.state.move.moveAppointmentId,
-      newStart: this.state.move.moveToTime,
-      newAssigneeId: this.state.move.moveToAssigneeId
+      appointmentId: this.props.move.moveAppointmentId,
+      newStart: this.props.move.moveToTime,
+      newAssigneeId: this.props.move.moveToAssigneeId
     }).then(() => {
-      this.setState({
-        ...this.state,
-        move: {
-          isMoving: false,
-          moveAppointmentId: null,
-          moveToAssigneeId: null,
-          moveToTime: null
-        }
+      this.props.dispatch({
+        type: 'APPOINTMENT_MOVE_END'
       })
     })
   }
@@ -282,10 +267,7 @@ export class AppointmentsView extends React.Component {
           onBlankMouseEnter={this.handleBlankHover}
           override={this.state.override}
           onScheduleModalOpen={this.handleScheduleModalOpen}
-          isMoving={this.state.move.isMoving}
-          moveAppointmentId={this.state.move.moveAppointmentId}
-          moveToTime={this.state.move.moveToTime}
-          moveToAssigneeId={this.state.move.moveToAssigneeId} />
+          move={this.props.move} />
 
         <AppointmentInfoModal
           appointmentId={this.state.selectedAppointmentId}

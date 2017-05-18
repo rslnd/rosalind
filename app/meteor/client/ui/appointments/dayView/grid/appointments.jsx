@@ -1,15 +1,38 @@
 import { Appointment } from '../appointment/Appointment'
 
-export const appointments = ({ assignees, onClick, isMoving, moveAppointmentId, moveToAssigneeId, moveToTime }) => (
-  assignees.map((assignee) => (
-    assignee.appointments.map((appointment) => (
+export const appointments = ({ assignees, onClick, move }) => {
+  const { isMoving, moveToTime, moveToAssigneeId, moveAppointmentId, appointment, patient } = move
+
+  let appointmentsList = assignees.map((assignee) => (
+    assignee.appointments.map((appointment) => {
+      if (isMoving && moveAppointmentId === appointment._id) {
+        // The appointment that is being moved is rendered separately below
+        return null
+      } else {
+        return (
+          <Appointment
+            key={appointment._id}
+            appointment={appointment}
+            onClick={onClick}
+          />
+        )
+      }
+    })
+  ))
+
+  if (isMoving) {
+    appointmentsList.push(
       <Appointment
-        key={appointment._id}
-        appointment={appointment}
-        isMoving={isMoving && moveAppointmentId === appointment._id}
+        key="move"
+        appointment={move.appointment}
+        patient={move.patient}
+        isMoving={true}
         moveToAssigneeId={moveToAssigneeId}
         moveToTime={moveToTime}
-        onClick={onClick} />
-    ))
-  ))
-)
+        onClick={onClick}
+      />
+    )
+  }
+
+  return appointmentsList
+}

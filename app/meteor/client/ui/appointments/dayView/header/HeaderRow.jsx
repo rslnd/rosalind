@@ -25,12 +25,14 @@ export class HeaderRow extends React.Component {
   }
 
   handleUserDropdownOpen ({ event, assigneeId }) {
-    this.setState({
-      ...this.state,
-      userDropdownOpen: true,
-      userDropdownAnchor: event.currentTarget,
-      userDropdownAssigneeId: assigneeId
-    })
+    if (this.props.canEditSchedules) {
+      this.setState({
+        ...this.state,
+        userDropdownOpen: true,
+        userDropdownAnchor: event.currentTarget,
+        userDropdownAssigneeId: assigneeId
+      })
+    }
   }
 
   handleUserDropdownClose () {
@@ -64,7 +66,9 @@ export class HeaderRow extends React.Component {
     return (
       <div>
         <div className={classes}>
-          <AddAssignee onAddUser={this.props.onAddUser} />
+          <div style={{ width: '60px' }}>
+            {this.props.canEditSchedules && <AddAssignee onAddUser={this.props.onAddUser} />}
+          </div>
           {/* Scheduled assignees */}
           {this.props.assignees.map((assignee) => (
             <div

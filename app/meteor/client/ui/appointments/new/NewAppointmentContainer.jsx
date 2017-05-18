@@ -90,7 +90,7 @@ export class NewAppointmentContainerComponent extends React.Component {
 }
 
 const mapStateToProps = (store) => {
-  const state = store.appointmentsSearch
+  const state = store.appointments.search
   const patientId = state.patientId ||
     (state.query && state.query.patient && state.query.patient._id)
   return { patientId }
