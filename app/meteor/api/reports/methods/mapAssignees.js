@@ -1,5 +1,6 @@
 import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
+import sortBy from 'lodash/fp/sortBy'
 
 const mapAppointments = ({ assigneeId, appointments, hours, tagMapping }) => {
   // Group by first tag
@@ -52,7 +53,7 @@ export const mapAssignees = ({ appointments, overrideSchedules, tagMapping }) =>
 
   const overrideSchedulesByAssignees = groupBy('userId')(overrideSchedules)
 
-  return Object.keys(appointmentsByAssignees).map((assigneeId) => {
+  const assignees = sortBy('assigneeId')(Object.keys(appointmentsByAssignees).map((assigneeId) => {
     const appointments = appointmentsByAssignees[assigneeId]
     const overrideSchedules = overrideSchedulesByAssignees[assigneeId]
 
@@ -68,5 +69,7 @@ export const mapAssignees = ({ appointments, overrideSchedules, tagMapping }) =>
     }
 
     return assignee
-  })
+  }))
+
+  return assignees
 }

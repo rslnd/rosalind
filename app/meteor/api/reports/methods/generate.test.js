@@ -43,31 +43,6 @@ describe('reports', () => {
         day,
         assignees: [
           {
-            assigneeId: '1',
-            patients: {
-              total: {
-                planned: 3,
-                plannedPerHour: 3 / 11.5
-              },
-              new: {
-                planned: 1,
-                plannedPerHour: 1 / 11.5
-              },
-              surgery: {
-                planned: 2,
-                plannedPerHour: 2 / 11.5
-              }
-            },
-            revenue: {},
-            hours: {
-              planned: 11.5
-            },
-            workload: {
-              available: 138,
-              planned: 3
-            }
-          },
-          {
             assigneeId: '2',
             patients: {
               total: {
@@ -95,7 +70,33 @@ describe('reports', () => {
               available: 102,
               planned: 3
             }
-          }, {
+          },
+          {
+            assigneeId: '1',
+            patients: {
+              total: {
+                planned: 3,
+                plannedPerHour: 3 / 11.5
+              },
+              new: {
+                planned: 1,
+                plannedPerHour: 1 / 11.5
+              },
+              surgery: {
+                planned: 2,
+                plannedPerHour: 2 / 11.5
+              }
+            },
+            revenue: {},
+            hours: {
+              planned: 11.5
+            },
+            workload: {
+              available: 138,
+              planned: 3
+            }
+          },
+          {
             patients: {
               total: {
                 planned: 1

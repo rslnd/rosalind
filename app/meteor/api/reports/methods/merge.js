@@ -1,7 +1,9 @@
+import idx from 'idx'
 import isEqual from 'lodash/isEqual'
 import find from 'lodash/find'
 import cloneDeep from 'lodash/cloneDeep'
 import mergeDeep from 'lodash/merge'
+import sortBy from 'lodash/fp/sortBy'
 
 const mergeAssignee = (originalAssignee, addendumAssignee) => (
   mergeDeep(
@@ -27,7 +29,11 @@ const mergeAssignees = (report, addendum) => {
     }
   })
 
-  return mergedAssignees
+  const sortedAssignees = sortBy(a => a.assigneeId ? 1 : 0)(
+    sortBy(a => idx(a, _ => _.revenue.total.actual))(mergedAssignees)
+  ).reverse()
+
+  return sortedAssignees
 }
 
 export const merge = (report, addendum) => {

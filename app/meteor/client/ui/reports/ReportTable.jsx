@@ -87,7 +87,7 @@ export const ReportTableBody = ({ showRevenue, report }) => (
       <tr key={assignee.assigneeId || 'unassigned'} className="bg-white">
 
         {/* Rank */}
-        <td className="text-muted">{index + 1}</td>
+        <td className="text-muted">{assignee.assigneeId && index + 1}</td>
 
         {/* Name */}
         <td>
