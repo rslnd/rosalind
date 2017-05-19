@@ -14,7 +14,7 @@ export const Report = ({ report, showRevenue }) => (
       <ReportTable report={report} showRevenue={showRevenue} />
     </Box>
 
-    <div className="row">
+    {/*<div className="row">
       <div className="col-md-4">
         <Box title="Absagen" noPadding icon="calendar-times-o">
           <Cancelations report={report} />
@@ -37,6 +37,6 @@ export const Report = ({ report, showRevenue }) => (
       <div className="col-md-9">
         <SquaresContainer report={report} />
       </div>
-    </div>
+    </div>*/}
   </div>
 )
