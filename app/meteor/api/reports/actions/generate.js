@@ -5,7 +5,7 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { dayToDate } from 'util/time/day'
 import { generate as generateReport } from '../methods/generate'
 
-export const generate = ({ Reports, Appointments, Schedules, Tags }) => {
+export const generate = ({ Reports, Appointments, Schedules, Tags, Messages }) => {
   return new ValidatedMethod({
     name: 'reports/generate',
     mixins: [CallPromiseMixin],
@@ -34,6 +34,11 @@ export const generate = ({ Reports, Appointments, Schedules, Tags }) => {
         }
       }).fetch()
 
+      const appointmentIds = appointments.map(a => a._id)
+      const messages = Messages.find({
+        'payload.appointmentId': { $in: appointmentIds }
+      }).fetch()
+
       const tagMapping = Tags.methods.getMappingForReports()
 
       console.log('[Reports] generate: Generating report for day', day, {
@@ -41,7 +46,7 @@ export const generate = ({ Reports, Appointments, Schedules, Tags }) => {
         overrideSchedules: overrideSchedules.length
       })
 
-      const report = generateReport({ day, appointments, overrideSchedules, tagMapping, addendum })
+      const report = generateReport({ day, appointments, overrideSchedules, tagMapping, messages, addendum })
 
       console.log('[Reports] generate: Generated report', JSON.stringify(report, null, 2))
 

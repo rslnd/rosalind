@@ -130,7 +130,13 @@ describe('reports', () => {
             available: 240,
             planned: 6
           },
-          revenue: {}
+          revenue: {},
+          noShows: {
+            total: 0,
+            canceled: 0,
+            remindedNoShow: 0,
+            notRemindedNoShow: 0
+          }
         },
         average: {
           patients: {

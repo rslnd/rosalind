@@ -20,7 +20,7 @@ const Cell = ({ label, part, of, right }) => (
   </td>
 )
 
-export const Cancelations = () => (
+export const Cancelations = ({ report }) => (
   <div className="table-responsive enable-select">
     <table className="table no-margin">
       <thead>
@@ -33,26 +33,16 @@ export const Cancelations = () => (
       <tbody>
         <tr>
           <th style={{ textAlign: 'right' }}>erinnert</th>
-          <Cell label="Storniert per SMS" part={12} of={355} right />
-          <Cell label="Erinnert, nicht erschienen" part={2} of={355} right />
+          <Cell label="Erinnert, storniert" part={report.total.noShows.remindedCanceled} of={report.total.noShows.total} right />
+          <Cell label="Erinnert, nicht erschienen" part={report.total.noShows.remindedNoShow} of={report.total.noShows.total} right />
         </tr>
 
         <tr>
           <th style={{ textAlign: 'right' }}>nicht erinnert</th>
-          <Cell label="Anders storniert" part={28 - 12} of={355} right />
-          <Cell label="Nicht erinnert, nicht erschienen" part={17} of={355} right />
+          <Cell label="nicht erinnert, storniert" part={report.total.noShows.notRemindedCanceled} of={report.total.noShows.total} right />
+          <Cell label="Nicht erinnert, nicht erschienen" part={report.total.noShows.notRemindedNoShow} of={report.total.noShows.total} right />
         </tr>
       </tbody>
     </table>
   </div>
 )
-
-//
-// <Cell label="Gesamt Termine" part={355} />
-// <Cell label="Gesamt storniert" part={28} of={355} right />
-// <Cell label="Gesamt nicht erschienen" part={19} of={355} right />
-//
-// <Cell label="Keine Erinnerung" part={355 - 204} of={355} />
-// <Cell label="Nicht erinnert, nicht erschienen" part={17} of={355} right />
-//
-// <Cell label="Erinnert per SMS" part={204} of={355} />
