@@ -54,13 +54,19 @@ export class InlineEdit extends React.Component {
       editing: false
     })
 
-    let finalValue = this.state.value
+    let originalValue = this.props.value
 
-    if (this.props.parse) {
-      finalValue = this.props.parse(finalValue)
+    if (this.props.stringify) {
+      originalValue = this.props.stringify(originalValue)
     }
 
-    if (finalValue !== this.props.value) {
+    if (this.state.value !== originalValue) {
+      let finalValue = this.state.value
+
+      if (this.props.parse) {
+        finalValue = this.props.parse(finalValue)
+      }
+
       this.props.onChange(finalValue)
     }
   }
