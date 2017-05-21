@@ -21,6 +21,17 @@ const composer = (props, onData) => {
       })
     }
 
+    const handleEditPatient = (newPatient) => {
+      Patients.actions.upsert.callPromise({
+        patient: {
+          _id: patient._id,
+          ...newPatient
+        }
+      }).then(() => {
+        Alert.success(TAPi18n.__('patients.editSuccess'))
+      })
+    }
+
     const handleSetMessagePreferences = (newValue) => {
       const noSMS = !newValue.value
 
@@ -43,6 +54,7 @@ const composer = (props, onData) => {
       patient,
       assignee,
       handleEditNote,
+      handleEditPatient,
       handleSetMessagePreferences
     })
   }

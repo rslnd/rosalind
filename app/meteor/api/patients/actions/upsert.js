@@ -31,7 +31,12 @@ export const upsert = ({ Patients }) => {
 
       // TODO: Split into separate method
       let existingPatient = null
-      if (patient.insuranceId) {
+
+      if (patient._id) {
+        existingPatient = Patients.findOne({ _id: patient._id })
+      }
+
+      if (!existingPatient && patient.insuranceId) {
         existingPatient = Patients.findOne({ insuranceId: patient.insuranceId })
       }
 

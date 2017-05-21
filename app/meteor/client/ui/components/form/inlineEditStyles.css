@@ -1,5 +1,6 @@
 :local(.field) {
   cursor: pointer;
+  display: inline-block;
 }
 
 :local(.field .startEdit) {

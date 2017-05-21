@@ -28,11 +28,27 @@ const ListItem = ({ icon, children, last = false, style }) => (
   </div>
 )
 
-const PatientName = ({ patient }) => (
+const PatientName = ({ patient, onChange }) => (
   patient && patient.profile && <div>
     <h4 className="enable-select" style={{ paddingLeft: 10 }}>
       <span className="text-muted">{patient.prefix()}&#8202; </span>
-      <b>{patient.profile.lastName}</b> &thinsp;{patient.profile.firstName}
+      <b>
+        <InlineEdit
+          onChange={(val) => onChange({ 'profile.lastName': val })}
+          value={patient.profile.lastName}
+          placeholder={<span className="text-muted">{TAPi18n.__('patients.lastName')}</span>}
+          label={TAPi18n.__('patients.lastName')}
+          submitOnBlur
+        />
+      </b>
+       &thinsp;
+      <InlineEdit
+        onChange={(val) => onChange({ 'profile.firstName': val })}
+        value={patient.profile.firstName}
+        placeholder={<span className="text-muted">{TAPi18n.__('patients.firstName')}</span>}
+        label={TAPi18n.__('patients.firstName')}
+        submitOnBlur
+      />
     </h4>
     <hr />
   </div> || null
@@ -132,13 +148,13 @@ const AppointmentNotes = ({ appointment, onChange }) => (
 
 export class AppointmentInfo extends React.Component {
   render () {
-    const { appointment, patient, assignee, handleEditNote, handleSetMessagePreferences } = this.props
+    const { appointment, patient, assignee, handleEditNote, handleEditPatient, handleSetMessagePreferences } = this.props
 
     return (
       <div>
         <div className="row">
           <div className="col-md-12">
-            <PatientName patient={patient} />
+            <PatientName patient={patient} onChange={handleEditPatient} />
           </div>
         </div>
         <div className="row">

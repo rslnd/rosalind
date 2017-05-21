@@ -28,11 +28,11 @@ export class InlineEdit extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
+    this.handleBlur = this.handleBlur.bind(this)
   }
 
   setEditing () {
     this.setState({
-      ...this.state,
       editing: true
     })
   }
@@ -46,44 +46,55 @@ export class InlineEdit extends React.Component {
 
   handleAccept () {
     this.setState({
-      ...this.state,
       editing: false
     })
 
-    this.props.onChange(this.state.value)
+    if (this.state.value !== this.props.value) {
+      this.props.onChange(this.state.value)
+    }
   }
 
   handleCancel () {
     this.setState({
-      ...this.state,
       editing: false,
       value: this.props.value
     })
   }
 
+  handleBlur() {
+    if (this.props.submitOnBlur) {
+      this.handleAccept()
+    }
+  }
+
   render () {
     if (!this.state.editing) {
-      return <div
+      return <span
         className={styles.field}
         onClick={this.setEditing}>
-        <div className="pull-right">
-          <TinyButton
-            onClick={this.setEditing}
-            className={styles.startEdit}
-            title={TAPi18n.__('ui.edit')}>
-            <Icon name="pencil-square-o" />
-          </TinyButton>
-        </div>
+
+        {
+          !this.props.submitOnBlur &&
+            <div className="pull-right">
+              <TinyButton
+                onClick={this.setEditing}
+                className={styles.startEdit}
+                title={TAPi18n.__('ui.edit')}>
+                <Icon name="pencil-square-o" />
+              </TinyButton>
+            </div>
+        }
 
         {this.props.children || (this.props.value && this.props.value.split('\n').map((t, i) => (
           <span key={i}>{t}<br /></span>
         ))) || this.props.placeholder}
-      </div>
+      </span>
     } else {
       return <span>
         <TextField
           value={this.state.value}
           onChange={this.handleChange}
+          onBlur={this.handleBlur}
           autoFocus
           multiLine={!!this.props.rows}
           rows={this.props.rows || 1}
@@ -91,18 +102,21 @@ export class InlineEdit extends React.Component {
           floatingLabelText={this.props.label}
           />
 
-        <div className="pull-right">
-          <TinyButton
-            onClick={this.handleAccept}
-            title={TAPi18n.__('ui.save')}>
-            <Icon name="check" />
-          </TinyButton>
-          <TinyButton
-            onClick={this.handleCancel}
-            title={TAPi18n.__('ui.cancel')}>
-            <Icon name="times" />
-          </TinyButton>
-        </div>
+        {
+          !this.props.submitOnBlur &&
+            <div className="pull-right">
+              <TinyButton
+                onClick={this.handleAccept}
+                title={TAPi18n.__('ui.save')}>
+                <Icon name="check" />
+              </TinyButton>
+              <TinyButton
+                onClick={this.handleCancel}
+                title={TAPi18n.__('ui.cancel')}>
+                <Icon name="times" />
+              </TinyButton>
+            </div>
+        }
       </span>
     }
   }
