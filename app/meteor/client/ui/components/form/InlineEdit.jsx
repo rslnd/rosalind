@@ -19,9 +19,14 @@ export class InlineEdit extends React.Component {
   constructor (props) {
     super(props)
 
+    let value = this.props.value
+    if (this.props.stringify) {
+      value = this.props.stringify(value)
+    }
+
     this.state = {
       editing: false,
-      value: this.props.value
+      value
     }
 
     this.setEditing = this.setEditing.bind(this)
@@ -49,8 +54,14 @@ export class InlineEdit extends React.Component {
       editing: false
     })
 
-    if (this.state.value !== this.props.value) {
-      this.props.onChange(this.state.value)
+    let finalValue = this.state.value
+
+    if (this.props.parse) {
+      finalValue = this.props.parse(finalValue)
+    }
+
+    if (finalValue !== this.props.value) {
+      this.props.onChange(finalValue)
     }
   }
 

@@ -11,6 +11,7 @@ import { Birthday as BirthdayWithAge } from 'client/ui/patients/Birthday'
 import { Stamps } from 'client/ui/helpers/Stamps'
 import { PastAppointmentsContainer } from 'client/ui/patients/PastAppointmentsContainer'
 import { EnlargeText } from 'client/ui/components/EnlargeText'
+import { fuzzyBirthday } from 'util/fuzzy/fuzzyBirthday'
 
 const ListItem = ({ icon, children, last = false, style }) => (
   <div style={style}>
@@ -104,10 +105,21 @@ const Contacts = ({ patient }) => (
   </div> || null
 )
 
-const Birthday = ({ patient }) => (
-  patient && patient.profile && patient.profile.birthday && <ListItem icon="birthday-cake">
-    <BirthdayWithAge day={patient.profile.birthday} />
-  </ListItem> || null
+const Birthday = ({ patient, onChange }) => (
+  patient && patient.profile && patient.profile.birthday && 
+    <ListItem icon="birthday-cake">
+      <InlineEdit
+        onChange={(val) => onChange({ 'profile.birthday': val })}
+        value={patient.profile.birthday}
+        stringify={(val) => moment(val).format(TAPi18n.__('time.dateFormatShort'))}
+        parse={fuzzyBirthday}
+        placeholder={<span className="text-muted">{TAPi18n.__('patients.birthday')}</span>}
+        label={TAPi18n.__('patients.birthday')}
+        submitOnBlur
+      >
+        <BirthdayWithAge day={patient.profile.birthday} />
+      </InlineEdit>
+    </ListItem> || null
 )
 
 const Tags = ({ appointment }) => (
@@ -185,7 +197,7 @@ export class AppointmentInfo extends React.Component {
 
           <div className="col-md-6">
             <Contacts patient={patient} />
-            <Birthday patient={patient} />
+            <Birthday patient={patient} onChange={handleEditPatient} />
             <Reminders patient={patient} onChange={handleSetMessagePreferences} />
 
             {patient && <PastAppointmentsContainer patientId={appointment.patientId} excludeAppointmentId={appointment._id} />}
