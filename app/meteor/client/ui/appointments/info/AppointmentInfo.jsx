@@ -28,10 +28,16 @@ const ListItem = ({ icon, children, last = false, style }) => (
   </div>
 )
 
-const PatientName = ({ patient, onChange }) => (
+const PatientName = ({ patient, onChange, onToggleGender }) => (
   patient && patient.profile && <div>
     <h4 className="enable-select" style={{ paddingLeft: 10 }}>
-      <span className="text-muted">{patient.prefix()}&#8202; </span>
+      <span
+        className="text-muted"
+        style={{ cursor: 'pointer' }}
+        onClick={onToggleGender}
+      >{
+        patient.prefix()
+      }&#8202; </span>
       <b>
         <InlineEdit
           onChange={(val) => onChange({ 'profile.lastName': val })}
@@ -148,13 +154,20 @@ const AppointmentNotes = ({ appointment, onChange }) => (
 
 export class AppointmentInfo extends React.Component {
   render () {
-    const { appointment, patient, assignee, handleEditNote, handleEditPatient, handleSetMessagePreferences } = this.props
+    const {
+      appointment,
+      patient,
+      assignee,
+      handleEditNote,
+      handleEditPatient,
+      handleToggleGender,
+      handleSetMessagePreferences } = this.props
 
     return (
       <div>
         <div className="row">
           <div className="col-md-12">
-            <PatientName patient={patient} onChange={handleEditPatient} />
+            <PatientName patient={patient} onChange={handleEditPatient} onToggleGender={handleToggleGender} />
           </div>
         </div>
         <div className="row">

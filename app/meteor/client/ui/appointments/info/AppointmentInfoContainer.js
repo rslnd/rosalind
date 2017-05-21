@@ -32,6 +32,14 @@ const composer = (props, onData) => {
       })
     }
 
+    const handleToggleGender = () => {
+      Patients.actions.toggleGender.callPromise({
+        patientId: patient._id
+      }).then(() => {
+        Alert.success(TAPi18n.__('patients.editSuccess'))
+      })
+    }
+
     const handleSetMessagePreferences = (newValue) => {
       const noSMS = !newValue.value
 
@@ -55,6 +63,7 @@ const composer = (props, onData) => {
       assignee,
       handleEditNote,
       handleEditPatient,
+      handleToggleGender,
       handleSetMessagePreferences
     })
   }
