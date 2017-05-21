@@ -1,6 +1,5 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import uniqBy from 'lodash/uniqBy'
 import { Toggle, Choice } from 'belle'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from 'util/zerofix'
@@ -88,19 +87,23 @@ const Assignee = ({ assignee, appointment }) => (
   </ListItem> || null
 )
 
-const Contacts = ({ patient }) => (
+const Contacts = ({ patient, onChange }) => (
   patient && patient.profile && patient.profile.contacts && <div>
-    {uniqBy(patient.profile.contacts, 'value').map((contact) => (
-      contact.channel === 'Phone'
-      ? (
-        <ListItem key={contact.value} icon="phone">
-          <EnlargeText>{zerofix(contact.value)}</EnlargeText>
-        </ListItem>
-      ) : (
-        <ListItem key={contact.value} icon="envelope-o">
-          <a href={`mailto:${contact.value}`} title={TAPi18n.__('ui.composeEmail')}>{contact.value}</a>
-        </ListItem>
-      )
+    {patient.profile.contacts.map((contact, i) => (
+      <ListItem key={i} icon={contact.channel === 'Phone' ? 'phone' : 'envelope-o'}>
+        <InlineEdit
+          onChange={(val) => onChange({ [`profile.contacts.${i}.value`]: val })}
+          value={contact.value}
+          placeholder={<span className="text-muted">{TAPi18n.__('patients.telephone')}</span>}
+          label={TAPi18n.__('patients.telephone')}
+          submitOnBlur
+          fullWidth
+        >{
+          contact.channel === 'Phone'
+          ? <EnlargeText>{zerofix(contact.value)}</EnlargeText>
+          : <a href={`mailto:${contact.value}`} title={TAPi18n.__('ui.composeEmail')}>{contact.value}</a>
+        }</InlineEdit>
+      </ListItem>
     ))}
   </div> || null
 )
@@ -196,7 +199,7 @@ export class AppointmentInfo extends React.Component {
           </div>
 
           <div className="col-md-6">
-            <Contacts patient={patient} />
+            <Contacts patient={patient} onChange={handleEditPatient} />
             <Birthday patient={patient} onChange={handleEditPatient} />
             <Reminders patient={patient} onChange={handleSetMessagePreferences} />
 

@@ -79,11 +79,19 @@ export class InlineEdit extends React.Component {
   }
 
   render () {
+    let style = {}
+    if (this.props.fullWidth) {
+      style = {
+        display: 'inline-block',
+        width: '100%'
+      }
+    }
+
     if (!this.state.editing) {
       return <span
         className={styles.field}
+        style={style}
         onClick={this.setEditing}>
-
         {
           !this.props.submitOnBlur &&
             <div className="pull-right">
