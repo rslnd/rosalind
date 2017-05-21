@@ -4,7 +4,7 @@ import { Toggle, Choice } from 'belle'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from 'util/zerofix'
 import { Icon } from 'client/ui/components/Icon'
-import { TagsList } from 'client/ui/tags/TagsList'
+import { TagsField } from 'client/ui/tags/TagsField'
 import { InlineEdit } from 'client/ui/components/form/InlineEdit'
 import { Birthday as BirthdayWithAge } from 'client/ui/patients/Birthday'
 import { Stamps } from 'client/ui/helpers/Stamps'
@@ -74,16 +74,9 @@ const Time = ({ appointment }) => (
   </ListItem>
 )
 
-const Assignee = ({ assignee, appointment }) => (
+const Assignee = ({ assignee }) => (
   assignee && <ListItem icon="user-md">
     {assignee.fullNameWithTitle()}
-
-    <div className="pull-right" style={{
-      position: 'relative',
-      top: -6
-    }}>
-      <Tags appointment={appointment} />
-    </div>
   </ListItem> || null
 )
 
@@ -125,12 +118,13 @@ const Birthday = ({ patient, onChange }) => (
     </ListItem> || null
 )
 
-const Tags = ({ appointment }) => (
-  appointment.tags && <div>
-    <TagsList tags={appointment.tags} last style={{
-      marginRight: 10
+const Tags = ({ appointment, onChange }) => (
+  <ListItem>
+    <TagsField input={{
+      value: appointment.tags || [],
+      onChange
     }} />
-  </div> || null
+  </ListItem>
 )
 
 const Reminders = ({ patient, onChange }) => (
@@ -163,6 +157,7 @@ const AppointmentNotes = ({ appointment, onChange }) => (
       placeholder={<span className="text-muted">{TAPi18n.__('appointments.form.note.placeholder')}</span>}
       rows={3}
       label={TAPi18n.__('appointments.form.note.label')}
+      submitOnBlur
       />
   </ListItem>
 )
@@ -176,6 +171,7 @@ export class AppointmentInfo extends React.Component {
       handleEditNote,
       handleEditPatient,
       handleToggleGender,
+      handleTagChange,
       handleSetMessagePreferences } = this.props
 
     return (
@@ -189,7 +185,8 @@ export class AppointmentInfo extends React.Component {
           <div className="col-md-6">
             <Day appointment={appointment} />
             <Time appointment={appointment} />
-            <Assignee assignee={assignee} appointment={appointment} />
+            <Assignee assignee={assignee} />
+            <Tags appointment={appointment} onChange={handleTagChange} />
             <AppointmentNotes appointment={appointment} onChange={handleEditNote} />
             <ListItem last>
               <Stamps

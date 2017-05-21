@@ -8,6 +8,7 @@ import { unsetAdmitted } from './unsetAdmitted'
 import { unsetCanceled } from './unsetCanceled'
 import { move } from './move'
 import { editNote } from './editNote'
+import { setTags } from './setTags'
 
 export default function ({ Appointments }) {
   return {
@@ -20,6 +21,7 @@ export default function ({ Appointments }) {
     unsetAdmitted: unsetAdmitted({ Appointments }),
     unsetCanceled: unsetCanceled({ Appointments }),
     move: move({ Appointments }),
-    editNote: editNote({ Appointments })
+    editNote: editNote({ Appointments }),
+    setTags: setTags({ Appointments })
   }
 }

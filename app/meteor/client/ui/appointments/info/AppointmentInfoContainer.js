@@ -57,6 +57,15 @@ const composer = (props, onData) => {
       }
     }
 
+    const handleTagChange = (newTags) => {
+      Appointments.actions.setTags.callPromise({
+        appointmentId: props.appointmentId,
+        newTags
+      }).then(() => {
+        Alert.success(TAPi18n.__('appointments.editSuccess'))
+      })
+    }
+
     onData(null, {
       appointment,
       patient,
@@ -64,6 +73,7 @@ const composer = (props, onData) => {
       handleEditNote,
       handleEditPatient,
       handleToggleGender,
+      handleTagChange,
       handleSetMessagePreferences
     })
   }
