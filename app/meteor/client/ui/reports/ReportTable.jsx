@@ -50,6 +50,7 @@ export const ReportTableHeader = ({ showRevenue }) => (
       <th style={center} colSpan={2}>Neu</th>
       <th style={center} colSpan={2}>Kontrolle</th>
       <th style={center} colSpan={2}>OP</th>
+      <th style={center} title="Kaustik privat">K</th>
       <th style={align} colSpan={2}>Neu/Std.</th>
       {showRevenue && <th style={align} colSpan={2}>Umsatz</th>}
     </tr>
@@ -68,9 +69,10 @@ export const ReportTableHeader = ({ showRevenue }) => (
       <th style={align}>Ist</th>
       <th style={colDivider}>Plan</th>
       <th style={align}>Ist</th>
+      <th style={align}>Plan</th>
       <th style={colDivider}>Plan</th>
       <th style={align}>Ist</th>
-      {showRevenue && <th style={align}>pro Std.</th>}
+      {showRevenue && <th style={align}>€/h</th>}
       {showRevenue && <th style={align}>Gesamt</th>}
     </tr>
   </thead>
@@ -130,6 +132,9 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={idx(assignee, _ => _.patients.surgery.planned)} of={assignee.patients.total.planned} /></Td>
         <Td><Percent part={idx(assignee, _ => _.patients.surgery.actual)} of={assignee.patients.total.actual} /></Td>
+        
+        {/* Kaustik privat [Plan] */}
+        <Td><Percent part={idx(assignee, _ => _.patients.cautery.planned)} of={assignee.patients.total.planned} /></Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft>{assignee.assigneeId &&
@@ -191,6 +196,9 @@ class SummaryRow extends React.Component {
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={idx(report, _ => _.total.patients.surgery.planned)} of={report.total.patients.total.planned} /></Td>
         <Td><Percent part={idx(report, _ => _.total.patients.surgery.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+        
+        {/* Kaustik privat [Plan] */}
+        <Td><Percent part={idx(report, _ => _.total.patients.cautery.planned)} of={idx(report, _ => _.total.patients.total.planned)} /></Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Round unit="⌀" number={idx(report, _ => _.average.patients.new.plannedPerHour)} /></Td>
