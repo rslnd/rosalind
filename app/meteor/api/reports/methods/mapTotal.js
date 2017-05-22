@@ -33,19 +33,22 @@ const mapHours = ({ report }) => {
 
 const mapWorkload = ({ report }) => {
   const workloads = assignedOnly(report.assignees).map(a => a.workload).filter(identity)
-  const { available, planned } = workloads.reduce((prev, curr) => {
+  const { available, planned, actual } = workloads.reduce((prev, curr) => {
     return {
       available: prev.available + curr.available,
-      planned: prev.planned + curr.planned
+      planned: prev.planned + curr.planned,
+      actual: prev.actual + curr.actual
     }
   }, {
     available: 0,
-    planned: 0
+    planned: 0,
+    actual: 0
   })
 
   return {
     available,
-    planned
+    planned,
+    actual
   }
 }
 

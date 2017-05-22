@@ -45,7 +45,7 @@ export const ReportTableHeader = ({ showRevenue }) => (
       <th>#</th>
       <th className="col-md-2">{TAPi18n.__('reports.assignee')}</th>
       <th style={align}>Std.</th>
-      <th style={align}>Ausl.</th>
+      <th style={align} colSpan={2}>Auslastung</th>
       <th style={align} colSpan={2}>PatientInnen</th>
       <th style={center} colSpan={2}>Neu</th>
       <th style={center} colSpan={2}>Kontrolle</th>
@@ -58,7 +58,8 @@ export const ReportTableHeader = ({ showRevenue }) => (
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
+      <th style={align}>Plan</th>
+      <th style={align}>Ist</th>
       <th style={align}>Plan</th>
       <th style={align}>Ist</th>
       <th style={colDivider}>Plan</th>
@@ -105,9 +106,12 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <td style={align}>{assignee.assigneeId && assignee.hours && durationFormat(assignee.hours.planned)}</td>
 
-        {/* Auslastung */}
+        {/* Auslastung [Plan, Ist] */}
         <td style={align}>{assignee.assigneeId && assignee.workload &&
           <Percent slash bigPercent part={assignee.workload.planned} of={assignee.workload.available} />
+        }</td>
+        <td style={align}>{assignee.assigneeId && assignee.workload &&
+          <Percent slash bigPercent part={assignee.workload.actual} of={assignee.workload.available} />
         }</td>
 
 
@@ -168,8 +172,9 @@ class SummaryRow extends React.Component {
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <Td>{report.total.hours && durationFormat(report.total.hours.planned)}</Td>
 
-        {/* Auslatung */}
+        {/* Auslatung [Plan, Ist] */}
         <Td><Percent slash bigPercent part={report.total.workload.planned} of={report.total.workload.available} /></Td>
+        <Td><Percent slash bigPercent part={report.total.workload.actual} of={report.total.workload.available} /></Td>
 
         {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
         <Td borderLeft>{report.total.patients.total.planned}</Td>

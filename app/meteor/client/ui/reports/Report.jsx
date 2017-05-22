@@ -7,8 +7,12 @@ import { TimelineBeforeAppointment } from './TimelineBeforeAppointment'
 import { SquaresContainer } from './Squares'
 import { Week } from './Week'
 
+const style = {
+  zoom: .909
+}
+
 export const Report = ({ report, showRevenue }) => (
-  <div>
+  <div style={style}>
     <ReportSummary report={report} showRevenue={showRevenue} />
     <Box type="info" noPadding>
       <ReportTable report={report} showRevenue={showRevenue} />

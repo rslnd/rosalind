@@ -1,3 +1,4 @@
+import add from 'lodash/add'
 import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
 import identity from 'lodash/identity'
@@ -42,13 +43,32 @@ const mapRevenue = ({ revenue, hours }) => (
   mapValues(calculatePerHour({ hours }))(revenue)
 )
 
+const sumAppointments = ({ appointments, slotsPerHour, filter = identity }) =>
+  (appointments
+    .filter(filter)
+    .map(a => a.end - a.start)
+    .reduce(add, 0) / (1000 * 60 * 60)) * slotsPerHour
+
+
 const mapWorkload = ({ hours, appointments }) => {
-  const available = hours.planned * 12
-  const planned = appointments.length
+  const slotsPerHour = 12
+  const available = hours.planned * slotsPerHour
+  const planned = sumAppointments({
+    filter: a => !a.canceled,
+    appointments,
+    slotsPerHour
+  })
+
+  const actual = sumAppointments({
+    filter: a => !a.canceled && a.admitted,
+    appointments,
+    slotsPerHour
+  })
 
   return {
     available,
-    planned
+    planned,
+    actual
   }
 }
 
