@@ -1,32 +1,42 @@
 import { Nil } from './Nil'
 
+export const formatPercentage = (props) => {
+  const percentage = props.part / props.of * 100
+
+  if (percentage < 5) {
+    return percentage.toFixed(1)
+  } else {
+    return Math.round(percentage)
+  }
+}
+
 export const Percent = (props) => {
-  if (!props.part) { return <Nil /> }
+  const {
+    part,
+    parenAbsolute,
+    slash,
+    bigPercent,
+    percentageStyle,
+    noBr
+  } = props
+
+  if (!part) { return <Nil /> }
   const style = { ...props.style, textAlign: 'right' }
 
-  let formattedPart = Math.round(props.part)
-  if (props.parenAbsolute) {
-    formattedPart = `(${props.part})`
+  let formattedPart = Math.round(part)
+  if (parenAbsolute) {
+    formattedPart = `(${part})`
   }
-  if (props.slash) {
-    formattedPart = `${props.part} / ${Math.round(props.of)}`
+  if (slash) {
+    formattedPart = `${part} / ${Math.round(props.of)}`
   }
 
   if (props.of) {
-    const percentage = props.part / props.of * 100
-    let formattedPercentage
-
-    if (percentage < 5) {
-      formattedPercentage = percentage.toFixed(1)
-    } else {
-      formattedPercentage = Math.floor(percentage)
-    }
-
-    formattedPercentage = `${formattedPercentage}%`
+    const formattedPercentage = `${formatPercentage({ part, of: props.of })}%`
 
     let upper, lower
 
-    if (props.bigPercent) {
+    if (bigPercent) {
       upper = formattedPercentage
       lower = formattedPart
     } else {
@@ -37,8 +47,8 @@ export const Percent = (props) => {
     return (
       <span style={style}>
         {upper}
-        <small className="text-muted" style={props.percentageStyle}>
-          {!props.noBr && <br />}
+        <small className="text-muted" style={percentageStyle}>
+          {!noBr && <br />}
           {lower}
         </small>
       </span>

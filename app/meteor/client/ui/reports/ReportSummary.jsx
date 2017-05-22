@@ -1,6 +1,7 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
+import { formatPercentage } from './shared/Percent'
 
 const Nil = () => (
   <span className="text-quite-muted">?</span>
@@ -16,7 +17,7 @@ export const InfoBox = ({ color = 'green', icon = 'eur', children, text, descrip
     <span className={`info-box-icon bg-${color}`}>
       <Icon name={icon} />
     </span>
-    <div className="info-box-content">
+    <div className="info-box-content enable-select">
       <span className="info-box-number">{children}</span>
       <span className="info-box-text">{text}</span>
       <span className="info-box-description text-muted">{description}</span>
@@ -47,38 +48,61 @@ export const TotalRevenueBox = ({ report }) => (
   </InfoBox>
 )
 
-export const NewPatientsPerHourBox = ({ report }) => (
-  <InfoBox
-    text={TAPi18n.__('reports.patientsNewPerHour')} color="purple" icon="user-plus">
-    {
-      idx(report, (_) => _.average.patients.new.plannedPerHour)
-      ? <Unit append="/h">{report.average.patients.new.plannedPerHour.toFixed(1)}</Unit>
-      : <Nil />
-    }
-  </InfoBox>
-)
+export const NewPatientsPerHourBox = ({ report }) => {
+  const newPerHour = idx(report, _ => _.average.patients.new.actualPerHour) || 
+    idx(report, _ => _.average.patients.new.plannedPerHour)
 
-export const Workload = ({ report }) => (
-  <InfoBox text="Auslastung" color="aqua" icon="calendar">
-    {
-      report.total.workload.planned
-      ? <BigPercent part={report.total.workload.planned} of={report.total.workload.available} />
-      : <Nil />
-    }
-  </InfoBox>
-)
+  return (
+    <InfoBox
+      text={TAPi18n.__('reports.patientsNewPerHour')} color="purple" icon="user-plus">
+      {
+        newPerHour
+        ? <Unit append="/h">{newPerHour.toFixed(1)}</Unit>
+        : <Nil />
+      }
+    </InfoBox>
+  )
+}
 
-export const NoShowsBox = ({ report }) => (
-  <InfoBox text="Nicht erschienen" color="red" icon="user-o">
-    {<Nil /> || <Unit append="%">2.4</Unit>}
-  </InfoBox>
-)
+export const Workload = ({ report }) => {
+  const workload = idx(report, _ => _.total.workload.actual) || 
+    idx(report, _ => _.total.workload.planned)
 
-export const TotalPatientsBox = ({ report }) => (
-  <InfoBox text={TAPi18n.__('reports.patients')} color="green" icon="users">
-    {idx(report, (_) => _.total.patients.total.planned) || <Nil />}
-  </InfoBox>
-)
+  return (
+    <InfoBox text="Auslastung" color="aqua" icon="calendar">
+      {
+        workload
+        ? <BigPercent part={workload} of={report.total.workload.available} />
+        : <Nil />
+      }
+    </InfoBox>
+  )
+}
+
+export const NoShowsBox = ({ report }) => {
+  const noShows = idx(report, _ => _.total.noShows.noShows)
+  const percentage = formatPercentage({
+    part: noShows,
+    of: report.total.patients.total.planned
+  })
+
+  return (
+    <InfoBox text="Nicht erschienen" color="red" icon="user-o">
+      {noShows && <Unit append="%">{percentage}</Unit> || <Nil />}
+    </InfoBox>
+  )
+}
+
+export const TotalPatientsBox = ({ report }) => {
+  const patients = idx(report, _ => _.total.patients.total.actual) ||
+    idx(report, _ => _.total.patients.total.planned )
+
+  return (
+    <InfoBox text={TAPi18n.__('reports.patients')} color="green" icon="users">
+      {patients || <Nil />}
+    </InfoBox>
+  )
+}
 
 export const ReportSummary = ({ report, showRevenue }) => {
   const withRevenue = [
