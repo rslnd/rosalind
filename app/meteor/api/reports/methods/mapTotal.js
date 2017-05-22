@@ -3,6 +3,7 @@ import add from 'lodash/add'
 import some from 'lodash/fp/some'
 import idx from 'idx'
 import { assignedOnly, byTags, sumByKeys } from './util'
+import { mapNoShows } from './mapNoShows'
 
 const mapPatients = ({ report }) => (
   byTags(report.assignees, (tag) => {
@@ -66,18 +67,20 @@ const mapRevenue = ({ report }) => {
   }
 }
 
-export const mapTotal = ({ report }) => {
+export const mapTotal = ({ report, appointments, messages }) => {
   const patients = mapPatients({ report })
   const assignees = mapAssignees({ report })
   const hours = mapHours({ report })
   const workload = mapWorkload({ report })
   const revenue = mapRevenue({ report })
+  const noShows = mapNoShows({ report, appointments, messages })
 
   return {
     assignees,
     hours,
     patients,
     workload,
-    revenue
+    revenue,
+    noShows
   }
 }
