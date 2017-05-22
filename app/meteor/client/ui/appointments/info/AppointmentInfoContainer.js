@@ -32,6 +32,15 @@ const composer = (props, onData) => {
       })
     }
 
+    const handleSetBirthday = (newBirthday) => {
+      Patients.actions.setBirthday.callPromise({
+        patientId: patient._id,
+        birthday: newBirthday
+      }).then(() => {
+        Alert.success(TAPi18n.__('patients.editSuccess'))
+      })
+    }
+
     const handleToggleGender = () => {
       Patients.actions.toggleGender.callPromise({
         patientId: patient._id
@@ -74,6 +83,7 @@ const composer = (props, onData) => {
       handleEditPatient,
       handleToggleGender,
       handleTagChange,
+      handleSetBirthday,
       handleSetMessagePreferences
     })
   }

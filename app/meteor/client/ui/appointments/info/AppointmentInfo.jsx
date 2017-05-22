@@ -102,19 +102,20 @@ const Contacts = ({ patient, onChange }) => (
 )
 
 const Birthday = ({ patient, onChange }) => (
-  patient && patient.profile && patient.profile.birthday && 
+  patient &&
     <ListItem icon="birthday-cake">
       <InlineEdit
-        onChange={(val) => onChange({ 'profile.birthday': val })}
-        value={patient.profile.birthday}
-        stringify={(val) => moment(val).format(TAPi18n.__('time.dateFormatShort'))}
+        onChange={onChange}
+        value={patient && patient.profile.birthday}
+        stringify={val => val && moment(val).format(TAPi18n.__('time.dateFormatShort')) || ''}
         parse={fuzzyBirthday}
         placeholder={<span className="text-muted">{TAPi18n.__('patients.birthday')}</span>}
         label={TAPi18n.__('patients.birthday')}
         submitOnBlur
-      >
-        <BirthdayWithAge day={patient.profile.birthday} />
-      </InlineEdit>
+      >{
+        patient.profile && patient.profile.birthday &&
+          <BirthdayWithAge day={patient.profile.birthday} />
+      }</InlineEdit>
     </ListItem> || null
 )
 
@@ -172,6 +173,7 @@ export class AppointmentInfo extends React.Component {
       handleEditPatient,
       handleToggleGender,
       handleTagChange,
+      handleSetBirthday,
       handleSetMessagePreferences } = this.props
 
     return (
@@ -197,7 +199,7 @@ export class AppointmentInfo extends React.Component {
 
           <div className="col-md-6">
             <Contacts patient={patient} onChange={handleEditPatient} />
-            <Birthday patient={patient} onChange={handleEditPatient} />
+            <Birthday patient={patient} onChange={handleSetBirthday} />
             <Reminders patient={patient} onChange={handleSetMessagePreferences} />
 
             {patient && <PastAppointmentsContainer patientId={appointment.patientId} excludeAppointmentId={appointment._id} />}
