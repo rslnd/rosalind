@@ -84,7 +84,7 @@ export const ReportTableBody = ({ showRevenue, report }) => (
     staggerDelayBy={160}
     staggerDurationBy={60}>
     {report.assignees.map((assignee, index) => (
-      <tr key={assignee.assigneeId || 'unassigned'} className="bg-white">
+      <tr key={assignee.assigneeId || assignee.type || 'unassigned'} className="bg-white">
 
         {/* Rank */}
         <td className="text-muted">{assignee.assigneeId && index + 1}</td>
@@ -94,15 +94,19 @@ export const ReportTableBody = ({ showRevenue, report }) => (
           {
             assignee.assigneeId
             ? <UserHelper userId={assignee.assigneeId} />
-            : <i className="text-muted">{TAPi18n.__('reports.unassigned')}</i>
+            : (
+              assignee.type
+              ? (assignee.type && <i className="text-muted">{TAPi18n.__(`reports.assigneeType__${assignee.type}`)}</i>)
+              : <i className="text-muted">{TAPi18n.__('reports.unassigned')}</i>
+            )
           }
         </td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
-        <td style={align}>{assignee.assigneeId && durationFormat(assignee.hours.planned)}</td>
+        <td style={align}>{assignee.assigneeId && assignee.hours && durationFormat(assignee.hours.planned)}</td>
 
         {/* Auslastung */}
-        <td style={align}>{assignee.assigneeId &&
+        <td style={align}>{assignee.assigneeId && assignee.workload &&
           <Percent slash bigPercent part={assignee.workload.planned} of={assignee.workload.available} />
         }</td>
 
@@ -162,7 +166,7 @@ class SummaryRow extends React.Component {
         <td>{report.total.assignees} {TAPi18n.__('reports.assignees')}</td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
-        <Td>{durationFormat(report.total.hours.planned)}</Td>
+        <Td>{report.total.hours && durationFormat(report.total.hours.planned)}</Td>
 
         {/* Auslatung */}
         <Td><Percent slash bigPercent part={report.total.workload.planned} of={report.total.workload.available} /></Td>

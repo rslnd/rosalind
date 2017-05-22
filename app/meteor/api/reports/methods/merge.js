@@ -12,20 +12,31 @@ const mergeAssignee = (originalAssignee, addendumAssignee) => (
   )
 )
 
+const isSameAssignee = a => b =>
+  a.assigneeId && b.assigneeId && a.assigneeId === b.assigneeId
+
 const mergeAssignees = (report, addendum) => {
   if (!addendum.assignees) {
     return report.assignees
   }
 
   // Only merge additional data for assignees that are already present in the original report
-  const assigneeIdsToMerge = report.assignees.map(a => a.assigneeId)
+  const mergedAssignees = report.assignees.map(originalAssignee => {
+    const addendumAssignee = find(addendum.assignees, isSameAssignee(originalAssignee))
 
-  const mergedAssignees = report.assignees.map((originalAssignee) => {
-    if (assigneeIdsToMerge.includes(originalAssignee.assigneeId)) {
-      const addendumAssignee = find(addendum.assignees, a => a.assigneeId === originalAssignee.assigneeId)
+    if (addendumAssignee) {
       return mergeAssignee(originalAssignee, addendumAssignee)
     } else {
       return originalAssignee
+    }
+  })
+
+  // Now add special assignees from addendum to report if they aren't already present
+  addendum.assignees.filter(a => a.type).map(addendumAssignee => {
+    const found = find(mergedAssignees, a => a.type === addendumAssignee.type)
+    if (!found) {
+      console.log('Putting to merged:', addendumAssignee)
+      mergedAssignees.push(addendumAssignee)
     }
   })
 

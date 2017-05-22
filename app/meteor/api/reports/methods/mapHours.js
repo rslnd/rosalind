@@ -52,28 +52,26 @@ const mapWorkload = ({ hours, appointments }) => {
   }
 }
 
-const mapAssignees = ({ report, overrideSchedules, appointments }) => {
-  const appointmentsByAssignee = groupBy('assigneeId')(appointments)
-
-  return report.assignees.map((assignee) => {
-    const assigneeId = assignee.assigneeId || null
+const mapAssignees = ({ report, overrideSchedules, appointments = [] }) => (
+  report.assignees.map((assignee) => {
+    const assigneeId = assignee.assigneeId
 
     if (assigneeId) {
       const hours = mapAssigneeHours({ assigneeId, overrideSchedules })
-      const appointments = appointmentsByAssignee[assigneeId]
+      const assigneesAppointments = appointments.filter(ap => ap.assigneeId === assigneeId)
 
       return {
         ...assignee,
         patients: mapPatients({ patients: assignee.patients, hours }),
         revenue: mapRevenue({ revenue: assignee.revenue, hours }),
         hours,
-        workload: mapWorkload({ hours, appointments })
+        workload: mapWorkload({ hours, appointments: assigneesAppointments })
       }
     } else {
       return assignee
     }
   })
-}
+)
 
 export const mapHours = ({ report, overrideSchedules, appointments }) => {
   return {

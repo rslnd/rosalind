@@ -6,6 +6,8 @@
     "thisDaySingular": "Tagesbericht",
     "assignee": "ÄrztIn",
     "assignees": "ÄrztInnen",
+    "assigneeType__external": "Team",
+    "assigneeType__overbooking": "Einschub",
     "unassigned": "Einschub",
     "newPercentage": "Neu",
     "new": "Neu",

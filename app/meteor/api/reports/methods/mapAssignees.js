@@ -66,6 +66,7 @@ export const mapAssignees = ({ appointments, overrideSchedules, tagMapping }) =>
 
     if (assignee.assigneeId === 'null') {
       delete assignee.assigneeId
+      assignee.type = 'overbooking'
     }
 
     return assignee

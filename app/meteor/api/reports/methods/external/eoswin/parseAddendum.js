@@ -1,6 +1,7 @@
 import moment from 'moment-timezone'
 import { parse as csvToJson } from 'papaparse'
 import fromPairs from 'lodash/fromPairs'
+import cloneDeep from 'lodash/cloneDeep'
 import set from 'lodash/set'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
@@ -56,18 +57,34 @@ export const matchAssigneeId = ({ row, users }) => {
     return null
   }
 
+  const external = {
+    eoswin: {
+      id: eoswinId
+    }
+  }
+
   if (users) {
     const assigneeMapping = mapAssigneeIds({ users })
 
     if (assigneeMapping[eoswinId]) {
-      return assigneeMapping[eoswinId]
+      return {
+        assigneeId: assigneeMapping[eoswinId],
+        external
+      }
     } else {
       console.error(`[Reports] external/eoswin/parseAddendum:
         Could not match assignee with EOSWIN id "${eoswinId}" "${row.BEZ}" to any user`)
-      return null
+      return {
+        type: 'external',
+        displayAs: row.BEZ,
+        external
+      }
     }
   } else {
-    return eoswinId
+    return {
+      type: 'external',
+      external
+    }
   }
 }
 
@@ -82,38 +99,39 @@ const initializeNewAssignee = () => {
 }
 
 export const parseAssignees = ({ rows, users }) => {
-  let assignees = {}
-  let currentAssigneeId = null
+  let assignees = []
+  let currentAssignee = null
 
   rows.map((row) => {
-    let assignee = assignees[currentAssigneeId]
-
-    const newAssigneeId = matchAssigneeId({ row, users })
-    if (newAssigneeId) {
-      currentAssigneeId = newAssigneeId
-      assignees[currentAssigneeId] = initializeNewAssignee()
-      assignee = assignees[currentAssigneeId]
-      assignee.assigneeId = currentAssigneeId
+    const newAssignee = matchAssigneeId({ row, users })
+    if (newAssignee) {
+      if (currentAssignee) {
+        assignees.push(cloneDeep(currentAssignee))
+      }
+      currentAssignee = {
+        ...initializeNewAssignee(),
+        ...newAssignee
+      }
     }
 
     const newPatients = getTagBilledCount(row.BEZ, 'new')
     if (newPatients) {
-      assignee.patients.new.actual += newPatients
+      currentAssignee.patients.new.actual += newPatients
     }
 
     const surgery = getTagBilledCount(row.BEZ, 'surgery')
     if (surgery) {
-      assignee.patients.surgery.actual += surgery
+      currentAssignee.patients.surgery.actual += surgery
     }
 
     // KS: Krankenscheine: total number of patients for assignee
     if (row.KZ === 'KS') {
-      assignee.patients.total.actual += parseInt(row.BEZ)
+      currentAssignee.patients.total.actual += parseInt(row.BEZ)
     }
 
     // E: Ergebnis: total revenue for assignee
     if (row.KZ === 'E') {
-      assignee.revenue.total.actual += parseFloat(row.WERT)
+      currentAssignee.revenue.total.actual += parseFloat(row.WERT)
     }
   })
 
@@ -147,8 +165,10 @@ export const parseAddendum = ({ content, users, ...rest }) => {
   const rows = csvToJson(content, { header: true }).data
   const assignees = parseAssignees({ rows, users })
 
-  return {
+  const addendum = {
     ...rest,
     assignees
   }
+
+  return addendum
 }
