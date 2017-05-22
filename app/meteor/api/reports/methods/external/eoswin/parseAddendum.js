@@ -135,6 +135,11 @@ export const parseAssignees = ({ rows, users }) => {
     }
   })
 
+  // Push last assignee
+  if (currentAssignee) {
+    assignees.push(cloneDeep(currentAssignee))
+  }
+
   const asArray = flow(
     filter(a => a.patients.total.actual > 0),
     map(a => {

@@ -12,14 +12,17 @@ const day = {
   year: 2017
 }
 
+const start = moment('2017-05-22T14:00:00').toDate()
+const end = moment(start).add(5, 'minutes').toDate()
+
 const appointments = [
-  { id: '101', assigneeId: '1', tags: ['n3w', 'should_not_show_up_tag2'] },
-  { id: '102', assigneeId: '1', tags: ['2rg'] },
-  { id: '103', assigneeId: '1', tags: ['2rg'] },
-  { id: '104', assigneeId: '2', tags: ['n3w'] },
-  { id: '105', assigneeId: '2', tags: ['rc1'] },
-  { id: '106', assigneeId: '2', tags: ['2rg', 'should_not_show_up_tag3'] },
-  { id: '107', tags: ['n3w', 'should_not_show_up_tag1'] }
+  { id: '101', assigneeId: '1', tags: ['n3w', 'should_not_show_up_tag2'], start, end },
+  { id: '102', assigneeId: '1', tags: ['2rg'], start, end },
+  { id: '103', assigneeId: '1', tags: ['2rg'], start, end },
+  { id: '104', assigneeId: '2', tags: ['n3w'], start, end },
+  { id: '105', assigneeId: '2', tags: ['rc1'], start, end },
+  { id: '106', assigneeId: '2', tags: ['2rg', 'should_not_show_up_tag3'], start, end },
+  { id: '107', tags: ['n3w', 'should_not_show_up_tag1'], start, end }
 ]
 
 const overrideSchedules = [
@@ -68,7 +71,8 @@ describe('reports', () => {
             },
             workload: {
               available: 102,
-              planned: 3
+              planned: 3,
+              actual: 0
             }
           },
           {
@@ -93,7 +97,8 @@ describe('reports', () => {
             },
             workload: {
               available: 138,
-              planned: 3
+              planned: 3,
+              actual: 0
             }
           },
           {
@@ -104,7 +109,8 @@ describe('reports', () => {
               new: {
                 planned: 1
               }
-            }
+            },
+            type: 'overbooking'
           }
         ],
         total: {
@@ -119,23 +125,28 @@ describe('reports', () => {
             new: {
               planned: 3
             },
-            surgery: {
-              planned: 3
-            },
             recall: {
               planned: 1
+            },
+            surgery: {
+              planned: 3
             }
           },
           workload: {
             available: 240,
-            planned: 6
+            planned: 6,
+            actual: 0
           },
           revenue: {},
           noShows: {
-            total: 0,
-            canceled: 0,
-            remindedNoShow: 0,
-            notRemindedNoShow: 0
+            remindedCanceled: null,
+            notRemindedCanceled: null,
+            remindedNoShow: null,
+            notRemindedNoShow: null,
+            reminded: null,
+            notReminded: null,
+            canceled: null,
+            noShows: null
           }
         },
         average: {
@@ -146,11 +157,11 @@ describe('reports', () => {
             new: {
               plannedPerHour: 3 / 20
             },
-            surgery: {
-              plannedPerHour: 3 / 20
-            },
             recall: {
               plannedPerHour: 1 / 20
+            },
+            surgery: {
+              plannedPerHour: 3 / 20
             }
           },
           revenue: {}
