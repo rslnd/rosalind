@@ -43,8 +43,8 @@ export class ReportsScreen extends React.Component {
   render () {
     return (
       <div>
-        <div className="content-header">
-          <h1>
+        <div className="content-header show-print">
+          <h1 className="show-print">
             {TAPi18n.__('reports.thisDaySingular')} {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
             <small>{weekOfYear(this.props.date, { short: true })}</small>
           </h1>
@@ -64,6 +64,7 @@ export class ReportsScreen extends React.Component {
           </DateNavigation>
         </div>
         <div className="content">
+          <div className="display-none show-print" style={{ width: '100%', height: 5 }}></div>
           <FlipMove duration={230}>
             {
               this.props.report
@@ -78,13 +79,15 @@ export class ReportsScreen extends React.Component {
             }
           </FlipMove>
 
-          <Button onClick={this.props.generateReport}>
-              Diesen Bericht neu generieren
-          </Button>
+          <div className="hide-print">
+            <Button onClick={this.props.generateReport}>
+                Diesen Bericht neu generieren
+            </Button>
 
-          <Button onClick={this.props.viewAppointments}>
-              Terminkalender für diesen Tag ansehen
-          </Button>
+            <Button onClick={this.props.viewAppointments}>
+                Terminkalender für diesen Tag ansehen
+            </Button>
+          </div>
         </div>
       </div>
     )

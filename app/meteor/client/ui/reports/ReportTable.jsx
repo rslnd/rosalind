@@ -19,7 +19,7 @@ const center = {
 }
 
 const summaryRowStyle = {
-  borderTop: '2px solid #ebf1f2',
+  borderTop: '4px double #ebf1f2',
   backgroundColor: '#f7f8f9'
 }
 
