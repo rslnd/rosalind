@@ -6,18 +6,18 @@ module.exports = function (wallaby) {
 
   return {
     files: [
-      './api/**/*.js',
-      './client/**/*.js',
-      './util/**/*.js',
-      '!./api/**/*.test.js',
-      '!./client/**/*.test.js',
-      '!./util/**/*.test.js'
+      './api/**/*.js*',
+      './client/**/*.js*',
+      './util/**/*.js*',
+      '!./api/**/*.test.js*',
+      '!./client/**/*.test.js*',
+      '!./util/**/*.test.js*'
     ],
 
     tests: [
-      './api/**/*.test.js',
-      './client/**/*.test.js',
-      './util/**/*.test.js'
+      './api/**/*.test.js*',
+      './client/**/*.test.js*',
+      './util/**/*.test.js*'
     ],
 
     bootstrap: function () {
@@ -27,7 +27,7 @@ module.exports = function (wallaby) {
     },
 
     compilers: {
-      '**/*.js': wallaby.compilers.babel()
+      '**/*.js*': wallaby.compilers.babel()
     },
 
     env: {
