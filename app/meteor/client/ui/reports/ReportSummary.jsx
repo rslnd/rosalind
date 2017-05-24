@@ -1,15 +1,14 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from 'client/ui/components/Icon'
-import { formatPercentage } from './shared/Percent'
+import { currency, integer, float, percentage, conditionalFloat } from 'util/format'
 
 const Nil = () => (
   <span className="text-quite-muted">?</span>
 )
 
 const BigPercent = (props) => {
-  const percentage = Math.round(100 * props.part / props.of)
-  return <Unit append="%">{percentage}</Unit>
+  return <Unit append="%">{percentage({ ...props, plain: true })}</Unit>
 }
 
 export const InfoBox = ({ color = 'green', icon = 'eur', children, text, description }) => (
@@ -42,8 +41,8 @@ export const TotalRevenueBox = ({ report }) => (
   <InfoBox text={TAPi18n.__('reports.revenue')} color="green" icon="euro">
     {
       idx(report, _ => _.total.revenue.actual)
-      ? <Unit prepend="€">{Math.round(report.total.revenue.actual)}</Unit>
-      : <Nil /> 
+      ? <Unit prepend="€">{integer(report.total.revenue.actual)}</Unit>
+      : <Nil />
     }
   </InfoBox>
 )
@@ -57,7 +56,7 @@ export const NewPatientsPerHourBox = ({ report }) => {
       text={TAPi18n.__('reports.patientsNewPerHour')} color="purple" icon="user-plus">
       {
         newPerHour
-        ? <Unit append="/h">{newPerHour.toFixed(1)}</Unit>
+        ? <Unit append="/h">{float(newPerHour)}</Unit>
         : <Nil />
       }
     </InfoBox>
@@ -81,14 +80,14 @@ export const Workload = ({ report }) => {
 
 export const NoShowsBox = ({ report }) => {
   const noShows = idx(report, _ => _.total.noShows.noShows)
-  const percentage = formatPercentage({
-    part: noShows,
-    of: report.total.patients.total.planned
-  })
 
   return (
     <InfoBox text="Nicht erschienen" color="red" icon="user-o">
-      {noShows && <Unit append="%">{percentage}</Unit> || <Nil />}
+      {
+        noShows
+        ? <BigPercent part={noShows} of={report.total.patients.total.planned} />
+        : <Nil />
+      }
     </InfoBox>
   )
 }
