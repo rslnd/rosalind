@@ -28,7 +28,7 @@ export const parseReportDate = (name, timezone = 'Europe/Vienna') => {
 }
 
 export const insuranceCodes = {
-  surgery: 502,
+  surgery: 502, // TODO: Count code 503 as surgery too
   new: 540
 }
 
