@@ -1,4 +1,5 @@
 import banner from './banner'
+import intl from './intl'
 import timezone from './timezone'
 import kadira from './kadira'
 import env from './env'
@@ -11,6 +12,7 @@ import api from './api'
 
 export default function () {
   banner()
+  intl()
   timezone()
   kadira()
   env()
