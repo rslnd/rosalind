@@ -8,7 +8,13 @@ const notNull = s => s &&
   (typeof s === 'string' && !s.match(/false|undefined| null|NaN/g) ||
   (typeof s === 'number' && s !== 0))
 
-const currencyFormatter = new Intl.NumberFormat('de-AT', { style: 'currency', currency: 'EUR' })
+const currencyFormatter = new Intl.NumberFormat('de-AT', {
+  style: 'currency',
+  currency: 'EUR',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0
+})
+
 const currency = number => {
   if (number) {
     return currencyFormatter.format(Math.round(number))
@@ -23,7 +29,7 @@ const percentage = (props) => {
   if (p > 5) {
     return `${Math.round(p)}%`
   } else {
-    return `${p.toFixed(1)}%`
+    return `${floatFormatter.format(p)}%`
   }
 }
 
@@ -52,8 +58,8 @@ export const renderSummary = ({ report }) => {
 
 export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
   const renderAssignee = (assignee, i) => {
-    const rank = i + 1
     const name = mapUserIdToName(assignee.assigneeId) || assignee.type && mapAssigneeType(assignee.type) || 'Ohne Zuweisung'
+    const rankAndName = assignee.assigneeId && `${i + 1} - ${name}` || name
     const revenue = assignee.revenue && currency(idx(assignee, _ => _.revenue.total.actual))
     const workload = assignee.workload && percentage({ part: assignee.patients.total.actual, of: assignee.workload.planned })
     const newPerHour = float(idx(assignee, _ => _.patients.new.actualPerHour))
@@ -63,7 +69,7 @@ export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
     const cautery = idx(assignee, _ => _.patients.cautery.planned)
 
     return [
-      `${rank} - ${name}`,
+      rankAndName,
       renderLine('Umsatz', revenue),
       renderLine('Termine', workload),
       renderLine('Neu / Stunde', newPerHour),
