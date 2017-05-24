@@ -30,12 +30,23 @@ export const sendEmail = new ValidatedMethod({
 
     const rendered = Reports.actions.renderEmail.call({ report: todaysReport })
 
+    let to = 'me+TEST@albertzak.com'
+
+    // if (process.env.NODE_ENV === 'production') {
+    //   to = process.env.MAIL_REPORTS_TO.split(',')
+    // }
+
     Email.send({
       from: process.env.MAIL_REPORTS_FROM,
-      to: process.env.MAIL_REPORTS_TO.split(','),
+      to,
       replyTo: process.env.MAIL_REPORTS_REPLYTO,
       subject: rendered.title,
       text: rendered.text
+      // attachments: [
+      //   {
+      //     path: 'Report.pdf'
+      //   }
+      // ]
     })
 
     Events.post('reports/sendEmail', { reportId: todaysReport._id })
