@@ -1,21 +1,11 @@
-import moment from 'moment-timezone'
-import dedent from 'dedent'
+import fromPairs from 'lodash/fromPairs'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Users } from 'api/users'
+import { renderEmail as doRenderEmail } from '../methods/renderEmail'
 
 export const renderEmail = ({ Reports }) => {
-  const currency = (number) => {
-    if (number) {
-      return number.toLocaleString('de-AT', { style: 'currency', currency: 'EUR' })
-    }
-  }
-
-  const __ = (tag) => {
-    return TAPi18n.__(tag, {}, 'de-AT')
-  }
-
   return new ValidatedMethod({
     name: 'reports/renderEmail',
 
@@ -24,34 +14,12 @@ export const renderEmail = ({ Reports }) => {
     }).validator(),
 
     run ({ report }) {
-      const title = `${currency(report.total.revenue)} ${__('reports.revenue')}`
+      const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, u.fullNameWithTitle()]))
 
-      const header = dedent`
-        Tagesbericht für ${moment().locale('de-AT').format(__('time.dateFormatWeekday'))}
-        Kalenderwoche ${moment().isoWeek()}
-      `
+      const mapAssigneeType = type => TAPi18n.__(`reports.assigneeType__${type}`, null, 'de-AT')
+      const mapUserIdToName = userId => userIdToNameMapping[userId]
 
-      const summary = dedent`
-        Gesamtumsatz: ${currency(report.total.revenue)}
-        ÄrztInnen: ${report.total.assignees}
-        ${report.total.patientsNewPerHourScheduled ? `Neue PatientInnen pro Stunde (laut Plan): ${report.total.patientsNewPerHourScheduled}` : ''}
-      `
-
-      const body = report.assignees.map((assignee, rank) => {
-        return dedent`
-          Platz ${rank + 1}: ${assignee.userId ? Users.findOne(assignee.userId).fullNameWithTitle() : 'Assistenz'}
-          Umsatz: ${currency(assignee.revenue)}
-          ${assignee.patients.newPerHourScheduled ? `Neue PatientInnen pro Stunde (laut Plan): ${assignee.patients.newPerHourScheduled}` : ''}
-          ${assignee.patients.surgeries ? `OPs: ${assignee.patients.surgeries}\n\n` : ''}
-        `.replace(/(\n+)/g, '\n')
-      }).join('\n\n')
-
-      const footer = dedent`
-        Gratulation!
-
-      `
-
-      const text = [header, summary, body, footer].join('\n\n')
+      const { title, text } = doRenderEmail({ report, mapUserIdToName, mapAssigneeType })
 
       return { title, text }
     }
