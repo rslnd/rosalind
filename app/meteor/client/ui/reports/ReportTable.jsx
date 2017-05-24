@@ -45,7 +45,7 @@ export const ReportTableHeader = ({ showRevenue }) => (
       <th>#</th>
       <th className="col-md-2">{TAPi18n.__('reports.assignee')}</th>
       <th style={align}>Std.</th>
-      <th style={align} colSpan={2}>Auslastung</th>
+      <th style={align} colSpan={2}>Termine</th>
       <th style={align} colSpan={2}>PatientInnen</th>
       <th style={center} colSpan={2}>Neu</th>
       <th style={center} colSpan={2}>Kontrolle</th>
@@ -108,12 +108,12 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <td style={align}>{assignee.assigneeId && assignee.hours && durationFormat(assignee.hours.planned)}</td>
 
-        {/* Auslastung [Plan, Ist] */}
+        {/* Termine [Plan, Ist] */}
         <td style={align}>{assignee.assigneeId && assignee.workload &&
           <Percent slash bigPercent part={assignee.workload.planned} of={assignee.workload.available} />
         }</td>
         <td style={align}>{assignee.assigneeId && assignee.workload &&
-          <Percent slash bigPercent part={assignee.workload.actual} of={assignee.workload.available} />
+          <Percent slash bigPercent part={assignee.patients.total.actual} of={assignee.workload.planned} />
         }</td>
 
 

@@ -69,7 +69,7 @@ export const Workload = ({ report }) => {
     idx(report, _ => _.total.workload.planned)
 
   return (
-    <InfoBox text="Auslastung" color="aqua" icon="calendar">
+    <InfoBox text="Termine" color="aqua" icon="calendar">
       {
         workload
         ? <BigPercent part={workload} of={report.total.workload.available} />
