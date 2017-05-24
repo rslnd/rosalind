@@ -1,14 +1,5 @@
 import { Nil } from './Nil'
-
-export const formatPercentage = (props) => {
-  const percentage = props.part / props.of * 100
-
-  if (percentage < 5) {
-    return percentage.toFixed(1)
-  } else {
-    return Math.round(percentage)
-  }
-}
+import { percentage, integer } from 'util/format'
 
 export const Percent = (props) => {
   const {
@@ -21,18 +12,21 @@ export const Percent = (props) => {
   } = props
 
   if (!part) { return <Nil /> }
+
   const style = { ...props.style, textAlign: 'right' }
 
-  let formattedPart = Math.round(part)
+  let formattedPart = integer(part)
+
   if (parenAbsolute) {
-    formattedPart = `(${part})`
+    formattedPart = `(${formattedPart})`
   }
+
   if (slash) {
-    formattedPart = `${part} / ${Math.round(props.of)}`
+    formattedPart = `${formattedPart} / ${integer(props.of)}`
   }
 
   if (props.of) {
-    const formattedPercentage = `${formatPercentage({ part, of: props.of })}%`
+    const formattedPercentage = percentage({ part, of: props.of })
 
     let upper, lower
 
