@@ -1,4 +1,4 @@
 {
  "presets": [ "latest", "stage-0" ],
- "plugins": [ "idx" ]
+ "plugins": [ "idx", "transform-react-jsx" ]
 }
