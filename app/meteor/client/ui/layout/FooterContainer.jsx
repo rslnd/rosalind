@@ -9,7 +9,6 @@ const composer = (props, onData) => {
   const update = () => {
     const customerName = server.env.CUSTOMER_NAME
     const printedStamp = TAPi18n.__('ui.printedStamp', {
-      name: Meteor.user().fullName(),
       time: moment().format(TAPi18n.__('time.timeFormat')),
       date: moment().format(TAPi18n.__('time.dateFormat'))
     })

@@ -19,7 +19,7 @@
     "weekOfYear": "Kalenderwoche",
     "weekOfYear_short": "KW",
     "print": "Drucken",
-    "printedStamp": "Gedruckt von __name__ am __date__ um __time__",
+    "printedStamp": "__date__ - __time__",
     "today": "Heute",
     "exportToExcel": "Nach Excel exportieren",
     "importSuccessMessage": "Erfolgreich importiert!",
