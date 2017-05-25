@@ -1,4 +1,4 @@
-users = require './fixtures/users'
+users from './fixtures/users'
 
 module.exports = ->
 
