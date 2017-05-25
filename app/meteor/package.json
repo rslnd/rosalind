@@ -24,6 +24,7 @@
     "elasticsearch": "^13.0.0",
     "event-stream": "^3.3.4",
     "fibers": "^1.0.14",
+    "file-type": "^4.3.0",
     "font-awesome": "^4.6.3",
     "font-awesome-webpack": "^0.0.5-beta.2",
     "gsm": "^0.1.4",

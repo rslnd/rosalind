@@ -1,8 +1,0 @@
-{
-  "root": "/",
-  "devServer": {
-    "host": "localhost"
-  },
-  "devtool": "eval",
-  "sassResources": "client/css/global.scss"
-}
