@@ -2,9 +2,22 @@ import React from 'react'
 import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
 import { isFirstSlot, isLastSlot } from './timeSlots'
-import style from './schedulesStyle'
+import { darkGrayDisabled } from '../../../css/global'
 
 monkey(moment)
+
+const style = {
+  scheduledUnavailable: {
+    background: darkGrayDisabled,
+    opacity: 0.5,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  schedulesText: {
+    textAlign: 'center'
+  }
+}
 
 export const schedules = ({ assignees, onDoubleClick }) => (
   assignees.map((assignee) => (
@@ -19,18 +32,18 @@ export const schedules = ({ assignees, onDoubleClick }) => (
         <div
           key={`schedule-${schedule._id}`}
           data-scheduleId={schedule._id}
-          className={style.scheduledUnavailable}
           onDoubleClick={(event) => onDoubleClick({ event, scheduleId: schedule._id })}
           style={{
+            ...style.scheduledUnavailable,
             gridRowStart: timeStart.format('[T]HHmm'),
             gridRowEnd: timeEnd.format('[T]HHmm'),
             gridColumn: `assignee-${schedule.userId}`
           }}>
 
-          <div className={style.schedulesText}>
+          <div style={style.schedulesText}>
             {!isFirstSlot(timeStart) && timeStart.format('H:mm')}
           </div>
-          <div className={style.schedulesText}>
+          <div style={style.schedulesText}>
             {!isLastSlot(timeEnd) && timeEnd.format('H:mm')}
           </div>
         </div>

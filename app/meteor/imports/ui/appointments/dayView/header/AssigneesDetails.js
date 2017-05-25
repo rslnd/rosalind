@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon } from '../../../components/Icon'
 
-const bar = {
+const barStyle = {
   height: 40,
   marginTop: 43,
   position: 'relative',
@@ -10,7 +10,7 @@ const bar = {
   display: 'flex'
 }
 
-const cell = {
+const cellStyle = {
   flex: 1,
   borderLeft: '1px solid #d2d6de',
   textAlign: 'center',
@@ -35,13 +35,13 @@ const Constraint = ({ constraint }) => (
 )
 
 export const AssigneesDetails = ({ assignees }) => (
-  <div style={bar}>
+  <div style={barStyle}>
     {
       assignees.map((assignee) => (
         <div
           key={assignee.assigneeId}
           className='text-muted'
-          style={cell}>
+          style={cellStyle}>
           {
             assignee.constraints && assignee.constraints.map((constraint) => (
               <Constraint key={constraint._id} constraint={constraint} />

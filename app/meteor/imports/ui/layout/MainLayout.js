@@ -1,5 +1,4 @@
 import React from 'react'
-import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import { SidebarContainer } from './SidebarContainer'
 import { UserPanelContainer } from './UserPanelContainer'
@@ -8,19 +7,19 @@ import { Alerts } from './Alerts'
 import { Login } from '../users/Login'
 import { MaintenanceMessageContainer } from './MaintenanceMessageContainer'
 
-const style = {
-  mainHeader: {
-    right: 'initial'
-  },
-  contentWrappedSidebarClosed: {
-    marginLeft: 45
-  },
-  logoSidebarClosed: {
-    width: 45
-  },
-  logo: {
-    padding: 0
-  }
+const mainHeaderStyle = {
+  right: 'initial'
+}
+const contentWrapperSidebarClosedStyle = {
+  marginLeft: 45
+}
+
+const logoSidebarClosedStyle = {
+  width: 45
+}
+
+const logoStyle = {
+  padding: 0
 }
 
 export class MainLayout extends React.Component {
@@ -54,17 +53,21 @@ export class MainLayout extends React.Component {
 
     // Force content wrapper to stay full-width to avoid reflow, that's why
     // the content wrapper's classes depend on (fixed) props instead of state
-    const content = classnames({
-      [ style.contentWrappedSidebarClosed ]: !this.props.sidebarOpen,
-      'content-wrapper': true,
-      'print-no-margin': true
-    })
+    let contentStyle = {}
+    if (!this.props.sidebarOpen) {
+      contentStyle = contentWrapperSidebarClosedStyle
+    }
 
-    const logoClasses = classnames({
-      [ style.logoSidebarClosed ]: !this.state.sidebarOpen,
-      [ style.logo ]: true,
-      'logo': true
-    })
+    let conditionalLogoStyle = {
+      ...logoStyle
+    }
+
+    if (!this.state.sidebarOpen) {
+      conditionalLogoStyle = {
+        ...conditionalLogoStyle,
+        ...logoSidebarClosedStyle
+      }
+    }
 
     const alwaysRender = () => (
       <div id='loaded'>
@@ -82,8 +85,8 @@ export class MainLayout extends React.Component {
           <div
             onMouseEnter={this.handleSidebarOpen}
             onMouseLeave={this.handleSidebarClose}>
-            <header className={`main-header ${style.mainHeader}`}>
-              <Link to='/' className={logoClasses}>
+            <header className='main-header' style={mainHeaderStyle}>
+              <Link to='/' className='logo' style={conditionalLogoStyle}>
                 <img src='/images/logo.svg' />
               </Link>
             </header>
@@ -93,7 +96,7 @@ export class MainLayout extends React.Component {
                 <UserPanelContainer sidebarOpen={this.state.sidebarOpen} />
               } />
           </div>
-          <div className={content}>
+          <div className='content-wrapper print-no-margin' style={contentStyle}>
             {children}
           </div>
           <FooterContainer />

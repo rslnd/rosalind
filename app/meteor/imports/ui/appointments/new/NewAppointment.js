@@ -8,11 +8,36 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { TagsField } from '../../tags/TagsField'
 import { PatientPickerContainer } from '../../patients/patientPicker/PatientPickerContainer'
 import { UserHelper } from '../../users/UserHelper'
-import style from './newAppointmentStyle'
 import { validate } from './newAppointmentValidators'
 
+const style = {
+  padded: {
+    padding: 10
+  },
+  tagsRow: {
+    marginTop: -25
+  },
+  tagsField: {
+    marginTop: 30,
+    paddingLeft: 0,
+    paddingRight: 0
+  },
+  noteRow: {
+    marginTop: -40
+  },
+  noteField: {
+    marginTop: 0,
+    paddingLeft: 0,
+    paddingRight: 0
+  },
+  summary: {
+    marginBottom: 5
+  }
+}
+
+
 const summary = ({ time, assigneeId }) => (
-  <div className={style.summary}>
+  <div style={style.summary}>
     <span className='text-muted'>{TAPi18n.__('appointments.thisSingular')}</span>&nbsp;
     {moment(time).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
 
@@ -34,7 +59,7 @@ export class NewAppointmentFormComponent extends React.Component {
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
-        <div className={style.padded}>
+        <div style={style.padded}>
           <div className='container-fluid'>
             <div className='row'>
               <Field
@@ -45,12 +70,12 @@ export class NewAppointmentFormComponent extends React.Component {
           </div>
         </div>
         <Divider />
-        <div className={style.padded}>
+        <div style={style.padded}>
           <div className='container-fluid'>
 
             {/* Tags */}
-            <div className='row' style={{ marginTop: -25 }}>
-              <div className='col-md-12' style={{ marginTop: 30, paddingLeft: 0, paddingRight: 0 }}>
+            <div className='row' style={style.tagsRow}>
+              <div className='col-md-12' style={style.tagsField}>
                 <Field
                   name='tags'
                   component={TagsField}
@@ -60,8 +85,8 @@ export class NewAppointmentFormComponent extends React.Component {
             </div>
 
             {/* Note */}
-            <div className='row' style={{ marginTop: -40 }}>
-              <div className='col-md-12' style={{ marginTop: 0, paddingLeft: 0, paddingRight: 0 }}>
+            <div className='row' style={style.noteRow}>
+              <div className='col-md-12' style={style.noteField}>
                 <Field name='appointmentNote'
                   component={TextField}
                   multiLine rows={1} fullWidth

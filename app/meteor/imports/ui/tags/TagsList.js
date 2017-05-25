@@ -1,6 +1,14 @@
 import React from 'react'
 import { Tags } from '../../api/tags'
-import css from './style'
+
+const tagStyle = {
+  borderRadius: 4,
+  color: '#fff',
+  display: 'inline-block',
+  padding: 4,
+  margin: 2,
+  userSelect: 'none'
+}
 
 export const TagsList = ({ tags = [], onClick, style = {} }) => (
   <span>
@@ -11,8 +19,9 @@ export const TagsList = ({ tags = [], onClick, style = {} }) => (
           key={tag._id}
           title={tag.description}
           onClick={() => onClick && onClick(tag._id)}
-          style={{ ...style, backgroundColor: tag.color || '#ccc' }}
-          className={css.tag}>{tag.tag}
+          style={{ ...tagStyle, ...style, backgroundColor: tag.color || '#ccc' }}
+        >
+          {tag.tag}
         </span>
       )
     })}

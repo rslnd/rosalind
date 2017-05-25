@@ -1,7 +1,15 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import overrideOverlayStyle from './overrideOverlayStyle'
 import { label } from './timeSlots'
+
+const style = {
+  backgroundColor: 'rgb(226, 214, 227)',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  pointerEvents: 'none',
+  textAlign: 'center'
+}
 
 export const overrideOverlay = ({ isOverriding, overrideAssigneeId, start, end }) => {
   if (start) {
@@ -11,8 +19,8 @@ export const overrideOverlay = ({ isOverriding, overrideAssigneeId, start, end }
     return (
       <div
         key='override-start'
-        className={overrideOverlayStyle.overrideOverlay}
         style={{
+          ...style,
           gridRowStart: label(overrideStart),
           gridRowEnd: label(overrideEnd),
           gridColumn: `assignee-${overrideAssigneeId}`

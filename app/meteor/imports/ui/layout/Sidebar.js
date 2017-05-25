@@ -1,10 +1,11 @@
 import React from 'react'
+import injectSheet from 'react-jss'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import FlipMove from 'react-flip-move'
 import { TAPi18n } from 'meteor/tap:i18n'
 
-const style = {
+const styles = {
   sidebar: {
     minHeight: '100%',
     paddingBottom: 70
@@ -35,10 +36,10 @@ const isActive = (path, location) => {
   return location.pathname.indexOf(path) === 0
 }
 
-const SidebarItem = ({ item, location, sidebarOpen }) => {
+const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes }) => {
   const hideWhenClosed = classnames({
-    [ style.hidden ]: !sidebarOpen,
-    [ style.fade ]: true
+    [ classes.hidden ]: !sidebarOpen,
+    [ classes.fade ]: true
   })
 
   return (
@@ -54,7 +55,7 @@ const SidebarItem = ({ item, location, sidebarOpen }) => {
             item.count && item.count > 0
             ? <small
               key={item.count}
-              className={`label pull-right label-primary ${!sidebarOpen && style.badgeWhenClosed}`}>
+              className={`label pull-right label-primary ${!sidebarOpen && classes.badgeWhenClosed}`}>
               {item.count}
             </small>
             : (item.subItems &&
@@ -81,9 +82,9 @@ const SidebarItem = ({ item, location, sidebarOpen }) => {
       }
     </li>
   )
-}
+})
 
-export class Sidebar extends React.Component {
+class SidebarItems extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -98,22 +99,29 @@ export class Sidebar extends React.Component {
   }
 
   render () {
+    const { classes } = this.props
+
     const asideClasses = classnames({
       'main-sidebar': true,
       'sidebar': true,
-      [ style.sidebarOpen ]: this.props.isOpen,
-      [ style.sidebarClosed ]: !this.props.isOpen
+      [ classes.sidebarOpen ]: this.props.isOpen,
+      [ classes.sidebarClosed ]: !this.props.isOpen
+    })
+
+    const listClasses = classnames({
+      'sidebar-menu': true,
+      [ classes.sidebar ]: true
     })
 
     const userPanelClasses = classnames({
       'header': true,
       'text-center': true,
-      [ style.username ]: !this.props.isOpen
+      [ classes.username ]: !this.props.isOpen
     })
 
     return (
       <aside className={asideClasses}>
-        <ul className={`sidebar-menu ${style.sidebar}`}>
+        <ul className={listClasses}>
 
           <li className={userPanelClasses}>
             {this.props.userPanel}
@@ -130,7 +138,7 @@ export class Sidebar extends React.Component {
           {/* TODO: Replace with flexbox */}
           <li style={{height: '70px'}} />
 
-          {/* <li className={`header text-center ${style.customerName} ${this.props.isOpen && style.hidden}`}>{this.props.customerName.split(' - ').map((name, i) => (
+          {/* <li className={`header text-center ${classes.customerName} ${this.props.isOpen && style.hidden}`}>{this.props.customerName.split(' - ').map((name, i) => (
             <span key={i}>{name}<br /></span>
           ))}</li> */}
         </ul>
@@ -138,3 +146,5 @@ export class Sidebar extends React.Component {
     )
   }
 }
+
+export const Sidebar = injectSheet(styles)(SidebarItems)
