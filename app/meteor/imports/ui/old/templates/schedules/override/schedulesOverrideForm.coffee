@@ -1,3 +1,4 @@
+import './schedulesOverrideForm.tpl.jade'
 import $ from 'jquery'
 
 Template.schedulesOverrideForm.events

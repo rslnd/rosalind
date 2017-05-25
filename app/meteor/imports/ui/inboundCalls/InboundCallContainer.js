@@ -1,5 +1,5 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
-import { InboundCalls } from 'api/inboundCalls'
+import { InboundCalls } from '../../api/inboundCalls'
 import { InboundCallItem } from './InboundCallItem'
 
 const composer = (props, onData) => {

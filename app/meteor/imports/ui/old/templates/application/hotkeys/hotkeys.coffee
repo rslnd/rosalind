@@ -1,4 +1,5 @@
-import hotkeys from 'startup/client/hotkeys'
+import './hotkeys.tpl.jade'
+import hotkeys from '../../../../../startup/client/hotkeys'
 
 Template.hotkeys.helpers
   hotkeys: ->

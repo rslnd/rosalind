@@ -1,8 +1,9 @@
+import './systemEvents.tpl.jade'
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Events } from 'api/events'
-import { Users } from 'api/users'
+import { Events } from '../../../../../api/events'
+import { Users } from '../../../../../api/users'
 
 Template.systemEvents.onCreated ->
   @autorun =>

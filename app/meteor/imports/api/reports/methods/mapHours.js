@@ -49,7 +49,6 @@ const sumAppointments = ({ appointments, slotsPerHour, filter = identity }) =>
     .map(a => a.end - a.start)
     .reduce(add, 0) / (1000 * 60 * 60)) * slotsPerHour
 
-
 const mapWorkload = ({ hours, appointments }) => {
   const slotsPerHour = 12
   const available = hours.planned * slotsPerHour

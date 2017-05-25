@@ -3,8 +3,8 @@ import once from 'lodash/once'
 import Mousetrap from 'mousetrap'
 import 'mousetrap/plugins/global-bind/mousetrap-global-bind'
 import Alert from 'react-s-alert'
-import { SpecialUnicorn } from 'client/ui/components/Emoji'
-import { Modal } from 'client/old/templates/application/modals/blazeModal'
+import { SpecialUnicorn } from '../../ui/components/Emoji'
+import { Modal } from '../../ui/old/templates/application/modals/blazeModal'
 
 hotkeys =
   appointments: [

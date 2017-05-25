@@ -4,9 +4,9 @@ import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { dateToDay } from 'util/time/day'
-import { Reports } from 'api/reports'
-import { Loading } from 'client/ui/components/Loading'
+import { dateToDay } from '../../util/time/day'
+import { Reports } from '../../api/reports'
+import { Loading } from '../components/Loading'
 import { ReportsScreen } from './ReportsScreen'
 
 const composer = (props, onData) => {

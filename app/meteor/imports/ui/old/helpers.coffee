@@ -1,6 +1,6 @@
-import Helpers from 'util/helpers'
-import { zerofix } from 'util/zerofix'
-import Time from 'util/time'
+import Helpers from '../../util/helpers'
+import { zerofix } from '../../util/zerofix'
+import Time from '../../util/time'
 
 
 h = Template.registerHelper

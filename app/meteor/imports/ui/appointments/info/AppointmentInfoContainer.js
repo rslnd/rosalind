@@ -1,9 +1,9 @@
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
-import { Appointments } from 'api/appointments'
-import { Patients } from 'api/patients'
-import { Users } from 'api/users'
+import { Appointments } from '../../../api/appointments'
+import { Patients } from '../../../api/patients'
+import { Users } from '../../../api/users'
 import { AppointmentInfo } from './AppointmentInfo'
 
 const composer = (props, onData) => {

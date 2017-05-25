@@ -1,9 +1,10 @@
+import './editUser.tpl.jade'
 import map from 'lodash/map'
 import Alert from 'react-s-alert'
-import { Users } from 'api/users'
-import { Groups } from 'api/groups'
-import { UpdatePassword, UpdateRoles } from 'api/users/schema/actions'
-import schema from 'api/users/schema/users'
+import { Users } from '../../../../api/users'
+import { Groups } from '../../../../api/groups'
+import { UpdatePassword, UpdateRoles } from '../../../../api/users/schema/actions'
+import schema from '../../../../api/users/schema/users'
 
 Template.editUser.helpers
   user: ->

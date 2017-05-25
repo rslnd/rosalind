@@ -1,4 +1,5 @@
-import { Modal } from 'client/old/templates/application/modals/blazeModal'
+import './commentCount.tpl.jade'
+import { Modal } from '../application/modals/blazeModal'
 import helpers from './helpers'
 
 Template.commentCount.helpers

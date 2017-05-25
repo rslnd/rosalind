@@ -1,5 +1,5 @@
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Comments } from 'api/comments'
+import { Comments } from '../../../../api/comments'
 
 module.exports =
   comments: (doc) ->

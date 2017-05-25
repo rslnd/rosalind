@@ -1,4 +1,5 @@
-import { InboundCalls } from 'api/inboundCalls'
+import './inboundCallsUnresolve.tpl.jade'
+import { InboundCalls } from '../../../../api/inboundCalls'
 
 Template.inboundCallsUnresolve.events
   'click .unresolve': ->

@@ -1,8 +1,8 @@
 import { createStore, combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form'
-import appointments, { form as appointmentsForm } from './ui/appointments/reducers'
-import { form as inboundCallsForm } from './ui/inboundCalls/reducers'
-import { form as schedulesForm } from './ui/schedules/reducers'
+import appointments, { form as appointmentsForm } from './appointments/reducers'
+import { form as inboundCallsForm } from './inboundCalls/reducers'
+import { form as schedulesForm } from './schedules/reducers'
 
 const reducers = {
   appointments,

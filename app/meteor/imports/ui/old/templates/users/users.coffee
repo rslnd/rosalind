@@ -1,5 +1,6 @@
-import users from 'api/users/table'
-import groups from 'api/groups/table'
+import './users.tpl.jade'
+import users from '../../../../api/users/table'
+import groups from '../../../../api/groups/table'
 
 Template.users.helpers
   tableUsers: ->

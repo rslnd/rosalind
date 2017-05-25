@@ -1,8 +1,8 @@
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { Counts } from 'meteor/tmeasday:publish-counts'
-import { InboundCalls } from 'api/inboundCalls'
-import { Loading } from 'client/ui/components/Loading'
+import { InboundCalls } from '../../api/inboundCalls'
+import { Loading } from '../components/Loading'
 import { InboundCallsScreen } from './InboundCallsScreen'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 

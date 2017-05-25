@@ -1,12 +1,13 @@
-@import '~react-select/scss/select';
+@import '../../css/global';
+@import '{}/node_modules/react-select/scss/select';
 
 $select-menu-max-height: 400px;
 
-@import '~react-select/scss/control';
-@import '~react-select/scss/menu';
-@import '~react-select/scss/mixins';
-@import '~react-select/scss/multi';
-@import '~react-select/scss/spinner';
+@import '{}/node_modules/react-select/scss/control';
+@import '{}/node_modules/react-select/scss/menu';
+@import '{}/node_modules/react-select/scss/mixins';
+@import '{}/node_modules/react-select/scss/multi';
+@import '{}/node_modules/react-select/scss/spinner';
 
 :local(.name) {
   display: inline-block;
