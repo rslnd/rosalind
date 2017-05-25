@@ -8,7 +8,32 @@ import { UserHelper } from '../../users/UserHelper'
 import { PatientName } from '../../patients/PatientName'
 import { Birthday } from '../../patients/Birthday'
 import { getColor } from '../../tags/getColor'
-import style from './appointmentsSearchStyle'
+import './appointmentsSearchStyle'
+import { darkGray, darkGrayDisabled, primaryActive } from '../../css/global'
+
+const style = {
+  name: {
+    display: 'inline-block',
+    width: '50%'
+  },
+  birthday: {
+    color: darkGray,
+    display: 'inline-block',
+    textAlign: 'right',
+    width: '50%'
+  },
+  appointment: {
+    borderLeft: `3px solid ${primaryActive}`,
+    marginLeft: 25,
+    paddingLeft: 6
+  },
+  assigneeName: {
+    alignSelf: 'flex-end',
+    color: darkGrayDisabled,
+    flexGrow: 1,
+    textAlign: 'right'
+  }
+}
 
 class AppointmentSearchResult extends React.Component {
   constructor (props) {
@@ -50,17 +75,17 @@ class AppointmentSearchResult extends React.Component {
 
         {
           patient && <span>
-            <span className={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
+            <span style={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
             {
               patient.profile && patient.profile.birthday &&
-                <span className={style.birthday}>{patient && <Birthday day={patient.profile.birthday} veryShort />}</span>
+                <span style={style.birthday}>{patient && <Birthday day={patient.profile.birthday} veryShort />}</span>
             }
           </span>
         }
         {
           appointment && <span
-            className={style.appointment}
             style={{
+              ...style.appointment,
               borderColor: tagColor,
               textDecoration: appointment.canceled && 'line-through'
             }}>
@@ -74,7 +99,7 @@ class AppointmentSearchResult extends React.Component {
             &emsp;
             {
               appointment.assigneeId &&
-                <span className={style.assigneeName}>
+                <span style={style.assigneeName}>
                   <UserHelper userId={appointment.assigneeId} helper='lastNameWithTitle' />
                 </span>
             }

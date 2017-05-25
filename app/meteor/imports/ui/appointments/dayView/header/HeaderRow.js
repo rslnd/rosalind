@@ -1,13 +1,38 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import classnames from 'classnames'
 import { Popover } from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
-import style from './headerRowStyle'
+import { background, grayDisabled, gray } from '../../../css/global'
+
+const headerRowStyle = {
+  backgroundColor: background,
+  borderBottom: `1px solid ${grayDisabled}`,
+  display: 'flex',
+  paddingBottom: 6,
+  paddingTop: 10,
+  position: 'fixed',
+  left: 60,
+  right: 15,
+  top: 50,
+  zIndex: 40
+}
+
+const addAssigneeStyle = {
+  width: 60
+}
+
+const headerCellStyle = {
+  flex: 1,
+  fontWeight: 'bold',
+  paddingTop: 4,
+  borderLeft: `1px solid ${gray}`,
+  textAlign: 'center'
+}
+
 
 export class HeaderRow extends React.Component {
   constructor (props) {
@@ -58,22 +83,17 @@ export class HeaderRow extends React.Component {
   }
 
   render () {
-    const classes = classnames({
-      [ style.headerRowSidebarClosed ]: true,
-      [ style.headerRow ]: true
-    })
-
     return (
       <div>
-        <div className={classes}>
-          <div style={{ width: '60px' }}>
+        <div style={headerRowStyle}>
+          <div style={addAssigneeStyle}>
             {this.props.canEditSchedules && <AddAssignee onAddUser={this.props.onAddUser} />}
           </div>
           {/* Scheduled assignees */}
           {this.props.assignees.map((assignee) => (
             <div
               key={`assignee-${assignee.assigneeId}`}
-              className={style.headerCell}
+              style={headerCellStyle}
               onClick={(event) => this.handleUserDropdownOpen({ event, assigneeId: assignee.assigneeId })}>
 
               {

@@ -1,26 +1,48 @@
 import React from 'react'
-import classnames from 'classnames'
-import timeLegendStyle from './timeLegendStyle'
 import { timeSlots, format, isFullHour, isQuarterHour } from './timeSlots'
+import { grayDisabled, darkGrayActive, darkGrayDisabled } from '../../../css/global'
+
+const styles = {
+  timeLegend: {
+    color: grayDisabled
+  },
+  fullHour: {
+    color: `darken(${darkGrayActive}, 15%)`,
+    fontWeight: 'bold'
+  },
+  quarterHour: {
+    color: darkGrayDisabled
+  }
+}
 
 export const timeLegend = () => (
   timeSlots
     .map((time) => {
-      const classes = classnames({
-        [ timeLegendStyle.fullHour ]: isFullHour(time),
-        [ timeLegendStyle.quarterHour ]: isQuarterHour(time),
-        [ timeLegendStyle.timeLegend ]: true
-      })
+      let style = {
+        ...styles.timeLegend,
+        gridColumn: 'time',
+        gridRow: time
+      }
+
+      if (isQuarterHour(time)) {
+        style = {
+          ...style,
+          ...styles.quarterHour
+        }
+      }
+
+      if (isFullHour(time)) {
+        style = {
+          ...style,
+          ...styles.fullHour
+        }
+      }
 
       return (
         <span
           key={time}
           id={time}
-          className={classes}
-          style={{
-            gridRow: time,
-            gridColumn: 'time'
-          }}>
+          style={style}>
           {format(time)}
         </span>
       )

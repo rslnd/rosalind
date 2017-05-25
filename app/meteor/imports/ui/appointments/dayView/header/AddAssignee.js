@@ -3,7 +3,25 @@ import { Popover } from 'material-ui/Popover'
 import FlatButton from 'material-ui/FlatButton'
 import { Icon } from '../../../components/Icon'
 import { UserPickerContainer } from '../../../users/UserPickerContainer'
-import style from './headerRowStyle'
+
+const buttonStyle = {
+  minWidth: 30,
+  height: 28,
+  lineHeight: '28px'
+}
+
+const labelStyle = {
+  display: 'inline-block',
+  paddingLeft: 6,
+  paddingRight: 6
+}
+
+const popoverStyle = {
+  height: 400,
+  overflowY: 'visible',
+  padding: 10,
+  width: 350
+}
 
 export class AddAssignee extends React.Component {
   constructor (props) {
@@ -44,15 +62,11 @@ export class AddAssignee extends React.Component {
     return (
       <div>
         <FlatButton
-          style={{ minWidth: 30, height: 28, lineHeight: '28px' }}
+          style={buttonStyle}
           onClick={this.handleAddUserPopoverOpen}
           label={<span
             className='text-muted'
-            style={{
-              display: 'inline-block',
-              paddingLeft: 6,
-              paddingRight: 6
-            }}>
+            style={labelStyle}>
             <Icon name='plus' />
           </span>}
         />
@@ -62,7 +76,7 @@ export class AddAssignee extends React.Component {
           anchorEl={this.state.popoverAnchor}
           onRequestClose={this.handleAddUserPopoverClose}
           style={{ overflowY: 'visible' }}>
-          <div className={style.modal}>
+          <div style={popoverStyle}>
             <UserPickerContainer
               autofocus
               onChange={this.handleAddUser} />

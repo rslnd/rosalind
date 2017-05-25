@@ -1,13 +1,21 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
-import classnames from 'classnames'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from '../../../util/time/format'
 import { DateNavigation } from '../../components/DateNavigation'
 import { AppointmentsView } from './AppointmentsView'
 import { AppointmentsSearchContainer } from '../search/AppointmentsSearchContainer'
-import style from './appointmentsScreenStyle'
+import { background } from '../../css/global'
+
+const contentHeaderStyle = {
+  background,
+  display: 'flex',
+  position: 'fixed',
+  right: 0,
+  left: 45,
+  zIndex: 50
+}
 
 monkey(moment)
 
@@ -29,15 +37,9 @@ export class AppointmentsScreen extends React.Component {
   }
 
   render () {
-    const contentHeaderClasses = classnames({
-      [ style.contentHeader ]: true,
-      [ style.contentHeaderSidebarClosed ]: true,
-      'content-header': true
-    })
-
     return (
       <div>
-        <div className={contentHeaderClasses}>
+        <div className='content-header' style={contentHeaderStyle}>
           <h1>
             {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
             <small>{weekOfYear(this.props.date, { short: true })}</small>

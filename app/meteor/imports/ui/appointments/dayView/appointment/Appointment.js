@@ -1,14 +1,48 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import classnames from 'classnames'
+import injectSheet from 'react-jss'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../../components/Icon'
 import { getColor } from '../../../tags/getColor'
 import { Indicator } from '../../appointment/Indicator'
-import style from './appointmentStyle'
 import { format } from '../grid/timeSlots'
+import { background, primaryActive, darkGrayDisabled, darkGray } from '../../../css/global'
+import { color, lightness } from 'kewler'
 
-export class Appointment extends React.Component {
+const styles = {
+  appointment: {
+    borderLeft: `16px solid ${primaryActive}`,
+    borderBottom: '1px solid rgba(128, 128, 128, 0.2)',
+    cursor: 'pointer',
+    marginLeft: 0,
+    overflow: 'hidden',
+    paddingLeft: 4,
+    whiteSpace: 'pre-wrap',
+    backgroundColor: background,
+    '&:hover': {
+      backgroundColor: color(background, lightness(3))
+    }
+  },
+  show: {
+    borderWidth: 0
+  },
+  canceled: {
+    color: darkGrayDisabled,
+    textDecoration: 'line-through'
+  },
+  prefix: {
+    color: darkGray
+  },
+  moving: {
+    opacity: 0.5
+  },
+  patientName: {
+    hyphens: 'auto'
+  }
+}
+
+class AppointmentItem extends React.Component {
   stripNumbers (text) {
     if (typeof text === 'string') {
       return text.replace(/\d{3,}/g, '')
@@ -16,15 +50,15 @@ export class Appointment extends React.Component {
   }
 
   render () {
-    const appointment = this.props.appointment
+    const { appointment, classes } = this.props
     const start = moment(appointment.start)
-    const classes = classnames({
-      [ style.appointment ]: true,
-      [ style.canceled ]: appointment.canceled,
-      [ style.admitted ]: appointment.admitted,
-      [ style.treated ]: appointment.treated,
-      [ style.locked ]: appointment.lockedAt,
-      [ style.moving ]: this.props.isMoving
+    const appointmentClasses = classnames({
+      [ classes.appointment ]: true,
+      [ classes.canceled ]: appointment.canceled,
+      [ classes.admitted ]: appointment.admitted,
+      [ classes.treated ]: appointment.treated,
+      [ classes.locked ]: appointment.lockedAt,
+      [ classes.moving ]: this.props.isMoving
     })
     const tagColor = getColor(appointment.tags)
 
@@ -48,7 +82,7 @@ export class Appointment extends React.Component {
       <div
         id={appointment._id}
         data-appointmentId={appointment._id}
-        className={classes}
+        className={appointmentClasses}
         onClick={(e) => this.props.onClick(e, appointment)}
         onContextMenu={(e) => this.props.onClick(e, appointment)}
         title={format(timeStart)}
@@ -73,8 +107,8 @@ export class Appointment extends React.Component {
         {
           patient
           ? (
-            <span style={{ hyphens: 'auto' }}>
-              <span className={style.prefix}>{patient.prefix}&#8202;</span>
+            <span style={styles.patientName}>
+              <span className={classes.prefix}>{patient.prefix}&#8202;</span>
               <b>{patient.profile.lastName} &thinsp;</b>
               <span>{patient.profile.firstName}</span>
             </span>
@@ -88,3 +122,5 @@ export class Appointment extends React.Component {
     )
   }
 }
+
+export const Appointment = injectSheet(styles)(AppointmentItem)
