@@ -1,6 +1,7 @@
+import './commentsModal.tpl.jade'
 import inflector from 'inflected'
 import { TAPi18n } from 'meteor/tap:i18n'
-import * as inboundCalls from 'client/ui/inboundCalls'
+import * as inboundCalls from '../../../inboundCalls'
 
 ReactComponents = { inboundCalls }
 

@@ -1,3 +1,4 @@
+import './modalAutoForm.tpl.jade'
 import inflector from 'inflected'
 
 Template.modalAutoForm.helpers

@@ -1,8 +1,8 @@
-import { store } from 'client/store'
+import { store } from '../../ui/store'
 import dragDrop from 'drag-drop/buffer'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Importers } from 'api/importers'
+import { Importers } from '../../api/importers'
 
 export const ingest = ({ name, content, buffer, importer }) => {
   return Importers.actions.ingest.callPromise({

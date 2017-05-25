@@ -4,12 +4,12 @@ import unionBy from 'lodash/unionBy'
 import sortBy from 'lodash/sortBy'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Meteor } from 'meteor/meteor'
-import { Loading } from 'client/ui/components/Loading'
+import { Loading } from '../../components/Loading'
 import { StatusBoard } from './StatusBoard'
-import { Schedules } from 'api/schedules'
-import { Timesheets } from 'api/timesheets'
-import { Users } from 'api/users'
-import { Groups } from 'api/groups'
+import { Schedules } from '../../../api/schedules'
+import { Timesheets } from '../../../api/timesheets'
+import { Users } from '../../../api/users'
+import { Groups } from '../../../api/groups'
 
 const compose = (props, onData) => {
   if (!Meteor.subscribe('timesheets-allToday').ready()) { return }

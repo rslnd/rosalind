@@ -1,5 +1,6 @@
-import { Schedules } from 'api/schedules'
-import { businessHoursOverride } from 'api/schedules/tables'
+import './businessHours.tpl.jade'
+import { Schedules } from '../../../../../api/schedules'
+import { businessHoursOverride } from '../../../../../api/schedules/tables'
 
 Template.businessHours.helpers
   regular: ->

@@ -1,4 +1,4 @@
-import { Comments } from 'api/comments'
+import { Comments } from '../../api/comments'
 import { CommentsBox } from './CommentsBox'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 

@@ -5,15 +5,15 @@ import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { process as server } from 'meteor/clinical:env'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Groups } from 'api/groups'
+import { Groups } from '../../api/groups'
 
 const getTranslation = () => {
   const keys = [ 'headerText', 'inputPlaceholder', 'sendButtonText',
-  'introductionText', 'introAppText', 'settingsText',
-  'settingsReadOnlyText', 'settingsInputPlaceholder',
-  'settingsSaveButtonText', 'settingsHeaderText', 'settingsNotificationText',
-  'actionPostbackError', 'messageError', 'messageIndicatorTitleSingular',
-  'messageIndicatorTitlePlural' ]
+    'introductionText', 'introAppText', 'settingsText',
+    'settingsReadOnlyText', 'settingsInputPlaceholder',
+    'settingsSaveButtonText', 'settingsHeaderText', 'settingsNotificationText',
+    'actionPostbackError', 'messageError', 'messageIndicatorTitleSingular',
+    'messageIndicatorTitlePlural' ]
 
   let translation = {}
 

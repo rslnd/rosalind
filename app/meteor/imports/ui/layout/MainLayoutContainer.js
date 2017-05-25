@@ -2,7 +2,7 @@ import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Loading } from 'client/ui/components/Loading'
+import { Loading } from '../components/Loading'
 import { MainLayout } from './MainLayout'
 
 const composer = (props, onData) => {

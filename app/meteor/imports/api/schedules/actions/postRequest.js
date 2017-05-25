@@ -12,11 +12,12 @@ export const postRequest = ({ Schedules, Users }) => {
       start: { type: Date },
       end: { type: Date },
       note: { type: String, optional: true },
-      reason: { type: String, allowedValues: [
-        'vacation',
-        'compensatory',
-        'sick'
-      ] }
+      reason: { type: String,
+        allowedValues: [
+          'vacation',
+          'compensatory',
+          'sick'
+        ] }
     }).validator(),
 
     run ({ start, end, note, reason }) {

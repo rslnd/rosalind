@@ -1,8 +1,8 @@
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Appointments } from 'api/appointments'
-import { Users } from 'api/users'
+import { Appointments } from '../../api/appointments'
+import { Users } from '../../api/users'
 import { LinkToAppointmentWrapper } from './LinkToAppointment'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 

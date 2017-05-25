@@ -1,7 +1,7 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Meteor } from 'meteor/meteor'
-import { Loading } from 'client/ui/components/Loading'
-import { Appointments } from 'api/appointments'
+import { Loading } from '../components/Loading'
+import { Appointments } from '../../api/appointments'
 import { PastAppointments } from './PastAppointments'
 
 const composer = (props, onData) => {

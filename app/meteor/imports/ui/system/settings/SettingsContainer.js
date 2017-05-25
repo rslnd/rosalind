@@ -1,6 +1,6 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Meteor } from 'meteor/meteor'
-import { Settings } from 'api/settings'
+import { Settings } from '../../../api/settings'
 import { SettingsScreen } from './SettingsScreen'
 
 const composer = (props, onData) => {

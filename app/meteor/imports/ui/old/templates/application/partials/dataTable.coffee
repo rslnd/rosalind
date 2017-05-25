@@ -1,3 +1,4 @@
+import './dataTable.tpl.jade'
 import { TAPi18n } from 'meteor/tap:i18n'
 
 Template.dataTable.helpers

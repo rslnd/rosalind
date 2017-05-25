@@ -1,5 +1,6 @@
-import Time from 'util/time'
-import { Schedules } from 'api/schedules'
+import './weekSummary.tpl.jade'
+import Time from '../../../../../../util/time'
+import { Schedules } from '../../../../../../api/schedules'
 
 Template.weekSummary.helpers
   weekdaysWithSchedule: ->

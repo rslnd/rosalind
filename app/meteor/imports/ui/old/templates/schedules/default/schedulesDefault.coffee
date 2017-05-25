@@ -1,8 +1,9 @@
+import './schedulesDefault.tpl.jade'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { ReactiveDict } from 'meteor/reactive-dict'
-import { Schedules } from 'api/schedules'
-import { Users } from 'api/users'
+import { Schedules } from '../../../../../api/schedules'
+import { Users } from '../../../../../api/users'
 
 Template.schedulesDefault.currentView = new ReactiveDict
 

@@ -1,8 +1,8 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { Schedules } from 'api/schedules'
-import { dateToDay } from 'util/time/day'
+import { Schedules } from '../../../../api/schedules'
+import { dateToDay } from '../../../../util/time/day'
 import { HeaderRow } from './HeaderRow'
 
 const composer = (props, onData) => {

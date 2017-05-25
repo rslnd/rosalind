@@ -18,7 +18,7 @@ const getLengthConstraint = ({ assigneeId, date }) => {
     end: { $gte: date.toDate() }
   })
 
-  return constraint && constraint.length || defaultLength
+  return (constraint && constraint.length) || defaultLength
 }
 
 export const getDefaultLength = ({ assigneeId, date, tags }) => {

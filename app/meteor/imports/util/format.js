@@ -25,7 +25,7 @@ export const integer = n => n && integerFormatter.format(n)
 
 export const float = n => n && floatFormatter.format(n)
 
-export const conditionalFloat = n => n && 
+export const conditionalFloat = n => n &&
   n < 10
   ? floatFormatter.format(n)
   : integerFormatter.format(n)

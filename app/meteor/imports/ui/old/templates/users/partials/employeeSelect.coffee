@@ -1,4 +1,5 @@
-import { Groups } from 'api/groups'
+import './employeeSelect.tpl.jade'
+import { Groups } from '../../../../../api/groups'
 
 Template.employeeSelect.helpers
   groups: ->

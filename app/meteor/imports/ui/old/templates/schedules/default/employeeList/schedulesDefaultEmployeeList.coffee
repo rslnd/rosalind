@@ -1,8 +1,9 @@
+import './schedulesDefaultEmployeeList.tpl.jade'
 import map from 'lodash/map'
-import Time from 'util/time'
-import { Schedules } from 'api/schedules'
-import { Users } from 'api/users'
-import { Groups } from 'api/groups'
+import Time from '../../../../../../util/time'
+import { Schedules } from '../../../../../../api/schedules'
+import { Users } from '../../../../../../api/users'
+import { Groups } from '../../../../../../api/groups'
 
 Template.schedulesDefaultEmployeeList.helpers
   employeeGroups: ->

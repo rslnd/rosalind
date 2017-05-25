@@ -27,6 +27,10 @@ export default () => {
   BrowserPolicy.content.allowScriptOrigin('https://cdn.jsdelivr.net/emojione/2.2.4/lib/js/emojione.min.js')
   BrowserPolicy.content.allowImageOrigin('https://cdn.jsdelivr.net/emojione')
 
+  BrowserPolicy.content.allowScriptOrigin('https://use.fontawesome.com')
+  BrowserPolicy.content.allowStyleOrigin('https://use.fontawesome.com')
+  BrowserPolicy.content.allowFontOrigin('https://use.fontawesome.com')
+
   if (process.env.NODE_ENV !== 'production') {
     BrowserPolicy.content.allowConnectOrigin('ws://*')
     BrowserPolicy.content.allowScriptOrigin('http://localhost:3500')

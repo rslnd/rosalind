@@ -1,5 +1,6 @@
+import './scheduleEdit.tpl.jade'
 import without from 'lodash/without'
-import { Schedules } from 'api/schedules'
+import { Schedules } from '../../../../../../api/schedules'
 
 Template.scheduleEdit.helpers
   formType: ->

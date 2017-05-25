@@ -1,3 +1,4 @@
+import './deleteThis.tpl.jade'
 import { Mongo } from 'meteor/mongo'
 
 Template.deleteThis.events

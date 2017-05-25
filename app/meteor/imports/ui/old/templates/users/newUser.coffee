@@ -1,4 +1,5 @@
-import { Create } from 'api/users/schema/actions'
+import './newUser.tpl.jade'
+import { Create } from '../../../../api/users/schema/actions'
 
 Template.newUser.helpers
   schema:

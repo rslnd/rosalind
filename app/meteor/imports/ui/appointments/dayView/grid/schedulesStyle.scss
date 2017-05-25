@@ -1,3 +1,5 @@
+@import "../../../css/global.scss";
+
 :local(.scheduledUnavailable) {
   background-color: $dark-gray-disabled;
   opacity: .5;

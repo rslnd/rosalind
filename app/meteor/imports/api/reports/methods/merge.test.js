@@ -35,7 +35,6 @@ describe('reports', () => {
         ]
       }
 
-
       const mergedReport = merge(originalReport, addendum)
       expect(mergedReport.assignees[0].patients.total.actual).to.equal(2)
     })

@@ -1,6 +1,7 @@
+import './systemImporters.tpl.jade'
 import { Meteor } from 'meteor/meteor'
 import Alert from 'react-s-alert'
-import { Importers } from 'api/importers'
+import { Importers } from '../../../../../api/importers'
 
 Template.systemImporters.onCreated ->
   @subscribe('import.jobs')
