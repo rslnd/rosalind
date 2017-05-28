@@ -1,7 +1,7 @@
 module.exports =
   create: (options) ->
     fn = (options) ->
-      TestUtil from 'test-util'
+      TestUtil = require 'test-util'
 
       if options.attributes
         options = options.attributes
