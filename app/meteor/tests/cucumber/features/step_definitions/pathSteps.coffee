@@ -1,5 +1,5 @@
-url from 'url'
-locale from './fixtures/locale'
+url = require 'url'
+locale = require './fixtures/locale'
 
 module.exports = ->
   @Given 'I am on the dashboard', ->

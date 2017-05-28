@@ -1,4 +1,4 @@
-import moment from 'moment-timezone'
+moment = require 'moment-timezone'
 
 module.exports = ->
   @Then /^I should see '([^']*)'$/, (string) ->
