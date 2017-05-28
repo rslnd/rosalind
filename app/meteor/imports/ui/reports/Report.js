@@ -2,20 +2,20 @@ import React from 'react'
 import { Box } from '../components/Box'
 import { ReportTable } from './ReportTable'
 import { ReportSummary } from './ReportSummary'
-import { Cancelations } from './Cancelations'
-import { TimelineBeforeAppointment } from './TimelineBeforeAppointment'
-import { SquaresContainer } from './Squares'
-import { Week } from './Week'
+// import { Cancelations } from './Cancelations'
+// import { TimelineBeforeAppointment } from './TimelineBeforeAppointment'
+// import { SquaresContainer } from './Squares'
+// import { Week } from './Week'
 
 const style = {
   zoom: 0.909
 }
 
-export const Report = ({ report, showRevenue }) => (
+export const Report = ({ report, showRevenue, mapUserIdToName, __ }) => (
   <div style={style}>
-    <ReportSummary report={report} showRevenue={showRevenue} />
+    <ReportSummary report={report} showRevenue={showRevenue} __={__} />
     <Box type='info' noPadding>
-      <ReportTable report={report} showRevenue={showRevenue} />
+      <ReportTable report={report} showRevenue={showRevenue} mapUserIdToName={mapUserIdToName} __={__} />
     </Box>
 
     {/* <div className="row">

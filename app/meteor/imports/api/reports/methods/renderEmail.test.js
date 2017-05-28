@@ -6,7 +6,7 @@ import {
   renderSummary,
   renderBody
 } from './renderEmail'
-import { report } from './renderEmail.fixture.js'
+import { report } from './report.fixture.js'
 
 const NBSP = ' '
 const equalizeWhitespace = s => s.replace(new RegExp(NBSP, 'g'), ' ')

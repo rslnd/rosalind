@@ -1,13 +1,14 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
+import { Report } from '../../../ui/reports/Report'
 
-export const renderHtml = ({ report }) => {
-  const Report = () =>
+export const renderHtml = ({ report, __, mapUserIdToName }) => {
+  const ReportContainer = () =>
     <div>
-      <h1>This is a Report</h1>
+      <Report report={report} mapUserIdToName={mapUserIdToName} __={__} />
     </div>
 
-  const html = ReactDOMServer.renderToStaticMarkup(<Report />)
+  const html = ReactDOMServer.renderToStaticMarkup(<ReportContainer />)
 
   return html
 }

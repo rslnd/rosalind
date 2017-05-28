@@ -69,7 +69,12 @@ export class ReportsScreen extends React.Component {
             {
               this.props.report
               ? <div key='reportTable'>
-                <Report report={this.props.report} showRevenue={this.state.showRevenue} />
+                <Report
+                  report={this.props.report}
+                  showRevenue={this.state.showRevenue}
+                  mapUserIdToName={this.props.mapUserIdToName}
+                  __={this.props.__}
+                />
               </div>
               : <div key='noReports'>
                 <Box type='warning' title={TAPi18n.__('ui.notice')}>

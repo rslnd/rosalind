@@ -1,6 +1,5 @@
 import React from 'react'
 import idx from 'idx'
-import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../components/Icon'
 import { currency, integer, float, percentage, conditionalFloat } from '../../util/format'
 
@@ -12,7 +11,7 @@ const BigPercent = (props) => {
   return <Unit append='%'>{percentage({ ...props, plain: true })}</Unit>
 }
 
-export const InfoBox = ({ color = 'green', icon = 'eur', children, text, description }) => (
+export const InfoBox = ({ color = 'green', icon = 'eur', children, text, description, __ }) => (
   <div className='info-box'>
     <span className={`info-box-icon bg-${color}`}>
       <Icon name={icon} />
@@ -25,7 +24,7 @@ export const InfoBox = ({ color = 'green', icon = 'eur', children, text, descrip
   </div>
 )
 
-export const Unit = ({ prepend, append, children }) => (
+export const Unit = ({ prepend, append, children, __ }) => (
   <span>
     {prepend && <small className='text-muted'>{prepend}&nbsp;</small>}
     {
@@ -38,8 +37,8 @@ export const Unit = ({ prepend, append, children }) => (
   </span>
 )
 
-export const TotalRevenueBox = ({ report }) => (
-  <InfoBox text={TAPi18n.__('reports.revenue')} color='green' icon='euro'>
+export const TotalRevenueBox = ({ report, __ }) => (
+  <InfoBox text={__('reports.revenue')} color='green' icon='euro'>
     {
       idx(report, _ => _.total.revenue.actual)
       ? <Unit prepend='€'>{integer(report.total.revenue.actual)}</Unit>
@@ -48,13 +47,13 @@ export const TotalRevenueBox = ({ report }) => (
   </InfoBox>
 )
 
-export const NewPatientsPerHourBox = ({ report }) => {
+export const NewPatientsPerHourBox = ({ report, __ }) => {
   const newPerHour = idx(report, _ => _.average.patients.new.actualPerHour) ||
     idx(report, _ => _.average.patients.new.plannedPerHour)
 
   return (
     <InfoBox
-      text={TAPi18n.__('reports.patientsNewPerHour')} color='purple' icon='user-plus'>
+      text={__('reports.patientsNewPerHour')} color='purple' icon='user-plus'>
       {
         newPerHour
         ? <Unit append='/h'>{float(newPerHour)}</Unit>
@@ -64,7 +63,7 @@ export const NewPatientsPerHourBox = ({ report }) => {
   )
 }
 
-export const Workload = ({ report }) => {
+export const Workload = ({ report, __ }) => {
   const workload = idx(report, _ => _.total.workload.actual) ||
     idx(report, _ => _.total.workload.planned)
 
@@ -79,7 +78,7 @@ export const Workload = ({ report }) => {
   )
 }
 
-export const NoShowsBox = ({ report }) => {
+export const NoShowsBox = ({ report, __ }) => {
   const noShows = idx(report, _ => _.total.noShows.noShows)
 
   return (
@@ -93,45 +92,45 @@ export const NoShowsBox = ({ report }) => {
   )
 }
 
-export const TotalPatientsBox = ({ report }) => {
+export const TotalPatientsBox = ({ report, __ }) => {
   const patients = idx(report, _ => _.total.patients.total.actual) ||
     idx(report, _ => _.total.patients.total.planned)
 
   return (
-    <InfoBox text={TAPi18n.__('reports.patients')} color='green' icon='users'>
+    <InfoBox text={__('reports.patients')} color='green' icon='users'>
       {patients || <Nil />}
     </InfoBox>
   )
 }
 
-export const ReportSummary = ({ report, showRevenue }) => {
+export const ReportSummary = ({ report, showRevenue, __ }) => {
   const withRevenue = [
     (<div key='TotalRevenueBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <TotalRevenueBox report={report} />
+      <TotalRevenueBox report={report} __={__} />
     </div>),
     (<div key='WorkloadBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <Workload report={report} />
+      <Workload report={report} __={__} />
     </div>),
     (<div key='NoShowsBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <NoShowsBox report={report} />
+      <NoShowsBox report={report} __={__} />
     </div>),
     (<div key='NewPatientsPerHourBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <NewPatientsPerHourBox report={report} />
+      <NewPatientsPerHourBox report={report} __={__} />
     </div>)
   ]
 
   const withoutRevenue = [
     (<div key='TotalPatientsBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <TotalPatientsBox report={report} />
+      <TotalPatientsBox report={report} __={__} />
     </div>),
     (<div key='WorkloadBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <Workload report={report} />
+      <Workload report={report} __={__} />
     </div>),
     (<div key='NoShowsBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <NoShowsBox report={report} />
+      <NoShowsBox report={report} __={__} />
     </div>),
     (<div key='NewPatientsPerHourBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <NewPatientsPerHourBox report={report} />
+      <NewPatientsPerHourBox report={report} __={__} />
     </div>)
   ]
 
