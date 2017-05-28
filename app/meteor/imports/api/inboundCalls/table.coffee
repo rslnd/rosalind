@@ -4,6 +4,10 @@ import { zerofix } from '../../util/zerofix'
 import InboundCalls from './collection'
 import Schema from './schema'
 
+if Meteor.isClient
+  require('../../ui/old/templates/comments/commentCount.tpl.jade')
+  require('../../ui/old/templates/inboundCalls/inboundCallsUnresolve.tpl.jade')
+
 module.exports = new Tabular.Table
   name: 'ResolvedInboundCalls'
   collection: InboundCalls
