@@ -134,7 +134,7 @@
   },
   "scripts": {
     "start": "meteor",
-    "test": "./node_modules/mocha/bin/mocha --recursive --require ./tests/mocha/helper.js --compilers js:babel-core/register './api/**/*.test.js' './util/**/*.test.js' './client/**/*.test.js'",
-    "test:acceptance": "node ./test.js"
+    "test": "./node_modules/mocha/bin/mocha --recursive --require ./tests/mocha/helper.js --compilers js:babel-core/register './imports/**/*.test.js'",
+    "test:acceptance": "node ./tests/test.js"
   }
 }

@@ -1,6 +1,7 @@
 'use strict'
 
 const exec = require('child_process').exec
+const path = require('path')
 
 let processes = []
 
@@ -21,8 +22,11 @@ Object.keys(defaults).forEach((key) => {
 const startChimp = () => {
   startProcess({
     name: 'Chimp',
-    command: './node_modules/.bin/chimp',
-    failOnMessage: 'Not running'
+    command: './node_modules/.bin/chimp tests/chimp.js',
+    failOnMessage: 'Not running',
+    options: {
+      cwd: path.resolve(path.join(__dirname, '../'))
+    }
   })
 }
 
