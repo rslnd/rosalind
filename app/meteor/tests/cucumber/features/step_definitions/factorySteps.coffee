@@ -1,5 +1,5 @@
-import factory from './fixtures/factory'
-import users from './fixtures/users'
+factory = require './fixtures/factory'
+users = require './fixtures/users'
 
 module.exports = ->
   @Given 'this user belongs to the group \'$groupName\'', (groupName) ->

@@ -1,4 +1,4 @@
-moment from 'moment-timezone'
+moment = require 'moment-timezone'
 
 module.exports = ->
 
