@@ -13,7 +13,6 @@
   },
   "standard": {
     "ignore": [
-      "/app/meteor/client/compatibility/",
       "/app/meteor/packages/"
     ]
   }
