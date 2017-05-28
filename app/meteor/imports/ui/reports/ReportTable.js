@@ -2,8 +2,6 @@ import React from 'react'
 import FlipMove from 'react-flip-move'
 import 'moment-duration-format'
 import idx from 'idx'
-import { UserHelper } from '../users/UserHelper'
-import { TAPi18n } from 'meteor/tap:i18n'
 import { durationFormat } from './shared/durationFormat'
 import { Nil } from './shared/Nil'
 import { Percent } from './shared/Percent'
@@ -38,11 +36,11 @@ const Td = ({ children, borderLeft }) => (
   </td>
 )
 
-export const ReportTableHeader = ({ showRevenue }) => (
+export const ReportTableHeader = ({ showRevenue, __ }) => (
   <thead>
     <tr>
       <th>#</th>
-      <th className='col-md-2'>{TAPi18n.__('reports.assignee')}</th>
+      <th className='col-md-2'>{__('reports.assignee')}</th>
       <th style={align}>Std.</th>
       <th style={align} colSpan={2}>Termine</th>
       <th style={align} colSpan={2}>PatientInnen</th>
@@ -77,7 +75,7 @@ export const ReportTableHeader = ({ showRevenue }) => (
   </thead>
 )
 
-export const ReportTableBody = ({ showRevenue, report }) => (
+export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) => (
   <FlipMove
     duration={200}
     typeName='tbody'
@@ -95,11 +93,11 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         <td>
           {
             assignee.assigneeId
-            ? <UserHelper userId={assignee.assigneeId} />
+            ? mapUserIdToName(assignee.assigneeId)
             : (
               assignee.type
-              ? (assignee.type && <i className='text-muted'>{TAPi18n.__(`reports.assigneeType__${assignee.type}`)}</i>)
-              : <i className='text-muted'>{TAPi18n.__('reports.unassigned')}</i>
+              ? (assignee.type && <i className='text-muted'>{__(`reports.assigneeType__${assignee.type}`)}</i>)
+              : <i className='text-muted'>{__('reports.unassigned')}</i>
             )
           }
         </td>
@@ -159,18 +157,18 @@ export const ReportTableBody = ({ showRevenue, report }) => (
         }
       </tr>
     ))}
-    <SummaryRow report={report} showRevenue={showRevenue} />
+    <SummaryRow report={report} showRevenue={showRevenue} __={__} />
   </FlipMove>
 )
 
 class SummaryRow extends React.Component {
   render () {
-    const { report, showRevenue } = this.props
+    const { report, showRevenue, __ } = this.props
     return (
       <tr style={summaryRowStyle} className='bg-white'>
         <td><b>∑</b></td>
 
-        <td>{report.total.assignees} {TAPi18n.__('reports.assignees')}</td>
+        <td>{report.total.assignees} {__('reports.assignees')}</td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <Td>{report.total.hours && durationFormat(report.total.hours.planned)}</Td>
@@ -212,11 +210,11 @@ class SummaryRow extends React.Component {
   }
 }
 
-export const ReportTable = ({ report, showRevenue }) => (
+export const ReportTable = ({ report, showRevenue, mapUserIdToName, __ }) => (
   <div className='table-responsive enable-select'>
     <table className='table no-margin'>
-      <ReportTableHeader showRevenue={showRevenue} />
-      <ReportTableBody report={report} showRevenue={showRevenue} />
+      <ReportTableHeader showRevenue={showRevenue} __={__} />
+      <ReportTableBody report={report} showRevenue={showRevenue} mapUserIdToName={mapUserIdToName} __={__} />
     </table>
   </div>
 )
