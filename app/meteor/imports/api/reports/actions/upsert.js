@@ -30,10 +30,6 @@ export const upsert = ({ Reports }) => {
           const reportId = Reports.insert(report, (err) => {
             if (err) { throw err }
             Events.post('reports/insert', { reportId })
-
-            if (Meteor.isServer && moment().isSame(dayToDate(report.day), 'day')) {
-              Meteor.call('reports/sendEmail')
-            }
           })
           return reportId
         } catch (e) {
