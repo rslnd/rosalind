@@ -131,7 +131,7 @@
     "webpack-hot-middleware": "^2.12.1"
   },
   "engines": {
-    "node": "^4.8.1"
+    "node": "^6.10.3"
   },
   "standard": {
     "parser": "babel-eslint"
