@@ -7,7 +7,7 @@ import { getColor } from '../../tags/getColor'
 import { UserHelper } from '../../users/UserHelper'
 import { Icon } from '../../components/Icon'
 import { PatientName } from '../PatientName'
-import style from './patientPickerStyle'
+import { primaryActive, darkGray, darkGrayDisabled } from '../../css/global'
 
 export class PatientSearchResult extends React.Component {
   constructor (props) {
@@ -45,19 +45,19 @@ export class PatientSearchResult extends React.Component {
 
         {
           patient && <span>
-            <span className={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
-            <span className={style.birthday}>{patient && <Birthday day={patient.profile.birthday} veryShort />}</span>
+            <span style={nameStyle}>{patient && <PatientName patient={patient} />}&emsp;</span>
+            <span style={birthdayStyle}>{patient && <Birthday day={patient.profile.birthday} veryShort />}</span>
             {
               patient.appointments &&
-                <span className={style.appointments}>
+                <span>
                   {patient.appointments.map((appointment) => {
                     const start = moment(appointment.start)
 
                     return (
                       <span
                         key={appointment._id}
-                        className={style.appointment}
                         style={{
+                          ...appointmentStyle,
                           borderColor: getColor(appointment.tags)
                         }}>
                         <span style={{
@@ -70,7 +70,7 @@ export class PatientSearchResult extends React.Component {
                         &emsp;
                         {
                           appointment.assigneeId &&
-                            <span className={style.assigneeName}>
+                            <span style={assigneeNameStyle}>
                               <UserHelper userId={appointment.assigneeId} helper='lastNameWithTitle' />
                               &emsp;
                               <Indicator appointment={appointment} />
@@ -94,4 +94,31 @@ export class PatientSearchResult extends React.Component {
       </div>
     )
   }
+}
+
+const nameStyle = {
+  display: 'inline-block',
+  width: '50%'
+}
+
+const birthdayStyle = {
+  color: darkGray,
+  display: 'inline-block',
+  textAlign: 'right',
+  width: '50%'
+}
+
+const appointmentStyle = {
+  borderLeft: `3px solid ${primaryActive}`,
+  display: 'flex',
+  marginBottom: 4,
+  marginLeft: 25,
+  paddingLeft: 6
+}
+
+const assigneeNameStyle = {
+  alignSelf: 'flex-end',
+  color: darkGrayDisabled,
+  flexGrow: 1,
+  textAlign: 'right'
 }
