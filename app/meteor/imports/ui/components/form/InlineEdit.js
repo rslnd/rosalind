@@ -3,7 +3,6 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import { Icon } from '../Icon'
-import styles from './inlineEditStyles'
 
 export const TinyButton = (props) => (
   <FlatButton
@@ -25,12 +24,15 @@ export class InlineEdit extends React.Component {
     }
 
     this.state = {
+      hovering: false,
       editing: false,
       value
     }
 
     this.setEditing = this.setEditing.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleMouseEnter = this.handleMouseEnter.bind(this)
+    this.handleMouseLeave = this.handleMouseLeave.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
     this.handleBlur = this.handleBlur.bind(this)
@@ -44,8 +46,19 @@ export class InlineEdit extends React.Component {
 
   handleChange (e) {
     this.setState({
-      ...this.state,
       value: e.target.value
+    })
+  }
+
+  handleMouseEnter (e) {
+    this.setState({
+      hovering: true
+    })
+  }
+
+  handleMouseLeave (e) {
+    this.setState({
+      hovering: false
     })
   }
 
@@ -85,9 +98,10 @@ export class InlineEdit extends React.Component {
   }
 
   render () {
-    let style = {}
+    let style = { ...fieldStyle }
     if (this.props.fullWidth) {
       style = {
+        ...style,
         display: 'inline-block',
         width: '100%'
       }
@@ -95,15 +109,15 @@ export class InlineEdit extends React.Component {
 
     if (!this.state.editing) {
       return <span
-        className={styles.field}
         style={style}
-        onClick={this.setEditing}>
+        onClick={this.setEditing}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}>
         {
-          !this.props.submitOnBlur &&
+          !this.props.submitOnBlur && this.state.hovering &&
             <div className='pull-right'>
               <TinyButton
                 onClick={this.setEditing}
-                className={styles.startEdit}
                 title={TAPi18n.__('ui.edit')}>
                 <Icon name='pencil-square-o' />
               </TinyButton>
@@ -145,4 +159,9 @@ export class InlineEdit extends React.Component {
       </span>
     }
   }
+}
+
+const fieldStyle = {
+  cursor: 'pointer',
+  display: 'inline-block'
 }
