@@ -27,8 +27,14 @@ export const dayToDate = (day) => {
   return moment(d).toDate()
 }
 
+export const dayToSlug = (day) => {
+  const date = dayToDate(day)
+  return moment(date).format('YYYY-MM-DD')
+}
+
 export default {
   zeroIndexMonth,
   dateToDay,
-  dayToDate
+  dayToDate,
+  dayToSlug
 }
