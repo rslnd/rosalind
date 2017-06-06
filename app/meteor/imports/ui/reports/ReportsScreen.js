@@ -92,6 +92,14 @@ export class ReportsScreen extends React.Component {
             <Button onClick={this.props.viewAppointments}>
                 Terminkalender für diesen Tag ansehen
             </Button>
+
+            <Button onClick={this.props.sendEmailTest}>
+                Test Email senden
+            </Button>
+
+            <Button onClick={this.props.sendEmail}>
+                Email senden
+            </Button>
           </div>
         </div>
       </div>

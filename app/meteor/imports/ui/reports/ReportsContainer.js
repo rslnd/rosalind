@@ -27,12 +27,29 @@ const composer = (props, onData) => {
       props.history.push(`/appointments/${dateParam}`)
     }
 
+    const sendEmailTest = () => {
+      Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com' })
+    }
+
+    const sendEmail = () => {
+      Meteor.call('reports/sendEmail')
+    }
+
     const userIdToNameMapping = fromPairs(Meteor.users.find({}).fetch().map(u => [u._id, u.fullNameWithTitle()]))
     const mapUserIdToName = id => userIdToNameMapping[id]
 
     const __ = (key, opts) => TAPi18n.__(key, opts)
 
-    onData(null, { date, report, generateReport, viewAppointments, canShowRevenue, mapUserIdToName, __ })
+    onData(null, {
+      date,
+      report,
+      generateReport,
+      sendEmail,
+      sendEmailTest,
+      viewAppointments,
+      canShowRevenue,
+      mapUserIdToName,
+      __ })
   }
 }
 
