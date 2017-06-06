@@ -1,9 +1,10 @@
 import { Meteor } from 'meteor/meteor'
 import { Users } from '../'
+import { isTrustedNetwork } from '../../customer/server/isTrustedNetwork'
 
 module.exports = ->
   Meteor.publish 'users', ->
-    return unless @userId
+    return unless @userId or (@connection and isTrustedNetwork(@connection.clientAddress))
 
     Users.find {}, fields:
       'username': 1
