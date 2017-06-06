@@ -16,10 +16,7 @@ const composer = (props, onData) => {
   const locale = TAPi18n.getLanguage()
 
   if (currentUser) {
-    Meteor.subscribe('users')
     Meteor.subscribe('cache')
-    Meteor.subscribe('groups')
-    Meteor.subscribe('tags')
     Meteor.subscribe('timesheets')
     Meteor.subscribe('inboundCalls')
   }
@@ -27,6 +24,9 @@ const composer = (props, onData) => {
   // Try to subscribe to appointments and schedules for caching
   // The server will check for currentUser or a connection from
   // a trusted network
+  Meteor.subscribe('users')
+  Meteor.subscribe('groups')
+  Meteor.subscribe('tags')
   Meteor.subscribe('appointments')
   Meteor.subscribe('schedules')
   Meteor.subscribe('schedules-constraints')
@@ -34,7 +34,9 @@ const composer = (props, onData) => {
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments/)
 
-  onData(null, { ...props, currentUser, locale, loggingIn, sidebarOpen })
+  const isPrint = props.location.hash === '#print'
+
+  onData(null, { ...props, currentUser, locale, loggingIn, sidebarOpen, isPrint })
 }
 
 const MainLayoutContainer = withRouter(composeWithTracker(composer, Loading)(MainLayout))

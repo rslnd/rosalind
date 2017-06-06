@@ -43,7 +43,7 @@ export const renderPdf = async ({ report }) => {
   }
 
   const slug = dayToSlug(report.day)
-  const url = `http://127.0.0.1:${process.env.PORT}/reports/${slug}`
+  const url = `http://127.0.0.1:${process.env.PORT}/reports/${slug}#print`
   const pdf = await printToPDF({ url, port, printOptions })
 
   return pdf

@@ -49,7 +49,7 @@ export class MainLayout extends React.Component {
   }
 
   render () {
-    const { children, currentUser, loggingIn, locale } = this.props
+    const { children, currentUser, loggingIn, locale, isPrint } = this.props
 
     // Force content wrapper to stay full-width to avoid reflow, that's why
     // the content wrapper's classes depend on (fixed) props instead of state
@@ -78,7 +78,7 @@ export class MainLayout extends React.Component {
       </div>
     )
 
-    if (currentUser) {
+    if (currentUser || isPrint) {
       return (
         <div className='wrapper disable-select'>
           <div id='logged-in' />
@@ -90,11 +90,15 @@ export class MainLayout extends React.Component {
                 <img src='/images/logo.svg' />
               </Link>
             </header>
-            <SidebarContainer
-              isOpen={this.state.sidebarOpen}
-              userPanel={
-                <UserPanelContainer sidebarOpen={this.state.sidebarOpen} />
-              } />
+            {
+              currentUser &&
+                <SidebarContainer
+                  isOpen={this.state.sidebarOpen}
+                  userPanel={
+                    <UserPanelContainer sidebarOpen={this.state.sidebarOpen} />
+                  }
+                />
+            }
           </div>
           <div className='content-wrapper print-no-margin' style={contentStyle}>
             {children}
