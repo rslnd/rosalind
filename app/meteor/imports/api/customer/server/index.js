@@ -1,5 +1,5 @@
-import methods from './methods'
+import onConnection from './onConnection'
 
 export default function () {
-  methods()
+  onConnection()
 }
