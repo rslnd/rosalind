@@ -6,8 +6,11 @@ WORKDIR /opt/app/programs/server
 ENV NPM_CONFIG_LOGLEVEL warn
 
 ENV LD_LIBRARY_PATH /lib/mdbtools
-RUN bash -c "time bash -c 'apt-get update && \
-  apt-get -y --no-install-recommends install libglib2.0-0 && \
+RUN bash -c "time bash -c 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+  apt-get update && \
+  apt-get install apt-transport-https && \
+  sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+  apt-get -y --no-install-recommends install libglib2.0-0 google-chrome-unstable && \
   wget -O /tmp/mdbtools.tar.gz https://github.com/albertzak/mdbtools/releases/download/0.7.1-fix-newlines/mdbtools-20161003.tar.gz && \
   tar -xzvf /tmp/mdbtools.tar.gz -C /usr/src/ && \
   mv /usr/src/lib /lib/mdbtools && \
