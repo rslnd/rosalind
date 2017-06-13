@@ -42,5 +42,12 @@ export const validate = (values) => {
     }
   }
 
+
+  if (values.patientId) {
+    if (!values.tags || values.tags.length === 0) {
+      errors.tags = 'appointments.tagsRequired'
+    }
+  }
+
   return errors
 }

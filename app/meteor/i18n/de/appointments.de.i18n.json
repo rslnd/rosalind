@@ -34,6 +34,7 @@
     "move": "Verschieben",
     "moveSuccess": "Termin verschoben",
     "editSuccess": "Erfolgreich gespeichert",
+    "tagsRequired": "Bitte Terminart auswählen",
     "today": "Heute",
     "asap": "so bald wie möglich",
     "in2Weeks": "in 2 Wochen",

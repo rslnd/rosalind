@@ -1,4 +1,5 @@
 import React from 'react'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Tags } from '../../api/tags'
 import { TagsList } from './TagsList'
 
@@ -22,18 +23,34 @@ export class TagsField extends React.Component {
   }
 
   render () {
-    const selector = this.props.allowedTags ? { _id: { $in: this.props.allowedTags } } : {}
+    const { input, meta, allowedTags } = this.props
+
+    const selector = allowedTags ? { _id: { $in: allowedTags } } : {}
     const tags = Tags.find(selector, { sort: { order: 1 } }).map((t) => {
-      const selected = this.props.input.value && this.props.input.value.includes(t._id)
+      const selected = input.value && input.value.includes(t._id)
       return {
         ...t,
         color: selected ? t.color : '#ccc'
       }
     })
 
-    return <TagsList
-      tags={tags}
-      onClick={this.toggle}
-      style={{ cursor: 'pointer' }} />
+    return <div>
+      <TagsList
+        tags={tags}
+        onClick={this.toggle}
+        style={tagsListStyle}
+      />
+      {
+        meta && meta.error &&
+          <span className='text-muted'>
+            <br />
+            {TAPi18n.__(meta.error)}
+          </span>
+      }
+    </div>
   }
+}
+
+const tagsListStyle = {
+  cursor: 'pointer'
 }

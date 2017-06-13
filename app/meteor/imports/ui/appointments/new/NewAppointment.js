@@ -55,7 +55,7 @@ const summary = ({ time, assigneeId }) => (
 
 export class NewAppointmentFormComponent extends React.Component {
   render () {
-    const { time, assigneeId, pristine, submitting, handleSubmit, onSubmit } = this.props
+    const { time, assigneeId, pristine, submitting, handleSubmit, onSubmit, fields } = this.props
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
