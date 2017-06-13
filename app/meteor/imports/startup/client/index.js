@@ -1,6 +1,5 @@
 import polyfills from './polyfills'
 import timezone from './timezone'
-import kadira from './kadira'
 import development from './development'
 import hotkeys from './hotkeys'
 import locale from './locale'
@@ -14,7 +13,6 @@ import entry from '../../ui/index'
 export default function () {
   polyfills()
   timezone()
-  kadira()
   development()
   locale()
   livechat()
