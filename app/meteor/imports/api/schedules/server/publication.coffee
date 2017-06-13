@@ -40,8 +40,10 @@ module.exports = ->
 
     else if (range and (range.start or range.end))
       selector = {
-        start: { $gt: moment(range.start).subtract(1, 'day').startOf('day').toDate() }
-        end: { $gt: moment(range.end).add(1, 'day').endOf('day').toDate() }
+        start: {
+          $gt: moment(range.start).subtract(1, 'day').startOf('day').toDate(),
+          $lt: moment(range.end).add(1, 'day').endOf('day').toDate()
+        }
       }
     else if (range and range.day)
       selector = { day: range }
