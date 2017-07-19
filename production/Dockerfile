@@ -20,7 +20,7 @@ RUN bash -c "time bash -c 'wget -q -O - https://dl-ssl.google.com/linux/linux_si
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*'"
 
 RUN bash -c "time bash -c 'yarn \
-  && npm cache clear \
+  && npm cache clear --force \
   && mv /opt/app/node_modules /opt/node_modules/ \
   && cp -r /opt/app/programs/server/node_modules/. /opt/node_modules/ \
   && mv /opt/app/package.json /opt/'"
