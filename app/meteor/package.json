@@ -25,7 +25,7 @@
     "drag-drop": "^2.12.1",
     "elasticsearch": "^13.0.0",
     "event-stream": "^3.3.4",
-    "fibers": "^1.0.14",
+    "fibers": "^2.0.0",
     "file-type": "^4.3.0",
     "fs-extra": "^3.0.1",
     "fs-promise": "^2.0.3",
