@@ -62,7 +62,7 @@ email@1.2.3
 es5-shim@4.6.15
 fastclick@1.0.13
 fds:coffeescript-share@1.0.0
-fourseven:scss@4.5.0
+fourseven:scss@4.5.4
 gadicc:blaze-react-component@1.4.0
 geojson-utils@1.0.10
 ground:db@0.3.15
@@ -120,8 +120,8 @@ npm-mongo@2.2.24
 observe-sequence@1.0.16
 ongoworks:security@1.3.0
 ordered-dict@1.0.9
-ostrio:cookies@2.2.1
-ostrio:files@1.7.16
+ostrio:cookies@2.2.2
+ostrio:files@1.8.0
 peppelg:bootstrap-3-modal@1.0.4
 promise@0.10.0-beta.9
 raix:eventemitter@0.1.3
