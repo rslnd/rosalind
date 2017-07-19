@@ -20,7 +20,9 @@ matrix:
   fast_finish: true
 
 install:
-  - sudo apt-get -y install libstdc++6
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update
+  - sudo apt-get install libstdc++6-7-dbg
   - chmod +x ci.sh && ./ci.sh install
 
 env:
