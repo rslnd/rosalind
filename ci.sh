@@ -12,7 +12,7 @@ export BRANCH="${TRAVIS_BRANCH:-$CIRCLE_BRANCH}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
 export DOCKER_COMPOSE_VERSION=1.5.2
-export NPM_VERSION=5.3.0
+export NPM_VERSION=5.2.0
 export PHANTOMJS_VERSION=2.1.1
 
 export ROOT_URL=http://0.0.0.0:3000/
