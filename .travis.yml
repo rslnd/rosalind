@@ -20,6 +20,7 @@ matrix:
   fast_finish: true
 
 install:
+  - sudo apt-get -y install libstdc++6
   - chmod +x ci.sh && ./ci.sh install
 
 env:
