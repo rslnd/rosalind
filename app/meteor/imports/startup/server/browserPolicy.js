@@ -30,11 +30,11 @@ export default () => {
   BrowserPolicy.content.allowScriptOrigin('https://use.fontawesome.com')
   BrowserPolicy.content.allowStyleOrigin('https://use.fontawesome.com')
   BrowserPolicy.content.allowFontOrigin('https://use.fontawesome.com')
+  BrowserPolicy.content.allowFontOrigin('http://*.bootstrapcdn.com')
 
   if (process.env.NODE_ENV !== 'production') {
     BrowserPolicy.content.allowConnectOrigin('ws://*')
     BrowserPolicy.content.allowScriptOrigin('http://localhost:3500')
     BrowserPolicy.content.allowFontOrigin('http://localhost:3500')
-    BrowserPolicy.content.allowFontOrigin('http://*.bootstrapcdn.com')
   }
 }
