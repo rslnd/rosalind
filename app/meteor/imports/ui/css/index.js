@@ -7,8 +7,8 @@ import './lockedLayout.css'
 import './overrides.scss'
 import './print.css'
 import './mui.css'
+import './reactDates.scss'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import 'react-dates/css/styles.scss'
 
 // Material UI
 injectTapEventPlugin()
