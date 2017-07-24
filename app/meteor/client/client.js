@@ -1,4 +1,4 @@
 import startup from '../imports/startup/client'
-import '../imports/ui/old'
+import '../imports/client/old'
 
 startup()

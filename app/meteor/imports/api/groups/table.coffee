@@ -3,7 +3,7 @@ import { Roles } from 'meteor/alanning:roles'
 import Groups from './collection'
 
 if Meteor.isClient
-  require('../../ui/old/templates/application/partials/groupIcon.tpl.jade')
+  require('../../client/old/templates/application/partials/groupIcon.tpl.jade')
 
 module.exports = new Tabular.Table
   name: 'Groups'

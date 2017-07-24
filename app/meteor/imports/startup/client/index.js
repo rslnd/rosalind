@@ -8,7 +8,7 @@ import livechat from './livechat'
 import dataTransfer from './dataTransfer'
 import nativeUpdate from './nativeUpdate'
 import emoji from './emoji'
-import entry from '../../ui/index'
+import entry from '../../client/index'
 
 export default function () {
   polyfills()

@@ -1,4 +1,4 @@
-import { store } from '../../ui/store'
+import { store } from '../../client/store'
 import dragDrop from 'drag-drop/buffer'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'

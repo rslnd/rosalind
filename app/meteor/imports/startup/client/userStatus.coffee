@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon } from '../../ui/components/Icon'
+import { Icon } from '../../client/components/Icon'
 import moment from 'moment-timezone'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
