@@ -5,6 +5,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import set from 'lodash/set'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
+import find from 'lodash/find'
 import filter from 'lodash/fp/filter'
 import sortBy from 'lodash/fp/sortBy'
 import reverse from 'lodash/fp/reverse'
@@ -28,16 +29,29 @@ export const parseReportDate = (name, timezone = 'Europe/Vienna') => {
 }
 
 export const insuranceCodes = {
-  surgery: 502, // TODO: Count code 503 as surgery too
-  new: 540
+  surgery: [502, 503, 506],
+  cautery: [504, 520, 534],
+  new: [540, 'E1', 'E12']
+  // TODO: Handle code 25 (anesthesia)
+  // if more anesthesia than surgery, add difference to surgery
 }
 
 export const getTagBilledCount = (rawLine, tag) => {
   if (rawLine && rawLine.length > 5) {
-    const code = insuranceCodes[tag]
-    const regexp = new RegExp(`\\[${code}\\] \\* (\\d+)`)
-    const count = rawLine.match(regexp)
-    return count && parseInt(count[1])
+    const codes = insuranceCodes[tag]
+
+    if (!codes) {
+      return null
+    }
+
+    return find(codes.map((code) => {
+      const regexp = new RegExp(`\\[${code}\\] \\* (\\d+)`)
+      const count = rawLine.match(regexp)
+
+      if (count) {
+        return parseInt(count[1])
+      }
+    }))
   }
 }
 
