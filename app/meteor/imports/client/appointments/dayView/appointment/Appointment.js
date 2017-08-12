@@ -9,6 +9,7 @@ import { Indicator } from '../../appointment/Indicator'
 import { format } from '../grid/timeSlots'
 import { background, primaryActive, darkGrayDisabled, darkGray } from '../../../css/global'
 import { color, lightness } from 'kewler'
+import namecase from 'namecase'
 
 const styles = {
   appointment: {
@@ -109,8 +110,8 @@ class AppointmentItem extends React.Component {
           ? (
             <span style={styles.patientName}>
               <span className={classes.prefix}>{patient.prefix}&#8202;</span>
-              <b>{patient.profile.lastName} &thinsp;</b>
-              <span>{patient.profile.firstName}</span>
+              <b>{namecase(patient.profile.lastName)} &thinsp;</b>
+              <span>{namecase(patient.profile.firstName)}</span>
             </span>
           ) : !appointment.lockedAt && (
             <span>
