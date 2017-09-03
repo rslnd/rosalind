@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
+import { AssigneesStats } from './AssigneesStats'
 import { background, grayDisabled, gray } from '../../../css/global'
 
 const headerRowStyle = {
@@ -122,6 +123,7 @@ export class HeaderRow extends React.Component {
           </Popover>
         </div>
         <AssigneesDetails date={this.props.date} assignees={this.props.assignees} />
+        <AssigneesStats date={this.props.date} assignees={this.props.assignees} />
       </div>
     )
   }
