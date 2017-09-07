@@ -3,7 +3,8 @@ import includes from 'lodash/includes'
 export const allowedImporters = [
   'terminiko',
   'eoswinPatients',
-  'eoswinReports',
+  'eoswinRevenueReports',
+  'eoswinJournalReports',
   'xdt'
 ]
 

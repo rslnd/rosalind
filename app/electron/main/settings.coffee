@@ -20,8 +20,9 @@ defaultSettings =
   customer:
     name: 'Rosalind'
   watch: [
-    { path: 'S:\\Export', importer: 'eoswinReports', enabled: true }
-    { path: 'S:\\Export\\Patients', importer: 'eoswinPatients', enabled: true }
+    { path: 'S:\\Export\\Tagesjournale', importer: 'eoswinJournalReports', enabled: true }
+    { path: 'S:\\Export\\Umsatzstatistiken', importer: 'eoswinRevenueReports', enabled: true }
+    { path: 'S:\\Export\\Patienten', importer: 'eoswinPatients', enabled: true }
     { path: 'C:\\xdt', importer: 'xdt', enabled: false }
   ]
 

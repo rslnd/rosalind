@@ -25,7 +25,7 @@ describe('api', function () {
         })
 
         it('parses single date', function () {
-          expect(parseReportDate('Ärzte Statistik Umsätze  [ vom 13.08.2016]   Uhrzeit 1314')).to.equalDate(new Date(2016, 7, 13))
+          expect(parseReportDate('20170906')).to.equalDate(new Date(2017, 8, 6))
         })
       })
 

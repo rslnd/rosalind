@@ -6,12 +6,12 @@ import { parseReportDate, parseAddendum } from '../../../../reports/methods/exte
 import { Reports } from '../../../../reports'
 import { Users } from '../../../../users'
 
-export const eoswinReports = ({ Importers }) => {
+export const eoswinRevenueReports = ({ Importers }) => {
   return new ValidatedMethod({
-    name: 'importers/eoswinReports',
+    name: 'importers/eoswinRevenueReports',
 
     validate: new SimpleSchema({
-      importer: { type: String, optional: true, allowedValues: [ 'eoswinReports' ] },
+      importer: { type: String, optional: true, allowedValues: [ 'eoswinRevenueReports' ] },
       name: { type: String },
       content: { type: String }
     }).validator(),
@@ -28,7 +28,7 @@ export const eoswinReports = ({ Importers }) => {
         const users = Users.find({}).fetch()
         const addendum = [parseAddendum({ day, content, users })]
 
-        console.log('[Importers] eoswinReports: parsed addendum', addendum)
+        console.log('[Importers] eoswinRevenueReports: parsed addendum', addendum)
 
         Reports.actions.generate.call({ day, addendum })
       } catch (e) {

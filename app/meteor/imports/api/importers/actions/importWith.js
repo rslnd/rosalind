@@ -17,15 +17,22 @@ export const importWith = ({ Importers }) => {
     run ({ importer, name, content }) {
       if (!Meteor.userId()) { return }
 
-      switch (importer) {
-        case 'eoswinReports':
-          return Importers.actions.eoswin.reports.call({ name, content })
-        case 'eoswinPatients':
-          return Importers.actions.eoswin.patients.call({ name, content })
-        case 'xdt':
-          return Importers.actions.xdt.call({ name, content })
-        default:
-          throw new Meteor.Error('no-importer-found', `Unknown importer ${importer}`)
+      try {
+        switch (importer) {
+          case 'eoswinRevenueReports':
+            return Importers.actions.eoswin.revenueReports.call({ name, content })
+          case 'eoswinJournalReports':
+            return Importers.actions.eoswin.journalReports.call({ name, content })
+          case 'eoswinPatients':
+            return Importers.actions.eoswin.patients.call({ name, content })
+          case 'xdt':
+            return Importers.actions.xdt.call({ name, content })
+          default:
+            throw new Meteor.Error('no-importer-found', `Unknown importer ${importer}`)
+        }
+      } catch (e) {
+        console.error(e)
+        throw new Meteor.Error(500, 'Failed to import')
       }
     }
   })

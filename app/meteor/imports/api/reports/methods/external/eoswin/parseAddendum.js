@@ -10,27 +10,25 @@ import filter from 'lodash/fp/filter'
 import sortBy from 'lodash/fp/sortBy'
 import reverse from 'lodash/fp/reverse'
 
-export const parseReportDate = (name, timezone = 'Europe/Vienna') => {
+export const parseReportDate = (name) => {
   if (name.includes('bis')) {
     throw new Error('Report must not contain more than one day')
   }
 
-  const matchDate = name.match(/vom (\d{2})\.(\d{2}).(\d{4})/)
-  const matchTime = name.match(/Uhrzeit (\d{2})(\d{2})/)
+  const matchDate = name.match(/(\d{4})(\d{2})(\d{2})/)
 
-  if (matchDate && matchTime) {
-    const [day, month, year] = matchDate.splice(1)
-    const [hour, minute] = matchTime.splice(1)
-    const date = moment.tz({ day, month: month - 1, year, hour, minute }, timezone).toDate()
+  if (matchDate) {
+    const [year, month, day] = matchDate.splice(1).map(d => parseInt(d))
+    const date = moment({ year, month: month - 1, day }).toDate()
     return date
   } else {
-    throw new Error('Report filename must contain date and time')
+    throw new Error('Report filename must contain date in YYYYMMDD format')
   }
 }
 
 export const insuranceCodes = {
-  surgery: [502, 503, 506],
-  cautery: [504, 520, 534],
+  surgery: [502],
+  cautery: [503, 506, 504, 520, 534],
   new: [540, 'E1', 'E12']
   // TODO: Handle code 25 (anesthesia)
   // if more anesthesia than surgery, add difference to surgery

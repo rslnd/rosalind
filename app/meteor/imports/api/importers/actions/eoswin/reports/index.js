@@ -1,1 +1,2 @@
-export { eoswinReports as reports } from './eoswinReports'
+export { eoswinRevenueReports as revenueReports } from './eoswinRevenueReports'
+export { eoswinJournalReports as journalReports } from './eoswinJournalReports'

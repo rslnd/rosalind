@@ -7,14 +7,17 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 
 export const ingest = ({ Importers }) => {
   const determineImporter = ({ name, content }) => {
-    if (name && name.includes('Ärzte Statistik Umsätze')) { return 'eoswinReports' }
+    if (name && name.includes('Ärzte Statistik Umsätze')) { return 'eoswinRevenueReports' }
     if (name && name.match(/\.PAT$/i)) { return 'eoswinPatients' }
     if (name && name.match(/(\.gdt)$|(\.bdt$)|(\.xdt$)/i)) { return 'xdt' }
+    if (content && content.match(/Online Konsultation mit e-card/i)) { return 'eoswinJournalReports' }
+    if (content && content.match(/Krankenscheine gesamt/i) && content.match(/Abrechnungsgruppe/i)) { return 'eoswinRevenueReports' }
   }
 
   const determineEncoding = ({ importer }) => {
     switch (importer) {
-      case 'eoswinReports': return 'ISO-8859-1'
+      case 'eoswinRevenueReports': return 'ISO-8859-1'
+      case 'eoswinJournalReports': return 'ISO-8859-1'
       case 'eoswinPatients': return 'WINDOWS-1252'
       case 'xdt': return 'ISO-8859-15'
     }
@@ -31,26 +34,33 @@ export const ingest = ({ Importers }) => {
     }).validator(),
 
     run ({ importer, name, content, buffer }) {
-      this.unblock()
+      try {
+        if (!Meteor.userId()) { return }
 
-      if (!Meteor.userId()) { return }
-
-      if (!importer) {
-        importer = determineImporter({ name, content })
-      }
-
-      if (!content && buffer) {
-        const encoding = determineEncoding({ importer })
-        content = iconv.decode(Buffer.from(buffer.blob), encoding)
-      }
-
-      if (importer) {
-        return {
-          importer,
-          result: Importers.actions.importWith.call({ importer, name, content })
+        if (!importer) {
+          if (!content) {
+            content = iconv.decode(Buffer.from(buffer.blob), 'ISO-8859-1')
+          }
+          importer = determineImporter({ name, content })
         }
-      } else {
-        throw new Meteor.Error('no-importer-found', `Could not determine importer from filename ${name}`)
+
+        if (!content && buffer) {
+          const encoding = determineEncoding({ importer })
+          if (!encoding) throw new Meteor.Error('encoding-not-recognized', `Could not determine encoding for ${name}`)
+          content = iconv.decode(Buffer.from(buffer.blob), encoding)
+        }
+
+        if (importer) {
+          return {
+            importer,
+            result: Importers.actions.importWith.call({ importer, name, content })
+          }
+        } else {
+          throw new Meteor.Error('no-importer-found', `Could not determine importer for ${name}`)
+        }
+      } catch (e) {
+        console.error(e)
+        throw new Meteor.Error(500, 'Failed to ingest')
       }
     }
   })
