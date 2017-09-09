@@ -5,15 +5,17 @@ import { parse as csvToJson } from 'papaparse'
 import { dateToDay } from '../../../../../../util/time/day'
 import { preprocessJournal } from './preprocessJournal'
 import { postprocessJournal } from './postprocessJournal'
+import { translateAssigneeIds } from '../translateAssigneeIds'
 
 export const parseCsv = csv =>
   csvToJson(csv, { header: true }).data
 
-export const processJournal = csv => {
+export const processJournal = mapIds => csv => {
   const rows = parseCsv(csv)
   const day = parseDayFromRows(rows, r => r.Kurzz === 'L:' && r.Datum)
   const summed = preprocessJournal(rows)
-  const addendum = postprocessJournal(summed)
+  const translated = translateAssigneeIds(mapIds)(summed)
+  const addendum = postprocessJournal(translated)
 
   return {
     ...addendum,

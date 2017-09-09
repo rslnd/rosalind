@@ -19,26 +19,19 @@ describe('api', () => {
       const result = preprocessJournal(parseCsv(JOURNAL))
 
       it('reduces journal to array', () => {
-        expect(result).to.be.an('array')
+        expect(result).to.be.an('object')
       })
 
-      it('returns an array of objects with certain keys', () => {
-        expect(result[0]).to.have.keys([
-          'admitted',
-          'surgery',
-          'new',
-          'cautery',
-          'missingReimbursement',
-          'assignee'
-        ])
+      it('returns an objects with assignee ids as keys', () => {
+        expect(result).to.have.keys('14', '1')
       })
 
       it('counts totals per assignee', () => {
-        expect(result[0].admitted).to.be.a('number')
-        expect(result[0].new).to.be.a('number')
-        expect(result[0].surgery).to.be.a('number')
-        expect(result[0].cautery).to.be.a('number')
-        expect(result[0].missingReimbursement).to.be.a('number')
+        expect(result['14'].admitted).to.be.a('number')
+        expect(result['14'].new).to.be.a('number')
+        expect(result['14'].surgery).to.be.a('number')
+        expect(result['14'].cautery).to.be.a('number')
+        expect(result['14'].missingReimbursement).to.be.a('number')
       })
 
       it('total new <= total admitted', () => {

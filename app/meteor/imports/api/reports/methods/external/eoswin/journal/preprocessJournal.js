@@ -1,4 +1,5 @@
-import map from 'lodash/fp/map'
+import map from 'lodash/map'
+import mapValues from 'lodash/fp/mapValues'
 import add from 'lodash/fp/add'
 import groupBy from 'lodash/fp/groupBy'
 import identity from 'lodash/fp/identity'
@@ -7,7 +8,7 @@ import { isNew, isSurgery, isCautery, isAny } from '../insuranceCodes'
 export const preprocessJournal = rows => {
   const mapped = rows.map(mapRow).filter(identity)
   const grouped = groupBy('assignee')(mapped)
-  const summed = map(a => a.reduce(sumRows, {}))(grouped)
+  const summed = mapValues(a => a.reduce(sumRows, {}))(grouped)
 
   return summed
 }
@@ -44,8 +45,7 @@ const sumRows = (acc, curr, i) => {
     new: incrementIf(curr.isNew)(acc.new),
     surgery: incrementIf(curr.isSurgery)(acc.surgery),
     cautery: incrementIf(curr.isCautery)(acc.cautery),
-    missingReimbursement: incrementIf(curr.isMissingReimbursement)(acc.missingReimbursement),
-    assignee: acc.assignee || curr.assignee
+    missingReimbursement: incrementIf(curr.isMissingReimbursement)(acc.missingReimbursement)
   }
 }
 
@@ -53,4 +53,4 @@ export const incrementIf = condition => value =>
   condition ? ((parseInt(value) || 0) + 1) : (parseInt(value) || 0)
 
 export const total = key => result =>
-  result.map(r => r[key]).reduce(add, 0)
+  map(result, v => v[key]).reduce(add, 0)
