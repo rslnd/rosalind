@@ -8,6 +8,7 @@ import {
   incrementIf,
   total
 } from './preprocessJournal'
+import { parseCsv } from './processJournal'
 
 const expect = chai.expect
 chai.use(chaiDatetime)
@@ -15,7 +16,7 @@ chai.use(chaiDatetime)
 describe('api', () => {
   describe('reports', () => {
     describe('eoswinPreprocessJournal', () => {
-      const result = preprocessJournal(JOURNAL)
+      const result = preprocessJournal(parseCsv(JOURNAL))
 
       it('reduces journal to array', () => {
         expect(result).to.be.an('array')

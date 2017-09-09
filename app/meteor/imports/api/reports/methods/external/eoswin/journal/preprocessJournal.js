@@ -2,11 +2,9 @@ import map from 'lodash/fp/map'
 import add from 'lodash/fp/add'
 import groupBy from 'lodash/fp/groupBy'
 import identity from 'lodash/fp/identity'
-import { parse as csvToJson } from 'papaparse'
 import { isNew, isSurgery, isCautery, isAny } from '../insuranceCodes'
 
-export const preprocessJournal = (csv) => {
-  const rows = csvToJson(csv, { header: true }).data
+export const preprocessJournal = rows => {
   const mapped = rows.map(mapRow).filter(identity)
   const grouped = groupBy('assignee')(mapped)
   const summed = map(a => a.reduce(sumRows, {}))(grouped)
