@@ -11,7 +11,6 @@
   "dependencies": {
     "admin-lte": "^2.3.5",
     "await-delay": "^1.0.0",
-    "babyparse": "^0.4.6",
     "bcrypt": "^1.0.2",
     "belle": "^3.0.1",
     "body-parser": "^1.16.0",

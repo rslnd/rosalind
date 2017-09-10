@@ -977,10 +977,6 @@ babylon@^6.17.2:
   version "6.17.4"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.17.4.tgz#3e8b7402b88d22c3423e137a1577883b15ff869a"
 
-babyparse@^0.4.6:
-  version "0.4.6"
-  resolved "https://registry.yarnpkg.com/babyparse/-/babyparse-0.4.6.tgz#8ff29b62d1e600c0654afd63457f97fa2c36e9c1"
-
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"

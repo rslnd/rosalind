@@ -1,7 +1,7 @@
 import defaults from 'lodash/defaults'
 import Adt from 'node_adt'
 import fs from 'fs'
-import csv from 'babyparse'
+import csv from 'papaparse'
 import iconv from 'iconv-lite'
 import { exec } from 'child_process'
 import temp from 'temp'
