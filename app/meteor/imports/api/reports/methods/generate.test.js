@@ -39,136 +39,179 @@ const tagMapping = {
 
 describe('reports', () => {
   describe('generate', () => {
+    const expectedReport = {
+      day,
+      assignees: [
+        {
+          assigneeId: '2',
+          patients: {
+            total: {
+              planned: 3,
+              plannedPerHour: 3 / 8.5
+            },
+            new: {
+              planned: 1,
+              plannedPerHour: 1 / 8.5
+            },
+            recall: {
+              planned: 1,
+              plannedPerHour: 1 / 8.5
+            },
+            surgery: {
+              planned: 1,
+              plannedPerHour: 1 / 8.5
+            }
+          },
+          revenue: {},
+          hours: {
+            planned: 8.5
+          },
+          workload: {
+            available: 102,
+            planned: 3,
+            actual: 0
+          }
+        },
+        {
+          assigneeId: '1',
+          patients: {
+            total: {
+              planned: 3,
+              plannedPerHour: 3 / 11.5
+            },
+            new: {
+              planned: 1,
+              plannedPerHour: 1 / 11.5
+            },
+            surgery: {
+              planned: 2,
+              plannedPerHour: 2 / 11.5
+            }
+          },
+          revenue: {},
+          hours: {
+            planned: 11.5
+          },
+          workload: {
+            available: 138,
+            planned: 3,
+            actual: 0
+          }
+        },
+        {
+          patients: {
+            total: {
+              planned: 1
+            },
+            new: {
+              planned: 1
+            }
+          },
+          type: 'overbooking'
+        }
+      ],
+      total: {
+        assignees: 2,
+        hours: {
+          planned: 20
+        },
+        patients: {
+          total: {
+            planned: 7
+          },
+          new: {
+            planned: 3
+          },
+          recall: {
+            planned: 1
+          },
+          surgery: {
+            planned: 3
+          }
+        },
+        workload: {
+          available: 240,
+          planned: 6,
+          actual: 0
+        },
+        revenue: {},
+        noShows: {
+          remindedCanceled: null,
+          notRemindedCanceled: null,
+          remindedNoShow: null,
+          notRemindedNoShow: null,
+          reminded: null,
+          notReminded: null,
+          canceled: null,
+          noShows: null
+        }
+      },
+      average: {
+        patients: {
+          total: {
+            plannedPerHour: 7 / 20
+          },
+          new: {
+            plannedPerHour: 3 / 20
+          },
+          recall: {
+            plannedPerHour: 1 / 20
+          },
+          surgery: {
+            plannedPerHour: 3 / 20
+          }
+        },
+        revenue: {}
+      }
+    }
+
     it('generates report', () => {
       const generatedReport = generate({ day, appointments, overrideSchedules, tagMapping })
+      expect(generatedReport).to.eql(expectedReport)
+    })
 
-      const expectedReport = {
+    const addendum = {
+      day,
+      assignees: [
+        {
+          assigneeId: '2',
+          patients: {
+            total: {
+              actual: 9000
+            }
+          }
+        }
+      ]
+    }
+
+    it('merges addendum', () => {
+      const generatedReport = generate({ day, appointments, overrideSchedules, tagMapping, addendum })
+      expect(generatedReport.addenda).to.eql([ addendum ])
+      expect(generatedReport.assignees[1].patients.total.actual).to.eql(9000)
+    })
+
+    it('merges two addenda', () => {
+      const existingReport = generate({ day, appointments, overrideSchedules, tagMapping, addendum })
+
+      const nextAddendum = {
         day,
         assignees: [
           {
             assigneeId: '2',
-            patients: {
+            revenue: {
               total: {
-                planned: 3,
-                plannedPerHour: 3 / 8.5
-              },
-              new: {
-                planned: 1,
-                plannedPerHour: 1 / 8.5
-              },
-              recall: {
-                planned: 1,
-                plannedPerHour: 1 / 8.5
-              },
-              surgery: {
-                planned: 1,
-                plannedPerHour: 1 / 8.5
+                actual: 1000
               }
-            },
-            revenue: {},
-            hours: {
-              planned: 8.5
-            },
-            workload: {
-              available: 102,
-              planned: 3,
-              actual: 0
             }
-          },
-          {
-            assigneeId: '1',
-            patients: {
-              total: {
-                planned: 3,
-                plannedPerHour: 3 / 11.5
-              },
-              new: {
-                planned: 1,
-                plannedPerHour: 1 / 11.5
-              },
-              surgery: {
-                planned: 2,
-                plannedPerHour: 2 / 11.5
-              }
-            },
-            revenue: {},
-            hours: {
-              planned: 11.5
-            },
-            workload: {
-              available: 138,
-              planned: 3,
-              actual: 0
-            }
-          },
-          {
-            patients: {
-              total: {
-                planned: 1
-              },
-              new: {
-                planned: 1
-              }
-            },
-            type: 'overbooking'
           }
-        ],
-        total: {
-          assignees: 2,
-          hours: {
-            planned: 20
-          },
-          patients: {
-            total: {
-              planned: 7
-            },
-            new: {
-              planned: 3
-            },
-            recall: {
-              planned: 1
-            },
-            surgery: {
-              planned: 3
-            }
-          },
-          workload: {
-            available: 240,
-            planned: 6,
-            actual: 0
-          },
-          revenue: {},
-          noShows: {
-            remindedCanceled: null,
-            notRemindedCanceled: null,
-            remindedNoShow: null,
-            notRemindedNoShow: null,
-            reminded: null,
-            notReminded: null,
-            canceled: null,
-            noShows: null
-          }
-        },
-        average: {
-          patients: {
-            total: {
-              plannedPerHour: 7 / 20
-            },
-            new: {
-              plannedPerHour: 3 / 20
-            },
-            recall: {
-              plannedPerHour: 1 / 20
-            },
-            surgery: {
-              plannedPerHour: 3 / 20
-            }
-          },
-          revenue: {}
-        }
+        ]
       }
 
-      expect(generatedReport).to.eql(expectedReport)
+      const generatedReport = generate({ day, appointments, overrideSchedules, tagMapping, addendum: nextAddendum, existingReport })
+
+      expect(generatedReport.assignees[1].patients.total.actual).to.eql(9000)
+      expect(generatedReport.assignees[1].revenue.total.actual).to.eql(1000)
+      expect(generatedReport.addenda).to.eql([ addendum, nextAddendum ])
     })
   })
 })

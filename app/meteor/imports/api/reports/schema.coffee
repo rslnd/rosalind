@@ -25,6 +25,11 @@ module.exports = new SimpleSchema
   external:
     optional: true
     type: External
+  
+  addenda:
+    optional: true
+    type: [Object]
+    blackbox: true
 
   createdAt:
     type: Date

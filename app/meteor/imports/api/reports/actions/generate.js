@@ -4,7 +4,6 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { dayToDate } from '../../../util/time/day'
 import { generate as generateReport } from '../methods/generate'
-import { reapplyAddenda, applyAddendum } from '../methods/reapplyAddenda'
 
 export const generate = ({ Reports, Appointments, Schedules, Tags, Messages }) => {
   return new ValidatedMethod({
@@ -43,16 +42,13 @@ export const generate = ({ Reports, Appointments, Schedules, Tags, Messages }) =
 
         const tagMapping = Tags.methods.getMappingForReports()
 
-        const generatedReport = generateReport({ day, appointments, overrideSchedules, tagMapping, messages })
-
         const existingReport = Reports.findOne({ day })
+        const generatedReport = generateReport({ day, appointments, overrideSchedules, tagMapping, messages, existingReport, addendum })
 
         if (existingReport) {
-          const updatedReport = reapplyAddenda(existingReport)(generatedReport)(addendum)
-          return Reports.update({ _id: existingReport._id }, { $set: updatedReport })
+          return Reports.update({ _id: existingReport._id }, generatedReport, { bypassCollection2: true })
         } else {
-          const withAddendum = applyAddendum(generatedReport)(addendum)
-          return Reports.insert(withAddendum)
+          return Reports.insert(generatedReport)
         }
       } catch (e) {
         console.error(e.message, e.stack)

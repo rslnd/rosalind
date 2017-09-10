@@ -35,7 +35,6 @@ const mergeAssignees = (report, addendum) => {
   addendum.assignees.filter(a => a.type).map(addendumAssignee => {
     const found = find(mergedAssignees, a => a.type === addendumAssignee.type)
     if (!found) {
-      console.log('Putting to merged:', addendumAssignee)
       mergedAssignees.push(addendumAssignee)
     }
   })

@@ -8,35 +8,59 @@ describe('reports', () => {
       expect(merge({ assignees: [] }, { assignees: [] })).to.eql({ assignees: [] })
     })
 
+    const originalReport = {
+      assignees: [
+        {
+          assigneeId: '1',
+          patients: {
+            total: {
+              planned: 3
+            }
+          }
+        }
+      ]
+    }
+
+    const addendum = {
+      assignees: [
+        {
+          assigneeId: '1',
+          patients: {
+            total: {
+              actual: 2
+            }
+          }
+        }
+      ]
+    }
+
     it('merges assignees', () => {
-      const originalReport = {
-        assignees: [
-          {
-            assigneeId: '1',
-            patients: {
-              total: {
-                planned: 3
-              }
-            }
-          }
-        ]
-      }
-
-      const addendum = {
-        assignees: [
-          {
-            assigneeId: '1',
-            patients: {
-              total: {
-                actual: 2
-              }
-            }
-          }
-        ]
-      }
-
       const mergedReport = merge(originalReport, addendum)
       expect(mergedReport.assignees[0].patients.total.actual).to.equal(2)
+    })
+
+    const addendum2 = {
+      assignees: [
+        {
+          assigneeId: '1',
+          patients: {
+            total: {
+              other: 1
+            }
+          },
+          revenue: {
+            actual: 1000
+          }
+        }
+      ]
+    }
+
+    it('merges multiple properties', () => {
+      const mergedReport = merge(originalReport, addendum)
+      const mergedReport2 = merge(mergedReport, addendum2)
+      expect(mergedReport2.assignees[0].patients.total.actual).to.equal(2)
+      expect(mergedReport2.assignees[0].patients.total.other).to.equal(1)
+      expect(mergedReport2.assignees[0].revenue.actual).to.equal(1000)
     })
   })
 })

@@ -1,17 +1,25 @@
 import mapValues from 'lodash/fp/mapValues'
-import map from 'lodash/fp/map'
+import map from 'lodash/map'
 
 export const postprocessJournal = journal => {
-  const assignees = map(transformAssignee)(journal)
+  const assignees = map(journal, transformAssignee)
   return { assignees }
 }
 
-const transformAssignee = ({ assignee, ...rest }) => {
-  const patients = mapValues(transformPatients)(rest)
+const transformAssignee = ({ type, ...values }, assigneeId) => {
+  const patients = mapValues(transformPatients)(values)
 
-  return {
-    assigneeId: assignee,
-    patients
+  if (type) {
+    return {
+      type,
+      assigneeId,
+      patients
+    }
+  } else {
+    return {
+      assigneeId,
+      patients
+    }
   }
 }
 

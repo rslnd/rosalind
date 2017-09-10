@@ -11,13 +11,12 @@ chai.use(chaiDatetime)
 describe('api', function () {
   describe('reports', function () {
     describe('eoswin postprocessJournal', function () {
-      const summed = [
-        {
-          assignee: 'A1',
+      const summed = {
+        A1: {
           total: 10,
           new: 9
         }
-      ]
+      }
 
       const expected = {
         assignees: [
