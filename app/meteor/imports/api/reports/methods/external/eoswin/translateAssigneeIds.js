@@ -1,24 +1,24 @@
+import { specialAssigneeType } from './mapUserIds'
+
 export const translateAssigneeIds = mapIds => report => {
   const originalIds = Object.keys(report)
 
   return originalIds.reduce((acc, originalId) => {
     const translatedId = mapIds(originalId)
+    const type = specialAssigneeType(originalId)
 
     if (translatedId) {
       return {
         ...acc,
         [ translatedId ]: report[originalId]
       }
-    } else if (hasTypeField(report[originalId])) {
+    } else if (type) {
       return {
         ...acc,
-        [ originalId ]: report[originalId]
+        [ type ]: { ...report[originalId], type }
       }
     } else {
       throw new Error(`Could not translate EOSWin id ${originalId}`)
     }
   }, {})
 }
-
-const hasTypeField = obj =>
-  obj && (typeof obj === 'object') && obj.type

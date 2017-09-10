@@ -38,18 +38,18 @@ describe('api', function () {
       it('does not fail if assignee has type field', () => {
         expect(() => translateAssigneeIds(mapIds)({
           ...report,
-          A99: { type: 'overbooking' }
+          A12: { type: 'external' }
         })).to.not.throw()
       })
 
       it('merges different assignee types', () => {
         expect(translateAssigneeIds(mapIds)({
           ...report,
-          A99: { type: 'overbooking' }
+          A12: { type: 'external' }
         })).to.eql({
           aaa: 1,
           bbb: { ok: 'cool' },
-          A99: { type: 'overbooking' }
+          external: { type: 'external' }
         })
       })
     })
