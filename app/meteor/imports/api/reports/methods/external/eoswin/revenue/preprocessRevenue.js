@@ -2,8 +2,7 @@ import identity from 'lodash/fp/identity'
 import { parse as csvToJson } from 'papaparse'
 import { isAny } from '../insuranceCodes'
 
-export const preprocessRevenue = (csv) => {
-  const rows = csvToJson(csv, { header: true }).data
+export const preprocessRevenue = (rows) => {
   const mapped = rows.map(mapRow).filter(identity)
   const grouped = mapped.reduce(groupRows, { result: [], assignee: null }).result
   const filtered = grouped.filter(isReimbursable)

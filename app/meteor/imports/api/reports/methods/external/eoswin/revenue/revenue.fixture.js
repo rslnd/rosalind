@@ -1,5 +1,5 @@
 export const REPORT = `"KZ";"BEZ";WERT;"LST";ANZ
-"A5";"Dr.  One";;"";
+"A5";"Dr.  Anmeldung";;"";
 "I";"Übersicht Leistungen:";;"";
 "Ü";"Abrechnungsgruppe: WGK";G;"";
 "L";"[ORD] * 2   ->";0.00;"ORD";2

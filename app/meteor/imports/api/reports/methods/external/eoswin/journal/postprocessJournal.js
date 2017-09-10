@@ -1,7 +1,8 @@
 import mapValues from 'lodash/fp/mapValues'
+import map from 'lodash/fp/map'
 
 export const postprocessJournal = journal => {
-  const assignees = journal.map(transformAssignee)
+  const assignees = map(transformAssignee)(journal)
   return { assignees }
 }
 

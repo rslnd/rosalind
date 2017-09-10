@@ -1,8 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { dateToDay } from '../../../../../util/time/day'
-import { parseReportDate, parseAddendum } from '../../../../reports/methods/external/eoswin/parseAddendum'
+import { processRevenue, mapUserIds } from '../../../../reports/methods/external/eoswin'
 import { Reports } from '../../../../reports'
 import { Users } from '../../../../users'
 
@@ -17,22 +16,17 @@ export const eoswinRevenueReports = ({ Importers }) => {
     }).validator(),
 
     run ({ name, content }) {
-      if (this.isSimulation) { return }
-      if (!Meteor.userId()) { return }
-
-      const day = dateToDay(parseReportDate(name))
-
-      Reports.actions.generate.call({ day })
-
       try {
-        const users = Users.find({}).fetch()
-        const addendum = [parseAddendum({ day, content, users })]
+        if (this.isSimulation) { return }
+        if (!Meteor.userId()) { return }
 
-        console.log('[Importers] eoswinRevenueReports: parsed addendum', addendum)
+        const mapIds = mapUserIds({ Users })
 
-        Reports.actions.generate.call({ day, addendum })
+        const addendum = processRevenue(mapIds)(content, name)
+        Reports.actions.generate.call({ day: addendum.day, addendum })
       } catch (e) {
         console.error(e.message, e.stack)
+        throw e
       }
     }
   })

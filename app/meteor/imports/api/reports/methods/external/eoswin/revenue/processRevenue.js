@@ -6,7 +6,7 @@ import { postprocessRevenue } from './postprocessRevenue'
 import { translateAssigneeIds } from '../translateAssigneeIds'
 
 export const parseCsv = csv =>
-  csvToJson(csv, { header: true }).data
+  csvToJson(String(csv), { header: true }).data
 
 export const processRevenue = mapIds => (csv, filename) => {
   const rows = parseCsv(csv)

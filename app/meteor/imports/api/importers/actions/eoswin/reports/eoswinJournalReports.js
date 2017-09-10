@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { processJournal, mapUserIds } from '../../../../reports/methods/external/eoswin'
+import { Reports } from '../../../../reports'
+import { Users } from '../../../../users'
 
 export const eoswinJournalReports = ({ Importers }) => {
   return new ValidatedMethod({
@@ -13,9 +16,18 @@ export const eoswinJournalReports = ({ Importers }) => {
     }).validator(),
 
     run ({ name, content }) {
-      if (this.isSimulation) { return }
-      if (!Meteor.userId()) { return }
-      console.log('[Importers] eoswinJournalReports: parsing addendum')
+      try {
+        if (this.isSimulation) { return }
+        if (!Meteor.userId()) { return }
+
+        const mapIds = mapUserIds({ Users })
+
+        const addendum = processJournal(mapIds)(content, name)
+        Reports.actions.generate.call({ day: addendum.day, addendum })
+      } catch (e) {
+        console.error(e.message, e.stack)
+        throw e
+      }
     }
   })
 }
