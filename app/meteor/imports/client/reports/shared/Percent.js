@@ -51,7 +51,7 @@ export const Percent = (props) => {
   } else {
     return (
       <span style={style}>
-        {upper}
+        {props.part}
       </span>
     )
   }

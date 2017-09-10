@@ -110,7 +110,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
           <Percent slash bigPercent part={assignee.workload.planned} of={assignee.workload.available} />
         }</td>
         <td style={align}>{assignee.assigneeId && assignee.workload &&
-          <Percent slash bigPercent part={assignee.patients.total.actual} of={assignee.workload.planned} />
+          <Percent slash bigPercent part={idx(assignee, _ => _.patients.total.planned)} of={assignee.workload.planned} />
         }</td>
 
         {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
@@ -118,19 +118,19 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
         <Td>{idx(assignee, _ => _.patients.total.actual) || <Nil />}</Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.planned)} of={assignee.patients.total.planned} /></Td>
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
         <Td><Percent part={idx(assignee, _ => _.patients.new.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.recall.planned)} of={assignee.patients.total.planned} /></Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.recall.actual)} of={assignee.patients.total.actual} /></Td>
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.recall.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.recall.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.surgery.planned)} of={assignee.patients.total.planned} /></Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.surgery.actual)} of={assignee.patients.total.actual} /></Td>
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.surgery.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.surgery.actual)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
 
         {/* Kaustik privat [Plan] */}
-        <Td><Percent part={idx(assignee, _ => _.patients.cautery.planned)} of={assignee.patients.total.planned} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.cautery.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft>{assignee.assigneeId &&
