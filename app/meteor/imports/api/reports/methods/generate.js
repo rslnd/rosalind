@@ -12,13 +12,13 @@ export const generate = ({ day, appointments, overrideSchedules, tagMapping, mes
   report.day = day
   report.assignees = mapAssignees({ appointments, overrideSchedules, tagMapping })
 
-  report = mergeReport(report, mapHours({ report, appointments, overrideSchedules }))
-
   if (addendum && existingReport) {
     report = reapplyAddenda(existingReport)(report)(addendum)
   } else if (addendum) {
     report = applyAddendum(report)(addendum)
   }
+
+  report = mergeReport(report, mapHours({ report, appointments, overrideSchedules }))
 
   report.total = mapTotal({ report, appointments, messages })
   report.average = mapAverage({ report })
