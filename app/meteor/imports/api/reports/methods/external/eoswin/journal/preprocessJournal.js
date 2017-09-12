@@ -40,13 +40,14 @@ const isMissingReimbursement = (text) =>
   text.includes('Keine Leistung(en) eingetragen')
 
 const sumRows = (acc, curr, i) => {
-  return {
-    total: incrementIf(curr.isAdmitted)(acc.total),
-    new: incrementIf(curr.isNew)(acc.new),
-    surgery: incrementIf(curr.isSurgery)(acc.surgery),
-    cautery: incrementIf(curr.isCautery)(acc.cautery),
-    missingReimbursement: incrementIf(curr.isMissingReimbursement)(acc.missingReimbursement)
-  }
+  const total = incrementIf(curr.isAdmitted)(acc.total)
+  const _new = incrementIf(curr.isNew)(acc.new)
+  const surgery = incrementIf(curr.isSurgery)(acc.surgery)
+  const cautery = incrementIf(curr.isCautery)(acc.cautery)
+  const missingReimbursement = incrementIf(curr.isMissingReimbursement)(acc.missingReimbursement)  
+  const recall = total - _new
+
+  return { total, new: _new, recall, surgery, cautery, missingReimbursement }
 }
 
 export const incrementIf = condition => value =>
