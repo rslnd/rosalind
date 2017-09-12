@@ -3,7 +3,6 @@ import fromPairs from 'lodash/fromPairs'
 import { Meteor } from 'meteor/meteor'
 import { Email } from 'meteor/email'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Reports } from '../../'
@@ -16,13 +15,7 @@ import { renderPdf } from '../../methods/renderPdf'
 export const sendEmail = new ValidatedMethod({
   name: 'reports/sendEmail',
   mixins: [CallPromiseMixin],
-  validate (args) {
-    if (args) {
-      return new SimpleSchema({
-        to: { type: String, optional: true }
-      }).validator()
-    }
-  },
+  validate () {},
 
   async run (args = {}) {
     if (!this.userId) {
