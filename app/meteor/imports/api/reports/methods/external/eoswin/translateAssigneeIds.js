@@ -13,9 +13,10 @@ export const translateAssigneeIds = mapIds => report => {
         [ translatedId ]: report[originalId]
       }
     } else if (type) {
+      const { assigneeId, ...rest } = report[originalId]
       return {
         ...acc,
-        [ type ]: { ...report[originalId], type }
+        [ type ]: { ...rest, type }
       }
     } else {
       throw new Error(`Could not translate EOSWin id ${originalId}`)

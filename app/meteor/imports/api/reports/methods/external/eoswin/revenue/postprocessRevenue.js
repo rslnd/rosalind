@@ -5,13 +5,24 @@ export const postprocessRevenue = revenue => {
   return { assignees }
 }
 
-const mapAssignees = (value, assigneeId) => {
-  return {
-    assigneeId,
+const mapAssignees = ({ type, revenue }, assigneeId) => {
+  const mappedRevenue = {
     revenue: {
       total: {
-        actual: value.revenue
+        actual: revenue
       }
+    }
+  }
+
+  if (type) {
+    return {
+      type,
+      ...mappedRevenue
+    }
+  } else {
+    return {
+      assigneeId,
+      ...mappedRevenue
     }
   }
 }

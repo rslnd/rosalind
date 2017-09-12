@@ -52,6 +52,17 @@ describe('api', function () {
           external: { type: 'external' }
         })
       })
+
+      it('removed assigneeId field if assignee has a type field', () => {
+        expect(translateAssigneeIds(mapIds)({
+          ...report,
+          A12: { type: 'external', assigneeId: 'A13' }
+        })).to.eql({
+          aaa: 1,
+          bbb: { ok: 'cool' },
+          external: { type: 'external' }
+        })
+      })
     })
   })
 })

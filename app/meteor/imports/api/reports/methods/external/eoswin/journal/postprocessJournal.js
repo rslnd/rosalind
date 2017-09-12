@@ -12,7 +12,6 @@ const transformAssignee = ({ type, ...values }, assigneeId) => {
   if (type) {
     return {
       type,
-      assigneeId,
       patients
     }
   } else {
