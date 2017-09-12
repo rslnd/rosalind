@@ -1,4 +1,5 @@
 import identity from 'lodash/fp/identity'
+import mapValues from 'lodash/fp/mapValues'
 import { parse as csvToJson } from 'papaparse'
 import { isAny } from '../insuranceCodes'
 
@@ -7,8 +8,9 @@ export const preprocessRevenue = (rows) => {
   const grouped = mapped.reduce(groupRows, { result: [], assignee: null }).result
   const filtered = grouped.filter(isReimbursable)
   const summed = filtered.reduce(sumRows, {})
+  const encapsulated = mapValues(r => ({ revenue: r }))(summed)
 
-  return summed
+  return encapsulated
 }
 
 const mapRow = (row) => {

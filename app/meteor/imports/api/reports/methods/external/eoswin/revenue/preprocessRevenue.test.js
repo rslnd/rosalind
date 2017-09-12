@@ -16,10 +16,10 @@ describe('api', function () {
           const result = preprocessRevenue(parseCsv(REPORT))
 
           expect(result).to.eql({
-            A5: 0,
-            A6: 2.64,
-            A11: 1024.27,
-            A12: 36.58
+            A5: { revenue: 0 },
+            A6: { revenue: 2.64 },
+            A11: { revenue: 1024.27 },
+            A12: { revenue: 36.58 }
           })
         })
       })

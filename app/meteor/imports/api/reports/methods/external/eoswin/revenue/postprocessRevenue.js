@@ -10,7 +10,7 @@ const mapAssignees = (value, assigneeId) => {
     assigneeId,
     revenue: {
       total: {
-        actual: value
+        actual: value.revenue
       }
     }
   }

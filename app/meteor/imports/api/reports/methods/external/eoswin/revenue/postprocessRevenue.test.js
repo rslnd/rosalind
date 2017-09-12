@@ -12,8 +12,8 @@ describe('api', function () {
   describe('reports', function () {
     describe('eoswin postprocessRevenue', function () {
       const summed = {
-        A5: 0,
-        A11: 1024.27
+        A5: { revenue: 0 },
+        A11: { revenue: 1024.27 }
       }
 
       const expected = {
