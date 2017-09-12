@@ -27,20 +27,20 @@ describe('api', () => {
       })
 
       it('counts totals per assignee', () => {
-        expect(result['14'].admitted).to.be.a('number')
+        expect(result['14'].total).to.be.a('number')
         expect(result['14'].new).to.be.a('number')
         expect(result['14'].surgery).to.be.a('number')
         expect(result['14'].cautery).to.be.a('number')
         expect(result['14'].missingReimbursement).to.be.a('number')
       })
 
-      it('total new <= total admitted', () => {
+      it('total new <= total total', () => {
         expect(total('new')(result))
-          .to.be.lte(total('admitted')(result))
+          .to.be.lte(total('total')(result))
       })
 
       it('counts codes', () => {
-        expect(total('admitted')(result)).to.equal(3)
+        expect(total('total')(result)).to.equal(3)
         expect(total('missingReimbursement')(result)).to.equal(1)
         expect(total('new')(result)).to.equal(2)
       })

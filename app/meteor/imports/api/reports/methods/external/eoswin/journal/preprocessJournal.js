@@ -41,7 +41,7 @@ const isMissingReimbursement = (text) =>
 
 const sumRows = (acc, curr, i) => {
   return {
-    admitted: incrementIf(curr.isAdmitted)(acc.admitted),
+    total: incrementIf(curr.isAdmitted)(acc.total),
     new: incrementIf(curr.isNew)(acc.new),
     surgery: incrementIf(curr.isSurgery)(acc.surgery),
     cautery: incrementIf(curr.isCautery)(acc.cautery),
