@@ -75,7 +75,7 @@ const mapAssignees = ({ report, overrideSchedules, appointments = [] }) => (
   report.assignees.map((assignee) => {
     const assigneeId = assignee.assigneeId
 
-    if (assigneeId) {
+    if (assigneeId && !assignee.type) {
       const hours = mapAssigneeHours({ assigneeId, overrideSchedules })
       const assigneesAppointments = appointments.filter(ap => ap.assigneeId === assigneeId)
 
