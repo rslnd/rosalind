@@ -13,7 +13,8 @@ const mergeAssignee = (originalAssignee, addendumAssignee) => (
 )
 
 const isSameAssignee = a => b =>
-  a.assigneeId && b.assigneeId && a.assigneeId === b.assigneeId
+  (a.assigneeId && b.assigneeId && a.assigneeId === b.assigneeId) ||
+  (a.type && b.type && a.type === b.type)
 
 const mergeAssignees = (report, addendum) => {
   if (!addendum.assignees) {
@@ -39,7 +40,7 @@ const mergeAssignees = (report, addendum) => {
     }
   })
 
-  const sortedAssignees = sortBy(a => a.assigneeId ? 1 : 0)(
+  const sortedAssignees = sortBy(a => ((a.assigneeId && !a.type) ? 1 : 0))(
     sortBy(a => idx(a, _ => _.revenue.total.actual))(mergedAssignees)
   ).reverse()
 
