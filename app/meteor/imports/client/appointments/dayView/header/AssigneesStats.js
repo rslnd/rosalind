@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
-import uniqBy from 'lodash/fp/uniqBy'
-import countBy from 'lodash/fp/countBy'
+import idx from 'idx'
+import { mapAppointmentsByTags } from '../../../../api/reports/methods/mapAssignees'
 import { Icon } from '../../../components/Icon'
 import { Tags } from '../../../../api/tags/'
 
@@ -24,47 +24,32 @@ const cellStyle = {
   alignItems: 'center'
 }
 
-const calculateStats = ({ appointments, tagMapping }) => {
-  const planned = uniqBy('patientId')(appointments
-    .filter(a => a.patientId && a.canceled !== true)
-  )
-
-  const admitted = planned.filter(a => a.admittedAt)
-
-  const admittedByTag = countBy(a => tagMapping[a.tags[0]])(admitted.filter(a => a.tags))
-
-  return {
-    planned: planned.length,
-    admitted: admitted.length,
-    noShow: planned.length - admitted.length,
-    admittedByTag
-  }
-}
-
 const Stats = ({ assignee }) => {
   const tagMapping = Tags.methods.getMappingForReports()
-  const { planned, admitted, noShow, admittedByTag } = calculateStats({
+  const report = mapAppointmentsByTags({
     appointments: assignee.appointments,
     tagMapping
   })
 
   return <div>
-    <span><Icon name='users' /> {planned}</span><br />
-    <span><Icon name='check' /> {admitted} (
+    <span><Icon name='users' /> {idx(report, _ => _.total.planned)}</span><br />
+    <span><Icon name='check' /> {idx(report, _ => _.total.admitted)} (
       <span>
-        Neu {admittedByTag['new'] || 0}, 
-        OP {admittedByTag['surgery'] || 0}
+        Neu {idx(report, _ => _.new.admitted) || 0},
+        OP {idx(report, _ => _.surgery.admitted) || 0}
       </span><br />
       <span>
-        Kaustik {admittedByTag['cautery'] || 0},
-        Kontrolle {admittedByTag['recall'] || 0}
+        Kaustik {idx(report, _ => _.cautery.admitted) || 0},
+        Kontrolle {idx(report, _ => _.recall.admitted) || 0}
       </span>
     )</span><br />
-    <span><Icon name='times' /> {noShow}</span><br />
+    <span><Icon name='times' /> {idx(report, _ => _.total.noShow)}</span><br />
   </div>
 }
 
-const shouldShow = (date) => moment(date).isBefore(moment().startOf('day'))
+const shouldShow = (date) =>
+  moment(date).isBefore(moment().startOf('day')) ||
+  (moment(date).isSame(moment(), 'day') && moment().hours() >= 12)
 
 export const AssigneesStats = ({ assignees, date }) => (
   shouldShow(date)

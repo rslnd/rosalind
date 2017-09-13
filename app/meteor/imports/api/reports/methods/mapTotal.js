@@ -9,10 +9,13 @@ const mapPatients = ({ report }) => (
   byTags(report.assignees, (tag) => {
     const perAssignee = report.assignees.map((assignee) => ({
       planned: assignee.patients[tag] && assignee.patients[tag].planned,
-      actual: assignee.patients[tag] && assignee.patients[tag].actual
+      actual: assignee.patients[tag] && assignee.patients[tag].actual,
+      admitted: assignee.patients[tag] && assignee.patients[tag].admitted,
+      noShow: assignee.patients[tag] && assignee.patients[tag].noShow,
+      canceled: assignee.patients[tag] && assignee.patients[tag].canceled
     }))
 
-    const sum = sumByKeys(perAssignee, ['planned', 'actual'])
+    const sum = sumByKeys(perAssignee, ['planned', 'actual', 'admitted', 'noShow', 'canceled'])
 
     return [ tag, sum ]
   })
@@ -73,14 +76,14 @@ export const mapTotal = ({ report, appointments, messages }) => {
   const hours = mapHours({ report })
   const workload = mapWorkload({ report })
   const revenue = mapRevenue({ report })
-  const noShows = mapNoShows({ report, appointments, messages })
+  // const noShows = mapNoShows({ report, appointments, messages })
 
   return {
     assignees,
     hours,
     patients,
     workload,
-    revenue,
-    noShows
+    revenue
+    // noShows
   }
 }

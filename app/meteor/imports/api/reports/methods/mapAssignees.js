@@ -1,10 +1,26 @@
 import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
 import sortBy from 'lodash/fp/sortBy'
+import uniqBy from 'lodash/fp/uniqBy'
 
-const mapAppointments = ({ assigneeId, appointments, hours, tagMapping }) => {
+const mapAppointments = (appointments) => {
+  const planned = uniqBy('patientId')(appointments
+    .filter(a => a.patientId && a.removed !== true))
+  const canceled = planned.filter(a => a.canceled).length
+  const admitted = planned.filter(a => a.admittedAt).length
+  const noShow = planned.length - canceled - admitted
+
+  return {
+    planned: planned.length,
+    canceled,
+    admitted,
+    noShow
+  }
+}
+
+export const mapAppointmentsByTags = ({ appointments, tagMapping }) => {
   // Group by first tag
-  // TOOD: Check if the first tag is also the one with the highest priority
+  // TODO: Check if the first tag is also the one with the highest priority
   const applyTagMapping = (appointment) => {
     if (appointment.tags && appointment.tags[0]) {
       return tagMapping[appointment.tags[0]] || null
@@ -14,27 +30,16 @@ const mapAppointments = ({ assigneeId, appointments, hours, tagMapping }) => {
   }
 
   const appointmentsByTags = groupBy(applyTagMapping)(appointments)
-
-  const byTags = mapValues((appointments) => {
-    const planned = appointments.length
-
-    return {
-      planned
-    }
-  })(appointmentsByTags)
-
-  const planned = appointments.length
+  const byTags = mapValues(mapAppointments)(appointmentsByTags)
 
   return {
-    total: {
-      planned
-    },
+    total: mapAppointments(appointments),
     ...byTags
   }
 }
 
 const mapAssignee = ({ assigneeId, appointments, overrideSchedules, tagMapping }) => {
-  const patients = mapAppointments({ assigneeId, appointments, tagMapping })
+  const patients = mapAppointmentsByTags({ appointments, tagMapping })
 
   return {
     assigneeId,

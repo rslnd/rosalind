@@ -42,13 +42,12 @@ export const ReportTableHeader = ({ showRevenue, __ }) => (
       <th>#</th>
       <th className='col-md-2'>{__('reports.assignee')}</th>
       <th style={align}>Std.</th>
-      <th style={align} colSpan={2}>Termine</th>
-      <th style={align} colSpan={2}>PatientInnen</th>
+      <th colSpan={3}>PatientInnen</th>
       <th style={center} colSpan={2}>Neu</th>
       <th style={center} colSpan={2}>Kontrolle</th>
       <th style={center} colSpan={2}>OP</th>
       <th style={center} title='Kaustik privat'>K</th>
-      <th style={align} colSpan={2}>Neu/Std.</th>
+      <th style={center} colSpan={2}>Neu/Std.</th>
       {showRevenue && <th style={align} colSpan={2}>Umsatz</th>}
     </tr>
 
@@ -56,10 +55,9 @@ export const ReportTableHeader = ({ showRevenue, __ }) => (
       <th />
       <th />
       <th />
-      <th style={align}>Plan</th>
-      <th style={align}>Ist</th>
-      <th style={align}>Plan</th>
-      <th style={align}>Ist</th>
+      <th style={borderLeftStyle}>Plan</th>
+      <th style={align} title='Anwesend'>Anw.</th>
+      <th style={align} title='Behandelt'>Ist</th>
       <th style={colDivider}>Plan</th>
       <th style={align}>Ist</th>
       <th style={colDivider}>Plan</th>
@@ -105,16 +103,9 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <td style={align}>{assignee.assigneeId && assignee.hours && durationFormat(assignee.hours.planned)}</td>
 
-        {/* Termine [Plan, Ist] */}
-        <td style={align}>{assignee.assigneeId && assignee.workload &&
-          <Percent slash bigPercent part={assignee.workload.planned} of={assignee.workload.available} />
-        }</td>
-        <td style={align}>{assignee.assigneeId && assignee.workload &&
-          <Percent slash bigPercent part={idx(assignee, _ => _.patients.total.planned)} of={assignee.workload.planned} />
-        }</td>
-
-        {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
-        <Td borderLeft>{idx(assignee, _ => _.patients.total.planned)}</Td>
+        {/* Patients [Plan, Admitted, Actual] */}
+        <Td borderLeft>{idx(assignee, _ => _.patients.total.planned) || <Nil />}</Td>
+        <Td>{idx(assignee, _ => _.patients.total.admitted) || <Nil />}</Td>
         <Td>{idx(assignee, _ => _.patients.total.actual) || <Nil />}</Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
@@ -173,12 +164,9 @@ class SummaryRow extends React.Component {
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <Td>{report.total.hours && durationFormat(report.total.hours.planned)}</Td>
 
-        {/* Auslatung [Plan, Ist] */}
-        <Td><Percent slash bigPercent part={report.total.workload.planned} of={report.total.workload.available} /></Td>
-        <Td><Percent slash bigPercent part={report.total.workload.actual} of={report.total.workload.available} /></Td>
-
-        {/* Total Patients [Plan (appointments count), Ist (admitted appointments, (Abs+%))] */}
-        <Td borderLeft>{report.total.patients.total.planned}</Td>
+        {/* Patients [planned, admitted, actual] */}
+        <Td borderLeft>{idx(report, _ => _.total.patients.total.planned) || <Nil />}</Td>
+        <Td>{idx(report, _ => _.total.patients.total.admitted) || <Nil />}</Td>
         <Td>{idx(report, _ => _.total.patients.total.actual) || <Nil />}</Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}

@@ -16,13 +16,13 @@ const start = moment('2017-05-22T14:00:00').toDate()
 const end = moment(start).add(5, 'minutes').toDate()
 
 const appointments = [
-  { id: '101', assigneeId: '1', tags: ['n3w', 'should_not_show_up_tag2'], start, end },
-  { id: '102', assigneeId: '1', tags: ['2rg'], start, end },
-  { id: '103', assigneeId: '1', tags: ['2rg'], start, end },
-  { id: '104', assigneeId: '2', tags: ['n3w'], start, end },
-  { id: '105', assigneeId: '2', tags: ['rc1'], start, end },
-  { id: '106', assigneeId: '2', tags: ['2rg', 'should_not_show_up_tag3'], start, end },
-  { id: '107', tags: ['n3w', 'should_not_show_up_tag1'], start, end }
+  { id: '101', patientId: '4', assigneeId: '1', tags: ['n3w', 'should_not_show_up_tag2'], start, end },
+  { id: '102', patientId: '5', assigneeId: '1', tags: ['2rg'], start, end },
+  { id: '103', patientId: '6', assigneeId: '1', tags: ['2rg'], start, end },
+  { id: '104', patientId: '7', assigneeId: '2', tags: ['n3w'], start, end },
+  { id: '105', patientId: '8', assigneeId: '2', tags: ['rc1'], start, end },
+  { id: '106', patientId: '9', assigneeId: '2', tags: ['2rg', 'should_not_show_up_tag3'], start, end },
+  { id: '107', patientId: '10', tags: ['n3w', 'should_not_show_up_tag1'], start, end }
 ]
 
 const overrideSchedules = [
@@ -39,28 +39,31 @@ const tagMapping = {
 
 describe('reports', () => {
   describe('generate', () => {
+    const fieldsPerTag = ({ planned, hours, admitted = 0, canceled = 0, noShow = 0 }) => {
+      noShow = noShow || planned
+      if (!hours) { return { planned, admitted, canceled, noShow } }
+      return {
+        planned,
+        plannedPerHour: planned / hours,
+        admitted,
+        admittedPerHour: admitted / hours,
+        canceled,
+        canceledPerHour: canceled / hours,
+        noShow,
+        noShowPerHour: noShow / hours
+      }
+    }
+
     const expectedReport = {
       day,
       assignees: [
         {
           assigneeId: '2',
           patients: {
-            total: {
-              planned: 3,
-              plannedPerHour: 3 / 8.5
-            },
-            new: {
-              planned: 1,
-              plannedPerHour: 1 / 8.5
-            },
-            recall: {
-              planned: 1,
-              plannedPerHour: 1 / 8.5
-            },
-            surgery: {
-              planned: 1,
-              plannedPerHour: 1 / 8.5
-            }
+            total: fieldsPerTag({ planned: 3, hours: 8.5 }),
+            new: fieldsPerTag({ planned: 1, hours: 8.5 }),
+            recall: fieldsPerTag({ planned: 1, hours: 8.5 }),
+            surgery: fieldsPerTag({ planned: 1, hours: 8.5 })
           },
           revenue: {},
           hours: {
@@ -75,18 +78,9 @@ describe('reports', () => {
         {
           assigneeId: '1',
           patients: {
-            total: {
-              planned: 3,
-              plannedPerHour: 3 / 11.5
-            },
-            new: {
-              planned: 1,
-              plannedPerHour: 1 / 11.5
-            },
-            surgery: {
-              planned: 2,
-              plannedPerHour: 2 / 11.5
-            }
+            total: fieldsPerTag({ planned: 3, hours: 11.5 }),
+            new: fieldsPerTag({ planned: 1, hours: 11.5 }),
+            surgery: fieldsPerTag({ planned: 2, hours: 11.5 })
           },
           revenue: {},
           hours: {
@@ -100,12 +94,8 @@ describe('reports', () => {
         },
         {
           patients: {
-            total: {
-              planned: 1
-            },
-            new: {
-              planned: 1
-            }
+            total: fieldsPerTag({ planned: 1 }),
+            new: fieldsPerTag({ planned: 1 })
           },
           type: 'overbooking'
         }
@@ -117,16 +107,20 @@ describe('reports', () => {
         },
         patients: {
           total: {
-            planned: 7
+            planned: 7,
+            noShow: 7
           },
           new: {
-            planned: 3
+            planned: 3,
+            noShow: 3
           },
           recall: {
-            planned: 1
+            planned: 1,
+            noShow: 1
           },
           surgery: {
-            planned: 3
+            planned: 3,
+            noShow: 3
           }
         },
         workload: {
@@ -134,17 +128,7 @@ describe('reports', () => {
           planned: 6,
           actual: 0
         },
-        revenue: {},
-        noShows: {
-          remindedCanceled: null,
-          notRemindedCanceled: null,
-          remindedNoShow: null,
-          notRemindedNoShow: null,
-          reminded: null,
-          notReminded: null,
-          canceled: null,
-          noShows: null
-        }
+        revenue: {}
       },
       average: {
         patients: {

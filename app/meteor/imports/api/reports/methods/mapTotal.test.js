@@ -9,7 +9,10 @@ const report = {
       patients: {
         total: {
           planned: 3,
-          actual: 1
+          actual: 1,
+          admitted: 0,
+          canceled: 0,
+          noShow: 1
         }
       }
     }
