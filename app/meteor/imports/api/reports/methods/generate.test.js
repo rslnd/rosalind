@@ -130,28 +130,24 @@ describe('reports', () => {
         },
         revenue: {}
       },
-      average: {
-        patients: {
-          total: {
-            plannedPerHour: 7 / 20
-          },
-          new: {
-            plannedPerHour: 3 / 20
-          },
-          recall: {
-            plannedPerHour: 1 / 20
-          },
-          surgery: {
-            plannedPerHour: 3 / 20
-          }
-        },
-        revenue: {}
-      }
+      average: {}
     }
 
-    it('generates report', () => {
+    it('has required fields', () => {
       const generatedReport = generate({ day, appointments, overrideSchedules, tagMapping })
-      expect(generatedReport).to.eql(expectedReport)
+      expect(generatedReport).to.have.keys([
+        'day', 'assignees', 'total', 'average'
+      ])
+    })
+
+    it('reports on all assignees', () => {
+      const generatedReport = generate({ day, appointments, overrideSchedules, tagMapping })
+      expect(generatedReport.assignees).to.eql(expectedReport.assignees)
+    })
+
+    it('reports total', () => {
+      const generatedReport = generate({ day, appointments, overrideSchedules, tagMapping })
+      expect(generatedReport.total).to.eql(expectedReport.total)
     })
 
     const addendum = {
