@@ -1936,6 +1936,13 @@ domready@1.x.x:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/domready/-/domready-1.0.8.tgz#91f252e597b65af77e745ae24dd0185d5e26d58c"
 
+dot-object@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/dot-object/-/dot-object-1.6.0.tgz#61c61ca764ea780cb563fe3b51a56d0cf5aa4070"
+  dependencies:
+    commander "^2.9.0"
+    glob "^7.0.5"
+
 drag-drop@^2.12.1:
   version "2.13.2"
   resolved "https://registry.yarnpkg.com/drag-drop/-/drag-drop-2.13.2.tgz#a01ff4459123f5ae0a8c8bd9bb38c625ccb81550"

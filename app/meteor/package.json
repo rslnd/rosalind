@@ -21,6 +21,7 @@
     "chrome-remote-interface": "^0.24.2",
     "classnames": "^2.2.5",
     "dedent": "^0.7.0",
+    "dot-object": "^1.6.0",
     "drag-drop": "^2.12.1",
     "elasticsearch": "^13.0.0",
     "event-stream": "^3.3.4",
