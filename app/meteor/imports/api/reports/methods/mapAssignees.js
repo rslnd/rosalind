@@ -4,15 +4,19 @@ import sortBy from 'lodash/fp/sortBy'
 import uniqBy from 'lodash/fp/uniqBy'
 
 const mapAppointments = (appointments) => {
-  const planned = uniqBy('patientId')(appointments
+  const patients = uniqBy('patientId')(appointments
     .filter(a => a.patientId && a.removed !== true))
-  const canceled = planned.filter(a => a.canceled).length
-  const admitted = planned.filter(a => a.admittedAt).length
-  const noShow = planned.length - canceled - admitted
+
+  const planned = patients.length
+  const canceled = patients.filter(a => a.canceled).length
+  const expected = planned - canceled
+  const admitted = patients.filter(a => a.admittedAt).length
+  const noShow = expected - admitted
 
   return {
-    planned: planned.length,
+    planned,
     canceled,
+    expected,
     admitted,
     noShow
   }

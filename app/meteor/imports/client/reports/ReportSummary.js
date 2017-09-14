@@ -79,13 +79,14 @@ export const Workload = ({ report, __ }) => {
 }
 
 export const NoShowsBox = ({ report, __ }) => {
-  const noShows = idx(report, _ => _.total.noShows.noShows)
+  const expected = idx(report, _ => _.total.patients.total.expected)
+  const noShows = idx(report, _ => _.total.patients.total.noShow)
 
   return (
     <InfoBox text='Nicht erschienen' color='red' icon='user-o'>
       {
         noShows
-        ? <BigPercent part={noShows} of={report.total.patients.total.planned} />
+        ? <BigPercent part={noShows} of={expected} />
         : <Nil />
       }
     </InfoBox>

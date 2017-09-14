@@ -3,19 +3,19 @@ import add from 'lodash/add'
 import some from 'lodash/fp/some'
 import idx from 'idx'
 import { assignedOnly, byTags, sumByKeys } from './util'
-import { mapNoShows } from './mapNoShows'
 
 const mapPatients = ({ report }) => (
   byTags(report.assignees, (tag) => {
     const perAssignee = report.assignees.map((assignee) => ({
       planned: assignee.patients[tag] && assignee.patients[tag].planned,
+      expected: assignee.patients[tag] && assignee.patients[tag].expected,
       actual: assignee.patients[tag] && assignee.patients[tag].actual,
       admitted: assignee.patients[tag] && assignee.patients[tag].admitted,
       noShow: assignee.patients[tag] && assignee.patients[tag].noShow,
       canceled: assignee.patients[tag] && assignee.patients[tag].canceled
     }))
 
-    const sum = sumByKeys(perAssignee, ['planned', 'actual', 'admitted', 'noShow', 'canceled'])
+    const sum = sumByKeys(perAssignee, ['planned', 'expected', 'actual', 'admitted', 'noShow', 'canceled'])
 
     return [ tag, sum ]
   })
@@ -76,7 +76,6 @@ export const mapTotal = ({ report, appointments, messages }) => {
   const hours = mapHours({ report })
   const workload = mapWorkload({ report })
   const revenue = mapRevenue({ report })
-  // const noShows = mapNoShows({ report, appointments, messages })
 
   return {
     assignees,
@@ -84,6 +83,5 @@ export const mapTotal = ({ report, appointments, messages }) => {
     patients,
     workload,
     revenue
-    // noShows
   }
 }

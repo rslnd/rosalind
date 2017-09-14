@@ -39,12 +39,15 @@ const tagMapping = {
 
 describe('reports', () => {
   describe('generate', () => {
-    const fieldsPerTag = ({ planned, hours, admitted = 0, canceled = 0, noShow = 0 }) => {
+    const fieldsPerTag = ({ planned, hours, expected, admitted = 0, canceled = 0, noShow = 0 }) => {
       noShow = noShow || planned
-      if (!hours) { return { planned, admitted, canceled, noShow } }
+      expected = expected || planned
+      if (!hours) { return { planned, expected, admitted, canceled, noShow } }
       return {
         planned,
         plannedPerHour: planned / hours,
+        expected,
+        expectedPerHour: expected / hours,
         admitted,
         admittedPerHour: admitted / hours,
         canceled,
@@ -108,18 +111,22 @@ describe('reports', () => {
         patients: {
           total: {
             planned: 7,
+            expected: 7,
             noShow: 7
           },
           new: {
             planned: 3,
+            expected: 3,
             noShow: 3
           },
           recall: {
             planned: 1,
+            expected: 1,
             noShow: 1
           },
           surgery: {
             planned: 3,
+            expected: 3,
             noShow: 3
           }
         },
