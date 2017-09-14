@@ -1,5 +1,6 @@
 import identity from 'lodash/identity'
 import add from 'lodash/add'
+import sumBy from 'lodash/fp/sumBy'
 import some from 'lodash/fp/some'
 import idx from 'idx'
 import { assignedOnly, byTags, sumByKeys } from './util'
@@ -35,25 +36,25 @@ const mapHours = ({ report }) => {
   }
 }
 
-const mapWorkload = ({ report }) => {
-  const workloads = assignedOnly(report.assignees).map(a => a.workload).filter(identity)
-  const { available, planned, actual } = workloads.reduce((prev, curr) => {
-    return {
-      available: prev.available + curr.available,
-      planned: prev.planned + curr.planned,
-      actual: prev.actual + curr.actual
-    }
-  }, {
-    available: 0,
-    planned: 0,
-    actual: 0
-  })
-
-  return {
-    available,
-    planned,
-    actual
+const calculateWorkload = assignee => {
+  const actual = idx(assignee, _ => _.patients.total.actual)
+  const planned = idx(assignee, _ => _.patients.total.planned)
+  if (actual && planned) {
+    const value = ((actual ** 2) / planned)
+    const weight = actual
+    return { value, weight }
   }
+}
+
+const mapWorkload = ({ report }) => {
+  const workloads = assignedOnly(report.assignees)
+    .map(calculateWorkload)
+    .filter(identity)
+
+  const summedWorkloads = sumBy('value')(workloads)
+  const summedWeights = sumBy('weight')(workloads)
+
+  return summedWorkloads / summedWeights
 }
 
 const mapRevenue = ({ report }) => {

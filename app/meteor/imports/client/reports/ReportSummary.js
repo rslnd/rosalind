@@ -64,14 +64,12 @@ export const NewPatientsPerHourBox = ({ report, __ }) => {
 }
 
 export const Workload = ({ report, __ }) => {
-  const workload = idx(report, _ => _.total.workload.actual) ||
-    idx(report, _ => _.total.workload.planned)
-
+  const workload = report.total.workload
   return (
-    <InfoBox text='Termine' color='aqua' icon='calendar'>
+    <InfoBox text='Auslastung' color='aqua' icon='bars'>
       {
         workload
-        ? <BigPercent part={workload} of={report.total.workload.available} />
+        ? <BigPercent value={workload} />
         : <Nil />
       }
     </InfoBox>

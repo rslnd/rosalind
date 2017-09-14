@@ -105,8 +105,8 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
 
         {/* Patients [Plan, Admitted, Actual] */}
         <Td borderLeft>{idx(assignee, _ => _.patients.total.planned) || <Nil />}</Td>
-        <Td>{idx(assignee, _ => _.patients.total.admitted) || <Nil />}</Td>
-        <Td>{idx(assignee, _ => _.patients.total.actual) || <Nil />}</Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.total.actual)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
@@ -166,8 +166,8 @@ class SummaryRow extends React.Component {
 
         {/* Patients [planned, admitted, actual] */}
         <Td borderLeft>{idx(report, _ => _.total.patients.total.planned) || <Nil />}</Td>
-        <Td>{idx(report, _ => _.total.patients.total.admitted) || <Nil />}</Td>
-        <Td>{idx(report, _ => _.total.patients.total.actual) || <Nil />}</Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.planned)} /></Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.total.actual)} of={idx(report, _ => _.total.patients.total.planned)} /></Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={idx(report, _ => _.total.patients.new.planned)} of={report.total.patients.total.planned} /></Td>
