@@ -6,7 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { NewAppointment } from './NewAppointment'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
-import { getDefaultLength } from '../../../api/appointments/methods/getDefaultLength'
+import { getDefaultLength, isConstraintApplicable } from '../../../api/appointments/methods/getDefaultLength'
 
 export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {
@@ -67,15 +67,17 @@ export class NewAppointmentContainerComponent extends React.Component {
   }
 
   allowedTags () {
+    const date = moment(this.props.time)
+
     const constraint = Schedules.findOne({
       type: 'constraint',
       userId: this.props.assigneeId,
-      weekdays: moment(this.props.time).clone().locale('en').format('ddd').toLowerCase(),
-      start: { $lte: moment(this.props.time).toDate() },
-      end: { $gte: moment(this.props.time).toDate() }
+      weekdays: date.clone().locale('en').format('ddd').toLowerCase(),
+      start: { $lte: date.toDate() },
+      end: { $gte: date.toDate() }
     })
 
-    return constraint && constraint.tags
+    return constraint && isConstraintApplicable({ constraint, date }) && constraint.tags
   }
 
   render () {

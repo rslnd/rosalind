@@ -5,6 +5,15 @@ import { Tags } from '../../tags'
 
 const defaultLength = 5
 
+export const isConstraintApplicable = ({ constraint, date }) => {
+  if (constraint.hourStart && constraint.hourEnd) {
+    return (constraint.hourStart <= date.hours() &&
+    date.hours() <= constraint.hourEnd)
+  } else {
+    return true
+  }
+}
+
 const getLengthConstraint = ({ assigneeId, date }) => {
   if (!date || !assigneeId) {
     return defaultLength
@@ -18,7 +27,7 @@ const getLengthConstraint = ({ assigneeId, date }) => {
     end: { $gte: date.toDate() }
   })
 
-  return (constraint && constraint.length) || defaultLength
+  return (constraint && isConstraintApplicable({ constraint, date }) && constraint.length) || defaultLength
 }
 
 export const getDefaultLength = ({ assigneeId, date, tags }) => {
