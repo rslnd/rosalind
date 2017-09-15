@@ -1,9 +1,10 @@
 import React from 'react'
 import { conditionalFloat, integer } from '../../../util/format'
+import { Nil } from './Nil'
 
 export const Round = ({ number, to, unit }) => {
   if (!number) {
-    return null
+    return <Nil />
   }
 
   let prepend = null

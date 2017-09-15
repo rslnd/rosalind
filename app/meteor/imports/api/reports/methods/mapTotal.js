@@ -4,6 +4,7 @@ import sumBy from 'lodash/fp/sumBy'
 import some from 'lodash/fp/some'
 import idx from 'idx'
 import { assignedOnly, byTags, sumByKeys } from './util'
+import { mapMisattributedRevenue } from './external/eoswin/revenue/mapMisattributedRevenue'
 
 const mapPatients = ({ report }) => (
   byTags(report.assignees, (tag) => {
@@ -71,7 +72,7 @@ const mapRevenue = ({ report }) => {
   }
 }
 
-export const mapTotal = ({ report, appointments, messages }) => {
+const preprocess = ({ report, appointments, messages }) => {
   const patients = mapPatients({ report })
   const assignees = mapAssignees({ report })
   const hours = mapHours({ report })
@@ -85,4 +86,26 @@ export const mapTotal = ({ report, appointments, messages }) => {
     workload,
     revenue
   }
+}
+
+const postprocess = ({ report, total }) => {
+  const attributed = idx(total, _ => _.revenue.actual)
+  if (!attributed) { return total }
+
+  const misattributed = mapMisattributedRevenue({ report, total })
+
+  return {
+    ...total,
+    revenue: {
+      ...total.revenue,
+      misattributed,
+      attributed,
+      actual: misattributed + attributed
+    }
+  }
+}
+
+export const mapTotal = ({ report, appointments, messages }) => {
+  const total = preprocess({ report, appointments, messages })
+  return postprocess({ total, report })
 }

@@ -6,6 +6,7 @@ import { durationFormat } from './shared/durationFormat'
 import { Nil } from './shared/Nil'
 import { Percent } from './shared/Percent'
 import { Round } from './shared/Round'
+import { Icon } from '../components/Icon'
 
 const align = {
   textAlign: 'right'
@@ -117,18 +118,18 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
         <Td><Percent part={idx(assignee, _ => _.patients.recall.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.surgery.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.surgery.actual)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
+        <Td borderLeft>{idx(assignee, _ => _.patients.surgery.planned) || <Nil />}</Td>
+        <Td>{idx(assignee, _ => _.patients.surgery.actual) || <Nil />}</Td>
 
         {/* Kaustik privat [Plan] */}
-        <Td><Percent part={idx(assignee, _ => _.patients.cautery.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
+        <Td>{idx(assignee, _ => _.patients.cautery.planned) || <Nil />}</Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft>{assignee.assigneeId &&
-          <Round number={idx(assignee, _ => _.patients.new.plannedPerHour)} />
+          <Round number={idx(assignee, _ => _.patients.new.plannedPerHour)} /> || <Nil />
         }</Td>
         <Td>{assignee.assigneeId &&
-          <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} />
+          <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} /> || <Nil />
         }</Td>
 
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
@@ -143,7 +144,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
         {
           showRevenue &&
             <Td style={align}>{
-              <Round to={0} unit='€' number={idx(assignee, _ => _.revenue.total.actual)} /> || <Nil />
+              <Round to={0} unit='€' number={idx(assignee, _ => _.revenue.total.actual)} />
             }</Td>
         }
       </tr>
@@ -178,11 +179,11 @@ class SummaryRow extends React.Component {
         <Td><Percent part={idx(report, _ => _.total.patients.recall.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.surgery.planned)} of={report.total.patients.total.planned} /></Td>
-        <Td><Percent part={idx(report, _ => _.total.patients.surgery.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+        <Td borderLeft>{idx(report, _ => _.total.patients.surgery.planned)}</Td>
+        <Td>{idx(report, _ => _.total.patients.surgery.actual)}</Td>
 
         {/* Kaustik privat [Plan] */}
-        <Td><Percent part={idx(report, _ => _.total.patients.cautery.planned)} of={idx(report, _ => _.total.patients.total.planned)} /></Td>
+        <Td>{idx(report, _ => _.total.patients.cautery.actual)}</Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Round unit='⌀' number={idx(report, _ => _.average.patients.new.plannedPerHour)} /></Td>
@@ -192,7 +193,14 @@ class SummaryRow extends React.Component {
         {showRevenue && <Td borderLeft style={align}><Round to={0} unit='⌀ €' number={idx(report, _ => _.average.revenue.actualPerHour)} /></Td>}
 
         {/* Umsatz gesamt */}
-        {showRevenue && <Td style={align}><Round to={0} unit='€' number={idx(report, _ => _.total.revenue.actual)} /></Td>}
+        {showRevenue && <Td style={align}>
+          {idx(report, _ => _.total.revenue.misattributed) &&
+            <small className='text-muted' title='Summe der Leistungen, die nicht anwesenden ÄrztInnen zugerechnet wurde'>
+              + <Round to={0} unit='€' number={idx(report, _ => _.total.revenue.misattributed)} /><br />
+            </small>
+          }
+          <Round to={0} unit='€' number={idx(report, _ => _.total.revenue.actual)} />
+        </Td>}
       </tr>
     )
   }
