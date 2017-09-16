@@ -18,6 +18,8 @@ export class Box extends React.Component {
       'no-padding': this.props.noPadding
     })
 
+    const style = this.props.style || {}
+
     return (
       <div className={boxClasses}>
         {this.props.title &&
@@ -27,7 +29,7 @@ export class Box extends React.Component {
             {this.props.buttons && <div className='pull-right'>{this.props.buttons}</div>}
           </div>
         }
-        <div className={bodyClasses}>{this.props.body || this.props.children}</div>
+        <div className={bodyClasses} style={style}>{this.props.body || this.props.children}</div>
         {
           this.props.footer && this.props.footer
         }

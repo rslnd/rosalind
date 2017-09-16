@@ -21,6 +21,18 @@ const summaryRowStyle = {
   backgroundColor: '#f7f8f9'
 }
 
+const rankStyle = {
+  width: 15
+}
+
+const disclaimerStyle = {
+  backgroundColor: summaryRowStyle.backgroundColor,
+  width: '100%',
+  display: 'block',
+  padding: 5,
+  paddingLeft: rankStyle.width + 17
+}
+
 const colDivider = {
   borderTop: '2px solid #ebf1f2',
   backgroundColor: '#f7f8f9'
@@ -40,7 +52,7 @@ const Td = ({ children, borderLeft }) => (
 export const ReportTableHeader = ({ showRevenue, __ }) => (
   <thead>
     <tr>
-      <th>#</th>
+      <th style={rankStyle}>#</th>
       <th className='col-md-2'>{__('reports.assignee')}</th>
       <th style={align}>Std.</th>
       <th colSpan={3}>PatientInnen</th>
@@ -206,11 +218,23 @@ class SummaryRow extends React.Component {
   }
 }
 
+const Disclaimers = ({ report }) => {
+  const missingReimbursement = idx(report, _ => _.total.patients.missingReimbursement.actual)
+  if (missingReimbursement) {
+    return <small className='text-muted' style={disclaimerStyle}>
+      Bei {missingReimbursement} PatientInnen wurde keine Leistung eingetragen.
+    </small>
+  } else {
+    return null
+  }
+}
+
 export const ReportTable = ({ report, showRevenue, mapUserIdToName, __ }) => (
   <div className='table-responsive enable-select'>
     <table className='table no-margin'>
       <ReportTableHeader showRevenue={showRevenue} __={__} />
       <ReportTableBody report={report} showRevenue={showRevenue} mapUserIdToName={mapUserIdToName} __={__} />
     </table>
+    <Disclaimers report={report} />
   </div>
 )

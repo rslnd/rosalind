@@ -11,10 +11,14 @@ const style = {
   zoom: 0.909
 }
 
+const absolutelyNoPadding = {
+  paddingBottom: 0
+}
+
 export const Report = ({ report, showRevenue, mapUserIdToName, __ }) => (
   <div style={style}>
     <ReportSummary report={report} showRevenue={showRevenue} __={__} />
-    <Box type='info' noPadding>
+    <Box type='info' noPadding style={absolutelyNoPadding}>
       <ReportTable report={report} showRevenue={showRevenue} mapUserIdToName={mapUserIdToName} __={__} />
     </Box>
 
