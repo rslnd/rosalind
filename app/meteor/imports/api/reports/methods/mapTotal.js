@@ -6,22 +6,25 @@ import idx from 'idx'
 import { assignedOnly, byTags, sumByKeys } from './util'
 import { mapMisattributedRevenue } from './external/eoswin/revenue/mapMisattributedRevenue'
 
-const mapPatients = ({ report }) => (
-  byTags(report.assignees, (tag) => {
+const mapPatients = ({ report }) => {
+
+  console.log('mapPatients report.assignees:', report.assignees)
+
+  return byTags(report.assignees, (tag) => {
     const perAssignee = report.assignees.map((assignee) => ({
-      planned: assignee.patients[tag] && assignee.patients[tag].planned,
-      expected: assignee.patients[tag] && assignee.patients[tag].expected,
-      actual: assignee.patients[tag] && assignee.patients[tag].actual,
-      admitted: assignee.patients[tag] && assignee.patients[tag].admitted,
-      noShow: assignee.patients[tag] && assignee.patients[tag].noShow,
-      canceled: assignee.patients[tag] && assignee.patients[tag].canceled
+      planned: idx(assignee, _ => _.patients[tag].planned) || 0,
+      expected: idx(assignee, _ => _.patients[tag].expected) || 0,
+      actual: idx(assignee, _ => _.patients[tag].actual) || 0,
+      admitted: idx(assignee, _ => _.patients[tag].admitted) || 0,
+      noShow: idx(assignee, _ => _.patients[tag].noShow) || 0,
+      canceled: idx(assignee, _ => _.patients[tag].canceled) || 0
     }))
 
     const sum = sumByKeys(perAssignee, ['planned', 'expected', 'actual', 'admitted', 'noShow', 'canceled'])
 
     return [ tag, sum ]
   })
-)
+}
 
 const mapAssignees = ({ report }) => {
   return assignedOnly(report.assignees).length

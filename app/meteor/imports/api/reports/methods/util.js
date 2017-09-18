@@ -3,9 +3,14 @@ import uniq from 'lodash/uniq'
 import fromPairs from 'lodash/fromPairs'
 
 export const getTags = (assignees) => (
-   uniq(flatten(assignees.map((assignee) => (
-    Object.keys(assignee.patients)
-  ))))
+   uniq(
+     flatten(assignees
+      .filter(a => a.patients)
+      .map(assignee =>
+        Object.keys(assignee.patients)
+      )
+    )
+  )
 )
 
 export const byTags = (assignees, iterator) => {
