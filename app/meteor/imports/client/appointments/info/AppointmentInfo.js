@@ -4,7 +4,7 @@ import { Toggle, Choice } from 'belle'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from '../../../util/zerofix'
 import { Icon } from '../../components/Icon'
-import { TagsField } from '../../tags/TagsField'
+import { TagsList } from '../../tags/TagsList'
 import { InlineEdit } from '../../components/form/InlineEdit'
 import { Birthday as BirthdayWithAge } from '../../patients/Birthday'
 import { Stamps } from '../../helpers/Stamps'
@@ -121,10 +121,7 @@ const Birthday = ({ patient, onChange }) => (
 
 const Tags = ({ appointment, onChange }) => (
   <ListItem>
-    <TagsField input={{
-      value: appointment.tags || [],
-      onChange
-    }} />
+    <TagsList tags={appointment.tags || []} onChange={onChange} />
   </ListItem>
 )
 
@@ -188,7 +185,7 @@ export class AppointmentInfo extends React.Component {
             <Day appointment={appointment} />
             <Time appointment={appointment} />
             <Assignee assignee={assignee} />
-            <Tags appointment={appointment} onChange={handleTagChange} />
+            <Tags appointment={appointment} />
             <AppointmentNotes appointment={appointment} onChange={handleEditNote} />
             <ListItem last>
               <Stamps
