@@ -5,6 +5,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Messages } from '../../messages'
+import { getDefaultLength } from '../methods/getDefaultLength'
 
 export const move = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -24,14 +25,18 @@ export const move = ({ Appointments }) => {
       const appointment = Appointments.findOne({ _id: appointmentId })
 
       if (appointment) {
-        const duration = (appointment.end - appointment.start)
+        const duration = getDefaultLength({
+          newAssigneeId,
+          date: moment(newStart),
+          tags: appointment.tags
+        })
         const oldStart = appointment.start
         const oldAssigneeId = appointment.assigneeId
 
         Appointments.update({ _id: appointmentId }, {
           $set: {
             start: newStart,
-            end: moment(newStart).add(duration, 'milliseconds').toDate(),
+            end: moment(newStart).add(duration, 'minutes').toDate(),
             assigneeId: newAssigneeId
           }
         })

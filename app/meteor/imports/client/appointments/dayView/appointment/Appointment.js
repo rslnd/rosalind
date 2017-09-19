@@ -10,6 +10,7 @@ import { format } from '../grid/timeSlots'
 import { background, primaryActive, darkGrayDisabled, darkGray } from '../../../css/global'
 import { color, lightness } from 'kewler'
 import namecase from 'namecase'
+import { getDefaultLength } from '../../../../api/appointments/methods/getDefaultLength'
 
 const styles = {
   appointment: {
@@ -66,11 +67,16 @@ class AppointmentItem extends React.Component {
     let timeStart, timeEnd, assigneeId
 
     if (this.props.isMoving) {
-      const duration = (appointment.end - appointment.start)
       const newStartTime = moment(this.props.moveToTime)
+      const newAssigneeId = this.props.moveToAssigneeId
+      const duration = getDefaultLength({
+        newAssigneeId,
+        date: newStartTime,
+        tags: appointment.tags
+      })
       timeStart = newStartTime.format('[T]HHmm')
-      timeEnd = newStartTime.add(duration, 'milliseconds').format('[T]HHmm')
-      assigneeId = this.props.moveToAssigneeId
+      timeEnd = newStartTime.add(duration, 'minutes').format('[T]HHmm')
+      assigneeId = newAssigneeId
     } else {
       timeStart = appointment.timeStart || start.format('[T]HHmm')
       timeEnd = appointment.timeEnd || moment(appointment.end).format('[T]HHmm')
