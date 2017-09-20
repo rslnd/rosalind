@@ -8,7 +8,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { Reports } from '../../'
 import { Events } from '../../../events'
 import { Users } from '../../../users'
-import { dateToDay, dayToSlug } from '../../../../util/time/day'
+import { dateToDay, dayToDate, dayToSlug } from '../../../../util/time/day'
 import { renderEmail } from '../../methods/renderEmail'
 import { renderPdf } from '../../methods/renderPdf'
 
@@ -30,10 +30,12 @@ export const sendEmail = new ValidatedMethod({
 
     console.log('[Reports] sendEmail')
 
-    const day = dateToDay(moment())
-    const todaysReport = Reports.findOne({ day })
+    const test = (process.env.NODE_ENV !== 'production')
 
-    if (!todaysReport) {
+    const day = args.day || dateToDay(moment(args))
+    const report = Reports.findOne({ day })
+    const isTodaysReport = moment().isSame(dayToDate(report.day), 'day')
+    if (!report || (!test && !isTodaysReport)) {
       throw new Meteor.Error(404, 'There is no report for today, and no email will be sent')
     }
 
@@ -41,13 +43,13 @@ export const sendEmail = new ValidatedMethod({
     const mapAssigneeType = type => TAPi18n.__(`reports.assigneeType__${type}`, null, 'de-AT')
     const mapUserIdToName = userId => userIdToNameMapping[userId]
 
-    const { title, text } = renderEmail({ report: todaysReport, mapUserIdToName, mapAssigneeType })
-    const pdf = await renderPdf({ report: todaysReport })
+    const { title, text } = renderEmail({ report, mapUserIdToName, mapAssigneeType })
+    const pdf = await renderPdf({ report })
     const filename = `${dayToSlug(day)} Tagesbericht ${process.env.CUSTOMER_NAME}.pdf`
 
     let recipients = args.to || process.env.MAIL_REPORTS_TO.split(',')
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (test) {
       const testEmail = 'me+TEST@albertzak.com'
       console.log('[Reports] sendEmail: Overriding recipients because not running in production enviroment', {
         previousRecipients: recipients,
@@ -70,6 +72,6 @@ export const sendEmail = new ValidatedMethod({
       ]
     })
 
-    Events.post('reports/sendEmail', { reportId: todaysReport._id })
+    Events.post('reports/sendEmail', { reportId: report._id })
   }
 })

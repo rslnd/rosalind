@@ -9,6 +9,8 @@ import { Icon } from '../components/Icon'
 import { DateNavigation } from '../components/DateNavigation'
 import { Box } from '../components/Box'
 import { Report } from './Report'
+import { Preview } from './Preview'
+import { FooterContainer } from '../layout/FooterContainer'
 
 export class ReportsScreen extends React.Component {
   constructor (props) {
@@ -75,12 +77,30 @@ export class ReportsScreen extends React.Component {
                   mapUserIdToName={this.props.mapUserIdToName}
                   __={this.props.__}
                 />
+                <FooterContainer />
               </div>
               : <div key='noReports'>
                 <Box type='warning' title={TAPi18n.__('ui.notice')}>
                   <p>{TAPi18n.__('reports.empty')}</p>
                 </Box>
               </div>
+            }
+          </FlipMove>
+
+          <FlipMove duration={230}>
+            {
+              this.props.preview &&
+                <div key='previewTable'>
+                  <Preview
+                    preview={this.props.preview}
+                    showRevenue={this.state.showRevenue}
+                    mapUserIdToName={this.props.mapUserIdToName}
+                    mapUserIdToUsername={this.props.mapUserIdToUsername}
+                    __={this.props.__}
+                  />
+                  {/* Signals that the page has fully loaded when rendering PDF */}
+                  <span className='weekPreviewLoaded' />
+                </div>
             }
           </FlipMove>
 

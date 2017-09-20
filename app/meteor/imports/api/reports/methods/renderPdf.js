@@ -1,50 +1,63 @@
-import chromeRemote from 'chrome-remote-interface'
+import puppeteer from 'puppeteer'
 import delay from 'await-delay'
 import { dayToSlug } from '../../../util/time/day'
 
-// Paper size in Inches
-const A4 = {
-  width: 11.7,
-  height: 8.3
+const printOptions = {
+  format: 'A4',
+  landscape: true,
+  printBackground: true,
+  margin: {
+    top: '1.3cm',
+    right: '1.3cm',
+    bottom: '1.3cm',
+    left: '1.3cm'
+  }
 }
 
-const printToPDF = async ({ url, port, printOptions }) => {
-  return new Promise((resolve, reject) => {
-    chromeRemote({ port }, async client => {
-      try {
-        const { Page } = client
-        await Page.enable()
-        await Page.navigate({ url })
-        await Page.loadEventFired()
+const isLoaded = (html = '') =>
+  html.match(/weekPreviewLoaded/g)
 
-        await delay(5000)
+const printToPDF = async ({ url, printOptions, isLoaded }) => {
+  const browser = await puppeteer.launch()
 
-        const pdf = await Page.printToPDF(printOptions)
-        const buffer = Buffer.from(pdf.data, 'base64')
+  try {
+    const page = await browser.newPage()
 
-        resolve(buffer)
-      } catch (e) {
-        reject(e)
-      } finally {
-        client.close()
+    await page.goto(url, { waitUntil: 'networkidle' })
+
+    let loaded = false
+    let retries = 0
+    do {
+      await delay(2000)
+      const html = await page.evaluate(() => document.body.innerHTML)
+      loaded = isLoaded(html)
+
+      if (!isLoaded) {
+        retries++
+        console.log('[Reports] renderPdf: Still loading, retry', retries)
+        if (retries > 30) {
+          console.error(html)
+          throw new Error(`[Reports] renderPdf: Failed to load`)
+        }
       }
-    })
-  })
+    } while (!loaded)
+
+    await delay(500)
+
+    const buffer = await page.pdf(printOptions)
+
+    return buffer
+  } catch (e) {
+    console.error('[Reports] renderPdf', e)
+  } finally {
+    await browser.close()
+  }
 }
 
 export const renderPdf = async ({ report }) => {
-  const port = 9222
-  const printOptions = {
-    landscape: true,
-    displayHeaderFooter: false,
-    printBackground: true,
-    paperWidth: A4.width,
-    paperHeight: A4.height
-  }
-
   const slug = dayToSlug(report.day)
   const url = `http://127.0.0.1:${process.env.PORT}/reports/${slug}#print`
-  const pdf = await printToPDF({ url, port, printOptions })
+  const pdf = await printToPDF({ url, printOptions, isLoaded })
 
   return pdf
 }

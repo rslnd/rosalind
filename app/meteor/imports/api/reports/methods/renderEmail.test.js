@@ -42,22 +42,21 @@ describe('reports', () => {
       expect(equalizeWhitespace(rendered)).to.include('Gesamtumsatz: € 5 859')
       expect(rendered).to.include('ÄrztInnen: 5')
       expect(rendered).to.include('Neu / Stunde: 6,2')
-      expect(rendered).to.include('Termine: 86%')
     })
 
     it('renders assignee ranking', () => {
       const rendered = renderBody({ report, mapUserIdToName, mapAssigneeType })
       expect(equalizeWhitespace(rendered)).to.include(dedent`
       € 1 713
-      Termine: 81%
       Neu / Stunde: 8,4
+      Auslastung: 85%
       PatientInnen: 43
       OPs: 5
 
       2 - Dr. B
       Umsatz: € 1 120
-      Termine: 75%
       Neu / Stunde: 8,5
+      Auslastung: 77%
       PatientInnen: 36
       OPs: 1`)
     })

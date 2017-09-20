@@ -341,23 +341,9 @@ export const report = {
         'planned': 1
       }
     },
-    'workload': {
-      'available': 252,
-      'planned': 251,
-      'actual': 216
-    },
+    'workload': 0.9861904761905,
     'revenue': {
       'actual': 5858.53
-    },
-    'noShows': {
-      'remindedCanceled': 3,
-      'notRemindedCanceled': 1,
-      'remindedNoShow': 15,
-      'notRemindedNoShow': 15,
-      'reminded': 127,
-      'notReminded': 81,
-      'canceled': 4,
-      'noShows': 30
     }
   },
   'average': {

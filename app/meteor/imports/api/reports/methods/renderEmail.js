@@ -5,12 +5,13 @@ import dedent from 'dedent'
 import { dayToDate } from '../../../util/time/day'
 import { float, percentage, currencyRounded } from '../../../util/format'
 
-const notNull = s => s &&
-  (typeof s === 'string' && !s.match(/false|undefined| null|NaN/g) ||
-  (typeof s === 'number' && s !== 0))
+const isNull = s => s &&
+  (typeof s === 'string' && s.match(/false|undefined| null|NaN/g) ||
+  (typeof s === 'string' && s.length === 0) ||
+  (typeof s === 'number' && s === 0))
 
 const renderLine = (text, value, separator = ': ') => {
-  if (text && value && notNull(value)) {
+  if (text && value && !isNull(value)) {
     return [text, value].join(separator)
   }
 }
@@ -26,9 +27,8 @@ export const renderSummary = ({ report }) => {
   return dedent`
     Gesamtumsatz: ${currencyRounded(idx(report, _ => _.total.revenue.actual))}
     Neu / Stunde: ${float(idx(report, _ => _.average.patients.new.actualPerHour))}
-    Termine: ${percentage({ part: idx(report, _ => _.total.workload.actual), of: idx(report, _ => _.total.workload.available) })}
-
     ÄrztInnen: ${report.total.assignees}
+    Auslastung: ${percentage({ value: report.total.workload })}
   `
 }
 
@@ -37,22 +37,25 @@ export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
     const name = mapUserIdToName(assignee.assigneeId) || assignee.type && mapAssigneeType(assignee.type) || 'Ohne Zuweisung'
     const rankAndName = assignee.assigneeId && `${i + 1} - ${name}` || name
     const revenue = assignee.revenue && currencyRounded(idx(assignee, _ => _.revenue.total.actual))
-    const workload = assignee.workload && percentage({ part: assignee.patients.total.actual, of: assignee.workload.planned })
     const newPerHour = float(idx(assignee, _ => _.patients.new.actualPerHour))
     const patientsActual = idx(assignee, _ => _.patients.total.actual)
     const patientsPlanned = idx(assignee, _ => _.patients.total.planned)
     const surgery = idx(assignee, _ => _.patients.surgery.actual)
     const cautery = idx(assignee, _ => _.patients.cautery.planned)
+    const workload = percentage({
+      part: idx(assignee, _ => _.workload.actual),
+      of: idx(assignee, _ => _.workload.available)
+    })
 
     return [
       rankAndName,
       renderLine('Umsatz', revenue),
-      renderLine('Termine', workload),
       renderLine('Neu / Stunde', newPerHour),
+      renderLine('Auslastung', workload),
       renderLine('PatientInnen', patientsActual || patientsPlanned),
       renderLine('OPs', surgery),
       renderLine('Kaustik', cautery)
-    ].filter(identity).filter(notNull).join('\n').replace(/(\n+)/g, '\n')
+    ].filter(identity).filter(s => !isNull(s)).join('\n').replace(/(\n+)/g, '\n')
   }
 
   const body = report.assignees.map(renderAssignee).join('\n\n')
@@ -79,6 +82,10 @@ export const renderEmail = ({ report, mapUserIdToName, mapAssigneeType }) => {
   const footer = renderFooter({ report })
 
   const text = [header, summary, body, footer].join('\n\n')
+
+  if (isNull(title) || isNull(text)) {
+    throw new Error(`Email contains 'null': ${title} - ${text}`)
+  }
 
   return { title, text }
 }

@@ -1,3 +1,4 @@
+import idx from 'idx'
 import omit from 'lodash/omit'
 import fromPairs from 'lodash/fromPairs'
 import moment from 'moment-timezone'
@@ -13,11 +14,13 @@ import { ReportsScreen } from './ReportsScreen'
 
 const composer = (props, onData) => {
   if (Meteor.subscribe('reports').ready()) {
-    const dateParam = props.match && props.match.params && props.match.params.date
+    const dateParam = idx(props, _ => _.match.params.date)
     const date = moment(dateParam)
     const day = omit(dateToDay(date), 'date')
     const report = Reports.findOne({ day })
-    const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ])
+
+    const isPrint = props.location.hash === '#print'
+    const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
 
     const generateReport = () => {
       return Reports.actions.generate.callPromise({ day })
@@ -28,7 +31,7 @@ const composer = (props, onData) => {
     }
 
     const sendEmailTest = () => {
-      Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com' })
+      Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com', day })
     }
 
     const sendEmail = () => {
@@ -38,9 +41,12 @@ const composer = (props, onData) => {
     const userIdToNameMapping = fromPairs(Meteor.users.find({}).fetch().map(u => [u._id, u.fullNameWithTitle()]))
     const mapUserIdToName = id => userIdToNameMapping[id]
 
+    const userIdToUsernameMapping = fromPairs(Meteor.users.find({}).fetch().map(u => [u._id, u.username]))
+    const mapUserIdToUsername = id => userIdToUsernameMapping[id]
+
     const __ = (key, opts) => TAPi18n.__(key, opts)
 
-    onData(null, {
+    const data = {
       date,
       report,
       generateReport,
@@ -49,7 +55,15 @@ const composer = (props, onData) => {
       viewAppointments,
       canShowRevenue,
       mapUserIdToName,
-      __ })
+      mapUserIdToUsername,
+      __
+    }
+
+    onData(null, data)
+
+    // Load preview data in background
+    Reports.actions.generatePreview.callPromise({ day })
+    .then(preview => onData(null, { ...data, preview }))
   }
 }
 

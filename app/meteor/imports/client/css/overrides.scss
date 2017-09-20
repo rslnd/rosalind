@@ -262,3 +262,7 @@ h6,
 .DayPickerKeyboardShortcuts__panel {
   display: none;
 }
+
+.box {
+  page-break-inside: avoid;
+}

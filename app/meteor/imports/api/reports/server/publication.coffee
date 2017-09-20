@@ -12,7 +12,7 @@ module.exports = ->
     check options, Match.Optional
       date: Match.Optional(Date)
 
-    showRevenue = (Roles.userIsInRole(@userId, ['reports-showRevenue', 'admin'], Roles.GLOBAL_GROUP))
+    showRevenue = (Roles.userIsInRole(@userId, ['reports-showRevenue', 'admin'], Roles.GLOBAL_GROUP)) || isTrustedNetwork(@connection.clientAddress)
     if (showRevenue)
       return Reports.find({})
     else
