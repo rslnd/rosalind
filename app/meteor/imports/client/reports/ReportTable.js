@@ -195,7 +195,7 @@ class SummaryRow extends React.Component {
         <Td>{idx(report, _ => _.total.patients.surgery.actual)}</Td>
 
         {/* Kaustik privat [Plan] */}
-        <Td>{idx(report, _ => _.total.patients.cautery.actual)}</Td>
+        <Td>{/* TODO: Fix insurance code mapping */}</Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Round unit='⌀' number={idx(report, _ => _.average.patients.new.plannedPerHour)} /></Td>
