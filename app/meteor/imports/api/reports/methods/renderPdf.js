@@ -18,7 +18,9 @@ const isLoaded = (html = '') =>
   html.match(/weekPreviewLoaded/g)
 
 const printToPDF = async ({ url, printOptions, isLoaded }) => {
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  })
 
   try {
     const page = await browser.newPage()
