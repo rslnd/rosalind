@@ -130,7 +130,12 @@ describe('reports', () => {
             noShow: 3
           }
         },
-        workload: NaN,
+        workload: {
+          actual: 0,
+          planned: 3,
+          available: 138,
+          weighted: NaN
+        },
         revenue: {}
       },
       average: {}

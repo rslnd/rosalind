@@ -37,7 +37,7 @@ const mapHours = ({ report }) => {
   }
 }
 
-const calculateWorkload = assignee => {
+const calculateWeightedWorkload = assignee => {
   const actual = idx(assignee, _ => _.patients.total.actual)
   const planned = idx(assignee, _ => _.patients.total.planned)
   if (actual && planned) {
@@ -47,15 +47,32 @@ const calculateWorkload = assignee => {
   }
 }
 
-const mapWorkload = ({ report }) => {
-  const workloads = assignedOnly(report.assignees)
-    .map(calculateWorkload)
+const mapWeightedWorkload = ({ report }) => {
+  const weightedworkloads = assignedOnly(report.assignees)
+    .map(calculateWeightedWorkload)
     .filter(identity)
 
-  const summedWorkloads = sumBy('value')(workloads)
-  const summedWeights = sumBy('weight')(workloads)
+  const summedWeightedWorkloads = sumBy('value')(weightedworkloads)
+  const summedWeights = sumBy('weight')(weightedworkloads)
 
-  return summedWorkloads / summedWeights
+  return summedWeightedWorkloads / summedWeights
+}
+
+const mapWorkload = ({ report }) => {
+  const summed = report.assignees
+    .map(a => a.workload)
+    .reduce((acc, curr) => {
+      return {
+        available: acc.available + curr && curr.available || acc.available,
+        planned: acc.planned + curr && curr.planned || acc.planned,
+        actual: acc.actual + curr && curr.actual || acc.actual
+      }
+    }, { available: 0, planned: 0, actual: 0 })
+
+  return {
+    ...summed,
+    weighted: mapWeightedWorkload({ report })
+  }
 }
 
 const mapRevenue = ({ report }) => {
@@ -92,7 +109,7 @@ const postprocess = ({ report, total }) => {
   const attributed = idx(total, _ => _.revenue.actual)
   if (!attributed) { return total }
 
-  const misattributed = mapMisattributedRevenue({ report, total })
+  const misattributed = mapMisattributedRevenue({ report, total }) || 0
 
   return {
     ...total,

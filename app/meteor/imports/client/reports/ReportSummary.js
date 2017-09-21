@@ -64,7 +64,7 @@ export const NewPatientsPerHourBox = ({ report, __ }) => {
 }
 
 export const Workload = ({ report, __ }) => {
-  const workload = report.total.workload
+  const workload = report.total.workload.weighted
   return (
     <InfoBox text='Auslastung' color='aqua' icon='bars'>
       {

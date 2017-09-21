@@ -341,7 +341,9 @@ export const report = {
         'planned': 1
       }
     },
-    'workload': 0.9861904761905,
+    'workload': {
+      weighted: 0.9861904761905
+    },
     'revenue': {
       'actual': 5858.53
     }

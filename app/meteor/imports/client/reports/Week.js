@@ -1,5 +1,7 @@
 import React from 'react'
 import moment from 'moment'
+import idx from 'idx'
+import { percentage } from '../../util/format'
 import { dayToDate } from '../../util/time/day'
 
 const colorMapping = {
@@ -55,7 +57,10 @@ const Day = ({ preview, mapUserIdToUsername }) => (
       .filter(a => a.assigneeId)
       .map(mapUserIdToUsername)
     }
-    workload={preview.total.patients.total.planned}
+    workload={percentage({
+      value: idx(preview, _ => _.total.workload.weighted) ||
+        (100 * idx(preview, _ => _.total.workload.planned) / idx(preview, _ => _.total.workload.available))
+    })}
   />
 )
 

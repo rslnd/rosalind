@@ -28,7 +28,7 @@ export const renderSummary = ({ report }) => {
     Gesamtumsatz: ${currencyRounded(idx(report, _ => _.total.revenue.actual))}
     Neu / Stunde: ${float(idx(report, _ => _.average.patients.new.actualPerHour))}
     ÄrztInnen: ${report.total.assignees}
-    Auslastung: ${percentage({ value: report.total.workload })}
+    Auslastung: ${percentage({ value: report.total.workload.weighted })}
   `
 }
 
