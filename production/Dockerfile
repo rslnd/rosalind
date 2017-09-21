@@ -24,13 +24,6 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
     && apt-get purge --auto-remove -y curl \
     && rm -rf /src/*.deb
 
-RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /node_modules
-
-USER pptruser
-
 RUN bash -c "time bash -c 'yarn \
   && npm cache clear --force \
   && mv /opt/app/node_modules /opt/node_modules/ \
@@ -44,6 +37,12 @@ RUN ln -s node_modules app/programs/server/node_modules \
 
 WORKDIR /opt/app
 
+RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
+    && mkdir -p /home/pptruser/Downloads \
+    && chown -R pptruser:pptruser /home/pptruser \
+    && chown -R pptruser:pptruser /opt/node_modules/
+
+USER pptruser
 ENV PORT 80
 EXPOSE 80
 
