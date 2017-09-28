@@ -9,11 +9,15 @@ export const NEW = [
 export const SURGERY = [
   // BVA VA KFA
   'O9H', // Technisch einfache Operation größerer Geschwülste
+  '09H',
   'O10H', // Technisch schwierige Operation größerer Geschwülste
+  '010H',
 
   // SVA
   'O8H', // Lipom, Basaliom, Nävus, OP mit Naht und Histo
+  '08H',
   'O8P', // PE und Naht 3 Stk pro Sitzung
+  '08P',
 
   // WGKK
   '502' // OP Hauttumore (Histo/Naht), Exzision Nävus, Basaliom
@@ -31,7 +35,7 @@ export const CAUTERY = [
 
   // WGKK
   '503', // OP oberflächliche Geschwülste (Atherom, Fibrom, Lipom) mit jeder Methode außer scharfem Löffel (ohne Histo/Naht) - kaustik weil ohne naht
-  
+
   '504', // Kaustik (außer Warzen)
   '506', // Exstirpation von Hauttumoren, z.B. mit scharfem Löffel (503 ist besser)
   '520', // Operative Behandlung von Abszessen, Furunkeln und Condylomen (egal wie)
@@ -43,7 +47,7 @@ export const CRYO = [
   '507', // Kroytherapie mit flüssigem Stickstoff (außer Warzen)  
   '72', //  Hühneraugen/Warzenentfernung, alle Methoden pro Sitzung (ausgenommen Excision und Naht)
   '26E', // Exkochleation oder Ätzung oder Kaustik von 3Stk. Warzen in einer Sitzung - Stickstiff
-  '38R' //Keratosen
+  '38R' // Keratosen
 ]
 
 export const OTHER = [
@@ -105,7 +109,19 @@ export const OTHER = [
   '538', // "Muttermalkontrolle"
   '525',
   '25',
-  'ORD'
+  'ORD',
+
+  // Regiezuschlag etc.
+  '941',
+  'RI',
+  '942',
+  'RII',
+  '542',
+  'BF',
+  'E2',
+  '8D',
+  '8E',
+  '8F'
 ]
 
 export const isNew = (codes) =>
@@ -117,8 +133,11 @@ export const isSurgery = (codes) =>
 export const isCautery = (codes) =>
   some(c => CAUTERY.includes(c))(codes)
 
+export const isCryo = (codes) =>
+  some(c => CRYO.includes(c))(codes)
+
 export const isOther = (codes) =>
   some(c => OTHER.includes(c))(codes)
 
 export const isAny = (codes) =>
-  isNew(codes) || isSurgery(codes) || isCautery(codes) || isOther(codes)
+  isNew(codes) || isSurgery(codes) || isCautery(codes) || isCryo(codes) || isOther(codes)
