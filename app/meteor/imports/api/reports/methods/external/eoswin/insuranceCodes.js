@@ -8,38 +8,46 @@ export const NEW = [
 
 export const SURGERY = [
   // BVA VA KFA
-  '09H',
-  '010H',
+  'O9H', // Technisch einfache Operation größerer Geschwülste
+  'O10H', // Technisch schwierige Operation größerer Geschwülste
 
   // SVA
-  '08H',
-  '08P',
+  'O8H', // Lipom, Basaliom, Nävus, OP mit Naht und Histo
+  'O8P', // PE und Naht 3 Stk pro Sitzung
 
   // WGKK
-  '502',
-  '503',
-  '506'
+  '502' // OP Hauttumore (Histo/Naht), Exzision Nävus, Basaliom
+
 ]
 
 export const CAUTERY = [
   // BVA VA KFA
-  '26D',
-  '26E',
-  '26F',
-  '38M',
-  'O16A',
+  '26F', // Abtragen leicht zugänglicher Geschwülste oder dermaler Nävus, Fibrom
+  '26D', // Exkochleation oder Ätzung oder Kaustik einer Warze, Achtung: Besser 26e verwenden!
+  '38M', // Kaustik - außer Warzen genaue LOKALISATION
+
+  'O16A', // Elektrokaustik bei Condylome und akt. Keratose/LOKALISATION
   '016A',
 
   // WGKK
-  '504',
-  '507',
-  '520',
-  '534',
-  '72',
-  '73'
+  '503', // OP oberflächliche Geschwülste (Atherom, Fibrom, Lipom) mit jeder Methode außer scharfem Löffel (ohne Histo/Naht) - kaustik weil ohne naht
+  
+  '504', // Kaustik (außer Warzen)
+  '506', // Exstirpation von Hauttumoren, z.B. mit scharfem Löffel (503 ist besser)
+  '520', // Operative Behandlung von Abszessen, Furunkeln und Condylomen (egal wie)
+
+  '534' // Operative Entfernung kleiner Geschwülste an den Lidern (egal wie)
+]
+
+export const CRYO = [
+  '507', // Kroytherapie mit flüssigem Stickstoff (außer Warzen)  
+  '72', //  Hühneraugen/Warzenentfernung, alle Methoden pro Sitzung (ausgenommen Excision und Naht)
+  '26E', // Exkochleation oder Ätzung oder Kaustik von 3Stk. Warzen in einer Sitzung - Stickstiff
+  '38R' //Keratosen
 ]
 
 export const OTHER = [
+  '73',
   // BVA VA KFA
   'TA',
   'E2',
@@ -49,7 +57,6 @@ export const OTHER = [
   '18C',
   '38V',
   '38VV',
-  '38R',
   'RZI',
   'RZII',
   '15A',
@@ -62,7 +69,6 @@ export const OTHER = [
   '11Q',
   '11R',
   '17A',
-  '',
   '11A',
   '11B',
 
@@ -96,7 +102,7 @@ export const OTHER = [
   '90',
   '535',
   '542',
-  '538',
+  '538', // "Muttermalkontrolle"
   '525',
   '25',
   'ORD'
