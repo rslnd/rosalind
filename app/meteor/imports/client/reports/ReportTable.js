@@ -27,6 +27,7 @@ const rankStyle = {
 
 const disclaimerStyle = {
   backgroundColor: summaryRowStyle.backgroundColor,
+  borderTop: '1px solid #ebf1f2',
   width: '100%',
   display: 'block',
   padding: 5,
@@ -219,10 +220,19 @@ class SummaryRow extends React.Component {
 }
 
 const Disclaimers = ({ report }) => {
-  const missingReimbursement = idx(report, _ => _.total.patients.missingReimbursement.actual)
-  if (missingReimbursement) {
+  const missingReimbursement = idx(report, _ => _.total.patients.missingReimbursement.actual) || 0
+  const misattributedRevenue = idx(report, _ => _.total.revenue.misattributed) || 0
+
+  if (missingReimbursement < 0 || misattributedRevenue > 0) {
     return <small className='text-muted' style={disclaimerStyle}>
-      Bei {missingReimbursement} PatientInnen wurde keine Leistung eingetragen.
+      {(missingReimbursement > 0) && <span>
+        Bei {missingReimbursement} PatientInnen wurde keine Leistung eingetragen.&emsp;
+      </span>}
+
+      {(misattributedRevenue > 0) && <span>
+        Falsch zugewiesener Umsatz:&nbsp;
+        <Round to={0} unit='€' number={misattributedRevenue} />
+      </span>}
     </small>
   } else {
     return null
