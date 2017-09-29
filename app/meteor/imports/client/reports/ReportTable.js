@@ -228,18 +228,19 @@ class SummaryRow extends React.Component {
   }
 }
 
-const Disclaimers = ({ report }) => {
+const Disclaimers = ({ report, __ }) => {
   const missingReimbursement = idx(report, _ => _.total.patients.missingReimbursement.actual) || 0
   const misattributedRevenue = idx(report, _ => _.total.revenue.misattributed) || 0
 
   if (missingReimbursement < 0 || misattributedRevenue > 0) {
     return <small className='text-muted' style={disclaimerStyle}>
       {(missingReimbursement > 0) && <span>
-        Bei {missingReimbursement} PatientInnen wurde keine Leistung eingetragen.&emsp;
+        {__('reports.missingReimbursement', { count: missingReimbursement })}
+        &emsp;
       </span>}
 
       {(misattributedRevenue > 0) && <span>
-        Falsch zugewiesener Umsatz:&nbsp;
+        {__('reports.misattributedRevenue')}:&nbsp;
         <Round to={0} unit='€' number={misattributedRevenue} />
       </span>}
     </small>
@@ -254,6 +255,6 @@ export const ReportTable = ({ report, showRevenue, mapUserIdToName, __ }) => (
       <ReportTableHeader showRevenue={showRevenue} __={__} />
       <ReportTableBody report={report} showRevenue={showRevenue} mapUserIdToName={mapUserIdToName} __={__} />
     </table>
-    <Disclaimers report={report} />
+    <Disclaimers report={report} __={__} />
   </div>
 )

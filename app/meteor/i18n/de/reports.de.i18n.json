@@ -24,6 +24,9 @@
     "patients": "PatientInnen",
     "patientsNew": "Neue PatientInnen",
     "patientsNewPerHour": "Neue PatientInnen",
-    "assigneeHours": "Arbeitszeit"
+    "assigneeHours": "Arbeitszeit",
+    "missingReimbursement": "Bei __count__ PatientIn wurde keine Leistung eingetragen.",
+    "missingReimbursement_plural": "Bei __count__ PatientInnen wurde keine Leistung eingetragen.",
+    "misattributedRevenue": "Falsch zugewiesener Umsatz"
   }
 }
