@@ -13,13 +13,14 @@ describe('ui', () => {
         it('should reject missing fields when creating new patient', () => {
           expect(validate({
             patientId: 'newPatient'
-          })).to.have.keys(['lastName', 'telephone', 'tags'])
+          })).to.have.keys(['lastName', 'firstName', 'telephone', 'tags'])
         })
 
         it('should reject missing birthday when creating new patient', () => {
           expect(validate({
             patientId: 'newPatient',
             lastName: 'Ok',
+            firstName: 'Ok',
             telephone: '12345',
             birthday: '111111'
           })).to.have.keys(['birthday', 'tags'])
@@ -29,6 +30,7 @@ describe('ui', () => {
           expect(validate({
             patientId: 'newPatient',
             lastName: 'Ok',
+            firstName: 'Ok',
             telephone: '12345',
             tags: [1],
             birthday: { day: 1, month: 2, year: 3 }
@@ -39,6 +41,7 @@ describe('ui', () => {
           expect(validate({
             patientId: 'newPatient',
             lastName: 'Ok',
+            firstName: 'Ok',
             tags: [1],
             telephone: '12345'
           })).to.eql({})

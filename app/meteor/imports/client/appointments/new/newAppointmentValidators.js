@@ -25,6 +25,10 @@ export const validate = (values) => {
       errors.lastName = 'patients.lastNameRequired'
     }
 
+    if (!values.firstName) {
+      errors.firstName = 'patients.firstNameRequired'
+    }
+
     if (values.birthday && !validateDay(values.birthday)) {
       errors.birthday = 'patients.birthdayRequired'
     }
