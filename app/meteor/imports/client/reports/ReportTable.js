@@ -7,6 +7,7 @@ import { Nil } from './shared/Nil'
 import { Percent } from './shared/Percent'
 import { Round } from './shared/Round'
 import { Icon } from '../components/Icon'
+import { percentage } from '../../util/format'
 
 const align = {
   textAlign: 'right'
@@ -178,10 +179,18 @@ class SummaryRow extends React.Component {
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <Td>{report.total.hours && durationFormat(report.total.hours.planned)}</Td>
 
-        {/* Patients [planned, admitted, actual] */}
+        {/* Patients [planned, admitted, weighted workload] */}
         <Td borderLeft>{idx(report, _ => _.total.patients.total.expected) || <Nil />}</Td>
         <Td><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
-        <Td><Percent part={idx(report, _ => _.total.patients.total.actual)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
+        <Td>
+          <span>
+            {idx(report, _ => _.total.patients.total.actual)}
+            <small className='text-muted'>
+              <br />
+              {percentage({ value: idx(report, _ => _.total.workload.weighted) })}
+            </small>
+          </span>
+        </Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={idx(report, _ => _.total.patients.new.expected)} of={report.total.patients.total.expected} /></Td>
