@@ -3,7 +3,7 @@ import mapValues from 'lodash/fp/mapValues'
 import add from 'lodash/fp/add'
 import groupBy from 'lodash/fp/groupBy'
 import identity from 'lodash/fp/identity'
-import { isNew, isSurgery, isCautery, isAny } from '../insuranceCodes'
+import { isNew, isSurgery, isCautery, isCryo, isAny } from '../insuranceCodes'
 
 export const preprocessJournal = rows => {
   const mapped = rows.map(mapRow).filter(identity)
@@ -26,6 +26,7 @@ const parseAppointmentType = (row) => {
     isNew: isNew(codes),
     isSurgery: isSurgery(codes),
     isCautery: isCautery(codes),
+    isCryo: isCryo(codes),
     isMissingReimbursement: isMissingReimbursement(row.Text),
     assignee: row.Assignee
   }
@@ -44,10 +45,11 @@ const sumRows = (acc, curr, i) => {
   const _new = incrementIf(curr.isNew)(acc.new)
   const surgery = incrementIf(curr.isSurgery)(acc.surgery)
   const cautery = incrementIf(curr.isCautery)(acc.cautery)
-  const missingReimbursement = incrementIf(curr.isMissingReimbursement)(acc.missingReimbursement)  
+  const cryo = incrementIf(curr.isCryo)(acc.cryo)
+  const missingReimbursement = incrementIf(curr.isMissingReimbursement)(acc.missingReimbursement)
   const recall = total - _new
 
-  return { total, new: _new, recall, surgery, cautery, missingReimbursement }
+  return { total, new: _new, recall, surgery, cautery, cryo, missingReimbursement }
 }
 
 export const incrementIf = condition => value =>
