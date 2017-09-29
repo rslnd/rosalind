@@ -117,29 +117,29 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <td style={align}>{assignee.assigneeId && assignee.hours && durationFormat(assignee.hours.planned)}</td>
 
-        {/* Patients [Plan, Admitted, Actual] */}
-        <Td borderLeft>{idx(assignee, _ => _.patients.total.planned) || <Nil />}</Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.total.actual)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
+        {/* Patients [Plan=Expected, Admitted, Actual] */}
+        <Td borderLeft>{idx(assignee, _ => _.patients.total.expected) || <Nil />}</Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
+        <Td><Percent part={idx(assignee, _ => _.patients.total.actual)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
         <Td><Percent part={idx(assignee, _ => _.patients.new.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.recall.planned)} of={idx(assignee, _ => _.patients.total.planned)} /></Td>
+        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.recall.expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
         <Td><Percent part={idx(assignee, _ => _.patients.recall.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft>{idx(assignee, _ => _.patients.surgery.planned) || <Nil />}</Td>
+        <Td borderLeft>{idx(assignee, _ => _.patients.surgery.expected) || <Nil />}</Td>
         <Td>{idx(assignee, _ => _.patients.surgery.actual) || <Nil />}</Td>
 
         {/* Kaustik privat [Plan] */}
-        <Td>{idx(assignee, _ => _.patients.cautery.planned) || <Nil />}</Td>
+        <Td>{idx(assignee, _ => _.patients.cautery.expected) || <Nil />}</Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft>{assignee.assigneeId &&
-          <Round number={idx(assignee, _ => _.patients.new.plannedPerHour)} /> || <Nil />
+          <Round number={idx(assignee, _ => _.patients.new.expectedPerHour)} /> || <Nil />
         }</Td>
         <Td>{assignee.assigneeId &&
           <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} /> || <Nil />
@@ -179,27 +179,27 @@ class SummaryRow extends React.Component {
         <Td>{report.total.hours && durationFormat(report.total.hours.planned)}</Td>
 
         {/* Patients [planned, admitted, actual] */}
-        <Td borderLeft>{idx(report, _ => _.total.patients.total.planned) || <Nil />}</Td>
-        <Td><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.planned)} /></Td>
-        <Td><Percent part={idx(report, _ => _.total.patients.total.actual)} of={idx(report, _ => _.total.patients.total.planned)} /></Td>
+        <Td borderLeft>{idx(report, _ => _.total.patients.total.expected) || <Nil />}</Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
+        <Td><Percent part={idx(report, _ => _.total.patients.total.actual)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.new.planned)} of={report.total.patients.total.planned} /></Td>
+        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.new.expected)} of={report.total.patients.total.expected} /></Td>
         <Td><Percent part={idx(report, _ => _.total.patients.new.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.recall.planned)} of={report.total.patients.total.planned} /></Td>
+        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.recall.expected)} of={report.total.patients.total.expected} /></Td>
         <Td><Percent part={idx(report, _ => _.total.patients.recall.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft>{idx(report, _ => _.total.patients.surgery.planned)}</Td>
+        <Td borderLeft>{idx(report, _ => _.total.patients.surgery.expected)}</Td>
         <Td>{idx(report, _ => _.total.patients.surgery.actual)}</Td>
 
         {/* Kaustik privat [Plan] */}
         <Td>{/* TODO: Fix insurance code mapping */}</Td>
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Round unit='⌀' number={idx(report, _ => _.average.patients.new.plannedPerHour)} /></Td>
+        <Td borderLeft><Round unit='⌀' number={idx(report, _ => _.average.patients.new.expectedPerHour)} /></Td>
         <Td><Round unit='⌀' number={idx(report, _ => _.average.patients.new.actualPerHour)} /></Td>
 
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
