@@ -2,11 +2,12 @@ import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
 import sortBy from 'lodash/fp/sortBy'
 import uniqBy from 'lodash/fp/uniqBy'
+import { isNew } from './mapPlannedNew'
 
-const mapAppointments = (appointments) => {
-  const patients = uniqBy('patientId')(appointments
-    .filter(a => a.patientId && a.removed !== true))
+const uniqAppointments = appointments => uniqBy('patientId')(appointments
+  .filter(a => a.patientId && a.removed !== true))
 
+const mapAppointments = (patients) => {
   const planned = patients.length
   const canceled = patients.filter(a => a.canceled).length
   const expected = planned - canceled
@@ -22,7 +23,7 @@ const mapAppointments = (appointments) => {
   }
 }
 
-export const mapAppointmentsByTags = ({ appointments, tagMapping }) => {
+export const mapAppointmentsByTags = ({ appointments, pastAppointments, tagMapping }) => {
   // Group by first tag
   // TODO: Check if the first tag is also the one with the highest priority
   const applyTagMapping = (appointment) => {
@@ -33,17 +34,22 @@ export const mapAppointmentsByTags = ({ appointments, tagMapping }) => {
     }
   }
 
-  const appointmentsByTags = groupBy(applyTagMapping)(appointments)
+  const uniqueAppointments = uniqAppointments(appointments)
+  const appointmentsByTags = groupBy(applyTagMapping)(uniqueAppointments)
   const byTags = mapValues(mapAppointments)(appointmentsByTags)
+  const newAppointments = uniqueAppointments.filter(isNew(pastAppointments))
+  const recallAppointments = uniqueAppointments.filter(a => !isNew(pastAppointments)(a))
 
   return {
+    ...byTags,
     total: mapAppointments(appointments),
-    ...byTags
+    new: mapAppointments(newAppointments),
+    recall: mapAppointments(recallAppointments)
   }
 }
 
-const mapAssignee = ({ assigneeId, appointments, overrideSchedules, tagMapping }) => {
-  const patients = mapAppointmentsByTags({ appointments, tagMapping })
+const mapAssignee = ({ assigneeId, appointments, pastAppointments, overrideSchedules, tagMapping }) => {
+  const patients = mapAppointmentsByTags({ appointments, pastAppointments, tagMapping })
 
   return {
     assigneeId,
@@ -51,8 +57,9 @@ const mapAssignee = ({ assigneeId, appointments, overrideSchedules, tagMapping }
   }
 }
 
-export const mapAssignees = ({ appointments, overrideSchedules, tagMapping }) => {
+export const mapAssignees = ({ appointments, pastAppointments, overrideSchedules, tagMapping }) => {
   const appointmentsByAssignees = groupBy('assigneeId')(appointments)
+  const pastAppointmentsByAssignees = groupBy('assigneeId')(pastAppointments)
 
   // Group unassigned appointments under 'null' and remove assigneeId field
   if (appointmentsByAssignees['undefined']) {
@@ -64,11 +71,13 @@ export const mapAssignees = ({ appointments, overrideSchedules, tagMapping }) =>
 
   const assignees = sortBy('assigneeId')(Object.keys(appointmentsByAssignees).map((assigneeId) => {
     const appointments = appointmentsByAssignees[assigneeId]
+    const pastAppointments = pastAppointmentsByAssignees[assigneeId]
     const overrideSchedules = overrideSchedulesByAssignees[assigneeId]
 
     const assignee = mapAssignee({
       assigneeId,
       appointments,
+      pastAppointments,
       overrideSchedules,
       tagMapping
     })

@@ -4,6 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { dayToDate } from '../../../util/time/day'
 import { generate as generateReport } from '../methods/generate'
+import { pastAppointmentsSelector } from '../methods/mapPlannedNew'
 
 export const generate = ({ Reports, Appointments, Schedules, Tags, Messages }) => {
   return new ValidatedMethod({
@@ -27,6 +28,8 @@ export const generate = ({ Reports, Appointments, Schedules, Tags, Messages }) =
           }
         }).fetch()
 
+        const pastAppointments = Appointments.find(pastAppointmentsSelector({ appointments })).fetch()
+
         const overrideSchedules = Schedules.find({
           type: 'override',
           start: {
@@ -43,7 +46,7 @@ export const generate = ({ Reports, Appointments, Schedules, Tags, Messages }) =
         const tagMapping = Tags.methods.getMappingForReports()
 
         const existingReport = Reports.findOne({ day })
-        const generatedReport = generateReport({ day, appointments, overrideSchedules, tagMapping, messages, existingReport, addendum })
+        const generatedReport = generateReport({ day, appointments, pastAppointments, overrideSchedules, tagMapping, messages, existingReport, addendum })
 
         if (existingReport) {
           return Reports.update({ _id: existingReport._id }, generatedReport, { bypassCollection2: true })
