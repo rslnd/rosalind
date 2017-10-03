@@ -56,6 +56,14 @@ export const getQ = (m) => {
   if (isQ1(t)) { return 1 }
 }
 
+export const getRange = (m) => {
+  const t = moment(m)
+  if (isQ4(t)) { return q4(t) }
+  if (isQ3(t)) { return q3(t) }
+  if (isQ2(t)) { return q2(t) }
+  if (isQ1(t)) { return q1(t) }
+}
+
 export const quarter = (date) => {
   const m = moment(date)
   const year = m.year()
@@ -63,6 +71,7 @@ export const quarter = (date) => {
   return {
     year,
     q,
+    range: getRange(m),
     isSame: isSame(m),
     isNext: isNext(m),
     isPrevious: isPrevious(m) }

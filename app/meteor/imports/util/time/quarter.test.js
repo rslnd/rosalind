@@ -70,6 +70,17 @@ describe('util', () => {
         })
       })
 
+      describe('range', () => {
+        it('gets start of quarter', () => {
+          expect(quarter.quarter('2017-10-10').range.start.toDate())
+            .to.equalTime(moment('2017-10-01 00:00:00').toDate())
+        })
+        it('gets end of quarter', () => {
+          expect(quarter.quarter('2017-10-10').range.end.toDate())
+            .to.equalTime(moment('2017-12-31 23:59:59.999').toDate())
+        })
+      })
+
       describe('within', () => {
         it('is within q1', () => {
           expect(quarter.isQ1('2016-02-29')).to.equal(true)
