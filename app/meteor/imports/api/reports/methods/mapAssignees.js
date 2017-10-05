@@ -42,7 +42,7 @@ export const mapAppointmentsByTags = ({ appointments, pastAppointments, tagMappi
 
   return {
     ...byTags,
-    total: mapAppointments(appointments),
+    total: mapAppointments(uniqueAppointments),
     new: mapAppointments(newAppointments),
     recall: mapAppointments(recallAppointments)
   }
