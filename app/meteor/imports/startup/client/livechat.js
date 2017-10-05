@@ -25,12 +25,11 @@ const getTranslation = () => {
 }
 
 export default () => {
-  if (server.env.SMOOCH_APP_TOKEN && !server.env.TEST) {
+  if (server.env.SMOOCH_APP_ID && !server.env.TEST) {
     scriptjs('https://cdn.smooch.io/smooch.min.js', () => {
       Smooch.init({
-        appToken: server.env.SMOOCH_APP_TOKEN,
+        appId: server.env.SMOOCH_APP_ID,
         imageUploadEnabled: false,
-        emailCaptureEnabled: true,
         customText: getTranslation()
       }).then(() => {
         let currentUserId = null
