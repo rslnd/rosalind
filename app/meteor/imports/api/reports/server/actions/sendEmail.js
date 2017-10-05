@@ -22,6 +22,10 @@ export const sendEmail = new ValidatedMethod({
       throw new Meteor.Error(403, 'Not authorized')
     }
 
+    if (this.isSimulation) {
+      return
+    }
+
     if (!process.env.MAIL_REPORTS_TO ||
       !process.env.MAIL_REPORTS_FROM ||
       !process.env.MAIL_URL) {
@@ -30,12 +34,12 @@ export const sendEmail = new ValidatedMethod({
 
     console.log('[Reports] sendEmail')
 
-    const test = (process.env.NODE_ENV !== 'production')
+    const test = (process.env.NODE_ENV !== 'production') || args.test
 
     const day = args.day || dateToDay(moment(args))
     const report = Reports.findOne({ day })
     const isTodaysReport = moment().isSame(dayToDate(report.day), 'day')
-    if (!report || (!test && !isTodaysReport)) {
+    if (!test && (!report || !isTodaysReport)) {
       throw new Meteor.Error(404, 'There is no report for today, and no email will be sent')
     }
 
