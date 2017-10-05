@@ -8,6 +8,6 @@ export default () => {
     COMMIT_HASH: true,
     BUILD_NUMBER: true,
     CUSTOMER_NAME: true,
-    SMOOCH_APP_TOKEN: true
+    SMOOCH_APP_ID: true
   })
 }
