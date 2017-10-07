@@ -1,6 +1,5 @@
-/* global Smooch */
 import throttle from 'lodash/throttle'
-import scriptjs from 'scriptjs'
+import Smooch from 'smooch'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { process as server } from 'meteor/clinical:env'
@@ -26,7 +25,7 @@ const getTranslation = () => {
 
 export default () => {
   if (server.env.SMOOCH_APP_ID && !server.env.TEST) {
-    scriptjs('https://cdn.smooch.io/smooch.min.js', () => {
+    if (Smooch) {
       Smooch.init({
         appId: server.env.SMOOCH_APP_ID,
         imageUploadEnabled: false,
@@ -34,27 +33,34 @@ export default () => {
       }).then(() => {
         let currentUserId = null
         Tracker.autorun(throttle(() => {
+          document.querySelector('body>iframe').style.zoom = 0.8080
           const user = Meteor.user()
           if (user) {
+            const env = server.env.NODE_ENV.toUpperCase()
+            const smoochUserId = `USER-${user._id}${env === 'PRODUCTION' ? '' : `-${env}`}`
+
             if (!currentUserId) {
-              const env = server.env.NODE_ENV.toUpperCase()
-              const smoochUserId = `USER-${user._id}${env === 'PRODUCTION' ? '' : `-${env}`}`
-              const group = user.groupId && Groups.findOne({ _id: user.groupId })
-              Smooch.login(smoochUserId, {
-                givenName: user.profile && user.profile.firstName,
-                surname: user.profile && user.profile.lastName,
-                email: user.email,
-                properties: {
-                  username: user.username,
-                  fullNameWithTitle: user.fullNameWithTitle(),
-                  employee: user.profile && user.profile.employee,
-                  roles: user.getRoles(),
-                  group
+              Meteor.call('livechat/init', { smoochUserId }, (err, jwt) => {
+                if (err) {
+                  return console.error('[Livechat] Failed to get jwt', err)
                 }
-              }).then(() => {
-                console.log('[Livechat] Logged in')
-              }).catch((e) => {
-                console.error('[Livechat] Failed to login', e)
+
+                const group = user.groupId && Groups.findOne({ _id: user.groupId })
+
+                Smooch.login(smoochUserId, jwt).then(() => {
+                  Smooch.updateUser({
+                    givenName: user.profile && user.profile.firstName,
+                    surname: user.profile && user.profile.lastName,
+                    email: user.email,
+                    properties: {
+                      username: user.username,
+                      fullNameWithTitle: user.fullNameWithTitle(),
+                      employee: user.profile && user.profile.employee,
+                      roles: user.getRoles(),
+                      group
+                    }
+                  })
+                })
               })
             }
             currentUserId = user._id
@@ -72,6 +78,6 @@ export default () => {
       }).catch((e) => {
         console.error('[Livechat] Failed to initialize', e)
       })
-    })
+    }
   }
 }

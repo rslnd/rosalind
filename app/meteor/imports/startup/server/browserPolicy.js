@@ -6,6 +6,7 @@ export default () => {
   BrowserPolicy.content.allowEval()
   BrowserPolicy.content.allowConnectOrigin('wss://*')
   BrowserPolicy.content.allowConnectOrigin('https://*')
+  BrowserPolicy.content.allowOriginForAll('blob:')
 
   BrowserPolicy.content.allowInlineStyles()
   BrowserPolicy.content.allowStyleOrigin('https://fonts.googleapis.com')
@@ -23,6 +24,7 @@ export default () => {
   BrowserPolicy.content.allowConnectOrigin('wss://api.smooch.io')
   BrowserPolicy.content.allowConnectOrigin('https://api.smooch.io')
   BrowserPolicy.content.allowMediaOrigin('https://cdn.smooch.io')
+  BrowserPolicy.content.allowStyleOrigin('https://cdn.smooch.io')
 
   BrowserPolicy.content.allowScriptOrigin('https://cdn.jsdelivr.net/emojione/2.2.4/lib/js/emojione.min.js')
   BrowserPolicy.content.allowImageOrigin('https://cdn.jsdelivr.net/emojione')

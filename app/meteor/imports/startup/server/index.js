@@ -3,6 +3,7 @@ import intl from './intl'
 import timezone from './timezone'
 import env from './env'
 import browserPolicy from './browserPolicy'
+import livechat from './livechat'
 import passwordlessLogin from './passwordlessLogin'
 import appcache from './appcache'
 import defaultAccount from './defaultAccount'
@@ -18,6 +19,7 @@ export default function () {
   appcache()
   defaultAccount()
   browserPolicy()
+  livechat()
   development()
   api()
 }
