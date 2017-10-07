@@ -23,7 +23,7 @@ const getTranslation = () => {
   return translation
 }
 
-export default () => {
+const init = () => {
   if (server.env.SMOOCH_APP_ID && !server.env.TEST) {
     if (Smooch) {
       Smooch.init({
@@ -80,4 +80,8 @@ export default () => {
       })
     }
   }
+}
+
+export default () => {
+  setTimeout(init, 2000)
 }
