@@ -9,12 +9,12 @@
 
   body {
     zoom: 1;
-    /* FIXME: Setting a different font here breaks printing; you have to
+    /* FIXME: Setting a different font here may break printing; you have to
               click print twice to make the fonts load. Probably because
               the web fonts aren't loaded in background beforhand since
               switching to system fonts for the rest of the UI. (And
               printing in sytem fonts looks bad.) */
-    /*font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
   .print-color {
