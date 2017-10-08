@@ -242,14 +242,14 @@ const Disclaimers = ({ report, __ }) => {
 
   if (missingReimbursement < 0 || misattributedRevenue > 0) {
     return <small className='text-muted' style={disclaimerStyle}>
-      {(missingReimbursement > 0) && <span>
+      {(missingReimbursement > 0) && <span className='text-muted'>
         {__('reports.missingReimbursement', { count: missingReimbursement })}
         &emsp;
       </span>}
 
-      {(misattributedRevenue > 0) && <span>
+      {(misattributedRevenue > 0) && <span className='text-muted'>
         {__('reports.misattributedRevenue')}:&nbsp;
-        <Round to={0} unit='€' number={misattributedRevenue} />
+        <Round to={0} unit='€' number={misattributedRevenue} className='text-muted' />
       </span>}
     </small>
   } else {

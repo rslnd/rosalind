@@ -2,7 +2,7 @@ import React from 'react'
 import { conditionalFloat, integer } from '../../../util/format'
 import { Nil } from './Nil'
 
-export const Round = ({ number, to, unit }) => {
+export const Round = ({ number, to, unit, className }) => {
   if (!number) {
     return <Nil />
   }
@@ -18,5 +18,5 @@ export const Round = ({ number, to, unit }) => {
     prepend = <small className='text-muted'>{unit}&thinsp;</small>
   }
 
-  return <span>{prepend}{rounded}</span>
+  return <span className={className}>{prepend}{rounded}</span>
 }

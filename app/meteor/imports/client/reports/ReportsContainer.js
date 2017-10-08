@@ -1,14 +1,16 @@
 import idx from 'idx'
 import omit from 'lodash/omit'
 import fromPairs from 'lodash/fromPairs'
+import sortBy from 'lodash/fp/sortBy'
 import moment from 'moment-timezone'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { dateToDay } from '../../util/time/day'
+import { dateToDay, dayToDate } from '../../util/time/day'
 import { Reports } from '../../api/reports'
+import { Users } from '../../api/users'
 import { Loading } from '../components/Loading'
 import { ReportsScreen } from './ReportsScreen'
 
@@ -61,9 +63,20 @@ const composer = (props, onData) => {
 
     onData(null, data)
 
+    const mapPreview = (preview) => ({
+      ...preview,
+      today: moment().isSame(dayToDate(preview.day), 'day'),
+      assignees: sortBy('username')(preview.assignees.filter(a => a.assigneeId).map(a => ({
+        username: mapUserIdToUsername(a.assigneeId),
+        fullNameWithTitle: Users.findOne(a.assigneeId).fullNameWithTitle(),
+        ...a
+      })))
+    })
+
     // Load preview data in background
     Reports.actions.generatePreview.callPromise({ day })
-    .then(preview => onData(null, { ...data, preview }))
+      .then(x => x.map(mapPreview))
+      .then(preview => onData(null, { ...data, preview }))
   }
 }
 

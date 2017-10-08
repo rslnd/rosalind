@@ -17,6 +17,12 @@
     /*font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
   }
 
+  .print-color {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    background: #ddd !important;
+  }
+
   .zoom-1 {
     zoom: 1;
   }

@@ -20,6 +20,7 @@
     "byline": "^5.0.0",
     "chrome-remote-interface": "^0.24.2",
     "classnames": "^2.2.5",
+    "color-hash": "^1.0.3",
     "dedent": "^0.7.0",
     "dot-object": "^1.6.0",
     "drag-drop": "^2.12.1",
