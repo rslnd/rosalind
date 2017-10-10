@@ -19,7 +19,7 @@ export const softRemove = ({ Schedules }) => {
 
       Schedules.update({ _id: scheduleId }, {
         $set: {
-          removed: false,
+          removed: true,
           removedAt: new Date(),
           removedBy: this.userId
         }
