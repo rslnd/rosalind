@@ -109,8 +109,9 @@ export const Week = ({ preview }) => (
     <table style={{ width: '100%' }}>
       <tbody>
         <SingleWeek preview={preview.slice(0, 6)} style={{ borderBottom: '1px solid #ececec' }} />
+        <SingleWeek preview={preview.slice(6, 12)} style={{ borderBottom: '1px solid #ececec' }} />
         <SingleWeek
-          preview={preview.slice(6)}
+          preview={preview.slice(12)}
         />
       </tbody>
     </table>
