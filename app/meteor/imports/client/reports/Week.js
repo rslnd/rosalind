@@ -83,7 +83,7 @@ const Day = ({ preview, style }) => (
     style={style}
     today={preview.today}
     assignees={preview.assignees}
-    workload={Math.floor((
+    workload={Math.round((
       idx(preview, _ => _.total.workload.weighted) ||
         (idx(preview, _ => _.total.workload.planned) / idx(preview, _ => _.total.workload.available))
     ) * 100)}
