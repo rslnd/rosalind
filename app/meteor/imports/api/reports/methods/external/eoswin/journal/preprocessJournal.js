@@ -12,14 +12,25 @@ export const preprocessJournal = rows => {
   return summed
 }
 
-const mapRow = (row) => {
+const mapRow = (row, i, rows) => {
   switch (row.Kurzz) {
-    case 'L:': return parseAppointmentType(row)
+    case 'L:': return parseAppointmentType(row, i, rows)
   }
 }
 
-const parseAppointmentType = (row) => {
+const isInsuredPatient = (row, i, rows) => {
+  // Thw row above an 'L:' entry is a patient header
+  const patientRow = rows[i - 1].Text
+  if (patientRow.match(/Patient: {4}geb\. am/)) { return false }
+  if (patientRow.match(/Kasse: PRIV/)) { return false }
+  return true
+}
+
+const parseAppointmentType = (row, i, rows) => {
   const codes = parenthesesToArray(row.Text).map(s => s.toUpperCase())
+
+  if (!isInsuredPatient(row, i, rows)) { return }
+
   return {
     isAdmitted: isAny(codes) || isMissingReimbursement(row.Text),
     isNew: isNew(codes),
