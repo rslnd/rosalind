@@ -6,4 +6,4 @@ module.exports = ->
   Meteor.publish 'tags', ->
     return unless @userId or (@connection and isTrustedNetwork(@connection.clientAddress))
 
-    Tags.find({})
+    Tags.find({}, { removed: true })
