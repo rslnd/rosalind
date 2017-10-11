@@ -4,6 +4,9 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { processJournal, mapUserIds } from '../../../../reports/methods/external/eoswin'
 import { Reports } from '../../../../reports'
 import { Users } from '../../../../users'
+import { Patients } from '../../../../patients'
+import { Appointments } from '../../../../appointments'
+import { deduplicateWithJournal } from '../../../../patients/methods/deduplicateWithJournal'
 
 export const eoswinJournalReports = ({ Importers }) => {
   return new ValidatedMethod({
@@ -21,6 +24,8 @@ export const eoswinJournalReports = ({ Importers }) => {
         if (!Meteor.userId()) { return }
 
         const mapIds = mapUserIds({ Users })
+
+        deduplicateWithJournal({ Appointments, Patients, journal: content })
 
         const addendum = processJournal(mapIds)(content, name)
         Reports.actions.generate.call({ day: addendum.day, addendum })

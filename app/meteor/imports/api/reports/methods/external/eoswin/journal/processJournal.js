@@ -12,7 +12,7 @@ export const parseCsv = csv =>
 
 export const processJournal = mapIds => csv => {
   const rows = parseCsv(csv)
-  const day = parseDayFromRows(rows, r => r.Kurzz === 'L:' && r.Datum)
+  const day = parseDayFromRows(rows)
   const summed = preprocessJournal(rows)
   const translated = translateAssigneeIds(mapIds)(summed)
   const addendum = postprocessJournal(translated)
@@ -23,7 +23,8 @@ export const processJournal = mapIds => csv => {
   }
 }
 
-export const parseDayFromRows = (rows, isDateRow, timezone = 'Europe/Vienna') => {
+export const parseDayFromRows = (rows, timezone = 'Europe/Vienna') => {
+  const isDateRow = r => r.Kurzz === 'L:' && r.Datum
   const first = find(isDateRow)(rows).Datum
   const last = findLast(isDateRow)(rows).Datum
 
