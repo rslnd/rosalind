@@ -128,11 +128,11 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.new.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
+        <Td>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients.new.actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients.new.actual)}</Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Percent part={idx(assignee, _ => _.patients.recall.expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.recall.actual)} of={idx(assignee, _ => _.patients.total.actual)} /></Td>
+        <Td>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients.recall.actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients.recall.actual)}</Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft>{idx(assignee, _ => _.patients.surgery.expected) || <Nil />}</Td>
