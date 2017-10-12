@@ -7,8 +7,8 @@ import { assignedOnly, byTags, sumByKeys } from './util'
 import { mapMisattributedRevenue } from './external/eoswin/revenue/mapMisattributedRevenue'
 
 const mapPatients = ({ report }) => {
-  return byTags(report.assignees, (tag) => {
-    const perAssignee = report.assignees.map((assignee) => ({
+  return byTags(assignedOnly(report.assignees), (tag) => {
+    const perAssignee = assignedOnly(report.assignees).map((assignee) => ({
       planned: idx(assignee, _ => _.patients[tag].planned) || 0,
       expected: idx(assignee, _ => _.patients[tag].expected) || 0,
       actual: idx(assignee, _ => _.patients[tag].actual) || 0,
