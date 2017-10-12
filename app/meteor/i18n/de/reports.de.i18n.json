@@ -9,6 +9,7 @@
     "assigneeType__external": "Team",
     "assigneeType__overbooking": "Einschub",
     "unassigned": "Einschub",
+    "overbookingSummary": "Einschub: __expected__ Plan, __admitted__ Anw.",
     "newPercentage": "Neu",
     "new": "Neu",
     "recall": "Kontrolle",
