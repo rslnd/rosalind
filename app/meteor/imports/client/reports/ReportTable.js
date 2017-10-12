@@ -180,7 +180,10 @@ class SummaryRow extends React.Component {
       <tr style={summaryRowStyle} className='bg-white'>
         <td><b>∑</b></td>
 
-        <td colSpan={2}>{report.total.assignees} {__('reports.assignees')}</td>
+        <td>{report.total.assignees} {__('reports.assignees')}</td>
+
+        {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
+        <Td>{report.total.hours && durationFormat(report.total.hours.planned)}</Td>
 
         {/* Patients [planned, admitted, weighted workload] */}
         <Td borderLeft>{idx(report, _ => _.total.patients.total.expected) || <Nil />}</Td>
