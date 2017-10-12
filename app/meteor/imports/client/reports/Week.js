@@ -71,24 +71,38 @@ const Cell = (props) => (
 
     <div className='row' style={{ marginTop: 60 }}>
       <div className='col-md-12'>
-        <Assignees assignees={props.assignees} />
+        <div style={{ float: 'left' }}><Assignees assignees={props.assignees} /></div>
+        {
+          props.slots.total > 0 &&
+            <div style={{ float: 'right' }}>
+              <b>{props.slots.booked}</b>/{props.slots.total}
+            </div>
+        }
       </div>
     </div>
   </td>
 )
 
-const Day = ({ preview, style }) => (
-  <Cell
+const clampLower = n => (n < 0) ? 0 : n
+const clampUpper = upper => n => (n > upper) ? upper : n
+
+const Day = ({ preview, style }) => {
+  const total = idx(preview, _ => _.total.workload.available)
+  const booked = clampUpper(total)(idx(preview, _ => _.total.workload.planned) || idx(preview, _ => _.total.workload.actual))
+  const free = clampLower(total - booked)
+
+  return <Cell
     day={moment(dayToDate(preview.day)).format('dd., D.M.')}
     style={style}
     today={preview.today}
     assignees={preview.assignees}
+    slots={{ total, booked, free }}
     workload={Math.round((
       idx(preview, _ => _.total.workload.weighted) ||
         (idx(preview, _ => _.total.workload.planned) / idx(preview, _ => _.total.workload.available))
     ) * 100)}
   />
-)
+}
 
 const SingleWeek = ({ preview, style }) => (
   <tr style={style}>
