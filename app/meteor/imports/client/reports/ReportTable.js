@@ -2,6 +2,7 @@ import React from 'react'
 import FlipMove from 'react-flip-move'
 import 'moment-duration-format'
 import idx from 'idx'
+import find from 'lodash/fp/find'
 import { durationFormat } from './shared/durationFormat'
 import { Nil } from './shared/Nil'
 import { Percent } from './shared/Percent'
@@ -98,7 +99,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
     enterAnimation='none'
     staggerDelayBy={160}
     staggerDurationBy={60}>
-    {report.assignees.map((assignee, index) => (
+    {report.assignees.filter(a => a.type !== 'overbooking').map((assignee, index) => (
       <tr key={assignee.assigneeId || assignee.type || 'unassigned'} className='bg-white'>
 
         {/* Rank */}
@@ -235,9 +236,14 @@ class SummaryRow extends React.Component {
 
 const Disclaimers = ({ report, __ }) => {
   const misattributedRevenue = idx(report, _ => _.total.revenue.misattributed) || 0
+  const overbooking = find(a => a.type === 'overbooking')(report.assignees)
+  const expected = idx(overbooking, _ => _.patients.total.expected)
+  const admitted = idx(overbooking, _ => _.patients.total.admitted)
 
-  if (misattributedRevenue > 0) {
+  if (misattributedRevenue > 0 || expected > 0 || admitted > 0) {
     return <small className='text-muted' style={disclaimerStyle}>
+      {(expected > 0 || admitted > 0) && __('reports.overbookingSummary', { expected, admitted })}
+      &emsp;
       {(misattributedRevenue > 0) && <span className='text-muted'>
         {__('reports.misattributedRevenue')}:&nbsp;
         <Round to={0} unit='€' number={misattributedRevenue} className='text-muted' />
