@@ -237,16 +237,10 @@ class SummaryRow extends React.Component {
 }
 
 const Disclaimers = ({ report, __ }) => {
-  const missingReimbursement = idx(report, _ => _.total.patients.missingReimbursement.actual) || 0
   const misattributedRevenue = idx(report, _ => _.total.revenue.misattributed) || 0
 
-  if (missingReimbursement < 0 || misattributedRevenue > 0) {
+  if (misattributedRevenue > 0) {
     return <small className='text-muted' style={disclaimerStyle}>
-      {(missingReimbursement > 0) && <span className='text-muted'>
-        {__('reports.missingReimbursement', { count: missingReimbursement })}
-        &emsp;
-      </span>}
-
       {(misattributedRevenue > 0) && <span className='text-muted'>
         {__('reports.misattributedRevenue')}:&nbsp;
         <Round to={0} unit='€' number={misattributedRevenue} className='text-muted' />
