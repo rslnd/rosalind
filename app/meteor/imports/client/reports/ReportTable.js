@@ -225,7 +225,7 @@ class SummaryRow extends React.Component {
 
         {/* Umsatz gesamt */}
         {showRevenue && <Td style={align}>
-          {idx(report, _ => _.total.revenue.misattributed) &&
+          {idx(report, _ => _.total.revenue.misattributed) > 0 &&
             <small className='text-muted' title='Summe der Leistungen, die nicht anwesenden ÄrztInnen zugerechnet wurde'>
               + <Round to={0} unit='€' number={idx(report, _ => _.total.revenue.misattributed)} /><br />
             </small>
