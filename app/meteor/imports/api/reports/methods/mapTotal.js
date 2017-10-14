@@ -28,12 +28,24 @@ const mapAssignees = ({ report }) => {
 }
 
 const mapHours = ({ report }) => {
-  const planned = assignedOnly(report.assignees)
-    .map((a) => a.hours && a.hours.planned || 0)
+  const sum = accessor => assignedOnly(report.assignees)
+    .map(a => accessor(a) || 0)
     .reduce(add, 0)
 
+  const ids = accessor => assignedOnly(report.assignees)
+    .filter(a => accessor(a) > 0)
+    .map(a => a.assigneeId)
+
   return {
-    planned
+    planned: sum(a => idx(a, _ => _.hours.planned)),
+    am: {
+      planned: sum(a => idx(a, _ => _.hours.am.planned)),
+      assignees: ids(a => idx(a, _ => _.hours.am.planned))
+    },
+    pm: {
+      planned: sum(a => idx(a, _ => _.hours.pm.planned)),
+      assignees: ids(a => idx(a, _ => _.hours.pm.planned))
+    }
   }
 }
 
@@ -59,8 +71,8 @@ const mapWeightedWorkload = ({ report }) => {
 }
 
 const mapWorkload = ({ report }) => {
-  const summed = report.assignees
-    .map(a => a.workload)
+  const sum = accessor => report.assignees
+    .map(accessor)
     .reduce((acc, curr) => {
       return {
         available: acc.available + curr && curr.available || acc.available,
@@ -70,8 +82,10 @@ const mapWorkload = ({ report }) => {
     }, { available: 0, planned: 0, actual: 0 })
 
   return {
-    ...summed,
-    weighted: mapWeightedWorkload({ report })
+    ...sum(a => a.workload),
+    weighted: mapWeightedWorkload({ report }),
+    am: sum(a => idx(a, _ => _.workload.am)),
+    pm: sum(a => idx(a, _ => _.workload.pm))
   }
 }
 

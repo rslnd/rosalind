@@ -6,6 +6,8 @@ import { percentage } from '../../util/format'
 import { dayToDate } from '../../util/time/day'
 
 const colorHash = new ColorHash({ saturation: 0.75, lightness: 0.65 })
+const clampLower = n => (n < 0) ? 0 : n
+const clampUpper = upper => n => clampLower((n > upper) ? upper : n)
 
 const avatarStyle = {
   color: '#fefefe',
@@ -23,32 +25,56 @@ const avatarStyle = {
   'WebkitPrintColorAdjust': 'exact'
 }
 
-const Assignees = ({ assignees }) => (
+const Workload = ({ workload }) => {
+  if (!workload || workload.available === 0) {
+    return null
+  }
+
+  const free = clampUpper(workload.available)(
+    workload.available - (
+      workload.actual || workload.planned
+    )
+  )
+
+  const title = `${free} frei von ${workload.available}`
+
+  return <span className='text-muted' title={title}>
+    <b>{free}</b>/{workload.available}
+  </span>
+}
+
+const Assignees = ({ assignees = [], workload, mapUserIdToName, mapUserIdToUsername }) => (
   <div style={{ paddingTop: 5, paddingBottom: 5, minHeight: 30 }}>
-    {assignees
-      .map((a, i) => (
-        <span
-          key={i}
-          className='print-color'
-          style={{ ...avatarStyle, backgroundColor: colorHash.hex(a.assigneeId) }}
-          title={a.fullNameWithTitle}>{a.username}</span>
-    ))}
+    <div className='pull-left'>
+      {assignees
+        .map((id, i) => (
+          <span
+            key={i}
+            className='print-color'
+            style={{ ...avatarStyle, backgroundColor: colorHash.hex(id) }}
+            title={mapUserIdToName(id)}>{mapUserIdToUsername(id)}</span>
+      ))}
+    </div>
+
+    <div className='pull-right'>
+      <Workload workload={workload} />
+    </div>
   </div>
 )
 
-const Cell = (props) => (
+const Cell = ({ day, today, style, am, pm, workload, mapUserIdToName, mapUserIdToUsername }) => (
   <td style={{
     height: 120,
     padding: 5,
-    ...props.style
+    ...style
   }}>
     <span className='pull-left'>
       <span style={{
         fontSize: 18
-      }}>{props.day}&emsp;</span>
+      }}>{day}&emsp;</span>
       <br />
       {
-        props.today &&
+        today &&
           <span className='label label-success' style={{ opacity: 0.7 }}>
             Heute
           </span>
@@ -61,32 +87,38 @@ const Cell = (props) => (
       marginTop: -11
     }}>
       {
-        props.workload > 0 &&
+        workload > 0 &&
           <span>
-            <b>{props.workload}</b>
+            <b>{workload}</b>
             <small className='text-muted' style={{ fontSize: '19px' }}>%</small>
           </span>
       }
     </span>
 
-    <div className='row' style={{ marginTop: 60 }}>
+    <div className='row' style={{ marginTop: 40 }}>
       <div className='col-md-12'>
-        <div style={{ float: 'left' }}><Assignees assignees={props.assignees} /></div>
-        {
-          props.slots.total > 0 &&
-            <div style={{ float: 'right' }}>
-              <b>{props.slots.booked}</b>/{props.slots.total}
-            </div>
-        }
+        <Assignees
+          assignees={am.assignees}
+          workload={am.workload}
+          mapUserIdToName={mapUserIdToName}
+          mapUserIdToUsername={mapUserIdToUsername}
+        />
+      </div>
+    </div>
+    <div className='row'>
+      <div className='col-md-12' style={{ marginTop: -7 }}>
+        <Assignees
+          assignees={pm.assignees}
+          workload={pm.workload}
+          mapUserIdToName={mapUserIdToName}
+          mapUserIdToUsername={mapUserIdToUsername}
+        />
       </div>
     </div>
   </td>
 )
 
-const clampLower = n => (n < 0) ? 0 : n
-const clampUpper = upper => n => (n > upper) ? upper : n
-
-const Day = ({ preview, style }) => {
+const Day = ({ preview, style, mapUserIdToName, mapUserIdToUsername }) => {
   const total = idx(preview, _ => _.total.workload.available)
   const booked = clampUpper(total)(idx(preview, _ => _.total.workload.planned) || idx(preview, _ => _.total.workload.actual))
   const free = clampLower(total - booked)
@@ -95,22 +127,32 @@ const Day = ({ preview, style }) => {
     day={moment(dayToDate(preview.day)).format('dd., D.M.')}
     style={style}
     today={preview.today}
-    assignees={preview.assignees}
-    slots={{ total, booked, free }}
+    am={{
+      assignees: idx(preview, _ => _.total.hours.am.assignees),
+      workload: idx(preview, _ => _.total.workload.am)
+    }}
+    pm={{
+      assignees: idx(preview, _ => _.total.hours.pm.assignees),
+      workload: idx(preview, _ => _.total.workload.pm)
+    }}
     workload={Math.round((
       idx(preview, _ => _.total.workload.weighted) ||
         (idx(preview, _ => _.total.workload.planned) / idx(preview, _ => _.total.workload.available))
     ) * 100)}
+    mapUserIdToName={mapUserIdToName}
+    mapUserIdToUsername={mapUserIdToUsername}
   />
 }
 
-const SingleWeek = ({ preview, style }) => (
+const SingleWeek = ({ preview, style, mapUserIdToName, mapUserIdToUsername }) => (
   <tr style={style}>
     {
       preview.map((day, i) =>
         <Day
           key={day.day.day}
           preview={day}
+          mapUserIdToName={mapUserIdToName}
+          mapUserIdToUsername={mapUserIdToUsername}
           style={{ borderRight: i < preview.length - 1 ? '1px solid #ececec' : 'none' }}
         />
       )
@@ -118,14 +160,28 @@ const SingleWeek = ({ preview, style }) => (
   </tr>
 )
 
-export const Week = ({ preview }) => (
+export const Week = ({ preview, mapUserIdToName, mapUserIdToUsername }) => (
   <div>
     <table style={{ width: '100%' }}>
       <tbody>
-        <SingleWeek preview={preview.slice(0, 6)} style={{ borderBottom: '1px solid #ececec' }} />
-        <SingleWeek preview={preview.slice(6, 12)} style={{ borderBottom: '1px solid #ececec' }} />
+        <SingleWeek
+          preview={preview.slice(0, 6)}
+          style={{ borderBottom: '1px solid #ececec' }}
+          mapUserIdToName={mapUserIdToName}
+          mapUserIdToUsername={mapUserIdToUsername}
+        />
+
+        <SingleWeek
+          preview={preview.slice(6, 12)}
+          style={{ borderBottom: '1px solid #ececec' }}
+          mapUserIdToName={mapUserIdToName}
+          mapUserIdToUsername={mapUserIdToUsername}
+        />
+
         <SingleWeek
           preview={preview.slice(12)}
+          mapUserIdToName={mapUserIdToName}
+          mapUserIdToUsername={mapUserIdToUsername}
         />
       </tbody>
     </table>
