@@ -5,7 +5,7 @@
     "thisSingular": "Bericht",
     "thisDaySingular": "Tagesbericht",
     "assignee": "ÄrztIn",
-    "assignees": "ÄrztInnen",
+    "assignee_plural": "ÄrztInnen",
     "assigneeType__external": "Team",
     "assigneeType__overbooking": "Einschub",
     "unassigned": "Einschub",
