@@ -55,7 +55,7 @@ const Td = ({ children, borderLeft }) => (
 export const ReportTableHeader = ({ showRevenue, __ }) => (
   <thead>
     <tr>
-      <th style={rankStyle}>#</th>
+      <th style={rankStyle} />
       <th className='col-md-2'>{__('reports.assignee')}</th>
       <th style={align}>Std.</th>
       <th colSpan={3}>PatientInnen</th>
@@ -178,7 +178,7 @@ class SummaryRow extends React.Component {
     const { report, showRevenue, __ } = this.props
     return (
       <tr style={summaryRowStyle} className='bg-white'>
-        <td><b>∑</b></td>
+        <td />
 
         <td>{report.total.assignees} {__('reports.assignee', { count: report.total.assignees })}</td>
 
