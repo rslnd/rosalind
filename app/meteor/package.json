@@ -30,6 +30,7 @@
     "file-type": "^5.2.0",
     "fs-extra": "^4.0.0",
     "fs-promise": "^2.0.3",
+    "full-icu": "^1.2.0",
     "glob-promise": "^3.1.0",
     "gsm": "^0.1.4",
     "iconv-lite": "^0.4.16",
