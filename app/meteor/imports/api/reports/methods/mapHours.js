@@ -2,12 +2,23 @@ import add from 'lodash/add'
 import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
 import identity from 'lodash/identity'
-import { calculateScheduledHours } from '../../schedules/methods/getScheduledHours'
+import {
+  calculateScheduledHours,
+  calculateScheduledHoursAM,
+  calculateScheduledHoursPM,
+  isAM, isPM
+} from '../../schedules/methods/getScheduledHours'
 
 const mapAssigneeHours = ({ assigneeId, overrideSchedules }) => {
-  const assigneeOverrideSchedules = groupBy('userId')(overrideSchedules)[assigneeId]
+  const ofAssignee = groupBy('userId')(overrideSchedules)[assigneeId]
   return {
-    planned: calculateScheduledHours({ overrideSchedules: assigneeOverrideSchedules })
+    planned: calculateScheduledHours({ overrideSchedules: ofAssignee }),
+    am: {
+      planned: calculateScheduledHoursAM({ overrideSchedules: ofAssignee })
+    },
+    pm: {
+      planned: calculateScheduledHoursPM({ overrideSchedules: ofAssignee })
+    }
   }
 }
 
@@ -49,7 +60,7 @@ const sumAppointments = ({ appointments, slotsPerHour, filter = identity }) =>
     .map(a => a.end - a.start)
     .reduce(add, 0) / (1000 * 60 * 60)) * slotsPerHour
 
-const mapWorkload = ({ hours, appointments }) => {
+const calculateWorkload = ({ appointments, hours }) => {
   const slotsPerHour = 12
   const available = hours.planned * slotsPerHour
   const planned = sumAppointments({
@@ -68,6 +79,23 @@ const mapWorkload = ({ hours, appointments }) => {
     available,
     planned,
     actual
+  }
+}
+
+const mapWorkload = ({ hours, appointments }) => {
+  const am = appointments.filter(isAM)
+  const pm = appointments.filter(isPM)
+
+  return {
+    ...calculateWorkload({ hours, appointments }),
+    am: {
+      ...calculateWorkload({ hours: hours.am, appointments: am }),
+      count: am.length
+    },
+    pm: {
+      ...calculateWorkload({ hours: hours.pm, appointments: pm }),
+      count: pm.length
+    }
   }
 }
 
