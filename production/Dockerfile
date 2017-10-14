@@ -43,6 +43,7 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
     && chown -R pptruser:pptruser /opt/node_modules/
 
 USER pptruser
+ENV NODE_ICU_DATA /opt/app/programs/server/npm/node_modules/full-icu/
 ENV PORT 80
 EXPOSE 80
 
