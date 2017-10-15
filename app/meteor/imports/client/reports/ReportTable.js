@@ -1,5 +1,6 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
+import moment from 'moment'
 import 'moment-duration-format'
 import idx from 'idx'
 import find from 'lodash/fp/find'
@@ -9,6 +10,7 @@ import { Percent } from './shared/Percent'
 import { Round } from './shared/Round'
 import { Icon } from '../components/Icon'
 import { percentage } from '../../util/format'
+import { dayToDate } from '../../util/time/day'
 
 const align = {
   textAlign: 'right'
@@ -52,11 +54,14 @@ const Td = ({ children, borderLeft }) => (
   </td>
 )
 
-export const ReportTableHeader = ({ showRevenue, __ }) => (
+export const ReportTableHeader = ({ showRevenue, assigneeReport, __ }) => (
   <thead>
     <tr>
-      <th style={rankStyle} />
-      <th className='col-md-2'>{__('reports.assignee')}</th>
+      <th className='col-md-2'>{
+        assigneeReport
+          ? __('reports.date')
+          : __('reports.assignee')
+      }</th>
       <th style={align}>Std.</th>
       <th colSpan={3}>PatientInnen</th>
       <th style={center} colSpan={2}>Neu</th>
@@ -69,7 +74,6 @@ export const ReportTableHeader = ({ showRevenue, __ }) => (
     </tr>
 
     <tr className='text-muted' style={{ backgroundColor: '#f7f8f9' }}>
-      <th />
       <th />
       <th />
       <th style={borderLeftStyle}>Plan</th>
@@ -91,7 +95,34 @@ export const ReportTableHeader = ({ showRevenue, __ }) => (
   </thead>
 )
 
-export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) => (
+
+const AssigneeName = ({ assignee, __ }) =>
+  <span>
+    {
+      assignee.assigneeId
+      ? mapUserIdToName(assignee.assigneeId)
+      : (
+        assignee.type
+        ? (assignee.type && <i className='text-muted'>{__(`reports.assigneeType__${assignee.type}`)}</i>)
+        : <i className='text-muted'>{__('reports.unassigned')}</i>
+      )
+    }
+  </span>
+
+const Date = ({ day, __ }) =>
+  <span>
+    {moment(dayToDate(day)).format(__('time.dateFormatWeekdayShort'))}
+  </span>
+
+const getKey = assignee => {
+  if (assignee.day) {
+    return moment(dayToDate(assignee.day)).format()
+  } else {
+    return assignee.day || assignee.assigneeId || assignee.type || 'unassigned'
+  }
+}
+
+export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assigneeReport, __ }) => (
   <FlipMove
     duration={200}
     typeName='tbody'
@@ -100,23 +131,13 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
     staggerDelayBy={160}
     staggerDurationBy={60}>
     {report.assignees.filter(a => a.type !== 'overbooking').map((assignee, index) => (
-      <tr key={assignee.assigneeId || assignee.type || 'unassigned'} className='bg-white'>
-
-        {/* Rank */}
-        <td className='text-muted'>{assignee.assigneeId && index + 1}</td>
-
-        {/* Name */}
-        <td>
-          {
-            assignee.assigneeId
-            ? mapUserIdToName(assignee.assigneeId)
-            : (
-              assignee.type
-              ? (assignee.type && <i className='text-muted'>{__(`reports.assigneeType__${assignee.type}`)}</i>)
-              : <i className='text-muted'>{__('reports.unassigned')}</i>
-            )
-          }
-        </td>
+      <tr key={getKey(assignee)} className='bg-white'>
+        {/* Name or Date */}
+        <td>{
+          assigneeReport
+          ? <Date day={assignee.day} __={__} />
+          : <AssigneeName assignee={assignee} __={__} />
+        }</td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
         <td style={align}>{assignee.assigneeId && assignee.hours && durationFormat(assignee.hours.planned)}</td>
@@ -169,21 +190,26 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, __ }) =>
         }
       </tr>
     ))}
-    <SummaryRow report={report} showRevenue={showRevenue} __={__} />
+    <SummaryRow
+      report={report}
+      showRevenue={showRevenue}
+      assigneeReport={assigneeReport}
+      __={__} />
   </FlipMove>
 )
 
 class SummaryRow extends React.Component {
   render () {
-    const { report, showRevenue, __ } = this.props
+    const { report, showRevenue, assigneeReport, __ } = this.props
     return (
       <tr style={summaryRowStyle} className='bg-white'>
-        <td />
-
-        <td>{report.total.assignees} {__('reports.assignee', { count: report.total.assignees })}</td>
+        <td>{
+          !assigneeReport &&
+          <span>{report.total.assignees} {__('reports.assignee', { count: report.total.assignees })}</span>
+        }</td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
-        <Td>{report.total.hours && durationFormat(report.total.hours.planned)}</Td>
+        <Td>{idx(report, _ => _.total.hours) && durationFormat(report.total.hours.planned)}</Td>
 
         {/* Patients [planned, admitted, weighted workload] */}
         <Td borderLeft>{idx(report, _ => _.total.patients.total.expected) || <Nil />}</Td>
@@ -199,11 +225,11 @@ class SummaryRow extends React.Component {
         </Td>
 
         {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.new.expected)} of={report.total.patients.total.expected} /></Td>
+        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.new.expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
         <Td><Percent part={idx(report, _ => _.total.patients.new.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.recall.expected)} of={report.total.patients.total.expected} /></Td>
+        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.recall.expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
         <Td><Percent part={idx(report, _ => _.total.patients.recall.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
 
         {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
@@ -257,11 +283,19 @@ const Disclaimers = ({ report, __ }) => {
   }
 }
 
-export const ReportTable = ({ report, showRevenue, mapUserIdToName, __ }) => (
+export const ReportTable = ({ report, showRevenue, mapUserIdToName, assigneeReport, __ }) => (
   <div className='table-responsive enable-select'>
     <table className='table no-margin'>
-      <ReportTableHeader showRevenue={showRevenue} __={__} />
-      <ReportTableBody report={report} showRevenue={showRevenue} mapUserIdToName={mapUserIdToName} __={__} />
+      <ReportTableHeader
+        showRevenue={showRevenue}
+        assigneeReport={assigneeReport}
+        __={__} />
+      <ReportTableBody
+        report={report}
+        showRevenue={showRevenue}
+        mapUserIdToName={mapUserIdToName}
+        assigneeReport={assigneeReport}
+        __={__} />
     </table>
     <Disclaimers report={report} __={__} />
   </div>

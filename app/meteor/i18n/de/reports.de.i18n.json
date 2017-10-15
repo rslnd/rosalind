@@ -4,6 +4,8 @@
     "dashboard": "Übersicht",
     "thisSingular": "Bericht",
     "thisDaySingular": "Tagesbericht",
+    "date": "Datum",
+    "assignees": "ÄrztInnen",
     "assignee": "ÄrztIn",
     "assignee_plural": "ÄrztInnen",
     "assigneeType__external": "Team",

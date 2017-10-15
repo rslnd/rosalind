@@ -65,12 +65,7 @@ const composer = (props, onData) => {
 
     const mapPreview = (preview) => ({
       ...preview,
-      today: moment().isSame(dayToDate(preview.day), 'day'),
-      assignees: sortBy('username')(preview.assignees.filter(a => a.assigneeId).map(a => ({
-        username: mapUserIdToUsername(a.assigneeId),
-        fullNameWithTitle: Users.findOne(a.assigneeId).fullNameWithTitle(),
-        ...a
-      })))
+      today: moment().isSame(dayToDate(preview.day), 'day')
     })
 
     // Load preview data in background

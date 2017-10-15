@@ -102,7 +102,7 @@ export const TotalPatientsBox = ({ report, __ }) => {
   )
 }
 
-export const ReportSummary = ({ report, showRevenue, __ }) => {
+export const ReportSummary = ({ report, showRevenue, assigneeReport, __ }) => {
   const withRevenue = [
     (<div key='TotalRevenueBox' className='col-md-3 col-sm-3 col-xs-12'>
       <TotalRevenueBox report={report} __={__} />
@@ -134,7 +134,7 @@ export const ReportSummary = ({ report, showRevenue, __ }) => {
   ]
 
   return (
-    <div className='row'>
+    !assigneeReport && <div className='row'>
       {
         showRevenue
         ? withRevenue
