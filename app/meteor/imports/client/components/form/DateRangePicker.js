@@ -57,6 +57,7 @@ export class DateRangePicker extends React.Component {
           startDate={start.input.value ? moment(start.input.value) : null}
           endDate={end.input.value ? moment(end.input.value) : null}
           minimumNights={0}
+          hideKeyboardShortcutsPanel
         />
       </div>
     )

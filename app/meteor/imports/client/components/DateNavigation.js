@@ -216,6 +216,7 @@ class DateNavigationButtons extends React.Component {
                 focused
                 initialVisibleMonth={() => this.props.date}
                 enableOutsideDays
+                hideKeyboardShortcutsPanel
                 numberOfMonths={1}
               />
             </div>
