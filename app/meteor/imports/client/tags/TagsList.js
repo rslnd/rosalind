@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tags } from '../../api/tags'
 
-const tagStyle = {
+export const tagStyle = {
   borderRadius: 4,
   color: '#fff',
   display: 'inline-block',

@@ -6,6 +6,7 @@ import Divider from 'material-ui/Divider'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { TagsField } from '../../tags/TagsField'
+import { tagStyle } from '../../tags/TagsList'
 import { PatientPickerContainer } from '../../patients/patientPicker/PatientPickerContainer'
 import { UserHelper } from '../../users/UserHelper'
 import { validate } from './newAppointmentValidators'
@@ -21,6 +22,11 @@ const style = {
     marginTop: 30,
     paddingLeft: 0,
     paddingRight: 0
+  },
+  tag: {
+    ...tagStyle,
+    backgroundColor: '#ccc',
+    cursor: 'pointer'
   },
   noteRow: {
     marginTop: -40
@@ -55,7 +61,16 @@ const summary = ({ time, assigneeId }) => (
 
 export class NewAppointmentFormComponent extends React.Component {
   render () {
-    const { time, assigneeId, pristine, submitting, handleSubmit, onSubmit, fields } = this.props
+    const {
+      time,
+      assigneeId,
+      pristine,
+      submitting,
+      handleSubmit,
+      onSubmit,
+      onSubmitPause,
+      fields
+    } = this.props
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
@@ -76,11 +91,18 @@ export class NewAppointmentFormComponent extends React.Component {
             {/* Tags */}
             <div className='row' style={style.tagsRow}>
               <div className='col-md-12' style={style.tagsField}>
-                <Field
-                  name='tags'
-                  component={TagsField}
-                  allowedTags={this.props.allowedTags}
-                  fullWidth />
+                <div className='pull-left'>
+                  <Field
+                    name='tags'
+                    component={TagsField}
+                    allowedTags={this.props.allowedTags}
+                    fullWidth />
+                </div>
+
+                <div
+                  style={style.tag}
+                  className='pull-right'
+                  onClick={onSubmitPause}>PAUSE</div>
               </div>
             </div>
 

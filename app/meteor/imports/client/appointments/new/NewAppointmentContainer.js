@@ -12,7 +12,30 @@ export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSubmitPause = this.handleSubmitPause.bind(this)
     this.allowedTags = this.allowedTags.bind(this)
+  }
+
+  handleSubmitPause () {
+    const appointment = {
+      note: 'PAUSE',
+      start: moment(this.props.time).toDate(),
+      end: moment(this.props.time).add(5, 'minutes').toDate(),
+      assigneeId: this.props.assigneeId
+    }
+
+    console.log('[Appointments] Inserting pause', { appointment })
+
+    return Appointments.actions.insert.callPromise({ appointment })
+      .then(() => {
+        this.props.dispatch({ type: 'APPOINTMENT_INSERT_SUCCESS' })
+        Alert.success(TAPi18n.__('appointments.pauseInsertSuccess'))
+        if (this.props.onClose) { this.props.onClose() }
+      })
+      .catch((e) => {
+        console.error(e)
+        Alert.error(TAPi18n.__('appointments.insertError'))
+      })
   }
 
   handleSubmit (values, dispatch) {
@@ -84,6 +107,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     return (
       <NewAppointment
         onSubmit={this.handleSubmit}
+        onSubmitPause={this.handleSubmitPause}
         initialValues={this.props.patientId ? { patientId: this.props.patientId } : {}}
         time={this.props.time}
         allowedTags={this.allowedTags()} />

@@ -46,6 +46,7 @@
     "show": "Anwesend",
     "noShow": "Nicht Erschienen",
     "insertSuccess": "Termin erfolgreich eingetragen",
+    "pauseInsertSuccess": "Pause erfolgreich eingetragen",
     "insertError": "Entschuldigung! Bitte noch einmal versuchen.",
     "search": "Suche...",
     "searching": "Suche...",
