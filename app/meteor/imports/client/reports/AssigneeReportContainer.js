@@ -4,6 +4,7 @@ import omit from 'lodash/omit'
 import fromPairs from 'lodash/fromPairs'
 import sortBy from 'lodash/fp/sortBy'
 import moment from 'moment-timezone'
+import { stringify as toQuery } from 'query-string'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
@@ -32,6 +33,16 @@ const composer = (props, onData) => {
     const isPrint = props.location.hash === '#print'
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
 
+    const handleRangeChange = ({ start, end }) => {
+      const search = toQuery({
+        from: start.format('YYYY-MM-DD'),
+        to: end.format('YYYY-MM-DD')
+      })
+
+      const path = `/reports/assignees/${username}?${search}`
+      props.history.replace(path)
+    }
+
     const __ = (key, opts) => TAPi18n.__(key, opts)
 
     const data = {
@@ -41,6 +52,7 @@ const composer = (props, onData) => {
       user,
       from,
       to,
+      handleRangeChange,
       __
     }
 

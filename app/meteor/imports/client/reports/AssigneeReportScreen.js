@@ -6,7 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from '../../util/time/format'
 import { dayToDate } from '../../util/time/day'
 import { Icon } from '../components/Icon'
-import { DateNavigation } from '../components/DateNavigation'
+import { DateRangeNavigation } from '../components/DateRangeNavigation'
 import { Box } from '../components/Box'
 import { Report } from './Report'
 import { Preview } from './Preview'
@@ -19,7 +19,7 @@ export class AssigneeReportScreen extends React.Component {
     this.handleToggleRevenue = this.handleToggleRevenue.bind(this)
 
     this.state = {
-      showRevenue: props.canShowRevenue || false
+      showRevenue: false
     }
   }
 
@@ -49,20 +49,17 @@ export class AssigneeReportScreen extends React.Component {
           <h1 className='show-print'>
             {this.props.user.fullNameWithTitle()}
           </h1>
-          {/* <DateNavigation
-            date={this.props.date}
-            basePath='reports'
-            pullRight
-            jumpWeekBackward
-            jumpMonthBackward
-            jumpWeekForward
-            jumpMonthForward>
+          <DateRangeNavigation
+            start={this.props.from}
+            end={this.props.to}
+            onRangeChange={this.props.handleRangeChange}
+            pullRight>
             <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name='print' /></Button>
             {
               this.props.canShowRevenue &&
                 <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.toggleRevenue')}><Icon name='euro' /></Button>
             }
-          </DateNavigation> */}
+          </DateRangeNavigation>
         </div>
         <div className='content'>
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
