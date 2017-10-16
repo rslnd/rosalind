@@ -1,5 +1,5 @@
 @media screen {
-  .print-footer {
+  .hide-screen {
     display: none;
   }
 }

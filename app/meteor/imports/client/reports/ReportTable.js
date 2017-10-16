@@ -129,7 +129,8 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
     leaveAnimation='none'
     enterAnimation='none'
     staggerDelayBy={160}
-    staggerDurationBy={60}>
+    staggerDurationBy={60}
+    disableAllAnimations={assigneeReport}>
     {report.assignees.filter(a => a.type !== 'overbooking').map((assignee, index) => (
       <tr key={getKey(assignee)} className='bg-white'>
         {/* Name or Date */}

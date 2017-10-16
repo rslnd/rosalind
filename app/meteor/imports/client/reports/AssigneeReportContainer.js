@@ -43,6 +43,14 @@ const composer = (props, onData) => {
       props.history.replace(path)
     }
 
+    const handleChangeAssignee = (assigneeId) => {
+      const user = Users.findOne({ _id: assigneeId })
+      if (user) {
+        const path = `/reports/assignees/${user.username}${props.location.search}`
+        props.history.replace(path)
+      }
+    }
+
     const __ = (key, opts) => TAPi18n.__(key, opts)
 
     const data = {
@@ -53,6 +61,7 @@ const composer = (props, onData) => {
       from,
       to,
       handleRangeChange,
+      handleChangeAssignee,
       __
     }
 

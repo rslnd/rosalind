@@ -202,6 +202,7 @@ class DateNavigationButtons extends React.Component {
           onClose={this.handleCalendarClose}
           isOpened={this.state.calendarOpen}>
           <div
+            className='hide-print'
             style={{
               position: 'fixed',
               zIndex: 50,

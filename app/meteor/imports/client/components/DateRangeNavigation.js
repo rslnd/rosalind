@@ -86,6 +86,10 @@ export class DateRangeNavigation extends React.Component {
             onMouseEnter={this.handleCalendarOpen}
             onClick={this.handleCalendarOpen}
             title={TAPi18n.__('time.calendar')}>
+            {
+              this.props.calendarText &&
+                <span>{this.props.calendarText}&ensp;</span>
+            }
             <Icon name='calendar' />
           </Button>
 
@@ -98,6 +102,7 @@ export class DateRangeNavigation extends React.Component {
           onClose={this.handleCalendarClose}
           isOpened={this.state.calendarOpen}>
           <div
+            className='hide-print'
             style={{
               position: 'fixed',
               zIndex: 50,

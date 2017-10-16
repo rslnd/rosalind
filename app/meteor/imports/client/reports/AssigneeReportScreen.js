@@ -11,6 +11,14 @@ import { Box } from '../components/Box'
 import { Report } from './Report'
 import { Preview } from './Preview'
 import { FooterContainer } from '../layout/FooterContainer'
+import { UserPickerContainer } from '../users/UserPickerContainer'
+
+const formatRange = ({ start, end }) =>
+  ([
+    moment(start).format(TAPi18n.__('time.dateFormatShortNoYear')),
+    '-',
+    moment(end).format(TAPi18n.__('time.dateFormatShort'))
+  ].join(' '))
 
 export class AssigneeReportScreen extends React.Component {
   constructor (props) {
@@ -43,16 +51,29 @@ export class AssigneeReportScreen extends React.Component {
   }
 
   render () {
+    const formattedRange = formatRange({
+      start: this.props.from,
+      end: this.props.to
+    })
+
     return (
       <div>
         <div className='content-header show-print'>
-          <h1 className='show-print'>
+          <h1 className='show-print hide-screen'>
             {this.props.user.fullNameWithTitle()}
+
+            <small>{formattedRange}</small>
           </h1>
+
+          <h1 className='hide-print'>
+            {TAPi18n.__('reports.assigneesReport')}
+          </h1>
+
           <DateRangeNavigation
             start={this.props.from}
             end={this.props.to}
             onRangeChange={this.props.handleRangeChange}
+            calendarText={formattedRange}
             pullRight>
             <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name='print' /></Button>
             {
@@ -62,6 +83,11 @@ export class AssigneeReportScreen extends React.Component {
           </DateRangeNavigation>
         </div>
         <div className='content'>
+          <div className='hide-print' style={{ paddingBottom: 15 }}>
+            <UserPickerContainer
+                autofocus
+                onChange={this.props.handleChangeAssignee} />
+          </div>
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
           <FlipMove duration={230}>
             {

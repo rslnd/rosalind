@@ -7,6 +7,7 @@
     "date": "Datum",
     "assignees": "ÄrztInnen",
     "assignee": "ÄrztIn",
+    "assigneesReport": "ÄrztInnen-Bericht",
     "assignee_plural": "ÄrztInnen",
     "assigneeType__external": "Team",
     "assigneeType__overbooking": "Einschub",
