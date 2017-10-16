@@ -17,6 +17,12 @@
     background: #ddd !important;
   }
 
+  .label {
+    background-color: #ddd !important;
+    color: #333 !important;
+    border: none !important;
+  }
+
   .zoom-1 {
     zoom: 1;
   }

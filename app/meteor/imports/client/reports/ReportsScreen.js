@@ -12,6 +12,10 @@ import { Report } from './Report'
 import { Preview } from './Preview'
 import { FooterContainer } from '../layout/FooterContainer'
 
+const avoidPageBreak = {
+  pageBreakInside: 'avoid'
+}
+
 export class ReportsScreen extends React.Component {
   constructor (props) {
     super(props)
@@ -90,7 +94,7 @@ export class ReportsScreen extends React.Component {
           <FlipMove duration={230}>
             {
               this.props.preview &&
-                <div key='previewTable'>
+                <div key='previewTable' style={avoidPageBreak}>
                   <Preview
                     preview={this.props.preview}
                     showRevenue={this.state.showRevenue}

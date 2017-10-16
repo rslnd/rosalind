@@ -95,7 +95,7 @@ const Cell = ({ day, today, style, am, pm, workload, mapUserIdToName, mapUserIdT
       }
     </span>
 
-    <div className='row' style={{ marginTop: 40 }}>
+    <div className='row' style={{ marginTop: 50 }}>
       <div className='col-md-12'>
         <Assignees
           assignees={am.assignees}
