@@ -95,8 +95,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, __ }) => (
   </thead>
 )
 
-
-const AssigneeName = ({ assignee, __ }) =>
+const AssigneeName = ({ assignee, mapUserIdToName, __ }) =>
   <span>
     {
       assignee.assigneeId
@@ -137,7 +136,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         <td>{
           assigneeReport
           ? <Date day={assignee.day} __={__} />
-          : <AssigneeName assignee={assignee} __={__} />
+          : <AssigneeName assignee={assignee} mapUserIdToName={mapUserIdToName} __={__} />
         }</td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}

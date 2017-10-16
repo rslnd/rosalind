@@ -19,7 +19,7 @@ export const generate = ({ day, appointments, pastAppointments, overrideSchedule
 
   report = mergeReport(report, mapHours({ report, appointments, overrideSchedules }))
 
-  report.total = mapTotal({ report, appointments, messages })
+  report.total = mapTotal({ report })
   report.average = mapAverage({ report })
 
   return report

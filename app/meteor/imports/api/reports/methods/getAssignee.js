@@ -1,6 +1,8 @@
 import sortBy from 'lodash/fp/sortBy'
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
+import { mapTotal } from './mapTotal'
+import { mapAverage } from './mapAverage'
 import { dayToDate } from '../../../util/time/day'
 
 const moment = extendMoment(_moment)
@@ -17,12 +19,15 @@ const findAssignee = assigneeId => report => ({
 })
 
 export const getAssignee = ({ assigneeId, reports = [], from, to }) => {
-  const assignees = sortBy(r => dayToDate(r.day))(reports
+  let report = {}
+
+  report.assignees = sortBy(r => dayToDate(r.day))(reports
     .filter(isWithin({ from, to }))
     .filter(includesAssignee(assigneeId))
     .map(findAssignee(assigneeId)))
 
-  return {
-    assignees
-  }
+  report.total = mapTotal({ report })
+  report.average = mapTotal({ report })
+
+  return report
 }

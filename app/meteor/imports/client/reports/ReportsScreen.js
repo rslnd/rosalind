@@ -52,7 +52,7 @@ export class ReportsScreen extends React.Component {
           </h1>
           <DateNavigation
             date={this.props.date}
-            basePath='reports'
+            basePath='reports/day'
             pullRight
             jumpWeekBackward
             jumpMonthBackward

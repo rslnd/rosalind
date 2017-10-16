@@ -103,7 +103,7 @@ const mapRevenue = ({ report }) => {
   }
 }
 
-const preprocess = ({ report, appointments, messages }) => {
+const preprocess = ({ report }) => {
   const patients = mapPatients({ report })
   const assignees = mapAssignees({ report })
   const hours = mapHours({ report })
@@ -136,7 +136,7 @@ const postprocess = ({ report, total }) => {
   }
 }
 
-export const mapTotal = ({ report, appointments, messages }) => {
-  const total = preprocess({ report, appointments, messages })
+export const mapTotal = ({ report }) => {
+  const total = preprocess({ report })
   return postprocess({ total, report })
 }
