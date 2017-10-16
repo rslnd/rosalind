@@ -105,7 +105,7 @@ class DateNavigationButtons extends React.Component {
       calendarOpen: true,
       calendarPosition: {
         top: targetRect.bottom,
-        right: targetRect.right - bodyRect.right
+        right: bodyRect.right - targetRect.right - 30
       }
     })
   }
