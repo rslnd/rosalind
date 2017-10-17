@@ -60,7 +60,7 @@ export class AssigneeReportScreen extends React.Component {
       <div>
         <div className='content-header show-print'>
           <h1 className='show-print hide-screen'>
-            {this.props.user.fullNameWithTitle()}
+            {this.props.user && this.props.user.fullNameWithTitle()}
 
             <small>{formattedRange}</small>
           </h1>

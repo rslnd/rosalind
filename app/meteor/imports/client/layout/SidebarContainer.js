@@ -46,8 +46,8 @@ const sidebarItems = () => {
       icon: 'bar-chart',
       roles: ['admin', 'reports'],
       subItems: [
-        { name: 'dashboard' },
-        { name: 'assignees', path: '/assignees' }
+        { name: 'dashboard', path: '/day' },
+        { name: 'assignees', path: '/assignee' }
       ]
     },
     {

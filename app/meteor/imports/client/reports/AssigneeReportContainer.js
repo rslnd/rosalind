@@ -39,14 +39,14 @@ const composer = (props, onData) => {
         to: end.format('YYYY-MM-DD')
       })
 
-      const path = `/reports/assignees/${username}?${search}`
+      const path = `/reports/assignee/${username}?${search}`
       props.history.replace(path)
     }
 
     const handleChangeAssignee = (assigneeId) => {
       const user = Users.findOne({ _id: assigneeId })
       if (user) {
-        const path = `/reports/assignees/${user.username}${props.location.search}`
+        const path = `/reports/assignee/${user.username}${props.location.search}`
         props.history.replace(path)
       }
     }
