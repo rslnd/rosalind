@@ -70,14 +70,14 @@ const mapWeightedWorkload = ({ report }) => {
   return summedWeightedWorkloads / summedWeights
 }
 
-const mapWorkload = ({ report }) => {
+export const mapWorkload = ({ report }) => {
   const sum = accessor => report.assignees
     .map(accessor)
     .reduce((acc, curr) => {
       return {
-        available: acc.available + curr && curr.available || acc.available,
-        planned: acc.planned + curr && curr.planned || acc.planned,
-        actual: acc.actual + curr && curr.actual || acc.actual
+        available: (acc.available + (curr && curr.available)) || acc.available,
+        planned: (acc.planned + (curr && curr.planned)) || acc.planned,
+        actual: (acc.actual + (curr && curr.actual)) || acc.actual
       }
     }, { available: 0, planned: 0, actual: 0 })
 
