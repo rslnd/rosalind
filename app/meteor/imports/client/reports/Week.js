@@ -31,9 +31,7 @@ const Workload = ({ workload }) => {
   }
 
   const free = clampUpper(workload.available)(
-    workload.available - (
-      workload.actual || workload.planned
-    )
+    workload.available - workload.planned
   )
 
   const title = `${free} frei von ${workload.available}`
