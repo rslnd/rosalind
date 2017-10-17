@@ -30,14 +30,13 @@ const Workload = ({ workload }) => {
     return null
   }
 
-  const free = clampUpper(workload.available)(
-    workload.available - workload.planned
-  )
+  const available = Math.round(workload.available)
+  const free = Math.round(clampUpper(available)(available - workload.planned))
 
-  const title = `${free} frei von ${workload.available}`
+  const title = `${free} frei von ${available}`
 
   return <span className='text-muted' title={title}>
-    <b>{free}</b>/{workload.available}
+    <b>{free}</b>/{available}
   </span>
 }
 
