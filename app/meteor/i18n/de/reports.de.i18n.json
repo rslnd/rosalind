@@ -8,6 +8,7 @@
     "assignees": "ÄrztInnen",
     "assignee": "ÄrztIn",
     "assigneesReport": "ÄrztInnen-Bericht",
+    "assigneesReportFor": "Bericht für __name__",
     "assignee_plural": "ÄrztInnen",
     "assigneeType__external": "Team",
     "assigneeType__overbooking": "Einschub",

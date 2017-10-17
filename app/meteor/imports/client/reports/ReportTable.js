@@ -69,6 +69,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, __ }) => (
       <th style={center} colSpan={2}>OP</th>
       <th style={align} title='Kaustik'>Kau</th>
       <th style={align} title='Kryo'>Kry</th>
+      {assigneeReport && <th style={align} title='Einschub'>Ein</th>}
       <th style={center} colSpan={2}>Neu/Std.</th>
       {showRevenue && <th style={align} colSpan={2}>Umsatz</th>}
     </tr>
@@ -87,6 +88,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, __ }) => (
       <th style={align}>Ist</th>
       <th style={align}>Ist</th>
       <th style={align}>Ist</th>
+      {assigneeReport && <th />}
       <th style={colDivider}>Plan</th>
       <th style={align}>Ist</th>
       {showRevenue && <th style={align}>€/h</th>}
@@ -118,6 +120,20 @@ const getKey = assignee => {
     return moment(dayToDate(assignee.day)).format()
   } else {
     return assignee.day || assignee.assigneeId || assignee.type || 'unassigned'
+  }
+}
+
+const Overbooking = ({ assignee, __ }) => {
+  const planned = idx(assignee, _ => _.overbooking.patients.total.planned)
+  const admitted = idx(assignee, _ => _.overbooking.patients.total.admitted)
+
+  const title = __('reports.overbookingSummary', { expected: planned, admitted })
+  if (planned > 0) {
+    return <span className='text-muted' title={title}>
+      {admitted}/{planned}
+    </span>
+  } else {
+    return <Nil />
   }
 }
 
@@ -164,6 +180,11 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
 
         {/* Kryo [Ist] */}
         <Td>{idx(assignee, _ => _.patients.cryo.actual) || <Nil />}</Td>
+
+        {/* Assignee reports include overbooking column */}
+        {
+          assigneeReport && <Td><Overbooking assignee={assignee} __={__} /></Td>
+        }
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft>{assignee.assigneeId &&
@@ -241,6 +262,9 @@ class SummaryRow extends React.Component {
 
         {/* Kryo [Ist] */}
         <Td>{idx(report, _ => _.total.patients.cryo.actual)}</Td>
+
+        {/* Overbooking */}
+        {assigneeReport && <Td />}
 
         {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
         <Td borderLeft><Round unit='⌀' number={idx(report, _ => _.average.patients.new.expectedPerHour)} /></Td>

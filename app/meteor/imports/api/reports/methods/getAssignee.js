@@ -1,4 +1,5 @@
 import sortBy from 'lodash/fp/sortBy'
+import findIndex from 'lodash/fp/findIndex'
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { mapTotal } from './mapTotal'
@@ -15,7 +16,10 @@ const includesAssignee = assigneeId => report =>
 
 const findAssignee = assigneeId => report => ({
   ...report.assignees.find(a => a.assigneeId === assigneeId),
-  day: report.day
+  day: report.day,
+  overbooking: report.assignees.find(a => a.type === 'overbooking'),
+  rank: findIndex(a => a.assigneeId === assigneeId)(report.assignees) + 1,
+  assignees: report.total.assignees
 })
 
 export const getAssignee = ({ assigneeId, reports = [], from, to }) => {
@@ -27,7 +31,7 @@ export const getAssignee = ({ assigneeId, reports = [], from, to }) => {
     .map(findAssignee(assigneeId)))
 
   report.total = mapTotal({ report })
-  report.average = mapTotal({ report })
+  report.average = mapAverage({ report })
 
   return report
 }
