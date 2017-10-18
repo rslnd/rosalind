@@ -132,7 +132,7 @@ class DateNavigationButtons extends React.Component {
           {
             this.props.jumpMonthBackward &&
               <Button
-                onClick={this.handleForwardMonthClick}
+                onClick={this.handleBackwardMonthClick}
                 title={TAPi18n.__('time.oneMonthBackward')}>
                 <Icon name='angle-left' />
                 <Icon name='angle-left' />
@@ -141,7 +141,7 @@ class DateNavigationButtons extends React.Component {
           {
             this.props.jumpWeekBackward &&
               <Button
-                onClick={this.handleForwardWeekClick}
+                onClick={this.handleBackwardWeekClick}
                 title={TAPi18n.__('time.oneWeekBackward')}>
                 <Icon name='angle-double-left' />
               </Button>
