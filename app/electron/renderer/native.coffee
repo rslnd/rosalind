@@ -11,6 +11,7 @@ try
     print: (options) -> ipcRenderer.send('window/print', options)
     events: new EventEmitter()
     quitAndInstall: -> ipcRenderer.send('update/quitAndInstall')
+    dataTransferSuccess: (a) -> ipcRenderer.send('import/dataTransferSuccess', a)
 
   ipcRenderer.on 'settings', (e, settings) ->
     window.native.settings = settings

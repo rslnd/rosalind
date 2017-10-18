@@ -49,6 +49,15 @@ const start = ({ ipcReceiver }) => {
 
       return watcher
     })
+
+    const { ipcMain } = require('electron')
+    ipcMain.on('import/dataTransferSuccess', ({ file, response }) => {
+      logger.info('[Watch] Data transfer success', { file, response })
+      if (file.remove) {
+        logger.info('[Watch] Removing file', file.path)
+        fs.unlink(file.path)
+      }
+    })
   }
 }
 

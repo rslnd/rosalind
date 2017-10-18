@@ -49,6 +49,10 @@ export const setupNative = () => {
               result
             })
           }
+
+          if (window.native.dataTransferSuccess) {
+            window.native.dataTransferSuccess({ file, response })
+          }
         })
     })
   }
