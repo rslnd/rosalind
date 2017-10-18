@@ -56,13 +56,17 @@ export class AssigneeReportScreen extends React.Component {
       end: this.props.to
     })
 
+    const title = this.props.user &&
+      TAPi18n.__('reports.assigneesReportFor', {
+        name: this.props.user.fullNameWithTitle()
+      }) || TAPi18n.__('reports.assigneesReport')
+
     return (
       <div>
         <div className='content-header show-print'>
-          <h1 className='hide-print'>
-            {this.props.user && TAPi18n.__('reports.assigneesReportFor', { name:  this.props.user.fullNameWithTitle()}) || TAPi18n.__('reports.assigneesReport')}
-
-            <small className='show-print hide-screen'>{formattedRange}</small>
+          <h1 className='show-print'>
+            {title}
+            <small className='hide-screen'>{formattedRange}</small>
           </h1>
 
           <DateRangeNavigation

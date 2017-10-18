@@ -1,6 +1,6 @@
 @media screen {
   .hide-screen {
-    display: none;
+    display: none !important;
   }
 }
 
