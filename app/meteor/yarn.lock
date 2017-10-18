@@ -4991,15 +4991,6 @@ react-vis@1.6.7:
     react-motion "^0.4.8"
     react-test-renderer "^15.5.4"
 
-react-with-styles-interface-aphrodite@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/react-with-styles-interface-aphrodite/-/react-with-styles-interface-aphrodite-3.1.1.tgz#781845989bde8a0eab599eaab42ce39c45ddadb4"
-  dependencies:
-    array-flatten "^2.1.1"
-    has "^1.0.1"
-    object.assign "^4.0.4"
-    rtl-css-js "^1.7.0"
-
 react-with-styles-interface-css@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/react-with-styles-interface-css/-/react-with-styles-interface-css-2.0.2.tgz#e9cb651a4377a36cbeb6427cf68a7b139e3de1cb"
@@ -5420,10 +5411,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^2.0.0"
     inherits "^2.0.1"
-
-rtl-css-js@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/rtl-css-js/-/rtl-css-js-1.7.0.tgz#0a9b0a5ddcc7181b0b41977264f39647ba705770"
 
 run-async@^2.2.0:
   version "2.3.0"

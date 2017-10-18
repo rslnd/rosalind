@@ -80,7 +80,6 @@
     "react-sticky": "^6.0.1",
     "react-tap-event-plugin": "^2.0.1",
     "react-vis": "1.6.7",
-    "react-with-styles-interface-aphrodite": "^3.1.1",
     "redux": "^3.6.0",
     "redux-form": "^7.0.1",
     "redux-form-material-ui": "^4.0.1",
