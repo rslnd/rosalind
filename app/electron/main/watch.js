@@ -51,11 +51,11 @@ const start = ({ ipcReceiver }) => {
     })
 
     const { ipcMain } = require('electron')
-    ipcMain.on('import/dataTransferSuccess', ({ file, response }) => {
-      logger.info('[Watch] Data transfer success', { file, response })
-      if (file.remove) {
-        logger.info('[Watch] Removing file', file.path)
-        fs.unlink(file.path)
+    ipcMain.on('import/dataTransferSuccess', ({ remove, path }) => {
+      logger.info('[Watch] Data transfer success', { path, remove })
+      if (remove) {
+        logger.info('[Watch] Removing file', path)
+        fs.unlink(path)
       }
     })
   }
