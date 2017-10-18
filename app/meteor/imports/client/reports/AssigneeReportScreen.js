@@ -88,7 +88,7 @@ export class AssigneeReportScreen extends React.Component {
           <FlipMove duration={230}>
             {
               this.props.report && this.props.report.assignees.length > 0
-              ? <div key='reportTable'>
+              ? <div key='reportTable' style={{ marginBottom: 80 }}>
                 <Report
                   report={this.props.report}
                   showRevenue={this.state.showRevenue}
