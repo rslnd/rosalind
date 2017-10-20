@@ -1,52 +1,34 @@
 import moment from 'moment-timezone'
 
-export const q1 = (m) => {
-  return {
-    start: moment(m).month(0).startOf('month'),
-    end: moment(m).month(3 - 1).endOf('month')
-  }
+export const Q = {
+  1: [1, 2, 3],
+  2: [4, 5, 6],
+  3: [7, 8, 9],
+  4: [10, 11, 12]
 }
 
-export const q2 = (m) => {
-  return {
-    start: moment(m).month(4 - 1).startOf('month'),
-    end: moment(m).month(6 - 1).endOf('month')
-  }
+export const start = a => a[0]
+export const end = a => a[2]
+
+export const q = n => m => ({
+  start: moment(m).month(start(Q[n]) - 1).startOf('month'),
+  end: moment(m).month(end(Q[n]) - 1).endOf('month')
+})
+
+export const isQ = n => m => {
+  const { start, end } = q(n)(m)
+  return moment(m).isBetween(start, end, null, '[]')
 }
 
-export const q3 = (m) => {
-  return {
-    start: moment(m).month(7 - 1).startOf('month'),
-    end: moment(m).month(9 - 1).endOf('month')
-  }
-}
+export const q1 = q(1)
+export const q2 = q(2)
+export const q3 = q(3)
+export const q4 = q(4)
 
-export const q4 = (m) => {
-  return {
-    start: moment(m).month(10 - 1).startOf('month'),
-    end: moment(m).month(12 - 1).endOf('month')
-  }
-}
-
-export const isQ1 = (m) => {
-  const q = q1(m)
-  return moment(m).isBetween(q.start, q.end, null, '[]')
-}
-
-export const isQ2 = (m) => {
-  const q = q2(m)
-  return moment(m).isBetween(q.start, q.end, null, '[]')
-}
-
-export const isQ3 = (m) => {
-  const q = q3(m)
-  return moment(m).isBetween(q.start, q.end, null, '[]')
-}
-
-export const isQ4 = (m) => {
-  const q = q4(m)
-  return moment(m).isBetween(q.start, q.end, null, '[]')
-}
+export const isQ1 = isQ(1)
+export const isQ2 = isQ(2)
+export const isQ3 = isQ(3)
+export const isQ4 = isQ(4)
 
 export const getQ = (m) => {
   const t = moment(m)
@@ -54,6 +36,14 @@ export const getQ = (m) => {
   if (isQ3(t)) { return 3 }
   if (isQ2(t)) { return 2 }
   if (isQ1(t)) { return 1 }
+}
+
+export const getQuarterSelector = m => {
+  const months = Q[getQ(m)]
+  return {
+    'day.month': { $in: months },
+    'day.year': moment(m).year()
+  }
 }
 
 export const getRange = (m) => {
@@ -107,5 +97,6 @@ export default {
   quarter,
   isPrevious,
   isSame,
-  isNext
+  isNext,
+  getQuarterSelector
 }

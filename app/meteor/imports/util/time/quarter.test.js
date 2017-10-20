@@ -177,6 +177,16 @@ describe('util', () => {
           })
         })
       })
+
+      describe('getQuarterSelector', () => {
+        it('returns mongo selector', () => {
+          const m = moment('2017-10-19T20:55:00+02:00')
+          expect(quarter.getQuarterSelector(m)).to.eql({
+            'day.month': { $in: [10, 11, 12] },
+            'day.year': 2017
+          })
+        })
+      })
     })
   })
 })
