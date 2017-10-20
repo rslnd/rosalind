@@ -68,10 +68,17 @@ const composer = (props, onData) => {
       today: moment().isSame(dayToDate(preview.day), 'day')
     })
 
-    // Load preview data in background
-    Reports.actions.generatePreview.callPromise({ day })
-      .then(x => x.map(mapPreview))
-      .then(preview => onData(null, { ...data, preview }))
+    // Load quarter data in background
+    Reports.actions.generateQuarter.callPromise({ day })
+      .then(quarter => {
+        onData(null, { ...data, quarter })
+
+        // Then load preview data in background. Ugh.
+        // TODO: Refactor.
+        Reports.actions.generatePreview.callPromise({ day })
+        .then(x => x.map(mapPreview))
+        .then(preview => onData(null, { ...data, quarter, preview }))
+      })
   }
 }
 

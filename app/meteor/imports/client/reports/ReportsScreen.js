@@ -10,6 +10,7 @@ import { DateNavigation } from '../components/DateNavigation'
 import { Box } from '../components/Box'
 import { Report } from './Report'
 import { Preview } from './Preview'
+import { Quarter } from './Quarter'
 import { FooterContainer } from '../layout/FooterContainer'
 
 const avoidPageBreak = {
@@ -88,6 +89,19 @@ export class ReportsScreen extends React.Component {
                   <p>{TAPi18n.__('reports.empty')}</p>
                 </Box>
               </div>
+            }
+          </FlipMove>
+
+          <FlipMove duration={230}>
+            {
+              this.props.quarter && this.state.showRevenue &&
+                <div key='quarterTable' style={avoidPageBreak}>
+                  <Quarter
+                    quarter={this.props.quarter}
+                    __={this.props.__}
+                  />
+                  <span className='quarterLoaded' />
+                </div>
             }
           </FlipMove>
 

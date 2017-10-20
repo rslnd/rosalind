@@ -11,7 +11,7 @@ import idx from 'idx'
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { dayToDate } from '../../../util/time/day'
-import { getRange } from '../../../util/time/quarter'
+import { getRange, getQ } from '../../../util/time/quarter'
 
 const moment = extendMoment(_moment)
 
@@ -20,6 +20,7 @@ export const mapQuarter = ({ day, reports, overrideSchedules, holidays }) => {
   return {
     day,
     days,
+    q: getQ(dayToDate(day)),
     revenue: mapRevenue({ reports, days }),
     patients: mapPatients(reports)
   }
