@@ -7,6 +7,7 @@ import { upsert } from './upsert'
 import { tally } from './tally'
 import { generate } from './generate'
 import { generatePreview } from './generatePreview'
+import { generateQuarter } from './generateQuarter'
 
 export default function ({ Reports }) {
   return Object.assign({},
@@ -14,6 +15,7 @@ export default function ({ Reports }) {
     { upsert: upsert({ Reports }) },
     { tally: tally({ Reports }) },
     { generate: generate({ Reports, Schedules, Appointments, Tags, Messages }) },
-    { generatePreview: generatePreview({ Reports, Schedules, Appointments, Tags, Messages }) }
+    { generatePreview: generatePreview({ Reports, Schedules, Appointments, Tags, Messages }) },
+    { generateQuarter: generateQuarter({ Reports, Schedules }) }
   )
 }
