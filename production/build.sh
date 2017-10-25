@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 echo "** Pulling base image in background"
-docker pull node:8.1.4 &
+docker pull node:8.8.0 &
 
 echo "** Building meteor bundle"
 
