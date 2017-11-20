@@ -5546,8 +5546,8 @@ slash@^1.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
 
 smooch@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/smooch/-/smooch-4.0.4.tgz#ba092e56c2d4682095e961ad4c7f9de2a889a080"
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/smooch/-/smooch-4.3.3.tgz#e6dabeccbc7586367f8db28d1367c2828c06ac3e"
 
 sntp@1.x.x:
   version "1.0.9"
