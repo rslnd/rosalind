@@ -57,7 +57,7 @@ const init = () => {
                       fullNameWithTitle: user.fullNameWithTitle(),
                       employee: user.profile && user.profile.employee,
                       roles: user.getRoles(),
-                      group
+                      group: group && group.name
                     }
                   })
                 })
