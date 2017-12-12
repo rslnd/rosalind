@@ -24,12 +24,21 @@ export const xdt = ({ Importers }) => {
       const parsed = new Xdt(content)
 
       if (parsed.patient) {
+        let contacts = null
+        const phone = parsed.find('3626')
+        if (phone && phone[0]) {
+          contacts = [
+            { channel: 'Phone', value: phone[0] }
+          ]
+        }
+
         const patient = {
           profile: {
             firstName: parsed.patient.firstName,
             lastName: parsed.patient.lastName,
             birthday: dateToDay(moment.tz(parsed.patient.birthday, 'DDMMYYYY', timezone)),
-            gender: parsed.patient.gender === '1' ? 'Male' : 'Female'
+            gender: parsed.patient.gender === '1' ? 'Male' : 'Female',
+            contacts
           },
           external: {
             eoswin: {

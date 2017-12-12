@@ -50,7 +50,7 @@ export const upsert = ({ Patients }) => {
           let newContacts = []
 
           patient.profile.contacts.forEach((c) => {
-            if (!existingPatient.profile.contacts.map((c) => c.value).includes(c.value)) {
+            if (!existingPatient.profile.contacts.map((c) => zerofix(c.value)).includes(zerofix(c.value))) {
               if (c.channel === 'Phone') {
                 c.value = zerofix(c.value)
               }
