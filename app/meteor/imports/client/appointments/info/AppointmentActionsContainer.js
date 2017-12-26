@@ -4,6 +4,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { withRouter } from 'react-router-dom'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Patients } from '../../../api/patients'
+import { Calendars } from '../../../api/calendars'
 import { Appointments } from '../../../api/appointments'
 import { AppointmentActions } from './AppointmentActions'
 
@@ -59,8 +60,9 @@ const composer = (props, onData) => {
   if (props.viewInCalendar) {
     viewInCalendar = () => {
       closeModal()
-      const slug = moment(appointment.start).format('YYYY-MM-DD')
-      props.history.push(`/appointments/${slug}#${props.appointmentId}`)
+      const calendarSlug = Calendars.findOne(appointment.calendarId).slug
+      const date = moment(appointment.start).format('YYYY-MM-DD')
+      props.history.push(`/appointments/${calendarSlug}/${date}#${props.appointmentId}`)
     }
   }
 

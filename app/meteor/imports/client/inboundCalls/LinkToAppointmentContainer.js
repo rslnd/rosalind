@@ -1,6 +1,7 @@
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { Calendars } from '../../api/calendars'
 import { Appointments } from '../../api/appointments'
 import { Users } from '../../api/users'
 import { LinkToAppointmentWrapper } from './LinkToAppointment'
@@ -11,6 +12,7 @@ const getFormattedAppointmentData = (appointmentId) => {
   Meteor.subscribe('appointment', appointmentId)
   const appointment = Appointments.findOne({ _id: appointmentId })
   if (appointment) {
+    const calendarName = Calendars.findOne(appointment.calendarId).name
     const start = moment(appointment.start)
     const date = start.format(TAPi18n.__('time.dateFormatWeekdayShort'))
     const time = start.format(TAPi18n.__('time.timeFormat'))
@@ -18,9 +20,9 @@ const getFormattedAppointmentData = (appointmentId) => {
     if (appointment.assigneeId) {
       const assignee = Users.findOne({ _id: appointmentId })
       const assigneeName = assignee && assignee.lastNameWithTitle()
-      return { date, time, assigneeName }
+      return { calendarName, date, time, assigneeName }
     } else {
-      return { date, time }
+      return { calendarName, date, time }
     }
   } else {
     return {}
@@ -38,7 +40,7 @@ const composer = ({ inboundCall }, onData) => {
 
   const appointmentId = inboundCall.payload.appointmentId
 
-  const { date, time, assigneeName } = getFormattedAppointmentData(appointmentId)
+  const { date, time, calendarName, assigneeName } = getFormattedAppointmentData(appointmentId)
 
   if (!date) {
     return onData(null, { text: TAPi18n.__('inboundCalls.isSmsFromPatient') })
@@ -47,7 +49,7 @@ const composer = ({ inboundCall }, onData) => {
   if (date && !assigneeName) {
     return onData(null, {
       text: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminder'),
-      linkText: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkText', { date, time }),
+      linkText: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkText', { calendarName, date, time }),
       appointmentId
     })
   }
@@ -55,7 +57,7 @@ const composer = ({ inboundCall }, onData) => {
   if (date && assigneeName) {
     return onData(null, {
       text: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminder'),
-      linkText: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkTextWithAssigneeName', { date, time, assigneeName }),
+      linkText: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkTextWithAssigneeName', { calendarName, date, time, assigneeName }),
       appointmentId
     })
   }
