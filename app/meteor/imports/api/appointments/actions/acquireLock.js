@@ -11,11 +11,12 @@ export const acquireLock = ({ Appointments }) => {
     name: 'appointments/acquireLock',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
+      calendarId: { type: SimpleSchema.RegEx.Id },
       time: { type: Date },
       assigneeId: { type: String, optional: true }
     }).validator(),
 
-    run ({ assigneeId, time }) {
+    run ({ calendarId, assigneeId, time }) {
       this.unblock()
 
       if (this.connection && !this.userId) {
@@ -25,6 +26,7 @@ export const acquireLock = ({ Appointments }) => {
       const length = getDefaultLength({ assigneeId, date: moment(time) })
 
       const appointmentId = Appointments.insert({
+        calendarId,
         start: time,
         end: moment(time).add(length, 'minutes').toDate(),
         assigneeId,

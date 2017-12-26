@@ -2,7 +2,7 @@ import React from 'react'
 import { Popover, PopoverAnimationVertical } from 'material-ui/Popover'
 import { NewAppointmentContainer } from '../../new/NewAppointmentContainer'
 
-export const NewAppointmentPopover = ({ open, anchorEl, onClose, assigneeId, time }) => (
+export const NewAppointmentPopover = ({ open, anchorEl, onClose, calendar, assigneeId, time }) => (
   <Popover
     open={open}
     anchorEl={anchorEl}
@@ -25,6 +25,7 @@ export const NewAppointmentPopover = ({ open, anchorEl, onClose, assigneeId, tim
       maxWidth: 400
     }}>
       <NewAppointmentContainer
+        calendar={calendar}
         assigneeId={assigneeId}
         time={time}
         onClose={onClose} />

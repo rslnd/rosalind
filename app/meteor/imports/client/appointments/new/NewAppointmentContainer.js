@@ -19,6 +19,7 @@ export class NewAppointmentContainerComponent extends React.Component {
   handleSubmitPause () {
     const appointment = {
       note: 'PAUSE',
+      calendarId: this.props.calendar._id,
       start: moment(this.props.time).toDate(),
       end: moment(this.props.time).add(5, 'minutes').toDate(),
       assigneeId: this.props.assigneeId
@@ -67,6 +68,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     })
 
     const appointment = {
+      calendarId: this.props.calendar._id,
       patientId: newPatient ? undefined : values.patientId,
       note: values.appointmentNote,
       tags: values.tags,

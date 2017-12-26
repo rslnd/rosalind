@@ -60,6 +60,11 @@ module.exports = new SimpleSchema
   day:
     type: Day
     optional: true
+  
+  calendarId:
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+    index: 1
 
   external:
     optional: true

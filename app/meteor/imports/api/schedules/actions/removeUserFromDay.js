@@ -12,16 +12,17 @@ export const removeUserFromDay = ({ Schedules, Users }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       userId: { type: SimpleSchema.RegEx.Id },
+      calendarId: { type: SimpleSchema.RegEx.Id },
       day: { type: Day }
     }).validator(),
 
-    run ({ day, userId }) {
+    run ({ day, calendarId, userId }) {
       if (this.connection && !this.userId ||
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const existingSchedule = Schedules.findOne({ day, type: 'day' })
+      const existingSchedule = Schedules.findOne({ day, calendarId, type: 'day' })
 
       if (existingSchedule) {
         Schedules.update({ _id: existingSchedule._id }, {

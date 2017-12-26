@@ -9,11 +9,12 @@ export const releaseLock = ({ Appointments }) => {
     name: 'appointments/releaseLock',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
+      calendarId: { type: SimpleSchema.RegEx.Id, optional: true },
       time: { type: Date, optional: true },
       assigneeId: { type: String, optional: true }
     }).validator(),
 
-    run ({ assigneeId, time }) {
+    run ({ calendarId, assigneeId, time }) {
       this.unblock()
 
       if (this.connection && !this.userId) {
@@ -23,6 +24,7 @@ export const releaseLock = ({ Appointments }) => {
       let selector = {
         lockedAt: { $ne: null },
         lockedBy: this.userId,
+        calendarId,
         assigneeId
       }
 

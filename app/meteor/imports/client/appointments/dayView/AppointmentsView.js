@@ -92,6 +92,7 @@ export class AppointmentsView extends React.Component {
   handleNewAppointmentPopoverClose () {
     if (this.props.onNewAppointmentPopoverClose) {
       this.props.onNewAppointmentPopoverClose({
+        calendarId: this.props.calendar._id,
         time: this.state.selectedTime,
         assigneeId: this.state.selectedAssigneeId
       })
@@ -104,7 +105,11 @@ export class AppointmentsView extends React.Component {
     event.preventDefault()
 
     if (this.props.onNewAppointmentPopoverOpen) {
-      this.props.onNewAppointmentPopoverOpen({ time, assigneeId })
+      this.props.onNewAppointmentPopoverOpen({
+        calendarId: this.props.calendar._id,
+        time,
+        assigneeId
+      })
     }
 
     this.setState({ ...this.state,
@@ -160,6 +165,7 @@ export class AppointmentsView extends React.Component {
 
       const newSchedule = {
         userId: this.state.override.overrideAssigneeId,
+        calendarId: this.props.calendar._id,
         start,
         end,
         available: false,
@@ -255,6 +261,7 @@ export class AppointmentsView extends React.Component {
       <div>
         <HeaderRowContainer
           date={this.props.date}
+          calendar={this.props.calendar}
           assignees={this.props.assignees}
           onToggleOverrideMode={this.handleToggleOverrideMode}
           overrideMode={this.state.override.isOverriding} />
@@ -281,6 +288,7 @@ export class AppointmentsView extends React.Component {
           onClickScheduleSoftRemove={this.handleScheduleSoftRemove} />
 
         <NewAppointmentPopover
+          calendar={this.props.calendar}
           open={this.state.popoverOpen}
           anchorEl={this.state.popoverAnchor}
           assigneeId={this.state.selectedAssigneeId}

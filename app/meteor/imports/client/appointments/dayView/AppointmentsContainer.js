@@ -59,7 +59,7 @@ const composer = (props, onData) => {
 
   if (subsReady) {
     const appointmentsSelector = {
-      calendarId: calendar.id,
+      calendarId: calendar._id,
       start: {
         $gte: startOfDay,
         $lte: endOfDay
@@ -72,7 +72,10 @@ const composer = (props, onData) => {
     // Combine all assigneeIds from the appointments with
     // the assigneeIds that are scheduled for this day (but may not have any
     // appointments scheduled yet). Make sure the 'null' assignee is added here as well.
-    const assigneeIdsScheduled = uniq(flatten(Schedules.find({ day }).fetch().map((s) => s.userIds)))
+    const assigneeIdsScheduled = uniq(flatten(Schedules.find({
+      day,
+      calendarId: calendar._id
+    }).fetch().map((s) => s.userIds)))
     const assigneeIdsAppointments = uniq(appointments.map((a) => a.assigneeId))
 
     // HACK: Merge undefined to null
@@ -96,6 +99,7 @@ const composer = (props, onData) => {
       mapUncapped((assignee) => {
         const overrides = Schedules.find({
           type: 'override',
+          calendarId: calendar._id,
           userId: assignee.assigneeId,
           start: { $gte: startOfDay },
           end: { $lte: endOfDay }
@@ -103,6 +107,7 @@ const composer = (props, onData) => {
 
         const constraints = Schedules.find({
           type: 'constraint',
+          calendarId: calendar._id,
           userId: assignee.assigneeId,
           weekdays: date.clone().locale('en').format('ddd').toLowerCase(),
           start: { $lte: endOfDay },

@@ -7,13 +7,14 @@ import { HeaderRow } from './HeaderRow'
 
 const composer = (props, onData) => {
   const day = dateToDay(props.date)
+  const calendarId = props.calendar._id
 
   const onAddUser = (userId) => {
-    return Schedules.actions.addUserToDay.callPromise({ userId, day })
+    return Schedules.actions.addUserToDay.callPromise({ userId, calendarId, day })
   }
 
   const onRemoveUser = (userId) => {
-    return Schedules.actions.removeUserFromDay.callPromise({ userId, day })
+    return Schedules.actions.removeUserFromDay.callPromise({ userId, calendarId, day })
   }
 
   const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])

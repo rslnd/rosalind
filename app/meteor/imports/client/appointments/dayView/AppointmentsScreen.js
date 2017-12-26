@@ -65,6 +65,7 @@ export class AppointmentsScreen extends React.Component {
           <AppointmentsView
             assignees={this.props.assignees}
             date={this.props.date}
+            calendar={this.props.calendar}
             canEditSchedules={this.props.canEditSchedules}
             onSetAdmitted={this.props.handleSetAdmitted}
             onMove={this.props.handleMove}
