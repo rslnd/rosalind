@@ -1,3 +1,4 @@
+import idx from 'idx'
 import moment from 'moment-timezone'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
@@ -15,6 +16,7 @@ import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { dateToDay } from '../../../util/time/day'
 import { Users } from '../../../api/users'
 import { Patients } from '../../../api/patients'
+import { Calendars } from '../../../api/calendars'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
 import { Loading } from '../../components/Loading'
@@ -27,7 +29,14 @@ const appointmentsSubsManager = new SubsManager({
 })
 
 const composer = (props, onData) => {
-  const date = moment(props.match && props.match.params && props.match.params.date || undefined)
+  const date = moment(idx(props, _ => _.match.params.date))
+  const calendarSlug = idx(props, _ => _.match.params.calendar)
+  const calendar = Calendars.findOne({ slug: calendarSlug })
+  if (!calendar) {
+    console.log('No calendar named', calendarSlug)
+    return
+  }
+
   const day = dateToDay(date)
   const startOfDay = date.clone().startOf('day').toDate()
   const endOfDay = date.clone().endOf('day').toDate()
@@ -50,6 +59,7 @@ const composer = (props, onData) => {
 
   if (subsReady) {
     const appointmentsSelector = {
+      calendarId: calendar.id,
       start: {
         $gte: startOfDay,
         $lte: endOfDay
@@ -151,6 +161,7 @@ const composer = (props, onData) => {
     const { dispatch, move } = props
 
     onData(null, {
+      calendar,
       assignees,
       date,
       onNewAppointmentPopoverOpen,

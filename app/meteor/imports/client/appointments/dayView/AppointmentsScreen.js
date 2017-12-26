@@ -41,7 +41,8 @@ export class AppointmentsScreen extends React.Component {
       <div>
         <div className='content-header' style={contentHeaderStyle}>
           <h1>
-            {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
+            <b>{this.props.calendar.name}</b>&ensp;
+            {this.props.date.format(TAPi18n.__('time.dateFormatWeekdayShortNoYear'))}&nbsp;
             <small>{weekOfYear(this.props.date, { short: true })}</small>
           </h1>
 
@@ -53,7 +54,7 @@ export class AppointmentsScreen extends React.Component {
             <DateNavigation
               date={this.props.date}
               onTodayClick={this.scrollToCurrentTime}
-              basePath='appointments'
+              basePath={`appointments/${this.props.calendar.slug}`}
               pullRight
               jumpWeekForward
               jumpMonthForward />

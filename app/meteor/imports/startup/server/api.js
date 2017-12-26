@@ -2,6 +2,7 @@ import settings from '../../api/settings/server'
 import users from '../../api/users/server'
 import groups from '../../api/groups/server'
 import patients from '../../api/patients/server'
+import calendars from '../../api/calendars/server'
 import appointments from '../../api/appointments/server'
 import cache from '../../api/cache/server'
 import comments from '../../api/comments/server'
@@ -22,6 +23,7 @@ export default function () {
   users()
   groups()
   patients()
+  calendars()
   appointments()
   cache()
   comments()

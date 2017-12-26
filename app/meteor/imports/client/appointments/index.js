@@ -5,8 +5,9 @@ import { AppointmentsContainer } from './dayView/AppointmentsContainer'
 export const Appointments = ({ match }) => (
   <div>
     <Switch>
-      <Route path={`${match.url}/:date`} component={AppointmentsContainer} />
-      <Route path={match.url} component={AppointmentsContainer} />
+      <Route path={`${match.url}/:calendar/:date`} component={AppointmentsContainer} />
+      <Route path={`${match.url}/:calendar`} component={AppointmentsContainer} />
+      <Route path={`${match.url}`} component={AppointmentsContainer} />
     </Switch>
   </div>
 )

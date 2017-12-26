@@ -1,20 +1,34 @@
+import identity from 'lodash/identity'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { withRouter } from 'react-router-dom'
 import { process as server } from 'meteor/clinical:env'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { Counts } from 'meteor/tmeasday:publish-counts'
+import { Calendars } from '../../api/calendars'
 import { Sidebar } from './Sidebar'
 
-const sidebarItems = () => {
+const sidebarItems = ({ history }) => {
+  const calendars = Calendars.find().fetch()
+
   return [
     {
       name: 'appointments',
       icon: 'calendar',
       roles: ['admin', 'appointments'],
-      subItems: [
-        { name: 'thisCalendar' }
-      ]
+      subItems: calendars.map(c => ({
+        name: c.slug,
+        label: c.name,
+        path: '/' + c.slug,
+        slug: c.slug
+      })),
+      // replace calendar slug and keep selected date
+      onClick: ({subItem, location}) => {
+        const [base, calendar, date] = location.pathname
+          .split('/').filter(x => x.length > 0)
+        const newPath = '/' + [base, subItem.slug, date].filter(identity).join('/')
+        history.push(newPath)
+      }
     },
     {
       name: 'inboundCalls',
@@ -76,7 +90,7 @@ const sidebarItems = () => {
 }
 
 const composer = (props, onData) => {
-  const items = sidebarItems().filter((item) => {
+  const items = sidebarItems(props).filter((item) => {
     return (!item.roles || item.roles && Roles.userIsInRole(Meteor.user(), item.roles))
   }).map((item) => {
     if (item.countBadge) {
@@ -92,4 +106,4 @@ const composer = (props, onData) => {
   onData(null, { ...props, items, customerName })
 }
 
-export const SidebarContainer = composeWithTracker(composer)(withRouter(Sidebar))
+export const SidebarContainer = withRouter(composeWithTracker(composer)(Sidebar))

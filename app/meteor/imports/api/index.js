@@ -8,6 +8,7 @@ import { Events } from './events'
 import { Customer } from './customer'
 import { Patients } from './patients'
 import { InboundCalls } from './inboundCalls'
+import { Calendars } from './calendars'
 import { Appointments } from './appointments'
 import { Importers } from './importers'
 import { Jobs } from './jobs'
@@ -22,6 +23,7 @@ export {
   Groups,
   Cache,
   Patients,
+  Calendars,
   Appointments,
   Comments,
   Customer,

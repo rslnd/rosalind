@@ -69,20 +69,39 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
       {sidebarOpen && item.subItems &&
         <ul className='treeview-menu'>
           {item.subItems.map((subItem) => (
-            <li key={subItem.name} className={isActive(`/${item.name}${subItem.path || ''}`, location) && 'active level-1 link'}>
-              <Link
-                to={`/${item.name}${subItem.path || ''}`}
-                className='level-1 link'
-                title={TAPi18n.__([item.name, subItem.name].join('.'))}>
-                <span>{TAPi18n.__([item.name, subItem.name].join('.'))}</span>
-              </Link>
-            </li>
+            <SubItem key={subItem.name} item={item} subItem={subItem} location={location} />
           ))}
         </ul>
       }
     </li>
   )
 })
+
+const SubItem = ({item, subItem, location}) => {
+  const displayName = subItem.label ||
+    TAPi18n.__([item.name, subItem.name].join('.'))
+
+  return (
+    <li key={subItem.name} className={isActive(`/${item.name}${subItem.path || ''}`, location) && 'active level-1 link'}>
+      {
+        item.onClick
+          ? <a className='level-1 link'>
+            <span
+              onClick={() => item.onClick({ subItem, location })}
+              title={displayName}>
+              {displayName}
+            </span>
+          </a>
+          : <Link
+            to={`/${item.name}${subItem.path || ''}`}
+            className='level-1 link'
+            title={displayName}>
+            <span>{displayName}</span>
+          </Link>
+      }
+    </li>
+  )
+}
 
 class SidebarItems extends React.Component {
   constructor (props) {

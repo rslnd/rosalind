@@ -2,6 +2,10 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Auto, External } from '../../util/schema'
 
 Schema = new SimpleSchema
+  calendarId:
+    type: SimpleSchema.RegEx.Id,
+    index: 1
+
   start:
     type: Date
     index: -1
