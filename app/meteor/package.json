@@ -120,7 +120,7 @@
     "test-util": "^1.1.0"
   },
   "engines": {
-    "node": "^8.8.0"
+    "node": "^8.9.3"
   },
   "standard": {
     "parser": "babel-eslint"
