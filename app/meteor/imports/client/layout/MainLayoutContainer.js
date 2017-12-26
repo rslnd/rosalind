@@ -33,7 +33,7 @@ const composer = (props, onData) => {
   Meteor.subscribe('schedules-constraints')
   Meteor.subscribe('settings')
 
-  const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments/)
+  const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments\//)
 
   const isPrint = props.location.hash === '#print'
 

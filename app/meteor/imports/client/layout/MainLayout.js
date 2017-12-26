@@ -27,7 +27,7 @@ export class MainLayout extends React.Component {
     super(props)
 
     this.state = {
-      sidebarOpen: this.props.sidebarOpen
+      sidebarForceOpen: false
     }
 
     this.handleSidebarOpen = this.handleSidebarOpen.bind(this)
@@ -35,21 +35,21 @@ export class MainLayout extends React.Component {
   }
 
   handleSidebarClose () {
-    if (!this.props.sidebarOpen) {
-      this.setState({ ...this.state,
-        sidebarOpen: false
-      })
-    }
+    this.setState({ ...this.state,
+      sidebarForceOpen: false
+    })
   }
 
   handleSidebarOpen () {
     this.setState({ ...this.state,
-      sidebarOpen: true
+      sidebarForceOpen: true
     })
   }
 
   render () {
     const { children, currentUser, loggingIn, locale, isPrint } = this.props
+
+    const open = this.props.sidebarOpen || this.state.sidebarForceOpen
 
     // Force content wrapper to stay full-width to avoid reflow, that's why
     // the content wrapper's classes depend on (fixed) props instead of state
@@ -62,7 +62,7 @@ export class MainLayout extends React.Component {
       ...logoStyle
     }
 
-    if (!this.state.sidebarOpen) {
+    if (!open) {
       conditionalLogoStyle = {
         ...conditionalLogoStyle,
         ...logoSidebarClosedStyle
@@ -93,9 +93,9 @@ export class MainLayout extends React.Component {
             {
               currentUser &&
                 <SidebarContainer
-                  isOpen={this.state.sidebarOpen}
+                  isOpen={open}
                   userPanel={
-                    <UserPanelContainer sidebarOpen={this.state.sidebarOpen} />
+                    <UserPanelContainer sidebarOpen={open} />
                   }
                 />
             }

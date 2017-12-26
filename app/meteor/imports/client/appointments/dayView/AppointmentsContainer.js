@@ -32,10 +32,7 @@ const composer = (props, onData) => {
   const date = moment(idx(props, _ => _.match.params.date))
   const calendarSlug = idx(props, _ => _.match.params.calendar)
   const calendar = Calendars.findOne({ slug: calendarSlug })
-  if (!calendar) {
-    console.log('No calendar named', calendarSlug)
-    return
-  }
+  if (!calendar) { return }
 
   const day = dateToDay(date)
   const startOfDay = date.clone().startOf('day').toDate()
