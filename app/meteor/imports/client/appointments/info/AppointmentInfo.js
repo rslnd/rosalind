@@ -74,6 +74,13 @@ const Time = ({ appointment }) => (
   </ListItem>
 )
 
+const Private = ({ appointment }) => (
+  appointment.privateAppointment &&
+    <ListItem icon='eur'>
+      {TAPi18n.__('appointments.private')}
+    </ListItem>
+)
+
 const Assignee = ({ assignee }) => (
   assignee && <ListItem icon='user-md'>
     {assignee.fullNameWithTitle()}
@@ -185,6 +192,7 @@ export class AppointmentInfo extends React.Component {
             <Day appointment={appointment} />
             <Time appointment={appointment} />
             <Assignee assignee={assignee} />
+            <Private appointment={appointment} />
             <Tags appointment={appointment} />
             <AppointmentNotes appointment={appointment} onChange={handleEditNote} />
             <ListItem last>
