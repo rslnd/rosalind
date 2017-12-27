@@ -6,7 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { NewAppointment } from './NewAppointment'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
-import { getDefaultLength, isConstraintApplicable } from '../../../api/appointments/methods/getDefaultLength'
+import { getDefaultDuration, isConstraintApplicable } from '../../../api/appointments/methods/getDefaultDuration'
 
 export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {
@@ -61,7 +61,8 @@ export class NewAppointmentContainerComponent extends React.Component {
       }
     }
 
-    const length = getDefaultLength({
+    const length = getDefaultDuration({
+      calendarId: this.props.calendar._id,
       assigneeId: this.props.assigneeId,
       tags: values.tags,
       date: moment(this.props.time)

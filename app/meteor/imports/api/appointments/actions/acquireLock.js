@@ -4,7 +4,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
-import { getDefaultLength } from '../methods/getDefaultLength'
+import { getDefaultDuration } from '../methods/getDefaultDuration'
 
 export const acquireLock = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -23,12 +23,16 @@ export const acquireLock = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const length = getDefaultLength({ assigneeId, date: moment(time) })
+      const duration = getDefaultDuration({
+        calendarId,
+        assigneeId,
+        date: moment(time)
+      })
 
       const appointmentId = Appointments.insert({
         calendarId,
         start: time,
-        end: moment(time).add(length, 'minutes').toDate(),
+        end: moment(time).add(duration, 'minutes').toDate(),
         assigneeId,
         lockedAt: new Date(),
         lockedBy: this.userId

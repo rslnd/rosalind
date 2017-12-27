@@ -10,7 +10,7 @@ import { format } from '../grid/timeSlots'
 import { background, primaryActive, darkGrayDisabled, darkGray } from '../../../css/global'
 import { color, lightness } from 'kewler'
 import namecase from 'namecase'
-import { getDefaultLength } from '../../../../api/appointments/methods/getDefaultLength'
+import { getDefaultDuration } from '../../../../api/appointments/methods/getDefaultDuration'
 
 const styles = {
   appointment: {
@@ -69,7 +69,8 @@ class AppointmentItem extends React.Component {
     if (this.props.isMoving) {
       const newStartTime = moment(this.props.moveToTime)
       const newAssigneeId = this.props.moveToAssigneeId
-      const duration = getDefaultLength({
+      const duration = getDefaultDuration({
+        calendarId: appointment.calendarId,
         newAssigneeId,
         date: newStartTime,
         tags: appointment.tags
