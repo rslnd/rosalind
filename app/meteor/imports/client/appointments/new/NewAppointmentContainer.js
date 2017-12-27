@@ -115,6 +115,7 @@ export class NewAppointmentContainerComponent extends React.Component {
         onSubmitPause={this.handleSubmitPause}
         initialValues={this.props.patientId ? { patientId: this.props.patientId } : {}}
         time={this.props.time}
+        calendarId={this.props.calendar._id}
         assigneeId={this.props.assigneeId}
         allowedTags={this.allowedTags()} />
     )

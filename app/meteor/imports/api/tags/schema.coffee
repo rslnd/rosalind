@@ -23,6 +23,10 @@ module.exports = new SimpleSchema
     type: String
     optional: true
 
+  calendarId:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+
   reportAs:
     type: String
     allowedValues: [ 'surgery', 'new', 'recall', 'cautery' ]

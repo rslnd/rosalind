@@ -66,6 +66,7 @@ export class NewAppointmentFormComponent extends React.Component {
     const {
       time,
       allowedTags,
+      calendarId,
       assigneeId,
       pristine,
       submitting,
@@ -99,6 +100,7 @@ export class NewAppointmentFormComponent extends React.Component {
                     name='tags'
                     component={TagsField}
                     allowedTags={allowedTags}
+                    calendarId={calendarId}
                     assigneeId={assigneeId}
                     fullWidth />
                 </div>

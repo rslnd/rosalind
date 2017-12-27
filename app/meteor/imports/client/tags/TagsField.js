@@ -23,7 +23,7 @@ export class TagsField extends React.Component {
   }
 
   render () {
-    const { input, meta, assigneeId, allowedTags } = this.props
+    const { input, meta, assigneeId, allowedTags, calendarId } = this.props
 
     const selector = allowedTags ? { _id: { $in: allowedTags } } : {}
     const tags = Tags.find(selector, { sort: { order: 1 } }).map((t) => {
@@ -35,6 +35,12 @@ export class TagsField extends React.Component {
     }).filter(t => {
       if (t.assigneeIds) {
         return t.assigneeIds.includes(assigneeId)
+      } else {
+        return true
+      }
+    }).filter(t => {
+      if (t.calendarIds && calendarId) {
+        return t.calendarIds.includes(calendarId)
       } else {
         return true
       }
