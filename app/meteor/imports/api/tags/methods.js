@@ -1,4 +1,5 @@
 import fromPairs from 'lodash/fromPairs'
+import some from 'lodash/fp/some'
 
 export default ({ Tags }) => {
   const findOneOrInsert = (selector) => {
@@ -16,5 +17,11 @@ export default ({ Tags }) => {
     }))
   }
 
-  return { findOneOrInsert, getMappingForReports }
+  const expand = (tags = []) =>
+    tags.map(t => t.tag ? t : (Tags.findOne({ tag: t }) || Tags.findOne(t)))
+
+  const isPrivate = tags =>
+    some('privateAppointment')(expand(tags))
+
+  return { findOneOrInsert, getMappingForReports, expand, isPrivate }
 }

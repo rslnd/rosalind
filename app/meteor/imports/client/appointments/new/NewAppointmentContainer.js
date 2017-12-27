@@ -6,6 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { NewAppointment } from './NewAppointment'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
+import { Tags } from '../../../api/tags'
 import { getDefaultDuration, isConstraintApplicable } from '../../../api/appointments/methods/getDefaultDuration'
 
 export class NewAppointmentContainerComponent extends React.Component {
@@ -75,7 +76,8 @@ export class NewAppointmentContainerComponent extends React.Component {
       tags: values.tags,
       start: moment(this.props.time).toDate(),
       end: moment(this.props.time).add(length, 'minutes').toDate(),
-      assigneeId: this.props.assigneeId
+      assigneeId: this.props.assigneeId,
+      privateAppointment: Tags.methods.isPrivate(values.tags)
     }
 
     console.log('[Appointments] Inserting appointment with new patient', { newPatient, appointment })
