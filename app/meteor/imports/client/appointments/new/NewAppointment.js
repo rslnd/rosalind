@@ -41,8 +41,7 @@ const style = {
   }
 }
 
-
-const summary = ({ time, assigneeId }) => (
+const Summary = ({ time, assigneeId }) => (
   <div style={style.summary}>
     <span className='text-muted'>{TAPi18n.__('appointments.thisSingular')}</span>&nbsp;
     {moment(time).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
@@ -52,8 +51,11 @@ const summary = ({ time, assigneeId }) => (
 
     {
       assigneeId && <div>
-        <span className='text-muted'>{TAPi18n.__('appointments.assignedTo')}</span>&nbsp;
-        <UserHelper helper='fullNameWithTitle' userId={assigneeId} /><br />
+        <span className='text-muted'>
+          {TAPi18n.__('appointments.assignedTo')}&nbsp;
+          <UserHelper helper='fullNameWithTitle' userId={assigneeId} />
+        </span>
+        <br />
       </div>
     }
   </div>
@@ -63,6 +65,7 @@ export class NewAppointmentFormComponent extends React.Component {
   render () {
     const {
       time,
+      allowedTags,
       assigneeId,
       pristine,
       submitting,
@@ -95,7 +98,8 @@ export class NewAppointmentFormComponent extends React.Component {
                   <Field
                     name='tags'
                     component={TagsField}
-                    allowedTags={this.props.allowedTags}
+                    allowedTags={allowedTags}
+                    assigneeId={assigneeId}
                     fullWidth />
                 </div>
 
@@ -117,7 +121,7 @@ export class NewAppointmentFormComponent extends React.Component {
             </div>
 
             <div className='row'>
-              {summary({ time, assigneeId })}
+              <Summary time={time} assigneeId={assigneeId} />
             </div>
             <div className='row'>
               <RaisedButton type='submit'

@@ -11,7 +11,7 @@ module.exports = new SimpleSchema
     type: Number
     optional: true
 
-  length:
+  duration:
     type: Number
     optional: true
 

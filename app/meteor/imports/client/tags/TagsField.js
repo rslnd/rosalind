@@ -23,7 +23,7 @@ export class TagsField extends React.Component {
   }
 
   render () {
-    const { input, meta, allowedTags } = this.props
+    const { input, meta, assigneeId, allowedTags } = this.props
 
     const selector = allowedTags ? { _id: { $in: allowedTags } } : {}
     const tags = Tags.find(selector, { sort: { order: 1 } }).map((t) => {
@@ -31,6 +31,12 @@ export class TagsField extends React.Component {
       return {
         ...t,
         color: selected ? t.color : '#ccc'
+      }
+    }).filter(t => {
+      if (t.assigneeIds) {
+        return t.assigneeIds.includes(assigneeId)
+      } else {
+        return true
       }
     })
 
