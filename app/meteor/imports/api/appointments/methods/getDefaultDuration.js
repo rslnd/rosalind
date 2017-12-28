@@ -7,8 +7,8 @@ import { Tags } from '../../tags'
 const defaultDuration = 5
 const getCalendarDefaultDuration = calendarId => {
   const calendar = Calendars.findOne(calendarId)
-  if (calendar && calendar.defaultAppointmentDuration) {
-    return calendar.defaultAppointmentDuration
+  if (calendar && calendar.defaultDuration) {
+    return calendar.defaultDuration
   } else {
     return defaultDuration
   }

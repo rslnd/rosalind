@@ -79,10 +79,11 @@ const sidebarItems = ({ history }) => {
       roles: ['admin', 'system'],
       subItems: [
         { name: 'thisEvents', path: '/events' },
+        { name: 'thisCalendars', path: '/calendars' },
+        { name: 'thisTags', path: '/tags' },
         { name: 'thisMessages', path: '/messages' },
         { name: 'thisSettings', path: '/settings' },
         { name: 'thisImporters', path: '/importers' },
-        { name: 'thisTags', path: '/tags' },
         { name: 'thisNative', path: '/native', only: () => window.native }
       ]
     }
