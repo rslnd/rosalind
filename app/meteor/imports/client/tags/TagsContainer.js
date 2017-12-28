@@ -9,10 +9,13 @@ import { TagsScreen } from './TagsScreen'
 const composer = (props, onData) => {
   const tags = Tags.find({}, { sort: { order: 1 } }).fetch()
 
-  const getCalendarName = id => id && Calendars.findOne(id).name
+  const getCalendarName = id => id && Calendars.findOne(id) && Calendars.findOne(id).name
   const getAssigneeName = id => id && Users.findOne(id).fullNameWithTitle()
+  const handleUpdate = (_id, update) => {
+    Tags.update({ _id }, update)
+  }
 
-  onData(null, { tags, getCalendarName, getAssigneeName })
+  onData(null, { tags, getCalendarName, getAssigneeName, handleUpdate })
 }
 
 export const TagsContainer = composeWithTracker(composer, Loading)(TagsScreen)

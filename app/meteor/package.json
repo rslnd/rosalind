@@ -64,6 +64,7 @@
     "react-addons-shallow-compare": "^15.3.2",
     "react-bootstrap": "^0.31.0",
     "react-calendar-heatmap": "^1.1.0",
+    "react-color": "^2.13.8",
     "react-dates": "^13.0.5",
     "react-dom": "^15.5.4",
     "react-flip-move": "^2.9.3",

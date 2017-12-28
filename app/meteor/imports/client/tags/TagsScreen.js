@@ -1,4 +1,5 @@
 import React from 'react'
+import Portal from 'react-portal'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/Table'
@@ -7,7 +8,7 @@ import { tagStyle } from './TagsList'
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: '#',
-    render: t => t.order
+    field: 'order'
   },
   {
     header: 'Kalender',
@@ -15,6 +16,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Tag',
+    field: 'color',
     render: t => (
       <span style={{...tagStyle, backgroundColor: t.color || '#ccc'}}>
         {t.tag}
@@ -23,7 +25,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: { icon: 'clock-o', title: 'Standard-Termindauer in Minuten' },
-    render: t => t.duration
+    field: 'duration'
   },
   {
     header: { icon: 'eur', title: 'Privat- oder Kassentermin' },
@@ -31,7 +33,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Description',
-    render: t => t.description
+    field: 'description'
   },
   {
     header: 'ÄrztInnen',
@@ -39,16 +41,17 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   }
 ]
 
-export const TagsScreen = ({ tags, getCalendarName, getAssigneeName }) =>
+export const TagsScreen = ({ tags, getCalendarName, getAssigneeName, handleUpdate }) =>
   <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
         <Box title='Tags' icon='tags'>
           <Table
             structure={structure}
-            data={tags}
+            rows={tags}
             getCalendarName={getCalendarName}
             getAssigneeName={getAssigneeName}
+            onUpdate={handleUpdate}
           />
         </Box>
       </div>
