@@ -6,8 +6,8 @@ export const NewAppointmentPopover = ({ open, anchorEl, onClose, calendar, assig
   <Popover
     open={open}
     anchorEl={anchorEl}
-    animated
-    animation={PopoverAnimationVertical}
+    animated={false}
+    zDepth={3}
     anchorOrigin={{
       horizontal: assigneeId ? 'middle' : 'right',
       vertical: 'top'
