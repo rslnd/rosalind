@@ -5,7 +5,7 @@ import { Loading } from '../components/Loading'
 import { CalendarsScreen } from './CalendarsScreen'
 
 const composer = (props, onData) => {
-  const tags = Calendars.find({}, { sort: { order: 1 } }).fetch()
+  const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
 
   const getCalendarName = id => id && Calendars.findOne(id) && Calendars.findOne(id).name
   const getAssigneeName = id => id && Users.findOne(id).fullNameWithTitle()
@@ -13,7 +13,7 @@ const composer = (props, onData) => {
     Calendars.update({ _id }, update)
   }
 
-  onData(null, { tags, getCalendarName, getAssigneeName, handleUpdate })
+  onData(null, { calendars, getCalendarName, getAssigneeName, handleUpdate })
 }
 
 export const CalendarsContainer = composeWithTracker(composer, Loading)(CalendarsScreen)

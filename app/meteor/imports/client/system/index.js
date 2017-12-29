@@ -5,6 +5,7 @@ import { SettingsContainer } from './settings/SettingsContainer'
 import { MessagesContainer } from '../messages/MessagesContainer'
 import { TagsContainer } from '../tags/TagsContainer'
 import { CalendarsContainer } from '../calendars/CalendarsContainer'
+import { ConstraintsContainer } from '../schedules/constraints/ConstraintsContainer'
 
 const Events = () => <Blaze template='systemEvents' />
 const Importers = () => <Blaze template='systemImporters' />
@@ -18,6 +19,7 @@ export const System = ({ match }) => (
       <Route exact path={`${match.url}/importers`} component={Importers} />
       <Route exact path={`${match.url}/tags`} component={TagsContainer} />
       <Route exact path={`${match.url}/calendars`} component={CalendarsContainer} />
+      <Route exact path={`${match.url}/constraints`} component={ConstraintsContainer} />
       <Route exact path={`${match.url}/native`} component={NativeSettings} />
       <Route path={`${match.url}`} component={Events} />
     </Switch>

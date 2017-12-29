@@ -42,14 +42,14 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   }
 ]
 
-export const CalendarsScreen = ({ tags, getCalendarName, getAssigneeName, handleUpdate }) =>
+export const CalendarsScreen = ({ calendars, getCalendarName, getAssigneeName, handleUpdate }) =>
   <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
-        <Box title='Kalender' icon='tags'>
+        <Box title='Kalender' icon='calendar'>
           <Table
             structure={structure}
-            rows={tags}
+            rows={calendars}
             getCalendarName={getCalendarName}
             getAssigneeName={getAssigneeName}
             onUpdate={handleUpdate}
