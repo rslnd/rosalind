@@ -80,18 +80,23 @@ module.exports = ->
     }
 
 
-  Meteor.publish 'appointmentsPatient', (options = {}) ->
+  Meteor.publishComposite 'appointmentsPatient', (options = {}) ->
     check options,
       patientId: String
 
     return unless (@userId and Roles.userIsInRole(@userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
 
-    return Appointments.find({
-      patientId: options.patientId,
-      removed: { $ne: true }
-    }, {
-      sort: { start: 1 }
-    })
+    {
+      find: -> Appointments.find({
+        patientId: options.patientId,
+        removed: { $ne: true }
+      }, {
+        sort: { start: 1 }
+      }),
+      children: [
+        { find: (doc) -> @unblock(); Comments.find(docId: options.patientId) }
+      ]
+    } 
 
 
   Meteor.publishComposite 'appointmentsTable', (tableName, ids, fields) ->

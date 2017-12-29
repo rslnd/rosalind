@@ -4,19 +4,24 @@ import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
-import { AppointmentInfo } from './AppointmentInfo'
+import { Comments } from '../../../api/comments'
+import { AppointmentInfoModal } from './AppointmentInfoModal'
 
 const composer = (props, onData) => {
   const appointment = Appointments.findOne({ _id: props.appointmentId })
-  const patient = Patients.findOne({ _id: appointment.patientId })
-  const args = { appointmentId: props.appointmentId }
 
   if (appointment) {
+    const patient = Patients.findOne({ _id: appointment.patientId })
     const assignee = Users.findOne({ _id: appointment.assigneeId })
+    const comments = patient ? Comments.find({
+      docId: patient._id
+    }, {
+      sort: { createdAt: 1 }
+    }).fetch() : []
 
     const handleEditNote = (newNote) => {
       Appointments.actions.editNote.call({
-        ...args,
+        appointmentId: props.appointmentId,
         newNote: newNote
       })
     }
@@ -76,9 +81,11 @@ const composer = (props, onData) => {
     }
 
     onData(null, {
+      ...props,
       appointment,
       patient,
       assignee,
+      comments,
       handleEditNote,
       handleEditPatient,
       handleToggleGender,
@@ -89,4 +96,4 @@ const composer = (props, onData) => {
   }
 }
 
-export const AppointmentInfoContainer = composeWithTracker(composer)(AppointmentInfo)
+export const AppointmentInfoModalContainer = composeWithTracker(composer)(AppointmentInfoModal)

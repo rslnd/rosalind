@@ -3,7 +3,7 @@ import React from 'react'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Schedules } from '../../../api/schedules'
-import { AppointmentInfoModal } from '../info/AppointmentInfoModal'
+import { AppointmentInfoModalContainer } from '../info/AppointmentInfoModalContainer'
 import { HeaderRowContainer } from './header/HeaderRowContainer'
 import { AppointmentsGrid } from './grid/AppointmentsGrid'
 import { ScheduleModal } from './schedules/ScheduleModal'
@@ -276,7 +276,7 @@ export class AppointmentsView extends React.Component {
           onScheduleModalOpen={this.handleScheduleModalOpen}
           move={this.props.move} />
 
-        <AppointmentInfoModal
+        <AppointmentInfoModalContainer
           appointmentId={this.state.selectedAppointmentId}
           onStartMove={this.handleMoveStart}
           show={this.state.appointmentModalOpen}
