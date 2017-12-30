@@ -6,7 +6,7 @@ import Divider from 'material-ui/Divider'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { TagsField } from '../../tags/TagsField'
-import { tagStyle } from '../../tags/TagsList'
+import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { PatientPickerContainer } from '../../patients/patientPicker/PatientPickerContainer'
 import { UserHelper } from '../../users/UserHelper'
 import { validate } from './newAppointmentValidators'
@@ -25,7 +25,7 @@ const style = {
   },
   tag: {
     ...tagStyle,
-    backgroundColor: '#ccc',
+    backgroundColor: tagBackgroundColor,
     cursor: 'pointer'
   },
   noteRow: {

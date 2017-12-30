@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'
 import { Table } from '../../components/Table'
-import { tagStyle } from '../../tags/TagsList'
+import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { Tags } from '../../../api/tags'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
@@ -13,9 +13,15 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Tags',
     render: c => c.tags && Tags.methods.expand(c.tags).map(t =>
-      <span key={t._id}><span style={{...tagStyle, backgroundColor: t.color || '#ccc'}}>
-        {t.tag}
-      </span>&ensp;</span>
+      <span key={t._id}>
+        <span style={{
+          ...tagStyle,
+          backgroundColor: t.color || tagBackgroundColor
+        }}>
+          {t.tag}
+        </span>
+        &ensp;
+      </span>
     )
   },
   {

@@ -2,10 +2,11 @@ import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
 import sortBy from 'lodash/fp/sortBy'
 import { Tags } from '../../api/tags'
+import { tagBackgroundColor } from '../tags/TagsList'
 
-export const getColor = (tags = [], defaultColor = '#dddddd') => {
+export const getColor = (tags = [], defaultColor) => {
   if (tags.length === 0) {
-    return defaultColor
+    return defaultColor || tagBackgroundColor
   } else {
     return flow(
       map((tagId) => {
@@ -13,7 +14,7 @@ export const getColor = (tags = [], defaultColor = '#dddddd') => {
       }),
       sortBy('order'),
       map((tag) => {
-        return (tag && tag.color) || defaultColor
+        return (tag && tag.color) || defaultColor || tagBackgroundColor
       })
     )(tags)[0]
   }

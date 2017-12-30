@@ -30,7 +30,8 @@ export class TagsField extends React.Component {
       const selected = input.value && input.value.includes(t._id)
       return {
         ...t,
-        color: selected ? t.color : '#ccc'
+        selectable: true,
+        selected
       }
     }).filter(t => {
       if (t.assigneeIds) {

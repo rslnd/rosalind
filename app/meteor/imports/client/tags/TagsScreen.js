@@ -3,7 +3,7 @@ import Portal from 'react-portal'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/Table'
-import { tagStyle } from './TagsList'
+import { tagStyle, tagBackgroundColor, darken } from './TagsList'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
@@ -18,7 +18,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     header: 'Tag',
     field: 'color',
     render: t => (
-      <span style={{...tagStyle, backgroundColor: t.color || '#ccc'}}>
+      <span style={{
+        ...tagStyle,
+        color: '#fff',
+        backgroundColor: t.color || tagBackgroundColor,
+        borderColor: darken(t.color)
+      }}>
         {t.tag}
       </span>
     )
