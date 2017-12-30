@@ -4,16 +4,17 @@ import { UserHelper } from '../users/UserHelper'
 import { RelativeTime } from '../helpers/RelativeTime'
 
 const childCommentStyle = {
+  display: 'block',
   paddingTop: 4,
   paddingBottom: 4,
   borderTop: '1px solid #eee'
 }
 
 const ChildCommentItem = ({ comment }) => (
-  <div style={childCommentStyle}>
+  <span style={childCommentStyle}>
     <span className='text-muted pull-right'><RelativeTime time={comment.createdAt} /></span>
     {comment.body}
-  </div>
+  </span>
 )
 
 export class CommentItem extends React.Component {
