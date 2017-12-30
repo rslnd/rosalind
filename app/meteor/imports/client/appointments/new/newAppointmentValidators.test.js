@@ -43,7 +43,8 @@ describe('ui', () => {
             lastName: 'Ok',
             firstName: 'Ok',
             tags: [1],
-            telephone: '12345'
+            telephone: '12345',
+            email: 'test@example.com'
           })).to.eql({})
         })
 

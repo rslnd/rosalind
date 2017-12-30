@@ -98,6 +98,29 @@ export class NewPatientFormFields extends React.Component {
                 </div>
               </div>
             </div>
+
+            {/* Email */}
+            <div className='row'>
+              <div className='col-md-12'>
+                <div className='row no-pad' style={{ marginTop: -15, zIndex: 17 }}>
+                  <div className='col-md-1'>
+                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
+                      <Icon name='envelope-o' />
+                    </div>
+                  </div>
+                  <div className='col-md-10'>
+                    <div>
+                      <Field
+                        name='email'
+                        component={TextField}
+                        fullWidth
+                        floatingLabelText={TAPi18n.__('patients.email')} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

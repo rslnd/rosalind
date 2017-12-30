@@ -37,6 +37,10 @@ export const validate = (values) => {
       errors.telephone = 'patients.telephoneRequired'
     }
 
+    if (values.email && !values.email.match(/@/)) {
+      errors.email = 'patients.emailIncorrect'
+    }
+
     if (!validateNameCase(values.lastName)) {
       errors.lastName = 'patients.nameCaseWarning'
     }

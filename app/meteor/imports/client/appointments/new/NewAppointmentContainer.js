@@ -55,10 +55,18 @@ export class NewAppointmentContainerComponent extends React.Component {
         }
       }
 
+      newPatient.profile.contacts = []
+
       if (values.telephone) {
-        newPatient.profile.contacts = [
-          { channel: 'Phone', value: values.telephone }
-        ]
+        newPatient.profile.contacts.push({
+          channel: 'Phone', value: values.telephone
+        })
+      }
+
+      if (values.email) {
+        newPatient.profile.contacts.push({
+          channel: 'Email', value: values.email
+        })
       }
     }
 
