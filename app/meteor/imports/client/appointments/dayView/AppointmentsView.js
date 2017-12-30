@@ -149,7 +149,7 @@ export class AppointmentsView extends React.Component {
     this.setState({ ...this.state,
       override: {
         ...this.state.override,
-        end: moment(time).add(5, 'minutes').subtract(1, 'second').toDate()
+        end: moment(time).add(this.props.calendar.slotSize || 5, 'minutes').subtract(1, 'second').toDate()
       }
     })
   }
@@ -157,7 +157,7 @@ export class AppointmentsView extends React.Component {
   handleOverrideEnd ({ time }) {
     if (this.state.override.isOverriding) {
       let start = this.state.override.start
-      let end = moment(time).add(5, 'minutes').subtract(1, 'second').toDate()
+      let end = moment(time).add(this.props.calendar.slotSize || 5, 'minutes').subtract(1, 'second').toDate()
 
       if (this.state.override.start > this.state.override.end) {
         [ start, end ] = [ end, start ]
