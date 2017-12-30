@@ -52,7 +52,7 @@ class AppointmentItem extends React.Component {
   }
 
   render () {
-    const { appointment, classes } = this.props
+    const { appointment, classes, format } = this.props
     const start = moment(appointment.start)
     const appointmentClasses = classnames({
       [ classes.appointment ]: true,

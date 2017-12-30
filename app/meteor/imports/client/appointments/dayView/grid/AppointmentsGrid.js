@@ -15,15 +15,16 @@ import { overrideOverlay } from './overrideOverlay'
 // ...         | ...
 // [21:00]     | [time] [assignee-1] [assignee-2] ... [assignee-n]
 
-const gridTimeSlots = timeSlots.map((time) => `[${time}] 25px`).join(' ')
+export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, onScheduleModalOpen, move }) => {
+  const slotSize = calendar.slotSize || 5
+  const gridTimeSlots = timeSlots(slotSize).map((time) => `[${time}] 25px`).join(' ')
 
-const gridTemplateRows = `
-  [header] 60px
-  [subheader] 0px
-  ${gridTimeSlots}
-`
+  const gridTemplateRows = `
+    [header] 60px
+    [subheader] 0px
+    ${gridTimeSlots}
+  `
 
-export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, onScheduleModalOpen, move }) => {
   const style = {
     display: 'grid',
     position: 'relative',
@@ -38,11 +39,11 @@ export const AppointmentsGrid = ({ date, assignees, onAppointmentClick, onBlankM
 
   return (
     <div style={style}>
-      {appointments({ assignees, onClick: onAppointmentClick, move })}
-      {blanks({ date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
+      {appointments({ slotSize, assignees, onClick: onAppointmentClick, move })}
+      {blanks({ slotSize, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
       {overrideOverlay(override)}
       {schedules({ assignees, onDoubleClick: onScheduleModalOpen })}
-      {timeLegend()}
+      {timeLegend({ slotSize })}
     </div>
 
   )

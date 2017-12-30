@@ -1,10 +1,11 @@
 import React from 'react'
-import { timeSlots, format, isFullHour, isQuarterHour } from './timeSlots'
+import { timeSlots, formatter, isFullHour, isQuarterHour } from './timeSlots'
 import { grayDisabled, darkGrayActive, darkGrayDisabled } from '../../../css/global'
 
 const styles = {
   timeLegend: {
-    color: grayDisabled
+    color: grayDisabled,
+    gridColumn: 'time'
   },
   fullHour: {
     color: `darken(${darkGrayActive}, 15%)`,
@@ -15,12 +16,13 @@ const styles = {
   }
 }
 
-export const timeLegend = () => (
-  timeSlots
-    .map((time) => {
+export const timeLegend = ({ slotSize }) => {
+  const format = formatter(slotSize)
+
+  return timeSlots(slotSize)
+    .map((time, i, slots) => {
       let style = {
         ...styles.timeLegend,
-        gridColumn: 'time',
         gridRow: time
       }
 
@@ -47,4 +49,4 @@ export const timeLegend = () => (
         </span>
       )
     })
-)
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import injectSheet from 'react-jss'
 import moment from 'moment-timezone'
-import { setTime, timeSlots, format } from './timeSlots'
+import { setTime, timeSlots, formatter } from './timeSlots'
 import { background } from '../../../css/global'
 import { color, lightness } from 'kewler'
 
@@ -41,7 +41,7 @@ class BlankState extends React.Component {
   }
 
   render () {
-    const { time, assigneeId, classes } = this.props
+    const { time, assigneeId, classes, format } = this.props
 
     return (
       <span
@@ -62,16 +62,19 @@ class BlankState extends React.Component {
 
 const Blank = injectSheet(styles)(BlankState)
 
-export const blanks = ({ date, assignees, onClick, onMouseEnter }) => (
-  assignees.map((assignee) => (
-    timeSlots
+export const blanks = ({ slotSize, date, assignees, onClick, onMouseEnter }) => {
+  const format = formatter(slotSize)
+
+  return assignees.map((assignee) => (
+    timeSlots(slotSize)
       .map((time) => (
         <Blank
           date={date}
           time={time}
+          format={format}
           assigneeId={assignee.assigneeId}
           onClick={onClick}
           onMouseEnter={onMouseEnter} />
       ))
   ))
-)
+}

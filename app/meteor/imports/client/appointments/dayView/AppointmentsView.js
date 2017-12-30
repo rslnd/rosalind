@@ -267,6 +267,7 @@ export class AppointmentsView extends React.Component {
           overrideMode={this.state.override.isOverriding} />
 
         <AppointmentsGrid
+          calendar={this.props.calendar}
           date={this.props.date}
           assignees={this.props.assignees}
           onAppointmentClick={this.handleAppointmentClick}
