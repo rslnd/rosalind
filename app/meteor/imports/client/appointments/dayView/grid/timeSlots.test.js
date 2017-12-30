@@ -16,22 +16,22 @@ describe('ui', () => {
       })
 
       it('isSlot', () => {
-        expect(t.isSlot('1000')).to.equal(true)
-        expect(t.isSlot('1005')).to.equal(true)
-        expect(t.isSlot('1006')).to.equal(false)
-        expect(t.isSlot('1001')).to.equal(false)
+        expect(t.isSlot(5)('1000')).to.equal(true)
+        expect(t.isSlot(5)('1005')).to.equal(true)
+        expect(t.isSlot(5)('1006')).to.equal(false)
+        expect(t.isSlot(5)('1001')).to.equal(false)
       })
 
       it('timeSlots', () => {
-        expect(t.timeSlots).to.include('T0730')
-        expect(t.timeSlots).to.include('T2030')
-        expect(t.timeSlots).not.to.include('T0731')
-        expect(t.timeSlots).not.to.include('T0844')
+        expect(t.timeSlots(5)).to.include('T0730')
+        expect(t.timeSlots(5)).to.include('T2030')
+        expect(t.timeSlots(5)).not.to.include('T0731')
+        expect(t.timeSlots(5)).not.to.include('T0844')
       })
 
       it('format', () => {
-        expect(t.format('T0730')).to.equal('7:30')
-        expect(t.format('T2030')).to.equal('20:30')
+        expect(t.formatter(5)('T0730')).to.equal('7:30')
+        expect(t.formatter(5)('T2030')).to.equal('20:30')
       })
 
       it('setTime', () => {
