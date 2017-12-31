@@ -6,7 +6,7 @@ import { dayToDate } from '../../../util/time/day'
 import { daysForPreview } from '../methods/daysForPreview'
 import { generate as generateReport } from '../methods/generate'
 
-export const generatePreview = ({ Reports, Appointments, Schedules, Tags, Messages }) => {
+export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, Tags, Messages }) => {
   return new ValidatedMethod({
     name: 'reports/generatePreview',
     mixins: [CallPromiseMixin],
@@ -18,38 +18,51 @@ export const generatePreview = ({ Reports, Appointments, Schedules, Tags, Messag
       try {
         if (this.isSimulation) { return }
 
-        return daysForPreview(dayToDate(day)).map(day => {
-          const date = moment(dayToDate(day))
+        const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
 
-          // TODO: Dry up, merge with generate action
-          const appointments = Appointments.find({
-            start: {
-              $gt: date.startOf('day').toDate(),
-              $lt: date.endOf('day').toDate()
+        return calendars.map(calendar => {
+          const calendarId = calendar._id
+
+          const preview = daysForPreview(dayToDate(day)).map(day => {
+            const date = moment(dayToDate(day))
+
+            // TODO: Dry up, merge with generate action
+            const appointments = Appointments.find({
+              calendarId,
+              start: {
+                $gt: date.startOf('day').toDate(),
+                $lt: date.endOf('day').toDate()
+              }
+            }).fetch()
+
+            const overrideSchedules = Schedules.find({
+              calendarId,
+              type: 'override',
+              start: {
+                $gt: date.startOf('day').toDate(),
+                $lt: date.endOf('day').toDate()
+              }
+            }).fetch()
+
+            const appointmentIds = appointments.map(a => a._id)
+            const messages = Messages.find({
+              'payload.appointmentId': { $in: appointmentIds }
+            }).fetch()
+
+            const tagMapping = Tags.methods.getMappingForReports()
+
+            const existingReport = Reports.findOne({ day })
+            if (existingReport) {
+              return existingReport
+            } else {
+              const generatedPreview = generateReport({ calendar, day, appointments, overrideSchedules, tagMapping, messages })
+              return generatedPreview
             }
-          }).fetch()
+          })
 
-          const overrideSchedules = Schedules.find({
-            type: 'override',
-            start: {
-              $gt: date.startOf('day').toDate(),
-              $lt: date.endOf('day').toDate()
-            }
-          }).fetch()
-
-          const appointmentIds = appointments.map(a => a._id)
-          const messages = Messages.find({
-            'payload.appointmentId': { $in: appointmentIds }
-          }).fetch()
-
-          const tagMapping = Tags.methods.getMappingForReports()
-
-          const existingReport = Reports.findOne({ day })
-          if (existingReport) {
-            return existingReport
-          } else {
-            const generatedPreview = generateReport({ day, appointments, overrideSchedules, tagMapping, messages })
-            return generatedPreview
+          return {
+            preview,
+            calendarId
           }
         })
       } catch (e) {

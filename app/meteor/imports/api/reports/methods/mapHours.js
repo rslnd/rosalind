@@ -60,8 +60,8 @@ const sumAppointments = ({ appointments, slotsPerHour, filter = identity }) =>
     .map(a => a.end - a.start)
     .reduce(add, 0) / (1000 * 60 * 60)) * slotsPerHour
 
-const calculateWorkload = ({ appointments, hours }) => {
-  const slotsPerHour = 12
+const calculateWorkload = ({ calendar, appointments, hours }) => {
+  const slotsPerHour = Math.ceil(60 / ((calendar && calendar.slotSize) || 5))
   const available = hours.planned * slotsPerHour
   const planned = sumAppointments({
     filter: a => !a.canceled,
@@ -82,24 +82,24 @@ const calculateWorkload = ({ appointments, hours }) => {
   }
 }
 
-const mapWorkload = ({ hours, appointments }) => {
+const mapWorkload = ({ calendar, hours, appointments }) => {
   const am = appointments.filter(isAM)
   const pm = appointments.filter(isPM)
 
   return {
-    ...calculateWorkload({ hours, appointments }),
+    ...calculateWorkload({ calendar, hours, appointments }),
     am: {
-      ...calculateWorkload({ hours: hours.am, appointments: am }),
+      ...calculateWorkload({ calendar, hours: hours.am, appointments: am }),
       count: am.length
     },
     pm: {
-      ...calculateWorkload({ hours: hours.pm, appointments: pm }),
+      ...calculateWorkload({ calendar, hours: hours.pm, appointments: pm }),
       count: pm.length
     }
   }
 }
 
-const mapAssignees = ({ report, overrideSchedules, appointments = [] }) => (
+const mapAssignees = ({ calendar, report, overrideSchedules, appointments = [] }) => (
   report.assignees.map((assignee) => {
     const assigneeId = assignee.assigneeId
 
@@ -112,7 +112,7 @@ const mapAssignees = ({ report, overrideSchedules, appointments = [] }) => (
         patients: mapPatients({ patients: assignee.patients, hours }),
         revenue: mapRevenue({ revenue: assignee.revenue, hours }),
         hours,
-        workload: mapWorkload({ hours, appointments: assigneesAppointments })
+        workload: mapWorkload({ calendar, hours, appointments: assigneesAppointments })
       }
     } else {
       return assignee
@@ -120,9 +120,9 @@ const mapAssignees = ({ report, overrideSchedules, appointments = [] }) => (
   })
 )
 
-export const mapHours = ({ report, overrideSchedules, appointments }) => {
+export const mapHours = ({ calendar, report, overrideSchedules, appointments }) => {
   return {
     ...report,
-    assignees: mapAssignees({ report, overrideSchedules, appointments })
+    assignees: mapAssignees({ calendar, report, overrideSchedules, appointments })
   }
 }

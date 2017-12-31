@@ -1,4 +1,5 @@
 import { Schedules } from '../../schedules'
+import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
 import { Tags } from '../../tags'
 import { Messages } from '../../messages'
@@ -14,8 +15,8 @@ export default function ({ Reports }) {
     { renderEmail: renderEmail({ Reports }) },
     { upsert: upsert({ Reports }) },
     { tally: tally({ Reports }) },
-    { generate: generate({ Reports, Schedules, Appointments, Tags, Messages }) },
-    { generatePreview: generatePreview({ Reports, Schedules, Appointments, Tags, Messages }) },
-    { generateQuarter: generateQuarter({ Reports, Schedules }) }
+    { generate: generate({ Calendars, Reports, Schedules, Appointments, Tags, Messages }) },
+    { generatePreview: generatePreview({ Calendars, Reports, Schedules, Appointments, Tags, Messages }) },
+    { generateQuarter: generateQuarter({ Calendars, Reports, Schedules }) }
   )
 }

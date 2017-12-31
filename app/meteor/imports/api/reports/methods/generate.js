@@ -5,11 +5,11 @@ import { mapHours } from './mapHours'
 import { merge as mergeReport } from './merge'
 import { reapplyAddenda, applyAddendum } from './reapplyAddenda'
 
-export const generate = ({ day, appointments, pastAppointments, overrideSchedules, tagMapping, messages, existingReport, addendum }) => {
+export const generate = ({ calendar, day, appointments, pastAppointments, overrideSchedules, tagMapping, messages, existingReport, addendum }) => {
   let report = {}
 
   report.day = day
-  report.assignees = mapAssignees({ appointments, pastAppointments, overrideSchedules, tagMapping })
+  report.assignees = mapAssignees({ calendar, appointments, pastAppointments, overrideSchedules, tagMapping })
 
   if (addendum && existingReport) {
     report = reapplyAddenda(existingReport)(report)(addendum)
@@ -17,7 +17,7 @@ export const generate = ({ day, appointments, pastAppointments, overrideSchedule
     report = applyAddendum(report)(addendum)
   }
 
-  report = mergeReport(report, mapHours({ report, appointments, overrideSchedules }))
+  report = mergeReport(report, mapHours({ calendar, report, appointments, overrideSchedules }))
 
   report.total = mapTotal({ report })
   report.average = mapAverage({ report })

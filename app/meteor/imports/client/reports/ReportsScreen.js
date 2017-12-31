@@ -107,13 +107,14 @@ export class ReportsScreen extends React.Component {
 
           <FlipMove duration={230}>
             {
-              this.props.preview &&
-                <div key='previewTable' style={avoidPageBreak}>
+              this.props.previews &&
+                <div key='previewTable'>
                   <Preview
-                    preview={this.props.preview}
+                    previews={this.props.previews}
                     showRevenue={this.state.showRevenue}
                     mapUserIdToName={this.props.mapUserIdToName}
                     mapUserIdToUsername={this.props.mapUserIdToUsername}
+                    getCalendar={this.props.getCalendar}
                     __={this.props.__}
                   />
                   {/* Signals that the page has fully loaded when rendering PDF */}
