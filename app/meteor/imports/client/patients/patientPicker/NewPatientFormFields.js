@@ -9,117 +9,135 @@ import { BirthdayField } from '../../components/form/BirthdayField'
 
 export class NewPatientFormFields extends React.Component {
   render () {
+    const { whitelistFields } = this.props
+
+    const shouldShowField = field =>
+      whitelistFields ? whitelistFields.includes(field) : true
+
+    const name = shouldShowField('name')
+    const birthday = shouldShowField('birthday')
+    const phone = shouldShowField('phone')
+    const email = shouldShowField('email')
+
     return (
       <div>
-        {/* Name */}
         <div className='row'>
           <div className='col-md-12'>
-            <div className='row no-pad' style={{ marginTop: -10, zIndex: 19 }}>
-              <div className='col-md-1'>
-                <Field
-                  name='gender'
-                  component={ToggleField}
-                  style={{ minWidth: 31, marginTop: 32 }}
-                  values={[
-                    { value: 'Female', label: TAPi18n.__('patients.salutationFemale') },
-                    { value: 'Male', label: TAPi18n.__('patients.salutationMale') }
-                  ]} />
-              </div>
-              <div className='col-md-5'>
-                <div>
-                  <Field
-                    name='lastName'
-                    component={TextField}
-                    fullWidth
-                    floatingLabelText={TAPi18n.__('inboundCalls.form.lastName.label')} />
-                </div>
-              </div>
-              <div className='col-md-5'>
-                <div>
-                  <Field
-                    name='firstName'
-                    component={TextField}
-                    fullWidth
-                    autoFocus={() => console.log(this.props)}
-                    floatingLabelText={TAPi18n.__('inboundCalls.form.firstName.label')} />
-                </div>
-              </div>
-              <div className='col-md-1'>
-                <FlatButton
-                  tabIndex={-1}
-                  style={{ minWidth: 31, marginTop: 32, color: '#bebebe' }}
-                  onClick={this.props.swapNameFields}>
-                  <Icon name='random' flipHorizontal />
-                </FlatButton>
-              </div>
-            </div>
-
-            {/* Birthday */}
-            <div className='row'>
-              <div className='col-md-12'>
-                <div className='row no-pad' style={{ minWidth: 31, marginTop: -15, textAlign: 'center', zIndex: 18 }}>
+            {
+              name &&
+                <div className='row no-pad' style={{ marginTop: -10, zIndex: 19 }}>
                   <div className='col-md-1'>
-                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                      <Icon name='birthday-cake' />
-                    </div>
+                    <Field
+                      name='gender'
+                      component={ToggleField}
+                      style={{ minWidth: 31, marginTop: 32 }}
+                      values={[
+                        { value: 'Female', label: TAPi18n.__('patients.salutationFemale') },
+                        { value: 'Male', label: TAPi18n.__('patients.salutationMale') }
+                      ]} />
                   </div>
-                  <div className='col-md-10'>
+                  <div className='col-md-5'>
                     <div>
                       <Field
-                        name='birthday'
-                        component={BirthdayField}
-                        fullWidth
-                        autoFocus
-                        floatingLabelText={TAPi18n.__('patients.birthday')} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Phone */}
-            <div className='row'>
-              <div className='col-md-12'>
-                <div className='row no-pad' style={{ marginTop: -15, zIndex: 17 }}>
-                  <div className='col-md-1'>
-                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                      <Icon name='phone' />
-                    </div>
-                  </div>
-                  <div className='col-md-10'>
-                    <div>
-                      <Field
-                        name='telephone'
+                        name='lastName'
                         component={TextField}
                         fullWidth
-                        floatingLabelText={TAPi18n.__('inboundCalls.form.telephone.label')} />
+                        floatingLabelText={TAPi18n.__('inboundCalls.form.lastName.label')} />
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Email */}
-            <div className='row'>
-              <div className='col-md-12'>
-                <div className='row no-pad' style={{ marginTop: -15, zIndex: 17 }}>
-                  <div className='col-md-1'>
-                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                      <Icon name='envelope-o' />
-                    </div>
-                  </div>
-                  <div className='col-md-10'>
+                  <div className='col-md-5'>
                     <div>
                       <Field
-                        name='email'
+                        name='firstName'
                         component={TextField}
                         fullWidth
-                        floatingLabelText={TAPi18n.__('patients.email')} />
+                        autoFocus={() => console.log(this.props)}
+                        floatingLabelText={TAPi18n.__('inboundCalls.form.firstName.label')} />
+                    </div>
+                  </div>
+                  <div className='col-md-1'>
+                    <FlatButton
+                      tabIndex={-1}
+                      style={{ minWidth: 31, marginTop: 32, color: '#bebebe' }}
+                      onClick={this.props.swapNameFields}>
+                      <Icon name='random' flipHorizontal />
+                    </FlatButton>
+                  </div>
+                </div>
+            }
+
+            {
+              birthday &&
+                <div className='row'>
+                  <div className='col-md-12'>
+                    <div className='row no-pad' style={{ minWidth: 31, marginTop: -15, textAlign: 'center', zIndex: 18 }}>
+                      <div className='col-md-1'>
+                        <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
+                          <Icon name='birthday-cake' />
+                        </div>
+                      </div>
+                      <div className='col-md-10'>
+                        <div>
+                          <Field
+                            name='birthday'
+                            component={BirthdayField}
+                            fullWidth
+                            autoFocus
+                            floatingLabelText={TAPi18n.__('patients.birthday')} />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+            }
+
+            {
+              phone &&
+                <div className='row'>
+                  <div className='col-md-12'>
+                    <div className='row no-pad' style={{ marginTop: -15, zIndex: 17 }}>
+                      <div className='col-md-1'>
+                        <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
+                          <Icon name='phone' />
+                        </div>
+                      </div>
+                      <div className='col-md-10'>
+                        <div>
+                          <Field
+                            name='telephone'
+                            component={TextField}
+                            fullWidth
+                            floatingLabelText={TAPi18n.__('inboundCalls.form.telephone.label')} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            }
+
+            {
+              email &&
+                <div className='row'>
+                  <div className='col-md-12'>
+                    <div className='row no-pad' style={{ marginTop: -15, zIndex: 17 }}>
+                      <div className='col-md-1'>
+                        <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
+                          <Icon name='envelope-o' />
+                        </div>
+                      </div>
+                      <div className='col-md-10'>
+                        <div>
+                          <Field
+                            name='email'
+                            component={TextField}
+                            fullWidth
+                            floatingLabelText={TAPi18n.__('patients.email')} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            }
 
           </div>
         </div>

@@ -42,32 +42,30 @@ export class NewAppointmentContainerComponent extends React.Component {
 
   handleSubmit (values, dispatch) {
     console.log('[Appointments] Submitting new Appointment', { values })
-    let newPatient = null
 
-    if ((values.patientId === 'newPatient') && values.lastName) {
-      newPatient = {
-        profile: {
-          lastName: values.lastName,
-          firstName: values.firstName,
-          gender: values.gender,
-          note: values.patientNote,
-          birthday: values.birthday
-        }
+    let newPatient = {
+      _id: values.patientId,
+      profile: {
+        lastName: values.lastName,
+        firstName: values.firstName,
+        gender: values.gender,
+        note: values.patientNote,
+        birthday: values.birthday
       }
+    }
 
-      newPatient.profile.contacts = []
+    newPatient.profile.contacts = []
 
-      if (values.telephone) {
-        newPatient.profile.contacts.push({
-          channel: 'Phone', value: values.telephone
-        })
-      }
+    if (values.telephone) {
+      newPatient.profile.contacts.push({
+        channel: 'Phone', value: values.telephone
+      })
+    }
 
-      if (values.email) {
-        newPatient.profile.contacts.push({
-          channel: 'Email', value: values.email
-        })
-      }
+    if (values.email) {
+      newPatient.profile.contacts.push({
+        channel: 'Email', value: values.email
+      })
     }
 
     const length = getDefaultDuration({

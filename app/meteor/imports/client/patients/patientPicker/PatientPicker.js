@@ -7,6 +7,7 @@ import { findPatients } from './findPatients'
 import { NewPatientFormFieldsContainer } from './NewPatientFormFieldsContainer'
 import { PatientSearchResult } from './PatientSearchResult'
 import { PatientNameSelected } from './PatientNameSelected'
+import { isValid, missingPatientInfo } from './missingPatientInfo'
 
 export class PatientPicker extends React.Component {
   constructor (props) {
@@ -126,6 +127,15 @@ export class PatientPicker extends React.Component {
           this.state.newPatient && <div>
             <NewPatientFormFieldsContainer />
           </div>
+        }
+        {
+          this.props.value &&
+          this.props.value.patient &&
+          !isValid(missingPatientInfo(this.props.value.patient)) &&
+            <div>
+              <NewPatientFormFieldsContainer
+                whitelistFields={Object.keys(missingPatientInfo(this.props.value.patient))} />
+            </div>
         }
       </div>
     )

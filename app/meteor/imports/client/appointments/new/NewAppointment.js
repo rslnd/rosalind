@@ -73,7 +73,8 @@ export class NewAppointmentFormComponent extends React.Component {
       handleSubmit,
       onSubmit,
       onSubmitPause,
-      fields
+      fields,
+      values
     } = this.props
 
     return (

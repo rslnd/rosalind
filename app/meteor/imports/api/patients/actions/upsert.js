@@ -1,4 +1,5 @@
 import dot from 'mongo-dot-notation'
+import omitBy from 'lodash/fp/omitBy'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
@@ -61,9 +62,17 @@ export const upsert = ({ Patients }) => {
           patient.profile.contacts = [ ...existingPatient.profile.contacts, ...newContacts ]
         }
 
-        console.log('[Patients] Updating', { patient })
+        const isEmpty = v => (v === null || v === undefined || v === '' || typeof v === 'function')
+        patient.profile = omitBy(isEmpty)(patient.profile)
+        const tempBirthday = patient.profile.birthday
+        patient.profile = omitBy((v, k) => k === 'birthday')(patient.profile)
 
-        Patients.update({ _id: existingPatient._id }, dot.flatten(patient), (err) => {
+        let update = dot.flatten(patient)
+        update['profile.birthday'] = tempBirthday
+
+        console.log('[Patients] Updating', existingPatient._id, JSON.stringify(update, null, 2))
+
+        Patients.update({ _id: existingPatient._id }, update, (err) => {
           if (err) { throw err }
           if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
         })
