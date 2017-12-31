@@ -9,6 +9,7 @@ import { TagsField } from '../../tags/TagsField'
 import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { PatientPickerContainer } from '../../patients/patientPicker/PatientPickerContainer'
 import { UserHelper } from '../../users/UserHelper'
+import { Icon } from '../../components/Icon'
 import { validate } from './newAppointmentValidators'
 
 const style = {
@@ -128,7 +129,9 @@ export class NewAppointmentFormComponent extends React.Component {
                 fullWidth
                 primary
                 disabled={submitting || (pristine && !this.props.initialValues.patientId)}
-                label={TAPi18n.__('appointments.thisSave')} />
+                label={submitting
+                  ? <Icon name='refresh' spin />
+                  : TAPi18n.__('appointments.thisSave')} />
             </div>
           </div>
         </div>
