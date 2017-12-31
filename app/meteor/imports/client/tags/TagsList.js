@@ -31,7 +31,9 @@ export const TagsList = ({ tags = [], onClick, style = {} }) => {
 
   // group by private, sort within groups
   const groupedTags = groupBy(t => (t.privateAppointment || false))(expandedTags)
-  const orderedTagGroups = [groupedTags.false, groupedTags.true].map(t => sortBy('order')(t))
+  const orderedTagGroups = [groupedTags.false, groupedTags.true]
+    .filter(t => t && t.length > 0)
+    .map(t => sortBy('order')(t))
 
   return <span>
     {orderedTagGroups.map((tagGroup, i) =>
@@ -57,7 +59,9 @@ export const TagsList = ({ tags = [], onClick, style = {} }) => {
             </span>
           )
         })
-      }<br /></span>
+      }{
+        orderedTagGroups.length > 1 && <br />
+      }</span>
     )}
   </span>
 }

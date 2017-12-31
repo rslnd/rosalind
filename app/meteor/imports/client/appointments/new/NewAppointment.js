@@ -19,7 +19,7 @@ const style = {
     marginTop: -25
   },
   tagsField: {
-    marginTop: 30,
+    marginTop: 23,
     paddingLeft: 0,
     paddingRight: 0
   },
@@ -28,11 +28,8 @@ const style = {
     backgroundColor: tagBackgroundColor,
     cursor: 'pointer'
   },
-  noteRow: {
-    marginTop: -40
-  },
   noteField: {
-    marginTop: 0,
+    marginTop: -14,
     paddingLeft: 0,
     paddingRight: 0
   },
@@ -95,17 +92,16 @@ export class NewAppointmentFormComponent extends React.Component {
 
             {/* Tags */}
             <div className='row' style={style.tagsRow}>
-              <div className='col-md-12' style={style.tagsField}>
-                <div className='pull-left'>
-                  <Field
-                    name='tags'
-                    component={TagsField}
-                    allowedTags={allowedTags}
-                    calendarId={calendarId}
-                    assigneeId={assigneeId}
-                    fullWidth />
-                </div>
-
+              <div className='col-md-10' style={style.tagsField}>
+                <Field
+                  name='tags'
+                  component={TagsField}
+                  allowedTags={allowedTags}
+                  calendarId={calendarId}
+                  assigneeId={assigneeId}
+                  fullWidth />
+              </div>
+              <div className='col-md-2' style={style.tagsField}>
                 <div
                   style={style.tag}
                   className='pull-right'
