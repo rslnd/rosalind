@@ -43,8 +43,13 @@ export class NewAppointmentContainerComponent extends React.Component {
   handleSubmit (values, dispatch) {
     console.log('[Appointments] Submitting new Appointment', { values })
 
+    let patientId = values.patientId
+    if (patientId === 'newPatient') {
+      patientId = undefined
+    }
+
     let newPatient = {
-      _id: values.patientId,
+      _id: patientId,
       profile: {
         lastName: values.lastName,
         firstName: values.firstName,
