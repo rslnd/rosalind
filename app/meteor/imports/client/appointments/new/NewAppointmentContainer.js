@@ -43,34 +43,43 @@ export class NewAppointmentContainerComponent extends React.Component {
   handleSubmit (values, dispatch) {
     console.log('[Appointments] Submitting new Appointment', { values })
 
+    let newPatient = null
     let patientId = values.patientId
-    if (patientId === 'newPatient') {
-      patientId = undefined
+
+    if (!patientId && !values.appointmentNote) {
+      Alert.error(TAPi18n.__('appointments.patientOrNoteError'))
+      throw new Error('Cannot save appointment without patientId or appointmentNote')
     }
 
-    let newPatient = {
-      _id: patientId,
-      profile: {
-        lastName: values.lastName,
-        firstName: values.firstName,
-        gender: values.gender,
-        note: values.patientNote,
-        birthday: values.birthday
+    if (patientId) {
+      if (patientId === 'newPatient') {
+        patientId = undefined
       }
-    }
 
-    newPatient.profile.contacts = []
+      newPatient = {
+        _id: patientId,
+        profile: {
+          lastName: values.lastName,
+          firstName: values.firstName,
+          gender: values.gender,
+          note: values.patientNote,
+          birthday: values.birthday
+        }
+      }
 
-    if (values.telephone) {
-      newPatient.profile.contacts.push({
-        channel: 'Phone', value: values.telephone
-      })
-    }
+      newPatient.profile.contacts = []
 
-    if (values.email) {
-      newPatient.profile.contacts.push({
-        channel: 'Email', value: values.email
-      })
+      if (values.telephone) {
+        newPatient.profile.contacts.push({
+          channel: 'Phone', value: values.telephone
+        })
+      }
+
+      if (values.email) {
+        newPatient.profile.contacts.push({
+          channel: 'Email', value: values.email
+        })
+      }
     }
 
     const length = getDefaultDuration({

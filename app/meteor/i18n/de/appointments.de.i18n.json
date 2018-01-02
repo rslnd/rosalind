@@ -49,6 +49,7 @@
     "insertSuccess": "Termin erfolgreich eingetragen",
     "pauseInsertSuccess": "Pause erfolgreich eingetragen",
     "insertError": "Entschuldigung! Bitte noch einmal versuchen.",
+    "patientOrNoteError": "Bitte eine PatientIn wählen oder Anmerkung schreiben.",
     "search": "Suche...",
     "searching": "Suche...",
     "appointmentReminderSMS": "SMS-Terminerinnerung",

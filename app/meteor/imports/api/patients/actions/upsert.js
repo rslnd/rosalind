@@ -1,5 +1,7 @@
 import dot from 'mongo-dot-notation'
+import idx from 'idx'
 import omitBy from 'lodash/fp/omitBy'
+import isEqual from 'lodash/isEqual'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
@@ -7,6 +9,23 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { normalizeName } from '../util/normalizeName'
 import { zerofix } from '../../../util/zerofix'
+
+const isEmpty = v => (
+  v === null ||
+  v === undefined ||
+  v === '' ||
+  isEqual(v, []) ||
+  isEqual(v, {}) ||
+  typeof v === 'function'
+)
+
+const cleanFields = (p = {}) => {
+  if (p.profile && p.profile.contacts === []) {
+    delete p.profile.contacts
+  }
+
+  return omitBy(isEmpty)(p)
+}
 
 export const upsert = ({ Patients }) => {
   return new ValidatedMethod({
@@ -34,6 +53,9 @@ export const upsert = ({ Patients }) => {
       let existingPatient = null
 
       if (patient._id) {
+        if (patient._id === 'newPatient') {
+          throw new Meteor.Error('Invalid patientId `newPatient`')
+        }
         existingPatient = Patients.findOne({ _id: patient._id })
       }
 
@@ -62,7 +84,6 @@ export const upsert = ({ Patients }) => {
           patient.profile.contacts = [ ...existingPatient.profile.contacts, ...newContacts ]
         }
 
-        const isEmpty = v => (v === null || v === undefined || v === '' || typeof v === 'function')
         patient.profile = omitBy(isEmpty)(patient.profile)
         const tempBirthday = patient.profile.birthday
         patient.profile = omitBy((v, k) => k === 'birthday')(patient.profile)
@@ -70,7 +91,13 @@ export const upsert = ({ Patients }) => {
         let update = dot.flatten(patient)
         if (update['$set']) {
           update['$set']['profile.birthday'] = tempBirthday
+          if (update['$set']['profile.contacts'] === []) {
+            delete update['$set']['profile.contacts']
+          }
+          update['$set'] = omitBy(isEmpty)(update['$set'])
         }
+
+        update = cleanFields(update)
 
         console.log('[Patients] Updating', existingPatient._id, JSON.stringify(update, null, 2))
 
@@ -81,6 +108,8 @@ export const upsert = ({ Patients }) => {
 
         return existingPatient._id
       } else {
+        patient = cleanFields(patient)
+
         try {
           const patientId = Patients.insert(patient, (e) => {
             if (e) { console.error('[Patients] Insert failed with error', e, 'of patient', patient) }
