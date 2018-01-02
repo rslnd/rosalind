@@ -13,7 +13,7 @@ else
 
   if [ ! -z $CI ]; then
     echo "** Logging in to $DOCKER_SERVER"
-    time docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL $DOCKER_SERVER
+    time docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD $DOCKER_SERVER
   fi
 
   echo "** Building docker image"
