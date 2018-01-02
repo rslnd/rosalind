@@ -68,7 +68,9 @@ export const upsert = ({ Patients }) => {
         patient.profile = omitBy((v, k) => k === 'birthday')(patient.profile)
 
         let update = dot.flatten(patient)
-        update['profile.birthday'] = tempBirthday
+        if (update['$set']) {
+          update['$set']['profile.birthday'] = tempBirthday
+        }
 
         console.log('[Patients] Updating', existingPatient._id, JSON.stringify(update, null, 2))
 
