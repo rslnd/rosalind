@@ -11,13 +11,8 @@ export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 export BRANCH="${TRAVIS_BRANCH:-$CIRCLE_BRANCH}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
-export DOCKER_COMPOSE_VERSION=1.5.2
 export NPM_VERSION=5.2.0
-export PHANTOMJS_VERSION=2.1.1
 
-export ROOT_URL=http://0.0.0.0:3000/
-
-export DISPLAY=:99.0
 export NPM_CONFIG_LOGLEVEL=warn
 export METEOR_PRETTY_OUTPUT=0
 export METEOR_WATCH_FORCE_POLLING=true
@@ -48,27 +43,12 @@ case "$1" in
   install)
     echo "Setting up CI environment"
     SECONDS=0
-    { curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose; } &
     npm -g install npm@$NPM_VERSION &
 
-    echo "phantomjs $(phantomjs --version)"
-    export PATH=$PWD/phantomjs_bin/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/bin:$PATH
-    echo "phantomjs $(phantomjs --version)"
-    if [ $(phantomjs --version) != '$PHANTOMJS_VERSION' ]; then
-      rm -rf $PWD/phantomjs_bin; mkdir -p $PWD/phantomjs_bin
-      wget https://github.com/Medium/phantomjs/releases/download/v$PHANTOMJS_VERSION/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -O $PWD/phantomjs_bin/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2
-      tar -xvf $PWD/phantomjs_bin/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -C $PWD/phantomjs_bin
-    fi
-    echo "phantomjs $(phantomjs --version)"
-
-    curl -Lo travis_after_all.py https://raw.githubusercontent.com/dmakhno/travis_after_all/master/travis_after_all.py &
-    wait
     npm set registry https://registry.npmjs.org/
     npm -g install yarn
-    chmod +x docker-compose && sudo mv docker-compose /usr/local/bin
     mkdir -p $ARTIFACTS_PATH
 
-    java -version
     echo "npm $(npm --version)"
     echo "node $(node --version)"
 
@@ -99,11 +79,6 @@ case "$1" in
     echo -en "travis_fold:start:install_dependencies\r"
     SECONDS=0
 
-    echo "[CI] Installing cucumber npm dependencies"
-    cd app/meteor/tests/cucumber
-    yarn
-    cd -
-
     echo "[CI] Installing meteor npm dependencies"
     cd app/meteor
     yarn
@@ -115,66 +90,8 @@ case "$1" in
 
   test)
     echo "[CI] Running test suite"
-
-    if [ -z "$ROOT_URL" ]; then
-      echo "Please set ROOT_URL for running integration tests"
-      exit 1
-    fi
-
     # Run unit tests
-    echo -en "travis_fold:start:unit_tests\r"
     yarn run test
-    echo -en "travis_fold:end:unit_tests\r"
-
-    # Start environment for acceptance tests
-    echo "[CI] Starting environment for acceptance tests"
-    SECONDS=0
-    RETRY=0
-
-    export TEST=true
-
-    echo "[CI] Starting meteor"
-    cd app/meteor
-    meteor &
-    METEOR_PID=$!
-
-    for i in {1..2700}; do
-      printf "(%03d) " $i && curl -q "$ROOT_URL" && break;
-      if [ "$SECONDS" -ge 900 ]; then
-        RETRY=$((RETRY + 1))
-        SECONDS=0
-        echo "[CI] Warning: Timed out while waiting for meteor to start"
-        kill $METEOR_PID
-        meteor &
-        METEOR_PID=$!
-      fi;
-
-      if [ "$RETRY" -ge 3 ]; then
-        echo "[CI] Error: Timed out while waiting for meteor to start after $RETRY retries. Failing tests."
-        exit 1
-      fi;
-      sleep 3
-    done;
-
-    if [ "$RETRY" -ge 1 ]; then
-      echo "[CI] Meteor took $SECONDS seconds to start after $RETRY retries"
-    else
-      echo "[CI] Meteor took $SECONDS seconds to start"
-    fi;
-
-    cd -
-
-    # Run acceptance tests
-    echo "[CI] Running acceptance tests"
-    echo -en "travis_fold:start:acceptance_tests\r"
-    SECONDS=0
-
-    export SAUCE_NAME="Rosalind build $BUILD_NUMBER of commit ${COMMIT_HASH:0:6}"
-    export SAUCE_TUNNEL_ID=$BUILD_NUMBER
-    export BUILD_NUMBER=$BUILD_NUMBER
-    yarn run test:acceptance
-    echo -en "travis_fold:end:acceptance_tests\r"
-    echo "[CI] Acceptance tests took $SECONDS seconds"
     ;;
 
   build)
@@ -194,34 +111,11 @@ case "$1" in
     echo -en "travis_fold:end:push\r"
 
     echo "** Done!"
-
     ;;
 
-  after_success)
-    python travis_after_all.py
-    export $(cat .to_export_back) > /dev/null 2>&1
-    if [ "$BUILD_LEADER" = "YES" ]; then
-      if [ "$BUILD_AGGREGATE_STATUS" = "others_succeeded" ]; then
-        echo "** All jobs succeeded!"
-        chmod +x production/deploy.sh && production/deploy.sh
-      else
-        echo "** Some jobs failed"
-      fi
-    fi
-
-    ;;
-
-  after_failure)
-    python travis_after_all.py
-    export $(cat .to_export_back) > /dev/null 2>&1
-    if [ "$BUILD_LEADER" = "YES" ]; then
-      if [ "$BUILD_AGGREGATE_STATUS" = "others_failed" ]; then
-        echo "** All jobs failed"
-      else
-        echo "** Some jobs failed"
-      fi
-    fi
-
+  deploy)
+    chmod +x production/deploy.sh
+    production/deploy.sh
     ;;
 
   *)

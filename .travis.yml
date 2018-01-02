@@ -16,9 +16,6 @@ branches:
   except:
   - /^v/
 
-matrix:
-  fast_finish: true
-
 install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get -y update
@@ -26,23 +23,11 @@ install:
   - chmod +x ci.sh && ./ci.sh install
 
 env:
-  global:
-    - PHANTOMJS_CDNURL=http://cnpmjs.org/downloads
-    - METEOR_WAREHOUSE_URLBASE=https://d3fm2vapipm3k9.cloudfront.net
+  - METEOR_WAREHOUSE_URLBASE=https://d3fm2vapipm3k9.cloudfront.net
 
-  matrix:
-    - CMD=build
-    - CMD=test   OS='Windows 10'   BROWSER='Chrome:50.0'
-
-script: ./ci.sh $CMD
-
-after_success: ./ci.sh after_success
-
-after_failure: ./ci.sh after_failure
-
-addons:
-  sauce_connect: true
-  no_ssl_bump_domains: all
+script:
+  - ./ci.sh test
+  - ./ci.sh build
 
 notifications:
   slack:
