@@ -24,7 +24,7 @@ export const AppointmentInfoModal = (props) => {
         <AppointmentInfo {...props} />
       </Modal.Body>
       {
-        comments.length > 4 &&
+        comments && comments.length > 4 &&
           <Modal.Footer>
             <Actions />
           </Modal.Footer>
