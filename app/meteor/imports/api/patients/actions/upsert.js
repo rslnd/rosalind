@@ -94,17 +94,20 @@ export const upsert = ({ Patients }) => {
           if (update['$set']['profile.contacts'] === []) {
             delete update['$set']['profile.contacts']
           }
+          delete update['$set']._id
           update['$set'] = omitBy(isEmpty)(update['$set'])
         }
 
         update = cleanFields(update)
 
-        console.log('[Patients] Updating', existingPatient._id, JSON.stringify(update, null, 2))
+        if (!isEqual(update, {}) && !isEqual(update['$set'], {})) {
+          console.log('[Patients] Updating', existingPatient._id, JSON.stringify(update, null, 2))
 
-        Patients.update({ _id: existingPatient._id }, update, (err) => {
-          if (err) { throw err }
-          if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
-        })
+          Patients.update({ _id: existingPatient._id }, update, (err) => {
+            if (err) { throw err }
+            if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
+          })
+        }
 
         return existingPatient._id
       } else {
