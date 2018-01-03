@@ -15,12 +15,9 @@ export const PreviewBoxes = ({ previews, mapUserIdToName, mapUserIdToUsername })
             <div className='col-md-12'>
               <Box
                 title={<span>
-                  {/* Weirdest Bug so far: When interpolating properties of p.calendar */}
-                  {/* as texts here, it works in the browser but silently skips */}
-                  {/* rendering the whole PreviewBoxes on headless Chrome during PDF generation*/}
-                  <b>{'Termine' || p.calendar.name}</b> &middot; Vorschau
+                  <b>{p.calendar.name}</b> &middot; Vorschau
                 </span>}
-                icon={'users' || p.calendar.icon}>
+                icon={p.calendar.icon}>
                 <Week
                   preview={p.preview}
                   mapUserIdToName={mapUserIdToName}

@@ -43,7 +43,7 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
       if (!isLoaded) {
         retries++
         console.log('[Reports] renderPdf: Still loading, retry', retries)
-        if (retries > 30) {
+        if (retries > 10) {
           console.error(html)
           throw new Error(`[Reports] renderPdf: Failed to load`)
         }
