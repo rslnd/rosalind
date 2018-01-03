@@ -24,14 +24,20 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
 
   try {
     const page = await browser.newPage()
+    page.on('console', msg => console.log('[Reports] renderPdf [console]', msg.text))
 
-    await page.goto(url, { waitUntil: 'networkidle' })
-
+    await page.goto(url, { waitUntil: 'networkidle2' })
     let loaded = false
     let retries = 0
+    let html = ''
     do {
       await delay(2000)
-      const html = await page.evaluate(() => document.body.innerHTML)
+
+      const aHandle = await page.evaluateHandle(() => document.body)
+      const resultHandle = await page.evaluateHandle(body => body.innerHTML, aHandle)
+      html = await resultHandle.jsonValue()
+      await resultHandle.dispose()
+
       loaded = isLoaded(html)
 
       if (!isLoaded) {

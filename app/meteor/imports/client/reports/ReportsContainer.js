@@ -47,8 +47,6 @@ const composer = (props, onData) => {
     const userIdToUsernameMapping = fromPairs(Meteor.users.find({}).fetch().map(u => [u._id, u.username]))
     const mapUserIdToUsername = id => userIdToUsernameMapping[id]
 
-    const getCalendar = id => id && Calendars.findOne(id)
-
     const __ = (key, opts) => TAPi18n.__(key, opts)
 
     const data = {
@@ -61,7 +59,6 @@ const composer = (props, onData) => {
       canShowRevenue,
       mapUserIdToName,
       mapUserIdToUsername,
-      getCalendar,
       __
     }
 
@@ -80,11 +77,12 @@ const composer = (props, onData) => {
         // Then load preview data in background. Ugh.
         // TODO: Refactor.
         Reports.actions.generatePreview.callPromise({ day })
-        .then(x => x.map(c => ({
-          ...c,
-          preview: c.preview.map(mapPreview)
-        })))
-        .then(previews => onData(null, { ...data, quarter, previews }))
+          .then(previews => previews.map(p => ({
+            ...p,
+            preview: p.preview.map(mapPreview),
+            calendar: Calendars.findOne({ _id: p.calendarId })
+          })))
+          .then(previews => onData(null, { ...data, quarter, previews }))
       })
   }
 }

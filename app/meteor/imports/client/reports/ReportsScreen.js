@@ -9,7 +9,7 @@ import { Icon } from '../components/Icon'
 import { DateNavigation } from '../components/DateNavigation'
 import { Box } from '../components/Box'
 import { Report } from './Report'
-import { Preview } from './Preview'
+import { PreviewBoxes } from './PreviewBoxes'
 import { Quarter } from './Quarter'
 import { FooterContainer } from '../layout/FooterContainer'
 
@@ -48,15 +48,31 @@ export class ReportsScreen extends React.Component {
   }
 
   render () {
+    const {
+      date,
+      report,
+      quarter,
+      previews,
+      canShowRevenue,
+      showRevenue,
+      mapUserIdToName,
+      mapUserIdToUsername,
+      generateReport,
+      viewAppointments,
+      sendEmailTest,
+      sendEmail,
+      __
+    } = this.props
+
     return (
       <div>
         <div className='content-header show-print'>
           <h1 className='show-print'>
-            {TAPi18n.__('reports.thisDaySingular')} {this.props.date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
-            <small>{weekOfYear(this.props.date, { short: true })}</small>
+            {TAPi18n.__('reports.thisDaySingular')} {date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
+            <small>{weekOfYear(date, { short: true })}</small>
           </h1>
           <DateNavigation
-            date={this.props.date}
+            date={date}
             basePath='reports/day'
             pullRight
             jumpWeekBackward
@@ -65,7 +81,7 @@ export class ReportsScreen extends React.Component {
             jumpMonthForward>
             <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name='print' /></Button>
             {
-              this.props.canShowRevenue &&
+              canShowRevenue &&
                 <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.toggleRevenue')}><Icon name='euro' /></Button>
             }
           </DateNavigation>
@@ -74,13 +90,13 @@ export class ReportsScreen extends React.Component {
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
           <FlipMove duration={230}>
             {
-              this.props.report
+              report
               ? <div key='reportTable'>
                 <Report
-                  report={this.props.report}
+                  report={report}
                   showRevenue={this.state.showRevenue}
-                  mapUserIdToName={this.props.mapUserIdToName}
-                  __={this.props.__}
+                  mapUserIdToName={mapUserIdToName}
+                  __={__}
                 />
                 <FooterContainer />
               </div>
@@ -94,49 +110,42 @@ export class ReportsScreen extends React.Component {
 
           <FlipMove duration={230}>
             {
-              this.props.quarter && this.state.showRevenue &&
+              quarter && this.state.showRevenue &&
                 <div key='quarterTable' style={avoidPageBreak}>
                   <Quarter
-                    quarter={this.props.quarter}
-                    __={this.props.__}
+                    quarter={quarter}
+                    __={__}
                   />
                   <span className='quarterLoaded' />
                 </div>
             }
           </FlipMove>
 
-          <FlipMove duration={230}>
-            {
-              this.props.previews &&
-                <div key='previewTable'>
-                  <Preview
-                    previews={this.props.previews}
-                    showRevenue={this.state.showRevenue}
-                    mapUserIdToName={this.props.mapUserIdToName}
-                    mapUserIdToUsername={this.props.mapUserIdToUsername}
-                    getCalendar={this.props.getCalendar}
-                    __={this.props.__}
-                  />
-                  {/* Signals that the page has fully loaded when rendering PDF */}
-                  <span className='weekPreviewLoaded' />
-                </div>
-            }
-          </FlipMove>
+          {
+            previews &&
+              <div>
+                <PreviewBoxes
+                  previews={previews}
+                  mapUserIdToUsername={mapUserIdToUsername}
+                  mapUserIdToName={mapUserIdToName} />
+                <span className='weekPreviewLoaded' />
+              </div>
+          }
 
           <div className='hide-print'>
-            <Button onClick={this.props.generateReport}>
+            <Button onClick={generateReport}>
                 Diesen Bericht neu generieren
             </Button>
 
-            <Button onClick={this.props.viewAppointments}>
+            <Button onClick={viewAppointments}>
                 Terminkalender für diesen Tag ansehen
             </Button>
 
-            <Button onClick={this.props.sendEmailTest}>
+            <Button onClick={sendEmailTest}>
                 Test Email senden
             </Button>
 
-            <Button onClick={this.props.sendEmail}>
+            <Button onClick={sendEmail}>
                 Email senden
             </Button>
           </div>

@@ -9,7 +9,6 @@ import { Icon } from '../components/Icon'
 import { DateRangeNavigation } from '../components/DateRangeNavigation'
 import { Box } from '../components/Box'
 import { Report } from './Report'
-import { Preview } from './Preview'
 import { FooterContainer } from '../layout/FooterContainer'
 import { UserPickerContainer } from '../users/UserPickerContainer'
 

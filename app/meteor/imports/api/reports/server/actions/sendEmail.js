@@ -34,48 +34,53 @@ export const sendEmail = new ValidatedMethod({
 
     console.log('[Reports] sendEmail')
 
-    const test = (process.env.NODE_ENV !== 'production') || args.test
+    try {
+      const test = (process.env.NODE_ENV !== 'production') || args.test
 
-    const day = args.day || dateToDay(moment(args))
-    const report = Reports.findOne({ day })
-    const isTodaysReport = moment().isSame(dayToDate(report.day), 'day')
-    if (!test && (!report || !isTodaysReport)) {
-      throw new Meteor.Error(404, 'There is no report for today, and no email will be sent')
-    }
+      const day = args.day || dateToDay(moment(args))
+      const report = Reports.findOne({ day })
+      const isTodaysReport = moment().isSame(dayToDate(report.day), 'day')
+      if (!test && (!report || !isTodaysReport)) {
+        throw new Meteor.Error(404, 'There is no report for today, and no email will be sent')
+      }
 
-    const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, u.fullNameWithTitle()]))
-    const mapAssigneeType = type => TAPi18n.__(`reports.assigneeType__${type}`, null, 'de-AT')
-    const mapUserIdToName = userId => userIdToNameMapping[userId]
+      const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, u.fullNameWithTitle()]))
+      const mapAssigneeType = type => TAPi18n.__(`reports.assigneeType__${type}`, null, 'de-AT')
+      const mapUserIdToName = userId => userIdToNameMapping[userId]
 
-    const { title, text } = renderEmail({ report, mapUserIdToName, mapAssigneeType })
-    const pdf = await renderPdf({ report })
-    const filename = `${dayToSlug(day)} Tagesbericht ${process.env.CUSTOMER_NAME}.pdf`
+      const { title, text } = renderEmail({ report, mapUserIdToName, mapAssigneeType })
+      const pdf = await renderPdf({ report })
+      const filename = `${dayToSlug(day)} Tagesbericht ${process.env.CUSTOMER_NAME}.pdf`
 
-    let recipients = args.to || process.env.MAIL_REPORTS_TO.split(',')
+      let recipients = args.to || process.env.MAIL_REPORTS_TO.split(',')
 
-    if (test) {
-      const testEmail = 'me+TEST@albertzak.com'
-      console.log('[Reports] sendEmail: Overriding recipients because not running in production enviroment', {
-        previousRecipients: recipients,
-        newRecipients: testEmail
+      if (test) {
+        const testEmail = 'me+TEST@albertzak.com'
+        console.log('[Reports] sendEmail: Overriding recipients because not running in production enviroment', {
+          previousRecipients: recipients,
+          newRecipients: testEmail
+        })
+        recipients = testEmail
+      }
+
+      Email.send({
+        from: process.env.MAIL_REPORTS_FROM,
+        to: recipients,
+        replyTo: process.env.MAIL_REPORTS_REPLYTO,
+        subject: title,
+        text,
+        attachments: [
+          {
+            content: pdf,
+            filename
+          }
+        ]
       })
-      recipients = testEmail
+
+      Events.post('reports/sendEmail', { reportId: report._id })
+    } catch (e) {
+      console.error(e)
+      throw e
     }
-
-    Email.send({
-      from: process.env.MAIL_REPORTS_FROM,
-      to: recipients,
-      replyTo: process.env.MAIL_REPORTS_REPLYTO,
-      subject: title,
-      text,
-      attachments: [
-        {
-          content: pdf,
-          filename
-        }
-      ]
-    })
-
-    Events.post('reports/sendEmail', { reportId: report._id })
   }
 })
