@@ -14,14 +14,17 @@ const barStyle = {
   display: 'flex'
 }
 
-const cellStyle = {
+const containerStyle = {
   flex: 1,
   borderLeft: '1px solid #d2d6de',
-  textAlign: 'center',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center'
+}
+
+const cellStyle = {
+  textAlign: 'center'
 }
 
 const Stats = ({ assignee }) => {
@@ -31,19 +34,15 @@ const Stats = ({ assignee }) => {
     tagMapping
   })
 
-  return <div>
+  const moreInfo = `Neu ${idx(report, _ => _.new.admitted) || 0}
+OP ${idx(report, _ => _.surgery.admitted) || 0}
+Kaustik ${idx(report, _ => _.cautery.admitted) || 0},
+Kontrolle ${idx(report, _ => _.recall.admitted) || 0}`
+
+  return <div style={cellStyle} title={moreInfo}>
     <span><Icon name='users' /> {idx(report, _ => _.total.planned)}</span><br />
-    <span><Icon name='check' /> {idx(report, _ => _.total.admitted)} (
-      <span>
-        Neu {idx(report, _ => _.new.admitted) || 0},
-        OP {idx(report, _ => _.surgery.admitted) || 0}
-      </span><br />
-      <span>
-        Kaustik {idx(report, _ => _.cautery.admitted) || 0},
-        Kontrolle {idx(report, _ => _.recall.admitted) || 0}
-      </span>
-    )</span><br />
-    <span><Icon name='times' /> {idx(report, _ => _.total.noShow)}</span><br />
+    <span><Icon name='check' /> {idx(report, _ => _.total.admitted)}</span>&ensp;
+    <span><Icon name='times' /> {idx(report, _ => _.total.noShow)}</span>&ensp;
   </div>
 }
 
@@ -59,7 +58,7 @@ export const AssigneesStats = ({ assignees, date }) => (
           <div
             key={assignee.assigneeId}
             className='text-muted'
-            style={cellStyle}>
+            style={containerStyle}>
               <Stats key={assignee.assigneeId} assignee={assignee} />
           </div>
         ))
