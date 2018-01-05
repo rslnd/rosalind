@@ -30,6 +30,8 @@
     "lastNameRequired": "Bitte ausfüllen",
     "firstNameRequired": "Bitte ausfüllen",
     "messagesDisabledSuccess": "PatientIn bekommt ab sofort keine Terminerinnerungen mehr.",
-    "messagesEnabledSuccess": "PatientIn wird wieder Terminerinnerungen bekommen."
+    "messagesEnabledSuccess": "PatientIn wird wieder Terminerinnerungen bekommen.",
+    "banned": "Nicht erwünscht",
+    "toggleBanned": "PatientIn als erwünscht/nicht erwünscht markieren"
   }
 }

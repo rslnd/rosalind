@@ -24,7 +24,8 @@ export const findOne = ({ Patients }) => {
         'profile.firstName': 1,
         'profile.gender': 1,
         'profile.birthday': 1,
-        'profile.contacts': 1
+        'profile.contacts': 1,
+        'profile.banned': 1
       }})
     }
   })

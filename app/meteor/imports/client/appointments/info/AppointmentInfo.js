@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment-timezone'
+import injectSheet from 'react-jss'
 import { Toggle, Choice } from 'belle'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from '../../../util/zerofix'
@@ -27,6 +28,28 @@ const ListItem = ({ icon, children, last = false, style }) => (
     {!last && <hr />}
   </div>
 )
+
+const dotStyle = {
+  dot: {
+    width: 30,
+    height: 30,
+    margin: 3,
+    backgroundColor: '#f2f2f2',
+    borderRadius: '100%',
+    cursor: 'pointer',
+    '&:hover': {
+      border: '1px dashed #ccc'
+    }
+  }
+}
+
+const Dot = injectSheet(dotStyle)(({ classes, patient, onChange }) => (
+  patient && patient.profile && <div
+    className={classes.dot}
+    onClick={() => onChange({ 'profile.banned': !patient.profile.banned })}
+    style={{ backgroundColor: patient.profile.banned && 'black' }}
+    title={patient.profile.banned ? TAPi18n.__('patients.banned') : TAPi18n.__('patients.toggleBanned')} /> || null
+))
 
 const PatientName = ({ patient, onChange, onToggleGender }) => (
   patient && patient.profile && <div>
@@ -56,7 +79,6 @@ const PatientName = ({ patient, onChange, onToggleGender }) => (
         submitOnBlur
       />
     </h4>
-    <hr />
   </div> || null
 )
 
@@ -184,7 +206,13 @@ export class AppointmentInfo extends React.Component {
       <div>
         <div className='row'>
           <div className='col-md-12'>
+            <div className='pull-right'>
+              <Dot patient={patient} onChange={handleEditPatient} />
+            </div>
+
             <PatientName patient={patient} onChange={handleEditPatient} onToggleGender={handleToggleGender} />
+
+            <hr />
           </div>
         </div>
         <div className='row'>

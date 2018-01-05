@@ -36,7 +36,8 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
             'profile.lastName': 1,
             'profile.firstName': 1,
             'profile.gender': 1,
-            'profile.birthday': 1
+            'profile.birthday': 1,
+            'profile.banned': 1
           }
         }).fetch()
 

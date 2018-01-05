@@ -91,6 +91,10 @@ Profile = new SimpleSchema
     type: Address
     optional: true
 
+  banned:
+    type: Boolean
+    optional: true
+
 Profile.i18n('user.profile')
 
 module.exports = {
