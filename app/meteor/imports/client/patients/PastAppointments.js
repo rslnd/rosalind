@@ -8,6 +8,7 @@ import { TagsList } from '../tags/TagsList';
 
 const Appointment = ({ appointment }) => {
   const assignee = Users.findOne({ _id: appointment.assigneeId })
+  const canceled = appointment.canceled || appointment.removed
   return (
     <li
       style={{
@@ -17,8 +18,8 @@ const Appointment = ({ appointment }) => {
       &ensp;
       <span style={{
         display: 'inline-block',
-        textDecoration: appointment.canceled && 'line-through',
-        color: appointment.canceled && '#ccc',
+        textDecoration: canceled && 'line-through',
+        color: canceled && '#ccc',
         paddingTop: 4,
         verticalAlign: -2 }}>
         {moment(appointment.start).format(TAPi18n.__('time.dateFormatShort'))} {moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}&emsp;

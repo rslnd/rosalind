@@ -7,8 +7,10 @@ const overlay = {
   opacity: 0.6
 }
 
-export const Indicator = ({ appointment }) => (
-  appointment.patientId &&
+export const Indicator = ({ appointment }) => {
+  const canceled = appointment.canceled || appointment.removed
+
+  return appointment.patientId &&
     <span className='pull-right'>
       {
         appointment.privateAppointment &&
@@ -17,7 +19,7 @@ export const Indicator = ({ appointment }) => (
           </span>
       }
       {
-        !appointment.canceled && <span>{
+        !canceled && <span>{
           (appointment.treated || appointment.admitted)
             ? (<span
               key='show'
@@ -36,4 +38,4 @@ export const Indicator = ({ appointment }) => (
         }</span>
       }
     </span> || null
-)
+}

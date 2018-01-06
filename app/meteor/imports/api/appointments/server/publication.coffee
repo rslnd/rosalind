@@ -89,9 +89,9 @@ module.exports = ->
     {
       find: -> Appointments.find({
         patientId: options.patientId,
-        removed: { $ne: true }
       }, {
-        sort: { start: 1 }
+        sort: { start: 1 },
+        removed: true
       }),
       children: [
         { find: (doc) -> @unblock(); Comments.find(docId: options.patientId) }

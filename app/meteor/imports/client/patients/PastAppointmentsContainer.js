@@ -9,10 +9,13 @@ const composer = (props, onData) => {
   Meteor.subscribe('appointmentsPatient', { patientId })
 
   const _id = { $not: props.excludeAppointmentId }
-  const sort = { start: -1 }
+  const options = {
+    sort: { start: -1 },
+    removed: true
+  }
 
-  const pastAppointments = Appointments.find({ patientId, start: { $lt: new Date() }, _id }, { sort }).fetch()
-  const futureAppointments = Appointments.find({ patientId, start: { $gte: new Date() }, _id }, { sort }).fetch()
+  const pastAppointments = Appointments.find({ patientId, start: { $lt: new Date() }, _id }, options).fetch()
+  const futureAppointments = Appointments.find({ patientId, start: { $gte: new Date() }, _id }, options).fetch()
 
   onData(null, { ...props, pastAppointments, futureAppointments })
 }
