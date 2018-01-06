@@ -17,14 +17,8 @@ export const tagStyle = {
   paddingLeft: 5,
   paddingRight: 5,
   paddingBottom: 3,
-  lineHeight: 1.3,
   margin: 2,
   userSelect: 'none'
-}
-
-const tagRowStyle = {
-  display: 'inline-block',
-  marginTop: -15
 }
 
 const overlay = {
@@ -48,7 +42,7 @@ export const TagsList = ({ tags = [], onClick, style = {}, tiny }) => {
 
   return <span style={tinyStyle}>
     {orderedTagGroups.map((tagGroup, i) =>
-      <span key={i} style={tagRowStyle}>
+      <span key={i}>
         {
           tagGroup.map(tag => {
             return (
@@ -66,13 +60,16 @@ export const TagsList = ({ tags = [], onClick, style = {}, tiny }) => {
                   borderColor: darken(tag.color || tagBackgroundColor)
                 }}>
                 {tag.tag}
-                {tag.privateAppointment && <span>&ensp;<Icon name='eur' style={overlay} /></span>}
+                {tag.privateAppointment &&
+                  <span>
+                    &ensp;
+                    <Icon name='eur' style={overlay} />
+                  </span>
+                }
               </span>
             )
           })
         }
-        {/* Fix a weird issue where the full height of tags is not clickable */}
-        <span style={{lineHeight: '60px'}} />
         {
           orderedTagGroups.length > 1 && <br />
         }

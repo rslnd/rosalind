@@ -22,7 +22,8 @@ const style = {
   tagsField: {
     marginTop: 23,
     paddingLeft: 0,
-    paddingRight: 0
+    paddingRight: 0,
+    zIndex: 3
   },
   tag: {
     ...tagStyle,
@@ -32,7 +33,8 @@ const style = {
   noteField: {
     marginTop: -14,
     paddingLeft: 0,
-    paddingRight: 0
+    paddingRight: 0,
+    zIndex: 2 // Fix notes field overlaying bottom ~10px of clickable tags
   },
   summary: {
     marginBottom: 5
