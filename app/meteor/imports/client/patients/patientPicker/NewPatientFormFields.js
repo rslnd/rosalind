@@ -51,7 +51,7 @@ export class NewPatientFormFields extends React.Component {
                         name='firstName'
                         component={TextField}
                         fullWidth
-                        autoFocus={() => console.log(this.props)}
+                        autoFocus
                         floatingLabelText={TAPi18n.__('inboundCalls.form.firstName.label')} />
                     </div>
                   </div>
@@ -74,7 +74,6 @@ export class NewPatientFormFields extends React.Component {
                             name='birthday'
                             component={BirthdayField}
                             fullWidth
-                            autoFocus
                             floatingLabelText={TAPi18n.__('patients.birthday')} />
                         </div>
                       </div>
