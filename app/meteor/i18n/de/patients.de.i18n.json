@@ -23,6 +23,7 @@
     "email": "Email",
     "note": "Anmerkung zur PatientIn",
     "notePlaceholder": "Anmerkung zur PatientIn hinzufügen",
+    "save": "Speichern",
     "editSuccess": "Erfolgreich gespeichert",
     "patientNotFound": "PatientIn nicht gefunden",
     "nameCaseWarning": "Bitte den ersten Buchstaben groß schreiben, und den Rest klein. Danke!",

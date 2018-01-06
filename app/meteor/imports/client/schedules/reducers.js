@@ -1,7 +1,7 @@
-const newHolidays = (state, action) => {
+const newHolidays = (state = null, action) => {
   switch (action.type) {
     case 'HOLIDAYS_INSERT_SUCCESS':
-      return undefined
+      return null
     default:
       return state
   }
@@ -9,7 +9,7 @@ const newHolidays = (state, action) => {
 const newSchedulesRequest = (state, action) => {
   switch (action.type) {
     case 'SCHEDULES_POST_REQUEST_SUCCESS':
-      return undefined
+      return null
     default:
       return state
   }

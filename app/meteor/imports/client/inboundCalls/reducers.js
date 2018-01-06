@@ -1,7 +1,7 @@
 const newInboundCall = (state, action) => {
   switch (action.type) {
     case 'INBOUND_CALL_POST_SUCCESS':
-      return undefined
+      return null
     default:
       return state
   }
