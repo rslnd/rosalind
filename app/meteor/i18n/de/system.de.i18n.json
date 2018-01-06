@@ -20,7 +20,7 @@
       "appointments/softRemove": "hat einen Termin gelöscht",
       "inboundCalls/post": "hat einen eingehenden Anruf als erledigt markiert",
       "inboundCalls/resolve": "hat einen eingehenden Anruf als erledigt markiert",
-      "comments/post": "hat einen Kommentar geschrieben",
+      "comments/post": "hat eine Anmerkung hinzugefügt",
       "patients/insert": "hat eine neue PatientIn angelegt",
       "patients/update": "hat eine bestehende PatientIn bearbeitet",
       "reports/upsert": "hat einen Bericht aktualisiert",
