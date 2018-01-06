@@ -19,10 +19,21 @@ const composer = (props, onData) => {
       sort: { createdAt: 1 }
     }).fetch() : []
 
-    const handleEditNote = (newNote) => {
-      Appointments.actions.editNote.call({
+    const handleEditAppointmentNote = (newNote) => {
+      Appointments.actions.editNote.callPromise({
         appointmentId: props.appointmentId,
         newNote: newNote
+      }).then(() => {
+        Alert.success(TAPi18n.__('patients.editSuccess'))
+      })
+    }
+
+    const handleEditPatientNote = (newNote) => {
+      patient && Patients.actions.editNote.callPromise({
+        patientId: patient._id,
+        newNote: newNote
+      }).then(() => {
+        Alert.success(TAPi18n.__('patients.editSuccess'))
       })
     }
 
@@ -86,7 +97,8 @@ const composer = (props, onData) => {
       patient,
       assignee,
       comments,
-      handleEditNote,
+      handleEditAppointmentNote,
+      handleEditPatientNote,
       handleEditPatient,
       handleToggleGender,
       handleTagChange,

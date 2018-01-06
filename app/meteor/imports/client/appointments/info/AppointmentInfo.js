@@ -13,8 +13,13 @@ import { PastAppointmentsContainer } from '../../patients/PastAppointmentsContai
 import { EnlargeText } from '../../components/EnlargeText'
 import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
 
-const ListItem = ({ icon, children, last = false, style }) => (
-  <div style={style}>
+const ListItem = ({ icon, children, last, style, highlight }) => {
+  const containerStyle = {
+    ...style,
+    fontWeight: highlight && '700'
+  }
+
+  return <div style={containerStyle}>
     <div className='row'>
       <div className='col-md-1'>
         {icon && <Icon name={icon} style={{
@@ -27,7 +32,7 @@ const ListItem = ({ icon, children, last = false, style }) => (
     </div>
     {!last && <hr />}
   </div>
-)
+}
 
 const dotStyle = {
   dot: {
@@ -177,7 +182,11 @@ const Reminders = ({ patient, onChange }) => (
 )
 
 const AppointmentNotes = ({ appointment, onChange }) => (
-  <ListItem icon='info-circle' last style={{ marginBottom: 30 }}>
+  <ListItem
+    icon='info-circle'
+    last
+    highlight={appointment.notes()}
+    style={{ marginBottom: 30 }}>
     <InlineEdit
       onChange={onChange}
       value={appointment.notes()}
@@ -189,13 +198,30 @@ const AppointmentNotes = ({ appointment, onChange }) => (
   </ListItem>
 )
 
+const PatientNotes = ({ patient, onChange }) => (
+  patient && <ListItem
+    icon='info-circle'
+    style={{ marginBottom: 30 }}
+    highlight={patient.notes()}>
+    <InlineEdit
+      onChange={onChange}
+      value={patient.notes()}
+      placeholder={<span className='text-muted'>{TAPi18n.__('patients.notePlaceholder')}</span>}
+      rows={3}
+      label={TAPi18n.__('patients.note')}
+      submitOnBlur
+      />
+  </ListItem> || null
+)
+
 export class AppointmentInfo extends React.Component {
   render () {
     const {
       appointment,
       patient,
       assignee,
-      handleEditNote,
+      handleEditAppointmentNote,
+      handleEditPatientNote,
       handleEditPatient,
       handleToggleGender,
       handleTagChange,
@@ -204,17 +230,20 @@ export class AppointmentInfo extends React.Component {
 
     return (
       <div>
-        <div className='row'>
-          <div className='col-md-12'>
-            <div className='pull-right'>
-              <Dot patient={patient} onChange={handleEditPatient} />
+        {
+          patient &&
+            <div className='row'>
+              <div className='col-md-12'>
+                <div className='pull-right'>
+                  <Dot patient={patient} onChange={handleEditPatient} />
+                </div>
+
+                <PatientName patient={patient} onChange={handleEditPatient} onToggleGender={handleToggleGender} />
+
+                <hr />
+              </div>
             </div>
-
-            <PatientName patient={patient} onChange={handleEditPatient} onToggleGender={handleToggleGender} />
-
-            <hr />
-          </div>
-        </div>
+        }
         <div className='row'>
           <div className='col-md-6'>
             <Day appointment={appointment} />
@@ -222,7 +251,7 @@ export class AppointmentInfo extends React.Component {
             <Assignee assignee={assignee} />
             <Private appointment={appointment} />
             <Tags appointment={appointment} />
-            <AppointmentNotes appointment={appointment} onChange={handleEditNote} />
+            <AppointmentNotes appointment={appointment} onChange={handleEditAppointmentNote} />
             <ListItem last>
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}
@@ -233,6 +262,7 @@ export class AppointmentInfo extends React.Component {
           <div className='col-md-6'>
             <Contacts patient={patient} onChange={handleEditPatient} />
             <Birthday patient={patient} onChange={handleSetBirthday} />
+            <PatientNotes patient={patient} onChange={handleEditPatientNote} />
             <Reminders patient={patient} onChange={handleSetMessagePreferences} />
 
             {patient && <PastAppointmentsContainer patientId={appointment.patientId} excludeAppointmentId={appointment._id} />}

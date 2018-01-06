@@ -77,7 +77,7 @@
         "label": "Assistenten"
       },
       "note": {
-        "label": "Anmerkungen",
+        "label": "Anmerkung zum Termin",
         "placeholder": "Anmerkung zum Termin hinzufügen"
       },
       "privateAppointment": {
