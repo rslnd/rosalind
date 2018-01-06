@@ -1,7 +1,7 @@
-export const newAppointment = (state = null, action) => {
+export const newAppointment = (state = {}, action) => {
   switch (action.type) {
     case 'APPOINTMENT_INSERT_SUCCESS':
-      return null
+      return {}
     default:
       return state
   }

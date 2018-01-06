@@ -55,14 +55,6 @@ export class NewPatientFormFields extends React.Component {
                         floatingLabelText={TAPi18n.__('inboundCalls.form.firstName.label')} />
                     </div>
                   </div>
-                  <div className='col-md-1'>
-                    <FlatButton
-                      tabIndex={-1}
-                      style={{ minWidth: 31, marginTop: 32, color: '#bebebe' }}
-                      onClick={this.props.swapNameFields}>
-                      <Icon name='random' flipHorizontal />
-                    </FlatButton>
-                  </div>
                 </div>
             }
 

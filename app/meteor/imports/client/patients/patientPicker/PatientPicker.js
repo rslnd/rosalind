@@ -4,7 +4,7 @@ import Select from 'react-select'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { startCase } from '../../../util/fuzzy/startCase'
 import { findPatients } from './findPatients'
-import { NewPatientFormFieldsContainer } from './NewPatientFormFieldsContainer'
+import { NewPatientFormFields } from './NewPatientFormFields'
 import { PatientSearchResult } from './PatientSearchResult'
 import { PatientNameSelected } from './PatientNameSelected'
 import { isValid, missingPatientInfo } from './missingPatientInfo'
@@ -125,7 +125,7 @@ export class PatientPicker extends React.Component {
           valueComponent={PatientNameSelected} />
         {
           this.state.newPatient && <div>
-            <NewPatientFormFieldsContainer />
+            <NewPatientFormFields />
           </div>
         }
         {
@@ -133,7 +133,7 @@ export class PatientPicker extends React.Component {
           this.props.value.patient &&
           !isValid(missingPatientInfo(this.props.value.patient)) &&
             <div>
-              <NewPatientFormFieldsContainer
+              <NewPatientFormFields
                 whitelistFields={Object.keys(missingPatientInfo(this.props.value.patient))} />
             </div>
         }

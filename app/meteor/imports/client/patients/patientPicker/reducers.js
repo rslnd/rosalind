@@ -23,14 +23,6 @@ export const patientPicker = (state = {}, action) => {
           birthday: null
         }
       }
-    case 'NEW_PATIENT_SWAP_NAME_FIELDS':
-      return { ...state,
-        values: {
-          ...state.values,
-          firstName: state.values.lastName,
-          lastName: state.values.firstName
-        }
-      }
     default:
       return state
   }

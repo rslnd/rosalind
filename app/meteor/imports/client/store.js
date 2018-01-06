@@ -1,4 +1,5 @@
 import { createStore, combineReducers } from 'redux'
+import reduceReducers from 'reduce-reducers'
 import { reducer as formReducer } from 'redux-form'
 import appointments from './appointments/reducers'
 import { newAppointment } from './appointments/new/reducers'
@@ -9,10 +10,10 @@ import { patientPicker } from './patients/patientPicker/reducers'
 const reducers = {
   appointments,
   form: formReducer.plugin({
-    appointmentsForm: combineReducers({
+    newAppointment: reduceReducers(
       newAppointment,
       patientPicker
-    }),
+    ),
     ...inboundCallsForm,
     ...schedulesForm,
     bulkNewPatientForm: patientPicker

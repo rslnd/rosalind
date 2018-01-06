@@ -884,7 +884,7 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bcrypt@1.0.3:
+bcrypt@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-1.0.3.tgz#b02ddc6c0b52ea16b8d3cf375d5a32e780dab548"
   dependencies:
@@ -1318,25 +1318,13 @@ d3-array@1, d3-array@^1.1.1, d3-array@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-1.2.1.tgz#d1ca33de2f6ac31efadb8e050a021d7e2396d5dc"
 
-d3-array@~0.7.0:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-0.7.1.tgz#a321c21558459d994eb4ad47b478240e64933942"
-
 d3-collection@1, d3-collection@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.4.tgz#342dfd12837c90974f33f1cc0a785aea570dcdc2"
 
-d3-collection@~0.1.0:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-0.1.2.tgz#d1495f5720add3835117e1916607d2b05b186c5a"
-
 d3-color@1, d3-color@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.3.tgz#bc7643fca8e53a8347e2fbdaffa236796b58509b"
-
-d3-color@~0.3.2:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-0.3.4.tgz#eba2fa9532513998b623a077c3b5149cb1df53d7"
 
 d3-contour@^1.1.0:
   version "1.1.2"
@@ -1344,7 +1332,7 @@ d3-contour@^1.1.0:
   dependencies:
     d3-array "^1.1.1"
 
-d3-format@1:
+d3-format@1, d3-format@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.2.1.tgz#4e19ecdb081a341dafaf5f555ee956bcfdbf167f"
 
@@ -1364,23 +1352,17 @@ d3-interpolate@1, d3-interpolate@^1.1.4:
   dependencies:
     d3-color "1"
 
-d3-interpolate@~0.2.0:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-0.2.1.tgz#0f0d7364e40ab5e7f2ebd010de1539c5e6711991"
-  dependencies:
-    d3-color "~0.3.2"
-
 d3-path@1:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-1.0.5.tgz#241eb1849bd9e9e8021c0d0a799f8a0e8e441764"
 
-d3-sankey-align@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/d3-sankey-align/-/d3-sankey-align-0.1.0.tgz#709d44089dc9fdb04e109daad6a2ce2c39dc1c3e"
+d3-sankey@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/d3-sankey/-/d3-sankey-0.7.1.tgz#d229832268fc69a7fec84803e96c2256a614c521"
   dependencies:
-    d3-array "~0.7.0"
-    d3-collection "~0.1.0"
-    d3-interpolate "~0.2.0"
+    d3-array "1"
+    d3-collection "1"
+    d3-shape "^1.2.0"
 
 d3-scale@^1.0.5:
   version "1.0.7"
@@ -1394,7 +1376,7 @@ d3-scale@^1.0.5:
     d3-time "1"
     d3-time-format "2"
 
-d3-shape@^1.1.0:
+d3-shape@^1.1.0, d3-shape@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.2.0.tgz#45d01538f064bafd05ea3d6d2cb748fd8c41f777"
   dependencies:
@@ -3592,13 +3574,6 @@ react-tap-event-plugin@^2.0.1:
   dependencies:
     fbjs "^0.8.6"
 
-react-test-renderer@^15.5.4:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-15.6.2.tgz#d0333434fc2c438092696ca770da5ed48037efa8"
-  dependencies:
-    fbjs "^0.8.9"
-    object-assign "^4.1.0"
-
 react-transform-catch-errors@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-transform-catch-errors/-/react-transform-catch-errors-1.0.2.tgz#1b4d4a76e97271896fc16fe3086c793ec88a9eeb"
@@ -3620,19 +3595,19 @@ react-transition-group@^1.1.2, react-transition-group@^1.2.0:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react-vis@1.6.7:
-  version "1.6.7"
-  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.6.7.tgz#b7e5f08abeca96ef63e34cf55a509e8e354e0fab"
+react-vis@^1.6.7:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.8.1.tgz#3e26d497d376e4616ea9c88efb5447f0b81ce491"
   dependencies:
-    babel-preset-es2017 "^6.24.1"
     d3-array "^1.2.0"
     d3-collection "^1.0.3"
     d3-color "^1.0.3"
     d3-contour "^1.1.0"
+    d3-format "^1.2.0"
     d3-geo "^1.6.4"
     d3-hierarchy "^1.1.4"
     d3-interpolate "^1.1.4"
-    d3-sankey-align "^0.1.0"
+    d3-sankey "^0.7.1"
     d3-scale "^1.0.5"
     d3-shape "^1.1.0"
     d3-voronoi "^1.1.2"
@@ -3640,7 +3615,6 @@ react-vis@1.6.7:
     global "^4.3.1"
     prop-types "^15.5.8"
     react-motion "^0.4.8"
-    react-test-renderer "^15.5.4"
 
 react-with-direction@^1.1.0:
   version "1.1.0"
@@ -3741,6 +3715,10 @@ redent@^1.0.0:
   dependencies:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
+
+reduce-reducers@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.1.2.tgz#fa1b4718bc5292a71ddd1e5d839c9bea9770f14b"
 
 redux-form-material-ui@^4.0.1:
   version "4.2.0"
