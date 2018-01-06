@@ -4,21 +4,26 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { Users } from '../../api/users'
 import { getColor } from '../tags/getColor'
 import { Indicator } from '../appointments/appointment/Indicator'
+import { TagsList } from '../tags/TagsList';
 
 const Appointment = ({ appointment }) => {
   const assignee = Users.findOne({ _id: appointment.assigneeId })
-  const color = getColor(appointment.tags)
   return (
     <li
       style={{
-        borderLeft: `4px solid ${color}`,
-        paddingLeft: 10,
-        listStyleType: 'none',
-        textDecoration: appointment.canceled && 'line-through',
-        color: appointment.canceled && '#ccc'
+        listStyleType: 'none'
       }}>
-      {moment(appointment.start).format(TAPi18n.__('time.dateFormatShort'))} {moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}&emsp;
-      {assignee && assignee.fullNameWithTitle()}
+      <TagsList tiny tags={appointment.tags} />
+      &ensp;
+      <span style={{
+        display: 'inline-block',
+        textDecoration: appointment.canceled && 'line-through',
+        color: appointment.canceled && '#ccc',
+        paddingTop: 4,
+        verticalAlign: -2 }}>
+        {moment(appointment.start).format(TAPi18n.__('time.dateFormatShort'))} {moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}&emsp;
+        {assignee && assignee.lastNameWithTitle()}
+      </span>
       <Indicator appointment={appointment} />
     </li>
   )

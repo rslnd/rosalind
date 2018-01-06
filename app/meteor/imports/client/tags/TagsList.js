@@ -13,9 +13,18 @@ export const tagStyle = {
   color: tagTextColor,
   borderBottom: `3px solid ${tagBackgroundColor}`,
   display: 'inline-block',
-  padding: 4,
+  paddingTop: 4,
+  paddingLeft: 5,
+  paddingRight: 5,
+  paddingBottom: 3,
+  lineHeight: 1.3,
   margin: 2,
   userSelect: 'none'
+}
+
+const tagRowStyle = {
+  display: 'inline-block',
+  marginTop: -15
 }
 
 const overlay = {
@@ -24,7 +33,7 @@ const overlay = {
 
 export const darken = c => color(c)(lightness(-10))()
 
-export const TagsList = ({ tags = [], onClick, style = {} }) => {
+export const TagsList = ({ tags = [], onClick, style = {}, tiny }) => {
   const expandedTags = tags.map(slug =>
     slug.tag ? slug : Tags.findOne({ _id: slug })
   )
@@ -35,33 +44,39 @@ export const TagsList = ({ tags = [], onClick, style = {} }) => {
     .filter(t => t && t.length > 0)
     .map(t => sortBy('order')(t))
 
-  return <span>
+  const tinyStyle = tiny ? { zoom: 0.6 } : {}
+
+  return <span style={tinyStyle}>
     {orderedTagGroups.map((tagGroup, i) =>
-      <span key={i}>{
-        tagGroup.map(tag => {
-          return (
-            <span
-              key={tag._id}
-              title={tag.description}
-              onClick={() => onClick && onClick(tag._id)}
-              style={{
-                ...tagStyle,
-                ...style,
-                color: tag.selectable && (tag.selected ? '#fff' : tagTextColor) || '#fff',
-                backgroundColor: tag.selectable
-                  ? (tag.selected ? tag.color : tagBackgroundColor)
-                  : tag.color,
-                borderColor: darken(tag.color || tagBackgroundColor)
-              }}
-            >
-              {tag.tag}
-              {tag.privateAppointment && <span>&ensp;<Icon name='eur' style={overlay} /></span>}
-            </span>
-          )
-        })
-      }{
-        orderedTagGroups.length > 1 && <br />
-      }</span>
+      <span key={i} style={tagRowStyle}>
+        {
+          tagGroup.map(tag => {
+            return (
+              <span
+                key={tag._id}
+                title={tag.description}
+                onClick={() => onClick && onClick(tag._id)}
+                style={{
+                  ...tagStyle,
+                  ...style,
+                  color: tag.selectable && (tag.selected ? '#fff' : tagTextColor) || '#fff',
+                  backgroundColor: tag.selectable
+                    ? (tag.selected ? tag.color : tagBackgroundColor)
+                    : tag.color,
+                  borderColor: darken(tag.color || tagBackgroundColor)
+                }}>
+                {tag.tag}
+                {tag.privateAppointment && <span>&ensp;<Icon name='eur' style={overlay} /></span>}
+              </span>
+            )
+          })
+        }
+        {/* Fix a weird issue where the full height of tags is not clickable */}
+        <span style={{lineHeight: '60px'}} />
+        {
+          orderedTagGroups.length > 1 && <br />
+        }
+      </span>
     )}
   </span>
 }

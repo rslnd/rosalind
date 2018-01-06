@@ -10,6 +10,7 @@ import { Birthday } from '../../patients/Birthday'
 import { getColor } from '../../tags/getColor'
 import './appointmentsSearchStyle'
 import { darkGray, darkGrayDisabled, primaryActive } from '../../css/global'
+import { TagsList } from '../../tags/TagsList';
 
 const style = {
   name: {
@@ -23,9 +24,8 @@ const style = {
     width: '50%'
   },
   appointment: {
-    borderLeft: `3px solid ${primaryActive}`,
-    marginLeft: 25,
-    paddingLeft: 6
+    marginLeft: 12,
+    marginTop: -4
   },
   assigneeName: {
     alignSelf: 'flex-end',
@@ -84,12 +84,13 @@ class AppointmentSearchResult extends React.Component {
         }
         {
           appointment && <span
-            style={{
-              ...style.appointment,
-              borderColor: tagColor,
-              textDecoration: appointment.canceled && 'line-through'
+            style={style.appointment}>
+            <TagsList tiny tags={appointment.tags} />
+            &ensp;
+            <span style={{
+              textDecoration: appointment.canceled && 'line-through',
+              verticalAlign: '-2px'
             }}>
-            <span>
               {start.format(TAPi18n.__('time.dateFormatShort'))}
               &nbsp;
               {TAPi18n.__('time.at')}

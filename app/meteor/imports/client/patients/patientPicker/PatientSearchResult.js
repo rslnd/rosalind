@@ -3,11 +3,11 @@ import moment from 'moment-timezone'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Indicator } from '../../appointments/appointment/Indicator'
 import { Birthday } from '../Birthday'
-import { getColor } from '../../tags/getColor'
 import { UserHelper } from '../../users/UserHelper'
 import { Icon } from '../../components/Icon'
 import { PatientName } from '../PatientName'
-import { primaryActive, darkGray, darkGrayDisabled } from '../../css/global'
+import { darkGray, darkGrayDisabled } from '../../css/global'
+import { TagsList } from '../../tags/TagsList';
 
 export class PatientSearchResult extends React.Component {
   constructor (props) {
@@ -56,10 +56,9 @@ export class PatientSearchResult extends React.Component {
                     return (
                       <span
                         key={appointment._id}
-                        style={{
-                          ...appointmentStyle,
-                          borderColor: getColor(appointment.tags)
-                        }}>
+                        style={appointmentStyle}>
+                        <TagsList tiny tags={appointment.tags} />
+                        &ensp;
                         <span style={{
                           textDecoration: appointment.canceled && 'line-through'
                         }}>
@@ -109,11 +108,9 @@ const birthdayStyle = {
 }
 
 const appointmentStyle = {
-  borderLeft: `3px solid ${primaryActive}`,
   display: 'flex',
   marginBottom: 4,
-  marginLeft: 25,
-  paddingLeft: 6
+  marginLeft: 4
 }
 
 const assigneeNameStyle = {
