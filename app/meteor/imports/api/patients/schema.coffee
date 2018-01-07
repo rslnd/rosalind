@@ -12,6 +12,10 @@ module.exports = new SimpleSchema
     type: String
     optional: true
 
+  externalRevenue:
+    type: Number
+    optional: true
+
   profile:
     type: Profile
     optional: true

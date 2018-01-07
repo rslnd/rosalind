@@ -7,7 +7,7 @@ const composer = (props, onData) => {
   if (props.input.value) {
     const patientId = props.input.value
 
-    if (patientId === 'newPatient' || !patientId) {
+    if (patientId === 'newPatient' || patientId === '') {
       return onData(null, { ...props })
     } else {
       Patients.actions.findOne.callPromise({ _id: patientId })

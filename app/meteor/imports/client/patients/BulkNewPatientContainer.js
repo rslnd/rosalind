@@ -1,6 +1,7 @@
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import Alert from 'react-s-alert'
 import { PatientPickerContainer } from './patientPicker/PatientPickerContainer'
 import RaisedButton from 'material-ui/RaisedButton'
 import { Icon } from '../components/Icon'
@@ -13,13 +14,14 @@ import { Patients } from '../../api/patients'
 
 const NewPatientForm = ({ submitting, handleSubmit, onSubmit }) => (
   <div className='content'>
-    <Box icon='user-plus' title='Stammdaten vervollständigen'>
+    <Box title='Stammdaten vervollständigen'>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
         <div className='row'>
           <div className='col-md-12'>
             <Field
               name='patientId'
               component={PatientPickerContainer}
+              extended
               autofocus />
           </div>
         </div>
@@ -42,12 +44,90 @@ const NewPatientForm = ({ submitting, handleSubmit, onSubmit }) => (
 
 export const NewPatientFormContainer = reduxForm({
   form: 'bulkNewPatientForm',
-  fields: ['patientId', 'firstName', 'lastName', 'gender', 'telephone', 'email', 'birthday', 'patientNote']
+  fields: [
+    'patientId',
+    'gender',
+    'firstName',
+    'lastName',
+    'titlePrepend',
+    'titleAppend',
+    'insuranceId',
+    'birthday',
+    'addressLine1',
+    'addressLine2',
+    'addressPostalCode',
+    'addressLocality',
+    'addressCountry',
+    'telephone',
+    'email',
+    'patientNote',
+    'externalRevenue',
+    'banned'
+  ]
 })(NewPatientForm)
 
 const composer = (props, onData) => {
-  const onSubmit = (v) => {
-    console.log('a >', v)
+  const onSubmit = v => {
+    try {
+      let patientId = v.patientId
+      let patient = null
+
+      if (patientId) {
+        if (patientId === 'newPatient') {
+          patientId = undefined
+        }
+
+        patient = {
+          _id: patientId,
+          insuranceId: v.insuranceId,
+          note: v.patientNote,
+          externalRevenue: v.externalRevenue,
+          profile: {
+            gender: v.gender,
+            lastName: v.lastName,
+            firstName: v.firstName,
+            titlePrepend: v.titlePrepend,
+            titleAppend: v.titleAppend,
+            birthday: v.birthday,
+            banned: v.banned,
+            note: v.patientNote,
+            address: {
+              line1: v.addressLine1,
+              line2: v.addressLine2,
+              postalCode: v.addressPostalCode,
+              locality: v.addressLocality,
+              country: v.addressCountry
+            }
+          }
+        }
+
+        patient.profile.contacts = []
+
+        if (v.telephone) {
+          patient.profile.contacts.push({
+            channel: 'Phone', value: v.telephone
+          })
+        }
+
+        if (v.email) {
+          patient.profile.contacts.push({
+            channel: 'Email', value: v.email
+          })
+        }
+      }
+
+      console.log({ v, patient })
+
+      return Patients.actions.upsert.callPromise({ patient })
+        .then(() => Alert.success(''))
+        .catch(e => {
+          Alert.error('Bitte noch einmal versuchen')
+          console.error(e)
+        })
+    } catch (e) {
+      Alert.error('Bitte noch einmal versuchen')
+      console.error(e)
+    }
   }
 
   onData(null, { ...props, onSubmit })

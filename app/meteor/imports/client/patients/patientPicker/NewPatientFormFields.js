@@ -6,10 +6,15 @@ import FlatButton from 'material-ui/FlatButton'
 import { Icon } from '../../components/Icon'
 import { ToggleField } from '../../components/form/ToggleField'
 import { BirthdayField } from '../../components/form/BirthdayField'
+import { NewPatientExtendedFormFields } from './NewPatientExtendedFormFields'
 
 export class NewPatientFormFields extends React.Component {
   render () {
-    const { whitelistFields } = this.props
+    const { whitelistFields, extended } = this.props
+
+    if (extended) {
+      return <NewPatientExtendedFormFields />
+    }
 
     const shouldShowField = field =>
       whitelistFields ? whitelistFields.includes(field) : true
@@ -27,14 +32,16 @@ export class NewPatientFormFields extends React.Component {
               name &&
                 <div className='row no-pad' style={{ marginTop: -10, zIndex: 19 }}>
                   <div className='col-md-1'>
-                    <Field
-                      name='gender'
-                      component={ToggleField}
-                      style={{ minWidth: 31, marginTop: 32 }}
-                      values={[
-                        { value: 'Female', label: TAPi18n.__('patients.salutationFemale') },
-                        { value: 'Male', label: TAPi18n.__('patients.salutationMale') }
-                      ]} />
+                    <div style={{ textAlign: 'center' }}>
+                      <Field
+                        name='gender'
+                        component={ToggleField}
+                        style={{ minWidth: 31, marginTop: 32 }}
+                        values={[
+                          { value: 'Female', label: TAPi18n.__('patients.salutationFemale') },
+                          { value: 'Male', label: TAPi18n.__('patients.salutationMale') }
+                        ]} />
+                    </div>
                   </div>
                   <div className='col-md-5'>
                     <div>

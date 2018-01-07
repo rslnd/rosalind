@@ -30,9 +30,16 @@ export class ToggleField extends React.Component {
   }
 
   render () {
-    return <FlatButton
-      onClick={this.toggle}
-      style={{ ...this.props.style }}>
-      {this.props.values[this.state.currentIndex].label}</FlatButton>
+    if (this.props.button === false) {
+      return <div
+        onClick={this.toggle}
+        style={this.props.style}>
+        {this.props.values[this.state.currentIndex].label}</div>
+    } else {
+      return <FlatButton
+        onClick={this.toggle}
+        style={this.props.style}>
+        {this.props.values[this.state.currentIndex].label}</FlatButton>
+    }
   }
 }
