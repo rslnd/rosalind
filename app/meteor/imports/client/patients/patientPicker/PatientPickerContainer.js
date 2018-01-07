@@ -12,6 +12,10 @@ const composer = (props, onData) => {
     } else {
       Patients.actions.findOne.callPromise({ _id: patientId })
         .then((patient) => {
+          if (props.dispatch) {
+            props.dispatch({ type: 'LOAD_PATIENT', data: patient })
+          }
+
           onData(null, {
             ...props,
             value: {

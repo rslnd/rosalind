@@ -1,5 +1,6 @@
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import Alert from 'react-s-alert'
 import { PatientPickerContainer } from './patientPicker/PatientPickerContainer'
@@ -41,30 +42,6 @@ const NewPatientForm = ({ submitting, handleSubmit, onSubmit }) => (
     </Box>
   </div>
 )
-
-export const NewPatientFormContainer = reduxForm({
-  form: 'bulkNewPatientForm',
-  fields: [
-    'patientId',
-    'gender',
-    'firstName',
-    'lastName',
-    'titlePrepend',
-    'titleAppend',
-    'insuranceId',
-    'birthday',
-    'addressLine1',
-    'addressLine2',
-    'addressPostalCode',
-    'addressLocality',
-    'addressCountry',
-    'telephone',
-    'email',
-    'patientNote',
-    'externalRevenue',
-    'banned'
-  ]
-})(NewPatientForm)
 
 const composer = (props, onData) => {
   const onSubmit = v => {
@@ -133,6 +110,40 @@ const composer = (props, onData) => {
   onData(null, { ...props, onSubmit })
 }
 
-const BulkNewPatientContainer = composeWithTracker(composer, Loading)(NewPatientFormContainer)
+let BulkNewPatientContainer = reduxForm({
+  form: 'bulkNewPatientForm',
+  enableReinitialize: true,
+  fields: [
+    'patientId',
+    'gender',
+    'firstName',
+    'lastName',
+    'titlePrepend',
+    'titleAppend',
+    'insuranceId',
+    'birthday',
+    'addressLine1',
+    'addressLine2',
+    'addressPostalCode',
+    'addressLocality',
+    'addressCountry',
+    'telephone',
+    'email',
+    'patientNote',
+    'externalRevenue',
+    'banned'
+  ]
+})(NewPatientForm)
+
+BulkNewPatientContainer = composeWithTracker(composer, Loading)(BulkNewPatientContainer)
+
+BulkNewPatientContainer = connect(
+  state => {
+    console.log('called iV', state)
+    return ({
+      initialValues: state.loadPatient.data
+    })
+  }
+)(BulkNewPatientContainer)
 
 export { BulkNewPatientContainer }

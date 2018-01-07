@@ -83,7 +83,6 @@ export const NewPatientExtendedFormFields = () => {
                         name='titleAppend'
                         component={TextField}
                         fullWidth
-                        autoFocus
                         floatingLabelText={TAPi18n.__('patients.titleAppend')} />
                     </div>
                   </div>

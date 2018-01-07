@@ -131,11 +131,11 @@ export class PatientPicker extends React.Component {
         {
           this.props.value &&
           this.props.value.patient &&
-          !isValid(missingPatientInfo(this.props.value.patient)) &&
+          (this.props.extended || !isValid(missingPatientInfo(this.props.value.patient))) &&
             <div>
               <NewPatientFormFields
                 extended={this.props.extended}
-                whitelistFields={Object.keys(missingPatientInfo(this.props.value.patient))} />
+                whitelistFields={this.props.extended ? undefined : Object.keys(missingPatientInfo(this.props.value.patient))} />
             </div>
         }
       </div>

@@ -18,15 +18,7 @@ export const findOne = ({ Patients }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      return Patients.findOne({ _id }, { fields: {
-        '_id': 1,
-        'profile.lastName': 1,
-        'profile.firstName': 1,
-        'profile.gender': 1,
-        'profile.birthday': 1,
-        'profile.contacts': 1,
-        'profile.banned': 1
-      }})
+      return Patients.findOne({ _id })
     }
   })
 }

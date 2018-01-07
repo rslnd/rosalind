@@ -5,10 +5,11 @@ import appointments from './appointments/reducers'
 import { newAppointment } from './appointments/new/reducers'
 import { form as inboundCallsForm } from './inboundCalls/reducers'
 import { form as schedulesForm } from './schedules/reducers'
-import { patientPicker } from './patients/patientPicker/reducers'
+import { patientPicker, loadPatient } from './patients/patientPicker/reducers'
 
 const reducers = {
   appointments,
+  loadPatient,
   form: formReducer.plugin({
     newAppointment: reduceReducers(
       newAppointment,
