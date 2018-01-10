@@ -5,12 +5,19 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { dayToDate } from '../../../util/time/day'
 import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
 
+const toStringValue = v => {
+  if (!v) { return '' }
+
+  const date = moment(dayToDate(v))
+  return date.format(TAPi18n.__('time.dateFormat'))
+}
+
 export class BirthdayField extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      stringValue: '',
+      stringValue: toStringValue(props.input.value),
       focus: false
     }
 
@@ -22,21 +29,24 @@ export class BirthdayField extends React.Component {
 
   handleFocus () {
     this.setState({
-      ...this.state,
       focus: true
     })
+
+    if (!this.state.stringValue && this.props.input.value) {
+      this.setState({
+        stringValue: toStringValue(this.props.input.value)
+      })
+    }
   }
 
   handleChange (e, stringValue) {
     this.setState({
-      ...this.state,
       stringValue
     })
   }
 
   handleBlur () {
     this.setState({
-      ...this.state,
       focus: false
     })
 
