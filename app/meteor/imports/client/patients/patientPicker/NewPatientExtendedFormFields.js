@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field } from 'redux-form'
+import { Field, FieldArray } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import FlatButton from 'material-ui/FlatButton'
@@ -7,6 +7,63 @@ import { Icon } from '../../components/Icon'
 import { ToggleField } from '../../components/form/ToggleField'
 import { BirthdayField } from '../../components/form/BirthdayField'
 import { Dot } from '../Dot'
+
+const filterField = channel => field => field && field.channel === channel
+
+const ContactsField = ({ fields, icon, channel }) => {
+  const count = (fields.getAll() || [])
+    .filter(filterField(channel))
+    .length
+
+  return <div>
+    {
+      fields.map((member, i) => (
+        // can't call .filter on `fields` as it's not a real array
+        filterField(channel)(fields.get(i)) &&
+          <div key={i} className='row'>
+            <div className='col-md-12'>
+              <div className='row no-pad' style={{ marginTop: -15, zIndex: 14 }}>
+                <div className='col-md-1'>
+                  <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
+                    <Icon name={icon} />
+                  </div>
+                </div>
+                <div className='col-md-10'>
+                  <div className='row'>
+                    <div className='col-md-10'>
+                      <Field
+                        name={`${member}.value`}
+                        component={TextField}
+                        fullWidth
+                        floatingLabelText={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
+                    </div>
+                    <div className='col-md-2' style={{ paddingTop: 32 }}>
+                      {
+                        count > 1 &&
+                          <FlatButton
+                            onClick={() => fields.remove(i)}
+                            style={{ minWidth: 35, color: '#ccc' }}>
+                            <Icon name='remove' />
+                          </FlatButton>
+                      }
+                      {
+                        count < 5 &&
+                          <FlatButton
+                            onClick={() => fields.insert(i + 1, { channel })}
+                            style={{ minWidth: 35 }}>
+                            <Icon name='plus' />
+                          </FlatButton>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+  </div>
+}
 
 export const NewPatientExtendedFormFields = () => {
   const name = true
@@ -148,22 +205,13 @@ export const NewPatientExtendedFormFields = () => {
                         <Icon name='home' />
                       </div>
                     </div>
-                    <div className='col-md-5'>
+                    <div className='col-md-10'>
                       <div>
                         <Field
                           name='addressLine1'
                           component={TextField}
                           fullWidth
                           floatingLabelText={TAPi18n.__('patients.addressLine1')} />
-                      </div>
-                    </div>
-                    <div className='col-md-5'>
-                      <div>
-                        <Field
-                          name='addressLine2'
-                          component={TextField}
-                          fullWidth
-                          floatingLabelText={TAPi18n.__('patients.addressLine2')} />
                       </div>
                     </div>
                   </div>
@@ -210,52 +258,21 @@ export const NewPatientExtendedFormFields = () => {
               </div>
             </div>
         }
-        {
-          phone &&
-            <div className='row'>
-              <div className='col-md-12'>
-                <div className='row no-pad' style={{ marginTop: -15, zIndex: 14 }}>
-                  <div className='col-md-1'>
-                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                      <Icon name='phone' />
-                    </div>
-                  </div>
-                  <div className='col-md-10'>
-                    <div>
-                      <Field
-                        name='telephone'
-                        component={TextField}
-                        fullWidth
-                        floatingLabelText={TAPi18n.__('inboundCalls.form.telephone.label')} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-        }
 
         {
-          email &&
-            <div className='row'>
-              <div className='col-md-12'>
-                <div className='row no-pad' style={{ marginTop: -15, zIndex: 13 }}>
-                  <div className='col-md-1'>
-                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                      <Icon name='envelope-open-o' />
-                    </div>
-                  </div>
-                  <div className='col-md-10'>
-                    <div>
-                      <Field
-                        name='email'
-                        component={TextField}
-                        fullWidth
-                        floatingLabelText={TAPi18n.__('patients.email')} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          true && <div>
+            <FieldArray
+              name='contacts'
+              channel='Phone'
+              icon='phone'
+              component={ContactsField} />
+
+            <FieldArray
+              name='contacts'
+              channel='Email'
+              icon='envelope-open-o'
+              component={ContactsField} />
+          </div>
         }
 
         {

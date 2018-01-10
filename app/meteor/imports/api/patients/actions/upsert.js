@@ -33,10 +33,11 @@ export const upsert = ({ Patients }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       patient: { type: Object, blackbox: true },
+      replaceContacts: { type: Boolean, optional: true },
       quiet: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ patient, quiet }) {
+    run ({ patient, quiet, replaceContacts }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -69,7 +70,7 @@ export const upsert = ({ Patients }) => {
 
       if (existingPatient) {
         // TODO: Factor contacts into own model
-        if (existingPatient.profile && existingPatient.profile.contacts && patient.profile && patient.profile.contacts) {
+        if (!replaceContacts && existingPatient.profile && existingPatient.profile.contacts && patient.profile && patient.profile.contacts) {
           let newContacts = []
 
           patient.profile.contacts.forEach((c) => {
@@ -91,7 +92,7 @@ export const upsert = ({ Patients }) => {
         let update = dot.flatten(patient)
         if (update['$set']) {
           update['$set']['profile.birthday'] = tempBirthday
-          if (update['$set']['profile.contacts'] === []) {
+          if (!replaceContacts && update['$set']['profile.contacts'] === []) {
             delete update['$set']['profile.contacts']
           }
           delete update['$set']._id

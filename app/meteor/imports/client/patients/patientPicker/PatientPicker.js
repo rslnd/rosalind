@@ -7,18 +7,18 @@ import { findPatients } from './findPatients'
 import { NewPatientFormFields } from './NewPatientFormFields'
 import { PatientSearchResult } from './PatientSearchResult'
 import { PatientNameSelected } from './PatientNameSelected'
-import { isValid, missingPatientInfo } from './missingPatientInfo'
+import { isEmpty, missingPatientInfo } from './missingPatientInfo'
 
 export class PatientPicker extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      newPatient: false,
-      searchValue: ''
+      upserting: false,
+      searchValue: null
     }
     this.handleQueryChange = this.handleQueryChange.bind(this)
-    this.handleCloseNewPatient = this.handleCloseNewPatient.bind(this)
-    this.handleOpenNewPatient = this.handleOpenNewPatient.bind(this)
+    this.handleCloseUpsert = this.handleCloseUpsert.bind(this)
+    this.handleOpenUpsert = this.handleOpenUpsert.bind(this)
     this.handleSearchValueChange = this.handleSearchValueChange.bind(this)
   }
 
@@ -52,19 +52,23 @@ export class PatientPicker extends React.Component {
       autofill.firstName = startCase(possibleFirstName)
     }
 
+    autofill.contacts = [
+      { channel: 'Phone' },
+      { channel: 'Email' }
+    ]
+
     console.log('[PatientPicker] Autofill', { query, autofill })
     return autofill
   }
 
   handleQueryChange (query) {
     if (query) {
-      if (query.newPatient) {
-        const autofill = this.parseQueryForAutofill(query.query)
-        this.handleOpenNewPatient()
-        this.props.dispatch({ type: 'OPEN_NEW_PATIENT', autofill })
+      const missingFields = query.patient && missingPatientInfo(query.patient)
+      const needsMoreInfo = missingFields && !isEmpty(missingFields)
+      if (query.newPatient || this.props.alwaysUpsert || needsMoreInfo) {
+        this.handleOpenUpsert(query)
       } else {
-        this.handleCloseNewPatient()
-        this.props.dispatch({ type: 'CLOSE_NEW_PATIENT' })
+        this.handleCloseUpsert()
       }
 
       if (this.props.input.onChange) {
@@ -74,24 +78,34 @@ export class PatientPicker extends React.Component {
     } else {
       console.log('[PatientPicker] no query, closing new patient form')
       if (this.props.input.onChange) {
-        this.props.input.onChange('')
+        this.props.input.onChange(null)
       }
       this.setState({
-        searchValue: ''
+        searchValue: null
       })
-      this.handleCloseNewPatient()
+      this.handleCloseUpsert()
     }
   }
 
-  handleOpenNewPatient () {
+  handleOpenUpsert (query) {
+    if (query.newPatient) {
+      const autofill = this.parseQueryForAutofill(query.query)
+      this.props.dispatch({ type: 'OPEN_NEW_PATIENT', autofill })
+    } else {
+      this.props.dispatch({ type: 'OPEN_UPSERT' })
+    }
+
     this.setState({
-      newPatient: true
+      upsert: true,
+      searchValue: null
     })
   }
 
-  handleCloseNewPatient () {
+  handleCloseUpsert () {
+    this.props.dispatch({ type: 'CLOSE_UPSERT' })
     this.setState({
-      newPatient: false
+      upsert: false,
+      searchValue: null
     })
   }
 
@@ -102,6 +116,14 @@ export class PatientPicker extends React.Component {
   }
 
   render () {
+    let whitelistFields = null
+    if (this.props.value &&
+      this.props.value.patient &&
+      !this.props.extended &&
+      !this.props.alwaysUpsert) {
+      whitelistFields = Object.keys(missingPatientInfo(this.props.value.patient))
+    }
+
     return (
       <div>
         <Select.Async
@@ -116,7 +138,7 @@ export class PatientPicker extends React.Component {
           cache={false}
           ignoreCase={false}
           ignoreAccents={false}
-          autofocus={this.props.autofocus && !this.props.value}
+          autoFocus={this.props.autoFocus && !this.props.value}
           placeholder={TAPi18n.__('patients.search')}
           loadingPlaceholder={TAPi18n.__('patients.searching')}
           clearValueText={TAPi18n.__('ui.clear')}
@@ -124,19 +146,11 @@ export class PatientPicker extends React.Component {
           optionComponent={PatientSearchResult}
           valueComponent={PatientNameSelected} />
         {
-          this.state.newPatient && <div>
-            <NewPatientFormFields extended={this.props.extended} />
+          this.state.upsert && <div>
+            <NewPatientFormFields
+              extended={this.props.extended}
+              whitelistFields={whitelistFields} />
           </div>
-        }
-        {
-          this.props.value &&
-          this.props.value.patient &&
-          (this.props.extended || !isValid(missingPatientInfo(this.props.value.patient))) &&
-            <div>
-              <NewPatientFormFields
-                extended={this.props.extended}
-                whitelistFields={this.props.extended ? undefined : Object.keys(missingPatientInfo(this.props.value.patient))} />
-            </div>
         }
       </div>
     )

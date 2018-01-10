@@ -1,4 +1,5 @@
 import React from 'react'
+import find from 'lodash/fp/find'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
@@ -22,6 +23,7 @@ const NewPatientForm = ({ submitting, handleSubmit, onSubmit }) => (
             <Field
               name='patientId'
               component={PatientPickerContainer}
+              alwaysUpsert
               extended
               autofocus />
           </div>
@@ -54,6 +56,8 @@ const composer = (props, onData) => {
           patientId = undefined
         }
 
+        const contacts = (v.contacts || []).filter(c => c.value)
+
         patient = {
           _id: patientId,
           insuranceId: v.insuranceId,
@@ -68,6 +72,7 @@ const composer = (props, onData) => {
             birthday: v.birthday,
             banned: v.banned,
             note: v.patientNote,
+            contacts,
             address: {
               line1: v.addressLine1,
               line2: v.addressLine2,
@@ -77,26 +82,12 @@ const composer = (props, onData) => {
             }
           }
         }
-
-        patient.profile.contacts = []
-
-        if (v.telephone) {
-          patient.profile.contacts.push({
-            channel: 'Phone', value: v.telephone
-          })
-        }
-
-        if (v.email) {
-          patient.profile.contacts.push({
-            channel: 'Email', value: v.email
-          })
-        }
       }
 
       console.log({ v, patient })
 
-      return Patients.actions.upsert.callPromise({ patient })
-        .then(() => Alert.success(''))
+      return Patients.actions.upsert.callPromise({ patient, replaceContacts: true })
+        .then(() => Alert.success(TAPi18n.__('patients.editSuccess')))
         .catch(e => {
           Alert.error('Bitte noch einmal versuchen')
           console.error(e)
@@ -127,6 +118,7 @@ let BulkNewPatientContainer = reduxForm({
     'addressPostalCode',
     'addressLocality',
     'addressCountry',
+    'contacts',
     'telephone',
     'email',
     'patientNote',
@@ -139,10 +131,53 @@ BulkNewPatientContainer = composeWithTracker(composer, Loading)(BulkNewPatientCo
 
 BulkNewPatientContainer = connect(
   state => {
-    console.log('called iV', state)
-    return ({
-      initialValues: state.loadPatient.data
-    })
+    const patient = state.loadPatient.data
+    if (patient && patient.profile) {
+      let address = {}
+      if (patient.profile.address) {
+        address = {
+          addressLine1: patient.profile.address.line1,
+          addressLine2: patient.profile.address.line2,
+          addressPostalCode: patient.profile.address.postalCode,
+          addressLocality: patient.profile.address.locality,
+          addressCountry: patient.profile.address.country
+        }
+      }
+
+      let contacts = patient.profile.contacts || [];
+      ['Phone', 'Email'].map(channel => {
+        if (!find(c => c.channel === channel)(contacts)) {
+          contacts.push({ channel })
+        }
+      })
+
+      return ({
+        initialValues: {
+          patientId: patient._id,
+          insuranceId: patient.insuranceId,
+          gender: patient.profile.gender,
+          firstName: patient.profile.firstName,
+          lastName: patient.profile.lastName,
+          titlePrepend: patient.profile.titlePrepend,
+          titleAppend: patient.profile.titleAppend,
+          birthday: patient.profile.birthday,
+          contacts,
+          ...address,
+          banned: patient.profile.banned,
+          externalRevenue: patient.externalRevenue,
+          note: patient.note
+        }
+      })
+    } else {
+      return {
+        initialValues: {
+          contacts: [
+            { channel: 'Phone' },
+            { channel: 'Email' }
+          ]
+        }
+      }
+    }
   }
 )(BulkNewPatientContainer)
 

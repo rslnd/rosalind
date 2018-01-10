@@ -4,11 +4,11 @@ const hasContact = channel => patient =>
   patient.profile.contacts &&
     find(c => c.channel === channel)(patient.profile.contacts)
 
-export const isValid = errors => Object.keys(errors).length === 0
+export const isEmpty = errors => Object.keys(errors).length === 0
 
 export const missingPatientInfo = (patient) => {
-  console.log(patient)
   let errors = {}
+  if (!patient) { return {} }
 
   if (!patient.profile.birthday) {
     errors.birthday = 'birthday'
