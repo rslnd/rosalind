@@ -4,8 +4,11 @@ import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import FlatButton from 'material-ui/FlatButton'
 import { Icon } from '../../components/Icon'
+import { Currency } from '../../components/Currency'
 import { ToggleField } from '../../components/form/ToggleField'
 import { BirthdayField } from '../../components/form/BirthdayField'
+import { CalculatorField } from '../../components/form/CalculatorField'
+import { twoPlaces } from '../../../util/format'
 import { Dot } from '../Dot'
 
 const filterField = channel => field => field && field.channel === channel
@@ -309,14 +312,22 @@ export const NewPatientExtendedFormFields = () => {
                       <Icon name='eur' />
                     </div>
                   </div>
-                  <div className='col-md-10'>
+                  <div className='col-md-8'>
                     <div>
                       <Field
                         name='externalRevenue'
-                        component={TextField}
+                        component={CalculatorField}
+                        format={twoPlaces}
                         fullWidth
+                        hintStyle={{ color: '#ccc' }}
+                        hintText='100 50 140 ...'
                         floatingLabelText={TAPi18n.__('patients.revenue')} />
                     </div>
+                  </div>
+                  <div className='col-md-2'>
+                    <Field
+                      name='externalRevenue'
+                      component={CurrencyField} />
                   </div>
                 </div>
               </div>
@@ -326,3 +337,16 @@ export const NewPatientExtendedFormFields = () => {
     </div>
   </div>
 }
+
+const currencyStyle = {
+  fontSize: '20px',
+  paddingTop: 35,
+  textAlign: 'center',
+  width: '100%',
+  display: 'inline-block'
+}
+
+const CurrencyField = ({ input }) =>
+  <Currency
+    value={input.value}
+    style={currencyStyle} />

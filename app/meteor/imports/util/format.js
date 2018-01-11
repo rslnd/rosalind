@@ -17,6 +17,11 @@ const integerFormatter = new Intl.NumberFormat('de-AT', {
 
 const floatFormatter = new Intl.NumberFormat('de-AT', { maximumFractionDigits: 1 })
 
+const twoPlacesFormatter = new Intl.NumberFormat('de-AT', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+})
+
 export const currencyRounded = n => n && currencyRoundedFormatter.format(n)
 
 export const currency = n => n && currencyFormatter.format(n)
@@ -24,6 +29,8 @@ export const currency = n => n && currencyFormatter.format(n)
 export const integer = n => n && integerFormatter.format(n)
 
 export const float = n => n && floatFormatter.format(n)
+
+export const twoPlaces = n => n && twoPlacesFormatter.format(n)
 
 export const conditionalFloat = n => n &&
   n < 10
