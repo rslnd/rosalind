@@ -24,6 +24,10 @@ module.exports = new SimpleSchema
     optional: true
     type: External
 
+  patientSince:
+    type: Date,
+    optional: true
+
   createdAt:
     type: Date
     autoValue: Auto.createdAt

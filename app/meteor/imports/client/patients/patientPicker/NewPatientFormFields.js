@@ -5,7 +5,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import FlatButton from 'material-ui/FlatButton'
 import { Icon } from '../../components/Icon'
 import { ToggleField } from '../../components/form/ToggleField'
-import { BirthdayField } from '../../components/form/BirthdayField'
+import { DayField } from '../../components/form/DayField'
 import { NewPatientExtendedFormFields } from './NewPatientExtendedFormFields'
 
 export class NewPatientFormFields extends React.Component {
@@ -79,7 +79,8 @@ export class NewPatientFormFields extends React.Component {
                         <div>
                           <Field
                             name='birthday'
-                            component={BirthdayField}
+                            component={DayField}
+                            birthday
                             fullWidth
                             floatingLabelText={TAPi18n.__('patients.birthday')} />
                         </div>

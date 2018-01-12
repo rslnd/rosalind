@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton'
 import { Icon } from '../../components/Icon'
 import { Currency } from '../../components/Currency'
 import { ToggleField } from '../../components/form/ToggleField'
-import { BirthdayField } from '../../components/form/BirthdayField'
+import { DayField } from '../../components/form/DayField'
 import { CalculatorField } from '../../components/form/CalculatorField'
 import { twoPlaces } from '../../../util/format'
 import { Dot } from '../Dot'
@@ -187,7 +187,8 @@ export const NewPatientExtendedFormFields = () => {
                     <div>
                       <Field
                         name='birthday'
-                        component={BirthdayField}
+                        component={DayField}
+                        birthday
                         fullWidth
                         floatingLabelText={TAPi18n.__('patients.birthday')} />
                     </div>
@@ -328,6 +329,30 @@ export const NewPatientExtendedFormFields = () => {
                     <Field
                       name='externalRevenue'
                       component={CurrencyField} />
+                  </div>
+                </div>
+              </div>
+            </div>
+        }
+
+        {
+          true &&
+            <div className='row'>
+              <div className='col-md-12'>
+                <div className='row no-pad' style={{ marginTop: -15, zIndex: 13 }}>
+                  <div className='col-md-1'>
+                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
+                      <Icon name='calendar-o' />
+                    </div>
+                  </div>
+                  <div className='col-md-10'>
+                    <div>
+                      <Field
+                        name='patientSince'
+                        component={DayField}
+                        fullWidth
+                        floatingLabelText={TAPi18n.__('patients.patientSince')} />
+                    </div>
                   </div>
                 </div>
               </div>

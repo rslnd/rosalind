@@ -12,7 +12,7 @@ const toStringValue = v => {
   return date.format(TAPi18n.__('time.dateFormat'))
 }
 
-export class BirthdayField extends React.Component {
+export class DayField extends React.Component {
   constructor (props) {
     super(props)
 
@@ -67,8 +67,13 @@ export class BirthdayField extends React.Component {
     } else if (typeof inputValue === 'object' && inputValue.day && inputValue.month && inputValue.year) {
       const date = moment(dayToDate(inputValue))
       const formattedDate = date.format(TAPi18n.__('time.dateFormat'))
-      const formattedAge = TAPi18n.__('patients.yearsOld', { age: moment().diff(date, 'years') })
-      return `${formattedDate} (${formattedAge})`
+
+      if (this.props.birthday) {
+        const formattedAge = TAPi18n.__('patients.yearsOld', { age: moment().diff(date, 'years') })
+        return `${formattedDate} (${formattedAge})`
+      } else {
+        return formattedDate
+      }
     } else {
       return stringValue
     }

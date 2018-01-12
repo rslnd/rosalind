@@ -35,6 +35,12 @@ export class CalculatorField extends React.Component {
       focus: true
     })
 
+    if (this.props.input.meta.pristine) {
+      this.setState({
+        stringValue: ''
+      })
+    }
+
     if (!this.state.stringValue && this.props.input.value) {
       this.setState({
         stringValue: this.props.input.value

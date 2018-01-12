@@ -10,6 +10,7 @@ import { Icon } from '../components/Icon'
 import { Loading } from '../components/Loading'
 import { Box } from '../components/Box'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { dayToDate } from '../../util/time/day'
 
 import { Meteor } from 'meteor/meteor'
 import { Patients } from '../../api/patients'
@@ -63,6 +64,7 @@ const composer = (props, onData) => {
           insuranceId: v.insuranceId,
           note: v.patientNote,
           externalRevenue: v.externalRevenue,
+          patientSince: dayToDate(v.patientSince),
           profile: {
             gender: v.gender,
             lastName: v.lastName,
@@ -123,7 +125,8 @@ let BulkNewPatientContainer = reduxForm({
     'email',
     'patientNote',
     'externalRevenue',
-    'banned'
+    'banned',
+    'patientSince'
   ]
 })(NewPatientForm)
 
@@ -165,7 +168,8 @@ BulkNewPatientContainer = connect(
           ...address,
           banned: patient.profile.banned,
           externalRevenue: patient.externalRevenue,
-          note: patient.note
+          note: patient.note,
+          patientSince: patient.patientSince
         }
       })
     } else {
