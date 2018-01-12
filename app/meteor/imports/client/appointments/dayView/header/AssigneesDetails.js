@@ -1,25 +1,38 @@
 import React from 'react'
 import { Icon } from '../../../components/Icon'
 import { TagsList } from '../../../tags/TagsList'
+import { background } from '../../../css/global'
 
 const barStyle = {
+  position: 'fixed',
+  pointerEvents: 'none',
   minHeight: 40,
   marginTop: 43,
-  position: 'relative',
-  top: 60,
+  top: 44,
+  right: 15,
+  left: 60,
+  zIndex: 40,
   paddingLeft: 60,
   display: 'flex'
 }
 
 const cellStyle = {
   flex: 1,
-  borderLeft: '1px solid #d2d6de',
+  borderRadius: 4,
   textAlign: 'center',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
   alignItems: 'center',
-  padding: 4
+  paddingLeft: 4,
+  paddingRight: 4,
+  paddingTop: 5,
+  paddingBottom: 12
+}
+
+const relevantCellStyle = {
+  background,
+  borderBottom: '1px solid #d2d6de',
+  pointerEvents: 'auto'
 }
 
 const leftAlign = {
@@ -29,12 +42,12 @@ const leftAlign = {
 const Constraint = ({ constraint }) => (
   <div>
     {
-      constraint.length
+      constraint.duration
       ? <span>
-        <Icon name='clock-o' /> {constraint.length} min {constraint.note && <span>&middot; {constraint.note}</span>}
+        <Icon name='clock-o' /> {constraint.duration} min {constraint.note && <span>&middot; {constraint.note}</span>}
       </span>
       : <span>
-        <Icon name='info-circle' /> {constraint.note}
+        {constraint.note}
       </span>
     }
     {
@@ -43,21 +56,38 @@ const Constraint = ({ constraint }) => (
   </div>
 )
 
-export const AssigneesDetails = ({ assignees }) => (
-  <div style={barStyle}>
+const Cell = ({ assignee, expanded }) => {
+  const isRelevant = (assignee.constraints && assignee.constraints.length > 0)
+  const style = isRelevant
+    ? { ...relevantCellStyle, ...cellStyle }
+    : cellStyle
+
+  return <div style={style}>
     {
-      assignees.map((assignee) => (
-        <div
-          key={assignee.assigneeId}
-          className='text-muted'
-          style={cellStyle}>
-          {
-            assignee.constraints && assignee.constraints.map((constraint) => (
-              <Constraint key={constraint._id} constraint={constraint} />
-            ))
-          }
+      expanded && isRelevant && assignee.constraints.map((constraint) => (
+        <div key={constraint._id}>
+          <Icon name='info-circle' />
+          <Constraint constraint={constraint} />
         </div>
       ))
+    }
+    {
+      !expanded && isRelevant && <div>
+        <Icon name='info-circle' />
+      </div>
+    }
+  </div>
+}
+
+export const AssigneesDetails = ({ assignees, expanded }) => (
+  <div style={barStyle}>
+    {
+      assignees.map((assignee) =>
+        <Cell
+          key={assignee.assigneeId}
+          assignee={assignee}
+          expanded={expanded} />
+      )
     }
   </div>
 )

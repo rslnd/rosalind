@@ -6,7 +6,6 @@ import MenuItem from 'material-ui/MenuItem'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
-import { AssigneesStats } from './AssigneesStats'
 import { background, grayDisabled, gray } from '../../../css/global'
 
 const headerRowStyle = {
@@ -34,6 +33,9 @@ const headerCellStyle = {
   textAlign: 'center'
 }
 
+const topPaddingStyle = {
+  height: 30
+}
 
 export class HeaderRow extends React.Component {
   constructor (props) {
@@ -41,13 +43,16 @@ export class HeaderRow extends React.Component {
 
     this.state = {
       userDropdownOpen: false,
-      userDropdownAnchor: null
+      userDropdownAnchor: null,
+      hovering: false
     }
 
     this.handleRemoveUser = this.handleRemoveUser.bind(this)
     this.handleUserDropdownOpen = this.handleUserDropdownOpen.bind(this)
     this.handleUserDropdownClose = this.handleUserDropdownClose.bind(this)
     this.handleToggleOverrideModeClick = this.handleToggleOverrideModeClick.bind(this)
+    this.handleMouseEnter = this.handleMouseEnter.bind(this)
+    this.handleMouseLeave = this.handleMouseLeave.bind(this)
   }
 
   handleUserDropdownOpen ({ event, assigneeId }) {
@@ -83,9 +88,23 @@ export class HeaderRow extends React.Component {
     this.handleUserDropdownClose()
   }
 
+  handleMouseEnter () {
+    this.setState({
+      hovering: true
+    })
+  }
+
+  handleMouseLeave () {
+    this.setState({
+      hovering: false
+    })
+  }
+
   render () {
     return (
-      <div>
+      <div
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}>
         <div style={headerRowStyle}>
           <div style={addAssigneeStyle}>
             {this.props.canEditSchedules && <AddAssignee onAddUser={this.props.onAddUser} />}
@@ -122,8 +141,11 @@ export class HeaderRow extends React.Component {
             </Menu>
           </Popover>
         </div>
-        <AssigneesDetails date={this.props.date} assignees={this.props.assignees} />
-        <AssigneesStats date={this.props.date} assignees={this.props.assignees} />
+        <AssigneesDetails
+          date={this.props.date}
+          assignees={this.props.assignees}
+          expanded={this.state.hovering} />
+        <div style={topPaddingStyle} />
       </div>
     )
   }
