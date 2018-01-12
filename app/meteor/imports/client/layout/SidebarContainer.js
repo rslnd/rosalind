@@ -74,12 +74,19 @@ const sidebarItems = ({ history }) => {
       ]
     },
     {
+      name: 'patients',
+      icon: 'user-plus',
+      roles: ['admin', 'patients'],
+      subItems: [
+        { name: 'thisUpsert' }
+      ]
+    },
+    {
       name: 'system',
       icon: 'server',
       roles: ['admin', 'system'],
       subItems: [
         { name: 'thisEvents', path: '/events' },
-        { name: 'thisNewPatient', path: '/newPatient' },
         { name: 'thisCalendars', path: '/calendars' },
         { name: 'thisConstraints', path: '/constraints' },
         { name: 'thisTags', path: '/tags' },

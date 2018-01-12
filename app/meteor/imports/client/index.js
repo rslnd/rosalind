@@ -17,6 +17,7 @@ import { Appointments } from './appointments'
 import { Schedules } from './schedules'
 import { Reports } from './reports'
 import { Users } from './users'
+import { Patients } from './patients'
 import { System } from './system'
 
 export const Rosalind = () => (
@@ -30,6 +31,7 @@ export const Rosalind = () => (
             <Route path='/schedules' component={Schedules} />
             <Route path='/reports' component={Reports} />
             <Route path='/users' component={Users} />
+            <Route path='/patients' component={Patients} />
             <Route path='/system' component={System} />
             <Route exact path='/' component={Dashboard} />
             <Route path='/' component={Error} />
