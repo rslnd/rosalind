@@ -23,7 +23,7 @@ export class TagsField extends React.Component {
   }
 
   render () {
-    const { input, meta, assigneeId, allowedTags, calendarId } = this.props
+    const { input, meta, assigneeId, allowedTags, calendarId, showDefaultRevenue } = this.props
 
     const selector = allowedTags ? { _id: { $in: allowedTags } } : {}
     const tags = Tags.find(selector, { sort: { order: 1 } }).map((t) => {
@@ -52,6 +52,7 @@ export class TagsField extends React.Component {
         tags={tags}
         onClick={this.toggle}
         style={tagsListStyle}
+        showDefaultRevenue={showDefaultRevenue}
       />
       {
         meta && meta.error &&

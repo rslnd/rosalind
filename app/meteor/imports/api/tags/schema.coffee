@@ -23,6 +23,14 @@ module.exports = new SimpleSchema
     type: String
     optional: true
 
+  privateAppointment:
+    type: Boolean,
+    optional: true
+
+  defaultRevenue:
+    type: Number,
+    optional: true
+
   calendarId:
     type: SimpleSchema.RegEx.Id
     optional: true

@@ -1,4 +1,6 @@
 import Alert from 'react-s-alert'
+import sum from 'lodash/sum'
+import identity from 'lodash/identity'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from '../../../api/appointments'
@@ -18,6 +20,17 @@ const composer = (props, onData) => {
     }, {
       sort: { createdAt: 1 }
     }).fetch() : []
+
+    // TODO: Move into action
+    let totalPatientRevenue = null
+    if (patient) {
+      const pastAppointments = Appointments.find({
+        patientId: patient._id
+      }).fetch()
+
+      totalPatientRevenue = (patient.externalRevenue || 0) +
+        sum(pastAppointments.map(p => p.revenue).filter(identity))
+    }
 
     const handleEditAppointmentNote = (newNote) => {
       Appointments.actions.editNote.callPromise({
@@ -97,6 +110,7 @@ const composer = (props, onData) => {
       patient,
       assignee,
       comments,
+      totalPatientRevenue,
       handleEditAppointmentNote,
       handleEditPatientNote,
       handleEditPatient,

@@ -96,7 +96,7 @@ module.exports = ->
       children: [
         { find: (doc) -> @unblock(); Comments.find(docId: options.patientId) }
       ]
-    } 
+    }
 
 
   Meteor.publishComposite 'appointmentsTable', (tableName, ids, fields) ->

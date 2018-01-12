@@ -2,12 +2,11 @@ import React from 'react'
 import { twoPlaces } from '../../util/format'
 
 const currencyStyle = {
-  fontSize: 36,
-  verticalAlign: 'baseline'
+  opacity: 0.4
 }
 
 export const Currency = ({ style, value }) =>
-  <span style={{ ...currencyStyle, ...style }}>
-    <small className='text-muted'>€&nbsp;</small>
-    {twoPlaces(value || 0.0)}
+  <span style={style}>
+    <small style={{currencyStyle}}>€&nbsp;</small>
+    {twoPlaces(value)}
   </span>

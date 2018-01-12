@@ -2,20 +2,27 @@ import React from 'react'
 import moment from 'moment-timezone'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
+import { Currency } from '../../components/Currency'
 
 const overlay = {
   opacity: 0.6
 }
 
-export const Indicator = ({ appointment }) => {
+export const Indicator = ({ appointment, showRevenue }) => {
   const canceled = appointment.canceled || appointment.removed
 
   return appointment.patientId &&
     <span className='pull-right'>
       {
-        appointment.privateAppointment &&
+        !showRevenue && appointment.privateAppointment &&
           <span>
             <Icon name='eur' style={overlay} />&nbsp;
+          </span>
+      }
+      {
+        showRevenue && appointment.privateAppointment &&
+          <span>
+            <Currency value={appointment.revenue} />&nbsp;
           </span>
       }
       {

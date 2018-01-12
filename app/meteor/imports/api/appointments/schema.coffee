@@ -40,6 +40,10 @@ Schema = new SimpleSchema
     type: Boolean
     defaultValue: false
 
+  revenue:
+    type: Number
+    optional: true
+
   admittedAt:
     type: Date
     optional: true

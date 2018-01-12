@@ -25,7 +25,7 @@ const Appointment = ({ appointment }) => {
         {moment(appointment.start).format(TAPi18n.__('time.dateFormatShort'))} {moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}&emsp;
         {assignee && assignee.lastNameWithTitle()}
       </span>
-      <Indicator appointment={appointment} />
+      <Indicator showRevenue appointment={appointment} />
     </li>
   )
 }

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Icon } from '../../../components/Icon'
+import { TagsList } from '../../../tags/TagsList'
 
 const barStyle = {
-  height: 40,
+  minHeight: 40,
   marginTop: 43,
   position: 'relative',
   top: 60,
@@ -17,7 +18,12 @@ const cellStyle = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
+  padding: 4
+}
+
+const leftAlign = {
+  textAlign: 'left'
 }
 
 const Constraint = ({ constraint }) => (
@@ -30,6 +36,9 @@ const Constraint = ({ constraint }) => (
       : <span>
         <Icon name='info-circle' /> {constraint.note}
       </span>
+    }
+    {
+      constraint.tags && <div style={leftAlign}><TagsList tiny tags={constraint.tags} /></div>
     }
   </div>
 )

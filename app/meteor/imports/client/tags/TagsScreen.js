@@ -37,6 +37,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: t => t.privateAppointment && <Icon name='eur' />
   },
   {
+    header: 'Umsatz',
+    field: 'defaultRevenue'
+  },
+  {
     header: 'Description',
     field: 'description'
   },

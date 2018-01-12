@@ -30,7 +30,7 @@ export const integer = n => n && integerFormatter.format(n)
 
 export const float = n => n && floatFormatter.format(n)
 
-export const twoPlaces = n => n && twoPlacesFormatter.format(n)
+export const twoPlaces = n => (n && n > 0) ? twoPlacesFormatter.format(n) : '0,00'
 
 export const conditionalFloat = n => n &&
   n < 10

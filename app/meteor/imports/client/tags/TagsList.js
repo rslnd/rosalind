@@ -4,6 +4,7 @@ import sortBy from 'lodash/fp/sortBy'
 import { color, lightness } from 'kewler'
 import { Icon } from '../components/Icon'
 import { Tags } from '../../api/tags'
+import { Currency } from '../components/Currency';
 
 export const tagBackgroundColor = '#e5e5e5'
 export const tagTextColor = '#a0a0a0'
@@ -21,30 +22,54 @@ export const tagStyle = {
   userSelect: 'none'
 }
 
+const tagGroupTitleStyle = {
+  display: 'block',
+  fontSize: 12
+}
+
 const overlay = {
   opacity: 0.6
 }
 
 export const darken = c => color(c)(lightness(-10))()
 
-export const TagsList = ({ tags = [], onClick, style = {}, tiny }) => {
+export const TagsList = ({ tags = [], onClick, style = {}, tiny, showDefaultRevenue }) => {
   const expandedTags = tags.map(slug =>
     slug.tag ? slug : Tags.findOne({ _id: slug })
   )
 
   // group by private, sort within groups
   const groupedTags = groupBy(t => (t.privateAppointment || false))(expandedTags)
-  const orderedTagGroups = [groupedTags.false, groupedTags.true]
-    .filter(t => t && t.length > 0)
-    .map(t => sortBy('order')(t))
+  const orderedTagGroups = [
+    {
+      title: 'Kasse',
+      tags: groupedTags.false
+    }, {
+      title: 'Privat',
+      tags: groupedTags.true,
+      style: { paddingTop: 6 }
+    }]
+    .filter(t => t.tags && t.tags.length > 0)
+    .map(t => ({ ...t, tags: sortBy('order')(t.tags) }))
 
   const tinyStyle = tiny ? { zoom: 0.6 } : {}
+  const tinyTagGroupTitleStyle = tiny ? { zoom: 1.66 } : {}
 
   return <span style={tinyStyle}>
     {orderedTagGroups.map((tagGroup, i) =>
       <span key={i}>
         {
-          tagGroup.map(tag => {
+        orderedTagGroups.length > 1 &&
+          <span className='text-muted' style={{
+            ...tagGroup.style,
+            ...tagGroupTitleStyle,
+            ...tinyTagGroupTitleStyle
+          }}>
+            {tagGroup.title}
+          </span>
+        }
+        {
+          tagGroup.tags.map(tag => {
             return (
               <span
                 key={tag._id}
@@ -60,12 +85,7 @@ export const TagsList = ({ tags = [], onClick, style = {}, tiny }) => {
                   borderColor: darken(tag.color || tagBackgroundColor)
                 }}>
                 {tag.tag}
-                {tag.privateAppointment &&
-                  <span>
-                    &ensp;
-                    <Icon name='eur' style={overlay} />
-                  </span>
-                }
+                <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} />
               </span>
             )
           })
@@ -76,4 +96,19 @@ export const TagsList = ({ tags = [], onClick, style = {}, tiny }) => {
       </span>
     )}
   </span>
+}
+
+const PrivateIndicator = ({ tag, showDefaultRevenue }) => {
+  let render = null
+  if (showDefaultRevenue && tag.defaultRevenue > 0) {
+    render = <Currency value={tag.defaultRevenue} />
+  } else if (tag.privateAppointment) {
+    render = <Icon name='eur' style={overlay} />
+  }
+
+  return render &&
+    <span>
+      &ensp;
+      {render}
+    </span>
 }

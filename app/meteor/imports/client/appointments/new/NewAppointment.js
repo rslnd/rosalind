@@ -1,10 +1,11 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, Fields } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { RevenueField } from './RevenueField'
 import { TagsField } from '../../tags/TagsField'
 import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { PatientPickerContainer } from '../../patients/patientPicker/PatientPickerContainer'
@@ -23,7 +24,7 @@ const style = {
     marginTop: 23,
     paddingLeft: 0,
     paddingRight: 0,
-    zIndex: 3
+    zIndex: 5
   },
   tag: {
     ...tagStyle,
@@ -34,7 +35,13 @@ const style = {
     marginTop: -14,
     paddingLeft: 0,
     paddingRight: 0,
-    zIndex: 2 // Fix notes field overlaying bottom ~10px of clickable tags
+    zIndex: 4 // Fix notes field overlaying bottom ~10px of clickable tags
+  },
+  revenueField: {
+    marginTop: -14,
+    paddingLeft: 0,
+    paddingRight: 0,
+    zIndex: 3
   },
   summary: {
     marginBottom: 5
@@ -102,6 +109,7 @@ export class NewAppointmentFormComponent extends React.Component {
                   allowedTags={allowedTags}
                   calendarId={calendarId}
                   assigneeId={assigneeId}
+                  showDefaultRevenue
                   fullWidth />
               </div>
               <div className='col-md-2' style={style.tagsField}>
@@ -109,6 +117,13 @@ export class NewAppointmentFormComponent extends React.Component {
                   style={style.tag}
                   className='pull-right'
                   onClick={onSubmitPause}>PAUSE</div>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col-md-12' style={style.revenueField}>
+                <Fields
+                  names={['tags', 'revenue']}
+                  component={RevenueField} />
               </div>
             </div>
 
@@ -152,7 +167,7 @@ export const translateObject = (obj) => {
 
 export const NewAppointment = reduxForm({
   form: 'newAppointment',
-  fields: ['note', 'patientId', 'tags', 'appointmentNote',
+  fields: ['note', 'patientId', 'tags', 'appointmentNote', 'revenue',
     // The following fields may be filled within NewPatientFormFields
     // This allows creating a new patient at the same time as an appointment
     'firstName', 'lastName', 'gender', 'telephone', 'email', 'birthday', 'patientNote'],

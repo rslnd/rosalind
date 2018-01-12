@@ -11,6 +11,7 @@ import { Dot } from '../../patients/Dot'
 import { Stamps } from '../../helpers/Stamps'
 import { PastAppointmentsContainer } from '../../patients/PastAppointmentsContainer'
 import { EnlargeText } from '../../components/EnlargeText'
+import { Currency } from '../../components/Currency'
 import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
 
 const ListItem = ({ icon, children, last, style, highlight }) => {
@@ -79,12 +80,22 @@ const Time = ({ appointment }) => (
   </ListItem>
 )
 
-const Private = ({ appointment }) => (
-  appointment.privateAppointment &&
-    <ListItem icon='eur'>
+const Private = ({ appointment, onChange }) => {
+  if (appointment.revenue > 0) {
+    return <ListItem icon='plus-circle'>
+      Privattermin&ensp;
+      <Currency value={appointment.revenue} />
+    </ListItem>
+  }
+
+  if (appointment.privateAppointment) {
+    return <ListItem icon='eur'>
       {TAPi18n.__('appointments.private')}
     </ListItem>
-)
+  }
+
+  return null
+}
 
 const Assignee = ({ assignee }) => (
   assignee && <ListItem icon='user-md'>
@@ -159,6 +170,13 @@ const Reminders = ({ patient, onChange }) => (
   </ListItem> || null
 )
 
+const TotalRevenue = ({ value }) => (
+  value && value > 0 && <ListItem icon='pie-chart'>
+    Gesamtumsatz&ensp;
+    <Currency value={value} />
+  </ListItem> || null
+)
+
 const AppointmentNotes = ({ appointment, onChange }) => (
   <ListItem
     icon='info-circle'
@@ -178,7 +196,7 @@ const AppointmentNotes = ({ appointment, onChange }) => (
 
 const PatientNotes = ({ patient, onChange }) => (
   patient && <ListItem
-    icon='info-circle'
+    icon='user-plus'
     style={{ marginBottom: 30 }}
     highlight={patient.notes()}>
     <InlineEdit
@@ -198,6 +216,7 @@ export class AppointmentInfo extends React.Component {
       appointment,
       patient,
       assignee,
+      totalPatientRevenue,
       handleEditAppointmentNote,
       handleEditPatientNote,
       handleEditPatient,
@@ -246,6 +265,7 @@ export class AppointmentInfo extends React.Component {
             <Birthday patient={patient} onChange={handleSetBirthday} />
             <PatientNotes patient={patient} onChange={handleEditPatientNote} />
             <Reminders patient={patient} onChange={handleSetMessagePreferences} />
+            <TotalRevenue value={totalPatientRevenue} />
 
             {patient && <PastAppointmentsContainer patientId={appointment.patientId} excludeAppointmentId={appointment._id} />}
           </div>

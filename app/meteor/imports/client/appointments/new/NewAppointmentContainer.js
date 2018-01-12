@@ -7,6 +7,7 @@ import { NewAppointment } from './NewAppointment'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
 import { Tags } from '../../../api/tags'
+import { calculateRevenue } from './RevenueField'
 import { getDefaultDuration, isConstraintApplicable } from '../../../api/appointments/methods/getDefaultDuration'
 
 export class NewAppointmentContainerComponent extends React.Component {
@@ -89,6 +90,8 @@ export class NewAppointmentContainerComponent extends React.Component {
       date: moment(this.props.time)
     })
 
+    const revenue = (values.revenue === 0 || values.revenue > 0) ? values.revenue : calculateRevenue(values.tags)
+
     const appointment = {
       calendarId: this.props.calendar._id,
       patientId: newPatient ? undefined : values.patientId,
@@ -97,7 +100,8 @@ export class NewAppointmentContainerComponent extends React.Component {
       start: moment(this.props.time).toDate(),
       end: moment(this.props.time).add(length, 'minutes').toDate(),
       assigneeId: this.props.assigneeId,
-      privateAppointment: Tags.methods.isPrivate(values.tags)
+      privateAppointment: Tags.methods.isPrivate(values.tags),
+      revenue
     }
 
     console.log('[Appointments] Inserting appointment with new patient', { newPatient, appointment })
