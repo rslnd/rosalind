@@ -86,7 +86,7 @@ export const fuzzyMonth = (month) => {
 const fuzzyYear = (year) => {
   if (year < 100) {
     const currentYear = parseInt(moment().format('YY'))
-    if (year < currentYear) {
+    if (year <= currentYear) {
       return 2000 + year
     } else {
       return 1900 + year
