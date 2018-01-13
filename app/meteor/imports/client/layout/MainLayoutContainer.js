@@ -1,6 +1,7 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
+import { Roles } from 'meteor/alanning:roles'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Loading } from '../components/Loading'
 import { MainLayout } from './MainLayout'
@@ -14,6 +15,8 @@ const composer = (props, onData) => {
   const currentUser = Meteor.user()
   const loggingIn = Meteor.loggingIn()
   const locale = TAPi18n.getLanguage()
+  // Track reactive role changes
+  Roles.getRolesForUser(currentUser)
 
   if (currentUser) {
     Meteor.subscribe('cache')
