@@ -80,7 +80,7 @@ export class DayField extends React.Component {
   }
 
   render () {
-    const { input, ...props } = this.props
+    const { input, birthday, ...props } = this.props
     const { onBlur, onFocus, onChange, value, ...keepInput } = this.props.input
 
     return <TextField
