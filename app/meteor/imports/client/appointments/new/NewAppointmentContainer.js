@@ -7,8 +7,8 @@ import { NewAppointmentForm } from './NewAppointmentForm'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
 import { Tags } from '../../../api/tags'
-import { calculateRevenue } from './RevenueField'
 import { getDefaultDuration, isConstraintApplicable } from '../../../api/appointments/methods/getDefaultDuration'
+import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 
 export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {
@@ -57,40 +57,15 @@ export class NewAppointmentContainerComponent extends React.Component {
         patientId = undefined
       }
 
-      newPatient = {
-        _id: patientId,
-        profile: {
-          lastName: values.lastName,
-          firstName: values.firstName,
-          gender: values.gender,
-          note: values.patientNote,
-          birthday: values.birthday
-        }
-      }
-
-      newPatient.profile.contacts = []
-
-      if (values.telephone) {
-        newPatient.profile.contacts.push({
-          channel: 'Phone', value: values.telephone
-        })
-      }
-
-      if (values.email) {
-        newPatient.profile.contacts.push({
-          channel: 'Email', value: values.email
-        })
-      }
+      newPatient = mapFieldsToPatient(values)
     }
 
-    const length = getDefaultDuration({
+    const duration = getDefaultDuration({
       calendarId: this.props.calendar._id,
       assigneeId: this.props.assigneeId,
       tags: values.tags,
       date: moment(this.props.time)
     })
-
-    const revenue = (values.revenue === 0 || values.revenue > 0) ? values.revenue : calculateRevenue(values.tags)
 
     const appointment = {
       calendarId: this.props.calendar._id,
@@ -98,10 +73,9 @@ export class NewAppointmentContainerComponent extends React.Component {
       note: values.appointmentNote,
       tags: values.tags,
       start: moment(this.props.time).toDate(),
-      end: moment(this.props.time).add(length, 'minutes').toDate(),
+      end: moment(this.props.time).add(duration, 'minutes').toDate(),
       assigneeId: this.props.assigneeId,
-      privateAppointment: Tags.methods.isPrivate(values.tags),
-      revenue
+      privateAppointment: Tags.methods.isPrivate(values.tags)
     }
 
     console.log('[Appointments] Inserting appointment with new patient', { newPatient, appointment })

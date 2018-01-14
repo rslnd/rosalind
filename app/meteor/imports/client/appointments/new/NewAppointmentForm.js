@@ -25,7 +25,6 @@ let NewAppointmentForm = reduxForm({
   fields: [
     'tags',
     'appointmentNote',
-    'revenue',
     ...patientFields
   ],
   validate: (values) => translateObject(validate(values))
