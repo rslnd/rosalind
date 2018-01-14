@@ -29,6 +29,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: c => <Icon name={c.icon} />
   },
   {
+    header: 'Private',
+    field: 'privateAppointments',
+    render: c => c.privateAppointments && <Icon name='eur' />
+  },
+  {
     header: 'Name',
     field: 'name'
   },

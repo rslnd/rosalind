@@ -3,7 +3,7 @@ import { PatientFormFields } from './PatientFormFields'
 import { PatientPickerContainer } from './PatientPickerContainer'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 
-export const PatientPickerUpsert = ({ patientId }) =>
+export const PatientPickerUpsert = ({ patientId, extended }) =>
   <div>
     <div className='row'>
       <div className='col-md-12'>
@@ -20,7 +20,7 @@ export const PatientPickerUpsert = ({ patientId }) =>
         patientId &&
           <div className='row'>
             <div className='col-md-12'>
-              <PatientFormFields extended />
+              <PatientFormFields extended={extended} />
             </div>
           </div>
       }

@@ -25,5 +25,10 @@ export const schema = new SimpleSchema({
   defaultDuration: {
     type: Number,
     defaultValue: 5
+  },
+
+  privateAppointments: {
+    type: Boolean,
+    optional: true
   }
 })

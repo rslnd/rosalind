@@ -115,7 +115,8 @@ export class NewAppointmentContainerComponent extends React.Component {
         time={this.props.time}
         calendarId={this.props.calendar._id}
         assigneeId={this.props.assigneeId}
-        allowedTags={this.allowedTags()} />
+        allowedTags={this.allowedTags()}
+        extended={this.props.calendar.privateAppointments} />
     )
   }
 }

@@ -77,7 +77,8 @@ export const NewAppointmentFields = props => {
     handleSubmit,
     onSubmit,
     onSubmitPause,
-    patientId
+    patientId,
+    extended
   } = props
 
   return (
@@ -86,7 +87,8 @@ export const NewAppointmentFields = props => {
         <div className='container-fluid'>
           <div className='row'>
             <PatientPickerUpsert
-              patientId={patientId} />
+              patientId={patientId}
+              extended={extended} />
           </div>
         </div>
       </div>
