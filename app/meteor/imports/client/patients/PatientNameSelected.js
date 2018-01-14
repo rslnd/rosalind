@@ -1,7 +1,7 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Icon } from '../../components/Icon'
-import { PatientName } from '../PatientName'
+import { Icon } from '../components/Icon'
+import { PatientName } from './PatientName'
 
 export const PatientNameSelected = ({ value }) => (
   <div className='Select-value'>

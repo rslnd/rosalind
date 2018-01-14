@@ -1,13 +1,13 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Indicator } from '../../appointments/appointment/Indicator'
-import { Birthday } from '../Birthday'
-import { UserHelper } from '../../users/UserHelper'
-import { Icon } from '../../components/Icon'
-import { PatientName } from '../PatientName'
-import { darkGray, darkGrayDisabled } from '../../css/global'
-import { TagsList } from '../../tags/TagsList';
+import { Indicator } from '../appointments/appointment/Indicator'
+import { Birthday } from './Birthday'
+import { UserHelper } from '../users/UserHelper'
+import { Icon } from '../components/Icon'
+import { PatientName } from './PatientName'
+import { darkGray, darkGrayDisabled } from '../css/global'
+import { TagsList } from '../tags/TagsList'
 
 export class PatientSearchResult extends React.Component {
   constructor (props) {

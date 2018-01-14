@@ -1,1 +1,1 @@
-export { BulkNewPatientContainer as Patients } from './BulkNewPatientContainer'
+export { BulkUpsertContainer as Patients } from './BulkUpsertContainer'

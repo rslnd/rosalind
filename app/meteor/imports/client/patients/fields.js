@@ -1,0 +1,22 @@
+export const fields = [
+  'patientId',
+  'gender',
+  'firstName',
+  'lastName',
+  'titlePrepend',
+  'titleAppend',
+  'insuranceId',
+  'birthday',
+  'addressLine1',
+  'addressLine2',
+  'addressPostalCode',
+  'addressLocality',
+  'addressCountry',
+  'contacts',
+  'telephone',
+  'email',
+  'patientNote',
+  'externalRevenue',
+  'banned',
+  'patientSince'
+]

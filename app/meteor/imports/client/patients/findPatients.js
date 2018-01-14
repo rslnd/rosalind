@@ -1,5 +1,5 @@
 import map from 'lodash/fp/map'
-import { Search } from '../../../api/search'
+import { Search } from '../../api/search'
 
 export const findPatients = (query) => {
   return Search.actions.patientsWithAppointments.callPromise({ query })
