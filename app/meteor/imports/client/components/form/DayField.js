@@ -27,6 +27,14 @@ export class DayField extends React.Component {
     this.renderValue = this.renderValue.bind(this)
   }
 
+  componentWillReceiveProps (props) {
+    if (!this.state.focus) {
+      this.setState({
+        stringValue: toStringValue(props.input.value)
+      })
+    }
+  }
+
   handleFocus () {
     this.setState({
       focus: true

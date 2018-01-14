@@ -1,6 +1,6 @@
 import React from 'react'
 import find from 'lodash/fp/find'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import Alert from 'react-s-alert'
@@ -10,12 +10,12 @@ import { Icon } from '../components/Icon'
 import { Loading } from '../components/Loading'
 import { Box } from '../components/Box'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { dayToDate } from '../../util/time/day'
-
+import { dayToDate, dateToDay } from '../../util/time/day'
 import { Meteor } from 'meteor/meteor'
 import { Patients } from '../../api/patients'
+import { PatientFormFields } from './PatientFormFields'
 
-const NewPatientForm = ({ submitting, handleSubmit, onSubmit }) => (
+const NewPatientForm = ({ submitting, handleSubmit, onSubmit, reset, patientId }) => (
   <div className='content'>
     <Box title='Stammdaten vervollständigen'>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
@@ -30,17 +30,28 @@ const NewPatientForm = ({ submitting, handleSubmit, onSubmit }) => (
           </div>
         </div>
 
-        <div className='row' style={{ marginTop: 10 }}>
-          <div className='col-md-12'>
-            <RaisedButton type='submit'
-              onClick={handleSubmit(onSubmit)}
-              fullWidth
-              primary
-              label={submitting
-                ? <Icon name='refresh' spin />
-                : TAPi18n.__('patients.thisSave')} />
-          </div>
-        </div>
+        {
+          patientId &&
+            <div>
+              <div className='row'>
+                <div className='col-md-12'>
+                  <PatientFormFields extended />
+                </div>
+              </div>
+
+              <div className='row' style={{ marginTop: 10 }}>
+                <div className='col-md-12'>
+                  <RaisedButton type='submit'
+                    onClick={handleSubmit(onSubmit)}
+                    fullWidth
+                    primary
+                    label={submitting
+                      ? <Icon name='refresh' spin />
+                      : TAPi18n.__('patients.thisSave')} />
+                </div>
+              </div>
+            </div>
+          }
       </form>
     </Box>
   </div>
@@ -64,7 +75,7 @@ const composer = (props, onData) => {
           insuranceId: v.insuranceId,
           note: v.patientNote,
           externalRevenue: v.externalRevenue,
-          patientSince: dayToDate(v.patientSince),
+          patientSince: v.patientSince ? dayToDate(v.patientSince) : undefined,
           profile: {
             gender: v.gender,
             lastName: v.lastName,
@@ -106,6 +117,9 @@ const composer = (props, onData) => {
 let BulkNewPatientContainer = reduxForm({
   form: 'bulkNewPatientForm',
   enableReinitialize: true,
+  updateUnregisteredFields: true,
+  keepDirtyOnReinitialize: false,
+  pure: false,
   fields: [
     'patientId',
     'gender',
@@ -132,49 +146,65 @@ let BulkNewPatientContainer = reduxForm({
 
 BulkNewPatientContainer = composeWithTracker(composer, Loading)(BulkNewPatientContainer)
 
+const mapPatientToFields = patient => {
+  if (patient && patient.profile) {
+    let address = {}
+    if (patient.profile.address) {
+      address = {
+        addressLine1: patient.profile.address.line1,
+        addressLine2: patient.profile.address.line2,
+        addressPostalCode: patient.profile.address.postalCode,
+        addressLocality: patient.profile.address.locality,
+        addressCountry: patient.profile.address.country
+      }
+    }
+
+    let contacts = patient.profile.contacts || [];
+    ['Phone', 'Email'].map(channel => {
+      if (!find(c => c.channel === channel)(contacts)) {
+        contacts.push({ channel })
+      }
+    })
+
+    return ({
+      patientId: patient._id,
+      insuranceId: patient.insuranceId,
+      gender: patient.profile.gender,
+      firstName: patient.profile.firstName,
+      lastName: patient.profile.lastName,
+      titlePrepend: patient.profile.titlePrepend,
+      titleAppend: patient.profile.titleAppend,
+      birthday: patient.profile.birthday,
+      contacts,
+      ...address,
+      banned: patient.profile.banned,
+      externalRevenue: patient.externalRevenue,
+      note: patient.note,
+      patientSince: patient.patientSince
+    })
+  } else {
+    return null
+  }
+}
+
+const selector = formValueSelector('bulkNewPatientForm')
+
 BulkNewPatientContainer = connect(
   state => {
     const patient = state.loadPatient.data
-    if (patient && patient.profile) {
-      let address = {}
-      if (patient.profile.address) {
-        address = {
-          addressLine1: patient.profile.address.line1,
-          addressLine2: patient.profile.address.line2,
-          addressPostalCode: patient.profile.address.postalCode,
-          addressLocality: patient.profile.address.locality,
-          addressCountry: patient.profile.address.country
-        }
+    const fields = mapPatientToFields(patient)
+    const patientId = selector(state, 'patientId')
+
+    if (fields) {
+      return {
+        patientId,
+        initialValues: fields
       }
-
-      let contacts = patient.profile.contacts || [];
-      ['Phone', 'Email'].map(channel => {
-        if (!find(c => c.channel === channel)(contacts)) {
-          contacts.push({ channel })
-        }
-      })
-
-      return ({
-        initialValues: {
-          patientId: patient._id,
-          insuranceId: patient.insuranceId,
-          gender: patient.profile.gender,
-          firstName: patient.profile.firstName,
-          lastName: patient.profile.lastName,
-          titlePrepend: patient.profile.titlePrepend,
-          titleAppend: patient.profile.titleAppend,
-          birthday: patient.profile.birthday,
-          contacts,
-          ...address,
-          banned: patient.profile.banned,
-          externalRevenue: patient.externalRevenue,
-          note: patient.note,
-          patientSince: patient.patientSince
-        }
-      })
     } else {
       return {
+        patientId,
         initialValues: {
+          gender: 'Female',
           contacts: [
             { channel: 'Phone' },
             { channel: 'Email' }

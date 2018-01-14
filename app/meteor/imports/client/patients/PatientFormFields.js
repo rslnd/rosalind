@@ -3,17 +3,17 @@ import { Field } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import FlatButton from 'material-ui/FlatButton'
-import { Icon } from '../../components/Icon'
-import { ToggleField } from '../../components/form/ToggleField'
-import { DayField } from '../../components/form/DayField'
-import { NewPatientExtendedFormFields } from './NewPatientExtendedFormFields'
+import { Icon } from '../components/Icon'
+import { ToggleField } from '../components/form/ToggleField'
+import { DayField } from '../components/form/DayField'
+import { PatientExtendedFormFields } from './PatientExtendedFormFields'
 
-export class NewPatientFormFields extends React.Component {
+export class PatientFormFields extends React.Component {
   render () {
     const { whitelistFields, extended } = this.props
 
     if (extended) {
-      return <NewPatientExtendedFormFields />
+      return <PatientExtendedFormFields />
     }
 
     const shouldShowField = field =>

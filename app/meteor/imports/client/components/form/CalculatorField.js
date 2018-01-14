@@ -4,8 +4,9 @@ import identity from 'lodash/identity'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 
-const calculate = string => {
+const calculate = (string = '') => {
   const summands = string
+    .toString()
     .replace(/,/g, '.')
     .split(/\+|\s/)
     .map(parseFloat)
@@ -30,16 +31,18 @@ export class CalculatorField extends React.Component {
     this.renderValue = this.renderValue.bind(this)
   }
 
+  componentWillReceiveProps (props) {
+    if (!this.state.focus && calculate(this.state.stringValue) != props.input.value) {
+      this.setState({
+        stringValue: props.input.value
+      })
+    }
+  }
+
   handleFocus () {
     this.setState({
       focus: true
     })
-
-    if (this.props.input.meta.pristine) {
-      this.setState({
-        stringValue: ''
-      })
-    }
 
     if (!this.state.stringValue && this.props.input.value) {
       this.setState({
@@ -73,12 +76,19 @@ export class CalculatorField extends React.Component {
     const inputValue = this.props.input.value
     const stringValue = this.state.stringValue
 
-    const finalValue = this.state.focus ? stringValue : inputValue
-    return finalValue || ''
+    const formatter = this.props.formatter
+
+    const finalValue = this.state.focus ? stringValue : formatter(inputValue)
+
+    if (!finalValue && !this.props.meta.touched) {
+      return ''
+    } else {
+      return (finalValue || '')
+    }
   }
 
   render () {
-    const { input, ...props } = this.props
+    const { input, formatter, ...props } = this.props
     const { onBlur, onFocus, onChange, value, ...keepInput } = this.props.input
 
     return <TextField

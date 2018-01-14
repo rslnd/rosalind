@@ -3,13 +3,13 @@ import { Field, FieldArray } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import FlatButton from 'material-ui/FlatButton'
-import { Icon } from '../../components/Icon'
-import { Currency } from '../../components/Currency'
-import { ToggleField } from '../../components/form/ToggleField'
-import { DayField } from '../../components/form/DayField'
-import { CalculatorField } from '../../components/form/CalculatorField'
-import { twoPlaces } from '../../../util/format'
-import { Dot } from '../Dot'
+import { Icon } from '../components/Icon'
+import { Currency } from '../components/Currency'
+import { ToggleField } from '../components/form/ToggleField'
+import { DayField } from '../components/form/DayField'
+import { CalculatorField } from '../components/form/CalculatorField'
+import { Dot } from './Dot'
+import { twoPlaces } from '../../util/format';
 
 const filterField = channel => field => field && field.channel === channel
 
@@ -68,7 +68,7 @@ const ContactsField = ({ fields, icon, channel }) => {
   </div>
 }
 
-export const NewPatientExtendedFormFields = () => {
+export const PatientExtendedFormFields = () => {
   const name = true
   const title = true
   const birthday = true
@@ -318,7 +318,7 @@ export const NewPatientExtendedFormFields = () => {
                       <Field
                         name='externalRevenue'
                         component={CalculatorField}
-                        format={twoPlaces}
+                        formatter={twoPlaces}
                         fullWidth
                         hintStyle={{ color: '#ccc' }}
                         hintText='100 50 140 ...'
