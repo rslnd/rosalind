@@ -153,8 +153,8 @@ const composer = (props, onData) => {
 
     const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
 
-    const onNewAppointmentPopoverOpen = (args) => Appointments.actions.acquireLock.call(args)
-    const onNewAppointmentPopoverClose = (args) => Appointments.actions.releaseLock.call(args)
+    const onNewAppointmentModalOpen = (args) => Appointments.actions.acquireLock.call(args)
+    const onNewAppointmentModalClose = (args) => Appointments.actions.releaseLock.call(args)
     const handleSetAdmitted = (args) => Appointments.actions.setAdmitted.call(args)
     const handleMove = (args) => Appointments.actions.move.callPromise(args).then(() => {
       Alert.success(TAPi18n.__('appointments.moveSuccess'))
@@ -166,8 +166,8 @@ const composer = (props, onData) => {
       calendar,
       assignees,
       date,
-      onNewAppointmentPopoverOpen,
-      onNewAppointmentPopoverClose,
+      onNewAppointmentModalOpen,
+      onNewAppointmentModalClose,
       handleSetAdmitted,
       handleMove,
       subsReady,

@@ -7,7 +7,7 @@ import { AppointmentInfoModalContainer } from '../info/AppointmentInfoModalConta
 import { HeaderRowContainer } from './header/HeaderRowContainer'
 import { AppointmentsGrid } from './grid/AppointmentsGrid'
 import { ScheduleModal } from './schedules/ScheduleModal'
-import { NewAppointmentPopover } from './new/NewAppointmentPopover'
+import { NewAppointmentModal } from './new/NewAppointmentModal'
 import { setTime } from './grid/timeSlots'
 
 export class AppointmentsView extends React.Component {
@@ -17,8 +17,7 @@ export class AppointmentsView extends React.Component {
     this.state = {
       selectedTime: null,
       selectedAssigneeId: null,
-      popoverOpen: false,
-      popoverAnchor: null,
+      newAppointmentModalOpen: false,
       appointmentModalOpen: false,
       selectedAppointmentId: null,
       override: {
@@ -32,8 +31,8 @@ export class AppointmentsView extends React.Component {
     this.handleAppointmentClick = this.handleAppointmentClick.bind(this)
     this.handleAppointmentModalOpen = this.handleAppointmentModalOpen.bind(this)
     this.handleAppointmentModalClose = this.handleAppointmentModalClose.bind(this)
-    this.handleNewAppointmentPopoverOpen = this.handleNewAppointmentPopoverOpen.bind(this)
-    this.handleNewAppointmentPopoverClose = this.handleNewAppointmentPopoverClose.bind(this)
+    this.handleNewAppointmentModalOpen = this.handleNewAppointmentModalOpen.bind(this)
+    this.handleNewAppointmentModalClose = this.handleNewAppointmentModalClose.bind(this)
     this.handleToggleOverrideMode = this.handleToggleOverrideMode.bind(this)
     this.handleOverrideStart = this.handleOverrideStart.bind(this)
     this.handleOverrideEnd = this.handleOverrideEnd.bind(this)
@@ -77,7 +76,7 @@ export class AppointmentsView extends React.Component {
     } else if (this.props.move.isMoving) {
       this.handleMoveEnd(options)
     } else {
-      this.handleNewAppointmentPopoverOpen(options)
+      this.handleNewAppointmentModalOpen(options)
     }
   }
 
@@ -89,32 +88,27 @@ export class AppointmentsView extends React.Component {
     }
   }
 
-  handleNewAppointmentPopoverClose () {
-    if (this.props.onNewAppointmentPopoverClose) {
-      this.props.onNewAppointmentPopoverClose({
-        calendarId: this.props.calendar._id,
-        time: this.state.selectedTime,
-        assigneeId: this.state.selectedAssigneeId
-      })
-    }
+  handleNewAppointmentModalClose () {
+    this.props.onNewAppointmentModalClose({
+      calendarId: this.props.calendar._id,
+      time: this.state.selectedTime,
+      assigneeId: this.state.selectedAssigneeId
+    })
 
-    this.setState({ ...this.state, popoverOpen: false })
+    this.setState({ ...this.state, newAppointmentModalOpen: false })
   }
 
-  handleNewAppointmentPopoverOpen ({ event, time, assigneeId }) {
+  handleNewAppointmentModalOpen ({ event, time, assigneeId }) {
     event.preventDefault()
 
-    if (this.props.onNewAppointmentPopoverOpen) {
-      this.props.onNewAppointmentPopoverOpen({
-        calendarId: this.props.calendar._id,
-        time,
-        assigneeId
-      })
-    }
+    this.props.onNewAppointmentModalOpen({
+      calendarId: this.props.calendar._id,
+      time,
+      assigneeId
+    })
 
     this.setState({ ...this.state,
-      popoverOpen: true,
-      popoverAnchor: event.currentTarget,
+      newAppointmentModalOpen: true,
       selectedTime: time,
       selectedAssigneeId: assigneeId
     })
@@ -288,13 +282,12 @@ export class AppointmentsView extends React.Component {
           onClose={this.handleScheduleModalClose}
           onClickScheduleSoftRemove={this.handleScheduleSoftRemove} />
 
-        <NewAppointmentPopover
+        <NewAppointmentModal
           calendar={this.props.calendar}
-          open={this.state.popoverOpen}
-          anchorEl={this.state.popoverAnchor}
+          open={this.state.newAppointmentModalOpen}
           assigneeId={this.state.selectedAssigneeId}
           time={this.state.selectedTime}
-          onClose={this.handleNewAppointmentPopoverClose} />
+          onClose={this.handleNewAppointmentModalClose} />
       </div>
     )
   }

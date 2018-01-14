@@ -3,7 +3,7 @@ import moment from 'moment-timezone'
 import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { NewAppointment } from './NewAppointment'
+import { NewAppointmentForm } from './NewAppointmentForm'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
 import { Tags } from '../../../api/tags'
@@ -134,7 +134,7 @@ export class NewAppointmentContainerComponent extends React.Component {
 
   render () {
     return (
-      <NewAppointment
+      <NewAppointmentForm
         onSubmit={this.handleSubmit}
         onSubmitPause={this.handleSubmitPause}
         initialValues={this.props.patientId ? { patientId: this.props.patientId } : {}}
