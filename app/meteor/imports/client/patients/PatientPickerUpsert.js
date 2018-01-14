@@ -1,18 +1,17 @@
 import React from 'react'
-import { PatientFormFields } from './PatientFormFields'
+import { PatientFormFields } from './formFields/PatientFormFields'
 import { PatientPickerContainer } from './PatientPickerContainer'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 
-export const PatientPickerUpsert = ({ patientId, extended }) =>
+export const PatientPickerUpsert = ({ patientId, extended, autoFocus }) =>
   <div>
     <div className='row'>
       <div className='col-md-12'>
         <Field
           name='patientId'
           component={PatientPickerContainer}
-          alwaysUpsert
           extended
-          autofocus />
+          autoFocus={autoFocus} />
       </div>
     </div>
     <div className='row'>

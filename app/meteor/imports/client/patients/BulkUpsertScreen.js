@@ -10,7 +10,9 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
     <Box title='Stammdaten vervollständigen'>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
         <PatientPickerUpsert
-          patientId={patientId} />
+          autoFocus
+          patientId={patientId}
+          extended />
 
         <div className='row' style={{ marginTop: 10 }}>
           <div className='col-md-12'>

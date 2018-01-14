@@ -14,6 +14,7 @@ module.exports = new SimpleSchema
 
   externalRevenue:
     type: Number
+    decimal: true
     optional: true
 
   profile:

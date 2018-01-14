@@ -87,6 +87,7 @@ export const NewAppointmentFields = props => {
         <div className='container-fluid'>
           <div className='row'>
             <PatientPickerUpsert
+              autoFocus
               patientId={patientId}
               extended={extended} />
           </div>
