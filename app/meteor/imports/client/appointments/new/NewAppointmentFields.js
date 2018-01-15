@@ -104,7 +104,7 @@ export const NewAppointmentFields = props => {
                 allowedTags={allowedTags}
                 calendarId={calendarId}
                 assigneeId={assigneeId}
-                showDefaultRevenue
+                showDefaultRevenue={false}
                 fullWidth />
             </div>
             <div className='col-md-2' style={style.tagsField}>
