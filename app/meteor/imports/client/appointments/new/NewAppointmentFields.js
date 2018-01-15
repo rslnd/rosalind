@@ -2,7 +2,6 @@ import React from 'react'
 import moment from 'moment-timezone'
 import { Field } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
-import Divider from 'material-ui/Divider'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { TagsField } from '../../tags/TagsField'
@@ -93,7 +92,6 @@ export const NewAppointmentFields = props => {
           </div>
         </div>
       </div>
-      <Divider />
       <div style={style.padded}>
         <div className='container-fluid'>
 
