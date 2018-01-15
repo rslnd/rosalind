@@ -42,6 +42,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'slug'
   },
   {
+    header: 'Feldlänge',
+    field: 'slotSize'
+  },
+  {
     header: 'Standard-Termindauer in Minuten',
     field: 'defaultDuration'
   }

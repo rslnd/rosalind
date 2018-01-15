@@ -27,6 +27,11 @@ export const schema = new SimpleSchema({
     defaultValue: 5
   },
 
+  slotSize: {
+    type: Number,
+    defaultValue: 5
+  },
+
   privateAppointments: {
     type: Boolean,
     optional: true
