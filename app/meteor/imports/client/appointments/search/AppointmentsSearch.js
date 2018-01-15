@@ -151,8 +151,10 @@ export class AppointmentsSearch extends React.Component {
         cache={false}
         ignoreCase={false}
         ignoreAccents={false}
-        autofocus={false}
+        autoFocus={false}
+        onSelectResetsInput={false}
         onCloseResetsInput={false}
+        onBlurResetsInput={false}
         placeholder={TAPi18n.__('appointments.search')}
         loadingPlaceholder={TAPi18n.__('appointments.searching')}
         searchPromptText={'Suche nach PatientInnen, Geburtsdatum'}

@@ -46,6 +46,8 @@ const compose = (props, onData) => {
       .then((patient) => findAppointments(patientId))
       .then(({ options }) => {
         const patient = options[0].patient
+
+        console.log('injecting to search', patient)
         onData(null, {
           findAppointments,
           query: {

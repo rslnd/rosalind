@@ -1,7 +1,8 @@
+import idx from 'idx'
 import { mapPatientToFields } from './mapPatientToFields'
 
 export const mapStateToProps = selector => state => {
-  const patient = state.loadPatient.data
+  const patient = state.loadPatient.data || idx(state, _ => _.appointments.search.query.patient)
   const fields = mapPatientToFields(patient)
   const patientId = selector(state, 'patientId')
 
