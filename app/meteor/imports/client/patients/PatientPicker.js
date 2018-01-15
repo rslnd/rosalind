@@ -56,6 +56,10 @@ export class PatientPicker extends React.Component {
     this.handleSearchValueChange = this.handleSearchValueChange.bind(this)
   }
 
+  componentWillUnmount () {
+    this.props.loadPatient(null)
+  }
+
   handleQueryChange (query) {
     if (query && query.value) {
       this.props.input.onChange(query.value)
