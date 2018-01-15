@@ -1,36 +1,37 @@
 import React from 'react'
 import moment from 'moment-timezone'
+import { withState } from 'recompose'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Users } from '../../api/users'
-import { getColor } from '../tags/getColor'
 import { Indicator, Revenue } from '../appointments/appointment/Indicator'
-import { TagsList } from '../tags/TagsList';
+import { TagsList } from '../tags/TagsList'
+import { CommentsContainer } from '../comments/CommentsContainer'
 
-{/* <span style={{
-  display: 'inline-block',
-  textDecoration: canceled && 'line-through',
-  color: canceled && '#ccc',
-  paddingTop: 4,
-  verticalAlign: -2 }}> */}
-
-const tableStyle = {
-  paddingLeft: 10,
-  width: '100%'
+const containerStyle = {
+  borderTop: '1px solid #eee',
+  paddingTop: 16,
+  marginTop: 6,
+  marginBottom: 15
 }
 
-const tdStyle = {
-  whiteSpace: 'nowrap',
-  padding: 4
+const appointmentRowContainerStyle = {
+  paddingTop: 6
 }
 
-const dateStyle = {
-  ...tdStyle,
-  width: 200
+const tinyPaddingStyle = {
+  paddingRight: 16,
+  paddingBottom: 6
 }
 
-const timeStyle = {
-  ...tdStyle,
-  width: 95
+const appointmentRowStyle = {
+  ...tinyPaddingStyle,
+  paddingLeft: 48,
+  cursor: 'pointer'
+}
+
+const separatorRowStyle = {
+  paddingLeft: 48,
+  marginTop: 6
 }
 
 const dateFormat = m =>
@@ -38,42 +39,70 @@ const dateFormat = m =>
   ? m.format(TAPi18n.__('time.dateFormatWeekdayShortNoYear'))
   : m.format(TAPi18n.__('time.dateFormatWeekdayShort'))
 
-const AppointmentRow = ({ appointment }) => {
+const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => {
   const assignee = Users.findOne({ _id: appointment.assigneeId })
   const canceled = appointment.canceled || appointment.removed
   const date = moment(appointment.start)
 
+  const canceledStyle = canceled ? {
+    textDecoration: 'line-through',
+    color: '#ccc'
+  } : {}
+
+  const canceledTagsStyle = canceled ? {
+    opacity: 0.7
+  } : {}
+
   return (
-    <div className='row'>
-      <div className='col-md-3'>
-        {dateFormat(date)}
+    <div onClick={onClick} style={appointmentRowContainerStyle}>
+      <div style={appointmentRowStyle}>
+        <div className='row'>
+          <div className='col-md-3' style={canceledTagsStyle}>
+            <TagsList tiny tags={appointment.tags} />
+          </div>
 
-        <span className='pull-right'>
-          {date.format(TAPi18n.__('time.timeFormat'))}
-        </span>
-      </div>
+          <div className='col-md-3 text-right' style={canceledStyle}>
+            {assignee && assignee.fullNameWithTitle()}
+          </div>
 
-      <div className='col-md-4'>
-        <TagsList tiny tags={appointment.tags} />
-      </div>
+          <div className='col-md-4' style={canceledStyle}>
+            {dateFormat(date)}
 
-      <div className='col-md-3 text-right'>
-        {assignee && assignee.lastNameWithTitle()}
-      </div>
+            <span className='pull-right' style={canceledStyle}>
+              {date.format(TAPi18n.__('time.timeFormat'))}
+            </span>
+          </div>
 
-      <div className='col-md-2 text-right'>
-        <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
-          <Revenue appointment={appointment} />
+          <div className='col-md-2 text-right'>
+            <div style={{ display: 'inline-block', verticalAlign: 'top', ...canceledStyle }}>
+              <Revenue appointment={appointment} />
+            </div>
+            <div style={{ display: 'inline-block', minWidth: 25 }}>
+              <Indicator appointment={appointment} />
+            </div>
+          </div>
         </div>
-        <div style={{ display: 'inline-block', minWidth: 25 }}>
-          <Indicator appointment={appointment} />
+      </div>
+
+      <div className='row'>
+        <div className='col-md-12'>
+          <CommentsContainer
+            docId={appointment._id}
+            newComment={expandComments}
+            background={false}
+            autoFocus={autoFocus} />
         </div>
       </div>
     </div>
   )
 }
 
-export const PastAppointments = ({ currentAppointment, pastAppointments, futureAppointments }) => {
+export const PastAppointments = withState('selectedAppointmentId', 'handleAppointmentClick', null)(({
+    currentAppointment,
+    pastAppointments,
+    futureAppointments,
+    selectedAppointmentId,
+    handleAppointmentClick }) => {
   const appointmentsWithSeparators = [
     { separator: TAPi18n.__('appointments.thisFuture'), count: futureAppointments.length },
     ...futureAppointments,
@@ -86,23 +115,28 @@ export const PastAppointments = ({ currentAppointment, pastAppointments, futureA
   ]
 
   return (
-    <div>
+    <div style={containerStyle}>
       {
         appointmentsWithSeparators.map((item, i) =>
           item.separator
           ? (
             item.count > 0 &&
               <div className='row' key={i}>
-                <div className='col-md-12'>
-                  <h6>{item.separator}</h6>
+                <div className='text-muted col-md-12'>
+                  <div style={separatorRowStyle}>
+                    {item.separator}
+                  </div>
                 </div>
               </div>
             )
           : <AppointmentRow
             key={item._id}
-            appointment={item} />
+            appointment={item}
+            expandComments={item._id === selectedAppointmentId}
+            autoFocus={!!selectedAppointmentId}
+            onClick={() => handleAppointmentClick(item._id)} />
         )
       }
     </div>
   )
-}
+})

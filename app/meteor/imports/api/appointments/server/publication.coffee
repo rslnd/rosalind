@@ -95,6 +95,7 @@ module.exports = ->
       }),
       children: [
         { find: (doc) -> @unblock(); Comments.find(docId: options.patientId) }
+        { find: (doc) -> @unblock(); Comments.find(docId: doc._id) }
       ]
     }
 

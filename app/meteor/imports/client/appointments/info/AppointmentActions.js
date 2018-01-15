@@ -50,10 +50,5 @@ export const AppointmentActions = (props) => (
         label={<span><Icon name='trash-o' />&emsp;{TAPi18n.__('appointments.softRemove')}</span>}
         onClick={props.softRemove} />
     </div>
-    <div className='pull-right'>
-      <FlatButton
-        onClick={props.onClose}
-        label={TAPi18n.__('ui.close')} />
-    </div>
   </div>
 )

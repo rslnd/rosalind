@@ -9,7 +9,6 @@ import { InlineEdit } from '../../components/form/InlineEdit'
 import { Birthday as BirthdayWithAge } from '../../patients/Birthday'
 import { Dot } from '../../patients/Dot'
 import { Stamps } from '../../helpers/Stamps'
-import { PastAppointmentsContainer } from '../../patients/PastAppointmentsContainer'
 import { EnlargeText } from '../../components/EnlargeText'
 import { Currency } from '../../components/Currency'
 import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
@@ -268,15 +267,6 @@ export class AppointmentInfo extends React.Component {
             <TotalRevenue value={totalPatientRevenue} />
           </div>
         </div>
-
-        {
-          patient &&
-            <div className='row'>
-              <div className='col-md-12'>
-                <PastAppointmentsContainer patientId={appointment.patientId} currentAppointmentId={appointment._id} />
-              </div>
-            </div>
-        }
       </div>
     )
   }

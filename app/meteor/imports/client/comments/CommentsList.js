@@ -23,12 +23,12 @@ const accumulateBy = field => list =>
     }
   }, { lastGroup: null, stack: [] }).stack
 
-export const CommentsList = ({ comments }) => {
+export const CommentsList = ({ comments, background = true }) => {
   if (comments.length === 0) {
     return null
   } else {
     return (
-      <div className='box-footer box-comments'>
+      <div className={`${!background && 'box-footer'} box-comments`}>
         {accumulateBy('createdBy')(comments).map((comment) => {
           return <CommentItem key={comment._id} comment={comment} />
         })}

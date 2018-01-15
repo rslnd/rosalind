@@ -52,8 +52,8 @@ export const TagsList = ({ tags = [], onClick, style = {}, tiny, showDefaultReve
     .filter(t => t.tags && t.tags.length > 0)
     .map(t => ({ ...t, tags: sortBy('order')(t.tags) }))
 
-  const tinyStyle = tiny ? { zoom: 0.6 } : {}
-  const tinyTagGroupTitleStyle = tiny ? { zoom: 1.66 } : {}
+  const tinyStyle = tiny ? { zoom: 0.8 } : {}
+  const tinyTagGroupTitleStyle = tiny ? { zoom: 1 / 0.8 } : {}
 
   return <span style={tinyStyle}>
     {orderedTagGroups.map((tagGroup, i) =>

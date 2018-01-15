@@ -40,6 +40,7 @@ export class NewComment extends React.Component {
               className='form-control input-sm'
               id={'new-comment-' + this.props.docId}
               placeholder={TAPi18n.__('ui.newCommentPlaceholder')}
+              autoFocus={this.props.autoFocus}
               value={this.state.body}
               onChange={this.handleBodyChange} />
             <span className='input-group-btn'>
