@@ -23,20 +23,6 @@ export const AppointmentInfoModal = (props) => {
       <Modal.Body>
         <AppointmentInfo {...props} />
       </Modal.Body>
-      {
-        comments && comments.length > 4 &&
-          <Modal.Footer>
-            <Actions />
-          </Modal.Footer>
-      }
-      {
-        patient &&
-          <div className='row'>
-            <div className='col-md-12'>
-              <CommentsContainer docId={patient._id} />
-            </div>
-          </div>
-      }
       <Modal.Footer>
         <Actions />
       </Modal.Footer>

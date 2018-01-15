@@ -8,16 +8,17 @@ const composer = (props, onData) => {
   const patientId = props.patientId
   Meteor.subscribe('appointmentsPatient', { patientId })
 
-  const _id = { $not: props.excludeAppointmentId }
+  const _id = { $not: props.currentAppointmentId }
   const options = {
     sort: { start: -1 },
     removed: true
   }
 
+  const currentAppointment = Appointments.findOne({ _id: props.currentAppointmentId })
   const pastAppointments = Appointments.find({ patientId, start: { $lt: new Date() }, _id }, options).fetch()
   const futureAppointments = Appointments.find({ patientId, start: { $gte: new Date() }, _id }, options).fetch()
 
-  onData(null, { ...props, pastAppointments, futureAppointments })
+  onData(null, { ...props, currentAppointment, pastAppointments, futureAppointments })
 }
 
 const PastAppointmentsContainer = composeWithTracker(composer, Loading)(PastAppointments)

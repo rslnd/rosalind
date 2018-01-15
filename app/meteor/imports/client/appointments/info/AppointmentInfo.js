@@ -266,10 +266,17 @@ export class AppointmentInfo extends React.Component {
             <PatientNotes patient={patient} onChange={handleEditPatientNote} />
             <Reminders patient={patient} onChange={handleSetMessagePreferences} />
             <TotalRevenue value={totalPatientRevenue} />
-
-            {patient && <PastAppointmentsContainer patientId={appointment.patientId} excludeAppointmentId={appointment._id} />}
           </div>
         </div>
+
+        {
+          patient &&
+            <div className='row'>
+              <div className='col-md-12'>
+                <PastAppointmentsContainer patientId={appointment.patientId} currentAppointmentId={appointment._id} />
+              </div>
+            </div>
+        }
       </div>
     )
   }

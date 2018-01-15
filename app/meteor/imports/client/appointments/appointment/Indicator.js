@@ -14,18 +14,6 @@ export const Indicator = ({ appointment, showRevenue }) => {
   return appointment.patientId &&
     <span className='pull-right'>
       {
-        !showRevenue && appointment.privateAppointment &&
-          <span>
-            <Icon name='eur' style={overlay} />&nbsp;
-          </span>
-      }
-      {
-        showRevenue && appointment.privateAppointment &&
-          <span>
-            <Currency value={appointment.revenue} />&nbsp;
-          </span>
-      }
-      {
         !canceled && <span>{
           (appointment.treated || appointment.admitted)
             ? (<span
@@ -46,3 +34,13 @@ export const Indicator = ({ appointment, showRevenue }) => {
       }
     </span> || null
 }
+
+export const Revenue = ({ appointment }) =>
+  <span>
+    {
+      appointment.privateAppointment &&
+        <span>
+          <Currency value={appointment.revenue} />&nbsp;
+        </span>
+    }
+  </span>

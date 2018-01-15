@@ -3,55 +3,105 @@ import moment from 'moment-timezone'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Users } from '../../api/users'
 import { getColor } from '../tags/getColor'
-import { Indicator } from '../appointments/appointment/Indicator'
+import { Indicator, Revenue } from '../appointments/appointment/Indicator'
 import { TagsList } from '../tags/TagsList';
 
-const Appointment = ({ appointment }) => {
+{/* <span style={{
+  display: 'inline-block',
+  textDecoration: canceled && 'line-through',
+  color: canceled && '#ccc',
+  paddingTop: 4,
+  verticalAlign: -2 }}> */}
+
+const tableStyle = {
+  paddingLeft: 10,
+  width: '100%'
+}
+
+const tdStyle = {
+  whiteSpace: 'nowrap',
+  padding: 4
+}
+
+const dateStyle = {
+  ...tdStyle,
+  width: 200
+}
+
+const timeStyle = {
+  ...tdStyle,
+  width: 95
+}
+
+const dateFormat = m =>
+  m.year() === moment().year()
+  ? m.format(TAPi18n.__('time.dateFormatWeekdayShortNoYear'))
+  : m.format(TAPi18n.__('time.dateFormatWeekdayShort'))
+
+const AppointmentRow = ({ appointment }) => {
   const assignee = Users.findOne({ _id: appointment.assigneeId })
   const canceled = appointment.canceled || appointment.removed
+  const date = moment(appointment.start)
+
   return (
-    <li
-      style={{
-        listStyleType: 'none'
-      }}>
-      <TagsList tiny tags={appointment.tags} />
-      &ensp;
-      <span style={{
-        display: 'inline-block',
-        textDecoration: canceled && 'line-through',
-        color: canceled && '#ccc',
-        paddingTop: 4,
-        verticalAlign: -2 }}>
-        {moment(appointment.start).format(TAPi18n.__('time.dateFormatShort'))} {moment(appointment.start).format(TAPi18n.__('time.timeFormat'))}&emsp;
+    <div className='row'>
+      <div className='col-md-3'>
+        {dateFormat(date)}
+
+        <span className='pull-right'>
+          {date.format(TAPi18n.__('time.timeFormat'))}
+        </span>
+      </div>
+
+      <div className='col-md-4'>
+        <TagsList tiny tags={appointment.tags} />
+      </div>
+
+      <div className='col-md-3 text-right'>
         {assignee && assignee.lastNameWithTitle()}
-      </span>
-      <Indicator showRevenue appointment={appointment} />
-    </li>
+      </div>
+
+      <div className='col-md-2 text-right'>
+        <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
+          <Revenue appointment={appointment} />
+        </div>
+        <div style={{ display: 'inline-block', minWidth: 25 }}>
+          <Indicator appointment={appointment} />
+        </div>
+      </div>
+    </div>
   )
 }
 
-export const PastAppointments = ({ pastAppointments, futureAppointments }) => {
-  const sections = [
-    { title: TAPi18n.__('appointments.thisFuture'), appointments: futureAppointments },
-    { title: TAPi18n.__('appointments.thisPast'), appointments: pastAppointments }
+export const PastAppointments = ({ currentAppointment, pastAppointments, futureAppointments }) => {
+  const appointmentsWithSeparators = [
+    { separator: TAPi18n.__('appointments.thisFuture'), count: futureAppointments.length },
+    ...futureAppointments,
+
+    { separator: TAPi18n.__('appointments.thisCurrent'), count: 1 },
+    currentAppointment,
+
+    { separator: TAPi18n.__('appointments.thisPast'), count: pastAppointments.length },
+    ...pastAppointments
   ]
 
   return (
     <div>
       {
-        sections.map((section) => (
-          section.appointments.length > 0 &&
-            <div key={section.title}>
-              <h6>{section.title}</h6>
-              <ul style={{ paddingLeft: 10 }}>
-                {section.appointments.map((appointment) => (
-                  <Appointment
-                    key={appointment._id}
-                    appointment={appointment} />
-                ))}
-              </ul>
-            </div>
-        ))
+        appointmentsWithSeparators.map((item, i) =>
+          item.separator
+          ? (
+            item.count > 0 &&
+              <div className='row' key={i}>
+                <div className='col-md-12'>
+                  <h6>{item.separator}</h6>
+                </div>
+              </div>
+            )
+          : <AppointmentRow
+            key={item._id}
+            appointment={item} />
+        )
       }
     </div>
   )
