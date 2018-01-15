@@ -48,6 +48,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Standard-Termindauer in Minuten',
     field: 'defaultDuration'
+  },
+  {
+    header: 'Einschub',
+    field: 'allowUnassigned',
+    render: c => c.allowUnassigned && <Icon name='check' />
   }
 ]
 

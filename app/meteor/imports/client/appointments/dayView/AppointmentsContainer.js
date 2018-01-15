@@ -68,7 +68,7 @@ const composer = (props, onData) => {
 
     // Combine all assigneeIds from the appointments with
     // the assigneeIds that are scheduled for this day (but may not have any
-    // appointments scheduled yet). Make sure the 'null' assignee is added here as well.
+    // appointments scheduled yet)
     const assigneeIdsScheduled = uniq(flatten(Schedules.find({
       day,
       calendarId: calendar._id
@@ -76,8 +76,18 @@ const composer = (props, onData) => {
     const assigneeIdsAppointments = uniq(appointments.map((a) => a.assigneeId))
 
     // HACK: Merge undefined to null
-    const assigneeIdsNullOrUndefined = union(assigneeIdsScheduled, assigneeIdsAppointments, [ null ])
-    const assigneeIds = assigneeIdsNullOrUndefined.filter((id) => id !== undefined)
+    const assigneeIdsNullOrUndefined = union(assigneeIdsScheduled, assigneeIdsAppointments)
+    const assigneeIdsFiltered = assigneeIdsNullOrUndefined.filter((id) => id !== undefined)
+
+    // If calendar allows unassigned appointments, add null assignee if not already present
+    const addNullAssignee = a =>
+      (a.indexOf(null) === -1)
+      ? [...a, null]
+      : a
+
+    let assigneeIds = calendar.allowUnassigned
+      ? addNullAssignee(assigneeIdsFiltered)
+      : assigneeIdsFiltered
 
     // Now turn the assigneeIds array into an array of assignee objects
     let assignees = flow(
