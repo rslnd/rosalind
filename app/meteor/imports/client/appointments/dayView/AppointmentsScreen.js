@@ -5,7 +5,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from '../../../util/time/format'
 import { DateNavigation } from '../../components/DateNavigation'
 import { AppointmentsView } from './AppointmentsView'
-import { AppointmentsSearchContainer } from '../search/AppointmentsSearchContainer'
+import { StandalonePatientPickerContainer } from '../../patients/StandalonePatientPickerContainer'
 import { background } from '../../css/global'
 
 const contentHeaderStyle = {
@@ -47,7 +47,7 @@ export class AppointmentsScreen extends React.Component {
           </h1>
 
           <div style={{ marginLeft: 30, marginRight: 15, flexGrow: 1 }}>
-            <AppointmentsSearchContainer />
+            <StandalonePatientPickerContainer />
           </div>
 
           <div style={{ marginTop: 27 }}>

@@ -110,7 +110,7 @@ export const upsert = ({ Patients }) => {
           })
         }
 
-        return existingPatient._id
+        return existingPatient
       } else {
         patient = cleanFields(patient)
 
@@ -119,7 +119,7 @@ export const upsert = ({ Patients }) => {
             if (e) { console.error('[Patients] Insert failed with error', e, 'of patient', patient) }
             if (!quiet) { Events.post('patients/insert', { patientId }) }
           })
-          return patientId
+          return { _id: patientId, ...patient }
         } catch (e) {
           console.error('[Patients] Insert failed with error', e, 'of patient', patient)
         }

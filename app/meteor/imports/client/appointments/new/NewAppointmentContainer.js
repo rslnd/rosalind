@@ -10,7 +10,7 @@ import { Tags } from '../../../api/tags'
 import { getDefaultDuration, isConstraintApplicable } from '../../../api/appointments/methods/getDefaultDuration'
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 
-export class NewAppointmentContainerComponent extends React.Component {
+export class NewAppointmentContainer extends React.Component {
   constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -111,7 +111,6 @@ export class NewAppointmentContainerComponent extends React.Component {
       <NewAppointmentForm
         onSubmit={this.handleSubmit}
         onSubmitPause={this.handleSubmitPause}
-        initialValues={this.props.patientId ? { patientId: this.props.patientId } : {}}
         time={this.props.time}
         calendarId={this.props.calendar._id}
         assigneeId={this.props.assigneeId}
@@ -120,12 +119,3 @@ export class NewAppointmentContainerComponent extends React.Component {
     )
   }
 }
-
-const mapStateToProps = (store) => {
-  const state = store.appointments.search
-  const patientId = state.patientId ||
-    (state.query && state.query.patient && state.query.patient._id)
-  return { patientId }
-}
-
-export const NewAppointmentContainer = connect(mapStateToProps)(NewAppointmentContainerComponent)

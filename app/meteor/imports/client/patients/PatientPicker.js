@@ -6,6 +6,7 @@ import { startCase } from '../../util/fuzzy/startCase'
 import { findPatients } from './findPatients'
 import { PatientSearchResult } from './PatientSearchResult'
 import { PatientNameSelected } from './PatientNameSelected'
+import './patientPickerStyle'
 
 // Fuzzy-parse query for pre-filling new patient form
 // TODO: Extract to method on Patients, merge with fuzzy birthday parsing
