@@ -100,7 +100,10 @@ export class PatientPicker extends React.Component {
           clearValueText={TAPi18n.__('ui.clear')}
           filterOptions={identity}
           optionComponent={PatientSearchResult}
-          valueComponent={PatientNameSelected} />
+          valueComponent={PatientNameSelected}
+          onSelectResetsInput={false}
+          onCloseResetsInput={false}
+          onBlurResetsInput={false} />
       </div>
     )
   }
