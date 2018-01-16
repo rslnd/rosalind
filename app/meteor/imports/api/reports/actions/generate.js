@@ -34,6 +34,7 @@ export const generate = ({ Calendars, Reports, Appointments, Schedules, Tags, Me
           }).fetch()
 
           const pastAppointments = Appointments.find(pastAppointmentsSelector({
+            date,
             calendarId,
             appointments
           })).fetch()

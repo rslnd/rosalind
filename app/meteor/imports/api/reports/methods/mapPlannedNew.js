@@ -7,9 +7,14 @@ export const isNew = pastAppointments => appointment => {
   return !find(p => p.patientId === appointment.patientId)(pastAppointments)
 }
 
-export const pastAppointmentsSelector = ({ calendarId, appointments }) => {
-  const date = appointments[0].start
-  const startOfDay = moment(date).startOf('day').toDate()
+export const pastAppointmentsSelector = ({ date, calendarId, appointments }) => {
+  if (!appointments || appointments.length === 0) {
+    return {
+      thisSelectorShouldNotFindAnything: true
+    }
+  }
+
+  const startOfDay = moment(date).clone().startOf('day').toDate()
   const startOfQuarter = quarter(date).range.start.toDate()
   const patientIds = appointments.map(a => a.patientId).filter(identity)
 
