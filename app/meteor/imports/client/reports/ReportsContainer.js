@@ -26,8 +26,7 @@ const composer = (props, onData) => {
       .fetch()
       .map(r => ({ ...r, calendar: Calendars.findOne({ _id: r.calendarId }) }))
 
-    console.log('fr', fetchedReports)
-    const reports = sortBy(r => r && r.calendar && r.calendar.order)(fetchedReports)
+      const reports = sortBy(r => r && r.calendar && r.calendar.order)(fetchedReports)
 
     const isPrint = props.location.hash === '#print'
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint

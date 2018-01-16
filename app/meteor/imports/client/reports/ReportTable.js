@@ -70,13 +70,21 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, __ })
       <th colSpan={3}>
         {(calendar && calendar.patientNamePlural) || __('reports.patients')}
       </th>
-      <th style={center} colSpan={2}>Neu</th>
-      <th style={center} colSpan={2}>Kontrolle</th>
-      <th style={center} colSpan={2}>OP</th>
-      <th style={align} title='Kaustik'>Kau</th>
-      <th style={align} title='Kryo'>Kry</th>
+      {
+        (calendar && calendar.reportTags)
+        ? calendar.reportTags.map(tag =>
+          <th key={tag} style={center} colSpan={2}>{tag}</th>
+        )
+        : [
+          <th key={1} style={center} colSpan={2}>Neu</th>,
+          <th key={2} style={center} colSpan={2}>Kontrolle</th>,
+          <th key={3} style={center} colSpan={2}>OP</th>,
+          <th key={4} style={align} title='Kaustik'>Kau</th>,
+          <th key={5} style={align} title='Kryo'>Kry</th>,
+          <th key={6} style={center} colSpan={2}>Neu/Std.</th>
+        ]
+      }
       {assigneeReport && <th style={align} title='Einschub'>Ein</th>}
-      <th style={center} colSpan={2}>Neu/Std.</th>
       {showRevenue && <th style={align} colSpan={2}>Umsatz</th>}
     </tr>
 
@@ -86,17 +94,29 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, __ })
       <th style={borderLeftStyle}>Plan</th>
       <th style={align} title='Anwesend'>Anw.</th>
       <th style={align} title='Behandelt'>Ist</th>
-      <th style={colDivider}>Plan</th>
-      <th style={align}>Ist</th>
-      <th style={colDivider}>Plan</th>
-      <th style={align}>Ist</th>
-      <th style={colDivider}>Plan</th>
-      <th style={align}>Ist</th>
-      <th style={align}>Ist</th>
-      <th style={align}>Ist</th>
+
+      {
+        (calendar && calendar.reportTags)
+        ? calendar.reportTags.map(tag =>
+          [
+            <th key={tag + 1} style={colDivider}>Plan</th>,
+            <th key={tag + 2} style={align}>Ist</th>
+          ]
+        )
+        : [
+          <th key={1} style={colDivider}>Plan</th>,
+          <th key={2} style={align}>Ist</th>,
+          <th key={3} style={colDivider}>Plan</th>,
+          <th key={4} style={align}>Ist</th>,
+          <th key={5} style={colDivider}>Plan</th>,
+          <th key={6} style={align}>Ist</th>,
+          <th key={7} style={align}>Ist</th>,
+          <th key={8} style={align}>Ist</th>,
+          <th key={9} style={colDivider}>Plan</th>,
+          <th key={10} style={align}>Ist</th>
+        ]
+      }
       {assigneeReport && <th />}
-      <th style={colDivider}>Plan</th>
-      <th style={align}>Ist</th>
       {showRevenue && <th style={align}>€/h</th>}
       {showRevenue && <th style={align}>Gesamt</th>}
     </tr>
@@ -169,36 +189,45 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         <Td><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
         <Td><Percent part={idx(assignee, _ => _.patients.total.actual)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
 
-        {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.new.expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
-        <Td>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients.new.actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients.new.actual)}</Td>
+        {
+          (report.calendar && report.calendar.reportTags)
+          ? report.calendar.reportTags.map(tag =>
+            [
+              <Td key={1} borderLeft><Percent part={idx(assignee, _ => _.patients[tag].expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>,
+              <Td key={2}>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients[tag].actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients[tag].actual)}</Td>
+            ]
+          ) : [
+            // davon NEU [Plan (Abs+%), Ist (Abs+%)]
+            <Td key={1} borderLeft><Percent part={idx(assignee, _ => _.patients.new.expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>,
+            <Td key={2}>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients.new.actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients.new.actual)}</Td>,
 
-        {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(assignee, _ => _.patients.recall.expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
-        <Td>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients.recall.actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients.recall.actual)}</Td>
+            // davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]
+            <Td key={3} borderLeft><Percent part={idx(assignee, _ => _.patients.recall.expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>,
+            <Td key={4}>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients.recall.actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients.recall.actual)}</Td>,
 
-        {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft>{idx(assignee, _ => _.patients.surgery.expected) || <Nil />}</Td>
-        <Td>{idx(assignee, _ => _.patients.surgery.actual) || <Nil />}</Td>
+            // davon OP [Plan (Abs+%) , Ist (Abs+%)]
+            <Td key={5} borderLeft>{idx(assignee, _ => _.patients.surgery.expected) || <Nil />}</Td>,
+            <Td key={6}>{idx(assignee, _ => _.patients.surgery.actual) || <Nil />}</Td>,
 
-        {/* Kaustik [Ist] */}
-        <Td>{idx(assignee, _ => _.patients.cautery.actual) || <Nil />}</Td>
+            // Kaustik [Ist]
+            <Td key={7}>{idx(assignee, _ => _.patients.cautery.actual) || <Nil />}</Td>,
 
-        {/* Kryo [Ist] */}
-        <Td>{idx(assignee, _ => _.patients.cryo.actual) || <Nil />}</Td>
+            // Kryo [Ist]
+            <Td key={8}>{idx(assignee, _ => _.patients.cryo.actual) || <Nil />}</Td>,
 
+            // Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]
+            <Td key={9} borderLeft>{assignee.assigneeId &&
+              <Round number={idx(assignee, _ => _.patients.new.expectedPerHour)} /> || <Nil />
+            }</Td>,
+            <Td key={10}>{assignee.assigneeId &&
+              <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} /> || <Nil />
+            }</Td>
+          ]
+        }
         {/* Assignee reports include overbooking column */}
         {
           assigneeReport && <Td><Overbooking assignee={assignee} __={__} /></Td>
         }
-
-        {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft>{assignee.assigneeId &&
-          <Round number={idx(assignee, _ => _.patients.new.expectedPerHour)} /> || <Nil />
-        }</Td>
-        <Td>{assignee.assigneeId &&
-          <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} /> || <Nil />
-        }</Td>
 
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
         {
@@ -251,30 +280,39 @@ class SummaryRow extends React.Component {
           </span>
         </Td>
 
-        {/* davon NEU [Plan (Abs+%), Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.new.expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
-        <Td><Percent part={idx(report, _ => _.total.patients.new.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+        {
+          (report.calendar && report.calendar.reportTags)
+          ? report.calendar.reportTags.map(tag =>
+            [
+              <Td key={1} borderLeft><Percent part={idx(report, _ => _.total.patients[tag].expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>,
+              <Td key={2}><Percent part={idx(report, _ => _.total.patients[tag].actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+            ]
+          ) : [
+            // davon NEU [Plan (Abs+%), Ist (Abs+%)]
+            <Td key={1} borderLeft><Percent part={idx(report, _ => _.total.patients.new.expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>,
+            <Td key={2}><Percent part={idx(report, _ => _.total.patients.new.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>,
 
-        {/* davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Percent part={idx(report, _ => _.total.patients.recall.expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
-        <Td><Percent part={idx(report, _ => _.total.patients.recall.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+            // davon Kontrolle [Plan (Abs+%) , Ist (Abs+%)]
+            <Td key={3} borderLeft><Percent part={idx(report, _ => _.total.patients.recall.expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>,
+            <Td key={4}><Percent part={idx(report, _ => _.total.patients.recall.actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>,
 
-        {/* davon OP [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft>{idx(report, _ => _.total.patients.surgery.expected)}</Td>
-        <Td>{idx(report, _ => _.total.patients.surgery.actual)}</Td>
+            // davon OP [Plan (Abs+%) , Ist (Abs+%)]
+            <Td key={5} borderLeft>{idx(report, _ => _.total.patients.surgery.expected)}</Td>,
+            <Td key={6}>{idx(report, _ => _.total.patients.surgery.actual)}</Td>,
 
-        {/* Kaustik [Ist] */}
-        <Td>{idx(report, _ => _.total.patients.cautery.actual)}</Td>
+            // Kaustik [Ist]
+            <Td key={7}>{idx(report, _ => _.total.patients.cautery.actual)}</Td>,
 
-        {/* Kryo [Ist] */}
-        <Td>{idx(report, _ => _.total.patients.cryo.actual)}</Td>
+            // Kryo [Ist]
+            <Td key={8}>{idx(report, _ => _.total.patients.cryo.actual)}</Td>,
 
+            // Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]
+            <Td key={9} borderLeft><Round unit='⌀' number={idx(report, _ => _.average.patients.new.expectedPerHour)} /></Td>,
+            <Td key={10}><Round unit='⌀' number={idx(report, _ => _.average.patients.new.actualPerHour)} /></Td>
+          ]
+        }
         {/* Overbooking */}
         {assigneeReport && <Td />}
-
-        {/* Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]  */}
-        <Td borderLeft><Round unit='⌀' number={idx(report, _ => _.average.patients.new.expectedPerHour)} /></Td>
-        <Td><Round unit='⌀' number={idx(report, _ => _.average.patients.new.actualPerHour)} /></Td>
 
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
         {showRevenue && <Td borderLeft style={align}><Round to={0} unit='⌀ €' number={idx(report, _ => _.average.revenue.actualPerHour)} /></Td>}
