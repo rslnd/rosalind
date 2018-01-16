@@ -80,7 +80,7 @@ const Time = ({ appointment }) => (
 )
 
 const Private = ({ appointment, onChange }) => {
-  if (appointment.revenue > 0) {
+  if (appointment.revenue >= 0) {
     return <ListItem icon='plus-circle'>
       Privattermin&ensp;
       <Currency value={appointment.revenue} />
