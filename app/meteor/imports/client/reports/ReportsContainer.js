@@ -20,7 +20,14 @@ const composer = (props, onData) => {
     const dateParam = idx(props, _ => _.match.params.date)
     const date = moment(dateParam)
     const day = omit(dateToDay(date), 'date')
-    const report = Reports.findOne({ day })
+
+    const fetchedReports = Reports
+      .find({ day })
+      .fetch()
+      .map(r => ({ ...r, calendar: Calendars.findOne({ _id: r.calendarId }) }))
+
+    console.log('fr', fetchedReports)
+    const reports = sortBy(r => r && r.calendar && r.calendar.order)(fetchedReports)
 
     const isPrint = props.location.hash === '#print'
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
@@ -51,7 +58,7 @@ const composer = (props, onData) => {
 
     const data = {
       date,
-      report,
+      reports,
       generateReport,
       sendEmail,
       sendEmailTest,
@@ -78,9 +85,9 @@ const composer = (props, onData) => {
         // TODO: Refactor.
         Reports.actions.generatePreview.callPromise({ day })
           .then(previews => previews.map(p => ({
-            ...p,
-            preview: p.preview.map(mapPreview),
-            calendar: Calendars.findOne({ _id: p.calendarId })
+            calendarId: p.calendarId,
+            calendar: Calendars.findOne({ _id: p.calendarId }),
+            days: p.days.map(mapPreview)
           })))
           .then(previews => onData(null, { ...data, quarter, previews }))
       })

@@ -63,6 +63,14 @@ export const NewPatientsPerHourBox = ({ report, __ }) => {
   )
 }
 
+export const KeyMetricBox = ({ report, __ }) => {
+  if (report.calendar.privateAppointments) {
+    return <TotalPatientsBox report={report} __={__} />
+  } else {
+    return <NewPatientsPerHourBox report={report} __={__} />
+  }
+}
+
 export const Workload = ({ report, __ }) => {
   const workload = report.total.workload.weighted
   return (
@@ -96,7 +104,7 @@ export const TotalPatientsBox = ({ report, __ }) => {
     idx(report, _ => _.total.patients.total.planned)
 
   return (
-    <InfoBox text={__('reports.patients')} color='green' icon='users'>
+    <InfoBox text={__('reports.patients')} color='teal' icon='users'>
       {patients || <Nil />}
     </InfoBox>
   )
@@ -113,8 +121,8 @@ export const ReportSummary = ({ report, showRevenue, assigneeReport, __ }) => {
     (<div key='NoShowsBox' className='col-md-3 col-sm-3 col-xs-12'>
       <NoShowsBox report={report} __={__} />
     </div>),
-    (<div key='NewPatientsPerHourBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <NewPatientsPerHourBox report={report} __={__} />
+    (<div key='KeyMetricBox' className='col-md-3 col-sm-3 col-xs-12'>
+      <KeyMetricBox report={report} __={__} />
     </div>)
   ]
 
@@ -128,8 +136,8 @@ export const ReportSummary = ({ report, showRevenue, assigneeReport, __ }) => {
     (<div key='NoShowsBox' className='col-md-3 col-sm-3 col-xs-12'>
       <NoShowsBox report={report} __={__} />
     </div>),
-    (<div key='NewPatientsPerHourBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <NewPatientsPerHourBox report={report} __={__} />
+    (<div key='KeyMetricBox' className='col-md-3 col-sm-3 col-xs-12'>
+      <KeyMetricBox report={report} __={__} />
     </div>)
   ]
 

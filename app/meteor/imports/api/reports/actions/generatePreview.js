@@ -23,7 +23,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
         return calendars.map(calendar => {
           const calendarId = calendar._id
 
-          const preview = daysForPreview(dayToDate(day)).map(day => {
+          const days = daysForPreview(dayToDate(day)).map(day => {
             const date = moment(dayToDate(day))
 
             // TODO: Dry up, merge with generate action
@@ -34,6 +34,8 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
                 $lt: date.endOf('day').toDate()
               }
             }).fetch()
+
+            console.log('found', appointments.length, 'appts for cal', calendarId)
 
             const overrideSchedules = Schedules.find({
               calendarId,
@@ -51,7 +53,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
 
             const tagMapping = Tags.methods.getMappingForReports()
 
-            const existingReport = Reports.findOne({ day })
+            const existingReport = Reports.findOne({ day, calendarId })
             if (existingReport) {
               return existingReport
             } else {
@@ -61,7 +63,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
           })
 
           return {
-            preview,
+            days,
             calendarId
           }
         })

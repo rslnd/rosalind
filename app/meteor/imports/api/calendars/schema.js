@@ -40,5 +40,25 @@ export const schema = new SimpleSchema({
   privateAppointments: {
     type: Boolean,
     optional: true
+  },
+
+  assigneeName: {
+    type: String,
+    optional: true
+  },
+
+  assigneeNamePlural: {
+    type: String,
+    optional: true
+  },
+
+  patientName: {
+    type: String,
+    optional: true
+  },
+
+  patientNamePlural: {
+    type: String,
+    optional: true
   }
 })

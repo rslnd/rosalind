@@ -54,16 +54,22 @@ const Td = ({ children, borderLeft }) => (
   </td>
 )
 
-export const ReportTableHeader = ({ showRevenue, assigneeReport, __ }) => (
+export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, __ }) => (
   <thead>
     <tr>
       <th className='col-md-2'>{
         assigneeReport
-          ? __('reports.date')
-          : __('reports.assignee')
+        ? __('reports.date')
+        : <span>
+          <Icon name={calendar.icon} />
+          &ensp;
+          {calendar.name}
+        </span>
       }</th>
       <th style={align}>Std.</th>
-      <th colSpan={3}>PatientInnen</th>
+      <th colSpan={3}>
+        {(calendar && calendar.patientNamePlural) || __('reports.patients')}
+      </th>
       <th style={center} colSpan={2}>Neu</th>
       <th style={center} colSpan={2}>Kontrolle</th>
       <th style={center} colSpan={2}>OP</th>
@@ -311,6 +317,7 @@ export const ReportTable = ({ report, showRevenue, mapUserIdToName, assigneeRepo
   <div className='table-responsive enable-select'>
     <table className='table no-margin'>
       <ReportTableHeader
+        calendar={report.calendar}
         showRevenue={showRevenue}
         assigneeReport={assigneeReport}
         __={__} />

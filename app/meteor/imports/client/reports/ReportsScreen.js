@@ -50,7 +50,7 @@ export class ReportsScreen extends React.Component {
   render () {
     const {
       date,
-      report,
+      reports,
       quarter,
       previews,
       canShowRevenue,
@@ -90,17 +90,18 @@ export class ReportsScreen extends React.Component {
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
           <FlipMove duration={230}>
             {
-              report
-              ? <div key='reportTable'>
-                <Report
-                  report={report}
-                  showRevenue={this.state.showRevenue}
-                  mapUserIdToName={mapUserIdToName}
-                  __={__}
-                />
-                <FooterContainer />
-              </div>
-              : <div key='noReports'>
+              (reports && reports.length >= 1)
+              ? reports.map(report =>
+                <div key={report._id}>
+                  <Report
+                    report={report}
+                    showRevenue={this.state.showRevenue}
+                    mapUserIdToName={mapUserIdToName}
+                    __={__}
+                  />
+                  <FooterContainer />
+                </div>
+              ) : <div key='noReports'>
                 <Box type='warning' title={TAPi18n.__('ui.notice')}>
                   <p>{TAPi18n.__('reports.empty')}</p>
                 </Box>

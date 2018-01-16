@@ -2,10 +2,13 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Auto, Day, External } from '../../util/schema'
 
 module.exports = new SimpleSchema
+  calendarId:
+    type: SimpleSchema.RegEx.Id
+    index: true
+
   day:
     type: Day
     index: true
-    unique: true
 
   total:
     type: Object
@@ -25,7 +28,7 @@ module.exports = new SimpleSchema
   external:
     optional: true
     type: External
-  
+
   addenda:
     optional: true
     type: [Object]

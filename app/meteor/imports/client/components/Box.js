@@ -18,10 +18,14 @@ export class Box extends React.Component {
       'no-padding': this.props.noPadding
     })
 
+    const borderTopStyle = this.props.color ? {
+      borderTopColor: this.props.color
+    } : {}
+
     const style = this.props.style || {}
 
     return (
-      <div className={boxClasses}>
+      <div className={boxClasses} style={borderTopStyle}>
         {this.props.title &&
           <div className={headerClasses}>
             {this.props.icon && <Icon name={this.props.icon} />}

@@ -6,27 +6,28 @@ const avoidPageBreak = {
   pageBreakInside: 'avoid'
 }
 
-export const PreviewBoxes = ({ previews, mapUserIdToName, mapUserIdToUsername }) => (
+export const PreviewBoxes = ({ previews, mapUserIdToUsername, mapUserIdToName }) =>
   <div>
     {
-      previews.map((p, i) =>
-        <div key={i} style={avoidPageBreak}>
-          <div className='row'>
-            <div className='col-md-12'>
-              <Box
-                title={<span>
+      previews.map(p =>
+        <div key={p.calendarId} className='row' style={avoidPageBreak}>
+          <div className='col-md-12'>
+            <Box
+              color={p.calendar.color}
+              title={
+                <span>
                   <b>{p.calendar.name}</b> &middot; Vorschau
-                </span>}
-                icon={p.calendar.icon}>
-                <Week
-                  preview={p.preview}
-                  mapUserIdToName={mapUserIdToName}
-                  mapUserIdToUsername={mapUserIdToUsername} />
-              </Box>
-            </div>
+                </span>
+                }
+              icon={p.calendar.icon}>
+              <Week
+                days={p.days}
+                mapUserIdToUsername={mapUserIdToUsername}
+                mapUserIdToName={mapUserIdToName}
+              />
+            </Box>
           </div>
         </div>
       )
     }
   </div>
-)

@@ -8,6 +8,7 @@ import { reapplyAddenda, applyAddendum } from './reapplyAddenda'
 export const generate = ({ calendar, day, appointments, pastAppointments, overrideSchedules, tagMapping, messages, existingReport, addendum }) => {
   let report = {}
 
+  report.calendarId = calendar._id
   report.day = day
   report.assignees = mapAssignees({ calendar, appointments, pastAppointments, overrideSchedules, tagMapping })
 

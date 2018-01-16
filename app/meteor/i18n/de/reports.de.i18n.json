@@ -7,6 +7,7 @@
     "date": "Datum",
     "assignees": "ÄrztInnen",
     "assignee": "ÄrztIn",
+    "assigneeName": "Name",
     "assigneesReport": "ÄrztInnen-Bericht",
     "assigneesReportFor": "Bericht für __name__",
     "assignee_plural": "ÄrztInnen",

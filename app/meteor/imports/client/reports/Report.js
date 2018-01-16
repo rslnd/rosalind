@@ -7,7 +7,8 @@ import { ReportSummary } from './ReportSummary'
 // import { SquaresContainer } from './Squares'
 
 const style = {
-  zoom: 0.909
+  zoom: 0.909,
+  pageBreakInside: 'avoid'
 }
 
 const absolutelyNoPadding = {
@@ -17,7 +18,7 @@ const absolutelyNoPadding = {
 export const Report = ({ report, showRevenue, mapUserIdToName, assigneeReport, __ }) => (
   <div style={style}>
     <ReportSummary report={report} showRevenue={showRevenue} assigneeReport={assigneeReport} __={__} />
-    <Box type='info' noPadding style={absolutelyNoPadding}>
+    <Box color={report.calendar.color} noPadding style={absolutelyNoPadding}>
       <ReportTable report={report} showRevenue={showRevenue} mapUserIdToName={mapUserIdToName} assigneeReport={assigneeReport} __={__} />
     </Box>
 

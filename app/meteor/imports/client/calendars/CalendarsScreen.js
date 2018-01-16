@@ -53,6 +53,15 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     header: 'Einschub',
     field: 'allowUnassigned',
     render: c => c.allowUnassigned && <Icon name='check' />
+  },
+  {
+    header: 'Bezeichnungen',
+    render: c => <span>
+      {c.assigneeName}<br />
+      {c.assigneeNamePlural}<br />
+      {c.patientName}<br />
+      {c.patientNamePlural}<br />
+    </span>
   }
 ]
 

@@ -115,68 +115,68 @@ const Cell = ({ day, today, style, am, pm, workload, mapUserIdToName, mapUserIdT
   </td>
 )
 
-const Day = ({ preview, style, mapUserIdToName, mapUserIdToUsername }) => {
-  const total = idx(preview, _ => _.total.workload.available)
-  const booked = clampUpper(total)(idx(preview, _ => _.total.workload.planned) || idx(preview, _ => _.total.workload.actual))
+const Day = ({ day, style, mapUserIdToName, mapUserIdToUsername }) => {
+  const total = idx(day, _ => _.total.workload.available)
+  const booked = clampUpper(total)(idx(day, _ => _.total.workload.planned) || idx(day, _ => _.total.workload.actual))
   const free = clampLower(total - booked)
 
   return <Cell
-    day={moment(dayToDate(preview.day)).format('dd., D.M.')}
+    day={moment(dayToDate(day.day)).format('dd., D.M.')}
     style={style}
-    today={preview.today}
+    today={day.today}
     am={{
-      assignees: idx(preview, _ => _.total.hours.am.assignees),
-      workload: idx(preview, _ => _.total.workload.am)
+      assignees: idx(day, _ => _.total.hours.am.assignees),
+      workload: idx(day, _ => _.total.workload.am)
     }}
     pm={{
-      assignees: idx(preview, _ => _.total.hours.pm.assignees),
-      workload: idx(preview, _ => _.total.workload.pm)
+      assignees: idx(day, _ => _.total.hours.pm.assignees),
+      workload: idx(day, _ => _.total.workload.pm)
     }}
     workload={Math.round((
-      idx(preview, _ => _.total.workload.weighted) ||
-        (idx(preview, _ => _.total.workload.planned) / idx(preview, _ => _.total.workload.available))
+      idx(day, _ => _.total.workload.weighted) ||
+        (idx(day, _ => _.total.workload.planned) / idx(day, _ => _.total.workload.available))
     ) * 100)}
     mapUserIdToName={mapUserIdToName}
     mapUserIdToUsername={mapUserIdToUsername}
   />
 }
 
-const SingleWeek = ({ preview, style, mapUserIdToName, mapUserIdToUsername }) => (
+const SingleWeek = ({ days, style, mapUserIdToName, mapUserIdToUsername }) => (
   <tr style={style}>
     {
-      preview.map((day, i) =>
+      days.map((day, i) =>
         <Day
           key={day.day.day}
-          preview={day}
+          day={day}
           mapUserIdToName={mapUserIdToName}
           mapUserIdToUsername={mapUserIdToUsername}
-          style={{ borderRight: i < preview.length - 1 ? '1px solid #ececec' : 'none' }}
+          style={{ borderRight: i < days.length - 1 ? '1px solid #ececec' : 'none' }}
         />
       )
     }
   </tr>
 )
 
-export const Week = ({ preview, mapUserIdToName, mapUserIdToUsername }) => (
+export const Week = ({ days, mapUserIdToName, mapUserIdToUsername }) => (
   <div>
     <table style={{ width: '100%' }}>
       <tbody>
         <SingleWeek
-          preview={preview.slice(0, 6)}
+          days={days.slice(0, 6)}
           style={{ borderBottom: '1px solid #ececec' }}
           mapUserIdToName={mapUserIdToName}
           mapUserIdToUsername={mapUserIdToUsername}
         />
 
         <SingleWeek
-          preview={preview.slice(6, 12)}
+          days={days.slice(6, 12)}
           style={{ borderBottom: '1px solid #ececec' }}
           mapUserIdToName={mapUserIdToName}
           mapUserIdToUsername={mapUserIdToUsername}
         />
 
         <SingleWeek
-          preview={preview.slice(12)}
+          days={days.slice(12)}
           mapUserIdToName={mapUserIdToName}
           mapUserIdToUsername={mapUserIdToUsername}
         />
