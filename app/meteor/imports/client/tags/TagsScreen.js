@@ -15,8 +15,22 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: t => t.calendarIds && t.calendarIds.map(c => getCalendarName(c)).join(', ')
   },
   {
-    header: 'Tag',
+    header: { icon: 'paint-brush' },
     field: 'color',
+    render: t => (
+      <div style={{
+        ...tagStyle,
+        color: '#fff',
+        backgroundColor: t.color || tagBackgroundColor,
+        borderColor: darken(t.color),
+        width: 20,
+        height: 20
+      }} />
+    )
+  },
+  {
+    header: 'Tag',
+    field: 'tag',
     render: t => (
       <span style={{
         ...tagStyle,
