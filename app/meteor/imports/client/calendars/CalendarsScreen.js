@@ -62,6 +62,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
       {c.patientName}<br />
       {c.patientNamePlural}<br />
     </span>
+  },
+  {
+    header: 'Bericht',
+    render: c => c.reportAs ? c.reportAs.map(t =>
+      <span key={t}>{t}<br /></span>
+    ) : null
   }
 ]
 

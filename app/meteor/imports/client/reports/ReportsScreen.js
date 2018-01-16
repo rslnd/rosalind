@@ -57,6 +57,7 @@ export class ReportsScreen extends React.Component {
       showRevenue,
       mapUserIdToName,
       mapUserIdToUsername,
+      mapReportAsToHeader,
       generateReport,
       viewAppointments,
       sendEmailTest,
@@ -97,6 +98,7 @@ export class ReportsScreen extends React.Component {
                     report={report}
                     showRevenue={this.state.showRevenue}
                     mapUserIdToName={mapUserIdToName}
+                    mapReportAsToHeader={mapReportAsToHeader}
                     __={__}
                   />
                   <FooterContainer />

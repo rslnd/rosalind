@@ -54,7 +54,7 @@ const Td = ({ children, borderLeft }) => (
   </td>
 )
 
-export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, __ }) => (
+export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapReportAsToHeader, __ }) => (
   <thead>
     <tr>
       <th className='col-md-2'>{
@@ -71,9 +71,9 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, __ })
         {(calendar && calendar.patientNamePlural) || __('reports.patients')}
       </th>
       {
-        (calendar && calendar.reportTags)
-        ? calendar.reportTags.map(tag =>
-          <th key={tag} style={center} colSpan={2}>{tag}</th>
+        (calendar && calendar.reportAs)
+        ? calendar.reportAs.map(tag =>
+          <th key={tag} style={center} colSpan={2}>{mapReportAsToHeader(tag)}</th>
         )
         : [
           <th key={1} style={center} colSpan={2}>Neu</th>,
@@ -96,8 +96,8 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, __ })
       <th style={align} title='Behandelt'>Ist</th>
 
       {
-        (calendar && calendar.reportTags)
-        ? calendar.reportTags.map(tag =>
+        (calendar && calendar.reportAs)
+        ? calendar.reportAs.map(tag =>
           [
             <th key={tag + 1} style={colDivider}>Plan</th>,
             <th key={tag + 2} style={align}>Ist</th>
@@ -190,8 +190,8 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         <Td><Percent part={idx(assignee, _ => _.patients.total.actual)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
 
         {
-          (report.calendar && report.calendar.reportTags)
-          ? report.calendar.reportTags.map(tag =>
+          (report.calendar && report.calendar.reportAs)
+          ? report.calendar.reportAs.map(tag =>
             [
               <Td key={1} borderLeft><Percent part={idx(assignee, _ => _.patients[tag].expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>,
               <Td key={2}>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients[tag].actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients[tag].actual)}</Td>
@@ -261,7 +261,15 @@ class SummaryRow extends React.Component {
       <tr style={summaryRowStyle} className='bg-white'>
         <td>{
           !assigneeReport &&
-          <span>{report.total.assignees} {__('reports.assignee', { count: report.total.assignees })}</span>
+          <span>
+            {report.total.assignees}
+            &nbsp;
+            {
+              (report.total.assignees === 1)
+              ? (report.calendar.assigneeName || __('reports.assignee', { count: report.total.assignees }))
+              : (report.calendar.assigneeNamePlural || __('reports.assignee', { count: report.total.assignees }))
+            }
+          </span>
         }</td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
@@ -281,8 +289,8 @@ class SummaryRow extends React.Component {
         </Td>
 
         {
-          (report.calendar && report.calendar.reportTags)
-          ? report.calendar.reportTags.map(tag =>
+          (report.calendar && report.calendar.reportAs)
+          ? report.calendar.reportAs.map(tag =>
             [
               <Td key={1} borderLeft><Percent part={idx(report, _ => _.total.patients[tag].expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>,
               <Td key={2}><Percent part={idx(report, _ => _.total.patients[tag].actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
@@ -351,13 +359,14 @@ const Disclaimers = ({ report, __ }) => {
   }
 }
 
-export const ReportTable = ({ report, showRevenue, mapUserIdToName, assigneeReport, __ }) => (
+export const ReportTable = ({ report, showRevenue, mapUserIdToName, assigneeReport, mapReportAsToHeader, __ }) => (
   <div className='table-responsive enable-select'>
     <table className='table no-margin'>
       <ReportTableHeader
         calendar={report.calendar}
         showRevenue={showRevenue}
         assigneeReport={assigneeReport}
+        mapReportAsToHeader={mapReportAsToHeader}
         __={__} />
       <ReportTableBody
         report={report}

@@ -45,6 +45,14 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'description'
   },
   {
+    header: 'Bericht',
+    field: 'reportAs'
+  },
+  {
+    header: 'Spalte',
+    field: 'reportHeader'
+  },
+  {
     header: 'ÄrztInnen',
     render: t => t.assigneeIds && t.assigneeIds.map(a => getAssigneeName(a)).join(', ')
   }

@@ -10,7 +10,7 @@ import { Roles } from 'meteor/alanning:roles'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { dateToDay, dayToDate } from '../../util/time/day'
 import { Reports } from '../../api/reports'
-import { Users } from '../../api/users'
+import { Tags } from '../../api/tags'
 import { Calendars } from '../../api/calendars'
 import { Loading } from '../components/Loading'
 import { ReportsScreen } from './ReportsScreen'
@@ -26,7 +26,7 @@ const composer = (props, onData) => {
       .fetch()
       .map(r => ({ ...r, calendar: Calendars.findOne({ _id: r.calendarId }) }))
 
-      const reports = sortBy(r => r && r.calendar && r.calendar.order)(fetchedReports)
+    const reports = sortBy(r => r && r.calendar && r.calendar.order)(fetchedReports)
 
     const isPrint = props.location.hash === '#print'
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
@@ -53,6 +53,11 @@ const composer = (props, onData) => {
     const userIdToUsernameMapping = fromPairs(Meteor.users.find({}).fetch().map(u => [u._id, u.username]))
     const mapUserIdToUsername = id => userIdToUsernameMapping[id]
 
+    const mapReportAsToHeader = reportAs => {
+      const tag = Tags.findOne({ reportAs })
+      return (tag && tag.reportHeader) || reportAs
+    }
+
     const __ = (key, opts) => TAPi18n.__(key, opts)
 
     const data = {
@@ -65,6 +70,7 @@ const composer = (props, onData) => {
       canShowRevenue,
       mapUserIdToName,
       mapUserIdToUsername,
+      mapReportAsToHeader,
       __
     }
 
