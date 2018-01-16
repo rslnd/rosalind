@@ -16,8 +16,10 @@ export const InfoBox = ({ color, position, icon = 'eur', children, text, descrip
   <div className='info-box'>
     <span className={`info-box-icon`} style={{
       color: '#fff',
-      backgroundColor: kewler(color)(lightness(-8 * (5 - position)))() }}>
-      <Icon name={icon} />
+      backgroundColor: kewler(color)(lightness(-7 * (5 - position)))() }}>
+      <span style={{ opacity: 0.95 }}>
+        <Icon name={icon} />
+      </span>
     </span>
     <div className='info-box-content enable-select'>
       <span className='info-box-number'>{children}</span>
