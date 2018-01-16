@@ -134,7 +134,11 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
             appointment={item}
             expandComments={item._id === selectedAppointmentId}
             autoFocus={!!selectedAppointmentId}
-            onClick={() => handleAppointmentClick(item._id)} />
+            onClick={() =>
+              item._id === selectedAppointmentId
+              ? handleAppointmentClick(null)
+              : handleAppointmentClick(item._id)
+            } />
         )
       }
     </div>
