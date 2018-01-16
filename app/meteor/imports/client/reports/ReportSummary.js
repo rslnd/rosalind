@@ -2,6 +2,7 @@ import React from 'react'
 import idx from 'idx'
 import { Icon } from '../components/Icon'
 import { currency, integer, float, percentage, conditionalFloat } from '../../util/format'
+import { color as kewler, lightness } from 'kewler'
 
 const Nil = () => (
   <span className='text-quite-muted'>?</span>
@@ -11,9 +12,11 @@ const BigPercent = (props) => {
   return <Unit append='%'>{percentage({ ...props, plain: true })}</Unit>
 }
 
-export const InfoBox = ({ color = 'green', icon = 'eur', children, text, description, __ }) => (
+export const InfoBox = ({ color, position, icon = 'eur', children, text, description, __ }) => (
   <div className='info-box'>
-    <span className={`info-box-icon bg-${color}`}>
+    <span className={`info-box-icon`} style={{
+      color: '#fff',
+      backgroundColor: kewler(color)(lightness(-8 * (5 - position)))() }}>
       <Icon name={icon} />
     </span>
     <div className='info-box-content enable-select'>
@@ -37,8 +40,8 @@ export const Unit = ({ prepend, append, children, __ }) => (
   </span>
 )
 
-export const TotalRevenueBox = ({ report, __ }) => (
-  <InfoBox text={__('reports.revenue')} color='green' icon='euro'>
+export const TotalRevenueBox = ({ report, position, color, __ }) => (
+  <InfoBox text={__('reports.revenue')} color={color} position={position} icon='euro'>
     {
       idx(report, _ => _.total.revenue.actual)
       ? <Unit prepend='€'>{integer(report.total.revenue.actual)}</Unit>
@@ -47,13 +50,13 @@ export const TotalRevenueBox = ({ report, __ }) => (
   </InfoBox>
 )
 
-export const NewPatientsPerHourBox = ({ report, __ }) => {
+export const NewPatientsPerHourBox = ({ report, position, color, __ }) => {
   const newPerHour = idx(report, _ => _.average.patients.new.actualPerHour) ||
     idx(report, _ => _.average.patients.new.plannedPerHour)
 
   return (
     <InfoBox
-      text={__('reports.patientsNewPerHour')} color='purple' icon='user-plus'>
+      text={__('reports.patientsNewPerHour')} color={color} position={position} icon='user-plus'>
       {
         newPerHour
         ? <Unit append='/h'>{float(newPerHour)}</Unit>
@@ -63,18 +66,18 @@ export const NewPatientsPerHourBox = ({ report, __ }) => {
   )
 }
 
-export const KeyMetricBox = ({ report, __ }) => {
+export const KeyMetricBox = ({ report, position, color, __ }) => {
   if (report.calendar.privateAppointments) {
-    return <TotalPatientsBox report={report} __={__} />
+    return <TotalPatientsBox report={report} position={position} color={color} __={__} />
   } else {
-    return <NewPatientsPerHourBox report={report} __={__} />
+    return <NewPatientsPerHourBox report={report} position={position} color={color} __={__} />
   }
 }
 
-export const Workload = ({ report, __ }) => {
+export const Workload = ({ report, position, color, __ }) => {
   const workload = report.total.workload.weighted
   return (
-    <InfoBox text='Auslastung' color='aqua' icon='bars'>
+    <InfoBox text='Auslastung' color={color} position={position} icon='bars'>
       {
         workload
         ? <BigPercent value={workload} />
@@ -84,12 +87,12 @@ export const Workload = ({ report, __ }) => {
   )
 }
 
-export const NoShowsBox = ({ report, __ }) => {
+export const NoShowsBox = ({ report, position, color, __ }) => {
   const expected = idx(report, _ => _.total.patients.total.expected)
   const noShows = idx(report, _ => _.total.patients.total.noShow)
 
   return (
-    <InfoBox text='Nicht erschienen' color='red' icon='user-o'>
+    <InfoBox text='Nicht erschienen' color={color} position={position} icon='user-o'>
       {
         noShows
         ? <BigPercent part={noShows} of={expected} />
@@ -99,54 +102,53 @@ export const NoShowsBox = ({ report, __ }) => {
   )
 }
 
-export const TotalPatientsBox = ({ report, __ }) => {
+export const TotalPatientsBox = ({ report, position, color, __ }) => {
   const patients = idx(report, _ => _.total.patients.total.actual) ||
     idx(report, _ => _.total.patients.total.planned)
 
   return (
-    <InfoBox text={__('reports.patients')} color='teal' icon='users'>
+    <InfoBox text={__('reports.patients')} color={color} position={position} icon='users'>
       {patients || <Nil />}
     </InfoBox>
   )
 }
 
 export const ReportSummary = ({ report, showRevenue, assigneeReport, __ }) => {
+  if (assigneeReport) {
+    return null
+  }
+
   const withRevenue = [
-    (<div key='TotalRevenueBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <TotalRevenueBox report={report} __={__} />
-    </div>),
-    (<div key='WorkloadBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <Workload report={report} __={__} />
-    </div>),
-    (<div key='NoShowsBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <NoShowsBox report={report} __={__} />
-    </div>),
-    (<div key='KeyMetricBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <KeyMetricBox report={report} __={__} />
-    </div>)
+    TotalRevenueBox,
+    Workload,
+    NoShowsBox,
+    KeyMetricBox
   ]
 
   const withoutRevenue = [
-    (<div key='TotalPatientsBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <TotalPatientsBox report={report} __={__} />
-    </div>),
-    (<div key='WorkloadBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <Workload report={report} __={__} />
-    </div>),
-    (<div key='NoShowsBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <NoShowsBox report={report} __={__} />
-    </div>),
-    (<div key='KeyMetricBox' className='col-md-3 col-sm-3 col-xs-12'>
-      <KeyMetricBox report={report} __={__} />
-    </div>)
+    TotalPatientsBox,
+    Workload,
+    NoShowsBox,
+    KeyMetricBox
   ]
 
+  const boxes = showRevenue
+    ? withRevenue
+    : withoutRevenue
+
   return (
-    !assigneeReport && <div className='row'>
+    <div className='row'>
       {
-        showRevenue
-        ? withRevenue
-        : withoutRevenue
+        boxes.map((box, i) =>
+          <div key={i} className='col-md-3 col-sm-3 col-xs-12'>
+            {React.createElement(box, {
+              position: i + 1,
+              color: report.calendar.color,
+              report,
+              __
+            })}
+          </div>
+        )
       }
     </div>
   )

@@ -35,8 +35,6 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
               }
             }).fetch()
 
-            console.log('found', appointments.length, 'appts for cal', calendarId)
-
             const overrideSchedules = Schedules.find({
               calendarId,
               type: 'override',
