@@ -2,13 +2,10 @@ import React from 'react'
 import { CommentsList } from './CommentsList'
 import { NewComment } from './NewComment'
 
-export const CommentsBox = ({ comments, docId, newComment = true, autoFocus, background }) => {
+export const CommentsBox = ({ comments, docId, newComment = true, autoFocus }) => {
   return (
     <div>
-      <CommentsList
-        comments={comments}
-        background={background}
-      />
+      <CommentsList comments={comments} />
       {
         newComment &&
           <NewComment
