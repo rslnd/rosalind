@@ -12,6 +12,21 @@ const warn = v => {
     return 'Bitte eintragen'
   }
 }
+
+const fieldRowStyle = {
+  display: 'flex'
+}
+
+const fieldStyle = {
+  flexGrow: 1
+}
+
+const buttonsStyle = {
+  flexShrink: 1,
+  paddingLeft: 6,
+  paddingTop: 32
+}
+
 export const ContactFields = ({ fields, icon, channel }) => {
   const count = (fields.getAll() || [])
     .filter(filterField(channel))
@@ -31,8 +46,8 @@ export const ContactFields = ({ fields, icon, channel }) => {
                   </div>
                 </div>
                 <div className='col-md-10'>
-                  <div className='row'>
-                    <div className='col-md-8'>
+                  <div style={fieldRowStyle}>
+                    <div style={fieldStyle}>
                       <Field
                         name={`${member}.value`}
                         component={TextField}
@@ -40,7 +55,8 @@ export const ContactFields = ({ fields, icon, channel }) => {
                         warn={warn}
                         floatingLabelText={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
                     </div>
-                    <div className='col-md-4' style={{ paddingTop: 32 }}>
+
+                    <div style={buttonsStyle}>
                       {
                         count > 1 &&
                           <FlatButton
