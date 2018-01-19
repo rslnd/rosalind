@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import moment from 'moment-timezone'
 import identity from 'lodash/identity'
 import React from 'react'
@@ -123,21 +124,35 @@ const SelectedResult = ({ value }) => (
 export class AppointmentsSearch extends React.Component {
   constructor (props) {
     super(props)
+
+    this.state = {
+      subscription: null
+    }
+
     this.handleQueryChange = this.handleQueryChange.bind(this)
     this.loadOptions = this.loadOptions.bind(this)
-  }
-
-  handleQueryChange (query) {
-    this.props.dispatch({
-      type: 'APPOINTMENTS_SEARCH_QUERY_CHANGE',
-      query: query
-    })
   }
 
   loadOptions () {
     return new Promise((resolve) => {
       resolve(this.props.options)
     })
+  }
+
+  handleQueryChange (query) {
+    if (this.state.subscription) {
+      this.state.subscription.stop()
+    }
+
+    if (query && query.patient) {
+      const patientId = query.patient._id
+
+      this.setState({
+        subscription: Meteor.subscribe('patients', [patientId])
+      })
+    }
+
+    this.props.handleQueryChange(query)
   }
 
   render () {

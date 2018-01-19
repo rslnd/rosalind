@@ -49,6 +49,7 @@ const compose = (props, onData) => {
 
         console.log('injecting to search', patient)
         onData(null, {
+          ...props,
           findAppointments,
           query: {
             patient,
@@ -58,7 +59,7 @@ const compose = (props, onData) => {
         })
       })
   } else {
-    onData(null, { query, findAppointments })
+    onData(null, { ...props, query, findAppointments })
   }
 }
 
@@ -71,6 +72,13 @@ const mapStateToProps = (store) => {
   }
 }
 
-const AppointmentsSearchConnected = connect(mapStateToProps)(AppointmentsSearchComposed)
+const AppointmentsSearchConnected = connect(mapStateToProps, {
+  handleQueryChange: query => {
+    return {
+      type: 'APPOINTMENTS_SEARCH_QUERY_CHANGE',
+      query
+    }
+  }
+})(AppointmentsSearchComposed)
 
 export const AppointmentsSearchContainer = AppointmentsSearchConnected

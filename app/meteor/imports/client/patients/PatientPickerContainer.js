@@ -12,6 +12,18 @@ const composer = (props, onData) => {
     if (patientId === 'newPatient' || patientId === '') {
       return onData(null, { ...props })
     } else {
+      const patient = Patients.findOne({ _id: patientId })
+
+      if (patient) {
+        onData(null, {
+          ...props,
+          injectedValue: {
+            patientId,
+            patient
+          }
+        })
+      }
+
       Patients.actions.findOne.callPromise({ _id: patientId })
         .then((patient) => {
           if (props.patientId && !props.input.value) {
@@ -45,7 +57,9 @@ PatientPickerContainer = connect(state => {
     return {}
   }
 }, {
-  loadPatient: data => ({ type: 'LOAD_PATIENT', data })
+  loadPatient: data => {
+    return { type: 'LOAD_PATIENT', data }
+  }
 })(PatientPickerContainer)
 
 export { PatientPickerContainer }
