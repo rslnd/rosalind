@@ -6,6 +6,7 @@ import { Users } from '../../api/users'
 import { Indicator, Revenue } from '../appointments/appointment/Indicator'
 import { TagsList } from '../tags/TagsList'
 import { CommentsContainer } from '../comments/CommentsContainer'
+import { CommentItem } from '../comments/CommentItem'
 
 const containerStyle = {
   borderTop: '1px solid #eee',
@@ -87,6 +88,16 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
 
       <div className='row'>
         <div className='col-md-12'>
+          {
+            appointment.note &&
+              <div className='box-footer box-comments'>
+                <CommentItem comment={{
+                  createdBy: appointment.createdBy,
+                  createdAt: appointment.createdAt,
+                  body: appointment.note
+                }} />
+              </div>
+          }
           <CommentsContainer
             docId={appointment._id}
             newComment={expandComments}
