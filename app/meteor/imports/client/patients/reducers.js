@@ -4,6 +4,8 @@ export const loadPatient = (state = {}, action) => {
       return {
         data: action.data
       }
+    case 'APPOINTMENT_INSERT_SUCCESS':
+      return null
     default:
       return state
   }

@@ -1,5 +1,7 @@
-export const search = (state = { query: '' }, action) => {
+export const search = (state = {}, action) => {
   switch (action.type) {
+    case 'APPOINTMENT_INSERT_SUCCESS':
+      return {}
     case 'APPOINTMENTS_SEARCH_QUERY_CHANGE':
       return {
         query: action.query,
