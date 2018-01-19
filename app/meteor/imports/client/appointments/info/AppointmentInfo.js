@@ -1,4 +1,5 @@
 import React from 'react'
+import { touch, Field, FieldArray, FormSection } from 'redux-form'
 import moment from 'moment-timezone'
 import { Toggle, Choice } from 'belle'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -6,12 +7,14 @@ import { zerofix } from '../../../util/zerofix'
 import { Icon } from '../../components/Icon'
 import { TagsList } from '../../tags/TagsList'
 import { InlineEdit } from '../../components/form/InlineEdit'
-import { Birthday as BirthdayWithAge } from '../../patients/Birthday'
 import { Dot } from '../../patients/Dot'
+import { ContactFields } from '../../patients/fields/ContactFields'
+import { AddressFields } from '../../patients/fields/AddressFields'
+import { BirthdayFields } from '../../patients/fields/BirthdayFields'
 import { Stamps } from '../../helpers/Stamps'
 import { EnlargeText } from '../../components/EnlargeText'
 import { Currency } from '../../components/Currency'
-import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
+import { TagsField } from '../../tags/TagsField'
 
 const ListItem = ({ icon, children, last, style, highlight }) => {
   const containerStyle = {
@@ -103,52 +106,39 @@ const Assignee = ({ assignee }) => (
 )
 
 const Contacts = ({ patient, onChange }) => (
-  patient && patient.profile && patient.profile.contacts && <div>
-    {patient.profile.contacts.map((contact, i) => (
-      <ListItem key={i} icon={contact.channel === 'Phone' ? 'phone' : 'envelope-o'}>
-        <InlineEdit
-          onChange={(val) => onChange({ [`profile.contacts.${i}.value`]: val })}
-          value={contact.value}
-          placeholder={<span className='text-muted'>{TAPi18n.__('patients.telephone')}</span>}
-          label={TAPi18n.__('patients.telephone')}
-          submitOnBlur
-          fullWidth
-        >{
-          contact.channel === 'Phone'
-          ? <EnlargeText>{zerofix(contact.value)}</EnlargeText>
-          : <a href={`mailto:${contact.value}`} title={TAPi18n.__('ui.composeEmail')}>{contact.value}</a>
-        }</InlineEdit>
-      </ListItem>
-    ))}
-  </div> || null
-)
-
-const Birthday = ({ patient, onChange }) => (
   patient &&
-    <ListItem icon='birthday-cake'>
-      <InlineEdit
-        onChange={onChange}
-        value={patient && patient.profile.birthday}
-        stringify={val => val && moment(val).format(TAPi18n.__('time.dateFormatShort')) || ''}
-        parse={fuzzyBirthday}
-        placeholder={<span className='text-muted'>{TAPi18n.__('patients.birthday')}</span>}
-        label={TAPi18n.__('patients.birthday')}
-        submitOnBlur
-      >{
-        patient.profile && patient.profile.birthday &&
-          <BirthdayWithAge day={patient.profile.birthday} />
-      }</InlineEdit>
-    </ListItem> || null
+    <div>
+      <FieldArray
+        name='contacts'
+        channel='Phone'
+        icon='phone'
+        component={ContactFields} />
+
+      <FieldArray
+        name='contacts'
+        channel='Email'
+        icon='envelope-open-o'
+        component={ContactFields} />
+      <br />
+    </div> || null
 )
 
-const Tags = ({ appointment, onChange }) => (
+const Tags = ({ appointment, assignee, calendar, onChange }) => (
   <ListItem>
-    <TagsList tags={appointment.tags || []} onChange={onChange} />
+    <Field
+      name='tags'
+      component={TagsField}
+      // allowedTags={allowedTags}
+      calendarId={calendar._id}
+      assigneeId={assignee && assignee._id}
+      showDefaultRevenue={false}
+      fullWidth
+    />
   </ListItem>
 )
 
 const Reminders = ({ patient, onChange }) => (
-  patient && patient.profile && patient.profile.contacts && <ListItem icon='paper-plane'>
+  patient && patient.profile && patient.profile.contacts && <ListItem icon='paper-plane' last>
     {TAPi18n.__('appointments.appointmentReminderSMS')}
     <div className='pull-right' style={{
       position: 'absolute',
@@ -166,6 +156,7 @@ const Reminders = ({ patient, onChange }) => (
         <Choice value={false}><Icon name='times' /></Choice>
       </Toggle>
     </div>
+    <br /><br />
   </ListItem> || null
 )
 
@@ -176,28 +167,12 @@ const TotalRevenue = ({ value }) => (
   </ListItem> || null
 )
 
-const AppointmentNotes = ({ appointment, onChange }) => (
-  <ListItem
-    icon='info-circle'
-    last
-    highlight={appointment.notes()}
-    style={{ marginBottom: 30 }}>
-    <InlineEdit
-      onChange={onChange}
-      value={appointment.notes()}
-      placeholder={<span className='text-muted'>{TAPi18n.__('appointments.form.note.placeholder')}</span>}
-      rows={3}
-      label={TAPi18n.__('appointments.form.note.label')}
-      submitOnBlur
-      />
-  </ListItem>
-)
-
 const PatientNotes = ({ patient, onChange }) => (
   patient && <ListItem
     icon='user-plus'
     style={{ marginBottom: 30 }}
-    highlight={patient.notes()}>
+    highlight={patient.notes()}
+    last>
     <InlineEdit
       onChange={onChange}
       value={patient.notes()}
@@ -210,13 +185,19 @@ const PatientNotes = ({ patient, onChange }) => (
 )
 
 export class AppointmentInfo extends React.Component {
+  componentWillMount () {
+    // TODO: This doensn't work.
+    // TODO: How to show validation errors even on untouched fields?
+    touch('appointmentInfoForm', 'contacts', 'birthday', 'insuranceId')
+  }
+
   render () {
     const {
       appointment,
       patient,
       assignee,
+      calendar,
       totalPatientRevenue,
-      handleEditAppointmentNote,
       handleEditPatientNote,
       handleEditPatient,
       handleToggleGender,
@@ -250,8 +231,7 @@ export class AppointmentInfo extends React.Component {
             <Time appointment={appointment} />
             <Assignee assignee={assignee} />
             <Private appointment={appointment} />
-            <Tags appointment={appointment} />
-            <AppointmentNotes appointment={appointment} onChange={handleEditAppointmentNote} />
+            <Tags appointment={appointment} assignee={assignee} calendar={calendar} />
             <ListItem last>
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}
@@ -259,13 +239,20 @@ export class AppointmentInfo extends React.Component {
             </ListItem>
           </div>
 
-          <div className='col-md-6'>
-            <Contacts patient={patient} onChange={handleEditPatient} />
-            <Birthday patient={patient} onChange={handleSetBirthday} />
-            <PatientNotes patient={patient} onChange={handleEditPatientNote} />
-            <Reminders patient={patient} onChange={handleSetMessagePreferences} />
-            <TotalRevenue value={totalPatientRevenue} />
-          </div>
+          {
+            patient &&
+              <div className='col-md-6'>
+                <PatientNotes patient={patient} onChange={handleEditPatientNote} />
+                <Contacts patient={patient} onChange={handleEditPatient} />
+                <BirthdayFields collectInsuranceId />
+                <FormSection name='address'>
+                  <AddressFields />
+                </FormSection>
+                <br />
+                <Reminders patient={patient} onChange={handleSetMessagePreferences} />
+                <TotalRevenue value={totalPatientRevenue} />
+              </div>
+          }
         </div>
       </div>
     )

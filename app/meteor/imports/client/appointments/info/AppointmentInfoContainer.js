@@ -1,3 +1,5 @@
+import { connect } from 'react-redux'
+import { touch, reduxForm, formValueSelector } from 'redux-form'
 import Alert from 'react-s-alert'
 import sum from 'lodash/sum'
 import identity from 'lodash/identity'
@@ -7,7 +9,32 @@ import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
 import { Comments } from '../../../api/comments'
-import { AppointmentInfoModal } from './AppointmentInfoModal'
+import { Calendars } from '../../../api/calendars'
+import { AppointmentInfo } from './AppointmentInfo'
+import { translateObject } from '../../components/form/translateObject'
+import { mapPatientToFields } from '../../patients/mapPatientToFields'
+
+const formName = 'appointmentInfoForm'
+
+let AppointmentInfoContainer = reduxForm({
+  form: formName,
+  enableReinitialize: true,
+  updateUnregisteredFields: true,
+  keepDirtyOnReinitialize: false,
+  pure: false,
+  onChange: (values, dispatch, props) => {
+    console.log('onChange', values)
+  },
+  fields: [
+    'tags',
+    'contacts',
+    'address'
+  ],
+  // validate: (values) => translateObject(validate(values))
+})(AppointmentInfo)
+
+// const selector = formValueSelector(formName)
+// AppointmentInfoContainer = connect(mapPatientStateToProps(selector))(AppointmentInfoContainer)
 
 const composer = (props, onData) => {
   const appointment = Appointments.findOne({ _id: props.appointmentId })
@@ -20,6 +47,13 @@ const composer = (props, onData) => {
     }, {
       sort: { createdAt: 1 }
     }).fetch() : []
+    const calendar = Calendars.findOne({ _id: appointment.calendarId })
+
+    const patientFields =mapPatientToFields(patient)
+    const initialValues = {
+      tags: appointment.tags,
+      ...patientFields
+    }
 
     // TODO: Move into action
     let totalPatientRevenue = null
@@ -30,15 +64,6 @@ const composer = (props, onData) => {
 
       totalPatientRevenue = (patient.externalRevenue || 0) +
         sum(pastAppointments.map(p => p.revenue).filter(identity))
-    }
-
-    const handleEditAppointmentNote = (newNote) => {
-      Appointments.actions.editNote.callPromise({
-        appointmentId: props.appointmentId,
-        newNote: newNote
-      }).then(() => {
-        Alert.success(TAPi18n.__('patients.editSuccess'))
-      })
     }
 
     const handleEditPatientNote = (newNote) => {
@@ -106,12 +131,13 @@ const composer = (props, onData) => {
 
     onData(null, {
       ...props,
+      initialValues,
+      calendar,
       appointment,
       patient,
       assignee,
       comments,
       totalPatientRevenue,
-      handleEditAppointmentNote,
       handleEditPatientNote,
       handleEditPatient,
       handleToggleGender,
@@ -122,4 +148,6 @@ const composer = (props, onData) => {
   }
 }
 
-export const AppointmentInfoModalContainer = composeWithTracker(composer)(AppointmentInfoModal)
+AppointmentInfoContainer = composeWithTracker(composer)(AppointmentInfoContainer)
+
+export { AppointmentInfoContainer }

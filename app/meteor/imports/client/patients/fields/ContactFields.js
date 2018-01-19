@@ -7,6 +7,11 @@ import { Icon } from '../../components/Icon'
 
 const filterField = channel => field => field && field.channel === channel
 
+const warn = v => {
+  if (!v) {
+    return 'Bitte eintragen'
+  }
+}
 export const ContactFields = ({ fields, icon, channel }) => {
   const count = (fields.getAll() || [])
     .filter(filterField(channel))
@@ -27,14 +32,15 @@ export const ContactFields = ({ fields, icon, channel }) => {
                 </div>
                 <div className='col-md-10'>
                   <div className='row'>
-                    <div className='col-md-10'>
+                    <div className='col-md-8'>
                       <Field
                         name={`${member}.value`}
                         component={TextField}
                         fullWidth
+                        warn={warn}
                         floatingLabelText={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
                     </div>
-                    <div className='col-md-2' style={{ paddingTop: 32 }}>
+                    <div className='col-md-4' style={{ paddingTop: 32 }}>
                       {
                         count > 1 &&
                           <FlatButton

@@ -4,13 +4,7 @@ export const mapPatientToFields = patient => {
   if (patient && patient.profile) {
     let address = {}
     if (patient.profile.address) {
-      address = {
-        addressLine1: patient.profile.address.line1,
-        addressLine2: patient.profile.address.line2,
-        addressPostalCode: patient.profile.address.postalCode,
-        addressLocality: patient.profile.address.locality,
-        addressCountry: patient.profile.address.country
-      }
+      address = patient.profile.address
     }
 
     let contacts = patient.profile.contacts || [];
@@ -30,7 +24,7 @@ export const mapPatientToFields = patient => {
       titleAppend: patient.profile.titleAppend,
       birthday: patient.profile.birthday,
       contacts,
-      ...address,
+      address,
       banned: patient.profile.banned,
       externalRevenue: patient.externalRevenue,
       note: patient.note,

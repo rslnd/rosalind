@@ -17,7 +17,7 @@ export const AddressFields = () =>
           <div className='col-md-10'>
             <div>
               <Field
-                name='addressLine1'
+                name='line1'
                 component={TextField}
                 fullWidth
                 floatingLabelText={TAPi18n.__('patients.addressLine1')} />
@@ -35,19 +35,19 @@ export const AddressFields = () =>
               <Icon name='map-marker' />
             </div>
           </div>
-          <div className='col-md-3'>
+          <div className='col-md-2'>
             <div>
               <Field
-                name='addressPostalCode'
+                name='postalCode'
                 component={TextField}
                 fullWidth
                 floatingLabelText={TAPi18n.__('patients.addressPostalCode')} />
             </div>
           </div>
-          <div className='col-md-4'>
+          <div className='col-md-5'>
             <div>
               <Field
-                name='addressLocality'
+                name='locality'
                 component={TextField}
                 fullWidth
                 floatingLabelText={TAPi18n.__('patients.addressLocality')} />
@@ -56,7 +56,7 @@ export const AddressFields = () =>
           <div className='col-md-3'>
             <div>
               <Field
-                name='addressCountry'
+                name='country'
                 component={TextField}
                 fullWidth
                 floatingLabelText={TAPi18n.__('patients.addressCountry')} />

@@ -5,6 +5,7 @@ export const validateNameCase = (name) => {
     const withoutDiacritics = unidecode(name)
     return !!(
       withoutDiacritics.match(/^[A-Z][a-z]/) ||
+      withoutDiacritics.match(/^[A-Z][a-z]/) ||
       withoutDiacritics.match(/\s/) ||
       withoutDiacritics.match(/[a-z][A-Z][a-z]/)
     )

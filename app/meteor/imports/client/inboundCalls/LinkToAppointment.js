@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppointmentInfoModal } from '../appointments/info/AppointmentInfoModal'
+import { AppointmentModal } from '../appointments/info/AppointmentModal'
 
 export const LinkToAppointment = ({ text, linkText, onClick }) => (
   text &&
@@ -45,7 +45,7 @@ export class LinkToAppointmentWrapper extends React.Component {
         <LinkToAppointment {...this.props} onClick={this.handleModalOpen} />
         {
           this.props.appointmentId &&
-            <AppointmentInfoModal
+            <AppointmentModal
               show={this.state.modalOpen}
               onClose={this.handleModalClose}
               appointmentId={this.props.appointmentId}

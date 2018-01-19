@@ -50,7 +50,8 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
   } : {}
 
   const canceledTagsStyle = canceled ? {
-    opacity: 0.7
+    filter: 'grayscale(1)',
+    opacity: 0.5
   } : {}
 
   return (
@@ -89,7 +90,6 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
           <CommentsContainer
             docId={appointment._id}
             newComment={expandComments}
-            background={false}
             autoFocus={autoFocus} />
         </div>
       </div>
@@ -98,11 +98,13 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
 }
 
 export const PastAppointments = withState('selectedAppointmentId', 'handleAppointmentClick', null)(({
+    patient,
     currentAppointment,
     pastAppointments,
     futureAppointments,
     selectedAppointmentId,
-    handleAppointmentClick }) => {
+    handleAppointmentClick,
+    appendIfMany }) => {
   const appointmentsWithSeparators = [
     { separator: TAPi18n.__('appointments.thisFuture'), count: futureAppointments.length },
     ...futureAppointments,
@@ -115,31 +117,43 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
   ]
 
   return (
-    <div style={containerStyle}>
-      {
-        appointmentsWithSeparators.map((item, i) =>
-          item.separator
-          ? (
-            item.count > 0 &&
-              <div className='row' key={i}>
-                <div className='text-muted col-md-12'>
-                  <div style={separatorRowStyle}>
-                    {item.separator}
+    <div>
+      <div style={containerStyle}>
+        {
+          appointmentsWithSeparators.map((item, i) =>
+            item.separator
+            ? (
+              item.count > 0 &&
+                <div className='row' key={i}>
+                  <div className='text-muted col-md-12'>
+                    <div style={separatorRowStyle}>
+                      {item.separator}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-          : <AppointmentRow
-            key={item._id}
-            appointment={item}
-            expandComments={item._id === selectedAppointmentId}
-            autoFocus={!!selectedAppointmentId}
-            onClick={() =>
-              item._id === selectedAppointmentId
-              ? handleAppointmentClick(null)
-              : handleAppointmentClick(item._id)
-            } />
-        )
+              )
+            : <AppointmentRow
+              key={item._id}
+              appointment={item}
+              expandComments={item._id === selectedAppointmentId}
+              autoFocus={!!selectedAppointmentId}
+              onClick={() =>
+                item._id === selectedAppointmentId
+                ? handleAppointmentClick(null)
+                : handleAppointmentClick(item._id)
+              } />
+          )
+        }
+        <br />
+        {
+          patient && patient.patientSince &&
+            <span className='text-muted' style={separatorRowStyle}>
+              PatientIn seit {moment(patient.patientSince).format('DD. MMMM YYYY')}
+            </span>
+        }
+      </div>
+      {
+        appointmentsWithSeparators.length > 6 && appendIfMany || null
       }
     </div>
   )
