@@ -45,7 +45,8 @@ export class NewComment extends React.Component {
               onChange={this.handleBodyChange} />
             <span className='input-group-btn'>
               <button
-                type='submit'
+                type='button'
+                onClick={this.handleSubmit}
                 title={TAPi18n.__('ui.newCommentPost')}
                 className='btn btn-default btn-flat no-border-radius'>
                 <i className='fa fa-arrow-right text-muted' />
