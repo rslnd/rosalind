@@ -30,13 +30,17 @@ const composer = (props, onData) => {
             props.loadPatient(patient)
           }
 
-          onData(null, {
-            ...props,
-            injectedValue: {
-              patientId,
-              patient
-            }
-          })
+          try {
+            onData(null, {
+              ...props,
+              injectedValue: {
+                patientId,
+                patient
+              }
+            })
+          } catch (e) {
+            // ignore
+          }
         })
     }
   } else {
