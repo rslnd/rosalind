@@ -9,8 +9,6 @@ const composer = (props, onData) => {
   if (props.input.value || props.patientId) {
     const patientId = props.input.value || props.patientId
 
-    console.log('ppc', patientId)
-
     if (patientId === 'newPatient' || patientId === '') {
       return onData(null, { ...props })
     } else {
@@ -20,15 +18,11 @@ const composer = (props, onData) => {
             props.loadPatient(patient)
           }
 
-          console.log('injecting', patientId, 'to picker')
           onData(null, {
             ...props,
-            input: {
-              value: {
-                patientId,
-                patient
-              },
-              ...props.input
+            injectedValue: {
+              patientId,
+              patient
             }
           })
         })
@@ -43,7 +37,6 @@ let PatientPickerContainer = composeWithTracker(composer)(PatientPicker)
 PatientPickerContainer = connect(state => {
   const patientId = idx(state, _ => _.appointments.search.patientId)
 
-  console.log('mstpr/ppC', patientId, state)
   if (patientId) {
     return {
       patientId

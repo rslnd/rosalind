@@ -84,7 +84,7 @@ export class PatientPicker extends React.Component {
       <div>
         <Select.Async
           name='patientPicker'
-          value={this.props.input.value || null}
+          value={this.props.injectedValue || this.props.input.value || null}
           loadOptions={findPatients}
           onChange={this.handleQueryChange}
           onInputChange={this.handleSearchValueChange}
