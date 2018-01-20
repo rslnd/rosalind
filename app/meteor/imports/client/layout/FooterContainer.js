@@ -13,7 +13,11 @@ const composer = (props, onData) => {
       date: moment().format(TAPi18n.__('time.dateFormat'))
     })
 
-    onData(null, { customerName, printedStamp })
+    try {
+      onData(null, { customerName, printedStamp })
+    } catch (e) {
+      // ignore
+    }
   }
 
   update()
