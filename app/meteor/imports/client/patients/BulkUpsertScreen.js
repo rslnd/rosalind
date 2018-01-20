@@ -9,10 +9,12 @@ import { PatientPickerUpsert } from './PatientPickerUpsert'
 import { DayField } from '../components/form/DayField'
 import { CalculatorField } from '../components/form/CalculatorField'
 import { twoPlaces } from '../../util/format'
+import { rowStyle, iconStyle, grow, shrink } from '../components/form/rowStyle'
 
 const currencyStyle = {
   fontSize: '20px',
   paddingTop: 35,
+  paddingLeft: 20,
   textAlign: 'center',
   width: '100%',
   display: 'inline-block'
@@ -36,69 +38,51 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
         {
           patientId &&
             <div>
-              <div className='row'>
-                <div className='col-md-12'>
-                  <div className='row no-pad' style={{ marginTop: -15, zIndex: 13 }}>
-                    <div className='col-md-1'>
-                      <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                        <Icon name='eur' />
-                      </div>
-                    </div>
-                    <div className='col-md-8'>
-                      <div>
-                        <Field
-                          name='externalRevenue'
-                          component={CalculatorField}
-                          formatter={twoPlaces}
-                          fullWidth
-                          hintStyle={{ color: '#ccc' }}
-                          hintText='100 50 140 ...'
-                          floatingLabelText={TAPi18n.__('patients.revenue')} />
-                      </div>
-                    </div>
-                    <div className='col-md-2'>
-                      <Field
-                        name='externalRevenue'
-                        component={CurrencyField} />
-                    </div>
-                  </div>
+              <div style={rowStyle}>
+                <div style={iconStyle}>
+                  <Icon name='eur' />
+                </div>
+                <div style={grow}>
+                  <Field
+                    name='externalRevenue'
+                    component={CalculatorField}
+                    formatter={twoPlaces}
+                    fullWidth
+                    hintStyle={{ color: '#ccc' }}
+                    hintText='100 50 140 ...'
+                    floatingLabelText={TAPi18n.__('patients.revenue')} />
+                </div>
+                <div style={shrink}>
+                  <Field
+                    name='externalRevenue'
+                    component={CurrencyField} />
                 </div>
               </div>
-              <div className='row'>
-                <div className='col-md-12'>
-                  <div className='row no-pad' style={{ marginTop: -15, zIndex: 13 }}>
-                    <div className='col-md-1'>
-                      <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                        <Icon name='calendar-o' />
-                      </div>
-                    </div>
-                    <div className='col-md-10'>
-                      <div>
-                        <Field
-                          name='patientSince'
-                          component={DayField}
-                          fullWidth
-                          floatingLabelText={TAPi18n.__('patients.patientSince')} />
-                      </div>
-                    </div>
-                  </div>
+              <div style={rowStyle}>
+                <div style={iconStyle}>
+                  <Icon name='calendar-o' />
+                </div>
+                <div style={grow}>
+                  <Field
+                    name='patientSince'
+                    component={DayField}
+                    fullWidth
+                    floatingLabelText={TAPi18n.__('patients.patientSince')} />
                 </div>
               </div>
             </div>
         }
 
-        <div className='row' style={{ marginTop: 10 }}>
-          <div className='col-md-12'>
-            <RaisedButton type='submit'
-              onClick={handleSubmit(onSubmit)}
-              fullWidth
-              primary
-              disabled={!patientId}
-              label={submitting
-                ? <Icon name='refresh' spin />
-                : TAPi18n.__('patients.thisSave')} />
-          </div>
-        </div>
+        <RaisedButton
+          type='submit'
+          style={{ marginTop: 10 }}
+          onClick={handleSubmit(onSubmit)}
+          fullWidth
+          primary
+          disabled={!patientId}
+          label={submitting
+            ? <Icon name='refresh' spin />
+            : TAPi18n.__('patients.thisSave')} />
       </form>
     </Box>
   </div>
