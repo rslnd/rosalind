@@ -26,14 +26,14 @@ export const timeLegend = ({ slotSize }) => {
         gridRow: time
       }
 
-      if (isQuarterHour(time)) {
+      if (slotSize < 15 && isQuarterHour(time) || slotSize >= 60) {
         style = {
           ...style,
           ...styles.quarterHour
         }
       }
 
-      if (isFullHour(time)) {
+      if (slotSize < 60 && isFullHour(time)) {
         style = {
           ...style,
           ...styles.fullHour
