@@ -3,66 +3,47 @@ import { Field } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
+import { rowStyle, iconStyle, grow } from '../../components/form/rowStyle'
 
 export const AddressFields = () =>
   <div>
-    <div className='row'>
-      <div className='col-md-12'>
-        <div className='row no-pad' style={{ marginTop: -15, zIndex: 16 }}>
-          <div className='col-md-1'>
-            <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-              <Icon name='home' />
-            </div>
-          </div>
-          <div className='col-md-10'>
-            <div>
-              <Field
-                name='line1'
-                component={TextField}
-                fullWidth
-                floatingLabelText={TAPi18n.__('patients.addressLine1')} />
-            </div>
-          </div>
-        </div>
+    <div style={rowStyle}>
+      <div style={iconStyle}>
+        <Icon name='home' />
+      </div>
+      <div style={grow}>
+        <Field
+          name='line1'
+          component={TextField}
+          fullWidth
+          floatingLabelText={TAPi18n.__('patients.addressLine1')} />
       </div>
     </div>
+    <div style={rowStyle}>
+      <div style={iconStyle}>
+        <Icon name='map-marker' />
+      </div>
 
-    <div className='row'>
-      <div className='col-md-12'>
-        <div className='row no-pad' style={{ marginTop: -15, zIndex: 15 }}>
-          <div className='col-md-1'>
-            <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-              <Icon name='map-marker' />
-            </div>
-          </div>
-          <div className='col-md-2'>
-            <div>
-              <Field
-                name='postalCode'
-                component={TextField}
-                fullWidth
-                floatingLabelText={TAPi18n.__('patients.addressPostalCode')} />
-            </div>
-          </div>
-          <div className='col-md-5'>
-            <div>
-              <Field
-                name='locality'
-                component={TextField}
-                fullWidth
-                floatingLabelText={TAPi18n.__('patients.addressLocality')} />
-            </div>
-          </div>
-          <div className='col-md-3'>
-            <div>
-              <Field
-                name='country'
-                component={TextField}
-                fullWidth
-                floatingLabelText={TAPi18n.__('patients.addressCountry')} />
-            </div>
-          </div>
-        </div>
+      <div style={{ flexGrow: 1 }}>
+        <Field
+          name='postalCode'
+          component={TextField}
+          fullWidth
+          floatingLabelText={TAPi18n.__('patients.addressPostalCode')} />
+      </div>
+      <div style={{ flexGrow: 3 }}>
+        <Field
+          name='locality'
+          component={TextField}
+          fullWidth
+          floatingLabelText={TAPi18n.__('patients.addressLocality')} />
+      </div>
+      <div style={{ flexGrow: 1 }}>
+        <Field
+          name='country'
+          component={TextField}
+          fullWidth
+          floatingLabelText={TAPi18n.__('patients.addressCountry')} />
       </div>
     </div>
   </div>

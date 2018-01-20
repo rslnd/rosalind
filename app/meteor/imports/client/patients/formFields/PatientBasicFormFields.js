@@ -6,24 +6,19 @@ import { ContactFields } from '../fields/ContactFields'
 
 export const PatientBasicFormFields = () =>
   <div>
-    <div className='row'>
-      <div className='col-md-12'>
-        <NameFields />
+    <NameFields />
 
-        <BirthdayFields />
+    <BirthdayFields />
 
-        <FieldArray
-          name='contacts'
-          channel='Phone'
-          icon='phone'
-          component={ContactFields} />
+    <FieldArray
+      name='contacts'
+      channel='Phone'
+      icon='phone'
+      component={ContactFields} />
 
-        <FieldArray
-          name='contacts'
-          channel='Email'
-          icon='envelope-open-o'
-          component={ContactFields} />
-
-      </div>
-    </div>
+    <FieldArray
+      name='contacts'
+      channel='Email'
+      icon='envelope-open-o'
+      component={ContactFields} />
   </div>

@@ -11,7 +11,7 @@ const modalStyle = {
 }
 
 const innerStyle = {
-  padding: 6
+  padding: 10
 }
 
 export const NewAppointmentModal = injectSheet(modalStyle)(({ open, onClose, calendar, assigneeId, time, classes }) => (

@@ -81,30 +81,28 @@ export class PatientPicker extends React.Component {
 
   render () {
     return (
-      <div>
-        <Select.Async
-          name='patientPicker'
-          value={this.props.injectedValue || this.props.input.value || null}
-          loadOptions={findPatients}
-          onChange={this.handleQueryChange}
-          onInputChange={this.handleSearchValueChange}
-          inputValue={this.state.searchValue}
-          onBlur={() => this.props.input.onBlur(this.props.input.value)}
-          autoBlur
-          cache={false}
-          ignoreCase={false}
-          ignoreAccents={false}
-          autoFocus={this.props.autoFocus}
-          placeholder={TAPi18n.__('patients.search')}
-          loadingPlaceholder={TAPi18n.__('patients.searching')}
-          clearValueText={TAPi18n.__('ui.clear')}
-          filterOptions={identity}
-          optionComponent={PatientSearchResult}
-          valueComponent={PatientNameSelected}
-          onSelectResetsInput={false}
-          onCloseResetsInput={false}
-          onBlurResetsInput={false} />
-      </div>
+      <Select.Async
+        name='patientPicker'
+        value={this.props.injectedValue || this.props.input.value || null}
+        loadOptions={findPatients}
+        onChange={this.handleQueryChange}
+        onInputChange={this.handleSearchValueChange}
+        inputValue={this.state.searchValue}
+        onBlur={() => this.props.input.onBlur(this.props.input.value)}
+        autoBlur
+        cache={false}
+        ignoreCase={false}
+        ignoreAccents={false}
+        autoFocus={this.props.autoFocus}
+        placeholder={TAPi18n.__('patients.search')}
+        loadingPlaceholder={TAPi18n.__('patients.searching')}
+        clearValueText={TAPi18n.__('ui.clear')}
+        filterOptions={identity}
+        optionComponent={PatientSearchResult}
+        valueComponent={PatientNameSelected}
+        onSelectResetsInput={false}
+        onCloseResetsInput={false}
+        onBlurResetsInput={false} />
     )
   }
 }

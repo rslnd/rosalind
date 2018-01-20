@@ -9,61 +9,13 @@ import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { UserHelper } from '../../users/UserHelper'
 import { Icon } from '../../components/Icon'
 import { PatientPickerUpsert } from '../../patients/PatientPickerUpsert'
+import { flex, grow, shrink } from '../../components/form/rowStyle'
 
-const style = {
-  padded: {
-    padding: 10
-  },
-  tagsRow: {
-    marginTop: -25
-  },
-  tagsField: {
-    marginTop: 23,
-    paddingLeft: 0,
-    paddingRight: 0,
-    zIndex: 5
-  },
-  tag: {
-    ...tagStyle,
-    backgroundColor: tagBackgroundColor,
-    cursor: 'pointer'
-  },
-  noteField: {
-    marginTop: -14,
-    paddingLeft: 0,
-    paddingRight: 0,
-    zIndex: 4 // Fix notes field overlaying bottom ~10px of clickable tags
-  },
-  revenueField: {
-    marginTop: -14,
-    paddingLeft: 0,
-    paddingRight: 0,
-    zIndex: 3
-  },
-  summary: {
-    marginBottom: 5
-  }
+const pauseButtonStyle = {
+  ...tagStyle,
+  backgroundColor: tagBackgroundColor,
+  cursor: 'pointer'
 }
-
-const Summary = ({ time, assigneeId }) => (
-  <div style={style.summary}>
-    <span className='text-muted'>{TAPi18n.__('appointments.thisSingular')}</span>&nbsp;
-    {moment(time).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
-
-    <span className='text-muted'>{TAPi18n.__('time.at')}</span>&nbsp;
-    <b>{moment(time).format(TAPi18n.__('time.timeFormat'))}</b><br />
-
-    {
-      assigneeId && <div>
-        <span className='text-muted'>
-          {TAPi18n.__('appointments.assignedTo')}&nbsp;
-          <UserHelper helper='fullNameWithTitle' userId={assigneeId} />
-        </span>
-        <br />
-      </div>
-    }
-  </div>
-)
 
 export const NewAppointmentFields = props => {
   const {
@@ -82,64 +34,78 @@ export const NewAppointmentFields = props => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
-      <div style={style.padded}>
-        <div className='container-fluid'>
-          <div className='row'>
-            <PatientPickerUpsert
-              autoFocus
-              patientId={patientId}
-              extended={extended} />
-          </div>
+      <div style={flex}>
+        <PatientPickerUpsert
+          autoFocus
+          patientId={patientId}
+          extended={extended} />
+      </div>
+
+      {/* Tags */}
+      <div style={flex}>
+        <div style={grow}>
+          <Field
+            name='tags'
+            component={TagsField}
+            allowedTags={allowedTags}
+            calendarId={calendarId}
+            assigneeId={assigneeId}
+            showDefaultRevenue={false}
+            fullWidth />
+        </div>
+        <div style={shrink}>
+          <div
+            style={pauseButtonStyle}
+            onClick={onSubmitPause}>PAUSE</div>
         </div>
       </div>
-      <div style={style.padded}>
-        <div className='container-fluid'>
 
-          {/* Tags */}
-          <div className='row' style={style.tagsRow}>
-            <div className='col-md-10' style={style.tagsField}>
-              <Field
-                name='tags'
-                component={TagsField}
-                allowedTags={allowedTags}
-                calendarId={calendarId}
-                assigneeId={assigneeId}
-                showDefaultRevenue={false}
-                fullWidth />
-            </div>
-            <div className='col-md-2' style={style.tagsField}>
-              <div
-                style={style.tag}
-                className='pull-right'
-                onClick={onSubmitPause}>PAUSE</div>
-            </div>
-          </div>
+      {/* Note */}
+      <div style={flex}>
+        <Field name='appointmentNote'
+          component={TextField}
+          multiLine rows={1} fullWidth
+          floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
+      </div>
 
-          {/* Note */}
-          <div className='row' style={style.noteRow}>
-            <div className='col-md-12' style={style.noteField}>
-              <Field name='appointmentNote'
-                component={TextField}
-                multiLine rows={1} fullWidth
-                floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
-            </div>
-          </div>
+      <div style={flex}>
+        <Summary time={time} assigneeId={assigneeId} />
+      </div>
 
-          <div className='row'>
-            <Summary time={time} assigneeId={assigneeId} />
-          </div>
-          <div className='row'>
-            <RaisedButton type='submit'
-              onClick={handleSubmit}
-              fullWidth
-              primary
-              disabled={submitting || (pristine && !patientId)}
-              label={submitting
-                ? <Icon name='refresh' spin />
-                : TAPi18n.__('appointments.thisSave')} />
-          </div>
-        </div>
+      <div style={flex}>
+        <RaisedButton type='submit'
+          onClick={handleSubmit}
+          fullWidth
+          primary
+          disabled={submitting || (pristine && !patientId)}
+          label={submitting
+            ? <Icon name='refresh' spin />
+            : TAPi18n.__('appointments.thisSave')} />
       </div>
     </form>
   )
 }
+
+const summaryStyle = {
+  marginBottom: 5
+}
+
+const Summary = ({ time, assigneeId }) => (
+  <div style={summaryStyle}>
+    <span className='text-muted'>{TAPi18n.__('appointments.thisSingular')}</span>&nbsp;
+    {moment(time).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
+
+    <span className='text-muted'>{TAPi18n.__('time.at')}</span>&nbsp;
+    <b>{moment(time).format(TAPi18n.__('time.timeFormat'))}</b><br />
+
+    {
+      assigneeId && <div>
+        <span className='text-muted'>
+          {TAPi18n.__('appointments.assignedTo')}&nbsp;
+          <UserHelper helper='fullNameWithTitle' userId={assigneeId} />
+        </span>
+        <br />
+      </div>
+    }
+  </div>
+)
