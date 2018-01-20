@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, FieldArray } from 'redux-form'
+import { Field, FieldArray, FormSection } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
@@ -15,7 +15,7 @@ import { AddressFields } from '../fields/AddressFields'
 import { ContactFields } from '../fields/ContactFields'
 import { BirthdayFields } from '../fields/BirthdayFields'
 
-export const PatientExtendedFormFields = () => {
+export const PatientExtendedFormFields = ({ change }) => {
   const title = true
   const note = true
   const externalRevenue = true
@@ -72,7 +72,10 @@ export const PatientExtendedFormFields = () => {
         }
 
         <BirthdayFields collectInsuranceId />
-        <AddressFields />
+
+        <FormSection name='address'>
+          <AddressFields change={change} />
+        </FormSection>
 
         <FieldArray
           name='contacts'

@@ -6,7 +6,6 @@ import { Loading } from '../components/Loading'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Patients } from '../../api/patients'
 import { mapFieldsToPatient } from './mapFieldsToPatient'
-import { fields } from './fields'
 import { mapStateToProps } from './mapStateToProps'
 import { BulkUpsertScreen } from './BulkUpsertScreen'
 
@@ -37,8 +36,7 @@ let BulkUpsertContainer = reduxForm({
   enableReinitialize: true,
   updateUnregisteredFields: true,
   keepDirtyOnReinitialize: false,
-  pure: false,
-  fields
+  pure: false
 })(BulkUpsertScreen)
 
 BulkUpsertContainer = composeWithTracker(composer, Loading)(BulkUpsertContainer)

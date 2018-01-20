@@ -5,14 +5,15 @@ import { Icon } from '../components/Icon'
 import { Box } from '../components/Box'
 import { PatientPickerUpsert } from './PatientPickerUpsert'
 
-export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId }) => (
+export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId, change }) => (
   <div className='content'>
     <Box title='Stammdaten vervollständigen'>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
         <PatientPickerUpsert
           autoFocus
           patientId={patientId}
-          extended />
+          extended
+          change={change} />
 
         <div className='row' style={{ marginTop: 10 }}>
           <div className='col-md-12'>

@@ -29,7 +29,8 @@ export const NewAppointmentFields = props => {
     onSubmit,
     onSubmitPause,
     patientId,
-    extended
+    extended,
+    change
   } = props
 
   return (
@@ -38,7 +39,8 @@ export const NewAppointmentFields = props => {
         <PatientPickerUpsert
           autoFocus
           patientId={patientId}
-          extended={extended} />
+          extended={extended}
+          change={change} />
       </div>
 
       {/* Tags */}

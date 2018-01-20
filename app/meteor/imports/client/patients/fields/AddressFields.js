@@ -4,8 +4,26 @@ import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
 import { rowStyle, iconStyle, grow } from '../../components/form/rowStyle'
+import ort from 'plz-ort'
 
-export const AddressFields = () =>
+const autofillLocality = change => (e, postalCode) => {
+  const locality = ort(postalCode)
+  if (locality) {
+    change('address.locality', locality.toString())
+  }
+}
+
+const postalCodeStyle = {
+  minWidth: 70,
+  width: '20%'
+}
+
+const countryStyle = {
+  minWidth: 70,
+  width: '20%'
+}
+
+export const AddressFields = ({ change }) =>
   <div>
     <div style={rowStyle}>
       <div style={iconStyle}>
@@ -24,21 +42,22 @@ export const AddressFields = () =>
         <Icon name='map-marker' />
       </div>
 
-      <div style={{ flexGrow: 1 }}>
+      <div style={postalCodeStyle}>
         <Field
           name='postalCode'
           component={TextField}
           fullWidth
+          onBlur={autofillLocality(change)}
           floatingLabelText={TAPi18n.__('patients.addressPostalCode')} />
       </div>
-      <div style={{ flexGrow: 3 }}>
+      <div style={grow}>
         <Field
           name='locality'
           component={TextField}
           fullWidth
           floatingLabelText={TAPi18n.__('patients.addressLocality')} />
       </div>
-      <div style={{ flexGrow: 1 }}>
+      <div style={countryStyle}>
         <Field
           name='country'
           component={TextField}

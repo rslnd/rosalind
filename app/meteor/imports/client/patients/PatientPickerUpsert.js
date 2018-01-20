@@ -7,15 +7,15 @@ const fullWidthStyle = {
   width: '100%'
 }
 
-export const PatientPickerUpsert = ({ patientId, extended, autoFocus }) =>
+export const PatientPickerUpsert = (props) =>
   <div style={fullWidthStyle}>
     <Field
       name='patientId'
       component={PatientPickerContainer}
       extended
-      autoFocus={autoFocus} />
+      autoFocus={props.autoFocus} />
     {
-      patientId &&
-        <PatientFormFields extended={extended} />
+      props.patientId &&
+        <PatientFormFields {...props} />
     }
   </div>

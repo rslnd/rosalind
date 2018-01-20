@@ -198,6 +198,7 @@ export class AppointmentInfo extends React.Component {
       assignee,
       calendar,
       totalPatientRevenue,
+      change,
       handleEditPatientNote,
       handleEditPatient,
       handleToggleGender,
@@ -246,7 +247,7 @@ export class AppointmentInfo extends React.Component {
                 <Contacts patient={patient} onChange={handleEditPatient} />
                 <BirthdayFields collectInsuranceId />
                 <FormSection name='address'>
-                  <AddressFields />
+                  <AddressFields change={change} />
                 </FormSection>
                 <br />
                 <Reminders patient={patient} onChange={handleSetMessagePreferences} />
