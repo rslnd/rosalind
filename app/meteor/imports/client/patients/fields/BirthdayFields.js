@@ -1,10 +1,10 @@
 import React from 'react'
 import { Field } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
 import { DayField } from '../../components/form/DayField'
 import { rowStyle, iconStyle, grow } from '../../components/form/rowStyle'
+import { TextField } from '../../components/form'
 
 const insuranceIdStyle = {
   minWidth: 130,
@@ -22,8 +22,7 @@ export const BirthdayFields = ({ collectInsuranceId }) =>
           <Field
             name='insuranceId'
             component={TextField}
-            fullWidth
-            floatingLabelText={TAPi18n.__('patients.insuranceId')} />
+            label={TAPi18n.__('patients.insuranceId')} />
         </div>
     }
     <div style={grow}>
@@ -31,7 +30,6 @@ export const BirthdayFields = ({ collectInsuranceId }) =>
         name='birthday'
         component={DayField}
         birthday
-        fullWidth
-        floatingLabelText={TAPi18n.__('patients.birthday')} />
+        label={TAPi18n.__('patients.birthday')} />
     </div>
   </div>

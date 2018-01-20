@@ -1,13 +1,15 @@
 import React from 'react'
-import { Popover } from 'material-ui/Popover'
-import FlatButton from 'material-ui/FlatButton'
+import { Manager, Target, Popper } from 'react-popper'
+import Paper from 'material-ui/Paper'
+import Button from 'material-ui/Button'
 import { Icon } from '../../../components/Icon'
 import { UserPickerContainer } from '../../../users/UserPickerContainer'
+import ClickAwayListener from 'material-ui/utils/ClickAwayListener'
 
 const buttonStyle = {
   minWidth: 30,
-  height: 28,
-  lineHeight: '28px'
+  minHeight: 28,
+  height: 28
 }
 
 const labelStyle = {
@@ -54,35 +56,37 @@ export class AddAssignee extends React.Component {
   handleAddUser (userId) {
     if (userId) {
       this.props.onAddUser(userId)
-        .then(this.handleAddUserPopoverClose)
     }
   }
 
   render () {
     return (
-      <div>
-        <FlatButton
-          style={buttonStyle}
-          onClick={this.handleAddUserPopoverOpen}
-          label={<span
-            className='text-muted'
-            style={labelStyle}>
-            <Icon name='plus' />
-          </span>}
-        />
+      <Manager>
+        <Target>
+          <Button
+            style={buttonStyle}
+            onClick={this.handleAddUserPopoverOpen}>
+            <span
+              className='text-muted'
+              style={labelStyle}>
+              <Icon name='plus' />
+            </span>
+          </Button>
+        </Target>
 
-        <Popover
-          open={this.state.isPopoverOpen}
-          anchorEl={this.state.popoverAnchor}
-          onRequestClose={this.handleAddUserPopoverClose}
-          style={{ overflowY: 'visible' }}>
-          <div style={popoverStyle}>
-            <UserPickerContainer
-              autofocus
-              onChange={this.handleAddUser} />
-          </div>
-        </Popover>
-      </div>
+        {
+          this.state.isPopoverOpen &&
+            <Popper placement='bottom-start' eventsEnabled>
+              <ClickAwayListener onClickAway={this.handleAddUserPopoverClose}>
+                <Paper style={popoverStyle}>
+                  <UserPickerContainer
+                    autofocus
+                    onChange={this.handleAddUser} />
+                </Paper>
+              </ClickAwayListener>
+            </Popper>
+        }
+      </Manager>
     )
   }
 }

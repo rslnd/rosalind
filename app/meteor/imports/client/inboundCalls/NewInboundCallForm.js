@@ -1,7 +1,9 @@
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
-import RaisedButton from 'material-ui/RaisedButton'
-import { TextField, Checkbox } from 'redux-form-material-ui'
+import Button from 'material-ui/Button'
+import { FormControlLabel } from 'material-ui/Form'
+import { Checkbox } from 'redux-form-material-ui'
+import { TextField } from '../components/form/TextField'
 import { TAPi18n } from 'meteor/tap:i18n'
 
 class NewInboundCallFormComponent extends React.Component {
@@ -16,18 +18,21 @@ class NewInboundCallFormComponent extends React.Component {
               <div className='col-md-6'>
                 <div>
                   <Field name='lastName' component={TextField} fullWidth
-                    floatingLabelText={TAPi18n.__('inboundCalls.form.lastName.label')} />
+                    label={TAPi18n.__('inboundCalls.form.lastName.label')} />
                 </div>
                 <div>
                   <Field name='firstName' component={TextField} fullWidth
-                    floatingLabelText={TAPi18n.__('inboundCalls.form.firstName.label')} />
+                    label={TAPi18n.__('inboundCalls.form.firstName.label')} />
                 </div>
                 <div>
                   <Field name='telephone' component={TextField} fullWidth
-                    floatingLabelText={TAPi18n.__('inboundCalls.form.telephone.label')} />
+                    label={TAPi18n.__('inboundCalls.form.telephone.label')} />
                 </div>
                 <div className='form-row'>
-                  <Field name='privatePatient' component={Checkbox}
+                  <FormControlLabel
+                    control={
+                      <Field name='privatePatient' component={Checkbox} />
+                    }
                     label={TAPi18n.__('inboundCalls.form.privatePatient.label')} />
                 </div>
               </div>
@@ -35,8 +40,8 @@ class NewInboundCallFormComponent extends React.Component {
                 <Field name='note'
                   component={TextField}
                   autoFocus
-                  multiLine rows={7} fullWidth
-                  floatingLabelText={TAPi18n.__('inboundCalls.form.note.label')} />
+                  multiline rows={7} fullWidth
+                  label={TAPi18n.__('inboundCalls.form.note.label')} />
               </div>
             </div>
           </div>
@@ -44,12 +49,12 @@ class NewInboundCallFormComponent extends React.Component {
 
         <div className='row form-row'>
           <div className='col-md-12'>
-            <RaisedButton type='submit'
+            <Button raised type='submit'
               fullWidth
-              primary={!submitting && !pristine}
+              color={(!submitting && !pristine) ? 'primary' : 'default'}
               disabled={pristine || submitting}>
               {TAPi18n.__('inboundCalls.thisSave')}
-            </RaisedButton>
+            </Button>
           </div>
         </div>
 

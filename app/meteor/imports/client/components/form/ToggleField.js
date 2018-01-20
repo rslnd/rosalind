@@ -1,5 +1,5 @@
 import React from 'react'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui/Button'
 
 export class ToggleField extends React.Component {
   constructor (props) {
@@ -35,10 +35,10 @@ export class ToggleField extends React.Component {
         style={this.props.style}>
         {this.props.values[this.currentIndex()].label}</div>
     } else {
-      return <FlatButton
+      return <Button
         onClick={this.toggle}
         style={this.props.style}>
-        {this.props.values[this.currentIndex()].label}</FlatButton>
+        {this.props.values[this.currentIndex()].label}</Button>
     }
   }
 }

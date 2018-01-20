@@ -13,3 +13,5 @@ export const grayDisabled = '#d2d6de'
 export const darkGrayActive = '#6c717a'
 export const darkGray = '#81868e'
 export const darkGrayDisabled = '#9398a1'
+
+export const text = '#333'

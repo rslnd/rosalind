@@ -1,7 +1,7 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { List, ListItem } from 'material-ui/List'
-import Subheader from 'material-ui/Subheader'
+import ListSubheader from 'material-ui/List/ListSubheader'
 import Avatar from 'material-ui/Avatar'
 import { Box } from '../../components/Box'
 
@@ -10,7 +10,7 @@ export const StatusBoard = ({ groups, weekday }) => (
     <Box noPadding>
       {groups.map((g) => (
         <List key={g.group._id}>
-          <Subheader>{g.group.name}</Subheader>
+          <ListSubheader>{g.group.name}</ListSubheader>
           {g.users.map(({ user, schedule, timesheets }) => (
             <ListItem
               key={user._id}

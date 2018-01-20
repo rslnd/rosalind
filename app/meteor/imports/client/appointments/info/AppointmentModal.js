@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui/Button'
 import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { AppointmentActionsContainer } from './AppointmentActionsContainer'
 import { PastAppointmentsContainer } from '../../patients/PastAppointmentsContainer'

@@ -1,11 +1,11 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import TextField from 'material-ui/TextField'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui/Button'
 import { Icon } from '../Icon'
 
 export const TinyButton = (props) => (
-  <FlatButton
+  <Button
     {...props}
     style={{
       ...props.style,
@@ -135,10 +135,10 @@ export class InlineEdit extends React.Component {
           onChange={this.handleChange}
           onBlur={this.handleBlur}
           autoFocus
-          multiLine={!!this.props.rows}
+          multiline={!!this.props.rows}
           rows={this.props.rows || 1}
           name={this.props.label}
-          floatingLabelText={this.props.label}
+          label={this.props.label}
           />
 
         {

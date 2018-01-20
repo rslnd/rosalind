@@ -1,8 +1,8 @@
 import React from 'react'
 import { reduxForm, Field, Fields } from 'redux-form'
-import RaisedButton from 'material-ui/RaisedButton'
-import RadioButton from 'material-ui/RadioButton'
-import { TextField, RadioButtonGroup } from 'redux-form-material-ui'
+import Button from 'material-ui/Button'
+import Radio from 'material-ui/Radio'
+import { TextField, RadioGroup } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { DateRangePicker } from '../../components/form/DateRangePicker'
 
@@ -17,27 +17,27 @@ class NewRequestFormComponent extends React.Component {
         <div className='row'>
           <div className='col-md-6'>
             <h5>Ansuchen auf</h5>
-            <Field name='reason' component={RadioButtonGroup}>
-              <RadioButton value='vacation' label={TAPi18n.__('schedules.requests.vacation')} />
-              <RadioButton value='compensatory' label={TAPi18n.__('schedules.requests.compensatory')} />
-              <RadioButton value='sick' label={TAPi18n.__('schedules.requests.sick')} />
+            <Field name='reason' component={RadioGroup}>
+              <Radio value='vacation' label={TAPi18n.__('schedules.requests.vacation')} />
+              <Radio value='compensatory' label={TAPi18n.__('schedules.requests.compensatory')} />
+              <Radio value='sick' label={TAPi18n.__('schedules.requests.sick')} />
             </Field>
           </div>
           <div className='col-md-6'>
             <Field name='note'
               component={TextField}
-              multiLine rows={1} fullWidth
-              floatingLabelText={TAPi18n.__('schedules.note')} />
+              multiline rows={1} fullWidth
+              label={TAPi18n.__('schedules.note')} />
           </div>
         </div>
 
-        <RaisedButton type='submit'
+        <Button raised type='submit'
           onClick={handleSubmit}
           fullWidth
           primary={!submitting && !pristine}
           disabled={pristine || submitting}>
           {TAPi18n.__('schedules.postRequest')}
-        </RaisedButton>
+        </Button>
       </form>
     )
   }

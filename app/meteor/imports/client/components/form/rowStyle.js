@@ -12,7 +12,7 @@ export const shrink = {
 
 export const rowStyle = {
   display: 'flex',
-  marginTop: -10,
+  marginTop: 0,
   zIndex: 19,
   paddingRight: 16
 }
@@ -22,10 +22,10 @@ export const iconStyle = {
   paddingLeft: 6,
   paddingRight: 6,
   minWidth: 50,
-  marginTop: 40
+  marginTop: 25
 }
 
 export const buttonStyle = {
   ...iconStyle,
-  marginTop: 31
+  marginTop: 16
 }

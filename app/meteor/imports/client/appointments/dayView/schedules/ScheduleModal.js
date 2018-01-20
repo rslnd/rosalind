@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../../components/Icon'
 
@@ -11,7 +11,7 @@ export const ScheduleModal = ({ show, onClose, onClickScheduleSoftRemove }) => (
     onHide={onClose}
     bsSize='large'>
     <Modal.Body>
-      <FlatButton
+      <Button
         onClick={onClickScheduleSoftRemove}
         label={<span>
           <Icon name='trash-o' />&emsp;
@@ -20,7 +20,7 @@ export const ScheduleModal = ({ show, onClose, onClickScheduleSoftRemove }) => (
     </Modal.Body>
     <Modal.Footer>
       <div className='pull-right'>
-        <FlatButton
+        <Button
           onClick={onClose}
           label={TAPi18n.__('ui.close')} />
       </div>

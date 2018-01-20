@@ -1,8 +1,7 @@
 import React from 'react'
 import { Field } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { ToggleField } from '../../components/form/ToggleField'
+import { TextField, ToggleField } from '../../components/form'
 import { rowStyle, buttonStyle, grow } from '../../components/form/rowStyle'
 
 export const NameFields = () =>
@@ -11,7 +10,7 @@ export const NameFields = () =>
       <Field
         name='gender'
         component={ToggleField}
-        style={{ minWidth: 31 }}
+        style={{ minWidth: 31, padding: 10 }}
         values={[
           { value: 'Female', label: TAPi18n.__('patients.salutationFemale') },
           { value: 'Male', label: TAPi18n.__('patients.salutationMale') }
@@ -21,15 +20,13 @@ export const NameFields = () =>
       <Field
         name='lastName'
         component={TextField}
-        fullWidth
-        floatingLabelText={TAPi18n.__('inboundCalls.form.lastName.label')} />
+        label={TAPi18n.__('inboundCalls.form.lastName.label')} />
     </div>
     <div style={grow}>
       <Field
         name='firstName'
         component={TextField}
-        fullWidth
         autoFocus
-        floatingLabelText={TAPi18n.__('inboundCalls.form.firstName.label')} />
+        label={TAPi18n.__('inboundCalls.form.firstName.label')} />
     </div>
   </div>

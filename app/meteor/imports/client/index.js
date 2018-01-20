@@ -23,7 +23,7 @@ import { System } from './system'
 export const Rosalind = () => (
   <ReduxProvider store={store}>
     <Router>
-      <MuiThemeProvider muiTheme={muiTheme}>
+      <MuiThemeProvider theme={muiTheme}>
         <MainLayoutContainer>
           <Switch>
             <Route path='/appointments' component={Appointments} />

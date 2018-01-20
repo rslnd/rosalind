@@ -1,9 +1,8 @@
 import React from 'react'
 import { Field, FieldArray, FormSection } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
-import { ToggleField } from '../../components/form/ToggleField'
+import { ToggleField, TextField } from '../../components/form'
 import { Dot } from '../Dot'
 
 import { NameFields } from '../fields/NameFields'
@@ -32,14 +31,14 @@ export const PatientExtendedFormFields = ({ change }) => {
                   name='titlePrepend'
                   component={TextField}
                   fullWidth
-                  floatingLabelText={TAPi18n.__('patients.titlePrepend')} />
+                  label={TAPi18n.__('patients.titlePrepend')} />
               </div>
               <div style={grow}>
                 <Field
                   name='titleAppend'
                   component={TextField}
                   fullWidth
-                  floatingLabelText={TAPi18n.__('patients.titleAppend')} />
+                  label={TAPi18n.__('patients.titleAppend')} />
               </div>
               <div style={shrink}>
                 <Field
@@ -84,7 +83,7 @@ export const PatientExtendedFormFields = ({ change }) => {
                   name='patientNote'
                   component={TextField}
                   fullWidth
-                  floatingLabelText={TAPi18n.__('patients.note')} />
+                  label={TAPi18n.__('patients.note')} />
               </div>
             </div>
         }

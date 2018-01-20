@@ -1,6 +1,5 @@
 form.mui {
   zoom: 1.29;
-  margin-top: -17px;
 }
 
 div.mui {
@@ -12,7 +11,6 @@ input:-webkit-autofill {
 }
 
 .mui button {
-  text-transform: uppercase;
   color: white;
   font-weight: 700;
 }

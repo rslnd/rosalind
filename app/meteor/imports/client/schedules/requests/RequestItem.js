@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import classnames from 'classnames'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Stamps } from '../../helpers/Stamps'
 import { UserHelper } from '../../users/UserHelper'
@@ -25,12 +25,12 @@ export class RequestItem extends React.Component {
       {
         this.props.canEdit &&
           <div className='box-footer'>
-            <FlatButton
+            <Button
               label={TAPi18n.__('schedules.requests.approve')}
               onClick={() => this.props.approve(_id)}
               disabled={accepted} />
 
-            <FlatButton
+            <Button
               label={TAPi18n.__('schedules.requests.decline')}
               onClick={() => this.props.decline(_id)}
               disabled={declined} />

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Field } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
 import { rowStyle, iconStyle, grow } from '../../components/form/rowStyle'
+import { TextField } from '../../components/form'
 import ort from 'plz-ort'
 
 const autofillLocality = change => (e, postalCode) => {
@@ -33,8 +33,7 @@ export const AddressFields = ({ change }) =>
         <Field
           name='line1'
           component={TextField}
-          fullWidth
-          floatingLabelText={TAPi18n.__('patients.addressLine1')} />
+          label={TAPi18n.__('patients.addressLine1')} />
       </div>
     </div>
     <div style={rowStyle}>
@@ -46,23 +45,20 @@ export const AddressFields = ({ change }) =>
         <Field
           name='postalCode'
           component={TextField}
-          fullWidth
           onBlur={autofillLocality(change)}
-          floatingLabelText={TAPi18n.__('patients.addressPostalCode')} />
+          label={TAPi18n.__('patients.addressPostalCode')} />
       </div>
       <div style={grow}>
         <Field
           name='locality'
           component={TextField}
-          fullWidth
-          floatingLabelText={TAPi18n.__('patients.addressLocality')} />
+          label={TAPi18n.__('patients.addressLocality')} />
       </div>
       <div style={countryStyle}>
         <Field
           name='country'
           component={TextField}
-          fullWidth
-          floatingLabelText={TAPi18n.__('patients.addressCountry')} />
+          label={TAPi18n.__('patients.addressCountry')} />
       </div>
     </div>
   </div>

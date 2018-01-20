@@ -1,9 +1,9 @@
 import React from 'react'
 import { Field } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
+import { TextField } from '../../components/form'
 import { rowStyle, iconStyle, buttonStyle, grow } from '../../components/form/rowStyle'
 
 const filterField = channel => field => field && field.channel === channel
@@ -38,27 +38,26 @@ export const ContactFields = ({ fields, icon, channel }) => {
               <Field
                 name={`${member}.value`}
                 component={TextField}
-                fullWidth
                 warn={warn}
-                floatingLabelText={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
+                label={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
             </div>
 
             <div style={buttonsStyle}>
               {
                 count > 1 &&
-                  <FlatButton
+                  <Button
                     onClick={() => fields.remove(i)}
                     style={{ minWidth: 35, color: '#ccc' }}>
                     <Icon name='remove' />
-                  </FlatButton>
+                  </Button>
               }
               {
                 count < 5 &&
-                  <FlatButton
+                  <Button
                     onClick={() => fields.insert(i + 1, { channel })}
                     style={{ minWidth: 35 }}>
                     <Icon name='plus' />
-                  </FlatButton>
+                  </Button>
               }
             </div>
           </div>

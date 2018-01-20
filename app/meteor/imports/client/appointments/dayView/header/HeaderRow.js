@@ -1,12 +1,13 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import { Popover } from 'material-ui/Popover'
-import Menu from 'material-ui/Menu'
-import MenuItem from 'material-ui/MenuItem'
+import { Manager, Target, Popper } from 'react-popper'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import Paper from 'material-ui/Paper'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
 import { background, grayDisabled, gray } from '../../../css/global'
+import ClickAwayListener from 'material-ui/utils/ClickAwayListener';
 
 const headerRowStyle = {
   backgroundColor: background,
@@ -107,12 +108,15 @@ export class HeaderRow extends React.Component {
         onMouseLeave={this.handleMouseLeave}>
         <div style={headerRowStyle}>
           <div style={addAssigneeStyle}>
-            {this.props.canEditSchedules && <AddAssignee onAddUser={this.props.onAddUser} />}
+            {
+              this.props.canEditSchedules &&
+                <AddAssignee onAddUser={this.props.onAddUser} />
+            }
           </div>
           {/* Scheduled assignees */}
           {this.props.assignees.map((assignee) => (
             <div
-              key={`assignee-${assignee.assigneeId}`}
+              key={assignee.assigneeId}
               style={headerCellStyle}
               onClick={(event) => this.handleUserDropdownOpen({ event, assigneeId: assignee.assigneeId })}>
 
@@ -127,20 +131,24 @@ export class HeaderRow extends React.Component {
               }
             </div>
           ))}
-
-          {/* Drop down menu for each user */}
-          <Popover
-            open={this.state.userDropdownOpen}
-            anchorEl={this.state.userDropdownAnchor}
-            onRequestClose={this.handleUserDropdownClose}
-            anchorOrigin={{ horizontal: 'middle', vertical: 'bottom' }}
-            targetOrigin={{ horizontal: 'middle', vertical: 'top' }}>
-            <Menu>
-              <MenuItem primaryText='Zeitraum blockieren' onClick={this.handleToggleOverrideModeClick} />
-              <MenuItem primaryText='Löschen' onClick={this.handleRemoveUser} />
-            </Menu>
-          </Popover>
         </div>
+
+        <Menu
+          id='assignee-dropdown'
+          open={this.state.userDropdownOpen}
+          onClose={this.handleUserDropdownClose}
+          anchorEl={this.state.userDropdownAnchor}
+          getContentAnchorEl={null}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          transformOrigin={{ horizontal: 'center', vertical: 'top' }}>
+          <MenuItem onClick={this.handleToggleOverrideModeClick}>
+            Zeitraum blockieren
+          </MenuItem>
+          <MenuItem onClick={this.handleRemoveUser}>
+            Löschen
+          </MenuItem>
+        </Menu>
+
         <AssigneesDetails
           date={this.props.date}
           assignees={this.props.assignees}

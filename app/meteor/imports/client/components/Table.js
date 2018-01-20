@@ -4,7 +4,7 @@ import Portal from 'react-portal'
 import isEqual from 'lodash/isEqual'
 import Paper from 'material-ui/Paper'
 import TextField from 'material-ui/TextField'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui/Button'
 import { SwatchesPicker } from 'react-color'
 import { Icon } from './Icon'
 
@@ -96,10 +96,10 @@ class EditModal extends React.Component {
               fullWidth
               name='modalEditText'
               autoFocus
-              floatingLabelText={field.field}
+              label={field.field}
               onChange={this.handleChange}
               value={this.state.value} />
-            <FlatButton
+            <Button
               fullWidth
               onClick={this.handleUpdateClick}
               label={<span><Icon name='check' /></span>} />

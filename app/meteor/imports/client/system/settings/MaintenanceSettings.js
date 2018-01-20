@@ -23,13 +23,13 @@ export const MaintenanceSettings = ({ settings }) => (
     <br />
 
     <TextField
-      floatingLabelText={'Edit Title'}
+      label={'Edit Title'}
       defaultValue={settings.get('maintenance.title')}
       width={500}
       onBlur={(e) => settings.set('maintenance.title', e.target.value)} />
     <br />
     <TextField
-      floatingLabelText={'Edit Message'}
+      label={'Edit Message'}
       defaultValue={settings.get('maintenance.message')}
       width={500}
       onBlur={(e) => settings.set('maintenance.message', e.target.value)} />

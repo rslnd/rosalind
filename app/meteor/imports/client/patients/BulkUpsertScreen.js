@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field } from 'redux-form'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from 'material-ui/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../components/Icon'
 import { Box } from '../components/Box'
@@ -50,7 +50,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
                     fullWidth
                     hintStyle={{ color: '#ccc' }}
                     hintText='100 50 140 ...'
-                    floatingLabelText={TAPi18n.__('patients.revenue')} />
+                    label={TAPi18n.__('patients.revenue')} />
                 </div>
                 <div style={shrink}>
                   <Field
@@ -67,13 +67,13 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
                     name='patientSince'
                     component={DayField}
                     fullWidth
-                    floatingLabelText={TAPi18n.__('patients.patientSince')} />
+                    label={TAPi18n.__('patients.patientSince')} />
                 </div>
               </div>
             </div>
         }
 
-        <RaisedButton
+        <Button raised
           type='submit'
           style={{ marginTop: 10 }}
           onClick={handleSubmit(onSubmit)}

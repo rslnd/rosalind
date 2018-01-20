@@ -1,6 +1,6 @@
 import React from 'react'
 import { reduxForm, Field, Fields } from 'redux-form'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from 'material-ui/Button'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { DateRangePicker } from '../../components/form/DateRangePicker'
@@ -19,19 +19,19 @@ class NewHolidaysFormComponent extends React.Component {
             <Field name='note'
               component={TextField}
               fullWidth
-              floatingLabelText={TAPi18n.__('schedules.holidaysNote')} />
+              label={TAPi18n.__('schedules.holidaysNote')} />
           </div>
         </div>
 
         <div className='row'>
           <div className='col-md-12' style={{ marginTop: 20 }}>
-            <RaisedButton type='submit'
+            <Button raised type='submit'
               onClick={handleSubmit}
               fullWidth
               primary={!submitting && !pristine}
               disabled={pristine || submitting}>
               {TAPi18n.__('schedules.holidaysSave')}
-            </RaisedButton>
+            </Button>
           </div>
         </div>
       </form>

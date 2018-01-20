@@ -1,20 +1,24 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { Field } from 'redux-form'
-import RaisedButton from 'material-ui/RaisedButton'
-import { TextField } from 'redux-form-material-ui'
+import Button from 'material-ui/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { TagsField } from '../../tags/TagsField'
 import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { UserHelper } from '../../users/UserHelper'
 import { Icon } from '../../components/Icon'
 import { PatientPickerUpsert } from '../../patients/PatientPickerUpsert'
-import { flex, grow, shrink } from '../../components/form/rowStyle'
+import { flex, grow, shrink, TextField } from '../../components/form'
 
 const pauseButtonStyle = {
   ...tagStyle,
   backgroundColor: tagBackgroundColor,
   cursor: 'pointer'
+}
+
+const tagsRowStyle = {
+  ...flex,
+  paddingTop: 10
 }
 
 export const NewAppointmentFields = props => {
@@ -44,7 +48,7 @@ export const NewAppointmentFields = props => {
       </div>
 
       {/* Tags */}
-      <div style={flex}>
+      <div style={tagsRowStyle}>
         <div style={grow}>
           <Field
             name='tags'
@@ -66,8 +70,8 @@ export const NewAppointmentFields = props => {
       <div style={flex}>
         <Field name='appointmentNote'
           component={TextField}
-          multiLine rows={1} fullWidth
-          floatingLabelText={TAPi18n.__('appointments.form.note.label')} />
+          fullWidth
+          label={TAPi18n.__('appointments.form.note.label')} />
       </div>
 
       <div style={flex}>
@@ -75,14 +79,17 @@ export const NewAppointmentFields = props => {
       </div>
 
       <div style={flex}>
-        <RaisedButton type='submit'
+        <Button raised type='submit'
           onClick={handleSubmit}
           fullWidth
-          primary
-          disabled={submitting || (pristine && !patientId)}
-          label={submitting
-            ? <Icon name='refresh' spin />
-            : TAPi18n.__('appointments.thisSave')} />
+          color='primary'
+          disabled={submitting || (pristine && !patientId)}>
+          {
+            submitting
+              ? <Icon name='refresh' spin />
+              : TAPi18n.__('appointments.thisSave')
+          }
+        </Button>
       </div>
     </form>
   )
