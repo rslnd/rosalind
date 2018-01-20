@@ -7,7 +7,8 @@ import { DayField } from '../../components/form/DayField'
 import { rowStyle, iconStyle, grow } from '../../components/form/rowStyle'
 
 const insuranceIdStyle = {
-  width: 130
+  minWidth: 130,
+  width: '20%'
 }
 
 export const BirthdayFields = ({ collectInsuranceId }) =>

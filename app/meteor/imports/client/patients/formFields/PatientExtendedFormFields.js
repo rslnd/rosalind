@@ -3,12 +3,8 @@ import { Field, FieldArray, FormSection } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
-import { Currency } from '../../components/Currency'
 import { ToggleField } from '../../components/form/ToggleField'
-import { DayField } from '../../components/form/DayField'
-import { CalculatorField } from '../../components/form/CalculatorField'
 import { Dot } from '../Dot'
-import { twoPlaces } from '../../../util/format'
 
 import { NameFields } from '../fields/NameFields'
 import { AddressFields } from '../fields/AddressFields'
@@ -18,7 +14,6 @@ import { BirthdayFields } from '../fields/BirthdayFields'
 export const PatientExtendedFormFields = ({ change }) => {
   const title = true
   const note = true
-  const externalRevenue = true
 
   return <div>
     <div className='row'>
@@ -112,76 +107,7 @@ export const PatientExtendedFormFields = ({ change }) => {
               </div>
             </div>
         }
-
-        {
-          externalRevenue &&
-            <div className='row'>
-              <div className='col-md-12'>
-                <div className='row no-pad' style={{ marginTop: -15, zIndex: 13 }}>
-                  <div className='col-md-1'>
-                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                      <Icon name='eur' />
-                    </div>
-                  </div>
-                  <div className='col-md-8'>
-                    <div>
-                      <Field
-                        name='externalRevenue'
-                        component={CalculatorField}
-                        formatter={twoPlaces}
-                        fullWidth
-                        hintStyle={{ color: '#ccc' }}
-                        hintText='100 50 140 ...'
-                        floatingLabelText={TAPi18n.__('patients.revenue')} />
-                    </div>
-                  </div>
-                  <div className='col-md-2'>
-                    <Field
-                      name='externalRevenue'
-                      component={CurrencyField} />
-                  </div>
-                </div>
-              </div>
-            </div>
-        }
-
-        {
-          true &&
-            <div className='row'>
-              <div className='col-md-12'>
-                <div className='row no-pad' style={{ marginTop: -15, zIndex: 13 }}>
-                  <div className='col-md-1'>
-                    <div style={{ minWidth: 31, marginTop: 40, textAlign: 'center' }}>
-                      <Icon name='calendar-o' />
-                    </div>
-                  </div>
-                  <div className='col-md-10'>
-                    <div>
-                      <Field
-                        name='patientSince'
-                        component={DayField}
-                        fullWidth
-                        floatingLabelText={TAPi18n.__('patients.patientSince')} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-        }
       </div>
     </div>
   </div>
 }
-
-const currencyStyle = {
-  fontSize: '20px',
-  paddingTop: 35,
-  textAlign: 'center',
-  width: '100%',
-  display: 'inline-block'
-}
-
-const CurrencyField = ({ input }) =>
-  <Currency
-    value={input.value}
-    style={currencyStyle} />
