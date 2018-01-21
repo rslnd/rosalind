@@ -9,11 +9,7 @@ export const publication = () => {
     const isTrusted = this.connection && isTrustedNetwork(this.connection.clientAddress)
 
     if (isAuthenticated || isTrusted) {
-
-      // Feature Flag
-      const ff = (Roles.userIsInRole(this.userId, [ 'ff-cosmetics' ]))
-
-      return ff ? Calendars.find() : Calendars.find({ slug: 'kasse' })
+      return Calendars.find()
     }
   })
 }
