@@ -4,7 +4,6 @@ import Auto from '../../util/schema/auto'
 module.exports = new SimpleSchema
   tag:
     type: String
-    unique: true
     index: 1
 
   order:
@@ -33,6 +32,14 @@ module.exports = new SimpleSchema
 
   calendarId:
     type: SimpleSchema.RegEx.Id
+    optional: true
+
+  assigneeIds:
+    type: [SimpleSchema.RegEx.Id]
+    optional: true
+
+  blacklistAssigneeIds:
+    type: [SimpleSchema.RegEx.Id]
     optional: true
 
   reportAs:

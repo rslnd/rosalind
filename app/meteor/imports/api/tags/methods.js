@@ -3,8 +3,9 @@ import some from 'lodash/fp/some'
 
 export default ({ Tags }) => {
   const findOneOrInsert = (selector) => {
-    const tag = Tags.findOne({ tag: selector.tag })
-    return tag || Tags.insert(selector)
+    throw new Error('Deprecated: Tag string is no longer guaranteed to be unique')
+    // const tag = Tags.findOne({ tag: selector.tag })
+    // return tag || Tags.insert(selector)
   }
 
   // Maps Tag ids to reporting categories, eg.:
@@ -18,7 +19,7 @@ export default ({ Tags }) => {
   }
 
   const expand = (tags = []) =>
-    tags.map(t => t.tag ? t : (Tags.findOne({ tag: t }) || Tags.findOne(t)))
+    tags.map(t => t.tag ? t : Tags.findOne({ _id: t }))
 
   const isPrivate = tags =>
     some('privateAppointment')(expand(tags))

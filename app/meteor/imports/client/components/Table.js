@@ -91,7 +91,7 @@ class EditModal extends React.Component {
             onChangeComplete={this.handleUpdateClick} />
           : <Paper
             style={{ padding: 6 }}
-            zDepth={3}>
+            elevation={10}>
             <TextField
               fullWidth
               name='modalEditText'
@@ -101,8 +101,10 @@ class EditModal extends React.Component {
               value={this.state.value} />
             <Button
               fullWidth
-              onClick={this.handleUpdateClick}
-              label={<span><Icon name='check' /></span>} />
+              style={{ marginTop: 6 }}
+              onClick={this.handleUpdateClick}>
+              <span><Icon name='check' /></span>
+            </Button>
           </Paper>
         }
       </div>

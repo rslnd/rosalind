@@ -68,7 +68,21 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'ÄrztInnen',
-    render: t => t.assigneeIds && t.assigneeIds.map(a => getAssigneeName(a)).join(', ')
+    render: t => <span>
+      {
+        t.assigneeIds && t.assigneeIds
+          .map(a => getAssigneeName(a)).join(', ')
+      }
+      {
+        t.blacklistAssigneeIds &&
+          <span style={{ textDecoration: 'line-through' }}>
+            {
+              t.blacklistAssigneeIds
+                .map(a => getAssigneeName(a)).join(', ')
+            }
+          </span>
+      }
+    </span>
   }
 ]
 

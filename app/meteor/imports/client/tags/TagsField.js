@@ -40,6 +40,12 @@ export class TagsField extends React.Component {
         return true
       }
     }).filter(t => {
+      if (t.blacklistAssigneeIds) {
+        return !t.blacklistAssigneeIds.includes(assigneeId)
+      } else {
+        return true
+      }
+    }).filter(t => {
       if (t.calendarIds && calendarId) {
         return t.calendarIds.includes(calendarId)
       } else {
