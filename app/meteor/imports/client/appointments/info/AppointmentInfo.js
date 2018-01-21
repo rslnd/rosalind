@@ -6,7 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from '../../../util/zerofix'
 import { Icon } from '../../components/Icon'
 import { TagsList } from '../../tags/TagsList'
-import { InlineEdit } from '../../components/form/InlineEdit'
+import { grow, rowStyle, flex, shrink, InlineEdit, TextField, ToggleField, iconStyle } from '../../components/form'
 import { Dot } from '../../patients/Dot'
 import { ContactFields } from '../../patients/fields/ContactFields'
 import { AddressFields } from '../../patients/fields/AddressFields'
@@ -16,24 +16,29 @@ import { EnlargeText } from '../../components/EnlargeText'
 import { Currency } from '../../components/Currency'
 import { TagsField } from '../../tags/TagsField'
 
-const ListItem = ({ icon, children, last, style, highlight }) => {
+const iconDefaultStyle = {
+  textAlign: 'center',
+  paddingLeft: 6,
+  paddingRight: 6,
+  minWidth: 50,
+}
+
+const ListItem = ({ icon, children, hr, style, iconStyle, highlight }) => {
   const containerStyle = {
     ...style,
     fontWeight: highlight && '700'
   }
 
   return <div style={containerStyle}>
-    <div className='row'>
-      <div className='col-md-1'>
-        {icon && <Icon name={icon} style={{
-          position: 'absolute',
-          left: 27,
-          top: 3
-        }} />}
+    <div style={flex}>
+      <div style={{ ...iconDefaultStyle, ...iconStyle }}>
+        {icon && <Icon name={icon} />}
       </div>
-      <div className='col-md-11 enable-select'>{children}</div>
+      <div style={grow} className='enable-select'>
+        {children}
+      </div>
     </div>
-    {!last && <hr />}
+    {hr && <hr />}
   </div>
 }
 
@@ -69,13 +74,13 @@ const PatientName = ({ patient, onChange, onToggleGender }) => (
 )
 
 const Day = ({ appointment }) => (
-  <ListItem icon='calendar'>
+  <ListItem icon='calendar' hr>
     {moment(appointment.start).format(TAPi18n.__('time.dateFormatWeekday'))}
   </ListItem>
 )
 
 const Time = ({ appointment }) => (
-  <ListItem icon='clock-o'>
+  <ListItem icon='clock-o' hr>
     {moment(appointment.start).format(TAPi18n.__('time.timeFormatShort'))}
     &nbsp;-&nbsp;
     {moment(appointment.end).format(TAPi18n.__('time.timeFormat'))}
@@ -100,7 +105,7 @@ const Private = ({ appointment, onChange }) => {
 }
 
 const Assignee = ({ assignee }) => (
-  assignee && <ListItem icon='user-md'>
+  assignee && <ListItem icon='user-md' hr>
     {assignee.fullNameWithTitle()}
   </ListItem> || null
 )
@@ -119,12 +124,11 @@ const Contacts = ({ patient, onChange }) => (
         channel='Email'
         icon='envelope-open-o'
         component={ContactFields} />
-      <br />
     </div> || null
 )
 
 const Tags = ({ appointment, assignee, calendar, onChange }) => (
-  <ListItem>
+  <ListItem hr>
     <Field
       name='tags'
       component={TagsField}
@@ -138,10 +142,10 @@ const Tags = ({ appointment, assignee, calendar, onChange }) => (
 )
 
 const Reminders = ({ patient, onChange }) => (
-  patient && patient.profile && patient.profile.contacts && <ListItem icon='paper-plane' last>
+  patient && patient.profile && patient.profile.contacts && <ListItem icon='paper-plane'>
     {TAPi18n.__('appointments.appointmentReminderSMS')}
     <div className='pull-right' style={{
-      position: 'absolute',
+      position: 'relative',
       right: 5,
       top: -5
     }}>
@@ -168,20 +172,31 @@ const TotalRevenue = ({ value }) => (
 )
 
 const PatientNotes = ({ patient, onChange }) => (
-  patient && <ListItem
-    icon='user-plus'
-    style={{ marginBottom: 30 }}
-    highlight={patient.notes()}
-    last>
-    <InlineEdit
-      onChange={onChange}
-      value={patient.notes()}
-      placeholder={<span className='text-muted'>{TAPi18n.__('patients.notePlaceholder')}</span>}
-      rows={3}
-      label={TAPi18n.__('patients.note')}
-      submitOnBlur
-      />
-  </ListItem> || null
+  patient &&
+    <div style={rowStyle}>
+      <div style={iconStyle}>
+        <Icon name='user-plus' />
+      </div>
+      <div style={grow}>
+        <Field
+          name='note'
+          component={TextField}
+          label={TAPi18n.__('patients.note')}
+        />
+      </div>
+
+      <div style={shrink}>
+        <Field
+          name='banned'
+          component={ToggleField}
+          button={false}
+          style={{ marginTop: 15, marginLeft: 20 }}
+          values={[
+            { value: false, label: <Dot /> },
+            { value: true, label: <Dot banned /> }
+          ]} />
+      </div>
+    </div> || null
 )
 
 export class AppointmentInfo extends React.Component {
@@ -208,32 +223,23 @@ export class AppointmentInfo extends React.Component {
 
     return (
       <div>
-        {
-          patient &&
-            <div className='row'>
-              <div className='col-md-12'>
-                <div className='pull-right'>
-                  <Dot
-                    banned={patient.profile && patient.profile.banned}
-                    onClick={() => handleEditPatient({
-                      'profile.banned': !patient.profile.banned
-                    })} />
-                </div>
-
-                <PatientName patient={patient} onChange={handleEditPatient} onToggleGender={handleToggleGender} />
-
-                <hr />
-              </div>
-            </div>
-        }
         <div className='row'>
           <div className='col-md-6'>
+            {
+              patient &&
+                <div className='row'>
+                  <div className='col-md-12'>
+                    <PatientName patient={patient} onChange={handleEditPatient} onToggleGender={handleToggleGender} />
+                    <hr />
+                  </div>
+                </div>
+            }
             <Day appointment={appointment} />
             <Time appointment={appointment} />
             <Assignee assignee={assignee} />
             <Private appointment={appointment} />
             <Tags appointment={appointment} assignee={assignee} calendar={calendar} />
-            <ListItem last>
+            <ListItem>
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}
                 doc={appointment} />
