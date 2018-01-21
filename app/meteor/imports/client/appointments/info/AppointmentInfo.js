@@ -120,6 +120,7 @@ const Contacts = ({ patient }) => (
         name='contacts'
         channel='Phone'
         icon='phone'
+        zoomable
         component={ContactFields} />
 
       <FieldArray

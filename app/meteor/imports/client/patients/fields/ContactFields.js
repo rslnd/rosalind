@@ -4,7 +4,8 @@ import Button from 'material-ui/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
 import { TextField } from '../../components/form'
-import { rowStyle, iconStyle, buttonStyle, grow } from '../../components/form/rowStyle'
+import { rowStyle, iconStyle, buttonStyle, grow, shrink } from '../../components/form/rowStyle'
+import { EnlargeText } from '../../components/EnlargeText'
 
 const filterField = channel => field => field && field.channel === channel
 
@@ -20,7 +21,12 @@ const buttonsStyle = {
   paddingLeft: 6
 }
 
-export const ContactFields = ({ fields, icon, channel }) => {
+const zoomIconStyle = {
+  display: 'block',
+  padding: 23
+}
+
+export const ContactFields = ({ fields, icon, channel, zoomable }) => {
   const count = (fields.getAll() || [])
     .filter(filterField(channel))
     .length
@@ -41,6 +47,15 @@ export const ContactFields = ({ fields, icon, channel }) => {
                 warn={warn}
                 label={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
             </div>
+
+            {
+              zoomable && fields.get(i).value &&
+                <div style={shrink}>
+                  <EnlargeText iconOnly style={zoomIconStyle}>
+                    {fields.get(i).value}
+                  </EnlargeText>
+                </div>
+            }
 
             <div style={buttonsStyle}>
               {

@@ -56,9 +56,11 @@ export class EnlargeText extends React.Component {
         <span
           onMouseEnter={this.handleShow}
           onMouseLeave={this.handleHide}>
-          {this.props.children}
+          {
+            !this.props.iconOnly && this.props.children
+          }
 
-          <span className='pull-right text-muted' style={{ cursor: 'pointer' }}>
+          <span className='pull-right text-muted' style={{ ...this.props.style, cursor: 'pointer' }}>
             <Icon name='search-plus' />
           </span>
         </span>
