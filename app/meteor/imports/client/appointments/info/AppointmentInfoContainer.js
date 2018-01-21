@@ -42,10 +42,11 @@ const composer = (props, onData) => {
     const calendar = Calendars.findOne({ _id: appointment.calendarId })
 
     const initialPatientFields = mapPatientToFields(patient)
+    const initialAppointmentFields = {
+      tags: appointment.tags
+    }
     const initialValues = {
-      appointment: {
-        tags: appointment.tags
-      },
+      appointment: initialAppointmentFields,
       patient: initialPatientFields
     }
 
@@ -60,46 +61,37 @@ const composer = (props, onData) => {
         sum(pastAppointments.map(p => p.revenue).filter(identity))
     }
 
-    const handleEditPatientNote = (newNote) => {
-      patient && Patients.actions.editNote.callPromise({
-        patientId: patient._id,
-        newNote: newNote
-      }).then(() => {
-        Alert.success(TAPi18n.__('patients.editSuccess'))
-      })
-    }
-
     const handleEditPatient = v => {
-      try {
-        if (!isEqual(initialPatientFields, v.patient)) {
-          const patient = mapFieldsToPatient(v.patient)
+      if (!isEqual(initialPatientFields, v.patient)) {
+        const patient = mapFieldsToPatient(v.patient)
 
-          return Patients.actions.upsert.callPromise({
-            patient: {
-              ...patient,
-              _id: patient._id
-            },
-            replaceContacts: true
-          })
-          .then(() => Alert.success(TAPi18n.__('patients.editSuccess')))
-          .catch(e => {
-            Alert.error('Bitte noch einmal versuchen')
-            console.error(e)
-          })
-        }
-      } catch (e) {
-        Alert.error('Bitte noch einmal versuchen')
-        console.error(e)
+        return Patients.actions.upsert.callPromise({
+          patient: {
+            ...patient,
+            _id: patient._id
+          },
+          replaceContacts: true
+        })
+        .then(() => Alert.success(TAPi18n.__('patients.editSuccess')))
+        .catch(e => {
+          Alert.error('Bitte noch einmal versuchen')
+          console.error(e)
+        })
       }
     }
 
-    const handleSetBirthday = (newBirthday) => {
-      Patients.actions.setBirthday.callPromise({
-        patientId: patient._id,
-        birthday: newBirthday
-      }).then(() => {
-        Alert.success(TAPi18n.__('patients.editSuccess'))
-      })
+    const handleEditAppointment = v => {
+      if (!isEqual(initialAppointmentFields, v.appointment)) {
+        return Appointments.actions.update.callPromise({
+          appointmentId: appointment._id,
+          update: v.appointment
+        })
+        .then(() => Alert.success(TAPi18n.__('appointments.editSuccess')))
+        .catch(e => {
+          Alert.error('Bitte noch einmal versuchen')
+          console.error(e)
+        })
+      }
     }
 
     const handleToggleGender = () => {
@@ -127,15 +119,6 @@ const composer = (props, onData) => {
       }
     }
 
-    const handleTagChange = (newTags) => {
-      Appointments.actions.setTags.callPromise({
-        appointmentId: props.appointmentId,
-        newTags
-      }).then(() => {
-        Alert.success(TAPi18n.__('appointments.editSuccess'))
-      })
-    }
-
     onData(null, {
       ...props,
       initialValues,
@@ -145,11 +128,9 @@ const composer = (props, onData) => {
       assignee,
       comments,
       totalPatientRevenue,
-      handleEditPatientNote,
       handleEditPatient,
+      handleEditAppointment,
       handleToggleGender,
-      handleTagChange,
-      handleSetBirthday,
       handleSetMessagePreferences
     })
   }

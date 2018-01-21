@@ -90,7 +90,7 @@ const Time = ({ appointment }) => (
   </ListItem>
 )
 
-const Private = ({ appointment, onChange }) => {
+const Private = ({ appointment }) => {
   if (appointment.revenue >= 0) {
     return <ListItem icon='plus-circle' hr>
       Privattermin&ensp;
@@ -113,7 +113,7 @@ const Assignee = ({ assignee }) => (
   </ListItem> || null
 )
 
-const Contacts = ({ patient, onChange }) => (
+const Contacts = ({ patient }) => (
   patient &&
     <div>
       <FieldArray
@@ -130,7 +130,7 @@ const Contacts = ({ patient, onChange }) => (
     </div> || null
 )
 
-const Tags = ({ appointment, assignee, calendar, onChange }) => (
+const Tags = ({ appointment, assignee, calendar }) => (
   <ListItem hr>
     <Field
       name='tags'
@@ -174,7 +174,7 @@ const TotalRevenue = ({ value }) => (
   </ListItem> || null
 )
 
-const PatientNotes = ({ patient, onChange }) => (
+const PatientNotes = ({ patient }) => (
   patient &&
     <div style={rowStyle}>
       <div style={iconStyle}>
@@ -203,10 +203,35 @@ const PatientNotes = ({ patient, onChange }) => (
 )
 
 export class AppointmentInfo extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
   componentWillMount () {
     // TODO: This doensn't work.
     // TODO: How to show validation errors even on untouched fields?
     touch('appointmentInfoForm', 'contacts', 'birthday', 'insuranceId')
+  }
+
+  // BUG: This seems to never get called. Why?
+  handleSubmit (e) {
+    e && e.preventDefault()
+    if (this.props.dirty) {
+      return Promise.all([
+        this.props.handleSubmit(this.props.handleEditPatient),
+        this.props.handleSubmit(this.props.handleEditAppointment)
+      ])
+    }
+  }
+
+  handleKeyDown (e) {
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      e.preventDefault()
+      return this.handleSubmit()
+    }
   }
 
   render () {
@@ -219,15 +244,13 @@ export class AppointmentInfo extends React.Component {
       calendar,
       totalPatientRevenue,
       change,
-      handleEditPatientNote,
       handleEditPatient,
+      handleEditAppointment,
       handleToggleGender,
-      handleTagChange,
-      handleSetBirthday,
       handleSetMessagePreferences } = this.props
 
     return (
-      <div>
+      <form onSubmit={this.handleSubmit} onKeyDown={this.handleKeyDown}>
         <div className='row'>
           <div className='col-md-6'>
             {
@@ -239,13 +262,19 @@ export class AppointmentInfo extends React.Component {
             }
             { patient && <hr /> }
 
-            <FormSection name='appointment'>
-              <Day appointment={appointment} />
-              <Time appointment={appointment} />
-              <Assignee assignee={assignee} />
-              <Private appointment={appointment} />
-              <Tags appointment={appointment} assignee={assignee} calendar={calendar} />
-            </FormSection>
+            <div onMouseLeave={
+              dirty
+              ? handleSubmit(handleEditAppointment)
+              : identity
+            }>
+              <FormSection name='appointment'>
+                <Day appointment={appointment} />
+                <Time appointment={appointment} />
+                <Assignee assignee={assignee} />
+                <Private appointment={appointment} />
+                <Tags appointment={appointment} assignee={assignee} calendar={calendar} />
+              </FormSection>
+            </div>
             <ListItem>
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}
@@ -255,24 +284,26 @@ export class AppointmentInfo extends React.Component {
 
           {
             patient &&
-              <ClickAwayListener onClickAway={dirty ? handleSubmit(handleEditPatient) : identity}>
-                <div className='col-md-6'>
-                  <FormSection name='patient'>
-                    <PatientNotes patient={patient} onChange={handleEditPatientNote} />
-                    <Contacts patient={patient} onChange={handleEditPatient} />
-                    <BirthdayFields collectInsuranceId />
-                    <FormSection name='address'>
-                      <AddressFields change={change} />
-                    </FormSection>
-                    <br />
-                    <Reminders patient={patient} onChange={handleSetMessagePreferences} />
-                    <TotalRevenue value={totalPatientRevenue} />
+              <div className='col-md-6' onMouseLeave={
+                dirty
+                ? handleSubmit(handleEditPatient)
+                : identity
+              }>
+                <FormSection name='patient'>
+                  <PatientNotes patient={patient} />
+                  <Contacts patient={patient} />
+                  <BirthdayFields collectInsuranceId />
+                  <FormSection name='address'>
+                    <AddressFields change={change} />
                   </FormSection>
-                </div>
-              </ClickAwayListener>
+                  <br />
+                  <Reminders patient={patient} onChange={handleSetMessagePreferences} />
+                  <TotalRevenue value={totalPatientRevenue} />
+                </FormSection>
+              </div>
           }
         </div>
-      </div>
+      </form>
     )
   }
 }
