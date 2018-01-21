@@ -47,9 +47,9 @@ export class DayField extends React.Component {
     }
   }
 
-  handleChange (e, stringValue) {
+  handleChange (e) {
     this.setState({
-      stringValue
+      stringValue: e.target.value
     })
   }
 

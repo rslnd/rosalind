@@ -48,8 +48,6 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
                     component={CalculatorField}
                     formatter={twoPlaces}
                     fullWidth
-                    hintStyle={{ color: '#ccc' }}
-                    hintText='100 50 140 ...'
                     label={TAPi18n.__('patients.revenue')} />
                 </div>
                 <div style={shrink}>
@@ -78,11 +76,14 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
           style={{ marginTop: 10 }}
           onClick={handleSubmit(onSubmit)}
           fullWidth
-          primary
-          disabled={!patientId}
-          label={submitting
-            ? <Icon name='refresh' spin />
-            : TAPi18n.__('patients.thisSave')} />
+          color='primary'
+          disabled={!patientId}>
+          {
+            submitting
+              ? <Icon name='refresh' spin />
+              : TAPi18n.__('patients.thisSave')
+          }
+        </Button>
       </form>
     </Box>
   </div>
