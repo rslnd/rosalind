@@ -40,6 +40,9 @@ export const muiTheme = createMuiTheme({
       }
     },
     MuiInput: {
+      input: {
+        color: text
+      },
       underline: {
         '&:before': {
           backgroundColor: gray,
@@ -57,6 +60,11 @@ export const muiTheme = createMuiTheme({
           height: 2,
           zoom: 1 / 1.221
         }
+      }
+    },
+    MuiInputLabel: {
+      root: {
+        color: text
       }
     }
   }
