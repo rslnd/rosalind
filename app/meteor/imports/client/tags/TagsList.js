@@ -1,10 +1,11 @@
 import React from 'react'
 import groupBy from 'lodash/fp/groupBy'
 import sortBy from 'lodash/fp/sortBy'
+import identity from 'lodash/identity'
 import { color, lightness } from 'kewler'
 import { Icon } from '../components/Icon'
 import { Tags } from '../../api/tags'
-import { Currency } from '../components/Currency';
+import { Currency } from '../components/Currency'
 
 export const tagBackgroundColor = '#e5e5e5'
 export const tagTextColor = '#a0a0a0'
@@ -33,10 +34,34 @@ const overlay = {
 
 export const darken = c => color(c)(lightness(-10))()
 
-export const TagsList = ({ tags = [], onClick, style = {}, tiny, showDefaultRevenue }) => {
-  const expandedTags = tags.map(slug =>
-    slug.tag ? slug : Tags.findOne({ _id: slug })
+const Tag = ({ tag, onClick, style, showDefaultRevenue }) => {
+  const handleClick = () => {
+    onClick && onClick(tag._id)
+  }
+
+  return (
+    <span
+      title={tag.description}
+      onClick={handleClick}
+      style={{
+        ...tagStyle,
+        ...style,
+        color: tag.selectable && (tag.selected ? '#fff' : tagTextColor) || '#fff',
+        backgroundColor: tag.selectable
+          ? (tag.selected ? tag.color : tagBackgroundColor)
+          : tag.color,
+        borderColor: darken(tag.color || tagBackgroundColor)
+      }}>
+      {tag.tag}
+      <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} />
+    </span>
   )
+}
+
+export const TagsList = ({ tags = [], onClick = () => {}, style = {}, tiny, showDefaultRevenue }) => {
+  const expandedTags = tags.map(slug =>
+    slug.tag ? slug : Tags.findOne({ _id: slug }, { removed: true })
+  ).filter(identity)
 
   // group by private, sort within groups
   const groupedTags = groupBy(t => (t.privateAppointment || false))(expandedTags)
@@ -69,26 +94,15 @@ export const TagsList = ({ tags = [], onClick, style = {}, tiny, showDefaultReve
           </span>
         }
         {
-          tagGroup.tags.map(tag => {
-            return (
-              <span
-                key={tag._id}
-                title={tag.description}
-                onClick={() => onClick && onClick(tag._id)}
-                style={{
-                  ...tagStyle,
-                  ...style,
-                  color: tag.selectable && (tag.selected ? '#fff' : tagTextColor) || '#fff',
-                  backgroundColor: tag.selectable
-                    ? (tag.selected ? tag.color : tagBackgroundColor)
-                    : tag.color,
-                  borderColor: darken(tag.color || tagBackgroundColor)
-                }}>
-                {tag.tag}
-                <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} />
-              </span>
-            )
-          })
+          tagGroup.tags.map(tag =>
+            <Tag
+              key={tag._id}
+              tag={tag}
+              onClick={onClick}
+              style={style}
+              showDefaultRevenue={showDefaultRevenue}
+            />
+          )
         }
         {
           orderedTagGroups.length > 1 && <br />
