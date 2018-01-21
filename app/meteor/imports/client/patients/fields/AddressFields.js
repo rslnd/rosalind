@@ -7,9 +7,11 @@ import { TextField } from '../../components/form'
 import ort from 'plz-ort'
 
 const autofillLocality = change => (e, postalCode) => {
-  const locality = ort(postalCode)
-  if (locality) {
-    change('address.locality', locality.toString())
+  if (postalCode && postalCode.length === 4) {
+    const locality = ort(postalCode)
+    if (locality) {
+      change('patient.address.locality', locality.toString())
+    }
   }
 }
 
@@ -45,7 +47,7 @@ export const AddressFields = ({ change }) =>
         <Field
           name='postalCode'
           component={TextField}
-          onBlur={autofillLocality(change)}
+          onChange={autofillLocality(change)}
           label={TAPi18n.__('patients.addressPostalCode')} />
       </div>
       <div style={grow}>

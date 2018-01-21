@@ -26,14 +26,8 @@ export const mapFieldsToPatient = v => {
         birthday: v.birthday,
         banned: v.banned,
         note: v.patientNote,
-        contacts,
-        address: {
-          line1: v.addressLine1,
-          line2: v.addressLine2,
-          postalCode: v.addressPostalCode,
-          locality: v.addressLocality,
-          country: v.addressCountry
-        }
+        address: v.address,
+        contacts
       }
     }
   }

@@ -46,9 +46,9 @@ export class NewAppointmentContainerComponent extends React.Component {
     console.log('[Appointments] Submitting new Appointment', { values })
 
     let newPatient = null
-    let patientId = values.patientId
+    let patientId = values.patient.patientId
 
-    if (!patientId && !values.appointmentNote) {
+    if (!patientId && !values.appointment.appointmentNote) {
       Alert.error(TAPi18n.__('appointments.patientOrNoteError'))
       throw new Error('Cannot save appointment without patientId or appointmentNote')
     }
@@ -58,29 +58,29 @@ export class NewAppointmentContainerComponent extends React.Component {
         patientId = undefined
       }
 
-      newPatient = mapFieldsToPatient(values)
+      newPatient = mapFieldsToPatient(values.patient)
     }
 
     const duration = getDefaultDuration({
       calendarId: this.props.calendar._id,
       assigneeId: this.props.assigneeId,
-      tags: values.tags,
+      tags: values.appointment.tags,
       date: moment(this.props.time)
     })
 
-    const revenue = (values.revenue === 0 || values.revenue > 0)
-      ? values.revenue
-      : calculateRevenue(values.tags)
+    const revenue = (values.appointment.revenue === 0 || values.appointment.revenue > 0)
+      ? values.appointment.revenue
+      : calculateRevenue(values.appointment.tags)
 
     const appointment = {
       calendarId: this.props.calendar._id,
       patientId: newPatient ? undefined : values.patientId,
-      note: values.appointmentNote,
-      tags: values.tags,
+      note: values.appointment.appointmentNote,
+      tags: values.appointment.tags,
       start: moment(this.props.time).toDate(),
       end: moment(this.props.time).add(duration, 'minutes').toDate(),
       assigneeId: this.props.assigneeId,
-      privateAppointment: Tags.methods.isPrivate(values.tags),
+      privateAppointment: Tags.methods.isPrivate(values.appointment.tags),
       revenue
     }
 
@@ -117,7 +117,11 @@ export class NewAppointmentContainerComponent extends React.Component {
       <NewAppointmentForm
         onSubmit={this.handleSubmit}
         onSubmitPause={this.handleSubmitPause}
-        initialValues={this.props.patientId ? { patientId: this.props.patientId } : {}}
+        initialValues={
+          this.props.patientId
+          ? { patient: { patientId: this.props.patientId } }
+          : {}
+        }
         time={this.props.time}
         calendarId={this.props.calendar._id}
         assigneeId={this.props.assigneeId}

@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import { Field } from 'redux-form'
+import { FormSection, Field } from 'redux-form'
 import Button from 'material-ui/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { TagsField } from '../../tags/TagsField'
@@ -39,40 +39,44 @@ export const NewAppointmentFields = props => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
-      <div style={flex}>
-        <PatientPickerUpsert
-          autoFocus
-          patientId={patientId}
-          extended={extended}
-          change={change} />
-      </div>
-
-      {/* Tags */}
-      <div style={tagsRowStyle}>
-        <div style={grow}>
-          <Field
-            name='tags'
-            component={TagsField}
-            allowedTags={allowedTags}
-            calendarId={calendarId}
-            assigneeId={assigneeId}
-            showDefaultRevenue={false}
-            fullWidth />
+      <FormSection name='patient'>
+        <div style={flex}>
+          <PatientPickerUpsert
+            autoFocus
+            patientId={patientId}
+            extended={extended}
+            change={change} />
         </div>
-        <div style={shrink}>
-          <div
-            style={pauseButtonStyle}
-            onClick={onSubmitPause}>PAUSE</div>
-        </div>
-      </div>
+      </FormSection>
 
-      {/* Note */}
-      <div style={flex}>
-        <Field name='appointmentNote'
-          component={TextField}
-          fullWidth
-          label={TAPi18n.__('appointments.form.note.label')} />
-      </div>
+      <FormSection name='appointment'>
+        {/* Tags */}
+        <div style={tagsRowStyle}>
+          <div style={grow}>
+            <Field
+              name='tags'
+              component={TagsField}
+              allowedTags={allowedTags}
+              calendarId={calendarId}
+              assigneeId={assigneeId}
+              showDefaultRevenue={false}
+              fullWidth />
+          </div>
+          <div style={shrink}>
+            <div
+              style={pauseButtonStyle}
+              onClick={onSubmitPause}>PAUSE</div>
+          </div>
+        </div>
+
+        {/* Note */}
+        <div style={flex}>
+          <Field name='appointmentNote'
+            component={TextField}
+            fullWidth
+            label={TAPi18n.__('appointments.form.note.label')} />
+        </div>
+      </FormSection>
 
       <div style={flex}>
         <Summary time={time} assigneeId={assigneeId} />

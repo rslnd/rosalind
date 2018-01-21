@@ -1,7 +1,10 @@
 import React from 'react'
+import identity from 'lodash/identity'
 import { touch, Field, FieldArray, FormSection } from 'redux-form'
 import moment from 'moment-timezone'
 import { Toggle, Choice } from 'belle'
+import ClickAwayListener from 'material-ui/utils/ClickAwayListener'
+
 import { TAPi18n } from 'meteor/tap:i18n'
 import { zerofix } from '../../../util/zerofix'
 import { Icon } from '../../components/Icon'
@@ -89,14 +92,14 @@ const Time = ({ appointment }) => (
 
 const Private = ({ appointment, onChange }) => {
   if (appointment.revenue >= 0) {
-    return <ListItem icon='plus-circle'>
+    return <ListItem icon='plus-circle' hr>
       Privattermin&ensp;
       <Currency value={appointment.revenue} />
     </ListItem>
   }
 
   if (appointment.privateAppointment) {
-    return <ListItem icon='eur'>
+    return <ListItem icon='eur' hr>
       {TAPi18n.__('appointments.private')}
     </ListItem>
   }
@@ -208,6 +211,8 @@ export class AppointmentInfo extends React.Component {
 
   render () {
     const {
+      handleSubmit,
+      dirty,
       appointment,
       patient,
       assignee,
@@ -227,18 +232,20 @@ export class AppointmentInfo extends React.Component {
           <div className='col-md-6'>
             {
               patient &&
-                <div className='row'>
-                  <div className='col-md-12'>
-                    <PatientName patient={patient} onChange={handleEditPatient} onToggleGender={handleToggleGender} />
-                    <hr />
-                  </div>
-                </div>
+                <PatientName
+                  patient={patient}
+                  onChange={handleEditPatient}
+                  onToggleGender={handleToggleGender} />
             }
-            <Day appointment={appointment} />
-            <Time appointment={appointment} />
-            <Assignee assignee={assignee} />
-            <Private appointment={appointment} />
-            <Tags appointment={appointment} assignee={assignee} calendar={calendar} />
+            { patient && <hr /> }
+
+            <FormSection name='appointment'>
+              <Day appointment={appointment} />
+              <Time appointment={appointment} />
+              <Assignee assignee={assignee} />
+              <Private appointment={appointment} />
+              <Tags appointment={appointment} assignee={assignee} calendar={calendar} />
+            </FormSection>
             <ListItem>
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}
@@ -248,17 +255,21 @@ export class AppointmentInfo extends React.Component {
 
           {
             patient &&
-              <div className='col-md-6'>
-                <PatientNotes patient={patient} onChange={handleEditPatientNote} />
-                <Contacts patient={patient} onChange={handleEditPatient} />
-                <BirthdayFields collectInsuranceId />
-                <FormSection name='address'>
-                  <AddressFields change={change} />
-                </FormSection>
-                <br />
-                <Reminders patient={patient} onChange={handleSetMessagePreferences} />
-                <TotalRevenue value={totalPatientRevenue} />
-              </div>
+              <ClickAwayListener onClickAway={dirty ? handleSubmit(handleEditPatient) : identity}>
+                <div className='col-md-6'>
+                  <FormSection name='patient'>
+                    <PatientNotes patient={patient} onChange={handleEditPatientNote} />
+                    <Contacts patient={patient} onChange={handleEditPatient} />
+                    <BirthdayFields collectInsuranceId />
+                    <FormSection name='address'>
+                      <AddressFields change={change} />
+                    </FormSection>
+                    <br />
+                    <Reminders patient={patient} onChange={handleSetMessagePreferences} />
+                    <TotalRevenue value={totalPatientRevenue} />
+                  </FormSection>
+                </div>
+              </ClickAwayListener>
           }
         </div>
       </div>

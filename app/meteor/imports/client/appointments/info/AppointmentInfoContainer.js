@@ -1,7 +1,9 @@
 import { connect } from 'react-redux'
 import { touch, reduxForm, formValueSelector } from 'redux-form'
+import { withProps } from 'recompose'
 import Alert from 'react-s-alert'
 import sum from 'lodash/sum'
+import isEqual from 'lodash/isEqual'
 import identity from 'lodash/identity'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
@@ -13,6 +15,7 @@ import { Calendars } from '../../../api/calendars'
 import { AppointmentInfo } from './AppointmentInfo'
 import { translateObject } from '../../components/form/translateObject'
 import { mapPatientToFields } from '../../patients/mapPatientToFields'
+import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 
 const formName = 'appointmentInfoForm'
 
@@ -21,20 +24,9 @@ let AppointmentInfoContainer = reduxForm({
   enableReinitialize: true,
   updateUnregisteredFields: true,
   keepDirtyOnReinitialize: false,
-  pure: false,
-  onChange: (values, dispatch, props) => {
-    console.log('onChange', values)
-  },
-  fields: [
-    'tags',
-    'contacts',
-    'address'
-  ],
+  pure: false
   // validate: (values) => translateObject(validate(values))
 })(AppointmentInfo)
-
-// const selector = formValueSelector(formName)
-// AppointmentInfoContainer = connect(mapPatientStateToProps(selector))(AppointmentInfoContainer)
 
 const composer = (props, onData) => {
   const appointment = Appointments.findOne({ _id: props.appointmentId })
@@ -49,10 +41,12 @@ const composer = (props, onData) => {
     }).fetch() : []
     const calendar = Calendars.findOne({ _id: appointment.calendarId })
 
-    const patientFields =mapPatientToFields(patient)
+    const initialPatientFields = mapPatientToFields(patient)
     const initialValues = {
-      tags: appointment.tags,
-      ...patientFields
+      appointment: {
+        tags: appointment.tags
+      },
+      patient: initialPatientFields
     }
 
     // TODO: Move into action
@@ -75,15 +69,28 @@ const composer = (props, onData) => {
       })
     }
 
-    const handleEditPatient = (newPatient) => {
-      Patients.actions.upsert.callPromise({
-        patient: {
-          _id: patient._id,
-          ...newPatient
+    const handleEditPatient = v => {
+      try {
+        if (!isEqual(initialPatientFields, v.patient)) {
+          const patient = mapFieldsToPatient(v.patient)
+
+          return Patients.actions.upsert.callPromise({
+            patient: {
+              ...patient,
+              _id: patient._id
+            },
+            replaceContacts: true
+          })
+          .then(() => Alert.success(TAPi18n.__('patients.editSuccess')))
+          .catch(e => {
+            Alert.error('Bitte noch einmal versuchen')
+            console.error(e)
+          })
         }
-      }).then(() => {
-        Alert.success(TAPi18n.__('patients.editSuccess'))
-      })
+      } catch (e) {
+        Alert.error('Bitte noch einmal versuchen')
+        console.error(e)
+      }
     }
 
     const handleSetBirthday = (newBirthday) => {
