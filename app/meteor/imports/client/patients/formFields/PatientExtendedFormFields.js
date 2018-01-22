@@ -80,7 +80,7 @@ export const PatientExtendedFormFields = ({ change }) => {
               </div>
               <div style={grow}>
                 <Field
-                  name='patientNote'
+                  name='note'
                   component={TextField}
                   fullWidth
                   label={TAPi18n.__('patients.note')} />

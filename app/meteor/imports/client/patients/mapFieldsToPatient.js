@@ -14,7 +14,7 @@ export const mapFieldsToPatient = v => {
     patient = {
       _id: patientId,
       insuranceId: v.insuranceId,
-      note: v.patientNote,
+      note: v.note,
       externalRevenue: v.externalRevenue,
       patientSince: v.patientSince ? dayToDate(v.patientSince) : undefined,
       profile: {
@@ -25,7 +25,6 @@ export const mapFieldsToPatient = v => {
         titleAppend: v.titleAppend,
         birthday: v.birthday,
         banned: v.banned,
-        note: v.patientNote,
         address: v.address,
         contacts
       }
