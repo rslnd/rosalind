@@ -26,6 +26,7 @@ export class ToggleField extends React.Component {
     const newIndex = 1 - this.currentIndex()
 
     this.props.input.onChange(this.props.values[newIndex].value)
+    this.props.onChange && this.props.onChange()
   }
 
   render () {

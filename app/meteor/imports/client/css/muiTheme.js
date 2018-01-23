@@ -36,7 +36,7 @@ export const muiTheme = createMuiTheme({
     MuiButton: {
       root: {
         textTransform: 'none',
-        fontSize: '14px'
+        fontSize: '16px'
       }
     },
     MuiInput: {

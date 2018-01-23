@@ -3,19 +3,16 @@ import identity from 'lodash/identity'
 import { touch, Field, FieldArray, FormSection } from 'redux-form'
 import moment from 'moment-timezone'
 import { Toggle, Choice } from 'belle'
-import ClickAwayListener from 'material-ui/utils/ClickAwayListener'
-
+import { withState } from 'recompose'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { zerofix } from '../../../util/zerofix'
 import { Icon } from '../../components/Icon'
-import { TagsList } from '../../tags/TagsList'
-import { grow, rowStyle, flex, shrink, InlineEdit, TextField, ToggleField, iconStyle } from '../../components/form'
+import { grow, rowStyle, flex, shrink, TextField, ToggleField, iconStyle } from '../../components/form'
 import { Dot } from '../../patients/Dot'
 import { ContactFields } from '../../patients/fields/ContactFields'
 import { AddressFields } from '../../patients/fields/AddressFields'
 import { BirthdayFields } from '../../patients/fields/BirthdayFields'
+import { NameFields, GenderField } from '../../patients/fields/NameFields'
 import { Stamps } from '../../helpers/Stamps'
-import { EnlargeText } from '../../components/EnlargeText'
 import { Currency } from '../../components/Currency'
 import { TagsField } from '../../tags/TagsField'
 
@@ -45,36 +42,60 @@ const ListItem = ({ icon, children, hr, style, iconStyle, highlight }) => {
   </div>
 }
 
-const PatientName = ({ patient, onChange, onToggleGender }) => (
-  patient && patient.profile && <div>
-    <h4 className='enable-select' style={{ paddingLeft: 10 }}>
-      <span
-        className='text-muted'
-        style={{ cursor: 'pointer' }}
-        onClick={onToggleGender}
-      >{
-        patient.prefix()
-      }&#8202; </span>
-      <b>
-        <InlineEdit
-          onChange={(val) => onChange({ 'profile.lastName': val })}
-          value={patient.profile.lastName}
-          placeholder={<span className='text-muted'>{TAPi18n.__('patients.lastName')}</span>}
-          label={TAPi18n.__('patients.lastName')}
-          submitOnBlur
-        />
-      </b>
-       &thinsp;
-      <InlineEdit
-        onChange={(val) => onChange({ 'profile.firstName': val })}
-        value={patient.profile.firstName}
-        placeholder={<span className='text-muted'>{TAPi18n.__('patients.firstName')}</span>}
-        label={TAPi18n.__('patients.firstName')}
-        submitOnBlur
-      />
-    </h4>
-  </div> || null
-)
+const PlainRenderField = ({ input, append, prepend }) =>
+  input.value && <span>
+    {prepend}
+    {input.value}
+    {append}
+  </span> || null
+
+const PatientName = withState('editing', 'setEditing', false)(({ patient, editing, setEditing, onChange }) => (
+  <div
+    style={{
+      ...rowStyle,
+      paddingLeft: 10,
+      marginLeft: -10,
+      marginTop: -16,
+      marginBottom: -8
+    }}>
+    <GenderField onChange={() => setTimeout(30, onChange)} />
+    <div
+      onMouseEnter={() => setEditing(true)}
+      onMouseLeave={() => {
+        setEditing(false)
+        onChange()
+      }}>
+
+      {
+        editing
+        ? <NameFields titles gender={false} />
+        : (
+          <h4 className='enable-select' style={{ marginLeft: -5, marginTop: 26 }}>
+            <Field
+              name='titlePrepend'
+              component={PlainRenderField}
+              append={<span>&ensp;</span>} />
+
+            <b>
+              <Field
+                name='lastName'
+                component={PlainRenderField} />
+            </b>
+            &thinsp;
+            <Field
+              name='firstName'
+              component={PlainRenderField} />
+
+            <Field
+              name='titleAppend'
+              component={PlainRenderField}
+              prepend={<span>&ensp;</span>} />
+          </h4>
+        )
+      }
+    </div>
+  </div>
+))
 
 const Day = ({ appointment }) => (
   <ListItem icon='calendar' hr>
@@ -253,16 +274,18 @@ export class AppointmentInfo extends React.Component {
     return (
       <form onSubmit={this.handleSubmit} onKeyDown={this.handleKeyDown}>
         <div className='row'>
-          <div className='col-md-6'>
-            {
+          {
               patient &&
-                <PatientName
-                  patient={patient}
-                  onChange={handleEditPatient}
-                  onToggleGender={handleToggleGender} />
-            }
-            { patient && <hr /> }
-
+                <div className='col-md-12'>
+                  <FormSection name='patient'>
+                    <PatientName
+                      onChange={handleSubmit(handleEditPatient)}
+                      patient={patient} />
+                  </FormSection>
+                  <hr />
+                </div>
+          }
+          <div className='col-md-6'>
             <div onMouseLeave={
               dirty
               ? handleSubmit(handleEditAppointment)
@@ -285,7 +308,10 @@ export class AppointmentInfo extends React.Component {
 
           {
             patient &&
-              <div className='col-md-6' onMouseLeave={
+              <div
+                className='col-md-6'
+                style={{ marginTop: -25 }}
+                onMouseLeave={
                 dirty
                 ? handleSubmit(handleEditPatient)
                 : identity
