@@ -16,7 +16,10 @@ const composer = (props, onData) => {
       console.log({ v, patient })
 
       return Patients.actions.upsert.callPromise({ patient, replaceContacts: true })
-        .then(() => Alert.success(TAPi18n.__('patients.editSuccess')))
+        .then(() => {
+          Alert.success(TAPi18n.__('patients.editSuccess'))
+          props.dispatch({ type: 'LOAD_PATIENT', data: patient })
+        })
         .catch(e => {
           Alert.error('Bitte noch einmal versuchen')
           console.error(e)

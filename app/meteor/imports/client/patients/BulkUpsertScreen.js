@@ -25,7 +25,7 @@ const CurrencyField = ({ input }) =>
     value={input.value}
     style={currencyStyle} />
 
-export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId, change }) => (
+export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId, change, pristine }) => (
   <div className='content'>
     <Box title='Stammdaten vervollständigen'>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
@@ -78,7 +78,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
             onClick={handleSubmit(onSubmit)}
             fullWidth
             color='primary'
-            disabled={!patientId}>
+            disabled={submitting || pristine}>
             {
               submitting
                 ? <Icon name='refresh' spin />
