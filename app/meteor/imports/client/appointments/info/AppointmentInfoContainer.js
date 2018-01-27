@@ -13,6 +13,7 @@ import { Users } from '../../../api/users'
 import { Comments } from '../../../api/comments'
 import { Calendars } from '../../../api/calendars'
 import { AppointmentInfo } from './AppointmentInfo'
+import { calculateRevenue } from '../new/RevenueField'
 import { translateObject } from '../../components/form/translateObject'
 import { mapPatientToFields } from '../../patients/mapPatientToFields'
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
@@ -43,7 +44,8 @@ const composer = (props, onData) => {
 
     const initialPatientFields = mapPatientToFields(patient)
     const initialAppointmentFields = {
-      tags: appointment.tags
+      tags: appointment.tags,
+      revenue: appointment.revenue
     }
     const initialValues = {
       appointment: initialAppointmentFields,

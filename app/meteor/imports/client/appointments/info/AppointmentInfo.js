@@ -3,6 +3,8 @@ import identity from 'lodash/identity'
 import { touch, Field, FieldArray, FormSection } from 'redux-form'
 import moment from 'moment-timezone'
 import { Toggle, Choice } from 'belle'
+import { InputAdornment } from 'material-ui/Input'
+import NumberFormat from 'react-number-format'
 import { withState } from 'recompose'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
@@ -15,6 +17,8 @@ import { NameFields, GenderField } from '../../patients/fields/NameFields'
 import { Stamps } from '../../helpers/Stamps'
 import { Currency } from '../../components/Currency'
 import { TagsField } from '../../tags/TagsField'
+import { calculateRevenue, RevenueField } from '../new/RevenueField'
+import { twoPlaces } from '../../../util/format';
 
 const iconDefaultStyle = {
   textAlign: 'center',
@@ -111,22 +115,57 @@ const Time = ({ appointment }) => (
   </ListItem>
 )
 
-const Private = ({ appointment }) => {
-  if (appointment.revenue >= 0) {
-    return <ListItem icon='plus-circle' hr>
-      Privattermin&ensp;
-      <Currency value={appointment.revenue} />
-    </ListItem>
-  }
+const toFloat = v =>
+  v
+    ? parseFloat(v.toString().replace(/,/g, '.').replace(/\s/g, ''))
+    : null
 
-  if (appointment.privateAppointment) {
-    return <ListItem icon='eur' hr>
-      {TAPi18n.__('appointments.private')}
-    </ListItem>
-  }
+const CurrencyFieldInner = (props) =>
+  <NumberFormat
+    {...props}
+    onValueChange={values => {
+      console.log('onvaluechange', values.value)
+      props.onChange({
+        target: {
+          value: values.value
+        }
+      })
+    }}
+    thousandSeparator=' '
+    decimalSeparator=','
+    onKeyDown={(e) => {
+      const {key, target} = e
+      const {selectionStart, value} = target
+      if (key === '.') {
+        e.preventDefault()
+        target.value = `${value.substr(0, selectionStart)},${value.substr(selectionStart, value.length)}`
+      }
+    }}
+  />
 
-  return null
-}
+const CurrencyField = (props) =>
+  <TextField
+    {...props}
+    InputProps={{
+      inputComponent: CurrencyFieldInner,
+      startAdornment: <InputAdornment position='start'>€</InputAdornment>
+    }}
+  />
+
+const Private = () => (
+  <ListItem icon='plus-circle' style={{ marginBottom: 20 }}>
+    {TAPi18n.__('appointments.private')}
+
+    <div className='pull-right' style={{ marginTop: -10 }}>
+      <Field
+        name='revenue'
+        component={CurrencyField}
+        // format={twoPlaces}
+        normalize={toFloat}
+      />
+    </div>
+  </ListItem>
+)
 
 const Assignee = ({ assignee }) => (
   assignee && <ListItem icon='user-md' hr>
@@ -152,7 +191,17 @@ const Contacts = ({ patient }) => (
     </div> || null
 )
 
-const Tags = ({ appointment, assignee, calendar }) => (
+const autofillRevenue = change => (e, tags) => {
+  if (tags && tags.length >= 1) {
+    const revenue = calculateRevenue(tags)
+    console.log('afr', tags, revenue)
+    if (revenue >= 0) {
+      change('appointment.revenue', revenue)
+    }
+  }
+}
+
+const Tags = ({ appointment, assignee, calendar, change }) => (
   <ListItem hr>
     <Field
       name='tags'
@@ -161,6 +210,7 @@ const Tags = ({ appointment, assignee, calendar }) => (
       calendarId={calendar._id}
       assigneeId={assignee && assignee._id}
       showDefaultRevenue={false}
+      onChange={autofillRevenue(change)}
       fullWidth
     />
   </ListItem>
@@ -296,7 +346,12 @@ export class AppointmentInfo extends React.Component {
                 <Time appointment={appointment} />
                 <Assignee assignee={assignee} />
                 <Private appointment={appointment} />
-                <Tags appointment={appointment} assignee={assignee} calendar={calendar} />
+                <Tags
+                  appointment={appointment}
+                  assignee={assignee}
+                  calendar={calendar}
+                  change={change}
+                />
               </FormSection>
             </div>
             <ListItem>

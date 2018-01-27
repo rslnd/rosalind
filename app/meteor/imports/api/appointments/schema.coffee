@@ -42,6 +42,7 @@ Schema = new SimpleSchema
 
   revenue:
     type: Number
+    decimal: true
     optional: true
 
   admittedAt:
