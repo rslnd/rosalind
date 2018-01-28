@@ -16,6 +16,7 @@ export const processRevenue = mapIds => (csv, filename) => {
   const addendum = postprocessRevenue(translated)
 
   return {
+    type: 'eoswinRevenue',
     ...addendum,
     day
   }

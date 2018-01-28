@@ -47,6 +47,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  reportAddenda: {
+    type: [String],
+    optional: true
+  },
+
   assigneeName: {
     type: String,
     optional: true

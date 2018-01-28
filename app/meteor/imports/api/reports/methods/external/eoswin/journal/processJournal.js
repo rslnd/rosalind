@@ -18,6 +18,7 @@ export const processJournal = mapIds => csv => {
   const addendum = postprocessJournal(translated)
 
   return {
+    type: 'eoswinJournal',
     ...addendum,
     day
   }

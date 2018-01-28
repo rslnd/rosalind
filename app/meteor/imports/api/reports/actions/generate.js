@@ -56,7 +56,13 @@ export const generate = ({ Calendars, Reports, Appointments, Schedules, Tags, Me
           const tagMapping = Tags.methods.getMappingForReports()
 
           const existingReport = Reports.findOne({ calendarId, day })
-          const generatedReport = generateReport({ calendar, day, appointments, pastAppointments, overrideSchedules, tagMapping, messages, existingReport, addendum })
+
+          let filteredAddendum = null
+          if (addendum && (calendar.reportAddenda || []).includes(addendum.type)) {
+            filteredAddendum = addendum
+          }
+
+          const generatedReport = generateReport({ calendar, day, appointments, pastAppointments, overrideSchedules, tagMapping, messages, existingReport, addendum: filteredAddendum })
 
           if (existingReport) {
             return Reports.update({ _id: existingReport._id }, generatedReport, { bypassCollection2: true })
