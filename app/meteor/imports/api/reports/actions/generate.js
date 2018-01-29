@@ -33,6 +33,10 @@ export const generate = ({ Calendars, Reports, Appointments, Schedules, Tags, Me
             }
           }).fetch()
 
+          if (appointments.length === 0) {
+            return null
+          }
+
           const pastAppointments = Appointments.find(pastAppointmentsSelector({
             date,
             calendarId,
