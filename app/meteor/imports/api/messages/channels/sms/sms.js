@@ -1,6 +1,7 @@
 import moment from 'moment-timezone'
 import { rateLimit } from 'meteor/dandv:rate-limit'
 import { Messages } from '../../'
+import { Calendars } from '../../../calendars'
 import { Appointments } from '../../../appointments'
 import { Patients } from '../../../patients'
 import { InboundCalls } from '../../../inboundCalls'
@@ -60,6 +61,8 @@ export const receive = (payload) => {
   let parentMessage
   let appointmentId
   let appointment
+  let calendarId
+  let calendar
   let patientId
   let patient
   let cancelAppointment
@@ -86,6 +89,8 @@ export const receive = (payload) => {
 
     appointmentId = parentMessage.payload.appointmentId
     appointment = Appointments.findOne({ _id: appointmentId })
+    calendarId = appointment.calendarId
+    calendar = calendarId && Calendars.findOne({ _id: calendarId })
     patientId = parentMessage.payload.patientId
     patient = Patients.findOne({ _id: patientId })
 
@@ -93,6 +98,7 @@ export const receive = (payload) => {
       $set: {
         parentMessageId: parentMessage._id,
         'payload.appointmentId': appointmentId,
+        'payload.calendarId': calendarId,
         'payload.patientId': patientId
       }
     })
@@ -109,13 +115,17 @@ export const receive = (payload) => {
         }
       })
 
-      if (Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')) {
+      const cancelationConfirmationText =
+        (calendar && calendar.smsAppointmentReminderCancelationConfirmationText) ||
+        Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')
+
+      if (cancelationConfirmationText) {
         const confirmationId = Messages.insert({
           type: 'intentToCancelConfirmation',
           channel: 'SMS',
           direction: 'outbound',
           text: buildMessageText({
-            text: Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')
+            text: cancelationConfirmationText
           }, {
             date: appointment.start
           }),

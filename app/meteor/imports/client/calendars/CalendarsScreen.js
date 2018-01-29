@@ -74,6 +74,14 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: c => c.reportAs ? c.reportAs.map(t =>
       <span key={t}>{t}<br /></span>
     ) : null
+  },
+  {
+    header: 'SMS Erinnerung',
+    field: 'smsAppointmentReminderText'
+  },
+  {
+    header: 'SMS Storno',
+    field: 'smsAppointmentReminderCancelationConfirmationText'
   }
 ]
 

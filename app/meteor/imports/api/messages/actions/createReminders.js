@@ -6,6 +6,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
+import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
 import { Users } from '../../users'
@@ -20,8 +21,7 @@ export const sendDaysBeforeAppointment = 2
 // Don't immediately send out reminder if appointment is very soon,
 // We don't want the patient to receive the reminder while still
 // on the phone with the clinic.
-// TODO: Increase before going into production
-export const waitMinutesAfterNewAppointment = 1
+export const waitMinutesAfterNewAppointment = 5
 
 // TODO: Replace with GraphQL
 export const findUpcomingAppointments = (cutoffDate) => {
@@ -140,6 +140,7 @@ export const createReminders = ({ Messages }) => {
       const messagePayloads = uniqueAppointmentsWithMobile.map((a) => {
         return {
           appointmentId: a._id,
+          calendarId: a.calendarId,
           assigneeId: a.assigneeId,
           patientId: a.patient._id,
           start: a.start,
@@ -151,6 +152,11 @@ export const createReminders = ({ Messages }) => {
       })
 
       const messages = messagePayloads.map((payload) => {
+        const calendar = Calendars.findOne({ _id: payload.calendarId })
+        const text =
+          (calendar && calendar.smsAppointmentReminderText) ||
+          Settings.get('messages.sms.appointmentReminder.text')
+
         return {
           type: 'appointmentReminder',
           channel: 'SMS',
@@ -158,9 +164,7 @@ export const createReminders = ({ Messages }) => {
           status: 'scheduled',
           to: payload.contacts[0].value,
           scheduled: calculateReminderDate(payload.start).toDate(),
-          text: buildMessageText({
-            text: Settings.get('messages.sms.appointmentReminder.text')
-          }, {
+          text: buildMessageText({ text }, {
             date: payload.start
           }),
           invalidBefore: moment(payload.start).subtract(3, 'weeks').toDate(),

@@ -175,7 +175,7 @@ export class Table extends React.Component {
     const cols = structure(this.props)
 
     return (
-      <div>
+      <div style={{ overflowX: 'scroll' }}>
         <table className='table'>
           <thead>
             <tr>{

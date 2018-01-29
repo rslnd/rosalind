@@ -52,6 +52,16 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  smsAppointmentReminderText: {
+    type: String,
+    optional: true
+  },
+
+  smsAppointmentReminderCancelationConfirmationText: {
+    type: String,
+    optional: true
+  },
+
   assigneeName: {
     type: String,
     optional: true
