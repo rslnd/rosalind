@@ -46,7 +46,7 @@ const mapRevenue = ({ reports, days }) => {
 
 const mapNewPerHour = reports => {
   const values = reports
-    .map(r => r.average.patients.new.actualPerHour)
+    .map(r => idx(r, _ => _.average.patients.new.actualPerHour))
     .filter(identity)
 
   return {
