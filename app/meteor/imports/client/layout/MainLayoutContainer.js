@@ -40,7 +40,9 @@ const composer = (props, onData) => {
 
   const isPrint = props.location.hash === '#print'
 
-  onData(null, { ...props, currentUser, locale, loggingIn, sidebarOpen, isPrint })
+  const isTinyLayout = Roles.userIsInRole(currentUser, ['only-waitlist'])
+
+  onData(null, { ...props, currentUser, locale, loggingIn, sidebarOpen, isPrint, isTinyLayout })
 }
 
 const MainLayoutContainer = withRouter(composeWithTracker(composer, Loading)(MainLayout))
