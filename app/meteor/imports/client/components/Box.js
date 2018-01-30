@@ -4,38 +4,56 @@ import { Icon } from './Icon'
 
 export class Box extends React.Component {
   render () {
-    const typeClass = this.props.type ? `box-${this.props.type}` : 'default'
+    const {
+      type,
+      noBorder,
+      noPadding,
+      style,
+      boxStyle,
+      title,
+      icon,
+      buttons,
+      children,
+      body,
+      footer,
+      color
+    } = this.props
+
+    const typeClass = type ? `box-${type}` : 'default'
     const boxClasses = classnames({
       box: true,
       [ typeClass ]: true
     })
     const headerClasses = classnames({
       'box-header': true,
-      'with-border': !this.props.noBorder
+      'with-border': !noBorder
     })
     const bodyClasses = classnames({
       'box-body': true,
-      'no-padding': this.props.noPadding
+      'no-padding': noPadding
     })
 
-    const borderTopStyle = this.props.color ? {
-      borderTopColor: this.props.color
+    const borderTopStyle = color ? {
+      borderTopColor: color
     } : {}
 
-    const style = this.props.style || {}
+    const outerStyle = {
+      ...borderTopStyle,
+      ...boxStyle
+    }
 
     return (
-      <div className={boxClasses} style={borderTopStyle}>
-        {this.props.title &&
+      <div className={boxClasses} style={outerStyle}>
+        {title &&
           <div className={headerClasses}>
-            {this.props.icon && <Icon name={this.props.icon} />}
-            <h3 className='box-title'>{this.props.title}</h3>
-            {this.props.buttons && <div className='pull-right'>{this.props.buttons}</div>}
+            {icon && <Icon name={icon} />}
+            <h3 className='box-title'>{title}</h3>
+            {buttons && <div className='pull-right'>{buttons}</div>}
           </div>
         }
-        <div className={bodyClasses} style={style}>{this.props.body || this.props.children}</div>
+        <div className={bodyClasses} style={style}>{body || children}</div>
         {
-          this.props.footer && this.props.footer
+          footer && footer
         }
       </div>
     )
