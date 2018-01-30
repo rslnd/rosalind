@@ -18,7 +18,6 @@ const styles = {
     borderBottom: '1px solid rgba(128, 128, 128, 0.2)',
     cursor: 'pointer',
     marginLeft: 0,
-    overflow: 'hidden',
     paddingLeft: 4,
     whiteSpace: 'pre-wrap',
     backgroundColor: background,
@@ -40,7 +39,12 @@ const styles = {
     opacity: 0.5
   },
   patientName: {
-    hyphens: 'auto'
+    display: 'inline-block',
+    maxHeight: '100%',
+    minWidth: '100%',
+    wordBreak: 'break-all',
+    hyphens: 'auto',
+    overflow: 'hidden'
   }
 }
 
@@ -110,22 +114,21 @@ class AppointmentItem extends React.Component {
             </span>
         }
 
-        <Indicator appointment={appointment} />
-
-        {
-          patient
-          ? (
-            <span style={styles.patientName}>
-              <span className={classes.prefix}>{patient.prefix}&#8202;</span>
-              <b>{namecase(patient.profile.lastName)} &thinsp;</b>
-              <span>{namecase(patient.profile.firstName)}</span>
-            </span>
-          ) : !appointment.lockedAt && (
-            <span>
-              {this.stripNumbers(appointment.notes) || <Icon name='question-circle' />}
-            </span>
-          )
-        }
+        <span style={styles.patientName}>
+          <Indicator appointment={appointment} />
+          {
+            patient
+            ? (
+              <span>
+                <span className={classes.prefix}>{patient.prefix}&nbsp;</span>
+                <b>{namecase(patient.profile.lastName)}&nbsp;&nbsp;</b>
+                <span>{namecase(patient.profile.firstName)}</span>
+              </span>
+            ) : !appointment.lockedAt && (
+              this.stripNumbers(appointment.notes) || <Icon name='question-circle' />
+            )
+          }
+        </span>
       </div>
     )
   }
