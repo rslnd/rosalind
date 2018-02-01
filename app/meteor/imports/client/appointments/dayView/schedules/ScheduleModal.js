@@ -11,18 +11,18 @@ export const ScheduleModal = ({ show, onClose, onClickScheduleSoftRemove }) => (
     onHide={onClose}
     bsSize='large'>
     <Modal.Body>
-      <Button
-        onClick={onClickScheduleSoftRemove}
-        label={<span>
+      <Button onClick={onClickScheduleSoftRemove}>
+        <span>
           <Icon name='trash-o' />&emsp;
           {TAPi18n.__('schedules.softRemove')}
-        </span>} />
+        </span>
+      </Button>
     </Modal.Body>
     <Modal.Footer>
       <div className='pull-right'>
-        <Button
-          onClick={onClose}
-          label={TAPi18n.__('ui.close')} />
+        <Button onClick={onClose}>
+          {TAPi18n.__('ui.close')}
+        </Button>
       </div>
     </Modal.Footer>
   </Modal>
