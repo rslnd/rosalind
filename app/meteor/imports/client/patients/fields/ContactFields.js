@@ -62,15 +62,17 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                 count > 1 &&
                   <Button
                     onClick={() => fields.remove(i)}
-                    style={{ minWidth: 35, color: '#ccc' }}>
-                    <Icon name='remove' />
+                    style={{ minWidth: 35, color: '#ccc' }}
+                    title={TAPi18n.__('patients.removeContact')}>
+                    <Icon name='minus' />
                   </Button>
               }
               {
                 count < 5 &&
                   <Button
                     onClick={() => fields.insert(i + 1, { channel })}
-                    style={{ minWidth: 35 }}>
+                    style={{ minWidth: 35 }}
+                    title={TAPi18n.__('patients.addContact')}>
                     <Icon name='plus' />
                   </Button>
               }

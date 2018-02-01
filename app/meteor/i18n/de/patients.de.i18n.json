@@ -33,6 +33,8 @@
     "note": "Diverse Informationen zur PatientIn",
     "notePlaceholder": "Diverse Informationen zur PatientIn hinzufügen",
     "revenue": "Umsatz",
+    "removeContact": "Diesen Kontakt entfernen",
+    "addContact": "Weiteren Kontakt hinzufügen",
     "save": "Speichern",
     "patientSince": "Datum der ersten Behandlung",
     "editSuccess": "Erfolgreich gespeichert",
