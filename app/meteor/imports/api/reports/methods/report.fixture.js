@@ -55,7 +55,8 @@ export const report = {
       'workload': {
         'available': 54,
         'planned': 53,
-        'actual': 46
+        'actual': 46,
+        'weighted': 0.8518518519
       }
     },
     {
@@ -107,7 +108,8 @@ export const report = {
       'workload': {
         'available': 48,
         'planned': 48,
-        'actual': 37
+        'actual': 37,
+        'weighted': 0.7708333333
       }
     },
     {
@@ -211,7 +213,8 @@ export const report = {
       'workload': {
         'available': 42,
         'planned': 42,
-        'actual': 34
+        'actual': 34,
+        'weighted': 0.8095238095
       }
     },
     {
@@ -263,7 +266,8 @@ export const report = {
       'workload': {
         'available': 54,
         'planned': 56,
-        'actual': 54
+        'actual': 54,
+        'weighted': 1
       }
     },
     {
