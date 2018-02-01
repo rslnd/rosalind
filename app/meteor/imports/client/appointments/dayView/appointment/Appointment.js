@@ -114,7 +114,9 @@ class AppointmentItem extends React.Component {
             </span>
         }
 
-        <span style={styles.patientName}>
+        <span
+          style={styles.patientName}
+          className={appointment.canceled && classes.canceled}>
           <Indicator appointment={appointment} />
           {
             patient
