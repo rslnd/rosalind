@@ -42,7 +42,7 @@ export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick
       {appointments({ slotSize, assignees, onClick: onAppointmentClick, move })}
       {blanks({ slotSize, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
       {overrideOverlay(override)}
-      {schedules({ assignees, onDoubleClick: onScheduleModalOpen })}
+      {schedules({ slotSize, assignees, onDoubleClick: onScheduleModalOpen })}
       {timeLegend({ slotSize })}
     </div>
 
