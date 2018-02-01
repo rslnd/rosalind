@@ -29,8 +29,6 @@ export const schedules = ({ assignees, onDoubleClick, slotSize }) => (
       const timeEnd = moment(schedule.end).ceil(5, 'minutes')
       const duration = (schedule.end - schedule.start) / 1000 / 60
 
-      console.log(duration, slotSize)
-
       return (
         <div
           key={`schedule-${schedule._id}`}
