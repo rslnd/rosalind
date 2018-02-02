@@ -47,18 +47,9 @@ describe('reports', () => {
     it('renders assignee ranking', () => {
       const rendered = renderBody({ report, mapUserIdToName, mapAssigneeType })
       expect(equalizeWhitespace(rendered)).to.include(dedent`
-      € 1 713
-      Neu / Stunde: 8,4
-      Auslastung: 85%
-      PatientInnen: 43
-      OPs: 5
-
-      2 - Dr. B
-      Umsatz: € 1 120
-      Neu / Stunde: 8,5
-      Auslastung: 77%
-      PatientInnen: 36
-      OPs: 1`)
+      1 - Dr. A
+      Umsatz: € 1 713
+      Neu / Stunde: 8,4`)
     })
   })
 })

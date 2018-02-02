@@ -42,7 +42,10 @@ export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
     const patientsPlanned = idx(assignee, _ => _.patients.total.planned)
     const surgery = idx(assignee, _ => _.patients.surgery.actual)
     const cautery = idx(assignee, _ => _.patients.cautery.planned)
-    const workload = percentage({ value: idx(assignee, _ => _.workload.weighted) })
+    const workload = percentage({
+      part: idx(assignee, _ => _.patients.total.actual),
+      of: idx(assignee, _ => _.patients.total.expected)
+    })
 
     return [
       rankAndName,
