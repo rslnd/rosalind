@@ -8,13 +8,13 @@ describe('patients', function () {
       it('normalizes', function () {
         expect(parseContact('0699112233').result).to.eql({
           'profile.contacts.valueNormalized': {
-            $regex: '^0699 1122 33'
+            $regex: '^43699112233'
           }
         })
 
         expect(parseContact('0699 11 22 33').result).to.eql({
           'profile.contacts.valueNormalized': {
-            $regex: '^0699 1122 33'
+            $regex: '^43699112233'
           }
         })
       })
