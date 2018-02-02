@@ -1,4 +1,4 @@
-import { zerofix } from '../../../../util/zerofix'
+import { normalizePhoneNumber } from '../../../messages/methods/normalizePhoneNumber'
 
 const pattern = /(\d+.?)+/g
 
@@ -11,7 +11,7 @@ export const parseContact = (query) => {
 
   const remainingQuery = query.replace(pattern, '').trim()
 
-  const phone = zerofix(match[0].replace(/[^\d]/g, ''))
+  const phone = normalizePhoneNumber(match[0].replace(/[^\d]/g, ''))
 
   if (phone) {
     const selector = {
