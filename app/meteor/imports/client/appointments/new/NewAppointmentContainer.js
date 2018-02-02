@@ -24,7 +24,7 @@ export class NewAppointmentContainerComponent extends React.Component {
       note: 'PAUSE',
       calendarId: this.props.calendar._id,
       start: moment(this.props.time).toDate(),
-      end: moment(this.props.time).add(this.props.calendar.slotSize || 5, 'minutes').toDate(),
+      end: moment(this.props.time).add(this.props.calendar.defaultDuration || this.props.calendar.slotSize || 5, 'minutes').toDate(),
       assigneeId: this.props.assigneeId
     }
 
