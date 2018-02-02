@@ -74,7 +74,7 @@ export const NewAppointmentFields = props => {
           <Field name='appointmentNote'
             component={TextField}
             fullWidth
-            label={TAPi18n.__('appointments.form.note.label')} />
+            label={TAPi18n.__('appointments.note')} />
         </div>
       </FormSection>
 

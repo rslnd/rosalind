@@ -45,7 +45,8 @@ const composer = (props, onData) => {
     const initialPatientFields = mapPatientToFields(patient)
     const initialAppointmentFields = {
       tags: appointment.tags,
-      revenue: appointment.revenue
+      revenue: appointment.revenue,
+      note: appointment.note
     }
     const initialValues = {
       appointment: initialAppointmentFields,

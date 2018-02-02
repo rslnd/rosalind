@@ -57,6 +57,8 @@
     "searching": "Suche...",
     "appointmentReminderSMS": "SMS-Terminerinnerung",
     "viewInCalendar": "Termin im Kalender zeigen",
+    "note": "Anmerkung zu diesem Termin",
+    "notePlaceholder": "Anmerkung zu diesem Termin hinzufügen",
     "form": {
       "start": {
         "label": "Beginn"
@@ -78,10 +80,6 @@
       },
       "assistentIds": {
         "label": "Assistenten"
-      },
-      "note": {
-        "label": "Anmerkung zu diesem Termin",
-        "placeholder": "Anmerkung zu diesem Termin hinzufügen"
       },
       "privateAppointment": {
         "label": "Privattermin"

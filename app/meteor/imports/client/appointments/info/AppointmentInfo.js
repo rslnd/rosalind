@@ -274,6 +274,18 @@ const PatientNotes = ({ patient }) => (
     </div> || null
 )
 
+const AppointmentNote = () =>
+  <ListItem icon='pencil' hr>
+    <Field
+      name='note'
+      label={TAPi18n.__('appointments.note')}
+      multiline
+      rows={3}
+      component={TextField}
+      fullWidth
+    />
+  </ListItem>
+
 export class AppointmentInfo extends React.Component {
   constructor (props) {
     super(props)
@@ -285,7 +297,10 @@ export class AppointmentInfo extends React.Component {
   componentWillMount () {
     // TODO: This doensn't work.
     // TODO: How to show validation errors even on untouched fields?
-    touch('appointmentInfoForm', 'contacts', 'birthday', 'insuranceId')
+    setTimeout(() =>
+      touch('appointmentInfoForm', 'contacts', 'birthday', 'insuranceId'),
+      500
+    )
   }
 
   // BUG: This seems to never get called. Why?
@@ -360,6 +375,21 @@ export class AppointmentInfo extends React.Component {
                 doc={appointment} />
             </ListItem>
           </div>
+
+          {
+            !patient &&
+              <div
+                className='col-md-6'
+                onMouseLeave={
+                  dirty
+                  ? handleSubmit(handleEditAppointment)
+                  : identity
+                }>
+                <FormSection name='appointment'>
+                  <AppointmentNote />
+                </FormSection>
+              </div>
+          }
 
           {
             patient &&
