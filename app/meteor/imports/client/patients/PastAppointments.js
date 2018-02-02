@@ -56,8 +56,8 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
   } : {}
 
   return (
-    <div onClick={onClick} style={appointmentRowContainerStyle}>
-      <div style={appointmentRowStyle}>
+    <div style={appointmentRowContainerStyle}>
+      <div style={appointmentRowStyle} onClick={onClick}>
         <div className='row'>
           <div className='col-md-3' style={canceledTagsStyle}>
             <TagsList tiny tags={appointment.tags} />
@@ -90,7 +90,7 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
         <div className='col-md-12'>
           {
             appointment.note &&
-              <div className='box-footer box-comments'>
+              <div className='box-footer box-comments' onClick={onClick}>
                 <CommentItem comment={{
                   createdBy: appointment.createdBy,
                   createdAt: appointment.createdAt,
@@ -101,6 +101,7 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
           <CommentsContainer
             docId={appointment._id}
             newComment={expandComments}
+            onClick={onClick}
             autoFocus={autoFocus} />
         </div>
       </div>
