@@ -5,6 +5,11 @@ Contact = new SimpleSchema
   value:
     type: String
 
+  valueNormalized:
+    type: String,
+    optional: true
+    index: 1
+
   channel:
     allowedValues: ['Phone', 'Email']
     type: String

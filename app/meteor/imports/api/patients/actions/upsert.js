@@ -9,6 +9,7 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { normalizeName } from '../util/normalizeName'
 import { zerofix } from '../../../util/zerofix'
+import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
 
 const isEmpty = v => (
   v === null ||
@@ -19,9 +20,22 @@ const isEmpty = v => (
   typeof v === 'function'
 )
 
+const normalizeContact = c => {
+  if (c.channel === 'Phone') {
+    const valueNormalized = normalizePhoneNumber(c.value)
+    return { ...c, valueNormalized }
+  } else {
+    return c
+  }
+}
+
 const cleanFields = (p = {}) => {
   if (p.profile && p.profile.contacts === []) {
     delete p.profile.contacts
+  }
+
+  if (p.profile && p.profile.contacts) {
+    p.profile.contacts = p.profile.contacts.map(normalizeContact)
   }
 
   return omitBy(isEmpty)(p)
@@ -89,7 +103,7 @@ export const upsert = ({ Patients }) => {
         const tempBirthday = patient.profile.birthday
         patient.profile = omitBy((v, k) => k === 'birthday')(patient.profile)
 
-        let update = dot.flatten(patient)
+        let update = dot.flatten(cleanFields(patient))
         if (update['$set']) {
           update['$set']['profile.birthday'] = tempBirthday
           if (!replaceContacts && update['$set']['profile.contacts'] === []) {
@@ -98,8 +112,6 @@ export const upsert = ({ Patients }) => {
           delete update['$set']._id
           update['$set'] = omitBy(isEmpty)(update['$set'])
         }
-
-        update = cleanFields(update)
 
         if (!isEqual(update, {}) && !isEqual(update['$set'], {})) {
           console.log('[Patients] Updating', existingPatient._id, JSON.stringify(update, null, 2))

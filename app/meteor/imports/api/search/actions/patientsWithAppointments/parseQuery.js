@@ -1,5 +1,6 @@
 import { parseBirthday } from './parseBirthday'
 import { parseExactName } from './parseExactName'
+import { parseContact } from './parseContact'
 
 export const parseQuery = (query) => {
   if (!query) {
@@ -8,16 +9,23 @@ export const parseQuery = (query) => {
 
   let parsed = {}
 
-  const { result, remainingQuery } = parseBirthday(query)
+  const birthday = parseBirthday(query)
 
-  if (result) {
-    parsed = { ...parsed, ...result }
+  if (birthday.result) {
+    parsed = { ...parsed, ...birthday.result }
   }
 
-  if (remainingQuery && remainingQuery.length > 0) {
-    const { result } = parseExactName(remainingQuery)
-    if (result) {
-      parsed = { ...parsed, ...result }
+  if (birthday.remainingQuery && birthday.remainingQuery.length > 0) {
+    const contact = parseContact(birthday.remainingQuery)
+    if (contact.result) {
+      parsed = { ...parsed, ...contact.result }
+    }
+  }
+
+  if (birthday.remainingQuery && birthday.remainingQuery.length > 0) {
+    const name = parseExactName(birthday.remainingQuery)
+    if (name.result) {
+      parsed = { ...parsed, ...name.result }
     }
   }
 

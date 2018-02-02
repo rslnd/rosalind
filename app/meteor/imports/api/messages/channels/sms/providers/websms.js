@@ -22,6 +22,10 @@ const getClient = memoize(() => {
 
 export const send = (message) => {
   const to = normalizePhoneNumber(message.to)
+  if (!to) {
+    throw new Error(`Invalid phone number: ${message.to}`)
+  }
+
   const text = message.text
 
   console.log('[Messages] channels/sms/websms: Sending SMS to', to, `"${text}"`, message._id)

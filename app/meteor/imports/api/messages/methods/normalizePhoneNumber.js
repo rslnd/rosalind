@@ -2,13 +2,14 @@ import flow from 'lodash/flow'
 import { zerofix } from '../../../util/zerofix'
 
 const countryPrefix = '43'
-const minimumLength = 9
+const minimumLength = 5
+const maximumLength = 16
 
 export const checkArgument = (s) => {
   if (typeof s === 'string') {
     return s
   } else {
-    throw new Error('Missing argument of type string')
+    return ''
   }
 }
 
@@ -24,11 +25,11 @@ export const addCountryCode = (s) => {
   }
 }
 
-export const ensureMinimumLength = (s) => {
-  if (s.length >= minimumLength) {
+export const ensureLength = (s) => {
+  if (s.length >= minimumLength && s.length <= maximumLength) {
     return s
   } else {
-    throw new Error(`Number is shorter than the minimum length ${minimumLength}`)
+    return undefined
   }
 }
 
@@ -38,5 +39,5 @@ export const normalizePhoneNumber = flow(
   stripNonNumber,
   stripLeadingZeroes,
   addCountryCode,
-  ensureMinimumLength
+  ensureLength
 )

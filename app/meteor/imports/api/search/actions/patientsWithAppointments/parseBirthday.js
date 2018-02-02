@@ -10,15 +10,15 @@ export const parseBirthday = (query) => {
   const result = fuzzyBirthday(query)
   let selector = {}
 
-  if (result) {
-    if (result.day) { selector['profile.birthday.day'] = result.day }
-    if (result.month) { selector['profile.birthday.month'] = result.month }
-    if (result.year) { selector['profile.birthday.year'] = result.year }
+  if (result && result.day && result.month && result.year) {
+    selector['profile.birthday.day'] = result.day
+    selector['profile.birthday.month'] = result.month
+    selector['profile.birthday.year'] = result.year
   }
 
   if (Object.keys(selector).length > 0) {
     return { result: selector, remainingQuery }
   } else {
-    return { result: false, remainingQuery }
+    return { result: false, remainingQuery: query }
   }
 }

@@ -5,8 +5,8 @@ import { normalizeName } from '../../../patients/util/normalizeName'
 export const parseExactName = (query) => {
   // Split query into single words
   const pattern = /([^-\s]{1,})/g
-  const match = query.match(pattern)
-  const remainingQuery = query.replace(pattern, '')
+  const match = query && query.match(pattern)
+  const remainingQuery = query && query.replace(pattern, '')
 
   // Build list of potential last names
   const names = uniq([ match.join(''), ...match ]
@@ -15,26 +15,36 @@ export const parseExactName = (query) => {
   )
 
   if (names && names.length > 0) {
-    // Build selector from this list
-    const $or = names.map((name) => {
-      return {
-        'profile.lastNameNormalized': normalizeName(name)
+    const normalized = normalizeName(names[1] || names[0])
+    if (normalized) {
+      let result = {}
+
+      // Force exact match for short queries to avoid unnecessary fetching
+      if (normalized.length <= 4) {
+        result = {
+          'profile.lastNameNormalized': normalized
+        }
+      } else {
+        result = {
+          'profile.lastNameNormalized': {
+            $regex: '^' + normalized
+          }
+        }
       }
-    })
 
-    let result = { $or }
-
-    if (names.length >= 2) {
-      const firstName = names[names.length - 1]
-
-      result['profile.firstName'] = {
-        $regex: '^' + firstName,
-        $options: 'i'
+      if (names.length >= 2) {
+        const firstName = normalizeName(names[names.length - 1])
+        if (firstName) {
+          result['profile.firstName'] = {
+            $regex: '^' + firstName,
+            $options: 'i'
+          }
+        }
       }
+
+      return { result, remainingQuery }
     }
-
-    return { result, remainingQuery }
   } else {
-    return { result: false, remainingQuery }
+    return { result: false, remainingQuery: query }
   }
 }
