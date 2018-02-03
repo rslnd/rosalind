@@ -85,9 +85,8 @@ const SubItem = ({item, subItem, location}) => {
     <li key={subItem.name} className={isActive(`/${item.name}${subItem.path || ''}`, location) && 'active level-1 link'}>
       {
         item.onClick
-          ? <a className='level-1 link'>
+          ? <a className='level-1 link' onClick={() => item.onClick({ subItem, location })}>
             <span
-              onClick={() => item.onClick({ subItem, location })}
               title={displayName}>
               {displayName}
             </span>
