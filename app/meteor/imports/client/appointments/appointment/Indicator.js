@@ -38,7 +38,7 @@ export const Indicator = ({ appointment, showRevenue }) => {
 export const Revenue = ({ appointment }) =>
   <span>
     {
-      appointment.privateAppointment &&
+      (appointment.revenue === 0 || appointment.revenue > 0) &&
         <span>
           <Currency value={appointment.revenue} />&nbsp;
         </span>

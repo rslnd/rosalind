@@ -196,7 +196,7 @@ const autofillRevenue = change => (e, tags) => {
   if (tags && tags.length >= 1) {
     const revenue = calculateRevenue(tags)
     console.log('afr', tags, revenue)
-    if (revenue >= 0) {
+    if (revenue === 0 || revenue > 0) {
       change('appointment.revenue', revenue)
     }
   }

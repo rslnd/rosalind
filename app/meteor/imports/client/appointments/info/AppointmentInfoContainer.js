@@ -3,7 +3,7 @@ import { touch, reduxForm, formValueSelector } from 'redux-form'
 import { withProps } from 'recompose'
 import Alert from 'react-s-alert'
 import sum from 'lodash/sum'
-import isEqual from 'lodash/isEqual'
+import isEqualWith from 'lodash/isEqualWith'
 import identity from 'lodash/identity'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
@@ -84,7 +84,7 @@ const composer = (props, onData) => {
     }
 
     const handleEditAppointment = v => {
-      if (!isEqual(initialAppointmentFields, v.appointment)) {
+      if (!isEqualWith(initialAppointmentFields, v.appointment, (a, b) => a === b)) {
         return Appointments.actions.update.callPromise({
           appointmentId: appointment._id,
           update: v.appointment
