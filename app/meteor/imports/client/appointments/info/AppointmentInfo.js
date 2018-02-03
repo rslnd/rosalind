@@ -28,10 +28,11 @@ const iconDefaultStyle = {
 }
 
 const ListItem = ({ icon, children, hr, style, iconStyle, highlight }) => {
-  const containerStyle = {
-    ...style,
-    fontWeight: highlight && '700'
-  }
+  const containerStyle = highlight
+    ? {
+      ...style,
+      backgroundColor: '#FFF9C4'
+    } : style
 
   return <div style={containerStyle}>
     <div style={flex}>
@@ -252,7 +253,7 @@ const PatientNotes = ({ patient }) => (
       <div style={iconStyle}>
         <Icon name='user-plus' />
       </div>
-      <div style={grow}>
+      <div style={{...grow, backgroundColor: patient.note ? '#FFF9C4' : ''}}>
         <Field
           name='note'
           component={TextField}
@@ -274,8 +275,8 @@ const PatientNotes = ({ patient }) => (
     </div> || null
 )
 
-const AppointmentNote = () =>
-  <ListItem icon='pencil' hr>
+const AppointmentNote = ({ appointment }) =>
+  <ListItem icon='pencil' hr highlight={!!appointment.note}>
     <Field
       name='note'
       label={TAPi18n.__('appointments.note')}
@@ -386,7 +387,7 @@ export class AppointmentInfo extends React.Component {
                   : identity
                 }>
                 <FormSection name='appointment'>
-                  <AppointmentNote />
+                  <AppointmentNote appointment={appointment} />
                 </FormSection>
               </div>
           }
