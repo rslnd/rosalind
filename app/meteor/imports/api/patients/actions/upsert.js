@@ -11,14 +11,20 @@ import { normalizeName } from '../util/normalizeName'
 import { zerofix } from '../../../util/zerofix'
 import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
 
-const isEmpty = v => (
-  v === null ||
-  v === undefined ||
-  v === '' ||
-  isEqual(v, []) ||
-  isEqual(v, {}) ||
-  typeof v === 'function'
-)
+const isEmpty = (v, k) => {
+  if (k === 'note') {
+    return false
+  } else {
+    return (
+      v === null ||
+      v === undefined ||
+      v === '' ||
+      isEqual(v, []) ||
+      isEqual(v, {}) ||
+      typeof v === 'function'
+    )
+  }
+}
 
 const normalizeContact = c => {
   if (c.channel === 'Phone') {
