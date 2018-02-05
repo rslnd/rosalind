@@ -32,7 +32,7 @@ export class ReportsScreen extends React.Component {
     if (window.native) {
       console.log('[Client] Printing: native')
       const title = moment(dayToDate(this.props.day))
-        .format("YYYY-MM-DD-[#{TAPi18n.__('reports.thisDaySingular')}]")
+        .format(`YYYY-MM-DD-[${TAPi18n.__('reports.thisDaySingular')}]`)
       window.native.print({ title })
     } else {
       console.log('[Client] Printing: default')

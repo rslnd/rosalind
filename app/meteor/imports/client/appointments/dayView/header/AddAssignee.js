@@ -65,6 +65,7 @@ export class AddAssignee extends React.Component {
         <Target>
           <Button
             style={buttonStyle}
+            className='hide-print'
             onClick={this.handleAddUserPopoverOpen}>
             <span
               className='text-muted'

@@ -107,7 +107,7 @@ export class HeaderRow extends React.Component {
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}>
         <div style={headerRowStyle}>
-          <div style={addAssigneeStyle}>
+          <div className='hide-print' style={addAssigneeStyle}>
             {
               this.props.canEditSchedules &&
                 <AddAssignee onAddUser={this.props.onAddUser} />

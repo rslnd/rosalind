@@ -23,6 +23,10 @@
     border: none !important;
   }
 
+  .print-zoom-1 {
+    zoom: calc(1 / 1.221);
+  }
+
   .zoom-1 {
     zoom: 1;
   }
