@@ -1,4 +1,7 @@
 import React from 'react'
+import { Meteor } from 'meteor/meteor'
+import { Roles } from 'meteor/alanning:roles'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Avatar } from '../users/Avatar'
 import { UserHelper } from '../users/UserHelper'
 import { RelativeTime } from '../helpers/RelativeTime'
@@ -10,16 +13,36 @@ const childCommentStyle = {
   borderTop: '1px solid #eee'
 }
 
-const ChildCommentItem = ({ comment }) => (
+const removeLinkStyle = {
+  cursor: 'pointer'
+}
+
+const RemoveLink = ({ comment, onRemove }) => (
+  (comment.createdBy === Meteor.userId() || Roles.userIsInRole(Meteor.userId(), ['admin'])) &&
+    <span
+      onClick={() => onRemove(comment._id)}
+      style={removeLinkStyle}>
+      {TAPi18n.__('ui.removeComment')}
+      &nbsp;
+      &middot;
+      &nbsp;
+    </span>
+)
+
+const ChildCommentItem = ({ comment, onRemove }) => (
   <span style={childCommentStyle}>
-    <span className='text-muted pull-right'><RelativeTime time={comment.createdAt} /></span>
+    <span className='text-muted pull-right'>
+      <RemoveLink comment={comment} onRemove={onRemove} />
+      <RelativeTime time={comment.createdAt} />
+    </span>
     {comment.body}
   </span>
 )
 
 export class CommentItem extends React.Component {
   render () {
-    const { createdBy, createdAt, body, children } = this.props.comment
+    const { comment, onRemove } = this.props
+    const { createdBy, createdAt, body, children } = comment    
 
     return (
       <div className='box-comment'>
@@ -27,13 +50,19 @@ export class CommentItem extends React.Component {
         <div className='comment-text'>
           <span className='username'>
             <span><UserHelper userId={createdBy} helper='fullName' /></span>
-            <span className='text-muted pull-right'><RelativeTime time={createdAt} /></span>
+            <span className='text-muted pull-right'>
+              <RemoveLink comment={comment} onRemove={onRemove} />
+              <RelativeTime time={createdAt} />
+            </span>
           </span>
           <p className='enable-select break-word'>
             {body}
             {
               children && children.map(c =>
-                <ChildCommentItem key={c._id} comment={c} />
+                <ChildCommentItem
+                  key={c._id}
+                  comment={c}
+                  onRemove={onRemove} />
               )
             }
           </p>

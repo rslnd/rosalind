@@ -27,6 +27,7 @@
     "comment_plural": "Anmerkungen",
     "newCommentPlaceholder": "Anmerkung hinzufügen...",
     "newCommentPost": "Senden",
+    "removeComment": "Löschen",
     "noValue": "k.A.",
     "updateAvailableMessage": "Wenn du eine Minute Zeit hast, bitte starte das Programm neu. Es ist ein Update verfügbar, das Sicherheit und Stabilität verbessert.",
     "updateInstallNow": "OK, Los!",

@@ -23,15 +23,19 @@ const accumulateBy = field => list =>
     }
   }, { lastGroup: null, stack: [] }).stack
 
-export const CommentsList = ({ comments, onClick }) => {
+export const CommentsList = ({ comments, onClick, onRemove }) => {
   if (comments.length === 0) {
     return null
   } else {
     return (
       <div className='box-footer box-comments' onClick={onClick}>
-        {accumulateBy('createdBy')(comments).map((comment) => {
-          return <CommentItem key={comment._id} comment={comment} />
-        })}
+        {accumulateBy('createdBy')(comments).map((comment) =>
+          <CommentItem
+            key={comment._id}
+            comment={comment}
+            onRemove={onRemove}
+          />
+        )}
       </div>
     )
   }
