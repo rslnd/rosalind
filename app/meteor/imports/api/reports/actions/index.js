@@ -3,7 +3,6 @@ import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
 import { Tags } from '../../tags'
 import { Messages } from '../../messages'
-import { renderEmail } from './renderEmail'
 import { upsert } from './upsert'
 import { tally } from './tally'
 import { generate } from './generate'
@@ -12,7 +11,6 @@ import { generateQuarter } from './generateQuarter'
 
 export default function ({ Reports }) {
   return Object.assign({},
-    { renderEmail: renderEmail({ Reports }) },
     { upsert: upsert({ Reports }) },
     { tally: tally({ Reports }) },
     { generate: generate({ Calendars, Reports, Schedules, Appointments, Tags, Messages }) },

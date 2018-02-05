@@ -4,6 +4,7 @@
     "dashboard": "Übersicht",
     "thisSingular": "Bericht",
     "thisDaySingular": "Tagesbericht",
+    "thisDayPlural": "Tagesberichte",
     "date": "Datum",
     "assignees": "ÄrztInnen",
     "assignee": "ÄrztIn",

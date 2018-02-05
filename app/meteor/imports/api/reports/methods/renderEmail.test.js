@@ -8,6 +8,7 @@ import {
 } from './renderEmail'
 import { report } from './report.fixture.js'
 
+const reports = [ report ]
 const NBSP = ' '
 const equalizeWhitespace = s => s.replace(new RegExp(NBSP, 'g'), ' ')
 
@@ -26,10 +27,12 @@ const mapAssigneeType = type => ({
   team: 'Team'
 }[type])
 
+const mapCalendar = calendarId => ({ name: 'Insurance' })
+
 describe('reports', () => {
   describe('renderEmail', () => {
     it('renders report title', () => {
-      const rendered = renderEmail({ report, mapUserIdToName, mapAssigneeType })
+      const rendered = renderEmail({ reports, mapUserIdToName, mapAssigneeType, mapCalendar })
       expect(rendered.title).to.include('Tagesbericht')
       expect(rendered.title).to.include('Umsatz')
       expect(rendered.title).to.include('Donnerstag, 18. Mai 2017')
@@ -38,14 +41,14 @@ describe('reports', () => {
     })
 
     it('renders summary', () => {
-      const rendered = renderSummary({ report, mapUserIdToName, mapAssigneeType })
+      const rendered = renderSummary({ report, mapUserIdToName, mapAssigneeType, mapCalendar })
       expect(equalizeWhitespace(rendered)).to.include('Gesamtumsatz: € 5 859')
       expect(rendered).to.include('ÄrztInnen: 5')
       expect(rendered).to.include('Neu / Stunde: 6,2')
     })
 
     it('renders assignee ranking', () => {
-      const rendered = renderBody({ report, mapUserIdToName, mapAssigneeType })
+      const rendered = renderBody({ report, mapUserIdToName, mapAssigneeType, mapCalendar })
       expect(equalizeWhitespace(rendered)).to.include(dedent`
       1 - Dr. A
       Umsatz: € 1 713

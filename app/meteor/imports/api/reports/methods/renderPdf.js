@@ -62,8 +62,8 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
   }
 }
 
-export const renderPdf = async ({ report }) => {
-  const slug = dayToSlug(report.day)
+export const renderPdf = async ({ day }) => {
+  const slug = dayToSlug(day)
   const url = `http://127.0.0.1:${process.env.PORT}/reports/day/${slug}#print`
   const pdf = await printToPDF({ url, printOptions, isLoaded })
 

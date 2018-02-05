@@ -6,6 +6,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Reports } from '../../'
+import { Calendars } from '../../../calendars'
 import { Events } from '../../../events'
 import { Users } from '../../../users'
 import { dateToDay, dayToDate, dayToSlug } from '../../../../util/time/day'
@@ -38,19 +39,25 @@ export const sendEmail = new ValidatedMethod({
       const test = (process.env.NODE_ENV !== 'production') || args.test
 
       const day = args.day || dateToDay(moment(args))
-      const report = Reports.findOne({ day })
-      const isTodaysReport = moment().isSame(dayToDate(report.day), 'day')
-      if (!test && (!report || !isTodaysReport)) {
+      const reports = Reports.find({ day }).fetch()
+      const isTodaysReport = moment().isSame(dayToDate(day), 'day')
+      if (!test && (reports.length === 0 || !isTodaysReport)) {
         throw new Meteor.Error(404, 'There is no report for today, and no email will be sent')
       }
 
       const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, u.fullNameWithTitle()]))
       const mapAssigneeType = type => TAPi18n.__(`reports.assigneeType__${type}`, null, 'de-AT')
       const mapUserIdToName = userId => userIdToNameMapping[userId]
+      const mapCalendar = calendarId => Calendars.findOne({ _id: calendarId })
 
-      const { title, text } = renderEmail({ report, mapUserIdToName, mapAssigneeType })
-      const pdf = await renderPdf({ report })
-      const filename = `${dayToSlug(day)} Tagesbericht ${process.env.CUSTOMER_NAME}.pdf`
+      const { title, text } = renderEmail({ reports, mapUserIdToName, mapAssigneeType, mapCalendar })
+      const pdf = await renderPdf({ day })
+
+      const filename = [
+        dayToSlug(day),
+        TAPi18n.__('reports.thisDaySingular'),
+        process.env.CUSTOMER_NAME
+      ].join(' ') + '.pdf'
 
       let recipients = args.to || process.env.MAIL_REPORTS_TO.split(',')
 
@@ -77,7 +84,7 @@ export const sendEmail = new ValidatedMethod({
         ]
       })
 
-      Events.post('reports/sendEmail', { reportId: report._id })
+      Events.post('reports/sendEmail', { reportIds: reports.map(r => r._id) })
     } catch (e) {
       console.error(e)
       throw e

@@ -59,6 +59,7 @@
     "viewInCalendar": "Termin im Kalender zeigen",
     "note": "Anmerkung zu diesem Termin",
     "notePlaceholder": "Anmerkung zu diesem Termin hinzufügen",
+    "printDayView": "Diesen Tag drucken",
     "form": {
       "start": {
         "label": "Beginn"

@@ -1,5 +1,6 @@
 export const report = {
   '_id': 'ymghpQqRKiPTiLrXt',
+  'calendarId': 'insurance',
   'day': {
     'year': 2017,
     'month': 5,

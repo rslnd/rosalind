@@ -1,6 +1,7 @@
 import moment from 'moment-timezone'
 import idx from 'idx'
 import identity from 'lodash/identity'
+import sum from 'lodash/sum'
 import dedent from 'dedent'
 import { dayToDate } from '../../../util/time/day'
 import { float, percentage, currencyRounded } from '../../../util/format'
@@ -16,15 +17,16 @@ const renderLine = (text, value, separator = ': ') => {
   }
 }
 
-export const renderHeader = ({ report }) => {
+export const renderHeader = ({ day }) => {
   return dedent`
-    Tagesbericht für ${moment(dayToDate(report.day)).locale('de-AT').format('dddd, D. MMMM YYYY')}
-    Kalenderwoche ${moment(dayToDate(report.day)).isoWeek()}
+    Tagesbericht für ${moment(dayToDate(day)).locale('de-AT').format('dddd, D. MMMM YYYY')}
+    Kalenderwoche ${moment(dayToDate(day)).isoWeek()}
   `
 }
 
-export const renderSummary = ({ report }) => {
+export const renderSummary = ({ report, mapCalendar }) => {
   return dedent`
+    ${mapCalendar(report.calendarId).name}
     Gesamtumsatz: ${currencyRounded(idx(report, _ => _.total.revenue.actual))}
     Neu / Stunde: ${float(idx(report, _ => _.average.patients.new.actualPerHour))}
     ÄrztInnen: ${report.total.assignees}
@@ -63,7 +65,7 @@ export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
   return body
 }
 
-export const renderFooter = ({ report }) => {
+export const renderFooter = () => {
   return dedent`
 
     Der detaillierte Tagesbericht befindet sich im Anhang.
@@ -73,15 +75,23 @@ export const renderFooter = ({ report }) => {
   `
 }
 
-export const renderEmail = ({ report, mapUserIdToName, mapAssigneeType }) => {
-  const title = `Tagesbericht für ${moment(dayToDate(report.day)).locale('de-AT').format('dddd, D. MMMM YYYY')} - Umsatz ${currencyRounded(report.total.revenue.actual)}`
+export const renderEmail = ({ reports, mapUserIdToName, mapAssigneeType, mapCalendar }) => {
+  const day = reports[0].day
+  const totalRevenue = sum(reports.map(r => idx(r, _ => _.total.revenue.actual) || 0))
 
-  const header = renderHeader({ report, mapUserIdToName })
-  const summary = renderSummary({ report, mapUserIdToName })
-  const body = renderBody({ report, mapUserIdToName, mapAssigneeType })
-  const footer = renderFooter({ report })
+  const title = `Tagesbericht für ${moment(dayToDate(day)).locale('de-AT').format('dddd, D. MMMM YYYY')} - Umsatz ${currencyRounded(totalRevenue)}`
 
-  const text = [header, summary, body, footer].join('\n\n')
+  const header = renderHeader({ day })
+
+  const body = reports.map(report => {
+    const summary = renderSummary({ report, mapUserIdToName, mapCalendar })
+    const reportBody = renderBody({ report, mapUserIdToName, mapAssigneeType })
+    return [summary, reportBody].join('\n\n')
+  }).join('\n\n\n')
+
+  const footer = renderFooter()
+
+  const text = [header, body, footer].join('\n\n')
 
   if (isNull(title) || isNull(text)) {
     throw new Error(`Email contains 'null': ${title} - ${text}`)

@@ -65,7 +65,10 @@ export class AppointmentsScreen extends React.Component {
             <small>
               {weekOfYear(this.props.date, { short: true })}
               &nbsp;
-              <span style={printStyle} onClick={this.handlePrint}>
+              <span
+                style={printStyle}
+                title={TAPi18n.__('appointments.printDayView')}
+                onClick={this.handlePrint}>
                 <Icon name='print' />
               </span>
             </small>
