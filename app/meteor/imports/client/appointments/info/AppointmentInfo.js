@@ -257,6 +257,9 @@ const PatientNotes = ({ patient }) => (
         <Field
           name='note'
           component={TextField}
+          multiline
+          rows={1}
+          rowsMax={5}
           label={TAPi18n.__('patients.note')}
         />
       </div>
@@ -292,7 +295,6 @@ export class AppointmentInfo extends React.Component {
     super(props)
 
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
   componentWillMount () {
@@ -315,13 +317,6 @@ export class AppointmentInfo extends React.Component {
     }
   }
 
-  handleKeyDown (e) {
-    if (e.keyCode === 13 && e.shiftKey === false) {
-      e.preventDefault()
-      return this.handleSubmit()
-    }
-  }
-
   render () {
     const {
       handleSubmit,
@@ -338,7 +333,7 @@ export class AppointmentInfo extends React.Component {
       handleSetMessagePreferences } = this.props
 
     return (
-      <form onSubmit={this.handleSubmit} onKeyDown={this.handleKeyDown}>
+      <form onSubmit={this.handleSubmit}>
         <div className='row'>
           {
               patient &&
