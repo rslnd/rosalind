@@ -177,8 +177,12 @@ export const isSameContact = a => b =>
   )
 
 export const mergeContacts = (master = [], addendum = []) => {
+  console.log('mergeContacts', typeof master, master, typeof addendum, addendum)
+
+  if (!master) { return addendum }
+  if (!addendum) { return master }
   return flatten([
-    [ ...(master || []), ...(addendum || []) ].reduce((master, addendum) => {
+    [ ...master, ...addendum ].reduce((master, addendum) => {
       const acc = master.length ? flatten(master) : [ master ]
 
       if (find(isSameContact(addendum))(acc)) {
