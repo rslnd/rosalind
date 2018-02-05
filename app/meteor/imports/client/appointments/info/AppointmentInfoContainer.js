@@ -65,7 +65,7 @@ const composer = (props, onData) => {
     }
 
     const handleEditPatient = v => {
-      if (!isEqual(initialPatientFields, v.patient)) {
+      if (!isEqualWith(initialPatientFields, v.patient, (a, b) => a === b)) {
         const patient = mapFieldsToPatient(v.patient)
 
         return Patients.actions.upsert.callPromise({

@@ -125,7 +125,7 @@ const CurrencyFieldInner = (props) =>
   <NumberFormat
     {...props}
     onValueChange={values => {
-      console.log('onvaluechange', values.value)
+      console.log('onvaluechange', values)
       props.onChange({
         target: {
           value: values.value
