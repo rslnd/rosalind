@@ -83,7 +83,7 @@ export const NewAppointmentFields = props => {
       </div>
 
       <div style={flex}>
-        <Button raised type='submit'
+        <Button variant='raised' type='submit'
           onClick={handleSubmit}
           fullWidth
           color='primary'

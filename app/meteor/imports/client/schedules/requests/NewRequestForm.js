@@ -31,7 +31,7 @@ class NewRequestFormComponent extends React.Component {
           </div>
         </div>
 
-        <Button raised type='submit'
+        <Button variant='raised' type='submit'
           onClick={handleSubmit}
           fullWidth
           primary={!submitting && !pristine}

@@ -9,13 +9,13 @@ export const AppointmentActions = (props) => (
       {
         props.admitted
         ? <Button
-          raised
+          variant='raised'
           style={{ backgroundColor: '#C5E1A5' }}
           onClick={props.unsetAdmitted}>
           <span><Icon name='check' />&emsp;{TAPi18n.__('appointments.admit')}</span>
         </Button>
         : <Button
-          raised
+          variant='raised'
           style={{ backgroundColor: '#fff' }}
           onClick={props.setAdmitted}>
           <span><Icon name='check' />&emsp;{TAPi18n.__('appointments.admit')}</span>

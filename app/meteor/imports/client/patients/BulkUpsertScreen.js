@@ -72,7 +72,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
               </div>
           }
 
-          <Button raised
+          <Button variant='raised'
             type='submit'
             style={{ marginTop: 10 }}
             onClick={handleSubmit(onSubmit)}

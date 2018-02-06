@@ -25,7 +25,7 @@ class NewHolidaysFormComponent extends React.Component {
 
         <div className='row'>
           <div className='col-md-12' style={{ marginTop: 20 }}>
-            <Button raised type='submit'
+            <Button variant='raised' type='submit'
               onClick={handleSubmit}
               fullWidth
               primary={!submitting && !pristine}
