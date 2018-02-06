@@ -14,7 +14,7 @@ const composer = (props, onData) => {
   const selector = {
     assigneeId: Meteor.userId(),
     admittedAt: { $ne: null },
-    treatedAt: null
+    treatmentEnd: null
   }
 
   const appointments = Appointments.find(selector, {

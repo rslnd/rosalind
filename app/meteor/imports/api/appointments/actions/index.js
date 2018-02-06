@@ -8,6 +8,8 @@ import { unsetAdmitted } from './unsetAdmitted'
 import { unsetCanceled } from './unsetCanceled'
 import { move } from './move'
 import { update } from './update'
+import { startTreatment } from './startTreatment'
+import { endTreatment } from './endTreatment'
 
 export default function ({ Appointments }) {
   return {
@@ -20,6 +22,8 @@ export default function ({ Appointments }) {
     unsetAdmitted: unsetAdmitted({ Appointments }),
     unsetCanceled: unsetCanceled({ Appointments }),
     move: move({ Appointments }),
-    update: update({ Appointments })
+    update: update({ Appointments }),
+    startTreatment: startTreatment({ Appointments }),
+    endTreatment: endTreatment({ Appointments })
   }
 }

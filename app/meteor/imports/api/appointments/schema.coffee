@@ -55,12 +55,17 @@ Schema = new SimpleSchema
     optional: true
     index: 1
 
-  treatedAt:
+  treatmentStart:
     type: Date
     optional: true
     index: 1
 
-  treatedBy:
+  treatmentEnd:
+    type: SimpleSchema.RegEx.Id
+    optional: true
+    index: 1
+
+  treatmentBy:
     type: SimpleSchema.RegEx.Id
     optional: true
     index: 1

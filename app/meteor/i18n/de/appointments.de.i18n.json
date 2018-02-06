@@ -60,6 +60,11 @@
     "note": "Anmerkung zu diesem Termin",
     "notePlaceholder": "Anmerkung zu diesem Termin hinzufügen",
     "printDayView": "Diesen Tag drucken",
+    "startTreatment": "Behandlung starten",
+    "startTreatmentSuccess": "Behandlung gestartet",
+    "endTreatment": "Behandlung beenden",
+    "endTreatmentSuccess": "Behandlung beendet",
+    "error": "Entschuldigung! Bitte noch einmal versuchen.",
     "form": {
       "start": {
         "label": "Beginn"
