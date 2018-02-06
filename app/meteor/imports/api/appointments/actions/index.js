@@ -10,6 +10,7 @@ import { move } from './move'
 import { update } from './update'
 import { startTreatment } from './startTreatment'
 import { endTreatment } from './endTreatment'
+import { nextTreatment } from './nextTreatment'
 
 export default function ({ Appointments }) {
   return {
@@ -24,6 +25,7 @@ export default function ({ Appointments }) {
     move: move({ Appointments }),
     update: update({ Appointments }),
     startTreatment: startTreatment({ Appointments }),
-    endTreatment: endTreatment({ Appointments })
+    endTreatment: endTreatment({ Appointments }),
+    nextTreatment: nextTreatment({ Appointments })
   }
 }

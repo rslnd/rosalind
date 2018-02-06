@@ -15,6 +15,7 @@ export const WaitlistScreen = ({ appointments }) => (
         <div key={appointment._id}>
           <WaitlistItem
             isFirst={i === 0}
+            isLast={i === (appointments.length - 1)}
             appointment={appointment} />
         </div>
       ))
@@ -34,7 +35,7 @@ const boxStyle = {
   marginBottom: 10
 }
 
-const WaitlistItem = ({ appointment, isFirst }) =>
+const WaitlistItem = ({ appointment, isFirst, isLast }) =>
   <Box noPadding boxStyle={boxStyle}>
     <div>
       <span className='text-muted'>
@@ -56,10 +57,11 @@ const WaitlistItem = ({ appointment, isFirst }) =>
 
     <ActionButton
       appointment={appointment}
-      highlight={isFirst} />
+      isFirst={isFirst}
+      isLast={isLast} />
   </Box>
 
-const action = (action, appointment) => {
+const action = (action, appointment, options = {}) => {
   const fn = () => Appointments.actions[action].callPromise({ appointmentId: appointment._id })
     .then(() => {
       Alert.success(TAPi18n.__(`appointments.${action}Success`))
@@ -68,25 +70,45 @@ const action = (action, appointment) => {
       console.error(e)
       Alert.error(TAPi18n.__(`appointments.error`))
     })
-  const title = TAPi18n.__(`appointments.${action}`)
+
+  const title = options.alternative
+    ? TAPi18n.__(`appointments.${action}Alternative`)
+    : TAPi18n.__(`appointments.${action}`)
+
   return { title, fn }
 }
 
-const ActionButton = ({ appointment, highlight }) => {
+const ActionButton = ({ appointment, isFirst, isLast }) => {
   const a = appointment
   const nextAction = [
     !a.treatmentStart && action('startTreatment', a),
+    a.treatmentStart && !a.treatmentEnd && !isLast && {
+      ...action('nextTreatment', a),
+      alternativeAction: action('endTreatment', a, { alternative: true })
+    },
     a.treatmentStart && !a.treatmentEnd && action('endTreatment', a)
   ].find(identity)
 
-  return nextAction && <Button
-    variant='raised'
-    color={highlight ? 'primary' : 'default'}
-    size='large'
-    onClick={nextAction.fn}
-    fullWidth>
+  return nextAction && <div className='text-center'>
+    <Button
+      variant='raised'
+      color={isFirst ? 'primary' : 'default'}
+      size='large'
+      onClick={nextAction.fn}
+      fullWidth>
+      {
+        nextAction.title
+      }
+    </Button>
     {
-      nextAction.title
+      nextAction.alternativeAction &&
+        <Button
+          size='small'
+          onClick={nextAction.alternativeAction.fn}
+          style={{ marginTop: 6 }}
+          fullWidth>
+          {nextAction.alternativeAction.title}
+        </Button>
     }
-  </Button> || null
+  </div> || null
 }

@@ -6,15 +6,22 @@ import { Patients } from '../../../api/patients'
 import { WaitlistScreen } from './WaitlistScreen'
 
 const composer = (props, onData) => {
+  const startOfToday = moment().startOf('day').toDate()
+  const endOfToday = moment().endOf('day').toDate()
+
   Meteor.subscribe('appointments', {
-    start: moment().startOf('day').toDate(),
-    end: moment().endOf('day').toDate()
+    start: startOfToday,
+    end: endOfToday
   })
 
   const selector = {
     assigneeId: Meteor.userId(),
     admittedAt: { $ne: null },
-    treatmentEnd: null
+    treatmentEnd: null,
+    start: {
+      $gt: startOfToday,
+      $lt: endOfToday
+    }
   }
 
   const appointments = Appointments.find(selector, {
