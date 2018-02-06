@@ -13,6 +13,7 @@ import { Appointments } from './appointments'
 import { Importers } from './importers'
 import { Jobs } from './jobs'
 import { Messages } from './messages'
+import { Referrals } from './referrals'
 import { Reports } from './reports'
 import { Search } from './search'
 import { Settings } from './settings'
@@ -32,6 +33,7 @@ export {
   InboundCalls,
   Jobs,
   Messages,
+  Referrals,
   Reports,
   Schedules,
   Search,
