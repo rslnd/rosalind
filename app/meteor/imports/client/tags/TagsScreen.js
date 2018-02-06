@@ -83,6 +83,17 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
           </span>
       }
     </span>
+  },
+  {
+    header: 'Empfehlbar von',
+    render: c => c.referrableFrom && <span>
+      {c.referrableFrom.map(r =>
+        <span key={r}>
+          {getCalendarName(r)}
+          <br />
+        </span>
+      )}
+    </span>
   }
 ]
 

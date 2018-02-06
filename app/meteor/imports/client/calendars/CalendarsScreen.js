@@ -82,6 +82,17 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'SMS Storno',
     field: 'smsAppointmentReminderCancelationConfirmationText'
+  },
+  {
+    header: 'Empfehlbar von',
+    render: c => c.referrableFrom && <span>
+      {c.referrableFrom.map(r =>
+        <span key={r}>
+          {getCalendarName(r)}
+          <br />
+        </span>
+      )}
+    </span>
   }
 ]
 

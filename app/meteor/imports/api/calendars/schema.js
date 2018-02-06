@@ -80,5 +80,10 @@ export const schema = new SimpleSchema({
   patientNamePlural: {
     type: String,
     optional: true
+  },
+
+  referrableFrom: {
+    type: [SimpleSchema.RegEx.Id],
+    optional: true
   }
 })

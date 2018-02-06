@@ -49,6 +49,10 @@ module.exports = new SimpleSchema
   reportHeader:
     type: String
     optional: true
+  
+  referrableFrom:
+    type: [SimpleSchema.RegEx.Id],
+    optional: true
 
   external:
     type: [ String ]
