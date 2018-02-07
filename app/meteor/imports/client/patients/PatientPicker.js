@@ -56,10 +56,6 @@ export class PatientPicker extends React.Component {
     this.handleSearchValueChange = this.handleSearchValueChange.bind(this)
   }
 
-  componentWillUnmount () {
-    this.props.loadPatient(null)
-  }
-
   handleQueryChange (query) {
     if (query && query.value) {
       this.props.input.onChange(query.value)
@@ -88,7 +84,10 @@ export class PatientPicker extends React.Component {
         onChange={this.handleQueryChange}
         onInputChange={this.handleSearchValueChange}
         inputValue={this.state.searchValue}
-        onBlur={() => this.props.input.onBlur(this.props.input.value)}
+        onBlur={() => this.props.input.onBlur(
+          (this.props.injectedValue && this.props.injectedValue.patientId) ||
+          this.props.input.value
+        )}
         autoBlur
         cache={false}
         ignoreCase={false}

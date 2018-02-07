@@ -1,3 +1,4 @@
+import idx from 'idx'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { connect } from 'react-redux'
 import { Patients } from '../../../api/patients'
@@ -31,6 +32,9 @@ const findAppointments = (query) => {
       })
       return { options }
     })
+    .catch(e => {
+      console.error('search/patientsWithAppointments', e)
+    })
   } else {
     return new Promise((resolve) => {
       resolve([])
@@ -38,8 +42,10 @@ const findAppointments = (query) => {
   }
 }
 
+let lastQueryId = 0
 const compose = (props, onData) => {
   const { patientId, query } = props
+  const currentQueryId = (lastQueryId + 1)
 
   if (patientId) {
     Patients.actions.findOne.callPromise({ _id: patientId })
@@ -47,28 +53,36 @@ const compose = (props, onData) => {
       .then(({ options }) => {
         const patient = options[0].patient
 
-        console.log('injecting to search', patient)
-        onData(null, {
-          ...props,
-          findAppointments,
-          query: {
-            patient,
-            value: `patient-${patient._id}`
-          },
-          options
-        })
+        console.log('ondata injecting to search', patient)
+
+        if (currentQueryId === lastQueryId) {
+          onData(null, {
+            ...props,
+            findAppointments,
+            query: {
+              patient,
+              value: `patient-${patient._id}`
+            },
+            options
+          })
+        }
+      })
+      .catch(e => {
+        console.error('patients/findOne', e)
       })
   } else {
     onData(null, { ...props, query, findAppointments })
   }
+
+  lastQueryId = currentQueryId
 }
 
 const AppointmentsSearchComposed = composeWithTracker(compose)(AppointmentsSearch)
 
 const mapStateToProps = (store) => {
   return {
-    patientId: store.appointments.search.patientId,
-    query: store.appointments.search.query
+    patientId: idx(store, _ => _.appointments.search.patientId) || null,
+    query: idx(store, _ => _.appointments.search.query) || null
   }
 }
 

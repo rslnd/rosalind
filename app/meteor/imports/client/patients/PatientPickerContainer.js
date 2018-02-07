@@ -7,7 +7,12 @@ import { mapStateToProps } from './mapStateToProps';
 
 const composer = (props, onData) => {
   if (props.input.value || props.patientId) {
-    const patientId = props.input.value || props.patientId
+    const inputValue = (typeof props.input.value === 'string')
+      ? props.input.value
+      : (typeof props.input.value === 'object')
+        ? props.input.value.patientId
+        : null
+    const patientId = inputValue || props.patientId
 
     if (patientId === 'newPatient' || patientId === '') {
       return onData(null, { ...props })

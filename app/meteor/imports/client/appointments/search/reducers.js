@@ -15,6 +15,15 @@ export const search = (state = {}, action) => {
         }
       }
       return state
+    case 'LOAD_PATIENT':
+      if (action.data) {
+        return {
+          patientId: action.data._id,
+          query: null
+        }
+      } else {
+        return {}
+      }
     default:
       return state
   }
