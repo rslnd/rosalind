@@ -25,7 +25,7 @@ export const mapPatientToFields = patient => {
       birthday: patient.profile.birthday,
       contacts,
       address,
-      banned: patient.profile.banned,
+      banned: patient.profile.banned || false,
       externalRevenue: patient.externalRevenue,
       note: patient.note,
       patientSince: patient.patientSince
