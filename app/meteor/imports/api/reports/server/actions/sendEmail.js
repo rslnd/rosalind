@@ -55,7 +55,7 @@ export const sendEmail = new ValidatedMethod({
 
       const filename = [
         dayToSlug(day),
-        TAPi18n.__('reports.thisDaySingular'),
+        TAPi18n.__('reports.thisDaySingular', null, 'de-AT'),
         process.env.CUSTOMER_NAME
       ].join(' ') + '.pdf'
 

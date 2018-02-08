@@ -8,6 +8,7 @@ import { float, percentage, currencyRounded } from '../../../util/format'
 
 const isNull = s => s &&
   (typeof s === 'string' && s.match(/false|undefined| null|NaN/g) ||
+  (typeof s === 'string' && s.match(/reports\./g)) ||
   (typeof s === 'string' && s.length === 0) ||
   (typeof s === 'number' && s === 0))
 
