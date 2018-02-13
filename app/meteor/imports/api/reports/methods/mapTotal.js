@@ -90,17 +90,25 @@ export const mapWorkload = ({ report }) => {
 }
 
 const mapRevenue = ({ report }) => {
-  if (!some(a => idx(a, _ => _.revenue.total.actual))(report.assignees)) {
-    return {}
-  }
+  let revenues = {}
 
-  const actual = report.assignees
-    .map(a => idx(a, _ => _.revenue.total.actual) || 0)
-    .reduce(add, 0)
+  report.assignees.map(a => {
+    Object.keys(a.revenue).map(typeKey => {
+      if (!revenues[typeKey]) {
+        revenues[typeKey] = {}
+      }
 
-  return {
-    actual
-  }
+      Object.keys(a.revenue[typeKey]).map(valueKey => {
+        if (!revenues[typeKey][valueKey]) {
+          revenues[typeKey][valueKey] = 0
+        }
+
+        revenues[typeKey][valueKey] += a.revenue[typeKey][valueKey]
+      })
+    })
+  })
+
+  return revenues
 }
 
 const preprocess = ({ report }) => {

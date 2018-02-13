@@ -52,6 +52,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  reportExpectedAsActual: {
+    type: Boolean,
+    optional: true
+  },
+
   smsAppointmentReminderText: {
     type: String,
     optional: true

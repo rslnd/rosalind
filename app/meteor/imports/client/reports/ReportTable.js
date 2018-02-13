@@ -39,6 +39,7 @@ const disclaimerStyle = {
 }
 
 const colDivider = {
+  ...align,
   borderTop: '2px solid #ebf1f2',
   backgroundColor: '#f7f8f9'
 }
@@ -67,7 +68,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapRe
         </span>
       }</th>
       <th style={align}>Std.</th>
-      <th colSpan={3}>
+      <th colSpan={calendar.reportExpectedAsActual ? 2 : 3}>
         {(calendar && calendar.patientNamePlural) || __('reports.patients')}
       </th>
       {
@@ -92,9 +93,14 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapRe
       <th />
       <th />
       <th style={borderLeftStyle}>Plan</th>
-      <th style={align} title='Anwesend'>Anw.</th>
-      <th style={align} title='Behandelt'>Ist</th>
-
+      {
+        calendar.reportExpectedAsActual
+        ? <th key='actual' style={align} title='Behandelt'>Ist</th>
+        : [
+          <th key='admitted' style={align} title='Anwesend'>Anw.</th>,
+          <th key='actual' style={align} title='Behandelt'>Ist</th>
+        ]
+      }
       {
         (calendar && calendar.reportAs)
         ? calendar.reportAs.map(tag =>
@@ -163,7 +169,7 @@ const Overbooking = ({ assignee, __ }) => {
   }
 }
 
-export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assigneeReport, __ }) => (
+export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assigneeReport, calendar, __ }) => (
   <FlipMove
     duration={200}
     typeName='tbody'
@@ -186,15 +192,37 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
 
         {/* Patients [Plan=Expected, Admitted, Actual] */}
         <Td borderLeft>{idx(assignee, _ => _.patients.total.expected) || <Nil />}</Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
-        <Td><Percent part={idx(assignee, _ => _.patients.total.actual)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
 
         {
-          (report.calendar && report.calendar.reportAs)
-          ? report.calendar.reportAs.map(tag =>
+          calendar.reportExpectedAsActual
+          ? <Td><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
+          : [
+            <Td key='admitted'><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>,
+            <Td key='actual'><Percent part={idx(assignee, _ => _.patients.total.actual)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
+          ]
+        }
+
+        {
+          (calendar && calendar.reportAs)
+          ? calendar.reportAs.map(tag =>
             [
               <Td key={1} borderLeft><Percent part={idx(assignee, _ => _.patients[tag].expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>,
-              <Td key={2}>{(assignee.type !== 'external') ? <Percent part={idx(assignee, _ => _.patients[tag].actual)} of={idx(assignee, _ => _.patients.total.actual)} /> : idx(assignee, _ => _.patients[tag].actual)}</Td>
+
+              calendar.reportExpectedAsActual
+              ? <Td key={2}>{
+                (assignee.type !== 'external')
+                ? <Percent
+                  part={idx(assignee, _ => _.patients[tag].admitted)}
+                  of={idx(assignee, _ => _.patients.total.admitted)} />
+                : idx(assignee, _ => _.patients[tag].admitted)
+              }</Td>
+              : <Td key={2}>{
+                (assignee.type !== 'external')
+                ? <Percent
+                  part={idx(assignee, _ => _.patients[tag].actual)}
+                  of={idx(assignee, _ => _.patients.total.actual)} />
+                : idx(assignee, _ => _.patients[tag].actual)
+              }</Td>
             ]
           ) : [
             // davon NEU [Plan (Abs+%), Ist (Abs+%)]
@@ -233,7 +261,9 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         {
           showRevenue &&
             <Td borderLeft style={align}>{assignee.assigneeId &&
-              <Round to={0} unit='€' number={idx(assignee, _ => _.revenue.total.actualPerHour)} /> || <Nil />
+              <Round to={0} unit='€' number={
+                idx(assignee, _ => _.revenue.total.actualPerHour) ||
+                idx(assignee, _ => _.revenue.total.expectedPerHour)} /> || <Nil />
             }</Td>
         }
 
@@ -241,13 +271,16 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         {
           showRevenue &&
             <Td style={align}>{
-              <Round to={0} unit='€' number={idx(assignee, _ => _.revenue.total.actual)} />
+              <Round to={0} unit='€' number={
+                idx(assignee, _ => _.revenue.total.actual) ||
+                idx(assignee, _ => _.revenue.total.expected)} />
             }</Td>
         }
       </tr>
     ))}
     <SummaryRow
       report={report}
+      calendar={report.calendar}
       showRevenue={showRevenue}
       assigneeReport={assigneeReport}
       __={__} />
@@ -256,7 +289,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
 
 class SummaryRow extends React.Component {
   render () {
-    const { report, showRevenue, assigneeReport, __ } = this.props
+    const { report, showRevenue, assigneeReport, calendar, __ } = this.props
     return (
       <tr style={summaryRowStyle} className='bg-white'>
         <td>{
@@ -266,8 +299,8 @@ class SummaryRow extends React.Component {
             &nbsp;
             {
               (report.total.assignees === 1)
-              ? (report.calendar.assigneeName || __('reports.assignee', { count: report.total.assignees }))
-              : (report.calendar.assigneeNamePlural || __('reports.assignee', { count: report.total.assignees }))
+              ? (calendar.assigneeName || __('reports.assignee', { count: report.total.assignees }))
+              : (calendar.assigneeNamePlural || __('reports.assignee', { count: report.total.assignees }))
             }
           </span>
         }</td>
@@ -277,23 +310,32 @@ class SummaryRow extends React.Component {
 
         {/* Patients [planned, admitted, weighted workload] */}
         <Td borderLeft>{idx(report, _ => _.total.patients.total.expected) || <Nil />}</Td>
-        <Td><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
-        <Td>
-          <span>
-            {idx(report, _ => _.total.patients.total.actual)}
-            <small className='text-muted'>
-              <br />
-              {percentage({ value: idx(report, _ => _.total.workload.weighted) })}
-            </small>
-          </span>
-        </Td>
+        {
+          calendar.reportExpectedAsActual
+          ? <Td><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
+          : [
+            <Td key='admitted'><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>,
+            <Td key='actual'>
+              <span>
+                {idx(report, _ => _.total.patients.total.actual)}
+                <small className='text-muted'>
+                  <br />
+                  {percentage({ value: idx(report, _ => _.total.workload.weighted) })}
+                </small>
+              </span>
+            </Td>
+          ]
+        }
 
         {
-          (report.calendar && report.calendar.reportAs)
-          ? report.calendar.reportAs.map(tag =>
+          (calendar && calendar.reportAs)
+          ? calendar.reportAs.map(tag =>
             [
               <Td key={1} borderLeft><Percent part={idx(report, _ => _.total.patients[tag].expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>,
-              <Td key={2}><Percent part={idx(report, _ => _.total.patients[tag].actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
+
+              calendar.reportExpectedAsActual
+              ? <Td key={2}><Percent part={idx(report, _ => _.total.patients[tag].expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
+              : <Td key={2}><Percent part={idx(report, _ => _.total.patients[tag].actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
             ]
           ) : [
             // davon NEU [Plan (Abs+%), Ist (Abs+%)]
@@ -323,16 +365,27 @@ class SummaryRow extends React.Component {
         {assigneeReport && <Td />}
 
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
-        {showRevenue && <Td borderLeft style={align}><Round to={0} unit='⌀ €' number={idx(report, _ => _.average.revenue.actualPerHour)} /></Td>}
+        {showRevenue && <Td borderLeft style={align}><Round to={0} unit='⌀ €' number={
+          idx(report, _ => _.average.revenue.actualPerHour) || // backwards compatibility
+          idx(report, _ => _.average.revenue.total.actualPerHour) ||
+          idx(report, _ => _.average.revenue.total.expectedPerHour)
+        } /></Td>}
 
         {/* Umsatz gesamt */}
         {showRevenue && <Td style={align}>
           {idx(report, _ => _.total.revenue.misattributed) > 0 &&
             <small className='text-muted' title='Summe der Leistungen, die nicht anwesenden ÄrztInnen zugerechnet wurde'>
-              + <Round to={0} unit='€' number={idx(report, _ => _.total.revenue.misattributed)} /><br />
+              + <Round to={0} unit='€' number={
+                idx(report, _ => _.total.revenue.misattributed) ||
+                idx(report, _ => _.total.revenue.total.misattributed)
+                } /><br />
             </small>
           }
-          <Round to={0} unit='€' number={idx(report, _ => _.total.revenue.actual)} />
+          <Round to={0} unit='€' number={
+            idx(report, _ => _.total.revenue.actual) || // backwards compatibility
+            idx(report, _ => _.total.revenue.total.actual) ||
+            idx(report, _ => _.total.revenue.total.expected)
+          } />
         </Td>}
       </tr>
     )
@@ -370,6 +423,7 @@ export const ReportTable = ({ report, showRevenue, mapUserIdToName, assigneeRepo
         __={__} />
       <ReportTableBody
         report={report}
+        calendar={report.calendar}
         showRevenue={showRevenue}
         mapUserIdToName={mapUserIdToName}
         assigneeReport={assigneeReport}

@@ -50,9 +50,9 @@ const mapPatients = ({ patients, hours }) => (
   mapValues(calculatePerHour({ hours }))(patients)
 )
 
-const mapRevenue = ({ revenue, hours }) => (
-  mapValues(calculatePerHour({ hours }))(revenue)
-)
+const mapRevenue = ({ revenue, hours }) => {
+  return mapValues(calculatePerHour({ hours }))(revenue)
+}
 
 const sumAppointments = ({ appointments, slotsPerHour, filter = identity }) =>
   (appointments

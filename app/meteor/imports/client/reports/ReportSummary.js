@@ -42,15 +42,21 @@ export const Unit = ({ prepend, append, children, __ }) => (
   </span>
 )
 
-export const TotalRevenueBox = ({ report, position, color, __ }) => (
-  <InfoBox text={__('reports.revenue')} color={color} position={position} icon='euro'>
+export const TotalRevenueBox = ({ report, position, color, __ }) => {
+  const revenue = (
+    idx(report, _ => _.total.revenue.actual) || // backwards compatibility
+    idx(report, _ => _.total.revenue.total.actual) ||
+    idx(report, _ => _.total.revenue.total.expected)
+  )
+
+  return <InfoBox text={__('reports.revenue')} color={color} position={position} icon='euro'>
     {
-      idx(report, _ => _.total.revenue.actual)
-      ? <Unit prepend='€'>{integer(report.total.revenue.actual)}</Unit>
+      revenue
+      ? <Unit prepend='€'>{integer(revenue)}</Unit>
       : <Nil />
     }
   </InfoBox>
-)
+}
 
 export const NewPatientsPerHourBox = ({ report, position, color, __ }) => {
   const newPerHour = idx(report, _ => _.average.patients.new.actualPerHour) ||
@@ -78,12 +84,15 @@ export const KeyMetricBox = ({ report, position, color, __ }) => {
 
 export const Workload = ({ report, position, color, __ }) => {
   const workload = report.total.workload.weighted
+
   return (
     <InfoBox text='Auslastung' color={color} position={position} icon='bars'>
       {
         workload
         ? <BigPercent value={workload} />
-        : <Nil />
+        : <BigPercent
+          part={idx(report, _ => _.total.patients.total.admitted)}
+          of={idx(report, _ => _.total.patients.total.expected)} />
       }
     </InfoBox>
   )
@@ -91,15 +100,11 @@ export const Workload = ({ report, position, color, __ }) => {
 
 export const NoShowsBox = ({ report, position, color, __ }) => {
   const expected = idx(report, _ => _.total.patients.total.expected)
-  const noShows = idx(report, _ => _.total.patients.total.noShow)
+  const noShows = idx(report, _ => _.total.patients.total.noShow) || 0
 
   return (
     <InfoBox text='Nicht erschienen' color={color} position={position} icon='user-o'>
-      {
-        noShows
-        ? <BigPercent part={noShows} of={expected} />
-        : <Nil />
-      }
+      <BigPercent part={noShows} of={expected} />
     </InfoBox>
   )
 }

@@ -8,7 +8,7 @@ export const postprocessRevenue = revenue => {
 const mapAssignees = ({ type, revenue }, assigneeId) => {
   const mappedRevenue = {
     revenue: {
-      total: {
+      insurance: {
         actual: revenue
       }
     }

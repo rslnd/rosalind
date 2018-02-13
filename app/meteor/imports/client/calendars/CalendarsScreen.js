@@ -76,6 +76,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     ) : null
   },
   {
+    title: 'Nur "Ist"',
+    field: 'reportExpectedAsActual',
+    render: c =>
+      c.reportExpectedAsActual && <Icon name='check' />
+  },
+  {
     header: 'SMS Erinnerung',
     field: 'smsAppointmentReminderText'
   },

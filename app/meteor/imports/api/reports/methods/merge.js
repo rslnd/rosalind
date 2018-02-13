@@ -40,8 +40,20 @@ const mergeAssignees = (report, addendum) => {
     }
   })
 
+  // Recalculate totals
+  const talliedAssignees = mergedAssignees.map(a => {
+    if (a.revenue) {
+      return {
+        ...a,
+        total: sumRevenues(a.revenue)
+      }
+    } else {
+      return a
+    }
+  })
+
   const sortedAssignees = sortBy(a => ((a.assigneeId && !a.type) ? 1 : 0))(
-    sortBy(a => idx(a, _ => _.revenue.total.actual))(mergedAssignees)
+    sortBy(a => idx(a, _ => _.revenue.total.actual))(talliedAssignees)
   ).reverse()
 
   return sortedAssignees
@@ -60,4 +72,24 @@ export const merge = (report, addendum) => {
     ...report,
     assignees
   }
+}
+
+const sumRevenues = revenues => {
+  let total = {}
+  const privateOrInsurance = Object.keys(revenues)
+  privateOrInsurance.map(typeKey => {
+    const plannedOrActual = Object.keys(typeKey)
+    plannedOrActual.map(valueKey => {
+      if (!total[typeKey]) {
+        total[typeKey] = {}
+      }
+      if (!total[typeKey][valueKey]) {
+        total[typeKey][valueKey] = 0
+      }
+
+      total[typeKey][valueKey] += revenues[typeKey][valueKey]
+    })
+  })
+
+  return total
 }

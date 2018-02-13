@@ -2,6 +2,8 @@ import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
 import sortBy from 'lodash/fp/sortBy'
 import uniqBy from 'lodash/fp/uniqBy'
+import sum from 'lodash/fp/sum'
+import identity from 'lodash/fp/identity'
 import { isNew } from './mapPlannedNew'
 
 const uniqAppointments = appointments => uniqBy('patientId')(appointments
@@ -48,12 +50,36 @@ export const mapAppointmentsByTags = ({ appointments, pastAppointments, tagMappi
   }
 }
 
+const mapRevenue = ({ appointments }) => {
+  const calculate = filter => sum(appointments
+    .filter(a => !a.canceled && !a.removed)
+    .filter(filter)
+    .map(a => a.revenue)
+    .filter(identity))
+
+  const planned = calculate(identity)
+  const expected = calculate(a => a.admitted)
+
+  const revenues = {
+    planned,
+    expected
+  }
+
+  return {
+    private: revenues,
+    total: revenues
+  }
+}
+
 const mapAssignee = ({ assigneeId, appointments, pastAppointments, overrideSchedules, tagMapping }) => {
   const patients = mapAppointmentsByTags({ appointments, pastAppointments, tagMapping })
 
+  const revenue = mapRevenue({ appointments })
+
   return {
     assigneeId,
-    patients
+    patients,
+    revenue
   }
 }
 
