@@ -38,8 +38,8 @@ export const conditionalFloat = n => n &&
   : integerFormatter.format(n)
 
 export const percentage = (props) => {
-  if ((props.part === null || props.part === undefined) &&
-    (props.value === null || props.part === undefined)) { return null }
+  if ((props.part === null && props.part === undefined) &&
+    (props.value === null && props.part === undefined)) { return null }
 
   const value = props.value || (props.part / props.of)
   let p = conditionalFloat(100 * value)

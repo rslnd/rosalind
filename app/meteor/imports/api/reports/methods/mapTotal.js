@@ -93,7 +93,7 @@ const mapRevenue = ({ report }) => {
   let revenues = {}
 
   report.assignees.map(a => {
-    Object.keys(a.revenue).map(typeKey => {
+    Object.keys(a.revenue || {}).map(typeKey => {
       if (!revenues[typeKey]) {
         revenues[typeKey] = {}
       }

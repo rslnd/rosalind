@@ -350,7 +350,9 @@ export const report = {
       weighted: 0.9861904761905
     },
     'revenue': {
-      'actual': 5858.53
+      'total': {
+        'actual': 5858.53
+      }
     }
   },
   'average': {
@@ -379,7 +381,9 @@ export const report = {
       }
     },
     'revenue': {
-      'actualPerHour': 278.977619047619
+      'total': {
+        'actualPerHour': 278.977619047619
+      }
     }
   },
   'createdAt': new Date('2017-05-22T12:01:15.908+02:00')

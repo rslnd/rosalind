@@ -22,7 +22,7 @@ describe('api', function () {
           {
             assigneeId: 'A5',
             revenue: {
-              total: {
+              insurance: {
                 actual: 0
               }
             }
@@ -30,7 +30,7 @@ describe('api', function () {
           {
             assigneeId: 'A11',
             revenue: {
-              total: {
+              insurance: {
                 actual: 1024.27
               }
             }
@@ -38,7 +38,7 @@ describe('api', function () {
           {
             type: 'external',
             revenue: {
-              total: {
+              insurance: {
                 actual: 100.00
               }
             }

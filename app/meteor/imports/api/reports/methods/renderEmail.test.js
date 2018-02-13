@@ -43,8 +43,6 @@ describe('reports', () => {
     it('renders summary', () => {
       const rendered = renderSummary({ report, mapUserIdToName, mapAssigneeType, mapCalendar })
       expect(equalizeWhitespace(rendered)).to.include('Gesamtumsatz: € 5 859')
-      expect(rendered).to.include('ÄrztInnen: 5')
-      expect(rendered).to.include('Neu / Stunde: 6,2')
     })
 
     it('renders assignee ranking', () => {
