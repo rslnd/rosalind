@@ -16,7 +16,9 @@ export class Box extends React.Component {
       children,
       body,
       footer,
-      color
+      color,
+      badge,
+      badgeColor
     } = this.props
 
     const typeClass = type ? `box-${type}` : 'default'
@@ -48,6 +50,17 @@ export class Box extends React.Component {
           <div className={headerClasses}>
             {icon && <Icon name={icon} />}
             <h3 className='box-title'>{title}</h3>
+
+            {badge &&
+              <span>
+                &ensp;
+                <small
+                  style={{ zoom: 0.8 }}
+                  className={`badge bg-${badgeColor || 'gray'}`}>
+                  {badge}
+                </small>
+              </span>
+            }
             {buttons && <div className='pull-right'>{buttons}</div>}
           </div>
         }

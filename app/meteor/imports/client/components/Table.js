@@ -8,14 +8,20 @@ import Button from 'material-ui/Button'
 import { SwatchesPicker } from 'react-color'
 import { Icon } from './Icon'
 
-const ColHeader = ({ header }) => {
-  if (typeof header === 'string') return <th title={header.title}>{header}</th>
-  if (header.icon) return <th title={header.title}><Icon name={header.icon} /></th>
-  return null
+const ColHeader = ({ header, style }) => {
+  const title = (typeof header === 'string') ? header : ((header && header.title) || null)
+
+  return <th style={style}>
+    {
+      (header && header.icon)
+      ? <Icon name={header.icon} />
+      : title
+    }
+  </th>
 }
 
 const Cell = ({ isEditing, col, row, onClick }) => {
-  let style = {}
+  let style = col.style || {}
   let contents = {}
 
   if (isEditing) {

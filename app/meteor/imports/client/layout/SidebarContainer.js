@@ -67,7 +67,7 @@ const sidebarItems = ({ history }) => {
     {
       name: 'users',
       icon: 'unlock-alt',
-      roles: ['admin', 'users'],
+      roles: ['admin', 'edit-users'],
       subItems: [
         { name: 'thisAll' },
         { name: 'thisNew', path: '/new' }
