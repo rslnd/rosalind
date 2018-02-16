@@ -101,3 +101,4 @@ mdg:meteor-apm-agent
 # Legacy
 coffeescript
 fds:coffeescript-share
+east5th:package-scan
