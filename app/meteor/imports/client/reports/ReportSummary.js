@@ -60,7 +60,7 @@ export const TotalRevenueBox = ({ report, position, color, __ }) => {
 
 export const NewPatientsPerHourBox = ({ report, position, color, __ }) => {
   const newPerHour = idx(report, _ => _.average.patients.new.actualPerHour) ||
-    idx(report, _ => _.average.patients.new.plannedPerHour)
+    idx(report, _ => _.average.patients.new.expectedPerHour)
 
   return (
     <InfoBox
@@ -111,7 +111,7 @@ export const NoShowsBox = ({ report, position, color, __ }) => {
 
 export const TotalPatientsBox = ({ report, position, color, __ }) => {
   const patients = idx(report, _ => _.total.patients.total.actual) ||
-    idx(report, _ => _.total.patients.total.planned)
+    idx(report, _ => _.total.patients.total.expected)
 
   return (
     <InfoBox text={__('reports.patients')} color={color} position={position} icon='users'>
