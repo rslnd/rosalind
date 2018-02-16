@@ -63,7 +63,7 @@ module.exports = ->
             'day.year': -1,
             start: -1
           },
-          limit: 1200 # BUG: Figure out how to make sure no schedules are left out
+          limit: 4000 # BUG: Figure out how to make sure no schedules are left out
         })
 
         return cursor
