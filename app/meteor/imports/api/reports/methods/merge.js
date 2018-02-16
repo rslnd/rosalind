@@ -45,7 +45,10 @@ const mergeAssignees = (report, addendum) => {
     if (a.revenue) {
       return {
         ...a,
-        total: sumRevenues(a.revenue)
+        revenue: {
+          ...a.revenue,
+          total: sumRevenues(a.revenue)
+        }
       }
     } else {
       return a
@@ -78,16 +81,12 @@ const sumRevenues = revenues => {
   let total = {}
   const privateOrInsurance = Object.keys(revenues)
   privateOrInsurance.map(typeKey => {
-    const plannedOrActual = Object.keys(typeKey)
+    const plannedOrActual = Object.keys(revenues[typeKey])
     plannedOrActual.map(valueKey => {
-      if (!total[typeKey]) {
-        total[typeKey] = {}
+      if (!total[valueKey]) {
+        total[valueKey] = 0
       }
-      if (!total[typeKey][valueKey]) {
-        total[typeKey][valueKey] = 0
-      }
-
-      total[typeKey][valueKey] += revenues[typeKey][valueKey]
+      total[valueKey] += revenues[typeKey][valueKey]
     })
   })
 

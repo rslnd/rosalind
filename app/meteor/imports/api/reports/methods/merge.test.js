@@ -16,6 +16,11 @@ describe('reports', () => {
             total: {
               planned: 3
             }
+          },
+          revenue: {
+            private: {
+              actual: 60
+            }
           }
         }
       ]
@@ -29,6 +34,11 @@ describe('reports', () => {
             total: {
               actual: 2
             }
+          },
+          revenue: {
+            insurance: {
+              actual: 40
+            }
           }
         }
       ]
@@ -37,6 +47,7 @@ describe('reports', () => {
     it('merges assignees', () => {
       const mergedReport = merge(originalReport, addendum)
       expect(mergedReport.assignees[0].patients.total.actual).to.equal(2)
+      expect(mergedReport.assignees[0].revenue.total.actual).to.equal(100)
     })
 
     const addendum2 = {
@@ -49,7 +60,9 @@ describe('reports', () => {
             }
           },
           revenue: {
-            actual: 1000
+            insurance: {
+              actual: 1000
+            }
           }
         }
       ]
@@ -60,7 +73,7 @@ describe('reports', () => {
       const mergedReport2 = merge(mergedReport, addendum2)
       expect(mergedReport2.assignees[0].patients.total.actual).to.equal(2)
       expect(mergedReport2.assignees[0].patients.total.other).to.equal(1)
-      expect(mergedReport2.assignees[0].revenue.actual).to.equal(1000)
+      expect(mergedReport2.assignees[0].revenue.insurance.actual).to.equal(1000)
     })
   })
 })
