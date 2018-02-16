@@ -28,7 +28,7 @@ export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick
   const style = {
     display: 'grid',
     position: 'relative',
-    top: 0,
+    marginTop: 30,
     gridTemplateRows,
     gridTemplateColumns: `
       [time] 60px
