@@ -1,5 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { Auto, External } from '../../util/schema'
+import { Log, Auto, External } from '../../util/schema'
 
 Schema = new SimpleSchema
   calendarId:
@@ -124,6 +124,10 @@ Schema = new SimpleSchema
     type: Boolean
     optional: true
     index: 1
+
+  logs:
+    type: [Log]
+    optional: true
 
   # This field is TTL indexed
   # see collection.js for details

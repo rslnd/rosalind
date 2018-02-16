@@ -39,6 +39,19 @@ export const move = ({ Appointments }) => {
             start: newStart,
             end: moment(newStart).add(duration, 'minutes').toDate(),
             assigneeId: newAssigneeId
+          },
+          $push: {
+            logs: {
+              type: 'move',
+              userId: this.userId,
+              date: new Date(),
+              payload: {
+                oldStart,
+                oldAssigneeId,
+                newStart,
+                newAssigneeId
+              }
+            }
           }
         })
 

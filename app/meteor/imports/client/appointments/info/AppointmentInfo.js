@@ -1,5 +1,6 @@
 import React from 'react'
 import identity from 'lodash/identity'
+import { Users } from '../../../api/users'
 import { touch, Field, FieldArray, FormSection } from 'redux-form'
 import moment from 'moment-timezone'
 import { Toggle, Choice } from 'belle'
@@ -15,6 +16,7 @@ import { AddressFields } from '../../patients/fields/AddressFields'
 import { BirthdayFields } from '../../patients/fields/BirthdayFields'
 import { NameFields, GenderField } from '../../patients/fields/NameFields'
 import { Stamps } from '../../helpers/Stamps'
+import { Logs } from '../../helpers/Logs'
 import { Currency } from '../../components/Currency'
 import { TagsField } from '../../tags/TagsField'
 import { calculateRevenue, RevenueField } from '../new/RevenueField'
@@ -25,6 +27,38 @@ const iconDefaultStyle = {
   paddingLeft: 6,
   paddingRight: 6,
   minWidth: 50,
+}
+
+const logFormat = {
+  move: log => {
+    const movedDay = !moment(log.payload.oldStart).isSame(log.payload.newStart, 'day')
+    const movedTime = moment(log.payload.oldStart).format('HHmm') !== moment(log.payload.newStart).format('HHmm')
+    const movedAssignee = log.payload.oldAssigneeId !== log.payload.newAssigneeId
+
+    if (!(movedDay || movedTime || movedAssignee)) {
+      return null
+    }
+
+    const getAssigneeName = _id => {
+      if (_id) {
+        return Users.findOne({ _id }).fullNameWithTitle()
+      } else {
+        return '(Einschub)'
+      }
+    }
+
+    return [
+      'Verschoben von',
+      movedDay && moment(log.payload.oldStart).format(TAPi18n.__('time.dateFormatShortNoYear')),
+      movedTime && moment(log.payload.oldStart).format(TAPi18n.__('time.timeFormat')),
+      movedAssignee && getAssigneeName(log.payload.oldAssigneeId),
+      '→',
+      movedDay && moment(log.payload.newStart).format(TAPi18n.__('time.dateFormatShortNoYear')),
+      movedTime && moment(log.payload.newStart).format(TAPi18n.__('time.timeFormat')),
+      movedAssignee && getAssigneeName(log.payload.newAssigneeId),
+      'von'
+    ].filter(identity).join(' ')
+  }
 }
 
 const ListItem = ({ icon, children, hr, style, iconStyle, highlight }) => {
@@ -366,6 +400,7 @@ export class AppointmentInfo extends React.Component {
               </FormSection>
             </div>
             <ListItem>
+              <Logs format={logFormat} doc={appointment} />
               <Stamps
                 fields={['removed', 'created', 'admitted', 'canceled']}
                 doc={appointment} />
