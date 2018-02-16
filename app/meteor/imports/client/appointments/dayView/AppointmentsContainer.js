@@ -165,10 +165,15 @@ const composer = (props, onData) => {
 
     const onNewAppointmentModalOpen = (args) => Appointments.actions.acquireLock.call(args)
     const onNewAppointmentModalClose = (args) => Appointments.actions.releaseLock.call(args)
-    const handleSetAdmitted = (args) => Appointments.actions.setAdmitted.call(args)
-    const handleMove = (args) => Appointments.actions.move.callPromise(args).then(() => {
-      Alert.success(TAPi18n.__('appointments.moveSuccess'))
-    })
+    const handleSetAdmitted = (args) => {
+      Alert.success(TAPi18n.__('appointments.setAdmittedSuccess')) // optimistic for smoother UX
+      return Appointments.actions.setAdmitted.callPromise(args)
+    }
+
+    const handleMove = (args) =>
+      Appointments.actions.move.callPromise(args).then(() => {
+        Alert.success(TAPi18n.__('appointments.moveSuccess'))
+      })
 
     const { dispatch, move } = props
 

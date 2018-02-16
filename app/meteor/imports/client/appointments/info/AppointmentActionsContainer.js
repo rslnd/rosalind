@@ -15,29 +15,32 @@ const composer = (props, onData) => {
   const closeModal = () => props.onClose && props.onClose()
 
   const setAdmitted = () => {
+    Alert.success(TAPi18n.__('appointments.setAdmittedSuccess'))
     Appointments.actions.setAdmitted.call(args)
     closeModal()
   }
 
   const unsetAdmitted = () => {
+    Alert.success(TAPi18n.__('appointments.unsetAdmittedSuccess'))
     Appointments.actions.unsetAdmitted.call(args)
     closeModal()
   }
 
   const setCanceled = () => {
+    Alert.success(TAPi18n.__('appointments.setCanceledSuccess'))
     Appointments.actions.setCanceled.call(args)
     closeModal()
   }
 
   const unsetCanceled = () => {
+    Alert.success(TAPi18n.__('appointments.unsetCanceledSuccess'))
     Appointments.actions.unsetCanceled.call(args)
     closeModal()
   }
 
   const softRemove = () => {
-    Appointments.actions.softRemove.callPromise(args).then(() => {
-      Alert.success(TAPi18n.__('appointments.softRemoveSuccess'))
-    })
+    Alert.success(TAPi18n.__('appointments.softRemoveSuccess'))
+    Appointments.actions.softRemove.callPromise(args)
     closeModal()
   }
 
