@@ -116,7 +116,7 @@ export class ReportsScreen extends React.Component {
               quarter && this.state.showRevenue &&
                 <div key='quarterTable' style={avoidPageBreak}>
                   <Quarter
-                    quarter={quarter}
+                    quarter={quarter.total}
                     __={__}
                   />
                   <span className='quarterLoaded' />

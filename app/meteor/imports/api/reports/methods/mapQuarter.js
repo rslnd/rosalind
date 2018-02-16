@@ -1,6 +1,8 @@
 import identity from 'lodash/identity'
+import uniq from 'lodash/uniq'
 import negate from 'lodash/negate'
 import mean from 'lodash/mean'
+import maxBy from 'lodash/fp/maxBy'
 import sum from 'lodash/sum'
 import min from 'lodash/min'
 import max from 'lodash/max'
@@ -11,7 +13,7 @@ import idx from 'idx'
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { dayToDate } from '../../../util/time/day'
-import { getRange, getQ } from '../../../util/time/quarter'
+import { getRange, getQ, quarter } from '../../../util/time/quarter'
 
 const moment = extendMoment(_moment)
 
@@ -26,9 +28,42 @@ export const mapQuarter = ({ day, reports, overrideSchedules, holidays }) => {
   }
 }
 
+export const sumQuarters = quarters => {
+  const days = maxBy('passed')(quarters.map(q => q.days))
+
+  return quarters.reduce((acc, curr) =>
+    ({
+      day: curr.day,
+      days,
+      q: curr.q,
+      revenue: {
+        accumulated: acc.revenue.accumulated + curr.revenue.accumulated,
+        averagePerDay: (acc.revenue.accumulated + curr.revenue.accumulated) / days.passed,
+        projected: mean(quarters.map(q => q.revenue.projected)),
+        min: min(quarters.map(q => q.revenue.min)),
+        max: max(quarters.map(q => q.revenue.max))
+      },
+      patients: {
+        newPerHour: {
+          average: mean(quarters.map(q => q.patients.newPerHour.average)),
+          min: min(quarters.map(q => q.patients.newPerHour.min)),
+          max: max(quarters.map(q => q.patients.newPerHour.max))
+        },
+        noShow: {
+          average: mean(quarters.map(q => q.patients.noShow.average)),
+          min: min(quarters.map(q => q.patients.noShow.min)),
+          max: max(quarters.map(q => q.patients.noShow.max))
+        }
+      }
+    })
+  )
+}
+
 const mapRevenue = ({ reports, days }) => {
   const revenues = reports
-    .map(r => idx(r, _ => _.total.revenue.actual))
+    .map(r =>
+      idx(r, _ => _.total.revenue.total.actual) ||
+      idx(r, _ => _.total.revenue.total.expected))
     .filter(identity)
 
   const accumulated = sum(revenues)
@@ -59,9 +94,9 @@ const mapNewPerHour = reports => {
 const mapNoShow = reports => {
   const values = reports
     .map(r =>
-      idx(r, _ => _.total.patients.total.noShow) /
+      (idx(r, _ => _.total.patients.total.noShow) || 0) /
       idx(r, _ => _.total.patients.total.expected)
-    )
+    ).filter(v => (v === 0 || v > 0))
 
   return {
     average: mean(values),
@@ -81,7 +116,7 @@ const isHoliday = holidays => d =>
 const isWeekend = d => (d.isoWeekday() === 6 || d.isoWeekday() === 7)
 
 const mapDays = ({ reports, day, overrideSchedules, holidays }) => {
-  const passed = reports.length
+  const passed = uniq(reports.map(r => dayToDate(r.day).toString())).length
 
   const date = dayToDate(day)
 
