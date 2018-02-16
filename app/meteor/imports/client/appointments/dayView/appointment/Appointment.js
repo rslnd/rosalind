@@ -108,7 +108,7 @@ class AppointmentItem extends React.Component {
 
         {
           appointment.lockedAt &&
-            <span className='text-muted'>
+            <span style={styles.patientName} className='text-muted'>
               <i className='fa fa-clock-o fa-fw' />&nbsp;
               {TAPi18n.__('appointments.lockedBy', { name: appointment.lockedByFirstName })}
             </span>
