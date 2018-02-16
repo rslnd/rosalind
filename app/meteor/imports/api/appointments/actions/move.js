@@ -27,7 +27,7 @@ export const move = ({ Appointments }) => {
       if (appointment) {
         const duration = getDefaultDuration({
           calendarId: appointment.calendarId,
-          newAssigneeId,
+          assigneeId: newAssigneeId,
           date: moment(newStart),
           tags: appointment.tags
         })

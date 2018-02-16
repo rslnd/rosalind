@@ -75,7 +75,7 @@ class AppointmentItem extends React.Component {
       const newAssigneeId = this.props.moveToAssigneeId
       const duration = getDefaultDuration({
         calendarId: appointment.calendarId,
-        newAssigneeId,
+        assigneeId: newAssigneeId,
         date: newStartTime,
         tags: appointment.tags
       })
