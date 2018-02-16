@@ -62,6 +62,7 @@ export const sumQuarters = quarters => {
 const mapRevenue = ({ reports, days }) => {
   const revenues = reports
     .map(r =>
+      idx(r, _ => _.total.revenue.actual) || // backwards compatibility
       idx(r, _ => _.total.revenue.total.actual) ||
       idx(r, _ => _.total.revenue.total.expected))
     .filter(identity)
