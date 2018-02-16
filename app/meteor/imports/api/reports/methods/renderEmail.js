@@ -9,6 +9,7 @@ import { float, percentage, currencyRounded } from '../../../util/format'
 const isNull = s => s &&
   (typeof s === 'string' && s.match(/false|undefined| null|NaN/g) ||
   (typeof s === 'string' && s.match(/reports\./g)) ||
+  (typeof s === 'string' && s.match(/\{|\}|\$/)) || // catch misplaced interpolation brackets
   (typeof s === 'string' && s.length === 0) ||
   (typeof s === 'number' && s === 0))
 
@@ -27,14 +28,13 @@ export const renderHeader = ({ day }) => {
 
 export const renderSummary = ({ report, mapCalendar }) => {
   return dedent`
-    ${mapCalendar(report.calendarId).name}
+    -- ${mapCalendar(report.calendarId).name} --
     Gesamtumsatz: ${currencyRounded(
       idx(report, _ => _.total.revenue.total.actual) ||
       idx(report, _ => _.total.revenue.total.expected))}
     Auslastung: ${
       percentage({ value: report.total.workload.weighted }) ||
       percentage({ part: report.total.workload.actual, of: report.total.workload.available })}
-    }
   `
 }
 
