@@ -12,7 +12,7 @@ export const Quarter = ({ quarter, __ }) => (
   <div className='row'>
     <div className='col-md-12'>
       <Box title='Quartal' icon='line-chart'>
-        <div className='row'>
+        <div className='row enable-select'>
           <DayCounter quarter={quarter} />
           <NewPerHour quarter={quarter} />
           <NoShows quarter={quarter} />

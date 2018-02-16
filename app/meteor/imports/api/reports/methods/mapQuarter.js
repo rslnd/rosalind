@@ -45,9 +45,9 @@ export const sumQuarters = quarters => {
       },
       patients: {
         newPerHour: {
-          average: mean(quarters.map(q => q.patients.newPerHour.average)),
-          min: min(quarters.map(q => q.patients.newPerHour.min)),
-          max: max(quarters.map(q => q.patients.newPerHour.max))
+          average: mean(quarters.map(q => q.patients.newPerHour.average).filter(identity)),
+          min: min(quarters.map(q => q.patients.newPerHour.min).filter(identity)),
+          max: max(quarters.map(q => q.patients.newPerHour.max).filter(identity))
         },
         noShow: {
           average: mean(quarters.map(q => q.patients.noShow.average)),

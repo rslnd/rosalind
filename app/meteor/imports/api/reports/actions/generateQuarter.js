@@ -57,11 +57,6 @@ export const generateQuarter = ({ Reports, Calendars, Schedules }) => {
           total: sumQuarters(withCalendars)
         }
 
-        console.log('**')
-        console.log(withCalendars[0].patients)
-        console.log('---')
-        console.log('>>>', quartersWithTotal)
-        console.log('**')
         return quartersWithTotal
       } catch (e) {
         console.error(e.message, e.stack)
