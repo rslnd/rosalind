@@ -1,5 +1,4 @@
 import { createStore, combineReducers } from 'redux'
-import reduceReducers from 'reduce-reducers'
 import { reducer as formReducer } from 'redux-form'
 import appointments from './appointments/reducers'
 import { newAppointment } from './appointments/new/reducers'

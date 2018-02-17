@@ -8,8 +8,5 @@ import './lockedLayout.css'
 import './overrides.scss'
 import './print.css'
 import './mui.css'
-import injectTapEventPlugin from 'react-tap-event-plugin'
 
-// Material UI
-injectTapEventPlugin()
 adminlte()
