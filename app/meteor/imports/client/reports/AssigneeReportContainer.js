@@ -11,6 +11,7 @@ import { Roles } from 'meteor/alanning:roles'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { getAssignee } from '../../api/reports/methods/getAssignee'
+import { Calendars } from '../../api/calendars'
 import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
 import { Loading } from '../components/Loading'
@@ -22,13 +23,22 @@ const composer = (props, onData) => {
     const user = Users.findOne({ username })
     const assigneeId = user && user._id
 
-    const reports = Reports.find({}).fetch()
-
     const search = parse(props.location.search)
     const from = search.from && moment(search.from) || moment().startOf('month')
     const to = search.to && moment(search.to) || moment()
 
-    const report = getAssignee({ reports, assigneeId, from, to })
+    const reports = Calendars
+      .find({}, { sort: { order: 1 } })
+      .fetch().map(calendar => {
+        const calendarId = calendar._id
+
+        const assigneeReports = Reports.find({ calendarId }).fetch()
+
+        return {
+          ...getAssignee({ reports: assigneeReports, assigneeId, from, to }),
+          calendar
+        }
+      }).filter(r => r && r.assignees && r.assignees.length > 0)
 
     const isPrint = props.location.hash === '#print'
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
@@ -56,7 +66,7 @@ const composer = (props, onData) => {
     const data = {
       canShowRevenue,
       isPrint,
-      report,
+      reports,
       user,
       from,
       to,

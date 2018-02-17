@@ -84,23 +84,23 @@ export class AssigneeReportScreen extends React.Component {
         <div className='content'>
           <div className='hide-print' style={{ paddingBottom: 15 }}>
             <UserPickerContainer
-                autofocus
-                onChange={this.props.handleChangeAssignee} />
+              autoFocus
+              onChange={this.props.handleChangeAssignee} />
           </div>
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
           <FlipMove duration={230}>
             {
-              this.props.report && this.props.report.assignees.length > 0
-              ? <div key='reportTable' style={{ marginBottom: 80 }}>
-                <Report
-                  report={this.props.report}
-                  showRevenue={this.state.showRevenue}
-                  mapUserIdToName={this.props.mapUserIdToName}
-                  assigneeReport
-                  __={this.props.__}
-                />
-              </div>
-              : <div key='noReports'>
+              (this.props.reports && this.props.reports.length > 0 && this.props.reports).map((report, i) =>
+                <div key={i} style={{ marginBottom: 80 }}>
+                  <Report
+                    report={report}
+                    showRevenue={this.state.showRevenue}
+                    mapUserIdToName={this.props.mapUserIdToName}
+                    assigneeReport
+                    __={this.props.__}
+                  />
+                </div>
+              ) || <div key='noReports'>
                 <Box type='warning' title={TAPi18n.__('ui.notice')}>
                   <p>{TAPi18n.__('reports.empty')}</p>
                 </Box>

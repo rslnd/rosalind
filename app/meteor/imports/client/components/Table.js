@@ -1,6 +1,6 @@
 import idx from 'idx'
 import React from 'react'
-import Portal from 'react-portal'
+import { PortalWithState } from 'react-portal'
 import isEqual from 'lodash/isEqual'
 import Paper from 'material-ui/Paper'
 import TextField from 'material-ui/TextField'
@@ -81,7 +81,7 @@ class EditModal extends React.Component {
 
     const boxStyle = {
       zIndex: 50,
-      position: 'absolute',
+      position: 'fixed',
       width: 320,
       ...style
     }
@@ -181,43 +181,52 @@ export class Table extends React.Component {
     const cols = structure(this.props)
 
     return (
-      <div style={{ overflowX: 'scroll' }}>
-        <table className='table'>
-          <thead>
-            <tr>{
-              cols.map((col, i) =>
-                <ColHeader key={i} header={col.header} />
+      <PortalWithState
+        closeOnEsc
+        closeOnOutsideClick
+        onClose={this.handleEditEnd}
+      >{
+        ({ portal, openPortal, isOpen }) =>
+          <div>
+            <div style={{ overflowX: 'scroll' }}>
+              <table className='table'>
+                <thead>
+                  <tr>{
+                    cols.map((col, i) =>
+                      <ColHeader key={i} header={col.header} />
+                    )
+                  }</tr>
+                </thead>
+                <tbody>{
+                  rows.map((row, i) =>
+                    <tr key={i}>{
+                      cols.map((col, j) =>
+                        <Cell
+                          key={j}
+                          onClick={(e) => { console.log(e, isOpen); this.handleEditStart(e, i, j); openPortal() }}
+                          isEditing={this.isEditing(i, j)}
+                          col={col}
+                          row={row} />
+                      )
+                    }</tr>
+                )}</tbody>
+              </table>
+            </div>
+
+            {
+              portal(
+                isOpen && <div className='xxyy'>yoyoyoyo</div>
+                // <EditModal
+                //   onUpdate={this.handleUpdate}
+                //   style={this.state.editModalPosition}
+                //   value={this.state.editingValue}
+                //   field={this.state.editingField}
+                // />
               )
-            }</tr>
-          </thead>
-          <tbody>{
-            rows.map((row, i) =>
-              <tr key={i}>{
-                cols.map((col, j) =>
-                  <Cell
-                    key={j}
-                    onClick={(e) => this.handleEditStart(e, i, j)}
-                    isEditing={this.isEditing(i, j)}
-                    col={col}
-                    row={row} />
-                )
-              }</tr>
-          )}</tbody>
-        </table>
-        <Portal
-          closeOnEsc
-          closeOnOutsideClick
-          onClose={this.handleEditEnd}
-          isOpened={!!this.state.editing}
-        >
-          <EditModal
-            onUpdate={this.handleUpdate}
-            style={this.state.editModalPosition}
-            value={this.state.editingValue}
-            field={this.state.editingField}
-          />
-        </Portal>
-      </div>
+            }
+          </div>
+        }
+      </PortalWithState>
     )
   }
 }

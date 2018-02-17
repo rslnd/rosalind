@@ -1,5 +1,4 @@
 import React from 'react'
-import Portal from 'react-portal'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/Table'
