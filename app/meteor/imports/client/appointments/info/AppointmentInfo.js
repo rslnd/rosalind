@@ -155,9 +155,12 @@ const toFloat = v =>
     ? parseFloat(v.toString().replace(/,/g, '.').replace(/\s/g, ''))
     : null
 
-const CurrencyFieldInner = (props) =>
-  <NumberFormat
-    {...props}
+const CurrencyFieldInner = (props) => {
+  // Swallow warning about unknown inputRef prop input
+  const { inputRef, ...restProps } = props
+
+  return <NumberFormat
+    {...restProps}
     onValueChange={values => {
       console.log('onvaluechange', values)
       props.onChange({
@@ -177,6 +180,7 @@ const CurrencyFieldInner = (props) =>
       }
     }}
   />
+}
 
 const CurrencyField = (props) =>
   <TextField
