@@ -1,4 +1,5 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { toClass } from 'recompose'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Messages } from '../../api/messages'
@@ -33,4 +34,4 @@ const composer = (props, onData) => {
   }
 }
 
-export const MessagesContainer = composeWithTracker(composer, Loading)(MessagesScreen)
+export const MessagesContainer = composeWithTracker(composer, Loading)(toClass(MessagesScreen))

@@ -1,4 +1,5 @@
 import React from 'react'
+import { toClass } from 'recompose'
 import { compose } from 'react-komposer'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { RelativeTime } from './RelativeTime'
@@ -32,6 +33,6 @@ const composer = (props, onData) => {
   onData(null, { stamps })
 }
 
-const Stamps = compose(composer)(StampsList)
+const Stamps = compose(composer)(toClass(StampsList))
 
 export { Stamps }

@@ -1,4 +1,5 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { toClass } from 'recompose'
 import { Roles } from 'meteor/alanning:roles'
 import Alert from 'react-s-alert'
 import { Users } from '../../api/users'
@@ -29,4 +30,4 @@ const composer = (props, onData) => {
   onData(null, { groups, getAssigneeName, handleUpdate, isInRole })
 }
 
-export const UsersContainer = composeWithTracker(composer, Loading)(UsersScreen)
+export const UsersContainer = composeWithTracker(composer, Loading)(toClass(UsersScreen))

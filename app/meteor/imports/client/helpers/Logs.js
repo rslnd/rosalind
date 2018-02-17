@@ -1,4 +1,5 @@
 import React from 'react'
+import { toClass } from 'recompose'
 import identity from 'lodash/identity'
 import { compose } from 'react-komposer'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -34,6 +35,6 @@ const composer = (props, onData) => {
   onData(null, { logs })
 }
 
-const Logs = compose(composer)(LogsList)
+const Logs = compose(composer)(toClass(LogsList))
 
 export { Logs }

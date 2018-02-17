@@ -93,7 +93,7 @@ class AppointmentItem extends React.Component {
     return (
       <div
         id={appointment._id}
-        data-appointmentId={appointment._id}
+        data-appointmentid={appointment._id}
         className={appointmentClasses}
         onClick={(e) => this.props.onClick(e, appointment)}
         onContextMenu={(e) => this.props.onClick(e, appointment)}
@@ -116,7 +116,7 @@ class AppointmentItem extends React.Component {
 
         <span
           style={styles.patientName}
-          className={appointment.canceled && classes.canceled}>
+          className={appointment.canceled ? classes.canceled : undefined}>
           <Indicator appointment={appointment} />
           {
             patient

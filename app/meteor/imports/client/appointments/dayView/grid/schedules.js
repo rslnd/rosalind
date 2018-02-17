@@ -20,7 +20,7 @@ const style = {
 }
 
 export const schedules = ({ assignees, onDoubleClick, slotSize }) => (
-  assignees.map((assignee) => (
+  assignees.map((assignee, i) => (
     assignee.schedules && assignee.schedules.map((schedule) => {
       if (!schedule.start && !schedule.end) {
         return null
@@ -31,8 +31,8 @@ export const schedules = ({ assignees, onDoubleClick, slotSize }) => (
 
       return (
         <div
-          key={`schedule-${schedule._id}`}
-          data-scheduleId={schedule._id}
+          key={`schedule-${schedule._id + i}`}
+          data-scheduleid={schedule._id}
           onDoubleClick={(event) => onDoubleClick({ event, scheduleId: schedule._id })}
           style={{
             ...style.scheduledUnavailable,

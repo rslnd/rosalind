@@ -1,4 +1,5 @@
 import React from 'react'
+import { toClass } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/Table'
@@ -96,7 +97,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   }
 ]
 
-export const TagsScreen = ({ tags, getCalendarName, getAssigneeName, handleUpdate }) =>
+export const TagsScreen = toClass(({ tags, getCalendarName, getAssigneeName, handleUpdate }) =>
   <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
@@ -112,3 +113,4 @@ export const TagsScreen = ({ tags, getCalendarName, getAssigneeName, handleUpdat
       </div>
     </div>
   </div>
+)

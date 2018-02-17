@@ -1,4 +1,5 @@
 import React from 'react'
+import { toClass } from 'recompose'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Comments } from '../../api/comments'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
@@ -14,4 +15,4 @@ const humanCommentCountComposer = (props, onData) => {
   onData(null, { commentCount, docId: props.docId })
 }
 
-export const HumanCommentCount = composeWithTracker(humanCommentCountComposer)(HumanCommentCountSpan)
+export const HumanCommentCount = composeWithTracker(humanCommentCountComposer)(toClass(HumanCommentCountSpan))

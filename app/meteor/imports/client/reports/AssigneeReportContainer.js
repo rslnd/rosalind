@@ -1,4 +1,5 @@
 import idx from 'idx'
+import { toClass } from 'recompose'
 import { parse } from 'query-string'
 import omit from 'lodash/omit'
 import fromPairs from 'lodash/fromPairs'
@@ -79,4 +80,4 @@ const composer = (props, onData) => {
   }
 }
 
-export const AssigneeReportContainer = withRouter(composeWithTracker(composer, Loading)(AssigneeReportScreen))
+export const AssigneeReportContainer = withRouter(toClass(composeWithTracker(composer, Loading)(AssigneeReportScreen)))

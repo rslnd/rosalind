@@ -1,4 +1,5 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { toClass } from 'recompose'
 import { InboundCalls } from '../../api/inboundCalls'
 import { InboundCallItem } from './InboundCallItem'
 
@@ -10,4 +11,4 @@ const composer = (props, onData) => {
   onData(null, { inboundCall, resolve, unresolve })
 }
 
-export const InboundCallContainer = composeWithTracker(composer)(InboundCallItem)
+export const InboundCallContainer = composeWithTracker(composer)(toClass(InboundCallItem))

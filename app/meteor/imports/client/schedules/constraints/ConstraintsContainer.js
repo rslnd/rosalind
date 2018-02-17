@@ -1,4 +1,5 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { toClass } from 'recompose'
 import { Users } from '../../../api/users'
 import { Schedules } from '../../../api/schedules'
 import { Calendars } from '../../../api/calendars'
@@ -19,4 +20,4 @@ const composer = (props, onData) => {
   onData(null, { constraints, getCalendarName, getAssigneeName, handleUpdate })
 }
 
-export const ConstraintsContainer = composeWithTracker(composer, Loading)(ConstraintsScreen)
+export const ConstraintsContainer = composeWithTracker(composer, Loading)(toClass(ConstraintsScreen))

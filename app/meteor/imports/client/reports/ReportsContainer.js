@@ -1,4 +1,5 @@
 import idx from 'idx'
+import { toClass } from 'recompose'
 import omit from 'lodash/omit'
 import fromPairs from 'lodash/fromPairs'
 import sortBy from 'lodash/fp/sortBy'
@@ -99,4 +100,4 @@ const composer = (props, onData) => {
   }
 }
 
-export const ReportsContainer = withRouter(composeWithTracker(composer, Loading)(ReportsScreen))
+export const ReportsContainer = withRouter(toClass(composeWithTracker(composer, Loading)(ReportsScreen)))

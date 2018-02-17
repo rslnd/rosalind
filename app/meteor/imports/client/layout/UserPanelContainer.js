@@ -1,4 +1,5 @@
 import React from 'react'
+import { toClass } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Meteor } from 'meteor/meteor'
@@ -46,6 +47,6 @@ const composer = (props, onData) => {
   onData(null, { currentUser })
 }
 
-const UserPanelContainer = composeWithTracker(composer)(withRouter(UserPanelContainerComponent))
+const UserPanelContainer = composeWithTracker(composer)(toClass(withRouter(UserPanelContainerComponent)))
 
 export { UserPanelContainer }

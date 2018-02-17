@@ -1,3 +1,4 @@
+import { toClass } from 'recompose'
 import { Comments } from '../../api/comments'
 import { CommentsBox } from './CommentsBox'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
@@ -12,4 +13,4 @@ const commentsBoxComposer = (props, onData) => {
   onData(null, { ...props, comments, onRemove })
 }
 
-export const CommentsContainer = composeWithTracker(commentsBoxComposer)(CommentsBox)
+export const CommentsContainer = composeWithTracker(commentsBoxComposer)(toClass(CommentsBox))

@@ -1,4 +1,5 @@
 import moment from 'moment-timezone'
+import { toClass } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 import { InboundCalls } from '../../api/inboundCalls'
@@ -21,4 +22,4 @@ const composer = (props, onData) => {
   }
 }
 
-export const InboundCallsContainer = composeWithTracker(composer, Loading)(InboundCallsScreen)
+export const InboundCallsContainer = composeWithTracker(composer, Loading)(toClass(InboundCallsScreen))

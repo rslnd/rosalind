@@ -43,7 +43,7 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
   })
 
   return (
-    <li className={isActive(`/${item.name}`, location) && 'active'}>
+    <li className={isActive(`/${item.name}`, location) ? 'active' : undefined}>
       <Link
         to={`/${item.name}`}
         className='pointer level-0 link'
@@ -82,7 +82,7 @@ const SubItem = ({item, subItem, location}) => {
     TAPi18n.__([item.name, subItem.name].join('.'))
 
   return (
-    <li key={subItem.name} className={isActive(`/${item.name}${subItem.path || ''}`, location) && 'active level-1 link'}>
+    <li key={subItem.name} className={isActive(`/${item.name}${subItem.path || ''}`, location) ? 'active level-1 link' : undefined}>
       {
         item.onClick
           ? <a className='level-1 link' onClick={() => item.onClick({ subItem, location })}>

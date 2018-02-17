@@ -1,4 +1,5 @@
 import Alert from 'react-s-alert'
+import { toClass } from 'recompose'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Appointments } from '../../../api/appointments'
@@ -32,6 +33,6 @@ const composer = (props, onData) => {
   }
 }
 
-const AppointmentModalContainer = composeWithTracker(composer)(AppointmentModal)
+const AppointmentModalContainer = composeWithTracker(composer)(toClass(AppointmentModal))
 
 export { AppointmentModalContainer }

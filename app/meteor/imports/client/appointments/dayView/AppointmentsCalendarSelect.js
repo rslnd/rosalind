@@ -23,7 +23,7 @@ const CalendarItem = ({ link, icon, color, name }) => (
   <div className='col-md-6 col-sm-12'>
     <Link to={link}>
       <div className='info-box'>
-        <span className={`info-box-icon`} style={{ backgroundColor: color, color: '#fff' }}>
+        <span className='info-box-icon' style={{ backgroundColor: color, color: '#fff' }}>
           <i className={`fa fa-${icon}`} />
         </span>
         <div className='info-box-content'>

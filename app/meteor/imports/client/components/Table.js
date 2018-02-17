@@ -203,7 +203,7 @@ export class Table extends React.Component {
                       cols.map((col, j) =>
                         <Cell
                           key={j}
-                          onClick={(e) => { console.log(e, isOpen); this.handleEditStart(e, i, j); openPortal() }}
+                          onClick={(e) => { this.handleEditStart(e, i, j); openPortal() }}
                           isEditing={this.isEditing(i, j)}
                           col={col}
                           row={row} />

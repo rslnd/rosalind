@@ -1,6 +1,6 @@
 import moment from 'moment-timezone'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
-import { Meteor } from 'meteor/meteor'
+import { toClass } from 'recompose'
 import { process as server } from 'meteor/clinical:env'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Footer } from './Footer'
@@ -26,4 +26,4 @@ const composer = (props, onData) => {
   return cleanup
 }
 
-export const FooterContainer = composeWithTracker(composer)(Footer)
+export const FooterContainer = composeWithTracker(composer)(toClass(Footer))

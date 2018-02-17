@@ -1,4 +1,5 @@
 import React from 'react'
+import { toClass } from 'recompose'
 import { compose } from 'react-komposer'
 import { relativeTimeString } from '../../util/time/format'
 
@@ -14,6 +15,6 @@ const composer = (props, onData) => {
   return cleanup
 }
 
-const RelativeTime = compose(composer)(Time)
+const RelativeTime = compose(composer)(toClass(Time))
 
 export { RelativeTime }

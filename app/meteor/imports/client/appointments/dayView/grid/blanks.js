@@ -45,7 +45,6 @@ class BlankState extends React.Component {
 
     return (
       <span
-        key={`new-${assigneeId}-${time}`}
         className={classes.blank}
         onClick={this.handleClick}
         onMouseEnter={this.handleOnMouseEnter}
@@ -65,10 +64,11 @@ const Blank = injectSheet(styles)(BlankState)
 export const blanks = ({ slotSize, date, assignees, onClick, onMouseEnter }) => {
   const format = formatter(slotSize)
 
-  return assignees.map((assignee) => (
+  return assignees.map((assignee, i) => (
     timeSlots(slotSize)
-      .map((time) => (
+      .map((time, j) => (
         <Blank
+          key={[i, j].join('')}
           date={date}
           time={time}
           format={format}

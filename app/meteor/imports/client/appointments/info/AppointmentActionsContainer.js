@@ -1,4 +1,5 @@
 import moment from 'moment-timezone'
+import { toClass } from 'recompose'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { withRouter } from 'react-router-dom'
@@ -82,4 +83,4 @@ const composer = (props, onData) => {
   })
 }
 
-export const AppointmentActionsContainer = withRouter(composeWithTracker(composer)(AppointmentActions))
+export const AppointmentActionsContainer = withRouter(toClass(composeWithTracker(composer)(toClass(AppointmentActions))))
