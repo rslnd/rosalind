@@ -32,6 +32,7 @@ xolvio:backdoor
 xolvio:cleaner
 
 # React
+react-template-helper
 gadicc:blaze-react-component
 nicocrm:react-komposer-tracker
 

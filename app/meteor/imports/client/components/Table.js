@@ -1,6 +1,7 @@
 import idx from 'idx'
 import React from 'react'
 import { PortalWithState } from 'react-portal'
+import ClickAwayListener from 'material-ui/utils/ClickAwayListener'
 import isEqual from 'lodash/isEqual'
 import Paper from 'material-ui/Paper'
 import TextField from 'material-ui/TextField'
@@ -81,7 +82,7 @@ class EditModal extends React.Component {
 
     const boxStyle = {
       zIndex: 50,
-      position: 'fixed',
+      position: 'absolute',
       width: 320,
       ...style
     }
@@ -132,26 +133,30 @@ export class Table extends React.Component {
     this.handleUpdate = this.handleUpdate.bind(this)
   }
 
-  handleEditStart (e, rowIndex, colIndex) {
-    const editingField = this.props.structure(this.props)[colIndex].field
+  handleEditStart (rowIndex, colIndex, openPortal) {
+    return e => {
+      const editingField = this.props.structure(this.props)[colIndex].field
 
-    if (!editingField) {
-      return
-    }
-
-    const bodyRect = document.body.getBoundingClientRect()
-    const targetRect = e.currentTarget.getBoundingClientRect()
-
-    this.setState({
-      editing: [rowIndex, colIndex],
-      editingValue: this.props.rows[rowIndex],
-      editingField,
-      editModalPosition: {
-        top: targetRect.bottom - bodyRect.top,
-        left: targetRect.left - bodyRect.left,
-        minWidth: targetRect.width
+      if (!editingField) {
+        return
       }
-    })
+
+      openPortal()
+
+      const bodyRect = document.body.getBoundingClientRect()
+      const targetRect = e.currentTarget.getBoundingClientRect()
+
+      this.setState({
+        editing: [rowIndex, colIndex],
+        editingValue: this.props.rows[rowIndex],
+        editingField,
+        editModalPosition: {
+          top: targetRect.bottom - bodyRect.top,
+          left: targetRect.left - bodyRect.left,
+          minWidth: targetRect.width
+        }
+      })
+    }
   }
 
   handleEditEnd () {
@@ -183,10 +188,10 @@ export class Table extends React.Component {
     return (
       <PortalWithState
         closeOnEsc
-        closeOnOutsideClick
+        // closeOnOutsideClick
         onClose={this.handleEditEnd}
       >{
-        ({ portal, openPortal, isOpen }) =>
+        ({ portal, openPortal, closePortal, isOpen }) =>
           <div>
             <div style={{ overflowX: 'scroll' }}>
               <table className='table'>
@@ -203,7 +208,7 @@ export class Table extends React.Component {
                       cols.map((col, j) =>
                         <Cell
                           key={j}
-                          onClick={(e) => { this.handleEditStart(e, i, j); openPortal() }}
+                          onClick={this.handleEditStart(i, j, openPortal)}
                           isEditing={this.isEditing(i, j)}
                           col={col}
                           row={row} />
@@ -215,13 +220,15 @@ export class Table extends React.Component {
 
             {
               portal(
-                isOpen && <div className='xxyy'>yoyoyoyo</div>
-                // <EditModal
-                //   onUpdate={this.handleUpdate}
-                //   style={this.state.editModalPosition}
-                //   value={this.state.editingValue}
-                //   field={this.state.editingField}
-                // />
+                isOpen &&
+                  <ClickAwayListener onClickAway={closePortal}>
+                    <EditModal
+                      onUpdate={(x, y) => { this.handleUpdate(x, y); closePortal() }}
+                      style={this.state.editModalPosition}
+                      value={this.state.editingValue}
+                      field={this.state.editingField}
+                    />
+                  </ClickAwayListener>
               )
             }
           </div>
