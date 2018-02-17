@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import { Manager, Target, Popper } from 'react-popper'
 import Menu, { MenuItem } from 'material-ui/Menu'
@@ -160,13 +161,13 @@ export class HeaderRow extends React.Component {
 }
 
 HeaderRow.propTypes = {
-  date: React.PropTypes.oneOfType([
-    React.PropTypes.instanceOf(Date),
-    React.PropTypes.instanceOf(moment)
+  date: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.instanceOf(moment)
   ]).isRequired,
-  assignees: React.PropTypes.array,
-  overrideMode: React.PropTypes.bool,
-  onToggleOverrideMode: React.PropTypes.func.isRequired,
-  onAddUser: React.PropTypes.func.isRequired,
-  onRemoveUser: React.PropTypes.func.isRequired
+  assignees: PropTypes.array,
+  overrideMode: PropTypes.bool,
+  onToggleOverrideMode: PropTypes.func.isRequired,
+  onAddUser: PropTypes.func.isRequired,
+  onRemoveUser: PropTypes.func.isRequired
 }
