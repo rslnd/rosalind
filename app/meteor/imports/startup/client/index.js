@@ -7,7 +7,6 @@ import userStatus from './userStatus'
 import livechat from './livechat'
 import dataTransfer from './dataTransfer'
 import nativeUpdate from './nativeUpdate'
-import emoji from './emoji'
 import entry from '../../client/index'
 
 export default function () {
@@ -20,6 +19,5 @@ export default function () {
   hotkeys()
   dataTransfer()
   nativeUpdate()
-  emoji()
   entry()
 }

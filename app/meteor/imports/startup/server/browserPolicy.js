@@ -26,9 +26,6 @@ export default () => {
   BrowserPolicy.content.allowMediaOrigin('https://cdn.smooch.io')
   BrowserPolicy.content.allowStyleOrigin('https://cdn.smooch.io')
 
-  BrowserPolicy.content.allowScriptOrigin('https://cdn.jsdelivr.net/emojione/2.2.4/lib/js/emojione.min.js')
-  BrowserPolicy.content.allowImageOrigin('https://cdn.jsdelivr.net/emojione')
-
   BrowserPolicy.content.allowScriptOrigin('https://use.fontawesome.com')
   BrowserPolicy.content.allowStyleOrigin('https://use.fontawesome.com')
   BrowserPolicy.content.allowFontOrigin('https://use.fontawesome.com')

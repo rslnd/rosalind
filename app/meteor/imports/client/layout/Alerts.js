@@ -41,7 +41,6 @@ const CustomAlert = ({ classNames, id, styles, message, handleClose, customField
         flexGrow: 1
       }}>
       {message}
-      &nbsp;{customFields.emoji || null}
     </span>
     <span
       className='s-alert-close'

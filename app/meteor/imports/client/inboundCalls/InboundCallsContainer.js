@@ -1,7 +1,6 @@
 import moment from 'moment-timezone'
 import { toClass } from 'recompose'
 import { Meteor } from 'meteor/meteor'
-import { Counts } from 'meteor/tmeasday:publish-counts'
 import { InboundCalls } from '../../api/inboundCalls'
 import { Loading } from '../components/Loading'
 import { InboundCallsScreen } from './InboundCallsScreen'
@@ -14,11 +13,7 @@ const composer = (props, onData) => {
     const resolve = (_id) => InboundCalls.methods.resolve.call({ _id })
     const unresolve = (_id) => InboundCalls.methods.unresolve.call({ _id })
 
-    const resolvedTodayCount = Counts.get('inboundCalls-resolvedToday')
-    const isLate = moment().hour() >= 17
-    const showEncouragement = isLate && resolvedTodayCount > 30
-
-    onData(null, { inboundCalls, resolve, unresolve, showEncouragement })
+    onData(null, { inboundCalls, resolve, unresolve })
   }
 }
 
