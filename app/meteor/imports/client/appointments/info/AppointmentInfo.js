@@ -2,8 +2,8 @@ import React from 'react'
 import identity from 'lodash/identity'
 import { Users } from '../../../api/users'
 import { touch, Field, FieldArray, FormSection } from 'redux-form'
+import { Switch } from 'redux-form-material-ui'
 import moment from 'moment-timezone'
-import { Toggle, Choice } from 'belle'
 import { InputAdornment } from 'material-ui/Input'
 import NumberFormat from 'react-number-format'
 import { withState } from 'recompose'
@@ -251,24 +251,18 @@ const Tags = ({ appointment, assignee, calendar, change }) => (
   </ListItem>
 )
 
-const Reminders = ({ patient, onChange }) => (
-  patient && patient.profile && patient.profile.contacts && <ListItem icon='paper-plane'>
+const Reminders = () => (
+  <ListItem icon='paper-plane'>
     {TAPi18n.__('appointments.appointmentReminderSMS')}
     <div className='pull-right' style={{
       position: 'relative',
       right: 5,
-      top: -5
+      top: -15
     }}>
-
-      <Toggle
-        style={{transform: 'scale(0.6)'}}
-        firstChoiceStyle={{backgroundColor: '#8fc6ae'}}
-        secondChoiceStyle={{backgroundColor: '#e37067'}}
-        value={!patient.profile.noSMS}
-        onUpdate={onChange}>
-        <Choice value><Icon name='check' /></Choice>
-        <Choice value={false}><Icon name='times' /></Choice>
-      </Toggle>
+      <Field
+        name='reminders'
+        component={Switch}
+      />
     </div>
     <br /><br />
   </ListItem> || null
@@ -282,34 +276,33 @@ const TotalRevenue = ({ value }) => (
 )
 
 const PatientNotes = ({ patient }) => (
-  patient &&
-    <div style={rowStyle}>
-      <div style={iconStyle}>
-        <Icon name='user-plus' />
-      </div>
-      <div style={{...grow, backgroundColor: patient.note ? '#FFF9C4' : ''}}>
-        <Field
-          name='note'
-          component={TextField}
-          multiline
-          rows={1}
-          rowsMax={5}
-          label={TAPi18n.__('patients.note')}
-        />
-      </div>
+  <div style={rowStyle}>
+    <div style={iconStyle}>
+      <Icon name='user-plus' />
+    </div>
+    <div style={{...grow, backgroundColor: patient.note ? '#FFF9C4' : ''}}>
+      <Field
+        name='note'
+        component={TextField}
+        multiline
+        rows={1}
+        rowsMax={5}
+        label={TAPi18n.__('patients.note')}
+      />
+    </div>
 
-      <div style={shrink}>
-        <Field
-          name='banned'
-          component={ToggleField}
-          button={false}
-          style={{ marginTop: 15, marginLeft: 20 }}
-          values={[
-            { value: false, label: <Dot /> },
-            { value: true, label: <Dot banned /> }
-          ]} />
-      </div>
-    </div> || null
+    <div style={shrink}>
+      <Field
+        name='banned'
+        component={ToggleField}
+        button={false}
+        style={{ marginTop: 15, marginLeft: 20 }}
+        values={[
+          { value: false, label: <Dot /> },
+          { value: true, label: <Dot banned /> }
+        ]} />
+    </div>
+  </div>
 )
 
 const AppointmentNote = ({ appointment }) =>
@@ -440,7 +433,7 @@ export class AppointmentInfo extends React.Component {
                     <AddressFields change={change} />
                   </FormSection>
                   <br />
-                  <Reminders patient={patient} onChange={handleSetMessagePreferences} />
+                  <Reminders />
                   <TotalRevenue value={totalPatientRevenue} />
                 </FormSection>
               </div>

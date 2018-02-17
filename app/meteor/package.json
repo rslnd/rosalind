@@ -12,7 +12,6 @@
     "admin-lte": "^2.3.5",
     "await-delay": "^1.0.0",
     "bcrypt": "1.0.3",
-    "belle": "^3.0.1",
     "body-parser": "1.18.2",
     "bottleneck": "^1.15.1",
     "buffer": "^5.1.0",

@@ -1,19 +1,13 @@
 import React from 'react'
-import { Toggle, Choice } from 'belle'
 import TextField from 'material-ui/TextField'
-import { Icon } from '../../components/Icon'
+import Switch from 'material-ui/Switch'
 
 export const MaintenanceSettings = ({ settings }) => (
   <div className='container'>
-    <Toggle
-      style={{transform: 'scale(0.6)'}}
-      firstChoiceStyle={{backgroundColor: '#f39c12'}}
-      secondChoiceStyle={{backgroundColor: '#bababa'}}
-      value={settings.get('maintenance.enabled')}
-      onUpdate={({ value }) => settings.set('maintenance.enabled', value)}>
-      <Choice value><Icon name='exclamation-triangle' /></Choice>
-      <Choice value={false}><Icon name='times' /></Choice>
-    </Toggle>
+    <Switch
+      checked={settings.get('maintenance.enabled')}
+      onChange={(e, v) => settings.set('maintenance.enabled', v)}
+    />
 
     <br />
 

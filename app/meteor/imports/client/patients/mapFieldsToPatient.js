@@ -26,6 +26,7 @@ export const mapFieldsToPatient = v => {
         birthday: v.birthday,
         banned: v.banned,
         address: v.address,
+        noSMS: !v.reminders,
         contacts
       }
     }

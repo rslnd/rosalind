@@ -28,6 +28,7 @@ export const mapPatientToFields = patient => {
       banned: patient.profile.banned || false,
       externalRevenue: patient.externalRevenue,
       note: patient.note,
+      reminders: !patient.profile.noSMS,
       patientSince: patient.patientSince
     })
   } else {

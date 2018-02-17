@@ -970,12 +970,6 @@ bcrypt@1.0.3:
     nan "2.6.2"
     node-pre-gyp "0.6.36"
 
-belle@^3.0.1:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/belle/-/belle-3.0.2.tgz#7cf6f17573fabd43501b11429892633398e57ceb"
-  dependencies:
-    exenv "^1.2.0"
-
 blob-to-buffer@^1.0.2:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/blob-to-buffer/-/blob-to-buffer-1.2.6.tgz#089ac264c686b73ead6c539a484a8003bfbb2033"
@@ -1798,10 +1792,6 @@ evp_bytestokey@^1.0.0:
   resolved "https://registry.yarnpkg.com/evp_bytestokey/-/evp_bytestokey-1.0.0.tgz#497b66ad9fef65cd7c08a6180824ba1476b66e53"
   dependencies:
     create-hash "^1.1.1"
-
-exenv@^1.2.0:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
 
 extend@~3.0.0, extend@~3.0.1:
   version "3.0.1"
