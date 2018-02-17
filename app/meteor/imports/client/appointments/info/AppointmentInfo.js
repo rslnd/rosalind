@@ -265,6 +265,7 @@ const Reminders = () => (
     }}>
       <Field
         name='reminders'
+        color='primary'
         component={Switch}
       />
     </div>
