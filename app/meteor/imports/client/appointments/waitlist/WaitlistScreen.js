@@ -7,6 +7,7 @@ import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointments } from '../../../api/appointments'
 import { Box } from '../../components/Box'
+import { Icon } from '../../components/Icon'
 
 export const WaitlistScreen = ({ appointments }) => (
   <FlipMove style={containerStyle}>
@@ -55,11 +56,59 @@ const WaitlistItem = ({ appointment, isFirst, isLast }) =>
       </span>
     </div>
 
+    {
+      appointment.treatmentStart &&
+        <Referrals referrals={appointment.referrals} />
+    }
+
     <ActionButton
       appointment={appointment}
       isFirst={isFirst}
       isLast={isLast} />
   </Box>
+
+const Referrals = ({ referrals }) =>
+  referrals.length >= 1 && <div style={{ paddingTop: 6, paddingBottom: 6 }}>
+    {
+      referrals.length >= 2 &&
+        <small className='text-muted'>PatientIn zu<br /></small>
+    }
+
+    {
+      referrals.referrableCalendars.map(r => (
+        <Button
+          key={r._id}>
+          <div style={{ textAlign: 'center' }}>
+            {
+              referrals.length === 1 &&
+                <small className='text-muted'>Patientin zu<br /></small>
+            }
+            <Icon name={r.icon} /><br />
+            {r.name}
+            {
+              referrals.length === 1 &&
+                <small className='text-muted'><br />empfehlen</small>
+            }
+          </div>
+        </Button>
+      ))
+    }
+
+    {
+      referrals.referrableTags.map(r => (
+        <Button
+          key={r._id}>
+          {r.tag}
+        </Button>
+      ))
+    }
+
+    {
+      referrals.length >= 2 &&
+        <small className='text-muted'><br />empfehlen</small>
+    }
+
+  </div> || null
 
 const action = (action, appointment, options = {}) => {
   const fn = () => Appointments.actions[action].callPromise({ appointmentId: appointment._id })
