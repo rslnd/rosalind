@@ -33,7 +33,7 @@ export class Grid extends React.Component {
               estimatedColumnWidth={(width - timeLegendWidth) / ((columns.length - 1) || 1)}
               height={height}
               rowCount={rows.length}
-              rowHeight={30}
+              rowHeight={25}
               width={width}
             />
           }
@@ -58,7 +58,13 @@ export class Grid extends React.Component {
         time={this.props.rows[rowIndex]}
       />
     } else {
-      cell = 'Appo'
+      const appointment = this.props.getAppointment(columnIndex, rowIndex)
+
+      if (appointment) {
+        cell = appointment._id
+      } else {
+        cell = '---'
+      }
     }
 
     return <div key={key} style={style}>{cell}</div>
@@ -68,5 +74,6 @@ export class Grid extends React.Component {
 Grid.propTypes = {
   columns: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,
-  slotSize: PropTypes.number.isRequired
+  slotSize: PropTypes.number.isRequired,
+  getAppointment: PropTypes.func.isRequired
 }
