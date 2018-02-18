@@ -1,7 +1,7 @@
 import publication from './publication'
-import security from './security'
+import publicationLegacy from './publication-legacy'
 
 export default function () {
   publication()
-  security()
+  publicationLegacy()
 }

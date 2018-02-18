@@ -31,7 +31,7 @@ const composer = (props, onData) => {
   Meteor.subscribe('groups')
   Meteor.subscribe('tags')
   Meteor.subscribe('calendars')
-  Meteor.subscribe('appointments')
+  Meteor.subscribe('appointments-future')
   Meteor.subscribe('schedules')
   Meteor.subscribe('schedules-constraints')
   Meteor.subscribe('settings')
