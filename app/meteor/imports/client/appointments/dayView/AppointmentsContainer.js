@@ -48,7 +48,7 @@ const composer = (props, onData) => {
   if (date.toDate() < moment().startOf('day').toDate()) {
     const schedulesDaySubscriptions = appointmentsSubsManager.subscribe('schedules', day)
     const schedulesOverrideSubscriptions = appointmentsSubsManager.subscribe('schedules', dateRange)
-    const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments', dateRange)
+    const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments-legacy', dateRange)
     subsReady = schedulesDaySubscriptions.ready() && schedulesOverrideSubscriptions.ready() && appointmentsSubscription.ready()
   } else {
     subsReady = true
