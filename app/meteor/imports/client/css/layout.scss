@@ -4,11 +4,41 @@ html,
 body {
   background-color: #ECF0F5;
   font-family: $font-stack;
+  min-height: 100%;
 }
 
 body {
   zoom: 1.221;
   transition: filter 1s cubic-bezier(.17,.67,.83,.67);
+}
+
+#react-root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  min-height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  z-index: 1 !important;
+  display: flex;
+  flex: 1;
+}
+
+.content-wrapper > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  width: 100%;
 }
 
 .zoom-1 {

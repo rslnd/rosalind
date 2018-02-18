@@ -7,6 +7,7 @@ import { DateNavigation } from '../../components/DateNavigation'
 import { Icon } from '../../components/Icon'
 import { AppointmentsSearchContainer } from '../search/AppointmentsSearchContainer'
 import { background } from '../../css/global'
+import { GridContainer } from './GridContainer'
 
 const contentHeaderStyle = {
   background,
@@ -88,7 +89,10 @@ export class AppointmentsScreen extends React.Component {
           </div>
         </div>
 
-        {/* Appointments Grid */}
+        <GridContainer
+          calendar={calendar}
+          date={date}
+        />
       </div>
     )
   }

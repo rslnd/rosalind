@@ -4,7 +4,6 @@ import memoize from 'lodash/memoize'
 import momentTz from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import { monkey } from 'spotoninc-moment-round'
-import { Slider } from 'redux-form-material-ui';
 
 const moment = extendMoment(momentTz)
 monkey(moment)
