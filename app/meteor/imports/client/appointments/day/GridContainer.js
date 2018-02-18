@@ -18,18 +18,22 @@ const composer = (props, onData) => {
     calendarId: calendar._id
   })
 
-  const columns = daySchedule ? sortByLastName(daySchedule.userIds.map(assigneeId => {
-    const user = Users.findOne({ _id: assigneeId })
-    return {
-      assigneeId,
-      fullNameWithTitle: user.fullNameWithTitle(),
-      lastName: user.profile.lastName
-    }
-  })) : []
+  let columns = [
+    { type: 'timeLegend' },
+    ...daySchedule ? sortByLastName(daySchedule.userIds.map(assigneeId => {
+      const user = Users.findOne({ _id: assigneeId })
+      return {
+        assigneeId,
+        fullNameWithTitle: user.fullNameWithTitle(),
+        lastName: user.profile.lastName
+      }
+    })) : []
+  ]
 
   if (calendar.allowUnassigned) {
     columns.push({
       assigneeId: null,
+      type: 'overbooking',
       fullNameWithTitle: TAPi18n.__('appointments.unassigned')
     })
   }
@@ -37,7 +41,7 @@ const composer = (props, onData) => {
   const slotSize = calendar.slotSize || 5
   const rows = timeSlots(slotSize)
 
-  onData(null, { columns, rows })
+  onData(null, { columns, rows, slotSize })
 }
 
 export const GridContainer = composeWithTracker(composer)(Grid)
