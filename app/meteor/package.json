@@ -79,6 +79,7 @@
     "temp": "^0.8.3",
     "unidecode": "^0.1.8",
     "websmscom": "^1.0.2",
+    "why-did-you-update": "^0.1.1",
     "xdt": "^0.4.0"
   },
   "devDependencies": {
