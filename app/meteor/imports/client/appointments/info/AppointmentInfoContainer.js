@@ -5,8 +5,9 @@ import Alert from 'react-s-alert'
 import sum from 'lodash/sum'
 import isEqual from 'lodash/isEqual'
 import identity from 'lodash/identity'
+import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
@@ -29,8 +30,10 @@ let AppointmentInfoContainer = reduxForm({
   // validate: (values) => translateObject(validate(values))
 })(AppointmentInfo)
 
-const composer = (props, onData) => {
+const composer = props => {
+  const subscription = Meteor.subscribe('appointment')
   const appointment = Appointments.findOne({ _id: props.appointmentId })
+  const loading = !subscription.ready()
 
   if (appointment) {
     const patient = Patients.findOne({ _id: appointment.patientId })
@@ -122,8 +125,9 @@ const composer = (props, onData) => {
       }
     }
 
-    onData(null, {
+    return {
       ...props,
+      loading,
       initialValues,
       calendar,
       appointment,
@@ -135,10 +139,10 @@ const composer = (props, onData) => {
       handleEditAppointment,
       handleToggleGender,
       handleSetMessagePreferences
-    })
+    }
   }
 }
 
-AppointmentInfoContainer = composeWithTracker(composer)(AppointmentInfoContainer)
+AppointmentInfoContainer = withTracker(composer)(AppointmentInfoContainer)
 
 export { AppointmentInfoContainer }

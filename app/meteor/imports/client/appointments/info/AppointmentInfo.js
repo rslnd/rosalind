@@ -5,6 +5,7 @@ import { touch, Field, FieldArray, FormSection } from 'redux-form'
 import { Switch } from 'redux-form-material-ui'
 import moment from 'moment-timezone'
 import { InputAdornment } from 'material-ui/Input'
+import { LinearProgress } from 'material-ui/Progress'
 import NumberFormat from 'react-number-format'
 import { withState } from 'recompose'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -20,7 +21,6 @@ import { Logs } from '../../helpers/Logs'
 import { Currency } from '../../components/Currency'
 import { TagsField } from '../../tags/TagsField'
 import { calculateRevenue, RevenueField } from '../new/RevenueField'
-import { twoPlaces } from '../../../util/format';
 
 const iconDefaultStyle = {
   textAlign: 'center',
@@ -351,6 +351,7 @@ export class AppointmentInfo extends React.Component {
 
   render () {
     const {
+      loading,
       handleSubmit,
       dirty,
       appointment,
@@ -366,18 +367,21 @@ export class AppointmentInfo extends React.Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
+        {loading && <LinearProgress style={loadingStyle} />}
+        {
+          patient &&
+            <div className='row'>
+              <div className='col-md-12'>
+                <FormSection name='patient'>
+                  <PatientName
+                    onChange={handleSubmit(handleEditPatient)}
+                    patient={patient} />
+                </FormSection>
+                <hr />
+              </div>
+            </div>
+        }
         <div className='row'>
-          {
-              patient &&
-                <div className='col-md-12'>
-                  <FormSection name='patient'>
-                    <PatientName
-                      onChange={handleSubmit(handleEditPatient)}
-                      patient={patient} />
-                  </FormSection>
-                  <hr />
-                </div>
-          }
           <div className='col-md-6'>
             <div onMouseLeave={
               dirty
@@ -447,4 +451,13 @@ export class AppointmentInfo extends React.Component {
       </form>
     )
   }
+}
+
+const loadingStyle = {
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  width: '100%',
+  top: 67,
+  height: 2
 }
