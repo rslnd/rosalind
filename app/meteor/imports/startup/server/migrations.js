@@ -3,6 +3,6 @@ import { Migrations } from 'meteor/percolate:migrations'
 
 export default () => {
   Meteor.startup(() => {
-    Migrations.migrateTo(1)
+    Migrations.migrateTo(2)
   })
 }
