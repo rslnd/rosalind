@@ -2,6 +2,7 @@ import banner from './banner'
 import intl from './intl'
 import timezone from './timezone'
 import env from './env'
+import migrations from './migrations'
 import browserPolicy from './browserPolicy'
 import livechat from './livechat'
 import passwordlessLogin from './passwordlessLogin'
@@ -15,6 +16,7 @@ export default function () {
   intl()
   timezone()
   env()
+  migrations()
   passwordlessLogin()
   appcache()
   defaultAccount()
