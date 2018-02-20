@@ -5,7 +5,7 @@ export const findPatients = (query) => {
   return Search.actions.patientsWithAppointments.callPromise({ query })
     .then(map((patient) => {
       return {
-        label: `${patient.profile.lastName} ${patient.profile.firstName}`,
+        label: `${patient.lastName} ${patient.firstName}`,
         value: patient._id,
         patient
       }

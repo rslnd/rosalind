@@ -42,17 +42,17 @@ const WaitlistItem = ({ appointment, isFirst, isLast }) =>
       <span className='text-muted'>
         {appointment.patient.prefix()}
         {
-          appointment.patient.profile.titlePrepend &&
+          appointment.patient.titlePrepend &&
             <span>
-              {appointment.patient.profile.titlePrepend}
+              {appointment.patient.titlePrepend}
               &ensp;
             </span>
         }
       </span>
-      <b>{namecase(appointment.patient.profile.lastName)}</b>&ensp;
-      {namecase(appointment.patient.profile.firstName)}&ensp;
+      <b>{namecase(appointment.patient.lastName)}</b>&ensp;
+      {namecase(appointment.patient.firstName)}&ensp;
       <span className='text-muted'>
-        {appointment.patient.profile.titleAppend}
+        {appointment.patient.titleAppend}
       </span>
     </div>
 

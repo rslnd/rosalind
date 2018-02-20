@@ -1,25 +1,11 @@
 {
   "user": {
     "password": "Passwort",
-    "profile": {
-      "firstName": {
-        "label": "Vorname"
-      },
-      "lastName": {
-        "label": "Nachname"
-      },
-      "titlePrepend": {
-        "label": "Titel (Vorangestellt)"
-      },
-      "titleAppend": {
-        "label": "Titel (Nachgestellt)"
-      },
-      "birthday": {
-        "label": "Geburtstag"
-      },
-      "gender": {
-        "label": "Geschlecht"
-      }
-    }
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "titlePrepend": "Titel (Vorangestellt)",
+    "titleAppend": "Titel (Nachgestellt)",
+    "birthday": "Geburtstag",
+    "gender":"Geschlecht"
   }
 }

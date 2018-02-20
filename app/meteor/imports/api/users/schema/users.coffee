@@ -1,10 +1,36 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { Auto, Profile, External } from '../../../util/schema'
+import { Auto, Day, External } from '../../../util/schema'
 
 Schema = new SimpleSchema
+  firstName:
+    type: String
+    optional: true
+
+  lastName:
+    type: String
+    optional: true
+
+  titlePrepend:
+    type: String
+    optional: true
+
+  titleAppend:
+    type: String
+    optional: true
+
+  birthday:
+    type: Day
+    optional: true
+
+  gender:
+    type: String
+    allowedValues: ['Male', 'Female']
+    optional: true
+
   username:
     type: String
     regEx: /^[a-z0-9A-Z_]*$/
+    # Meteor takes care of the index
 
   groupId:
     type: SimpleSchema.RegEx.Id
@@ -14,10 +40,6 @@ Schema = new SimpleSchema
     type: Date
     optional: true
     autoValue: Auto.createdAt
-
-  profile:
-    type: Profile
-    optional: true
 
   external:
     type: External

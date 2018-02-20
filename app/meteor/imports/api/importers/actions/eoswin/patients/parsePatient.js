@@ -66,19 +66,17 @@ export const parsePatient = (row, timezone) => {
       timestamp: moment.tz(row[15], 'DD.MM.YYYY H:m:s', timezone).toDate(),
       action,
       note: row[10] }),
-    profile: {
-      firstName: row[0],
-      lastName: row[1],
-      titlePrepend: row[2],
-      gender: parseGender(row[3]),
-      birthday: row[14] && dateToDay(moment.tz(row[14], 'DD.MM.YYYY', timezone)),
-      address: {
-        line1: row[4],
-        postalCode: row[5],
-        locality: row[6]
-      },
-      contacts: parseContacts({ phone: row[8], email: row[9], mobile: row[13] })
-    }
+    firstName: row[0],
+    lastName: row[1],
+    titlePrepend: row[2],
+    gender: parseGender(row[3]),
+    birthday: row[14] && dateToDay(moment.tz(row[14], 'DD.MM.YYYY', timezone)),
+    address: {
+      line1: row[4],
+      postalCode: row[5],
+      locality: row[6]
+    },
+    contacts: parseContacts({ phone: row[8], email: row[9], mobile: row[13] })
   }
 
   return { patient, action }

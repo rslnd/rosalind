@@ -17,18 +17,16 @@ export const mapFieldsToPatient = v => {
       note: v.note,
       externalRevenue: v.externalRevenue,
       patientSince: v.patientSince ? dayToDate(v.patientSince) : undefined,
-      profile: {
-        gender: v.gender,
-        lastName: v.lastName,
-        firstName: v.firstName,
-        titlePrepend: v.titlePrepend,
-        titleAppend: v.titleAppend,
-        birthday: v.birthday,
-        banned: v.banned,
-        address: v.address,
-        noSMS: !v.reminders,
-        contacts
-      }
+      gender: v.gender,
+      lastName: v.lastName,
+      firstName: v.firstName,
+      titlePrepend: v.titlePrepend,
+      titleAppend: v.titleAppend,
+      birthday: v.birthday,
+      banned: v.banned,
+      address: v.address,
+      noSMS: !v.reminders,
+      contacts
     }
   }
 

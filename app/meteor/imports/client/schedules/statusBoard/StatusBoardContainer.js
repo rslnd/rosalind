@@ -10,6 +10,7 @@ import { Schedules } from '../../../api/schedules'
 import { Timesheets } from '../../../api/timesheets'
 import { Users } from '../../../api/users'
 import { Groups } from '../../../api/groups'
+import { shortname, fullNameWithTitle } from '../../../api/users/methods/name'
 
 const compose = (props, onData) => {
   if (!Meteor.subscribe('timesheets-allToday').ready()) { return }
@@ -32,7 +33,7 @@ const compose = (props, onData) => {
     const groups = Groups.methods.all().map((g) => {
       return {
         group: g,
-        users: sortBy(intersectionBy(scheduledUsers, g.users(), '_id'), (u) => u.profile.lastName).map((user) => {
+        users: sortBy(intersectionBy(scheduledUsers, g.users(), '_id'), (u) => u.lastName).map((user) => {
           const userId = user._id
           const schedule = Schedules.findOne({ type: 'default', 'schedule.day': weekday, userId })
           const isTracking = Timesheets.methods.isTracking({ userId })
@@ -41,8 +42,8 @@ const compose = (props, onData) => {
           return {
             user: {
               _id: user._id,
-              shortname: user.shortname(),
-              fullNameWithTitle: user.fullNameWithTitle()
+              shortname: shortname(user),
+              fullNameWithTitle: fullNameWithTitle(user)
             },
             timesheets: {
               sum,

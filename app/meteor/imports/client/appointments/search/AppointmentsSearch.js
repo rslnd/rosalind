@@ -78,8 +78,8 @@ class AppointmentSearchResult extends React.Component {
           patient && <span>
             <span style={style.name}>{patient && <PatientName patient={patient} />}&emsp;</span>
             {
-              patient.profile && patient.profile.birthday &&
-                <span style={style.birthday}>{patient && <Birthday day={patient.profile.birthday} veryShort />}</span>
+              patient.birthday &&
+                <span style={style.birthday}>{patient && <Birthday day={patient.birthday} veryShort />}</span>
             }
           </span>
         }

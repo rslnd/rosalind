@@ -11,9 +11,9 @@ export const parseBirthday = (query) => {
   let selector = {}
 
   if (result && result.day && result.month && result.year) {
-    selector['profile.birthday.day'] = result.day
-    selector['profile.birthday.month'] = result.month
-    selector['profile.birthday.year'] = result.year
+    selector['birthday.day'] = result.day
+    selector['birthday.month'] = result.month
+    selector['birthday.year'] = result.year
   }
 
   if (Object.keys(selector).length > 0) {

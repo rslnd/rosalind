@@ -20,12 +20,12 @@ module.exports = (collection) ->
 
     query = query.split(/\s+/).join(' ')
 
-    selector['profile.titlePrepend'] = 'Dr.' if query.match(/Dr\./)
+    selector['titlePrepend'] = 'Dr.' if query.match(/Dr\./)
     query = query.replace('Dr. ', '')
 
     selector['$or'] = [
-      { 'profile.lastName': query.split(' ')[0] }
-      { 'profile.firstName': query.split(' ')[0] }
+      { 'lastName': query.split(' ')[0] }
+      { 'firstName': query.split(' ')[0] }
     ]
 
     collection.findOne(selector)

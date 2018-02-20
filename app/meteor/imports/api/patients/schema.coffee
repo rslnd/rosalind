@@ -1,7 +1,100 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { Profile, External, Auto } from '../../util/schema'
+import { External, Day, Auto } from '../../util/schema'
+
+Contact = new SimpleSchema
+  value:
+    type: String
+
+  valueNormalized:
+    type: String,
+    optional: true
+    index: 1
+
+  channel:
+    allowedValues: ['Phone', 'Email']
+    type: String
+
+  order:
+    type: Number
+    optional: true
+
+  note:
+    type: String
+    optional: true
+
+Address = new SimpleSchema
+  line1:
+    type: String
+    optional: true
+
+  line2:
+    type: String
+    optional: true
+
+  postalCode:
+    type: String
+    optional: true
+
+  locality:
+    type: String
+    optional: true
+
+  country:
+    type: String
+    optional: true
 
 module.exports = new SimpleSchema
+  firstName:
+    type: String
+    optional: true
+
+  lastName:
+    type: String
+    optional: true
+
+  lastNameNormalized:
+    type: String
+    optional: true
+    index: 1
+
+  titlePrepend:
+    type: String
+    optional: true
+
+  titleAppend:
+    type: String
+    optional: true
+
+  birthday:
+    type: Day
+    optional: true
+    index: 1
+
+  gender:
+    type: String
+    allowedValues: ['Male', 'Female']
+    optional: true
+
+  contacts:
+    type: [ Contact ]
+    optional: true
+
+  noSMS:
+    type: Boolean
+    optional: true
+
+  noCall:
+    type: Boolean
+    optional: true
+
+  address:
+    type: Address
+    optional: true
+
+  banned:
+    type: Boolean
+    optional: true
+
   insuranceId:
     type: String
     optional: true
@@ -15,10 +108,6 @@ module.exports = new SimpleSchema
   externalRevenue:
     type: Number
     decimal: true
-    optional: true
-
-  profile:
-    type: Profile
     optional: true
 
   external:

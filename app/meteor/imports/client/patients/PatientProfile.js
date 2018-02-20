@@ -15,16 +15,16 @@ export class PatientProfile extends React.Component {
       return (
         <div>
           <h4>{patient.fullNameWithTitle()}</h4>
-          {patient.profile.contacts && uniqBy(patient.profile.contacts, 'value').map((contact) => (
+          {patient.contacts && uniqBy(patient.contacts, 'value').map((contact) => (
             <h4 key={contact.value}>{
               contact.channel === 'Phone'
               ? zerofix(contact.value)
               : contact.value
             }</h4>
           ))}
-          <p><Birthday day={patient.profile.birthday} /></p>
+          <p><Birthday day={patient.birthday} /></p>
           {
-            map(patient.profile.address).filter(identity).map((l) => <span key={l}>{l}&emsp;</span>)
+            map(patient.address).filter(identity).map((l) => <span key={l}>{l}&emsp;</span>)
           }
           {
             patient.notes && patient.notes.length > 4 &&

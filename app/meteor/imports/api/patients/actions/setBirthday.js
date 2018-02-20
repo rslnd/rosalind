@@ -23,7 +23,7 @@ export const setBirthday = ({ Patients }) => {
       if (patient) {
         Patients.update({ _id: patientId }, {
           $set: {
-            'profile.birthday': birthday
+            birthday
           }
         }, (err) => {
           if (err) { throw err }

@@ -10,7 +10,7 @@ Template.schedulesDefaultEmployeeList.helpers
     map Groups.methods.all(), (g) ->
       group: g
       users: Users.find
-        'profile.employee': true
+        employee: true
         groupId: g._id
 
   linkToDefaultScheduleForUser: ->

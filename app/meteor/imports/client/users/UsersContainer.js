@@ -13,14 +13,14 @@ const composer = (props, onData) => {
     .fetch()
     .map(g => ({
       ...g,
-      users: Users.find({ groupId: g._id }, { sort: { 'profile.lastName': 1 } }).fetch()
+      users: Users.find({ groupId: g._id }, { sort: { lastName: 1 } }).fetch()
     }))
 
   const groups = [{
     _id: 'other',
     name: 'Benutzer',
     icon: 'users',
-    users: Users.find({ groupId: null }, { sort: { 'profile.lastName': 1 } }).fetch()
+    users: Users.find({ groupId: null }, { sort: { lastName: 1 } }).fetch()
   }, ...groupedUsers]
 
   const getAssigneeName = id => id && Users.findOne(id).fullNameWithTitle()

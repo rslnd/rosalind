@@ -29,7 +29,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
 
       if (selector) {
         const patients = Patients.find(selector, {
-          sort: { 'profile.lastName': 1 },
+          sort: { lastName: 1 },
           limit: 100
         }).fetch()
 

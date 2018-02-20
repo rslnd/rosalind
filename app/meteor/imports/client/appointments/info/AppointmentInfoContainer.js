@@ -31,7 +31,7 @@ let AppointmentInfoContainer = reduxForm({
 })(AppointmentInfo)
 
 const composer = props => {
-  const subscription = Meteor.subscribe('appointment')
+  const subscription = Meteor.subscribe('appointment', props.appointmentId)
   const appointment = Appointments.findOne({ _id: props.appointmentId })
   const loading = !subscription.ready()
 

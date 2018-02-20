@@ -20,7 +20,7 @@ export const toggleGender = ({ Patients }) => {
 
       let newGender = 'Female'
 
-      if (patient.profile.gender === 'Female') {
+      if (patient.gender === 'Female') {
         newGender = 'Male'
       }
 
@@ -28,7 +28,7 @@ export const toggleGender = ({ Patients }) => {
 
       Patients.update({ _id: patientId }, {
         $set: {
-          'profile.gender': newGender
+          gender: newGender
         }
       })
     }

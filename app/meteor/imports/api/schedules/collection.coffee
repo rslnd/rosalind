@@ -1,5 +1,4 @@
 import { Mongo } from 'meteor/mongo'
-import helpersProfile from '../../util/helpersProfile'
 import methods from './methods'
 import actions from './actions'
 import helpers from './helpers'

@@ -27,9 +27,9 @@ export const deduplicateWithJournal = ({ Appointments, Patients, journal }) => {
 }
 
 const findIdForPatient = journalRows => patient => {
-  const dd = leftPad(patient.profile.birthday.day, 2, '0')
-  const mm = leftPad(patient.profile.birthday.month, 2, '0')
-  const yyyy = patient.profile.birthday.year
+  const dd = leftPad(patient.birthday.day, 2, '0')
+  const mm = leftPad(patient.birthday.month, 2, '0')
+  const yyyy = patient.birthday.year
   const needle1 = `Patient: ${patient.fullNameNormalized}`
   const needle2 = `geb. am: ${dd}.${mm}.${yyyy}`
 
@@ -61,7 +61,7 @@ const findPatientsOfDay = ({ Appointments, Patients, day }) => {
       $in: appointments.map(a => a.patientId)
     },
     removed: { $ne: true },
-    'profile.birthday.day': { $ne: null }
+    'birthday.day': { $ne: null }
   }).fetch()
 
   return patients
@@ -73,9 +73,9 @@ const findDuplicatePatients = ({ Appointments, Patients, patientsToCheck }) => {
       $nin: patientsToCheck.map(p => p._id)
     },
     $or: patientsToCheck.map(p => ({
-      'profile.birthday.day': p.profile.birthday.day,
-      'profile.birthday.month': p.profile.birthday.month,
-      'profile.birthday.year': p.profile.birthday.year
+      'birthday.day': p.birthday.day,
+      'birthday.month': p.birthday.month,
+      'birthday.year': p.birthday.year
     })),
     removed: { $ne: true }
   }).fetch()
@@ -83,21 +83,21 @@ const findDuplicatePatients = ({ Appointments, Patients, patientsToCheck }) => {
   const sort = sortBy('fullNameNormalized')
   const fullNameNormalized = sort(sameBirthday.map(p => ({
     ...p,
-    fullNameNormalized: `${p.profile.lastName} ${p.profile.firstName}`.toUpperCase()
+    fullNameNormalized: `${p.lastName} ${p.firstName}`.toUpperCase()
   })))
 
   const fullNameNormalizedToCheck = sort(patientsToCheck.map(p => ({
     ...p,
-    fullNameNormalized: `${p.profile.lastName} ${p.profile.firstName}`.toUpperCase()
+    fullNameNormalized: `${p.lastName} ${p.firstName}`.toUpperCase()
   })))
 
   const duplicates = fullNameNormalizedToCheck.map(check => ([
     check,
     ...fullNameNormalized.filter(f =>
       f.fullNameNormalized === check.fullNameNormalized &&
-      f.profile.birthday.day === check.profile.birthday.day &&
-      f.profile.birthday.month === check.profile.birthday.month &&
-      f.profile.birthday.year === check.profile.birthday.year
+      f.birthday.day === check.birthday.day &&
+      f.birthday.month === check.birthday.month &&
+      f.birthday.year === check.birthday.year
     )
   ])).filter(a => a.length > 1)
 
@@ -145,13 +145,10 @@ const mergePatient = (master, addendum) => {
   return omitBy(isNil)({
     ...masterFields,
     note: mergeNote(master.note, addendum.note),
-    profile: omitBy(isNil)({
-      ...master.profile,
-      contacts: mergeContacts(
-        idx(master, _ => _.profile.contacts),
-        idx(addendum, _ => _.profile.contacts)
-      )
-    })
+    contacts: mergeContacts(
+      idx(master, _ => _.contacts),
+      idx(addendum, _ => _.contacts)
+    )
   })
 }
 

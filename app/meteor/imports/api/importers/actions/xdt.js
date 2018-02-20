@@ -33,13 +33,11 @@ export const xdt = ({ Importers }) => {
         }
 
         const patient = {
-          profile: {
-            firstName: parsed.patient.firstName,
-            lastName: parsed.patient.lastName,
-            birthday: dateToDay(moment.tz(parsed.patient.birthday, 'DDMMYYYY', timezone)),
-            gender: parsed.patient.gender === '1' ? 'Male' : 'Female',
-            contacts
-          },
+          firstName: parsed.patient.firstName,
+          lastName: parsed.patient.lastName,
+          birthday: dateToDay(moment.tz(parsed.patient.birthday, 'DDMMYYYY', timezone)),
+          gender: parsed.patient.gender === '1' ? 'Male' : 'Female',
+          contacts,
           external: {
             eoswin: {
               id: parsed.patient.id

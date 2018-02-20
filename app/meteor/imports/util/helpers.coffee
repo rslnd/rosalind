@@ -23,18 +23,6 @@ module.exports =
     collection = Mongo.Collection.get(collection) if typeof collection is 'string'
     collection.findOne(id)
 
-  getFirstName: (user, collection) ->
-    @person(user, collection)?.firstName()
-
-  getFullName: (user, collection) ->
-    @person(user, collection)?.fullName()
-
-  getFullNameWithTitle: (user, collection) ->
-    @person(user, collection)?.fullNameWithTitle()
-
-  getShortname: (user, collection) ->
-    @person(user, collection)?.shortname()
-
   floor: (number) ->
     return unless number
     Math.floor(number)

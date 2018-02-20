@@ -18,7 +18,7 @@ const getAssignee = memoize(assigneeId => {
   return {
     assigneeId,
     fullNameWithTitle: user.fullNameWithTitle(),
-    lastName: user.profile.lastName
+    lastName: user.lastName
   }
 })
 

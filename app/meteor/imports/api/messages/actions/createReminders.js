@@ -51,8 +51,8 @@ export const findUpcomingAppointments = (cutoffDate) => {
 
     if (appointment.patientId) {
       patient = Patients.findOne({ _id: appointment.patientId })
-      if (patient && patient.profile && patient.profile.contacts) {
-        contacts = patient.profile.contacts
+      if (patient && patient.contacts) {
+        contacts = patient.contacts
       }
     }
 
@@ -67,15 +67,13 @@ export const findUpcomingAppointments = (cutoffDate) => {
     if (patient) {
       result.patient = {
         _id: patient._id,
-        profile: {
-          lastName: patient && patient.lastName(),
-          prefix: patient && patient.prefix(),
-          gender: patient && patient.profile.gender
-        }
+        lastName: patient && patient.lastName(),
+        prefix: patient && patient.prefix(),
+        gender: patient && patient.gender
       }
 
       if (contacts) {
-        result.patient.profile.contacts = contacts
+        result.patient.contacts = contacts
       }
     }
 
@@ -122,18 +120,18 @@ export const createReminders = ({ Messages }) => {
       const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
       const appointments = findUpcomingAppointments(cutoffDate)
       const appointmentsWithMobile = appointments.filter((a) => {
-        if (a.patient && a.patient.profile && a.patient.profile.noSMS) {
+        if (a.patient && a.patient.noSMS) {
           return false
         }
 
-        if (a.patient && a.patient.profile && a.patient.profile.contacts) {
-          return some(a.patient.profile.contacts, (c) =>
+        if (a.patient && a.patient.contacts) {
+          return some(a.patient.contacts, (c) =>
             (c.channel === 'Phone' && isMobileNumber(c.value))
           )
         }
       })
       const uniqueAppointmentsWithMobile = uniqBy(appointmentsWithMobile, (a) => (
-        a.patient.profile.contacts[0].value
+        a.patient.contacts[0].value
       ))
 
       let insertedCount = 0
@@ -144,10 +142,10 @@ export const createReminders = ({ Messages }) => {
           assigneeId: a.assigneeId,
           patientId: a.patient._id,
           start: a.start,
-          lastName: a.patient.profile.lastName,
-          prefix: a.patient.profile.prefix,
-          gender: a.patient.profile.gender,
-          contacts: a.patient.profile.contacts
+          lastName: a.patient.lastName,
+          prefix: a.patient.prefix,
+          gender: a.patient.gender,
+          contacts: a.patient.contacts
         }
       })
 

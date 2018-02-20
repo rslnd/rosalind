@@ -22,11 +22,11 @@ export const parseExactName = (query) => {
       // Force exact match for short queries to avoid unnecessary fetching
       if (normalized.length <= 4) {
         result = {
-          'profile.lastNameNormalized': normalized
+          'lastNameNormalized': normalized
         }
       } else {
         result = {
-          'profile.lastNameNormalized': {
+          'lastNameNormalized': {
             $regex: '^' + normalized
           }
         }
@@ -35,7 +35,7 @@ export const parseExactName = (query) => {
       if (names.length >= 2) {
         const firstName = normalizeName(names[names.length - 1])
         if (firstName) {
-          result['profile.firstName'] = {
+          result['firstName'] = {
             $regex: '^' + firstName,
             $options: 'i'
           }

@@ -22,8 +22,8 @@ export const setMessagePreferences = ({ Patients }) => {
       }
 
       let update = {}
-      if (noSMS !== undefined) { update['profile.noSMS'] = noSMS }
-      if (noCall !== undefined) { update['profile.noCall'] = noCall }
+      if (noSMS !== undefined) { update['noSMS'] = noSMS }
+      if (noCall !== undefined) { update['noCall'] = noCall }
 
       if (Object.keys(update).length > 0) {
         Patients.update({ _id: patientId }, { $set: update })

@@ -1,8 +1,8 @@
 import find from 'lodash/fp/find'
 
 const hasContact = channel => patient =>
-  patient.profile.contacts &&
-    find(c => c.channel === channel)(patient.profile.contacts)
+  patient.contacts &&
+    find(c => c.channel === channel)(patient.contacts)
 
 export const isEmpty = errors => Object.keys(errors).length === 0
 
@@ -10,7 +10,7 @@ export const missingPatientInfo = (patient) => {
   let errors = {}
   if (!patient) { return {} }
 
-  if (!patient.profile.birthday) {
+  if (!patient.birthday) {
     errors.birthday = 'birthday'
   }
 

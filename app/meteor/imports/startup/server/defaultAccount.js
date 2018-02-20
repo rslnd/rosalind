@@ -10,9 +10,7 @@ export default () => {
     username: 'admin',
     password: Random.id(),
     email: 'admin@example.com',
-    profile: {
-      firstName: 'Admin'
-    }
+    firstName: 'Admin'
   }
 
   console.warn(`[Server] Creating first user '${defaultAccount.username}' with password '${defaultAccount.password}'`)

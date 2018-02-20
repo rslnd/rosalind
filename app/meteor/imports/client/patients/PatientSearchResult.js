@@ -46,7 +46,7 @@ export class PatientSearchResult extends React.Component {
         {
           patient && <span>
             <span style={nameStyle}>{patient && <PatientName patient={patient} />}&emsp;</span>
-            <span style={birthdayStyle}>{patient && <Birthday day={patient.profile.birthday} veryShort />}</span>
+            <span style={birthdayStyle}>{patient && <Birthday day={patient.birthday} veryShort />}</span>
             {
               patient.appointments &&
                 <span>

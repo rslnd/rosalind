@@ -54,7 +54,7 @@ export const sendScheduled = ({ Messages }) => {
         removed: { $ne: true }
       }).fetch().filter((message) => {
         const patient = Patients.findOne({ _id: message.patientId })
-        if (patient && patient.profile && patient.profile.noSMS) {
+        if (patient && patient.noSMS) {
           return false
         }
 

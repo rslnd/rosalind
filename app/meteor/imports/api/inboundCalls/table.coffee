@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import Helpers from '../../util/helpers'
 import { zerofix } from '../../util/zerofix'
+import { firstName } from '../users/methods/name'
 import InboundCalls from './collection'
 import Schema from './schema'
 
@@ -19,9 +20,9 @@ module.exports = new Tabular.Table
     { data: 'note', title: 'Notiz' }
     { data: 'privatePatient', title: 'Privat', render: (val, type, doc) -> doc.privatePatient }
     { data: 'createdAt', title: 'Angenommen', render: (val) -> moment(val).calendar() }
-    { data: 'createdBy', title: 'von', render: (val) -> Helpers.getFirstName(val) }
+    { data: 'createdBy', title: 'von', render: firstName }
     { data: 'removedAt', title: 'Erledigt', render: (val) -> moment(val).calendar() }
-    { data: 'removedBy', title: 'von', render: (val) -> Helpers.getFirstName(val) }
+    { data: 'removedBy', title: 'von', render: firstName }
     { title: '<i class="fa fa-commenting-o"></i>', tmpl: Meteor.isClient and Template.commentCount }
     { tmpl: Meteor.isClient and Template.inboundCallsUnresolve }
   ]

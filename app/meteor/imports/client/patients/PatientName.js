@@ -12,15 +12,15 @@ const dotStyle = {
 export const PatientName = ({ patient }) => (
   <span>
     <span className='text-muted'>
-      {patient.profile.gender === 'Female' && TAPi18n.__('patients.salutationFemale')}
-      {patient.profile.gender === 'Male' && TAPi18n.__('patients.salutationMale')}
+      {patient.gender === 'Female' && TAPi18n.__('patients.salutationFemale')}
+      {patient.gender === 'Male' && TAPi18n.__('patients.salutationMale')}
     &nbsp;</span>
-    {patient.profile.titlePrepend && <span>{patient.profile.titlePrepend}&nbsp;</span>}
-    <b>{patient.profile.lastName}&nbsp;</b>
-    {patient.profile.firstName}&nbsp;
-    {patient.profile.titleAppend}
+    {patient.titlePrepend && <span>{patient.titlePrepend}&nbsp;</span>}
+    <b>{patient.lastName}&nbsp;</b>
+    {patient.firstName}&nbsp;
+    {patient.titleAppend}
     {
-      patient.profile.banned && <span>
+      patient.banned && <span>
         &ensp;
         <span title={TAPi18n.__('patients.banned')} style={dotStyle} />
       </span>

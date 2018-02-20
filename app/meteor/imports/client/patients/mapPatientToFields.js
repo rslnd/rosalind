@@ -1,13 +1,8 @@
 import find from 'lodash/fp/find'
 
 export const mapPatientToFields = patient => {
-  if (patient && patient.profile) {
-    let address = {}
-    if (patient.profile.address) {
-      address = patient.profile.address
-    }
-
-    let contacts = patient.profile.contacts || [];
+  if (patient) {
+    let contacts = patient.contacts || [];
     ['Phone', 'Email'].map(channel => {
       if (!find(c => c.channel === channel)(contacts)) {
         contacts.push({ channel })
@@ -17,18 +12,18 @@ export const mapPatientToFields = patient => {
     return ({
       patientId: patient._id || patient.patientId,
       insuranceId: patient.insuranceId,
-      gender: patient.profile.gender,
-      firstName: patient.profile.firstName,
-      lastName: patient.profile.lastName,
-      titlePrepend: patient.profile.titlePrepend,
-      titleAppend: patient.profile.titleAppend,
-      birthday: patient.profile.birthday,
+      gender: patient.gender,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      titlePrepend: patient.titlePrepend,
+      titleAppend: patient.titleAppend,
+      birthday: patient.birthday,
       contacts,
-      address,
-      banned: patient.profile.banned || false,
+      address: patient.address,
+      banned: patient.banned || false,
       externalRevenue: patient.externalRevenue,
       note: patient.note,
-      reminders: !patient.profile.noSMS,
+      reminders: !patient.noSMS,
       patientSince: patient.patientSince
     })
   } else {

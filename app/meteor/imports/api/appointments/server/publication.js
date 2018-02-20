@@ -9,7 +9,7 @@ import Appointments from '../collection'
 
 export default () => {
   Meteor.publishComposite('appointment', function (_id) {
-    check(_id, Match.Optional(String))
+    check(_id, String)
 
     if (!(this.userId && Roles.userIsInRole(this.userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))) { return }
 

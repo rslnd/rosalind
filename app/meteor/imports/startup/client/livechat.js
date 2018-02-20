@@ -49,13 +49,13 @@ const init = () => {
 
                 Smooch.login(smoochUserId, jwt).then(() => {
                   Smooch.updateUser({
-                    givenName: user.profile && user.profile.firstName,
-                    surname: user.profile && user.profile.lastName,
+                    givenName: user.firstName,
+                    surname: user.lastName,
                     email: user.email,
                     properties: {
                       username: user.username,
                       fullNameWithTitle: user.fullNameWithTitle(),
-                      employee: user.profile && user.profile.employee,
+                      employee: user.employee,
                       roles: user.getRoles(),
                       group: group && group.name
                     }

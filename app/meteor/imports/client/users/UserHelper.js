@@ -1,12 +1,14 @@
-import React from 'react'
 import { Users } from '../../api/users'
+import * as helpers from '../../api/users/methods/name'
 
 export const UserHelper = ({ userId, helper }) => {
   let user = Users.findOne({ _id: userId })
   if (!user) { return null }
-  if (helper) {
-    return (<span>{user[helper](user)}</span>)
+
+  if (helpers[helper]) {
+    return helpers[helper](user)
   } else {
-    return (<span>{user.fullNameWithTitle()}</span>)
+    console.error('No definition for helper', helper)
+    return helpers.fullNameWithTitle(user)
   }
 }

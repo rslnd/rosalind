@@ -2,17 +2,17 @@ import { TAPi18n } from 'meteor/tap:i18n'
 
 module.exports =
   firstName: ->
-    @profile?.firstName or @fullName()
+    @firstName or @fullName()
 
   lastName: ->
-    @profile?.lastName or @fullName()
+    @lastName or @fullName()
 
   prefix: ->
     return '' if @?collection()._name is 'users'
 
-    if @profile?.gender is 'Male'
+    if @gender is 'Male'
       TAPi18n.__('patients.salutationMale') + ' '
-    else if @profile?.gender is 'Female'
+    else if @gender is 'Female'
       TAPi18n.__('patients.salutationFemale') + ' '
     else
       ''
@@ -20,34 +20,34 @@ module.exports =
   fullName: (options = {}) ->
     prefix = if options.prefix isnt false then @prefix() else ''
 
-    if (@profile?.lastName and @profile.firstName)
-      prefix + @profile.firstName + ' ' + @profile.lastName
-    else if (@profile?.lastName)
-      prefix + @profile.lastName
-    else if (@profile?.firstName)
-      @profile.firstName
+    if (@lastName and @firstName)
+      prefix + @firstName + ' ' + @lastName
+    else if (@lastName)
+      prefix + @lastName
+    else if (@firstName)
+      @firstName
     else
       @username
 
   fullNameWithTitle: ->
-    if (@profile?.titleAppend and @profile.titlePrepend)
-      @prefix() + @profile.titlePrepend + ' ' + @fullName({ prefix: false }) +
-        ', ' + @profile.titleAppend
-    else if (@profile?.titlePrepend)
-      @prefix() + @profile.titlePrepend + ' ' + @fullName({ prefix: false })
-    else if (@profile?.titleAppend)
-      @prefix() + @fullName() + ', ' + @profile.titleAppend
+    if (@titleAppend and @titlePrepend)
+      @prefix() + @titlePrepend + ' ' + @fullName({ prefix: false }) +
+        ', ' + @titleAppend
+    else if (@titlePrepend)
+      @prefix() + @titlePrepend + ' ' + @fullName({ prefix: false })
+    else if (@titleAppend)
+      @prefix() + @fullName() + ', ' + @titleAppend
     else
       @fullName()
 
   lastNameWithTitle: ->
-    if (@profile?.lastName)
-      if (@profile?.titleAppend and @profile.titlePrepend)
-        @prefix() + @profile.titlePrepend + ' ' + @lastName() +
-          ', ' + @profile.titleAppend
-      else if (@profile?.titlePrepend)
-        @prefix() + @profile.titlePrepend + ' ' + @lastName()
-      else if (@profile?.titleAppend)
-        @prefix() + @fullName() + ', ' + @profile.titleAppend
+    if (@lastName)
+      if (@titleAppend and @titlePrepend)
+        @prefix() + @titlePrepend + ' ' + @lastName() +
+          ', ' + @titleAppend
+      else if (@titlePrepend)
+        @prefix() + @titlePrepend + ' ' + @lastName()
+      else if (@titleAppend)
+        @prefix() + @fullName() + ', ' + @titleAppend
     else
       @fullNameWithTitle()

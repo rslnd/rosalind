@@ -4,10 +4,6 @@ import Time from '../../util/time'
 
 
 h = Template.registerHelper
-h 'getFirstName', (context) -> Helpers.getFirstName(context)
-h 'getFullName', (context) -> Helpers.getFullName(context)
-h 'getFullNameWithTitle', (context) -> Helpers.getFullNameWithTitle(context)
-h 'getShortname', (context) -> Helpers.getShortname(context)
 h 'floor', (context) -> Helpers.floor(context)
 h 'roundToOne', (context) -> Helpers.roundToOne(context)
 h 'roundToTwo', (context) -> Helpers.roundToTwo(context)

@@ -10,7 +10,6 @@
             .box-header.with-border
               h3.box-title
                 | {{_ 'schedules.thisDefault'}} {{_ 'ui.for' }}
-                strong {{ getFullNameWithTitle viewUser }}
               .box-tools.pull-right
                 +if isInRole 'schedules-edit,admin'
                   button.btn.btn-box-tool(rel='edit')

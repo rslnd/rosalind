@@ -15,7 +15,7 @@ export const parseContact = (query) => {
 
   if (phone) {
     const selector = {
-      'profile.contacts.valueNormalized': {
+      'contacts.valueNormalized': {
         $regex: '^' + phone
       }
     }

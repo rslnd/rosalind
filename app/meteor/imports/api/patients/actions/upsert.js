@@ -36,12 +36,12 @@ const normalizeContact = c => {
 }
 
 const cleanFields = (p = {}) => {
-  if (p.profile && p.profile.contacts === []) {
-    delete p.profile.contacts
+  if (p.contacts === []) {
+    delete p.contacts
   }
 
-  if (p.profile && p.profile.contacts) {
-    p.profile.contacts = p.profile.contacts.map(normalizeContact)
+  if (p.contacts) {
+    p.contacts = p.contacts.map(normalizeContact)
   }
 
   return omitBy(isEmpty)(p)
@@ -66,8 +66,8 @@ export const upsert = ({ Patients }) => {
         quiet = false
       }
 
-      if (patient.profile && patient.profile.lastName) {
-        patient.profile.lastNameNormalized = normalizeName(patient.profile.lastName)
+      if (patient.lastName) {
+        patient.lastNameNormalized = normalizeName(patient.lastName)
       }
 
       // TODO: Split into separate method
@@ -90,11 +90,11 @@ export const upsert = ({ Patients }) => {
 
       if (existingPatient) {
         // TODO: Factor contacts into own model
-        if (!replaceContacts && existingPatient.profile && existingPatient.profile.contacts && patient.profile && patient.profile.contacts) {
+        if (!replaceContacts && existingPatient.contacts && patient.contacts) {
           let newContacts = []
 
-          patient.profile.contacts.forEach((c) => {
-            if (!existingPatient.profile.contacts.map((c) => zerofix(c.value)).includes(zerofix(c.value))) {
+          patient.contacts.forEach((c) => {
+            if (!existingPatient.contacts.map((c) => zerofix(c.value)).includes(zerofix(c.value))) {
               if (c.channel === 'Phone') {
                 c.value = zerofix(c.value)
               }
@@ -102,18 +102,19 @@ export const upsert = ({ Patients }) => {
             }
           })
 
-          patient.profile.contacts = [ ...existingPatient.profile.contacts, ...newContacts ]
+          patient.contacts = [ ...existingPatient.contacts, ...newContacts ]
         }
 
-        patient.profile = omitBy(isEmpty)(patient.profile)
-        const tempBirthday = patient.profile.birthday
-        patient.profile = omitBy((v, k) => k === 'birthday')(patient.profile)
+        patient = omitBy(isEmpty)(patient)
+
+        const tempBirthday = patient.birthday
+        patient = omitBy((v, k) => k === 'birthday')(patient)
 
         let update = dot.flatten(cleanFields(patient))
         if (update['$set']) {
-          update['$set']['profile.birthday'] = tempBirthday
-          if (!replaceContacts && update['$set']['profile.contacts'] === []) {
-            delete update['$set']['profile.contacts']
+          update['$set']['birthday'] = tempBirthday
+          if (!replaceContacts && update['$set']['contacts'] === []) {
+            delete update['$set']['contacts']
           }
           delete update['$set']._id
           update['$set'] = omitBy(isEmpty)(update['$set'])

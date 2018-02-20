@@ -43,7 +43,7 @@ const parseQueryForAutofill = (query = '') => {
   ]
 
   console.log('[PatientPicker] Autofill', { query, autofill })
-  return { _id: 'newPatient', profile: autofill }
+  return { _id: 'newPatient', ...autofill }
 }
 
 export class PatientPicker extends React.Component {
