@@ -50,7 +50,7 @@ export default () => {
     return {
       find: function () {
         this.unblock()
-        Appointments.find({
+        return Appointments.find({
           start: {
             $gt: startOfToday
           }
@@ -65,7 +65,8 @@ export default () => {
             end: 1,
             admitted: 1,
             treated: 1,
-            canceled: 1
+            canceled: 1,
+            note: 1
           },
           sort: {
             start: 1
@@ -79,12 +80,7 @@ export default () => {
             if (doc.patientId) {
               return Patients.find({ _id: doc.patientId }, {
                 limit: 1,
-                fields: {
-                  _id: 1,
-                  'profile.firstName': 1,
-                  'profile.lastName': 1,
-                  'profile.gender': 1
-                }
+                fields: Patients.fields.preload
               })
             }
           }
