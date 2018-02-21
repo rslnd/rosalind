@@ -7,7 +7,7 @@ describe('patients', function () {
     describe('parseExactName', function () {
       it('normalizes', function () {
         expect(parseExactName('rotter').result).to.eql({
-          'profile.lastNameNormalized': {
+          'lastNameNormalized': {
             $regex: '^ROTTER'
           }
         })
@@ -16,11 +16,11 @@ describe('patients', function () {
       // it('parses first name', function () {
       //   expect(parseExactName('rotter jan').result).to.eql({
       //     $or: [
-      //       { 'profile.lastNameNormalized': 'ROTTERJAN' },
-      //       { 'profile.lastNameNormalized': 'ROTTER' },
-      //       { 'profile.lastNameNormalized': 'JAN' }
+      //       { 'lastNameNormalized': 'ROTTERJAN' },
+      //       { 'lastNameNormalized': 'ROTTER' },
+      //       { 'lastNameNormalized': 'JAN' }
       //     ],
-      //     'profile.firstName': {
+      //     'firstName': {
       //       $regex: '^jan',
       //       $options: 'i'
       //     }
@@ -30,11 +30,11 @@ describe('patients', function () {
       // it('parses single letter first name', function () {
       //   expect(parseExactName('rotter j').result).to.eql({
       //     $or: [
-      //       { 'profile.lastNameNormalized': 'ROTTERJ' },
-      //       { 'profile.lastNameNormalized': 'ROTTER' },
-      //       { 'profile.lastNameNormalized': 'J' }
+      //       { 'lastNameNormalized': 'ROTTERJ' },
+      //       { 'lastNameNormalized': 'ROTTER' },
+      //       { 'lastNameNormalized': 'J' }
       //     ],
-      //     'profile.firstName': {
+      //     'firstName': {
       //       $regex: '^j',
       //       $options: 'i'
       //     }
@@ -44,12 +44,12 @@ describe('patients', function () {
       // it('tokenizes', function () {
       //   expect(parseExactName('vito corleone don').result).to.eql({
       //     $or: [
-      //       { 'profile.lastNameNormalized': 'VITOCORLEONEDON' },
-      //       { 'profile.lastNameNormalized': 'VITO' },
-      //       { 'profile.lastNameNormalized': 'CORLEONE' },
-      //       { 'profile.lastNameNormalized': 'DON' }
+      //       { 'lastNameNormalized': 'VITOCORLEONEDON' },
+      //       { 'lastNameNormalized': 'VITO' },
+      //       { 'lastNameNormalized': 'CORLEONE' },
+      //       { 'lastNameNormalized': 'DON' }
       //     ],
-      //     'profile.firstName': {
+      //     'firstName': {
       //       $regex: '^don',
       //       $options: 'i'
       //     }
@@ -59,7 +59,7 @@ describe('patients', function () {
       // it('parses umlauts', function () {
       //   expect(parseExactName('dön').result).to.eql({
       //     $or: [
-      //       { 'profile.lastNameNormalized': 'DN' }
+      //       { 'lastNameNormalized': 'DN' }
       //     ]
       //   })
       // })
@@ -67,12 +67,12 @@ describe('patients', function () {
       // it('removes hyphens', function () {
       //   expect(parseExactName('alpha-beta gamma').result).to.eql({
       //     $or: [
-      //       { 'profile.lastNameNormalized': 'ALPHABETAGAMMA' },
-      //       { 'profile.lastNameNormalized': 'ALPHA' },
-      //       { 'profile.lastNameNormalized': 'BETA' },
-      //       { 'profile.lastNameNormalized': 'GAMMA' }
+      //       { 'lastNameNormalized': 'ALPHABETAGAMMA' },
+      //       { 'lastNameNormalized': 'ALPHA' },
+      //       { 'lastNameNormalized': 'BETA' },
+      //       { 'lastNameNormalized': 'GAMMA' }
       //     ],
-      //     'profile.firstName': {
+      //     'firstName': {
       //       $regex: '^gamma',
       //       $options: 'i'
       //     }

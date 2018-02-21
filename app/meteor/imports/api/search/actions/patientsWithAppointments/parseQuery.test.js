@@ -12,21 +12,21 @@ describe('patients', function () {
 
       it('parses birthdays', function () {
         expect(parseQuery('12 jun 94')).to.eql({
-          'profile.birthday.day': 12,
-          'profile.birthday.month': 6,
-          'profile.birthday.year': 1994
+          'birthday.day': 12,
+          'birthday.month': 6,
+          'birthday.year': 1994
         })
       })
 
       // it('parses names', function () {
       //   expect(parseQuery('walrus unicorn i')).to.eql({
       //     $or: [
-      //       { 'profile.lastNameNormalized': 'WALRUSUNICORNI' },
-      //       { 'profile.lastNameNormalized': 'WALRUS' },
-      //       { 'profile.lastNameNormalized': 'UNICORN' },
-      //       { 'profile.lastNameNormalized': 'I' }
+      //       { 'lastNameNormalized': 'WALRUSUNICORNI' },
+      //       { 'lastNameNormalized': 'WALRUS' },
+      //       { 'lastNameNormalized': 'UNICORN' },
+      //       { 'lastNameNormalized': 'I' }
       //     ],
-      //     'profile.firstName': {
+      //     'firstName': {
       //       $regex: '^i',
       //       $options: 'i'
       //     }
@@ -36,11 +36,11 @@ describe('patients', function () {
       // it('removes umlauts', function () {
       //   expect(parseQuery('walrüs unicörn')).to.eql({
       //     $or: [
-      //       { 'profile.lastNameNormalized': 'WALRSUNICRN' },
-      //       { 'profile.lastNameNormalized': 'WALRS' },
-      //       { 'profile.lastNameNormalized': 'UNICRN' }
+      //       { 'lastNameNormalized': 'WALRSUNICRN' },
+      //       { 'lastNameNormalized': 'WALRS' },
+      //       { 'lastNameNormalized': 'UNICRN' }
       //     ],
-      //     'profile.firstName': {
+      //     'firstName': {
       //       $regex: '^unicörn',
       //       $options: 'i'
       //     }
@@ -49,15 +49,15 @@ describe('patients', function () {
 
       // it('parses birthday and names', function () {
       //   expect(parseQuery('walrus unicorn 12 jun 1994')).to.eql({
-      //     'profile.birthday.day': 12,
-      //     'profile.birthday.month': 6,
-      //     'profile.birthday.year': 1994,
+      //     'birthday.day': 12,
+      //     'birthday.month': 6,
+      //     'birthday.year': 1994,
       //     $or: [
-      //       { 'profile.lastNameNormalized': 'WALRUSUNICORN' },
-      //       { 'profile.lastNameNormalized': 'WALRUS' },
-      //       { 'profile.lastNameNormalized': 'UNICORN' }
+      //       { 'lastNameNormalized': 'WALRUSUNICORN' },
+      //       { 'lastNameNormalized': 'WALRUS' },
+      //       { 'lastNameNormalized': 'UNICORN' }
       //     ],
-      //     'profile.firstName': {
+      //     'firstName': {
       //       $regex: '^unicorn',
       //       $options: 'i'
       //     }
