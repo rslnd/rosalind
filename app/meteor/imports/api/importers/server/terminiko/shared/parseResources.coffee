@@ -27,7 +27,7 @@ parseDoctors = (job, resources) ->
       if record.Name.match(/privat/i)?
         $set.privateAppointment = true
 
-      if assignee = Users.methods.queryExactlyOne(record.Name)
+      if assignee = findExactlyOne(record.Name)
         $set.assigneeId = assignee._id
 
       if Object.keys($set).length is 0
@@ -50,3 +50,18 @@ parseTags = (job, resources) ->
       resources[key] = record.Kurz
 
   return resources
+
+findExactlyOne = (name) ->
+  selector = {}
+
+  query = query.split(/\s+/).join(' ')
+
+  selector['titlePrepend'] = 'Dr.' if query.match(/Dr\./)
+  query = query.replace('Dr. ', '')
+
+  selector['$or'] = [
+    { 'lastName': query.split(' ')[0] }
+    { 'firstName': query.split(' ')[0] }
+  ]
+
+  Users.findOne(selector)

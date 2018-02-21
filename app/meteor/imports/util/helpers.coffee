@@ -7,17 +7,6 @@ import { Users } from '../api/users'
 import { Comments } from '../api/comments'
 
 module.exports =
-  person: (idOrUsername, collection) ->
-    if idOrUsername and typeof idOrUsername.collection is 'function'
-      idOrUsername
-
-    else if collection
-      collection = Mongo.Collection.get(collection)
-      collection.findOne(_id: idOrUsername)
-
-    else
-      Users.methods.findOneByIdOrUsername(idOrUsername)
-
   findOneByIdAndCollection: (id, collection) ->
     return id if typeof id is 'object'
     collection = Mongo.Collection.get(collection) if typeof collection is 'string'

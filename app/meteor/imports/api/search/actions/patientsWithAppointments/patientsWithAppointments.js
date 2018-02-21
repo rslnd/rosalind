@@ -30,7 +30,8 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
       if (selector) {
         const patients = Patients.find(selector, {
           sort: { lastName: 1 },
-          limit: 100
+          limit: 100,
+          fields: Patients.fields.search
         }).fetch()
 
         return patients.map((patient) => {

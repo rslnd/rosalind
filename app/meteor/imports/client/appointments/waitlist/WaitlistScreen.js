@@ -8,6 +8,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointments } from '../../../api/appointments'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'
+import { prefix } from '../../../api/patients/methods/name'
 
 export const WaitlistScreen = ({ appointments }) => (
   <FlipMove style={containerStyle}>
@@ -40,7 +41,7 @@ const WaitlistItem = ({ appointment, isFirst, isLast }) =>
   <Box noPadding boxStyle={boxStyle}>
     <div>
       <span className='text-muted'>
-        {appointment.patient.prefix()}
+        {prefix(appointment.patient)}
         {
           appointment.patient.titlePrepend &&
             <span>

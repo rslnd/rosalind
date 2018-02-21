@@ -94,7 +94,7 @@ const composer = (props, onData) => {
       mapUncapped((assigneeId) => {
         const user = Users.findOne({ _id: assigneeId })
         return {
-          fullNameWithTitle: user && user.fullNameWithTitle(),
+          fullNameWithTitle: user && Users.methods.fullNameWithTitle(user),
           lastName: user && user.lastName,
           employee: user && user.employee,
           assigneeId: assigneeId || null
@@ -137,12 +137,12 @@ const composer = (props, onData) => {
         const appointments = Appointments.find(selector).fetch().map((appointment) => {
           let patient = Patients.findOne({ _id: appointment.patientId })
           if (patient) {
-            patient.prefix = patient.prefix()
+            patient.prefix = Patients.methods.prefix(patient)
           }
 
           const notes = appointment.notes()
           const lockedBy = Users.findOne({ _id: appointment.lockedBy })
-          const lockedByFirstName = lockedBy && lockedBy.firstName()
+          const lockedByFirstName = lockedBy && Users.methods.firstName(lockedBy)
           return {
             ...appointment,
             patient,

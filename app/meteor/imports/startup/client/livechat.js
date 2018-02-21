@@ -5,6 +5,7 @@ import { Tracker } from 'meteor/tracker'
 import { process as server } from 'meteor/clinical:env'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Groups } from '../../api/groups'
+import { Users } from '../../api/users'
 
 const getTranslation = () => {
   const keys = [ 'headerText', 'inputPlaceholder', 'sendButtonText',
@@ -54,7 +55,7 @@ const init = () => {
                     email: user.email,
                     properties: {
                       username: user.username,
-                      fullNameWithTitle: user.fullNameWithTitle(),
+                      fullNameWithTitle: Users.methods.fullNameWithTitle(user),
                       employee: user.employee,
                       roles: user.getRoles(),
                       group: group && group.name

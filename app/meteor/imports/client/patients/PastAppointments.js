@@ -64,7 +64,7 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
           </div>
 
           <div className='col-md-3 text-right' style={canceledStyle}>
-            {assignee && assignee.fullNameWithTitle()}
+            {assignee && Users.methods.fullNameWithTitle(assignee)}
           </div>
 
           <div className='col-md-4' style={canceledStyle}>

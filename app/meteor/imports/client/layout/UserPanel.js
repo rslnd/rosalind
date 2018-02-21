@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../components/Icon'
 import { gray } from '../css/global'
+import { fullNameWithTitle } from '../../api/users/methods/name'
 
 const style = {
   hidden: {
@@ -28,7 +29,7 @@ export class UserPanel extends React.Component {
         <b style={style.name}>
           {
             this.props.sidebarOpen
-            ? this.props.currentUser.fullNameWithTitle()
+            ? fullNameWithTitle(this.props.currentUser)
             : this.props.currentUser.username
           }
         </b>

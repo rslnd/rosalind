@@ -20,12 +20,6 @@ module.exports =
   lastTimesheet: ->
     Timesheets.findOne({ userId: @_id }, sort: { start: -1 })
 
-  shortname: ->
-    if (@username.length <= 3)
-      @username
-    else
-      map(@fullName().split(' '), (n) -> n.charAt(0) ).join('')
-
   getRoles: ->
     Roles.getRolesForUser(@_id).join(', ')
 

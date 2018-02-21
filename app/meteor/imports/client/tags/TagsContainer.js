@@ -10,7 +10,7 @@ const composer = (props, onData) => {
   const tags = Tags.find({}, { sort: { order: 1 } }).fetch()
 
   const getCalendarName = id => id && Calendars.findOne(id) && Calendars.findOne(id).name
-  const getAssigneeName = id => id && Users.findOne(id).fullNameWithTitle()
+  const getAssigneeName = id => id && Users.methods.fullNameWithTitle(Users.findOne(id))
   const handleUpdate = (_id, update) => {
     Tags.update({ _id }, update)
   }

@@ -66,7 +66,8 @@ export default () => {
             admitted: 1,
             treated: 1,
             canceled: 1,
-            note: 1
+            note: 1,
+            lockedBy: 1
           },
           sort: {
             start: 1

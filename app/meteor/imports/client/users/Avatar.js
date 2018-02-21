@@ -11,5 +11,5 @@ export const Avatar = ({ userId }) => {
     user = Meteor.user()
   }
 
-  return (<div className='avatar username img-sm'>{user.shortname()}</div>)
+  return (<div className='avatar username img-sm'>{Users.methods.shortname(user)}</div>)
 }

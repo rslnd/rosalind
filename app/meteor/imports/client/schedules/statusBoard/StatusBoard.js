@@ -4,6 +4,7 @@ import { List, ListItem } from 'material-ui/List'
 import ListSubheader from 'material-ui/List/ListSubheader'
 import Avatar from 'material-ui/Avatar'
 import { Box } from '../../components/Box'
+import { shortname } from '../../../api/users/methods/name'
 
 export const StatusBoard = ({ groups, weekday }) => (
   <div className='content'>
@@ -20,7 +21,7 @@ export const StatusBoard = ({ groups, weekday }) => (
                     schedule.unavailableToday && '#dd4b39'
                   )
                 )
-              }>{user.shortname}</Avatar>}
+              }>{shortname(user)}</Avatar>}
               rightIcon={<span>ON</span>}
               primaryText={user.fullNameWithTitle}
               secondaryText={<span>

@@ -8,7 +8,7 @@ const composer = (props, onData) => {
   const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
 
   const getCalendarName = id => id && Calendars.findOne(id) && Calendars.findOne(id).name
-  const getAssigneeName = id => id && Users.findOne(id).fullNameWithTitle()
+  const getAssigneeName = id => id && Users.methods.fullNameWithTitle(Users.findOne(id))
   const handleUpdate = (_id, update) => {
     Calendars.update({ _id }, update)
   }

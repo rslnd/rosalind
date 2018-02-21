@@ -123,8 +123,8 @@ class AppointmentItem extends React.Component {
             ? (
               <span>
                 <span className={classes.prefix}>{patient.prefix}&nbsp;</span>
-                <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>
-                <span>{namecase(patient.firstName)}</span>
+                {patient.lastName && <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
+                {patient.firstName && <span>{namecase(patient.firstName)}</span>}
               </span>
             ) : !appointment.lockedAt && (
               this.stripNumbers(appointment.notes) || <Icon name='question-circle' />

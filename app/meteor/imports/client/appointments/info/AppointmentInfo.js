@@ -41,7 +41,7 @@ const logFormat = {
 
     const getAssigneeName = _id => {
       if (_id) {
-        return Users.findOne({ _id }).fullNameWithTitle()
+        return Users.methods.fullNameWithTitle(Users.findOne({ _id }))
       } else {
         return '(Einschub)'
       }
@@ -208,7 +208,7 @@ const Private = () => (
 
 const Assignee = ({ assignee }) => (
   assignee && <ListItem icon='user-md' hr>
-    {assignee.fullNameWithTitle()}
+    {Users.methods.fullNameWithTitle(assignee)}
   </ListItem> || null
 )
 

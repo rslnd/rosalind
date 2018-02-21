@@ -45,7 +45,7 @@ export const sendEmail = new ValidatedMethod({
         throw new Meteor.Error(404, 'There is no report for today, and no email will be sent')
       }
 
-      const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, u.fullNameWithTitle()]))
+      const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
       const mapAssigneeType = type => TAPi18n.__(`reports.assigneeType__${type}`, null, 'de-AT')
       const mapUserIdToName = userId => userIdToNameMapping[userId]
       const mapCalendar = calendarId => Calendars.findOne({ _id: calendarId })

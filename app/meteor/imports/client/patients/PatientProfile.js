@@ -5,6 +5,7 @@ import identity from 'lodash/identity'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Birthday } from './Birthday'
 import { zerofix } from 'util/zerofix'
+import { fullNameWithTitle } from '../../api/users/methods/name'
 
 export class PatientProfile extends React.Component {
   render () {
@@ -14,7 +15,7 @@ export class PatientProfile extends React.Component {
     } else {
       return (
         <div>
-          <h4>{patient.fullNameWithTitle()}</h4>
+          <h4>{fullNameWithTitle(patient)}</h4>
           {patient.contacts && uniqBy(patient.contacts, 'value').map((contact) => (
             <h4 key={contact.value}>{
               contact.channel === 'Phone'

@@ -11,6 +11,7 @@ import { Roles } from 'meteor/alanning:roles'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { dateToDay, dayToDate } from '../../util/time/day'
 import { Reports } from '../../api/reports'
+import { Users } from '../../api/users'
 import { Tags } from '../../api/tags'
 import { Calendars } from '../../api/calendars'
 import { Loading } from '../components/Loading'
@@ -48,10 +49,10 @@ const composer = (props, onData) => {
       Meteor.call('reports/sendEmail')
     }
 
-    const userIdToNameMapping = fromPairs(Meteor.users.find({}).fetch().map(u => [u._id, u.fullNameWithTitle()]))
+    const userIdToNameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
     const mapUserIdToName = id => userIdToNameMapping[id]
 
-    const userIdToUsernameMapping = fromPairs(Meteor.users.find({}).fetch().map(u => [u._id, u.username]))
+    const userIdToUsernameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, u.username]))
     const mapUserIdToUsername = id => userIdToUsernameMapping[id]
 
     const mapReportAsToHeader = reportAs => {

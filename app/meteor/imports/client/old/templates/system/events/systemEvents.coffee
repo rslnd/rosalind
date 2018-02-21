@@ -11,11 +11,11 @@ Template.systemEvents.onCreated ->
 
 Template.systemEvents.helpers
   personName: ->
-    Users.findOne(_id: @createdBy).fullNameWithTitle()
+    Users.methods.fullNameWithTitle(Users.findOne(_id: @createdBy))
 
   title: (options = {}) ->
     if @subject
-      options.subject = Users.findOne(_id: @subject).fullNameWithTitle()
+      options.subject = Users.methods.fullNameWithTitle(Users.findOne(_id: @subject))
 
     TAPi18n.__('system.events.' + @type, options)
 

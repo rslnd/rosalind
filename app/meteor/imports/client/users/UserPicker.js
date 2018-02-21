@@ -32,7 +32,7 @@ export class UserPicker extends React.Component {
     }).fetch().map((user) => {
       return {
         value: user._id,
-        label: user.fullNameWithTitle()
+        label: Users.methods.fullNameWithTitle(user)
       }
     })
   }

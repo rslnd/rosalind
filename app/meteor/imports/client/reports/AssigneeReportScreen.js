@@ -11,6 +11,7 @@ import { Box } from '../components/Box'
 import { Report } from './Report'
 import { FooterContainer } from '../layout/FooterContainer'
 import { UserPickerContainer } from '../users/UserPickerContainer'
+import { fullNameWithTitle } from '../../api/users/methods/name'
 
 const formatRange = ({ start, end }) =>
   ([
@@ -57,7 +58,7 @@ export class AssigneeReportScreen extends React.Component {
 
     const title = this.props.user &&
       TAPi18n.__('reports.assigneesReportFor', {
-        name: this.props.user.fullNameWithTitle()
+        name: fullNameWithTitle(this.props.user)
       }) || TAPi18n.__('reports.assigneesReport')
 
     return (

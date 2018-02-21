@@ -45,7 +45,7 @@ module.exports = ({ Schedules, Users, Groups, Time }) ->
               end: end
               editable: true
               resourceId: Groups.findOne(user.groupId)?._id
-              title: user.fullNameWithTitle()
+              title: Users.methods.fullNameWithTitle(user)
               scheduleId: schedule._id
 
     events
