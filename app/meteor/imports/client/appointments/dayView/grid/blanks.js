@@ -17,7 +17,7 @@ const styles = {
   }
 }
 
-class BlankState extends React.Component {
+class BlankState extends React.PureComponent {
   constructor (props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)
@@ -64,11 +64,11 @@ const Blank = injectSheet(styles)(BlankState)
 export const blanks = ({ slotSize, date, assignees, onClick, onMouseEnter }) => {
   const format = formatter(slotSize)
 
-  return assignees.map((assignee, i) => (
+  return assignees.map((assignee) => (
     timeSlots(slotSize)
-      .map((time, j) => (
+      .map((time) => (
         <Blank
-          key={[i, j].join('')}
+          key={[date.unix(), time, assignee.assigneeId].join('')}
           date={date}
           time={time}
           format={format}

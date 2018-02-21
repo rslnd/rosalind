@@ -3,14 +3,21 @@ import { Appointment } from '../appointment/Appointment'
 import { formatter } from './timeSlots'
 
 export const appointments = ({ slotSize, assignees, onClick, move }) => {
-  const { isMoving, moveToTime, moveToAssigneeId, moveAppointmentId, appointment, patient } = move
   const format = formatter(slotSize)
 
-  let appointmentsList = assignees.map((assignee) => (
+  return assignees.map((assignee) => (
     assignee.appointments.map((appointment) => {
-      if (isMoving && moveAppointmentId === appointment._id) {
-        // The appointment that is being moved is rendered separately below
-        return null
+      if (move.isMoving && move.moveAppointmentId === appointment._id) {
+        return <Appointment
+          key={appointment._id}
+          isMoving
+          appointment={move.appointment}
+          moveToTime={move.moveToTime}
+          moveToAssigneeId={move.moveToAssigneeId}
+          patient={move.patient}
+          onClick={onClick}
+          format={format}
+        />
       } else {
         return (
           <Appointment
@@ -23,21 +30,4 @@ export const appointments = ({ slotSize, assignees, onClick, move }) => {
       }
     })
   ))
-
-  if (isMoving) {
-    appointmentsList.push(
-      <Appointment
-        key='move'
-        appointment={move.appointment}
-        patient={move.patient}
-        isMoving
-        moveToAssigneeId={moveToAssigneeId}
-        moveToTime={moveToTime}
-        onClick={onClick}
-        format={format}
-      />
-    )
-  }
-
-  return appointmentsList
 }

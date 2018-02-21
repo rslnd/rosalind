@@ -1,5 +1,6 @@
 import idx from 'idx'
 import moment from 'moment-timezone'
+import memoize from 'lodash/memoize'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
 import sortBy from 'lodash/fp/sortBy'
@@ -28,8 +29,10 @@ const appointmentsSubsManager = new SubsManager({
   expireIn: 15 // in minutes
 })
 
+const parseDay = memoize(d => moment(d))
+
 const composer = (props, onData) => {
-  const date = moment(idx(props, _ => _.match.params.date))
+  const date = parseDay(idx(props, _ => _.match.params.date))
   const calendarSlug = idx(props, _ => _.match.params.calendar)
   const calendar = Calendars.findOne({ slug: calendarSlug })
   if (!calendar) { return }

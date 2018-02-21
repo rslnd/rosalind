@@ -367,7 +367,7 @@ export class AppointmentInfo extends React.Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
-        {loading && <LinearProgress style={loadingStyle} />}
+        {/* {loading && <LinearProgress style={loadingStyle} />} */}
         {
           patient &&
             <div className='row'>

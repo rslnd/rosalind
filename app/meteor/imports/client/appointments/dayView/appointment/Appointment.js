@@ -1,4 +1,5 @@
 import React from 'react'
+import isEqual from 'lodash/isEqual'
 import moment from 'moment-timezone'
 import classnames from 'classnames'
 import injectSheet from 'react-jss'
@@ -55,7 +56,35 @@ class AppointmentItem extends React.Component {
     }
   }
 
+  shouldComponentUpdate (nextProps) {
+    const a = this.props.appointment
+    const b = nextProps.appointment
+
+    if (a.admitted !== b.admitted) { return true }
+    if (a.canceled !== b.canceled) { return true }
+    if (a.treated !== b.treated) { return true }
+    if (a.start.getTime() !== b.start.getTime()) { return true }
+    if (!isEqual(a.tags, b.tags)) { return true }
+
+    if (this.props.isMoving || nextProps.isMoving) { return true }
+
+    const p = (this.props.patient || a.patient)
+    const q = (nextProps.patient || b.patient)
+
+    if (p && q) {
+      if (p.gender !== q.gender) { return true }
+      if (p.firstName !== q.firstName) { return true }
+      if (p.lastName !== q.lastName) { return true }
+    } else if (p || q) {
+      return true
+    }
+
+    return false
+  }
+
   render () {
+    this.props.isMoving && console.log(this.props)
+
     const { appointment, classes, format } = this.props
     const start = moment(appointment.start)
     const appointmentClasses = classnames({
@@ -63,7 +92,7 @@ class AppointmentItem extends React.Component {
       [ classes.canceled ]: appointment.canceled,
       [ classes.admitted ]: appointment.admitted,
       [ classes.treated ]: appointment.treated,
-      [ classes.locked ]: appointment.lockedAt,
+      [ classes.locked ]: appointment.lockedBy,
       [ classes.moving ]: this.props.isMoving
     })
     const tagColor = getColor(appointment.tags)
@@ -103,11 +132,11 @@ class AppointmentItem extends React.Component {
           gridRowEnd: timeEnd,
           gridColumn: `assignee-${assigneeId}`,
           borderLeftColor: tagColor,
-          zIndex: appointment.lockedAt ? 29 : 30
+          zIndex: appointment.lockedBy ? 29 : 30
         }}>
 
         {
-          appointment.lockedAt &&
+          appointment.lockedBy &&
             <span style={styles.patientName} className='text-muted'>
               <i className='fa fa-clock-o fa-fw' />&nbsp;
               {TAPi18n.__('appointments.lockedBy', { name: appointment.lockedByFirstName })}
@@ -126,7 +155,7 @@ class AppointmentItem extends React.Component {
                 {patient.lastName && <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
                 {patient.firstName && <span>{namecase(patient.firstName)}</span>}
               </span>
-            ) : !appointment.lockedAt && (
+            ) : !appointment.lockedBy && (
               this.stripNumbers(appointment.notes) || <Icon name='question-circle' />
             )
           }

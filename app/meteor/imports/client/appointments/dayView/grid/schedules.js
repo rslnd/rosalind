@@ -21,41 +21,50 @@ const style = {
 
 export const schedules = ({ assignees, onDoubleClick, slotSize }) => (
   assignees.map((assignee, i) => (
-    assignee.schedules && assignee.schedules.map((schedule) => {
-      if (!schedule.start && !schedule.end) {
-        return null
-      }
-      const timeStart = moment(schedule.start).floor(5, 'minutes')
-      const timeEnd = moment(schedule.end).ceil(5, 'minutes')
-      const duration = (schedule.end - schedule.start) / 1000 / 60
-
-      return (
-        <div
-          key={`schedule-${schedule._id + i}`}
-          data-scheduleid={schedule._id}
-          onDoubleClick={(event) => onDoubleClick({ event, scheduleId: schedule._id })}
-          style={{
-            ...style.scheduledUnavailable,
-            gridRowStart: timeStart.format('[T]HHmm'),
-            gridRowEnd: timeEnd.format('[T]HHmm'),
-            gridColumn: `assignee-${schedule.userId}`
-          }}>
-
-          {
-            duration > slotSize
-            ? [
-              <div key={1} style={style.schedulesText}>
-                {!isFirstSlot(timeStart) && timeStart.format('H:mm')}
-              </div>,
-              <div key={2} style={style.schedulesText}>
-                {!isLastSlot(timeEnd) && timeEnd.format('H:mm')}
-              </div>
-            ] : <div style={style.schedulesText}>
-              {timeStart.format('H:mm')} - {timeEnd.format('H:mm')}
-            </div>
-          }
-        </div>
+    assignee.schedules && assignee.schedules
+      .filter(s => s.start && s.end)
+      .map(s => 
+        <Schedule
+          key={s._id}
+          scheduleId={s._id}
+          assigneeId={s.userId}
+          start={s.start}
+          end={s.end}
+          slotSize={slotSize}
+          onDoubleClick={onDoubleClick} />
       )
-    })
   ))
 )
+
+const Schedule = ({ start, end, scheduleId, assigneeId, slotSize, onDoubleClick }) => {
+  const timeStart = moment(start).floor(5, 'minutes')
+  const timeEnd = moment(end).ceil(5, 'minutes')
+  const duration = (end - start) / 1000 / 60
+
+  return (
+    <div
+      data-scheduleid={scheduleId}
+      onDoubleClick={(event) => onDoubleClick({ event, scheduleId })}
+      style={{
+        ...style.scheduledUnavailable,
+        gridRowStart: timeStart.format('[T]HHmm'),
+        gridRowEnd: timeEnd.format('[T]HHmm'),
+        gridColumn: `assignee-${assigneeId}`
+      }}>
+
+      {
+        duration > slotSize
+        ? [
+          <div key={1} style={style.schedulesText}>
+            {!isFirstSlot(timeStart) && timeStart.format('H:mm')}
+          </div>,
+          <div key={2} style={style.schedulesText}>
+            {!isLastSlot(timeEnd) && timeEnd.format('H:mm')}
+          </div>
+        ] : <div style={style.schedulesText}>
+          {timeStart.format('H:mm')} - {timeEnd.format('H:mm')}
+        </div>
+      }
+    </div>
+  )
+}
