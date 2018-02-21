@@ -31,6 +31,24 @@ const appointmentsSubsManager = new SubsManager({
 
 const parseDay = memoize(d => moment(d))
 
+// If calendar allows unassigned appointments, add null assignee if not already present
+const addNullAssignee = a =>
+  (a.indexOf(null) === -1)
+  ? [...a, null]
+  : a
+
+const onNewAppointmentModalOpen = (args) => Appointments.actions.acquireLock.call(args)
+const onNewAppointmentModalClose = (args) => Appointments.actions.releaseLock.call(args)
+const handleSetAdmitted = (args) => {
+  Alert.success(TAPi18n.__('appointments.setAdmittedSuccess')) // optimistic for smoother UX
+  return Appointments.actions.setAdmitted.callPromise(args)
+}
+
+const handleMove = (args) =>
+  Appointments.actions.move.callPromise(args).then(() => {
+    Alert.success(TAPi18n.__('appointments.moveSuccess'))
+  })
+
 const composer = (props, onData) => {
   const date = parseDay(idx(props, _ => _.match.params.date))
   const calendarSlug = idx(props, _ => _.match.params.calendar)
@@ -66,31 +84,14 @@ const composer = (props, onData) => {
       }
     }
 
-    // Fetch all appointments for current day
-    const appointments = Appointments.find(appointmentsSelector, { sort: { start: 1 } }).fetch()
-
-    // Combine all assigneeIds from the appointments with
-    // the assigneeIds that are scheduled for this day (but may not have any
-    // appointments scheduled yet)
     const assigneeIdsScheduled = uniq(flatten(Schedules.find({
       day,
       calendarId: calendar._id
     }).fetch().map((s) => s.userIds)))
-    const assigneeIdsAppointments = uniq(appointments.map((a) => a.assigneeId))
-
-    // HACK: Merge undefined to null
-    const assigneeIdsNullOrUndefined = union(assigneeIdsScheduled, assigneeIdsAppointments)
-    const assigneeIdsFiltered = assigneeIdsNullOrUndefined.filter((id) => id !== undefined)
-
-    // If calendar allows unassigned appointments, add null assignee if not already present
-    const addNullAssignee = a =>
-      (a.indexOf(null) === -1)
-      ? [...a, null]
-      : a
 
     let assigneeIds = calendar.allowUnassigned
-      ? addNullAssignee(assigneeIdsFiltered)
-      : assigneeIdsFiltered
+      ? addNullAssignee(assigneeIdsScheduled)
+      : assigneeIdsScheduled
 
     // Now turn the assigneeIds array into an array of assignee objects
     let assignees = flow(
@@ -144,7 +145,7 @@ const composer = (props, onData) => {
           }
 
           const notes = appointment.notes()
-          const lockedBy = Users.findOne({ _id: appointment.lockedBy })
+          const lockedBy = appointment.lockedBy && Users.findOne({ _id: appointment.lockedBy })
           const lockedByFirstName = lockedBy && Users.methods.firstName(lockedBy)
           return {
             ...appointment,
@@ -165,18 +166,6 @@ const composer = (props, onData) => {
     )(assigneeIds)
 
     const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
-
-    const onNewAppointmentModalOpen = (args) => Appointments.actions.acquireLock.call(args)
-    const onNewAppointmentModalClose = (args) => Appointments.actions.releaseLock.call(args)
-    const handleSetAdmitted = (args) => {
-      Alert.success(TAPi18n.__('appointments.setAdmittedSuccess')) // optimistic for smoother UX
-      return Appointments.actions.setAdmitted.callPromise(args)
-    }
-
-    const handleMove = (args) =>
-      Appointments.actions.move.callPromise(args).then(() => {
-        Alert.success(TAPi18n.__('appointments.moveSuccess'))
-      })
 
     const { dispatch, move } = props
 
