@@ -7,5 +7,12 @@ export const preload = {
 
 export const search = {
   ...preload,
-  birthday: 1
+  birthday: 1,
+  contacts: 1,
+  note: 1,
+  insuranceId: 1,
+  address: 1,
+  titlePrepend: 1,
+  titleAppend: 1,
+  banned: 1
 }
