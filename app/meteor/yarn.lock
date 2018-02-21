@@ -4143,9 +4143,9 @@ react-mounter@^1.2.0:
     babel-runtime "6.x.x"
     domready "1.x.x"
 
-react-number-format@^3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-3.1.5.tgz#babe212be0209782d107fcf57b5f041d06d65294"
+react-number-format@^3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-3.1.6.tgz#0a416d64eade71f163165606247570d395e8b293"
   dependencies:
     prop-types "^15.6.0"
 
