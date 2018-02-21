@@ -57,13 +57,14 @@ export class HeaderRow extends React.Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this)
   }
 
-  handleUserDropdownOpen ({ event, assigneeId }) {
+  handleUserDropdownOpen ({ event, assigneeId, canRemoveUser }) {
     if (this.props.canEditSchedules) {
       this.setState({
         ...this.state,
         userDropdownOpen: true,
         userDropdownAnchor: event.currentTarget,
-        userDropdownAssigneeId: assigneeId
+        userDropdownAssigneeId: assigneeId,
+        canRemoveUser
       })
     }
   }
@@ -119,7 +120,7 @@ export class HeaderRow extends React.Component {
             <div
               key={assignee.assigneeId}
               style={headerCellStyle}
-              onClick={(event) => this.handleUserDropdownOpen({ event, assigneeId: assignee.assigneeId })}>
+              onClick={(event) => this.handleUserDropdownOpen({ event, assigneeId: assignee.assigneeId, canRemoveUser: !assignee.hasAppointments })}>
 
               {
                 assignee.fullNameWithTitle
@@ -145,9 +146,11 @@ export class HeaderRow extends React.Component {
           <MenuItem onClick={this.handleToggleOverrideModeClick}>
             Zeitraum blockieren
           </MenuItem>
-          <MenuItem onClick={this.handleRemoveUser}>
+          <MenuItem
+            disabled={!this.state.canRemoveUser}
+            onClick={this.handleRemoveUser}>
             Löschen
-          </MenuItem>
+          </MenuItem>}
         </Menu>
 
         <AssigneesDetails
