@@ -18,13 +18,13 @@ export default () => {
     return {
       find: function () {
         this.unblock()
-        Appointments.find({ _id }, { limit: 1 })
+        return Appointments.find({ _id }, { limit: 1 })
       },
       children: [
         {
           find: function (doc) {
             this.unblock()
-            Comments.find({ docId: doc._id })
+            return Comments.find({ docId: doc._id })
           }
         }, {
           find: function (doc) {
