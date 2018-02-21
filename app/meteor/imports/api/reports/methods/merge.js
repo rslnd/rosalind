@@ -78,17 +78,19 @@ export const merge = (report, addendum) => {
 }
 
 const sumRevenues = revenues => {
-  let total = {}
-  const privateOrInsurance = Object.keys(revenues)
+  const { total, ...revenuesWithoutTotal } = revenues
+  let newTotal = {}
+
+  const privateOrInsurance = Object.keys(revenuesWithoutTotal)
   privateOrInsurance.map(typeKey => {
-    const plannedOrActual = Object.keys(revenues[typeKey])
+    const plannedOrActual = Object.keys(revenuesWithoutTotal[typeKey])
     plannedOrActual.map(valueKey => {
-      if (!total[valueKey]) {
-        total[valueKey] = 0
+      if (!newTotal[valueKey]) {
+        newTotal[valueKey] = 0
       }
-      total[valueKey] += revenues[typeKey][valueKey]
+      newTotal[valueKey] += revenuesWithoutTotal[typeKey][valueKey]
     })
   })
 
-  return total
+  return newTotal
 }

@@ -101,6 +101,17 @@ export class ReportsScreen extends React.Component {
                     mapReportAsToHeader={mapReportAsToHeader}
                     __={__}
                   />
+                  {
+                    quarter && this.state.showRevenue &&
+                      <div key='quarterTable' style={avoidPageBreak}>
+                        <Quarter
+                          calendar={report.calendar}
+                          quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
+                          __={__}
+                        />
+                        <span className='quarterLoaded' />
+                      </div>
+                  }
                   <FooterContainer />
                 </div>
               ) : <div key='noReports'>
@@ -108,19 +119,6 @@ export class ReportsScreen extends React.Component {
                   <p>{TAPi18n.__('reports.empty')}</p>
                 </Box>
               </div>
-            }
-          </FlipMove>
-
-          <FlipMove duration={230}>
-            {
-              quarter && this.state.showRevenue &&
-                <div key='quarterTable' style={avoidPageBreak}>
-                  <Quarter
-                    quarter={quarter.total}
-                    __={__}
-                  />
-                  <span className='quarterLoaded' />
-                </div>
             }
           </FlipMove>
 

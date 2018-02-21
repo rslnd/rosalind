@@ -8,13 +8,13 @@ import { Icon } from '../components/Icon'
 import { Round } from './shared/Round'
 import { integer } from '../../util/format'
 
-export const Quarter = ({ quarter, __ }) => (
+export const Quarter = ({ quarter, calendar, __ }) => (
   <div className='row'>
     <div className='col-md-12'>
       <Box title='Quartal' icon='line-chart'>
-        <div className='row enable-select'>
-          <DayCounter quarter={quarter} />
-          <NewPerHour quarter={quarter} />
+        <div className='row enable-select' style={{ display: 'flex' }}>
+          {!calendar.privateAppointments && <DayCounter quarter={quarter} />}
+          {!calendar.privateAppointments && <NewPerHour quarter={quarter} />}
           <NoShows quarter={quarter} />
           <RevenuePerDay quarter={quarter} />
           <Accumulated quarter={quarter} />
@@ -83,7 +83,7 @@ const statStyle = {
 }
 
 const Stat = ({ name, children, average }) =>
-  <div className='col-sm-2 col-xs-4'>
+  <div className='col-sm-2 col-xs-4' style={{ flex: 1 }}>
     <div className='description-block border-right' style={statStyle}>
       <h5 className='description-header'>
         {children}
