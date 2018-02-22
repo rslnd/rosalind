@@ -67,7 +67,7 @@ export const findUpcomingAppointments = (cutoffDate) => {
     if (patient) {
       result.patient = {
         _id: patient._id,
-        lastName: patient && Patients.methods.lastName(patient),
+        lastName: patient && patient.lastName,
         prefix: patient && Patients.methods.prefix(patient),
         gender: patient && patient.gender
       }
