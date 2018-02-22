@@ -31,6 +31,7 @@ export class AppointmentsScreen extends React.Component {
     super(props)
 
     this.scrollToCurrentTime = this.scrollToCurrentTime.bind(this)
+    this.handlePrint = this.handlePrint.bind(this)
   }
 
   scrollToCurrentTime () {
