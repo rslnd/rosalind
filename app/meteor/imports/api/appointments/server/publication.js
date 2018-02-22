@@ -38,7 +38,7 @@ export default () => {
     }
   })
 
-  Meteor.publishComposite('appointments-future', function () {
+  Meteor.publishComposite('appointments-today', function () {
     const isAuthenticated = (this.userId && Roles.userIsInRole(this.userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
 
     if (!(isAuthenticated || (this.connection && isTrustedNetwork(this.connection.clientAddress)))) { return }
@@ -46,13 +46,52 @@ export default () => {
     this.unblock()
 
     const startOfToday = moment().startOf('day').toDate()
+    const endOfToday = moment().endOf('day').toDate()
 
     return {
       find: function () {
         this.unblock()
         return Appointments.find({
           start: {
-            $gt: startOfToday
+            $gt: startOfToday,
+            $lt: endOfToday
+          }
+        }, {
+          sort: {
+            start: 1
+          }
+        })
+      },
+      children: [
+        {
+          find: function (doc) {
+            this.unblock()
+            if (doc.patientId) {
+              return Patients.find({ _id: doc.patientId }, {
+                limit: 1
+              })
+            }
+          }
+        }
+      ]
+    }
+  })
+
+  Meteor.publishComposite('appointments-future', function () {
+    const isAuthenticated = (this.userId && Roles.userIsInRole(this.userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
+
+    if (!(isAuthenticated || (this.connection && isTrustedNetwork(this.connection.clientAddress)))) { return }
+
+    this.unblock()
+
+    const startOfTomorrow = moment().endOf('day').toDate()
+
+    return {
+      find: function () {
+        this.unblock()
+        return Appointments.find({
+          start: {
+            $gt: startOfTomorrow
           }
         }, {
           fields: {

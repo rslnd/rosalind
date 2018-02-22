@@ -7,7 +7,8 @@ export const schema = new SimpleSchema({
   },
 
   referredBy: {
-    type: SimpleSchema.RegEx.Id
+    type: SimpleSchema.RegEx.Id,
+    optional: true
   },
 
   referredTo: {
