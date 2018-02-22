@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from 'material-ui/Button'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
 
 const defaultIcon = 'plus-square'
@@ -12,19 +13,17 @@ const infoTextStyle = {
   paddingBottom: 6
 }
 
-export const ReferralsWidget = ({ referrableTags, referrableCalendars, length, insert }) =>
+export const ReferralsWidget = ({ referrableTags, referrableCalendars, length }) =>
   length >= 1 && <div style={containerStyle}>
     <div className='text-muted' style={infoTextStyle}>
-      PatientIn empfehlen
+      {TAPi18n.__('appointments.referPatientTo')}
     </div>
 
     {
       referrableCalendars.map(r =>
         <ReferralButton
           key={r._id}
-          name={r.name}
-          icon={r.icon}
-          onClick={insert}
+          referral={r}
         />
       )
     }
@@ -33,18 +32,25 @@ export const ReferralsWidget = ({ referrableTags, referrableCalendars, length, i
       referrableTags.map(r =>
         <ReferralButton
           key={r._id}
-          name={r.tag}
-          icon={r.icon}
-          onClick={insert}
+          referral={r}
         />
       )
     }
   </div> || null
 
-const ReferralButton = ({ icon, name, onClick }) =>
-  <Button onClick={onClick}>
-    <div style={{ textAlign: 'center' }}>
-      <Icon name={icon || defaultIcon} /><br />
-      {name}
-    </div>
-  </Button>
+const ReferralButton = ({ referral }) => {
+  const { icon, name, tag, handleClick, isReferrable, existingReferralBySameAssignee } = referral
+  const title = name || tag
+  const iconOrCheckmark = existingReferralBySameAssignee
+    ? 'check'
+    : (icon || defaultIcon)
+
+  return (
+    <Button onClick={handleClick} disabled={!isReferrable}>
+      <div style={{ textAlign: 'center' }}>
+        <Icon name={iconOrCheckmark} /><br />
+        {title}
+      </div>
+    </Button>
+  )
+}

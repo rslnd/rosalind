@@ -32,6 +32,7 @@ const composer = props => {
 
   const selector = {
     assigneeId: Meteor.userId(),
+    patientId: { $ne: null },
     admittedAt: { $ne: null },
     treatmentEnd: null,
     start: {
@@ -44,9 +45,9 @@ const composer = props => {
     sort: { admittedAt: 1 }
   }).fetch()
 
-  Meteor.subscribe('referrals', {
-    patientIds: appointments.map(a => a.patientId).filter(identity)
-  })
+  Meteor.subscribe('referrals',
+    appointments.map(a => a.patientId).filter(identity)
+  )
 
   const waitlistAppointments = appointments.map(appointment => {
     const patient = Patients.findOne({ _id: appointment.patientId })
