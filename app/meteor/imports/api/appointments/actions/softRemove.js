@@ -3,6 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
+import { Referrals } from '../../referrals'
 import { Messages } from '../../messages'
 
 export const softRemove = ({ Appointments }) => {
@@ -25,6 +26,10 @@ export const softRemove = ({ Appointments }) => {
           removedBy: this.userId
         }
       })
+
+      if (Meteor.isServer) {
+        Referrals.serverActions.unredeem({ appointmentId })
+      }
 
       Messages.actions.removeReminder.call({ appointmentId })
 

@@ -3,6 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
+import { Referrals } from '../../referrals'
 
 export const unsetAdmitted = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -29,6 +30,10 @@ export const unsetAdmitted = ({ Appointments }) => {
           admittedBy: null
         }
       })
+
+      if (Meteor.isServer) {
+        Referrals.serverActions.unredeem({ appointmentId })
+      }
 
       Events.post('appointments/unsetAdmitted', { appointmentId })
 

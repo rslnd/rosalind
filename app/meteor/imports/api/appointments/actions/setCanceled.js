@@ -4,6 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Messages } from '../../messages'
+import { Referrals } from '../../referrals'
 
 export const setCanceled = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -34,6 +35,9 @@ export const setCanceled = ({ Appointments }) => {
       })
 
       Messages.actions.removeReminder.call({ appointmentId })
+      if (Meteor.isServer) {
+        Referrals.serverActions.unredeem({ appointmentId })
+      }
 
       Events.post('appointments/setCanceled', { appointmentId })
 
