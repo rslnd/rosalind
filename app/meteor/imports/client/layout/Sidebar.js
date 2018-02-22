@@ -42,14 +42,20 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
     [ classes.fade ]: true
   })
 
+  const name = item.name.indexOf('.') === -1
+    ? TAPi18n.__(`${item.name}.this`)
+    : TAPi18n.__(item.name)
+
+  const link = item.link || `/${item.name}`
+
   return (
-    <li className={isActive(`/${item.name}`, location) ? 'active' : undefined}>
+    <li className={isActive(link, location) ? 'active' : undefined}>
       <Link
-        to={`/${item.name}`}
+        to={link}
         className='pointer level-0 link'
-        title={TAPi18n.__(`${item.name}.this`)}>
+        title={name}>
         <i className={`fa fa-${item.icon}`} />
-        <span className={hideWhenClosed}>{TAPi18n.__(`${item.name}.this`)}</span>
+        <span className={hideWhenClosed}>{name}</span>
         <FlipMove typeName='span'>
           {
             item.count && item.count > 0

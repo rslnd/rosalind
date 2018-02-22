@@ -1,23 +1,34 @@
 import moment from 'moment'
 import identity from 'lodash/identity'
-import some from 'lodash/fp/some'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { toClass } from 'recompose'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
+import { TAPi18n } from 'meteor/tap:i18n'
+import Alert from 'react-s-alert'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
-import { Referrals } from '../../../api/referrals'
-import { Tags } from '../../../api/tags'
-import { Calendars } from '../../../api/calendars'
 import { WaitlistScreen } from './WaitlistScreen'
 
-const composer = (props, onData) => {
+const action = (action, appointment, options = {}) => {
+  const fn = () => Appointments.actions[action].callPromise({ appointmentId: appointment._id })
+    .then(() => {
+      Alert.success(TAPi18n.__(`appointments.${action}Success`))
+    })
+    .catch((e) => {
+      console.error(e)
+      Alert.error(TAPi18n.__(`appointments.error`))
+    })
+
+  const title = options.alternative
+    ? TAPi18n.__(`appointments.${action}Alternative`)
+    : TAPi18n.__(`appointments.${action}`)
+
+  return { title, fn }
+}
+
+const composer = props => {
   const startOfToday = moment().startOf('day').toDate()
   const endOfToday = moment().endOf('day').toDate()
-
-  Meteor.subscribe('appointments', {
-    start: startOfToday,
-    end: endOfToday
-  })
 
   const selector = {
     assigneeId: Meteor.userId(),
@@ -38,34 +49,18 @@ const composer = (props, onData) => {
   })
 
   const waitlistAppointments = appointments.map(appointment => {
-    const { calendarId } = appointment
     const patient = Patients.findOne({ _id: appointment.patientId })
-    const referrals = patient
-      ? Referrals.find({ patientId: patient._id }).fetch()
-      : []
-
-    const isReferrable = x => !referrals.includes(r => r.referredTo === x._id)
-    const referrableTags = Tags.find({ referrableFrom: calendarId }).fetch()
-      .map(x => ({ ...x, isReferrable: isReferrable(x) }))
-
-    const referrableCalendars = Calendars.find({ referrableFrom: calendarId }).fetch()
-      .map(x => ({ ...x, isReferrable: isReferrable(x) }))
-
-    const length = [ ...referrableTags, ...referrableCalendars ].filter(isReferrable).length
 
     return {
       ...appointment,
-      patient,
-      referrals: {
-        referrableTags,
-        referrableCalendars,
-        length,
-        insert: () => {}
-      }
+      patient
     }
   })
 
-  onData(null, { ...props, appointments: waitlistAppointments })
+  return {
+    action,
+    appointments: waitlistAppointments
+  }
 }
 
-export const WaitlistContainer = composeWithTracker(composer)(WaitlistScreen)
+export const WaitlistContainer = withTracker(composer)(toClass(WaitlistScreen))

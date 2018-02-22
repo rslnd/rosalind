@@ -31,6 +31,12 @@ const sidebarItems = ({ history }) => {
       }
     },
     {
+      name: 'patients.thisNext',
+      link: '/waitlist',
+      icon: 'angle-right',
+      roles: ['waitlist']
+    },
+    {
       name: 'inboundCalls',
       icon: 'phone',
       roles: ['admin', 'inboundCalls'],

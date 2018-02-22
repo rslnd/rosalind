@@ -40,5 +40,4 @@ AutoForm.hooks
   updateRolesUserForm:
     onSuccess: ->
       window.__deprecated_history_push('/users/')
-      console.log(Alert)
       Alert.success(TAPi18n.__('users.editSuccess'))

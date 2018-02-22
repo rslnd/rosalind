@@ -12,6 +12,11 @@ const toggleablePermissions = [
     icon: 'calendar'
   },
   {
+    permission: 'waitlist',
+    title: 'Warteliste',
+    icon: 'angle-right'
+  },
+  {
     permission: 'schedules-edit',
     title: 'Anwesenheiten bearbeiten',
     icon: 'clock-o'

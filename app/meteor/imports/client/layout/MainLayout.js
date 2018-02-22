@@ -6,21 +6,12 @@ import { FooterContainer } from './FooterContainer'
 import { Alerts } from './Alerts'
 import { Login } from '../users/Login'
 import { MaintenanceMessageContainer } from './MaintenanceMessageContainer'
-import { WaitlistContainer } from '../appointments/waitlist/WaitlistContainer'
 
 const mainHeaderStyle = {
   right: 'initial'
 }
 const contentWrapperSidebarClosedStyle = {
   marginLeft: 45
-}
-
-const contentWrapperTinyStyle = {
-  marginLeft: 0,
-  transform: 'none',
-  WebkitTransform: 'none',
-  msTransform: 'none',
-  OTransform: 'none'
 }
 
 const logoSidebarClosedStyle = {
@@ -63,7 +54,7 @@ export class MainLayout extends React.Component {
   }
 
   render () {
-    const { children, currentUser, loggingIn, locale, isPrint, isTinyLayout } = this.props
+    const { children, currentUser, loggingIn, locale, isPrint } = this.props
 
     const open = this.props.sidebarOpen || this.state.sidebarForceOpen
 
@@ -72,10 +63,6 @@ export class MainLayout extends React.Component {
     let contentStyle = {}
     if (!this.props.sidebarOpen) {
       contentStyle = contentWrapperSidebarClosedStyle
-    }
-
-    if (isTinyLayout) {
-      contentStyle = contentWrapperTinyStyle
     }
 
     let conditionalLogoStyle = {
@@ -102,38 +89,26 @@ export class MainLayout extends React.Component {
       return (
         <div className='wrapper disable-select'>
           <div id='logged-in' />
-          {
-            !isTinyLayout &&
-              <div
-                onMouseEnter={this.handleSidebarOpen}
-                onMouseLeave={this.handleSidebarClose}>
-                <header className='main-header' style={mainHeaderStyle}>
-                  <Link to='/' className='logo' style={conditionalLogoStyle}>
-                    <img src='/images/logo.svg' />
-                  </Link>
-                </header>
-                {
-                  currentUser &&
-                    <SidebarContainer
-                      isOpen={open}
-                      userPanel={
-                        <UserPanelContainer sidebarOpen={open} />
-                      }
-                    />
-                }
-              </div>
-          }
-          <div className='content-wrapper print-no-margin' style={contentStyle}>
+          <div
+            onMouseEnter={this.handleSidebarOpen}
+            onMouseLeave={this.handleSidebarClose}>
+            <header className='main-header' style={mainHeaderStyle}>
+              <Link to='/' className='logo' style={conditionalLogoStyle}>
+                <img src='/images/logo.svg' />
+              </Link>
+            </header>
             {
-              isTinyLayout
-              ? <div>
-                <div style={userPanelStyle}>
-                  <UserPanelContainer sidebarOpen />
-                </div>
-                <WaitlistContainer />
-              </div>
-              : children
+              currentUser &&
+                <SidebarContainer
+                  isOpen={open}
+                  userPanel={
+                    <UserPanelContainer sidebarOpen={open} />
+                  }
+                />
             }
+          </div>
+          <div className='content-wrapper print-no-margin' style={contentStyle}>
+            {children}
           </div>
           <FooterContainer />
           {alwaysRender()}

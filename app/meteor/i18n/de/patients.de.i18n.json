@@ -2,6 +2,7 @@
   "patients": {
     "this": "PatientInnen",
     "thisOne": "PatientIn",
+    "thisNext": "Nächste PatientInnen",
     "search": "PatientIn suchen...",
     "thisAll": "Alle PatientInnen",
     "thisNew": "Neue PatientIn",
