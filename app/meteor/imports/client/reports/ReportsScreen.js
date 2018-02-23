@@ -12,6 +12,7 @@ import { Report } from './Report'
 import { PreviewBoxes } from './PreviewBoxes'
 import { Quarter } from './Quarter'
 import { FooterContainer } from '../layout/FooterContainer'
+import { Loading } from '../components/Loading';
 
 const avoidPageBreak = {
   pageBreakInside: 'avoid'
@@ -49,6 +50,7 @@ export class ReportsScreen extends React.Component {
 
   render () {
     const {
+      loading,
       date,
       reports,
       quarter,
@@ -61,8 +63,7 @@ export class ReportsScreen extends React.Component {
       generateReport,
       viewAppointments,
       sendEmailTest,
-      sendEmail,
-      __
+      sendEmail
     } = this.props
 
     return (
@@ -87,70 +88,72 @@ export class ReportsScreen extends React.Component {
             }
           </DateNavigation>
         </div>
-        <div className='content'>
-          <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
-          <FlipMove duration={230}>
-            {
-              (reports && reports.length >= 1)
-              ? reports.map(report =>
-                <div key={report._id}>
-                  <Report
-                    report={report}
-                    showRevenue={this.state.showRevenue}
-                    mapUserIdToName={mapUserIdToName}
-                    mapReportAsToHeader={mapReportAsToHeader}
-                    __={__}
-                  />
-                  {
-                    quarter && this.state.showRevenue &&
-                      <div key='quarterTable' style={avoidPageBreak}>
-                        <Quarter
-                          calendar={report.calendar}
-                          quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
-                          __={__}
-                        />
-                        <span className='quarterLoaded' />
-                      </div>
-                  }
-                  <FooterContainer />
+        {
+          loading
+          ? <Loading />
+          : <div className='content'>
+            <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
+            <FlipMove duration={230}>
+              {
+                (reports && reports.length >= 1)
+                ? reports.map(report =>
+                  <div key={report._id}>
+                    <Report
+                      report={report}
+                      showRevenue={this.state.showRevenue}
+                      mapUserIdToName={mapUserIdToName}
+                      mapReportAsToHeader={mapReportAsToHeader}
+                    />
+                    {
+                      quarter && this.state.showRevenue &&
+                        <div key='quarterTable' style={avoidPageBreak}>
+                          <Quarter
+                            calendar={report.calendar}
+                            quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
+                          />
+                          <span className='quarterLoaded' />
+                        </div>
+                    }
+                    <FooterContainer />
+                  </div>
+                ) : <div key='noReports'>
+                  <Box type='warning' title={TAPi18n.__('ui.notice')}>
+                    <p>{TAPi18n.__('reports.empty')}</p>
+                  </Box>
                 </div>
-              ) : <div key='noReports'>
-                <Box type='warning' title={TAPi18n.__('ui.notice')}>
-                  <p>{TAPi18n.__('reports.empty')}</p>
-                </Box>
-              </div>
+              }
+            </FlipMove>
+
+            {
+              previews &&
+                <div>
+                  <PreviewBoxes
+                    previews={previews}
+                    mapUserIdToUsername={mapUserIdToUsername}
+                    mapUserIdToName={mapUserIdToName} />
+                  <span className='weekPreviewLoaded' />
+                </div>
             }
-          </FlipMove>
 
-          {
-            previews &&
-              <div>
-                <PreviewBoxes
-                  previews={previews}
-                  mapUserIdToUsername={mapUserIdToUsername}
-                  mapUserIdToName={mapUserIdToName} />
-                <span className='weekPreviewLoaded' />
-              </div>
-          }
+            <div className='hide-print'>
+              <Button onClick={generateReport}>
+                  Diesen Bericht neu generieren
+              </Button>
 
-          <div className='hide-print'>
-            <Button onClick={generateReport}>
-                Diesen Bericht neu generieren
-            </Button>
+              <Button onClick={viewAppointments}>
+                  Terminkalender für diesen Tag ansehen
+              </Button>
 
-            <Button onClick={viewAppointments}>
-                Terminkalender für diesen Tag ansehen
-            </Button>
+              <Button onClick={sendEmailTest}>
+                  Test Email senden
+              </Button>
 
-            <Button onClick={sendEmailTest}>
-                Test Email senden
-            </Button>
-
-            <Button onClick={sendEmail}>
-                Email senden
-            </Button>
+              <Button onClick={sendEmail}>
+                  Email senden
+              </Button>
+            </div>
           </div>
-        </div>
+        }
       </div>
     )
   }

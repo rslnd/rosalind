@@ -9,6 +9,8 @@ import {
   primaryDisabled
 } from './global'
 
+const animationSpeed = 1.6
+
 export const muiTheme = createMuiTheme({
   typography: {
     fontFamily: fontStack
@@ -65,6 +67,14 @@ export const muiTheme = createMuiTheme({
     MuiInputLabel: {
       root: {
         color: text
+      }
+    },
+    MuiCircularProgress: {
+      svgIndeterminate: {
+        animation: `mui-progress-circular-rotate ${1.4 / animationSpeed}s linear infinite`
+      },
+      circleIndeterminate: {
+        animation: `mui-progress-circular-dash ${1.4 / animationSpeed}s ease-in-out infinite`
       }
     }
   }

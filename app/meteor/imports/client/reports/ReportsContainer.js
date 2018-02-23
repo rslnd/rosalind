@@ -1,28 +1,27 @@
 import idx from 'idx'
-import { toClass } from 'recompose'
+import { compose, toClass } from 'recompose'
 import omit from 'lodash/omit'
 import fromPairs from 'lodash/fromPairs'
 import sortBy from 'lodash/fp/sortBy'
 import moment from 'moment-timezone'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { TAPi18n } from 'meteor/tap:i18n'
 import { dateToDay, dayToDate } from '../../util/time/day'
 import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
 import { Tags } from '../../api/tags'
 import { Calendars } from '../../api/calendars'
-import { Loading } from '../components/Loading'
 import { ReportsScreen } from './ReportsScreen'
+import { withMethodData } from '../components/withMethodData'
 
-const composer = (props, onData) => {
+const composer = props => {
+  const dateParam = idx(props, _ => _.match.params.date)
+  const date = moment(dateParam)
+  const day = omit(dateToDay(date), 'date')
+
   if (Meteor.subscribe('reports').ready()) {
-    const dateParam = idx(props, _ => _.match.params.date)
-    const date = moment(dateParam)
-    const day = omit(dateToDay(date), 'date')
-
     const fetchedReports = Reports
       .find({ day })
       .fetch()
@@ -32,22 +31,6 @@ const composer = (props, onData) => {
 
     const isPrint = props.location.hash === '#print'
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
-
-    const generateReport = () => {
-      return Reports.actions.generate.callPromise({ day })
-    }
-
-    const viewAppointments = () => {
-      props.history.push(`/appointments/${dateParam}`)
-    }
-
-    const sendEmailTest = () => {
-      Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com', day })
-    }
-
-    const sendEmail = () => {
-      Meteor.call('reports/sendEmail')
-    }
 
     const userIdToNameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
     const mapUserIdToName = id => userIdToNameMapping[id]
@@ -60,9 +43,24 @@ const composer = (props, onData) => {
       return (tag && tag.reportHeader) || reportAs
     }
 
-    const __ = (key, opts) => TAPi18n.__(key, opts)
+    const viewAppointments = () => {
+      props.history.push(`/appointments/${dateParam}`)
+    }
 
-    const data = {
+    const generateReport = () => {
+      return Reports.actions.generate.callPromise({ day })
+    }
+
+    const sendEmailTest = () => {
+      Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com', day })
+    }
+
+    const sendEmail = () => {
+      Meteor.call('reports/sendEmail')
+    }
+
+    return {
+      day,
       date,
       reports,
       generateReport,
@@ -72,33 +70,39 @@ const composer = (props, onData) => {
       canShowRevenue,
       mapUserIdToName,
       mapUserIdToUsername,
-      mapReportAsToHeader,
-      __
+      mapReportAsToHeader
     }
-
-    onData(null, data)
-
-    const mapPreview = (preview) => ({
-      ...preview,
-      today: moment().isSame(dayToDate(preview.day), 'day')
-    })
-
-    // Load quarter data in background
-    Reports.actions.generateQuarter.callPromise({ day })
-      .then(quarter => {
-        onData(null, { ...data, quarter })
-
-        // Then load preview data in background. Ugh.
-        // TODO: Refactor.
-        Reports.actions.generatePreview.callPromise({ day })
-          .then(previews => previews.map(p => ({
-            calendarId: p.calendarId,
-            calendar: Calendars.findOne({ _id: p.calendarId }),
-            days: p.days.map(mapPreview)
-          })))
-          .then(previews => onData(null, { ...data, quarter, previews }))
-      })
+  } else {
+    return {
+      day,
+      date,
+      loading: true
+    }
   }
 }
 
-export const ReportsContainer = withRouter(toClass(composeWithTracker(composer, Loading)(ReportsScreen)))
+const mapPreview = (preview) => ({
+  ...preview,
+  today: moment().isSame(dayToDate(preview.day), 'day')
+})
+
+const fetchPreview = ({ day }) =>
+  Reports.actions.generatePreview.callPromise({ day })
+    .then(previews => previews.map(p => ({
+      calendarId: p.calendarId,
+      calendar: Calendars.findOne({ _id: p.calendarId }),
+      days: p.days.map(mapPreview)
+    })))
+    .then(previews => ({ previews }))
+
+const fetchQuarter = ({ day }) =>
+  Reports.actions.generateQuarter.callPromise({ day })
+    .then(quarter => ({ quarter }))
+
+export const ReportsContainer = compose(
+  withRouter,
+  withTracker(composer),
+  withMethodData(fetchPreview),
+  withMethodData(fetchQuarter),
+  toClass
+)(ReportsScreen)

@@ -4,6 +4,7 @@ import moment from 'moment'
 import 'moment-duration-format'
 import idx from 'idx'
 import find from 'lodash/fp/find'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { durationFormat } from './shared/durationFormat'
 import { Nil } from './shared/Nil'
 import { Percent } from './shared/Percent'
@@ -55,12 +56,12 @@ const Td = ({ children, borderLeft }) => (
   </td>
 )
 
-export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapReportAsToHeader, __ }) => (
+export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapReportAsToHeader }) => (
   <thead>
     <tr>
       <th className='col-md-2'>{
         assigneeReport
-        ? __('reports.date')
+        ? TAPi18n.__('reports.date')
         : <span>
           <Icon name={calendar.icon} />
           &ensp;
@@ -69,7 +70,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapRe
       }</th>
       <th style={align}>Std.</th>
       <th colSpan={calendar.reportExpectedAsActual ? 2 : 3}>
-        {(calendar && calendar.patientNamePlural) || __('reports.patients')}
+        {(calendar && calendar.patientNamePlural) || TAPi18n.__('reports.patients')}
       </th>
       {
         (calendar && calendar.reportAs)
@@ -129,22 +130,22 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapRe
   </thead>
 )
 
-const AssigneeName = ({ assignee, mapUserIdToName, __ }) =>
+const AssigneeName = ({ assignee, mapUserIdToName }) =>
   <span>
     {
       assignee.assigneeId
       ? mapUserIdToName(assignee.assigneeId)
       : (
         assignee.type
-        ? (assignee.type && <i className='text-muted'>{__(`reports.assigneeType__${assignee.type}`)}</i>)
-        : <i className='text-muted'>{__('reports.unassigned')}</i>
+        ? (assignee.type && <i className='text-muted'>{TAPi18n.__(`reports.assigneeType__${assignee.type}`)}</i>)
+        : <i className='text-muted'>{TAPi18n.__('reports.unassigned')}</i>
       )
     }
   </span>
 
-const Date = ({ day, __ }) =>
+const Date = ({ day }) =>
   <span>
-    {moment(dayToDate(day)).format(__('time.dateFormatWeekdayShort'))}
+    {moment(dayToDate(day)).format(TAPi18n.__('time.dateFormatWeekdayShort'))}
   </span>
 
 const getKey = assignee => {
@@ -155,11 +156,11 @@ const getKey = assignee => {
   }
 }
 
-const Overbooking = ({ assignee, __ }) => {
+const Overbooking = ({ assignee }) => {
   const planned = idx(assignee, _ => _.overbooking.patients.total.planned)
   const admitted = idx(assignee, _ => _.overbooking.patients.total.admitted)
 
-  const title = __('reports.overbookingSummary', { expected: planned, admitted })
+  const title = TAPi18n.__('reports.overbookingSummary', { expected: planned, admitted })
   if (planned > 0) {
     return <span className='text-muted' title={title}>
       {admitted}/{planned}
@@ -169,7 +170,7 @@ const Overbooking = ({ assignee, __ }) => {
   }
 }
 
-export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assigneeReport, calendar, __ }) => (
+export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assigneeReport, calendar }) => (
   <FlipMove
     duration={200}
     typeName='tbody'
@@ -183,8 +184,8 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         {/* Name or Date */}
         <td>{
           assigneeReport
-          ? <Date day={assignee.day} __={__} />
-          : <AssigneeName assignee={assignee} mapUserIdToName={mapUserIdToName} __={__} />
+          ? <Date day={assignee.day} />
+          : <AssigneeName assignee={assignee} mapUserIdToName={mapUserIdToName} />
         }</td>
 
         {/* Stunden [von, bis, h, lt Terminkalender (Plan only)] (Split row by Vormittag/Nachmittag) */}
@@ -254,7 +255,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         }
         {/* Assignee reports include overbooking column */}
         {
-          assigneeReport && <Td><Overbooking assignee={assignee} __={__} /></Td>
+          assigneeReport && <Td><Overbooking assignee={assignee} /></Td>
         }
 
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
@@ -283,13 +284,13 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
       calendar={report.calendar}
       showRevenue={showRevenue}
       assigneeReport={assigneeReport}
-      __={__} />
+     />
   </FlipMove>
 )
 
 class SummaryRow extends React.Component {
   render () {
-    const { report, showRevenue, assigneeReport, calendar, __ } = this.props
+    const { report, showRevenue, assigneeReport, calendar } = this.props
     return (
       <tr style={summaryRowStyle} className='bg-white'>
         <td>{
@@ -299,8 +300,8 @@ class SummaryRow extends React.Component {
             &nbsp;
             {
               (report.total.assignees === 1)
-              ? (calendar.assigneeName || __('reports.assignee', { count: report.total.assignees }))
-              : (calendar.assigneeNamePlural || __('reports.assignee', { count: report.total.assignees }))
+              ? (calendar.assigneeName || TAPi18n.__('reports.assignee', { count: report.total.assignees }))
+              : (calendar.assigneeNamePlural || TAPi18n.__('reports.assignee', { count: report.total.assignees }))
             }
           </span>
         }</td>
@@ -392,7 +393,7 @@ class SummaryRow extends React.Component {
   }
 }
 
-const Disclaimers = ({ report, __ }) => {
+const Disclaimers = ({ report }) => {
   const misattributedRevenue = idx(report, _ => _.total.revenue.misattributed) || 0
   const overbooking = find(a => a.type === 'overbooking')(report.assignees)
   const expected = idx(overbooking, _ => _.patients.total.expected)
@@ -400,10 +401,10 @@ const Disclaimers = ({ report, __ }) => {
 
   if (misattributedRevenue > 0 || expected > 0 || admitted > 0) {
     return <small className='text-muted' style={disclaimerStyle}>
-      {(expected > 0 || admitted > 0) && __('reports.overbookingSummary', { expected, admitted })}
+      {(expected > 0 || admitted > 0) && TAPi18n.__('reports.overbookingSummary', { expected, admitted })}
       &emsp;
       {(misattributedRevenue > 0) && <span className='text-muted'>
-        {__('reports.misattributedRevenue')}:&nbsp;
+        {TAPi18n.__('reports.misattributedRevenue')}:&nbsp;
         <Round to={0} unit='€' number={misattributedRevenue} className='text-muted' />
       </span>}
     </small>
@@ -412,7 +413,7 @@ const Disclaimers = ({ report, __ }) => {
   }
 }
 
-export const ReportTable = ({ report, showRevenue, mapUserIdToName, assigneeReport, mapReportAsToHeader, __ }) => (
+export const ReportTable = ({ report, showRevenue, mapUserIdToName, assigneeReport, mapReportAsToHeader }) => (
   <div className='table-responsive enable-select'>
     <table className='table no-margin'>
       <ReportTableHeader
@@ -420,15 +421,15 @@ export const ReportTable = ({ report, showRevenue, mapUserIdToName, assigneeRepo
         showRevenue={showRevenue}
         assigneeReport={assigneeReport}
         mapReportAsToHeader={mapReportAsToHeader}
-        __={__} />
+       />
       <ReportTableBody
         report={report}
         calendar={report.calendar}
         showRevenue={showRevenue}
         mapUserIdToName={mapUserIdToName}
         assigneeReport={assigneeReport}
-        __={__} />
+       />
     </table>
-    <Disclaimers report={report} __={__} />
+    <Disclaimers report={report} />
   </div>
 )

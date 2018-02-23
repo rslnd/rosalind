@@ -8,7 +8,7 @@ import { Icon } from '../components/Icon'
 import { Round } from './shared/Round'
 import { integer } from '../../util/format'
 
-export const Quarter = ({ quarter, calendar, __ }) => (
+export const Quarter = ({ quarter, calendar }) => (
   <div className='row'>
     <div className='col-md-12'>
       <Box title='Quartal' icon='line-chart'>

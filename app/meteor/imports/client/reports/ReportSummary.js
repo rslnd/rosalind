@@ -1,5 +1,6 @@
 import React from 'react'
 import idx from 'idx'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../components/Icon'
 import { currency, integer, float, percentage, conditionalFloat } from '../../util/format'
 import { color as kewler, lightness } from 'kewler'
@@ -12,7 +13,7 @@ const BigPercent = (props) => {
   return <Unit append='%'>{percentage({ ...props, plain: true })}</Unit>
 }
 
-export const InfoBox = ({ color, position, icon = 'eur', children, text, description, __ }) => (
+export const InfoBox = ({ color, position, icon = 'eur', children, text, description }) => (
   <div className='info-box'>
     <span className={`info-box-icon`} style={{
       color: '#fff',
@@ -29,7 +30,7 @@ export const InfoBox = ({ color, position, icon = 'eur', children, text, descrip
   </div>
 )
 
-export const Unit = ({ prepend, append, children, __ }) => (
+export const Unit = ({ prepend, append, children }) => (
   <span>
     {prepend && <small className='text-muted'>{prepend}&nbsp;</small>}
     {
@@ -42,14 +43,14 @@ export const Unit = ({ prepend, append, children, __ }) => (
   </span>
 )
 
-export const TotalRevenueBox = ({ report, position, color, __ }) => {
+export const TotalRevenueBox = ({ report, position, color }) => {
   const revenue = (
     idx(report, _ => _.total.revenue.actual) || // backwards compatibility
     idx(report, _ => _.total.revenue.total.actual) ||
     idx(report, _ => _.total.revenue.total.expected)
   )
 
-  return <InfoBox text={__('reports.revenue')} color={color} position={position} icon='euro'>
+  return <InfoBox text={TAPi18n.__('reports.revenue')} color={color} position={position} icon='euro'>
     {
       revenue
       ? <Unit prepend='€'>{integer(revenue)}</Unit>
@@ -58,13 +59,13 @@ export const TotalRevenueBox = ({ report, position, color, __ }) => {
   </InfoBox>
 }
 
-export const NewPatientsPerHourBox = ({ report, position, color, __ }) => {
+export const NewPatientsPerHourBox = ({ report, position, color }) => {
   const newPerHour = idx(report, _ => _.average.patients.new.actualPerHour) ||
     idx(report, _ => _.average.patients.new.expectedPerHour)
 
   return (
     <InfoBox
-      text={__('reports.patientsNewPerHour')} color={color} position={position} icon='user-plus'>
+      text={TAPi18n.__('reports.patientsNewPerHour')} color={color} position={position} icon='user-plus'>
       {
         newPerHour
         ? <Unit append='/h'>{float(newPerHour)}</Unit>
@@ -74,15 +75,15 @@ export const NewPatientsPerHourBox = ({ report, position, color, __ }) => {
   )
 }
 
-export const KeyMetricBox = ({ report, position, color, __ }) => {
+export const KeyMetricBox = ({ report, position, color }) => {
   if (report.calendar.privateAppointments) {
-    return <TotalPatientsBox report={report} position={position} color={color} __={__} />
+    return <TotalPatientsBox report={report} position={position} color={color} />
   } else {
-    return <NewPatientsPerHourBox report={report} position={position} color={color} __={__} />
+    return <NewPatientsPerHourBox report={report} position={position} color={color} />
   }
 }
 
-export const Workload = ({ report, position, color, __ }) => {
+export const Workload = ({ report, position, color }) => {
   const workload = report.total.workload.weighted
 
   return (
@@ -98,7 +99,7 @@ export const Workload = ({ report, position, color, __ }) => {
   )
 }
 
-export const NoShowsBox = ({ report, position, color, __ }) => {
+export const NoShowsBox = ({ report, position, color }) => {
   const expected = idx(report, _ => _.total.patients.total.expected)
   const noShows = idx(report, _ => _.total.patients.total.noShow) || 0
 
@@ -109,18 +110,18 @@ export const NoShowsBox = ({ report, position, color, __ }) => {
   )
 }
 
-export const TotalPatientsBox = ({ report, position, color, __ }) => {
+export const TotalPatientsBox = ({ report, position, color }) => {
   const patients = idx(report, _ => _.total.patients.total.actual) ||
     idx(report, _ => _.total.patients.total.expected)
 
   return (
-    <InfoBox text={__('reports.patients')} color={color} position={position} icon='users'>
+    <InfoBox text={TAPi18n.__('reports.patients')} color={color} position={position} icon='users'>
       {patients || <Nil />}
     </InfoBox>
   )
 }
 
-export const ReportSummary = ({ report, showRevenue, assigneeReport, __ }) => {
+export const ReportSummary = ({ report, showRevenue, assigneeReport }) => {
   if (assigneeReport) {
     return null
   }
@@ -151,8 +152,7 @@ export const ReportSummary = ({ report, showRevenue, assigneeReport, __ }) => {
             {React.createElement(box, {
               position: i + 1,
               color: report.calendar.color,
-              report,
-              __
+              report
             })}
           </div>
         )
