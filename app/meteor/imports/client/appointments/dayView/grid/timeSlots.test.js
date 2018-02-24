@@ -22,6 +22,14 @@ describe('ui', () => {
         expect(t.isSlot(5)('1001')).to.equal(false)
       })
 
+      it('isSlot with offset', () => {
+        expect(t.isSlot(60, 30)('1030')).to.equal(true)
+        expect(t.isSlot(60, 30)('1000')).to.equal(false)
+        expect(t.isSlot(60, 0)('1030')).to.equal(false)
+        expect(t.isSlot(30, false)('1030')).to.equal(true)
+        expect(t.isSlot(30, undefined)('1030')).to.equal(true)
+      })
+
       it('timeSlots', () => {
         expect(t.timeSlots(5)).to.include('T0730')
         expect(t.timeSlots(5)).to.include('T2030')

@@ -1,7 +1,8 @@
 import React from 'react'
 import injectSheet from 'react-jss'
 import moment from 'moment-timezone'
-import { setTime, timeSlots, formatter } from './timeSlots'
+import sortBy from 'lodash/sortBy'
+import { setTime, timeSlots, formatter, label, end } from './timeSlots'
 import { background } from '../../../css/global'
 import { color, lightness } from 'kewler'
 
@@ -27,7 +28,7 @@ class BlankState extends React.PureComponent {
   handleClick (event) {
     this.props.onClick({
       event,
-      time: setTime(this.props.time)(moment(this.props.date)).toDate(),
+      time: setTime(this.props.startTime)(moment(this.props.date)).toDate(),
       assigneeId: this.props.assigneeId
     })
   }
@@ -35,22 +36,23 @@ class BlankState extends React.PureComponent {
   handleOnMouseEnter (event) {
     this.props.onMouseEnter({
       event,
-      time: setTime(this.props.time)(moment(this.props.date)).toDate(),
+      time: setTime(this.props.startTime)(moment(this.props.date)).toDate(),
       assigneeId: this.props.assigneeId
     })
   }
 
   render () {
-    const { time, assigneeId, classes, format } = this.props
+    const { startTime, endTime, assigneeId, classes, format } = this.props
 
     return (
       <span
         className={classes.blank}
         onClick={this.handleClick}
         onMouseEnter={this.handleOnMouseEnter}
-        title={format(time)}
+        title={format(endTime)}
         style={{
-          gridRow: time,
+          gridRowStart: startTime,
+          gridRowEnd: endTime,
           gridColumn: `assignee-${assigneeId}`
         }}>
         &nbsp;
@@ -61,20 +63,33 @@ class BlankState extends React.PureComponent {
 
 const Blank = injectSheet(styles)(BlankState)
 
-export const blanks = ({ slotSize, date, assignees, onClick, onMouseEnter }) => {
-  const format = formatter(slotSize)
+export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter }) => {
+  const { slotSize, slotSizeAppointment } = calendar
 
-  return assignees.map((assignee) => (
-    timeSlots(slotSize)
-      .map((time) => (
+  return assignees.map(a => {
+    const scheduleOffset = slotSizeAppointment &&
+      (a.schedules && a.schedules.length >= 1) &&
+      moment(sortBy(a.schedules, 'end')[0].end).add(1, 'second').minute()
+
+    const slotSizeBlank = (scheduleOffset === 0 || scheduleOffset > 0)
+      ? slotSizeAppointment
+      : slotSize
+
+    const format = formatter(slotSizeBlank, scheduleOffset)
+
+    const lastSlot = label(end())
+
+    return timeSlots(slotSizeBlank, scheduleOffset)
+      .map((time, i, times) => (
         <Blank
-          key={[date.unix(), time, assignee.assigneeId].join('')}
+          key={[date.unix(), time, a.assigneeId].join('')}
           date={date}
-          time={time}
+          startTime={time}
+          endTime={times[i + 1] || lastSlot}
           format={format}
-          assigneeId={assignee.assigneeId}
+          assigneeId={a.assigneeId}
           onClick={onClick}
           onMouseEnter={onMouseEnter} />
       ))
-  ))
+  })
 }

@@ -169,6 +169,8 @@ const composer = (props, onData) => {
 
     const { dispatch, move } = props
 
+    calendar.slotSize = calendar.slotSize || 5
+
     onData(null, {
       calendar,
       assignees,
