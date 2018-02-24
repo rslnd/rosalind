@@ -18,7 +18,7 @@ import { withMethodData } from '../components/withMethodData'
 
 const composer = props => {
   const dateParam = idx(props, _ => _.match.params.date)
-  const date = moment(dateParam)
+  const date = moment(dateParam).startOf('day')
   const day = omit(dateToDay(date), 'date')
 
   const subscription = Meteor.subscribe('reports', { date: date.toDate() })
@@ -26,60 +26,55 @@ const composer = props => {
     .find({ day })
     .fetch()
 
-  if (dayReports.length > 0 || subscription.ready()) {
-    const reportsWithCalendar = dayReports
-      .map(r => ({ ...r, calendar: Calendars.findOne({ _id: r.calendarId }) }))
-    const reports = sortBy(r => r && r.calendar && r.calendar.order)(reportsWithCalendar)
+  const reportLoading = (!subscription.ready() && dayReports.length === 0)
 
-    const isPrint = props.location.hash === '#print'
-    const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
+  const reportsWithCalendar = dayReports
+    .map(r => ({ ...r, calendar: Calendars.findOne({ _id: r.calendarId }) }))
+  const reports = sortBy(r => r && r.calendar && r.calendar.order)(reportsWithCalendar)
 
-    const userIdToNameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
-    const mapUserIdToName = id => userIdToNameMapping[id]
+  const isPrint = props.location.hash === '#print'
+  const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
 
-    const userIdToUsernameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, u.username]))
-    const mapUserIdToUsername = id => userIdToUsernameMapping[id]
+  const userIdToNameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
+  const mapUserIdToName = id => userIdToNameMapping[id]
 
-    const mapReportAsToHeader = reportAs => {
-      const tag = Tags.findOne({ reportAs })
-      return (tag && tag.reportHeader) || reportAs
-    }
+  const userIdToUsernameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, u.username]))
+  const mapUserIdToUsername = id => userIdToUsernameMapping[id]
 
-    const viewAppointments = () => {
-      props.history.push(`/appointments/${dateParam}`)
-    }
+  const mapReportAsToHeader = reportAs => {
+    const tag = Tags.findOne({ reportAs })
+    return (tag && tag.reportHeader) || reportAs
+  }
 
-    const generateReport = () => {
-      return Reports.actions.generate.callPromise({ day })
-    }
+  const viewAppointments = () => {
+    props.history.push(`/appointments/${dateParam}`)
+  }
 
-    const sendEmailTest = () => {
-      Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com', day })
-    }
+  const generateReport = () => {
+    return Reports.actions.generate.callPromise({ day })
+  }
 
-    const sendEmail = () => {
-      Meteor.call('reports/sendEmail')
-    }
+  const sendEmailTest = () => {
+    Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com', day })
+  }
 
-    return {
-      day,
-      date,
-      reports,
-      generateReport,
-      sendEmail,
-      sendEmailTest,
-      viewAppointments,
-      canShowRevenue,
-      mapUserIdToName,
-      mapUserIdToUsername,
-      mapReportAsToHeader
-    }
-  } else {
-    return {
-      day,
-      date,
-      loading: true
-    }
+  const sendEmail = () => {
+    Meteor.call('reports/sendEmail')
+  }
+
+  return {
+    reportLoading,
+    day,
+    date,
+    reports,
+    generateReport,
+    sendEmail,
+    sendEmailTest,
+    viewAppointments,
+    canShowRevenue,
+    mapUserIdToName,
+    mapUserIdToUsername,
+    mapReportAsToHeader
   }
 }
 

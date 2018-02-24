@@ -50,6 +50,7 @@ export class ReportsScreen extends React.Component {
   render () {
     const {
       loading,
+      reportLoading,
       date,
       reports,
       quarter,
@@ -88,7 +89,7 @@ export class ReportsScreen extends React.Component {
           </DateNavigation>
         </div>
         {
-          loading
+          reportLoading
           ? <Loading />
           : <div className='content'>
             <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
@@ -120,6 +121,8 @@ export class ReportsScreen extends React.Component {
                 </Box>
               </div>
             }
+
+            { loading && <Loading />}
 
             {
               previews &&
