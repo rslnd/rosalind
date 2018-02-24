@@ -21,13 +21,15 @@ const composer = props => {
   const date = moment(dateParam)
   const day = omit(dateToDay(date), 'date')
 
-  if (Meteor.subscribe('reports').ready()) {
-    const fetchedReports = Reports
-      .find({ day })
-      .fetch()
-      .map(r => ({ ...r, calendar: Calendars.findOne({ _id: r.calendarId }) }))
+  const subscription = Meteor.subscribe('reports', { date: date.toDate() })
+  const dayReports = Reports
+    .find({ day })
+    .fetch()
 
-    const reports = sortBy(r => r && r.calendar && r.calendar.order)(fetchedReports)
+  if (dayReports.length > 0 || subscription.ready()) {
+    const reportsWithCalendar = dayReports
+      .map(r => ({ ...r, calendar: Calendars.findOne({ _id: r.calendarId }) }))
+    const reports = sortBy(r => r && r.calendar && r.calendar.order)(reportsWithCalendar)
 
     const isPrint = props.location.hash === '#print'
     const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint

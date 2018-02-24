@@ -23,6 +23,8 @@ export class UserPicker extends React.Component {
 
     if (this.props.onChange && query && query.value) {
       this.props.onChange(query.value)
+    } else {
+      this.props.onChange(null)
     }
   }
 

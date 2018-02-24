@@ -6,6 +6,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from '../../util/time/format'
 import { dayToDate } from '../../util/time/day'
 import { Icon } from '../components/Icon'
+import { Loading } from '../components/Loading'
 import { DateRangeNavigation } from '../components/DateRangeNavigation'
 import { Box } from '../components/Box'
 import { Report } from './Report'
@@ -51,14 +52,26 @@ export class AssigneeReportScreen extends React.Component {
   }
 
   render () {
+    const {
+      loading,
+      from,
+      to,
+      user,
+      handleRangeChange,
+      canShowRevenue,
+      handleChangeAssignee,
+      reports,
+      mapUserIdToName
+    } = this.props
+
     const formattedRange = formatRange({
-      start: this.props.from,
-      end: this.props.to
+      start: from,
+      end: to
     })
 
-    const title = this.props.user &&
+    const title = user &&
       TAPi18n.__('reports.assigneesReportFor', {
-        name: fullNameWithTitle(this.props.user)
+        name: fullNameWithTitle(user)
       }) || TAPi18n.__('reports.assigneesReport')
 
     return (
@@ -70,14 +83,14 @@ export class AssigneeReportScreen extends React.Component {
           </h1>
 
           <DateRangeNavigation
-            start={this.props.from}
-            end={this.props.to}
-            onRangeChange={this.props.handleRangeChange}
+            start={from}
+            end={to}
+            onRangeChange={handleRangeChange}
             calendarText={formattedRange}
             pullRight>
             <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name='print' /></Button>
             {
-              this.props.canShowRevenue &&
+              canShowRevenue &&
                 <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.toggleRevenue')}><Icon name='euro' /></Button>
             }
           </DateRangeNavigation>
@@ -86,28 +99,31 @@ export class AssigneeReportScreen extends React.Component {
           <div className='hide-print' style={{ paddingBottom: 15 }}>
             <UserPickerContainer
               autoFocus
-              onChange={this.props.handleChangeAssignee} />
+              onChange={handleChangeAssignee} />
           </div>
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
-          <FlipMove duration={230}>
-            {
-              (this.props.reports && this.props.reports.length > 0 && this.props.reports).map((report, i) =>
-                <div key={i} style={{ marginBottom: 80 }}>
-                  <Report
-                    report={report}
-                    showRevenue={this.state.showRevenue}
-                    mapUserIdToName={this.props.mapUserIdToName}
-                    assigneeReport
-                    __={this.props.__}
-                  />
-                </div>
-              ) || <div key='noReports'>
-                <Box type='warning' title={TAPi18n.__('ui.notice')}>
-                  <p>{TAPi18n.__('reports.empty')}</p>
-                </Box>
+          {
+            !user
+            ? <Box type='info' title={TAPi18n.__('ui.notice')}>
+              <p>{TAPi18n.__('reports.emptySelectAssignee')}</p>
+            </Box>
+            : loading
+            ? <Loading />
+            : (reports && reports.length > 0) && reports.map((report, i) =>
+              <div key={i} style={{ marginBottom: 80 }}>
+                <Report
+                  report={report}
+                  showRevenue={this.state.showRevenue}
+                  mapUserIdToName={mapUserIdToName}
+                  assigneeReport
+                />
               </div>
-            }
-          </FlipMove>
+            ) || <div key='noReports'>
+              <Box type='info' title={TAPi18n.__('ui.notice')}>
+                <p>{TAPi18n.__('reports.emptyAssignee')}</p>
+              </Box>
+            </div>
+          }
         </div>
       </div>
     )

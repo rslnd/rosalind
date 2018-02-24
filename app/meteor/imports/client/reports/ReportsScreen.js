@@ -1,5 +1,4 @@
 import React from 'react'
-import FlipMove from 'react-flip-move'
 import moment from 'moment-timezone'
 import { Button } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -93,36 +92,34 @@ export class ReportsScreen extends React.Component {
           ? <Loading />
           : <div className='content'>
             <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
-            <FlipMove duration={230}>
-              {
-                (reports && reports.length >= 1)
-                ? reports.map(report =>
-                  <div key={report._id}>
-                    <Report
-                      report={report}
-                      showRevenue={this.state.showRevenue}
-                      mapUserIdToName={mapUserIdToName}
-                      mapReportAsToHeader={mapReportAsToHeader}
-                    />
-                    {
-                      quarter && this.state.showRevenue &&
-                        <div key='quarterTable' style={avoidPageBreak}>
-                          <Quarter
-                            calendar={report.calendar}
-                            quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
-                          />
-                          <span className='quarterLoaded' />
-                        </div>
-                    }
-                    <FooterContainer />
-                  </div>
-                ) : <div key='noReports'>
-                  <Box type='warning' title={TAPi18n.__('ui.notice')}>
-                    <p>{TAPi18n.__('reports.empty')}</p>
-                  </Box>
+            {
+              (reports && reports.length >= 1)
+              ? reports.map(report =>
+                <div key={report._id}>
+                  <Report
+                    report={report}
+                    showRevenue={this.state.showRevenue}
+                    mapUserIdToName={mapUserIdToName}
+                    mapReportAsToHeader={mapReportAsToHeader}
+                  />
+                  {
+                    quarter && this.state.showRevenue &&
+                      <div key='quarterTable' style={avoidPageBreak}>
+                        <Quarter
+                          calendar={report.calendar}
+                          quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
+                        />
+                        <span className='quarterLoaded' />
+                      </div>
+                  }
+                  <FooterContainer />
                 </div>
-              }
-            </FlipMove>
+              ) : <div key='noReports'>
+                <Box type='warning' title={TAPi18n.__('ui.notice')}>
+                  <p>{TAPi18n.__('reports.empty')}</p>
+                </Box>
+              </div>
+            }
 
             {
               previews &&

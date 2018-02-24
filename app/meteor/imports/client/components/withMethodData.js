@@ -15,7 +15,6 @@ export const withMethodData = fetcher =>
       constructor (props) {
         super(props)
 
-        console.log('b', props)
         this.state = {
           isLoading: true,
           data: null,
