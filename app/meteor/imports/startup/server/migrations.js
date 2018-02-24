@@ -7,6 +7,6 @@ export default () => {
       logIfLatest: false
     })
 
-    Migrations.migrateTo(2)
+    Migrations.migrateTo('latest')
   })
 }
