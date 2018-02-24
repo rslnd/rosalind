@@ -23,5 +23,7 @@ export const generate = ({ calendar, day, appointments, pastAppointments, overri
   report.total = mapTotal({ report })
   report.average = mapAverage({ report })
 
+  report.createdAt = new Date()
+
   return report
 }
