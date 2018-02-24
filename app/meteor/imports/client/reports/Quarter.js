@@ -1,29 +1,50 @@
 import React from 'react'
-import moment from 'moment'
-import idx from 'idx'
-import { percentage } from '../../util/format'
-import { dayToDate } from '../../util/time/day'
-import { Box } from '../components/Box'
-import { Icon } from '../components/Icon'
 import { Round } from './shared/Round'
 import { integer } from '../../util/format'
 
 export const Quarter = ({ quarter, calendar }) => (
-  <div className='row'>
-    <div className='col-md-12'>
-      <Box title='Quartal' icon='line-chart'>
-        <div className='row enable-select' style={{ display: 'flex' }}>
-          {!calendar.privateAppointments && <DayCounter quarter={quarter} />}
-          {!calendar.privateAppointments && <NewPerHour quarter={quarter} />}
-          <NoShows quarter={quarter} />
-          <RevenuePerDay quarter={quarter} />
-          <Accumulated quarter={quarter} />
-          <Projected quarter={quarter} />
+  <div className='enable-select' style={boxStyle}>
+    <div style={containerStyle}>
+      <div style={titleContainer}>
+        <div className='text-muted' style={titleStyle}>
+          Q{quarter.q} {quarter.day.year}
         </div>
-      </Box>
+      </div>
+
+      {!calendar.privateAppointments && <DayCounter quarter={quarter} />}
+      {!calendar.privateAppointments && <NewPerHour quarter={quarter} />}
+      <NoShows quarter={quarter} />
+      <RevenuePerDay quarter={quarter} />
+      <Accumulated quarter={quarter} />
+      <Projected quarter={quarter} />
     </div>
   </div>
 )
+
+const boxStyle = {
+  borderTop: '1px solid #ebf1f2',
+  backgroundColor: 'rgb(251, 251, 251)'
+}
+
+const titleContainer = {
+  flexShrink: 1,
+  width: 10
+}
+
+const titleStyle = {
+  color: '#ccc',
+  padding: 5,
+  transform: 'rotate(-90deg) translate(-20px, -10px)',
+  width: 60
+}
+
+const containerStyle = {
+  display: 'flex'
+}
+
+const statStyle = {
+  flex: 1
+}
 
 const DayCounter = ({ quarter }) =>
   <Stat name='Tag'>
@@ -78,13 +99,13 @@ const Percentage = ({ value, average }) =>
     <small className='text-muted'>&nbsp;%</small>
   </span>
 
-const statStyle = {
+const overrideMinHeight = {
   minHeight: 0
 }
 
 const Stat = ({ name, children, average }) =>
-  <div className='col-sm-2 col-xs-4' style={{ flex: 1 }}>
-    <div className='description-block border-right' style={statStyle}>
+  <div style={statStyle}>
+    <div className='description-block border-right' style={overrideMinHeight}>
       <h5 className='description-header'>
         {children}
       </h5>

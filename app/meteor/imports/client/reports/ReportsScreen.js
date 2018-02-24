@@ -102,17 +102,18 @@ export class ReportsScreen extends React.Component {
                     showRevenue={this.state.showRevenue}
                     mapUserIdToName={mapUserIdToName}
                     mapReportAsToHeader={mapReportAsToHeader}
-                  />
-                  {
-                    quarter && this.state.showRevenue &&
-                      <div key='quarterTable' style={avoidPageBreak}>
-                        <Quarter
-                          calendar={report.calendar}
-                          quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
-                        />
-                        <span className='quarterLoaded' />
-                      </div>
-                  }
+                  >
+                    {
+                      quarter && this.state.showRevenue &&
+                        <div key='quarterTable' style={avoidPageBreak}>
+                          <Quarter
+                            calendar={report.calendar}
+                            quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
+                          />
+                          <span className='quarterLoaded' />
+                        </div>
+                    }
+                  </Report>
                   <FooterContainer />
                 </div>
               ) : <div key='noReports'>

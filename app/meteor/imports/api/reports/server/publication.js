@@ -37,6 +37,11 @@ export const publication = () => {
         $gte: from,
         $lte: to
       }
-    }, { fields })
+    }, {
+      fields,
+      sort: {
+        createdAt: -1
+      }
+    })
   })
 }

@@ -36,5 +36,6 @@ module.exports = new SimpleSchema
 
   createdAt:
     type: Date
+    index: 1
     autoValue: Auto.createdAt
     optional: true

@@ -36,7 +36,7 @@ const disclaimerStyle = {
   width: '100%',
   display: 'block',
   padding: 5,
-  paddingLeft: rankStyle.width + 17
+  paddingLeft: 13
 }
 
 const colDivider = {
@@ -400,14 +400,14 @@ const Disclaimers = ({ report }) => {
   const admitted = idx(overbooking, _ => _.patients.total.admitted)
 
   if (misattributedRevenue > 0 || expected > 0 || admitted > 0) {
-    return <small className='text-muted' style={disclaimerStyle}>
+    return <span className='text-muted' style={disclaimerStyle}>
       {(expected > 0 || admitted > 0) && TAPi18n.__('reports.overbookingSummary', { expected, admitted })}
       &emsp;
       {(misattributedRevenue > 0) && <span className='text-muted'>
         {TAPi18n.__('reports.misattributedRevenue')}:&nbsp;
         <Round to={0} unit='€' number={misattributedRevenue} className='text-muted' />
       </span>}
-    </small>
+    </span>
   } else {
     return null
   }

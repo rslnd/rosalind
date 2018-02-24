@@ -15,11 +15,13 @@ const absolutelyNoPadding = {
   paddingBottom: 0
 }
 
-export const Report = ({ report, showRevenue, mapUserIdToName, assigneeReport, mapReportAsToHeader }) => (
+export const Report = ({ report, showRevenue, mapUserIdToName, assigneeReport, mapReportAsToHeader, children }) => (
   <div style={style}>
     <ReportSummary report={report} showRevenue={showRevenue} assigneeReport={assigneeReport} />
     <Box color={report.calendar.color} noPadding style={absolutelyNoPadding}>
       <ReportTable report={report} showRevenue={showRevenue} mapUserIdToName={mapUserIdToName} assigneeReport={assigneeReport} mapReportAsToHeader={mapReportAsToHeader} />
+
+      {children}
     </Box>
 
     {/* <div className="row">
