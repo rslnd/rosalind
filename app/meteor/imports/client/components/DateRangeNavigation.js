@@ -5,6 +5,7 @@ import { DayPickerRangeController } from 'react-dates'
 import { PortalWithState } from 'react-portal'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from './Icon'
+import { calendarStyle, calendarStyleOpen } from './DateNavigation'
 
 export class DateRangeNavigation extends React.Component {
   constructor (props) {
@@ -16,27 +17,9 @@ export class DateRangeNavigation extends React.Component {
       endDate: this.props.end
     }
 
-    this.handleCalendarOpen = this.handleCalendarOpen.bind(this)
     this.handleCalendarRangeChange = this.handleCalendarRangeChange.bind(this)
     this.handleFocusChange = this.handleFocusChange.bind(this)
     this.isFuture = this.isFuture.bind(this)
-  }
-
-  handleCalendarOpen ({ isOpen, openPortal }) {
-    return (e) => {
-      console.log({isOpen, e})
-      if (isOpen) { return }
-      openPortal()
-      const bodyRect = document.body.getBoundingClientRect()
-      const targetRect = e.currentTarget.getBoundingClientRect()
-
-      this.setState({
-        calendarPosition: {
-          top: targetRect.bottom,
-          right: bodyRect.right - targetRect.right - 30
-        }
-      })
-    }
   }
 
   handleFocusChange (focusedInput) {
@@ -73,7 +56,7 @@ export class DateRangeNavigation extends React.Component {
               <ButtonGroup>
 
                 <Button
-                  onMouseEnter={this.handleCalendarOpen({ isOpen, openPortal })}
+                  onMouseEnter={openPortal}
                   title={TAPi18n.__('time.calendar')}>
                   {
                     this.props.calendarText &&
@@ -84,14 +67,9 @@ export class DateRangeNavigation extends React.Component {
 
                 {
                   portal(
-                    isOpen && <div
+                    <div
                       className='hide-print'
-                      style={{
-                        position: 'fixed',
-                        zIndex: 50,
-                        marginRight: 30,
-                        ...this.state.calendarPosition
-                      }}>
+                      style={isOpen ? calendarStyleOpen : calendarStyle}>
                       <div onMouseLeave={closePortal}>
                         <DayPickerRangeController
                           onDatesChange={this.handleCalendarRangeChange}

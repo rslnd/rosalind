@@ -7,13 +7,22 @@ import { PortalWithState } from 'react-portal'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from './Icon'
 
+export const calendarStyle = {
+  position: 'fixed',
+  zIndex: 50,
+  top: 50,
+  right: 15,
+  display: 'none'
+}
+
+export const calendarStyleOpen = {
+  ...calendarStyle,
+  display: 'block'
+}
+
 class DateNavigationButtons extends React.Component {
   constructor (props) {
     super(props)
-
-    this.state = {
-      calendarPosition: null
-    }
 
     this.goToDate = this.goToDate.bind(this)
     this.dateToPath = this.dateToPath.bind(this)
@@ -24,10 +33,10 @@ class DateNavigationButtons extends React.Component {
     this.handleForwardDayClick = this.handleForwardDayClick.bind(this)
     this.handleForwardWeekClick = this.handleForwardWeekClick.bind(this)
     this.handleForwardMonthClick = this.handleForwardMonthClick.bind(this)
-    this.handleCalendarOpen = this.handleCalendarOpen.bind(this)
     this.handleCalendarDayChange = this.handleCalendarDayChange.bind(this)
     this.isToday = this.isToday.bind(this)
     this.isSelected = this.isSelected.bind(this)
+    this.initialVisibleMonth = this.initialVisibleMonth.bind(this)
   }
 
   dateToPath (date) {
@@ -79,22 +88,6 @@ class DateNavigationButtons extends React.Component {
     this.goToDate(moment(this.props.date).add(1, 'month'))
   }
 
-  handleCalendarOpen ({ isOpen, openPortal }) {
-    return (e) => {
-      if (isOpen) { return }
-      openPortal()
-      const bodyRect = document.body.getBoundingClientRect()
-      const targetRect = e.currentTarget.getBoundingClientRect()
-
-      this.setState({
-        calendarPosition: {
-          top: targetRect.bottom,
-          right: bodyRect.right - targetRect.right - 30
-        }
-      })
-    }
-  }
-
   handleCalendarDayChange (date) {
     const path = this.dateToPath(moment(date))
     this.props.history.replace(path)
@@ -106,6 +99,10 @@ class DateNavigationButtons extends React.Component {
 
   isSelected (day) {
     return day.isSame(this.props.date, 'day')
+  }
+
+  initialVisibleMonth () {
+    return this.props.date
   }
 
   render () {
@@ -178,27 +175,22 @@ class DateNavigationButtons extends React.Component {
                 <ButtonGroup>
                   <Button
                     key='calendar-button'
-                    onMouseEnter={this.handleCalendarOpen({ isOpen, openPortal })}
+                    onMouseEnter={openPortal}
                     title={TAPi18n.__('time.calendar')}>
                     <Icon name='calendar' />
                   </Button>
                   {
                     portal(
-                      isOpen && <div
+                      <div
                         className='hide-print'
-                        style={{
-                          position: 'fixed',
-                          zIndex: 50,
-                          marginRight: 30,
-                          ...this.state.calendarPosition
-                        }}>
+                        style={isOpen ? calendarStyleOpen : calendarStyle}>
                         <div onMouseLeave={closePortal}>
                           <DayPickerSingleDateController
                             onDateChange={this.handleCalendarDayChange}
                             date={this.props.date}
                             isDayHighlighted={this.isToday}
                             focused
-                            initialVisibleMonth={() => this.props.date}
+                            initialVisibleMonth={this.initialVisibleMonth}
                             enableOutsideDays
                             hideKeyboardShortcutsPanel
                             numberOfMonths={1}
