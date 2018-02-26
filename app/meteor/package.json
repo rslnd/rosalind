@@ -17,6 +17,7 @@
     "byline": "^5.0.0",
     "classnames": "^2.2.5",
     "color-hash": "^1.0.3",
+    "date-fns": "^2.0.0-alpha.7",
     "dedent": "^0.7.0",
     "dot-object": "^1.7.0",
     "drag-drop": "^2.12.1",
