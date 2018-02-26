@@ -86,7 +86,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapRe
           <th key={6} style={center} colSpan={2}>Neu/Std.</th>
         ]
       }
-      {assigneeReport && <th style={align} title='Einschub'>Ein</th>}
+      {assigneeReport && calendar && calendar.allowUnassigned && <th style={align} title='Einschub'>Ein</th>}
       {showRevenue && <th style={align} colSpan={2}>Umsatz</th>}
     </tr>
 
