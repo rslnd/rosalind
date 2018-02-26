@@ -15,3 +15,5 @@ export const darkGray = '#81868e'
 export const darkGrayDisabled = '#9398a1'
 
 export const text = '#333'
+
+export const fontSize = '16px'

@@ -6,7 +6,8 @@ import {
   grayActive,
   primary,
   primaryActive,
-  primaryDisabled
+  primaryDisabled,
+  fontSize
 } from './global'
 
 const animationSpeed = 1.6
@@ -75,6 +76,14 @@ export const muiTheme = createMuiTheme({
       },
       circleIndeterminate: {
         animation: `mui-progress-circular-dash ${1.4 / animationSpeed}s ease-in-out infinite`
+      }
+    },
+    MuiTableCell: {
+      typeHead: {
+        fontSize
+      },
+      typeBody: {
+        fontSize
       }
     }
   }

@@ -10,8 +10,9 @@ import { Box } from '../components/Box'
 import { Report } from './Report'
 import { PreviewBoxes } from './PreviewBoxes'
 import { Quarter } from './Quarter'
+import { Referrals } from './Referrals'
 import { FooterContainer } from '../layout/FooterContainer'
-import { Loading } from '../components/Loading';
+import { Loading } from '../components/Loading'
 
 const avoidPageBreak = {
   pageBreakInside: 'avoid'
@@ -55,6 +56,7 @@ export class ReportsScreen extends React.Component {
       reports,
       quarter,
       previews,
+      referrals,
       canShowRevenue,
       showRevenue,
       mapUserIdToName,
@@ -131,6 +133,16 @@ export class ReportsScreen extends React.Component {
                   <PreviewBoxes
                     previews={previews}
                     mapUserIdToUsername={mapUserIdToUsername}
+                    mapUserIdToName={mapUserIdToName} />
+                  <span className='weekPreviewLoaded' />
+                </div>
+            }
+
+            {
+              referrals &&
+                <div>
+                  <Referrals
+                    referrals={referrals}
                     mapUserIdToName={mapUserIdToName} />
                   <span className='weekPreviewLoaded' />
                 </div>

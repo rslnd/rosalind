@@ -13,6 +13,12 @@ const sidebarItems = ({ history }) => {
 
   return [
     {
+      name: 'patients.thisNext',
+      link: '/waitlist',
+      icon: 'angle-right',
+      roles: ['waitlist']
+    },
+    {
       name: 'appointments',
       icon: 'calendar',
       roles: ['admin', 'appointments'],
@@ -29,12 +35,6 @@ const sidebarItems = ({ history }) => {
         const newPath = '/' + [base, subItem.slug, date].filter(identity).join('/')
         history.push(newPath)
       }
-    },
-    {
-      name: 'patients.thisNext',
-      link: '/waitlist',
-      icon: 'angle-right',
-      roles: ['waitlist']
     },
     {
       name: 'inboundCalls',

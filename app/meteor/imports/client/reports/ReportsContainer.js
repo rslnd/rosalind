@@ -13,6 +13,7 @@ import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
 import { Tags } from '../../api/tags'
 import { Calendars } from '../../api/calendars'
+import { Referrals } from '../../api/referrals'
 import { ReportsScreen } from './ReportsScreen'
 import { withMethodData } from '../components/withMethodData'
 
@@ -96,10 +97,15 @@ const fetchQuarter = ({ day }) =>
   Reports.actions.generateQuarter.callPromise({ day })
     .then(quarter => ({ quarter }))
 
+const fetchReferrals = ({ date }) =>
+  Referrals.actions.tally.callPromise({ date: date.toDate() })
+    .then(referrals => ({ referrals }))
+
 export const ReportsContainer = compose(
   withRouter,
   withTracker(composer),
-  withMethodData(fetchPreview),
   withMethodData(fetchQuarter),
+  withMethodData(fetchPreview),
+  withMethodData(fetchReferrals),
   toClass
 )(ReportsScreen)
