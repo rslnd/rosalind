@@ -13,14 +13,14 @@
   resolved "https://registry.yarnpkg.com/@types/jss/-/jss-9.3.0.tgz#0f8484fd03ded206917be27b58217f274a0ad59f"
 
 "@types/react-transition-group@^2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-2.0.6.tgz#8903fa2cf540ba454461590bff811a787889617c"
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-2.0.7.tgz#2847292d54c5685d982ae5a3ecb6960946689d87"
   dependencies:
     "@types/react" "*"
 
 "@types/react@*":
-  version "16.0.34"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.34.tgz#7a8f795afd8a404a9c4af9539b24c75d3996914e"
+  version "16.0.38"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.38.tgz#76617433ea10274505f60bb86eddfdd0476ffdc2"
 
 Base64@~0.2.0:
   version "0.2.1"
@@ -163,10 +163,6 @@ array-find-index@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/array-find-index/-/array-find-index-1.0.2.tgz#df010aa1287e164bbda6f9723b0a96a1ec4187a1"
 
-array-flatten@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-2.1.1.tgz#426bb9da84090c1838d812c8150af20a8331e296"
-
 array-map@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/array-map/-/array-map-0.0.0.tgz#88a2bab73d1cf7bcd5c1b118a003f66f665fa662"
@@ -181,6 +177,14 @@ array.prototype.find@^2.0.4:
   dependencies:
     define-properties "^1.1.2"
     es-abstract "^1.7.0"
+
+array.prototype.flatten@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/array.prototype.flatten/-/array.prototype.flatten-1.2.1.tgz#a77ae1b64524ce373b137fade324d12040d3c680"
+  dependencies:
+    define-properties "^1.1.2"
+    es-abstract "^1.10.0"
+    function-bind "^1.1.1"
 
 asap@^2.0.3, asap@~2.0.3:
   version "2.0.6"
@@ -1993,7 +1997,7 @@ error-ex@^1.2.0:
   dependencies:
     is-arrayish "^0.2.1"
 
-es-abstract@^1.6.1, es-abstract@^1.7.0:
+es-abstract@^1.10.0, es-abstract@^1.6.1, es-abstract@^1.7.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.10.0.tgz#1ecb36c197842a00d8ee4c2dfd8646bb97d60864"
   dependencies:
@@ -2907,11 +2911,7 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.3.6"
 
-jss-camel-case@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/jss-camel-case/-/jss-camel-case-6.0.0.tgz#7cf8453e395c31fed931d11efbc885edcd61132e"
-
-jss-camel-case@^6.1.0:
+jss-camel-case@^6.0.0, jss-camel-case@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/jss-camel-case/-/jss-camel-case-6.1.0.tgz#ccb1ff8d6c701c02a1fed6fb6fb6b7896e11ce44"
   dependencies:
@@ -2931,12 +2931,6 @@ jss-expand@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/jss-expand/-/jss-expand-5.1.0.tgz#b1ad74ec18631f34f65a2124fcfceb6400610e3d"
 
-jss-extend@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/jss-extend/-/jss-extend-6.1.0.tgz#85f3d39944018e8f44b322c14fa316068aa7bb0b"
-  dependencies:
-    warning "^3.0.0"
-
 jss-extend@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/jss-extend/-/jss-extend-6.2.0.tgz#4af09d0b72fb98ee229970f8ca852fec1ca2a8dc"
@@ -2952,21 +2946,6 @@ jss-nested@^6.0.1:
   resolved "https://registry.yarnpkg.com/jss-nested/-/jss-nested-6.0.1.tgz#ef992b79d6e8f63d939c4397b9d99b5cbbe824ca"
   dependencies:
     warning "^3.0.0"
-
-jss-preset-default@^4.0.1:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/jss-preset-default/-/jss-preset-default-4.1.0.tgz#8a07d8de92cb0c55b70dc1919b802aed9cc4ebe9"
-  dependencies:
-    jss-camel-case "^6.0.0"
-    jss-compose "^5.0.0"
-    jss-default-unit "^8.0.2"
-    jss-expand "^5.1.0"
-    jss-extend "^6.1.0"
-    jss-global "^3.0.0"
-    jss-nested "^6.0.1"
-    jss-props-sort "^6.0.0"
-    jss-template "^1.0.1"
-    jss-vendor-prefixer "^7.0.0"
 
 jss-preset-default@^4.3.0:
   version "4.3.0"
@@ -2999,9 +2978,17 @@ jss-vendor-prefixer@^7.0.0:
   dependencies:
     css-vendor "^0.3.8"
 
-jss@^9.3.2, jss@^9.3.3:
+jss@^9.3.2:
   version "9.5.1"
   resolved "https://registry.yarnpkg.com/jss/-/jss-9.5.1.tgz#c869f38cdc44a32f4425fe007ea46b8891536326"
+  dependencies:
+    is-in-browser "^1.1.3"
+    symbol-observable "^1.1.0"
+    warning "^3.0.0"
+
+jss@^9.3.3:
+  version "9.8.0"
+  resolved "https://registry.yarnpkg.com/jss/-/jss-9.8.0.tgz#77830def563870103f8671ed31ce3a3d2f32aa2b"
   dependencies:
     is-in-browser "^1.1.3"
     symbol-observable "^1.1.0"
@@ -3239,9 +3226,9 @@ material-colors@^1.2.1:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.5.tgz#5292593e6754cb1bcc2b98030e4e0d6a3afc9ea1"
 
-material-ui@^1.0.0-beta.34:
-  version "1.0.0-beta.34"
-  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-1.0.0-beta.34.tgz#bea328d3d34df7ab8bf01c936d08adee11195b80"
+material-ui@^1.0.0-beta.35:
+  version "1.0.0-beta.35"
+  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-1.0.0-beta.35.tgz#eeac6be307c0469943c7686e5c6bd4eaa6b1b563"
   dependencies:
     "@types/jss" "^9.3.0"
     "@types/react-transition-group" "^2.0.6"
@@ -3268,7 +3255,7 @@ material-ui@^1.0.0-beta.34:
     react-scrollbar-size "^2.0.2"
     react-transition-group "^2.2.1"
     recompose "^0.26.0"
-    scroll "^2.0.1"
+    scroll "^2.0.3"
     warning "^3.0.0"
 
 media-typer@0.3.0:
@@ -4046,9 +4033,9 @@ react-color@2.13.8:
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
 
-react-dates@^16.3.0:
-  version "16.3.0"
-  resolved "https://registry.yarnpkg.com/react-dates/-/react-dates-16.3.0.tgz#165a872cc9d38c7602557fd6b0affb5569b8b172"
+react-dates@^16.3.5:
+  version "16.3.5"
+  resolved "https://registry.yarnpkg.com/react-dates/-/react-dates-16.3.5.tgz#3c73b22755859efd842c5637a759426d12faccb6"
   dependencies:
     airbnb-prop-types "^2.8.1"
     consolidated-events "^1.1.1"
@@ -4060,8 +4047,8 @@ react-dates@^16.3.0:
     react-addons-shallow-compare "^15.6.2"
     react-moment-proptypes "^1.5.0"
     react-portal "^4.1.2"
-    react-with-styles "=2.2.0"
-    react-with-styles-interface-css "^3.0.0"
+    react-with-styles "^3.1.0"
+    react-with-styles-interface-css "^4.0.1"
 
 react-deep-force-update@^1.0.0:
   version "1.0.1"
@@ -4076,7 +4063,7 @@ react-dom@^16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-event-listener@^0.5.0, react-event-listener@^0.5.1:
+react-event-listener@^0.5.1:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/react-event-listener/-/react-event-listener-0.5.3.tgz#a8b492596ad601865314fcc2c18cb87b6ce3876e"
   dependencies:
@@ -4095,17 +4082,7 @@ react-input-autosize@^2.1.2:
   dependencies:
     prop-types "^15.5.8"
 
-react-jss@^8.1.0:
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/react-jss/-/react-jss-8.2.1.tgz#b2905063ba8b950f095a139a75232d851c79e15e"
-  dependencies:
-    hoist-non-react-statics "^2.3.1"
-    jss "^9.3.2"
-    jss-preset-default "^4.0.1"
-    prop-types "^15.6.0"
-    theming "^1.3.0"
-
-react-jss@^8.3.3:
+react-jss@^8.1.0, react-jss@^8.3.3:
   version "8.3.3"
   resolved "https://registry.yarnpkg.com/react-jss/-/react-jss-8.3.3.tgz#677a57569d3e4f5099fcdeafeddd8d2c62ab5977"
   dependencies:
@@ -4237,12 +4214,13 @@ react-s-alert@^1.4.1:
     babel-runtime "^6.23.0"
 
 react-scrollbar-size@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/react-scrollbar-size/-/react-scrollbar-size-2.0.2.tgz#237dd091fa39dec8e3a6f720807787703c5ebf9e"
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-scrollbar-size/-/react-scrollbar-size-2.1.0.tgz#105e797135cab92b1f9e16f00071db7f29f80754"
   dependencies:
-    babel-runtime "^6.23.0"
-    prop-types "^15.5.10"
-    react-event-listener "^0.5.0"
+    babel-runtime "^6.26.0"
+    prop-types "^15.6.0"
+    react-event-listener "^0.5.1"
+    stifle "^1.0.2"
 
 react-select@^1.2.1:
   version "1.2.1"
@@ -4311,7 +4289,7 @@ react-vis@^1.8.3:
     prop-types "^15.5.8"
     react-motion "^0.4.8"
 
-react-with-direction@^1.3.0:
+react-with-direction@^1.1.0, react-with-direction@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-with-direction/-/react-with-direction-1.3.0.tgz#9885f5941aa986be753db95a41e8f3d8f8de97ff"
   dependencies:
@@ -4324,22 +4302,23 @@ react-with-direction@^1.3.0:
     object.values "^1.0.4"
     prop-types "^15.6.0"
 
-react-with-styles-interface-css@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-with-styles-interface-css/-/react-with-styles-interface-css-3.0.0.tgz#ebb000c23f75567f25af6792ab7a29089d798fda"
+react-with-styles-interface-css@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-with-styles-interface-css/-/react-with-styles-interface-css-4.0.1.tgz#79d0a40bae388e11f15362d35aa52e8917982db0"
   dependencies:
     aphrodite "^1.2.5"
-    array-flatten "^2.1.1"
+    array.prototype.flatten "^1.2.1"
     global-cache "^1.2.1"
 
-react-with-styles@=2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/react-with-styles/-/react-with-styles-2.2.0.tgz#c85352d9e5951824b259bf9fad11dbcf74a15571"
+react-with-styles@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-with-styles/-/react-with-styles-3.1.0.tgz#bf70a90cc7d54cbe866e5d6955bf9c21cf260d09"
   dependencies:
     deepmerge "^1.5.2"
     global-cache "^1.2.1"
     hoist-non-react-statics "^2.3.1"
     prop-types "^15.6.0"
+    react-with-direction "^1.1.0"
 
 react@^16.2.0:
   version "16.2.0"
@@ -4654,9 +4633,9 @@ sass-graph@^2.2.4:
     scss-tokenizer "^0.2.3"
     yargs "^7.0.0"
 
-scroll@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/scroll/-/scroll-2.0.1.tgz#b4c7d27e8bcf3ae8a58a042f27268ae3f55f9ccd"
+scroll@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/scroll/-/scroll-2.0.3.tgz#0951b785544205fd17753bc3d294738ba16fc2ab"
   dependencies:
     rafl "~1.2.1"
 
@@ -4823,6 +4802,10 @@ stdout-stream@^1.4.0:
   resolved "https://registry.yarnpkg.com/stdout-stream/-/stdout-stream-1.4.0.tgz#a2c7c8587e54d9427ea9edb3ac3f2cd522df378b"
   dependencies:
     readable-stream "^2.0.1"
+
+stifle@^1.0.2:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/stifle/-/stifle-1.0.4.tgz#8b3bcdf52419b0a9c79e35adadce50123c1d8e99"
 
 stream-browserify@^2.0.0, stream-browserify@^2.0.1:
   version "2.0.1"
