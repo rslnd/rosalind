@@ -24,9 +24,6 @@ const composer = (props, onData) => {
     Meteor.subscribe('inboundCalls')
   }
 
-  // Try to subscribe to appointments and schedules for caching
-  // The server will check for currentUser or a connection from
-  // a trusted network
   const loading = [
     Meteor.subscribe('users'),
     Meteor.subscribe('groups'),
@@ -34,6 +31,9 @@ const composer = (props, onData) => {
     Meteor.subscribe('calendars')
   ].some(s => !s.ready())
 
+  // Try to subscribe to appointments and schedules for caching
+  // The server will check for currentUser or a connection from
+  // a trusted network
   Meteor.subscribe('appointments-today')
   Meteor.subscribe('appointments-future')
   Meteor.subscribe('schedules')

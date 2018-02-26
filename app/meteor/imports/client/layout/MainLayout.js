@@ -57,10 +57,6 @@ export class MainLayout extends React.Component {
   render () {
     const { children, loading, currentUser, loggingIn, locale, isPrint } = this.props
 
-    if (loading) {
-      return <Loading />
-    }
-
     const open = this.props.sidebarOpen || this.state.sidebarForceOpen
 
     // Force content wrapper to stay full-width to avoid reflow, that's why
@@ -113,7 +109,11 @@ export class MainLayout extends React.Component {
             }
           </div>
           <div className='content-wrapper print-no-margin' style={contentStyle}>
-            {children}
+            {
+              loading
+              ? <Loading />
+              : children
+            }
           </div>
           <FooterContainer />
           {alwaysRender()}
