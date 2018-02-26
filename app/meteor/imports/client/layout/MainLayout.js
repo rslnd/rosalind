@@ -6,6 +6,7 @@ import { FooterContainer } from './FooterContainer'
 import { Alerts } from './Alerts'
 import { Login } from '../users/Login'
 import { MaintenanceMessageContainer } from './MaintenanceMessageContainer'
+import { Loading } from '../components/Loading'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -54,7 +55,11 @@ export class MainLayout extends React.Component {
   }
 
   render () {
-    const { children, currentUser, loggingIn, locale, isPrint } = this.props
+    const { children, loading, currentUser, loggingIn, locale, isPrint } = this.props
+
+    if (loading) {
+      return <Loading />
+    }
 
     const open = this.props.sidebarOpen || this.state.sidebarForceOpen
 

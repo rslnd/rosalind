@@ -27,10 +27,13 @@ const composer = (props, onData) => {
   // Try to subscribe to appointments and schedules for caching
   // The server will check for currentUser or a connection from
   // a trusted network
-  Meteor.subscribe('users')
-  Meteor.subscribe('groups')
-  Meteor.subscribe('tags')
-  Meteor.subscribe('calendars')
+  const loading = [
+    Meteor.subscribe('users'),
+    Meteor.subscribe('groups'),
+    Meteor.subscribe('tags'),
+    Meteor.subscribe('calendars')
+  ].some(s => !s.ready())
+
   Meteor.subscribe('appointments-today')
   Meteor.subscribe('appointments-future')
   Meteor.subscribe('schedules')
@@ -41,7 +44,7 @@ const composer = (props, onData) => {
 
   const isPrint = props.location.hash === '#print'
 
-  onData(null, { ...props, currentUser, locale, loggingIn, sidebarOpen, isPrint })
+  onData(null, { ...props, loading, currentUser, locale, loggingIn, sidebarOpen, isPrint })
 }
 
 const MainLayoutContainer = withRouter(composeWithTracker(composer, Loading)(MainLayout))
