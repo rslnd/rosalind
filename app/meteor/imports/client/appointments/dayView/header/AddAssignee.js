@@ -81,7 +81,7 @@ export class AddAssignee extends React.Component {
               <ClickAwayListener onClickAway={this.handleAddUserPopoverClose}>
                 <Paper style={popoverStyle}>
                   <UserPickerContainer
-                    autofocus
+                    autoFocus
                     onChange={this.handleAddUser} />
                 </Paper>
               </ClickAwayListener>

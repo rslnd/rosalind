@@ -7,7 +7,6 @@ import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 
 export const Referrals = ({ referrals, mapUserIdToName }) => {
-  console.log('r', referrals)
   const hasData = referrals.total.referred.total || referrals.total.redeemed.total
   if (!hasData) { return null }
 
