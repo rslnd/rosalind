@@ -17,6 +17,7 @@ export NPM_CONFIG_LOGLEVEL=warn
 export METEOR_PRETTY_OUTPUT=0
 export METEOR_WATCH_FORCE_POLLING=true
 export METEOR_WATCH_POLLING_INTERVAL_MS=1800000
+export TOOL_NODE_FLAGS="--max-old-space-size=4096"
 
 retry() {
   local result=0
