@@ -1,4 +1,4 @@
-import publication from './publication'
+import { publication } from './publication'
 import security from './security'
 import '../table'
 

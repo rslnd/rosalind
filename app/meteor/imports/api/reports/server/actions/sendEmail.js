@@ -53,6 +53,10 @@ export const sendEmail = new ValidatedMethod({
       const { title, text } = renderEmail({ reports, mapUserIdToName, mapAssigneeType, mapCalendar })
       const pdf = await renderPdf({ day })
 
+      if (!pdf) {
+        throw new Meteor.Error('Failed to generate pdf, not sending email.')
+      }
+
       const filename = [
         dayToSlug(day),
         TAPi18n.__('reports.thisDaySingular', null, 'de-AT'),
