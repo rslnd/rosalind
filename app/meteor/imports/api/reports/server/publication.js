@@ -13,11 +13,14 @@ export const publication = () => {
       to: Match.Optional(Date)
     }))
 
-    if (!this.userId) { return }
-    if (!Roles.userIsInRole(this.userId, ['reports', 'admin'], Roles.GLOBAL_GROUP) ||
-      !(this.connection && isTrustedNetwork(this.connection.clientAddress))) { return }
+    if (!(
+      (this.userId &&
+        Roles.userIsInRole(this.userId, ['reports', 'admin'], Roles.GLOBAL_GROUP)) ||
+      (this.connection &&
+        isTrustedNetwork(this.connection.clientAddress))
+      )) { return }
 
-    const canShowRevenue = Roles.userIsInRole(this.userId, ['reports-showRevenue', 'admin'], Roles.GLOBAL_GROUP) || isTrustedNetwork(this.connection.clientAddress)
+    const canShowRevenue = Roles.userIsInRole(this.userId, ['reports-showRevenue', 'admin'], Roles.GLOBAL_GROUP) || (this.connection && isTrustedNetwork(this.connection.clientAddress))
 
     const fields = canShowRevenue
       ? Reports.fields.withRevenue
