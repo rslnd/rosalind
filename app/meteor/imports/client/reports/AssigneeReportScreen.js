@@ -61,7 +61,8 @@ export class AssigneeReportScreen extends React.Component {
       canShowRevenue,
       handleChangeAssignee,
       reports,
-      mapUserIdToName
+      mapUserIdToName,
+      mapReportAsToHeader
     } = this.props
 
     const formattedRange = formatRange({
@@ -115,6 +116,7 @@ export class AssigneeReportScreen extends React.Component {
                   report={report}
                   showRevenue={this.state.showRevenue}
                   mapUserIdToName={mapUserIdToName}
+                  mapReportAsToHeader={mapReportAsToHeader}
                   assigneeReport
                 />
               </div>

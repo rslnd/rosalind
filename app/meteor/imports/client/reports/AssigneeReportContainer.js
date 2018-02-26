@@ -13,6 +13,7 @@ import { getAssignee } from '../../api/reports/methods/getAssignee'
 import { Calendars } from '../../api/calendars'
 import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
+import { Tags } from '../../api/tags'
 import { AssigneeReportScreen } from './AssigneeReportScreen'
 
 const composer = props => {
@@ -68,6 +69,11 @@ const composer = props => {
     props.history.replace(path)
   }
 
+  const mapReportAsToHeader = reportAs => {
+    const tag = Tags.findOne({ reportAs })
+    return (tag && tag.reportHeader) || reportAs
+  }
+
   return {
     loading,
     user,
@@ -77,7 +83,8 @@ const composer = props => {
     isPrint,
     reports,
     handleRangeChange,
-    handleChangeAssignee
+    handleChangeAssignee,
+    mapReportAsToHeader
   }
 }
 
