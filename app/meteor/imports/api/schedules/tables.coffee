@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import Helpers from '../../util/helpers'
 import { fullNameWithTitle } from '../users/methods/name'
+import { Users } from '../users'
 import Schedules from './collection'
 import Schema from './schema'
 
@@ -49,7 +50,7 @@ module.exports =
     name: 'schedulesOverride'
     collection: Schedules
     columns: [
-      { data: 'userId', title: 'Mitarbeiter', render: fullNameWithTitle }
+      { data: 'userId', title: 'Mitarbeiter', render: (_id) -> fullNameWithTitle(Users.findOne({ _id })) }
       { data: 'available', title: 'Anwesend' }
       { data: 'note', title: 'Notiz' }
       { data: 'start', title: 'von' }
