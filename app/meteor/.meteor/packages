@@ -24,6 +24,13 @@ promise@0.10.0-beta.32
 modules@0.11.0-beta.32
 dynamic-import@0.2.0-beta.32
 
+# Testing
+# While these packages should have the debug-only flag set,
+# they are removed before building just to make sure.
+# Keep this section synced with production/build.sh
+xolvio:backdoor
+xolvio:cleaner
+
 # React
 react-meteor-data
 react-template-helper
