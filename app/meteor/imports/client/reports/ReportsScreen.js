@@ -144,7 +144,7 @@ export class ReportsScreen extends React.Component {
                   <Referrals
                     referrals={referrals}
                     mapUserIdToName={mapUserIdToName} />
-                  <span className='weekPreviewLoaded' />
+                  <span className='referralsLoaded' />
                 </div>
             }
 
