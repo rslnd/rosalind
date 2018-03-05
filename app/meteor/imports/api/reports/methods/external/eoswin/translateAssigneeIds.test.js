@@ -38,14 +38,14 @@ describe('api', function () {
       it('does not fail if assignee has type field', () => {
         expect(() => translateAssigneeIds(mapIds)({
           ...report,
-          A12: { type: 'external' }
+          A7: { type: 'external' }
         })).to.not.throw()
       })
 
       it('merges different assignee types', () => {
         expect(translateAssigneeIds(mapIds)({
           ...report,
-          A12: { type: 'external' }
+          A7: { type: 'external' }
         })).to.eql({
           aaa: 1,
           bbb: { ok: 'cool' },
@@ -56,7 +56,7 @@ describe('api', function () {
       it('removed assigneeId field if assignee has a type field', () => {
         expect(translateAssigneeIds(mapIds)({
           ...report,
-          A12: { type: 'external', assigneeId: 'A13' }
+          A7: { type: 'external', assigneeId: 'A13' }
         })).to.eql({
           aaa: 1,
           bbb: { ok: 'cool' },
