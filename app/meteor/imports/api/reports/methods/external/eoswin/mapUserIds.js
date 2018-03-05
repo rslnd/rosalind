@@ -15,7 +15,7 @@ export const mapUserIds = ({ Users }) => {
 // HACK: Hardcoded id mappings
 export const specialAssigneeType = id => {
   switch (normalizeEoswinId(id)) {
-    case 12: return 'external'
+    case 7: return 'external'
   }
 }
 
