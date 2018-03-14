@@ -25,7 +25,6 @@ export const tally = ({ Referrals }) => {
           throw new Meteor.Error(403, 'Not authorized')
         }
       }
-      console.log(referredBy)
 
       const selector = referredBy ? { referredBy } : {}
       const referrals = Referrals.find(selector).fetch()

@@ -2,6 +2,12 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
 export const schema = new SimpleSchema({
+  type: {
+    type: String,
+    optional: true,
+    allowedValues: ['external']
+  },
+
   patientId: {
     type: SimpleSchema.RegEx.Id
   },
