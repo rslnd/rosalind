@@ -47,7 +47,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
                   </Cell>
                 )
               }
-              <Cell colSpan={2}>Gesamt</Cell>
+              <Cell style={separatorStyle} colSpan={2}>Gesamt</Cell>
             </TableRow>
             <TableRow>
               <Cell>{/* Name */}</Cell>
@@ -55,19 +55,19 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
                 columns.map(c =>
                   [
                     <Cell key={`${c._id}-referred`}>
-                      <Icon name='commenting-o' />
+                      <Referred />
                     </Cell>,
                     <Cell key={`${c._id}-redeemed`}>
-                      <Icon name='check' />
+                      <Redeemed />
                     </Cell>
                   ]
                 )
               }
-              <Cell>
-                <Icon name='commenting-o' />
+              <Cell style={separatorStyle}>
+                <Referred />
               </Cell>
               <Cell>
-                <Icon name='check' />
+                <Redeemed />
               </Cell>
             </TableRow>
           </TableHead>
@@ -94,7 +94,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
                       ]
                     )
                   }
-                  <Cell>
+                  <Cell style={separatorStyle}>
                     <Value
                       total={a.referred.total}
                       today={a.referredToday.total}
@@ -116,6 +116,20 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
   )
 }
 
+const separatorStyle = {
+  borderLeft: '1px solid #ccc'
+}
+
+const Referred = () =>
+  <Icon
+    name='commenting-o'
+    title='Ausgesprochene Empfehlungen' />
+
+const Redeemed = () =>
+  <Icon
+    name='check'
+    title='Von PatientIn in Anspruch genommene Empfehlungen' />
+
 const Cell = ({ children, ...props }) =>
   <TableCell padding='dense' {...props}>
     {children}
@@ -123,7 +137,7 @@ const Cell = ({ children, ...props }) =>
 
 const Value = ({ total, today }) =>
   <span>
-    {total}
+    {total && total > 0 ? total : null}
     {
       today && today > 0
         ? <span className='text-muted'>

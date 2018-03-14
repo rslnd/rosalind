@@ -1,5 +1,6 @@
 import idx from 'idx'
-import { toClass } from 'recompose'
+import { compose } from 'recompose'
+import fromPairs from 'lodash/fromPairs'
 import {
   parse as fromQuery,
   stringify as toQuery
@@ -14,7 +15,9 @@ import { Calendars } from '../../api/calendars'
 import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
 import { Tags } from '../../api/tags'
+import { Referrals } from '../../api/referrals'
 import { AssigneeReportScreen } from './AssigneeReportScreen'
+import { withMethodData } from '../components/withMethodData'
 
 const composer = props => {
   const username = idx(props, _ => _.match.params.username)
@@ -74,6 +77,9 @@ const composer = props => {
     return (tag && tag.reportHeader) || reportAs
   }
 
+  const userIdToNameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
+  const mapUserIdToName = id => userIdToNameMapping[id]
+
   return {
     loading,
     user,
@@ -84,8 +90,26 @@ const composer = props => {
     reports,
     handleRangeChange,
     handleChangeAssignee,
-    mapReportAsToHeader
+    mapReportAsToHeader,
+    mapUserIdToName
   }
 }
 
-export const AssigneeReportContainer = withRouter(toClass(withTracker(composer)(AssigneeReportScreen)))
+const fetchReferrals = ({ from, to, user }) => {
+  if (user) {
+    return Referrals.actions.tally.callPromise({
+      date: new Date(),
+      from: from.toDate(),
+      to: to.toDate(),
+      referredBy: user._id
+    }).then(referrals => ({ referrals }))
+  } else {
+    return Promise.resolve()
+  }
+}
+
+export const AssigneeReportContainer = compose(
+  withRouter,
+  withTracker(composer),
+  withMethodData(fetchReferrals),
+)(AssigneeReportScreen)

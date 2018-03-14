@@ -10,6 +10,7 @@ import { Loading } from '../components/Loading'
 import { DateRangeNavigation } from '../components/DateRangeNavigation'
 import { Box } from '../components/Box'
 import { Report } from './Report'
+import { Referrals } from './Referrals'
 import { FooterContainer } from '../layout/FooterContainer'
 import { UserPickerContainer } from '../users/UserPickerContainer'
 import { fullNameWithTitle } from '../../api/users/methods/name'
@@ -57,6 +58,7 @@ export class AssigneeReportScreen extends React.Component {
       from,
       to,
       user,
+      referrals,
       handleRangeChange,
       canShowRevenue,
       handleChangeAssignee,
@@ -125,6 +127,15 @@ export class AssigneeReportScreen extends React.Component {
                 <p>{TAPi18n.__('reports.emptyAssignee')}</p>
               </Box>
             </div>
+          }
+          {
+            user && referrals && referrals.assignees[0] &&
+              <div>
+                <Referrals
+                  referrals={referrals}
+                  mapUserIdToName={mapUserIdToName} />
+                <span className='referralsLoaded' />
+              </div>
           }
         </div>
       </div>

@@ -6,6 +6,7 @@ import Alert from 'react-s-alert'
 import { Referrals } from '../../../api/referrals'
 import { Tags } from '../../../api/tags'
 import { Calendars } from '../../../api/calendars'
+import { Appointments } from '../../../api/appointments'
 import { ReferralsWidget } from './ReferralsWidget'
 
 const composer = props => {
@@ -16,16 +17,23 @@ const composer = props => {
   }
 
   const referrals = Referrals.find({ patientId }).fetch()
+  const appointments = Appointments.find({ patientId }).fetch()
 
-  const existingReferral = ({ _id }) => find(referrals, r => r.referredTo === _id)
-  const isReferrable = ({ _id }) => !existingReferral({ _id })
+  const existingReferral = toId => find(referrals, r => r.referredTo === toId)
+  const existingAppointment = toId => find(appointments, a =>
+    a.calendarId === toId ||
+    a.tags && a.tags.includes(toId)
+  )
+  const isReferrable = toId =>
+    !existingReferral(toId) &&
+    !existingAppointment(toId)
 
-  const handleClick = ({ _id }) => () => {
-    if (isReferrable({ _id })) {
+  const handleClick = toId => () => {
+    if (isReferrable(toId)) {
       Alert.success(TAPi18n.__('appointments.referralSuccess'))
       return Referrals.actions.insert.callPromise({
         patientId,
-        referredTo: _id,
+        referredTo: toId,
         appointmentId: props.appointment._id
       })
     }
@@ -37,8 +45,8 @@ const composer = props => {
       ...x,
       existingReferral: existing,
       existingReferralBySameAssignee: existing && existing.referredBy === Meteor.userId(),
-      isReferrable: isReferrable(x),
-      handleClick: handleClick(x)
+      isReferrable: isReferrable(x._id),
+      handleClick: handleClick(x._id)
     }
   }
 
@@ -49,7 +57,7 @@ const composer = props => {
     .fetch().map(mapper)
 
   const length = [ ...referrableTags, ...referrableCalendars ].filter(x =>
-    x.existingReferralBySameAssignee || isReferrable(x)
+    x.existingReferralBySameAssignee || isReferrable(x._id)
   ).length
 
   return {
