@@ -31,6 +31,7 @@
     "noValue": "k.A.",
     "updateAvailableMessage": "Wenn du eine Minute Zeit hast, bitte starte das Programm neu. Es ist ein Update verfügbar, das Sicherheit und Stabilität verbessert.",
     "updateInstallNow": "OK, Los!",
+    "clientRegistrationFailed": "Entschuldigung! Es liegt ein Problem mit diesem Gerät vor. Bitte über Support-Chat melden. Danke!",
     "experimentalWarning": {
       "title": "Experimentelle Funktion",
       "body": "Diese Funktion befindet sich noch in aktiver Entwicklung und ist mit Vorsicht zu benutzen."

@@ -6,6 +6,7 @@ try
   window.native =
     electron: process.versions.electron
     settings: null
+    systemInfo: 
     editSettings: -> ipcRenderer.send('settings/edit')
     log: (options) -> ipcRenderer.send('log', options)
     print: (options) -> ipcRenderer.send('window/print', options)
@@ -15,10 +16,12 @@ try
 
   ipcRenderer.on 'settings', (e, settings) ->
     window.native.settings = settings
+    window.native.events.emit('settings', settings)
     console.log('[Electron Native] Settings', window.native.settings)
 
   ipcRenderer.on 'version', (e, version) ->
     window.native.version = version
+    window.native.events.emit('version', version)
     console.log('[Electron Native] Version', window.native.version)
 
 

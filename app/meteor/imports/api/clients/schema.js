@@ -3,7 +3,9 @@ import Auto from '../../util/schema/auto'
 
 export const schema = new SimpleSchema({
   clientKey: {
-    type: String
+    type: String,
+    min: 200,
+    index: 1
   },
 
   description: {
@@ -24,6 +26,11 @@ export const schema = new SimpleSchema({
   lastActionAt: {
     type: Date,
     optional: true
+  },
+
+  version: {
+    type: String,
+    min: 3
   },
 
   settings: {
