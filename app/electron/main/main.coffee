@@ -9,6 +9,7 @@ require './debugger'
 updater = require './updater'
 window = require './window'
 logger = require './logger'
+systemInfo = require './systemInfo'
 
 logger.start()
 
@@ -29,6 +30,7 @@ start = ->
       logger.ready('[Main] Main window loaded')
       settings.send(ipcReceiver: mainWindow)
       updater.sendVersion(ipcReceiver: mainWindow)
+      systemInfo.send(ipcReceiver: mainWindow)
       watch.start(ipcReceiver: mainWindow)
       print.start(ipcReceiver: mainWindow)
       shortcuts.updateShortcuts()

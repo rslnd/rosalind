@@ -5,27 +5,35 @@ import { Clients } from '../../api/clients'
 
 export default () => {
   if (window.native) {
-    let settings = {}
+    let settings = null
     let version = null
+    let systemInfo = null
 
     const attemptRegistration = async () => {
-      console.log('[Client] Attempting registration')
-      const clientKey = settings.native.clientKey
+      if (settings && version && systemInfo) {
+        const clientKey = settings.native.clientKey
 
-      const isOk = await Clients.actions.register.callPromise({
-        clientKey,
-        version,
-        settings: omit(['clientKey'])(settings),
-        systemInfo: {}
-      })
+        const isOk = await Clients.actions.register.callPromise({
+          clientKey,
+          version,
+          settings: omit(['clientKey'])(settings),
+          systemInfo: {}
+        })
 
-      if (!isOk) {
-        Alert.error(TAPi18n.__('ui.clientRegistrationFailed'), { timeout: false })
+        console.log('[Client] Attempting registration', { version, systemInfo, isOk })
+        if (!isOk) {
+          Alert.error(TAPi18n.__('ui.clientRegistrationFailed'), { timeout: false })
+        }
       }
     }
 
     window.native.events.on('settings', s => {
       settings = s
+      attemptRegistration()
+    })
+
+    window.native.events.on('systemInfo', s => {
+      systemInfo = s
       attemptRegistration()
     })
 

@@ -6,7 +6,7 @@ try
   window.native =
     electron: process.versions.electron
     settings: null
-    systemInfo: 
+    systemInfo: null
     editSettings: -> ipcRenderer.send('settings/edit')
     log: (options) -> ipcRenderer.send('log', options)
     print: (options) -> ipcRenderer.send('window/print', options)
@@ -24,6 +24,10 @@ try
     window.native.events.emit('version', version)
     console.log('[Electron Native] Version', window.native.version)
 
+  ipcRenderer.on 'systemInfo', (e, systemInfo) ->
+    window.native.systemInfo = systemInfo
+    window.native.events.emit('systemInfo', systemInfo)
+    console.log('[Electron Native] systemInfo', window.native.systemInfo)
 
   allowedEvents = [
     'import/dataTransfer',
