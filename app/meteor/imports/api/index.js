@@ -17,12 +17,11 @@ import { Referrals } from './referrals'
 import { Reports } from './reports'
 import { Search } from './search'
 import { Settings } from './settings'
-import { Cache } from './cache'
+import { Clients } from './clients'
 
 export {
   Users,
   Groups,
-  Cache,
   Patients,
   Calendars,
   Appointments,
@@ -39,5 +38,6 @@ export {
   Search,
   Settings,
   Tags,
-  Timesheets
+  Timesheets,
+  Clients
 }

@@ -4,10 +4,11 @@ import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Events } from '../../../../../api/events'
 import { Users } from '../../../../../api/users'
+import { subscribe } from '../../../../../util/meteor/subscribe'
 
 Template.systemEvents.onCreated ->
   @autorun =>
-    @subscribe('events')
+    subscribe('events')
 
 Template.systemEvents.helpers
   personName: ->

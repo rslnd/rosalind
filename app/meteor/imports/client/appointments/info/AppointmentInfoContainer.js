@@ -13,6 +13,7 @@ import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
 import { Comments } from '../../../api/comments'
 import { Calendars } from '../../../api/calendars'
+import { subscribe } from '../../../util/meteor/subscribe'
 import { AppointmentInfo } from './AppointmentInfo'
 import { calculateRevenue } from '../new/RevenueField'
 import { translateObject } from '../../components/form/translateObject'
@@ -31,7 +32,7 @@ let AppointmentInfoContainer = reduxForm({
 })(AppointmentInfo)
 
 const composer = props => {
-  const subscription = Meteor.subscribe('appointment', props.appointmentId)
+  const subscription = subscribe('appointment', { appointmentId: props.appointmentId })
   const appointment = Appointments.findOne({ _id: props.appointmentId })
   const loading = appointment.patientId && !subscription.ready()
 

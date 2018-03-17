@@ -1,7 +1,7 @@
 import { check, Match } from 'meteor/check'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 
-export const isTrustedNetwork = (ip) => {
+const validateIp = ip =>
   check(ip, Match.Where((s) => {
     if (typeof s === 'undefined') { return true }
     if (s === null) { return true }
@@ -11,10 +11,11 @@ export const isTrustedNetwork = (ip) => {
     return false
   }))
 
+export const isTrustedNetwork = ip => {
+  validateIp(ip)
+
   // Requests from localhost are trusted
-  if (ip === null) {
-    return true
-  }
+  if (isLocalhost(ip)) { return true }
 
   let allowedIps = process.env.PASSWORDLESS_LOGIN_IP
   if (ip && allowedIps) {
@@ -23,4 +24,9 @@ export const isTrustedNetwork = (ip) => {
   } else {
     return false
   }
+}
+
+export const isLocalhost = ip => {
+  validateIp(ip)
+  return ip === null
 }

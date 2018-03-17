@@ -1,10 +1,10 @@
 import logging from './logging'
-import publication from './publication'
+import security from './security'
 import worker from './worker'
 import '../table'
 
 export default function () {
   logging()
-  publication()
+  security()
   worker()
 }

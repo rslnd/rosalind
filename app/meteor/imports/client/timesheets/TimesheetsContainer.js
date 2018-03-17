@@ -8,6 +8,7 @@ import { Loading } from '../components/Loading'
 import { Timesheets } from '../../api/timesheets'
 import { Schedules } from '../../api/schedules'
 import { TimesheetsScreen } from './TimesheetsScreen'
+import { subscribe } from '../../util/meteor/subscribe'
 
 const parseDateRange = (dateRange) => {
   const date = dateRange ? moment(dateRange, 'YYYY-MM-DD') : moment()
@@ -22,7 +23,7 @@ let userIdStore = new ReactiveVar()
 const composer = (props, onData) => {
   const { start, end } = parseDateRange(props.match && props.match.params.dateRange)
   const userId = userIdStore.get() || Meteor.userId()
-  const subscription = Meteor.subscribe('timesheets-range', {
+  const subscription = subscribe('timesheets-range', {
     userId,
     start: start.toDate(),
     end: end.toDate()

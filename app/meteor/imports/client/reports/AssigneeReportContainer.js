@@ -18,6 +18,7 @@ import { Tags } from '../../api/tags'
 import { Referrals } from '../../api/referrals'
 import { AssigneeReportScreen } from './AssigneeReportScreen'
 import { withMethodData } from '../components/withMethodData'
+import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = props => {
   const username = idx(props, _ => _.match.params.username)
@@ -28,7 +29,7 @@ const composer = props => {
   const from = search.from && moment(search.from) || moment().startOf('month')
   const to = search.to && moment(search.to) || moment().endOf('day')
 
-  const subscription = Meteor.subscribe('reports', {
+  const subscription = subscribe('reports', {
     from: from.toDate(),
     to: to.toDate()
   })

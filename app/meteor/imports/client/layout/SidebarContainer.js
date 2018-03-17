@@ -93,6 +93,7 @@ const sidebarItems = ({ history }) => {
       roles: ['admin', 'system'],
       subItems: [
         { name: 'thisEvents', path: '/events' },
+        { name: 'thisClients', path: '/clients' },
         { name: 'thisCalendars', path: '/calendars' },
         { name: 'thisConstraints', path: '/constraints' },
         { name: 'thisTags', path: '/tags' },

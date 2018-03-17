@@ -8,6 +8,7 @@ import Alert from 'react-s-alert'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
 import { WaitlistScreen } from './WaitlistScreen'
+import { subscribe } from '../../../util/meteor/subscribe'
 
 const action = (action, appointment, options = {}) => {
   const fn = () => Appointments.actions[action].callPromise({ appointmentId: appointment._id })
@@ -45,9 +46,9 @@ const composer = props => {
     sort: { admittedAt: 1 }
   }).fetch()
 
-  Meteor.subscribe('referrals',
-    appointments.map(a => a.patientId).filter(identity)
-  )
+  subscribe('referrals', {
+    patientIds: appointments.map(a => a.patientId).filter(identity)
+  })
 
   const waitlistAppointments = appointments.map(appointment => {
     const patient = Patients.findOne({ _id: appointment.patientId })

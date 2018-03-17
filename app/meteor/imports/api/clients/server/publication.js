@@ -1,13 +1,12 @@
 import { publish } from '../../../util/meteor/publish'
-import { Calendars } from '../'
+import { Clients } from '../'
 
 export const publication = () => {
   publish({
-    name: 'calendars',
-    roles: ['appointments'],
-    preload: true,
+    name: 'clients',
+    roles: ['admin'],
     fn: function () {
-      return Calendars.find({})
+      return Clients.find({})
     }
   })
 }

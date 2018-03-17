@@ -6,6 +6,7 @@ import { MessagesContainer } from '../messages/MessagesContainer'
 import { TagsContainer } from '../tags/TagsContainer'
 import { CalendarsContainer } from '../calendars/CalendarsContainer'
 import { ConstraintsContainer } from '../schedules/constraints/ConstraintsContainer'
+import { ClientsContainer } from '../clients/ClientsContainer'
 
 const Events = () => <Blaze template='systemEvents' />
 const Importers = () => <Blaze template='systemImporters' />
@@ -15,6 +16,7 @@ export const System = ({ match }) => (
   <div>
     <Switch>
       <Route exact path={`${match.url}/settings`} component={SettingsContainer} />
+      <Route exact path={`${match.url}/clients`} component={ClientsContainer} />
       <Route exact path={`${match.url}/messages`} component={MessagesContainer} />
       <Route exact path={`${match.url}/importers`} component={Importers} />
       <Route exact path={`${match.url}/tags`} component={TagsContainer} />

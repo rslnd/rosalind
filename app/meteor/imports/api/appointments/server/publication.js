@@ -1,131 +1,228 @@
 import moment from 'moment'
-import { Meteor } from 'meteor/meteor'
-import { check, Match } from 'meteor/check'
-import { Roles } from 'meteor/alanning:roles'
-import { isTrustedNetwork } from '../../customer/server/isTrustedNetwork'
+import { Match } from 'meteor/check'
 import { Comments } from '../../comments'
 import { Patients } from '../../patients'
 import Appointments from '../collection'
+import { publishComposite } from '../../../util/meteor/publish'
 
 export default () => {
-  Meteor.publishComposite('appointment', function (_id) {
-    check(_id, String)
+  publishComposite({
+    name: 'appointment',
+    roles: [ 'appointments' ],
+    args: {
+      appointmentId: String
+    },
+    fn: function ({ appointmentId }) {
+      this.unblock()
 
-    if (!(this.userId && Roles.userIsInRole(this.userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))) { return }
-
-    this.unblock()
-
-    return {
-      find: function () {
-        this.unblock()
-        return Appointments.find({ _id }, { limit: 1 })
-      },
-      children: [
-        {
-          find: function (doc) {
-            this.unblock()
-            return Comments.find({ docId: doc._id })
-          }
-        }, {
-          find: function (doc) {
-            this.unblock()
-            if (doc.patientId) {
-              return Patients.find({ _id: doc.patientId }, { limit: 1 })
+      return {
+        find: function () {
+          this.unblock()
+          return Appointments.find({ _id: appointmentId }, { limit: 1 })
+        },
+        children: [
+          {
+            find: function (doc) {
+              this.unblock()
+              return Comments.find({ docId: doc._id })
+            }
+          }, {
+            find: function (doc) {
+              this.unblock()
+              if (doc.patientId) {
+                return Patients.find({ _id: doc.patientId }, { limit: 1 })
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     }
   })
 
-  Meteor.publishComposite('appointments-today', function () {
-    const isAuthenticated = (this.userId && Roles.userIsInRole(this.userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
+  publishComposite({
+    name: 'appointments-today',
+    roles: [ 'appointments' ],
+    preload: true,
+    fn: function ({ appointmentId }) {
+      this.unblock()
 
-    if (!(isAuthenticated || (this.connection && isTrustedNetwork(this.connection.clientAddress)))) { return }
+      const startOfToday = moment().startOf('day').toDate()
+      const endOfToday = moment().endOf('day').toDate()
 
-    this.unblock()
-
-    const startOfToday = moment().startOf('day').toDate()
-    const endOfToday = moment().endOf('day').toDate()
-
-    return {
-      find: function () {
-        this.unblock()
-        return Appointments.find({
-          start: {
-            $gt: startOfToday,
-            $lt: endOfToday
-          }
-        }, {
-          sort: {
-            start: 1
-          }
-        })
-      },
-      children: [
-        {
-          find: function (doc) {
-            this.unblock()
-            if (doc.patientId) {
-              return Patients.find({ _id: doc.patientId }, {
-                limit: 1
-              })
+      return {
+        find: function () {
+          this.unblock()
+          return Appointments.find({
+            start: {
+              $gt: startOfToday,
+              $lt: endOfToday
+            }
+          }, {
+            sort: {
+              start: 1
+            }
+          })
+        },
+        children: [
+          {
+            find: function (doc) {
+              this.unblock()
+              if (doc.patientId) {
+                return Patients.find({ _id: doc.patientId }, {
+                  limit: 1
+                })
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     }
   })
 
-  Meteor.publishComposite('appointments-future', function () {
-    const isAuthenticated = (this.userId && Roles.userIsInRole(this.userId, ['appointments', 'admin'], Roles.GLOBAL_GROUP))
+  publishComposite({
+    name: 'appointments-future',
+    roles: [ 'appointments' ],
+    preload: true,
+    fn: function () {
+      this.unblock()
 
-    if (!(isAuthenticated || (this.connection && isTrustedNetwork(this.connection.clientAddress)))) { return }
+      const startOfTomorrow = moment().endOf('day').toDate()
 
-    this.unblock()
-
-    const startOfTomorrow = moment().endOf('day').toDate()
-
-    return {
-      find: function () {
-        this.unblock()
-        return Appointments.find({
-          start: {
-            $gt: startOfTomorrow
+      return {
+        find: function () {
+          this.unblock()
+          return Appointments.find({
+            start: {
+              $gt: startOfTomorrow
+            }
+          }, {
+            fields: {
+              _id: 1,
+              calendarId: 1,
+              patientId: 1,
+              assigneeId: 1,
+              tags: 1,
+              start: 1,
+              end: 1,
+              admitted: 1,
+              treated: 1,
+              canceled: 1,
+              note: 1,
+              lockedBy: 1
+            },
+            sort: {
+              start: 1
+            }
+          })
+        },
+        children: [
+          {
+            find: function (doc) {
+              this.unblock()
+              if (doc.patientId) {
+                return Patients.find({ _id: doc.patientId }, {
+                  limit: 1,
+                  fields: Patients.fields.preload
+                })
+              }
+            }
           }
-        }, {
-          fields: {
-            _id: 1,
-            calendarId: 1,
-            patientId: 1,
-            assigneeId: 1,
-            tags: 1,
-            start: 1,
-            end: 1,
-            admitted: 1,
-            treated: 1,
-            canceled: 1,
-            note: 1,
-            lockedBy: 1
+        ]
+      }
+    }
+  })
+
+  publishComposite({
+    name: 'appointments-patient',
+    args: {
+      patientId: String
+    },
+    roles: ['appointments'],
+    fn: function ({ patientId }) {
+      this.unblock()
+
+      return {
+        find: function () {
+          this.unblock()
+          return Appointments.find({ patientId }, {
+            sort: { start: 1 },
+            removed: true
+          })
+        },
+        children: [
+          {
+            find: function (appointment) {
+              this.unblock()
+              return Comments.find({ docId: patientId })
+            }
+          }, {
+            find: function (appointment) {
+              this.unblock()
+              return Comments.find({ docId: appointment._id })
+            }
+          }
+        ]
+      }
+    }
+
+  })
+
+  // LEGACY
+  publishComposite({
+    name: 'appointments-legacy',
+    args: {
+      date: Match.Optional(Date),
+      start: Match.Optional(Date),
+      end: Match.Optional(Date),
+      within: Match.Optional(String)
+    },
+    roles: ['appointments'],
+    preload: 1,
+    fn: function ({ date, start, end, within }) {
+      this.unblock()
+      // If no argument are supplied, publish future appointments
+      if (!within) {
+        within = 'day'
+      }
+
+      if (!start && !end && !date) {
+        start = moment().startOf(within).toDate()
+        end = moment().add(6, 'months').endOf(within).toDate()
+      } else if (date) {
+        start = moment(date).startOf(within).toDate()
+        end = moment(date).endOf(within).toDate()        
+      }
+
+      return {
+        find: function () {
+          this.unblock()
+          const selector = {
+            start: {
+              $gte: start,
+              $lte: end
+            },
+            removed: { $ne: true }
+          }
+
+          return Appointments.find(selector, { sort: { start: 1 } })
+        },
+        children: [
+          {
+            find: function (appointment) {
+              this.unblock()
+              return Comments.find({ docId: appointment._id })
+            }
           },
-          sort: {
-            start: 1
-          }
-        })
-      },
-      children: [
-        {
-          find: function (doc) {
-            this.unblock()
-            if (doc.patientId) {
-              return Patients.find({ _id: doc.patientId }, {
-                limit: 1,
-                fields: Patients.fields.preload
-              })
+          {
+            find: function (appointment) {
+              this.unblock()
+              if (appointment.patientId) {
+                return Patients.find({ _id: appointment.patientId }, { limit: 1 })
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     }
   })
 }

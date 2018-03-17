@@ -1,10 +1,11 @@
-import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
+import { publish } from '../../../util/meteor/publish'
 import { Messages } from '../'
 
 export const publication = () => {
-  Meteor.publish('messages-inbound', function () {
-    if (this.userId && Roles.userIsInRole(this.userId, [ 'admin' ])) {
+  publish({
+    name: 'messages-inbound',
+    roles: ['admin', 'system'],
+    fn: function () {
       return Messages.find({
         direction: 'inbound'
       }, {

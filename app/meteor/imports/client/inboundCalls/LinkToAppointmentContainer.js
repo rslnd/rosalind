@@ -6,10 +6,11 @@ import { Appointments } from '../../api/appointments'
 import { Users } from '../../api/users'
 import { LinkToAppointmentWrapper } from './LinkToAppointment'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { subscribe } from '../../util/meteor/subscribe'
 
 const getFormattedAppointmentData = (appointmentId) => {
   if (!appointmentId) { return {} }
-  Meteor.subscribe('appointment', appointmentId)
+  subscribe('appointment', { appointmentId })
   const appointment = Appointments.findOne({ _id: appointmentId })
   if (appointment) {
     const calendarName = Calendars.findOne(appointment.calendarId).name

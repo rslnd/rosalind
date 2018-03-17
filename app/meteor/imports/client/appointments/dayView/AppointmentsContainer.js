@@ -22,6 +22,7 @@ import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
 import { Loading } from '../../components/Loading'
 import { AppointmentsScreen } from './AppointmentsScreen'
+import { subscribeManager } from '../../../util/meteor/subscribe'
 
 const mapUncapped = map.convert({ cap: false })
 const appointmentsSubsManager = new SubsManager({
@@ -67,9 +68,9 @@ const composer = (props, onData) => {
   // Appointments and schedules for future dates are cached as global subscriptions
   let subsReady = false
   if (date.toDate() < moment().startOf('day').toDate()) {
-    const schedulesDaySubscriptions = appointmentsSubsManager.subscribe('schedules', day)
-    const schedulesOverrideSubscriptions = appointmentsSubsManager.subscribe('schedules', dateRange)
-    const appointmentsSubscription = appointmentsSubsManager.subscribe('appointments-legacy', dateRange)
+    const schedulesDaySubscriptions = subscribeManager(appointmentsSubsManager, 'schedules', day)
+    const schedulesOverrideSubscriptions = subscribeManager(appointmentsSubsManager, 'schedules', dateRange)
+    const appointmentsSubscription = subscribeManager(appointmentsSubsManager, 'appointments-legacy', dateRange)
     subsReady = schedulesDaySubscriptions.ready() && schedulesOverrideSubscriptions.ready() && appointmentsSubscription.ready()
   } else {
     subsReady = true

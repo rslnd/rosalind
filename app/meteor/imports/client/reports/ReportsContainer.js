@@ -16,13 +16,14 @@ import { Calendars } from '../../api/calendars'
 import { Referrals } from '../../api/referrals'
 import { ReportsScreen } from './ReportsScreen'
 import { withMethodData } from '../components/withMethodData'
+import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = props => {
   const dateParam = idx(props, _ => _.match.params.date)
   const date = moment(dateParam).startOf('day')
   const day = omit(dateToDay(date), 'date')
 
-  const subscription = Meteor.subscribe('reports', { date: date.toDate() })
+  const subscription = subscribe('reports', { date: date.toDate() })
   const dayReports = Reports
     .find({ day })
     .fetch()

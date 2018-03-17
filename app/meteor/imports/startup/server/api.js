@@ -4,7 +4,6 @@ import groups from '../../api/groups/server'
 import patients from '../../api/patients/server'
 import calendars from '../../api/calendars/server'
 import appointments from '../../api/appointments/server'
-import cache from '../../api/cache/server'
 import comments from '../../api/comments/server'
 import customer from '../../api/customer/server'
 import events from '../../api/events/server'
@@ -18,6 +17,7 @@ import roles from '../../api/roles/server'
 import schedules from '../../api/schedules/server'
 import tags from '../../api/tags/server'
 import timesheets from '../../api/timesheets/server'
+import clients from '../../api/clients/server'
 
 export default function () {
   settings()
@@ -26,7 +26,6 @@ export default function () {
   patients()
   calendars()
   appointments()
-  cache()
   comments()
   customer()
   events()
@@ -40,4 +39,5 @@ export default function () {
   schedules()
   tags()
   timesheets()
+  clients()
 }

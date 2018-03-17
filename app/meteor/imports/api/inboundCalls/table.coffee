@@ -21,7 +21,7 @@ name = (_id) ->
 module.exports = new Tabular.Table
   name: 'ResolvedInboundCalls'
   collection: InboundCalls
-  pub: 'inboundCalls'
+  pub: 'inboundCalls-table'
   columns: [
     { data: 'firstName', title: 'Vorname' }
     { data: 'lastName', title: 'Nachname' }

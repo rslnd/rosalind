@@ -11,7 +11,8 @@ import { Birthday } from '../../patients/Birthday'
 import { getColor } from '../../tags/getColor'
 import './appointmentsSearchStyle'
 import { darkGray, darkGrayDisabled, primaryActive } from '../../css/global'
-import { TagsList } from '../../tags/TagsList';
+import { TagsList } from '../../tags/TagsList'
+import { subscribe } from '../../../util/meteor/subscribe'
 
 const style = {
   name: {
@@ -148,7 +149,7 @@ export class AppointmentsSearch extends React.Component {
       const patientId = query.patient._id
 
       this.setState({
-        subscription: Meteor.subscribe('patients', [patientId])
+        subscription: subscribe('patients', { patientIds: [patientId] })
       })
     }
 

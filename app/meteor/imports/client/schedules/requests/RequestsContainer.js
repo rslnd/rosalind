@@ -7,9 +7,10 @@ import { Schedules } from '../../../api/schedules'
 import { Loading } from '../../components/Loading'
 import { RequestsScreen } from './RequestsScreen'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { subscribe } from '../../../util/meteor/subscribe'
 
 const composer = (props, onData) => {
-  const handle = Meteor.subscribe('schedules')
+  const handle = subscribe('schedules')
   if (handle.ready()) {
     let selector = {
       requestedAt: { $ne: null },

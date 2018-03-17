@@ -1,10 +1,10 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
-import { Meteor } from 'meteor/meteor'
 import { Settings } from '../../../api/settings'
 import { SettingsScreen } from './SettingsScreen'
+import { subscribe } from '../../../util/meteor/subscribe'
 
-const composer = (props, onData) => {
-  if (Meteor.subscribe('settings').ready()) {
+export const composer = (props, onData) => {
+  if (subscribe('settings').ready()) {
     const get = (key) => Settings.get(key)
     const set = (key, value) => Settings.actions.set.call({ key, value })
 

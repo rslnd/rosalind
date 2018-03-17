@@ -1,13 +1,15 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
-import { Meteor } from 'meteor/meteor'
 import { Loading } from '../components/Loading'
 import { Appointments } from '../../api/appointments'
 import { Patients } from '../../api/patients'
 import { PastAppointments } from './PastAppointments'
+import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = (props, onData) => {
   const patientId = props.patientId
-  Meteor.subscribe('appointmentsPatient', { patientId })
+  if (!patientId) { return }
+
+  subscribe('appointments-patient', { patientId })
 
   const patient = Patients.findOne({ _id: patientId })
 
