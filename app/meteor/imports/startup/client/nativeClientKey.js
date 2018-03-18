@@ -11,7 +11,7 @@ export default () => {
 
     const attemptRegistration = async () => {
       if (settings && version && systemInfo) {
-        const clientKey = settings.native.clientKey
+        const clientKey = settings.clientKey
 
         const isOk = await Clients.actions.register.callPromise({
           clientKey,
@@ -20,7 +20,7 @@ export default () => {
           systemInfo: {}
         })
 
-        console.log('[Client] Attempting registration', { version, systemInfo, isOk })
+        console.log('[Client] Registration', { version, systemInfo, isOk })
         if (!isOk) {
           Alert.error(TAPi18n.__('ui.clientRegistrationFailed'), { timeout: false })
         }
