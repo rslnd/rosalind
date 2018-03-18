@@ -1,9 +1,9 @@
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Settings } from '../../../api/settings'
 import { SettingsScreen } from './SettingsScreen'
 import { subscribe } from '../../../util/meteor/subscribe'
 
-export const composer = (props, onData) => {
+export const composer = (props) => {
   if (subscribe('settings').ready()) {
     const get = (key) => Settings.get(key)
     const set = (key, value) => Settings.actions.set.call({ key, value })
@@ -12,8 +12,8 @@ export const composer = (props, onData) => {
 
     settings.get = get
     settings.set = set
-    onData(null, { get, set, settings })
+    return { get, set, settings }
   }
 }
 
-export const SettingsContainer = composeWithTracker(composer, { pure: false })(SettingsScreen)
+export const SettingsContainer = withTracker(composer, { pure: false })(SettingsScreen)
