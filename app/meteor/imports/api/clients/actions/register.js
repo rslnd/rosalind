@@ -14,7 +14,7 @@ export const register = ({ Clients }) => {
       settings: { type: Object, blackbox: true, optional: true }
     }).validator(),
 
-    run ({ clientKey, systemInfo, settings }) {
+    run ({ clientKey, systemInfo, version, settings }) {
       const existingClient = Clients.findOne({ clientKey })
 
       if (existingClient) {
@@ -34,6 +34,7 @@ export const register = ({ Clients }) => {
             clientKey,
             systemInfo,
             settings,
+            version,
             createdAt: new Date()
           })
           return true

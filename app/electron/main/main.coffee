@@ -4,7 +4,7 @@ module.paths.push(path.resolve('../node_modules'))
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app', 'node_modules'))
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app.asar', 'node_modules'))
 
-{ app } = require 'electron'
+{ app, ipcMain } = require 'electron'
 require './debugger'
 updater = require './updater'
 window = require './window'
@@ -28,12 +28,13 @@ start = ->
     mainWindow = window.open (err) ->
       return logger.error('[Main] Could not load main window', err) if err
       logger.ready('[Main] Main window loaded')
-      settings.send(ipcReceiver: mainWindow)
-      updater.sendVersion(ipcReceiver: mainWindow)
-      systemInfo.send(ipcReceiver: mainWindow)
       watch.start(ipcReceiver: mainWindow)
       print.start(ipcReceiver: mainWindow)
       shortcuts.updateShortcuts()
+      ipcMain.on 'window/reload', (e) =>
+        settings.send(ipcReceiver: mainWindow)
+        updater.sendVersion(ipcReceiver: mainWindow)
+        systemInfo.send(ipcReceiver: mainWindow)
 
     updater.start()
     setTimeout(updater.check, 5 * 1000)

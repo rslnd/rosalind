@@ -1,6 +1,7 @@
 /* global Accounts */
 import { isTrustedNetwork } from '../../api/customer/server/isTrustedNetwork'
 import { Users } from '../../api/users'
+import { Clients } from '../../api/clients'
 import { Meteor } from 'meteor/meteor'
 
 export default () => {
@@ -28,16 +29,35 @@ export default () => {
     const user = loginAttempt.user
     const userId = user._id
     const username = user.username
-    const userAllowed = user.services.passwordless
+    const userPasswordlessAllowed = user.services.passwordless
     const ipAddress = loginAttempt.connection.clientAddress
     const passwordlessAttempt = loginAttempt.methodArguments[0].passwordless
+    const clientKey = loginAttempt.methodArguments[0].clientKey
 
     if (passwordlessAttempt) {
       console.log('[Login] Passwordless login attempt', { username, userId, ipAddress })
       if (isTrustedNetwork(ipAddress)) {
-        if (userAllowed) {
-          console.error('[Login] Allowing passwordless login', { username, userId, ipAddress })
-          return true
+        if (userPasswordlessAllowed) {
+          if (clientKey) {
+            const client = Clients.findOne({ clientKey })
+            if (client && !client.removed) {
+              if (client.passwordlessGroupIds) {
+                if (client.passwordlessGroupIds.contains(user.groupId)) {
+                  console.log('[Login] Allowing passwordless login for', username)
+                  return true
+                } else {
+                  throw new Meteor.Error('passwordless-client-group-disallowed', 'Group not allowed on this client')
+                }
+              } else {
+                console.log('[Login] Allowing passwordless login for', username)
+                return true
+              }
+            } else {
+              throw new Meteor.Error('passwordless-unknown-client-key', 'Client key not registered or not allowed')
+            }
+          } else {
+            throw new Meteor.Error('passwordless-login-no-client-key', 'Missing client key for passwordless login within trusted network')
+          }
         } else {
           console.warn('[Login] Passwordless login not enabled for user', { username, userId, ipAddress })
           throw new Meteor.Error('passwordless-login-disallowed-for-user', `Passwordless Login not enabled for user ${username}`)

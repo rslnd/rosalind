@@ -5,6 +5,8 @@ import { Clients } from '../../api/clients'
 
 export default () => {
   if (window.native) {
+    window.native.load()
+
     let settings = null
     let version = null
     let systemInfo = null

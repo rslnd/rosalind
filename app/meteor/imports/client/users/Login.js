@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../components/Icon'
+import { getClientKey } from '../../util/meteor/getClientKey'
 
 export class Login extends React.Component {
   constructor (props) {
@@ -77,9 +78,21 @@ export class Login extends React.Component {
       }
     }
 
+    const clientKey = getClientKey()
+
     if (username && !password) {
+      if (clientKey) {
+        Accounts.callLoginMethod({
+          methodArguments: [{ username, clientKey, passwordless: true }],
+          userCallback: callback
+        })
+      } else {
+        console.warn('[Users] Login failed: Attempting passwordless login without clientKey')
+        Alert.error(TAPi18n.__('login.passwordlessNoClientKeyMessage'))
+      }
+    } else if (username && password && clientKey) {
       Accounts.callLoginMethod({
-        methodArguments: [{ username, passwordless: true }],
+        methodArguments: [{ username, clientKey, password }],
         userCallback: callback
       })
     } else if (username && password) {

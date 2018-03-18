@@ -1,7 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-
-const getClientKey = () =>
-  window.native && window.native.settings && window.native.settings.clientKey
+import { getClientKey } from './getClientKey'
 
 const withClientKey = (name, args) => {
   if (args && typeof args !== 'object') {

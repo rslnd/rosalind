@@ -6,6 +6,7 @@ const Clients = new Mongo.Collection('clients')
 
 Clients.attachSchema(schema)
 Clients.helpers({ collection: () => Clients })
+Clients.attachBehaviour('softRemovable')
 Clients.actions = actions({ Clients })
 
 export default Clients
