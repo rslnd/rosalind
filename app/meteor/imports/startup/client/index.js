@@ -8,6 +8,7 @@ import livechat from './livechat'
 import dataTransfer from './dataTransfer'
 import nativeUpdate from './nativeUpdate'
 import nativeClientKey from './nativeClientKey'
+import autoLogout from './autoLogout'
 import entry from '../../client/index'
 
 export default function () {
@@ -21,5 +22,6 @@ export default function () {
   dataTransfer()
   nativeUpdate()
   nativeClientKey()
+  autoLogout()
   entry()
 }
