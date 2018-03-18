@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 
-export const autoLogout = () => {
+export default () => {
   window.addEventListener('beforeunload', function () {
     Meteor.logout()
     window.localStorage.clear()
