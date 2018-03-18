@@ -6,6 +6,14 @@ import { Clients } from '../../api/clients'
 export default () => {
   if (window.native) {
     window.native.load()
+    const loadingInterval = setInterval(() => {
+      console.log('[Client] Attempting to load native settings')
+      if (settings && version && systemInfo) {
+        clearInterval(loadingInterval)
+      } else {
+        window.native.load()
+      }
+    }, 300)
 
     let settings = null
     let version = null
