@@ -31,7 +31,7 @@ start = ->
       watch.start(ipcReceiver: mainWindow)
       print.start(ipcReceiver: mainWindow)
       shortcuts.updateShortcuts()
-      ipcMain.on 'window/reload', (e) =>
+      ipcMain.on 'window/load', (e) =>
         settings.send(ipcReceiver: mainWindow)
         updater.sendVersion(ipcReceiver: mainWindow)
         systemInfo.send(ipcReceiver: mainWindow)

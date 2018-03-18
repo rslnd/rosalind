@@ -13,7 +13,7 @@ try
     events: new EventEmitter()
     quitAndInstall: -> ipcRenderer.send('update/quitAndInstall')
     dataTransferSuccess: (a) -> ipcRenderer.send('import/dataTransferSuccess', a)
-    reload: () -> ipcRenderer.send('window/reload')
+    load: () -> ipcRenderer.send('window/load')
 
   ipcRenderer.on 'settings', (e, settings) ->
     window.native.settings = settings
