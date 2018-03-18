@@ -15,6 +15,10 @@ export const register = ({ Clients }) => {
     }).validator(),
 
     run ({ clientKey, systemInfo, version, settings }) {
+      if (this.isSimulation) {
+        return true
+      }
+
       const existingClient = Clients.findOne({ clientKey })
 
       if (existingClient) {
