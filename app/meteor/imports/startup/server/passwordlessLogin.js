@@ -42,7 +42,7 @@ export default () => {
             const client = Clients.findOne({ clientKey })
             if (client && !client.removed) {
               if (client.passwordlessGroupIds) {
-                if (client.passwordlessGroupIds.contains(user.groupId)) {
+                if (client.passwordlessGroupIds.includes(user.groupId)) {
                   console.log('[Login] Allowing passwordless login for', username)
                   return true
                 } else {
