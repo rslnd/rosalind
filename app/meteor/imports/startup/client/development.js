@@ -12,4 +12,13 @@ export default () => {
       whyDidYouUpdate(React)
     }
   }
+
+  if (server.env.NODE_ENV === 'production') {
+    console.log({
+      commit: server.env.COMMIT_HASH,
+      env: server.env.NODE_ENV,
+      test: server.env.TEST,
+      build: server.env.BUILD_NUMBER
+    })
+  }
 }

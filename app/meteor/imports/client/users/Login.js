@@ -39,12 +39,6 @@ export class Login extends React.Component {
     })
 
     console.log('[Login] Requested Login help')
-    console.log({
-      commit: server.env.COMMIT_HASH,
-      env: server.env.NODE_ENV,
-      test: server.env.TEST,
-      build: server.env.BUILD_NUMBER
-    })
 
     if (window.Smooch) {
       window.Smooch.open()
@@ -69,6 +63,7 @@ export class Login extends React.Component {
             Alert.error(TAPi18n.__('login.passwordlessDisallowedUserMessage'))
             break
           default:
+            console.error(err)
             Alert.error(TAPi18n.__('login.failedMessage'))
         }
       } else {
@@ -90,11 +85,8 @@ export class Login extends React.Component {
         console.warn('[Users] Login failed: Attempting passwordless login without clientKey')
         Alert.error(TAPi18n.__('login.passwordlessNoClientKeyMessage'))
       }
-    } else if (username && password && clientKey) {
-      Accounts.callLoginMethod({
-        methodArguments: [{ user: { username }, clientKey, password }],
-        userCallback: callback
-      })
+    // Note that if a password is supplied, the client key is ignored for login
+    // Only passwordless login needs a client key
     } else if (username && password) {
       Meteor.loginWithPassword(username, password, callback)
     } else {

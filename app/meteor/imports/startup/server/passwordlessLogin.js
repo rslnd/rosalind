@@ -1,4 +1,5 @@
 /* global Accounts */
+import { check, Match } from 'meteor/check'
 import { isTrustedNetwork } from '../../api/customer/server/isTrustedNetwork'
 import { Users } from '../../api/users'
 import { Clients } from '../../api/clients'
@@ -10,15 +11,26 @@ export default () => {
     loginExpirationInDays: (5 * 365)
   })
 
-  Accounts.registerLoginHandler((loginRequest) => {
-    const username = loginRequest.user && loginRequest.user.username
-    const user = username && Users.findOne({ username: username.toLowerCase() })
-    if (user) {
-      const userId = user._id
-      console.log('[Login] Login request', { userId, username })
-      return { userId }
-    } else {
-      throw new Meteor.Error(403, 'User not found')
+  Accounts.registerLoginHandler('clientKey passwordless', (loginRequest) => {
+    if (loginRequest.passwordless && loginRequest.clientKey) {
+      check(loginRequest, {
+        user: {
+          username: String
+        },
+        passwordless: true,
+        clientKey: String
+      })
+
+      const username = loginRequest.user && loginRequest.user.username
+      const user = username && Users.findOne({ username: username.toLowerCase() })
+      if (user) {
+        const userId = user._id
+        console.log('[Login] Passwordless login request', { userId, username })
+        return { userId }
+      } else {
+        console.error('[Login] User not found while logging in passwordless with clientKey', { username })
+        throw new Meteor.Error(403, 'User not found')
+      }
     }
   })
 
