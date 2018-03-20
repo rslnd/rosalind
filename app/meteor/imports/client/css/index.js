@@ -9,5 +9,6 @@ import './overrides.scss'
 import './print.css'
 import './mui.css'
 import './font-awesome.css'
+import './source-sans-pro.css'
 
 adminlte()

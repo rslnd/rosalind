@@ -9,9 +9,6 @@ export default () => {
   BrowserPolicy.content.allowOriginForAll('blob:')
 
   BrowserPolicy.content.allowInlineStyles()
-  BrowserPolicy.content.allowStyleOrigin('https://fonts.googleapis.com')
-  BrowserPolicy.content.allowFontOrigin('https://fonts.googleapis.com')
-  BrowserPolicy.content.allowFontOrigin('https://fonts.gstatic.com')
 
   BrowserPolicy.content.allowScriptOrigin('https://cdn.smooch.io/')
   BrowserPolicy.content.allowScriptOrigin('https://api.smooch.io')
