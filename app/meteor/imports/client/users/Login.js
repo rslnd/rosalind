@@ -83,7 +83,7 @@ export class Login extends React.Component {
     if (username && !password) {
       if (clientKey) {
         Accounts.callLoginMethod({
-          methodArguments: [{ username, clientKey, passwordless: true }],
+          methodArguments: [{ user: { username }, clientKey, passwordless: true }],
           userCallback: callback
         })
       } else {
@@ -92,7 +92,7 @@ export class Login extends React.Component {
       }
     } else if (username && password && clientKey) {
       Accounts.callLoginMethod({
-        methodArguments: [{ username, clientKey, password }],
+        methodArguments: [{ user: { username }, clientKey, password }],
         userCallback: callback
       })
     } else if (username && password) {

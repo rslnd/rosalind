@@ -11,16 +11,14 @@ export default () => {
   })
 
   Accounts.registerLoginHandler((loginRequest) => {
-    if (loginRequest.passwordless) {
-      const username = loginRequest.username
-      const user = Users.findOne({ username: username.toLowerCase() })
-      if (user) {
-        const userId = user._id
-        console.log('[Login] Passwordless login request', { userId, username })
-        return { userId }
-      } else {
-        throw new Meteor.Error(403, 'User not found')
-      }
+    const username = loginRequest.user && loginRequest.user.username
+    const user = username && Users.findOne({ username: username.toLowerCase() })
+    if (user) {
+      const userId = user._id
+      console.log('[Login] Login request', { userId, username })
+      return { userId }
+    } else {
+      throw new Meteor.Error(403, 'User not found')
     }
   })
 
