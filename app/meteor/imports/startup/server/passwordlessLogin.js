@@ -25,8 +25,13 @@ export default () => {
       const user = username && Users.findOne({ username: username.toLowerCase() })
       if (user) {
         const userId = user._id
-        console.log('[Login] Passwordless login request', { userId, username })
-        return { userId }
+        if (user.services && user.services.passwordless) {
+          console.log('[Login] Passwordless login request', { userId, username })
+          return { userId }
+        } else {
+          console.error('[Login] Passwordless login is disabled', { userId })
+          throw new Meteor.Error('passwordless-login-disallowed-for-user', `Passwordless Login not enabled for user ${username}`)
+        }
       } else {
         console.error('[Login] User not found while logging in passwordless with clientKey', { username })
         throw new Meteor.Error(403, 'User not found')
@@ -39,7 +44,7 @@ export default () => {
     const user = loginAttempt.user
     const userId = user._id
     const username = user.username
-    const userPasswordlessAllowed = user.services.passwordless
+    const userPasswordlessAllowed = user.services && user.services.passwordless
     const ipAddress = loginAttempt.connection.clientAddress
     const passwordlessAttempt = loginAttempt.methodArguments[0].passwordless
     const clientKey = loginAttempt.methodArguments[0].clientKey
