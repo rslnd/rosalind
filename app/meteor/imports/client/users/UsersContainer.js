@@ -5,10 +5,13 @@ import Alert from 'react-s-alert'
 import { Users } from '../../api/users'
 import { Groups } from '../../api/groups'
 import { Calendars } from '../../api/calendars'
+import { subscribe } from '../../util/meteor/subscribe'
 import { Loading } from '../components/Loading'
 import { UsersScreen } from './UsersScreen'
 
 const composer = (props, onData) => {
+  subscribe('users-permissions')
+
   const groupedUsers = Groups.find({}, { sort: { order: 1 } })
     .fetch()
     .map(g => ({

@@ -61,6 +61,22 @@ const structure = ({ getAssigneeName, isInRole }) => [
   })),
 
   {
+    header: { icon: 'key', title: 'Passwort' },
+    render: u => <span>
+      {(u.services && u.services.password && Object.keys(u.services.password).length >= 1) &&
+        <Icon name='key' title='Passwort' />}
+    </span>
+  },
+
+  {
+    header: { icon: 'unlock-alt', title: 'Passwordless' },
+    render: u => <span>
+      {(u.services && u.services.passwordless) &&
+        <Icon name='unlock-alt' title='Passwordless' />}
+    </span>
+  },
+
+  {
     header: '',
     render: u => <Link to={`/users/${u._id}/edit`}>Bearbeiten</Link>,
     style: { width: 100, textAlign: 'right' }

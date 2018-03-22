@@ -25,4 +25,12 @@ export default () => {
       })
     }
   })
+
+  publish({
+    name: 'users-permissions',
+    roles: ['admin', 'users-edit'],
+    fn: function () {
+      return Users.find({})
+    }
+  })
 }
