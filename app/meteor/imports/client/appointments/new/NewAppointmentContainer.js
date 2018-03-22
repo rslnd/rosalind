@@ -74,7 +74,7 @@ export class NewAppointmentContainerComponent extends React.Component {
 
     const appointment = {
       calendarId: this.props.calendar._id,
-      patientId: newPatient ? undefined : values.patientId,
+      patientId,
       note: values.appointment.appointmentNote,
       tags: values.appointment.tags,
       start: moment(this.props.time).toDate(),
