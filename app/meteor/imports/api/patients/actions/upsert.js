@@ -62,6 +62,8 @@ export const upsert = ({ Patients }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      this.unblock()
+
       if (this.connection) {
         quiet = false
       }

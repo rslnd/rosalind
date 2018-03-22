@@ -19,6 +19,8 @@ export const insert = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      this.unblock()
+
       console.log('[Appointments] Insert', { appointment, newPatient })
 
       let patientId = appointment.patientId
