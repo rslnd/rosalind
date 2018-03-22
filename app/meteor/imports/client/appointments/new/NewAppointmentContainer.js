@@ -17,6 +17,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleSubmitPause = this.handleSubmitPause.bind(this)
     this.allowedTags = this.allowedTags.bind(this)
+    this.maxDuration = this.maxDuration.bind(this)
   }
 
   handleSubmitPause () {
@@ -98,6 +99,25 @@ export class NewAppointmentContainerComponent extends React.Component {
       })
   }
 
+  maxDuration () {
+    const nextAppointments = Appointments.find({
+      start: { $gt: this.props.time },
+      assigneeId: this.props.assigneeId,
+      calendarId: this.props.calendar._id
+    }, { sort: { start: 1 }, limit: 1 }).fetch()
+
+    if (nextAppointments[0]) {
+      return Math.abs(
+        moment.range(
+          this.props.time,
+          nextAppointments[0].start
+        ).diff('minutes')
+      )
+    } else {
+      return null
+    }
+  }
+
   allowedTags () {
     const date = moment(this.props.time)
 
@@ -126,6 +146,7 @@ export class NewAppointmentContainerComponent extends React.Component {
         calendarId={this.props.calendar._id}
         assigneeId={this.props.assigneeId}
         allowedTags={this.allowedTags()}
+        maxDuration={this.maxDuration()}
         extended={this.props.calendar.privateAppointments} />
     )
   }

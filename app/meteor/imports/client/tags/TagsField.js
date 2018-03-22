@@ -2,6 +2,7 @@ import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Tags } from '../../api/tags'
 import { TagsList } from './TagsList'
+import { getDefaultDuration } from '../../api/appointments/methods/getDefaultDuration'
 
 export class TagsField extends React.Component {
   constructor (props) {
@@ -23,7 +24,7 @@ export class TagsField extends React.Component {
   }
 
   render () {
-    const { input, meta, assigneeId, allowedTags, calendarId, showDefaultRevenue } = this.props
+    const { input, meta, assigneeId, allowedTags, maxDuration, calendarId, showDefaultRevenue, time } = this.props
 
     const selector = allowedTags ? { _id: { $in: allowedTags } } : {}
     const tags = Tags.find(selector, { sort: { order: 1 } }).map((t) => {
@@ -32,6 +33,23 @@ export class TagsField extends React.Component {
         ...t,
         selectable: true,
         selected
+      }
+    }).filter(t => {
+      if (maxDuration === null) {
+        return true
+      }
+
+      const duration = getDefaultDuration({
+        calendarId,
+        assigneeId,
+        tags: [...(input.value || []), t._id],
+        date: time
+      })
+
+      if (duration > maxDuration) {
+        return false
+      } else {
+        return true
       }
     }).filter(t => {
       if (t.assigneeIds) {

@@ -25,6 +25,7 @@ export const NewAppointmentFields = props => {
   const {
     time,
     allowedTags,
+    maxDuration,
     calendarId,
     assigneeId,
     pristine,
@@ -57,6 +58,7 @@ export const NewAppointmentFields = props => {
               name='tags'
               component={TagsField}
               allowedTags={allowedTags}
+              maxDuration={maxDuration}
               calendarId={calendarId}
               assigneeId={assigneeId}
               showDefaultRevenue={false}
