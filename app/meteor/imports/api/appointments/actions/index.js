@@ -11,6 +11,7 @@ import { update } from './update'
 import { startTreatment } from './startTreatment'
 import { endTreatment } from './endTreatment'
 import { nextTreatment } from './nextTreatment'
+import { changeAssignee } from './changeAssignee'
 
 export default function ({ Appointments }) {
   return {
@@ -26,6 +27,7 @@ export default function ({ Appointments }) {
     update: update({ Appointments }),
     startTreatment: startTreatment({ Appointments }),
     endTreatment: endTreatment({ Appointments }),
-    nextTreatment: nextTreatment({ Appointments })
+    nextTreatment: nextTreatment({ Appointments }),
+    changeAssignee: changeAssignee({ Appointments })
   }
 }

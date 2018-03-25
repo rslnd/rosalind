@@ -1,6 +1,8 @@
+import identity from 'lodash/identity'
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
+import Alert from 'react-s-alert'
 import { Manager, Target, Popper } from 'react-popper'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import Paper from 'material-ui/Paper'
@@ -8,7 +10,10 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
 import { background, grayDisabled, gray } from '../../../css/global'
-import ClickAwayListener from 'material-ui/utils/ClickAwayListener';
+import ClickAwayListener from 'material-ui/utils/ClickAwayListener'
+import { Modal } from 'react-bootstrap'
+import Button from 'material-ui/Button'
+import { UserPickerContainer } from '../../../users/UserPickerContainer'
 
 const headerRowStyle = {
   backgroundColor: background,
@@ -46,7 +51,8 @@ export class HeaderRow extends React.Component {
     this.state = {
       userDropdownOpen: false,
       userDropdownAnchor: null,
-      hovering: false
+      hovering: false,
+      changingAssignee: false
     }
 
     this.handleRemoveUser = this.handleRemoveUser.bind(this)
@@ -55,12 +61,13 @@ export class HeaderRow extends React.Component {
     this.handleToggleOverrideModeClick = this.handleToggleOverrideModeClick.bind(this)
     this.handleMouseEnter = this.handleMouseEnter.bind(this)
     this.handleMouseLeave = this.handleMouseLeave.bind(this)
+    this.handleChangeAssigneeClick = this.handleChangeAssigneeClick.bind(this)
+    this.handleChangeAssigneeFinishClick = this.handleChangeAssigneeFinishClick.bind(this)
   }
 
   handleUserDropdownOpen ({ event, assigneeId, canRemoveUser }) {
     if (this.props.canEditSchedules) {
       this.setState({
-        ...this.state,
         userDropdownOpen: true,
         userDropdownAnchor: event.currentTarget,
         userDropdownAssigneeId: assigneeId,
@@ -71,7 +78,6 @@ export class HeaderRow extends React.Component {
 
   handleUserDropdownClose () {
     this.setState({
-      ...this.state,
       userDropdownOpen: false
     })
   }
@@ -100,6 +106,45 @@ export class HeaderRow extends React.Component {
   handleMouseLeave () {
     this.setState({
       hovering: false
+    })
+  }
+
+  handleChangeAssigneeClick () {
+    const currentAssigneeId = this.state.userDropdownAssigneeId
+    if (currentAssigneeId) {
+      this.handleUserDropdownClose()
+      setTimeout(() => {
+        this.setState({
+          changingAssignee: {
+            oldAssigneeId: currentAssigneeId,
+            newAssigneeId: currentAssigneeId
+          }
+        })
+      }, 600) // BUG Weird interaction with mui menu sets overflow: hidden on body
+    }
+  }
+
+  handleChangeAssigneeFinishClick () {
+    const { oldAssigneeId, newAssigneeId } = this.state.changingAssignee
+    if (oldAssigneeId === newAssigneeId) { return }
+
+    const todaysAssigneeIds = this.props.assignees
+      .map(a => a.assigneeId).filter(identity)
+
+    if (todaysAssigneeIds.includes(newAssigneeId)) {
+      Alert.error(TAPi18n.__('appointments.changeAssigneeMustBeDifferent'))
+      return
+    }
+
+    this.props.onChangeAssignee({
+      oldAssigneeId,
+      newAssigneeId
+    }).then(() =>
+      Alert.success(TAPi18n.__('appointments.changeAssigneeSuccess'))
+    )
+
+    this.setState({
+      changingAssignee: false
     })
   }
 
@@ -146,6 +191,9 @@ export class HeaderRow extends React.Component {
           <MenuItem onClick={this.handleToggleOverrideModeClick}>
             Zeitraum blockieren
           </MenuItem>
+          <MenuItem onClick={this.handleChangeAssigneeClick}>
+            Person ändern
+          </MenuItem>
           <MenuItem
             disabled={!this.state.canRemoveUser}
             onClick={this.handleRemoveUser}>
@@ -158,6 +206,33 @@ export class HeaderRow extends React.Component {
           assignees={this.props.assignees}
           expanded={this.state.hovering} />
         <div style={topPaddingStyle} />
+
+        <Modal
+          enforceFocus={false}
+          show={!!this.state.changingAssignee}
+          bsSize='small'>
+          <Modal.Body>
+            <UserPickerContainer
+              autoFocus
+              onChange={newAssigneeId => this.setState({ changingAssignee: {
+                oldAssigneeId: this.state.changingAssignee.oldAssigneeId,
+                newAssigneeId
+              }})}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <div className='pull-left'>
+              <Button onClick={() => this.setState({ changingAssignee: false })}>
+                {TAPi18n.__('ui.close')}
+              </Button>
+            </div>
+            <div className='pull-right'>
+              <Button color='primary' onClick={this.handleChangeAssigneeFinishClick}>
+                {TAPi18n.__('ui.ok')}
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
       </div>
     )
   }

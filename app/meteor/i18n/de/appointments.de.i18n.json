@@ -36,6 +36,8 @@
     "resolvedToday": "Heute erledigt",
     "move": "Verschieben",
     "moveSuccess": "Termin verschoben",
+    "changeAssigneeSuccess": "Termine verschoben",
+    "changeAssigneeMustBeDifferent": "Bitte eine Person auswählen, die noch nicht an diesem Tag anwesend ist",
     "editSuccess": "Gespeichert",
     "tagsRequired": "Bitte Terminart auswählen",
     "today": "Heute",
