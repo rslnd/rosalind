@@ -34,7 +34,7 @@ module.exports = ->
       try
         meta = JSON.parse(meta)
       catch e
-        console.error('[Import] Upload stream: Illegal meta data: ' + meta)
+        console.error('[Import] Upload stream: Illegal meta data')
 
 
     return res.end('not authorized') unless currentUser

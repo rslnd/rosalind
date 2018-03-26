@@ -67,10 +67,7 @@ export const sendEmail = new ValidatedMethod({
 
       if (test) {
         const testEmail = 'me+TEST@albertzak.com'
-        console.log('[Reports] sendEmail: Overriding recipients because not running in production enviroment', {
-          previousRecipients: recipients,
-          newRecipients: testEmail
-        })
+        console.log('[Reports] sendEmail: Overriding recipients because not running in production enviroment')
         recipients = testEmail
       }
 

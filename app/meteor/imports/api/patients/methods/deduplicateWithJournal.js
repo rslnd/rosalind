@@ -174,8 +174,6 @@ export const isSameContact = a => b =>
   )
 
 export const mergeContacts = (master = [], addendum = []) => {
-  console.log('mergeContacts', typeof master, master, typeof addendum, addendum)
-
   if (!master) { return addendum }
   if (!addendum) { return master }
   return flatten([

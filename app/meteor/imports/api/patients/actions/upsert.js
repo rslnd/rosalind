@@ -123,7 +123,7 @@ export const upsert = ({ Patients }) => {
         }
 
         if (!isEqual(update, {}) && !isEqual(update['$set'], {})) {
-          console.log('[Patients] Updating', existingPatient._id, JSON.stringify(update, null, 2))
+          console.log('[Patients] Updating', existingPatient._id)
 
           Patients.update({ _id: existingPatient._id }, update, (err) => {
             if (err) { throw err }
@@ -137,12 +137,12 @@ export const upsert = ({ Patients }) => {
 
         try {
           const patientId = Patients.insert(patient, (e) => {
-            if (e) { console.error('[Patients] Insert failed with error', e, 'of patient', patient) }
+            if (e) { console.error('[Patients] Insert failed with error', e) }
             if (!quiet) { Events.post('patients/insert', { patientId }) }
           })
           return patientId
         } catch (e) {
-          console.error('[Patients] Insert failed with error', e, 'of patient', patient)
+          console.error('[Patients] Insert failed with error', e)
         }
       }
     }

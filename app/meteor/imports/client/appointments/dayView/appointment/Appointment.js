@@ -83,8 +83,6 @@ class AppointmentItem extends React.Component {
   }
 
   render () {
-    this.props.isMoving && console.log(this.props)
-
     const { appointment, classes, format } = this.props
     const start = moment(appointment.start)
     const appointmentClasses = classnames({

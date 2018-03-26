@@ -33,7 +33,7 @@ export const upsert = ({ Reports }) => {
           })
           return reportId
         } catch (e) {
-          console.error('[Reports] Insert failed with error', e, 'of report', report)
+          console.error('[Reports] Insert failed with error', e)
         }
       }
     }

@@ -21,8 +21,6 @@ export const insert = ({ Appointments }) => {
 
       this.unblock()
 
-      console.log('[Appointments] Insert', { appointment, newPatient })
-
       let patientId = appointment.patientId
 
       if (newPatient) {
@@ -31,7 +29,7 @@ export const insert = ({ Appointments }) => {
 
       const appointmentId = Appointments.insert({ ...appointment, patientId }, (err) => {
         if (err) {
-          console.error('[Appointments] Appointment insert failed with error', err, 'of appointment', appointment)
+          console.error('[Appointments] Appointment insert failed with error', err)
         } else {
           Events.post('appointments/insert', { appointmentId })
         }

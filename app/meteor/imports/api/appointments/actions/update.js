@@ -33,10 +33,7 @@ export const update = ({ Appointments }) => {
           $set: update
         })
 
-        Events.post('appointments/update', {
-          appointmentId,
-          update
-        })
+        Events.post('appointments/update', { appointmentId })
       } else {
         throw new Meteor.Error(404, 'Appointment not found')
       }

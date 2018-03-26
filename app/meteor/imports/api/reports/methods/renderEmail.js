@@ -102,11 +102,11 @@ export const renderEmail = ({ reports, mapUserIdToName, mapAssigneeType, mapCale
   const text = [header, body, footer].join('\n\n')
 
   if (isNull(title)) {
-    throw new Error(`Title contains 'null': ${title}`)
+    throw new Error(`Title contains 'null'`)
   }
 
   if (isNull(text)) {
-    throw new Error(`Text contains 'null': ${text}`)
+    throw new Error(`Text contains 'null'`)
   }
 
   return { title, text }

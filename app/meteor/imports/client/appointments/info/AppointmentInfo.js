@@ -162,7 +162,6 @@ const CurrencyFieldInner = (props) => {
   return <NumberFormat
     {...restProps}
     onValueChange={values => {
-      console.log('onvaluechange', values)
       props.onChange({
         target: {
           value: values.value
@@ -233,7 +232,6 @@ const Contacts = ({ patient }) => (
 const autofillRevenue = change => (e, tags) => {
   if (tags && tags.length >= 1) {
     const revenue = calculateRevenue(tags)
-    console.log('afr', tags, revenue)
     if (revenue === 0 || revenue > 0) {
       change('appointment.revenue', revenue)
     }

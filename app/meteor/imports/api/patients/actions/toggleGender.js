@@ -24,7 +24,7 @@ export const toggleGender = ({ Patients }) => {
         newGender = 'Male'
       }
 
-      console.log('[Patients] toggleGender: Setting gender of patient', patientId, 'to', newGender)
+      console.log('[Patients] toggleGender: Setting gender of patient', patientId)
 
       Patients.update({ _id: patientId }, {
         $set: {

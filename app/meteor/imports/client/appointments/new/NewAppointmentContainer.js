@@ -44,7 +44,7 @@ export class NewAppointmentContainerComponent extends React.Component {
   }
 
   handleSubmit (values, dispatch) {
-    console.log('[Appointments] Submitting new Appointment', { values })
+    console.log('[Appointments] Submitting new Appointment')
 
     let newPatient = null
     let patientId = values.patient.patientId
@@ -85,7 +85,7 @@ export class NewAppointmentContainerComponent extends React.Component {
       revenue
     }
 
-    console.log('[Appointments] Inserting appointment with new patient', { newPatient, appointment })
+    console.log('[Appointments] Inserting appointment with new patient', { appointment })
 
     return Appointments.actions.insert.callPromise({ appointment, newPatient })
       .then(() => {

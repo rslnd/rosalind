@@ -27,11 +27,7 @@ export const editNote = ({ Patients }) => {
           }
         })
 
-        Events.post('patients/editNote', {
-          patientId,
-          oldNote: patient.note,
-          newNote
-        })
+        Events.post('patients/editNote', { patientId })
       } else {
         throw new Meteor.Error(404, 'Patient not found')
       }

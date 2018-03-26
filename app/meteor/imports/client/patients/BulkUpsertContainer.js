@@ -13,7 +13,6 @@ const composer = (props, onData) => {
   const onSubmit = v => {
     try {
       const patient = mapFieldsToPatient(v.patient)
-      console.log({ v, patient })
 
       return Patients.actions.upsert.callPromise({ patient, replaceContacts: true })
         .then(() => {

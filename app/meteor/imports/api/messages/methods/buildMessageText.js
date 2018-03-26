@@ -39,10 +39,15 @@ export const buildMessageText = (templates = {}, { date }) => {
     if (validateNoRemainingPlaceholders(text)) {
       return text
     } else {
-      throw new Error(`[Messages] buildMessageText: Text contains remaining placeholders: "${text}"`)
+      throw new Error(`[Messages] buildMessageText: Text contains remaining placeholders`)
     }
   } else {
     const gsmInfo = gsm(text)
-    throw new Error(`[Messages] buildMessageText: Text exceeds maximum length: ${text} ${JSON.stringify(gsmInfo)}`)
+    const whitelistGsmInfo = {
+      charset: gsmInfo.char_set,
+      charsLeft: gsmInfo.chars_left,
+      smsCount: gsmInfo.sms_count
+    }
+    throw new Error(`[Messages] buildMessageText: Text exceeds maximum length ${JSON.stringify(whitelistGsmInfo)}`)
   }
 }

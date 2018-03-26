@@ -30,18 +30,18 @@ module.exports = (job, resources) ->
         return
 
       if (not includes([1, 8], record.Status_Id))
-        console.error('[Importers] terminiko: upsertAppointments: Status ID is not 1 or 8', record)
+        console.error('[Importers] terminiko: upsertAppointments: Status ID is not 1 or 8', record.Kennummer)
         return
 
       if (not record.Datum_Beginn or not record.Datum_Ende)
-        console.error('[Importers] terminiko: upsertAppointments: Appointment has no start or end date', record)
+        console.error('[Importers] terminiko: upsertAppointments: Appointment has no start or end date', record.Kennummer)
         return
 
       start = moment.tz(record.Datum_Beginn, timezone)
       end = moment.tz(record.Datum_Ende, timezone)
 
       if (moment.range(start, end).diff('hours') > 20)
-        console.error('[Importers] terminiko: upsertAppointments: Appointment duration is too long', record)
+        console.error('[Importers] terminiko: upsertAppointments: Appointment duration is too long', record.Kennummer)
         return
 
       if (moment.range(start, end).diff('seconds') < 1)

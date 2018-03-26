@@ -43,7 +43,7 @@ export const upsert = ({ Schedules, Users }) => {
           })
           return scheduleId
         } catch (e) {
-          console.error('[Schedules] Insert failed with error', e, 'of schedule', schedule)
+          console.error('[Schedules] Insert failed with error', e)
         }
       }
     }

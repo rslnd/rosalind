@@ -54,7 +54,7 @@ export const parsePatient = (row, timezone) => {
   const expectedFieldsCount = 17
   if (row.length < 2) { return }
   if (row.length !== expectedFieldsCount) {
-    throw new Error(`Expected row to have ${expectedFieldsCount} fields, got ${row.length}: ${row}`)
+    throw new Error(`Expected row to have ${expectedFieldsCount} fields, got ${row.length}`)
   }
 
   const action = parseAction(row[12])

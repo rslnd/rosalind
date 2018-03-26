@@ -29,7 +29,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
         }
       }
 
-      console.error('Cannot find calendar or tag with id', _id, referrals)
+      console.error('[Referrals] Cannot find calendar or tag with id', _id)
       return {}
     })
 

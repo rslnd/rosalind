@@ -20,7 +20,7 @@ export const setupDragdrop = () => {
         Alert.success(TAPi18n.__('ui.importSuccessMessage'))
         if (typeof response === 'object') {
           const { result, importer } = response
-          console.log('[Importers] Successfully ingested dragdrop data transfer', { importer, result })
+          console.log('[Importers] Successfully ingested dragdrop data transfer', { importer })
           store.dispatch({
             type: 'DATA_TRANSFER_SUCCESS',
             importer,
@@ -38,7 +38,7 @@ export const setupDragdrop = () => {
 export const setupNative = () => {
   if (window.native) {
     window.native.events.on('import/dataTransfer', (file) => {
-      console.log('[Importers] Received data transfer event from native binding', file)
+      console.log('[Importers] Received data transfer event from native binding', { name: file.path, importer: file.importer })
       ingest({ name: file.path, content: file.content, importer: file.importer })
         .then((response) => {
           if (typeof response === 'object') {

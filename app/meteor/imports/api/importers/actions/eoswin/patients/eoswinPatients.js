@@ -30,7 +30,7 @@ export const eoswinPatients = ({ Importers }) => {
             break
           case 'softRemove':
             // TODO: Add method to soft remove patients
-            console.warn('[Importers] eoswinPatients: Not implemented: Requested soft removal of patient', patient)
+            console.warn('[Importers] eoswinPatients: Not implemented: Requested soft removal of patient', patient.external.id)
             break
           default: throw new Error(`[Importers] eoswinPatients: Unknown action ${action}`)
         }

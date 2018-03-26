@@ -42,7 +42,7 @@ const parseQueryForAutofill = (query = '') => {
     { channel: 'Email' }
   ]
 
-  console.log('[PatientPicker] Autofill', { query, autofill })
+  console.log('[PatientPicker] Autofill')
   return { _id: 'newPatient', ...autofill }
 }
 

@@ -7,13 +7,13 @@ import {
 } from '../../api/customer/server/isTrustedNetwork'
 
 const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
-  if (!roles) {
-    console.warn('Publication', name, 'is not restricted to any roles')
-  }
+  // if (!roles) {
+  //   console.warn('Publication', name, 'is not restricted to any roles')
+  // }
 
-  if (preload) {
-    console.log('Preload Publication', name)
-  }
+  // if (preload) {
+  //   console.log('Preload Publication', name)
+  // }
 
   return function (clientArgs) {
     try {
@@ -22,7 +22,7 @@ const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
         ...args
       })
     } catch (e) {
-      console.error('Publication', name, 'failed check, expected', args, ' -- Actual', clientArgs)
+      console.error('Publication', name, 'failed check')
       throw e
     }
 

@@ -3,7 +3,7 @@ import { getClientKey } from './getClientKey'
 
 const withClientKey = (name, args) => {
   if (args && typeof args !== 'object') {
-    console.warn('[util] subscribe to', name, 'called with non-object argument', args)
+    console.warn('[util] subscribe to', name, 'called with non-object argument')
   }
 
   if (!args) {

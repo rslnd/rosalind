@@ -20,15 +20,7 @@ export const set = ({ Settings }) => {
 
       Settings.set(key, value, isPublic)
 
-      const valueSanitized = (
-          key.includes('secret') ||
-          key.includes('password') ||
-          key.includes('private') ||
-          key.includes('key'))
-        ? '<secret>'
-        : value
-
-      Events.post('settings/set', { key, value: valueSanitized, isPublic })
+      Events.post('settings/set', { key, isPublic })
     }
   })
 }

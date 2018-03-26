@@ -21,7 +21,7 @@ export const unredeem = ({ Referrals, Appointments }) => {
           }
         })
 
-        console.log('[Referrals] serverActions/unredeem', referral)
+        console.log('[Referrals] serverActions/unredeem', referral._id)
 
         return true
       }

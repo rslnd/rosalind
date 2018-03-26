@@ -8,7 +8,7 @@ export const inboundWebhooks = () => {
   post.route('/api/messages/channels/sms/receive', (params, req, res, next) => {
     const payload = req.body
 
-    console.log('[Messages] server/inboundWebhooks: Caught webhook', { params, headers: req.headers, body: req.body })
+    console.log('[Messages] server/inboundWebhooks: Caught webhook', { headers: req.headers })
 
     res.setHeader('Content-Type', 'application/json; charset=utf8')
 

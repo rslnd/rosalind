@@ -17,9 +17,9 @@ const sendUnthrottled = (messageId) => {
 
   const message = Messages.findOne({ _id: messageId })
   if (message && okToSend(message)) {
-    console.log('[Messages] channels/sms: Sending message', message)
+    console.log('[Messages] channels/sms: Sending SMS', message._id)
     return provider.send(message).then((res) => {
-      console.log('[Messages] channels/sms: Successfully sent SMS', message._id, res)
+      console.log('[Messages] channels/sms: Successfully sent SMS', message._id)
       Messages.update({ _id: message._id }, {
         $set: {
           status: 'sent',
@@ -29,7 +29,7 @@ const sendUnthrottled = (messageId) => {
       })
       return res
     }).catch((err) => {
-      console.log('[Messages] channels/sms: Failed to send SMS', message._id, err)
+      console.log('[Messages] channels/sms: Failed to send SMS', message._id)
       Messages.update({ _id: message._id }, {
         $set: {
           status: 'failed',
@@ -67,7 +67,7 @@ export const receive = (payload) => {
   let patient
   let cancelAppointment
 
-  console.log('[Messages] channels/sms: Received message', messageId, message)
+  console.log('[Messages] channels/sms: Received message', messageId)
 
   // Try to match received reply with a message sent by the system
   const sentMessages = Messages.find(

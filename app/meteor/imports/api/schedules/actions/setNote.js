@@ -26,7 +26,7 @@ export const setNote = ({ Schedules }) => {
 
       if (existingSchedule) {
         if (!note) {
-          Events.post('schedules/setNoteRemove', { userId, day, oldNote: existingSchedule.note })
+          Events.post('schedules/setNoteRemove', { userId, day })
           Schedules.remove({ _id: existingSchedule._id })
         }
 
@@ -34,7 +34,7 @@ export const setNote = ({ Schedules }) => {
           $set: { note }
         })
 
-        Events.post('schedules/setNoteUpdate', { scheduleId: existingSchedule._id, userId, day, note })
+        Events.post('schedules/setNoteUpdate', { scheduleId: existingSchedule._id, userId, day })
         return existingSchedule._id
       } else {
         const schedule = {
@@ -46,7 +46,7 @@ export const setNote = ({ Schedules }) => {
 
         const scheduleId = Schedules.insert(schedule, (err) => {
           if (err) { throw err }
-          Events.post('schedules/setNoteInsert', { scheduleId, userId, note, day })
+          Events.post('schedules/setNoteInsert', { scheduleId, userId, day })
         })
         return scheduleId
       }

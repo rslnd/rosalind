@@ -1,7 +1,7 @@
 export const name = 'stub'
 
 export const send = (message) => {
-  console.log('[Messages] channels/sms/stub: Sending SMS to', message.to, `"${message.text}"`, message._id)
+  console.log('[Messages] channels/sms/stub: Sending SMS', message._id)
 
   return new Promise((resolve, reject) => {
     if (Math.random() < 0.05) {
@@ -22,8 +22,6 @@ export const receive = (payload) => {
     senderAddressType: 'international',
     textMessageContent: 'NEIN'
   }
-
-  console.log('[Messages] channels/sms/stub: Receiving payload', payload)
 
   const message = {
     type: 'inbound',

@@ -23,12 +23,12 @@ const getClient = memoize(() => {
 export const send = (message) => {
   const to = normalizePhoneNumber(message.to)
   if (!to) {
-    throw new Error(`Invalid phone number: ${message.to}`)
+    throw new Error(`Invalid phone number of message ${message._id}`)
   }
 
   const text = message.text
 
-  console.log('[Messages] channels/sms/websms: Sending SMS to', to, `"${text}"`, message._id)
+  console.log('[Messages] channels/sms/websms: Sending SMS', message._id)
 
   const maxSmsPerMessage = 1
 
@@ -62,7 +62,7 @@ export const send = (message) => {
 }
 
 export const receive = (payload) => {
-  console.log('[Messages] channels/sms/websms: Received payload', payload)
+  console.log('[Messages] channels/sms/websms: Received payload')
 
   const message = {
     type: 'inbound',
