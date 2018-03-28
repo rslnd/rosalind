@@ -50,7 +50,7 @@ export default () => {
     const clientKey = loginAttempt.methodArguments[0].clientKey
 
     if (passwordlessAttempt) {
-      console.log('[Login] Passwordless login attempt', { userId, ipAddress })
+      console.log('[Login] Passwordless login attempt', { userId })
       if (isTrustedNetwork(ipAddress)) {
         if (userPasswordlessAllowed) {
           if (clientKey) {
@@ -74,12 +74,12 @@ export default () => {
             throw new Meteor.Error('passwordless-login-no-client-key', 'Missing client key for passwordless login within trusted network')
           }
         } else {
-          console.warn('[Login] Passwordless login not enabled for user', { userId, ipAddress })
+          console.warn('[Login] Passwordless login not enabled for user', { userId })
           throw new Meteor.Error('passwordless-login-disallowed-for-user', `Passwordless Login not enabled for user ${userId}`)
         }
       } else {
-        console.warn('[Login] Passwordless login not allowed for network', { userId, ipAddress })
-        throw new Meteor.Error('passwordless-login-disallowed-for-network', `Passwordless Login not allowed for network ${ipAddress}`)
+        console.warn('[Login] Passwordless login not allowed for network', { userId })
+        throw new Meteor.Error('passwordless-login-disallowed-for-network', `Passwordless Login not allowed for network`)
       }
     } else {
       return loginAttempt.allowed
