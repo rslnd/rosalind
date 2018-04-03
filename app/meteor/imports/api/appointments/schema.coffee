@@ -23,6 +23,10 @@ Schema = new SimpleSchema
     type: SimpleSchema.RegEx.Id
     optional: true
     index: 1
+  
+  waitlistAssigneeId:
+    type: SimpleSchema.RegEx.Id,
+    optional: true
 
   assistantIds:
     type: [SimpleSchema.RegEx.Id]

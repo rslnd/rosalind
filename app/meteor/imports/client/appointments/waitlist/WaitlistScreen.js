@@ -1,22 +1,34 @@
 import React from 'react'
 import { WaitlistItem } from './WaitlistItem'
 import FlipMove from 'react-flip-move'
+import { UserPickerContainer } from '../../users/UserPickerContainer'
 
-export const WaitlistScreen = ({ appointments, action }) => (
-  <FlipMove style={containerStyle}>
+export const WaitlistScreen = ({ appointments, action, canViewAllWaitlists, handleChangeAssigneeView }) => (
+  <div className='content'>
     {
-      appointments.map((appointment, i) => (
-        <div key={appointment._id}>
-          <WaitlistItem
-            isFirst={i === 0}
-            isLast={i === (appointments.length - 1)}
-            appointment={appointment}
-            action={action}
-          />
+      canViewAllWaitlists &&
+        <div className='hide-print' style={{ paddingBottom: 15 }}>
+          <UserPickerContainer
+            autoFocus
+            onChange={handleChangeAssigneeView} />
         </div>
-      ))
+
     }
-  </FlipMove>
+    <FlipMove style={containerStyle}>
+      {
+        appointments.map((appointment, i) => (
+          <div key={appointment._id}>
+            <WaitlistItem
+              isFirst={i === 0}
+              isLast={i === (appointments.length - 1)}
+              appointment={appointment}
+              action={action}
+            />
+          </div>
+        ))
+      }
+    </FlipMove>
+  </div>
 )
 
 const containerStyle = {

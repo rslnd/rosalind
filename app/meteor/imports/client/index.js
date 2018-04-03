@@ -14,7 +14,7 @@ import { MainLayoutContainer } from './layout'
 import { Dashboard } from './dashboard/Dashboard'
 import { InboundCalls } from './inboundCalls'
 import { Appointments } from './appointments'
-import { WaitlistContainer } from './appointments/waitlist/WaitlistContainer'
+import { Waitlist } from './appointments/waitlist'
 import { Schedules } from './schedules'
 import { Reports } from './reports'
 import { Users } from './users'
@@ -28,7 +28,7 @@ export const Rosalind = () => (
         <MainLayoutContainer>
           <Switch>
             <Route path='/appointments' component={Appointments} />
-            <Route path='/waitlist' component={WaitlistContainer} />
+            <Route path='/waitlist' component={Waitlist} />
             <Route path='/inboundCalls' component={InboundCalls} />
             <Route path='/schedules' component={Schedules} />
             <Route path='/reports' component={Reports} />

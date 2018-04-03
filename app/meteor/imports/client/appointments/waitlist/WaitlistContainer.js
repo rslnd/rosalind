@@ -1,11 +1,14 @@
+import idx from 'idx'
 import moment from 'moment'
 import identity from 'lodash/identity'
 import { toClass } from 'recompose'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { Roles } from 'meteor/alanning:roles'
 import Alert from 'react-s-alert'
 import { Appointments } from '../../../api/appointments'
+import { Users } from '../../../api/users'
 import { Patients } from '../../../api/patients'
 import { WaitlistScreen } from './WaitlistScreen'
 import { subscribe } from '../../../util/meteor/subscribe'
@@ -31,8 +34,15 @@ const composer = props => {
   const startOfToday = moment().startOf('day').toDate()
   const endOfToday = moment().endOf('day').toDate()
 
+  const username = idx(props, _ => _.match.params.username)
+  const user = username && Users.findOne({ username })
+  const assigneeId = (user && user._id) || Meteor.userId()
+
   const selector = {
-    assigneeId: Meteor.userId(),
+    $or: [
+      { assigneeId },
+      { waitlistAssigneeId: assigneeId }
+    ],
     patientId: { $ne: null },
     admittedAt: { $ne: null },
     treatmentEnd: null,
@@ -45,6 +55,21 @@ const composer = props => {
   const appointments = Appointments.find(selector, {
     sort: { admittedAt: 1 }
   }).fetch()
+
+  const filteredAppointments = appointments.filter(a => {
+    // If this appt was reassigned (ie. has waitlistAssigneeId set)
+    // then remove it from original assigneeId's waitlist
+    if (a.waitlistAssigneeId) {
+      if (a.waitlistAssigneeId === assigneeId) {
+        return true
+      }
+      return false
+    } else {
+      return true
+    }
+  })
+
+  console.log({username, al: appointments.length, af: filteredAppointments.length})
 
   subscribe('referrals', {
     patientIds: appointments.map(a => a.patientId).filter(identity)
@@ -59,9 +84,22 @@ const composer = props => {
     }
   })
 
+  const canViewAllWaitlists = Roles.userIsInRole(Meteor.userId(), [
+    'admin',
+    'waitlist-all'
+  ])
+
+  const handleChangeAssigneeView = assigneeId => {
+    const user = Users.findOne({ _id: assigneeId })
+    const path = `/waitlist/${user ? user.username : ''}${props.location.search}`
+    props.history.replace(path)
+  }
+
   return {
     action,
-    appointments: waitlistAppointments
+    appointments: waitlistAppointments,
+    canViewAllWaitlists,
+    handleChangeAssigneeView
   }
 }
 
