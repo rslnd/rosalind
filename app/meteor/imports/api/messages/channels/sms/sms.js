@@ -44,7 +44,10 @@ const sendUnthrottled = (messageId) => {
   }
 }
 
-const sendThrottled = rateLimit(sendUnthrottled, 2000)
+const sendThrottled = rateLimit(sendUnthrottled, 2000, this, {
+  debug: true,
+  futures: true
+})
 
 export const send = (messageId) => {
   return new Promise((resolve) => {

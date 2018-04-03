@@ -1,4 +1,5 @@
 import some from 'lodash/some'
+import find from 'lodash/find'
 import uniqBy from 'lodash/uniqBy'
 import identity from 'lodash/identity'
 import moment from 'moment-timezone'
@@ -149,6 +150,9 @@ export const createReminders = ({ Messages }) => {
         }
       })
 
+      const phone = contacts =>
+        find(contacts, c => c.channel === 'Phone').value
+
       const messages = messagePayloads.map((payload) => {
         const calendar = Calendars.findOne({ _id: payload.calendarId })
         const text =
@@ -160,7 +164,7 @@ export const createReminders = ({ Messages }) => {
           channel: 'SMS',
           direction: 'outbound',
           status: 'scheduled',
-          to: payload.contacts[0].value,
+          to: phone(payload.contacts),
           scheduled: calculateReminderDate(payload.start).toDate(),
           text: buildMessageText({ text }, {
             date: payload.start
