@@ -8,6 +8,8 @@ import { Schedules } from '../../schedules'
 import { Day } from '../../../util/schema/day'
 import { dayToDate } from '../../../util/time/day'
 
+// This action updates the assigneeId of someone's appointments on a given day,
+// eg. when the assignee gets ill
 export const changeAssignee = ({ Appointments }) => {
   return new ValidatedMethod({
     name: 'appointments/changeAssignee',

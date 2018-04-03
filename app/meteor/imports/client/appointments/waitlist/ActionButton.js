@@ -11,15 +11,15 @@ const alternativeButtonStyle = {
   flexShrink: 1
 }
 
-export const ActionButton = ({ appointment, isFirst, isLast, action, style = {} }) => {
+export const ActionButton = ({ appointment, isFirst, isLast, action, style = {}, canChangeWaitlistAssignee, handleChangeWaitlistAssignee }) => {
   const a = appointment
   const nextAction = [
-    !a.treatmentStart && action('startTreatment', a),
+    !a.treatmentStart && action('startTreatment', a._id),
     a.treatmentStart && !a.treatmentEnd && !isLast && {
-      ...action('nextTreatment', a),
-      alternativeAction: action('endTreatment', a, { alternative: true })
+      ...action('nextTreatment', a._id),
+      alternativeAction: action('endTreatment', a._id, { alternative: true })
     },
-    a.treatmentStart && !a.treatmentEnd && action('endTreatment', a)
+    a.treatmentStart && !a.treatmentEnd && action('endTreatment', a._id)
   ].find(identity)
 
   const containerStyle = {
@@ -49,6 +49,16 @@ export const ActionButton = ({ appointment, isFirst, isLast, action, style = {} 
             onClick={nextAction.alternativeAction.fn}
             fullWidth>
             {nextAction.alternativeAction.title}
+          </Button>
+      }
+      {
+        canChangeWaitlistAssignee &&
+          <Button
+            style={alternativeButtonStyle}
+            size='small'
+            onClick={() => handleChangeWaitlistAssignee({ appointmentId: a._id })}
+            fullWidth>
+            Zuweisen
           </Button>
       }
     </div> || null

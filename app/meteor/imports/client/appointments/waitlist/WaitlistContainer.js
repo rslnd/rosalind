@@ -13,8 +13,11 @@ import { Patients } from '../../../api/patients'
 import { WaitlistScreen } from './WaitlistScreen'
 import { subscribe } from '../../../util/meteor/subscribe'
 
-const action = (action, appointment, options = {}) => {
-  const fn = () => Appointments.actions[action].callPromise({ appointmentId: appointment._id })
+const action = (action, appointmentId, options = {}, args = {}) => {
+  const fn = () => Appointments.actions[action].callPromise({
+    appointmentId,
+    ...args
+  })
     .then(() => {
       Alert.success(TAPi18n.__(`appointments.${action}Success`))
     })
@@ -69,13 +72,11 @@ const composer = props => {
     }
   })
 
-  console.log({username, al: appointments.length, af: filteredAppointments.length})
-
   subscribe('referrals', {
-    patientIds: appointments.map(a => a.patientId).filter(identity)
+    patientIds: filteredAppointments.map(a => a.patientId).filter(identity)
   })
 
-  const waitlistAppointments = appointments.map(appointment => {
+  const waitlistAppointments = filteredAppointments.map(appointment => {
     const patient = Patients.findOne({ _id: appointment.patientId })
 
     return {
@@ -89,6 +90,11 @@ const composer = props => {
     'waitlist-all'
   ])
 
+  const canChangeWaitlistAssignee = Roles.userIsInRole(Meteor.userId(), [
+    'admin',
+    'waitlist-change'
+  ])
+
   const handleChangeAssigneeView = assigneeId => {
     const user = Users.findOne({ _id: assigneeId })
     const path = `/waitlist/${user ? user.username : ''}${props.location.search}`
@@ -99,6 +105,7 @@ const composer = props => {
     action,
     appointments: waitlistAppointments,
     canViewAllWaitlists,
+    canChangeWaitlistAssignee,
     handleChangeAssigneeView
   }
 }

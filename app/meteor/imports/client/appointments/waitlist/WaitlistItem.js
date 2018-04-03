@@ -29,7 +29,7 @@ const actionButtonStyle = {
   flex: 1
 }
 
-export const WaitlistItem = ({ appointment, isFirst, isLast, action }) =>
+export const WaitlistItem = ({ appointment, isFirst, isLast, action, handleChangeWaitlistAssignee, canChangeWaitlistAssignee }) =>
   <Paper style={isFirst ? boxStyleFirst : boxStyle}>
     <div style={patientInfoStyle}>
       <div>
@@ -63,5 +63,7 @@ export const WaitlistItem = ({ appointment, isFirst, isLast, action }) =>
       action={action}
       appointment={appointment}
       isFirst={isFirst}
-      isLast={isLast} />
+      isLast={isLast}
+      handleChangeWaitlistAssignee={handleChangeWaitlistAssignee}
+      canChangeWaitlistAssignee={canChangeWaitlistAssignee} />
   </Paper>

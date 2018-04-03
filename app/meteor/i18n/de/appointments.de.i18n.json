@@ -75,6 +75,8 @@
     "endTreatmentSuccess": "Behandlung beendet",
     "nextTreatment": "Nächste Behandlung starten",
     "nextTreatmentSuccess": "Nächste Behandlung gestartet",
+    "changeWaitlistAssigneeSuccess": "Zugewiesen",
+    "changeWaitlistAssignee": "Zuweisen",
     "error": "Entschuldigung! Bitte noch einmal versuchen.",
     "form": {
       "start": {

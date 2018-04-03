@@ -12,6 +12,7 @@ import { startTreatment } from './startTreatment'
 import { endTreatment } from './endTreatment'
 import { nextTreatment } from './nextTreatment'
 import { changeAssignee } from './changeAssignee'
+import { changeWaitlistAssignee } from './changeWaitlistAssignee'
 
 export default function ({ Appointments }) {
   return {
@@ -28,6 +29,7 @@ export default function ({ Appointments }) {
     startTreatment: startTreatment({ Appointments }),
     endTreatment: endTreatment({ Appointments }),
     nextTreatment: nextTreatment({ Appointments }),
-    changeAssignee: changeAssignee({ Appointments })
+    changeAssignee: changeAssignee({ Appointments }),
+    changeWaitlistAssignee: changeWaitlistAssignee({ Appointments })
   }
 }
