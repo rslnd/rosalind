@@ -21,31 +21,31 @@ const getClient = memoize(() => {
 })
 
 export const send = (message) => {
-  const to = normalizePhoneNumber(message.to)
-  if (!to) {
-    throw new Error(`Invalid phone number of message ${message._id}`)
-  }
+  return new Promise((resolve, reject) => {
+    const to = normalizePhoneNumber(message.to)
+    if (!to) {
+      reject(new Error(`Invalid phone number of message ${message._id}`))
+    }
 
-  const text = message.text
+    const text = message.text
 
-  console.log('[Messages] channels/sms/websms: Sending SMS', message._id)
+    console.log('[Messages] channels/sms/websms: Sending SMS', message._id)
 
-  const maxSmsPerMessage = 1
+    const maxSmsPerMessage = 1
 
-  if (Settings.get('messages.sms.whitelist.enabled')) {
-    isTest = true
-    if (Settings.get('messages.sms.whitelist.numbers') && some(Settings.get('messages.sms.whitelist.numbers').split(','), n => to.indexOf(n) !== -1)) {
-      isTest = false
+    if (Settings.get('messages.sms.whitelist.enabled')) {
+      isTest = true
+      if (Settings.get('messages.sms.whitelist.numbers') && some(Settings.get('messages.sms.whitelist.numbers').split(','), n => to.indexOf(n) !== -1)) {
+        isTest = false
+        console.log('[Messages] channels/sms/websms: Not running in production environment, enabling test mode')
+      }
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      isTest = true
       console.log('[Messages] channels/sms/websms: Not running in production environment, enabling test mode')
     }
-  }
 
-  if (process.env.NODE_ENV !== 'production') {
-    isTest = true
-    console.log('[Messages] channels/sms/websms: Not running in production environment, enabling test mode')
-  }
-
-  return new Promise((resolve, reject) => {
     const sms = new websms.TextMessage([to], text, (err) => {
       reject(err)
     })
