@@ -19,7 +19,7 @@ const schema = new SimpleSchema({
 
   status: {
     type: String,
-    allowedValues: ['unread', 'read', 'answered', 'draft', 'final', 'scheduled', 'sent']
+    allowedValues: ['unread', 'read', 'answered', 'draft', 'final', 'scheduled', 'sent', 'failed']
   },
 
   to: {
