@@ -23,6 +23,10 @@ export const changeWaitlistAssignee = ({ Appointments }) => {
       }, {
         $set: {
           waitlistAssigneeId
+        },
+        $unset: {
+          treatmentStart: 1,
+          treatmentBy: 1
         }
       })
 
