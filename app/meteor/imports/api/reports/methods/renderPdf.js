@@ -49,7 +49,7 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
       }
     } while (!loaded)
 
-    await delay(500)
+    await delay(5000)
 
     const buffer = await page.pdf(printOptions)
 
