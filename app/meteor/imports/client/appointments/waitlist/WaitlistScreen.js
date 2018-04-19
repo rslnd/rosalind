@@ -113,6 +113,7 @@ export class WaitlistScreen extends React.Component {
     )
   }
 }
+
 const containerStyle = {
   padding: 12,
   overflow: 'hidden',
