@@ -30,6 +30,7 @@ export const publication = () => {
                   calendarId: 1,
                   patientId: 1,
                   assigneeId: 1,
+                  waitlistAssigneeId: 1,
                   tags: 1,
                   start: 1,
                   end: 1,

@@ -10,10 +10,11 @@ export const setAdmitted = ({ Appointments }) => {
     name: 'appointments/setAdmitted',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
-      appointmentId: { type: SimpleSchema.RegEx.Id }
+      appointmentId: { type: SimpleSchema.RegEx.Id },
+      waitlistAssigneeId: { type: SimpleSchema.RegEx.Id, optional: true }
     }).validator(),
 
-    run ({ appointmentId }) {
+    run ({ appointmentId, waitlistAssigneeId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -23,20 +24,24 @@ export const setAdmitted = ({ Appointments }) => {
         return
       }
 
-      Appointments.update({ _id: appointmentId }, {
-        $set: {
-          canceled: false,
-          admitted: true,
-          admittedAt: new Date(),
-          admittedBy: this.userId
-        }
-      })
+      let $set = {
+        canceled: false,
+        admitted: true,
+        admittedAt: new Date(),
+        admittedBy: this.userId
+      }
+
+      if (waitlistAssigneeId) {
+        $set.waitlistAssigneeId = waitlistAssigneeId
+      }
+
+      Appointments.update({ _id: appointmentId }, { $set })
 
       if (Meteor.isServer) {
         Referrals.serverActions.redeem({ appointmentId })
       }
 
-      Events.post('appointments/setAdmitted', { appointmentId })
+      Events.post('appointments/setAdmitted', { appointmentId, waitlistAssigneeId })
 
       return appointmentId
     }

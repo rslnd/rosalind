@@ -16,8 +16,7 @@ const composer = (props, onData) => {
   const closeModal = () => props.onClose && props.onClose()
 
   const setAdmitted = () => {
-    Alert.success(TAPi18n.__('appointments.setAdmittedSuccess'))
-    Appointments.actions.setAdmitted.call(args)
+    props.onSetAdmitted(appointment)
     closeModal()
   }
 

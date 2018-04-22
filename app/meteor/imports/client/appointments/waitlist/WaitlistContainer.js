@@ -101,6 +101,8 @@ const composer = props => {
     props.history.replace(path)
   }
 
+  console.log(selector, appointments, waitlistAppointments)
+
   return {
     action,
     appointments: waitlistAppointments,

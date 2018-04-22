@@ -7,7 +7,16 @@ import { AppointmentActionsContainer } from './AppointmentActionsContainer'
 import { PastAppointmentsContainer } from '../../patients/PastAppointmentsContainer'
 
 export const AppointmentModal = (props) => {
-  const { appointmentId, onStartMove, show, onClose, viewInCalendar, comments, patient } = props
+  const {
+    appointmentId,
+    onStartMove,
+    onSetAdmitted,
+    show,
+    onClose,
+    viewInCalendar,
+    comments,
+    patient
+  } = props
 
   const Actions = () =>
     <Modal.Footer style={{ backgroundColor: '#fcfcfc' }}>
@@ -15,7 +24,8 @@ export const AppointmentModal = (props) => {
         appointmentId={appointmentId}
         onStartMove={onStartMove}
         onClose={onClose}
-        viewInCalendar={viewInCalendar} />
+        viewInCalendar={viewInCalendar}
+        onSetAdmitted={onSetAdmitted} />
     </Modal.Footer>
 
   return (

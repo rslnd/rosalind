@@ -8,6 +8,7 @@ import { HeaderRowContainer } from './header/HeaderRowContainer'
 import { AppointmentsGrid } from './grid/AppointmentsGrid'
 import { ScheduleModal } from './schedules/ScheduleModal'
 import { NewAppointmentModal } from './new/NewAppointmentModal'
+import { WaitlistAssigneeModal } from './WaitlistAssigneeModal'
 import { setTime } from './grid/timeSlots'
 
 export class AppointmentsView extends React.Component {
@@ -44,6 +45,7 @@ export class AppointmentsView extends React.Component {
     this.handleScheduleModalClose = this.handleScheduleModalClose.bind(this)
     this.handleScheduleSoftRemove = this.handleScheduleSoftRemove.bind(this)
     this.handleSetAdmitted = this.handleSetAdmitted.bind(this)
+    this.handleSelectWaitlistAssigneeModalClose = this.handleSelectWaitlistAssigneeModalClose.bind(this)
     this.handleMoveStart = this.handleMoveStart.bind(this)
     this.handleMoveHover = this.handleMoveHover.bind(this)
     this.handleMoveEnd = this.handleMoveEnd.bind(this)
@@ -63,11 +65,11 @@ export class AppointmentsView extends React.Component {
   }
 
   handleAppointmentModalOpen (appointment) {
-    this.setState({ ...this.state, appointmentModalOpen: true, selectedAppointmentId: appointment._id })
+    this.setState({ appointmentModalOpen: true, selectedAppointmentId: appointment._id })
   }
 
   handleAppointmentModalClose () {
-    this.setState({ ...this.state, appointmentModalOpen: false })
+    this.setState({ appointmentModalOpen: false })
   }
 
   handleBlankClick (options) {
@@ -95,7 +97,7 @@ export class AppointmentsView extends React.Component {
       assigneeId: this.state.selectedAssigneeId
     })
 
-    this.setState({ ...this.state, newAppointmentModalOpen: false })
+    this.setState({ newAppointmentModalOpen: false })
   }
 
   handleNewAppointmentModalOpen ({ event, time, assigneeId }) {
@@ -107,7 +109,7 @@ export class AppointmentsView extends React.Component {
       assigneeId
     })
 
-    this.setState({ ...this.state,
+    this.setState({
       newAppointmentModalOpen: true,
       selectedTime: time,
       selectedAssigneeId: assigneeId
@@ -119,7 +121,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleToggleOverrideMode ({ assigneeId }) {
-    this.setState({ ...this.state,
+    this.setState({
       override: {
         isOverriding: !this.state.override.isOverriding,
         overrideAssigneeId: assigneeId
@@ -129,7 +131,7 @@ export class AppointmentsView extends React.Component {
 
   handleOverrideStart ({ time }) {
     if (this.state.override.isOverriding) {
-      this.setState({ ...this.state,
+      this.setState({
         override: {
           ...this.state.override,
           start: time,
@@ -140,7 +142,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleOverrideHover ({ time }) {
-    this.setState({ ...this.state,
+    this.setState({
       override: {
         ...this.state.override,
         end: moment(time).add(this.props.calendar.slotSize || 5, 'minutes').subtract(1, 'second').toDate()
@@ -169,7 +171,7 @@ export class AppointmentsView extends React.Component {
       console.log('[Appointments] Schedules override end event', { newSchedule })
 
       Schedules.actions.upsert.callPromise({ schedule: newSchedule }).then(() => {
-        this.setState({ ...this.state,
+        this.setState({
           override: {
             isOverriding: false,
             start: null,
@@ -191,7 +193,7 @@ export class AppointmentsView extends React.Component {
 
   handleScheduleModalOpen ({ scheduleId }) {
     if (this.props.canEditSchedules) {
-      this.setState({...this.state,
+      this.setState({
         scheduleModalOpen: true,
         scheduleModalId: scheduleId
       })
@@ -199,7 +201,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleScheduleModalClose () {
-    this.setState({...this.state,
+    this.setState({
       scheduleModalOpen: false,
       scheduleModalId: null
     })
@@ -215,12 +217,24 @@ export class AppointmentsView extends React.Component {
   }
 
   handleSetAdmitted (appointment) {
-    this.props.onSetAdmitted({ appointmentId: appointment._id })
+    if (appointment.assigneeId) {
+      this.props.onSetAdmitted({ appointmentId: appointment._id })
+    } else {
+      this.setState({
+        selectWaitlistAssigneeModalOpen: true,
+        selectWaitlistAssigneeAppointmentId: appointment._id
+      })
+    }
+  }
+
+  handleSelectWaitlistAssigneeModalClose () {
+    this.setState({
+      selectWaitlistAssigneeModalOpen: false
+    })
   }
 
   handleMoveStart (args) {
     this.setState({
-      ...this.state,
       appointmentModalOpen: false
     })
 
@@ -274,6 +288,7 @@ export class AppointmentsView extends React.Component {
         <AppointmentModalContainer
           appointmentId={this.state.selectedAppointmentId}
           onStartMove={this.handleMoveStart}
+          onSetAdmitted={this.handleSetAdmitted}
           show={this.state.appointmentModalOpen}
           onClose={this.handleAppointmentModalClose} />
 
@@ -288,6 +303,13 @@ export class AppointmentsView extends React.Component {
           assigneeId={this.state.selectedAssigneeId}
           time={this.state.selectedTime}
           onClose={this.handleNewAppointmentModalClose} />
+
+        <WaitlistAssigneeModal
+          show={this.state.selectWaitlistAssigneeModalOpen}
+          onClose={this.handleSelectWaitlistAssigneeModalClose}
+          appointmentId={this.state.selectWaitlistAssigneeAppointmentId}
+          onSetAdmitted={this.props.onSetAdmitted}
+        />
       </div>
     )
   }

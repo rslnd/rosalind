@@ -41,7 +41,7 @@ export default () => {
 
   publishComposite({
     name: 'appointments-today',
-    roles: [ 'appointments' ],
+    roles: [ 'appointments', 'waitlist' ],
     preload: true,
     fn: function ({ appointmentId }) {
       this.unblock()
@@ -101,6 +101,7 @@ export default () => {
               calendarId: 1,
               patientId: 1,
               assigneeId: 1,
+              waitlistAssigneeId: 1,
               tags: 1,
               start: 1,
               end: 1,
