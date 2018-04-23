@@ -37,8 +37,13 @@ export const nextTreatment = ({ Appointments }) => {
       }
 
       const waitlistSelector = {
-        assigneeId: this.userId,
+        $or: [
+          { assigneeId: this.userId },
+          { waitlistAssigneeId: this.userId }
+        ],
         admittedAt: { $ne: null },
+        patientId: { $ne: null },
+        removed: { $ne: true },
         treatmentEnd: null,
         start: {
           $gt: moment().startOf('day').toDate(),
@@ -60,7 +65,10 @@ export const nextTreatment = ({ Appointments }) => {
         })
       }
 
-      Events.post('appointments/nextTreatment', { appointmentId })
+      Events.post('appointments/nextTreatment', {
+        appointmentId,
+        nextAppointmentId: nextAppointments[0] && nextAppointments[0]._id
+      })
 
       return appointmentId
     }
