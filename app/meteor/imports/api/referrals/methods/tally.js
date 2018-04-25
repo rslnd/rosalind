@@ -14,12 +14,14 @@ export const tally = ({ date, from, to, referrals }) => {
       end: endOfDay(addDays(date, 1))
     })
 
+  const todayPeriod = {
+    start: startOfDay(addDays(date, 1)), // Ugh, time zones anyone?
+    end: endOfDay(addDays(date, 1))
+  }
+
   const isWithinPeriod = d => d && isWithinInterval(d, period)
 
-  const isToday = d => d && isWithinInterval(d, {
-    start: startOfDay(date),
-    end: endOfDay(addDays(date, 1))
-  })
+  const isToday = d => d && isWithinInterval(d, todayPeriod)
 
   const referredInPeriod = referrals =>
     referrals.filter(r => isWithinPeriod(r.createdAt))
@@ -71,6 +73,7 @@ export const tally = ({ date, from, to, referrals }) => {
     }))
   )
 
+  console.log(new Date(), 'tallying referrals', '\n date', date, {from, to}, '\n result', period, '----------- today period:', todayPeriod)
   return {
     period,
     assignees,
