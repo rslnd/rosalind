@@ -28,7 +28,7 @@ describe('referrals', () => {
       })
 
       expect(result.assignees).to.have.lengthOf(1)
-      expect(result.total.redeemedToday.ids.suX7qs3DjEjooBwZP).to.eql(2)
+      expect(result.total.redeemed.ids.suX7qs3DjEjooBwZP).to.eql(2)
     })
   })
 })
