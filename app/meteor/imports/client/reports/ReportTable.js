@@ -124,7 +124,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapRe
         ]
       }
       {assigneeReport && <th />}
-      {showRevenue && <th style={align}>€/h</th>}
+      {calendar && calendar.reportRevenuePerHour && showRevenue && <th style={align}>€/h</th>}
       {showRevenue && <th style={align}>Gesamt</th>}
     </tr>
   </thead>
@@ -260,7 +260,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
 
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
         {
-          showRevenue &&
+          (calendar && calendar.reportRevenuePerHour && showRevenue) &&
             <Td borderLeft style={align}>{assignee.assigneeId &&
               <Round to={0} unit='€' number={
                 idx(assignee, _ => _.revenue.total.actualPerHour) ||
@@ -366,11 +366,14 @@ class SummaryRow extends React.Component {
         {assigneeReport && <Td />}
 
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
-        {showRevenue && <Td borderLeft style={align}><Round to={0} unit='⌀ €' number={
-          idx(report, _ => _.average.revenue.actualPerHour) || // backwards compatibility
-          idx(report, _ => _.average.revenue.total.actualPerHour) ||
-          idx(report, _ => _.average.revenue.total.expectedPerHour)
-        } /></Td>}
+        {
+          calendar && calendar.reportRevenuePerHour && showRevenue &&
+            <Td borderLeft style={align}><Round to={0} unit='⌀ €' number={
+              idx(report, _ => _.average.revenue.actualPerHour) || // backwards compatibility
+              idx(report, _ => _.average.revenue.total.actualPerHour) ||
+              idx(report, _ => _.average.revenue.total.expectedPerHour)
+            } /></Td>
+        }
 
         {/* Umsatz gesamt */}
         {showRevenue && <Td style={align}>
