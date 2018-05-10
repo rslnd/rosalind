@@ -15,6 +15,7 @@ export const importWith = ({ Importers }) => {
     }).validator(),
 
     run ({ importer, name, content }) {
+      this.unblock()
       if (!Meteor.userId()) { return }
 
       try {
@@ -27,6 +28,8 @@ export const importWith = ({ Importers }) => {
             return Importers.actions.eoswin.patients.call({ name, content })
           case 'xdt':
             return Importers.actions.xdt.call({ name, content })
+          case 'genericJson':
+            return Importers.actions.genericJson.call({ name, content })
           default:
             throw new Meteor.Error('no-importer-found', `Unknown importer ${importer}`)
         }

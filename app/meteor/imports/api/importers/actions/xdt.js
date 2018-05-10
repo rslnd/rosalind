@@ -19,6 +19,7 @@ export const xdt = ({ Importers }) => {
 
     run ({ name, content }) {
       if (!Meteor.userId()) { return }
+      this.unblock()
 
       const timezone = 'Europe/Vienna'
       const parsed = new Xdt(content)

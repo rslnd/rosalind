@@ -71,4 +71,8 @@ External = new SimpleSchema
     optional: true
     type: ExternalNode
 
+  bioresonanz:
+    optional: true
+    type: ExternalNode
+
 module.exports = { External }

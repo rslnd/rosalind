@@ -16,6 +16,7 @@ export const eoswinRevenueReports = ({ Importers }) => {
     }).validator(),
 
     run ({ name, content }) {
+      this.unblock()
       try {
         if (this.isSimulation) { return }
         if (!Meteor.userId()) { return }

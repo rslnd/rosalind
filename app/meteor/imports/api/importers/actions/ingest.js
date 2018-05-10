@@ -9,6 +9,7 @@ export const ingest = ({ Importers }) => {
   const determineImporter = ({ name, content }) => {
     if (name && name.includes('Ärzte Statistik Umsätze')) { return 'eoswinRevenueReports' }
     if (name && name.match(/\.PAT$/i)) { return 'eoswinPatients' }
+    if (name && name.match(/\.json$/i)) { return 'genericJson' }
     if (name && name.match(/(\.gdt)$|(\.bdt$)|(\.xdt$)/i)) { return 'xdt' }
     if (content && content.match(/Online Konsultation mit e-card/i)) { return 'eoswinJournalReports' }
     if (content && content.match(/Krankenscheine gesamt/i) && content.match(/Abrechnungsgruppe/i)) { return 'eoswinRevenueReports' }
@@ -20,6 +21,7 @@ export const ingest = ({ Importers }) => {
       case 'eoswinJournalReports': return 'ISO-8859-1'
       case 'eoswinPatients': return 'WINDOWS-1252'
       case 'xdt': return 'ISO-8859-15'
+      case 'genericJson': return 'utf8'
     }
   }
 
@@ -34,6 +36,7 @@ export const ingest = ({ Importers }) => {
     }).validator(),
 
     run ({ importer, name, content, buffer }) {
+      this.unblock()
       try {
         if (Meteor.isServer) {
           const { isTrustedNetwork } = require('../../customer/server/isTrustedNetwork')
@@ -45,10 +48,10 @@ export const ingest = ({ Importers }) => {
         if (this.isSimulation) {
           return
         }
-  
+
         if (!importer) {
           if (!content) {
-            content = iconv.decode(Buffer.from(buffer.blob), 'ISO-8859-1')
+            content = iconv.decode(Buffer.from(buffer.blob), 'utf8')
           }
           importer = determineImporter({ name, content })
         }
