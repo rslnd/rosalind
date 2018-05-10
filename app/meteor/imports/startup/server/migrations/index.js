@@ -4,6 +4,7 @@ import './1-topLevelProfile'
 import './2-topLevelProfile'
 import './3-createdAt'
 import './4-referredToCosmetics'
+import './5-referredToAlternative'
 
 export default () => {
   Meteor.startup(() => {
