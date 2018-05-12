@@ -125,7 +125,8 @@ const mapDays = ({ reports, day, overrideSchedules, holidays }) => {
     .map(s => moment(s.start))
     .filter(m => m.isAfter(date))).length
 
-  const lastPlannedDay = moment(last(sortBy('start')(overrideSchedules)).start)
+  const lastPlannedSchedule = last(sortBy('start')(overrideSchedules))
+  const lastPlannedDay = lastPlannedSchedule && moment(lastPlannedSchedule.start) || date
 
   const quarter = getRange(date)
   const unplanned = Array.from(moment.range(lastPlannedDay, quarter.end).by('day'))
