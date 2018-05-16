@@ -83,9 +83,6 @@ meteorhacks:picker
 # Jobs
 simonsimcity:job-collection
 
-# Monitoring
-mdg:meteor-apm-agent
-
 # Legacy
 coffeescript
 fds:coffeescript-share
