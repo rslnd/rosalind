@@ -1,5 +1,4 @@
 import dot from 'mongo-dot-notation'
-import idx from 'idx'
 import omitBy from 'lodash/fp/omitBy'
 import isEqual from 'lodash/isEqual'
 import { Meteor } from 'meteor/meteor'

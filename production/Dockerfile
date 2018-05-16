@@ -5,15 +5,6 @@ WORKDIR /opt/app/programs/server
 
 ENV NPM_CONFIG_LOGLEVEL warn
 
-ENV LD_LIBRARY_PATH /lib/mdbtools
-RUN bash -c "time bash -c 'wget -O /tmp/mdbtools.tar.gz https://github.com/albertzak/mdbtools/releases/download/0.7.1-fix-newlines/mdbtools-20161003.tar.gz && \
-  tar -xzvf /tmp/mdbtools.tar.gz -C /usr/src/ && \
-  mv /usr/src/lib /lib/mdbtools && \
-  mv /usr/src/bin/* /bin/ && \
-  ldconfig && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*'"
-
 RUN apt-get update && apt-get install -y libgconf-2-4 wget --no-install-recommends \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
