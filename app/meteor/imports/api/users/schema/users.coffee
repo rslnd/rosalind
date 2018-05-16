@@ -65,6 +65,4 @@ Schema = new SimpleSchema
     optional: true
     blackbox: true
 
-Schema.i18n('user')
-
 module.exports = Schema

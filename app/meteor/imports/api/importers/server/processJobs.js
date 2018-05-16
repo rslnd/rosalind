@@ -1,4 +1,4 @@
-import { Job } from 'meteor/vsivsi:job-collection'
+import { Job } from 'meteor/simonsimcity:job-collection'
 import { terminiko } from './terminiko'
 import { eoswinPatients } from './eoswin'
 
