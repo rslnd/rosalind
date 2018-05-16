@@ -11,6 +11,8 @@ import { AppointmentActions } from './AppointmentActions'
 
 const composer = (props, onData) => {
   const appointment = Appointments.findOne({ _id: props.appointmentId })
+  if (!appointment) { return }
+
   const { admitted, canceled } = appointment
   const args = { appointmentId: props.appointmentId }
   const closeModal = () => props.onClose && props.onClose()
@@ -22,26 +24,26 @@ const composer = (props, onData) => {
 
   const unsetAdmitted = () => {
     Alert.success(__('appointments.unsetAdmittedSuccess'))
-    Appointments.actions.unsetAdmitted.call(args)
     closeModal()
+    Appointments.actions.unsetAdmitted.call(args)
   }
 
   const setCanceled = () => {
     Alert.success(__('appointments.setCanceledSuccess'))
-    Appointments.actions.setCanceled.call(args)
     closeModal()
+    Appointments.actions.setCanceled.call(args)
   }
 
   const unsetCanceled = () => {
     Alert.success(__('appointments.unsetCanceledSuccess'))
-    Appointments.actions.unsetCanceled.call(args)
     closeModal()
+    Appointments.actions.unsetCanceled.call(args)
   }
 
   const softRemove = () => {
     Alert.success(__('appointments.softRemoveSuccess'))
-    Appointments.actions.softRemove.callPromise(args)
     closeModal()
+    Appointments.actions.softRemove.callPromise(args)
   }
 
   let startMove

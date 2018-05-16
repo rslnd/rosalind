@@ -60,6 +60,8 @@ class AppointmentItem extends React.Component {
     const a = this.props.appointment
     const b = nextProps.appointment
 
+    if (!b) { return true }
+
     if (a.admitted !== b.admitted) { return true }
     if (a.canceled !== b.canceled) { return true }
     if (a.treated !== b.treated) { return true }
