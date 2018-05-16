@@ -8,6 +8,7 @@ export const __ = (key, substitutions) => {
 
   if (!translation) {
     console.error('[i18n] No translation for', key)
+    return key
   }
 
   if (substitutions && Object.keys(substitutions) !== []) {
@@ -17,10 +18,10 @@ export const __ = (key, substitutions) => {
       return t.replace('__' + s + '__', substitutions[s])
     }, translation)
 
-    return replaced
+    return replaced || key
   }
 
-  return translation
+  return translation || key
 }
 
 if (Meteor.isClient) {
