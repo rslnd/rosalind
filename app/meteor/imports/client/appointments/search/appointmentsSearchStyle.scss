@@ -1,10 +1,10 @@
 @import '../../css/global';
-@import '{}/node_modules/react-select/scss/select';
+@import '{}/imports/react-select/scss/select';
 
 $select-menu-max-height: 400px;
 
-@import '{}/node_modules/react-select/scss/control';
-@import '{}/node_modules/react-select/scss/menu';
-@import '{}/node_modules/react-select/scss/mixins';
-@import '{}/node_modules/react-select/scss/multi';
-@import '{}/node_modules/react-select/scss/spinner';
+@import '{}/imports/react-select/scss/control';
+@import '{}/imports/react-select/scss/menu';
+@import '{}/imports/react-select/scss/mixins';
+@import '{}/imports/react-select/scss/multi';
+@import '{}/imports/react-select/scss/spinner';
