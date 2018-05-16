@@ -14,7 +14,7 @@ mkdir -p ../build/
 cd ../app/meteor/
 
 echo "** Building"
-time meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory ../../build
+travis_wait time meteor build --architecture=os.linux.x86_64 --server=http://0.0.0.0 --directory ../../build
 cd -
 
 mkdir -p ../build/bundle/node_modules/
