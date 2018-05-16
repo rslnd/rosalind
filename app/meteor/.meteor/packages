@@ -76,8 +76,7 @@ mizzao:timesync
 meteorhacks:async
 dandv:rate-limit
 
-# File Upload
-ostrio:files
+# Inbound Webhooks
 meteorhacks:picker
 
 # Jobs

@@ -9,6 +9,7 @@
     "test": "tests"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.47",
     "admin-lte": "^2.4.2",
     "await-delay": "^1.0.0",
     "bcrypt": "1.0.3",
@@ -25,7 +26,7 @@
     "full-icu": "^1.2.1",
     "gsm": "^0.1.4",
     "iconv-lite": "^0.4.19",
-    "idx": "^2.2.0",
+    "idx": "^2.3.0",
     "inflected": "^2.0.4",
     "intl": "^1.2.5",
     "jquery": "^3.3.1",
@@ -84,15 +85,6 @@
     "xdt": "^0.4.0"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-core": "^6.26.0",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-idx": "^2.2.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-latest": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
     "bootstrap": "^3.3.6",
     "chai": "^4.1.2",
     "chai-datetime": "^1.4.1",
