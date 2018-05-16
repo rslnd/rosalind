@@ -13,7 +13,7 @@ Package.onUse(function(api) {
   ]);
 
   api.use([
-    'matb33:collection-hooks@0.9.0-rc.1',
+    'matb33:collection-hooks@0.9.0-rc.4',
     'zimme:collection-behaviours@1.0.3'
   ]);
 
