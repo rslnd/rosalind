@@ -1,5 +1,5 @@
 Meteor.startup ->
-  if (Meteor.isClient and TAPi18n.getLanguage().match(/^de/))
+  if (Meteor.isClient)
     $.extend $.fn.dataTable.defaults,
       language:
         sEmptyTable: 'Keine Daten in der Tabelle vorhanden'

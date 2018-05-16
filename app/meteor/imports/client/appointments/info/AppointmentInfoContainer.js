@@ -6,7 +6,7 @@ import sum from 'lodash/sum'
 import isEqual from 'lodash/isEqual'
 import identity from 'lodash/identity'
 import { Meteor } from 'meteor/meteor'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
@@ -79,7 +79,7 @@ const composer = props => {
           },
           replaceContacts: true
         })
-        .then(() => Alert.success(TAPi18n.__('patients.editSuccess')))
+        .then(() => Alert.success(__('patients.editSuccess')))
         .catch(e => {
           Alert.error('Bitte noch einmal versuchen')
           console.error(e)
@@ -93,7 +93,7 @@ const composer = props => {
           appointmentId: appointment._id,
           update: v.appointment
         })
-        .then(() => Alert.success(TAPi18n.__('appointments.editSuccess')))
+        .then(() => Alert.success(__('appointments.editSuccess')))
         .catch(e => {
           Alert.error('Bitte noch einmal versuchen')
           console.error(e)
@@ -105,7 +105,7 @@ const composer = props => {
       Patients.actions.toggleGender.callPromise({
         patientId: patient._id
       }).then(() => {
-        Alert.success(TAPi18n.__('patients.editSuccess'))
+        Alert.success(__('patients.editSuccess'))
       })
     }
 
@@ -114,9 +114,9 @@ const composer = props => {
 
       if (patient) {
         if (noSMS) {
-          Alert.success(TAPi18n.__('patients.messagesDisabledSuccess'))
+          Alert.success(__('patients.messagesDisabledSuccess'))
         } else {
-          Alert.success(TAPi18n.__('patients.messagesEnabledSuccess'))
+          Alert.success(__('patients.messagesEnabledSuccess'))
         }
 
         Patients.actions.setMessagePreferences.call({

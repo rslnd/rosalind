@@ -1,12 +1,12 @@
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import Spacebars from 'meteor/spacebars'
 
 module.exports = ->
   privateOrInsurance: ->
     if @privatePatient
-      TAPi18n.__('inboundCalls.private')
+      __('inboundCalls.private')
     else
-      TAPi18n.__('inboundCalls.insurance')
+      __('inboundCalls.insurance')
 
   unresolve: ->
     Spacebars.SafeString('<a class="unresolve">Markierung entfernen</a>')

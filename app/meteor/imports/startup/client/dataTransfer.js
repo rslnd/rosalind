@@ -1,7 +1,7 @@
 import { store } from '../../client/store'
 import dragDrop from 'drag-drop/buffer'
 import Alert from 'react-s-alert'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Importers } from '../../api/importers'
 
 export const ingest = ({ name, content, buffer, importer }) => {
@@ -17,7 +17,7 @@ export const setupDragdrop = () => {
   dragDrop('body', (files) => {
     files.forEach((file) => {
       ingest({ name: file.name, buffer: file }).then((response) => {
-        Alert.success(TAPi18n.__('ui.importSuccessMessage'))
+        Alert.success(__('ui.importSuccessMessage'))
         if (typeof response === 'object') {
           const { result, importer } = response
           console.log('[Importers] Successfully ingested dragdrop data transfer', { importer })

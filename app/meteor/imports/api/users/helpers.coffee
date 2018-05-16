@@ -3,7 +3,7 @@ import map from 'lodash/map'
 import last from 'lodash/last'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import Time from '../../util/time'
 import { Timesheets } from '../timesheets'
 

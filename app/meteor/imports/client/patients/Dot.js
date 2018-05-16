@@ -1,5 +1,5 @@
 import React from 'react'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import injectSheet from 'react-jss'
 
 const dotStyle = {
@@ -21,5 +21,5 @@ export const Dot = injectSheet(dotStyle)(({ classes, banned, onClick }) => (
     className={classes.dot}
     onClick={onClick}
     style={{ backgroundColor: banned && 'black' }}
-    title={banned ? TAPi18n.__('patients.banned') : TAPi18n.__('patients.toggleBanned')} /> || null
+    title={banned ? __('patients.banned') : __('patients.toggleBanned')} /> || null
 ))

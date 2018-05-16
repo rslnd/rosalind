@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { TextField } from './TextField'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { dayToDate } from '../../../util/time/day'
 import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
 
@@ -9,7 +9,7 @@ const toStringValue = v => {
   if (!v) { return '' }
 
   const date = moment(dayToDate(v))
-  return date.format(TAPi18n.__('time.dateFormat'))
+  return date.format(__('time.dateFormat'))
 }
 
 export class DayField extends React.Component {
@@ -74,10 +74,10 @@ export class DayField extends React.Component {
       return stringValue
     } else if (typeof inputValue === 'object' && inputValue.day && inputValue.month && inputValue.year) {
       const date = moment(dayToDate(inputValue))
-      const formattedDate = date.format(TAPi18n.__('time.dateFormat'))
+      const formattedDate = date.format(__('time.dateFormat'))
 
       if (this.props.birthday) {
-        const formattedAge = TAPi18n.__('patients.yearsOld', { age: moment().diff(date, 'years') })
+        const formattedAge = __('patients.yearsOld', { age: moment().diff(date, 'years') })
         return `${formattedDate} (${formattedAge})`
       } else {
         return formattedDate

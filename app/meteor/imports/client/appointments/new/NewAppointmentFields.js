@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment-timezone'
 import { FormSection, Field } from 'redux-form'
 import Button from 'material-ui/Button'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { TagsField } from '../../tags/TagsField'
 import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { UserHelper } from '../../users/UserHelper'
@@ -76,7 +76,7 @@ export const NewAppointmentFields = props => {
           <Field name='appointmentNote'
             component={TextField}
             fullWidth
-            label={TAPi18n.__('appointments.note')} />
+            label={__('appointments.note')} />
         </div>
       </FormSection>
 
@@ -93,7 +93,7 @@ export const NewAppointmentFields = props => {
           {
             submitting
               ? <Icon name='refresh' spin />
-              : TAPi18n.__('appointments.thisSave')
+              : __('appointments.thisSave')
           }
         </Button>
       </div>
@@ -107,16 +107,16 @@ const summaryStyle = {
 
 const Summary = ({ time, assigneeId }) => (
   <div style={summaryStyle}>
-    <span className='text-muted'>{TAPi18n.__('appointments.thisSingular')}</span>&nbsp;
-    {moment(time).format(TAPi18n.__('time.dateFormatWeekday'))}<br />
+    <span className='text-muted'>{__('appointments.thisSingular')}</span>&nbsp;
+    {moment(time).format(__('time.dateFormatWeekday'))}<br />
 
-    <span className='text-muted'>{TAPi18n.__('time.at')}</span>&nbsp;
-    <b>{moment(time).format(TAPi18n.__('time.timeFormat'))}</b><br />
+    <span className='text-muted'>{__('time.at')}</span>&nbsp;
+    <b>{moment(time).format(__('time.timeFormat'))}</b><br />
 
     {
       assigneeId && <div>
         <span className='text-muted'>
-          {TAPi18n.__('appointments.assignedTo')}&nbsp;
+          {__('appointments.assignedTo')}&nbsp;
           <UserHelper helper='fullNameWithTitle' userId={assigneeId} />
         </span>
         <br />

@@ -1,7 +1,7 @@
 import React from 'react'
 import identity from 'lodash/identity'
 import Button from 'material-ui/Button'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 
 const primaryButtonStyle = {
   flexGrow: 1
@@ -59,7 +59,7 @@ export const ActionButton = ({ appointment, isFirst, isLast, action, style = {},
             size='small'
             onClick={() => handleChangeWaitlistAssignee({ appointmentId: a._id })}
             fullWidth>
-            {TAPi18n.__('appointments.changeWaitlistAssignee')}
+            {__('appointments.changeWaitlistAssignee')}
           </Button>
       }
     </div> || null

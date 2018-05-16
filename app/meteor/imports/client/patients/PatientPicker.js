@@ -1,7 +1,7 @@
 import identity from 'lodash/identity'
 import React from 'react'
 import Select from 'react-select'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { startCase } from '../../util/fuzzy/startCase'
 import { findPatients } from './findPatients'
 import { PatientSearchResult } from './PatientSearchResult'
@@ -93,9 +93,9 @@ export class PatientPicker extends React.Component {
         ignoreCase={false}
         ignoreAccents={false}
         autoFocus={this.props.autoFocus}
-        placeholder={TAPi18n.__('patients.search')}
-        loadingPlaceholder={TAPi18n.__('patients.searching')}
-        clearValueText={TAPi18n.__('ui.clear')}
+        placeholder={__('patients.search')}
+        loadingPlaceholder={__('patients.searching')}
+        clearValueText={__('ui.clear')}
         filterOptions={identity}
         optionComponent={PatientSearchResult}
         valueComponent={PatientNameSelected}

@@ -3,7 +3,7 @@ import Blaze from 'meteor/gadicc:blaze-react-component'
 import Alert from 'react-s-alert'
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Schedules } from '../../../api/schedules'
 import { holidays as holidaysTable } from '../../../api/schedules/tables'
 import { Holidays } from './Holidays'
@@ -24,11 +24,11 @@ export class HolidaysContainer extends React.Component {
 
       Schedules.insert(holidays, (err) => {
         if (err) {
-          Alert.error(TAPi18n.__('schedules.postRequestError'))
+          Alert.error(__('schedules.postRequestError'))
           reject(err)
           console.log(err)
         } else {
-          Alert.success(TAPi18n.__('schedules.postRequestSuccess'))
+          Alert.success(__('schedules.postRequestSuccess'))
           dispatch({ type: 'HOLIDAYS_INSERT_SUCCESS' })
           resolve()
         }

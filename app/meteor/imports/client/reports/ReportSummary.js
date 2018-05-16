@@ -1,6 +1,6 @@
 import React from 'react'
 import idx from 'idx'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { currency, integer, float, percentage, conditionalFloat } from '../../util/format'
 import { color as kewler, lightness } from 'kewler'
@@ -50,7 +50,7 @@ export const TotalRevenueBox = ({ report, position, color }) => {
     idx(report, _ => _.total.revenue.total.expected)
   )
 
-  return <InfoBox text={TAPi18n.__('reports.revenue')} color={color} position={position} icon='euro'>
+  return <InfoBox text={__('reports.revenue')} color={color} position={position} icon='euro'>
     {
       revenue
       ? <Unit prepend='€'>{integer(revenue)}</Unit>
@@ -65,7 +65,7 @@ export const NewPatientsPerHourBox = ({ report, position, color }) => {
 
   return (
     <InfoBox
-      text={TAPi18n.__('reports.patientsNewPerHour')} color={color} position={position} icon='user-plus'>
+      text={__('reports.patientsNewPerHour')} color={color} position={position} icon='user-plus'>
       {
         newPerHour
         ? <Unit append='/h'>{float(newPerHour)}</Unit>
@@ -115,7 +115,7 @@ export const TotalPatientsBox = ({ report, position, color }) => {
     idx(report, _ => _.total.patients.total.expected)
 
   return (
-    <InfoBox text={TAPi18n.__('reports.patients')} color={color} position={position} icon='users'>
+    <InfoBox text={__('reports.patients')} color={color} position={position} icon='users'>
       {patients || <Nil />}
     </InfoBox>
   )

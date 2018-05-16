@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import React from 'react'
 import Alert from 'react-s-alert'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Schedules } from '../../../api/schedules'
 import { AppointmentModalContainer } from '../info/AppointmentModalContainer'
 import { HeaderRowContainer } from './header/HeaderRowContainer'
@@ -211,7 +211,7 @@ export class AppointmentsView extends React.Component {
     if (this.state.scheduleModalOpen && this.state.scheduleModalId) {
       Schedules.actions.softRemove.callPromise({ scheduleId: this.state.scheduleModalId }).then(() => {
         this.handleScheduleModalClose()
-        Alert.success(TAPi18n.__('schedules.softRemoveSuccess'))
+        Alert.success(__('schedules.softRemoveSuccess'))
       })
     }
   }

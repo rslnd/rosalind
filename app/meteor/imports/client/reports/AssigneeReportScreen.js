@@ -2,7 +2,7 @@ import React from 'react'
 import FlipMove from 'react-flip-move'
 import moment from 'moment-timezone'
 import { Button } from 'react-bootstrap'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { weekOfYear } from '../../util/time/format'
 import { dayToDate } from '../../util/time/day'
 import { Icon } from '../components/Icon'
@@ -17,9 +17,9 @@ import { fullNameWithTitle } from '../../api/users/methods/name'
 
 const formatRange = ({ start, end }) =>
   ([
-    moment(start).format(TAPi18n.__('time.dateFormatShortNoYear')),
+    moment(start).format(__('time.dateFormatShortNoYear')),
     '-',
-    moment(end).format(TAPi18n.__('time.dateFormatShort'))
+    moment(end).format(__('time.dateFormatShort'))
   ].join(' '))
 
 export class AssigneeReportScreen extends React.Component {
@@ -37,7 +37,7 @@ export class AssigneeReportScreen extends React.Component {
     if (window.native) {
       console.log('[Client] Printing: native')
       const title = moment(dayToDate(this.props.day))
-        .format(`YYYY-MM-DD-[${TAPi18n.__('reports.thisDaySingular')}]`)
+        .format(`YYYY-MM-DD-[${__('reports.thisDaySingular')}]`)
       window.native.print({ title })
     } else {
       console.log('[Client] Printing: default')
@@ -73,9 +73,9 @@ export class AssigneeReportScreen extends React.Component {
     })
 
     const title = user &&
-      TAPi18n.__('reports.assigneesReportFor', {
+      __('reports.assigneesReportFor', {
         name: fullNameWithTitle(user)
-      }) || TAPi18n.__('reports.assigneesReport')
+      }) || __('reports.assigneesReport')
 
     return (
       <div>
@@ -91,10 +91,10 @@ export class AssigneeReportScreen extends React.Component {
             onRangeChange={handleRangeChange}
             calendarText={formattedRange}
             pullRight>
-            <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name='print' /></Button>
+            <Button onClick={this.handlePrint} title={__('ui.print')}><Icon name='print' /></Button>
             {
               canShowRevenue &&
-                <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.toggleRevenue')}><Icon name='euro' /></Button>
+                <Button onClick={this.handleToggleRevenue} title={__('reports.toggleRevenue')}><Icon name='euro' /></Button>
             }
           </DateRangeNavigation>
         </div>
@@ -107,8 +107,8 @@ export class AssigneeReportScreen extends React.Component {
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
           {
             !user
-            ? <Box type='info' title={TAPi18n.__('ui.notice')}>
-              <p>{TAPi18n.__('reports.emptySelectAssignee')}</p>
+            ? <Box type='info' title={__('ui.notice')}>
+              <p>{__('reports.emptySelectAssignee')}</p>
             </Box>
             : loading
             ? <Loading />
@@ -123,8 +123,8 @@ export class AssigneeReportScreen extends React.Component {
                 />
               </div>
             ) || <div key='noReports'>
-              <Box type='info' title={TAPi18n.__('ui.notice')}>
-                <p>{TAPi18n.__('reports.emptyAssignee')}</p>
+              <Box type='info' title={__('ui.notice')}>
+                <p>{__('reports.emptyAssignee')}</p>
               </Box>
             </div>
           }

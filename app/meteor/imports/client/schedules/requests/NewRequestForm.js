@@ -3,7 +3,7 @@ import { reduxForm, Field, Fields } from 'redux-form'
 import Button from 'material-ui/Button'
 import Radio from 'material-ui/Radio'
 import { TextField, RadioGroup } from 'redux-form-material-ui'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { DateRangePicker } from '../../components/form/DateRangePicker'
 
 class NewRequestFormComponent extends React.Component {
@@ -18,16 +18,16 @@ class NewRequestFormComponent extends React.Component {
           <div className='col-md-6'>
             <h5>Ansuchen auf</h5>
             <Field name='reason' component={RadioGroup}>
-              <Radio value='vacation' label={TAPi18n.__('schedules.requests.vacation')} />
-              <Radio value='compensatory' label={TAPi18n.__('schedules.requests.compensatory')} />
-              <Radio value='sick' label={TAPi18n.__('schedules.requests.sick')} />
+              <Radio value='vacation' label={__('schedules.requests.vacation')} />
+              <Radio value='compensatory' label={__('schedules.requests.compensatory')} />
+              <Radio value='sick' label={__('schedules.requests.sick')} />
             </Field>
           </div>
           <div className='col-md-6'>
             <Field name='note'
               component={TextField}
               multiline rows={1} fullWidth
-              label={TAPi18n.__('schedules.note')} />
+              label={__('schedules.note')} />
           </div>
         </div>
 
@@ -36,7 +36,7 @@ class NewRequestFormComponent extends React.Component {
           fullWidth
           primary={!submitting && !pristine}
           disabled={pristine || submitting}>
-          {TAPi18n.__('schedules.postRequest')}
+          {__('schedules.postRequest')}
         </Button>
       </form>
     )

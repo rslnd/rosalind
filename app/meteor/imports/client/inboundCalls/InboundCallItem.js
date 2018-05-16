@@ -1,5 +1,5 @@
 import React from 'react'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { zerofix } from '../../util/zerofix'
 import { Stamps } from '../helpers/Stamps'
 import { CommentsContainer, HumanCommentCount } from '../comments'
@@ -12,7 +12,7 @@ export class InboundCallItem extends React.Component {
         <div className='box-header'>
           <h4 className='username enable-select'>
             <b>{this.props.inboundCall.lastName}</b> {this.props.inboundCall.firstName}&ensp;
-            <small>{TAPi18n.__(`inboundCalls.${this.props.inboundCall.privatePatient ? 'private' : 'insurance'}`)}</small>
+            <small>{__(`inboundCalls.${this.props.inboundCall.privatePatient ? 'private' : 'insurance'}`)}</small>
           </h4>
           <h3 className='description enable-select'>{zerofix(this.props.inboundCall.telephone)}</h3>
         </div>
@@ -29,8 +29,8 @@ export class InboundCallItem extends React.Component {
         <div className='box-footer'>
           {
             this.props.inboundCall.removed
-              ? <a onClick={() => this.props.unresolve(this.props.inboundCall._id)}>{TAPi18n.__('inboundCalls.unresolve')}</a>
-            : <a onClick={() => this.props.resolve(this.props.inboundCall._id)}>{TAPi18n.__('inboundCalls.resolve')}</a>
+              ? <a onClick={() => this.props.unresolve(this.props.inboundCall._id)}>{__('inboundCalls.unresolve')}</a>
+            : <a onClick={() => this.props.resolve(this.props.inboundCall._id)}>{__('inboundCalls.resolve')}</a>
           }
         </div>
       </div>

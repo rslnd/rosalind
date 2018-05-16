@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field } from 'redux-form'
 import Button from 'material-ui/Button'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
 import { TextField } from '../../components/form'
 import { rowStyle, iconStyle, buttonStyle, grow, shrink } from '../../components/form/rowStyle'
@@ -45,7 +45,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                 name={`${member}.value`}
                 component={TextField}
                 warn={warn}
-                label={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
+                label={__(`patients.${channel.toLowerCase()}`)} />
             </div>
 
             {
@@ -63,7 +63,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                   <Button
                     onClick={() => fields.remove(i)}
                     style={{ minWidth: 35, color: '#ccc' }}
-                    title={TAPi18n.__('patients.removeContact')}>
+                    title={__('patients.removeContact')}>
                     <Icon name='minus' />
                   </Button>
               }
@@ -72,7 +72,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                   <Button
                     onClick={() => fields.insert(i + 1, { channel })}
                     style={{ minWidth: 35 }}
-                    title={TAPi18n.__('patients.addContact')}>
+                    title={__('patients.addContact')}>
                     <Icon name='plus' />
                   </Button>
               }

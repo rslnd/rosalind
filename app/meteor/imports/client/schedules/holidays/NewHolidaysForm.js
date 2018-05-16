@@ -2,7 +2,7 @@ import React from 'react'
 import { reduxForm, Field, Fields } from 'redux-form'
 import Button from 'material-ui/Button'
 import { TextField } from 'redux-form-material-ui'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { DateRangePicker } from '../../components/form/DateRangePicker'
 
 class NewHolidaysFormComponent extends React.Component {
@@ -12,14 +12,14 @@ class NewHolidaysFormComponent extends React.Component {
       <form onSubmit={handleSubmit(onSubmit)} className='mui'>
         <div className='row'>
           <div className='col-md-6'>
-            <h5>{TAPi18n.__('schedules.holidaysDateRange')}</h5>
+            <h5>{__('schedules.holidaysDateRange')}</h5>
             <Fields names={['start', 'end']} component={DateRangePicker} />
           </div>
           <div className='col-md-6'>
             <Field name='note'
               component={TextField}
               fullWidth
-              label={TAPi18n.__('schedules.holidaysNote')} />
+              label={__('schedules.holidaysNote')} />
           </div>
         </div>
 
@@ -30,7 +30,7 @@ class NewHolidaysFormComponent extends React.Component {
               fullWidth
               primary={!submitting && !pristine}
               disabled={pristine || submitting}>
-              {TAPi18n.__('schedules.holidaysSave')}
+              {__('schedules.holidaysSave')}
             </Button>
           </div>
         </div>
@@ -44,7 +44,7 @@ export const NewHolidaysForm = reduxForm({
   fields: ['start', 'end', 'note'],
   validate: (values) => {
     let errors = {}
-    const required = TAPi18n.__('ui.required')
+    const required = __('ui.required')
     if (!values.start) { errors.start = required }
     if (!values.end) { errors.end = required }
     if (!values.note) { errors.note = required }

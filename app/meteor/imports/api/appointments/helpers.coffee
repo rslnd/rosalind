@@ -1,12 +1,12 @@
 import moment from 'moment-timezone'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 
 module.exports =
   privateOrInsurance: ->
     if @privateAppointment
-      TAPi18n.__('appointments.private')
+      __('appointments.private')
     else
-      TAPi18n.__('appointments.insurance')
+      __('appointments.insurance')
 
   # open: ->
   #   not @admittedAt? and not @admittedBy? and not @treatedAt? and not @treatedBy? and not @removed

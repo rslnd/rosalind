@@ -1,7 +1,7 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Avatar } from '../users/Avatar'
 import { UserHelper } from '../users/UserHelper'
 import { RelativeTime } from '../helpers/RelativeTime'
@@ -22,7 +22,7 @@ const RemoveLink = ({ comment, onRemove }) => (
     <span
       onClick={() => onRemove(comment._id)}
       style={removeLinkStyle}>
-      {TAPi18n.__('ui.removeComment')}
+      {__('ui.removeComment')}
       &nbsp;
       &middot;
       &nbsp;

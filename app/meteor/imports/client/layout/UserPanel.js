@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { gray } from '../css/global'
 import { fullNameWithTitle } from '../../api/users/methods/name'
@@ -41,7 +41,7 @@ export class UserPanel extends React.Component {
                 <Icon name='refresh' spin />
               </Button>
               : <Button bsStyle='default' block onClick={this.props.handleLogout}>
-                <Icon name='sign-out' /> {TAPi18n.__('login.logout')}
+                <Icon name='sign-out' /> {__('login.logout')}
               </Button>
             }
           </div>

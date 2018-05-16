@@ -2,15 +2,15 @@ import moment from 'moment-timezone'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { toClass } from 'recompose'
 import { process as server } from 'meteor/clinical:env'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Footer } from './Footer'
 
 const composer = (props, onData) => {
   const update = () => {
     const customerName = server.env.CUSTOMER_NAME
-    const printedStamp = TAPi18n.__('ui.printedStamp', {
-      time: moment().format(TAPi18n.__('time.timeFormat')),
-      date: moment().format(TAPi18n.__('time.dateFormat'))
+    const printedStamp = __('ui.printedStamp', {
+      time: moment().format(__('time.timeFormat')),
+      date: moment().format(__('time.dateFormat'))
     })
 
     try {

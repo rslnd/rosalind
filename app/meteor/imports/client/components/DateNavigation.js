@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { DayPickerSingleDateController } from 'react-dates'
 import { PortalWithState } from 'react-portal'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Icon } from './Icon'
 
 export const calendarStyle = {
@@ -121,7 +121,7 @@ class DateNavigationButtons extends React.Component {
                     this.props.jumpMonthBackward &&
                       <Button
                         onClick={this.handleBackwardMonthClick}
-                        title={TAPi18n.__('time.oneMonthBackward')}>
+                        title={__('time.oneMonthBackward')}>
                         <Icon name='angle-left' />
                         <Icon name='angle-left' />
                       </Button>
@@ -130,25 +130,25 @@ class DateNavigationButtons extends React.Component {
                     this.props.jumpWeekBackward &&
                       <Button
                         onClick={this.handleBackwardWeekClick}
-                        title={TAPi18n.__('time.oneWeekBackward')}>
+                        title={__('time.oneWeekBackward')}>
                         <Icon name='angle-double-left' />
                       </Button>
                   }
 
                   <Button
                     onClick={this.handleBackwardDayClick}
-                    title={TAPi18n.__('time.oneDayBackward')}>
+                    title={__('time.oneDayBackward')}>
                     <Icon name='caret-left' />
                   </Button>
 
                   <Button
                     onClick={this.handleTodayClick}>
-                    {TAPi18n.__('ui.today')}
+                    {__('ui.today')}
                   </Button>
 
                   <Button
                     onClick={this.handleForwardDayClick}
-                    title={TAPi18n.__('time.oneDayForward')}>
+                    title={__('time.oneDayForward')}>
                     <Icon name='caret-right' />
                   </Button>
 
@@ -156,7 +156,7 @@ class DateNavigationButtons extends React.Component {
                     this.props.jumpWeekForward &&
                       <Button
                         onClick={this.handleForwardWeekClick}
-                        title={TAPi18n.__('time.oneWeekForward')}>
+                        title={__('time.oneWeekForward')}>
                         <Icon name='angle-double-right' />
                       </Button>
                   }
@@ -164,7 +164,7 @@ class DateNavigationButtons extends React.Component {
                     this.props.jumpMonthForward &&
                       <Button
                         onClick={this.handleForwardMonthClick}
-                        title={TAPi18n.__('time.oneMonthForward')}>
+                        title={__('time.oneMonthForward')}>
                         <Icon name='angle-right' />
                         <Icon name='angle-right' />
                       </Button>
@@ -176,7 +176,7 @@ class DateNavigationButtons extends React.Component {
                   <Button
                     key='calendar-button'
                     onMouseEnter={openPortal}
-                    title={TAPi18n.__('time.calendar')}>
+                    title={__('time.calendar')}>
                     <Icon name='calendar' />
                   </Button>
                   {

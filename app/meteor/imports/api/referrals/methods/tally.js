@@ -73,7 +73,6 @@ export const tally = ({ date, from, to, referrals }) => {
     }))
   )
 
-  console.log(new Date(), 'tallying referrals', '\n date', date, {from, to}, '\n result', period, '----------- today period:', todayPeriod)
   return {
     period,
     assignees,

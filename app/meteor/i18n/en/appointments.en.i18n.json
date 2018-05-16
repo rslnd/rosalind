@@ -1,9 +1,0 @@
-{
-  "appointments": {
-    "this": "Appointments",
-    "thisUpdate": "Update Appointment",
-    "thisSave": "Save Appointment",
-    "day": "Day",
-    "week": "Week"
-  }
-}

@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment-timezone'
 import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { NewAppointmentForm } from './NewAppointmentForm'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
@@ -34,12 +34,12 @@ export class NewAppointmentContainerComponent extends React.Component {
     return Appointments.actions.insert.callPromise({ appointment })
       .then(() => {
         this.props.dispatch({ type: 'APPOINTMENT_INSERT_SUCCESS' })
-        Alert.success(TAPi18n.__('appointments.pauseInsertSuccess'))
+        Alert.success(__('appointments.pauseInsertSuccess'))
         if (this.props.onClose) { this.props.onClose() }
       })
       .catch((e) => {
         console.error(e)
-        Alert.error(TAPi18n.__('appointments.insertError'))
+        Alert.error(__('appointments.insertError'))
       })
   }
 
@@ -50,7 +50,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     let patientId = values.patient.patientId
 
     if (!patientId && !values.appointment.appointmentNote) {
-      Alert.error(TAPi18n.__('appointments.patientOrNoteError'))
+      Alert.error(__('appointments.patientOrNoteError'))
       throw new Error('Cannot save appointment without patientId or appointmentNote')
     }
 
@@ -90,12 +90,12 @@ export class NewAppointmentContainerComponent extends React.Component {
     return Appointments.actions.insert.callPromise({ appointment, newPatient })
       .then(() => {
         dispatch({ type: 'APPOINTMENT_INSERT_SUCCESS' })
-        Alert.success(TAPi18n.__('appointments.insertSuccess'))
+        Alert.success(__('appointments.insertSuccess'))
         if (this.props.onClose) { this.props.onClose() }
       })
       .catch((e) => {
         console.error(e)
-        Alert.error(TAPi18n.__('appointments.insertError'))
+        Alert.error(__('appointments.insertError'))
       })
   }
 

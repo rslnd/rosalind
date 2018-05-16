@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import { Mongo } from 'meteor/mongo'
 import { Spacebars } from 'meteor/spacebars'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../i18n'
 import Time from './time'
 import { Users } from '../api/users'
 import { Comments } from '../api/comments'
@@ -49,7 +49,7 @@ module.exports =
       date = Time.dayToDate(date)
 
     weekOfYear = moment(date).format('W')
-    [TAPi18n.__('ui.weekOfYear'), weekOfYear].join(' ')
+    [__('ui.weekOfYear'), weekOfYear].join(' ')
 
 
   stringify: (blob, pretty = true) ->
@@ -68,6 +68,6 @@ module.exports =
     return str
 
   noValue: ->
-    noValue = TAPi18n.__('ui.noValue')
+    noValue = __('ui.noValue')
     noValue = '<span class="text-muted">' + noValue + '</span>'
     Spacebars.SafeString(noValue)

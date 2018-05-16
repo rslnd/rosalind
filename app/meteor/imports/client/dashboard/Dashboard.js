@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 
 export const Dashboard = () => (
@@ -13,7 +13,7 @@ export const Dashboard = () => (
               <i className='fa fa-phone' />
             </span>
             <div className='info-box-content'>
-              <span className='info-box-text'>{TAPi18n.__('inboundCalls.this')}</span>
+              <span className='info-box-text'>{__('inboundCalls.this')}</span>
               <span className='info-box-number'>{Counts.get('inboundCalls')}</span>
             </div>
           </div>
@@ -27,7 +27,7 @@ export const Dashboard = () => (
               <i className='fa fa-plus' />
             </span>
             <div className='info-box-content'>
-              <span className='info-box-text'>{TAPi18n.__('inboundCalls.thisInsert')}</span>
+              <span className='info-box-text'>{__('inboundCalls.thisInsert')}</span>
             </div>
           </div>
         </Link>

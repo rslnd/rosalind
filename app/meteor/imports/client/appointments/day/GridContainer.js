@@ -3,7 +3,7 @@ import sortBy from 'lodash/fp/sortBy'
 import keyBy from 'lodash/fp/keyBy'
 import moment from 'moment'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
 import { Users } from '../../../api/users'
@@ -58,7 +58,7 @@ const composer = (props, onData) => {
     columns.push({
       assigneeId: null,
       type: 'overbooking',
-      fullNameWithTitle: TAPi18n.__('appointments.unassigned')
+      fullNameWithTitle: __('appointments.unassigned')
     })
   }
 

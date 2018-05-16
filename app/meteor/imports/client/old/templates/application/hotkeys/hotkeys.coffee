@@ -15,4 +15,4 @@ Template.hotkeys.helpers
       @key.split(' ')
 
   hotkeyName: ->
-    TAPi18n.__('hotkeys.' + @name)
+    __('hotkeys.' + @name)

@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormSection, Field } from 'redux-form'
 import Button from 'material-ui/Button'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { Box } from '../components/Box'
 import { Currency } from '../components/Currency'
@@ -49,7 +49,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
                       component={CalculatorField}
                       formatter={twoPlaces}
                       fullWidth
-                      label={TAPi18n.__('patients.revenue')} />
+                      label={__('patients.revenue')} />
                   </div>
                   <div style={shrink}>
                     <Field
@@ -66,7 +66,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
                       name='patientSince'
                       component={DayField}
                       fullWidth
-                      label={TAPi18n.__('patients.patientSince')} />
+                      label={__('patients.patientSince')} />
                   </div>
                 </div>
               </div>
@@ -82,7 +82,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
             {
               submitting
                 ? <Icon name='refresh' spin />
-                : TAPi18n.__('patients.thisSave')
+                : __('patients.thisSave')
             }
           </Button>
         </FormSection>

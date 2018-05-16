@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import { Email } from 'meteor/email'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../../i18n'
 import { Reports } from '../../'
 import { Calendars } from '../../../calendars'
 import { Events } from '../../../events'
@@ -46,7 +46,7 @@ export const sendEmail = new ValidatedMethod({
       }
 
       const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
-      const mapAssigneeType = type => TAPi18n.__(`reports.assigneeType__${type}`, null, 'de-AT')
+      const mapAssigneeType = type => __(`reports.assigneeType__${type}`, null, 'de-AT')
       const mapUserIdToName = userId => userIdToNameMapping[userId]
       const mapCalendar = calendarId => Calendars.findOne({ _id: calendarId })
 
@@ -59,7 +59,7 @@ export const sendEmail = new ValidatedMethod({
 
       const filename = [
         dayToSlug(day),
-        TAPi18n.__('reports.thisDaySingular', null, 'de-AT'),
+        __('reports.thisDaySingular', null, 'de-AT'),
         process.env.CUSTOMER_NAME
       ].join(' ') + '.pdf'
 

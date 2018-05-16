@@ -3,7 +3,7 @@ import moment from 'moment-timezone'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { DayPickerRangeController } from 'react-dates'
 import { PortalWithState } from 'react-portal'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Icon } from './Icon'
 import { calendarStyle, calendarStyleOpen } from './DateNavigation'
 
@@ -57,7 +57,7 @@ export class DateRangeNavigation extends React.Component {
 
                 <Button
                   onMouseEnter={openPortal}
-                  title={TAPi18n.__('time.calendar')}>
+                  title={__('time.calendar')}>
                   {
                     this.props.calendarText &&
                       <span>{this.props.calendarText}&ensp;</span>

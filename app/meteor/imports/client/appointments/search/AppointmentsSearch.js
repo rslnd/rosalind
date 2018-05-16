@@ -1,9 +1,8 @@
-import { Meteor } from 'meteor/meteor'
 import moment from 'moment-timezone'
 import identity from 'lodash/identity'
 import React from 'react'
 import Select from 'react-select'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Indicator } from '../appointment/Indicator'
 import { UserHelper } from '../../users/UserHelper'
 import { PatientName } from '../../patients/PatientName'
@@ -93,11 +92,11 @@ class AppointmentSearchResult extends React.Component {
               textDecoration: appointment.canceled && 'line-through',
               verticalAlign: '-2px'
             }}>
-              {start.format(TAPi18n.__('time.dateFormatShort'))}
+              {start.format(__('time.dateFormatShort'))}
               &nbsp;
-              {TAPi18n.__('time.at')}
+              {__('time.at')}
               &nbsp;
-              {start.format(TAPi18n.__('time.timeFormat'))}
+              {start.format(__('time.timeFormat'))}
             </span>
             &emsp;
             {
@@ -171,10 +170,10 @@ export class AppointmentsSearch extends React.Component {
         onSelectResetsInput={false}
         onCloseResetsInput={false}
         onBlurResetsInput={false}
-        placeholder={TAPi18n.__('appointments.search')}
-        loadingPlaceholder={TAPi18n.__('appointments.searching')}
+        placeholder={__('appointments.search')}
+        loadingPlaceholder={__('appointments.searching')}
         searchPromptText={'Suche nach PatientInnen, Geburtsdatum'}
-        clearValueText={TAPi18n.__('ui.clear')}
+        clearValueText={__('ui.clear')}
         filterOptions={identity}
         optionComponent={AppointmentSearchResult}
         valueComponent={SelectedResult} />

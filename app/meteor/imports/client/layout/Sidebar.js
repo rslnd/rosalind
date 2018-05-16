@@ -3,7 +3,7 @@ import injectSheet from 'react-jss'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import FlipMove from 'react-flip-move'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 
 const styles = {
   sidebar: {
@@ -43,8 +43,8 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
   })
 
   const name = item.name.indexOf('.') === -1
-    ? TAPi18n.__(`${item.name}.this`)
-    : TAPi18n.__(item.name)
+    ? __(`${item.name}.this`)
+    : __(item.name)
 
   const link = item.link || `/${item.name}`
 
@@ -85,7 +85,7 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
 
 const SubItem = ({item, subItem, location}) => {
   const displayName = subItem.label ||
-    TAPi18n.__([item.name, subItem.name].join('.'))
+    __([item.name, subItem.name].join('.'))
 
   return (
     <li key={subItem.name} className={isActive(`/${item.name}${subItem.path || ''}`, location) ? 'active level-1 link' : undefined}>
