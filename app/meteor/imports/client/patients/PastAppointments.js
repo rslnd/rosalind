@@ -1,3 +1,4 @@
+import identity from 'lodash/identity'
 import React from 'react'
 import moment from 'moment-timezone'
 import { withState } from 'recompose'
@@ -132,7 +133,7 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
     <div>
       <div style={containerStyle}>
         {
-          appointmentsWithSeparators.map((item, i) =>
+          appointmentsWithSeparators.filter(identity).map((item, i) =>
             item.separator
             ? (
               item.count > 0 &&

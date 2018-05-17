@@ -19,19 +19,21 @@ export const softRemove = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      Appointments.update({ _id: appointmentId }, {
-        $set: {
-          removed: true,
-          removedAt: new Date(),
-          removedBy: this.userId
-        }
-      })
+      // If we don't wait, we totally break the frontend for some reason
+      setTimeout(() => {
+        Appointments.update({ _id: appointmentId }, {
+          $set: {
+            removed: true,
+            removedAt: new Date(),
+            removedBy: this.userId
+          }
+        })
+      }, 150)
 
       if (Meteor.isServer) {
         Referrals.serverActions.unredeem({ appointmentId })
+        Messages.actions.removeReminder.call({ appointmentId })
       }
-
-      Messages.actions.removeReminder.call({ appointmentId })
 
       Events.post('appointments/softRemove', { appointmentId })
 
