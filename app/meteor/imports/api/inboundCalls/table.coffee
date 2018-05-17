@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { Tabular } from 'meteor/aldeed:tabular'
+import Tabular from 'meteor/aldeed:tabular'
 import Helpers from '../../util/helpers'
 import { zerofix } from '../../util/zerofix'
 import { firstName } from '../users/methods/name'

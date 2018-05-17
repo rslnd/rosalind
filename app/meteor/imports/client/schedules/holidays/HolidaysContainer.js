@@ -1,11 +1,9 @@
 import React from 'react'
-import Blaze from 'meteor/gadicc:blaze-react-component'
 import Alert from 'react-s-alert'
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../../i18n'
 import { Schedules } from '../../../api/schedules'
-import { holidays as holidaysTable } from '../../../api/schedules/tables'
 import { Holidays } from './Holidays'
 import { NewHolidaysForm } from './NewHolidaysForm'
 
@@ -37,16 +35,10 @@ export class HolidaysContainer extends React.Component {
   }
 
   render () {
-    const table = <Blaze
-      template='dataTable'
-      title='schedules.holidays'
-      table={holidaysTable}
-      id='holidaysTable'
-      noNew />
-
     const form = <NewHolidaysForm
       onSubmit={this.handleSubmit} />
 
-    return (<Holidays table={table} form={form} />)
+    // TODO: Add table
+    return (<Holidays table={null} form={form} />)
   }
 }
