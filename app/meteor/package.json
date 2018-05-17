@@ -107,6 +107,6 @@
   },
   "scripts": {
     "start": "meteor",
-    "test": "./node_modules/mocha/bin/mocha --recursive --require ./tests/mocha/helper.js --require @babel/register './imports/**/*.test.js'"
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --recursive --require ./tests/mocha/helper.js --require @babel/register './imports/**/*.test.js'"
   }
 }
