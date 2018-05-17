@@ -4,11 +4,12 @@ import { Users } from '../../api/users'
 import { Roles } from 'meteor/alanning:roles'
 
 export default () => {
+  if (process.env.NODE_ENV === 'production') { return }
   if (Users.find({}).count() > 0) { return }
 
   const defaultAccount = {
     username: 'admin',
-    password: Random.id(),
+    password: 'admin',
     email: 'admin@example.com',
     firstName: 'Admin'
   }
