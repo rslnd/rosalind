@@ -19,7 +19,7 @@ const composer = (props, onData) => {
     removed: true
   }
 
-  const currentAppointment = Appointments.findOne({ _id: props.currentAppointmentId })
+  const currentAppointment = Appointments.findOne({ _id: props.currentAppointmentId }, { removed: true })
   const pastAppointments = Appointments.find({ patientId, start: { $lt: new Date() }, _id }, options).fetch()
   const futureAppointments = Appointments.find({ patientId, start: { $gte: new Date() }, _id }, options).fetch()
 

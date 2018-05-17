@@ -15,35 +15,35 @@ const composer = (props, onData) => {
 
   const { admitted, canceled } = appointment
   const args = { appointmentId: props.appointmentId }
-  const closeModal = () => props.onClose && props.onClose()
+  const closeModal = () => props.onClose()
 
   const setAdmitted = () => {
-    props.onSetAdmitted(appointment)
     closeModal()
+    props.onSetAdmitted(appointment)
   }
 
   const unsetAdmitted = () => {
-    Alert.success(__('appointments.unsetAdmittedSuccess'))
     closeModal()
+    Alert.success(__('appointments.unsetAdmittedSuccess'))
     Appointments.actions.unsetAdmitted.call(args)
   }
 
   const setCanceled = () => {
-    Alert.success(__('appointments.setCanceledSuccess'))
     closeModal()
+    Alert.success(__('appointments.setCanceledSuccess'))
     Appointments.actions.setCanceled.call(args)
   }
 
   const unsetCanceled = () => {
-    Alert.success(__('appointments.unsetCanceledSuccess'))
     closeModal()
+    Alert.success(__('appointments.unsetCanceledSuccess'))
     Appointments.actions.unsetCanceled.call(args)
   }
 
   const softRemove = () => {
-    Alert.success(__('appointments.softRemoveSuccess'))
     closeModal()
-    Appointments.actions.softRemove.callPromise(args)
+    Alert.success(__('appointments.softRemoveSuccess'))
+    setTimeout(() => Appointments.actions.softRemove.callPromise(args), 150)
   }
 
   let startMove

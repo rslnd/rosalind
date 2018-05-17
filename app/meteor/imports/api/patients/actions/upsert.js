@@ -152,7 +152,8 @@ export const upsert = ({ Patients }) => {
           patient = cleanFields(patient)
 
           try {
-            const patientId = Patients.insert(patient, (e) => {
+            let patientId = null
+            patientId = Patients.insert(patient, (e) => {
               if (e) {
                 console.error('[Patients] upsert: Insert failed with error', e)
                 throw e

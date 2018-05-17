@@ -55,7 +55,9 @@ export const move = ({ Appointments }) => {
           }
         })
 
-        Messages.actions.removeReminder.call({ appointmentId })
+        if (Meteor.isServer) {
+          Messages.actions.removeReminder.call({ appointmentId })
+        }
 
         Events.post('appointments/move', {
           appointmentId,

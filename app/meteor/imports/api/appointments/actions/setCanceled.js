@@ -21,7 +21,11 @@ export const setCanceled = ({ Appointments }) => {
 
       if (Appointments.findOne({ _id: appointmentId }).canceled) {
         console.log('[Appointments] setCanceled: Appointment is already set to canceled', { appointmentId })
-        Messages.actions.removeReminder.call({ appointmentId })
+
+        if (Meteor.isServer) {
+          Messages.actions.removeReminder.call({ appointmentId })
+        }
+
         return
       }
 
@@ -34,8 +38,9 @@ export const setCanceled = ({ Appointments }) => {
         }
       })
 
-      Messages.actions.removeReminder.call({ appointmentId })
+
       if (Meteor.isServer) {
+        Messages.actions.removeReminder.call({ appointmentId })
         Referrals.serverActions.unredeem({ appointmentId })
       }
 

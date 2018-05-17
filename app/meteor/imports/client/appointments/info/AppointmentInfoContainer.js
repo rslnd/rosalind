@@ -33,7 +33,7 @@ let AppointmentInfoContainer = reduxForm({
 
 const composer = props => {
   const subscription = subscribe('appointment', { appointmentId: props.appointmentId })
-  const appointment = Appointments.findOne({ _id: props.appointmentId })
+  const appointment = Appointments.findOne({ _id: props.appointmentId }, { removed: true })
 
   if (!appointment) { return }
 
