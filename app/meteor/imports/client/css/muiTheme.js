@@ -56,14 +56,14 @@ export const muiTheme = createMuiTheme({
           backgroundColor: grayActive,
           height: 2
         }
-      },
-      inkbar: {
-        '&:after': {
-          backgroundColor: primary,
-          height: 2,
-          zoom: 1 / 1.221
-        }
       }
+      // inkbar: {
+      //   '&:after': {
+      //     backgroundColor: primary,
+      //     height: 2,
+      //     zoom: 1 / 1.221
+      //   }
+      // }
     },
     MuiInputLabel: {
       root: {
