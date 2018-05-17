@@ -4,6 +4,7 @@ COPY . /opt/app
 WORKDIR /opt/app/programs/server
 
 ENV NPM_CONFIG_LOGLEVEL warn
+ENV NODE_ENV production
 
 RUN apt-get update && apt-get install -y libgconf-2-4 wget --no-install-recommends \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
