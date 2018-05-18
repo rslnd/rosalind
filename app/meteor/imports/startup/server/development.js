@@ -2,6 +2,13 @@ import * as Api from '../../api'
 import Fiber from 'fibers'
 
 export default () => {
+  process.on('warning', e => {
+    console.warn('Node Process warning')
+    console.warn(e.name)
+    console.warn(e.message)
+    console.warn(e.stack)
+  })
+
   if (process.env.ENABLE_TRACE) {
     setInterval(() => {
       const { rss, heapTotal, heapUsed } = process.memoryUsage()
