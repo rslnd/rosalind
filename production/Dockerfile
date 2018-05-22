@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y libgconf-2-4 wget --no-install-recommen
     && rm -rf /src/*.deb
 
 RUN bash -c "time bash -c 'yarn \
+  && yarn global add pm2 \
   && npm cache clear --force \
   && mv /opt/app/node_modules /opt/node_modules/ \
   && cp -r /opt/app/programs/server/node_modules/. /opt/node_modules/ \
@@ -39,4 +40,4 @@ ENV NODE_ICU_DATA /opt/app/programs/server/npm/node_modules/full-icu/
 ENV PORT 80
 EXPOSE 80
 
-CMD ["node", "main.js"]
+CMD [ "pm2-runtime", "main.js" ]
