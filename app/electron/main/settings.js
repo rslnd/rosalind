@@ -29,7 +29,7 @@ const readSettings = path => {
 
   try {
     return JSON.parse(raw)
-  } catch e {
+  } catch (e) {
     logger.error(`[Settings] Failed to parse settings file at path ${path} containing '${raw}'`)
     return emptySettings
   }
