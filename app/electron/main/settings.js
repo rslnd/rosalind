@@ -15,12 +15,17 @@ const emptySettings = {}
 let settings = {}
 
 const readSettings = path => {
-  if (!fs.existsSync(localSettingsPath)) {
+  if (!path) {
+    logger.warn(`[Settings] No path specified to read settings from`)
+    return emptySettings
+  }
+
+  if (!fs.existsSync(path)) {
     logger.warn(`[Settings] No settings file at path ${path}`)
     return emptySettings
   }
 
-  const raw = fs.readFileSync(localSettingsPath, { encoding: 'utf8' })
+  const raw = fs.readFileSync(path, { encoding: 'utf8' })
 
   if (raw.length < 4) {
     logger.warn(`[Settings] Skipping settings file at path ${path} containing '${raw}' because it is too short`)
@@ -96,7 +101,7 @@ const terminate = () => {
 }
 
 const getSettings = () => {
-  const defaultSettings = readSettings(defaultSettingsPath)
+  const defaultSettings = defaultSettingsPath && readSettings(defaultSettingsPath)
   const localSettings = readSettings(localSettingsPath)
 
   if (defaultSettings === emptySettings && localSettings === emptySettings) {
