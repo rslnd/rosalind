@@ -36,7 +36,7 @@ const readSettings = path => {
 }
 
 const mergeSettings = (local, remote) => {
-  return Object.assign({}, a, b)
+  return Object.assign({}, local, remote)
 }
 
 const ensureClientKey = settings => {
