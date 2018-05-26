@@ -7,7 +7,7 @@ const logger = require('./logger')
 
 const isWindows = (process.platform === 'win32' || process.platform === 'win64')
 
-const defaultSettingsPath = isWindows ? 'S:\\RosalindSettings.json' : null
+const defaultSettingsPath = isWindows ? 'S:\\RosalindSettingsDefault.json' : null
 const localSettingsPath = path.join(app.getPath('userData'), 'RosalindSettings.json')
 
 const emptySettings = {}
