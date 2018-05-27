@@ -4,7 +4,7 @@ const map = require('lodash/map')
 module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-copy')
   grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.loadNpmTasks('grunt-contrib-rename')
+  grunt.loadNpmTasks('grunt-rename-util')
   grunt.loadNpmTasks('grunt-electron-installer')
   grunt.loadNpmTasks('grunt-electron')
   grunt.loadNpmTasks('grunt-shell')

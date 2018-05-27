@@ -111,7 +111,7 @@ const getSettings = () => {
 
   const mergedSettings = mergeSettings(localSettings, defaultSettings)
   if (!validateSettings(mergedSettings)) {
-    editSettings(localSettings)
+    editSettings(localSettingsPath)
     terminate()
   }
 
