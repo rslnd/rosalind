@@ -51,8 +51,8 @@ export const setupNative = () => {
           }
 
           if (window.native.dataTransferSuccess) {
-            const { remove, path } = file
-            window.native.dataTransferSuccess({ remove, path })
+            const { remove, path, focus } = file
+            window.native.dataTransferSuccess({ remove, path, focus })
           }
         })
     })

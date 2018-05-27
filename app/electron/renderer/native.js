@@ -1,5 +1,5 @@
 console.log('[Electron Native] Enabling native bindings')
-const { ipcRenderer, app } = require('electron')
+const { ipcRenderer } = require('electron')
 const EventEmitter = require('eventemitter3')
 
 try {
@@ -49,7 +49,7 @@ try {
     })
   )
 } catch (e) {
-  message = '[Electron Native] Failed to load native bindings'
+  const message = '[Electron Native] Failed to load native bindings'
   console.error(message, e)
   ipcRenderer.send('log', {
     level: 'error',

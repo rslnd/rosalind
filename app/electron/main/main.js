@@ -21,7 +21,7 @@ const watch = require('./watch')
 
 let mainWindow = null
 
-const focus = () => {
+const handleFocus = () => {
   if (!mainWindow) { return }
   if (mainWindow.isMinimized()) {
     mainWindow.restore()
@@ -31,7 +31,7 @@ const focus = () => {
 
 const start = () => {
   if (updater.handleStartupEvent()) { return }
-  if (cli.handleStartupEvent(focus)) { return app.quit() }
+  if (cli.handleStartupEvent(handleFocus)) { return app.quit() }
 
   app.on('ready', () => {
     mainWindow = window.open(err => {
@@ -39,9 +39,9 @@ const start = () => {
         logger.error('[Main] Could not load main window', err)
         return
       }
-      
+
       logger.ready('[Main] Main window loaded')
-      watch.start({ ipcReceiver: mainWindow })
+      watch.start({ ipcReceiver: mainWindow, handleFocus })
       print.start({ ipcReceiver: mainWindow })
       shortcuts.updateShortcuts()
 
