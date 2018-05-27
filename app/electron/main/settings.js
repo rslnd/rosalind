@@ -45,7 +45,7 @@ const mergeSettings = (local, remote) => {
 }
 
 const ensureClientKey = settings => {
-  if (typeof settings.clientKey === 'string' && settings.clientKey.length >= 128 ) {
+  if (typeof settings.clientKey === 'string' && settings.clientKey.length >= 128) {
     return settings
   } else {
     return Object.assign({}, settings, {
@@ -109,7 +109,10 @@ const getSettings = () => {
     terminate()
   }
 
-  const mergedSettings = mergeSettings(localSettings, defaultSettings)
+  const mergedSettings = ensureClientKey(
+    mergeSettings(localSettings, defaultSettings)
+  )
+
   if (!validateSettings(mergedSettings)) {
     editSettings(localSettingsPath)
     terminate()
@@ -131,7 +134,6 @@ const getSettings = () => {
   settings.send = ({ ipcReceiver }) => {
     ipcReceiver.webContents.send('settings', settings)
   }
-
 }
 
 getSettings()
