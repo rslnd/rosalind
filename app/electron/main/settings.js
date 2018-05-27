@@ -41,7 +41,15 @@ const readSettings = path => {
 }
 
 const mergeSettings = (local, remote) => {
-  return Object.assign({}, local, remote)
+  let topLevel = Object.assign({}, local, remote)
+
+  // Keep watch as defined locally for now
+  // TODO: Move watch settings to server into clients collection
+  if (local.watch) {
+    topLevel.watch = local.watch
+  }
+
+  return topLevel
 }
 
 const ensureClientKey = settings => {
