@@ -7,7 +7,7 @@ branches:
 shallow_clone: true
 
 environment:
-  nodejs_version: '8.9.3'
+  nodejs_version: '8.11.2'
 
 install:
 - ps: >-
@@ -22,11 +22,9 @@ install:
     npm --version
 
 - cmd: >-
-    npm install -g yarn
-
     cd app\electron\
 
-    yarn install
+    npm i
 
 build_script:
 - ps: >-
