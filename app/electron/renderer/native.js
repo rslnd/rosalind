@@ -1,11 +1,12 @@
 console.log('[Electron Native] Enabling native bindings')
 const { ipcRenderer } = require('electron')
 const EventEmitter = require('eventemitter3')
+const settings = require('../main/settings')
 
 try {
   window.native = {
     electron: process.versions.electron,
-    settings: null,
+    settings: settings,
     systemInfo: null,
     editSettings: () => ipcRenderer.send('settings/edit'),
     log: options => ipcRenderer.send('log', options),
