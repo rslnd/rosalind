@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.74",
+  "version": "0.0.75",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
@@ -43,7 +43,7 @@
     "winston-papertrail": "^1.0.5"
   },
   "engines": {
-    "node": "^8.9.3"
+    "node": "^6.5.0"
   },
   "scripts": {
     "client:start": "./node_modules/.bin/grunt",
