@@ -15,6 +15,7 @@ const open = (callback) => {
     minWidth: 560,
     minHeight: 426,
     disableAutoHideCursor: true,
+    backgroundColor: '#ecf0f5',
     webPreferences: {
       preload: require.resolve('../renderer/native'),
       experimentalFeatures: true,
