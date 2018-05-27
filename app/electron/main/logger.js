@@ -3,7 +3,7 @@ const path = require('path')
 const url = require('url')
 const includes = require('lodash/includes')
 const winston = require('winston')
-const require('winston-papertrail')
+require('winston-papertrail')
 const { ipcMain, app } = require('electron')
 
 const start = () => {

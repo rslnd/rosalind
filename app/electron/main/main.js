@@ -5,7 +5,7 @@ module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', '
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app.asar', 'node_modules'))
 
 const { app, ipcMain } = require('electron')
-const require('./debugger')
+require('./debugger')
 const updater = require('./updater')
 const window = require('./window')
 const logger = require('./logger')
