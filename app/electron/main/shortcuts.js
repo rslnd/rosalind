@@ -1,4 +1,4 @@
-const fsp = require('fs-promise')
+const fsx = require('fs-extra')
 const shortcut = require('windows-shortcuts-appid')
 const logger = require('./logger')
 const settings = require('./settings')
@@ -23,7 +23,7 @@ const updateShortcuts = () => {
 
   return Promise.all(shortcutPaths.map((shortcutPath) => {
     return new Promise((resolve, reject) => {
-      fsp.exists(shortcutPath)
+      fsx.pathExists(shortcutPath)
         .then((exists) => {
           if (exists) {
             return resolve(updateShortcut(shortcutPath))
@@ -93,7 +93,7 @@ const updateShortcut = (shortcutPath, callback) => {
 
 const deleteShortcut = (shortcutPath) => {
   logger.info('[Updater] Deleting shortcut', shortcutPath)
-  return fsp.unlink(shortcutPath)
+  return fsx.remove(shortcutPath)
 }
 
 module.exports = { updateShortcuts, deleteShortcuts }
