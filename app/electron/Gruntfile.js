@@ -64,7 +64,7 @@ module.exports = (grunt) => {
         options: {
           name: 'Rosalind',
           icon: 'assets/appicon.ico',
-          versionString: {
+          win32metadata: {
             CompanyName: '<%= pkg.author %>',
             LegalCopyright: '<%= pkg.author %>',
             FileDescription: '<%= pkg.productName %>',
@@ -76,7 +76,7 @@ module.exports = (grunt) => {
           },
           dir: 'build/javascript/',
           out: 'build/packaged/',
-          version: options.electronVersion(),
+          electronVersion: options.electronVersion(),
           platform: 'win32',
           arch: 'ia32',
           asar: true,

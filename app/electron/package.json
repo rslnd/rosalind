@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.76",
+  "version": "0.0.77",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
@@ -11,8 +11,8 @@
   },
   "main": "main/main.js",
   "devDependencies": {
-    "electron": "^1.4.4",
-    "electron-packager": "^8.0.0",
+    "electron": "^2.0.2",
+    "electron-packager": "^12.1.0",
     "grunt": "^1.0.2",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.1.0",
