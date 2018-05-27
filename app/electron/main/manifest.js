@@ -1,4 +1,4 @@
-const { app } = require 'electron'
+const { app } = require('electron')
 
 module.exports = {
   appId: 'com.squirrel.rslnd.rosalind',

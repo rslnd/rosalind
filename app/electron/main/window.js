@@ -4,7 +4,7 @@ const logger = require('./logger')
 const settings = require('./settings')
 
 const open = (callback) => {
-  { screen } = require('electron')
+  const { screen } = require('electron')
   const display = screen.getPrimaryDisplay().workAreaSize
 
   const mainWindow = new BrowserWindow({
