@@ -49,13 +49,13 @@ const start = () => {
         settings.send({ ipcReceiver: mainWindow })
         updater.sendVersion({ ipcReceiver: mainWindow })
         systemInfo.send({ ipcReceiver: mainWindow })
-      }
-    }
+      })
+    })
 
     updater.start()
     setTimeout(updater.check, 5 * 1000)
     setInterval(updater.check, 5 * 60 * 1000)
-  }
+  })
 
   app.on('window-all-closed', () => {
     updater.quitAndInstall()
