@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.87",
+  "version": "0.0.88",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",

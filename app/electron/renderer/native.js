@@ -1,12 +1,15 @@
 console.log('[Electron Native] Enabling native bindings')
 const { ipcRenderer } = require('electron')
 const EventEmitter = require('eventemitter3')
-const settings = require('../main/settings')
+
+// TODO Figure out how to fetch settings before loading page.
+// Client key null throws nasty exceptions on server, and
+// shows loading spinner indefinitely until user clicks somewhere
 
 try {
   window.native = {
     electron: process.versions.electron,
-    settings: settings,
+    settings: null,
     systemInfo: null,
     editSettings: () => ipcRenderer.send('settings/edit'),
     log: options => ipcRenderer.send('log', options),
