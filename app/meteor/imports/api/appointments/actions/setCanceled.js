@@ -31,13 +31,16 @@ export const setCanceled = ({ Appointments }) => {
 
       Appointments.update({ _id: appointmentId }, {
         $set: {
-          admitted: false,
           canceled: true,
           canceledAt: new Date(),
           canceledBy: this.userId
+        },
+        $unset: {
+          admitted: 1,
+          admittedAt: 1,
+          admittedBy: 1
         }
       })
-
 
       if (Meteor.isServer) {
         Messages.actions.removeReminder.call({ appointmentId })
