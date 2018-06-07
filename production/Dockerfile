@@ -1,4 +1,4 @@
-FROM node:10.2.0
+FROM node:8.11.2
 
 COPY . /opt/app
 WORKDIR /opt/app/programs/server
