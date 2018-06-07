@@ -9,16 +9,16 @@ export default () => {
     console.warn(e.stack)
   })
 
-  Fiber.poolSize = 1e9;
+  // Fiber.poolSize = 1e9;
 
-  if (process.env.ENABLE_TRACE || process.env.NODE_ENV === 'development') {
-    setInterval(() => {
-      const { rss, heapTotal, heapUsed } = process.memoryUsage()
-      const { fibersCreated, poolSize } = Fiber
+  // if (process.env.ENABLE_TRACE || process.env.NODE_ENV === 'development') {
+  //   setInterval(() => {
+  //     const { rss, heapTotal, heapUsed } = process.memoryUsage()
+  //     const { fibersCreated, poolSize } = Fiber
 
-      console.log({ rss, heapTotal, heapUsed, fibersCreated, poolSize })
-    }, 20 * 1000).unref()
-  }
+  //     console.log({ rss, heapTotal, heapUsed, fibersCreated, poolSize })
+  //   }, 20 * 1000).unref()
+  // }
 
   if (process.env.NODE_ENV === 'production') { return }
 
