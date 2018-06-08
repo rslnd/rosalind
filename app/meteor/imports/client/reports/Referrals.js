@@ -19,7 +19,9 @@ import { Calendars } from '../../api/calendars'
 import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
+
+const stages = ['referred', 'pending', 'redeemed']
 
 export const Referrals = ({ referrals, mapUserIdToName }) => {
   const hasData = referrals.total.referred.total || referrals.total.redeemed.total
@@ -63,7 +65,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
               </Cell>
               {
                 columns.map(c =>
-                  <Cell key={c._id} colSpan={2}>
+                  <Cell style={headerTitleStyle} key={c._id} colSpan={3}>
                     {c.title}
                   </Cell>
                 )
@@ -79,21 +81,15 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
               {
                 columns.map(c =>
                   [
-                    <Cell key={`${c._id}-referred`}>
-                      <Referred />
-                    </Cell>,
-                    <Cell key={`${c._id}-redeemed`}>
-                      <Redeemed />
-                    </Cell>
+                    <Referred key={`${c._id}-referred`} />,
+                    <Pending key={`${c._id}-pending`} />,
+                    <Redeemed key={`${c._id}-redeemed`} />
                   ]
                 )
               }
-              <Cell style={separatorStyle}>
-                <Referred />
-              </Cell>
-              <Cell>
-                <Redeemed />
-              </Cell>
+              <Referred style={doubleSeparatorStyle} />
+              <Pending />
+              <Redeemed />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -103,26 +99,28 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
                   <Cell style={textCellStyle}>{mapUserIdToName(a.assigneeId)}</Cell>
                   {
                     columns.map(c =>
-                      [
-                        <Cell key={`${c._id}-${a.assigneeId}-referred`}>
+                      stages.map((stage, i) =>
+                        <Cell
+                          style={i === 0 ? separatorStyle : null}
+                          key={`${c._id}-${a.assigneeId}-${stage}`}>
                           <Value
-                            total={a.referred.ids[c._id]}
-                            today={a.referredToday.ids[c._id]}
-                          />
-                        </Cell>,
-                        <Cell key={`${c._id}-${a.assigneeId}-redeemed`}>
-                          <Value
-                            total={a.redeemed.ids[c._id]}
-                            today={a.redeemedToday.ids[c._id]}
+                            total={a[stage].ids[c._id]}
+                            today={a[`${stage}Today`].ids[c._id]}
                           />
                         </Cell>
-                      ]
+                      )
                     )
                   }
-                  <Cell style={separatorStyle}>
+                  <Cell style={doubleSeparatorStyle}>
                     <Value
                       total={a.referred.total}
                       today={a.referredToday.total}
+                    />
+                  </Cell>
+                  <Cell>
+                    <Value
+                      total={a.pending.total}
+                      today={a.pendingToday.total}
                     />
                   </Cell>
                   <Cell>
@@ -134,6 +132,34 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
                 </TableRow>
               )
             }
+
+            {/* Summary Row */}
+            <TableRow style={summaryRowStyle}>
+              <Cell />
+              {
+                columns.map(c =>
+                  stages.map(stage =>
+                    <Cell style={separatorStyle} key={`${c._id}-${stage}`}>
+                      <Value
+                        total={referrals.total[stage].ids[c._id]}
+                        today={referrals.total[`${stage}Today`].ids[c._id]}
+                      />
+                    </Cell>
+                  )
+                )
+              }
+
+              {
+                stages.map((stage, i) =>
+                  <Cell style={i === 0 ? doubleSeparatorStyle : separatorStyle} key={stage}>
+                    <Value
+                      total={referrals.total[stage].total}
+                      today={referrals.total[`${stage}Today`].total}
+                    />
+                  </Cell>
+                )
+              }
+            </TableRow>
           </TableBody>
         </Table>
       </Box>
@@ -166,21 +192,21 @@ const summaryRowStyle = {
 const Referred = ({ style }) =>
   <Cell
     style={style ? {...style, ...separatorStyle, ...iconCellStyle} : {...separatorStyle, ...iconCellStyle}}
-    title={__('reports.referralReferredTitle')}>
+    title={TAPi18n.__('reports.referralReferredTitle')}>
     <Icon name='commenting-o' />
   </Cell>
 
 const Pending = () =>
   <Cell
     style={{...separatorStyle, ...iconCellStyle}}
-    title={__('reports.referralPendingTitle')}>
+    title={TAPi18n.__('reports.referralPendingTitle')}>
     <Icon name='clock-o' />
   </Cell>
 
 const Redeemed = () =>
   <Cell
     style={{...separatorStyle, ...iconCellStyle}}
-    title={__('reports.referralRedeemedTitle')}>
+    title={TAPi18n.__('reports.referralRedeemedTitle')}>
     <Icon name='check' />
   </Cell>
 
