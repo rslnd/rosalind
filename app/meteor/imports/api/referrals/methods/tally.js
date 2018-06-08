@@ -4,7 +4,7 @@ import sum from 'lodash/sum'
 import uniq from 'lodash/uniq'
 import { startOfMonth, startOfDay, endOfDay, addDays, isWithinInterval } from 'date-fns'
 
-export const tally = ({ date, from, to, referrals }) => {
+export const tally = ({ date, from, to, referrals, futureAppointments = [] }) => {
   const period = (from && to)
     ? ({
       start: startOfDay(from),
