@@ -1,5 +1,6 @@
 import React from 'react'
 import uniq from 'lodash/uniq'
+import sortBy from 'lodash/fp/sortBy'
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
 import { Calendars } from '../../api/calendars'
 import { Tags } from '../../api/tags'
@@ -12,7 +13,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
   const hasData = referrals.total.referred.total || referrals.total.redeemed.total
   if (!hasData) { return null }
 
-  const columns = uniq([
+  const columns = sortBy('title')(uniq([
     ...Object.keys(referrals.total.referred.ids),
     ...Object.keys(referrals.total.redeemed.ids)])
     .map(_id => {
@@ -33,15 +34,17 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
 
       console.error('[Referrals] Cannot find calendar or tag with id', _id)
       return {}
-    })
+    }))
 
   return (
     <div style={avoidPageBreak}>
-      <Box title='Empfehlungen' noPadding>
+      <Box noPadding>
         <Table>
           <TableHead>
             <TableRow>
-              <Cell>{/* Name */}</Cell>
+              <Cell>
+                <b style={{ fontSize: '18px' }}>Empfehlungen</b>
+              </Cell>
               {
                 columns.map(c =>
                   <Cell style={headerTitleStyle} key={c._id} colSpan={3}>
@@ -49,7 +52,11 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
                   </Cell>
                 )
               }
-              <Cell style={doubleSeparatorStyle} colSpan={3}>Gesamt</Cell>
+              <Cell
+                style={doubleSeparatorHeaderTitleStyle}
+                colSpan={3}>
+                Gesamt
+              </Cell>
             </TableRow>
             <TableRow>
               <Cell>{/* Name */}</Cell>
@@ -153,6 +160,11 @@ const doubleSeparatorStyle = {
 const headerTitleStyle = {
   ...separatorStyle,
   textAlign: 'center'
+}
+
+const doubleSeparatorHeaderTitleStyle = {
+  ...headerTitleStyle,
+  ...doubleSeparatorStyle
 }
 
 const summaryRowStyle = {

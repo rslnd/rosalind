@@ -98,7 +98,11 @@ export const tally = ({ date, from, to, referrals, futureAppointments }) => {
       assigneeId,
       ...subtally(referredBy(assigneeId)(referrals))
     }))
-  )
+  ).filter(a => !(
+    a.referred.total === 0 &&
+    a.pending.total === 0 &&
+    a.redeemed.total === 0
+  ))
 
   return {
     period,
