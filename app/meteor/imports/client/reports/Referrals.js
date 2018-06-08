@@ -25,7 +25,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
   const hasData = referrals.total.referred.total || referrals.total.redeemed.total
   if (!hasData) { return null }
 
-  const columns = uniq([
+  const columns = sortBy('title')(uniq([
     ...Object.keys(referrals.total.referred.ids),
     ...Object.keys(referrals.total.redeemed.ids)])
     .map(_id => {
@@ -46,11 +46,11 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
 
       console.error('[Referrals] Cannot find calendar or tag with id', _id)
       return {}
-    })
+    }))
 
   return (
     <div style={avoidPageBreak}>
-      <Box title='Empfehlungen' noPadding>
+      <Box noPadding>
         <Table>
           <TableHead>
             <TableRow>
@@ -68,7 +68,11 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
                   </Cell>
                 )
               }
-              <Cell style={separatorStyle} colSpan={2}>Gesamt</Cell>
+              <Cell
+                style={doubleSeparatorHeaderTitleStyle}
+                colSpan={3}>
+                Gesamt
+              </Cell>
             </TableRow>
             <TableRow>
               <Cell>{/* Name */}</Cell>
@@ -135,6 +139,28 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
       </Box>
     </div>
   )
+}
+
+const separatorStyle = {
+  borderLeft: '1px solid #ccc'
+}
+
+const doubleSeparatorStyle = {
+  borderLeft: '3px double #ccc'
+}
+
+const headerTitleStyle = {
+  ...separatorStyle,
+  textAlign: 'center'
+}
+
+const doubleSeparatorHeaderTitleStyle = {
+  ...headerTitleStyle,
+  ...doubleSeparatorStyle
+}
+
+const summaryRowStyle = {
+  borderTop: doubleSeparatorStyle.borderLeft
 }
 
 const Referred = ({ style }) =>
