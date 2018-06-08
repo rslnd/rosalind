@@ -79,11 +79,11 @@ export const muiTheme = createMuiTheme({
       }
     },
     MuiTableCell: {
-      typeHead: {
-        fontSize
+      head: {
+        fontSize: '14px'
       },
-      typeBody: {
-        fontSize
+      body: {
+        fontSize: '14px'
       }
     }
   }
