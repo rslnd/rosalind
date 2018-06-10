@@ -44,5 +44,6 @@ export const reports = {
   referralPending: 'Ausgemacht',
   referralPendingTitle: 'Aufgrund von Empfehlungen geplante Termine',
   referralRedeemed: 'Eingelöst',
-  referralRedeemedTitle: 'Von PatientIn in Anspruch genommene Empfehlungen'
+  referralRedeemedTitle: 'Von PatientIn in Anspruch genommene Empfehlungen',
+  ofReferred: '__percent__% der Empfehlungen'
 }

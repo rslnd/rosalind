@@ -23,6 +23,7 @@ import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { PatientName } from '../patients/PatientName'
+import { ReferralsDetailSummary } from './ReferralsDetailSummary'
 
 const stages = ['referred', 'pending', 'redeemed']
 
@@ -46,10 +47,10 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
       referredToTitle: referredToTitle(r.referredTo)
     })))
 
-  console.log('rows', rows)
-
   return (
     <div>
+      <ReferralsDetailSummary referrals={rows} />
+
       <Box noPadding>
         <Table>
           <TableHead>
@@ -82,6 +83,21 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
                 </TableRow>
               )
             }
+
+            <TableRow style={summaryRowStyle}>
+              <Cell />
+              <Cell>Summe</Cell>
+              <Cell />
+              <Cell style={separatorStyle}>
+                <b>{referrals.length}</b> {__('reports.referralReferred')}
+              </Cell>
+              <Cell style={separatorStyle}>
+                <b>{referrals.filter(r => r.pendingAt).length}</b> {__('reports.referralPending')}
+              </Cell>
+              <Cell style={separatorStyle}>
+                <b>{referrals.filter(r => r.redeemedAt).length}</b> {__('reports.referralRedeemed')}
+              </Cell>
+            </TableRow>
           </TableBody>
         </Table>
       </Box>

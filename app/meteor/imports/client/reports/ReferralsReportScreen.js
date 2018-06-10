@@ -39,7 +39,7 @@ export class ReferralsReportScreen extends React.Component {
 
   render () {
     const {
-      loading,
+      isLoading,
       from,
       to,
       user,
@@ -91,7 +91,7 @@ export class ReferralsReportScreen extends React.Component {
             ? <Box type='info' title={__('ui.notice')}>
               <p>{__('reports.emptySelectAssignee')}</p>
             </Box>
-            : loading
+            : isLoading
             ? <Loading />
             : (referrals && referrals.length > 0)
             ? <ReferralsDetailTable
