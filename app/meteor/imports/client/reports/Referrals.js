@@ -1,11 +1,25 @@
 import React from 'react'
 import uniq from 'lodash/uniq'
 import sortBy from 'lodash/fp/sortBy'
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  numberCellStyle,
+  textCellStyle,
+  iconCellStyle,
+  separatorStyle,
+  doubleSeparatorStyle,
+  headerTitleStyle,
+  doubleSeparatorHeaderTitleStyle,
+  summaryRowStyle } from './shared/Table'
 import { Calendars } from '../../api/calendars'
 import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
+import { __ } from '../../i18n'
 
 const stages = ['referred', 'pending', 'redeemed']
 
@@ -42,8 +56,12 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <Cell>
-                <b style={{ fontSize: '18px' }}>Empfehlungen</b>
+              <Cell style={textCellStyle}>
+                <b style={{ fontSize: '18px' }}>
+                  <Icon name='angle-right' />
+                  &nbsp;
+                  Empfehlungen
+                </b>
               </Cell>
               {
                 columns.map(c =>
@@ -78,7 +96,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
             {
               referrals.assignees.map(a =>
                 <TableRow key={a.assigneeId}>
-                  <Cell>{mapUserIdToName(a.assigneeId)}</Cell>
+                  <Cell style={textCellStyle}>{mapUserIdToName(a.assigneeId)}</Cell>
                   {
                     columns.map(c =>
                       stages.map((stage, i) =>
@@ -149,51 +167,29 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
   )
 }
 
-const separatorStyle = {
-  borderLeft: '1px solid #ccc'
-}
-
-const doubleSeparatorStyle = {
-  borderLeft: '3px double #ccc'
-}
-
-const headerTitleStyle = {
-  ...separatorStyle,
-  textAlign: 'center'
-}
-
-const doubleSeparatorHeaderTitleStyle = {
-  ...headerTitleStyle,
-  ...doubleSeparatorStyle
-}
-
-const summaryRowStyle = {
-  borderTop: doubleSeparatorStyle.borderLeft
-}
-
 const Referred = ({ style }) =>
   <Cell
-    style={style || separatorStyle}
-    title='Ausgesprochene Empfehlungen'>
+    style={style ? {...style, ...separatorStyle, ...iconCellStyle} : {...separatorStyle, ...iconCellStyle}}
+    title={__('reports.referralReferredTitle')}>
     <Icon name='commenting-o' />
   </Cell>
 
 const Pending = () =>
   <Cell
-    style={separatorStyle}
-    title='Aufgrund von Empfehlungen geplante Termine'>
+    style={{...separatorStyle, ...iconCellStyle}}
+    title={__('reports.referralPendingTitle')}>
     <Icon name='clock-o' />
   </Cell>
 
 const Redeemed = () =>
   <Cell
-    style={separatorStyle}
-    title='Von PatientIn in Anspruch genommene Empfehlungen'>
+    style={{...separatorStyle, ...iconCellStyle}}
+    title={__('reports.referralRedeemedTitle')}>
     <Icon name='check' />
   </Cell>
 
-const Cell = ({ children, ...props }) =>
-  <TableCell padding='dense' {...props}>
+const Cell = ({ children, style, ...props }) =>
+  <TableCell padding='dense' style={style ? {...numberCellStyle, ...style} : numberCellStyle} {...props}>
     {children}
   </TableCell>
 

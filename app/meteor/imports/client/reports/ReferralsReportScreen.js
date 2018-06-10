@@ -1,18 +1,14 @@
 import React from 'react'
-import FlipMove from 'react-flip-move'
 import moment from 'moment-timezone'
 import { Button } from 'react-bootstrap'
 import { __ } from '../../i18n'
-import { weekOfYear } from '../../util/time/format'
 import { dayToDate } from '../../util/time/day'
 import { Icon } from '../components/Icon'
 import { Loading } from '../components/Loading'
+import { PrintSettings } from './shared/PrintSettings'
 import { DateRangeNavigation } from '../components/DateRangeNavigation'
 import { Box } from '../components/Box'
-import { Report } from './Report'
-import { Referrals } from './Referrals'
-import { PrintSettings } from './shared/PrintSettings'
-import { FooterContainer } from '../layout/FooterContainer'
+import { ReferralsDetailTable } from './ReferralsDetailTable'
 import { UserPickerContainer } from '../users/UserPickerContainer'
 import { fullNameWithTitle } from '../../api/users/methods/name'
 
@@ -23,15 +19,10 @@ const formatRange = ({ start, end }) =>
     moment(end).format(__('time.dateFormatShort'))
   ].join(' '))
 
-export class AssigneeReportScreen extends React.Component {
+export class ReferralsReportScreen extends React.Component {
   constructor (props) {
     super(props)
     this.handlePrint = this.handlePrint.bind(this)
-    this.handleToggleRevenue = this.handleToggleRevenue.bind(this)
-
-    this.state = {
-      showRevenue: false
-    }
   }
 
   handlePrint () {
@@ -46,13 +37,6 @@ export class AssigneeReportScreen extends React.Component {
     }
   }
 
-  handleToggleRevenue () {
-    this.setState({
-      ...this.state,
-      showRevenue: !this.state.showRevenue
-    })
-  }
-
   render () {
     const {
       loading,
@@ -61,9 +45,7 @@ export class AssigneeReportScreen extends React.Component {
       user,
       referrals,
       handleRangeChange,
-      canShowRevenue,
       handleChangeAssignee,
-      reports,
       mapUserIdToName,
       mapReportAsToHeader
     } = this.props
@@ -74,13 +56,13 @@ export class AssigneeReportScreen extends React.Component {
     })
 
     const title = user &&
-      __('reports.assigneesReportFor', {
+      __('reports.referralsReportFor', {
         name: fullNameWithTitle(user)
-      }) || __('reports.assigneesReport')
+      }) || __('reports.referralsReport')
 
     return (
       <div>
-        <PrintSettings orientation='landscape' />
+        <PrintSettings orientation='portrait' />
 
         <div className='content-header show-print'>
           <h1 className='show-print'>
@@ -95,10 +77,6 @@ export class AssigneeReportScreen extends React.Component {
             calendarText={formattedRange}
             pullRight>
             <Button onClick={this.handlePrint} title={__('ui.print')}><Icon name='print' /></Button>
-            {
-              canShowRevenue &&
-                <Button onClick={this.handleToggleRevenue} title={__('reports.toggleRevenue')}><Icon name='euro' /></Button>
-            }
           </DateRangeNavigation>
         </div>
         <div className='content'>
@@ -115,30 +93,16 @@ export class AssigneeReportScreen extends React.Component {
             </Box>
             : loading
             ? <Loading />
-            : (reports && reports.length > 0) && reports.map((report, i) =>
-              <div key={i} style={{ marginBottom: 80 }}>
-                <Report
-                  report={report}
-                  showRevenue={this.state.showRevenue}
-                  mapUserIdToName={mapUserIdToName}
-                  mapReportAsToHeader={mapReportAsToHeader}
-                  assigneeReport
-                />
-              </div>
-            ) || <div key='noReports'>
+            : (referrals && referrals.length > 0)
+            ? <ReferralsDetailTable
+                referrals={referrals}
+                mapUserIdToName={mapUserIdToName}
+              />
+            : <div key='noReports'>
               <Box type='info' title={__('ui.notice')}>
                 <p>{__('reports.emptyAssignee')}</p>
               </Box>
             </div>
-          }
-          {
-            user && referrals && referrals.assignees[0] &&
-              <div>
-                <Referrals
-                  referrals={referrals}
-                  mapUserIdToName={mapUserIdToName} />
-                <span className='referralsLoaded' />
-              </div>
           }
         </div>
       </div>

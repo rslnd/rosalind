@@ -1,15 +1,17 @@
 export const reports = {
   this: 'Berichte',
-  dashboard: 'Übersicht',
+  dashboard: 'Tagesbericht',
   thisSingular: 'Bericht',
   thisDaySingular: 'Tagesbericht',
   thisDayPlural: 'Tagesberichte',
   date: 'Datum',
-  assignees: 'Einzelperson',
+  assignees: 'MitarbeiterIn',
   assignee: 'ÄrztIn',
   assigneeName: 'Name',
   assigneesReport: 'Bericht',
   assigneesReportFor: 'Bericht für __name__',
+  referralsReport: 'Empfehlungen',
+  referralsReportFor: 'Empfehlungen von __name__',
   assignee_plural: 'ÄrztInnen',
   assigneeType__external: 'Team',
   assigneeType__overbooking: 'Einschub',
@@ -35,5 +37,12 @@ export const reports = {
   assigneeHours: 'Arbeitszeit',
   missingReimbursement: 'Bei __count__ PatientIn wurde keine Leistung eingetragen.',
   missingReimbursement_plural: 'Bei __count__ PatientInnen wurde keine Leistung eingetragen.',
-  misattributedRevenue: 'Falsch zugewiesener Umsatz'
+  misattributedRevenue: 'Falsch zugewiesener Umsatz',
+  referrals: 'Empfehlungen',
+  referralReferred: 'Empfohlen',
+  referralReferredTitle: 'Ausgesprochene Empfehlungen',
+  referralPending: 'Ausgemacht',
+  referralPendingTitle: 'Aufgrund von Empfehlungen geplante Termine',
+  referralRedeemed: 'Eingelöst',
+  referralRedeemedTitle: 'Von PatientIn in Anspruch genommene Empfehlungen'
 }
