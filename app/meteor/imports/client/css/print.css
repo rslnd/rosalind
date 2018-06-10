@@ -5,8 +5,6 @@
 }
 
 @media print {
-  @page { size: landscape; }
-
   body {
     zoom: 1;
   }
