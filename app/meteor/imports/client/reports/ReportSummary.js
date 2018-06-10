@@ -25,7 +25,7 @@ export const InfoBox = ({ color, position, icon = 'eur', children, text, descrip
     <div className='info-box-content enable-select'>
       <span className='info-box-number'>{children}</span>
       <span className='info-box-text'>{text}</span>
-      <span className='info-box-description text-muted'>{description}</span>
+      {description && <span className='info-box-description text-muted'>{description}</span>}
     </div>
   </div>
 )
