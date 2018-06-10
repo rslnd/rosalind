@@ -11,6 +11,7 @@ import { DateRangeNavigation } from '../components/DateRangeNavigation'
 import { Box } from '../components/Box'
 import { Report } from './Report'
 import { Referrals } from './Referrals'
+import { PrintSettings } from './shared/PrintSettings'
 import { FooterContainer } from '../layout/FooterContainer'
 import { UserPickerContainer } from '../users/UserPickerContainer'
 import { fullNameWithTitle } from '../../api/users/methods/name'
@@ -79,6 +80,8 @@ export class AssigneeReportScreen extends React.Component {
 
     return (
       <div>
+        <PrintSettings orientation='landscape' />
+
         <div className='content-header show-print'>
           <h1 className='show-print'>
             {title}

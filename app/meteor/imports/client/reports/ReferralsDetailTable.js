@@ -50,7 +50,6 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
   return (
     <div>
       <ReferralsDetailSummary referrals={rows} />
-
       <Box noPadding>
         <Table>
           <TableHead>

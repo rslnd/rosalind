@@ -1,10 +1,25 @@
 import React from 'react'
 import uniq from 'lodash/uniq'
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
+import sortBy from 'lodash/fp/sortBy'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  numberCellStyle,
+  textCellStyle,
+  iconCellStyle,
+  separatorStyle,
+  doubleSeparatorStyle,
+  headerTitleStyle,
+  doubleSeparatorHeaderTitleStyle,
+  summaryRowStyle } from './shared/Table'
 import { Calendars } from '../../api/calendars'
 import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
+import { __ } from '../../i18n'
 
 export const Referrals = ({ referrals, mapUserIdToName }) => {
   const hasData = referrals.total.referred.total || referrals.total.redeemed.total
@@ -39,7 +54,13 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <Cell>{/* Name */}</Cell>
+              <Cell style={textCellStyle}>
+                <b style={{ fontSize: '18px' }}>
+                  <Icon name='angle-right' />
+                  &nbsp;
+                  Empfehlungen
+                </b>
+              </Cell>
               {
                 columns.map(c =>
                   <Cell key={c._id} colSpan={2}>
@@ -75,7 +96,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
             {
               referrals.assignees.map(a =>
                 <TableRow key={a.assigneeId}>
-                  <Cell>{mapUserIdToName(a.assigneeId)}</Cell>
+                  <Cell style={textCellStyle}>{mapUserIdToName(a.assigneeId)}</Cell>
                   {
                     columns.map(c =>
                       [
@@ -116,22 +137,29 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
   )
 }
 
-const separatorStyle = {
-  borderLeft: '1px solid #ccc'
-}
+const Referred = ({ style }) =>
+  <Cell
+    style={style ? {...style, ...separatorStyle, ...iconCellStyle} : {...separatorStyle, ...iconCellStyle}}
+    title={__('reports.referralReferredTitle')}>
+    <Icon name='commenting-o' />
+  </Cell>
 
-const Referred = () =>
-  <Icon
-    name='commenting-o'
-    title='Ausgesprochene Empfehlungen' />
+const Pending = () =>
+  <Cell
+    style={{...separatorStyle, ...iconCellStyle}}
+    title={__('reports.referralPendingTitle')}>
+    <Icon name='clock-o' />
+  </Cell>
 
 const Redeemed = () =>
-  <Icon
-    name='check'
-    title='Von PatientIn in Anspruch genommene Empfehlungen' />
+  <Cell
+    style={{...separatorStyle, ...iconCellStyle}}
+    title={__('reports.referralRedeemedTitle')}>
+    <Icon name='check' />
+  </Cell>
 
-const Cell = ({ children, ...props }) =>
-  <TableCell padding='dense' {...props}>
+const Cell = ({ children, style, ...props }) =>
+  <TableCell padding='dense' style={style ? {...numberCellStyle, ...style} : numberCellStyle} {...props}>
     {children}
   </TableCell>
 

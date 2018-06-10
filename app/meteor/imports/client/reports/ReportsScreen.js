@@ -11,6 +11,7 @@ import { Report } from './Report'
 import { PreviewBoxes } from './PreviewBoxes'
 import { Quarter } from './Quarter'
 import { Referrals } from './Referrals'
+import { PrintSettings } from './shared/PrintSettings'
 import { FooterContainer } from '../layout/FooterContainer'
 import { Loading } from '../components/Loading'
 
@@ -70,6 +71,8 @@ export class ReportsScreen extends React.Component {
 
     return (
       <div>
+        <PrintSettings orientation='landscape' />
+
         <div className='content-header show-print'>
           <h1 className='show-print'>
             {TAPi18n.__('reports.thisDaySingular')} {date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
