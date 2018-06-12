@@ -13,6 +13,8 @@ module.exports = ->
 
       try
         status = Meteor.status().status
+        console.log('[Meteor] status', status)
+        console.log('[Meteor] connection', Meteor.connection)
 
         if status is 'connected'
           if window.offline?.alertId
