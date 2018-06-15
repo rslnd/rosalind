@@ -97,7 +97,7 @@ const PatientName = withState('editing', 'setEditing', false)(({ patient, editin
       marginTop: -16,
       marginBottom: -8
     }}>
-    <GenderField onChange={() => setTimeout(30, onChange)} />
+    <GenderField onChange={() => setTimeout(onChange, 30)} />
     <div
       onMouseEnter={() => setEditing(true)}
       onMouseLeave={() => {
