@@ -111,7 +111,8 @@ export const upsert = ({ Patients }) => {
               }
             })
 
-            patient.contacts = [ ...existingPatient.contacts, ...newContacts ].filter(c =>
+            // New contacts go first, because reminders etc go to the first matching channel
+            patient.contacts = [ ...newContacts, ...existingPatient.contacts ].filter(c =>
               c.value)
           }
 
