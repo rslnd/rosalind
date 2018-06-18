@@ -38,6 +38,8 @@
     "missingReimbursement_plural": "Bei __count__ PatientInnen wurde keine Leistung eingetragen.",
     "misattributedRevenue": "Falsch zugewiesener Umsatz",
     "referrals": "Empfehlungen",
+    "referralsReport": "Bericht",
+    "referralsReportFor": "Bericht für __name__",    
     "referralReferred": "Empfohlen",
     "referralReferredTitle": "Ausgesprochene Empfehlungen",
     "referralPending": "Ausgemacht",

@@ -167,28 +167,6 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
   )
 }
 
-const separatorStyle = {
-  borderLeft: '1px solid #ccc'
-}
-
-const doubleSeparatorStyle = {
-  borderLeft: '3px double #ccc'
-}
-
-const headerTitleStyle = {
-  ...separatorStyle,
-  textAlign: 'center'
-}
-
-const doubleSeparatorHeaderTitleStyle = {
-  ...headerTitleStyle,
-  ...doubleSeparatorStyle
-}
-
-const summaryRowStyle = {
-  borderTop: doubleSeparatorStyle.borderLeft
-}
-
 const Referred = ({ style }) =>
   <Cell
     style={style ? {...style, ...separatorStyle, ...iconCellStyle} : {...separatorStyle, ...iconCellStyle}}
