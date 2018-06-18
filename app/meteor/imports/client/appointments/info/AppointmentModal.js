@@ -1,5 +1,6 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
+import { TAPi18n } from 'meteor/tap:i18n'
 import Button from 'material-ui/Button'
 import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { AppointmentActionsContainer } from './AppointmentActionsContainer'
@@ -28,7 +29,7 @@ export const AppointmentModal = (props) => {
     </Modal.Footer>
 
   return (
-    show && <Modal
+    <Modal
       show={show}
       onHide={onClose}
       enforceFocus={false}
@@ -51,6 +52,6 @@ export const AppointmentModal = (props) => {
             </div>
           </div>
       }
-    </Modal> || null
+    </Modal>
   )
 }

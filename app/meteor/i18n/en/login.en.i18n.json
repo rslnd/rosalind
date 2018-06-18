@@ -1,0 +1,23 @@
+{
+  "login": {
+    "heading": "Please log in",
+    "help": "I need help",
+    "button": "Log in",
+    "name": "Name",
+    "password": "Password",
+    "loggedIn": "You are currently logged in.",
+    "logout": "Log out",
+    "help": "I need help",
+    "form": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Name"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Password"
+      }
+    }
+  },
+  "sidebar_actions": "Actions"
+}

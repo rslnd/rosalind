@@ -1,9 +1,9 @@
 import './dataTable.tpl.jade'
-import { __ } from '../../../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 
 Template.dataTable.helpers
   thisInsert: ->
-    __(@table.collection._name + '.thisInsert')
+    TAPi18n.__(@table.collection._name + '.thisInsert')
 
 Template.dataTable.events
   'click [rel="new"]': ->

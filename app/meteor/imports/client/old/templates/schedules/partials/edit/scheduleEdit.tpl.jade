@@ -1,0 +1,10 @@
+.modal.fade(tabindex='-1')
+  .modal-dialog.disable-selection
+    .modal-content
+      .modal-header
+        button(type='button' class='close' data-dismiss='modal' aria-hidden='true') &times;
+        h4.modal-title {{_ 'ui.edit' }}
+
+      .modal-body
+        .row
+          .col-md-12 {{> quickForm collection=collection doc=doc type=formType template='bootstrap3-inline' id='afSchedulesDefaultForm' label-class='sr-only' afFieldInput-placeholder='schemaLabel'}}

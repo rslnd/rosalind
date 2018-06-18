@@ -1,7 +1,7 @@
 import React from 'react'
 import max from 'lodash/max'
 import { TextField } from '../../components/form'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Tags } from '../../../api/tags'
 import { currency } from '../../../util/format'
 
@@ -88,7 +88,7 @@ export class RevenueField extends React.Component {
               onFocus={this.handleFocus}
               onBlur={this.handleBlur}
               onChange={this.handleChange}
-              label={__('appointments.revenue')}
+              label={TAPi18n.__('appointments.revenue')}
             />
             : null
         }

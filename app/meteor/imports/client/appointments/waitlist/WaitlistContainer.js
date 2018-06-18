@@ -4,7 +4,7 @@ import identity from 'lodash/identity'
 import { toClass } from 'recompose'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Roles } from 'meteor/alanning:roles'
 import Alert from 'react-s-alert'
 import { Appointments } from '../../../api/appointments'
@@ -19,16 +19,16 @@ const action = (action, appointmentId, options = {}, args = {}) => {
     ...args
   })
     .then(() => {
-      Alert.success(__(`appointments.${action}Success`))
+      Alert.success(TAPi18n.__(`appointments.${action}Success`))
     })
     .catch((e) => {
       console.error(e)
-      Alert.error(__(`appointments.error`))
+      Alert.error(TAPi18n.__(`appointments.error`))
     })
 
   const title = options.alternative
-    ? __(`appointments.${action}Alternative`)
-    : __(`appointments.${action}`)
+    ? TAPi18n.__(`appointments.${action}Alternative`)
+    : TAPi18n.__(`appointments.${action}`)
 
   return { title, fn }
 }

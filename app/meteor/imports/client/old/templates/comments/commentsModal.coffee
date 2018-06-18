@@ -1,13 +1,13 @@
 import './commentsModal.tpl.jade'
 import inflector from 'inflected'
-import { __ } from '../../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import * as inboundCalls from '../../../inboundCalls'
 
 ReactComponents = { inboundCalls }
 
 Template.commentsModal.helpers
   modalTitle: ->
-    __(@collection()._name + '.thisSingular')
+    TAPi18n.__(@collection()._name + '.thisSingular')
 
   blazeTemplate: ->
     template = inflector.singularize(@collection()._name)

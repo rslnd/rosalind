@@ -1,8 +1,7 @@
-import identity from 'lodash/identity'
 import React from 'react'
 import moment from 'moment-timezone'
 import { withState } from 'recompose'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Users } from '../../api/users'
 import { Indicator, Revenue } from '../appointments/appointment/Indicator'
 import { TagsList } from '../tags/TagsList'
@@ -38,8 +37,8 @@ const separatorRowStyle = {
 
 const dateFormat = m =>
   m.year() === moment().year()
-  ? m.format(__('time.dateFormatWeekdayShortNoYear'))
-  : m.format(__('time.dateFormatWeekdayShort'))
+  ? m.format(TAPi18n.__('time.dateFormatWeekdayShortNoYear'))
+  : m.format(TAPi18n.__('time.dateFormatWeekdayShort'))
 
 const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => {
   const assignee = Users.findOne({ _id: appointment.assigneeId })
@@ -72,7 +71,7 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
             {dateFormat(date)}
 
             <span className='pull-right' style={canceledStyle}>
-              {date.format(__('time.timeFormat'))}
+              {date.format(TAPi18n.__('time.timeFormat'))}
             </span>
           </div>
 
@@ -119,13 +118,13 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
     handleAppointmentClick,
     appendIfMany }) => {
   const appointmentsWithSeparators = [
-    { separator: __('appointments.thisFuture'), count: futureAppointments.length },
+    { separator: TAPi18n.__('appointments.thisFuture'), count: futureAppointments.length },
     ...futureAppointments,
 
-    { separator: __('appointments.thisCurrent'), count: 1 },
+    { separator: TAPi18n.__('appointments.thisCurrent'), count: 1 },
     currentAppointment,
 
-    { separator: __('appointments.thisPast'), count: pastAppointments.length },
+    { separator: TAPi18n.__('appointments.thisPast'), count: pastAppointments.length },
     ...pastAppointments
   ]
 
@@ -133,7 +132,7 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
     <div>
       <div style={containerStyle}>
         {
-          appointmentsWithSeparators.filter(identity).map((item, i) =>
+          appointmentsWithSeparators.map((item, i) =>
             item.separator
             ? (
               item.count > 0 &&

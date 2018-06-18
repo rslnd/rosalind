@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field } from 'redux-form'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { TextField, ToggleField } from '../../components/form'
 import { rowStyle, buttonStyle, grow } from '../../components/form/rowStyle'
 
@@ -12,8 +12,8 @@ export const GenderField = ({ onChange }) =>
       style={{ minWidth: 31, padding: 10 }}
       onChange={onChange}
       values={[
-        { value: 'Female', label: __('patients.salutationFemale') },
-        { value: 'Male', label: __('patients.salutationMale') }
+        { value: 'Female', label: TAPi18n.__('patients.salutationFemale') },
+        { value: 'Male', label: TAPi18n.__('patients.salutationMale') }
       ]} />
   </div>
 
@@ -30,7 +30,7 @@ export const NameFields = ({ gender = true, titles = false }) =>
           <Field
             name='titlePrepend'
             component={TextField}
-            label={__('patients.titlePrepend')} />
+            label={TAPi18n.__('patients.titlePrepend')} />
         </div>
     }
 
@@ -38,14 +38,14 @@ export const NameFields = ({ gender = true, titles = false }) =>
       <Field
         name='lastName'
         component={TextField}
-        label={__('patients.lastName')} />
+        label={TAPi18n.__('patients.lastName')} />
     </div>
     <div style={grow}>
       <Field
         name='firstName'
         component={TextField}
         autoFocus
-        label={__('patients.firstName')} />
+        label={TAPi18n.__('patients.firstName')} />
     </div>
 
     {
@@ -54,7 +54,7 @@ export const NameFields = ({ gender = true, titles = false }) =>
           <Field
             name='titleAppend'
             component={TextField}
-            label={__('patients.titleAppend')} />
+            label={TAPi18n.__('patients.titleAppend')} />
         </div>
     }
 

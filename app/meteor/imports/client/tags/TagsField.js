@@ -1,5 +1,5 @@
 import React from 'react'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Tags } from '../../api/tags'
 import { TagsList } from './TagsList'
 import { getDefaultDuration } from '../../api/appointments/methods/getDefaultDuration'
@@ -82,7 +82,7 @@ export class TagsField extends React.Component {
         meta && meta.error &&
           <span className='text-muted'>
             <br />
-            {__(meta.error)}
+            {TAPi18n.__(meta.error)}
           </span>
       }
     </div>

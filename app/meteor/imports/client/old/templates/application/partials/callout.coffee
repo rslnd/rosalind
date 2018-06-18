@@ -2,7 +2,7 @@ import './callout.tpl.jade'
 
 Template.callout.helpers
   title: ->
-    __(@text + '.title')
+    TAPi18n.__(@text + '.title')
 
   body: ->
-    __(@text + '.body')
+    TAPi18n.__(@text + '.body')

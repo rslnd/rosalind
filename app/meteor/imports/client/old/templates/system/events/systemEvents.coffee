@@ -1,7 +1,7 @@
 import './systemEvents.tpl.jade'
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
-import { __ } from '../../../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Events } from '../../../../../api/events'
 import { Users } from '../../../../../api/users'
 import { subscribe } from '../../../../../util/meteor/subscribe'
@@ -18,7 +18,7 @@ Template.systemEvents.helpers
     if @subject
       options.subject = Users.methods.fullNameWithTitle(Users.findOne(_id: @subject))
 
-    __('system.events.' + @type, options)
+    TAPi18n.__('system.events.' + @type, options)
 
   relativeTime: ->
     moment(@createdAt).fromNow()

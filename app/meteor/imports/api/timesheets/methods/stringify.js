@@ -1,5 +1,5 @@
 import moment from 'moment-timezone'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 
 export const stringify = ({ Timesheets }) => {
   return ({ userId }) => {
@@ -25,6 +25,6 @@ export const stringify = ({ Timesheets }) => {
     const start = firstTimesheet.start
     const end = !isTracking && lastTimesheet.end
 
-    return `${moment(start).format('H:mm')}-${end ? moment(end).format('H:mm') : __('timesheets.now')}`
+    return `${moment(start).format('H:mm')}-${end ? moment(end).format('H:mm') : TAPi18n.__('timesheets.now')}`
   }
 }

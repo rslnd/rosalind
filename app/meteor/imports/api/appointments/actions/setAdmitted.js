@@ -25,6 +25,7 @@ export const setAdmitted = ({ Appointments }) => {
       }
 
       let $set = {
+        canceled: false,
         admitted: true,
         admittedAt: new Date(),
         admittedBy: this.userId
@@ -34,13 +35,7 @@ export const setAdmitted = ({ Appointments }) => {
         $set.waitlistAssigneeId = waitlistAssigneeId
       }
 
-      const $unset = {
-        canceled: 1,
-        canceledAt: 1,
-        canceledBy: 1
-      }
-
-      Appointments.update({ _id: appointmentId }, { $set, $unset })
+      Appointments.update({ _id: appointmentId }, { $set })
 
       if (Meteor.isServer) {
         Referrals.serverActions.redeem({ appointmentId })

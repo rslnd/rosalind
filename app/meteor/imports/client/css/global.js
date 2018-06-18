@@ -14,9 +14,6 @@ export const darkGrayActive = '#6c717a'
 export const darkGray = '#81868e'
 export const darkGrayDisabled = '#9398a1'
 
-export const green = '#8fc6ae'
-export const red = '#e37067'
-
 export const text = '#333'
 
 export const fontSize = '16px'

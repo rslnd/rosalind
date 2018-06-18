@@ -6,8 +6,8 @@ const logger = require('./logger')
 
 let watchers = []
 
-const onAdd = ({ ipcReceiver, watch, path, importer, remove, focus }) => {
-  logger.info('[Watch] New file was added', { path, watch, importer, remove, focus })
+const onAdd = ({ ipcReceiver, watch, path, importer, remove }) => {
+  logger.info('[Watch] New file was added', { path, watch, importer, remove })
 
   fs.readFile(path, (err, buffer) => {
     if (err) { return logger.error('[Watch] Error reading file to buffer', err) }
@@ -16,15 +16,15 @@ const onAdd = ({ ipcReceiver, watch, path, importer, remove, focus }) => {
       const encoding = watch.encoding || 'ISO-8859-1'
       logger.info('[Watch] Transferring file with encoding', { path, encoding })
       const content = iconv.decode(buffer, encoding)
-      ipcReceiver.send('import/dataTransfer', { path, watch, content, importer, remove, focus })
+      ipcReceiver.send('import/dataTransfer', { path, watch, content, importer, remove })
     } else {
       logger.info('[Watch] Transferring file as binary', { path })
-      ipcReceiver.send('import/dataTransfer', { path, watch, buffer, importer, remove, focus })
+      ipcReceiver.send('import/dataTransfer', { path, watch, buffer, importer, remove })
     }
   })
 }
 
-const start = ({ ipcReceiver, handleFocus }) => {
+const start = ({ ipcReceiver }) => {
   if (settings.watch) {
     logger.info('[Watch] Watching paths', settings.watch)
 
@@ -35,7 +35,7 @@ const start = ({ ipcReceiver, handleFocus }) => {
 
       let watcher = chokidar.watch(watch.path, {
         persistent: true,
-        ignored: /[/\\]\./,
+        ignored: /[\/\\]\./,
         depth: 0,
         usePolling: true,
         awaitWriteFinish: {
@@ -51,16 +51,11 @@ const start = ({ ipcReceiver, handleFocus }) => {
     })
 
     const { ipcMain } = require('electron')
-    ipcMain.on('import/dataTransferSuccess', (e, { remove, path, focus }) => {
+    ipcMain.on('import/dataTransferSuccess', (e, { remove, path }) => {
       logger.info('[Watch] Data transfer success', { path, remove })
       if (remove) {
         logger.info('[Watch] Removing file', path)
         fs.unlink(path)
-      }
-
-      // TODO: Force true until meteor is updated
-      if (focus || true) {
-        handleFocus()
       }
     })
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Indicator } from '../appointments/appointment/Indicator'
 import { Birthday } from './Birthday'
 import { UserHelper } from '../users/UserHelper'
@@ -62,9 +62,9 @@ export class PatientSearchResult extends React.Component {
                         <span style={{
                           textDecoration: appointment.canceled && 'line-through'
                         }}>
-                          {start.format(__('time.dateFormatShort'))}
+                          {start.format(TAPi18n.__('time.dateFormatShort'))}
                           &nbsp;
-                          {start.format(__('time.timeFormat'))}
+                          {start.format(TAPi18n.__('time.timeFormat'))}
                         </span>
                         &emsp;
                         {
@@ -84,7 +84,7 @@ export class PatientSearchResult extends React.Component {
         }
         {
           newPatient && <span>
-            <Icon name='user-plus' />&nbsp;{__('patients.thisInsert')}
+            <Icon name='user-plus' />&nbsp;{TAPi18n.__('patients.thisInsert')}
             {
               query && <span>:&nbsp;{query}</span>
             }

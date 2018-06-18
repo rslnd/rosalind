@@ -3,7 +3,7 @@ import Smooch from 'smooch'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { process as server } from 'meteor/clinical:env'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Groups } from '../../api/groups'
 import { Users } from '../../api/users'
 
@@ -18,7 +18,7 @@ const getTranslation = () => {
   let translation = {}
 
   keys.map((key) => {
-    translation[key] = __(['livechat', key].join('.'), {}, 'de')
+    translation[key] = TAPi18n.__(['livechat', key].join('.'), {}, 'de')
   })
 
   return translation

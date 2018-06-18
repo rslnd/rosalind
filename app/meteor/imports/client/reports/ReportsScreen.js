@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { Button } from 'react-bootstrap'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { weekOfYear } from '../../util/time/format'
 import { dayToDate } from '../../util/time/day'
 import { Icon } from '../components/Icon'
@@ -11,7 +11,6 @@ import { Report } from './Report'
 import { PreviewBoxes } from './PreviewBoxes'
 import { Quarter } from './Quarter'
 import { Referrals } from './Referrals'
-import { PrintSettings } from './shared/PrintSettings'
 import { FooterContainer } from '../layout/FooterContainer'
 import { Loading } from '../components/Loading'
 
@@ -34,7 +33,7 @@ export class ReportsScreen extends React.Component {
     if (window.native) {
       console.log('[Client] Printing: native')
       const title = moment(dayToDate(this.props.day))
-        .format(`YYYY-MM-DD-[${__('reports.thisDaySingular')}]`)
+        .format(`YYYY-MM-DD-[${TAPi18n.__('reports.thisDaySingular')}]`)
       window.native.print({ title })
     } else {
       console.log('[Client] Printing: default')
@@ -71,11 +70,9 @@ export class ReportsScreen extends React.Component {
 
     return (
       <div>
-        <PrintSettings orientation='landscape' />
-
         <div className='content-header show-print'>
           <h1 className='show-print'>
-            {__('reports.thisDaySingular')} {date.format(__('time.dateFormatWeekday'))}&nbsp;
+            {TAPi18n.__('reports.thisDaySingular')} {date.format(TAPi18n.__('time.dateFormatWeekday'))}&nbsp;
             <small>{weekOfYear(date, { short: true })}</small>
           </h1>
           <DateNavigation
@@ -86,10 +83,10 @@ export class ReportsScreen extends React.Component {
             jumpMonthBackward
             jumpWeekForward
             jumpMonthForward>
-            <Button onClick={this.handlePrint} title={__('ui.print')}><Icon name='print' /></Button>
+            <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name='print' /></Button>
             {
               canShowRevenue &&
-                <Button onClick={this.handleToggleRevenue} title={__('reports.toggleRevenue')}><Icon name='euro' /></Button>
+                <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.toggleRevenue')}><Icon name='euro' /></Button>
             }
           </DateNavigation>
         </div>
@@ -122,8 +119,8 @@ export class ReportsScreen extends React.Component {
                   <FooterContainer />
                 </div>
               ) : <div key='noReports'>
-                <Box type='warning' title={__('ui.notice')}>
-                  <p>{__('reports.empty')}</p>
+                <Box type='warning' title={TAPi18n.__('ui.notice')}>
+                  <p>{TAPi18n.__('reports.empty')}</p>
                 </Box>
               </div>
             }

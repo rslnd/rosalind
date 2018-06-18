@@ -4,7 +4,7 @@ import Alert from 'react-s-alert'
 import { process as server } from 'meteor/clinical:env'
 import { Button } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../components/Icon'
 import { getClientKey } from '../../util/meteor/getClientKey'
 
@@ -57,14 +57,14 @@ export class Login extends React.Component {
 
         switch (err.error) {
           case 'passwordless-login-disallowed-for-network':
-            Alert.error(__('login.passwordlessDisallowedNetworkMessage'))
+            Alert.error(TAPi18n.__('login.passwordlessDisallowedNetworkMessage'))
             break
           case 'passwordless-login-disallowed-for-user':
-            Alert.error(__('login.passwordlessDisallowedUserMessage'))
+            Alert.error(TAPi18n.__('login.passwordlessDisallowedUserMessage'))
             break
           default:
             console.error(err)
-            Alert.error(__('login.failedMessage'))
+            Alert.error(TAPi18n.__('login.failedMessage'))
         }
       } else {
         Meteor.call('users/login', () => {
@@ -83,7 +83,7 @@ export class Login extends React.Component {
         })
       } else {
         console.warn('[Users] Login failed: Attempting passwordless login without clientKey')
-        Alert.error(__('login.passwordlessNoClientKeyMessage'))
+        Alert.error(TAPi18n.__('login.passwordlessNoClientKeyMessage'))
       }
     // Note that if a password is supplied, the client key is ignored for login
     // Only passwordless login needs a client key
@@ -91,7 +91,7 @@ export class Login extends React.Component {
       Meteor.loginWithPassword(username, password, callback)
     } else {
       console.warn('[Users] Login failed: No username or password provided')
-      Alert.error(__('login.failedMessage'))
+      Alert.error(TAPi18n.__('login.failedMessage'))
     }
   }
 
@@ -101,22 +101,22 @@ export class Login extends React.Component {
         <form className='login form-horizontal' onSubmit={this.handleSubmit}>
           <div className='panel panel-default'>
             <div className='panel-heading'>
-              <h3 className='panel-title'>{__('login.heading')}</h3>
+              <h3 className='panel-title'>{TAPi18n.__('login.heading')}</h3>
             </div>
             <div className='panel-body'>
               <div className='form-group'>
-                <label className='sr-only' htmlFor='nameField'>{__('login.name')}</label>
+                <label className='sr-only' htmlFor='nameField'>{TAPi18n.__('login.name')}</label>
                 <div className='col-sm-12'>
                   <input
                     name='name'
                     id='nameField'
                     className='input-lg form-control'
                     onChange={this.handleNameChange}
-                    placeholder={__('login.form.name.placeholder')} />
+                    placeholder={TAPi18n.__('login.form.name.placeholder')} />
                 </div>
               </div>
               <div className='form-group'>
-                <label className='sr-only' htmlFor='passwordField'>{__('login.password')}</label>
+                <label className='sr-only' htmlFor='passwordField'>{TAPi18n.__('login.password')}</label>
                 <div className='col-sm-12'>
                   <input
                     type='password'
@@ -124,7 +124,7 @@ export class Login extends React.Component {
                     id='passwordField'
                     className='input-lg form-control'
                     onChange={this.handlePasswordChange}
-                    placeholder={__('login.form.password.placeholder')} />
+                    placeholder={TAPi18n.__('login.form.password.placeholder')} />
                 </div>
               </div>
               <div className='form-group no-mb'>
@@ -136,14 +136,14 @@ export class Login extends React.Component {
                         <Icon name='refresh' spin />
                       </Button>
                     ) : <Button bsStyle='success' bsSize='large' type='submit' block>
-                      {__('login.button')}
+                      {TAPi18n.__('login.button')}
                     </Button>
                   }
                 </div>
               </div>
             </div>
             <div className='panel-footer'>
-              <a onClick={this.handleOpenLoginHelp} className='text-muted'>{__('login.help')}</a>
+              <a onClick={this.handleOpenLoginHelp} className='text-muted'>{TAPi18n.__('login.help')}</a>
             </div>
           </div>
         </form>

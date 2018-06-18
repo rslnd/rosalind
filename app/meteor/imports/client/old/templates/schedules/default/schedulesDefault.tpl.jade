@@ -1,0 +1,19 @@
++contentHeader(title='schedules.thisDefault' subtitle='schedules.totalHoursPerWeek' subtitleAppend=totalHoursPerWeek)
+.content.zoom-1
+  .row
+    .col-md-3 {{> schedulesDefaultEmployeeList }}
+
+    .col-md-9
+      .row
+        .col-md-12
+          .box.box-default
+            .box-header.with-border
+              h3.box-title
+                | {{_ 'schedules.thisDefault'}} {{_ 'ui.for' }}
+              .box-tools.pull-right
+                +if isInRole 'schedules-edit,admin'
+                  button.btn.btn-box-tool(rel='edit')
+                    i.fa.fa-pencil
+
+            .box-body
+              +weekSummary(viewUser=viewUser)

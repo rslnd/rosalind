@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from 'material-ui/Button'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
 
 const defaultIcon = 'plus-square'
@@ -16,7 +16,7 @@ const infoTextStyle = {
 export const ReferralsWidget = ({ referrableTags, referrableCalendars, length }) =>
   length >= 1 && <div style={containerStyle}>
     <div className='text-muted' style={infoTextStyle}>
-      {__('appointments.referPatientTo')}
+      {TAPi18n.__('appointments.referPatientTo')}
     </div>
 
     {

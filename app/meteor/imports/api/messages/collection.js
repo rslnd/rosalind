@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo'
-import { JobCollection, Job } from 'meteor/simonsimcity:job-collection'
+import { JobCollection, Job } from 'meteor/vsivsi:job-collection'
 import actions from './actions'
 import schema from './schema'
 
@@ -15,16 +15,10 @@ const jobs = new JobCollection('messages', {
   }
 })
 
-let Messages = {}
-
-// Work around weird duplicate collection bug
-if (Meteor.isServer) {
-  Messages = new Mongo.Collection('messages')
-  Messages.attachSchema(schema)
-  Messages.attachBehaviour('softRemovable')
-  Messages.helpers({ collection: () => Messages })
-  Messages.jobs = jobs
-  Messages.actions = actions({ Messages })
-}
-
+let Messages = new Mongo.Collection('messages')
+Messages.attachSchema(schema)
+Messages.attachBehaviour('softRemovable')
+Messages.helpers({ collection: () => Messages })
+Messages.jobs = jobs
+Messages.actions = actions({ Messages })
 export default Messages

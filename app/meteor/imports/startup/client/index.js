@@ -6,7 +6,6 @@ import locale from './locale'
 import userStatus from './userStatus'
 import livechat from './livechat'
 import dataTransfer from './dataTransfer'
-import dataTables from './dataTables.de.coffee'
 import nativeUpdate from './nativeUpdate'
 import nativeClientKey from './nativeClientKey'
 import autoLogout from './autoLogout'
@@ -21,7 +20,6 @@ export default function () {
   userStatus()
   hotkeys()
   dataTransfer()
-  dataTables()
   nativeUpdate()
   nativeClientKey()
   autoLogout()

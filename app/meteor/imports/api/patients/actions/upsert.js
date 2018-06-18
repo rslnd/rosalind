@@ -1,4 +1,5 @@
 import dot from 'mongo-dot-notation'
+import idx from 'idx'
 import omitBy from 'lodash/fp/omitBy'
 import isEqual from 'lodash/isEqual'
 import { Meteor } from 'meteor/meteor'
@@ -111,8 +112,7 @@ export const upsert = ({ Patients }) => {
               }
             })
 
-            // New contacts go first, because reminders etc go to the first matching channel
-            patient.contacts = [ ...newContacts, ...existingPatient.contacts ].filter(c =>
+            patient.contacts = [ ...existingPatient.contacts, ...newContacts ].filter(c =>
               c.value)
           }
 
@@ -153,8 +153,7 @@ export const upsert = ({ Patients }) => {
           patient = cleanFields(patient)
 
           try {
-            let patientId = null
-            patientId = Patients.insert(patient, (e) => {
+            const patientId = Patients.insert(patient, (e) => {
               if (e) {
                 console.error('[Patients] upsert: Insert failed with error', e)
                 throw e

@@ -1,13 +1,15 @@
+import { Meteor } from 'meteor/meteor'
 import moment from 'moment-timezone'
 import identity from 'lodash/identity'
 import React from 'react'
 import Select from 'react-select'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Indicator } from '../appointment/Indicator'
 import { UserHelper } from '../../users/UserHelper'
 import { PatientName } from '../../patients/PatientName'
 import { Birthday } from '../../patients/Birthday'
 import { getColor } from '../../tags/getColor'
+import './appointmentsSearchStyle'
 import { darkGray, darkGrayDisabled, primaryActive } from '../../css/global'
 import { TagsList } from '../../tags/TagsList'
 import { subscribe } from '../../../util/meteor/subscribe'
@@ -91,11 +93,11 @@ class AppointmentSearchResult extends React.Component {
               textDecoration: appointment.canceled && 'line-through',
               verticalAlign: '-2px'
             }}>
-              {start.format(__('time.dateFormatShort'))}
+              {start.format(TAPi18n.__('time.dateFormatShort'))}
               &nbsp;
-              {__('time.at')}
+              {TAPi18n.__('time.at')}
               &nbsp;
-              {start.format(__('time.timeFormat'))}
+              {start.format(TAPi18n.__('time.timeFormat'))}
             </span>
             &emsp;
             {
@@ -169,10 +171,10 @@ export class AppointmentsSearch extends React.Component {
         onSelectResetsInput={false}
         onCloseResetsInput={false}
         onBlurResetsInput={false}
-        placeholder={__('appointments.search')}
-        loadingPlaceholder={__('appointments.searching')}
+        placeholder={TAPi18n.__('appointments.search')}
+        loadingPlaceholder={TAPi18n.__('appointments.searching')}
         searchPromptText={'Suche nach PatientInnen, Geburtsdatum'}
-        clearValueText={__('ui.clear')}
+        clearValueText={TAPi18n.__('ui.clear')}
         filterOptions={identity}
         optionComponent={AppointmentSearchResult}
         valueComponent={SelectedResult} />

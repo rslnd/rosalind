@@ -4,7 +4,7 @@ import Button from 'material-ui/Button'
 import { FormControlLabel } from 'material-ui/Form'
 import { Checkbox } from 'redux-form-material-ui'
 import { TextField } from '../components/form/TextField'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 
 class NewInboundCallFormComponent extends React.Component {
   render () {
@@ -18,22 +18,22 @@ class NewInboundCallFormComponent extends React.Component {
               <div className='col-md-6'>
                 <div>
                   <Field name='lastName' component={TextField} fullWidth
-                    label={__('inboundCalls.form.lastName.label')} />
+                    label={TAPi18n.__('inboundCalls.form.lastName.label')} />
                 </div>
                 <div>
                   <Field name='firstName' component={TextField} fullWidth
-                    label={__('inboundCalls.form.firstName.label')} />
+                    label={TAPi18n.__('inboundCalls.form.firstName.label')} />
                 </div>
                 <div>
                   <Field name='telephone' component={TextField} fullWidth
-                    label={__('inboundCalls.form.telephone.label')} />
+                    label={TAPi18n.__('inboundCalls.form.telephone.label')} />
                 </div>
                 <div className='form-row'>
                   <FormControlLabel
                     control={
                       <Field name='privatePatient' component={Checkbox} />
                     }
-                    label={__('inboundCalls.form.privatePatient.label')} />
+                    label={TAPi18n.__('inboundCalls.form.privatePatient.label')} />
                 </div>
               </div>
               <div className='col-md-6'>
@@ -41,7 +41,7 @@ class NewInboundCallFormComponent extends React.Component {
                   component={TextField}
                   autoFocus
                   multiline rows={7} fullWidth
-                  label={__('inboundCalls.form.note.label')} />
+                  label={TAPi18n.__('inboundCalls.form.note.label')} />
               </div>
             </div>
           </div>
@@ -53,7 +53,7 @@ class NewInboundCallFormComponent extends React.Component {
               fullWidth
               color={(!submitting && !pristine) ? 'primary' : 'default'}
               disabled={pristine || submitting}>
-              {__('inboundCalls.thisSave')}
+              {TAPi18n.__('inboundCalls.thisSave')}
             </Button>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { toClass } from 'recompose'
 import identity from 'lodash/identity'
 import { compose } from 'react-komposer'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { RelativeTime } from './RelativeTime'
 import { UserHelper } from '../users/UserHelper'
 

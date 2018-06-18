@@ -4,7 +4,6 @@ import timezone from './timezone'
 import env from './env'
 import migrations from './migrations'
 import browserPolicy from './browserPolicy'
-import headers from './headers'
 import livechat from './livechat'
 import passwordlessLogin from './passwordlessLogin'
 import appcache from './appcache'
@@ -22,7 +21,6 @@ export default function () {
   appcache()
   defaultAccount()
   browserPolicy()
-  headers()
   livechat()
   development()
   api()

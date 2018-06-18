@@ -67,8 +67,7 @@ const sidebarItems = ({ history }) => {
       roles: ['admin', 'reports'],
       subItems: [
         { name: 'dashboard', path: '/day' },
-        { name: 'assignees', path: '/assignee' },
-        { name: 'referrals', path: '/referrals' }
+        { name: 'assignees', path: '/assignee' }
       ]
     },
     {

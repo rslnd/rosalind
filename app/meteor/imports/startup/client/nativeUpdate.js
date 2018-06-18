@@ -1,5 +1,5 @@
 import Alert from 'react-s-alert'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 
 export default () => {
   let didNotify = false
@@ -11,13 +11,13 @@ export default () => {
       if (!didNotify) {
         const text = `
           <i class="fa fa-heart" title="v${newVersion}"></i>
-          ${__('ui.updateAvailableMessage')}
+          ${TAPi18n.__('ui.updateAvailableMessage')}
           <br />
           <div
             class="btn btn-lg btn-default btn-block"
             style="margin-top: 5px"
             onClick="window.native.quitAndInstall()">
-              ${__('ui.updateInstallNow')}
+              ${TAPi18n.__('ui.updateInstallNow')}
           </div>
         `
 

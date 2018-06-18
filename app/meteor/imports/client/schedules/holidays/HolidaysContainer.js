@@ -1,9 +1,11 @@
 import React from 'react'
+import Blaze from 'meteor/gadicc:blaze-react-component'
 import Alert from 'react-s-alert'
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Schedules } from '../../../api/schedules'
+import { holidays as holidaysTable } from '../../../api/schedules/tables'
 import { Holidays } from './Holidays'
 import { NewHolidaysForm } from './NewHolidaysForm'
 
@@ -22,11 +24,11 @@ export class HolidaysContainer extends React.Component {
 
       Schedules.insert(holidays, (err) => {
         if (err) {
-          Alert.error(__('schedules.postRequestError'))
+          Alert.error(TAPi18n.__('schedules.postRequestError'))
           reject(err)
           console.log(err)
         } else {
-          Alert.success(__('schedules.postRequestSuccess'))
+          Alert.success(TAPi18n.__('schedules.postRequestSuccess'))
           dispatch({ type: 'HOLIDAYS_INSERT_SUCCESS' })
           resolve()
         }
@@ -35,10 +37,16 @@ export class HolidaysContainer extends React.Component {
   }
 
   render () {
+    const table = <Blaze
+      template='dataTable'
+      title='schedules.holidays'
+      table={holidaysTable}
+      id='holidaysTable'
+      noNew />
+
     const form = <NewHolidaysForm
       onSubmit={this.handleSubmit} />
 
-    // TODO: Add table
-    return (<Holidays table={null} form={form} />)
+    return (<Holidays table={table} form={form} />)
   }
 }

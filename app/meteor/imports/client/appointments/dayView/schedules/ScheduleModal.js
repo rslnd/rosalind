@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
 import Button from 'material-ui/Button'
-import { __ } from '../../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../../components/Icon'
 
 export const ScheduleModal = ({ show, onClose, onClickScheduleSoftRemove }) => (
@@ -14,14 +14,14 @@ export const ScheduleModal = ({ show, onClose, onClickScheduleSoftRemove }) => (
       <Button onClick={onClickScheduleSoftRemove}>
         <span>
           <Icon name='trash-o' />&emsp;
-          {__('schedules.softRemove')}
+          {TAPi18n.__('schedules.softRemove')}
         </span>
       </Button>
     </Modal.Body>
     <Modal.Footer>
       <div className='pull-right'>
         <Button onClick={onClose}>
-          {__('ui.close')}
+          {TAPi18n.__('ui.close')}
         </Button>
       </div>
     </Modal.Footer>

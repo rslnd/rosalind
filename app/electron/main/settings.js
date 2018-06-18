@@ -5,145 +5,86 @@ const childProcess = require('child_process')
 const { ipcMain, app } = require('electron')
 const logger = require('./logger')
 
-const isWindows = (process.platform === 'win32' || process.platform === 'win64')
+const settingsPath = path.join(app.getPath('userData'), 'RosalindSettings.json')
 
-const defaultSettingsPath = isWindows ? 'S:\\RosalindSettingsDefault.json' : null
-const localSettingsPath = path.join(app.getPath('userData'), 'RosalindSettings.json')
-
-const emptySettings = {}
-
-let settings = {}
-
-const readSettings = path => {
-  if (!path) {
-    logger.warn(`[Settings] No path specified to read settings from`)
-    return emptySettings
-  }
-
-  if (!fs.existsSync(path)) {
-    logger.warn(`[Settings] No settings file at path ${path}`)
-    return emptySettings
-  }
-
-  const raw = fs.readFileSync(path, { encoding: 'utf8' })
-
-  if (raw.length < 4) {
-    logger.warn(`[Settings] Skipping settings file at path ${path} containing '${raw}' because it is too short`)
-    return emptySettings
-  }
-
-  try {
-    return JSON.parse(raw)
-  } catch (e) {
-    logger.error(`[Settings] Failed to parse settings file at path ${path} containing '${raw}'`)
-    return emptySettings
-  }
-}
-
-const mergeSettings = (local, remote) => {
-  let topLevel = Object.assign({}, local, remote)
-
-  // Keep watch as defined locally for now
-  // TODO: Move watch settings to server into clients collection
-  if (local.watch) {
-    topLevel.watch = local.watch
-  }
-
-  return topLevel
-}
-
-const ensureClientKey = settings => {
-  if (typeof settings.clientKey === 'string' && settings.clientKey.length >= 128) {
-    return settings
-  } else {
-    return Object.assign({}, settings, {
-      clientKey: generateClientKey()
-    })
+const editSettings = () => {
+  logger.info('[Settings] Spawning settings editor')
+  if (process.platform === 'darwin') {
+    childProcess.spawn('open', [ settingsPath ])
+  } else if (process.platform === 'win32' || process.platform === 'win64') {
+    childProcess.spawn('cmd', [ '/s', '/c', 'start', 'wordpad', settingsPath ])
   }
 }
 
 const generateClientKey = () =>
   crypto.randomBytes(265).toString('hex')
 
-const validateSettings = settings => {
-  if (!settings.url) {
-    logger.error('[Settings] Missing setting key "url"')
-    return false
-  }
+const generateDefaultSettings = () => ({
+  url: 'http://0.0.0.0:3000',
+  clientKey: generateClientKey(),
+  customer: {
+    name: 'Rosalind'
+  },
+  watch: [
+    { path: 'S:\\Export\\Tagesjournale', importer: 'eoswinJournalReports', enabled: false },
+    { path: 'S:\\Export\\Umsatzstatistiken', importer: 'eoswinRevenueReports', enabled: false },
+    { path: 'S:\\Export\\Patienten', importer: 'eoswinPatients', enabled: false },
+    { path: 'C:\\xdt', importer: 'xdt', enabled: true }
+  ]
+})
 
-  if (!settings.clientKey) {
-    logger.error('[Settings] Missing setting key "clientKey"')
-    return false
-  }
+let settings = null
 
-  if (!settings.customer || !settings.customer.name) {
-    logger.error('[Settings] Missing setting key "customer.name"')
-    return false
-  }
+if (fs.existsSync(settingsPath) && fs.readFileSync(settingsPath).length > 3) {
+  logger.info('[Settings] Loading existing settings from', settingsPath)
+  settings = {}
 
-  return true
-}
+  try {
+    settings = JSON.parse(fs.readFileSync(settingsPath, { encoding: 'utf8' }))
+    logger.info('[Settings] Loaded existing settings', settings)
 
-const writeSettings = newSettings => {
-  logger.info('[Settings] Writing settings to', localSettingsPath)
-  fs.writeFile(localSettingsPath, JSON.stringify(newSettings, null, 2), { encoding: 'utf8' }, (err) => {
-    if (err) {
-      return logger.error('[Settings] Cannot write settings', err)
+    if (!settings.clientKey) {
+      logger.info('[Settings] Generating new client key')
+      const clientKey = generateClientKey()
+      settings.clientKey = clientKey
+      fs.writeFile(settingsPath, JSON.stringify(settings, null, 2), { encoding: 'utf8' }, (err) => {
+        if (err) {
+          logger.error('[Settings] Cannot write client key', err)
+          editSettings()
+          app.quit()
+        }
+      })
     }
-  })
-}
-
-const editSettings = path => {
-  logger.info('[Settings] Spawning settings editor')
-  if (process.platform === 'darwin') {
-    childProcess.spawn('open', [ path ])
-  } else if (isWindows) {
-    childProcess.spawn('cmd', [ '/s', '/c', 'start', 'wordpad', path ])
-  }
-}
-
-const terminate = () => {
-  logger.info('[Settings] Terminating app')
-  app.quit()
-  process.exit(1)
-}
-
-const getSettings = () => {
-  const defaultSettings = defaultSettingsPath && readSettings(defaultSettingsPath)
-  const localSettings = readSettings(localSettingsPath)
-
-  if (defaultSettings === emptySettings && localSettings === emptySettings) {
-    editSettings(localSettingsPath)
-    terminate()
-  }
-
-  const mergedSettings = ensureClientKey(
-    mergeSettings(localSettings, defaultSettings)
-  )
-
-  if (!validateSettings(mergedSettings)) {
-    editSettings(localSettingsPath)
-    terminate()
-  }
-
-  writeSettings(mergedSettings)
-
-  settings = mergedSettings
-  settings.settingsPath = localSettingsPath
-
-  logger.info('[Settings] The main entry point is', settings.url)
-  logger.info('[Settings]', settings)
-
-  ipcMain.on('settings/edit', (e) => {
-    logger.info('[Settings] Requested settings edit via ipc')
+  } catch (e) {
+    logger.error('[Settings] Cannot parse settings file', e)
     editSettings()
-  })
-
-  settings.send = ({ ipcReceiver }) => {
-    ipcReceiver.webContents.send('settings', settings)
+    app.quit()
   }
+} else {
+  logger.info('[Settings] Writing default settings to', settingsPath)
+  const defaultSettings = generateDefaultSettings()
+  fs.writeFile(settingsPath, JSON.stringify(defaultSettings, null, 2), { encoding: 'utf8' }, (err) => {
+    if (err) {
+      return logger.error('[Settings] Cannot write default settings', err)
+    }
+    editSettings()
+    app.quit()
+  })
+  settings = defaultSettings
 }
 
-getSettings()
+settings.settingsPath = settingsPath
+
+logger.info('[Settings] The main entry point is', settings.url)
+logger.info('[Settings]', settings)
+
+ipcMain.on('settings/edit', (e) => {
+  logger.info('[Settings] Requested settings edit via ipc')
+  editSettings()
+})
+
+settings.send = ({ ipcReceiver }) => {
+  ipcReceiver.webContents.send('settings', settings)
+}
 
 module.exports = settings

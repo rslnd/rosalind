@@ -17,10 +17,7 @@ export const processJobs = () => {
   })
 
   Meteor.setTimeout(() => {
-    // TODO: Remove guard
-    if (process.env.PROCESS_JOBS === '1') {
-      Messages.jobs.startJobServer()
-      Messages.jobs.processJobs('appointmentReminder', options, worker)
-    }
+    Messages.jobs.startJobServer()
+    Messages.jobs.processJobs('appointmentReminder', options, worker)
   }, process.env.NODE_ENV === 'production' ? 60 * 1000 : 1000)
 }

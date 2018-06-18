@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import find from 'lodash/find'
 import Alert from 'react-s-alert'
@@ -30,7 +30,7 @@ const composer = props => {
 
   const handleClick = toId => () => {
     if (isReferrable(toId)) {
-      Alert.success(__('appointments.referralSuccess'))
+      Alert.success(TAPi18n.__('appointments.referralSuccess'))
       return Referrals.actions.insert.callPromise({
         patientId,
         referredTo: toId,

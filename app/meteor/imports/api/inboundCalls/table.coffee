@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor'
-import Tabular from 'meteor/aldeed:tabular'
 import Helpers from '../../util/helpers'
 import { zerofix } from '../../util/zerofix'
 import { firstName } from '../users/methods/name'
@@ -37,10 +36,11 @@ module.exports = new Tabular.Table
     { tmpl: Meteor.isClient and Template.inboundCallsUnresolve }
   ]
   order: [[5, 'desc'], [7, 'desc']]
+  sub: new SubsManager()
   extraFields: Schema._firstLevelSchemaKeys
   responsive: true
   autoWidth: false
   stateSave: true
   changeSelector: (selector) ->
     selector.removed = true
-    return selector
+    selector

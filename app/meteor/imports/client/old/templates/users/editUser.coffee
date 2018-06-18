@@ -30,14 +30,14 @@ AutoForm.hooks
   editUserForm:
     onSuccess: ->
       window.__deprecated_history_push('/users/')
-      Alert.success(__('users.editSuccess'))
+      Alert.success(TAPi18n.__('users.editSuccess'))
 
   updatePasswordUserForm:
     onSuccess: ->
       window.__deprecated_history_push('/users/')
-      Alert.success(__('users.editSuccess'))
+      Alert.success(TAPi18n.__('users.editSuccess'))
 
   updateRolesUserForm:
     onSuccess: ->
       window.__deprecated_history_push('/users/')
-      Alert.success(__('users.editSuccess'))
+      Alert.success(TAPi18n.__('users.editSuccess'))

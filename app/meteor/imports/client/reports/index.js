@@ -2,7 +2,6 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { ReportsContainer } from './ReportsContainer'
 import { AssigneeReportContainer } from './AssigneeReportContainer'
-import { ReferralsReportContainer } from './ReferralsReportContainer'
 
 export const Reports = ({ match }) => (
   <div>
@@ -11,8 +10,6 @@ export const Reports = ({ match }) => (
       <Route exact path={`${match.url}/day`} component={ReportsContainer} />
       <Route exact path={`${match.url}/assignee/:username`} component={AssigneeReportContainer} />
       <Route exact path={`${match.url}/assignee`} component={AssigneeReportContainer} />
-      <Route exact path={`${match.url}/referrals`} component={ReferralsReportContainer} />
-      <Route exact path={`${match.url}/referrals/:username`} component={ReferralsReportContainer} />
       <Route path={match.url} component={ReportsContainer} />
     </Switch>
   </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Avatar } from '../users/Avatar'
 
 export class NewComment extends React.Component {
@@ -34,12 +34,12 @@ export class NewComment extends React.Component {
           <Avatar />
           <div className='img-push input-group input-group-sm'>
             <label className='sr-only' htmlFor={'new-comment-' + this.props.docId} >
-              {__('ui.newCommentPlaceholder')}
+              {TAPi18n.__('ui.newCommentPlaceholder')}
             </label>
             <input type='text'
               className='form-control input-sm'
               id={'new-comment-' + this.props.docId}
-              placeholder={__('ui.newCommentPlaceholder')}
+              placeholder={TAPi18n.__('ui.newCommentPlaceholder')}
               autoFocus={this.props.autoFocus}
               value={this.state.body}
               onChange={this.handleBodyChange} />
@@ -47,7 +47,7 @@ export class NewComment extends React.Component {
               <button
                 type='button'
                 onClick={this.handleSubmit}
-                title={__('ui.newCommentPost')}
+                title={TAPi18n.__('ui.newCommentPost')}
                 className='btn btn-default btn-flat no-border-radius'>
                 <i className='fa fa-arrow-right text-muted' />
               </button>

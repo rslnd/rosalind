@@ -8,7 +8,7 @@ import { InputAdornment } from 'material-ui/Input'
 import { LinearProgress } from 'material-ui/Progress'
 import NumberFormat from 'react-number-format'
 import { withState } from 'recompose'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../components/Icon'
 import { grow, rowStyle, flex, shrink, TextField, ToggleField, iconStyle } from '../../components/form'
 import { Dot } from '../../patients/Dot'
@@ -49,12 +49,12 @@ const logFormat = {
 
     return [
       'Verschoben von',
-      movedDay && moment(log.payload.oldStart).format(__('time.dateFormatShortNoYear')),
-      movedTime && moment(log.payload.oldStart).format(__('time.timeFormat')),
+      movedDay && moment(log.payload.oldStart).format(TAPi18n.__('time.dateFormatShortNoYear')),
+      movedTime && moment(log.payload.oldStart).format(TAPi18n.__('time.timeFormat')),
       movedAssignee && getAssigneeName(log.payload.oldAssigneeId),
       '→',
-      movedDay && moment(log.payload.newStart).format(__('time.dateFormatShortNoYear')),
-      movedTime && moment(log.payload.newStart).format(__('time.timeFormat')),
+      movedDay && moment(log.payload.newStart).format(TAPi18n.__('time.dateFormatShortNoYear')),
+      movedTime && moment(log.payload.newStart).format(TAPi18n.__('time.timeFormat')),
       movedAssignee && getAssigneeName(log.payload.newAssigneeId),
       'von'
     ].filter(identity).join(' ')
@@ -97,7 +97,7 @@ const PatientName = withState('editing', 'setEditing', false)(({ patient, editin
       marginTop: -16,
       marginBottom: -8
     }}>
-    <GenderField onChange={() => setTimeout(onChange, 30)} />
+    <GenderField onChange={() => setTimeout(30, onChange)} />
     <div
       onMouseEnter={() => setEditing(true)}
       onMouseLeave={() => {
@@ -138,15 +138,15 @@ const PatientName = withState('editing', 'setEditing', false)(({ patient, editin
 
 const Day = ({ appointment }) => (
   <ListItem icon='calendar' hr>
-    {moment(appointment.start).format(__('time.dateFormatWeekday'))}
+    {moment(appointment.start).format(TAPi18n.__('time.dateFormatWeekday'))}
   </ListItem>
 )
 
 const Time = ({ appointment }) => (
   <ListItem icon='clock-o' hr>
-    {moment(appointment.start).format(__('time.timeFormatShort'))}
+    {moment(appointment.start).format(TAPi18n.__('time.timeFormatShort'))}
     &nbsp;-&nbsp;
-    {moment(appointment.end).format(__('time.timeFormat'))}
+    {moment(appointment.end).format(TAPi18n.__('time.timeFormat'))}
   </ListItem>
 )
 
@@ -192,7 +192,7 @@ const CurrencyField = (props) =>
 
 const Private = () => (
   <ListItem icon='plus-circle' style={{ marginBottom: 20 }}>
-    {__('appointments.private')}
+    {TAPi18n.__('appointments.private')}
 
     <div className='pull-right' style={{ marginTop: -10 }}>
       <Field
@@ -255,7 +255,7 @@ const Tags = ({ appointment, assignee, calendar, change }) => (
 
 const Reminders = () => (
   <ListItem icon='paper-plane'>
-    {__('appointments.appointmentReminderSMS')}
+    {TAPi18n.__('appointments.appointmentReminderSMS')}
     <div className='pull-right' style={{
       position: 'relative',
       right: 5,
@@ -290,7 +290,7 @@ const PatientNotes = ({ patient }) => (
         multiline
         rows={1}
         rowsMax={5}
-        label={__('patients.note')}
+        label={TAPi18n.__('patients.note')}
       />
     </div>
 
@@ -312,7 +312,7 @@ const AppointmentNote = ({ appointment }) =>
   <ListItem icon='pencil' hr highlight={!!appointment.note}>
     <Field
       name='note'
-      label={__('appointments.note')}
+      label={TAPi18n.__('appointments.note')}
       multiline
       rows={3}
       component={TextField}

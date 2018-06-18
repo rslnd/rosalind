@@ -1,7 +1,4 @@
 {
-  "env": {
-    "test": {
-      "presets": ["@babel/preset-env"]
-    }
-  }
+ "presets": [ "latest", "stage-0" ],
+ "plugins": [ "idx", "transform-react-jsx" ]
 }

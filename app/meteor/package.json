@@ -9,7 +9,6 @@
     "test": "tests"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.47",
     "admin-lte": "^2.4.2",
     "await-delay": "^1.0.0",
     "bcrypt": "1.0.3",
@@ -18,8 +17,6 @@
     "byline": "^5.0.0",
     "classnames": "^2.2.5",
     "color-hash": "^1.0.3",
-    "core-js": "^2.5.6",
-    "datatables.net-bs": "^1.10.16",
     "date-fns": "^2.0.0-alpha.7",
     "dedent": "^0.7.0",
     "dot-object": "^1.7.0",
@@ -28,7 +25,7 @@
     "full-icu": "^1.2.1",
     "gsm": "^0.1.4",
     "iconv-lite": "^0.4.19",
-    "idx": "^2.3.0",
+    "idx": "^2.2.0",
     "inflected": "^2.0.4",
     "intl": "^1.2.5",
     "jquery": "^3.3.1",
@@ -38,7 +35,7 @@
     "leven": "^2.0.0",
     "lodash": "4.17.5",
     "material-ui": "^1.0.0-beta.35",
-    "meteor-node-stubs": "^0.4.1",
+    "meteor-node-stubs": "^0.3.2",
     "moment": "^2.18.1",
     "moment-duration-format": "^2.2.2",
     "moment-range": "^3.1.1",
@@ -87,24 +84,33 @@
     "xdt": "^0.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.47",
-    "@babel/preset-env": "^7.0.0-beta.47",
-    "@babel/register": "^7.0.0-beta.47",
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-idx": "^2.2.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "bootstrap": "^3.3.6",
     "chai": "^4.1.2",
     "chai-datetime": "^1.4.1",
     "coffee-script": "^1.10.0",
     "less": "^3.0.1",
-    "mocha": "^5.1.1",
-    "node-sass": "^4.9.0",
+    "mocha": "^5.0.1",
+    "node-sass": "^4.7.2",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4"
+  },
+  "engines": {
+    "node": "^8.9.3"
   },
   "standard": {
     "parser": "babel-eslint"
   },
   "scripts": {
     "start": "meteor",
-    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --recursive --require ./tests/mocha/helper.js --require @babel/register './imports/**/*.test.js'"
+    "test": "./node_modules/mocha/bin/mocha --recursive --require ./tests/mocha/helper.js --require babel-core/register './imports/**/*.test.js'"
   }
 }

@@ -1,0 +1,19 @@
+{
+  "users": {
+    "this": "Manage users",
+    "thisAll": "All users",
+    "thisInsert": "New user",
+    "thisEdit": "Edit user",
+    "thisSave": "Save user",
+    "changePassword": "Change password",
+    "setRoles": "Set roles",
+    "groups": {
+      "doctor": "Doctors",
+      "assistance": "Assistance",
+      "cosmetics": "Cosmetics",
+      "alternative": "Alternative",
+      "callcenter": "Callcenter",
+      "none": "Employees"
+    }
+  }
+}

@@ -1,10 +1,18 @@
-FROM node:8.11.3
+FROM node:8.9.3
 
 COPY . /opt/app
 WORKDIR /opt/app/programs/server
 
 ENV NPM_CONFIG_LOGLEVEL warn
-ENV NODE_ENV production
+
+ENV LD_LIBRARY_PATH /lib/mdbtools
+RUN bash -c "time bash -c 'wget -O /tmp/mdbtools.tar.gz https://github.com/albertzak/mdbtools/releases/download/0.7.1-fix-newlines/mdbtools-20161003.tar.gz && \
+  tar -xzvf /tmp/mdbtools.tar.gz -C /usr/src/ && \
+  mv /usr/src/lib /lib/mdbtools && \
+  mv /usr/src/bin/* /bin/ && \
+  ldconfig && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*'"
 
 RUN apt-get update && apt-get install -y libgconf-2-4 wget --no-install-recommends \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -17,7 +25,6 @@ RUN apt-get update && apt-get install -y libgconf-2-4 wget --no-install-recommen
     && rm -rf /src/*.deb
 
 RUN bash -c "time bash -c 'yarn \
-  && yarn global add pm2 \
   && npm cache clear --force \
   && mv /opt/app/node_modules /opt/node_modules/ \
   && cp -r /opt/app/programs/server/node_modules/. /opt/node_modules/ \
@@ -40,4 +47,4 @@ ENV NODE_ICU_DATA /opt/app/programs/server/npm/node_modules/full-icu/
 ENV PORT 80
 EXPOSE 80
 
-CMD [ "pm2-runtime", "main.js" ]
+CMD ["node", "main.js"]

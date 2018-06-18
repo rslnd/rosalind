@@ -3,7 +3,7 @@ import isEqual from 'lodash/isEqual'
 import moment from 'moment-timezone'
 import classnames from 'classnames'
 import injectSheet from 'react-jss'
-import { __ } from '../../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Icon } from '../../../components/Icon'
 import { getColor } from '../../../tags/getColor'
 import { Indicator } from '../../appointment/Indicator'
@@ -59,8 +59,6 @@ class AppointmentItem extends React.Component {
   shouldComponentUpdate (nextProps) {
     const a = this.props.appointment
     const b = nextProps.appointment
-
-    if (!b) { return true }
 
     if (a.admitted !== b.admitted) { return true }
     if (a.canceled !== b.canceled) { return true }
@@ -139,7 +137,7 @@ class AppointmentItem extends React.Component {
           appointment.lockedBy &&
             <span style={styles.patientName} className='text-muted'>
               <i className='fa fa-clock-o fa-fw' />&nbsp;
-              {__('appointments.lockedBy', { name: appointment.lockedByFirstName })}
+              {TAPi18n.__('appointments.lockedBy', { name: appointment.lockedByFirstName })}
             </span>
         }
 

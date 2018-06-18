@@ -1,10 +1,7 @@
-import identity from 'lodash/identity'
-import uniq from 'lodash/uniq'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { Appointments } from '../../appointments'
 
 export const tally = ({ Referrals }) => {
   return new ValidatedMethod({
@@ -28,26 +25,14 @@ export const tally = ({ Referrals }) => {
         return
       }
 
-      const selector = {
-        type: { $ne: 'external' },
-        referredBy: referredBy || undefined
-      }
-
+      const selector = referredBy ? { referredBy } : {}
       const referrals = Referrals.find(selector).fetch()
-
-      const patientIds = uniq(referrals.map(r => r.patientId).filter(identity))
-      const futureAppointments = Appointments.find({
-        patientId: { $in: patientIds },
-        start: { $gte: new Date() },
-        canceled: { $ne: true }
-      }).fetch()
 
       return Referrals.methods.tally({
         date,
         from,
         to,
-        referrals,
-        futureAppointments
+        referrals
       })
     }
   })

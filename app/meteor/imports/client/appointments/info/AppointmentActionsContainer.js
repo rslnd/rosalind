@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import { toClass } from 'recompose'
 import Alert from 'react-s-alert'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { withRouter } from 'react-router-dom'
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
 import { Patients } from '../../../api/patients'
@@ -11,39 +11,37 @@ import { AppointmentActions } from './AppointmentActions'
 
 const composer = (props, onData) => {
   const appointment = Appointments.findOne({ _id: props.appointmentId })
-  if (!appointment) { return }
-
   const { admitted, canceled } = appointment
   const args = { appointmentId: props.appointmentId }
-  const closeModal = () => props.onClose()
+  const closeModal = () => props.onClose && props.onClose()
 
   const setAdmitted = () => {
-    closeModal()
     props.onSetAdmitted(appointment)
+    closeModal()
   }
 
   const unsetAdmitted = () => {
-    closeModal()
-    Alert.success(__('appointments.unsetAdmittedSuccess'))
+    Alert.success(TAPi18n.__('appointments.unsetAdmittedSuccess'))
     Appointments.actions.unsetAdmitted.call(args)
+    closeModal()
   }
 
   const setCanceled = () => {
-    closeModal()
-    Alert.success(__('appointments.setCanceledSuccess'))
+    Alert.success(TAPi18n.__('appointments.setCanceledSuccess'))
     Appointments.actions.setCanceled.call(args)
+    closeModal()
   }
 
   const unsetCanceled = () => {
-    closeModal()
-    Alert.success(__('appointments.unsetCanceledSuccess'))
+    Alert.success(TAPi18n.__('appointments.unsetCanceledSuccess'))
     Appointments.actions.unsetCanceled.call(args)
+    closeModal()
   }
 
   const softRemove = () => {
+    Alert.success(TAPi18n.__('appointments.softRemoveSuccess'))
+    Appointments.actions.softRemove.callPromise(args)
     closeModal()
-    Alert.success(__('appointments.softRemoveSuccess'))
-    setTimeout(() => Appointments.actions.softRemove.callPromise(args), 150)
   }
 
   let startMove

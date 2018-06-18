@@ -1,5 +1,5 @@
 import React from 'react'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
 import { Icon } from '../Icon'
@@ -118,7 +118,7 @@ export class InlineEdit extends React.Component {
             <div className='pull-right'>
               <TinyButton
                 onClick={this.setEditing}
-                title={__('ui.edit')}>
+                title={TAPi18n.__('ui.edit')}>
                 <Icon name='pencil-square-o' />
               </TinyButton>
             </div>
@@ -146,12 +146,12 @@ export class InlineEdit extends React.Component {
             <div className='pull-right'>
               <TinyButton
                 onClick={this.handleAccept}
-                title={__('ui.save')}>
+                title={TAPi18n.__('ui.save')}>
                 <Icon name='check' />
               </TinyButton>
               <TinyButton
                 onClick={this.handleCancel}
-                title={__('ui.cancel')}>
+                title={TAPi18n.__('ui.cancel')}>
                 <Icon name='times' />
               </TinyButton>
             </div>

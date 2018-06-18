@@ -34,7 +34,6 @@ export class LinkToAppointmentWrapper extends React.Component {
   }
 
   handleModalClose () {
-    console.log('called close')
     this.setState({
       modalOpen: false
     })

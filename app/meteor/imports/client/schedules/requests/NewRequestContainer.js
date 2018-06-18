@@ -1,6 +1,6 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import { __ } from '../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Schedules } from '../../../api/schedules'
 import { Box } from '../../components/Box'
 import { NewRequestForm } from './NewRequestForm'
@@ -11,11 +11,11 @@ export class NewRequestContainer extends React.Component {
     return new Promise((resolve, reject) => {
       Schedules.actions.postRequest.call(data, (err) => {
         if (err) {
-          Alert.error(__('schedules.postRequestError'))
+          Alert.error(TAPi18n.__('schedules.postRequestError'))
           reject(err)
           console.log(err)
         } else {
-          Alert.success(__('schedules.postRequestSuccess'))
+          Alert.success(TAPi18n.__('schedules.postRequestSuccess'))
           dispatch({ type: 'SCHEDULES_POST_REQUEST_SUCCESS' })
           resolve()
         }
@@ -26,7 +26,7 @@ export class NewRequestContainer extends React.Component {
   render () {
     return (
       <Box
-        title={__('schedules.newRequest')}
+        title={TAPi18n.__('schedules.newRequest')}
         type='primary'
         noBorder>
         <NewRequestForm

@@ -1,0 +1,18 @@
+{
+  "ui": {
+    "allDone": "All done!",
+    "notice": "Notice",
+    "by": "by",
+    "at": "at",
+    "edit": "Edit",
+    "close": "Close",
+    "comment": "Comment",
+    "comment_plural": "Comments",
+    "newCommentPlaceholder": "Add comment...",
+    "newCommentPost": "Send",
+    "statusMessages": {
+      "connected": "Good, connection is fine again.",
+      "disconnected": "Hang in there, having trouble with the connection. Should be back in a moment."
+    }
+  }
+}

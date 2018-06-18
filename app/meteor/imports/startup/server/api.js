@@ -7,7 +7,9 @@ import appointments from '../../api/appointments/server'
 import comments from '../../api/comments/server'
 import customer from '../../api/customer/server'
 import events from '../../api/events/server'
+import importers from '../../api/importers/server'
 import inboundCalls from '../../api/inboundCalls/server'
+import jobs from '../../api/jobs/server'
 import messages from '../../api/messages/server'
 import referrals from '../../api/referrals/server'
 import reports from '../../api/reports/server'
@@ -27,7 +29,9 @@ export default function () {
   comments()
   customer()
   events()
+  importers()
   inboundCalls()
+  jobs()
   messages()
   referrals()
   reports()

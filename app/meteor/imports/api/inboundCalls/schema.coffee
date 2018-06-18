@@ -42,4 +42,6 @@ schema = new SimpleSchema
     optional: true
     blackbox: true
 
+schema.i18n('inboundCalls.form')
+
 module.exports = schema

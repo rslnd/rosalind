@@ -1,5 +1,5 @@
 import React from 'react'
-import { __ } from '../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { InboundCalls } from '../../api/inboundCalls'
 import { Box } from '../components/Box'
 import { NewInboundCallForm } from './NewInboundCallForm'
@@ -16,10 +16,10 @@ export class NewInboundCallContainer extends React.Component {
     return new Promise((resolve, reject) => {
       InboundCalls.methods.post.call(data, (err) => {
         if (err) {
-          Alert.error(__('inboundCalls.postError'))
+          Alert.error(TAPi18n.__('inboundCalls.postError'))
           reject(err)
         } else {
-          Alert.success(__('inboundCalls.postSuccess'))
+          Alert.success(TAPi18n.__('inboundCalls.postSuccess'))
           dispatch({ type: 'INBOUND_CALL_POST_SUCCESS' })
           resolve()
         }
@@ -30,7 +30,7 @@ export class NewInboundCallContainer extends React.Component {
   render () {
     return (
       <div className='content'>
-        <Box title={__('inboundCalls.thisNew')}>
+        <Box title={TAPi18n.__('inboundCalls.thisNew')}>
           <NewInboundCallForm onSubmit={this.handleSubmit} />
         </Box>
       </div>

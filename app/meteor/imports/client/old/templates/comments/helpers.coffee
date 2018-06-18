@@ -1,4 +1,4 @@
-import { __ } from '../../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { Comments } from '../../../../api/comments'
 
 module.exports =
@@ -13,5 +13,5 @@ module.exports =
 
   humanCommentCount: (doc) ->
     count = Comments.find({ docId: doc._id }).count()
-    human = __('ui.comment', { count })
+    human = TAPi18n.__('ui.comment', { count })
     count + ' ' + human

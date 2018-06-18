@@ -6,7 +6,7 @@ import Alert from 'react-s-alert'
 import { Manager, Target, Popper } from 'react-popper'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import Paper from 'material-ui/Paper'
-import { __ } from '../../../../i18n'
+import { TAPi18n } from 'meteor/tap:i18n'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
 import { background, grayDisabled, gray } from '../../../css/global'
@@ -132,7 +132,7 @@ export class HeaderRow extends React.Component {
       .map(a => a.assigneeId).filter(identity)
 
     if (todaysAssigneeIds.includes(newAssigneeId)) {
-      Alert.error(__('appointments.changeAssigneeMustBeDifferent'))
+      Alert.error(TAPi18n.__('appointments.changeAssigneeMustBeDifferent'))
       return
     }
 
@@ -140,7 +140,7 @@ export class HeaderRow extends React.Component {
       oldAssigneeId,
       newAssigneeId
     }).then(() =>
-      Alert.success(__('appointments.changeAssigneeSuccess'))
+      Alert.success(TAPi18n.__('appointments.changeAssigneeSuccess'))
     )
 
     this.setState({
@@ -174,7 +174,7 @@ export class HeaderRow extends React.Component {
                   ? assignee.fullNameWithTitle
                   : <span className='text-muted'>{assignee.fullNameWithTitle}</span>
                 )
-                : __('appointments.unassigned')
+                : TAPi18n.__('appointments.unassigned')
               }
             </div>
           ))}
@@ -223,12 +223,12 @@ export class HeaderRow extends React.Component {
           <Modal.Footer>
             <div className='pull-left'>
               <Button onClick={() => this.setState({ changingAssignee: false })}>
-                {__('ui.close')}
+                {TAPi18n.__('ui.close')}
               </Button>
             </div>
             <div className='pull-right'>
               <Button color='primary' onClick={this.handleChangeAssigneeFinishClick}>
-                {__('ui.ok')}
+                {TAPi18n.__('ui.ok')}
               </Button>
             </div>
           </Modal.Footer>

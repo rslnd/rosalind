@@ -1,33 +1,16 @@
 import React from 'react'
 import uniq from 'lodash/uniq'
-import sortBy from 'lodash/fp/sortBy'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  numberCellStyle,
-  textCellStyle,
-  iconCellStyle,
-  separatorStyle,
-  doubleSeparatorStyle,
-  headerTitleStyle,
-  doubleSeparatorHeaderTitleStyle,
-  summaryRowStyle } from './shared/Table'
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
 import { Calendars } from '../../api/calendars'
 import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
-import { __ } from '../../i18n'
-
-const stages = ['referred', 'pending', 'redeemed']
 
 export const Referrals = ({ referrals, mapUserIdToName }) => {
   const hasData = referrals.total.referred.total || referrals.total.redeemed.total
   if (!hasData) { return null }
 
-  const columns = sortBy('title')(uniq([
+  const columns = uniq([
     ...Object.keys(referrals.total.referred.ids),
     ...Object.keys(referrals.total.redeemed.ids)])
     .map(_id => {
@@ -48,79 +31,73 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
 
       console.error('[Referrals] Cannot find calendar or tag with id', _id)
       return {}
-    }))
+    })
 
   return (
     <div style={avoidPageBreak}>
-      <Box noPadding>
+      <Box title='Empfehlungen' noPadding>
         <Table>
           <TableHead>
             <TableRow>
-              <Cell style={textCellStyle}>
-                <b style={{ fontSize: '18px' }}>
-                  <Icon name='angle-right' />
-                  &nbsp;
-                  Empfehlungen
-                </b>
-              </Cell>
+              <Cell>{/* Name */}</Cell>
               {
                 columns.map(c =>
-                  <Cell style={headerTitleStyle} key={c._id} colSpan={3}>
+                  <Cell key={c._id} colSpan={2}>
                     {c.title}
                   </Cell>
                 )
               }
-              <Cell
-                style={doubleSeparatorHeaderTitleStyle}
-                colSpan={3}>
-                Gesamt
-              </Cell>
+              <Cell style={separatorStyle} colSpan={2}>Gesamt</Cell>
             </TableRow>
             <TableRow>
               <Cell>{/* Name */}</Cell>
               {
                 columns.map(c =>
                   [
-                    <Referred key={`${c._id}-referred`} />,
-                    <Pending key={`${c._id}-pending`} />,
-                    <Redeemed key={`${c._id}-redeemed`} />
+                    <Cell key={`${c._id}-referred`}>
+                      <Referred />
+                    </Cell>,
+                    <Cell key={`${c._id}-redeemed`}>
+                      <Redeemed />
+                    </Cell>
                   ]
                 )
               }
-              <Referred style={doubleSeparatorStyle} />
-              <Pending />
-              <Redeemed />
+              <Cell style={separatorStyle}>
+                <Referred />
+              </Cell>
+              <Cell>
+                <Redeemed />
+              </Cell>
             </TableRow>
           </TableHead>
           <TableBody>
             {
               referrals.assignees.map(a =>
                 <TableRow key={a.assigneeId}>
-                  <Cell style={textCellStyle}>{mapUserIdToName(a.assigneeId)}</Cell>
+                  <Cell>{mapUserIdToName(a.assigneeId)}</Cell>
                   {
                     columns.map(c =>
-                      stages.map((stage, i) =>
-                        <Cell
-                          style={i === 0 ? separatorStyle : null}
-                          key={`${c._id}-${a.assigneeId}-${stage}`}>
+                      [
+                        <Cell key={`${c._id}-${a.assigneeId}-referred`}>
                           <Value
-                            total={a[stage].ids[c._id]}
-                            today={a[`${stage}Today`].ids[c._id]}
+                            total={a.referred.ids[c._id]}
+                            today={a.referredToday.ids[c._id]}
+                          />
+                        </Cell>,
+                        <Cell key={`${c._id}-${a.assigneeId}-redeemed`}>
+                          <Value
+                            total={a.redeemed.ids[c._id]}
+                            today={a.redeemedToday.ids[c._id]}
                           />
                         </Cell>
-                      )
+                      ]
                     )
                   }
-                  <Cell style={doubleSeparatorStyle}>
+                  <Cell style={separatorStyle}>
                     <Value
                       total={a.referred.total}
                       today={a.referredToday.total}
-                    />
-                  </Cell>
-                  <Cell>
-                    <Value
-                      total={a.pending.total}
-                      today={a.pendingToday.total}
                     />
                   </Cell>
                   <Cell>
@@ -132,34 +109,6 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
                 </TableRow>
               )
             }
-
-            {/* Summary Row */}
-            <TableRow style={summaryRowStyle}>
-              <Cell />
-              {
-                columns.map(c =>
-                  stages.map(stage =>
-                    <Cell style={separatorStyle} key={`${c._id}-${stage}`}>
-                      <Value
-                        total={referrals.total[stage].ids[c._id]}
-                        today={referrals.total[`${stage}Today`].ids[c._id]}
-                      />
-                    </Cell>
-                  )
-                )
-              }
-
-              {
-                stages.map((stage, i) =>
-                  <Cell style={i === 0 ? doubleSeparatorStyle : separatorStyle} key={stage}>
-                    <Value
-                      total={referrals.total[stage].total}
-                      today={referrals.total[`${stage}Today`].total}
-                    />
-                  </Cell>
-                )
-              }
-            </TableRow>
           </TableBody>
         </Table>
       </Box>
@@ -167,29 +116,22 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
   )
 }
 
-const Referred = ({ style }) =>
-  <Cell
-    style={style ? {...style, ...separatorStyle, ...iconCellStyle} : {...separatorStyle, ...iconCellStyle}}
-    title={__('reports.referralReferredTitle')}>
-    <Icon name='commenting-o' />
-  </Cell>
+const separatorStyle = {
+  borderLeft: '1px solid #ccc'
+}
 
-const Pending = () =>
-  <Cell
-    style={{...separatorStyle, ...iconCellStyle}}
-    title={__('reports.referralPendingTitle')}>
-    <Icon name='clock-o' />
-  </Cell>
+const Referred = () =>
+  <Icon
+    name='commenting-o'
+    title='Ausgesprochene Empfehlungen' />
 
 const Redeemed = () =>
-  <Cell
-    style={{...separatorStyle, ...iconCellStyle}}
-    title={__('reports.referralRedeemedTitle')}>
-    <Icon name='check' />
-  </Cell>
+  <Icon
+    name='check'
+    title='Von PatientIn in Anspruch genommene Empfehlungen' />
 
-const Cell = ({ children, style, ...props }) =>
-  <TableCell padding='dense' style={style ? {...numberCellStyle, ...style} : numberCellStyle} {...props}>
+const Cell = ({ children, ...props }) =>
+  <TableCell padding='dense' {...props}>
     {children}
   </TableCell>
 
