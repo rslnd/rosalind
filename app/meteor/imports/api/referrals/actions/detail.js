@@ -42,7 +42,21 @@ export const detail = ({ Referrals }) => {
         ]
       }
 
-      const referrals = Referrals.find(selector).fetch()
+      const isInRange = ({ from, to }) => date =>
+        date && (from <= date && date <= to)
+
+      const referrals = Referrals.find(selector).fetch().map(r => {
+        const redeemedInPeriod = isInRange({ from, to })(r.redeemedAt)
+
+        if (!redeemedInPeriod) {
+          delete r.redeemedAt        
+        }
+
+        return {
+          ...r,
+          redeemedInPeriod
+        }
+      })
 
       const patientIds = referrals.map(r => r.patientId)
 
