@@ -1,3 +1,4 @@
+import uniq from 'lodash/uniq'
 import mapValues from 'lodash/fp/mapValues'
 import groupBy from 'lodash/fp/groupBy'
 import sortBy from 'lodash/fp/sortBy'
@@ -71,7 +72,7 @@ const mapRevenue = ({ appointments }) => {
   }
 }
 
-const mapAssignee = ({ assigneeId, appointments, pastAppointments, overrideSchedules, tagMapping }) => {
+const mapAssignee = ({ assigneeId, appointments = [], pastAppointments = [], overrideSchedules = [], tagMapping }) => {
   const patients = mapAppointmentsByTags({ appointments, pastAppointments, tagMapping })
 
   const revenue = mapRevenue({ appointments })
@@ -94,7 +95,12 @@ export const mapAssignees = ({ appointments, pastAppointments, overrideSchedules
 
   const overrideSchedulesByAssignees = groupBy('userId')(overrideSchedules)
 
-  const assignees = sortBy('assigneeId')(Object.keys(appointmentsByAssignees).map((assigneeId) => {
+  const assigneeIds = uniq([
+    ...Object.keys(overrideSchedulesByAssignees),
+    ...Object.keys(appointmentsByAssignees)
+  ])
+
+  const assignees = sortBy('assigneeId')(assigneeIds.map((assigneeId) => {
     const appointments = appointmentsByAssignees[assigneeId]
     const overrideSchedules = overrideSchedulesByAssignees[assigneeId]
 
