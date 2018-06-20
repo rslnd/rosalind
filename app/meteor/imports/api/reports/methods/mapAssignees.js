@@ -84,7 +84,7 @@ const mapAssignee = ({ assigneeId, appointments = [], pastAppointments = [], ove
   }
 }
 
-export const mapAssignees = ({ appointments, pastAppointments, overrideSchedules, tagMapping }) => {
+export const mapAssignees = ({ day, appointments, pastAppointments, daySchedule, overrideSchedules, tagMapping }) => {
   const appointmentsByAssignees = groupBy('assigneeId')(appointments)
 
   // Group unassigned appointments under 'null' and remove assigneeId field
@@ -95,10 +95,16 @@ export const mapAssignees = ({ appointments, pastAppointments, overrideSchedules
 
   const overrideSchedulesByAssignees = groupBy('userId')(overrideSchedules)
 
-  const assigneeIds = uniq([
-    ...Object.keys(overrideSchedulesByAssignees),
-    ...Object.keys(appointmentsByAssignees)
-  ])
+  const assigneeIds = daySchedule
+    ? daySchedule.userIds
+    : uniq([
+      ...Object.keys(overrideSchedulesByAssignees),
+      ...Object.keys(appointmentsByAssignees)
+    ])
+
+  if (day.day === 21 && day.month === 6) {
+    console.log(Object.keys(overrideSchedulesByAssignees), Object.keys(appointmentsByAssignees), '--->', assigneeIds)
+  } 
 
   const assignees = sortBy('assigneeId')(assigneeIds.map((assigneeId) => {
     const appointments = appointmentsByAssignees[assigneeId]

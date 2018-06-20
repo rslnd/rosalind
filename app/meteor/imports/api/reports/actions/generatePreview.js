@@ -29,15 +29,26 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
             // TODO: Dry up, merge with generate action
             const appointments = Appointments.find({
               calendarId,
+              removed: { $ne: true },
               start: {
                 $gt: date.startOf('day').toDate(),
                 $lt: date.endOf('day').toDate()
               }
             }).fetch()
 
+            const daySchedule = Schedules.findOne({
+              calendarId,
+              type: 'day',
+              removed: { $ne: true },
+              'day.day': day.day,
+              'day.month': day.month,
+              'day.year': day.year
+            })
+
             const overrideSchedules = Schedules.find({
               calendarId,
               type: 'override',
+              removed: { $ne: true },
               start: {
                 $gt: date.startOf('day').toDate(),
                 $lt: date.endOf('day').toDate()
@@ -55,7 +66,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
             if (existingReport) {
               return existingReport
             } else {
-              const generatedPreview = generateReport({ calendar, day, appointments, overrideSchedules, tagMapping, messages })
+              const generatedPreview = generateReport({ calendar, day, appointments, daySchedule, overrideSchedules, tagMapping, messages })
               return generatedPreview
             }
           })

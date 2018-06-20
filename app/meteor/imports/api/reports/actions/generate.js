@@ -52,6 +52,15 @@ export const generate = ({ Calendars, Reports, Appointments, Schedules, Tags, Me
             }
           }).fetch()
 
+          const daySchedule = Schedules.findOne({
+            calendarId,
+            type: 'day',
+            removed: { $ne: true },
+            'day.day': day.day,
+            'day.month': day.month,
+            'day.year': day.year
+          })
+
           const appointmentIds = appointments.map(a => a._id)
           const messages = Messages.find({
             'payload.appointmentId': { $in: appointmentIds }
@@ -66,7 +75,7 @@ export const generate = ({ Calendars, Reports, Appointments, Schedules, Tags, Me
             filteredAddendum = addendum
           }
 
-          const generatedReport = generateReport({ calendar, day, appointments, pastAppointments, overrideSchedules, tagMapping, messages, existingReport, addendum: filteredAddendum })
+          const generatedReport = generateReport({ calendar, day, appointments, pastAppointments, daySchedule, overrideSchedules, tagMapping, messages, existingReport, addendum: filteredAddendum })
 
           if (existingReport) {
             return Reports.update({ _id: existingReport._id }, generatedReport, { bypassCollection2: true })
