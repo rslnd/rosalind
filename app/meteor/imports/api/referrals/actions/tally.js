@@ -29,8 +29,11 @@ export const tally = ({ Referrals }) => {
       }
 
       const selector = {
-        type: { $ne: 'external' },
-        referredBy: referredBy || undefined
+        type: { $ne: 'external' }
+      }
+
+      if (referredBy) {
+        selector.referredBy = referredBy
       }
 
       const referrals = Referrals.find(selector).fetch()
