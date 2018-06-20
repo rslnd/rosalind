@@ -84,7 +84,7 @@ const Cell = ({ day, today, style, am, pm, workload, mapUserIdToName, mapUserIdT
       marginTop: -11
     }}>
       {
-        workload > 0 &&
+        (am.assignees.length > 0 || pm.assignees.length > 0) &&
           <span>
             <b>{workload}</b>
             <small className='text-muted' style={{ fontSize: '19px' }}>%</small>
