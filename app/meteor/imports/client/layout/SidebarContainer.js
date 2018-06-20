@@ -9,7 +9,7 @@ import { Calendars } from '../../api/calendars'
 import { Sidebar } from './Sidebar'
 
 const sidebarItems = ({ history }) => {
-  const calendars = Calendars.find().fetch()
+  const calendars = Calendars.find({}, { sort: { order: 1 }}).fetch()
 
   return [
     {

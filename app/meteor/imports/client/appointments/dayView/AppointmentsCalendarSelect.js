@@ -4,7 +4,7 @@ import { Calendars } from '../../../api/calendars'
 
 export const AppointmentsCalendarSelect = () => {
   const calendars = Calendars
-    .find().fetch()
+    .find({}, { sort: { order: 1 }}).fetch()
     .map(c => ({
       ...c,
       link: `/appointments/${c.slug}`
