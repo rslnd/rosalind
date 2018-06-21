@@ -1,8 +1,8 @@
 import React from 'react'
 
-export const Table = ({ children, ...props }) =>
+export const Table = ({ children, tableStyle, ...props }) =>
   <div {...props} className='table-responsive enable-select'>
-    <table className='table no-margin'>
+    <table style={tableStyle} className='table no-margin'>
       {children}
     </table>
   </div>

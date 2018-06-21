@@ -2,7 +2,7 @@ import { Mongo } from 'meteor/mongo'
 import methods from './methods'
 import actions from './actions'
 import helpers from './helpers'
-import Schema from './schema'
+import { Schema } from './schema'
 
 Schedules = new Mongo.Collection('schedules')
 Schedules.attachSchema(Schema)

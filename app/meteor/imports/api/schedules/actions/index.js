@@ -7,6 +7,7 @@ import { declineRequest } from './declineRequest'
 import { softRemove } from './softRemove'
 import { upsert } from './upsert'
 import { setNote } from './setNote'
+import { upsertDefaultSchedule } from './upsertDefaultSchedule'
 
 export default ({ Schedules }) => {
   return {
@@ -17,6 +18,7 @@ export default ({ Schedules }) => {
     declineRequest: declineRequest({ Schedules, Users }),
     softRemove: softRemove({ Schedules }),
     upsert: upsert({ Schedules, Users }),
-    setNote: setNote({ Schedules })
+    setNote: setNote({ Schedules }),
+    upsertDefaultSchedule: upsertDefaultSchedule({ Schedules })
   }
 }
