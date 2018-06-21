@@ -2,10 +2,10 @@ import moment from 'moment'
 import { Match } from 'meteor/check'
 import { Schedules } from '../'
 import { Comments } from '../../comments'
-import { publishComposite } from '../../../util/meteor/publish'
+import { publish } from '../../../util/meteor/publish'
 
 export default () => {
-  publishComposite({
+  publish({
     name: 'schedules',
     args: {
       start: Match.Optional(Date),
@@ -14,7 +14,7 @@ export default () => {
       month: Match.Optional(Number),
       year: Match.Optional(Number)
     },
-    roles: ['appointments', 'schedules'],
+    roles: ['appointments', 'schedules', 'schedules-edit'],
     preload: true,
     fn: function ({ start, end, day, month, year }) {
       let selector = {}
@@ -60,19 +60,20 @@ export default () => {
       }
 
       // TODO: Sensibly limit schedules sent to client, 2-4k currently?
-      return {
-        find: () => {
-          return Schedules.find(selector, {
-            sort: {
-              'day.year': -1,
-              start: -1
-            }
-          })
-        },
-        children: [
-          { find: schedule => Comments.find({ docId: schedule._id }) }
-        ]
-      }
+      return Schedules.find(selector, {
+        sort: {
+          'day.year': -1,
+          start: -1
+        }
+      })
+    }
+  })
+
+  publish({
+    name: 'schedules-default',
+    roles: ['schedules-edit'],
+    fn: function () {
+      return Schedules.find({ type: 'default' })
     }
   })
 }

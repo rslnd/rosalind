@@ -5,7 +5,7 @@ import de from 'date-fns/locale/de'
 import distanceInWordsToNow from 'date-fns'
 import { toClass } from 'recompose'
 import { Box } from '../components/Box'
-import { Table } from '../components/Table'
+import { Table } from '../components/InlineEditTable'
 
 const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   {

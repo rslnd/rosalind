@@ -2,7 +2,7 @@ import React from 'react'
 import { toClass } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
-import { Table } from '../components/Table'
+import { Table } from '../components/InlineEditTable'
 
 const colorStyle = {
   borderRadius: 4,

@@ -17,7 +17,7 @@ import {
   doubleSeparatorStyle,
   headerTitleStyle,
   doubleSeparatorHeaderTitleStyle,
-  summaryRowStyle } from './shared/Table'
+  summaryRowStyle } from '../components/Table'
 import { Calendars } from '../../api/calendars'
 import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'

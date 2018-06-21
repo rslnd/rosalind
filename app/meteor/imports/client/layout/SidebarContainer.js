@@ -47,20 +47,17 @@ const sidebarItems = ({ history }) => {
         { name: 'thisNew', path: '/new' }
       ]
     },
-    // {
-    //   name: 'schedules',
-    //   icon: 'user-md',
-    //   roles: ['admin', 'schedules'],
-    //   subItems: [
-    //     { name: 'statusBoard' },
-    //     { name: 'timesheets', path: '/timesheets' },
-    //     { name: 'requests.this', path: '/requests' },
-    //     { name: 'thisDefault', path: '/default' },
-    //     { name: 'override', path: '/override' },
-    //     { name: 'businessHours', path: '/businessHours' },
-    //     { name: 'holidays', path: '/holidays' }
-    //   ]
-    // },
+    {
+      name: 'schedules',
+      icon: 'clock-o',
+      roles: ['admin', 'schedules-edit'],
+      subItems: calendars.map(c => ({
+        name: c.slug,
+        label: c.name,
+        path: '/default/' + c.slug,
+        slug: c.slug
+      }))
+    },
     {
       name: 'reports',
       icon: 'bar-chart',

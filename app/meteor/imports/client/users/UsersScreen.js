@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import sum from 'lodash/sum'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
-import { Table } from '../components/Table'
+import { Table } from '../components/InlineEditTable'
 
 const toggleablePermissions = [
   {

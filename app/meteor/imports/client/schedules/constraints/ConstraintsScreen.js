@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'
-import { Table } from '../../components/Table'
+import { Table } from '../../components/InlineEditTable'
 import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { Tags } from '../../../api/tags'
 

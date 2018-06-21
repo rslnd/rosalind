@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Calendars } from '../../../api/calendars'
+import { Calendars } from '../../api/calendars'
 
-export const AppointmentsCalendarSelect = () => {
+export const CalendarSelect = ({ basePath = 'appointments' }) => {
   const calendars = Calendars
     .find({}, { sort: { order: 1 }}).fetch()
     .map(c => ({
       ...c,
-      link: `/appointments/${c.slug}`
+      link: `/${basePath}/${c.slug}`
     }))
 
   return <div className='content'>
