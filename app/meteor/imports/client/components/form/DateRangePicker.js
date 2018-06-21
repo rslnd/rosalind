@@ -42,11 +42,11 @@ export class DateRangePicker extends React.Component {
   }
 
   render () {
-    const { start, end } = this.props
+    const { start, end, ...restProps } = this.props
     return (
       <div>
         <DateRangePickerComponent
-          {...this.props}
+          {...restProps}
           showDefaultInputIcon
           showClearDates
           startDatePlaceholderText={TAPi18n.__('ui.startDate')}

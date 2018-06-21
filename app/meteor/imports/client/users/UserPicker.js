@@ -48,7 +48,7 @@ export class UserPicker extends React.Component {
         options={this.options()}
         ignoreCase
         autoFocus={this.props.autoFocus || false}
-        placeholder={TAPi18n.__('users.selectEmployee')} />
+        placeholder={this.props.placeholder || TAPi18n.__('users.selectEmployee')} />
     )
   }
 }

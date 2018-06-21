@@ -19,6 +19,7 @@ import {
 } from '../../components/Table'
 import { Icon } from '../../components/Icon'
 import { Button, TextField } from 'material-ui'
+import { ApplyDefaultSchedule } from './ApplyDefaultSchedule'
 
 const leftPad = n => ('00' + n).slice(-2)
 
@@ -268,21 +269,22 @@ class SchedulesDefaultScreenComponent extends React.Component {
                 }
 
                 <TableRow>
-                  <TableCell>
+                  <TableCell colSpan={3}>
                     <UserPickerContainer
                       onChange={this.handleAddAssignee}
+                      placeholder='MitarbeiterIn hinzufügen'
                     />
                   </TableCell>
+                  <TableCell colSpan={4} />
                 </TableRow>
 
               </TableBody>
             </Table>
           </Box>
 
-          <Box title='Wochenplan anwenden' icon='magic'>
-            Do the Magic
-          </Box>
-
+          <ApplyDefaultSchedule
+            calendarId={this.props.calendar._id}
+          />
         </div>
       </div>
     )
@@ -320,7 +322,7 @@ class EditSchedule extends React.Component {
     const { from, to, onCancel } = this.props
 
     return (
-      <div>
+      <form onSubmit={this.handleSave}>
         <TextField
           autoFocus
           onChange={this.handleChange}
@@ -333,7 +335,7 @@ class EditSchedule extends React.Component {
         <Button style={{ minWidth: 25 }} onClick={this.handleSave}>
           <Icon name='check' />
         </Button>
-      </div>
+      </form>
     )
   }
 }
