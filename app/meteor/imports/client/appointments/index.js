@@ -10,6 +10,9 @@ export const Appointments = ({ match }) => (
     <Route path={`${match.url}/day/:calendar`} component={AppointmentsContainer} />
     <Route path={`${match.url}/:calendar/:date`} component={OldAppointmentsContainer} />
     <Route path={`${match.url}/:calendar`} component={OldAppointmentsContainer} />
-    <Route path={`${match.url}`} component={<CalendarSelect basePath='appointments' />} />
+    <Route path={`${match.url}`} component={Select} />
   </Switch>
 )
+
+const Select = () =>
+  <CalendarSelect basePath='appointments' />

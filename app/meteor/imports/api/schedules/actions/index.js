@@ -8,6 +8,7 @@ import { softRemove } from './softRemove'
 import { upsert } from './upsert'
 import { setNote } from './setNote'
 import { upsertDefaultSchedule } from './upsertDefaultSchedule'
+import { applyDefaultSchedule } from './applyDefaultSchedule'
 
 export default ({ Schedules }) => {
   return {
@@ -19,6 +20,7 @@ export default ({ Schedules }) => {
     softRemove: softRemove({ Schedules }),
     upsert: upsert({ Schedules, Users }),
     setNote: setNote({ Schedules }),
-    upsertDefaultSchedule: upsertDefaultSchedule({ Schedules })
+    upsertDefaultSchedule: upsertDefaultSchedule({ Schedules }),
+    applyDefaultSchedule: applyDefaultSchedule({ Schedules })
   }
 }

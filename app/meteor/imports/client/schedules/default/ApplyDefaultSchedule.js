@@ -1,23 +1,52 @@
 import React from 'react'
 import moment from 'moment'
+import Alert from 'react-s-alert'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'
 import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { withTracker } from 'meteor/react-meteor-data'
-import { Users } from '../../../api/users'
+import { Calendars } from '../../../api/calendars'
+import { Schedules } from '../../../api/schedules'
 import { DayPickerRangeController } from 'react-dates'
 import { END_DATE, START_DATE } from 'react-dates/constants'
-import { Button } from 'material-ui';
+import { Button } from 'material-ui'
 
-export class ApplyDefaultSchedule extends React.Component {
+const composer = props => {
+  const { calendarId } = props
+  const calendar = Calendars.findOne({ _id: calendarId })
+
+  Meteor.subscribe('schedules-latest-planned', { calendarId })
+
+  const latestSchedules = Schedules.find({
+    type: 'override',
+    calendarId
+  }, {
+    sort: { end: -1 },
+    limit: 1
+  }).fetch()
+
+  const lastPlannedDate = latestSchedules.length === 1
+    ? latestSchedules[0].start
+    : null
+
+  console.log('lastPlannedDate', lastPlannedDate)
+
+  return {
+    ...props,
+    calendar,
+    lastPlannedDate
+  }
+}
+
+class ApplyDefaultScheduleComponent extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
       startDate: null,
       endDate: null,
-      focusedInput: START_DATE,
+      focusedInput: props.lastPlannedDate ? END_DATE : START_DATE,
       applying: false,
       applied: false
     }
@@ -25,6 +54,7 @@ export class ApplyDefaultSchedule extends React.Component {
     this.handleDatesChange = this.handleDatesChange.bind(this)
     this.handleFocusChange = this.handleFocusChange.bind(this)
     this.applyDefaultSchedule = this.applyDefaultSchedule.bind(this)
+    this.isOutsideRange = this.isOutsideRange.bind(this)
   }
 
   applyDefaultSchedule () {
@@ -32,12 +62,32 @@ export class ApplyDefaultSchedule extends React.Component {
       applying: true
     })
 
-    setTimeout(() =>
+    return Schedules.actions.applyDefaultSchedule.callPromise({
+      calendarId: this.props.calendarId,
+      from: this.state.startDate.toDate(),
+      to: this.state.endDate.toDate()
+    }).then(res => {
+      Alert.success('Erfolgreich geplant')
       this.setState({
         applying: false,
-        applied: true
+        applied: true,
+        startDate: null,
+        endDate: null
       })
-    , 2000)
+
+      setTimeout(() =>
+        this.setState({
+          applied: false
+        })
+      , 10 * 1000)
+    }).catch(e => {
+      Alert.error(e.message)
+      console.error(e)
+
+      this.setState({
+        applying: false
+      })
+    })
   }
 
   handleDatesChange ({ startDate, endDate }) {
@@ -54,8 +104,16 @@ export class ApplyDefaultSchedule extends React.Component {
     })
   }
 
+  isOutsideRange (m) {
+    return this.props.lastPlannedDate
+      ? m.isBefore(this.props.lastPlannedDate)
+      : m.isBefore(moment())
+  }
+
   render () {
-    const { startDate, endDate, focusedInput, applying } = this.state
+    const { startDate, endDate, focusedInput, applying, applied } = this.state
+    const { calendar, lastPlannedDate } = this.props
+
     return (
       <Box title='Wochenplan anwenden' icon='magic' noPadding noBorder>
         <div style={containerStyle}>
@@ -65,14 +123,23 @@ export class ApplyDefaultSchedule extends React.Component {
             focusedInput={focusedInput}
             startDate={startDate}
             endDate={endDate}
+            initialVisibleMonth={lastPlannedDate ? () => moment(lastPlannedDate) : null}
+            isOutsideRange={this.isOutsideRange}
             hideKeyboardShortcutsPanel
             numberOfMonths={2}
           />
           <div style={summaryStyle}>
             {
-              !startDate && !endDate &&
+              !applied && !startDate && !endDate &&
                 <p>
                   Tage auswählen, für welche die oben geplanten Anwesenheiten gelten sollen.
+                </p>
+            }
+
+            {
+              applied &&
+                <p>
+                  <Icon name='check-circle' /> Die Arbeitszeiten sind jetzt festgelegt.
                 </p>
             }
 
@@ -101,7 +168,7 @@ export class ApplyDefaultSchedule extends React.Component {
                 onClick={this.applyDefaultSchedule}
                 disabled={applying || !startDate || !endDate}
               >
-                <Icon name='cog' spin={applying} /> Wochenplan auf die gewählten Tage anwenden
+                <Icon name='cog' spin={applying} /> Wochenplan auf die gewählten Tage im Kalender {calendar.name} anwenden
               </Button>
             </div>
           </div>
@@ -130,3 +197,5 @@ const buttonStyle = {
 
 const formatDate = d =>
   moment(d).format(TAPi18n.__('time.dateFormatWeekday'))
+
+export const ApplyDefaultSchedule = withTracker(composer)(ApplyDefaultScheduleComponent)

@@ -76,4 +76,21 @@ export default () => {
       return Schedules.find({ type: 'default' })
     }
   })
+
+  publish({
+    name: 'schedules-latest-planned',
+    roles: ['schedules-edit'],
+    args: {
+      calendarId: String
+    },
+    fn: function ({ calendarId }) {
+      return Schedules.find({
+        type: 'override',
+        calendarId
+      }, {
+        sort: { end: -1 },
+        limit: 1
+      })
+    }
+  })
 }
