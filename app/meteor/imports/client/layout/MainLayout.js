@@ -17,20 +17,12 @@ const contentWrapperSidebarClosedStyle = {
 }
 
 const logoSidebarClosedStyle = {
-  width: 45,
-  // backgroundColor: '#2c3b41'
+  width: 45
 }
 
 const logoStyle = {
   padding: 0,
   ...sidebarTransitionStyle
-}
-
-const userPanelStyle = {
-  padding: 6,
-  color: '#4b646f',
-  background: '#1a2226',
-  textAlign: 'center'
 }
 
 export class MainLayout extends React.Component {
