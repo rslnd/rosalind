@@ -6,9 +6,10 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { weekdays, HM } from '../schema'
 
-const FromTo = new SimpleSchema({
+const Schedule = new SimpleSchema({
   from: { type: HM },
-  to: { type: HM }
+  to: { type: HM },
+  note: { type: String, optional: true }
 })
 
 export const upsertDefaultSchedule = ({ Schedules, Users }) => {
@@ -20,7 +21,7 @@ export const upsertDefaultSchedule = ({ Schedules, Users }) => {
       calendarId: { type: SimpleSchema.RegEx.Id, optional: true },
       scheduleId: { type: SimpleSchema.RegEx.Id, optional: true },
       weekday: { type: String, optional: true, allowedValues: weekdays },
-      newSchedule: { type: FromTo, optional: true }
+      newSchedule: { type: Schedule, optional: true }
     }).validator(),
 
     run ({ calendarId, userId, scheduleId, weekday, newSchedule }) {
@@ -28,6 +29,8 @@ export const upsertDefaultSchedule = ({ Schedules, Users }) => {
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
+
+      const available = !(newSchedule && newSchedule.note)
 
       if (scheduleId) {
         const existingSchedule = Schedules.findOne({
@@ -48,12 +51,24 @@ export const upsertDefaultSchedule = ({ Schedules, Users }) => {
           return scheduleId
         }
 
-        Schedules.update({ _id: scheduleId }, {
+        const modifier = {
           $set: {
             from: newSchedule.from,
-            to: newSchedule.to
+            to: newSchedule.to,
+            note: newSchedule.note,
+            available
           }
-        })
+        }
+
+        if (newSchedule.note) {
+          modifier.$set.note = newSchedule.note
+        } else {
+          modifier.$unset = {
+            note: 1
+          }
+        }
+
+        Schedules.update({ _id: scheduleId }, modifier)
 
         Events.post('schedules/updateDefaultSchedule', {
           scheduleId: scheduleId,
@@ -69,7 +84,8 @@ export const upsertDefaultSchedule = ({ Schedules, Users }) => {
             weekday,
             from: newSchedule.from,
             to: newSchedule.to,
-            available: true,
+            note: newSchedule.note,
+            available,
             createdAt: new Date(),
             createdBy: this.userId
           })

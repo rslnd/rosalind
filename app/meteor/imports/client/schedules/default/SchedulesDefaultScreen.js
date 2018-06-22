@@ -39,19 +39,39 @@ const parseTime = s => {
   }
 }
 
-const scheduleToString = ({ to, from }) =>
-  [
-    renderTime(from),
-    renderTime(to)
-  ].filter(identity).join('-')
+const scheduleToString = (schedule) => {
+  if (!schedule) {
+    return ''
+  }
+
+  const { to, from, note } = schedule
+
+  return [
+    [
+      renderTime(from),
+      renderTime(to)
+    ].filter(identity).join('-'),
+    note
+  ].filter(identity).join(' ')
+}
 
 const stringToSchedule = s => {
   if (!s) { return null }
-  const [from, to] = s.split('-')
-  return {
+  const [from, to, ...rest] = s.split(/-|\s/)
+  const schedule = {
     from: parseTime(from),
     to: parseTime(to)
   }
+
+  const note = rest && rest.join(' ')
+  if (note.length > 2) {
+    return {
+      ...schedule,
+      note
+    }
+  }
+
+  return schedule
 }
 
 const composer = props => {
@@ -188,15 +208,14 @@ class SchedulesDefaultScreenComponent extends React.Component {
               isEditingSchedule(s._id)
                 ? (
                   <EditSchedule
-                    from={s.from}
-                    to={s.to}
+                    schedule={s}
                     onChange={this.handleSaveEdit(s)}
                     onCancel={this.handleEndEdit}
                   />
                 ) : (
-                  <div onClick={this.handleStartEdit(s._id)}>
+                  <Button size='medium' style={{ width: '100%', fontSize: '14px' }} onClick={this.handleStartEdit(s._id)}>
                     {scheduleToString(s)}
-                  </div>
+                  </Button>
                 )
             }
           </div>
@@ -211,7 +230,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
             onCancel={this.handleEndEdit}
           />
         ) : (
-          canAddSchedule && <Button onClick={this.handleAddScheduleWeekday({ weekday, assigneeId })}>
+          canAddSchedule && <Button style={{ width: '100%' }} onClick={this.handleAddScheduleWeekday({ weekday, assigneeId })}>
             <Icon style={{ opacity: 0.1 }} name='plus' />
           </Button>
         )
@@ -293,15 +312,12 @@ class SchedulesDefaultScreenComponent extends React.Component {
 
 export const SchedulesDefaultScreen = withTracker(composer)(SchedulesDefaultScreenComponent)
 
-
 class EditSchedule extends React.Component {
   constructor (props) {
     super(props)
 
-    const { from, to } = this.props
-
     this.state = {
-      value: scheduleToString({ from, to })
+      value: scheduleToString(this.props.schedule)
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -319,7 +335,7 @@ class EditSchedule extends React.Component {
   }
 
   render () {
-    const { from, to, onCancel } = this.props
+    const { onCancel } = this.props
 
     return (
       <form onSubmit={this.handleSave}>
