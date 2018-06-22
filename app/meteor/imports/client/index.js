@@ -11,7 +11,7 @@ import { store } from './store'
 import { Loading } from './components/Loading'
 import { Error } from './components/Error'
 import { MainLayoutContainer } from './layout'
-import { Dashboard } from './dashboard/Dashboard'
+import { CalendarSelect } from './calendars/CalendarSelect'
 import { InboundCalls } from './inboundCalls'
 import { Appointments } from './appointments'
 import { Waitlist } from './appointments/waitlist'
@@ -35,7 +35,7 @@ export const Rosalind = () => (
             <Route path='/users' component={Users} />
             <Route path='/patients' component={Patients} />
             <Route path='/system' component={System} />
-            <Route exact path='/' component={Dashboard} />
+            <Route exact path='/' component={CalendarSelect} />
             <Route path='/' component={Error} />
           </Switch>
         </MainLayoutContainer>
