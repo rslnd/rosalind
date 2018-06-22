@@ -7,6 +7,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
+import { Referrals } from '../../referrals'
 import { normalizeName } from '../util/normalizeName'
 import { zerofix } from '../../../util/zerofix'
 import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
@@ -57,10 +58,11 @@ export const upsert = ({ Patients }) => {
     validate: new SimpleSchema({
       patient: { type: Object, blackbox: true },
       replaceContacts: { type: Boolean, optional: true },
-      quiet: { type: Boolean, optional: true }
+      quiet: { type: Boolean, optional: true },
+      createExternalReferralTo: { type: SimpleSchema.RegEx.Id, optional: true }
     }).validator(),
 
-    run ({ patient, quiet, replaceContacts }) {
+    run ({ patient, quiet, replaceContacts, createReferral, createExternalReferralTo }) {
       try {
         if (this.connection && !this.userId) {
           throw new Meteor.Error(403, 'Not authorized')
@@ -149,6 +151,11 @@ export const upsert = ({ Patients }) => {
             })
           }
 
+          ensureExternalReferral({
+            patientId: existingPatient.id,
+            createExternalReferralTo
+          })
+
           return existingPatient._id
         } else {
           patient = cleanFields(patient)
@@ -161,6 +168,12 @@ export const upsert = ({ Patients }) => {
               }
               if (!quiet) { Events.post('patients/insert', { patientId }) }
             })
+
+            ensureExternalReferral({
+              patientId,
+              createExternalReferralTo
+            })
+
             return patientId
           } catch (e) {
             console.error('[Patients] upsert: Insert failed with error', e)
@@ -173,4 +186,32 @@ export const upsert = ({ Patients }) => {
       }
     }
   })
+}
+
+const ensureExternalReferral = ({ patientId, createExternalReferralTo }) => {
+  if (createExternalReferralTo) {
+    const existingReferral = Referrals.findOne({
+      patientId,
+      referredTo: createExternalReferralTo
+    })
+
+    if (!existingReferral) {
+      const referralId = Referrals.insert({
+        type: 'external',
+        patientId,
+        referredTo: createExternalReferralTo,
+        createdAt: new Date(),
+        redeemedAt: new Date()
+      })
+
+      console.log('[Patients] upsert: created external referral', {
+        patientId,
+        referralId
+      })
+
+      return referralId
+    }
+
+    return existingReferral._id
+  }
 }

@@ -14,7 +14,11 @@ const composer = (props, onData) => {
     try {
       const patient = mapFieldsToPatient(v.patient)
 
-      return Patients.actions.upsert.callPromise({ patient, replaceContacts: true })
+      return Patients.actions.upsert.callPromise({
+        patient,
+        replaceContacts: true,
+        createExternalReferralTo: '9MY6AiaNrAkcER8DK'
+      })
         .then(() => {
           Alert.success(TAPi18n.__('patients.editSuccess'))
           props.dispatch({ type: 'LOAD_PATIENT', data: patient })
