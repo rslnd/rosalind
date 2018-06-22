@@ -5,10 +5,16 @@ import { Link } from 'react-router-dom'
 import FlipMove from 'react-flip-move'
 import { TAPi18n } from 'meteor/tap:i18n'
 
+const duration = 0.18
+export const sidebarTransitionStyle = {
+  transition: `width ${duration}s ease-out, transform ${duration}s ease-out, background-color ${duration}s ease-out ${duration}s`
+}
+
 const styles = {
   sidebar: {
     minHeight: '100%',
-    paddingBottom: 70
+    paddingBottom: 70,
+    ...sidebarTransitionStyle
   },
   sidebarOpen: {
     width: 230
@@ -42,36 +48,58 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
     [ classes.fade ]: true
   })
 
-  const name = item.name.indexOf('.') === -1
-    ? TAPi18n.__(`${item.name}.this`)
-    : TAPi18n.__(item.name)
+  const name = item.label
+    ? item.label
+    : item.name
+    ? item.name.indexOf('.') === -1
+      ? TAPi18n.__(`${item.name}.this`)
+      : TAPi18n.__(item.name)
+    : ''
 
   const link = item.link || `/${item.name}`
 
+  if (item.separator) {
+    return (
+      <li className='header'>{name}</li>
+    )
+  }
+
   return (
     <li className={isActive(link, location) ? 'active' : undefined}>
-      <Link
-        to={link}
-        className='pointer level-0 link'
-        title={name}>
-        <i className={`fa fa-${item.icon}`} />
-        <span className={hideWhenClosed}>{name}</span>
-        <FlipMove typeName='span'>
-          {
-            item.count && item.count > 0
-            ? <small
-              key={item.count}
-              className={`label pull-right label-primary ${!sidebarOpen && classes.badgeWhenClosed}`}>
-              {item.count}
-            </small>
-            : (item.subItems &&
-              <i
-                key='subItems'
-                className={`i fa fa-angle-left pull-right ${hideWhenClosed}`} />
-            )
-          }
-        </FlipMove>
-      </Link>
+      {
+        item.onClick
+        ? (
+          <a className='pointer level-0 link'
+            title={name}
+            onClick={() => item.onClick({ item, location })}>
+            <i className={`fa fa-${item.icon}`} />
+            <span className={hideWhenClosed}>{name}</span>
+          </a>
+        ) : (
+          <Link
+            to={link}
+            className='pointer level-0 link'
+            title={name}>
+            <i className={`fa fa-${item.icon}`} />
+            <span className={hideWhenClosed}>{name}</span>
+            <FlipMove typeName='span'>
+              {
+                item.count && item.count > 0
+                ? <small
+                  key={item.count}
+                  className={`label pull-right label-primary ${!sidebarOpen && classes.badgeWhenClosed}`}>
+                  {item.count}
+                </small>
+                : (item.subItems &&
+                  <i
+                    key='subItems'
+                    className={`i fa fa-angle-left pull-right ${hideWhenClosed}`} />
+                )
+              }
+            </FlipMove>
+          </Link>
+        )
+      }
       {sidebarOpen && item.subItems &&
         <ul className='treeview-menu'>
           {item.subItems.map((subItem) => (
@@ -144,16 +172,16 @@ class SidebarItems extends React.Component {
     })
 
     return (
-      <aside className={asideClasses}>
+      <aside className={asideClasses} style={sidebarTransitionStyle}>
         <ul className={listClasses}>
 
           <li className={userPanelClasses}>
             {this.props.userPanel}
           </li>
 
-          {this.props.items.map((item) => (
+          {this.props.items.map((item, i) => (
             <SidebarItem
-              key={item.name}
+              key={item.name || i}
               item={item}
               location={this.props.location}
               sidebarOpen={this.props.isOpen} />

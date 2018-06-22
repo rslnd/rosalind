@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { SidebarContainer } from './SidebarContainer'
+import { sidebarTransitionStyle } from './Sidebar'
 import { UserPanelContainer } from './UserPanelContainer'
 import { FooterContainer } from './FooterContainer'
 import { Alerts } from './Alerts'
@@ -16,11 +17,13 @@ const contentWrapperSidebarClosedStyle = {
 }
 
 const logoSidebarClosedStyle = {
-  width: 45
+  width: 45,
+  // backgroundColor: '#2c3b41'
 }
 
 const logoStyle = {
-  padding: 0
+  padding: 0,
+  ...sidebarTransitionStyle
 }
 
 const userPanelStyle = {

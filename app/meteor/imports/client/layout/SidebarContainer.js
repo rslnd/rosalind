@@ -18,23 +18,28 @@ const sidebarItems = ({ history }) => {
       icon: 'angle-right',
       roles: ['waitlist', 'waitlist-all', 'admin']
     },
-    {
-      name: 'appointments',
-      icon: 'calendar',
+    ...calendars.map(c => ({
+      label: c.name,
+      color: c.color,
+      icon: c.icon,
+      link: '/appointments/' + c.slug,
+      slug: c.slug,
       roles: ['admin', 'appointments'],
-      subItems: calendars.map(c => ({
-        name: c.slug,
-        label: c.name,
-        path: '/' + c.slug,
-        slug: c.slug
-      })),
       // replace calendar slug and keep selected date
-      onClick: ({subItem, location}) => {
-        const [base, calendar, date] = location.pathname
+      onClick: ({item, location}) => {
+        const [base, _calendar, date] = location.pathname
           .split('/').filter(x => x.length > 0)
-        const newPath = '/' + [base, subItem.slug, date].filter(identity).join('/')
+
+        const newPath =
+          base === 'appointments'
+          ? '/' + [base, item.slug, date].filter(identity).join('/')
+          : item.link
+
         history.push(newPath)
       }
+    })),
+    {
+      separator: true
     },
     {
       name: 'inboundCalls',
