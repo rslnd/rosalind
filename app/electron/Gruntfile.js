@@ -78,7 +78,7 @@ module.exports = (grunt) => {
           out: 'build/packaged/',
           electronVersion: options.electronVersion(),
           platform: 'win32',
-          arch: 'ia32',
+          arch: 'x64',
           asar: true,
           overwrite: true
         }
@@ -86,17 +86,9 @@ module.exports = (grunt) => {
     },
 
     'create-windows-installer': {
-      ia32: {
-        appDirectory: 'build/packaged/<%= pkg.productName %>-win32-ia32',
-        outputDirectory: 'build/installer/<%= pkg.productName %>-win32-ia32/',
-        exe: '<%= pkg.productName %>.exe',
-        title: '<%= pkg.productName %>',
-        iconUrl: 'https://raw.githubusercontent.com/rslnd/rosalind/master/app/electron/assets/appicon.ico',
-        setupIcon: 'assets/appicon.ico'
-      },
-      ia64: {
-        appDirectory: 'build/packaged/<%= pkg.productName %>-win32-ia64',
-        outputDirectory: 'build/installer/<%= pkg.productName %>-win32-ia64/',
+      x64: {
+        appDirectory: 'build/packaged/<%= pkg.productName %>-win32-x64',
+        outputDirectory: 'build/installer/<%= pkg.productName %>-win32-x64/',
         exe: '<%= pkg.productName %>.exe',
         title: '<%= pkg.productName %>',
         iconUrl: 'https://raw.githubusercontent.com/rslnd/rosalind/master/app/electron/assets/appicon.ico',
@@ -148,8 +140,8 @@ module.exports = (grunt) => {
       installerExe: {
         files: [
           {
-            src: 'build/installer/Rosalind-win32-ia32/RosalindSetup.exe',
-            dest: 'build/installer/Rosalind-win32-ia32/RosalindSetup-win-v<%= pkg.version %>.exe'
+            src: 'build/installer/Rosalind-win32-x64/RosalindSetup.exe',
+            dest: 'build/installer/Rosalind-win32-x64/RosalindSetup-win-v<%= pkg.version %>.exe'
           }
         ]
       }

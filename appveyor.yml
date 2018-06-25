@@ -41,8 +41,7 @@ test_script:
     echo "--> Installing app"
 
 
-    & ".\build\installer\Rosalind-win32-ia32\RosalindSetup-win-$env:ROSALIND_VERSION.exe"
-    & ".\build\installer\Rosalind-win32-ia64\RosalindSetup-win-$env:ROSALIND_VERSION.exe"
+    & ".\build\installer\Rosalind-win32-x64\RosalindSetup-win-$env:ROSALIND_VERSION.exe"
 
 
     Start-Sleep -s 30
@@ -60,26 +59,19 @@ test_script:
     echo "--> Done"
 
 artifacts:
-- path: app\electron\build\installer\Rosalind-win32-ia32\RELEASES
-  name: RELEASES-win-ia32
-- path: app\electron\build\installer\Rosalind-win32-ia32\*.exe
-  name: RosalindSetup-win-ia32.exe
-- path: app\electron\build\installer\Rosalind-win32-ia32\*.nupkg
-  name: rosalind-win-ia32.nupkg
-- path: app\electron\build\installer\Rosalind-win32-ia64\RELEASES
-  name: RELEASES-win-ia64
-- path: app\electron\build\installer\Rosalind-win32-ia64\*.exe
-  name: RosalindSetup-win-ia64.exe
-- path: app\electron\build\installer\Rosalind-win32-ia64\*.nupkg
-  name: rosalind-win-ia64.nupkg
-
+- path: app\electron\build\installer\Rosalind-win32-x64\RELEASES
+  name: RELEASES-win-x64
+- path: app\electron\build\installer\Rosalind-win32-x64\*.exe
+  name: RosalindSetup-win-x64.exe
+- path: app\electron\build\installer\Rosalind-win32-x64\*.nupkg
+  name: rosalind-win-x64.nupkg
 
 deploy:
 - provider: GitHub
   tag: $(ROSALIND_VERSION)
   release: $(ROSALIND_VERSION)
-  description: "🐣 Rosalind Client, Windows $(ROSALIND_VERSION)"
+  description: "🐣 Rosalind Client, Windows 64bit $(ROSALIND_VERSION)"
   auth_token:
     secure: PHADmhUgXdLiPP7KA7E+MqiX/CV9DMyoDfvFP+0pyzXfozFC0tiQ2QfdzlPEVU69
-  artifact: RosalindSetup-win-ia32.msi,RosalindSetup-win-ia32.exe,RELEASES-win-ia32,rosalind-win-ia32.nupkg,RosalindSetup-win-ia64.msi,RosalindSetup-win-ia64.exe,RELEASES-win-ia64,rosalind-win-ia64.nupkg
+  artifact: RosalindSetup-win-x64.msi,RosalindSetup-win-x64.exe,RELEASES-win-x64,rosalind-win-x64.nupkg
   force_update: true
