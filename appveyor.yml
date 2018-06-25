@@ -61,6 +61,8 @@ test_script:
 artifacts:
 - path: app\electron\build\installer\Rosalind-win32-x64\RELEASES
   name: RELEASES-win-x64
+- path: app\electron\build\installer\Rosalind-win32-x64\*.msi
+  name: RosalindSetup-allUsers-win-x64.msi
 - path: app\electron\build\installer\Rosalind-win32-x64\*.exe
   name: RosalindSetup-win-x64.exe
 - path: app\electron\build\installer\Rosalind-win32-x64\*.nupkg
@@ -73,5 +75,5 @@ deploy:
   description: "🐣 Rosalind Client, Windows 64bit $(ROSALIND_VERSION)"
   auth_token:
     secure: PHADmhUgXdLiPP7KA7E+MqiX/CV9DMyoDfvFP+0pyzXfozFC0tiQ2QfdzlPEVU69
-  artifact: RosalindSetup-win-x64.msi,RosalindSetup-win-x64.exe,RELEASES-win-x64,rosalind-win-x64.nupkg
+  artifact: RosalindSetup-allUsers-win-x64.msi,RosalindSetup-win-x64.exe,RELEASES-win-x64,rosalind-win-x64.nupkg
   force_update: true
