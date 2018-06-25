@@ -41,7 +41,7 @@ after_build:
 - ps: >-
     echo "--> Zipping app"
 
-    7z a Rosalind-$env:ROSALIND_VERSION.zip .\build\packaged\*
+    7z a C:\Rosalind-$env:ROSALIND_VERSION.zip .\build\packaged\*
 
 test_script:
 - ps: >-
@@ -74,7 +74,7 @@ artifacts:
   name: RosalindSetup-win-x64.exe
 - path: app\electron\build\installer\Rosalind-win32-x64\*.nupkg
   name: rosalind-win-x64.nupkg
-- path: .\Rosalind-$(ROSALIND_VERSION).zip
+- path: C:\Rosalind-$(ROSALIND_VERSION).zip
   name: Rosalind.zip
 
 
