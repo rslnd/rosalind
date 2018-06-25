@@ -41,7 +41,7 @@ after_build:
 - ps: >-
     echo "--> Zipping app"
 
-    7z a Rosalind-$env:ROSALIND_VERSION.zip %APPVEYOR_BUILD_FOLDER%\build\packaged\*
+    7z a Rosalind-$env:ROSALIND_VERSION.zip .\build\packaged\*
 
 test_script:
 - ps: >-
