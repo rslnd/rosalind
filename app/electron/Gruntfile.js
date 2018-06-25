@@ -92,8 +92,15 @@ module.exports = (grunt) => {
         exe: '<%= pkg.productName %>.exe',
         title: '<%= pkg.productName %>',
         iconUrl: 'https://raw.githubusercontent.com/rslnd/rosalind/master/app/electron/assets/appicon.ico',
-        setupIcon: 'assets/appicon.ico',
-        noMsi: true
+        setupIcon: 'assets/appicon.ico'
+      },
+      ia64: {
+        appDirectory: 'build/packaged/<%= pkg.productName %>-win32-ia64',
+        outputDirectory: 'build/installer/<%= pkg.productName %>-win32-ia64/',
+        exe: '<%= pkg.productName %>.exe',
+        title: '<%= pkg.productName %>',
+        iconUrl: 'https://raw.githubusercontent.com/rslnd/rosalind/master/app/electron/assets/appicon.ico',
+        setupIcon: 'assets/appicon.ico'
       }
     },
 
