@@ -74,7 +74,7 @@ artifacts:
   name: RosalindSetup-win-x64.exe
 - path: app\electron\build\installer\Rosalind-win32-x64\*.nupkg
   name: rosalind-win-x64.nupkg
-- path: Rosalind-*.zip
+- path: .\Rosalind-$(ROSALIND_VERSION).zip
   name: Rosalind.zip
 
 
