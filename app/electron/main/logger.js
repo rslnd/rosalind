@@ -39,7 +39,7 @@ const start = () => {
     }
   }
 
-  winston.info('[Log] App launched')
+  winston.info('[Log] App launched in: ', process.execPath)
   winston.info('[Log] App version: ', app.getVersion())
   winston.info('[Log] Command line arguments: ', process.argv)
 
