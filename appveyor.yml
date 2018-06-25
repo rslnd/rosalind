@@ -7,7 +7,7 @@ branches:
 shallow_clone: true
 
 environment:
-  nodejs_version: '6.5.0'
+  nodejs_version: '8.9.3'
 
 install:
 - ps: >-
@@ -22,11 +22,9 @@ install:
     npm --version
 
 - cmd: >-
-    npm install -g yarn
-
     cd app\electron\
 
-    yarn install
+    npm i
 
 build_script:
 - ps: >-
@@ -44,6 +42,7 @@ test_script:
 
 
     & ".\build\installer\Rosalind-win32-ia32\RosalindSetup-win-$env:ROSALIND_VERSION.exe"
+    & ".\build\installer\Rosalind-win32-ia64\RosalindSetup-win-$env:ROSALIND_VERSION.exe"
 
 
     Start-Sleep -s 30
@@ -67,13 +66,20 @@ artifacts:
   name: RosalindSetup-win-ia32.exe
 - path: app\electron\build\installer\Rosalind-win32-ia32\*.nupkg
   name: rosalind-win-ia32.nupkg
+- path: app\electron\build\installer\Rosalind-win32-ia64\RELEASES
+  name: RELEASES-win-ia64
+- path: app\electron\build\installer\Rosalind-win32-ia64\*.exe
+  name: RosalindSetup-win-ia64.exe
+- path: app\electron\build\installer\Rosalind-win32-ia64\*.nupkg
+  name: rosalind-win-ia64.nupkg
+
 
 deploy:
 - provider: GitHub
   tag: $(ROSALIND_VERSION)
   release: $(ROSALIND_VERSION)
-  description: "🐣 Rosalind Client, Windows 32bit $(ROSALIND_VERSION)"
+  description: "🐣 Rosalind Client, Windows $(ROSALIND_VERSION)"
   auth_token:
     secure: PHADmhUgXdLiPP7KA7E+MqiX/CV9DMyoDfvFP+0pyzXfozFC0tiQ2QfdzlPEVU69
-  artifact: RosalindSetup-win-ia32.msi,RosalindSetup-win-ia32.exe,RELEASES-win-ia32,rosalind-win-ia32.nupkg
+  artifact: RosalindSetup-win-ia32.msi,RosalindSetup-win-ia32.exe,RELEASES-win-ia32,rosalind-win-ia32.nupkg,RosalindSetup-win-ia64.msi,RosalindSetup-win-ia64.exe,RELEASES-win-ia64,rosalind-win-ia64.nupkg
   force_update: true
