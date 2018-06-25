@@ -6,7 +6,7 @@ import { dayToDate } from '../../../util/time/day'
 import { generate as generateReport } from '../methods/generate'
 import { pastAppointmentsSelector } from '../methods/mapPlannedNew'
 
-export const generate = ({ Calendars, Reports, Appointments, Schedules, Tags, Messages }) => {
+export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, Tags, Messages }) => {
   return new ValidatedMethod({
     name: 'reports/generate',
     mixins: [CallPromiseMixin],
@@ -78,9 +78,12 @@ export const generate = ({ Calendars, Reports, Appointments, Schedules, Tags, Me
           const generatedReport = generateReport({ calendar, day, appointments, pastAppointments, daySchedule, overrideSchedules, tagMapping, messages, existingReport, addendum: filteredAddendum })
 
           if (existingReport) {
+            Events.post('reports/update', { reportId: existingReport._id })
             return Reports.update({ _id: existingReport._id }, generatedReport, { bypassCollection2: true })
           } else {
-            return Reports.insert(generatedReport)
+            const reportId = Reports.insert(generatedReport)
+            Events.post('reports/insert', { reportId })
+            return reportId
           }
         })
       } catch (e) {

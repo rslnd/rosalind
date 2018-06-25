@@ -2,6 +2,7 @@ import { Schedules } from '../../schedules'
 import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
 import { Tags } from '../../tags'
+import { Events } from '../../events'
 import { Messages } from '../../messages'
 import { upsert } from './upsert'
 import { tally } from './tally'
@@ -13,7 +14,7 @@ export default function ({ Reports }) {
   return Object.assign({},
     { upsert: upsert({ Reports }) },
     { tally: tally({ Reports }) },
-    { generate: generate({ Calendars, Reports, Schedules, Appointments, Tags, Messages }) },
+    { generate: generate({ Events, Calendars, Reports, Schedules, Appointments, Tags, Messages }) },
     { generatePreview: generatePreview({ Calendars, Reports, Schedules, Appointments, Tags, Messages }) },
     { generateQuarter: generateQuarter({ Calendars, Reports, Schedules }) }
   )
