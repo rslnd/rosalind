@@ -6,13 +6,13 @@ import { withTracker } from 'meteor/react-meteor-data'
 import { CalendarSelect } from '../calendars/CalendarSelect'
 import { Waitlist } from '../appointments/waitlist'
 
-const DashboardComponent = ({ canSeeWaitlist, canSeeAppointments }) => {
+const DashboardComponent = ({ canSeeWaitlist, canSeeAppointments, ...props }) => {
   if (!canSeeAppointments && canSeeWaitlist) {
-    return <Waitlist />
+    return <Waitlist {...props} />
   }
 
   if (canSeeAppointments) {
-    return <CalendarSelect />
+    return <CalendarSelect {...props} />
   }
 
   return <div />
@@ -24,7 +24,8 @@ const composer = props => {
 
   return {
     canSeeWaitlist,
-    canSeeAppointments
+    canSeeAppointments: false,
+    ...props
   }
 }
 
