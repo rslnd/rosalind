@@ -11,29 +11,24 @@ const start = (argv = []) => {
 const generateEoswinReports = () => {
   const exePath = path.join(__dirname, '..', 'generateEoswinReports.exe')
   logger.info('[automation] Spawning', exePath)
-  const child = childProcess.execFile(exePath)
-  child.stdout.setEncoding('utf8')
 
-  child.stdout.on('data', d =>
-    logger.info('[automation] generateEoswinReports', d)
-  )
+  // Need to use execFile here because it is the only child process
+  // function that transparently extracts the executable from an asar package
+  return childProcess.execFile(exePath, [], {
+    shell: true
+  }, (err, stdout, stderr) => {
+    if (err) {
+      logger.error('[automation] generateEoswinReports error:', err)
+    }
 
-  child.stderr.on('data', d =>
-    console.error('[automation] generateEoswinReports error:', d)
-  )
+    if (stdout) {
+      logger.info('[automation] generateEoswinReports', stdout)
+    }
 
-  return new Promise((resolve, reject) => {
-    child.on('close', code => {
-      logger.info('[automation] generateEoswinReports exited with code', code)
-
-      if (code !== 0) {
-        logger.error('[automation] generateEoswinReports failed')
-        reject(code)
-      } else {
-        resolve()
-      }
-    })
+    if (stderr) {
+      logger.info('[automation] generateEoswinReports stderr', stderr)
+    }
   })
 }
 
-module.exports = { start, generateEoswinReports }
+module.exports = { start }
