@@ -18,8 +18,16 @@ export const eoswinRevenueReports = ({ Importers }) => {
     run ({ name, content }) {
       this.unblock()
       try {
-        if (this.isSimulation) { return }
-        if (!Meteor.userId()) { return }
+        if (Meteor.isServer) {
+          const { isTrustedNetwork } = require('../../../../customer/server/isTrustedNetwork')
+          if (!this.userId || (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
+            throw new Meteor.Error(403, 'Not authorized')
+          }
+        }
+
+        if (this.isSimulation) {
+          return
+        }
 
         const mapIds = mapUserIds({ Users })
 

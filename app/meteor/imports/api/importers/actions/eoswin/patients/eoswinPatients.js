@@ -16,8 +16,11 @@ export const eoswinPatients = ({ Importers }) => {
     }).validator(),
 
     run ({ name, content, quiet }) {
-      if (this.connection && !this.userId) {
-        throw new Meteor.Error(403, 'not-authorized')
+      if (Meteor.isServer) {
+        const { isTrustedNetwork } = require('../../../../customer/server/isTrustedNetwork')
+        if (!this.userId || (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
+          throw new Meteor.Error(403, 'Not authorized')
+        }
       }
 
       let patients = parsePatients(content)

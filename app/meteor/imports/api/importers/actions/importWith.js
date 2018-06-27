@@ -16,7 +16,13 @@ export const importWith = ({ Importers }) => {
 
     run ({ importer, name, content }) {
       this.unblock()
-      if (!Meteor.userId()) { return }
+
+      if (Meteor.isServer) {
+        const { isTrustedNetwork } = require('../../customer/server/isTrustedNetwork')
+        if (!this.userId || (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
+          throw new Meteor.Error(403, 'Not authorized')
+        }
+      }
 
       try {
         switch (importer) {
