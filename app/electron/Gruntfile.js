@@ -194,12 +194,16 @@ module.exports = (grunt) => {
           stderr: false,
           failOnError: false
         }
+      },
+
+      compileAutoit: {
+        command: 'node compileAutoIt.js'
       }
     }
   })
 
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
-  grunt.registerTask('package', ['clean:full', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'electron:package'])
-  grunt.registerTask('build', ['clean:full', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'electron:package', 'create-windows-installer', 'rename:installerExe'])
+  grunt.registerTask('package', ['clean:full', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'shell:compileAutoit', 'electron:package'])
+  grunt.registerTask('build', ['clean:full', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'shell:compileAutoit', 'electron:package', 'create-windows-installer', 'rename:installerExe'])
   grunt.registerTask('default', ['clean:full', 'shell:kill', 'copy:js', 'copy:packageJson', 'copy:nodeModules', 'shell:electronPrebuilt'])
 }
