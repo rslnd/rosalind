@@ -11,7 +11,7 @@ const start = (argv = []) => {
 const generateEoswinReports = () => {
   const exePath = path.join(__dirname, '..', 'generateEoswinReports.exe')
   logger.info('[automation] Spawning', exePath)
-  const child = childProcess.spawn(exePath)
+  const child = childProcess.execFile(exePath)
   child.stdout.setEncoding('utf8')
 
   child.stdout.on('data', d =>
