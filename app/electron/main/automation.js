@@ -3,13 +3,13 @@ const path = require('path')
 const logger = require('./logger')
 
 const start = (argv = []) => {
-  if (argv.indexOf('generateEoswinReports') !== -1) {
+  if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
     generateEoswinReports()
   }
 }
 
 const generateEoswinReports = () => {
-  const exePath = path.join(__dirname, '..', 'generateEoswinReports.au3')
+  const exePath = path.join(__dirname, '..', 'generateEoswinReports.exe')
   logger.info('[automation] Spawning', exePath)
   const child = childProcess.spawn(exePath)
   child.stdout.setEncoding('utf8')

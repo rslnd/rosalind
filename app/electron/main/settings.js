@@ -85,6 +85,10 @@ const validateSettings = settings => {
 }
 
 const writeSettings = newSettings => {
+  if (newSettings === emptySettings || Object.keys(newSettings).length <= 2) {
+    logger.error('[Settings] Skipping writing settings because it is empty')
+    return
+  }
   logger.info('[Settings] Writing settings to', localSettingsPath)
   fs.writeFile(localSettingsPath, JSON.stringify(newSettings, null, 2), { encoding: 'utf8' }, (err) => {
     if (err) {
