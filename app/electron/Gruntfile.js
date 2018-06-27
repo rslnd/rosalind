@@ -1,5 +1,6 @@
 const find = require('lodash/find')
 const map = require('lodash/map')
+const safeFFMPEG = require('electron-packager-plugin-non-proprietary-codecs-ffmpeg')
 
 module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-copy')
@@ -80,7 +81,8 @@ module.exports = (grunt) => {
           platform: 'win32',
           arch: 'x64',
           asar: true,
-          overwrite: true
+          overwrite: true,
+          afterExtract: [safeFFMPEG]
         }
       }
     },
