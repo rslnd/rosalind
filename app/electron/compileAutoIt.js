@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 const childProcess = require('child_process')
 
@@ -7,6 +6,11 @@ const main = () => {
   const exePath = path.join(__dirname, 'build', 'javascript', 'generateEoswinReports.exe')
 
   compile(au3Path, exePath)
+    .then(() => console.log('[compile] Success'))
+    .catch(code => {
+      console.error('[compile] Compiler exited with code', code)
+      process.exit(code)
+    })
 }
 
 const compile = (input, output) => {
@@ -30,8 +34,16 @@ const compile = (input, output) => {
     console.error('[compile] error:', d)
   )
 
-  compiler.on('close', code => {
-    console.log('[compile] Compiler exited with code', code)
+  return new Promise((resolve, reject) => {
+    compiler.on('close', code => {
+      console.log('[compile] Compiler exited with code', code)
+
+      if (code === 0) {
+        resolve(output)
+      } else {
+        reject(code)
+      }
+    })
   })
 }
 

@@ -15,6 +15,7 @@ logger.start()
 
 const settings = require('./settings')
 const cli = require('./cli')
+const automation = require('./automation')
 const print = require('./print')
 const shortcuts = require('./shortcuts')
 const watch = require('./watch')
@@ -29,9 +30,14 @@ const handleFocus = () => {
   mainWindow.focus()
 }
 
+const handleOtherInstanceLaunched = (argv) => {
+  handleFocus()
+  automation.start(argv)
+}
+
 const start = () => {
   if (updater.handleStartupEvent()) { return }
-  if (cli.handleStartupEvent(handleFocus)) { return app.quit() }
+  if (cli.handleStartupEvent(handleOtherInstanceLaunched)) { return app.quit() }
 
   app.on('ready', () => {
     mainWindow = window.open(err => {
@@ -43,6 +49,7 @@ const start = () => {
       logger.ready('[Main] Main window loaded')
       watch.start({ ipcReceiver: mainWindow, handleFocus })
       print.start({ ipcReceiver: mainWindow })
+      automation.start(process.argv)
       shortcuts.updateShortcuts()
 
       ipcMain.on('window/load', (e) => {
