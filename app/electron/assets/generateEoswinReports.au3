@@ -5,9 +5,8 @@ Main()
 Func Main()
   CloseEOSWin()
   OpenEOSWin()
-  GenerateEOSWinReport("Tagesjournal", "t{ENTER}")
-  ; No need to send ENTER if the item has a unique first letter
-  GenerateEOSWinReport("Ärzte Statistik Umsätze", "ä")
+  GenerateEOSWinReport("Tagesjournal")
+  GenerateEOSWinReport("Ärzte Statistik Umsätze")
   CloseEOSWin()
   ConsoleWrite("Success")
 EndFunc
@@ -18,9 +17,10 @@ Func GetDate()
 EndFunc
 
 Func OpenEOSWin()
-  Send("{CAPSLOCK off}{SHIFTDOWN}{SHIFTUP}")
   Run($sEoswinExe, "", @SW_MAXIMIZE)
   $hLoginWnd = ExpectWindow("EOSWin Anmeldung", 20)
+
+  ControlSend($hLoginWnd, "", "[CLASS:TEditName; INSTANCE: 1]", "{CAPSLOCK off}{SHIFTDOWN}{SHIFTUP}")
   ControlSend($hLoginWnd, "", "[CLASS:TEditName; INSTANCE: 1]", "--")
   Sleep(300)
   ControlClick($hLoginWnd, "OK", "[CLASS:TFocusBitBtn; INSTANCE: 1]")
@@ -62,28 +62,16 @@ Func CloseEOSWin($iRetries = 4)
   EndIf
 EndFunc
 
-Func GenerateEOSWinReport($sReportType, $sMenuShortcut = Null)
+Func GenerateEOSWinReport($sReportType)
   ConsoleWrite("Generating report " & $sReportType & @CRLF)
   sleep(3000)
   $hEosWnd = ExpectWindow("EOSWin Ordination")
   Local $sListWindowTitle = "Auswertungen/Serienbrief [" & $sReportType
 
   ConsoleWrite("Navigating menu bar" & @CRLF)
-  ; Navigate menu bar: "A_u_swertungen"
-  Send("!u")
-  Sleep(200)
+  WinMenuSelectItem($hEosWnd, "", "A&uswertungen", $sReportType)
 
-  If ($sMenuShortcut = Null) Then
-    ; Extract lower cased first letter of report type
-    $sFirstLetter = StringMid(StringLower($sReportType), 1, 1)
-    ConsoleWrite("No shortcut given, sending " & $sFirstLetter & @CRLF)
-    Send($sFirstLetter)
-  Else
-    ConsoleWrite("Sending shortcut " & $sMenuShortcut & @CRLF)
-    Send($sMenuShortcut)
-  EndIf
-
-  Sleep(500)
+  Sleep(800)
 
   $hListWnd = ExpectWindow($sListWindowTitle)
 
@@ -110,8 +98,7 @@ Func GenerateEOSWinReport($sReportType, $sMenuShortcut = Null)
   If ($hOverwritePromptWnd) Then
     ConsoleWrite("Dismissing warning about overwriting existing report" & @CRLF)
     Sleep(500)
-    ControlSend($hOverwritePromptWnd, "OK", "[CLASS:TMessageForm]", "{ENTER}")
-    Send("{ENTER}")
+    ControlClick($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]")
   EndIf
 
   $hReportWnd = ExpectWindow($sReportType & "  [ vom", 600) ; note the two space characters
