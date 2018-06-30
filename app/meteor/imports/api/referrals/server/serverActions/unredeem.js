@@ -7,10 +7,7 @@ export const unredeem = ({ Referrals, Appointments }) => {
     if (patientId) {
       const referral = Referrals.findOne({
         patientId,
-        referredTo: {
-          $in: [...appointment.tags, appointment.calendarId]
-        },
-        redeemedAt: { $ne: null }
+        redeemingAppointmentId: appointmentId
       })
 
       if (referral) {
