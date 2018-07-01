@@ -56,12 +56,15 @@ const sidebarItems = ({ history }) => {
       name: 'schedules',
       icon: 'clock-o',
       roles: ['admin', 'schedules-edit'],
-      subItems: calendars.map(c => ({
-        name: c.slug,
-        label: c.name,
-        path: '/default/' + c.slug,
-        slug: c.slug
-      }))
+      subItems: [
+        ...calendars.map(c => ({
+          name: c.slug,
+          label: c.name,
+          path: '/default/' + c.slug,
+          slug: c.slug
+        })),
+        { name: 'commonHolidays', path: '/holidays' }
+      ]
     },
     {
       name: 'reports',

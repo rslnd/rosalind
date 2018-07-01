@@ -109,7 +109,7 @@ export const createReminders = ({ Messages }) => {
       }
 
       const holidays = Schedules.find({
-        type: 'holidays',
+        type: 'holiday',
         removed: { $ne: true }
       }).fetch()
 

@@ -54,7 +54,7 @@ export default () => {
           { type: 'default' },
           { type: 'businessHours' },
           { type: 'businessHoursOverride' },
-          { type: 'holidays' },
+          { type: 'holiday' },
           { type: 'override' }
         ] }
       }
@@ -74,6 +74,19 @@ export default () => {
     roles: ['schedules-edit'],
     fn: function () {
       return Schedules.find({ type: 'default' })
+    }
+  })
+
+  publish({
+    name: 'schedules-holidays',
+    roles: ['schedules-edit'],
+    fn: function () {
+      return Schedules.find({
+        type: 'holiday',
+        start: {
+          $gt: moment().subtract(1, 'month').toDate()
+        }
+      })
     }
   })
 

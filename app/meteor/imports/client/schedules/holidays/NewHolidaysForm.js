@@ -1,52 +1,44 @@
 import React from 'react'
 import { reduxForm, Field, Fields } from 'redux-form'
 import Button from 'material-ui/Button'
-import { TextField } from 'redux-form-material-ui'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { DateRangePicker } from '../../components/form/DateRangePicker'
+import { DayNoteField } from '../../components/form/DayNoteField'
+import { Icon } from '../../components/Icon'
 
 class NewHolidaysFormComponent extends React.Component {
+  generatePlaceholder () {
+    return `1.1.${(new Date()).getFullYear() + 1} Neujahr`
+  }
+
   render () {
-    const { pristine, submitting, handleSubmit, onSubmit } = this.props
+    const { handleSubmit, onSubmit, day, note } = this.props
+
     return (
       <form onSubmit={handleSubmit(onSubmit)} className='mui'>
-        <div className='row'>
-          <div className='col-md-6'>
-            <h5>{TAPi18n.__('schedules.holidaysDateRange')}</h5>
-            <Fields names={['start', 'end']} component={DateRangePicker} />
-          </div>
-          <div className='col-md-6'>
-            <Field name='note'
-              component={TextField}
-              fullWidth
-              label={TAPi18n.__('schedules.holidaysNote')} />
-          </div>
-        </div>
-
-        <div className='row'>
-          <div className='col-md-12' style={{ marginTop: 20 }}>
-            <Button variant='raised' type='submit'
-              onClick={handleSubmit}
-              fullWidth
-              primary={!submitting && !pristine}
-              disabled={pristine || submitting}>
-              {TAPi18n.__('schedules.holidaysSave')}
-            </Button>
-          </div>
+        <div style={flexStyle}>
+          <Fields
+            names={['day', 'note']}
+            component={DayNoteField}
+            autoComplete='off'
+            placeholder={this.generatePlaceholder()}
+          />
         </div>
       </form>
     )
   }
 }
 
+const flexStyle = {
+  display: 'flex'
+}
+
 export const NewHolidaysForm = reduxForm({
-  form: 'newHolidays',
-  fields: ['start', 'end', 'note'],
+  form: 'newHoliday',
+  fields: ['day', 'note'],
   validate: (values) => {
     let errors = {}
     const required = TAPi18n.__('ui.required')
-    if (!values.start) { errors.start = required }
-    if (!values.end) { errors.end = required }
+    if (!values.day) { errors.day = required }
     if (!values.note) { errors.note = required }
     return errors
   }

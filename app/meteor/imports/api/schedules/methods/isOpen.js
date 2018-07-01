@@ -17,7 +17,7 @@ export default ({ Schedules }) => {
 
   const isHoliday = ({ time = moment(), within = 'minute' } = {}) => {
     const holidays = Schedules.find({
-      type: 'holidays',
+      type: 'holiday',
       start: { $lte: time.toDate() },
       end: { $gte: time.toDate() },
       removed: { $ne: true }

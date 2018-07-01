@@ -17,7 +17,11 @@ export const Holidays = ({ table, form }) => (
 
     <div className='row'>
       <div className='col-md-12'>
-        {table}
+        <Box
+          title={TAPi18n.__('schedules.futureHolidays')}
+          noBorder>
+          {table}
+        </Box>
       </div>
     </div>
   </div>

@@ -28,6 +28,8 @@
     "approvedBy": "Akzeptiert von",
     "declinedBy": "Abgelehnt von",
     "holidays": "Feiertage",
+    "commonHolidays": "Allgemeine Feiertage",
+    "futureHolidays": "Zukünftige Feiertage",
     "hoursPerWeek": "Wochenstunden",
     "totalHoursPerWeek": "Gesamtwochenstunden",
     "employee": "Mitarbeiter",

@@ -19,7 +19,7 @@ export const Schema = new SimpleSchema({
       'constraint',
       'businessHours',
       'businessHoursOverride',
-      'holidays',
+      'holiday',
       'day',
       'note'
     ],

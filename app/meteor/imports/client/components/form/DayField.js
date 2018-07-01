@@ -72,7 +72,7 @@ export class DayField extends React.Component {
 
     if (this.state.focus) {
       return stringValue
-    } else if (typeof inputValue === 'object' && inputValue.day && inputValue.month && inputValue.year) {
+    } else if (inputValue && typeof inputValue === 'object' && inputValue.day && inputValue.month && inputValue.year) {
       const date = moment(dayToDate(inputValue))
       const formattedDate = date.format(TAPi18n.__('time.dateFormat'))
 

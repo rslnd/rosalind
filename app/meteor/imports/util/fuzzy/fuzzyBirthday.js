@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import { zerofix } from '../zerofix'
 
-export const pattern = /(\d\d?)[ .\-/\\,]*((\d\d?)|([a-zA-Z]+))[ .\-/\\,]*(\d\d\d?\d?)?/
+export const pattern = /(\d\d?)[ .\-/\\,]*((\d\d?)|([a-zA-Z]+))[ .\-/\\,]*(\d\d\d?\d?)?(\s.*)?/
 
 export const fuzzyBirthday = (query) => {
   const zerofixed = zerofix(query, { dontSplit: true })
@@ -17,7 +17,7 @@ export const fuzzyBirthday = (query) => {
 export const fuzzyDayMonthYear = (query) => {
   const match = query.match(pattern)
 
-  const result = (() => {
+  const dmy = (() => {
     if (match) {
       const day = parseInt(match[1])
       const month = fuzzyMonth(match[2])
@@ -37,7 +37,13 @@ export const fuzzyDayMonthYear = (query) => {
     }
   })()
 
-  return result
+  const note = match && match[match.length - 1]
+
+  if (note && note.trim()) {
+    return { ...dmy, note: note.trim() }
+  } else {
+    return dmy
+  }
 }
 
 export const fuzzyMonth = (month) => {

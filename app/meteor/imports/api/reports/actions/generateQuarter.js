@@ -34,7 +34,7 @@ export const generateQuarter = ({ Reports, Calendars, Schedules }) => {
           }).fetch()
 
           const holidays = Schedules.find({
-            type: 'holidays',
+            type: 'holiday',
             start: {
               $gt: quarter.start.toDate(),
               $lt: quarter.end.toDate()
