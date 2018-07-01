@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import { CalendarSelect } from '../calendars/CalendarSelect'
 import { SchedulesDefaultScreen } from './default/SchedulesDefaultScreen'
 import { HolidaysContainer } from './holidays/HolidaysContainer'
+import { ConstraintsContainer } from './constraints/ConstraintsContainer'
 
 export const Schedules = ({ match }) => (
   <div>
@@ -10,6 +11,7 @@ export const Schedules = ({ match }) => (
       <Route exact path={`${match.url}/default/:slug`} component={SchedulesDefaultScreen} />
       <Route exact path={`${match.url}/default`} component={Select} />
       <Route exact path={`${match.url}/holidays`} component={HolidaysContainer} />
+      <Route exact path={`${match.url}/constraints`} component={ConstraintsContainer} />
       <Route path={match.url} component={Select} />
     </Switch>
   </div>

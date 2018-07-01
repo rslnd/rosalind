@@ -11,18 +11,22 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: t => t.calendarId && getCalendarName(t.calendarId)
   },
   {
-    header: 'Tags',
+    header: 'Behandlungen',
     render: c => c.tags && Tags.methods.expand(c.tags).map(t =>
       <span key={t._id}>
         <span style={{
           ...tagStyle,
+          color: 'white',
           backgroundColor: t.color || tagBackgroundColor
         }}>
           {t.tag}
         </span>
         &ensp;
       </span>
-    )
+    ),
+    style: {
+      width: '35%'
+    }
   },
   {
     header: 'Notiz',
@@ -54,7 +58,7 @@ export const ConstraintsScreen = ({ getCalendarName, constraints, getAssigneeNam
   <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
-        <Box title='Terminplaner-Regeln' icon='users'>
+        <Box title='Terminplaner-Sonderregeln' icon='code-fork' color='primary'>
           <Table
             structure={structure}
             rows={constraints}

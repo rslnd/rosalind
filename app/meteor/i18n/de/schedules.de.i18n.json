@@ -55,6 +55,7 @@
     },
     "timesheets": "Zeiterfassung",
     "softRemove": "Löschen",
-    "softRemoveSuccess": "Gelöscht"
+    "softRemoveSuccess": "Gelöscht",
+    "constraints": "Sonderregeln"
   }
 }

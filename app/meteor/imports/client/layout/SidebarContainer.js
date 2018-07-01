@@ -63,7 +63,8 @@ const sidebarItems = ({ history }) => {
           path: '/default/' + c.slug,
           slug: c.slug
         })),
-        { name: 'commonHolidays', path: '/holidays' }
+        { name: 'commonHolidays', path: '/holidays' },
+        { name: 'constraints', path: '/constraints' }
       ]
     },
     {
@@ -101,7 +102,6 @@ const sidebarItems = ({ history }) => {
         { name: 'thisEvents', path: '/events' },
         { name: 'thisClients', path: '/clients' },
         { name: 'thisCalendars', path: '/calendars' },
-        { name: 'thisConstraints', path: '/constraints' },
         { name: 'thisTags', path: '/tags' },
         { name: 'thisMessages', path: '/messages' },
         { name: 'thisSettings', path: '/settings' },
