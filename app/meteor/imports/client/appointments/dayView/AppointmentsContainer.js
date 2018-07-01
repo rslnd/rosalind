@@ -172,10 +172,19 @@ const composer = (props, onData) => {
 
     calendar.slotSize = calendar.slotSize || 5
 
+    const daySchedule = Schedules.findOne({
+      type: 'day',
+      calendarId: calendar._id,
+      'day.year': day.year,
+      'day.month': day.month,
+      'day.day': day.day
+    })
+
     onData(null, {
       calendar,
       assignees,
       date,
+      daySchedule,
       onNewAppointmentModalOpen,
       onNewAppointmentModalClose,
       handleSetAdmitted,

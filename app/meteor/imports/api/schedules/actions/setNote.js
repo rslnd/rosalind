@@ -11,42 +11,50 @@ export const setNote = ({ Schedules }) => {
     name: 'schedules/setNote',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
-      userId: { type: SimpleSchema.RegEx.Id },
+      calendarId: { type: SimpleSchema.RegEx.Id },
       day: { type: Day },
-      note: { type: String, optional: true }
+      note: { type: String, optional: true },
+      noteDetails: { type: String, optional: true }
     }).validator(),
 
-    run ({ day, userId, note }) {
+    run ({ calendarId, day, note, noteDetails }) {
+      console.log({ calendarId, day, note, noteDetails })
+
       if (this.connection && !this.userId ||
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const existingSchedule = Schedules.findOne({ day, userId, type: 'note' })
+      const existingSchedule = Schedules.findOne({
+        type: 'day',
+        calendarId,
+        'day.year': day.year,
+        'day.month': day.month,
+        'day.day': day.day
+      })
 
       if (existingSchedule) {
-        if (!note) {
-          Events.post('schedules/setNoteRemove', { userId, day })
-          Schedules.remove({ _id: existingSchedule._id })
-        }
-
         Schedules.update({ _id: existingSchedule._id }, {
-          $set: { note }
+          $set: {
+            note,
+            noteDetails
+          }
         })
 
-        Events.post('schedules/setNoteUpdate', { scheduleId: existingSchedule._id, userId, day })
+        Events.post('schedules/setNoteUpdate', { scheduleId: existingSchedule._id })
         return existingSchedule._id
       } else {
         const schedule = {
-          type: 'note',
-          userId,
+          type: 'day',
+          calendarId,
           day,
-          note
+          note,
+          noteDetails
         }
 
         const scheduleId = Schedules.insert(schedule, (err) => {
           if (err) { throw err }
-          Events.post('schedules/setNoteInsert', { scheduleId, userId, day })
+          Events.post('schedules/setNoteInsert', { scheduleId })
         })
         return scheduleId
       }

@@ -20,8 +20,7 @@ export const Schema = new SimpleSchema({
       'businessHours',
       'businessHoursOverride',
       'holiday',
-      'day',
-      'note'
+      'day'
     ],
     index: 1
   },
@@ -49,6 +48,11 @@ export const Schema = new SimpleSchema({
   },
 
   note: {
+    type: String,
+    optional: true
+  },
+
+  noteDetails: {
     type: String,
     optional: true
   },

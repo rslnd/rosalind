@@ -2,6 +2,7 @@ import React from 'react'
 import { Icon } from '../../../components/Icon'
 import { TagsList } from '../../../tags/TagsList'
 import { background } from '../../../css/global'
+import { InlineEdit } from '../../../components/form'
 
 const barStyle = {
   position: 'fixed',
@@ -56,11 +57,61 @@ const Constraint = ({ constraint }) => (
   </div>
 )
 
-const Cell = ({ assignee, expanded }) => {
+const Cell = ({ daySchedule, canEditSchedules, assignee, expanded, onChangeNote }) => {
   const isRelevant = (assignee.constraints && assignee.constraints.length > 0)
-  const style = isRelevant
+  const unassigned = !assignee.assigneeId
+  const hasDayNote = (daySchedule && (daySchedule.note || daySchedule.noteDetails))
+  const style = (isRelevant || (unassigned && (canEditSchedules || hasDayNote)))
     ? { ...relevantCellStyle, ...cellStyle }
     : cellStyle
+
+  // Day note
+  if (unassigned && (hasDayNote || canEditSchedules)) {
+    return <div style={style}>
+      {
+        expanded && canEditSchedules && <div>
+          <InlineEdit
+            value={daySchedule && daySchedule.note || ''}
+            placeholder='Info'
+            submitOnBlur
+            submitOnMouseLeave
+            onChange={note => onChangeNote({ note })}
+          />
+
+          <br />
+          <br />
+
+          <InlineEdit
+            value={daySchedule && daySchedule.noteDetails || ''}
+            placeholder='Details'
+            rows={3}
+            rowsMax={10}
+            submitOnBlur
+            submitOnMouseLeave
+            onChange={noteDetails => onChangeNote({ noteDetails })}
+          />
+        </div>
+      }
+      {
+        expanded && !canEditSchedules && hasDayNote && <div>
+          {daySchedule.note}
+          {daySchedule.noteDetails &&
+            <p>{daySchedule.noteDetails}</p>
+          }
+        </div>
+      }
+      {
+        !expanded && hasDayNote && <div>
+          {daySchedule.note}
+        </div>
+      }
+      {
+        !expanded && canEditSchedules && !hasDayNote && <div>
+          <Icon name='pencil' style={{ opacity: 0.2 }} />
+        </div>
+      }
+    </div>
+  }
 
   return <div style={style}>
     {
@@ -79,14 +130,17 @@ const Cell = ({ assignee, expanded }) => {
   </div>
 }
 
-export const AssigneesDetails = ({ assignees, expanded }) => (
+export const AssigneesDetails = ({ daySchedule, assignees, expanded, canEditSchedules, onChangeNote }) => (
   <div style={barStyle}>
     {
       assignees.map((assignee) =>
         <Cell
           key={assignee.assigneeId}
+          canEditSchedules={canEditSchedules}
+          onChangeNote={onChangeNote}
           assignee={assignee}
-          expanded={expanded} />
+          expanded={expanded}
+          daySchedule={daySchedule} />
       )
     }
   </div>

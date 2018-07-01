@@ -60,6 +60,10 @@ export class InlineEdit extends React.Component {
     this.setState({
       hovering: false
     })
+
+    if (this.props.submitOnMouseLeave) {
+      this.handleAccept()
+    }
   }
 
   handleAccept () {
@@ -129,33 +133,37 @@ export class InlineEdit extends React.Component {
         ))) || this.props.placeholder}
       </span>
     } else {
-      return <span>
-        <TextField
-          value={this.state.value}
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
-          autoFocus
-          multiline={!!this.props.rows}
-          rows={this.props.rows || 1}
-          name={this.props.label}
-          label={this.props.label}
-          />
+      return <span onMouseLeave={this.handleMouseLeave}>
+        <form onSubmit={this.handleAccept}>
+          <TextField
+            value={this.state.value}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
+            autoFocus
+            multiline={!!(this.props.rows || this.props.rowsMax)}
+            rows={this.props.rows || 1}
+            rowsMax={this.props.rowsMax}
+            placeholder={this.props.placeholder}
+            name={this.props.label}
+            label={this.props.label}
+            />
 
-        {
-          !this.props.submitOnBlur &&
-            <div className='pull-right'>
-              <TinyButton
-                onClick={this.handleAccept}
-                title={TAPi18n.__('ui.save')}>
-                <Icon name='check' />
-              </TinyButton>
-              <TinyButton
-                onClick={this.handleCancel}
-                title={TAPi18n.__('ui.cancel')}>
-                <Icon name='times' />
-              </TinyButton>
-            </div>
-        }
+          {
+            !this.props.submitOnBlur &&
+              <div className='pull-right'>
+                <TinyButton
+                  onClick={this.handleAccept}
+                  title={TAPi18n.__('ui.save')}>
+                  <Icon name='check' />
+                </TinyButton>
+                <TinyButton
+                  onClick={this.handleCancel}
+                  title={TAPi18n.__('ui.cancel')}>
+                  <Icon name='times' />
+                </TinyButton>
+              </div>
+          }
+        </form>
       </span>
     }
   }

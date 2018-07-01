@@ -269,6 +269,7 @@ export class AppointmentsView extends React.Component {
       <div>
         <HeaderRowContainer
           date={this.props.date}
+          daySchedule={this.props.daySchedule}
           calendar={this.props.calendar}
           assignees={this.props.assignees}
           onToggleOverrideMode={this.handleToggleOverrideMode}

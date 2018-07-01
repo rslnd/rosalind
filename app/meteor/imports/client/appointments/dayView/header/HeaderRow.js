@@ -203,6 +203,9 @@ export class HeaderRow extends React.Component {
 
         <AssigneesDetails
           date={this.props.date}
+          daySchedule={this.props.daySchedule}
+          canEditSchedules={this.props.canEditSchedules}
+          onChangeNote={this.props.onChangeNote}
           assignees={this.props.assignees}
           expanded={this.state.hovering} />
         <div style={topPaddingStyle} />
@@ -245,7 +248,9 @@ HeaderRow.propTypes = {
   ]).isRequired,
   assignees: PropTypes.array,
   overrideMode: PropTypes.bool,
+  canEditSchedules: PropTypes.bool,
   onToggleOverrideMode: PropTypes.func.isRequired,
   onAddUser: PropTypes.func.isRequired,
-  onRemoveUser: PropTypes.func.isRequired
+  onRemoveUser: PropTypes.func.isRequired,
+  onChangeNote: PropTypes.func.isRequired
 }

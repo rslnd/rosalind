@@ -1,4 +1,6 @@
 import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { TAPi18n }  from 'meteor/tap:i18n'
+import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { Schedules } from '../../../../api/schedules'
@@ -24,9 +26,22 @@ const composer = (props, onData) => {
     })
   }
 
+  const onChangeNote = ({ ...fields }) => {
+    Schedules.actions.setNote.callPromise({
+      calendarId,
+      day,
+      ...fields
+    }).catch(err => {
+      Alert.error(TAPi18n.__('ui.error'))
+      console.error(err)
+    }).then(() => {
+      Alert.success(TAPi18n.__('ui.saved'))
+    })
+  }
+
   const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
 
-  onData(null, { ...props, onAddUser, onRemoveUser, onChangeAssignee, canEditSchedules })
+  onData(null, { ...props, onAddUser, onRemoveUser, onChangeAssignee, canEditSchedules, onChangeNote })
 }
 
 export const HeaderRowContainer = composeWithTracker(composer)(HeaderRow)
