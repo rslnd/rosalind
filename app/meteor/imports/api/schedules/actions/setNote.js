@@ -46,6 +46,7 @@ export const setNote = ({ Schedules }) => {
       } else {
         const schedule = {
           type: 'day',
+          userIds: [],
           calendarId,
           day,
           note,
