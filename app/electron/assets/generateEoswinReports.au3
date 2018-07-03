@@ -1,10 +1,12 @@
 #include <ScreenCapture.au3>
 
 $sEoswinExe = "D:\Eoswin\ADSPraxis.exe"
+$iGenerateTimeout = 300
 
 Main()
 
 Func Main()
+  ConsoleWrite("AutoIt version " & @AutoItVersion) & @CRLF)
   CloseEOSWin()
   OpenEOSWin()
   GenerateEOSWinReport("Tagesjournal")
@@ -104,7 +106,7 @@ Func GenerateEOSWinReport($sReportType)
     ControlClick($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]")
   EndIf
 
-  $hReportWnd = ExpectWindow($sReportType & "  [ vom", 600) ; note the two space characters
+  $hReportWnd = ExpectWindow($sReportType & "  [ vom", $iGenerateTimeout) ; note the two space characters
 
   ConsoleWrite("Closing report window" & @CRLF)
   WinClose($hReportWnd)
@@ -133,7 +135,8 @@ EndFunc
 
 Func Screenshot()
   ConsoleWrite("Taking screenshot" & @CRLF)
-  Local $imagePath = @TempDir & "\" & _NowCalc () & ".jpg"
-  _ScreenCapture_Capture($imagePath)
-  ConsoleWrite("Saved screenshot" & $imagePath & @CRLF)
+  Local $sImagePath = @TempDir & "\" & @YEAR & @MON & @MDAY & @HOUR & @MIN & @SEC & ".bmp"
+  ConsoleWrite("Saving screenshot at " & $sImagePath & @CRLF)
+  _ScreenCapture_Capture($sImagePath)
+  ConsoleWrite("Saved screenshot at" & $sImagePath & @CRLF)
 EndFunc

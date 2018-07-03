@@ -23,6 +23,7 @@ const generateEoswinReports = () => {
 
     const child = childProcess.spawn(exePath)
     child.stdout.setEncoding('utf8')
+    child.stderr.setEncoding('utf8')
 
     child.stdout.on('data', d =>
       logger.info('[automation] generateEoswinReports', d)
