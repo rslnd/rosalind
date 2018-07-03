@@ -104,6 +104,7 @@ Func GenerateEOSWinReport($sReportType)
     ConsoleWrite("Dismissing warning about overwriting existing report" & @CRLF)
     Sleep(500)
     ControlClick($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]")
+    ControlSend($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]", "{ENTER}")
   EndIf
 
   $hReportWnd = ExpectWindow($sReportType & "  [ vom", $iGenerateTimeout) ; note the two space characters
@@ -135,8 +136,8 @@ EndFunc
 
 Func Screenshot()
   ConsoleWrite("Taking screenshot" & @CRLF)
-  Local $sImagePath = @TempDir & "\" & @YEAR & @MON & @MDAY & @HOUR & @MIN & @SEC & ".bmp"
+  Local $sImagePath = @TempDir & "\" & @YEAR & @MON & @MDAY & @HOUR & @MIN & @SEC & ".png"
   ConsoleWrite("Saving screenshot at " & $sImagePath & @CRLF)
   _ScreenCapture_Capture($sImagePath)
-  ConsoleWrite("Saved screenshot at" & $sImagePath & @CRLF)
+  ConsoleWrite("Saved screenshot at " & $sImagePath & @CRLF)
 EndFunc
