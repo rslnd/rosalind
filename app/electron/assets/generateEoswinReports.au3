@@ -6,7 +6,7 @@ $iGenerateTimeout = 300
 Main()
 
 Func Main()
-  ConsoleWrite("AutoIt version " & @AutoItVersion) & @CRLF)
+  ConsoleWrite("AutoIt version " & @AutoItVersion & @CRLF)
   CloseEOSWin()
   OpenEOSWin()
   GenerateEOSWinReport("Tagesjournal")
