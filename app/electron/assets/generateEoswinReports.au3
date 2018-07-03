@@ -1,3 +1,5 @@
+#include <ScreenCapture.au3>
+
 $sEoswinExe = "D:\Eoswin\ADSPraxis.exe"
 
 Main()
@@ -29,6 +31,7 @@ EndFunc
 Func CloseEOSWin($iRetries = 4)
   If ($iRetries = 0) Then
     ConsoleWrite("Exceeded maximum # of retries trying to close EOSWin, aborting" & @CRLF)
+    Screenshot()
     Exit(1)
   EndIf
 
@@ -117,6 +120,7 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
 
   If $hWnd = 0 Then
     ConsoleWriteError("Expected window with title " & $sTitle & @CRLF)
+    Screenshot()
     Exit(1)
   EndIf
 
@@ -125,4 +129,11 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
   ConsoleWrite("Found window" & @CRLF)
 
   Return $hWnd
+EndFunc
+
+Func Screenshot()
+  ConsoleWrite("Taking screenshot" & @CRLF)
+  Local $imagePath = @TempDir & "\" & _NowCalc () & ".jpg"
+  _ScreenCapture_Capture($imagePath)
+  ConsoleWrite("Saved screenshot" & $imagePath & @CRLF)
 EndFunc
