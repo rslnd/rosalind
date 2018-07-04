@@ -33,7 +33,7 @@ EndFunc
 Func CloseEOSWin($iRetries = 4)
   If ($iRetries = 0) Then
     ConsoleWrite("Exceeded maximum # of retries trying to close EOSWin, aborting" & @CRLF)
-    Screenshot()
+    Debug()
     Exit(1)
   EndIf
 
@@ -123,7 +123,7 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
 
   If $hWnd = 0 Then
     ConsoleWriteError("Expected window with title " & $sTitle & @CRLF)
-    Screenshot()
+    Debug()
     Exit(1)
   EndIf
 
@@ -132,6 +132,21 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
   ConsoleWrite("Found window" & @CRLF)
 
   Return $hWnd
+EndFunc
+
+Func Debug()
+  PrintWindows()
+  Screenshot()
+EndFunc
+
+Func PrintWindows()
+  Local $aWindows = WinList()
+  Local $iWindowCount = $aWindows[0][0]
+
+  ConsoleWrite("List of " & $iWindowCount & " windows:" & @CRLF)
+  For $i=1 To $iWindowCount
+    ConsoleWrite("[" & $i & "] " & aWindows[$i][0] & @CRLF)
+  Next
 EndFunc
 
 Func Screenshot()
