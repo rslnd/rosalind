@@ -1,5 +1,8 @@
-import moment from 'moment-timezone'
+import momentTz from 'moment-timezone'
+import { extendMoment } from 'moment-range'
 import clone from 'lodash/clone'
+
+const moment = extendMoment(momentTz)
 
 export const zeroIndexMonth = (day) => {
   if (day) {
@@ -30,6 +33,14 @@ export const dayToDate = (day) => {
 export const dayToSlug = (day) => {
   const date = dayToDate(day)
   return moment(date).format('YYYY-MM-DD')
+}
+
+export const rangeToDays = ({ from, to }) => {
+  const range = moment.range(from, to)
+  const days = Array.from(range.by('days')).map(t => moment(t))
+  return days
+    .filter(m => m.day() !== 0)
+    .map(dateToDay)
 }
 
 export default {
