@@ -20,7 +20,7 @@ export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick
   const gridTimeSlots = timeSlots(slotSize).map((time) => `[${time}] 25px`).join(' ')
 
   const gridTemplateRows = `
-    [header] 60px
+    [header] 90px
     [subheader] 0px
     ${gridTimeSlots}
   `

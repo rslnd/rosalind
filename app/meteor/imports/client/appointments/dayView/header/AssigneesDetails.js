@@ -57,6 +57,17 @@ const Constraint = ({ constraint }) => (
   </div>
 )
 
+const highlightStyle = {
+  backgroundColor: '#FFF9C4'
+}
+
+const BreakLines = ({ children, placeholder }) =>
+  children
+  ? children.split('\n').map((t, i) => (
+    <span key={i} style={highlightStyle}>{t}<br /></span>
+  ))
+  : placeholder
+
 const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onChangeNote, isLast }) => {
   const isRelevant = (assignee.constraints && assignee.constraints.length > 0)
   const isDayNoteColumn = (!assignee.assigneeId || (!calendar.allowUnassigned && isLast))
@@ -73,10 +84,12 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
           <InlineEdit
             value={daySchedule && daySchedule.note || ''}
             placeholder='Info'
+            rows={3}
+            rowsMax={10}
             submitOnBlur
             submitOnMouseLeave
             onChange={note => onChangeNote({ note })}
-          />
+          ><BreakLines placeholder='Info'>{daySchedule.note}</BreakLines></InlineEdit>
 
           <br />
           <br />
@@ -89,20 +102,20 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
             submitOnBlur
             submitOnMouseLeave
             onChange={noteDetails => onChangeNote({ noteDetails })}
-          />
+          ><BreakLines placeholder='Details'>{daySchedule.noteDetails}</BreakLines></InlineEdit>
         </div>
       }
       {
         expanded && !canEditSchedules && hasDayNote && <div>
-          {daySchedule.note}
+          <BreakLines>{daySchedule.note}</BreakLines>
           {daySchedule.noteDetails &&
-            <p>{daySchedule.noteDetails}</p>
+            <p><BreakLines>{daySchedule.noteDetails}</BreakLines></p>
           }
         </div>
       }
       {
         !expanded && hasDayNote && <div>
-          {daySchedule.note}
+          <BreakLines>{daySchedule.note}</BreakLines>
         </div>
       }
       {
