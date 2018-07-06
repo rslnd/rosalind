@@ -16,26 +16,23 @@ const composer = props => {
   const { calendarId } = props
   const calendar = Calendars.findOne({ _id: calendarId })
 
-  Meteor.subscribe('schedules-latest-planned', { calendarId })
+  // Meteor.subscribe('schedules-latest-planned', { calendarId })
 
-  const latestSchedules = Schedules.find({
-    type: 'override',
-    calendarId
-  }, {
-    sort: { end: -1 },
-    limit: 1
-  }).fetch()
+  // const latestSchedules = Schedules.find({
+  //   type: 'override',
+  //   calendarId
+  // }, {
+  //   sort: { end: -1 },
+  //   limit: 1
+  // }).fetch()
 
-  const lastPlannedDate = latestSchedules.length === 1
-    ? latestSchedules[0].start
-    : null
-
-  console.log('lastPlannedDate', lastPlannedDate)
+  // const lastPlannedDate = latestSchedules.length === 1
+    // ? latestSchedules[0].start
+    // : null
 
   return {
     ...props,
-    calendar,
-    lastPlannedDate
+    calendar
   }
 }
 
@@ -46,7 +43,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
     this.state = {
       startDate: null,
       endDate: null,
-      focusedInput: props.lastPlannedDate ? END_DATE : START_DATE,
+      focusedInput: START_DATE,
       applying: false,
       applied: false
     }
@@ -70,9 +67,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
       Alert.success('Erfolgreich geplant')
       this.setState({
         applying: false,
-        applied: true,
-        startDate: null,
-        endDate: null
+        applied: true
       })
 
       setTimeout(() =>
@@ -100,7 +95,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
   handleFocusChange (focusedInput) {
     // Force the focusedInput to always be truthy so that dates are always selectable
     this.setState({
-      focusedInput: focusedInput || START_DATE
+      focusedInput: !focusedInput ? START_DATE : focusedInput
     })
   }
 

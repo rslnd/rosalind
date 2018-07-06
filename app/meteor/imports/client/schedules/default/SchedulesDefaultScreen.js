@@ -20,14 +20,13 @@ import {
 import { Icon } from '../../components/Icon'
 import { Button, TextField } from 'material-ui'
 import { ApplyDefaultSchedule } from './ApplyDefaultSchedule'
-
-const leftPad = n => ('00' + n).slice(-2)
+import leftPad from 'left-pad'
 
 const renderTime = hm => {
   if (!hm) return null
   return [
-    leftPad(hm.h),
-    leftPad(hm.m)
+    leftPad(hm.h, 2, '0'),
+    leftPad(hm.m, 2, '0')
   ].join(':')
 }
 
