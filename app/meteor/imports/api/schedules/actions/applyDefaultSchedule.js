@@ -6,7 +6,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { transformDefaultsToOverrides } from '../methods/transformDefaultsToOverrides'
-import { rangeToDays } from '../../../util/time/day'
+import { rangeToDays, isSame } from '../../../util/time/day'
 
 export const applyDefaultSchedule = ({ Schedules, Users }) => {
   return new ValidatedMethod({
@@ -34,6 +34,17 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
 
       if (this.isSimulation) { return }
 
+      const holidays = Schedules.find({
+        type: 'holiday',
+        start: {
+          $gte: new Date()
+        }
+      }).fetch()
+
+      const excludeHolidays = d => !holidays.find(h => isSame(d, h.day))
+
+      const days = rangeToDays({ from, to }).filter(excludeHolidays)
+
       // Remove all overrides in selected period
       const countRemovedOverrides = Schedules.remove({
         type: 'override',
@@ -49,7 +60,7 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
       // Remove all day schedules in selected period
       const countRemovedDays = Schedules.remove({
         type: 'day',
-        $or: rangeToDays({ from, to }).map(day => ({
+        $or: days.map(day => ({
           'day.year': day.year,
           'day.month': day.month,
           'day.day': day.day
@@ -65,7 +76,7 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
         calendarId
       }).fetch()
 
-      const overrideSchedules = transformDefaultsToOverrides({ defaultSchedules, from, to })
+      const overrideSchedules = transformDefaultsToOverrides({ defaultSchedules, days })
 
       const ids = overrideSchedules.map(s => {
         const id = Schedules.insert(s)

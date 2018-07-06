@@ -8,6 +8,7 @@ import { TAPi18n } from 'meteor/tap:i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Calendars } from '../../../api/calendars'
 import { Schedules } from '../../../api/schedules'
+import { isSame, dateToDay } from '../../../util/time/day'
 import { DayPickerRangeController } from 'react-dates'
 import { END_DATE, START_DATE } from 'react-dates/constants'
 import { Button } from 'material-ui'
@@ -15,6 +16,16 @@ import { Button } from 'material-ui'
 const composer = props => {
   const { calendarId } = props
   const calendar = Calendars.findOne({ _id: calendarId })
+
+  const holidays = Schedules.find({
+    type: 'holiday'
+  }).fetch()
+
+  const isHoliday = m => {
+    if (m.isoWeekday() === 7) { return true }
+    const day = dateToDay(m)
+    return !!holidays.find(h => isSame(day, h.day))
+  }
 
   // Meteor.subscribe('schedules-latest-planned', { calendarId })
 
@@ -32,7 +43,8 @@ const composer = props => {
 
   return {
     ...props,
-    calendar
+    calendar,
+    isHoliday
   }
 }
 
@@ -118,6 +130,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
             focusedInput={focusedInput}
             startDate={startDate}
             endDate={endDate}
+            isDayBlocked={this.props.isHoliday}
             minimumNights={0}
             initialVisibleMonth={lastPlannedDate ? () => moment(lastPlannedDate) : null}
             isOutsideRange={this.isOutsideRange}

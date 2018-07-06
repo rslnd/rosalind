@@ -79,12 +79,12 @@ export default () => {
 
   publish({
     name: 'schedules-holidays',
-    roles: ['schedules-edit'],
+    roles: ['appointments', 'schedules-edit'],
     fn: function () {
       return Schedules.find({
         type: 'holiday',
         start: {
-          $gt: moment().subtract(1, 'month').toDate()
+          $gt: moment().subtract(1, 'month').startOf('day').toDate()
         }
       })
     }

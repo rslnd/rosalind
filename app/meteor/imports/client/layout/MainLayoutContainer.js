@@ -40,6 +40,7 @@ const composer = (props, onData) => {
   subscribe('appointments-future')
   subscribe('schedules')
   subscribe('schedules-constraints')
+  subscribe('schedules-holidays')
   subscribe('settings')
   subscribe('inboundCalls-counts')
 

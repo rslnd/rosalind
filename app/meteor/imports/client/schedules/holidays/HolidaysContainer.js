@@ -102,6 +102,10 @@ const composer = () => {
 
   const holidays = Schedules.find({
     type: 'holiday'
+  }, {
+    sort: {
+      start: 1
+    }
   }).fetch()
 
   return { holidays }

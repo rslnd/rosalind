@@ -1,10 +1,13 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { withRouter } from 'react-router-dom'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { DayPickerSingleDateController } from 'react-dates'
 import { PortalWithState } from 'react-portal'
 import { TAPi18n } from 'meteor/tap:i18n'
+import { Schedules } from '../../api/schedules'
+import { dateToDay, isSame } from '../../util/time/day'
 import { Icon } from './Icon'
 
 export const calendarStyle = {
@@ -18,6 +21,23 @@ export const calendarStyle = {
 export const calendarStyleOpen = {
   ...calendarStyle,
   display: 'block'
+}
+
+const composer = props => {
+  const holidays = Schedules.find({
+    type: 'holiday'
+  }).fetch()
+
+  const isHoliday = m => {
+    if (m.isoWeekday() === 7) { return true }
+    const day = dateToDay(m)
+    return !!holidays.find(h => isSame(day, h.day))
+  }
+
+  return {
+    ...props,
+    isHoliday
+  }
 }
 
 class DateNavigationButtons extends React.Component {
@@ -189,6 +209,7 @@ class DateNavigationButtons extends React.Component {
                             onDateChange={this.handleCalendarDayChange}
                             date={this.props.date}
                             isDayHighlighted={this.isToday}
+                            isDayBlocked={this.props.isHoliday}
                             focused
                             initialVisibleMonth={this.initialVisibleMonth}
                             enableOutsideDays
@@ -210,4 +231,4 @@ class DateNavigationButtons extends React.Component {
   }
 }
 
-export const DateNavigation = withRouter(DateNavigationButtons)
+export const DateNavigation = withRouter(withTracker(composer)(DateNavigationButtons))

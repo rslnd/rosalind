@@ -8,15 +8,14 @@ import map from 'lodash/map'
 import moment from 'moment-timezone'
 import {
   dayToDate,
-  rangeToDays,
   zeroIndexMonth,
   dayToString,
   stringToDay,
   dateToDay
  } from '../../../util/time/day'
 
-export const transformDefaultsToOverrides = ({ defaultSchedules, from, to }) => {
-  const days = rangeToDays({ from, to }).map(day => ({
+export const transformDefaultsToOverrides = ({ defaultSchedules, days }) => {
+  const daysWithWeekday = days.map(day => ({
     ...day,
     weekday: weekday(day)
   }))
@@ -27,7 +26,7 @@ export const transformDefaultsToOverrides = ({ defaultSchedules, from, to }) => 
   const byColumn = groupBy(groupKey)(defaultSchedules)
   const byColumnSorted = mapValues(sortByFrom)(byColumn)
 
-  const overrideSchedules = flatMap(expandColumn(days))(byColumnSorted)
+  const overrideSchedules = flatMap(expandColumn(daysWithWeekday))(byColumnSorted)
 
   // Transform to day schedules
   const byDay = groupBy(toDayKey)(overrideSchedules)
