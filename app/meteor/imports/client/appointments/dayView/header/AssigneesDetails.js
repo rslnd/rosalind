@@ -57,17 +57,17 @@ const Constraint = ({ constraint }) => (
   </div>
 )
 
-const Cell = ({ daySchedule, canEditSchedules, assignee, expanded, onChangeNote }) => {
+const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onChangeNote, isLast }) => {
   const isRelevant = (assignee.constraints && assignee.constraints.length > 0)
-  const unassigned = !assignee.assigneeId
+  const isDayNoteColumn = (!assignee.assigneeId || (!calendar.allowUnassigned && isLast))
   const hasDayNote = (daySchedule && (daySchedule.note || daySchedule.noteDetails))
-  const style = (isRelevant || (unassigned && (canEditSchedules || hasDayNote)))
+  const style = (isRelevant || (isDayNoteColumn && (canEditSchedules || hasDayNote)))
     ? { ...relevantCellStyle, ...cellStyle }
     : cellStyle
 
   // Day note
-  if (unassigned && (hasDayNote || canEditSchedules)) {
-    return <div style={style}>
+  const dayNote = (isDayNoteColumn && (hasDayNote || canEditSchedules))
+    ? <div>
       {
         expanded && canEditSchedules && <div>
           <InlineEdit
@@ -111,9 +111,10 @@ const Cell = ({ daySchedule, canEditSchedules, assignee, expanded, onChangeNote 
         </div>
       }
     </div>
-  }
+  : null
 
   return <div style={style}>
+    { dayNote }
     {
       expanded && isRelevant && assignee.constraints.map((constraint) => (
         <div key={constraint._id}>
@@ -130,16 +131,18 @@ const Cell = ({ daySchedule, canEditSchedules, assignee, expanded, onChangeNote 
   </div>
 }
 
-export const AssigneesDetails = ({ daySchedule, assignees, expanded, canEditSchedules, onChangeNote }) => (
+export const AssigneesDetails = ({ calendar, daySchedule, assignees, expanded, canEditSchedules, onChangeNote }) => (
   <div style={barStyle}>
     {
-      assignees.map((assignee) =>
+      assignees.map((assignee, i) =>
         <Cell
           key={assignee.assigneeId}
+          calendar={calendar}
           canEditSchedules={canEditSchedules}
           onChangeNote={onChangeNote}
           assignee={assignee}
           expanded={expanded}
+          isLast={i === (assignees.length - 1)}
           daySchedule={daySchedule} />
       )
     }

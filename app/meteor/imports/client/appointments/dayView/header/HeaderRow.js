@@ -203,6 +203,7 @@ export class HeaderRow extends React.Component {
 
         <AssigneesDetails
           date={this.props.date}
+          calendar={this.props.calendar}
           daySchedule={this.props.daySchedule}
           canEditSchedules={this.props.canEditSchedules}
           onChangeNote={this.props.onChangeNote}
@@ -239,18 +240,4 @@ export class HeaderRow extends React.Component {
       </div>
     )
   }
-}
-
-HeaderRow.propTypes = {
-  date: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.instanceOf(moment)
-  ]).isRequired,
-  assignees: PropTypes.array,
-  overrideMode: PropTypes.bool,
-  canEditSchedules: PropTypes.bool,
-  onToggleOverrideMode: PropTypes.func.isRequired,
-  onAddUser: PropTypes.func.isRequired,
-  onRemoveUser: PropTypes.func.isRequired,
-  onChangeNote: PropTypes.func.isRequired
 }
