@@ -2,6 +2,7 @@
 import { expect } from 'chai'
 import moment from 'moment-timezone'
 import { transformDefaultsToOverrides, applyHM } from './transformDefaultsToOverrides'
+import { rangeToDays } from '../../../util/time/day'
 
 const c1 = 'cal1'
 const u1 = 'u1'
@@ -44,18 +45,20 @@ describe('schedules', () => {
 
     const overridesOnly = s => s.filter(o => o.type === 'override')
 
+    const days = rangeToDays({ from, to })
+
     it('expands one available schedule', () => {
-      const result = transformDefaultsToOverrides({ defaultSchedules: [ds1], from, to })
+      const result = transformDefaultsToOverrides({ defaultSchedules: [ds1], days })
       expect(overridesOnly(result).length).to.eql(4)
     })
 
     it('expands two available schedules', () => {
-      const result = transformDefaultsToOverrides({ defaultSchedules: [ds1, ds2], from, to })
+      const result = transformDefaultsToOverrides({ defaultSchedules: [ds1, ds2], days })
       expect(overridesOnly(result).length).to.eql(6)
     })
 
     it('expands three available schedules', () => {
-      const result = transformDefaultsToOverrides({ defaultSchedules: [ds1, ds2, ds3], from, to })
+      const result = transformDefaultsToOverrides({ defaultSchedules: [ds1, ds2, ds3], days })
       expect(overridesOnly(result).length).to.eql(8)
     })
   })
