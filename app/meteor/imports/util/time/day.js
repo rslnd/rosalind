@@ -43,6 +43,21 @@ export const rangeToDays = ({ from, to }) => {
     .map(dateToDay)
 }
 
+export const dayToString = d => [
+  d.year,
+  d.month,
+  d.day
+].join('-')
+
+export const stringToDay = s => {
+  const [ year, month, day ] = s.split('-')
+  return {
+    year: parseInt(year, 10),
+    month: parseInt(month, 10),
+    day: parseInt(day, 10)
+  }
+}
+
 export default {
   zeroIndexMonth,
   dateToDay,

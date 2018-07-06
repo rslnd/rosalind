@@ -3,8 +3,17 @@ import sortBy from 'lodash/fp/sortBy'
 import groupBy from 'lodash/fp/groupBy'
 import mapValues from 'lodash/fp/mapValues'
 import flatMap from 'lodash/fp/flatMap'
+import uniq from 'lodash/uniq'
+import map from 'lodash/map'
 import moment from 'moment-timezone'
-import { dayToDate, rangeToDays, zeroIndexMonth } from '../../../util/time/day'
+import {
+  dayToDate,
+  rangeToDays,
+  zeroIndexMonth,
+  dayToString,
+  stringToDay,
+  dateToDay
+ } from '../../../util/time/day'
 
 export const transformDefaultsToOverrides = ({ defaultSchedules, from, to }) => {
   const days = rangeToDays({ from, to }).map(day => ({
@@ -18,8 +27,42 @@ export const transformDefaultsToOverrides = ({ defaultSchedules, from, to }) => 
   const byColumn = groupBy(groupKey)(defaultSchedules)
   const byColumnSorted = mapValues(sortByFrom)(byColumn)
 
-  return flatMap(expandColumn(days))(byColumnSorted)
+  const overrideSchedules = flatMap(expandColumn(days))(byColumnSorted)
+
+  // Transform to day schedules
+  const byDay = groupBy(toDayKey)(overrideSchedules)
+  const assigneeIdsByDay = mapValues(uniqAssignees)(byDay)
+  const daySchedules = map(assigneeIdsByDay, (userIds, dayKey) => {
+    const { day, calendarId } = fromDayKey(dayKey)
+
+    return {
+      type: 'day',
+      day,
+      userIds,
+      calendarId,
+      available: true
+    }
+  })
+
+  return [
+    ...overrideSchedules,
+    ...daySchedules
+  ]
 }
+
+const toDayKey = o => [
+  o.calendarId,
+  dayToString(dateToDay(o.start))
+].join('/')
+
+const fromDayKey = s => {
+  const [calendarId, dayString] = s.split('/')
+  const day = stringToDay(dayString)
+  return { calendarId, day }
+}
+
+const uniqAssignees = overrideSchedules =>
+  uniq(overrideSchedules.map(s => s.userId))
 
 const groupKey = s => [
   s.calendarId,

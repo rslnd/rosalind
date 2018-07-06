@@ -4,9 +4,7 @@ import moment from 'moment-timezone'
 import { transformDefaultsToOverrides, applyHM } from './transformDefaultsToOverrides'
 
 const c1 = 'cal1'
-const c2 = 'cal2'
 const u1 = 'u1'
-const u2 = 'u2'
 const from = moment().startOf('day')
 const to = moment(from).clone().add(14, 'days')
 const hm1Start = { h: 8, m: 30 }
@@ -44,19 +42,21 @@ describe('schedules', () => {
       expect(m(applyHM(day, hm)).seconds()).to.eql(0)
     })
 
+    const overridesOnly = s => s.filter(o => o.type === 'override')
+
     it('expands one available schedule', () => {
       const result = transformDefaultsToOverrides({ defaultSchedules: [ds1], from, to })
-      expect(result.length).to.eql(4)
+      expect(overridesOnly(result).length).to.eql(4)
     })
 
     it('expands two available schedules', () => {
       const result = transformDefaultsToOverrides({ defaultSchedules: [ds1, ds2], from, to })
-      expect(result.length).to.eql(6)
+      expect(overridesOnly(result).length).to.eql(6)
     })
 
     it('expands three available schedules', () => {
       const result = transformDefaultsToOverrides({ defaultSchedules: [ds1, ds2, ds3], from, to })
-      expect(result.length).to.eql(8)
+      expect(overridesOnly(result).length).to.eql(8)
     })
   })
 })

@@ -1,3 +1,4 @@
+import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
@@ -5,6 +6,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { transformDefaultsToOverrides } from '../methods/transformDefaultsToOverrides'
+import { rangeToDays } from '../../../util/time/day'
 
 export const applyDefaultSchedule = ({ Schedules, Users }) => {
   return new ValidatedMethod({
@@ -33,26 +35,29 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
       if (this.isSimulation) { return }
 
       // Remove all overrides in selected period
-      const countRemoved = Schedules.update({
+      const countRemovedOverrides = Schedules.remove({
         type: 'override',
         calendarId,
         start: {
-          $gte: from
+          $gte: moment(from).startOf('day').toDate()
         },
         end: {
-          $lte: to
+          $lte: moment(to).endOf('day').toDate()
         }
-      }, {
-        $set: {
-          removedAt: new Date(),
-          removed: true,
-          removedBy: this.userId
-        }
-      }, {
-        multi: true
       })
 
-      console.log('[Schedules] applyDefaultSchedule: Removed', countRemoved, 'overrides')
+      // Remove all day schedules in selected period
+      const countRemovedDays = Schedules.remove({
+        type: 'day',
+        $or: rangeToDays({ from, to }).map(day => ({
+          'day.year': day.year,
+          'day.month': day.month,
+          'day.day': day.day
+        }))
+      })
+
+      console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedOverrides, 'override schedules')
+      console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedDays, 'day schedules')
 
       // Create new overrides from schedules
       const defaultSchedules = Schedules.find({
@@ -61,12 +66,13 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
       }).fetch()
 
       const overrideSchedules = transformDefaultsToOverrides({ defaultSchedules, from, to })
+
       const ids = overrideSchedules.map(s => {
         const id = Schedules.insert(s)
         console.log('Inserted', id, s)
       })
 
-      console.log('[Schedules] applyDefaultSchedule: Inserted', ids.length, 'override schedules from', defaultSchedules.length, 'default schedules')
+      console.log('[Schedules] applyDefaultSchedule: Inserted', ids.length, 'override and day schedules from', defaultSchedules.length, 'default schedules')
 
       Events.post('schedules/applyDefaultSchedule', {
         calendarId,

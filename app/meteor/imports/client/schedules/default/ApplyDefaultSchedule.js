@@ -118,6 +118,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
             focusedInput={focusedInput}
             startDate={startDate}
             endDate={endDate}
+            minimumNights={0}
             initialVisibleMonth={lastPlannedDate ? () => moment(lastPlannedDate) : null}
             isOutsideRange={this.isOutsideRange}
             hideKeyboardShortcutsPanel
