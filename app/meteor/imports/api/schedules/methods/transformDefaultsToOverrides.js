@@ -82,7 +82,7 @@ const expandColumn = days => defaultSchedulesByColumn => {
       return []
     }
 
-    return defaultSchedulesByColumn.reduce((acc, curr, i) => {
+    const expandedSchedules = defaultSchedulesByColumn.reduce((acc, curr, i) => {
       const { available, from, to, calendarId, userId, note } = curr
 
       const previousDefaultSchedule = defaultSchedulesByColumn[i - 1]
@@ -145,6 +145,9 @@ const expandColumn = days => defaultSchedulesByColumn => {
         end: applyHM(day, from)
       }, ...acc]
     }, [])
+
+    const isNonzero = s => s.start.getTime() !== s.end.getTime()
+    return expandedSchedules.filter(isNonzero)
   })(days)
 }
 
