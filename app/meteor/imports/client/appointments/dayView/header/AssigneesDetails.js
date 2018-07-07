@@ -12,7 +12,7 @@ const barStyle = {
   top: 44,
   right: 15,
   left: 60,
-  zIndex: 40,
+  zIndex: 39,
   paddingLeft: 60,
   display: 'flex'
 }
@@ -26,7 +26,7 @@ const cellStyle = {
   alignItems: 'center',
   paddingLeft: 4,
   paddingRight: 4,
-  paddingTop: 5,
+  paddingTop: 15,
   paddingBottom: 12
 }
 
