@@ -13,7 +13,7 @@ const hm1End = { h: 14 }
 const hm2Start = { h: 15 }
 const hm2End = { h: 18, m: 45 }
 const hm3Start = { h: 19 }
-const hm3End = { h: 21 }
+const hm3End = { h: 19, m: 30 }
 const ds1 =
   { calendarId: c1, userId: u1, from: hm1Start, to: hm1End, weekday: 'mon', available: true }
 const ds2 =
@@ -47,19 +47,19 @@ describe('schedules', () => {
 
     const days = rangeToDays({ from, to })
 
-    it('expands one available schedule', () => {
+    it('expands one available schedule over 2 weeks', () => {
       const result = transformDefaultsToOverrides({ defaultSchedules: [ds1], days })
-      expect(overridesOnly(result).length).to.eql(4)
+      expect(overridesOnly(result).length).to.eql(2 * 2)
     })
 
-    it('expands two available schedules', () => {
+    it('expands two available schedules over 2 weeks', () => {
       const result = transformDefaultsToOverrides({ defaultSchedules: [ds1, ds2], days })
-      expect(overridesOnly(result).length).to.eql(6)
+      expect(overridesOnly(result).length).to.eql(3 * 2)
     })
 
-    it('expands three available schedules', () => {
+    it('expands three available schedules over 2 weeks', () => {
       const result = transformDefaultsToOverrides({ defaultSchedules: [ds1, ds2, ds3], days })
-      expect(overridesOnly(result).length).to.eql(8)
+      expect(overridesOnly(result).length).to.eql(4 * 2)
     })
   })
 })
