@@ -26,7 +26,7 @@ export class ReferralsReportScreen extends React.Component {
   }
 
   handlePrint () {
-    if (window.native) {
+    if (window.native && window.native.print) {
       console.log('[Client] Printing: native')
       const title = moment(dayToDate(this.props.day))
         .format(`YYYY-MM-DD-[${TAPi18n.__('reports.thisDaySingular')}]`)

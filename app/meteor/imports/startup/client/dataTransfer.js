@@ -36,7 +36,7 @@ export const setupDragdrop = () => {
 }
 
 export const setupNative = () => {
-  if (window.native) {
+  if (window.native && window.native.events) {
     window.native.events.on('import/dataTransfer', (file) => {
       console.log('[Importers] Received data transfer event from native binding', { name: file.path, importer: file.importer })
       ingest({ name: file.path, content: file.content, importer: file.importer })

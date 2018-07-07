@@ -37,20 +37,24 @@ export default () => {
       }
     }
 
-    window.native.events.on('settings', s => {
-      settings = s
-      attemptRegistration()
-    })
+    if (window.native.events) {
+      window.native.events.on('settings', s => {
+        settings = s
+        attemptRegistration()
+      })
 
-    window.native.events.on('systemInfo', s => {
-      systemInfo = s
-      attemptRegistration()
-    })
+      window.native.events.on('systemInfo', s => {
+        systemInfo = s
+        attemptRegistration()
+      })
 
-    window.native.events.on('version', v => {
-      version = v
-      attemptRegistration()
-    })
+      window.native.events.on('version', v => {
+        version = v
+        attemptRegistration()
+      })
+    } else {
+      console.log('[Native] No native event emitter available')
+    }
 
     attemptRegistration()
   }

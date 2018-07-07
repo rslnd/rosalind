@@ -98,7 +98,7 @@ export class TimesheetsScreen extends React.Component {
   }
 
   handlePrint () {
-    if (window.native) {
+    if (window.native && window.native.print) {
       console.log('[Client] Printing: native')
       const title = moment(this.props.start)
         .format("YYYY-MM-DD-[#{TAPi18n.__('reports.thisDaySingular')}]")
