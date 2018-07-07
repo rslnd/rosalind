@@ -60,6 +60,7 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
       // Remove all day schedules in selected period
       const countRemovedDays = Schedules.remove({
         type: 'day',
+        calendarId,
         $or: days.map(day => ({
           'day.year': day.year,
           'day.month': day.month,
