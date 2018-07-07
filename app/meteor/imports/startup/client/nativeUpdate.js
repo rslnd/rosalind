@@ -23,7 +23,7 @@ export default () => {
                   {TAPi18n.__('ui.updateInstallNow')}
               </div>
           }
-        </div>, { timeout: false })
+        </div>, { timeout: 'none' })
       }
 
       didNotify = true

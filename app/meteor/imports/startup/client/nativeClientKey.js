@@ -32,7 +32,7 @@ export default () => {
 
         console.log('[Client] Registration', { version, systemInfo, isOk })
         if (!isOk) {
-          Alert.error(TAPi18n.__('ui.clientRegistrationFailed'), { timeout: false })
+          Alert.error(TAPi18n.__('ui.clientRegistrationFailed'), { timeout: 'none' })
         }
       }
     }
