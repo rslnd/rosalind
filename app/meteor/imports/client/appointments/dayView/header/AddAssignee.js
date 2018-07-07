@@ -20,6 +20,7 @@ const labelStyle = {
 
 const popoverStyle = {
   height: 400,
+  zIndex: 50,
   overflowY: 'visible',
   padding: 10,
   width: 350

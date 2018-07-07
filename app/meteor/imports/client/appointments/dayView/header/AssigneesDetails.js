@@ -89,7 +89,7 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
             submitOnBlur
             submitOnMouseLeave
             onChange={note => onChangeNote({ note })}
-          ><BreakLines placeholder='Info'>{daySchedule.note}</BreakLines></InlineEdit>
+          ><BreakLines placeholder='Info'>{daySchedule && daySchedule.note}</BreakLines></InlineEdit>
 
           <br />
           <br />
@@ -102,7 +102,7 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
             submitOnBlur
             submitOnMouseLeave
             onChange={noteDetails => onChangeNote({ noteDetails })}
-          ><BreakLines placeholder='Details'>{daySchedule.noteDetails}</BreakLines></InlineEdit>
+          ><BreakLines placeholder='Details'>{daySchedule && daySchedule.noteDetails}</BreakLines></InlineEdit>
         </div>
       }
       {
@@ -158,6 +158,18 @@ export const AssigneesDetails = ({ calendar, daySchedule, assignees, expanded, c
           isLast={i === (assignees.length - 1)}
           daySchedule={daySchedule} />
       )
+    }
+    {
+      assignees.length === 0 &&
+        <Cell
+          key={'note'}
+          calendar={calendar}
+          canEditSchedules={canEditSchedules}
+          onChangeNote={onChangeNote}
+          assignee={{}}
+          expanded={expanded}
+          isLast
+          daySchedule={daySchedule} />
     }
   </div>
 )
