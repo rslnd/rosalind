@@ -38,7 +38,7 @@ Func CloseEOSWin($iRetries = 4)
   Info("Checking whether EOSWin is running")
 
   $hSingletonMessageWnd = WinWait("Bestätigung", "OK", 2)
-  $hMainWnd = WinWait("EOSWin", "Patienten", 2)
+  $hMainWnd = WinWait("EOSWin", "", 2)
 
   $hWnd = Null
   If ($hSingletonMessageWnd) Then
@@ -62,6 +62,14 @@ Func CloseEOSWin($iRetries = 4)
       Info("Process is still running, trying again. Retries left: " & String($iRetries))
       CloseEOSWin($iRetries - 1)
     EndIf
+  Else
+    Info("No EOSWin window found, force closing last instance")
+    ProcessClose("ADSPraxis.exe")
+
+    ; This is a hack, should be moved to Electron
+    Info("Waiting 5 minutes before closing Rosalind")
+    Sleep(1000 * 60 * 5)
+    ProcessClose("Rosalind.exe")
   EndIf
 EndFunc
 
