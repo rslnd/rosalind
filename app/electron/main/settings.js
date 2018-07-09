@@ -5,7 +5,7 @@ const childProcess = require('child_process')
 const { ipcMain, app } = require('electron')
 const logger = require('./logger')
 
-const isWindows = (process.platform === 'win32' || process.platform === 'win64')
+const isWindows = /^win/.test(process.platform)
 
 const defaultSettingsPath = isWindows ? 'S:\\RosalindSettingsDefault.json' : null
 const localSettingsPath = path.join(app.getPath('userData'), 'RosalindSettings.json')
@@ -116,7 +116,7 @@ const getSettings = () => {
   const defaultSettings = defaultSettingsPath && readSettings(defaultSettingsPath)
   const localSettings = readSettings(localSettingsPath)
 
-  if (defaultSettings === emptySettings && localSettings === emptySettings) {
+  if ((defaultSettings === emptySettings && localSettings === emptySettings) || (!defaultSettings && !localSettings)) {
     editSettings(localSettingsPath)
     terminate()
   }
