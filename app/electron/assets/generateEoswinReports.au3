@@ -102,7 +102,6 @@ Func GenerateEOSWinReport($sReportType)
     Info("Dismissing warning about overwriting existing report")
     Sleep(500)
     ExpectControlClick($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]")
-    ExpectControlSend($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]", "{ENTER}")
 
     Sleep(5000)
     If WinWait("Warnung","", 5) Then
