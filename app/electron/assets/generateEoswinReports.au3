@@ -3,6 +3,8 @@
 $sEoswinExe = "D:\Eoswin\ADSPraxis.exe"
 $iGenerateTimeout = 300
 
+AutoItSetOption("MustDeclareVars", 1)
+
 Main()
 
 Func Main()
@@ -148,12 +150,8 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
     Fail("Expected window with title: " & $sTitle)
   EndIf
 
-  If WinActivate($hWnd) = 0 Then
-    Fail("Found window but failed to activate: " & $sTitle)
-  EndIf
-
   If SendKeepActive($hWnd) = 0 Then
-    Fail("Found and activated, but failed to keep active: " & $sTitle)
+    Fail("Window not found: " & $sTitle)
   EndIf
 
   Info("Found window")
@@ -179,8 +177,8 @@ Func PrintWindows()
   Local $iWindowCount = $aWindows[0][0]
 
   Info("List of " & $iWindowCount & " windows:")
-  For $i=1 To $iWindowCount
-    Info("[" & $i & "] " & aWindows[$i][0])
+  For $i = 1 To $iWindowCount
+    Info("[" & String($i) & "] " & aWindows[$i][0])
   Next
 EndFunc
 
