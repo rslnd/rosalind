@@ -6,13 +6,13 @@ $iGenerateTimeout = 300
 Main()
 
 Func Main()
-  ConsoleWrite("AutoIt version " & @AutoItVersion & @CRLF)
+  Info("AutoIt version " & @AutoItVersion)
   CloseEOSWin()
   OpenEOSWin()
   GenerateEOSWinReport("Tagesjournal")
   GenerateEOSWinReport("Ärzte Statistik Umsätze")
   CloseEOSWin()
-  ConsoleWrite("Success")
+  Info("Success")
 EndFunc
 
 ; Format: DDMMYYYY
@@ -24,20 +24,18 @@ Func OpenEOSWin()
   Run($sEoswinExe, "", @SW_MAXIMIZE)
   $hLoginWnd = ExpectWindow("EOSWin Anmeldung", 20)
 
-  ControlSend($hLoginWnd, "", "[CLASS:TEditName; INSTANCE: 1]", "{CAPSLOCK off}{SHIFTDOWN}{SHIFTUP}")
-  ControlSend($hLoginWnd, "", "[CLASS:TEditName; INSTANCE: 1]", "--")
+  ExpectControlSend($hLoginWnd, "", "[CLASS:TEditName; INSTANCE: 1]", "{CAPSLOCK off}{SHIFTDOWN}{SHIFTUP}")
+  ExpectControlSend($hLoginWnd, "", "[CLASS:TEditName; INSTANCE: 1]", "--")
   Sleep(300)
-  ControlClick($hLoginWnd, "OK", "[CLASS:TFocusBitBtn; INSTANCE: 1]")
+  ExpectControlClick($hLoginWnd, "OK", "[CLASS:TFocusBitBtn; INSTANCE: 1]")
 EndFunc
 
 Func CloseEOSWin($iRetries = 4)
   If ($iRetries = 0) Then
-    ConsoleWrite("Exceeded maximum # of retries trying to close EOSWin, aborting" & @CRLF)
-    Debug()
-    Exit(1)
+    Fail("Exceeded maximum # of retries trying to close EOSWin")
   EndIf
 
-  ConsoleWrite("Checking whether EOSWin is running" & @CRLF)
+  Info("Checking whether EOSWin is running")
 
   $hSingletonMessageWnd = WinWait("Bestätigung", "OK", 2)
   $hMainWnd = WinWait("EOSWin", "Patienten", 2)
@@ -50,30 +48,30 @@ Func CloseEOSWin($iRetries = 4)
   EndIf
 
   If ($hWnd) Then
-    ConsoleWrite("EOSWin is running, attempting to terminate process" & @CRLF)
+    Info("EOSWin is running, attempting to terminate process")
     $iPid = WinGetProcess($hWnd)
-    ConsoleWrite("Terminating PID " & String($iPid) & @CRLF)
+    Info("Terminating PID " & String($iPid))
     ProcessClose($iPid)
-    ConsoleWrite("Termination result was " & String(@error) & @CRLF)
+    Info("Termination result was " & String(@error))
     $iOk = ProcessWaitClose($iPid, 10)
     If ($iOk = 1) Then
-      ConsoleWrite("Process was terminated" & @CRLF)
+      Info("Process was terminated")
       ; There may be more instances running
       CloseEOSWin($iRetries - 1)
     Else
-      ConsoleWrite("Process is still running, trying again. Retries left: " & String($iRetries) & @CRLF)
+      Info("Process is still running, trying again. Retries left: " & String($iRetries))
       CloseEOSWin($iRetries - 1)
     EndIf
   EndIf
 EndFunc
 
 Func GenerateEOSWinReport($sReportType)
-  ConsoleWrite("Generating report " & $sReportType & @CRLF)
+  Info("Generating report " & $sReportType)
   sleep(3000)
   $hEosWnd = ExpectWindow("EOSWin Ordination")
   Local $sListWindowTitle = "Auswertungen/Serienbrief [" & $sReportType
 
-  ConsoleWrite("Navigating menu bar" & @CRLF)
+  Info("Navigating menu bar")
   WinMenuSelectItem($hEosWnd, "", "A&uswertungen", $sReportType)
 
   Sleep(800)
@@ -81,78 +79,115 @@ Func GenerateEOSWinReport($sReportType)
   $hListWnd = ExpectWindow($sListWindowTitle)
 
   ; Create new report: "Neu"
-  ConsoleWrite("Sending n" & @CRLF)
-  ControlSend($hListWnd, "Neu", "[CLASS:TFocusBitBtn; INSTANCE: 2]", "n")
+  Info("Sending n to create new report")
+  ExpectControlSend($hListWnd, "Neu", "[CLASS:TFocusBitBtn; INSTANCE: 2]", "n")
   Sleep(500)
 
   ; Date range prompt
   $hDatePromptWnd = ExpectWindow($sReportType)
-  ConsoleWrite("Sending start date" & @CRLF)
+  Info("Sending start date")
   WinActivate($hDatePromptWnd)
-  ControlSend($hDatePromptWnd, "", "[CLASS:TEditDate; INSTANCE:1]", GetDate())
+  ExpectControlSend($hDatePromptWnd, "", "[CLASS:TEditDate; INSTANCE:1]", GetDate())
   Sleep(500)
-  ConsoleWrite("Sending end date" & @CRLF)
+  Info("Sending end date")
   WinActivate($hDatePromptWnd)
-  ControlSend($hDatePromptWnd, "", "[CLASS:TEditDate; INSTANCE:2]", GetDate())
+  ExpectControlSend($hDatePromptWnd, "", "[CLASS:TEditDate; INSTANCE:2]", GetDate())
   Sleep(500)
   WinActivate($hDatePromptWnd)
-  ControlSend($hDatePromptWnd, "", "[CLASS:TEditDate; INSTANCE:2]", "{ENTER}")
+  ExpectControlSend($hDatePromptWnd, "", "[CLASS:TEditDate; INSTANCE:2]", "{ENTER}")
 
   ; Overwrite any existing report for the same date range
   $hOverwritePromptWnd = WinWait("Warnung","", 10)
   If ($hOverwritePromptWnd) Then
-    ConsoleWrite("Dismissing warning about overwriting existing report" & @CRLF)
+    Info("Dismissing warning about overwriting existing report")
     Sleep(500)
-    ControlClick($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]")
-    ControlSend($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]", "{ENTER}")
+    ExpectControlClick($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]")
+    ExpectControlSend($hOverwritePromptWnd, "", "[CLASS:TButton; INSTANCE:2]", "{ENTER}")
+
+    Sleep(5000)
+    If WinWait("Warnung","", 5) Then
+      Fail("Failed to dismiss warning")
+    EndIf
   EndIf
 
   $hReportWnd = ExpectWindow($sReportType & "  [ vom", $iGenerateTimeout) ; note the two space characters
 
-  ConsoleWrite("Closing report window" & @CRLF)
+  Info("Closing report window")
   WinClose($hReportWnd)
-  ConsoleWrite("Closing list window" & @CRLF)
+  Info("Closing list window")
   WinClose($hListWnd)
 
-  ConsoleWrite("Done generating report " & $sReportType & @CRLF)
+  Info("Done generating report " & $sReportType)
+EndFunc
+
+Func ExpectControlSend($hWnd, $sText, $sControlId, $sSendString)
+  If ControlFocus($hWnd, $sText, $sControlId) = 0 Then
+    Fail("Window or control not found to focus before send: " & $sControlId)
+  EndIf
+
+  If ControlSend($hWnd, $sText, $sControlId, $sSendString) = 0 Then
+    Fail("Window or control not found to send: " & $sControlId)
+  EndIf
+EndFunc
+
+Func ExpectControlClick($hWnd, $sText, $sControlId)
+  If ControlFocus($hWnd, $sText, $sControlId) = 0 Then
+    Fail("Window or control not found to focus before click: " & $sControlId)
+  EndIf
+
+  If ControlClick($hWnd, $sText, $sControlId) = 0 Then
+    Fail("Window or control not found to click: " & $sControlId)
+  EndIf
 EndFunc
 
 Func ExpectWindow($sTitle, $iTimeout = 30)
-  ConsoleWrite("Waiting " & String($iTimeout) & "s for window with title " & $sTitle & @CRLF)
+  Info("Waiting " & String($iTimeout) & "s for window with title: " & $sTitle)
   Local $hWnd = WinWait($sTitle, "", $iTimeout)
 
   If $hWnd = 0 Then
-    ConsoleWriteError("Expected window with title " & $sTitle & @CRLF)
-    Debug()
-    Exit(1)
+    Fail("Expected window with title: " & $sTitle)
   EndIf
 
-  WinActivate($hWnd)
-  SendKeepActive($hWnd)
-  ConsoleWrite("Found window" & @CRLF)
+  If WinActivate($hWnd) = 0 Then
+    Fail("Found window but failed to activate: " & $sTitle)
+  EndIf
+
+  If SendKeepActive($hWnd) = 0 Then
+    Fail("Found and activated, but failed to keep active: " & $sTitle)
+  EndIf
+
+  Info("Found window")
 
   Return $hWnd
 EndFunc
 
-Func Debug()
+Func Fail($sMessage)
+  ConsoleWriteError("Fail: " & $sMessage & @CRLF)
+  ConsoleWriteError("Printing debug information" & @CRLF)
   PrintWindows()
   Screenshot()
+  ConsoleWriteError("Failed to run automation" & @CRLF)
+  Exit(1)
+EndFunc
+
+Func Info($sMessage)
+  ConsoleWrite($sMessage & @CRLF)
 EndFunc
 
 Func PrintWindows()
   Local $aWindows = WinList()
   Local $iWindowCount = $aWindows[0][0]
 
-  ConsoleWrite("List of " & $iWindowCount & " windows:" & @CRLF)
+  Info("List of " & $iWindowCount & " windows:")
   For $i=1 To $iWindowCount
-    ConsoleWrite("[" & $i & "] " & aWindows[$i][0] & @CRLF)
+    Info("[" & $i & "] " & aWindows[$i][0])
   Next
 EndFunc
 
 Func Screenshot()
-  ConsoleWrite("Taking screenshot" & @CRLF)
+  Info("Taking screenshot")
   Local $sImagePath = @TempDir & "\" & @YEAR & @MON & @MDAY & @HOUR & @MIN & @SEC & ".png"
-  ConsoleWrite("Saving screenshot at " & $sImagePath & @CRLF)
+  Info("Saving screenshot at " & $sImagePath)
   _ScreenCapture_Capture($sImagePath)
-  ConsoleWrite("Saved screenshot at " & $sImagePath & @CRLF)
+  Info("Saved screenshot at " & $sImagePath)
 EndFunc
