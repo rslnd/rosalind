@@ -3,8 +3,6 @@
 $sEoswinExe = "D:\Eoswin\ADSPraxis.exe"
 $iGenerateTimeout = 300
 
-AutoItSetOption("MustDeclareVars", 1)
-
 Main()
 
 Func Main()
