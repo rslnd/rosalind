@@ -121,9 +121,7 @@ Func GenerateEOSWinReport($sReportType)
 EndFunc
 
 Func ExpectControlSend($hWnd, $sText, $sControlId, $sSendString)
-  If ControlFocus($hWnd, $sText, $sControlId) = 0 Then
-    Fail("Window or control not found to focus before send: " & $sControlId)
-  EndIf
+  ControlFocus($hWnd, $sText, $sControlId)
 
   If ControlSend($hWnd, $sText, $sControlId, $sSendString) = 0 Then
     Fail("Window or control not found to send: " & $sControlId)
@@ -131,9 +129,7 @@ Func ExpectControlSend($hWnd, $sText, $sControlId, $sSendString)
 EndFunc
 
 Func ExpectControlClick($hWnd, $sText, $sControlId)
-  If ControlFocus($hWnd, $sText, $sControlId) = 0 Then
-    Fail("Window or control not found to focus before click: " & $sControlId)
-  EndIf
+  ControlFocus($hWnd, $sText, $sControlId)
 
   If ControlClick($hWnd, $sText, $sControlId) = 0 Then
     Fail("Window or control not found to click: " & $sControlId)
@@ -185,9 +181,12 @@ Func PrintWindows()
   Local $aWindows = WinList()
   Local $iWindowCount = $aWindows[0][0]
 
-  Info("List of " & $iWindowCount & " windows:")
+  Info("List of " & String($iWindowCount) & " windows:")
   For $i = 1 To $iWindowCount
-    Info("[" & String($i) & "] " & aWindows[$i][0])
+    ; List Visible windows with title only
+    If $aWindows[$i][0] <> "" And BitAND(WinGetState($aWindows[$i][1]), 2) Then
+      Info("[" & String($i) & "] " & aWindows[$i][0])
+    EndIf
   Next
 EndFunc
 
