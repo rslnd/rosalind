@@ -6,7 +6,8 @@ import { rangeToDays } from '../../../util/time/day'
 
 const c1 = 'cal1'
 const u1 = 'u1'
-const from = moment().startOf('day')
+// Starting on a monday would expand to three mondays, whereas other days expand to two weeks
+const from = moment('2018-07-07', 'YYYY-MM-DD').startOf('day')
 const to = moment(from).clone().add(14, 'days')
 const hm1Start = { h: 8, m: 30 }
 const hm1End = { h: 14 }
