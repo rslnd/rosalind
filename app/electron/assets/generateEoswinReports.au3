@@ -157,8 +157,19 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
   Return $hWnd
 EndFunc
 
+Func HoistErrors()
+  Local $hError = WinWait("Fehler", "", 1)
+  If $hError Then
+    Info("Detected hoistable error message")
+    ExpectControlClick($hError, "&>>", "[CLASS:TBitBtn; INSTANCE:2]")
+    Local $sError = ControlGetText($hError, "", "[CLASS:TMemo; INSTANCE:1]")
+    Fail("Hoisted Error: " & $sError)
+  EndIf
+EndFunc
+
 Func Fail($sMessage)
   ConsoleWriteError("Fail: " & $sMessage & @CRLF)
+  HoistErrors()
   ConsoleWriteError("Printing debug information" & @CRLF)
   PrintWindows()
   Screenshot()
