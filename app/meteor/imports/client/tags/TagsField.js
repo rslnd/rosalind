@@ -11,6 +11,8 @@ export class TagsField extends React.Component {
   }
 
   toggle (tagId) {
+    this.props.input.onBlur()
+
     const value = this.props.input.value || []
     if (value.includes(tagId)) {
       const withoutThisTag = [
@@ -79,8 +81,8 @@ export class TagsField extends React.Component {
         showDefaultRevenue={showDefaultRevenue}
       />
       {
-        meta && meta.error &&
-          <span className='text-muted'>
+        meta && meta.touched && (meta.error || meta.warning) &&
+          <span style={errorStyle}>
             <br />
             {TAPi18n.__(meta.error)}
           </span>
@@ -91,4 +93,11 @@ export class TagsField extends React.Component {
 
 const tagsListStyle = {
   cursor: 'pointer'
+}
+
+const errorStyle = {
+  color: '#f44336',
+  fontSize: '11px',
+  display: 'inline-block',
+  marginTop: -8
 }

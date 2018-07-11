@@ -19,44 +19,46 @@ export const validateDay = (day) => {
 }
 
 export const validate = (values) => {
-  let errors = {}
+  let errors = {
+    patient: {},
+    appointment: {}
+  }
 
-  if (values.patientId === 'newPatient') {
-    if (!values.lastName) {
-      errors.lastName = 'patients.lastNameRequired'
+  console.log('validating', values)
+
+  if (!values.appointment || (
+    (
+      !values.appointment.tags ||
+      values.appointment.tags.length === 0
+    ) && !values.appointment.note)
+  ) {
+    errors.appointment.tags = 'appointments.selectTagOrNote'
+    errors.appointment.note = 'appointments.addNoteIfNoTagsSelected'
+  }
+
+  if (values.patient) {
+    if (!values.patient.lastName) {
+      errors.patient.lastName = 'patients.lastNameRequired'
     }
 
-    if (!values.firstName) {
-      errors.firstName = 'patients.firstNameRequired'
+    if (!values.patient.firstName) {
+      errors.patient.firstName = 'patients.firstNameRequired'
     }
 
-    if (values.birthday && !validateDay(values.birthday)) {
-      errors.birthday = 'patients.birthdayRequired'
-    }
-
-    if (!values.telephone) {
-      errors.telephone = 'patients.telephoneRequired'
-    }
-
-    if (values.email && !values.email.match(/@/)) {
-      errors.email = 'patients.emailIncorrect'
-    }
-
-    if (!validateNameCase(values.lastName)) {
-      errors.lastName = 'patients.nameCaseWarning'
-    }
-
-    if (!validateNameCase(values.firstName)) {
-      errors.firstName = 'patients.nameCaseWarning'
+    if (!values.patient.birthday || values.patient.birthday && !validateDay(values.patient.birthday)) {
+      errors.patient.birthday = 'patients.birthdayRequired'
     }
   }
 
-
-  if (values.patientId) {
-    if (!values.tags || values.tags.length === 0) {
-      errors.tags = 'appointments.tagsRequired'
-    }
+  if (Object.keys(errors.appointment).length === 0) {
+    delete errors.appointment
   }
+
+  if (Object.keys(errors.patient).length === 0) {
+    delete errors.patient
+  }
+
+  console.log(errors)
 
   return errors
 }

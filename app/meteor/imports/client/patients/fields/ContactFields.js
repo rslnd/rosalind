@@ -9,9 +9,15 @@ import { EnlargeText } from '../../components/EnlargeText'
 
 const filterField = channel => field => field && field.channel === channel
 
+const requirePhone = v => {
+  if (!v) {
+    return TAPi18n.__('patients.telephoneRequired')
+  }
+}
+
 const warn = v => {
   if (!v) {
-    return 'Bitte eintragen'
+    return TAPi18n.__('ui.pleaseFill')
   }
 }
 
@@ -45,6 +51,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                 name={`${member}.value`}
                 component={TextField}
                 warn={warn}
+                validate={channel === 'Phone' ? requirePhone : null}
                 label={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
             </div>
 

@@ -13,7 +13,7 @@ let NewAppointmentForm = reduxForm({
   updateUnregisteredFields: true,
   keepDirtyOnReinitialize: false,
   pure: false,
-  validate: (values) => translateObject(validate(values))
+  validate: v => translateObject(validate(v))
 })(NewAppointmentFields)
 
 const selector = formValueSelector(formName)

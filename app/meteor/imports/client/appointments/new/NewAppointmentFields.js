@@ -73,7 +73,7 @@ export const NewAppointmentFields = props => {
 
         {/* Note */}
         <div style={flex}>
-          <Field name='appointmentNote'
+          <Field name='note'
             component={TextField}
             fullWidth
             label={TAPi18n.__('appointments.note')} />

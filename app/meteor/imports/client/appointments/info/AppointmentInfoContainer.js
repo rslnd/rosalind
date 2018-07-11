@@ -19,6 +19,7 @@ import { calculateRevenue } from '../new/RevenueField'
 import { translateObject } from '../../components/form/translateObject'
 import { mapPatientToFields } from '../../patients/mapPatientToFields'
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
+import { validate } from '../new/newAppointmentValidators'
 
 const formName = 'appointmentInfoForm'
 
@@ -27,8 +28,8 @@ let AppointmentInfoContainer = reduxForm({
   enableReinitialize: true,
   updateUnregisteredFields: true,
   keepDirtyOnReinitialize: false,
-  pure: false
-  // validate: (values) => translateObject(validate(values))
+  pure: false,
+  warn: (values) => translateObject(validate(values))
 })(AppointmentInfo)
 
 const composer = props => {

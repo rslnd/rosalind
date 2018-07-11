@@ -53,10 +53,12 @@ export class DayField extends React.Component {
     })
   }
 
-  handleBlur () {
+  handleBlur (e) {
     this.setState({
       focus: false
     })
+
+    this.props.input.onBlur(e)
 
     const day = fuzzyBirthday(this.state.stringValue)
     if (day && day.day && day.month && day.year) {

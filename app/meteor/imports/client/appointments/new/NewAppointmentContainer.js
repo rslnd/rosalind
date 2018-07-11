@@ -41,14 +41,17 @@ export class NewAppointmentContainerComponent extends React.Component {
   }
 
   handleSubmit (values, dispatch) {
-    console.log('[Appointments] Submitting new Appointment')
+    if (!values.appointment) {
+      console.log('[Appointments] Skipped submit')
+      return
+    }
 
     let newPatient = null
     let patientId = values.patient.patientId
 
-    if (!patientId && !values.appointment.appointmentNote) {
+    if (!patientId && !values.appointment.note) {
       Alert.error(TAPi18n.__('appointments.patientOrNoteError'))
-      throw new Error('Cannot save appointment without patientId or appointmentNote')
+      throw new Error('Cannot save appointment without patientId or note')
     }
 
     if (patientId) {
@@ -73,7 +76,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     const appointment = {
       calendarId: this.props.calendar._id,
       patientId,
-      note: values.appointment.appointmentNote,
+      note: values.appointment.note,
       tags: values.appointment.tags,
       start: moment(this.props.time).toDate(),
       end: moment(this.props.time).add(duration, 'minutes').toDate(),

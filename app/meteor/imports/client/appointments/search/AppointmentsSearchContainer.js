@@ -51,6 +51,7 @@ const compose = (props, onData) => {
     Patients.actions.findOne.callPromise({ _id: patientId })
       .then((patient) => findAppointments(patientId))
       .then(({ options }) => {
+        if (!options || !options[0]) { return }
         const patient = options[0].patient
 
         if (currentQueryId === lastQueryId) {
