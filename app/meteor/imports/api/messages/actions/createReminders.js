@@ -62,7 +62,8 @@ export const findUpcomingAppointments = (cutoffDate) => {
     let result = {
       _id: appointment._id,
       assigneeId: assignee && appointment.assigneeId,
-      start: appointment.start
+      start: appointment.start,
+      calendarId: appointment.calendarId
     }
 
     if (patient) {
