@@ -37,14 +37,15 @@ const composer = props => {
   const loading = appointment.patientId && !subscription.ready()
 
   if (appointment) {
-    const patient = Patients.findOne({ _id: appointment.patientId })
-    const assignee = Users.findOne({ _id: appointment.assigneeId })
+    const { patientId, assigneeId, calendarId } = appointment
+    const patient = Patients.findOne({ _id: patientId })
+    const assignee = Users.findOne({ _id: assigneeId })
     const comments = patient ? Comments.find({
       docId: patient._id
     }, {
       sort: { createdAt: 1 }
     }).fetch() : []
-    const calendar = Calendars.findOne({ _id: appointment.calendarId })
+    const calendar = Calendars.findOne({ _id: calendarId })
 
     const initialPatientFields = mapPatientToFields(patient)
     const initialAppointmentFields = {
@@ -56,6 +57,9 @@ const composer = props => {
       appointment: initialAppointmentFields,
       patient: initialPatientFields
     }
+
+    const allowedTags = Appointments.methods.getAllowedTags({ time: appointment.start, calendarId, assigneeId })
+    const maxDuration = Appointments.methods.getMaxDuration({ time: appointment.start, calendarId, assigneeId })
 
     // TODO: Move into action
     let totalPatientRevenue = null
@@ -135,6 +139,8 @@ const composer = props => {
       patient,
       assignee,
       comments,
+      allowedTags,
+      maxDuration,
       totalPatientRevenue,
       handleEditPatient,
       handleEditAppointment,

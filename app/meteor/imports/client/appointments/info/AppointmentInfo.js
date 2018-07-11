@@ -238,12 +238,13 @@ const autofillRevenue = change => (e, tags) => {
   }
 }
 
-const Tags = ({ appointment, assignee, calendar, change }) => (
+const Tags = ({ appointment, allowedTags, maxDuration, assignee, calendar, change }) => (
   <ListItem hr>
     <Field
       name='tags'
       component={TagsField}
-      // allowedTags={allowedTags}
+      allowedTags={allowedTags}
+      maxDuration={maxDuration}
       calendarId={calendar._id}
       assigneeId={assignee && assignee._id}
       showDefaultRevenue={false}
@@ -357,6 +358,8 @@ export class AppointmentInfo extends React.Component {
       assignee,
       calendar,
       totalPatientRevenue,
+      allowedTags,
+      maxDuration,
       change,
       handleEditPatient,
       handleEditAppointment,
@@ -393,6 +396,8 @@ export class AppointmentInfo extends React.Component {
                 <Private appointment={appointment} />
                 <Tags
                   appointment={appointment}
+                  allowedTags={allowedTags}
+                  maxDuration={maxDuration}
                   assignee={assignee}
                   calendar={calendar}
                   change={change}
