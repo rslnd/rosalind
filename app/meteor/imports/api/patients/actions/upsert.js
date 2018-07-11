@@ -148,30 +148,30 @@ export const upsert = ({ Patients }) => {
                 throw err
               }
               if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
+
+              ensureExternalReferral({
+                patientId: existingPatient._id,
+                createExternalReferralTo
+              })
             })
           }
-
-          ensureExternalReferral({
-            patientId: existingPatient.id,
-            createExternalReferralTo
-          })
 
           return existingPatient._id
         } else {
           patient = cleanFields(patient)
 
           try {
-            const patientId = Patients.insert(patient, (e) => {
+            const patientId = Patients.insert(patient, (e, patientId) => {
               if (e) {
                 console.error('[Patients] upsert: Insert failed with error', e)
                 throw e
               }
               if (!quiet) { Events.post('patients/insert', { patientId }) }
-            })
 
-            ensureExternalReferral({
-              patientId,
-              createExternalReferralTo
+              ensureExternalReferral({
+                patientId,
+                createExternalReferralTo
+              })
             })
 
             return patientId
@@ -189,29 +189,34 @@ export const upsert = ({ Patients }) => {
 }
 
 const ensureExternalReferral = ({ patientId, createExternalReferralTo }) => {
-  if (createExternalReferralTo) {
-    const existingReferral = Referrals.findOne({
-      patientId,
-      referredTo: createExternalReferralTo
-    })
-
-    if (!existingReferral) {
-      const referralId = Referrals.insert({
-        type: 'external',
+  try {
+    if (createExternalReferralTo) {
+      const existingReferral = Referrals.findOne({
         patientId,
-        referredTo: createExternalReferralTo,
-        createdAt: new Date(),
-        redeemedAt: new Date()
+        referredTo: createExternalReferralTo
       })
 
-      console.log('[Patients] upsert: created external referral', {
-        patientId,
-        referralId
-      })
+      if (!existingReferral) {
+        const referralId = Referrals.insert({
+          type: 'external',
+          patientId,
+          referredTo: createExternalReferralTo,
+          createdAt: new Date(),
+          redeemedAt: new Date()
+        })
 
-      return referralId
+        console.log('[Patients] upsert: created external referral', {
+          patientId,
+          referralId
+        })
+
+        return referralId
+      }
+
+      return existingReferral._id
     }
-
-    return existingReferral._id
+  } catch (e) {
+    console.error('[Patients] upsert: Ignoring failed external referral')
+    console.error(e)
   }
 }
