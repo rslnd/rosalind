@@ -3,7 +3,7 @@ import { WaitlistItem } from './WaitlistItem'
 import FlipMove from 'react-flip-move'
 import { Modal } from 'react-bootstrap'
 import { TAPi18n } from 'meteor/tap:i18n'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 import { UserPickerContainer } from '../../users/UserPickerContainer'
 
 export class WaitlistScreen extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import classnames from 'classnames'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Stamps } from '../../helpers/Stamps'
 import { UserHelper } from '../../users/UserHelper'

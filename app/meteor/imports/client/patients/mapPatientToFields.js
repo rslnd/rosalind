@@ -1,4 +1,5 @@
 import find from 'lodash/fp/find'
+import { dateToDay } from '../../util/time/day'
 
 export const mapPatientToFields = patient => {
   if (patient) {
@@ -24,7 +25,7 @@ export const mapPatientToFields = patient => {
       externalRevenue: patient.externalRevenue,
       note: patient.note,
       reminders: !patient.noSMS,
-      patientSince: patient.patientSince
+      patientSince: patient.patientSince ? dateToDay(patient.patientSince) : undefined
     })
   } else {
     return null

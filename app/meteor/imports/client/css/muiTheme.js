@@ -1,4 +1,4 @@
-import { createMuiTheme } from 'material-ui/styles'
+import { createMuiTheme } from '@material-ui/core/styles'
 import {
   fontStack,
   text,
@@ -55,13 +55,13 @@ export const muiTheme = createMuiTheme({
         '&:hover:not($disabled):before': {
           backgroundColor: grayActive,
           height: 2
-        }
-      },
-      inkbar: {
+        },
         '&:after': {
-          backgroundColor: primary,
-          height: 2,
+          borderBottom: `2px solid ${primary}`,
           zoom: 1 / 1.221
+        },
+        '&:hover:not($disabled):not($focused):not($error):before': {
+          borderBottom: `1px solid ${grayActive}`
         }
       }
     },
@@ -71,11 +71,8 @@ export const muiTheme = createMuiTheme({
       }
     },
     MuiCircularProgress: {
-      svgIndeterminate: {
+      indeterminate: {
         animation: `mui-progress-circular-rotate ${1.4 / animationSpeed}s linear infinite`
-      },
-      circleIndeterminate: {
-        animation: `mui-progress-circular-dash ${1.4 / animationSpeed}s ease-in-out infinite`
       }
     },
     MuiTableCell: {

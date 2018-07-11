@@ -1,6 +1,6 @@
 import React from 'react'
-import TextField from 'material-ui/TextField'
-import Switch from 'material-ui/Switch'
+import TextField from '@material-ui/core/TextField'
+import Switch from '@material-ui/core/Switch'
 
 export const MaintenanceSettings = ({ settings }) => (
   <div className='container'>

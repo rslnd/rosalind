@@ -1,6 +1,6 @@
 import React from 'react'
 import { reduxForm, Field, Fields } from 'redux-form'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { DayNoteField } from '../../components/form/DayNoteField'
 import { Icon } from '../../components/Icon'

@@ -1,6 +1,6 @@
 import React from 'react'
 import identity from 'lodash/identity'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 
 const primaryButtonStyle = {

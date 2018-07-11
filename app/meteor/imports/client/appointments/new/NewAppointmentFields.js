@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { FormSection, Field } from 'redux-form'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { TagsField } from '../../tags/TagsField'
 import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'

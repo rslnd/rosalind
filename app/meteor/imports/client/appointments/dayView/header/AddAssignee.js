@@ -1,10 +1,10 @@
 import React from 'react'
 import { Manager, Target, Popper } from 'react-popper'
-import Paper from 'material-ui/Paper'
-import Button from 'material-ui/Button'
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
 import { Icon } from '../../../components/Icon'
 import { UserPickerContainer } from '../../../users/UserPickerContainer'
-import ClickAwayListener from 'material-ui/utils/ClickAwayListener'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 const buttonStyle = {
   minWidth: 30,

@@ -1,6 +1,6 @@
 import React from 'react'
 import namecase from 'namecase'
-import Paper from 'material-ui/Paper'
+import Paper from '@material-ui/core/Paper'
 import { prefix } from '../../../api/patients/methods/name'
 import { ReferralsContainer } from './ReferralsContainer'
 import { ActionButton } from './ActionButton'

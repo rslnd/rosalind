@@ -1,7 +1,7 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
-import TextField from 'material-ui/TextField'
-import Button from 'material-ui/Button'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 import { Icon } from '../Icon'
 
 export const TinyButton = (props) => (

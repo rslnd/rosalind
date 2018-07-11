@@ -11,7 +11,7 @@ import { Schedules } from '../../../api/schedules'
 import { isSame, dateToDay } from '../../../util/time/day'
 import { DayPickerRangeController } from 'react-dates'
 import { END_DATE, START_DATE } from 'react-dates/constants'
-import { Button } from 'material-ui'
+import Button from '@material-ui/core/Button'
 
 const composer = props => {
   const { calendarId } = props

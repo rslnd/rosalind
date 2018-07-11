@@ -1,8 +1,9 @@
 import React from 'react'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { List, ListItem } from 'material-ui/List'
-import ListSubheader from 'material-ui/List/ListSubheader'
-import Avatar from 'material-ui/Avatar'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListSubheader from '@material-ui/core/List/ListSubheader'
+import Avatar from '@material-ui/core/Avatar'
 import { Box } from '../../components/Box'
 import { shortname } from '../../../api/users/methods/name'
 
