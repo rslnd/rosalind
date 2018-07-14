@@ -1,8 +1,9 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import { ReportsContainer } from './ReportsContainer'
 import { AssigneeReportContainer } from './AssigneeReportContainer'
 import { ReferralsReportContainer } from './ReferralsReportContainer'
+import { Route } from '../layout/SafeRoute'
 
 export const Reports = ({ match }) => (
   <div>

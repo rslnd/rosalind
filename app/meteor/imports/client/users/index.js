@@ -1,7 +1,8 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import Blaze from 'meteor/gadicc:blaze-react-component'
 import { UsersContainer } from './UsersContainer'
+import { Route } from '../layout/SafeRoute'
 
 const NewUser = () => <Blaze template='newUser' />
 const EditUser = () => <Blaze template='editUser' />

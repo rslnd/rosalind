@@ -1,8 +1,9 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import { AppointmentsContainer } from './day/AppointmentsContainer'
 import { AppointmentsContainer as OldAppointmentsContainer } from './dayView/AppointmentsContainer'
 import { CalendarSelect } from '../calendars/CalendarSelect'
+import { Route } from '../layout/SafeRoute'
 
 export const Appointments = ({ match }) => (
   <Switch>

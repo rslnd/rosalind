@@ -14,11 +14,9 @@ export class Login extends React.Component {
 
     this.state = {
       name: '',
-      password: '',
-      showVersionInfo: false
+      password: ''
     }
 
-    this.handleOpenLoginHelp = this.handleOpenLoginHelp.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -30,19 +28,6 @@ export class Login extends React.Component {
 
   handlePasswordChange (e) {
     this.setState({ ...this.state, password: e.target.value })
-  }
-
-  handleOpenLoginHelp () {
-    this.setState({
-      ...this.state,
-      showVersionInfo: true
-    })
-
-    console.log('[Login] Requested Login help')
-
-    if (window.Smooch) {
-      window.Smooch.open()
-    }
   }
 
   handleSubmit (e) {
@@ -142,20 +127,8 @@ export class Login extends React.Component {
                 </div>
               </div>
             </div>
-            <div className='panel-footer'>
-              <a onClick={this.handleOpenLoginHelp} className='text-muted'>{TAPi18n.__('login.help')}</a>
-            </div>
           </div>
         </form>
-        {
-          this.state.showVersionInfo &&
-            <small style={{ color: '#bfcbd9' }}>
-              {(server.env.COMMIT_HASH && server.env.COMMIT_HASH.substr(0, 7)) || 'Development'}
-              {
-                window.native && window.native.version && <span><br />v{window.native.version}</span>
-              }
-            </small>
-        }
       </div>
     )
   }

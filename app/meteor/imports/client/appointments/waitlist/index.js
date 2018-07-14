@@ -1,6 +1,7 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import { WaitlistContainer } from './WaitlistContainer'
+import { Route } from '../../layout/SafeRoute'
 
 export const Waitlist = ({ match }) => (
   <Switch>

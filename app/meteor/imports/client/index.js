@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'react-mounter'
 import { Provider as ReduxProvider } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import { setDefaults } from 'meteor/nicocrm:react-komposer-tracker'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { process as server } from 'meteor/clinical:env'
@@ -20,6 +20,7 @@ import { Reports } from './reports'
 import { Users } from './users'
 import { Patients } from './patients'
 import { System } from './system'
+import { Route } from './layout/SafeRoute'
 
 export const Rosalind = () => (
   <ReduxProvider store={store}>

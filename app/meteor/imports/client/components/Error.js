@@ -10,13 +10,9 @@ export const Error = ({ message }) => (
 
       <p>Entschuldigung, das hätte nicht passieren dürfen.</p>
 
-      {
-        window.Smooch && <div>
-          <p>Bitte öffne den Chat rechts unten und beschribe kurz,<br />
-          was du gerade machen wolltest und wo du zuletzt geklickt hast.</p>
-          <p><b>Danke!</b><br /></p>
-        </div>
-      }
+      <p>Bitte öffne den Chat rechts unten und beschribe kurz,<br />
+      was du gerade machen wolltest und wo du zuletzt geklickt hast.</p>
+      <p><b>Danke</b><br /></p>
     </Box>
   </div>
 )

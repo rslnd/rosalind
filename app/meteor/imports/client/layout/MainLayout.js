@@ -8,6 +8,7 @@ import { Alerts } from './Alerts'
 import { Login } from '../users/Login'
 import { MaintenanceMessageContainer } from './MaintenanceMessageContainer'
 import { Loading } from '../components/Loading'
+import { ErrorBoundary } from './ErrorBoundary'
 
 const mainHeaderStyle = {
   right: 'initial'

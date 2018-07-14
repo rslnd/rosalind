@@ -1,9 +1,10 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import { CalendarSelect } from '../calendars/CalendarSelect'
 import { SchedulesDefaultScreen } from './default/SchedulesDefaultScreen'
 import { HolidaysContainer } from './holidays/HolidaysContainer'
 import { ConstraintsContainer } from './constraints/ConstraintsContainer'
+import { Route } from '../layout/SafeRoute'
 
 export const Schedules = ({ match }) => (
   <div>

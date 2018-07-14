@@ -1,11 +1,12 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import Blaze from 'meteor/gadicc:blaze-react-component'
 import { SettingsContainer } from './settings/SettingsContainer'
 import { MessagesContainer } from '../messages/MessagesContainer'
 import { TagsContainer } from '../tags/TagsContainer'
 import { CalendarsContainer } from '../calendars/CalendarsContainer'
 import { ClientsContainer } from '../clients/ClientsContainer'
+import { Route } from '../layout/SafeRoute'
 
 const Events = () => <Blaze template='systemEvents' />
 const Importers = () => <Blaze template='systemImporters' />

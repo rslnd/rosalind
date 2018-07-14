@@ -1,8 +1,9 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+
 import Blaze from 'meteor/gadicc:blaze-react-component'
 import { InboundCallsContainer } from './InboundCallsContainer'
 import { NewInboundCallContainer } from './NewInboundCallContainer'
+import { Route } from '../layout/SafeRoute'
 
 // This is used by Blaze in commentsModal
 export { InboundCallContainer } from './InboundCallContainer'
