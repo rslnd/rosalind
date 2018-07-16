@@ -1,12 +1,12 @@
 import identity from 'lodash/identity'
 import React from 'react'
-import PropTypes from 'prop-types'
-import moment from 'moment-timezone'
 import Alert from 'react-s-alert'
-import { Manager, Target, Popper } from 'react-popper'
-import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import Grow from '@material-ui/core/Grow'
 import Paper from '@material-ui/core/Paper'
+import Popper from '@material-ui/core/Popper'
+import MenuList from '@material-ui/core/MenuList'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
@@ -78,7 +78,9 @@ export class HeaderRow extends React.Component {
 
   handleUserDropdownClose () {
     this.setState({
-      userDropdownOpen: false
+      userDropdownOpen: false,
+      userDropdownAnchor: null,
+      userDropdownAssigneeId: null
     })
   }
 
@@ -180,26 +182,43 @@ export class HeaderRow extends React.Component {
           ))}
         </div>
 
-        <Menu
-          id='assignee-dropdown'
+        <Popper
           open={this.state.userDropdownOpen}
-          onClose={this.handleUserDropdownClose}
           anchorEl={this.state.userDropdownAnchor}
-          getContentAnchorEl={null}
-          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-          transformOrigin={{ horizontal: 'center', vertical: 'top' }}>
-          <MenuItem onClick={this.handleToggleOverrideModeClick}>
-            Zeitraum blockieren
-          </MenuItem>
-          <MenuItem onClick={this.handleChangeAssigneeClick}>
-            Person ändern
-          </MenuItem>
-          <MenuItem
-            disabled={!this.state.canRemoveUser}
-            onClick={this.handleRemoveUser}>
-            Löschen
-          </MenuItem>}
-        </Menu>
+          keepMounted
+          transition
+          disablePortal
+          // height 0 prevents content from jumping around
+          style={{ zIndex: 41, height: 0 }}
+        >
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              id='assignee-dropdown'
+              style={{
+                transformOrigin: 'center top'
+              }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={this.handleUserDropdownClose}>
+                  <MenuList>
+                    <MenuItem onClick={this.handleToggleOverrideModeClick}>
+                      Zeitraum blockieren
+                    </MenuItem>
+                    <MenuItem onClick={this.handleChangeAssigneeClick}>
+                      Person ändern
+                    </MenuItem>
+                    <MenuItem
+                      disabled={!this.state.canRemoveUser}
+                      onClick={this.handleRemoveUser}>
+                      Löschen
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
 
         <AssigneesDetails
           date={this.props.date}
