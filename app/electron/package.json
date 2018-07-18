@@ -29,7 +29,7 @@
     "chokidar": "^2.0.3",
     "electron-localshortcut": "^3.1.0",
     "eventemitter3": "^3.1.0",
-    "fs-extra": "^6.0.1",
+    "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
     "iconv-lite": "^0.4.23",
     "lodash": "^4.17.10",
@@ -38,7 +38,7 @@
     "request": "^2.87.0",
     "temp": "^0.8.3",
     "windows-shortcuts-appid": "^0.3.2",
-    "winston": "^2.4.2",
+    "winston": "^3.0.0",
     "winston-papertrail": "^1.0.5"
   },
   "engines": {
