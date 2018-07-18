@@ -1,7 +1,7 @@
 const fs = require('fs')
 const crypto = require('crypto')
 const path = require('path')
-const childProcess = require('child_process')
+const open = require('opn')
 const { ipcMain, app } = require('electron')
 const logger = require('./logger')
 
@@ -99,10 +99,10 @@ const writeSettings = newSettings => {
 
 const editSettings = path => {
   logger.info('[Settings] Spawning settings editor')
-  if (process.platform === 'darwin') {
-    childProcess.spawn('open', [ path ])
-  } else if (isWindows) {
-    childProcess.spawn('cmd', [ '/s', '/c', 'start', 'wordpad', path ])
+  if (isWindows) {
+    open(path, { app: 'wordpad' })
+  } else {
+    open(path)
   }
 }
 

@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const open = require('open')
+const open = require('opn')
 const temp = require('temp')
 const { ipcMain } = require('electron')
 const logger = require('./logger')
