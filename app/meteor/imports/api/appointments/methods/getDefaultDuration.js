@@ -55,11 +55,17 @@ export const getDefaultDuration = ({ calendarId, assigneeId, date, tags }) => {
     tagDurations = Tags.find({ _id: { $in: tags } }).fetch().map(t => t.duration)
   }
 
-  const maxLength = max([
+  const maxDuration = max([
     assigneeDuration,
-    ...tagDurations,
-    getDurationConstraint({ calendarId, assigneeId, date })
+    ...tagDurations
   ])
 
-  return maxLength || getCalendarDefaultDuration(calendarId)
+  const durationConstraint = getDurationConstraint({ calendarId, assigneeId, date })
+  const defaultDuration = getCalendarDefaultDuration(calendarId)
+
+  if (durationConstraint === defaultDuration) {
+    return maxDuration || defaultDuration
+  } else {
+    return durationConstraint
+  }
 }
