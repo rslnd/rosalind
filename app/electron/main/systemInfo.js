@@ -1,7 +1,7 @@
 const systemInfo = {
   send: ({ ipcReceiver }) => {
     const info = {
-      k: 'v'
+      client: 'electron'
     }
 
     ipcReceiver.webContents.send('systemInfo', info)

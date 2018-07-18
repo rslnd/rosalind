@@ -8,18 +8,18 @@ export default () => {
     window.native.load && window.native.load()
     const loadingInterval = window.native.load && setInterval(() => {
       console.log('[Client] Attempting to load native settings')
-      if (settings && version && systemInfo) {
+      if (window.native.settings && window.native.version && window.native.systemInfo) {
         clearInterval(loadingInterval)
+        attemptRegistration()
       } else {
         window.native.load()
+        attemptRegistration()
       }
     }, 300)
 
-    let settings = null
-    let version = null
-    let systemInfo = null
-
     const attemptRegistration = async () => {
+      const { settings, version, systemInfo } = window.native
+
       if (settings && version && systemInfo) {
         const clientKey = settings.clientKey
 
@@ -27,33 +27,20 @@ export default () => {
           clientKey,
           version,
           settings: omit(['clientKey'])(settings),
-          systemInfo: {}
+          systemInfo
         })
 
         console.log('[Client] Registration', { version, systemInfo, isOk })
         if (!isOk) {
           Alert.error(TAPi18n.__('ui.clientRegistrationFailed'), { timeout: 'none' })
         }
+
+        return isOk
+      } else {
+        const missingKeys = ['settings', 'version', 'systemInfo'].filter(key => !window.native[key])
+        console.log(`[Client] Missing native: ${missingKeys}`)
+        return null
       }
-    }
-
-    if (window.native.events) {
-      window.native.events.on('settings', s => {
-        settings = s
-        attemptRegistration()
-      })
-
-      window.native.events.on('systemInfo', s => {
-        systemInfo = s
-        attemptRegistration()
-      })
-
-      window.native.events.on('version', v => {
-        version = v
-        attemptRegistration()
-      })
-    } else {
-      console.log('[Native] No native event emitter available')
     }
 
     attemptRegistration()
