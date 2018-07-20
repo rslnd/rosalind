@@ -12,6 +12,7 @@ Func Main()
   GenerateEOSWinReport("Tagesjournal")
   GenerateEOSWinReport("Ärzte Statistik Umsätze")
   CloseEOSWin()
+  CloseRosalind()
   Info("Success")
 EndFunc
 
@@ -65,12 +66,15 @@ Func CloseEOSWin($iRetries = 4)
   Else
     Info("No EOSWin window found, force closing last instance")
     ProcessClose("ADSPraxis.exe")
-
-    ; This is a hack, should be moved to Electron
-    Info("Waiting 5 minutes before closing Rosalind")
-    Sleep(1000 * 60 * 5)
-    ProcessClose("Rosalind.exe")
   EndIf
+EndFunc
+
+Func CloseRosalind()
+  ; This is a hack, should be moved to Electron
+  Info("Waiting 7 minutes before closing Rosalind")
+  Sleep(1000 * 60 * 7)
+  ProcessClose("Rosalind.exe")
+  Info("Closed Rosalind")
 EndFunc
 
 Func GenerateEOSWinReport($sReportType)
