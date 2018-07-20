@@ -6,8 +6,7 @@ import locale from './locale'
 import userStatus from './userStatus'
 import livechat from './livechat'
 import dataTransfer from './dataTransfer'
-import nativeUpdate from './nativeUpdate'
-import nativeClientKey from './nativeClientKey'
+import native from './native'
 import autoLogout from './autoLogout'
 import entry from '../../client/index'
 
@@ -20,8 +19,7 @@ export default function () {
   userStatus()
   hotkeys()
   dataTransfer()
-  nativeUpdate()
-  nativeClientKey()
+  native()
   autoLogout()
   entry()
 }

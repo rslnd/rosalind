@@ -1,7 +1,7 @@
 import omit from 'lodash/fp/omit'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { Clients } from '../../api/clients'
+import { Clients } from '../../../api/clients'
 
 export default () => {
   if (window.native) {
