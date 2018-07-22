@@ -84,7 +84,6 @@ meteorhacks:picker
 
 # Jobs
 vsivsi:job-collection
-dispatch:tabular-job-collection
 
 # Monitoring
 mdg:meteor-apm-agent
