@@ -15,7 +15,7 @@ const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
   //   console.log('Preload Publication', name)
   // }
 
-  return function (clientArgs) {
+  return function (clientArgs = {}) {
     try {
       check(clientArgs, {
         clientKey: Match.Optional(String),
