@@ -68,4 +68,4 @@ const composer = (props) => {
   }
 }
 
-export const TimesheetsContainer = withTracker(composer, Loading)(TimesheetsScreen)
+export const TimesheetsContainer = withTracker(composer)(TimesheetsScreen)

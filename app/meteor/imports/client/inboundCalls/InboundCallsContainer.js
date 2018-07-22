@@ -18,4 +18,4 @@ const composer = (props) => {
   }
 }
 
-export const InboundCallsContainer = withTracker(composer, Loading)(toClass(InboundCallsScreen))
+export const InboundCallsContainer = withTracker(composer)(toClass(InboundCallsScreen))

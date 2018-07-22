@@ -45,7 +45,7 @@ let BulkUpsertContainer = reduxForm({
   pure: false
 })(BulkUpsertScreen)
 
-BulkUpsertContainer = withTracker(composer, Loading)(BulkUpsertContainer)
+BulkUpsertContainer = withTracker(composer)(BulkUpsertContainer)
 
 const selector = formValueSelector(formName)
 BulkUpsertContainer = connect(mapStateToProps(selector))(BulkUpsertContainer)

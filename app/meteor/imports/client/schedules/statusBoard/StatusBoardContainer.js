@@ -69,4 +69,4 @@ const compose = (props) => {
   return cleanup
 }
 
-export const StatusBoardContainer = withTracker(compose, Loading)(StatusBoard)
+export const StatusBoardContainer = withTracker(compose)(StatusBoard)

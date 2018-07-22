@@ -17,4 +17,4 @@ const composer = (props) => {
   return { tags, getCalendarName, getAssigneeName, handleUpdate }
 }
 
-export const TagsContainer = withTracker(composer, Loading)(TagsScreen)
+export const TagsContainer = withTracker(composer)(TagsScreen)

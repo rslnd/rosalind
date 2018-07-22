@@ -51,6 +51,6 @@ const composer = (props) => {
   return { ...props, loading, currentUser, locale, loggingIn, sidebarOpen, isPrint }
 }
 
-const MainLayoutContainer = withRouter(withTracker(composer, Loading)(MainLayout))
+const MainLayoutContainer = withRouter(withTracker(composer)(MainLayout))
 
 export { MainLayoutContainer }

@@ -26,6 +26,6 @@ const composer = (props) => {
   return { ...props, patient, currentAppointment, pastAppointments, futureAppointments }
 }
 
-const PastAppointmentsContainer = withTracker(composer, Loading)(PastAppointments)
+const PastAppointmentsContainer = withTracker(composer)(PastAppointments)
 
 export { PastAppointmentsContainer }
