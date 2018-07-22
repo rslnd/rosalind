@@ -1,4 +1,5 @@
 import identity from 'lodash/fp/identity'
+import flatten from 'lodash/fp/flatten'
 import { merge } from './merge'
 
 export const reapplyAddenda = originalReport => newReport => newAddendum => {
@@ -25,9 +26,9 @@ export const applyAddendum = report => addendum => {
 
   return {
     ...merge(report, addendum),
-    addenda: [
-      ...(report.addenda || {}),
+    addenda: flatten([
+      (report.addenda || null),
       addendum
-    ]
+    ]).filter(identity)
   }
 }
