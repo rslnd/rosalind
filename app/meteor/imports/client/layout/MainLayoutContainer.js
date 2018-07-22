@@ -1,4 +1,4 @@
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
@@ -7,7 +7,7 @@ import { Loading } from '../components/Loading'
 import { MainLayout } from './MainLayout'
 import { subscribe } from '../../util/meteor/subscribe'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   // HACK: Expose history push method globally for legacy coffeescript stuff
   window.__deprecated_history_push = (l) => props.history.push(l)
   window.__deprecated_history_replace = (l) => props.history.replace(l)
@@ -48,9 +48,9 @@ const composer = (props, onData) => {
 
   const isPrint = props.location.hash === '#print'
 
-  onData(null, { ...props, loading, currentUser, locale, loggingIn, sidebarOpen, isPrint })
+  return { ...props, loading, currentUser, locale, loggingIn, sidebarOpen, isPrint }
 }
 
-const MainLayoutContainer = withRouter(composeWithTracker(composer, Loading)(MainLayout))
+const MainLayoutContainer = withRouter(withTracker(composer, Loading)(MainLayout))
 
 export { MainLayoutContainer }

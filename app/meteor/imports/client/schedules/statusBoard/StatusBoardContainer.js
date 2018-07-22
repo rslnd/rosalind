@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import intersectionBy from 'lodash/intersectionBy'
 import unionBy from 'lodash/unionBy'
 import sortBy from 'lodash/sortBy'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Loading } from '../../components/Loading'
 import { StatusBoard } from './StatusBoard'
 import { Schedules } from '../../../api/schedules'
@@ -12,7 +12,7 @@ import { Groups } from '../../../api/groups'
 import { shortname, fullNameWithTitle } from '../../../api/users/methods/name'
 import { subscribe } from '../../../util/meteor/subscribe'
 
-const compose = (props, onData) => {
+const compose = (props) => {
   if (!subscribe('timesheets-allToday').ready()) { return }
 
   const update = () => {
@@ -60,7 +60,7 @@ const compose = (props, onData) => {
       }
     }).filter((g) => g.users.length > 0)
 
-    onData(null, { defaultSchedules, groups, weekday })
+    return { defaultSchedules, groups, weekday }
   }
 
   update()
@@ -69,4 +69,4 @@ const compose = (props, onData) => {
   return cleanup
 }
 
-export const StatusBoardContainer = composeWithTracker(compose, Loading)(StatusBoard)
+export const StatusBoardContainer = withTracker(compose, Loading)(StatusBoard)

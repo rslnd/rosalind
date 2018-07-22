@@ -12,7 +12,7 @@ import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { dateToDay } from '../../../util/time/day'
 import { Users } from '../../../api/users'
@@ -50,7 +50,7 @@ const handleMove = (args) =>
     Alert.success(TAPi18n.__('appointments.moveSuccess'))
   })
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const date = parseDay(idx(props, _ => _.match.params.date))
   const calendarSlug = idx(props, _ => _.match.params.calendar)
   const calendar = Calendars.findOne({ slug: calendarSlug })
@@ -180,7 +180,7 @@ const composer = (props, onData) => {
       'day.day': day.day
     })
 
-    onData(null, {
+    return {
       calendar,
       assignees,
       date,
@@ -193,16 +193,13 @@ const composer = (props, onData) => {
       canEditSchedules,
       move,
       dispatch
-    })
+    }
   } else {
-    onData(null, null)
+    return null
   }
-
-  // Cleanup
-  return () => Appointments.actions.releaseLock.call({})
 }
 
-export const AppointmentsContainerComposed = composeWithTracker(composer, Loading)(AppointmentsScreen)
+export const AppointmentsContainerComposed = withTracker(composer)(AppointmentsScreen)
 
 const mapStateToProps = (store) => ({
   move: store.appointments.move

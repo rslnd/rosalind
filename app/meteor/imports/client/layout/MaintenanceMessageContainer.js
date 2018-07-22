@@ -1,14 +1,14 @@
 import React from 'react'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Settings } from '../../api/settings'
 
 const SNOOZE_SECONDS = 60 * 3
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const enabled = Settings.get('maintenance.enabled')
   const title = Settings.get('maintenance.title')
   const message = Settings.get('maintenance.message')
-  onData(null, { enabled, title, message })
+  return { enabled, title, message }
 }
 
 const styleContainer = {
@@ -75,4 +75,4 @@ export class MaintenanceMessage extends React.Component {
   }
 }
 
-export const MaintenanceMessageContainer = composeWithTracker(composer)(MaintenanceMessage)
+export const MaintenanceMessageContainer = withTracker(composer)(MaintenanceMessage)

@@ -1,7 +1,7 @@
 import Alert from 'react-s-alert'
 import { toClass } from 'recompose'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
@@ -9,7 +9,7 @@ import { Comments } from '../../../api/comments'
 import { Calendars } from '../../../api/calendars'
 import { AppointmentModal } from './AppointmentModal'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const appointment = Appointments.findOne({ _id: props.appointmentId })
 
   if (appointment) {
@@ -22,17 +22,17 @@ const composer = (props, onData) => {
     }).fetch() : []
     const calendar = Calendars.findOne({ _id: appointment.calendarId })
 
-    onData(null, {
+    return {
       ...props,
       calendar,
       appointment,
       patient,
       assignee,
       comments
-    })
+    }
   }
 }
 
-const AppointmentModalContainer = composeWithTracker(composer)(toClass(AppointmentModal))
+const AppointmentModalContainer = withTracker(composer)(toClass(AppointmentModal))
 
 export { AppointmentModalContainer }

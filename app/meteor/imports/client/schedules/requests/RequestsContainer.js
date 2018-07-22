@@ -4,12 +4,11 @@ import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Schedules } from '../../../api/schedules'
-import { Loading } from '../../components/Loading'
 import { RequestsScreen } from './RequestsScreen'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { subscribe } from '../../../util/meteor/subscribe'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const handle = subscribe('schedules')
   if (handle.ready()) {
     let selector = {
@@ -31,8 +30,8 @@ const composer = (props, onData) => {
 
     const canEdit = Roles.userIsInRole(Meteor.userId(), ['schedules-edit', 'admin'])
 
-    onData(null, { requests, approve, decline, canEdit })
+    return { requests, approve, decline, canEdit }
   }
 }
 
-export const RequestsContainer = composeWithTracker(composer, Loading)(RequestsScreen)
+export const RequestsContainer = withTracker(composer)(RequestsScreen)

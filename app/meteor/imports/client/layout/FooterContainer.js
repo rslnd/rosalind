@@ -1,11 +1,11 @@
 import moment from 'moment-timezone'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { toClass } from 'recompose'
 import { process as server } from 'meteor/clinical:env'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Footer } from './Footer'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const update = () => {
     const customerName = server.env.CUSTOMER_NAME
     const printedStamp = TAPi18n.__('ui.printedStamp', {
@@ -14,16 +14,14 @@ const composer = (props, onData) => {
     })
 
     try {
-      onData(null, { customerName, printedStamp })
+      return (null, { customerName, printedStamp })
     } catch (e) {
       // ignore
     }
   }
 
-  update()
-  const tick = setInterval(update, 30 * 1000)
-  const cleanup = () => clearInterval(tick)
-  return cleanup
+  setInterval(update, 30 * 1000)
+  return update()
 }
 
-export const FooterContainer = composeWithTracker(composer)(toClass(Footer))
+export const FooterContainer = withTracker(composer)(toClass(Footer))

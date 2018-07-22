@@ -1,5 +1,5 @@
 import identity from 'lodash/identity'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { withRouter } from 'react-router-dom'
 import { process as server } from 'meteor/clinical:env'
 import { Meteor } from 'meteor/meteor'
@@ -112,7 +112,7 @@ const sidebarItems = ({ history }) => {
   ]
 }
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const items = sidebarItems(props).filter((item) => {
     return (!item.roles || item.roles && Roles.userIsInRole(Meteor.user(), item.roles))
   }).map((item) => {
@@ -126,7 +126,7 @@ const composer = (props, onData) => {
 
   const customerName = server.env.CUSTOMER_NAME || 'Rosalind Development'
 
-  onData(null, { ...props, items, customerName })
+  return { ...props, items, customerName }
 }
 
-export const SidebarContainer = withRouter(composeWithTracker(composer)(Sidebar))
+export const SidebarContainer = withRouter(withTracker(composer)(Sidebar))

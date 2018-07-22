@@ -1,5 +1,5 @@
 import idx from 'idx'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { connect } from 'react-redux'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
@@ -43,7 +43,7 @@ const findAppointments = (query) => {
 }
 
 let lastQueryId = 0
-const compose = (props, onData) => {
+const compose = (props) => {
   const { patientId, query } = props
   const currentQueryId = (lastQueryId + 1)
 
@@ -55,7 +55,7 @@ const compose = (props, onData) => {
         const patient = options[0].patient
 
         if (currentQueryId === lastQueryId) {
-          onData(null, {
+          return {
             ...props,
             findAppointments,
             query: {
@@ -63,20 +63,20 @@ const compose = (props, onData) => {
               value: `patient-${patient._id}`
             },
             options
-          })
+          }
         }
       })
       .catch(e => {
         console.error('patients/findOne', e)
       })
   } else {
-    onData(null, { ...props, query, findAppointments })
+    return { ...props, query, findAppointments }
   }
 
   lastQueryId = currentQueryId
 }
 
-const AppointmentsSearchComposed = composeWithTracker(compose)(AppointmentsSearch)
+const AppointmentsSearchComposed = withTracker(compose)(AppointmentsSearch)
 
 const mapStateToProps = (store) => {
   return {

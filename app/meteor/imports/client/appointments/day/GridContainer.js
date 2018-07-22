@@ -2,7 +2,7 @@ import memoize from 'lodash/memoize'
 import sortBy from 'lodash/fp/sortBy'
 import keyBy from 'lodash/fp/keyBy'
 import moment from 'moment'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
@@ -40,7 +40,7 @@ const labelsToKey = (startLabel, assigneeId) => [
   assigneeId
 ].join('')
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const { calendar, date } = props
 
   const daySchedule = Schedules.findOne({
@@ -74,9 +74,7 @@ const composer = (props, onData) => {
     return appointmentsIndexed[labelsToKey(start, assigneeId)]
   }
 
-  onData(null, { columns, rows, slotSize, getAppointment })
-
-  const fetchTimeout = setTimeout(() => {
+  setTimeout(() => {
     const appointments = Appointments
       .find(getAppointmentsSelector({ date, calendarId: calendar._id }))
       .fetch()
@@ -84,7 +82,7 @@ const composer = (props, onData) => {
     appointmentsIndexed = keyBy(appointmentToKey)(appointments)
   }, 10)
 
-  return () => clearTimeout(fetchTimeout)
+  return { columns, rows, slotSize, getAppointment }
 }
 
-export const GridContainer = composeWithTracker(composer)(Grid)
+export const GridContainer = withTracker(composer)(Grid)

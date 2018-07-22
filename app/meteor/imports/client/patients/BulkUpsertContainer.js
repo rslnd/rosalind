@@ -1,6 +1,6 @@
 import { reduxForm, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import Alert from 'react-s-alert'
 import { Loading } from '../components/Loading'
 import { TAPi18n } from 'meteor/tap:i18n'
@@ -9,7 +9,7 @@ import { mapFieldsToPatient } from './mapFieldsToPatient'
 import { mapStateToProps } from './mapStateToProps'
 import { BulkUpsertScreen } from './BulkUpsertScreen'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const onSubmit = v => {
     try {
       const patient = mapFieldsToPatient(v.patient)
@@ -33,7 +33,7 @@ const composer = (props, onData) => {
     }
   }
 
-  onData(null, { ...props, onSubmit })
+  return { ...props, onSubmit }
 }
 
 const formName = 'bulkPatientUpsertForm'
@@ -45,7 +45,7 @@ let BulkUpsertContainer = reduxForm({
   pure: false
 })(BulkUpsertScreen)
 
-BulkUpsertContainer = composeWithTracker(composer, Loading)(BulkUpsertContainer)
+BulkUpsertContainer = withTracker(composer, Loading)(BulkUpsertContainer)
 
 const selector = formValueSelector(formName)
 BulkUpsertContainer = connect(mapStateToProps(selector))(BulkUpsertContainer)

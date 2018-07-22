@@ -3,13 +3,13 @@ import { toClass } from 'recompose'
 import Alert from 'react-s-alert'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { withRouter } from 'react-router-dom'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Patients } from '../../../api/patients'
 import { Calendars } from '../../../api/calendars'
 import { Appointments } from '../../../api/appointments'
 import { AppointmentActions } from './AppointmentActions'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const appointment = Appointments.findOne({ _id: props.appointmentId })
   const { admitted, canceled } = appointment
   const args = { appointmentId: props.appointmentId }
@@ -69,7 +69,7 @@ const composer = (props, onData) => {
     }
   }
 
-  onData(null, {
+  return {
     canceled,
     admitted,
     setAdmitted,
@@ -79,7 +79,7 @@ const composer = (props, onData) => {
     softRemove,
     startMove,
     viewInCalendar
-  })
+  }
 }
 
-export const AppointmentActionsContainer = withRouter(toClass(composeWithTracker(composer)(toClass(AppointmentActions))))
+export const AppointmentActionsContainer = withRouter(toClass(withTracker(composer)(toClass(AppointmentActions))))

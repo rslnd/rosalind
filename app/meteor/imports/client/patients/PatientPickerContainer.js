@@ -1,11 +1,10 @@
 import idx from 'idx'
 import { connect } from 'react-redux'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Patients } from '../../api/patients'
 import { PatientPicker } from './PatientPicker'
-import { mapStateToProps } from './mapStateToProps';
 
-const composer = (props, onData) => {
+const composer = (props) => {
   if (props.input.value || props.patientId) {
     const inputValue = (typeof props.input.value === 'string')
       ? props.input.value
@@ -15,18 +14,18 @@ const composer = (props, onData) => {
     const patientId = inputValue || props.patientId
 
     if (patientId === 'newPatient' || patientId === '') {
-      return onData(null, { ...props })
+      return { ...props }
     } else {
       const patient = Patients.findOne({ _id: patientId })
 
       if (patient) {
-        onData(null, {
+        return {
           ...props,
           injectedValue: {
             patientId,
             patient
           }
-        })
+        }
       }
 
       Patients.actions.findOne.callPromise({ _id: patientId })
@@ -36,24 +35,24 @@ const composer = (props, onData) => {
           }
 
           try {
-            onData(null, {
+            return {
               ...props,
               injectedValue: {
                 patientId,
                 patient
               }
-            })
+            }
           } catch (e) {
             // ignore
           }
         })
     }
   } else {
-    onData(null, { ...props })
+    return props
   }
 }
 
-let PatientPickerContainer = composeWithTracker(composer)(PatientPicker)
+let PatientPickerContainer = withTracker(composer)(PatientPicker)
 
 PatientPickerContainer = connect(state => {
   const patientId = idx(state, _ => _.appointments.search.patientId)

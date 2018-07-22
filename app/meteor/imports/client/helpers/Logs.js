@@ -1,7 +1,7 @@
 import React from 'react'
 import { toClass } from 'recompose'
 import identity from 'lodash/identity'
-import { compose } from 'react-komposer'
+import { withTracker } from 'meteor/react-meteor-data'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { RelativeTime } from './RelativeTime'
 import { UserHelper } from '../users/UserHelper'
@@ -20,7 +20,7 @@ const LogsList = ({ logs, style }) => (
   </div>
 )
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const logs = (props.doc.logs || []).map(log => {
     const format = (props.format[log.type] || (() => log.type))
     const formatted = format(log)
@@ -32,9 +32,9 @@ const composer = (props, onData) => {
     }
   }).filter(identity)
 
-  onData(null, { logs })
+  return { logs }
 }
 
-const Logs = compose(composer)(toClass(LogsList))
+const Logs = withTracker(composer)(toClass(LogsList))
 
 export { Logs }

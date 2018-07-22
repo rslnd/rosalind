@@ -1,13 +1,12 @@
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { toClass } from 'recompose'
 import Alert from 'react-s-alert'
 import { Messages } from '../../api/messages'
 import { InboundCalls } from '../../api/inboundCalls'
-import { Loading } from '../components/Loading'
 import { MessagesScreen } from './MessagesScreen'
 import { subscribe } from '../../util/meteor/subscribe'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const handle = subscribe('messages-inbound')
 
   if (handle.ready()) {
@@ -30,8 +29,8 @@ const composer = (props, onData) => {
       Alert.success('Created inbound call from message')
     }
 
-    onData(null, { inbound, intentToCancel, onCreateInboundCall })
+    return { inbound, intentToCancel, onCreateInboundCall }
   }
 }
 
-export const MessagesContainer = composeWithTracker(composer, Loading)(toClass(MessagesScreen))
+export const MessagesContainer = withTracker(composer)(toClass(MessagesScreen))

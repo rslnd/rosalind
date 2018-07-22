@@ -2,7 +2,7 @@ import add from 'lodash/sum'
 import moment from 'moment-timezone'
 import 'moment-duration-format'
 import { Meteor } from 'meteor/meteor'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { dateToDay } from '../../util/time/day'
 import { Loading } from '../components/Loading'
 import { Timesheets } from '../../api/timesheets'
@@ -20,7 +20,7 @@ const parseDateRange = (dateRange) => {
 
 let userIdStore = new ReactiveVar()
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const { start, end } = parseDateRange(props.match && props.match.params.dateRange)
   const userId = userIdStore.get() || Meteor.userId()
   const subscription = subscribe('timesheets-range', {
@@ -56,7 +56,7 @@ const composer = (props, onData) => {
 
       const sum = add(days.map((d) => d.timesheet.duration()))
 
-      onData(null, { days, timesheets, isTracking, sum, start, end, userId, onChangeUserId })
+      return { days, timesheets, isTracking, sum, start, end, userId, onChangeUserId }
     }
 
     update()
@@ -68,4 +68,4 @@ const composer = (props, onData) => {
   }
 }
 
-export const TimesheetsContainer = composeWithTracker(composer, Loading)(TimesheetsScreen)
+export const TimesheetsContainer = withTracker(composer, Loading)(TimesheetsScreen)

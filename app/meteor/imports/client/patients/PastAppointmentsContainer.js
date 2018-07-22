@@ -1,11 +1,11 @@
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Loading } from '../components/Loading'
 import { Appointments } from '../../api/appointments'
 import { Patients } from '../../api/patients'
 import { PastAppointments } from './PastAppointments'
 import { subscribe } from '../../util/meteor/subscribe'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const patientId = props.patientId
   if (!patientId) { return }
 
@@ -23,9 +23,9 @@ const composer = (props, onData) => {
   const pastAppointments = Appointments.find({ patientId, start: { $lt: new Date() }, _id }, options).fetch()
   const futureAppointments = Appointments.find({ patientId, start: { $gte: new Date() }, _id }, options).fetch()
 
-  onData(null, { ...props, patient, currentAppointment, pastAppointments, futureAppointments })
+  return { ...props, patient, currentAppointment, pastAppointments, futureAppointments }
 }
 
-const PastAppointmentsContainer = composeWithTracker(composer, Loading)(PastAppointments)
+const PastAppointmentsContainer = withTracker(composer, Loading)(PastAppointments)
 
 export { PastAppointmentsContainer }

@@ -5,7 +5,7 @@ import { Calendars } from '../../api/calendars'
 import { Appointments } from '../../api/appointments'
 import { Users } from '../../api/users'
 import { LinkToAppointmentWrapper } from './LinkToAppointment'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { subscribe } from '../../util/meteor/subscribe'
 
 const getFormattedAppointmentData = (appointmentId) => {
@@ -30,13 +30,13 @@ const getFormattedAppointmentData = (appointmentId) => {
   }
 }
 
-const composer = ({ inboundCall }, onData) => {
+const composer = ({ inboundCall }) => {
   if (!(inboundCall && inboundCall.payload)) {
-    return onData(null, {})
+    return {}
   }
 
   if (inboundCall.payload.channel !== 'SMS') {
-    return onData(null, {})
+    return {}
   }
 
   const appointmentId = inboundCall.payload.appointmentId
@@ -44,26 +44,26 @@ const composer = ({ inboundCall }, onData) => {
   const { date, time, calendarName, assigneeName } = getFormattedAppointmentData(appointmentId)
 
   if (!date) {
-    return onData(null, { text: TAPi18n.__('inboundCalls.isSmsFromPatient') })
+    return { text: TAPi18n.__('inboundCalls.isSmsFromPatient') }
   }
 
   if (date && !assigneeName) {
-    return onData(null, {
+    return {
       text: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminder'),
       linkText: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkText', { calendarName, date, time }),
       appointmentId
-    })
+    }
   }
 
   if (date && assigneeName) {
-    return onData(null, {
+    return {
       text: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminder'),
       linkText: TAPi18n.__('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkTextWithAssigneeName', { calendarName, date, time, assigneeName }),
       appointmentId
-    })
+    }
   }
 
-  onData(null, {})
+  return {}
 }
 
-export const LinkToAppointmentContainer = composeWithTracker(composer)(LinkToAppointmentWrapper)
+export const LinkToAppointmentContainer = withTracker(composer)(LinkToAppointmentWrapper)

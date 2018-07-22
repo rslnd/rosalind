@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment-timezone'
 import 'moment-duration-format'
 import { TAPi18n } from 'meteor/tap:i18n'
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { Button } from 'react-bootstrap'
 import { Icon } from 'client/client/components/Icon'
 import { Timesheets } from 'api/timesheets'
@@ -29,7 +29,7 @@ export const TimesheetWidget = ({ timesheets, isTracking, sum, stopTracking, sta
   </div>
 )
 
-const composer = (props, onData) => {
+const composer = (props) => {
   const { userId } = props
   const stopTracking = () => Timesheets.actions.stopTracking.call()
   const startTracking = () => Timesheets.actions.startTracking.call()
@@ -41,7 +41,7 @@ const composer = (props, onData) => {
     }).fetch()
     const isTracking = Timesheets.methods.isTracking({ userId })
     const sum = Timesheets.methods.sum({ userId })
-    onData(null, { timesheets, isTracking, sum, stopTracking, startTracking })
+    return { timesheets, isTracking, sum, stopTracking, startTracking }
   }
 
   update()
@@ -50,4 +50,4 @@ const composer = (props, onData) => {
   return cleanup
 }
 
-export const TimesheetWidgetContainer = composeWithTracker(composer)(TimesheetWidget)
+export const TimesheetWidgetContainer = withTracker(composer)(TimesheetWidget)

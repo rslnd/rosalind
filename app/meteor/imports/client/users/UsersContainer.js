@@ -1,4 +1,4 @@
-import { composeWithTracker } from 'meteor/nicocrm:react-komposer-tracker'
+import { withTracker } from 'meteor/react-meteor-data'
 import { toClass } from 'recompose'
 import { Roles } from 'meteor/alanning:roles'
 import Alert from 'react-s-alert'
@@ -9,7 +9,7 @@ import { subscribe } from '../../util/meteor/subscribe'
 import { Loading } from '../components/Loading'
 import { UsersScreen } from './UsersScreen'
 
-const composer = (props, onData) => {
+const composer = (props) => {
   subscribe('users-permissions')
 
   const groupedUsers = Groups.find({}, { sort: { order: 1 } })
@@ -30,7 +30,7 @@ const composer = (props, onData) => {
   const isInRole = (user, role) => Roles.userIsInRole(user, [role])
   const handleUpdate = () => {}
 
-  onData(null, { groups, getAssigneeName, handleUpdate, isInRole })
+  return { groups, getAssigneeName, handleUpdate, isInRole }
 }
 
-export const UsersContainer = composeWithTracker(composer, Loading)(toClass(UsersScreen))
+export const UsersContainer = withTracker(composer)(toClass(UsersScreen))
