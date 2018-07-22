@@ -27,6 +27,4 @@ UpdateRoles = new SimpleSchema
   userId:
     type: String
 
-Login.i18n('login.form')
-
 module.exports = { Login, Create, UpdatePassword, UpdateRoles }

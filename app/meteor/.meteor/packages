@@ -67,8 +67,6 @@ aldeed:autoform-bs-datetimepicker
 
 # I18n
 tap:i18n
-gwendall:autoform-i18n
-albertzak:simple-schema-i18n
 
 # Util
 momentjs:moment
