@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, FieldArray, FormSection } from 'redux-form'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
 import { ToggleField, TextField } from '../../components/form'
 import { Dot } from '../Dot'
@@ -31,14 +31,14 @@ export const PatientExtendedFormFields = ({ change }) => {
                   name='titlePrepend'
                   component={TextField}
                   fullWidth
-                  label={TAPi18n.__('patients.titlePrepend')} />
+                  label={__('patients.titlePrepend')} />
               </div>
               <div style={grow}>
                 <Field
                   name='titleAppend'
                   component={TextField}
                   fullWidth
-                  label={TAPi18n.__('patients.titleAppend')} />
+                  label={__('patients.titleAppend')} />
               </div>
               <div style={shrink}>
                 <Field
@@ -83,7 +83,7 @@ export const PatientExtendedFormFields = ({ change }) => {
                   name='note'
                   component={TextField}
                   fullWidth
-                  label={TAPi18n.__('patients.note')} />
+                  label={__('patients.note')} />
               </div>
             </div>
         }

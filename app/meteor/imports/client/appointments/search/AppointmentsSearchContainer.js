@@ -54,7 +54,7 @@ const compose = (props) => {
         if (!options || !options[0]) { return }
         const patient = options[0].patient
 
-        if (currentQueryId === lastQueryId) {
+        if (patient && currentQueryId === lastQueryId) {
           return {
             ...props,
             findAppointments,

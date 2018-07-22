@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper'
 import Popper from '@material-ui/core/Popper'
 import MenuList from '@material-ui/core/MenuList'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../../i18n'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
 import { background, grayDisabled, gray } from '../../../css/global'
@@ -134,7 +134,7 @@ export class HeaderRow extends React.Component {
       .map(a => a.assigneeId).filter(identity)
 
     if (todaysAssigneeIds.includes(newAssigneeId)) {
-      Alert.error(TAPi18n.__('appointments.changeAssigneeMustBeDifferent'))
+      Alert.error(__('appointments.changeAssigneeMustBeDifferent'))
       return
     }
 
@@ -142,7 +142,7 @@ export class HeaderRow extends React.Component {
       oldAssigneeId,
       newAssigneeId
     }).then(() =>
-      Alert.success(TAPi18n.__('appointments.changeAssigneeSuccess'))
+      Alert.success(__('appointments.changeAssigneeSuccess'))
     )
 
     this.setState({
@@ -176,7 +176,7 @@ export class HeaderRow extends React.Component {
                   ? assignee.fullNameWithTitle
                   : <span className='text-muted'>{assignee.fullNameWithTitle}</span>
                 )
-                : TAPi18n.__('appointments.unassigned')
+                : __('appointments.unassigned')
               }
             </div>
           ))}
@@ -246,12 +246,12 @@ export class HeaderRow extends React.Component {
           <Modal.Footer>
             <div className='pull-left'>
               <Button onClick={() => this.setState({ changingAssignee: false })}>
-                {TAPi18n.__('ui.close')}
+                {__('ui.close')}
               </Button>
             </div>
             <div className='pull-right'>
               <Button color='primary' onClick={this.handleChangeAssigneeFinishClick}>
-                {TAPi18n.__('ui.ok')}
+                {__('ui.ok')}
               </Button>
             </div>
           </Modal.Footer>

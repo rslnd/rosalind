@@ -2,7 +2,7 @@ import React from 'react'
 import map from 'lodash/map'
 import uniqBy from 'lodash/uniqBy'
 import identity from 'lodash/identity'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Birthday } from './Birthday'
 import { zerofix } from 'util/zerofix'
 import { fullNameWithTitle } from '../../api/users/methods/name'
@@ -11,7 +11,7 @@ export class PatientProfile extends React.Component {
   render () {
     const patient = this.props.patient
     if (!patient) {
-      return <div>{TAPi18n.__('patients.patientNotFound')}</div>
+      return <div>{__('patients.patientNotFound')}</div>
     } else {
       return (
         <div>

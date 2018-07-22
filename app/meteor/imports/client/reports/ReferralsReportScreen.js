@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { Button } from 'react-bootstrap'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { dayToDate } from '../../util/time/day'
 import { Icon } from '../components/Icon'
 import { Loading } from '../components/Loading'
@@ -14,9 +14,9 @@ import { fullNameWithTitle } from '../../api/users/methods/name'
 
 const formatRange = ({ start, end }) =>
   ([
-    moment(start).format(TAPi18n.__('time.dateFormatShortNoYear')),
+    moment(start).format(__('time.dateFormatShortNoYear')),
     '-',
-    moment(end).format(TAPi18n.__('time.dateFormatShort'))
+    moment(end).format(__('time.dateFormatShort'))
   ].join(' '))
 
 export class ReferralsReportScreen extends React.Component {
@@ -29,7 +29,7 @@ export class ReferralsReportScreen extends React.Component {
     if (window.native && window.native.print) {
       console.log('[Client] Printing: native')
       const title = moment(dayToDate(this.props.day))
-        .format(`YYYY-MM-DD-[${TAPi18n.__('reports.thisDaySingular')}]`)
+        .format(`YYYY-MM-DD-[${__('reports.thisDaySingular')}]`)
       window.native.print({ title })
     } else {
       console.log('[Client] Printing: default')
@@ -56,9 +56,9 @@ export class ReferralsReportScreen extends React.Component {
     })
 
     const title = user &&
-      TAPi18n.__('reports.referralsReportFor', {
+      __('reports.referralsReportFor', {
         name: fullNameWithTitle(user)
-      }) || TAPi18n.__('reports.referralsReport')
+      }) || __('reports.referralsReport')
 
     return (
       <div>
@@ -76,7 +76,7 @@ export class ReferralsReportScreen extends React.Component {
             onRangeChange={handleRangeChange}
             calendarText={formattedRange}
             pullRight>
-            <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name='print' /></Button>
+            <Button onClick={this.handlePrint} title={__('ui.print')}><Icon name='print' /></Button>
           </DateRangeNavigation>
         </div>
         <div className='content'>
@@ -88,8 +88,8 @@ export class ReferralsReportScreen extends React.Component {
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
           {
             !user
-            ? <Box type='info' title={TAPi18n.__('ui.notice')}>
-              <p>{TAPi18n.__('reports.emptySelectAssignee')}</p>
+            ? <Box type='info' title={__('ui.notice')}>
+              <p>{__('reports.emptySelectAssignee')}</p>
             </Box>
             : isLoading
             ? <Loading />
@@ -99,8 +99,8 @@ export class ReferralsReportScreen extends React.Component {
                 mapUserIdToName={mapUserIdToName}
               />
             : <div key='noReports'>
-              <Box type='info' title={TAPi18n.__('ui.notice')}>
-                <p>{TAPi18n.__('reports.emptyAssignee')}</p>
+              <Box type='info' title={__('ui.notice')}>
+                <p>{__('reports.emptyAssignee')}</p>
               </Box>
             </div>
           }

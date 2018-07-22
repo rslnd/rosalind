@@ -4,7 +4,7 @@ import Alert from 'react-s-alert'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'
 import { Meteor } from 'meteor/meteor'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Calendars } from '../../../api/calendars'
 import { Schedules } from '../../../api/schedules'
@@ -205,6 +205,6 @@ const buttonStyle = {
 }
 
 const formatDate = d =>
-  moment(d).format(TAPi18n.__('time.dateFormatWeekday'))
+  moment(d).format(__('time.dateFormatWeekday'))
 
 export const ApplyDefaultSchedule = withTracker(composer)(ApplyDefaultScheduleComponent)

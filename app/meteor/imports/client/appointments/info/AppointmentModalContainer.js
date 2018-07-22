@@ -1,6 +1,5 @@
 import Alert from 'react-s-alert'
 import { toClass } from 'recompose'
-import { TAPi18n } from 'meteor/tap:i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'

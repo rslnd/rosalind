@@ -1,5 +1,4 @@
 import Alert from 'react-s-alert'
-import { TAPi18n } from 'meteor/tap:i18n'
 import { onNativeEvent } from './events'
 import { lock as screenLock } from '../../../client/layout/Lock'
 

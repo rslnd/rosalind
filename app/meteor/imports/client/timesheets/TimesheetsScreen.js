@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import 'moment-duration-format'
 import React from 'react'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Button } from 'react-bootstrap'
 import { Icon } from '../components/Icon'
 import { DateNavigation } from '../components/DateNavigation'
@@ -19,7 +19,7 @@ const End = ({ end, isToday }) => (
       end
       ? end.format('H:mm')
       : (isToday
-        ? TAPi18n.__('timesheets.now')
+        ? __('timesheets.now')
         : <Icon name='times-circle-o' />
       )
     }
@@ -48,13 +48,13 @@ class TimesheetTableRow extends React.Component {
         <td><End {...{ end, isToday }} /></td>
 
         {/* scheduled */}
-        <td className='text-muted' style={{ width: 120 }}>{scheduledHours && moment.duration(scheduledHours, 'hours').format(TAPi18n.__('time.durationFormat'))}</td>
+        <td className='text-muted' style={{ width: 120 }}>{scheduledHours && moment.duration(scheduledHours, 'hours').format(__('time.durationFormat'))}</td>
 
         {/* actual */}
         <td style={{ textAlign: 'right', width: 120 }}>
           {
             start && (end || isToday)
-            ? moment.duration(duration).format(TAPi18n.__('time.durationFormat'))
+            ? moment.duration(duration).format(__('time.durationFormat'))
             : <Nil />
           }
         </td>
@@ -101,7 +101,7 @@ export class TimesheetsScreen extends React.Component {
     if (window.native && window.native.print) {
       console.log('[Client] Printing: native')
       const title = moment(this.props.start)
-        .format("YYYY-MM-DD-[#{TAPi18n.__('reports.thisDaySingular')}]")
+        .format("YYYY-MM-DD-[#{__('reports.thisDaySingular')}]")
       window.native.print({ title })
     } else {
       console.log('[Client] Printing: default')
@@ -115,13 +115,13 @@ export class TimesheetsScreen extends React.Component {
       <div>
         <div className='content-header'>
           <h1>
-            {TAPi18n.__('timesheets.this')}
+            {__('timesheets.this')}
           </h1>
           <DateNavigation date={this.props.start} basePath='schedules/timesheets' pullRight>
-            <Button onClick={this.handlePrint} title={TAPi18n.__('ui.print')}><Icon name='print' /></Button>
+            <Button onClick={this.handlePrint} title={__('ui.print')}><Icon name='print' /></Button>
             {
               this.props.canShowRevenue &&
-                <Button onClick={this.handleToggleRevenue} title={TAPi18n.__('reports.showRevenue')}><Icon name='euro' /></Button>
+                <Button onClick={this.handleToggleRevenue} title={__('reports.showRevenue')}><Icon name='euro' /></Button>
             }
           </DateNavigation>
         </div>
@@ -134,7 +134,7 @@ export class TimesheetsScreen extends React.Component {
             </div>
 
             <h4>
-              <UserHelper helper='fullNameWithTitle' userId={userId} /> hat im {moment(start).format('MMMM YYYY')} gesamt {moment.duration(sum).format(TAPi18n.__('time.durationFormat'))} gearbeitet.
+              <UserHelper helper='fullNameWithTitle' userId={userId} /> hat im {moment(start).format('MMMM YYYY')} gesamt {moment.duration(sum).format(__('time.durationFormat'))} gearbeitet.
             </h4>
 
             <div className='table-responsive'>

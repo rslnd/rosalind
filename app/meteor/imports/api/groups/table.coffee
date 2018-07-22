@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import Groups from './collection'
+import Tabular from 'meteor/aldeed:tabular'
 
 if Meteor.isClient
   require('../../client/old/templates/application/partials/groupIcon.tpl.jade')

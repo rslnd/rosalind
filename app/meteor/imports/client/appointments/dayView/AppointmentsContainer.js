@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { dateToDay } from '../../../util/time/day'
@@ -41,13 +41,13 @@ const addNullAssignee = a =>
 const onNewAppointmentModalOpen = (args) => Appointments.actions.acquireLock.call(args)
 const onNewAppointmentModalClose = (args) => Appointments.actions.releaseLock.call(args)
 const handleSetAdmitted = (args) => {
-  Alert.success(TAPi18n.__('appointments.setAdmittedSuccess')) // optimistic for smoother UX
+  Alert.success(__('appointments.setAdmittedSuccess')) // optimistic for smoother UX
   return Appointments.actions.setAdmitted.callPromise(args)
 }
 
 const handleMove = (args) =>
   Appointments.actions.move.callPromise(args).then(() => {
-    Alert.success(TAPi18n.__('appointments.moveSuccess'))
+    Alert.success(__('appointments.moveSuccess'))
   })
 
 const composer = (props) => {

@@ -19,7 +19,7 @@ import { Calendars } from '../../api/calendars'
 import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 
 const stages = ['referred', 'pending', 'redeemed']
 
@@ -170,21 +170,21 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
 const Referred = ({ style }) =>
   <Cell
     style={style ? {...style, ...separatorStyle, ...iconCellStyle} : {...separatorStyle, ...iconCellStyle}}
-    title={TAPi18n.__('reports.referralReferredTitle')}>
+    title={__('reports.referralReferredTitle')}>
     <Icon name='commenting-o' />
   </Cell>
 
 const Pending = () =>
   <Cell
     style={{...separatorStyle, ...iconCellStyle}}
-    title={TAPi18n.__('reports.referralPendingTitle')}>
+    title={__('reports.referralPendingTitle')}>
     <Icon name='clock-o' />
   </Cell>
 
 const Redeemed = () =>
   <Cell
     style={{...separatorStyle, ...iconCellStyle}}
-    title={TAPi18n.__('reports.referralRedeemedTitle')}>
+    title={__('reports.referralRedeemedTitle')}>
     <Icon name='check' />
   </Cell>
 

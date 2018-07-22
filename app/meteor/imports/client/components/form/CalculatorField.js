@@ -2,7 +2,6 @@ import React from 'react'
 import sum from 'lodash/sum'
 import identity from 'lodash/identity'
 import { TextField } from './TextField'
-import { TAPi18n } from 'meteor/tap:i18n'
 
 const calculate = (string = '') => {
   const summands = string

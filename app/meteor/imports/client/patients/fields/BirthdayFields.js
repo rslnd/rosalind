@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field } from 'redux-form'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
 import { DayField } from '../../components/form/DayField'
 import { rowStyle, iconStyle, grow } from '../../components/form/rowStyle'
@@ -22,7 +22,7 @@ export const BirthdayFields = ({ collectInsuranceId }) =>
           <Field
             name='insuranceId'
             component={TextField}
-            label={TAPi18n.__('patients.insuranceId')} />
+            label={__('patients.insuranceId')} />
         </div>
     }
     <div style={grow}>
@@ -30,6 +30,6 @@ export const BirthdayFields = ({ collectInsuranceId }) =>
         name='birthday'
         component={DayField}
         birthday
-        label={TAPi18n.__('patients.birthday')} />
+        label={__('patients.birthday')} />
     </div>
   </div>

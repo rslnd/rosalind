@@ -1,5 +1,5 @@
 import moment from 'moment-timezone'
-import { Job } from 'meteor/vsivsi:job-collection'
+import { Job } from 'meteor/simonsimcity:job-collection'
 import { Messages } from '../'
 
 const cleanOldJobs = (job) => {

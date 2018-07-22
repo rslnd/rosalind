@@ -2,7 +2,7 @@ import React from 'react'
 import { WaitlistItem } from './WaitlistItem'
 import FlipMove from 'react-flip-move'
 import { Modal } from 'react-bootstrap'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import Button from '@material-ui/core/Button'
 import { UserPickerContainer } from '../../users/UserPickerContainer'
 
@@ -98,12 +98,12 @@ export class WaitlistScreen extends React.Component {
           <Modal.Footer>
             <div className='pull-left'>
               <Button onClick={() => this.setState({ changingAssignee: false })}>
-                {TAPi18n.__('ui.close')}
+                {__('ui.close')}
               </Button>
             </div>
             <div className='pull-right'>
               <Button color='primary' onClick={this.handleFinishChangeWaitlistAssignee}>
-                {TAPi18n.__('ui.ok')}
+                {__('ui.ok')}
               </Button>
             </div>
           </Modal.Footer>

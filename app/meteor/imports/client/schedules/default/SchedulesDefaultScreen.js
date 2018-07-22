@@ -7,7 +7,7 @@ import { weekdays } from '../../../api/schedules/schema'
 import { Users } from '../../../api/users'
 import { Box } from '../../components/Box'
 import { UserPickerContainer } from '../../users/UserPickerContainer'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import {
   Table,
@@ -260,7 +260,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
                   {
                     weekdays.map(weekday =>
                       <TableCell key={weekday}>
-                        {TAPi18n.__(`time.${weekday}`)}
+                        {__(`time.${weekday}`)}
                       </TableCell>
                     )
                   }

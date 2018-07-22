@@ -65,9 +65,6 @@ peppelg:bootstrap-3-modal
 tsega:bootstrap3-datetimepicker@=3.1.3_3
 aldeed:autoform-bs-datetimepicker
 
-# I18n
-tap:i18n
-
 # Util
 momentjs:moment
 u2622:persistent-session
@@ -91,4 +88,3 @@ mdg:meteor-apm-agent
 # Legacy
 coffeescript
 fds:coffeescript-share
-east5th:package-scan

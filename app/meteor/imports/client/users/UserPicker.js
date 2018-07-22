@@ -1,6 +1,6 @@
 import React from 'react'
 import Select from 'react-select'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Users } from '../../api/users'
 
 export class UserPicker extends React.Component {
@@ -48,7 +48,7 @@ export class UserPicker extends React.Component {
         options={this.options()}
         ignoreCase
         autoFocus={this.props.autoFocus || false}
-        placeholder={this.props.placeholder || TAPi18n.__('users.selectEmployee')} />
+        placeholder={this.props.placeholder || __('users.selectEmployee')} />
     )
   }
 }

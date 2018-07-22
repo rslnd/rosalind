@@ -2,7 +2,6 @@ import React from 'react'
 import { toClass } from 'recompose'
 import identity from 'lodash/identity'
 import { withTracker } from 'meteor/react-meteor-data'
-import { TAPi18n } from 'meteor/tap:i18n'
 import { RelativeTime } from './RelativeTime'
 import { UserHelper } from '../users/UserHelper'
 

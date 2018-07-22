@@ -1,4 +1,4 @@
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import mapValues from 'lodash/fp/mapValues'
 
 export const translateObject = (obj) => {
@@ -8,7 +8,7 @@ export const translateObject = (obj) => {
     }
 
     if (typeof item === 'string') {
-      return TAPi18n.__(item)
+      return __(item)
     }
 
     console.error('translateObject: cannot translate', item)

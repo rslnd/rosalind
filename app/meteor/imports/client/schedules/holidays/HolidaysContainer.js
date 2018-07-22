@@ -1,6 +1,6 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import Alert from 'react-s-alert'
 import moment from 'moment-timezone'
@@ -32,11 +32,11 @@ export class HolidaysContainerComponent extends React.Component {
 
       Schedules.insert(holidays, (err) => {
         if (err) {
-          Alert.error(TAPi18n.__('ui.error'))
+          Alert.error(__('ui.error'))
           reject(err)
           console.log(err)
         } else {
-          Alert.success(TAPi18n.__('ui.ok'))
+          Alert.success(__('ui.ok'))
           dispatch({ type: 'HOLIDAYS_INSERT_SUCCESS' })
           resolve()
         }
@@ -48,10 +48,10 @@ export class HolidaysContainerComponent extends React.Component {
     return () => {
       Schedules.softRemove(({ _id }), err => {
         if (err) {
-          Alert.error(TAPi18n.__('ui.error'))
+          Alert.error(__('ui.error'))
           console.error(err)
         } else {
-          Alert.success(TAPi18n.__('ui.deleted'))
+          Alert.success(__('ui.deleted'))
         }
       })
     }
@@ -76,7 +76,7 @@ const structure = ({ handleRemove }) => [
   {
     header: 'Datum',
     render: s =>
-      moment(dayToDate(s.day)).format(TAPi18n.__('time.dateFormatWeekdayShort')),
+      moment(dayToDate(s.day)).format(__('time.dateFormatWeekdayShort')),
     style: {
       width: '20%',
       minWidth: 200

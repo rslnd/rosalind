@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Schedules } from '../../../api/schedules'
 import { RequestsScreen } from './RequestsScreen'
 import { withTracker } from 'meteor/react-meteor-data'
@@ -21,11 +21,11 @@ const composer = (props) => {
 
     const requests = Schedules.find(selector, { sort: { start: -1 } }).fetch()
     const approve = (_id) => Schedules.actions.approveRequest.callPromise({ scheduleId: _id }).then(() => {
-      Alert.success(TAPi18n.__('schedules.requests.acceptSuccess'))
+      Alert.success(__('schedules.requests.acceptSuccess'))
     })
 
     const decline = (_id) => Schedules.actions.declineRequest.callPromise({ scheduleId: _id }).then(() => {
-      Alert.success(TAPi18n.__('schedules.requests.declineSuccess'))
+      Alert.success(__('schedules.requests.declineSuccess'))
     })
 
     const canEdit = Roles.userIsInRole(Meteor.userId(), ['schedules-edit', 'admin'])

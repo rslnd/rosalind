@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import Tags from './collection'
+import Tabular from 'meteor/aldeed:tabular'
 
 module.exports = new Tabular.Table
   name: 'Tags'

@@ -1,5 +1,5 @@
 import { withTracker } from 'meteor/react-meteor-data'
-import { TAPi18n }  from 'meteor/tap:i18n'
+import { __ } from '../../../../i18n'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
@@ -32,10 +32,10 @@ const composer = (props) => {
       day,
       ...fields
     }).catch(err => {
-      Alert.error(TAPi18n.__('ui.error'))
+      Alert.error(__('ui.error'))
       console.error(err)
     }).then(() => {
-      Alert.success(TAPi18n.__('ui.saved'))
+      Alert.success(__('ui.saved'))
     })
   }
 

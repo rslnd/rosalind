@@ -1,6 +1,6 @@
 import clone from 'lodash/clone'
 import moment from 'moment-timezone'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../i18n'
 
 module.exports =
   startOfToday: ->
@@ -44,12 +44,12 @@ module.exports =
     moment(time).locale('en').format('ddd').toLowerCase()
 
   weekdays: ->
-    mon: { label: TAPi18n.__('time.monday'), offset: 0 }
-    tue: { label: TAPi18n.__('time.tuesday'), offset: 1 }
-    wed: { label: TAPi18n.__('time.wednesday'), offset: 2 }
-    thu: { label: TAPi18n.__('time.thursday'), offset: 3 }
-    fri: { label: TAPi18n.__('time.friday'), offset: 4 }
-    sat: { label: TAPi18n.__('time.saturday'), offset: 5 }
+    mon: { label: __('time.monday'), offset: 0 }
+    tue: { label: __('time.tuesday'), offset: 1 }
+    wed: { label: __('time.wednesday'), offset: 2 }
+    thu: { label: __('time.thursday'), offset: 3 }
+    fri: { label: __('time.friday'), offset: 4 }
+    sat: { label: __('time.saturday'), offset: 5 }
 
   weekdaysArray: ->
     _.map @weekdays(), (v, k) ->
@@ -57,13 +57,13 @@ module.exports =
       return v
 
   time: (time) ->
-    moment(time).format(TAPi18n.__('time.timeFormat'))
+    moment(time).format(__('time.timeFormat'))
 
   date: (time, options = {}) ->
     if options.weekday
-      moment(time).format(TAPi18n.__('time.dateFormatWeekday'))
+      moment(time).format(__('time.dateFormatWeekday'))
     else
-      moment(time).format(TAPi18n.__('time.dateFormat'))
+      moment(time).format(__('time.dateFormat'))
 
   hm: (float) ->
     h = Math.floor(float)

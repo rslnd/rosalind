@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withTracker } from 'meteor/react-meteor-data'
 import Alert from 'react-s-alert'
 import { Loading } from '../components/Loading'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { Patients } from '../../api/patients'
 import { mapFieldsToPatient } from './mapFieldsToPatient'
 import { mapStateToProps } from './mapStateToProps'
@@ -20,7 +20,7 @@ const composer = (props) => {
         createExternalReferralTo: '9MY6AiaNrAkcER8DK'
       })
         .then(() => {
-          Alert.success(TAPi18n.__('patients.editSuccess'))
+          Alert.success(__('patients.editSuccess'))
           props.dispatch({ type: 'LOAD_PATIENT', data: patient })
         })
         .catch(e => {

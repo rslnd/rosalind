@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field } from 'redux-form'
 import Button from '@material-ui/core/Button'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
 import { TextField } from '../../components/form'
 import { rowStyle, iconStyle, buttonStyle, grow, shrink } from '../../components/form/rowStyle'
@@ -11,13 +11,13 @@ const filterField = channel => field => field && field.channel === channel
 
 const requirePhone = v => {
   if (!v) {
-    return TAPi18n.__('patients.telephoneRequired')
+    return __('patients.telephoneRequired')
   }
 }
 
 const warn = v => {
   if (!v) {
-    return TAPi18n.__('ui.pleaseFill')
+    return __('ui.pleaseFill')
   }
 }
 
@@ -52,7 +52,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                 component={TextField}
                 warn={warn}
                 validate={channel === 'Phone' ? requirePhone : null}
-                label={TAPi18n.__(`patients.${channel.toLowerCase()}`)} />
+                label={__(`patients.${channel.toLowerCase()}`)} />
             </div>
 
             {
@@ -70,7 +70,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                   <Button
                     onClick={() => fields.remove(i)}
                     style={{ minWidth: 35, color: '#ccc' }}
-                    title={TAPi18n.__('patients.removeContact')}>
+                    title={__('patients.removeContact')}>
                     <Icon name='minus' />
                   </Button>
               }
@@ -79,7 +79,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                   <Button
                     onClick={() => fields.insert(i + 1, { channel })}
                     style={{ minWidth: 35 }}
-                    title={TAPi18n.__('patients.addContact')}>
+                    title={__('patients.addContact')}>
                     <Icon name='plus' />
                   </Button>
               }

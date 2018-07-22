@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
 import Button from '@material-ui/core/Button'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { UserPickerContainer } from '../../users/UserPickerContainer'
 
 export class WaitlistAssigneeModal extends React.Component {
@@ -50,7 +50,7 @@ export class WaitlistAssigneeModal extends React.Component {
       <Modal.Footer>
         <div className='pull-left'>
           <Button onClick={onClose}>
-            {TAPi18n.__('ui.close')}
+            {__('ui.close')}
           </Button>
         </div>
         <div className='pull-right'>
@@ -58,7 +58,7 @@ export class WaitlistAssigneeModal extends React.Component {
             color='primary'
             onClick={this.handleFinishClick}
             disabled={!this.state.selectedAssigneeId}>
-            {TAPi18n.__('ui.ok')}
+            {__('ui.ok')}
           </Button>
         </div>
       </Modal.Footer>

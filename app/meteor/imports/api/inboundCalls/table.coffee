@@ -5,6 +5,7 @@ import { firstName } from '../users/methods/name'
 import { Users } from '../users'
 import InboundCalls from './collection'
 import Schema from './schema'
+import Tabular from 'meteor/aldeed:tabular'
 
 if Meteor.isClient
   require('../../client/old/templates/comments/commentCount.tpl.jade')
@@ -36,7 +37,6 @@ module.exports = new Tabular.Table
     { tmpl: Meteor.isClient and Template.inboundCallsUnresolve }
   ]
   order: [[5, 'desc'], [7, 'desc']]
-  sub: new SubsManager()
   extraFields: Schema._firstLevelSchemaKeys
   responsive: true
   autoWidth: false

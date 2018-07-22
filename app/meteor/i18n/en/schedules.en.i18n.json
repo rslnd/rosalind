@@ -1,9 +1,0 @@
-{
-  "schedules": {
-    "this": "Schedules",
-    "thisCurrent": "Current schedules",
-    "thisDefault": "Default schedules",
-    "employee": "Employee",
-    "employee_plural": "Employees"
-  }
-}

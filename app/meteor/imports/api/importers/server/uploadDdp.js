@@ -1,6 +1,6 @@
 import moment from 'moment-timezone'
 import { Roles } from 'meteor/alanning:roles'
-import { Job } from 'meteor/vsivsi:job-collection'
+import { Job } from 'meteor/simonsimcity:job-collection'
 import { Jobs } from '../../jobs'
 import { Users } from '../../users'
 import { isAllowedImporter } from '../allowedImporters'

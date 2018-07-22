@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import { toClass } from 'recompose'
 import Alert from 'react-s-alert'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { withRouter } from 'react-router-dom'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Patients } from '../../../api/patients'
@@ -11,6 +11,8 @@ import { AppointmentActions } from './AppointmentActions'
 
 const composer = (props) => {
   const appointment = Appointments.findOne({ _id: props.appointmentId })
+  if (!appointment) { return }
+
   const { admitted, canceled } = appointment
   const args = { appointmentId: props.appointmentId }
   const closeModal = () => props.onClose && props.onClose()
@@ -21,25 +23,25 @@ const composer = (props) => {
   }
 
   const unsetAdmitted = () => {
-    Alert.success(TAPi18n.__('appointments.unsetAdmittedSuccess'))
+    Alert.success(__('appointments.unsetAdmittedSuccess'))
     Appointments.actions.unsetAdmitted.call(args)
     closeModal()
   }
 
   const setCanceled = () => {
-    Alert.success(TAPi18n.__('appointments.setCanceledSuccess'))
+    Alert.success(__('appointments.setCanceledSuccess'))
     Appointments.actions.setCanceled.call(args)
     closeModal()
   }
 
   const unsetCanceled = () => {
-    Alert.success(TAPi18n.__('appointments.unsetCanceledSuccess'))
+    Alert.success(__('appointments.unsetCanceledSuccess'))
     Appointments.actions.unsetCanceled.call(args)
     closeModal()
   }
 
   const softRemove = () => {
-    Alert.success(TAPi18n.__('appointments.softRemoveSuccess'))
+    Alert.success(__('appointments.softRemoveSuccess'))
     Appointments.actions.softRemove.callPromise(args)
     closeModal()
   }

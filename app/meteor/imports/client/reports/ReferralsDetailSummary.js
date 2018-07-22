@@ -1,7 +1,7 @@
 import React from 'react'
 import { InfoBox } from './ReportSummary'
 import { grayActive, gray, green } from '../css/global'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 
 export const ReferralsDetailSummary = ({ referrals }) => {
   const referred = referrals.length
@@ -11,7 +11,7 @@ export const ReferralsDetailSummary = ({ referrals }) => {
   return <div style={rowStyle}>
     <div style={colStyle}>
       <InfoBox
-        text={TAPi18n.__('reports.referralReferred')}
+        text={__('reports.referralReferred')}
         color={grayActive}
         position={1}
         icon='commenting-o'
@@ -20,8 +20,8 @@ export const ReferralsDetailSummary = ({ referrals }) => {
 
     <div className='col-md-4 col-sm-4 col-xs-4'>
       <InfoBox
-        text={TAPi18n.__('reports.referralPending')}
-        description={referred && pending && TAPi18n.__('reports.ofReferred', { percent: Math.floor(100 * pending / referred) })}
+        text={__('reports.referralPending')}
+        description={referred && pending && __('reports.ofReferred', { percent: Math.floor(100 * pending / referred) })}
         color={gray}
         position={2}
         icon='clock-o'
@@ -30,11 +30,11 @@ export const ReferralsDetailSummary = ({ referrals }) => {
 
     <div style={colStyle}>
       <InfoBox
-        text={TAPi18n.__('reports.referralRedeemed')}
+        text={__('reports.referralRedeemed')}
         color={green}
         position={3}
         icon='check'
-        description={referred && redeemed && TAPi18n.__('reports.ofReferred', { percent: Math.floor(100 * redeemed / referred) })}
+        description={referred && redeemed && __('reports.ofReferred', { percent: Math.floor(100 * redeemed / referred) })}
       >{redeemed}</InfoBox>
     </div>
   </div>

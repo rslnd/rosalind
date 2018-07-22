@@ -2,14 +2,14 @@ import identity from 'lodash/identity'
 import React from 'react'
 import moment from 'moment-timezone'
 import { TextField } from './TextField'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { dayToDate } from '../../../util/time/day'
 import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
 
 const toStringValue = (day, text) => {
   if (!day) { return '' }
 
-  const date = moment(dayToDate(day)).format(TAPi18n.__('time.dateFormat'))
+  const date = moment(dayToDate(day)).format(__('time.dateFormat'))
   const note = text && text.trim()
 
   return [date, note].filter(identity).join(' ')
@@ -89,7 +89,7 @@ export class DayNoteField extends React.Component {
       return stringValue
     } else if (day && typeof day === 'object' && day.day && day.month && day.year) {
       const date = moment(dayToDate(day))
-      const formattedDate = date.format(TAPi18n.__('time.dateFormat'))
+      const formattedDate = date.format(__('time.dateFormat'))
 
       return [
         formattedDate,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { toClass } from 'recompose'
 import { compose } from 'react-komposer'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import { RelativeTime } from './RelativeTime'
 import { UserHelper } from '../users/UserHelper'
 
@@ -24,7 +24,7 @@ const composer = (props, onData) => {
     return props.doc[`${field}By`] && props.doc[`${field}At`]
   }).map((field) => {
     return {
-      verb: TAPi18n.__(props.doc.collection()._name + '.' + field + 'By'),
+      verb: __(props.doc.collection()._name + '.' + field + 'By'),
       userId: props.doc[`${field}By`],
       time: props.doc[`${field}At`]
     }

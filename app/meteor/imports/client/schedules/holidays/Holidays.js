@@ -1,5 +1,5 @@
 import React from 'react'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import { Box } from '../../components/Box'
 
 export const Holidays = ({ table, form }) => (
@@ -7,7 +7,7 @@ export const Holidays = ({ table, form }) => (
     <div className='row'>
       <div className='col-md-12'>
         <Box
-          title={TAPi18n.__('schedules.holidaysNew')}
+          title={__('schedules.holidaysNew')}
           type='primary'
           noBorder>
           {form}
@@ -18,7 +18,7 @@ export const Holidays = ({ table, form }) => (
     <div className='row'>
       <div className='col-md-12'>
         <Box
-          title={TAPi18n.__('schedules.futureHolidays')}
+          title={__('schedules.futureHolidays')}
           noBorder>
           {table}
         </Box>

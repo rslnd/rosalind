@@ -2,7 +2,7 @@ import React from 'react'
 import namecase from 'namecase'
 import uniq from 'lodash/uniq'
 import sortBy from 'lodash/fp/sortBy'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../i18n'
 import moment from 'moment'
 import {
   Table,
@@ -55,11 +55,11 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
           <TableHead>
             <TableRow>
               <Cell />
-              <Cell>{TAPi18n.__('patients.thisOne')}</Cell>
+              <Cell>{__('patients.thisOne')}</Cell>
               <Cell />
-              <Cell style={separatorStyle}>{TAPi18n.__('reports.referralReferred')}</Cell>
-              <Cell style={separatorStyle}>{TAPi18n.__('reports.referralPending')}</Cell>
-              <Cell style={separatorStyle}>{TAPi18n.__('reports.referralRedeemed')}</Cell>
+              <Cell style={separatorStyle}>{__('reports.referralReferred')}</Cell>
+              <Cell style={separatorStyle}>{__('reports.referralPending')}</Cell>
+              <Cell style={separatorStyle}>{__('reports.referralRedeemed')}</Cell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -88,13 +88,13 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
               <Cell>Summe</Cell>
               <Cell />
               <Cell style={separatorStyle}>
-                <b>{referrals.length}</b> {TAPi18n.__('reports.referralReferred')}
+                <b>{referrals.length}</b> {__('reports.referralReferred')}
               </Cell>
               <Cell style={separatorStyle}>
-                <b>{referrals.filter(r => r.pendingAt).length}</b> {TAPi18n.__('reports.referralPending')}
+                <b>{referrals.filter(r => r.pendingAt).length}</b> {__('reports.referralPending')}
               </Cell>
               <Cell style={separatorStyle}>
-                <b>{referrals.filter(r => r.redeemedAt).length}</b> {TAPi18n.__('reports.referralRedeemed')}
+                <b>{referrals.filter(r => r.redeemedAt).length}</b> {__('reports.referralRedeemed')}
               </Cell>
             </TableRow>
           </TableBody>
@@ -107,7 +107,7 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
 const Date = ({ date, relativeTo }) => {
   if (!date) { return '-' }
 
-  const absolute = moment(date).format(TAPi18n.__('time.dateFormatShortNoYear'))
+  const absolute = moment(date).format(__('time.dateFormatShortNoYear'))
 
   if (relativeTo) {
     const relative = moment.range(

@@ -1,4 +1,4 @@
-import { JobCollection } from 'meteor/vsivsi:job-collection'
+import { JobCollection } from 'meteor/simonsimcity:job-collection'
 
 options = (options) ->
   transform: (doc) ->

@@ -1,5 +1,5 @@
 import React from 'react'
-import { TAPi18n } from 'meteor/tap:i18n'
+import { __ } from '../../../i18n'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/List/ListSubheader'
@@ -30,13 +30,13 @@ export const StatusBoard = ({ groups, weekday }) => (
                   <span>
                     {timesheets.sumFormatted}
                     &nbsp;({timesheets.stringified})
-                    &nbsp;{TAPi18n.__('timesheets.actual')}
+                    &nbsp;{__('timesheets.actual')}
                     <br />
                   </span>
                 }
                 {schedule.sum}h
                 &nbsp;({schedule.stringified})
-                &nbsp;{TAPi18n.__('schedules.planned')}
+                &nbsp;{__('schedules.planned')}
               </span>}
             />
           ))}
