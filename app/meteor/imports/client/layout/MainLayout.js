@@ -8,7 +8,7 @@ import { Alerts } from './Alerts'
 import { Login } from '../users/Login'
 import { MaintenanceMessageContainer } from './MaintenanceMessageContainer'
 import { Loading } from '../components/Loading'
-import { ErrorBoundary } from './ErrorBoundary'
+import { Lock } from './Lock'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -79,6 +79,7 @@ export class MainLayout extends React.Component {
         <span id='locale' className={locale} />
         <Alerts />
         <MaintenanceMessageContainer />
+        <Lock />
       </div>
     )
 

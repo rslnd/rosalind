@@ -12,10 +12,13 @@ const AlertIcon = ({ classNames, icon }) => (
       order: 1
     }}>
     {
-      icon ||
+      icon
+      ? <Icon name={icon} />
+      : (
         (classNames.includes('s-alert-success') && <Icon name='check-circle' />) ||
         (classNames.includes('s-alert-error') && <Icon name='exclamation-circle' />) ||
         (classNames.includes('s-alert-warning') && <Icon name='exclamation-triangle' />)
+      )
     }
   </div>
 )
@@ -49,6 +52,10 @@ const CustomAlert = ({ classNames, id, styles, message, handleClose, customField
   </div>
 )
 
+const stackLimit = {
+  limit: 4
+}
+
 export const Alerts = () => (
   <Alert
     effect='stackslide'
@@ -56,7 +63,7 @@ export const Alerts = () => (
     timeout={5000}
     html={false}
     onRouteClose={false}
-    stack={false}
+    stack={stackLimit}
     offset={0}
     beep={false}
     contentTemplate={CustomAlert}
