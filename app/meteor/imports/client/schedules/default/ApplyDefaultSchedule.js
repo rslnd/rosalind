@@ -27,7 +27,7 @@ const composer = props => {
     return !!holidays.find(h => isSame(day, h.day))
   }
 
-  // Meteor.subscribe('schedules-latest-planned', { calendarId })
+  // subscribe('schedules-latest-planned', { calendarId })
 
   // const latestSchedules = Schedules.find({
   //   type: 'override',

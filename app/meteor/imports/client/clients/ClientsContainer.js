@@ -1,14 +1,13 @@
-import { Meteor } from 'meteor/meteor'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Clients } from '../../api/clients'
 import { Users } from '../../api/users'
 import { Groups } from '../../api/groups'
-import { Loading } from '../components/Loading'
 import { ClientsScreen } from './ClientsScreen'
 import { composer as settings } from '../system/settings/SettingsContainer'
+import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = (props) => {
-  Meteor.subscribe('clients')
+  subscribe('clients')
 
   const clients = Clients.find({}, { sort: { lastActionAt: -1 } }).fetch()
 
@@ -26,4 +25,4 @@ const composer = (props) => {
   }
 }
 
-export const ClientsContainer = withTracker(settings)(withTracker(composer, Loading)(ClientsScreen))
+export const ClientsContainer = withTracker(settings)(withTracker(composer)(ClientsScreen))

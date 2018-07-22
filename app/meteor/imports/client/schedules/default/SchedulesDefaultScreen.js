@@ -7,7 +7,6 @@ import { weekdays } from '../../../api/schedules/schema'
 import { Users } from '../../../api/users'
 import { Box } from '../../components/Box'
 import { UserPickerContainer } from '../../users/UserPickerContainer'
-import { Meteor } from 'meteor/meteor'
 import { TAPi18n } from 'meteor/tap:i18n'
 import { withTracker } from 'meteor/react-meteor-data'
 import {
@@ -22,6 +21,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { ApplyDefaultSchedule } from './ApplyDefaultSchedule'
 import leftPad from 'left-pad'
+import { subscribe } from '../../../util/meteor/subscribe'
 
 const renderTime = hm => {
   if (!hm) return null
@@ -79,7 +79,7 @@ const composer = props => {
   const calendar = Calendars.findOne({ slug })
   const users = Users.find({}).fetch()
 
-  Meteor.subscribe('schedules-default', {})
+  subscribe('schedules-default')
 
   const defaultSchedules = Schedules.find({
     type: 'default',

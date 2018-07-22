@@ -16,4 +16,4 @@ export const composer = (props) => {
   }
 }
 
-export const SettingsContainer = withTracker(composer, { pure: false })(SettingsScreen)
+export const SettingsContainer = withTracker(composer)(SettingsScreen)

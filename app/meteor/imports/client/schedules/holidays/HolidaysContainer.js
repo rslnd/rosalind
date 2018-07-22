@@ -11,6 +11,7 @@ import { Icon } from '../../components/Icon'
 import { Schedules } from '../../../api/schedules'
 import { Holidays } from './Holidays'
 import { NewHolidaysForm } from './NewHolidaysForm'
+import { subscribe } from '../../../util/meteor/subscribe'
 
 export class HolidaysContainerComponent extends React.Component {
   handleSubmit (data, dispatch) {
@@ -98,7 +99,7 @@ const structure = ({ handleRemove }) => [
 ]
 
 const composer = () => {
-  Meteor.subscribe('schedules-holidays', {})
+  subscribe('schedules-holidays')
 
   const holidays = Schedules.find({
     type: 'holiday'
