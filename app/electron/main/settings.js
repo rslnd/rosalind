@@ -2,8 +2,9 @@ const fs = require('fs')
 const crypto = require('crypto')
 const path = require('path')
 const open = require('opn')
-const { ipcMain, app } = require('electron')
+const { ipcMain, app, dialog } = require('electron')
 const logger = require('./logger')
+const isEqual = require('lodash/isEqual')
 
 const isWindows = /^win/.test(process.platform)
 
@@ -25,17 +26,22 @@ const readSettings = path => {
     return emptySettings
   }
 
-  const raw = fs.readFileSync(path, { encoding: 'utf8' })
-
-  if (raw.length < 4) {
-    logger.warn(`[Settings] Skipping settings file at path ${path} containing '${raw}' because it is too short`)
-    return emptySettings
-  }
-
   try {
-    return JSON.parse(raw)
+    const raw = fs.readFileSync(path, { encoding: 'utf8' })
+
+    if (raw.length < 4) {
+      logger.warn(`[Settings] Skipping settings file at path ${path} containing '${raw}' because it is too short`)
+      return emptySettings
+    }
+
+    try {
+      return JSON.parse(raw)
+    } catch (e) {
+      logger.error(`[Settings] Failed to parse settings file at path ${path} containing '${raw}'`)
+      return emptySettings
+    }
   } catch (e) {
-    logger.error(`[Settings] Failed to parse settings file at path ${path} containing '${raw}'`)
+    logger.error(`[Settings] Failed to read settings file at path ${path}`)
     return emptySettings
   }
 }
@@ -97,19 +103,9 @@ const writeSettings = newSettings => {
   })
 }
 
-const editSettings = path => {
-  logger.info('[Settings] Spawning settings editor')
-  if (isWindows) {
-    open(path, { app: 'wordpad' })
-  } else {
-    open(path)
-  }
-}
-
 const terminate = () => {
   logger.info('[Settings] Terminating app')
-  app.quit()
-  process.exit(1)
+  app.exit(1)
 }
 
 const getSettings = () => {
@@ -117,7 +113,13 @@ const getSettings = () => {
   const localSettings = readSettings(localSettingsPath)
 
   if ((defaultSettings === emptySettings && localSettings === emptySettings) || (!defaultSettings && !localSettings)) {
-    editSettings(localSettingsPath)
+    logger.error(`[Settings] All settings are empty`)
+    dialog.showMessageBox({
+      type: 'error',
+      buttons: ['OK'],
+      title: 'Error',
+      message: 'Empty settings file'
+    })
     terminate()
   }
 
@@ -126,22 +128,26 @@ const getSettings = () => {
   )
 
   if (!validateSettings(mergedSettings)) {
-    editSettings(localSettingsPath)
+    logger.error(`[Settings] Invalid settings`)
+    dialog.showMessageBox({
+      type: 'error',
+      buttons: ['OK'],
+      title: 'Error',
+      message: 'Invalid settings file'
+    })
     terminate()
   }
 
-  writeSettings(mergedSettings)
+  if (!isEqual(localSettings, mergedSettings)) {
+    logger.info('[Settings] Local settings are different from merged settings, overwriting local settings')
+    writeSettings(mergedSettings)
+  }
 
   settings = mergedSettings
   settings.settingsPath = localSettingsPath
 
   logger.info('[Settings] The main entry point is', settings.url)
   logger.info('[Settings]', settings)
-
-  ipcMain.on('settings/edit', (e) => {
-    logger.info('[Settings] Requested settings edit via ipc')
-    editSettings()
-  })
 
   settings.send = ({ ipcReceiver }) => {
     ipcReceiver.webContents.send('settings', settings)
