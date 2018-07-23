@@ -17,6 +17,7 @@ try {
     events: new EventEmitter(),
     quitAndInstall: () => ipcRenderer.send('update/quitAndInstall'),
     dataTransferSuccess: a => ipcRenderer.send('import/dataTransferSuccess', a),
+    emit: (name, payload) => ipcRenderer.send('webEvent', name, payload),
     load: () => {
       console.log('[Electron Native] Attempting to load native settings')
       ipcRenderer.send('window/load')

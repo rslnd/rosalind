@@ -53,6 +53,10 @@ const composer = props => {
   }
 
   const generateReport = () => {
+    if (window.native && window.native.generateEoswinReports) {
+      window.native.generateEoswinReports({ day })
+    }
+
     return Reports.actions.generate.callPromise({ day })
   }
 
