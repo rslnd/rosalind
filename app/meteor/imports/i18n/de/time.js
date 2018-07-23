@@ -29,5 +29,12 @@ export const time = {
   oneWeekForward: 'Eine Woche vorwärts',
   oneWeekBackward: 'Eine Woche zurück',
   oneMonthForward: 'Einen Monat vorwärts',
-  oneMonthBackward: 'Einen Monat zurück'
+  oneMonthBackward: 'Einen Monat zurück',
+  mon: 'Montag',
+  tue: 'Dienstag',
+  wed: 'Mittwoch',
+  thu: 'Donnerstag',
+  fri: 'Freitag',
+  sat: 'Samstag',
+  sun: 'Sonntag'
 }

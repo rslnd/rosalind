@@ -8,6 +8,8 @@ export const schedules = {
     title: 'Abweichende Arbeitszeiten haben Vorrang',
     body: 'Wenn für einen Tag für einen Mitarbeiter eine abweichende Arbeitszeit eingetragen ist, überschreibt dieser Eintrag die übliche Arbeitszeit für diesen Tag und Mitarbeiter zur Gänze.'
   },
+  commonHolidays: 'Allgemeine Feiertage',
+  futureHolidays: 'Zukünftige Feiertage',
   holidaysDateRange: 'Zeitraum',
   holidaysNew: 'Neuen Feiertag eintragen',
   holidaysSave: 'Feiertag speichern',
@@ -52,5 +54,6 @@ export const schedules = {
   },
   timesheets: 'Zeiterfassung',
   softRemove: 'Löschen',
-  softRemoveSuccess: 'Gelöscht'
+  softRemoveSuccess: 'Gelöscht',
+  constraints: 'Sonderregeln'
 }

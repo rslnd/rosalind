@@ -145,7 +145,12 @@ const composer = (props) => {
             patient.prefix = Patients.methods.prefix(patient)
           }
 
-          const notes = appointment.notes()
+          const notes = [
+            appointment.note,
+            idx(appointment, _ => _.external.terminiko.note),
+            idx(appointment, _ => _.external.eoswin.note)
+          ].filter(s => s && s.length >= 1).join('\n')
+
           const lockedBy = appointment.lockedBy && Users.findOne({ _id: appointment.lockedBy })
           const lockedByFirstName = lockedBy && Users.methods.firstName(lockedBy)
           return {
