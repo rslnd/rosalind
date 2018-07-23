@@ -2,6 +2,7 @@ const childProcess = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const temp = require('temp')
+const { ipcMain } = require('electron')
 const logger = require('./logger')
 
 const exeName = 'generateEoswinReports.exe'
@@ -10,9 +11,15 @@ const start = (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
     generateEoswinReports()
   }
+
+  ipcMain.on('webEvent', (name, { day }) => {
+    if (name === 'automation/generateEoswinReports') {
+      generateEoswinReports({ day })
+    }
+  })
 }
 
-const generateEoswinReports = () => {
+const generateEoswinReports = ({ day } = {}) => {
   extractExe((err, exePath) => {
     if (err) {
       logger.error('[automation] Failed to extract exe', err)
@@ -21,7 +28,11 @@ const generateEoswinReports = () => {
 
     logger.info('[automation] Spawning', exePath)
 
-    const child = childProcess.spawn(exePath)
+    const spawnArgs = day
+      ? [`/day:${day.year}-${day.month}-${day.day}`]
+      : []
+
+    const child = childProcess.spawn(exePath, spawnArgs)
     child.stdout.setEncoding('utf8')
     child.stderr.setEncoding('utf8')
 

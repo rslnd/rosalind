@@ -3,6 +3,9 @@
 $sEoswinExe = "D:\Eoswin\ADSPraxis.exe"
 $iGenerateTimeout = 300
 
+; Parameters:
+; generateEoswinReports.exe /day:2018-02-03
+
 Main()
 
 Func Main()
@@ -18,7 +21,29 @@ EndFunc
 
 ; Format: DDMMYYYY
 Func GetDate()
+  Local $sDateParam = GetCmdLineArg("day")
+  If $sDateParam Then
+    Local $sLocalDate = IsoDateToLocal($sDateParam)
+    If $sLocalDate Then
+      Return $sLocalDate
+    EndIf
+  EndIf
+
+  ; Fallback to current day
   Return @MDAY & @MON & @YEAR
+EndFunc
+
+; Convert from YYYY-MM-DD to DDMMYYYY
+; One-indexed: 123456789X
+Func IsoDateToLocal($sYmd)
+  Local $sYear = StringMid($sYmd, 1, 4)
+  Local $sMonth = StringMid($sYmd, 6, 2)
+  Local $sDay = StringMid($sYmd, 9, 2)
+  If $sYear <> "" And $sMonth <> "" And $sDay <> "" Then
+    Return $sDay & $sMonth & $sYear
+  Else
+    Return 0
+  EndIf
 EndFunc
 
 Func OpenEOSWin()
@@ -165,6 +190,20 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
   Info("Found window")
 
   Return $hWnd
+EndFunc
+
+Func GetCmdLineArg($sKey)
+  Local $sKeyRaw = "/" & $sKey & ":"
+  Local $iCmdLineArgCount = $CmdLine[0]
+  For $i = 1 To $iCmdLineArgCount
+    If StringInStr($CmdLine[$i], $sKeyRaw, $STR_NOCASESENSE, 1, StringLen($sKeyRaw)) Then
+      Local $sArgValue = StringRight($CmdLine[$i], StringLen($CmdLine[$i]) - StringLen($sKeyRaw))
+      Info("Parsed command line argument `" & $sArgValue & "` for key `" & $sKey & "`")
+      Return $sArgValue
+    EndIf
+  Next
+  Info("Could not find command line argument for key `" & $sKey & "`")
+  Return 0
 EndFunc
 
 Func HoistErrors()
