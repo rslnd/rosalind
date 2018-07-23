@@ -34,20 +34,13 @@ const composer = (props) => {
   const stopTracking = () => Timesheets.actions.stopTracking.call()
   const startTracking = () => Timesheets.actions.startTracking.call()
 
-  const update = () => {
-    const timesheets = Timesheets.find({
-      userId,
-      start: { $gt: moment().startOf('day').toDate() }
-    }).fetch()
-    const isTracking = Timesheets.methods.isTracking({ userId })
-    const sum = Timesheets.methods.sum({ userId })
-    return { timesheets, isTracking, sum, stopTracking, startTracking }
-  }
-
-  update()
-  const tick = setInterval(update, 1000)
-  const cleanup = () => clearInterval(tick)
-  return cleanup
+  const timesheets = Timesheets.find({
+    userId,
+    start: { $gt: moment().startOf('day').toDate() }
+  }).fetch()
+  const isTracking = Timesheets.methods.isTracking({ userId })
+  const sum = Timesheets.methods.sum({ userId })
+  return { timesheets, isTracking, sum, stopTracking, startTracking }
 }
 
 export const TimesheetWidgetContainer = withTracker(composer)(TimesheetWidget)

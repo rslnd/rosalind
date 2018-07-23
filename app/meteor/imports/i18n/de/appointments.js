@@ -36,9 +36,11 @@ export const appointments = {
   move: 'Verschieben',
   moveSuccess: 'Termin verschoben',
   changeAssigneeSuccess: 'Termine verschoben',
-  changeAssigneeMustBeDifferent: 'Bitte eine Person auswählen, die noch nicht an diesem Tag anwesend ist',
+  changeAssigneeMustBeDifferent: 'Bitte eine Person wählen, die noch nicht an diesem Tag anwesend ist',
   editSuccess: 'Gespeichert',
-  tagsRequired: 'Bitte Terminart auswählen',
+  tagsRequired: 'Bitte mindestens eine Behandlung wählen',
+  selectTagOrNote: 'Bitte mindestens eine Behandlung wählen, oder eine Anmerkung schreiben',
+  addNoteIfNoTagsSelected: 'Wenn keine Behandlung gewählt ist, bitte eine Anmerkung schreiben',
   today: 'Heute',
   asap: 'so bald wie möglich',
   in2Weeks: 'in 2 Wochen',
@@ -76,31 +78,5 @@ export const appointments = {
   nextTreatmentSuccess: 'Nächste Behandlung gestartet',
   changeWaitlistAssigneeSuccess: 'Verschoben',
   changeWaitlistAssignee: 'Verschieben',
-  error: 'Entschuldigung! Bitte noch einmal versuchen.',
-  form: {
-    start: {
-      label: 'Beginn'
-    },
-    end: {
-      label: 'Ende'
-    },
-    type: {
-      label: 'Art'
-    },
-    show: {
-      label: 'Anwesend'
-    },
-    patientId: {
-      label: 'Patient'
-    },
-    assigneeId: {
-      label: 'Spezialist'
-    },
-    assistentIds: {
-      label: 'Assistenten'
-    },
-    privateAppointment: {
-      label: 'Privattermin'
-    }
-  }
+  error: 'Entschuldigung! Bitte noch einmal versuchen.'
 }

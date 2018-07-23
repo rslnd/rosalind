@@ -54,7 +54,6 @@ ecmascript-runtime-client@0.5.0
 ecmascript-runtime-server@0.5.0
 ejson@1.1.0
 email@1.2.3
-es5-shim@4.6.15
 fastclick@1.0.13
 fds:coffeescript-share@1.0.0
 fourseven:scss@4.5.4

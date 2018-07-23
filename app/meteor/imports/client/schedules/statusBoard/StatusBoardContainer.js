@@ -63,10 +63,7 @@ const compose = (props) => {
     return { defaultSchedules, groups, weekday }
   }
 
-  update()
-  const tick = setInterval(update, 15 * 1000)
-  const cleanup = () => clearInterval(tick)
-  return cleanup
+  return update()
 }
 
 export const StatusBoardContainer = withTracker(compose)(StatusBoard)

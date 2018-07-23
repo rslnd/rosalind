@@ -1,5 +1,4 @@
 import React from 'react'
-
 import Blaze from 'meteor/gadicc:blaze-react-component'
 import { InboundCallsContainer } from './InboundCallsContainer'
 import { NewInboundCallContainer } from './NewInboundCallContainer'

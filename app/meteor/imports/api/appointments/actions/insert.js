@@ -27,7 +27,8 @@ export const insert = ({ Appointments }) => {
         patientId = Patients.actions.upsert.call({ patient: newPatient })
       }
 
-      const appointmentId = Appointments.insert({ ...appointment, patientId }, (err) => {
+      let appointmentId = null
+      appointmentId = Appointments.insert({ ...appointment, patientId }, (err) => {
         if (err) {
           console.error('[Appointments] Appointment insert failed with error', err)
         } else {

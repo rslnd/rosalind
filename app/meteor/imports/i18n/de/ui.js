@@ -41,6 +41,7 @@ export const ui = {
     disconnected: 'Hoppla! Die Internetverbindung ist abgerissen. Keine Sorge, sie ist bestimmt gleich wieder da.'
   },
   required: 'Erforderlich',
+  pleaseFill: 'Bitte eintragen',
   composeEmail: 'Email schreiben',
   startDate: 'von',
   endDate: 'bis'

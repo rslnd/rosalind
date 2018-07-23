@@ -7,7 +7,7 @@ import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = (props) => {
   const patientId = props.patientId
-  if (!patientId) { return }
+  if (!patientId) { return {} }
 
   subscribe('appointments-patient', { patientId })
 

@@ -29,9 +29,8 @@ export const softRemove = ({ Appointments }) => {
 
       if (Meteor.isServer) {
         Referrals.serverActions.unredeem({ appointmentId })
+        Messages.actions.removeReminder.call({ appointmentId })
       }
-
-      Messages.actions.removeReminder.call({ appointmentId })
 
       Events.post('appointments/softRemove', { appointmentId })
 

@@ -30,6 +30,10 @@ const composer = (props) => {
     }
 
     return { inbound, intentToCancel, onCreateInboundCall }
+  } else {
+    return {
+      isLoading: true
+    }
   }
 }
 

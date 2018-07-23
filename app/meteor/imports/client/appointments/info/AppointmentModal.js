@@ -28,7 +28,7 @@ export const AppointmentModal = (props) => {
     </Modal.Footer>
 
   return (
-    <Modal
+    show && <Modal
       show={show}
       onHide={onClose}
       enforceFocus={false}
@@ -51,6 +51,6 @@ export const AppointmentModal = (props) => {
             </div>
           </div>
       }
-    </Modal>
+    </Modal> || null
   )
 }

@@ -148,6 +148,10 @@ const composer = props => {
       handleToggleGender,
       handleSetMessagePreferences
     }
+  } else {
+    return {
+      isLoading: true
+    }
   }
 }
 

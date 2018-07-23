@@ -33,39 +33,28 @@ const composer = (props) => {
     userIdStore.set(newUserId)
   }
 
-  if (subscription.ready()) {
-    const update = () => {
-      const timesheets = Timesheets.find({
-        userId,
-        start: { $gt: start.toDate() }
-      }, {
-        sort: { start: -1 }
-      }).fetch()
-      const isTracking = Timesheets.methods.isTracking({ userId })
+  const timesheets = Timesheets.find({
+    userId,
+    start: { $gt: start.toDate() }
+  }, {
+    sort: { start: -1 }
+  }).fetch()
+  const isTracking = Timesheets.methods.isTracking({ userId })
 
-      const days = timesheets.map((timesheet) => {
-        const day = dateToDay(timesheet.start)
-        const scheduledHours = Schedules.methods.getScheduledHours({ userId, day })
-        console.log(day, userId, scheduledHours)
-        return {
-          day,
-          timesheet,
-          scheduledHours
-        }
-      }).filter((s) => s.scheduledHours)
-
-      const sum = add(days.map((d) => d.timesheet.duration()))
-
-      return { days, timesheets, isTracking, sum, start, end, userId, onChangeUserId }
+  const days = timesheets.map((timesheet) => {
+    const day = dateToDay(timesheet.start)
+    const scheduledHours = Schedules.methods.getScheduledHours({ userId, day })
+    console.log(day, userId, scheduledHours)
+    return {
+      day,
+      timesheet,
+      scheduledHours
     }
+  }).filter((s) => s.scheduledHours)
 
-    update()
+  const sum = add(days.map((d) => d.timesheet.duration()))
 
-    // FIXME: This makes the screen flash
-    // const tick = setInterval(update, 1000)
-    // const cleanup = () => clearInterval(tick)
-    // return cleanup
-  }
+  return { days, timesheets, isTracking, sum, start, end, userId, onChangeUserId }
 }
 
 export const TimesheetsContainer = withTracker(composer)(TimesheetsScreen)

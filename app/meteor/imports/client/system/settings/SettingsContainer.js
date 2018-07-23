@@ -4,16 +4,17 @@ import { SettingsScreen } from './SettingsScreen'
 import { subscribe } from '../../../util/meteor/subscribe'
 
 export const composer = (props) => {
-  if (subscribe('settings').ready()) {
-    const get = (key) => Settings.get(key)
-    const set = (key, value) => Settings.actions.set.call({ key, value })
+  subscribe('settings').ready()
 
-    const settings = Settings.find({})
+  const get = (key) => Settings.get(key)
+  const set = (key, value) => Settings.actions.set.call({ key, value })
 
-    settings.get = get
-    settings.set = set
-    return { get, set, settings }
-  }
+  const settings = Settings.find({})
+
+  settings.get = get
+  settings.set = set
+
+  return { get, set, settings }
 }
 
 export const SettingsContainer = withTracker(composer)(SettingsScreen)

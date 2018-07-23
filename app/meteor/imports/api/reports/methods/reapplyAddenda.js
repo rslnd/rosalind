@@ -1,5 +1,5 @@
 import identity from 'lodash/fp/identity'
-import flatten from 'lodash/fp/flatten'
+import flatten from 'lodash/flatten'
 import { merge } from './merge'
 
 export const reapplyAddenda = originalReport => newReport => newAddendum => {

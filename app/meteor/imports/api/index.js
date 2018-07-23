@@ -11,7 +11,6 @@ import { InboundCalls } from './inboundCalls'
 import { Calendars } from './calendars'
 import { Appointments } from './appointments'
 import { Importers } from './importers'
-import { Jobs } from './jobs'
 import { Messages } from './messages'
 import { Referrals } from './referrals'
 import { Reports } from './reports'
@@ -30,7 +29,6 @@ export {
   Events,
   Importers,
   InboundCalls,
-  Jobs,
   Messages,
   Referrals,
   Reports,

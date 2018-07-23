@@ -15,6 +15,10 @@ const composer = (props) => {
     const unresolve = (_id) => InboundCalls.methods.unresolve.call({ _id })
 
     return { inboundCalls, resolve, unresolve }
+  } else {
+    return {
+      isLoading: true
+    }
   }
 }
 

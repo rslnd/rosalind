@@ -200,7 +200,9 @@ const composer = (props) => {
       dispatch
     }
   } else {
-    return null
+    return {
+      isLoading: true
+    }
   }
 }
 

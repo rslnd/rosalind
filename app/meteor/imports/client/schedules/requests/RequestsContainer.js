@@ -31,6 +31,10 @@ const composer = (props) => {
     const canEdit = Roles.userIsInRole(Meteor.userId(), ['schedules-edit', 'admin'])
 
     return { requests, approve, decline, canEdit }
+  } else {
+    return {
+      isLoading: true
+    }
   }
 }
 

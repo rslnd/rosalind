@@ -104,7 +104,6 @@ export const tally = ({ date, from, to, referrals, futureAppointments = [] }) =>
     a.redeemed.total === 0
   ))
 
-  console.log(new Date(), 'tallying referrals', '\n date', date, {from, to}, '\n result', period, '----------- today period:', todayPeriod)
   return {
     period,
     assignees,

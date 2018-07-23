@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor'
+import Tabular from 'meteor/aldeed:tabular'
 import Helpers from '../../util/helpers'
 import { zerofix } from '../../util/zerofix'
 import { firstName } from '../users/methods/name'
 import { Users } from '../users'
 import InboundCalls from './collection'
 import Schema from './schema'
-import Tabular from 'meteor/aldeed:tabular'
 
 if Meteor.isClient
   require('../../client/old/templates/comments/commentCount.tpl.jade')
@@ -43,4 +43,4 @@ module.exports = new Tabular.Table
   stateSave: true
   changeSelector: (selector) ->
     selector.removed = true
-    selector
+    return selector
