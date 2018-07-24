@@ -4,42 +4,58 @@ module.paths.push(path.resolve('../node_modules'))
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app', 'node_modules'))
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app.asar', 'node_modules'))
 
-const { app, ipcMain } = require('electron')
-require('./debugger')
-const updater = require('./updater')
-const window = require('./window')
-const logger = require('./logger')
-const systemInfo = require('./systemInfo')
+const { app, ipcMain, crashReporter } = require('electron')
 
+if ('@@CI'.indexOf('@@') === -1) {
+  const { init } = require('@sentry/electron')
+  init({
+    dsn: '@@SENTRY_DSN_URL',
+    enableNative: false,
+    release: app.getVersion()
+  })
+
+  crashReporter.start({
+    companyName: 'YourCompany',
+    productName: 'YourApp',
+    ignoreSystemCrashHandler: true,
+    submitURL: '@@SENTRY_CRASH_URL'
+  })
+}
+
+const logger = require('./logger')
 logger.start()
 
-const settings = require('./settings')
-const cli = require('./cli')
-const automation = require('./automation')
-const print = require('./print')
-const shortcuts = require('./shortcuts')
-const watch = require('./watch')
-
-let mainWindow = null
-
-const handleFocus = () => {
-  if (!mainWindow) { return }
-  if (mainWindow.isMinimized()) {
-    mainWindow.restore()
-  }
-  mainWindow.focus()
-}
-
-const handleOtherInstanceLaunched = (argv) => {
-  handleFocus()
-  automation.start(argv)
-}
-
 const start = () => {
-  if (updater.handleStartupEvent()) { return }
-  if (cli.handleStartupEvent(handleOtherInstanceLaunched)) { return app.quit() }
+  const updater = require('./updater')
+  const window = require('./window')
+  const systemInfo = require('./systemInfo')
+  const settings = require('./settings')
+  const cli = require('./cli')
+  const automation = require('./automation')
+  const print = require('./print')
+  const shortcuts = require('./shortcuts')
+  const watch = require('./watch')
+  const devtools = require('./devtools')
 
   app.on('ready', () => {
+    let mainWindow = null
+
+    const handleFocus = () => {
+      if (!mainWindow) { return }
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore()
+      }
+      mainWindow.focus()
+    }
+
+    const handleOtherInstanceLaunched = (argv) => {
+      handleFocus()
+      automation.start(argv)
+    }
+
+    if (updater.handleStartupEvent()) { return }
+    if (cli.handleStartupEvent(handleOtherInstanceLaunched)) { return app.quit() }
+
     mainWindow = window.open(err => {
       if (err) {
         logger.error('[Main] Could not load main window', err)
@@ -51,6 +67,7 @@ const start = () => {
       print.start({ ipcReceiver: mainWindow })
       automation.start(process.argv)
       shortcuts.updateShortcuts()
+      devtools.start()
 
       ipcMain.on('window/load', (e) => {
         settings.send({ ipcReceiver: mainWindow })

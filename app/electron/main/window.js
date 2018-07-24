@@ -84,5 +84,4 @@ const open = (callback) => {
   return mainWindow
 }
 
-
 module.exports = { open }

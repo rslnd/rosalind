@@ -4,7 +4,6 @@ const open = require('opn')
 const temp = require('temp')
 const { ipcMain } = require('electron')
 const logger = require('./logger')
-const settings = require('./settings')
 
 const start = (options) => {
   temp.track()
@@ -31,7 +30,7 @@ const print = (options) => {
         logger.error('[Print] Failed to generate pdf: ' + err)
         return
       }
-      
+
       fs.writeFile(pdfPath, data, (err) => {
         if (err) {
           logger.error('[Print] Failed to save pdf: ' + err)

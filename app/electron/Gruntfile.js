@@ -150,7 +150,9 @@ module.exports = (grunt) => {
     'string-replace': {
       env: {
         files: {
-          'build/javascript/main/logger.js': 'build/javascript/main/logger.js'
+          'build/javascript/main/logger.js': 'build/javascript/main/logger.js',
+          'build/javascript/main/main.js': 'build/javascript/main/main.js',
+          'build/javascript/renderer/native.js': 'build/javascript/renderer/native.js'
         },
         options: {
           replacements: [
@@ -161,6 +163,14 @@ module.exports = (grunt) => {
             {
               pattern: /@@PAPERTRAIL_URL/ig,
               replacement: process.env.PAPERTRAIL_URL
+            },
+            {
+              pattern: /@@SENTRY_DSN_URL/ig,
+              replacement: process.env.SENTRY_DSN_URL
+            },
+            {
+              pattern: /@@SENTRY_CRASH_URL/ig,
+              replacement: process.env.SENTRY_CRASH_URL
             }
           ]
         }

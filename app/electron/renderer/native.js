@@ -1,5 +1,11 @@
 console.log('[Electron Native] Enabling native bindings')
 const { ipcRenderer } = require('electron')
+
+const { init } = require('@sentry/electron')
+init({
+  dsn: '@@SENTRY_DSN_URL'
+})
+
 const EventEmitter = require('eventemitter3')
 
 // TODO Figure out how to fetch settings before loading page.

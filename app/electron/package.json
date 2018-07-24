@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.121",
+  "version": "0.0.122",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
@@ -25,6 +25,7 @@
     "shelljs": "^0.8.2"
   },
   "dependencies": {
+    "@sentry/electron": "^0.7.0",
     "async": "^2.6.1",
     "chokidar": "^2.0.3",
     "electron-localshortcut": "^3.1.0",
