@@ -206,19 +206,21 @@ Func GetCmdLineArg($sKey)
   Return 0
 EndFunc
 
-Func HoistErrors()
+Func HoistErrors($bShouldFail = True)
   Local $hError = WinWait("Fehler", "", 1)
   If $hError Then
     Info("Detected hoistable error message")
     ExpectControlClick($hError, "&>>", "[CLASS:TBitBtn; INSTANCE:2]")
     Local $sError = ControlGetText($hError, "", "[CLASS:TMemo; INSTANCE:1]")
-    Fail("Hoisted Error: " & $sError)
+    If ($bShouldFail) Then
+      Fail("Hoisted Error: " & $sError)
+    EndIf
   EndIf
 EndFunc
 
 Func Fail($sMessage)
   ConsoleWriteError("Fail: " & $sMessage & @CRLF)
-  HoistErrors()
+  HoistErrors(False)
   ConsoleWriteError("Printing debug information" & @CRLF)
   PrintWindows()
   Screenshot()
