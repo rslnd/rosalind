@@ -83,6 +83,7 @@ simonsimcity:job-collection
 
 # Monitoring
 mdg:meteor-apm-agent
+flowkey:raven
 
 # Legacy
 coffeescript

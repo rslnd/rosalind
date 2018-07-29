@@ -1,3 +1,4 @@
+import shared from '../shared'
 import banner from './banner'
 import intl from './intl'
 import timezone from './timezone'
@@ -13,6 +14,7 @@ import development from './development'
 import api from './api'
 
 export default function () {
+  shared()
   banner()
   intl()
   timezone()

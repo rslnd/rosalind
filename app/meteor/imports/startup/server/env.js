@@ -8,6 +8,7 @@ export default () => {
     COMMIT_HASH: true,
     BUILD_NUMBER: true,
     CUSTOMER_NAME: true,
-    SMOOCH_APP_ID: true
+    SMOOCH_APP_ID: true,
+    SENTRY_DSN_URL_PUBLIC: true
   })
 }
