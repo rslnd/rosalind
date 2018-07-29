@@ -1,6 +1,6 @@
 import { reduxForm, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import Alert from 'react-s-alert'
 import { Loading } from '../components/Loading'
 import { __ } from '../../i18n'

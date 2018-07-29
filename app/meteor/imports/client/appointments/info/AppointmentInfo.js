@@ -349,7 +349,7 @@ export class AppointmentInfo extends React.Component {
 
   render () {
     const {
-      loading,
+      isLoading,
       handleSubmit,
       dirty,
       appointment,

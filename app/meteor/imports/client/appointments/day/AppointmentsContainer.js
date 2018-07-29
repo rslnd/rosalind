@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import { Calendars } from '../../../api/calendars'
 import { AppointmentsScreen } from './AppointmentsScreen'
 

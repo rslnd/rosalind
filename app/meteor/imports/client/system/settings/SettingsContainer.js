@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import { Settings } from '../../../api/settings'
 import { SettingsScreen } from './SettingsScreen'
 import { subscribe } from '../../../util/meteor/subscribe'

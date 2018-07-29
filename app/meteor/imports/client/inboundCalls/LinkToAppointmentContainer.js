@@ -5,7 +5,7 @@ import { Calendars } from '../../api/calendars'
 import { Appointments } from '../../api/appointments'
 import { Users } from '../../api/users'
 import { LinkToAppointmentWrapper } from './LinkToAppointment'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { subscribe } from '../../util/meteor/subscribe'
 
 const getFormattedAppointmentData = (appointmentId) => {

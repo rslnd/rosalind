@@ -57,6 +57,10 @@ export class AppointmentsScreen extends React.Component {
   }
 
   render () {
+    if (this.props.isLoading) {
+      return null
+    }
+
     return (
       <div>
         <div className='content-header hide-print' style={contentHeaderStyle}>

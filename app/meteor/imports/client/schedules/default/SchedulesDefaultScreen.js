@@ -8,7 +8,7 @@ import { Users } from '../../../api/users'
 import { Box } from '../../components/Box'
 import { UserPickerContainer } from '../../users/UserPickerContainer'
 import { __ } from '../../../i18n'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import {
   Table,
   TableHead,

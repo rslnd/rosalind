@@ -5,7 +5,7 @@ import { Roles } from 'meteor/alanning:roles'
 import { __ } from '../../../i18n'
 import { Schedules } from '../../../api/schedules'
 import { RequestsScreen } from './RequestsScreen'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import { subscribe } from '../../../util/meteor/subscribe'
 
 const composer = (props) => {

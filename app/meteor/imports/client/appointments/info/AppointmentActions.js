@@ -9,12 +9,14 @@ export const AppointmentActions = (props) => (
       {
         props.admitted
         ? <Button
+          disabled={props.isLoading}
           variant='raised'
           style={{ backgroundColor: '#C5E1A5' }}
           onClick={props.unsetAdmitted}>
           <span><Icon name='check' />&emsp;{__('appointments.admit')}</span>
         </Button>
         : <Button
+          disabled={props.isLoading}
           variant='raised'
           style={{ backgroundColor: '#fff' }}
           onClick={props.setAdmitted}>
@@ -25,11 +27,13 @@ export const AppointmentActions = (props) => (
       {
         props.canceled
         ? <Button
+          disabled={props.isLoading}
           style={{ backgroundColor: '#e4e3e3', marginLeft: 20 }}
           onClick={props.unsetCanceled}>
           <span><Icon name='times' />&emsp;{__('appointments.canceled')}</span>
         </Button>
         : <Button
+          disabled={props.isLoading}
           style={{ marginLeft: 20 }}
           onClick={props.setCanceled}>
           <span><Icon name='times' />&emsp;{__('appointments.cancel')}</span>
@@ -39,6 +43,7 @@ export const AppointmentActions = (props) => (
       {
         props.startMove &&
           <Button
+            disabled={props.isLoading}
             style={{ marginLeft: 20 }}
             onClick={props.startMove}>
             <span><Icon name='arrows' />&emsp;{__('appointments.move')}</span>
@@ -48,6 +53,7 @@ export const AppointmentActions = (props) => (
       {
         props.viewInCalendar &&
           <Button
+            disabled={props.isLoading}
             style={{ marginLeft: 20 }}
             onClick={props.viewInCalendar}>
             <span><Icon name='calendar' />&emsp;{__('appointments.viewInCalendar')}</span>
@@ -55,6 +61,7 @@ export const AppointmentActions = (props) => (
       }
 
       <Button
+        disabled={props.isLoading}
         style={{ marginLeft: 20 }}
         onClick={props.softRemove}>
         <span><Icon name='trash-o' />&emsp;{__('appointments.softRemove')}</span>

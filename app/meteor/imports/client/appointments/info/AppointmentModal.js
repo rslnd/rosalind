@@ -4,9 +4,11 @@ import Button from '@material-ui/core/Button'
 import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { AppointmentActionsContainer } from './AppointmentActionsContainer'
 import { PastAppointmentsContainer } from '../../patients/PastAppointmentsContainer'
+import { Loading } from '../../components/Loading'
 
 export const AppointmentModal = (props) => {
   const {
+    isLoading,
     appointmentId,
     onStartMove,
     onSetAdmitted,
@@ -16,6 +18,14 @@ export const AppointmentModal = (props) => {
     comments,
     patient
   } = props
+
+  if (!show) {
+    return null
+  }
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   const Actions = () =>
     <Modal.Footer style={{ backgroundColor: '#fcfcfc' }}>

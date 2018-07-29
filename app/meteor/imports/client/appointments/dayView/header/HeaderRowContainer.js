@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../../components/withTracker'
 import { __ } from '../../../../i18n'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'

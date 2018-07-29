@@ -1,7 +1,7 @@
 import { toClass } from 'recompose'
 import { Comments } from '../../api/comments'
 import { CommentsBox } from './CommentsBox'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 
 const commentsBoxComposer = (props) => {
   const comments = Comments.find({ docId: props.docId }, { sort: { createdAt: 1 } }).fetch()

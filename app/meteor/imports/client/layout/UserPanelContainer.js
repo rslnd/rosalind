@@ -1,7 +1,7 @@
 import React from 'react'
 import { toClass } from 'recompose'
 import { withRouter } from 'react-router-dom'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { Meteor } from 'meteor/meteor'
 import { UserPanel } from './UserPanel'
 

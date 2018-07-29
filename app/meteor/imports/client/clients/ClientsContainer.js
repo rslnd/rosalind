@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { Clients } from '../../api/clients'
 import { Users } from '../../api/users'
 import { Groups } from '../../api/groups'

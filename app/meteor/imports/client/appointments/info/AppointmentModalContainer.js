@@ -1,6 +1,6 @@
 import Alert from 'react-s-alert'
 import { toClass } from 'recompose'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'

@@ -9,7 +9,7 @@ import moment from 'moment-timezone'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { getAssignee } from '../../api/reports/methods/getAssignee'
 import { Calendars } from '../../api/calendars'
 import { Reports } from '../../api/reports'
@@ -17,7 +17,7 @@ import { Users } from '../../api/users'
 import { Tags } from '../../api/tags'
 import { Referrals } from '../../api/referrals'
 import { ReferralsReportScreen } from './ReferralsReportScreen'
-import { withMethodData } from '../components/withMethodData'
+import { withPromise } from '../components/withPromise'
 import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = props => {
@@ -75,5 +75,5 @@ const fetchReferrals = ({ from, to, user }) => {
 export const ReferralsReportContainer = compose(
   withRouter,
   withTracker(composer),
-  withMethodData(fetchReferrals),
+  withPromise(fetchReferrals),
 )(ReferralsReportScreen)

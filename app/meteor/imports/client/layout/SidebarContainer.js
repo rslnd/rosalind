@@ -1,5 +1,5 @@
 import identity from 'lodash/identity'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { process as server } from 'meteor/clinical:env'
 import { Meteor } from 'meteor/meteor'

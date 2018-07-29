@@ -1,7 +1,7 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { CalendarSelect } from '../calendars/CalendarSelect'
 import { Waitlist } from '../appointments/waitlist'
 
@@ -23,7 +23,7 @@ const composer = props => {
 
   return {
     canSeeWaitlist,
-    canSeeAppointments: false,
+    canSeeAppointments,
     ...props
   }
 }

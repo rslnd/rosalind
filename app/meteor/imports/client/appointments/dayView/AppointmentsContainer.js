@@ -12,7 +12,7 @@ import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { __ } from '../../../i18n'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { dateToDay } from '../../../util/time/day'
 import { Users } from '../../../api/users'
@@ -65,18 +65,17 @@ const composer = (props) => {
     end: endOfDay
   }
 
+  let subsReady = true
   // Appointments and schedules for future dates are cached as global subscriptions
-  let subsReady = false
   if (date.toDate() < moment().startOf('day').toDate()) {
     const schedulesDaySubscriptions = subscribeManager(appointmentsSubsManager, 'schedules', day)
     const schedulesOverrideSubscriptions = subscribeManager(appointmentsSubsManager, 'schedules', dateRange)
     const appointmentsSubscription = subscribeManager(appointmentsSubsManager, 'appointments-legacy', dateRange)
     subsReady = schedulesDaySubscriptions.ready() && schedulesOverrideSubscriptions.ready() && appointmentsSubscription.ready()
-  } else {
-    subsReady = true
   }
 
-  if (subsReady) {
+  // Skip jarring loading indicator
+  if (subsReady || true) {
     const appointmentsSelector = {
       calendarId: calendar._id,
       start: {
@@ -194,14 +193,9 @@ const composer = (props) => {
       onNewAppointmentModalClose,
       handleSetAdmitted,
       handleMove,
-      subsReady,
       canEditSchedules,
       move,
       dispatch
-    }
-  } else {
-    return {
-      isLoading: true
     }
   }
 }

@@ -3,7 +3,7 @@ import Switch from '@material-ui/core/Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import de from 'date-fns/locale/de'
-import distanceInWordsToNow from 'date-fns'
+import { formatDistance } from 'date-fns'
 import { toClass } from 'recompose'
 import { Box } from '../components/Box'
 import { Table } from '../components/InlineEditTable'
@@ -28,7 +28,7 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   },
   {
     header: 'Letzte Aktion',
-    render: c => c.lastActionAt && distanceInWordsToNow(c.lastActionAt, { locale: de })
+    render: c => c.lastActionAt && formatDistance(c.lastActionAt, new Date(), { locale: de })
   },
   {
     header: 'System-Info',

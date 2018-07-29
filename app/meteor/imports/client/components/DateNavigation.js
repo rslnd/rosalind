@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { withRouter } from 'react-router-dom'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { DayPickerSingleDateController } from 'react-dates'
 import { PortalWithState } from 'react-portal'

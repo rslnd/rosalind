@@ -15,16 +15,11 @@ const jobs = new JobCollection('messages', {
   }
 })
 
-let Messages = {}
-
-// Work around weird duplicate collection bug
-if (Meteor.isServer) {
-  Messages = new Mongo.Collection('messages')
-  Messages.attachSchema(schema)
-  Messages.attachBehaviour('softRemovable')
-  Messages.helpers({ collection: () => Messages })
-  Messages.jobs = jobs
-  Messages.actions = actions({ Messages })
-}
+const Messages = new Mongo.Collection('messages')
+Messages.attachSchema(schema)
+Messages.attachBehaviour('softRemovable')
+Messages.helpers({ collection: () => Messages })
+Messages.jobs = jobs
+Messages.actions = actions({ Messages })
 
 export default Messages

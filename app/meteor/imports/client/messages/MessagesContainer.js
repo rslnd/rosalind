@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
 import Alert from 'react-s-alert'
 import { Messages } from '../../api/messages'

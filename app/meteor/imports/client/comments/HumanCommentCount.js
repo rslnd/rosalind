@@ -2,7 +2,7 @@ import React from 'react'
 import { toClass } from 'recompose'
 import { __ } from '../../i18n'
 import { Comments } from '../../api/comments'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 
 const HumanCommentCountSpan = ({ commentCount }) => (
   <span className='pull-right text-muted'>

@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { Loading } from '../components/Loading'
 import { Appointments } from '../../api/appointments'
 import { Patients } from '../../api/patients'

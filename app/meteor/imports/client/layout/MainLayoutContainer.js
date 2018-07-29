@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
@@ -23,7 +23,7 @@ const composer = (props) => {
     subscribe('inboundCalls')
   }
 
-  const loading = [
+  const isLoading = [
     subscribe('roles'),
     subscribe('users'),
     subscribe('groups'),
@@ -46,7 +46,7 @@ const composer = (props) => {
 
   const isPrint = props.location.hash === '#print'
 
-  return { ...props, loading, currentUser, locale, loggingIn, sidebarOpen, isPrint }
+  return { ...props, isLoading, currentUser, locale, loggingIn, sidebarOpen, isPrint }
 }
 
 const MainLayoutContainer = withRouter(withTracker(composer)(MainLayout))

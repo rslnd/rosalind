@@ -9,9 +9,27 @@ const omitUncomparable = omitBy((v, k) => {
 const propsEqual = (a, b) =>
   isEqual(omitUncomparable(a), omitUncomparable(b))
 
-export const withMethodData = fetcher =>
+const makeCancelable = promise => {
+  let isCanceled = false
+
+  const wrappedPromise = new Promise((resolve, reject) => {
+    promise.then(
+      val => isCanceled ? reject({ isCanceled: true }) : resolve(val),
+      error => isCanceled ? reject({ isCanceled: true }) : reject(error)
+    )
+  })
+
+  return {
+    promise: wrappedPromise,
+    cancel () {
+      isCanceled = true
+    }
+  }
+}
+
+export const withPromise = fetcher =>
   WrappedComponent =>
-    class WithMethodData extends React.Component {
+    class WithPromise extends React.Component {
       constructor (props) {
         super(props)
 
@@ -21,7 +39,10 @@ export const withMethodData = fetcher =>
           error: null
         }
 
+        this.promiseInFlight = null
+
         this.fetch = this.fetch.bind(this)
+        this.cancel = this.cancel.bind(this)
       }
 
       componentWillReceiveProps (nextProps) {
@@ -34,11 +55,23 @@ export const withMethodData = fetcher =>
         this.fetch(this.props)
       }
 
+      componentWillUnmount () {
+        this.cancel()
+      }
+
+      cancel () {
+        if (this.promiseInFlight) {
+          this.promiseInFlight.cancel()
+        }
+      }
+
       fetch (props) {
+        this.cancel()
         this.setState({ isLoading: true })
 
-        return fetcher(props)
-          .then(data =>
+        this.promiseInFlight = makeCancelable(fetcher(props))
+
+        this.promiseInFlight.promise.then(data =>
             this.setState({
               isLoading: false,
               data,
@@ -49,15 +82,17 @@ export const withMethodData = fetcher =>
             this.setState({
               isLoading: false,
               data: null,
-              error: null
+              error: e
             }))
       }
 
       render () {
+        const { data, ...rest } = this.state
+
         return <WrappedComponent
           {...this.props}
-          {...this.state.data}
-          {...this.state}
+          {...data}
+          {...rest}
         />
       }
 

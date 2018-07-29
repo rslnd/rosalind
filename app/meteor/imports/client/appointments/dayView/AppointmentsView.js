@@ -10,6 +10,7 @@ import { ScheduleModal } from './schedules/ScheduleModal'
 import { NewAppointmentModal } from './new/NewAppointmentModal'
 import { WaitlistAssigneeModal } from './WaitlistAssigneeModal'
 import { setTime } from './grid/timeSlots'
+import { ErrorBoundary } from '../../layout/ErrorBoundary'
 
 export class AppointmentsView extends React.Component {
   constructor (props) {
@@ -267,50 +268,62 @@ export class AppointmentsView extends React.Component {
   render () {
     return (
       <div>
-        <HeaderRowContainer
-          date={this.props.date}
-          daySchedule={this.props.daySchedule}
-          calendar={this.props.calendar}
-          assignees={this.props.assignees}
-          onToggleOverrideMode={this.handleToggleOverrideMode}
-          overrideMode={this.state.override.isOverriding} />
+        <ErrorBoundary>
+          <HeaderRowContainer
+            date={this.props.date}
+            daySchedule={this.props.daySchedule}
+            calendar={this.props.calendar}
+            assignees={this.props.assignees}
+            onToggleOverrideMode={this.handleToggleOverrideMode}
+            overrideMode={this.state.override.isOverriding} />
+        </ErrorBoundary>
 
-        <AppointmentsGrid
-          calendar={this.props.calendar}
-          date={this.props.date}
-          assignees={this.props.assignees}
-          onAppointmentClick={this.handleAppointmentClick}
-          onBlankClick={this.handleBlankClick}
-          onBlankMouseEnter={this.handleBlankHover}
-          override={this.state.override}
-          onScheduleModalOpen={this.handleScheduleModalOpen}
-          move={this.props.move} />
+        <ErrorBoundary>
+          <AppointmentsGrid
+            calendar={this.props.calendar}
+            date={this.props.date}
+            assignees={this.props.assignees}
+            onAppointmentClick={this.handleAppointmentClick}
+            onBlankClick={this.handleBlankClick}
+            onBlankMouseEnter={this.handleBlankHover}
+            override={this.state.override}
+            onScheduleModalOpen={this.handleScheduleModalOpen}
+            move={this.props.move} />
+        </ErrorBoundary>
 
-        <AppointmentModalContainer
-          appointmentId={this.state.selectedAppointmentId}
-          onStartMove={this.handleMoveStart}
-          onSetAdmitted={this.handleSetAdmitted}
-          show={this.state.appointmentModalOpen}
-          onClose={this.handleAppointmentModalClose} />
+        <ErrorBoundary>
+          <AppointmentModalContainer
+            appointmentId={this.state.selectedAppointmentId}
+            onStartMove={this.handleMoveStart}
+            onSetAdmitted={this.handleSetAdmitted}
+            show={this.state.appointmentModalOpen}
+            onClose={this.handleAppointmentModalClose} />
+        </ErrorBoundary>
 
-        <ScheduleModal
-          show={this.state.scheduleModalOpen}
-          onClose={this.handleScheduleModalClose}
-          onClickScheduleSoftRemove={this.handleScheduleSoftRemove} />
+        <ErrorBoundary>
+          <ScheduleModal
+            show={this.state.scheduleModalOpen}
+            onClose={this.handleScheduleModalClose}
+            onClickScheduleSoftRemove={this.handleScheduleSoftRemove} />
+        </ErrorBoundary>
 
-        <NewAppointmentModal
-          calendar={this.props.calendar}
-          open={this.state.newAppointmentModalOpen}
-          assigneeId={this.state.selectedAssigneeId}
-          time={this.state.selectedTime}
-          onClose={this.handleNewAppointmentModalClose} />
+        <ErrorBoundary>
+          <NewAppointmentModal
+            calendar={this.props.calendar}
+            open={this.state.newAppointmentModalOpen}
+            assigneeId={this.state.selectedAssigneeId}
+            time={this.state.selectedTime}
+            onClose={this.handleNewAppointmentModalClose} />
+        </ErrorBoundary>
 
-        <WaitlistAssigneeModal
-          show={this.state.selectWaitlistAssigneeModalOpen}
-          onClose={this.handleSelectWaitlistAssigneeModalClose}
-          appointmentId={this.state.selectWaitlistAssigneeAppointmentId}
-          onSetAdmitted={this.props.onSetAdmitted}
-        />
+        <ErrorBoundary>
+          <WaitlistAssigneeModal
+            show={this.state.selectWaitlistAssigneeModalOpen}
+            onClose={this.handleSelectWaitlistAssigneeModalClose}
+            appointmentId={this.state.selectWaitlistAssigneeAppointmentId}
+            onSetAdmitted={this.props.onSetAdmitted}
+          />
+        </ErrorBoundary>
       </div>
     )
   }

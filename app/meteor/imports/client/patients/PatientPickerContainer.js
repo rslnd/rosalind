@@ -1,6 +1,6 @@
 import idx from 'idx'
 import { connect } from 'react-redux'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withPromise } from '../components/withPromise'
 import { Patients } from '../../api/patients'
 import { PatientPicker } from './PatientPicker'
 
@@ -14,45 +14,41 @@ const composer = (props) => {
     const patientId = inputValue || props.patientId
 
     if (patientId === 'newPatient' || patientId === '') {
-      return { ...props }
+      return Promise.resolve(props)
     } else {
       const patient = Patients.findOne({ _id: patientId })
 
       if (patient) {
-        return {
+        return Promise.resolve({
           ...props,
           injectedValue: {
             patientId,
             patient
           }
-        }
+        })
       }
 
-      Patients.actions.findOne.callPromise({ _id: patientId })
+      return Patients.actions.findOne.callPromise({ _id: patientId })
         .then((patient) => {
           if (props.patientId && !props.input.value) {
             props.loadPatient(patient)
           }
 
-          try {
-            return {
-              ...props,
-              injectedValue: {
-                patientId,
-                patient
-              }
+          return {
+            ...props,
+            injectedValue: {
+              patientId,
+              patient
             }
-          } catch (e) {
-            // ignore
           }
         })
     }
   } else {
-    return props
+    return Promise.resolve(props)
   }
 }
 
-let PatientPickerContainer = withTracker(composer)(PatientPicker)
+let PatientPickerContainer = withPromise(composer)(PatientPicker)
 
 PatientPickerContainer = connect(state => {
   const patientId = idx(state, _ => _.appointments.search.patientId)

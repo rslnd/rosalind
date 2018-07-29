@@ -1,7 +1,7 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../../i18n'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import Alert from 'react-s-alert'
 import moment from 'moment-timezone'
 import Button from '@material-ui/core/Button'

@@ -1,6 +1,7 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
 import { Box } from '../components/Box'
+import { Loading } from '../components/Loading'
 import { RelativeTime } from '../helpers/RelativeTime'
 
 export class Message extends React.Component {
@@ -37,20 +38,24 @@ const List = ({ messages, onCreateInboundCall }) => (
   </FlipMove>
 )
 
-export const MessagesScreen = ({ inbound, intentToCancel, onCreateInboundCall }) => (
+export const MessagesScreen = ({ isLoading, inbound, intentToCancel, onCreateInboundCall }) => (
   <div className='content'>
-    <div className='row'>
-      <div className='col-md-6'>
-        <Box title='Inbound messages matched as intent to cancel' icon='calendar-times-o'>
-          <List messages={intentToCancel} onCreateInboundCall={onCreateInboundCall} />
-        </Box>
-      </div>
+    {
+      isLoading
+      ? <Loading />
+      : <div className='row'>
+          <div className='col-md-6'>
+            <Box title='Inbound messages matched as intent to cancel' icon='calendar-times-o'>
+              <List messages={intentToCancel} onCreateInboundCall={onCreateInboundCall} />
+            </Box>
+          </div>
 
-      <div className='col-md-6'>
-        <Box title='Other inbound messages' icon='comment-o'>
-          <List messages={inbound} />
-        </Box>
-      </div>
-    </div>
+          <div className='col-md-6'>
+            <Box title='Other inbound messages' icon='comment-o'>
+              <List messages={inbound} />
+            </Box>
+          </div>
+        </div>
+    }
   </div>
 )

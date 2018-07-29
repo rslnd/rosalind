@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import { InboundCalls } from '../../api/inboundCalls'
 import { Loading } from '../components/Loading'
 import { InboundCallsScreen } from './InboundCallsScreen'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = (props) => {

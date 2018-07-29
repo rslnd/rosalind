@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
 import { Roles } from 'meteor/alanning:roles'
 import Alert from 'react-s-alert'

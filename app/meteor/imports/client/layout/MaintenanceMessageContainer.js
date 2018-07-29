@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { Settings } from '../../api/settings'
 
 const SNOOZE_SECONDS = 60 * 3

@@ -51,7 +51,7 @@ export class MainLayout extends React.Component {
   }
 
   render () {
-    const { children, loading, currentUser, loggingIn, locale, isPrint } = this.props
+    const { children, isLoading, currentUser, loggingIn, locale, isPrint } = this.props
 
     const open = this.props.sidebarOpen || this.state.sidebarForceOpen
 
@@ -107,7 +107,7 @@ export class MainLayout extends React.Component {
           </div>
           <div className='content-wrapper print-no-margin' style={contentStyle}>
             {
-              loading
+              isLoading
               ? <Loading />
               : children
             }

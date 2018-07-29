@@ -4,7 +4,7 @@ import omit from 'lodash/omit'
 import fromPairs from 'lodash/fromPairs'
 import sortBy from 'lodash/fp/sortBy'
 import moment from 'moment-timezone'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
@@ -15,7 +15,7 @@ import { Tags } from '../../api/tags'
 import { Calendars } from '../../api/calendars'
 import { Referrals } from '../../api/referrals'
 import { ReportsScreen } from './ReportsScreen'
-import { withMethodData } from '../components/withMethodData'
+import { withPromise } from '../components/withPromise'
 import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = props => {
@@ -109,8 +109,8 @@ const fetchReferrals = ({ date }) =>
 export const ReportsContainer = compose(
   withRouter,
   withTracker(composer),
-  withMethodData(fetchQuarter),
-  withMethodData(fetchPreview),
-  withMethodData(fetchReferrals),
+  withPromise(fetchQuarter),
+  withPromise(fetchPreview),
+  withPromise(fetchReferrals),
   toClass
 )(ReportsScreen)

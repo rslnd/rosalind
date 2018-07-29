@@ -1,5 +1,5 @@
 import idx from 'idx'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withPromise } from '../../components/withPromise'
 import { connect } from 'react-redux'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
@@ -36,9 +36,7 @@ const findAppointments = (query) => {
       console.error('search/patientsWithAppointments', e)
     })
   } else {
-    return new Promise((resolve) => {
-      resolve([])
-    })
+    return Promise.resolve([])
   }
 }
 
@@ -46,12 +44,13 @@ let lastQueryId = 0
 const compose = (props) => {
   const { patientId, query } = props
   const currentQueryId = (lastQueryId + 1)
+  lastQueryId = currentQueryId
 
   if (patientId) {
-    Patients.actions.findOne.callPromise({ _id: patientId })
+    return Patients.actions.findOne.callPromise({ _id: patientId })
       .then((patient) => findAppointments(patientId))
       .then(({ options }) => {
-        if (!options || !options[0]) { return }
+        if (!options || !options[0]) { console.error('A'); return {} }
         const patient = options[0].patient
 
         if (patient && currentQueryId === lastQueryId) {
@@ -64,19 +63,21 @@ const compose = (props) => {
             },
             options
           }
+        } else {
+          console.error('B')
+          return {}
         }
       })
       .catch(e => {
         console.error('patients/findOne', e)
+        return {}
       })
   } else {
-    return { ...props, query, findAppointments }
+    return Promise.resolve({ ...props, query, findAppointments })
   }
-
-  lastQueryId = currentQueryId
 }
 
-const AppointmentsSearchComposed = withTracker(compose)(AppointmentsSearch)
+const AppointmentsSearchComposed = withPromise(compose)(AppointmentsSearch)
 
 const mapStateToProps = (store) => {
   return {

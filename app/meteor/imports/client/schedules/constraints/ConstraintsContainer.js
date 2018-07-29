@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import { toClass } from 'recompose'
 import { Users } from '../../../api/users'
 import { Schedules } from '../../../api/schedules'

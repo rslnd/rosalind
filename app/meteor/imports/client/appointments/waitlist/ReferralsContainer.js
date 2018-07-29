@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../../i18n'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import find from 'lodash/find'
 import Alert from 'react-s-alert'
 import { Referrals } from '../../../api/referrals'
@@ -13,7 +13,7 @@ const composer = props => {
   const { calendarId, patientId } = props.appointment
 
   if (!patientId) {
-    return null
+    return
   }
 
   const referrals = Referrals.find({ patientId }).fetch()

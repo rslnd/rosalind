@@ -1,4 +1,4 @@
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { Tags } from '../../api/tags'
 import { Users } from '../../api/users'
 import { Calendars } from '../../api/calendars'

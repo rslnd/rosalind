@@ -1,7 +1,7 @@
 import React from 'react'
 import range from 'lodash/range'
 import { ReactiveVar } from 'meteor/reactive-var'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { gray, background } from '../css/global'
 import { Icon } from '../components/Icon'
 

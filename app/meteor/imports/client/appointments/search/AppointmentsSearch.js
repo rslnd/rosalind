@@ -157,6 +157,10 @@ export class AppointmentsSearch extends React.Component {
   }
 
   render () {
+    if (this.props.isLoading) {
+      return null
+    }
+
     return (
       <Select.Async
         name='appointmentsSearch'

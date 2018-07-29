@@ -1,5 +1,5 @@
 import moment from 'moment-timezone'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
 import { process as server } from 'meteor/clinical:env'
 import { __ } from '../../i18n'

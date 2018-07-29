@@ -7,7 +7,7 @@ import isEqual from 'lodash/isEqual'
 import identity from 'lodash/identity'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../../i18n'
-import { withTracker } from 'meteor/react-meteor-data'
+import { withTracker } from '../../components/withTracker'
 import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
@@ -35,7 +35,7 @@ let AppointmentInfoContainer = reduxForm({
 const composer = props => {
   const subscription = subscribe('appointment', { appointmentId: props.appointmentId })
   const appointment = Appointments.findOne({ _id: props.appointmentId })
-  const loading = appointment.patientId && !subscription.ready()
+  const isLoading = appointment.patientId && !subscription.ready()
 
   if (appointment) {
     const { patientId, assigneeId, calendarId } = appointment
@@ -133,7 +133,7 @@ const composer = props => {
 
     return {
       ...props,
-      loading,
+      isLoading,
       initialValues,
       calendar,
       appointment,
@@ -149,9 +149,7 @@ const composer = props => {
       handleSetMessagePreferences
     }
   } else {
-    return {
-      isLoading: true
-    }
+    return
   }
 }
 
