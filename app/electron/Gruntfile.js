@@ -104,7 +104,9 @@ module.exports = (grunt) => {
               'main/*.js',
               'main/**/*.js',
               'renderer/*.js',
-              'renderer/**/*.js'
+              'renderer/**/*.js',
+              'assets/*',
+              'assets/**/*'
             ],
             dest: 'build/javascript/'
           }

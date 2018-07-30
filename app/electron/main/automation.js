@@ -5,9 +5,8 @@ const temp = require('temp')
 const { ipcMain } = require('electron')
 const logger = require('./logger')
 
-const exeName = 'generateEoswinReports.exe'
-const printerSettingsName = 'setRosalindReportsPrinterAsEOSWinDefault.reg'
-
+const exeName = path.join('assets', 'generateEoswinReports.exe')
+const printerSettingsName = path.join('assets', 'setRosalindReportsPrinterAsEOSWinDefault.reg')
 
 const start = (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
@@ -28,7 +27,7 @@ const generateEoswinReports = ({ day } = {}) => {
       return
     }
 
-    extract((err, exePath) => {
+    extract(exeName, (err, exePath) => {
       if (err) {
         logger.error('[automation] Failed to extract exe', err)
         return
