@@ -338,7 +338,7 @@ export class AppointmentInfo extends React.Component {
 
   // BUG: This seems to never get called. Why?
   handleSubmit (e) {
-    e && e.preventDefault()
+    e && e.preventDefault && e.preventDefault()
     if (this.props.dirty) {
       return Promise.all([
         this.props.handleSubmit(this.props.handleEditPatient),
@@ -366,28 +366,37 @@ export class AppointmentInfo extends React.Component {
       handleSetMessagePreferences } = this.props
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <div>
         {/* {loading && <LinearProgress style={loadingStyle} />} */}
         {
           patient &&
-            <div className='row'>
-              <div className='col-md-12'>
-                <FormSection name='patient'>
-                  <PatientName
-                    onChange={handleSubmit(handleEditPatient)}
-                    patient={patient} />
-                </FormSection>
-                <hr />
+            <form onSubmit={dirty ? handleSubmit(handleEditPatient) : identity}>
+              <div className='row'>
+                <div className='col-md-12'>
+                  <FormSection name='patient'>
+                    <PatientName
+                      onChange={handleSubmit(handleEditPatient)}
+                      patient={patient} />
+                  </FormSection>
+                  <hr />
+                </div>
               </div>
-            </div>
+
+              <input type='submit' style={{ display: 'none' }} />
+            </form>
         }
         <div className='row'>
           <div className='col-md-6'>
-            <div onMouseLeave={
-              dirty
-              ? handleSubmit(handleEditAppointment)
-              : identity
-            }>
+            <form onMouseLeave={
+                dirty
+                ? handleSubmit(handleEditAppointment)
+                : identity
+              }
+              onSubmit={
+                dirty
+                ? handleSubmit(handleEditAppointment)
+                : identity
+              }>
               <FormSection name='appointment'>
                 <Day appointment={appointment} />
                 <Time appointment={appointment} />
@@ -402,7 +411,8 @@ export class AppointmentInfo extends React.Component {
                   change={change}
                 />
               </FormSection>
-            </div>
+              <input type='submit' style={{ display: 'none' }} />
+            </form>
             <ListItem>
               <Logs format={logFormat} doc={appointment} />
               <Stamps
@@ -413,9 +423,14 @@ export class AppointmentInfo extends React.Component {
 
           {
             !patient &&
-              <div
+              <form
                 className='col-md-6'
                 onMouseLeave={
+                  dirty
+                  ? handleSubmit(handleEditAppointment)
+                  : identity
+                }
+                onSubmit={
                   dirty
                   ? handleSubmit(handleEditAppointment)
                   : identity
@@ -423,19 +438,25 @@ export class AppointmentInfo extends React.Component {
                 <FormSection name='appointment'>
                   <AppointmentNote appointment={appointment} />
                 </FormSection>
-              </div>
+                <input type='submit' style={{ display: 'none' }} />
+              </form>
           }
 
           {
             patient &&
-              <div
+              <form
                 className='col-md-6'
                 style={{ marginTop: -25 }}
                 onMouseLeave={
-                dirty
-                ? handleSubmit(handleEditPatient)
-                : identity
-              }>
+                  dirty
+                  ? handleSubmit(handleEditPatient)
+                  : identity
+                }
+                onSubmit={
+                  dirty
+                  ? handleSubmit(handleEditPatient)
+                  : identity
+                }>
                 <FormSection name='patient'>
                   <PatientNotes patient={patient} />
                   <Contacts patient={patient} />
@@ -447,10 +468,11 @@ export class AppointmentInfo extends React.Component {
                   <Reminders />
                   <TotalRevenue value={totalPatientRevenue} />
                 </FormSection>
-              </div>
+                <input type='submit' style={{ display: 'none' }} />
+              </form>
           }
         </div>
-      </form>
+      </div>
     )
   }
 }
