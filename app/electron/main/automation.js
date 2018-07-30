@@ -72,7 +72,7 @@ const extractAsset = (filename, cb) => {
 
   temp.mkdir('rosalind', (err, tmpDir) => {
     if (err) { return cb(err) }
-    const asarPath = path.join(__dirname, '..', 'assets', filename)
+    const asarPath = path.join(path.join(__dirname, '..'), path.join('assets', filename))
     const tempPath = path.join(tmpDir, filename)
 
     const read = fs.createReadStream(asarPath)
