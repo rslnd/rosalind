@@ -4,8 +4,9 @@ import { ReactiveVar } from 'meteor/reactive-var'
 import { withTracker } from '../components/withTracker'
 import { gray, background } from '../css/global'
 import { Icon } from '../components/Icon'
+import { getSettings } from '../../api/clients/methods/getSettings'
 
-const lockState = new ReactiveVar(false)
+const lockState = new ReactiveVar(null)
 const pinState = new ReactiveVar('')
 
 const setPin = (pin) => {
@@ -24,22 +25,37 @@ const unlock = () => {
   pinState.set('')
 }
 
-const attemptUnlock = (pin) => {
-  if (pin === '0000') {
-    unlock()
-  }
-}
-
 const composer = () => {
   const isLocked = lockState.get()
   const pin = pinState.get()
 
-  return {
-    pin,
-    setPin,
-    isLocked,
-    unlock,
-    attemptUnlock
+  const settings = getSettings()
+
+  console.log(`settings: ${JSON.stringify(settings)}`)
+  if (settings && settings.lockScreenPin) {
+    const { lockScreenPin } = settings
+
+    if (isLocked === null) {
+      lock()
+    }
+
+    const attemptUnlock = (pin) => {
+      if (pin === lockScreenPin) {
+        unlock()
+      }
+    }
+
+    return {
+      pin,
+      setPin,
+      isLocked,
+      unlock,
+      attemptUnlock
+    }
+  } else {
+    return {
+      isLocked: false
+    }
   }
 }
 
