@@ -1,3 +1,10 @@
-export { sentry } from './sentry'
+import { Meteor } from 'meteor/meteor'
+import sentry from './sentry'
 
-export default () => {}
+const env = Meteor.isClient
+  ? require('meteor/clinical:env').process.env
+  : process.env
+
+export default () => {
+  sentry({ env })
+}
