@@ -1,4 +1,5 @@
 #include <ScreenCapture.au3>
+#include <WinAPISys.au3>
 
 $sEoswinExe = "D:\Eoswin\ADSPraxis.exe"
 $iGenerateTimeout = 300
@@ -11,12 +12,57 @@ Main()
 Func Main()
   Info("AutoIt version " & @AutoItVersion)
   CloseEOSWin()
+  Local $mPreviousPrinterSettings = SetReportPrinter()
   OpenEOSWin()
   GenerateEOSWinReport("Tagesjournal")
   GenerateEOSWinReport("Ärzte Statistik Umsätze")
   CloseEOSWin()
+  RestorePreviousPrinter($mPreviousPrinterSettings)
   CloseRosalind()
   Info("Success")
+EndFunc
+
+Func SetReportPrinter()
+  Local $mPreviousPrinterSettings = []
+  Local $sReportPrinterName = "RosalindReports"
+  Local $sEoswinPrinterConfigKey = "HKEY_CURRENT_USER\Software\MCW\Praxis\Drucker"
+  Local $sReportPrinterSettingsFilename = "setRosalindReportsPrinterAsEOSWinDefault.reg"
+  $mPreviousPrinterSettings["DefaultPrinterName"] = _WinAPI_GetDefaultPrinter()
+  $mPreviousPrinterSettings["Filename"] = "eoswinPreviousPrinterSettings.reg"
+
+  Info("Exporting previous printer settings")
+  If ShellExecuteWait("reg.exe","export " & $sEoswinPrinterConfigKey & " " &  $mPreviousPrinterSettings["Filename"], @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
+    Info("Warning: Registry export failed with code " & String($iOk))
+  EndIf
+
+  Info("Importing report printer settings")
+  If ShellExecuteWait("reg.exe","import " & $sReportPrinterSettingsFilename, @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
+    Fail("Registry import failed with code " & String($iOk))
+  EndIf
+
+  Info("Previous default printer name was `" & $mPreviousPrinterSettings & "`")
+  Info("Setting default printer to `" & $sReportPrinterName & "`")
+  If _WinAPI_SetDefaultPrinter($sReportPrinterName) <> True Then
+    Fail("Warning: Failed to set printer as default")
+  EndIf
+
+  Return $mPreviousPrinterSettings
+EndFunc
+
+Func RestorePreviousPrinter($mPreviousPrinterSettings)
+  Info("Resetting default printer to `" & $mPreviousPrinterSettings["Filename"] & "`")
+  If _WinAPI_SetDefaultPrinter($sReportPrinterName) <> True Then
+    Info("Warning: Failed to reset default printer")
+  EndIf
+
+  Info("Importing previous printer settings")
+  If ShellExecuteWait("reg.exe","import " & $mPreviousPrinterSettings["Filename"], @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
+    Fail("Registry import failed with code " & String($iOk))
+  EndIf
+
+  If FileRecycle(@ScriptDir & "\" & $mPreviousPrinterSettings["Filename"]) = 0 Then
+    Info("Warning: Could not delete previous printer settings file (in use or does not exist)")
+  EndIf
 EndFunc
 
 ; Format: DDMMYYYY

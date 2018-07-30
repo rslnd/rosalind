@@ -6,6 +6,8 @@ const { ipcMain } = require('electron')
 const logger = require('./logger')
 
 const exeName = 'generateEoswinReports.exe'
+const printerSettingsName = 'setRosalindReportsPrinterAsEOSWinDefault.reg'
+
 
 const start = (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
@@ -20,52 +22,59 @@ const start = (argv = []) => {
 }
 
 const generateEoswinReports = ({ day } = {}) => {
-  extractExe((err, exePath) => {
+  extract(printerSettingsName, (err) => {
     if (err) {
-      logger.error('[automation] Failed to extract exe', err)
+      logger.error('[automation] Failed to extract printer settings', err)
       return
     }
 
-    logger.info('[automation] Spawning', exePath)
+    extract((err, exePath) => {
+      if (err) {
+        logger.error('[automation] Failed to extract exe', err)
+        return
+      }
 
-    const spawnArgs = day
-      ? [`/day:${day.year}-${day.month}-${day.day}`]
-      : []
+      logger.info('[automation] Spawning', exePath)
 
-    const child = childProcess.spawn(exePath, spawnArgs)
-    child.stdout.setEncoding('utf8')
-    child.stderr.setEncoding('utf8')
+      const spawnArgs = day
+        ? [`/day:${day.year}-${day.month}-${day.day}`]
+        : []
 
-    child.stdout.on('data', d =>
-      logger.info('[automation] generateEoswinReports', d)
-    )
+      const child = childProcess.spawn(exePath, spawnArgs)
+      child.stdout.setEncoding('utf8')
+      child.stderr.setEncoding('utf8')
 
-    child.stderr.on('data', d =>
-      logger.error('[automation] generateEoswinReports error:', d)
-    )
+      child.stdout.on('data', d =>
+        logger.info('[automation] generateEoswinReports', d)
+      )
 
-    return new Promise((resolve, reject) => {
-      child.on('close', code => {
-        logger.info('[automation] generateEoswinReports exited with code', code)
+      child.stderr.on('data', d =>
+        logger.error('[automation] generateEoswinReports error:', d)
+      )
 
-        if (code !== 0) {
-          logger.error('[automation] generateEoswinReports failed')
-          reject(code)
-        } else {
-          resolve()
-        }
+      return new Promise((resolve, reject) => {
+        child.on('close', code => {
+          logger.info('[automation] generateEoswinReports exited with code', code)
+
+          if (code !== 0) {
+            logger.error('[automation] generateEoswinReports failed')
+            reject(code)
+          } else {
+            resolve()
+          }
+        })
       })
     })
   })
 }
 
-const extractExe = (cb) => {
+const extract = (filename, cb) => {
   temp.track()
 
   temp.mkdir('rosalind', (err, tmpDir) => {
     if (err) { return cb(err) }
-    const asarPath = path.join(__dirname, '..', exeName)
-    const tempPath = path.join(tmpDir, exeName)
+    const asarPath = path.join(__dirname, '..', filename)
+    const tempPath = path.join(tmpDir, filename)
 
     const read = fs.createReadStream(asarPath)
     const write = fs.createWriteStream(tempPath)
