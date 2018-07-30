@@ -5,8 +5,8 @@ const temp = require('temp')
 const { ipcMain } = require('electron')
 const logger = require('./logger')
 
-const exeName = path.join('assets', 'generateEoswinReports.exe')
-const printerSettingsName = path.join('assets', 'setRosalindReportsPrinterAsEOSWinDefault.reg')
+const exeName = 'generateEoswinReports.exe'
+const printerSettingsName = 'setRosalindReportsPrinterAsEOSWinDefault.reg'
 
 const start = (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
@@ -21,13 +21,13 @@ const start = (argv = []) => {
 }
 
 const generateEoswinReports = ({ day } = {}) => {
-  extract(printerSettingsName, (err) => {
+  extractAsset(printerSettingsName, (err) => {
     if (err) {
       logger.error('[automation] Failed to extract printer settings', err)
       return
     }
 
-    extract(exeName, (err, exePath) => {
+    extractAsset(exeName, (err, exePath) => {
       if (err) {
         logger.error('[automation] Failed to extract exe', err)
         return
@@ -67,12 +67,12 @@ const generateEoswinReports = ({ day } = {}) => {
   })
 }
 
-const extract = (filename, cb) => {
+const extractAsset = (filename, cb) => {
   temp.track()
 
   temp.mkdir('rosalind', (err, tmpDir) => {
     if (err) { return cb(err) }
-    const asarPath = path.join(__dirname, '..', filename)
+    const asarPath = path.join(__dirname, '..', 'assets', filename)
     const tempPath = path.join(tmpDir, filename)
 
     const read = fs.createReadStream(asarPath)
