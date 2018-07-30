@@ -23,13 +23,11 @@ const composer = (props) => {
     subscribe('inboundCalls')
   }
 
-  const isLoading = [
-    subscribe('roles'),
-    subscribe('users'),
-    subscribe('groups'),
-    subscribe('tags'),
-    subscribe('calendars')
-  ].some(s => !s.ready())
+  subscribe('roles'),
+  subscribe('users'),
+  subscribe('groups'),
+  subscribe('tags'),
+  subscribe('calendars')
 
   // Try to subscribe to appointments and schedules for caching
   // The server will check for currentUser or a connection from
@@ -46,7 +44,7 @@ const composer = (props) => {
 
   const isPrint = props.location.hash === '#print'
 
-  return { ...props, isLoading, currentUser, locale, loggingIn, sidebarOpen, isPrint }
+  return { ...props, currentUser, locale, loggingIn, sidebarOpen, isPrint }
 }
 
 const MainLayoutContainer = withRouter(withTracker(composer)(MainLayout))

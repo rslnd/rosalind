@@ -26,13 +26,16 @@ export class UserPanel extends React.Component {
   render () {
     return (
       <div style={style.userPanel}>
-        <b style={style.name}>
-          {
-            this.props.sidebarOpen
-            ? fullNameWithTitle(this.props.currentUser)
-            : this.props.currentUser.username
-          }
-        </b>
+        {
+          this.props.currentUser &&
+            <b style={style.name}>
+              {
+                this.props.sidebarOpen
+                ? fullNameWithTitle(this.props.currentUser)
+                : this.props.currentUser.username
+              }
+            </b>
+        }
         <div style={style.hidden}>
           <div style={style.button}>
             {
