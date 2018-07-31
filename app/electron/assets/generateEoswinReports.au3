@@ -26,7 +26,7 @@ Func SetReportPrinter()
   Local $mPreviousPrinterSettings = []
   Local $sReportPrinterName = "RosalindReports"
   Local $sEoswinPrinterConfigKey = "HKEY_CURRENT_USER\Software\MCW\Praxis\Drucker"
-  Local $sReportPrinterSettingsFilename = "setRosalindReportsPrinterAsEOSWinDefault.reg"
+  Local $sReportPrinterSettingsFilename = "eoswinPrinter.reg"
   $mPreviousPrinterSettings["DefaultPrinterName"] = _WinAPI_GetDefaultPrinter()
   $mPreviousPrinterSettings["Filename"] = "eoswinPreviousPrinterSettings.reg"
 
