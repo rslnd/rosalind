@@ -72,8 +72,15 @@ const extractAsset = (filename, cb) => {
 
   temp.mkdir('rosalind', (err, tmpDir) => {
     if (err) { return cb(err) }
-    const asarPath = path.join(path.join(__dirname, '..'), path.join('assets', filename))
+    const asarPath = path.normalize(
+      path.join(
+        path.normalize(path.join(__dirname, '../')),
+        path.join('assets', filename)
+      )
+    )
     const tempPath = path.join(tmpDir, filename)
+
+    logger.info(`[automation] extracting asset from ${asarPath} -> ${tempPath}`)
 
     const read = fs.createReadStream(asarPath)
     const write = fs.createWriteStream(tempPath)
