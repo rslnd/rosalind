@@ -31,11 +31,13 @@ Func SetReportPrinter()
   $mPreviousPrinterSettings["Filename"] = "eoswinPreviousPrinterSettings.reg"
 
   Info("Exporting previous printer settings")
+  ExpectFile(@ScriptDir & "\" & $mPreviousPrinterSettings["Filename"])
   If ShellExecuteWait("reg.exe","export " & $sEoswinPrinterConfigKey & " " &  $mPreviousPrinterSettings["Filename"], @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
     Info("Warning: Registry export failed with code " & String($iOk))
   EndIf
 
   Info("Importing report printer settings")
+  ExpectFile(@ScriptDir & "\" & $sReportPrinterSettingsFilename)
   If ShellExecuteWait("reg.exe","import " & $sReportPrinterSettingsFilename, @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
     Fail("Registry import failed with code " & String($iOk))
   EndIf
@@ -56,6 +58,7 @@ Func RestorePreviousPrinter($mPreviousPrinterSettings)
   EndIf
 
   Info("Importing previous printer settings")
+  ExpectFile(@ScriptDir & "\" & $mPreviousPrinterSettings["Filename"])
   If ShellExecuteWait("reg.exe","import " & $mPreviousPrinterSettings["Filename"], @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
     Fail("Registry import failed with code " & String($iOk))
   EndIf
@@ -236,6 +239,12 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
   Info("Found window")
 
   Return $hWnd
+EndFunc
+
+Func ExpectFile($sPath)
+  If FileExists($sPath) = 0 Then
+    Fail("Expected file at " & $sPath)
+  EndIf
 EndFunc
 
 Func GetCmdLineArg($sKey)

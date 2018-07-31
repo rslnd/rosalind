@@ -21,70 +21,70 @@ const start = (argv = []) => {
 }
 
 const generateEoswinReports = ({ day } = {}) => {
-  extractAsset(printerSettingsName, (err) => {
+  extractAssets([exeName, printerSettingsName], (err, [exePath, _]) => {
     if (err) {
-      logger.error('[automation] Failed to extract printer settings', err)
+      logger.error('[automation] Failed to extract assets', err)
       return
     }
 
-    extractAsset(exeName, (err, exePath) => {
-      if (err) {
-        logger.error('[automation] Failed to extract exe', err)
-        return
-      }
+    logger.info('[automation] Spawning', exePath)
 
-      logger.info('[automation] Spawning', exePath)
+    const spawnArgs = day
+      ? [`/day:${day.year}-${day.month}-${day.day}`]
+      : []
 
-      const spawnArgs = day
-        ? [`/day:${day.year}-${day.month}-${day.day}`]
-        : []
+    const child = childProcess.spawn(exePath, spawnArgs)
+    child.stdout.setEncoding('utf8')
+    child.stderr.setEncoding('utf8')
 
-      const child = childProcess.spawn(exePath, spawnArgs)
-      child.stdout.setEncoding('utf8')
-      child.stderr.setEncoding('utf8')
+    child.stdout.on('data', d =>
+      logger.info('[automation] generateEoswinReports', d)
+    )
 
-      child.stdout.on('data', d =>
-        logger.info('[automation] generateEoswinReports', d)
-      )
+    child.stderr.on('data', d =>
+      logger.error('[automation] generateEoswinReports error:', d)
+    )
 
-      child.stderr.on('data', d =>
-        logger.error('[automation] generateEoswinReports error:', d)
-      )
+    return new Promise((resolve, reject) => {
+      child.on('close', code => {
+        logger.info('[automation] generateEoswinReports exited with code', code)
 
-      return new Promise((resolve, reject) => {
-        child.on('close', code => {
-          logger.info('[automation] generateEoswinReports exited with code', code)
-
-          if (code !== 0) {
-            logger.error('[automation] generateEoswinReports failed')
-            reject(code)
-          } else {
-            resolve()
-          }
-        })
+        if (code !== 0) {
+          logger.error('[automation] generateEoswinReports failed')
+          reject(code)
+        } else {
+          resolve()
+        }
       })
     })
   })
 }
 
-const extractAsset = (filename, cb) => {
+const extractAssets = (filenames, cb) => {
   temp.track()
 
   temp.mkdir('rosalind', (err, tmpDir) => {
     if (err) { return cb(err) }
-    const asarPath = path.join(__dirname, '..', filename)
-    const tempPath = path.join(tmpDir, filename)
 
-    logger.info(`[automation] extracting asset '${filename}' from ${asarPath} -> ${tempPath}`)
+    const promises = filenames.map(filename => {
+      const asarPath = path.join(__dirname, '..', filename)
+      const tempPath = path.join(tmpDir, filename)
 
-    const read = fs.createReadStream(asarPath)
-    const write = fs.createWriteStream(tempPath)
+      logger.info(`[automation] extracting asset '${filename}' from ${asarPath} -> ${tempPath}`)
 
-    read.on('error', e => cb(e))
-    write.on('error', e => cb(e))
-    write.on('close', e => cb(null, tempPath))
+      const read = fs.createReadStream(asarPath)
+      const write = fs.createWriteStream(tempPath)
 
-    read.pipe(write)
+      return new Promise((resolve, reject) => {
+        read.on('error', e => cb(e))
+        write.on('error', e => cb(e))
+        write.on('close', e => resolve(tempPath))
+
+        read.pipe(write)
+      })
+    })
+
+    return Promise.all(promises).then(results => cb(null, results))
   })
 }
 
