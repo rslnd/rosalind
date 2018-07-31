@@ -52,9 +52,13 @@ Func SetReportPrinter()
 EndFunc
 
 Func RestorePreviousPrinter($mPreviousPrinterSettings)
-  Info("Resetting default printer to `" & $mPreviousPrinterSettings["Filename"] & "`")
-  If _WinAPI_SetDefaultPrinter($sReportPrinterName) <> True Then
-    Info("Warning: Failed to reset default printer")
+  If $mPreviousPrinterSettings["DefaultPrinterName"] <> "" Then
+    Info("Resetting default printer to `" & $mPreviousPrinterSettings["DefaultPrinterName"] & "`")
+    If _WinAPI_SetDefaultPrinter($mPreviousPrinterSettings["DefaultPrinterName"]) <> True Then
+      Info("Warning: Failed to reset default printer")
+    EndIf
+  Else
+    Info("Skipping resetting default printer")
   EndIf
 
   Info("Importing previous printer settings")
