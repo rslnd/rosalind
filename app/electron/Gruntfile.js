@@ -104,9 +104,7 @@ module.exports = (grunt) => {
               'main/*.js',
               'main/**/*.js',
               'renderer/*.js',
-              'renderer/**/*.js',
-              'assets/*',
-              'assets/**/*'
+              'renderer/**/*.js'
             ],
             dest: 'build/javascript/'
           }
@@ -117,9 +115,9 @@ module.exports = (grunt) => {
         files: [
           {
             src: [
-              'assets/setRosalindReportsPrinterAsEOSWinDefault.reg'
+              'assets/eoswinPrinter.reg'
             ],
-            dest: 'build/javascript/'
+            dest: 'build/javascript/eoswinPrinter.reg'
           }
         ]
       },

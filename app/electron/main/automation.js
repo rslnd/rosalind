@@ -6,7 +6,7 @@ const { ipcMain } = require('electron')
 const logger = require('./logger')
 
 const exeName = 'generateEoswinReports.exe'
-const printerSettingsName = 'setRosalindReportsPrinterAsEOSWinDefault.reg'
+const printerSettingsName = 'eoswinPrinter.reg'
 
 const start = (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
