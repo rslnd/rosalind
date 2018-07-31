@@ -54,7 +54,7 @@ const composer = (props) => {
   const date = parseDay(idx(props, _ => _.match.params.date))
   const calendarSlug = idx(props, _ => _.match.params.calendar)
   const calendar = Calendars.findOne({ slug: calendarSlug })
-  if (!calendar) { return }
+  if (!calendar) { return { isLoading: true } }
 
   const day = dateToDay(date)
   const startOfDay = date.clone().startOf('day').toDate()

@@ -266,6 +266,10 @@ export class AppointmentsView extends React.Component {
   }
 
   render () {
+    if (!this.props.calendar) {
+      return null
+    }
+
     return (
       <div>
         <ErrorBoundary>

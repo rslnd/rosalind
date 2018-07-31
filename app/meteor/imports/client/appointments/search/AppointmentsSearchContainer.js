@@ -50,7 +50,10 @@ const compose = (props) => {
     return Patients.actions.findOne.callPromise({ _id: patientId })
       .then((patient) => findAppointments(patientId))
       .then(({ options }) => {
-        if (!options || !options[0]) { console.error('A'); return {} }
+        if (!options || !options[0]) {
+          console.error('A')
+          return Promise.resolve({ ...props, query, findAppointments })
+        }
         const patient = options[0].patient
 
         if (patient && currentQueryId === lastQueryId) {
@@ -65,12 +68,12 @@ const compose = (props) => {
           }
         } else {
           console.error('B')
-          return {}
+          return Promise.resolve({ ...props, query, findAppointments })
         }
       })
       .catch(e => {
         console.error('patients/findOne', e)
-        return {}
+        return Promise.resolve({ ...props, query, findAppointments })
       })
   } else {
     return Promise.resolve({ ...props, query, findAppointments })
