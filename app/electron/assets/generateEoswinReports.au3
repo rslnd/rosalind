@@ -31,10 +31,10 @@ Func SetReportPrinter()
   $mPreviousPrinterSettings["Filename"] = "eoswinPreviousPrinterSettings.reg"
 
   Info("Exporting previous printer settings")
-  ExpectFile(@ScriptDir & "\" & $mPreviousPrinterSettings["Filename"])
   If ShellExecuteWait("reg.exe","export " & $sEoswinPrinterConfigKey & " " &  $mPreviousPrinterSettings["Filename"], @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
     Info("Warning: Registry export failed with code " & String($iOk))
   EndIf
+  ExpectFile(@ScriptDir & "\" & $mPreviousPrinterSettings["Filename"])
 
   Info("Importing report printer settings")
   ExpectFile(@ScriptDir & "\" & $sReportPrinterSettingsFilename)
