@@ -113,6 +113,15 @@ module.exports = (grunt) => {
         ]
       },
 
+      assets: {
+        files: [
+          {
+            src: ['assets/*', 'assets/**/*'],
+            dest: 'build/javascript'
+          }
+        ]
+      },
+
       nodeModules: {
         files: [
           {
@@ -215,7 +224,7 @@ module.exports = (grunt) => {
   })
 
   grunt.registerTask('tag', ['shell:tag', 'shell:push'])
-  grunt.registerTask('package', ['clean:full', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'shell:compileAutoit', 'electron:package'])
-  grunt.registerTask('build', ['clean:full', 'copy:js', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'shell:compileAutoit', 'electron:package', 'create-windows-installer', 'rename:installerExe'])
-  grunt.registerTask('default', ['clean:full', 'shell:kill', 'copy:js', 'copy:packageJson', 'copy:nodeModules', 'shell:electronPrebuilt'])
+  grunt.registerTask('package', ['clean:full', 'copy:js', 'copy:assets', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'shell:compileAutoit', 'electron:package'])
+  grunt.registerTask('build', ['clean:full', 'copy:js', 'copy:assets', 'copy:packageJson', 'shell:npmInstallProduction', 'string-replace:env', 'shell:compileAutoit', 'electron:package', 'create-windows-installer', 'rename:installerExe'])
+  grunt.registerTask('default', ['clean:full', 'shell:kill', 'copy:js', 'copy:assets', 'copy:packageJson', 'copy:nodeModules', 'shell:electronPrebuilt'])
 }
