@@ -8,7 +8,13 @@ const composer = (props) => {
   const resolve = (_id) => InboundCalls.methods.resolve.call({ _id })
   const unresolve = (_id) => InboundCalls.methods.unresolve.call({ _id })
 
-  return { inboundCall, resolve, unresolve }
+  if (!inboundCall) {
+    return {
+      isLoading: true
+    }
+  } else {
+    return { inboundCall, resolve, unresolve }
+  }
 }
 
 export const InboundCallContainer = withTracker(composer)(toClass(InboundCallItem))

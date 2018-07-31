@@ -1,4 +1,5 @@
 import { InboundCalls } from '../'
+import flatten from 'lodash/flatten'
 import { Comments } from '../../comments'
 import Time from '../../../util/time'
 import { publish, publishComposite, publishCompositeTable } from '../../../util/meteor/publish'
@@ -27,6 +28,50 @@ export default () => {
         find: function () {
           this.unblock()
           return InboundCalls.find({ removed: { $ne: true } })
+        },
+        children: [
+          {
+            find: function (inboundCall) {
+              return Comments.find({ docId: inboundCall._id })
+            }
+          }
+        ]
+      }
+    }
+  })
+
+  publishComposite({
+    name: 'inboundCalls-resolved',
+    roles: ['inboundCalls'],
+    args: {
+      query: String
+    },
+    fn: function ({ query }) {
+      this.unblock()
+
+      const selector =
+        query && query.length > 3
+        ? {
+          $or: flatten(query.split(' ').map(word => [
+            { lastName: { $regex: '^' + word, $options: 'i' } },
+            { note: { $regex: word, $options: 'i' } },
+            { telephone: { $regex: word, $options: 'i' } },
+            { firstName: { $regex: '^' + word, $options: 'i' } }
+          ]))
+        } : {
+          removed: true
+        }
+
+      return {
+        find: function () {
+          this.unblock()
+          return InboundCalls.find(selector, {
+            sort: {
+              removedAt: -1
+            },
+            removed: true,
+            limit: 20
+          })
         },
         children: [
           {
