@@ -41,6 +41,7 @@ export const appointments = {
   tagsRequired: 'Bitte mindestens eine Behandlung wählen',
   selectTagOrNote: 'Bitte mindestens eine Behandlung wählen, oder eine Anmerkung schreiben',
   addNoteIfNoTagsSelected: 'Wenn keine Behandlung gewählt ist, bitte eine Anmerkung schreiben',
+  addNoteIfNoPatientSelected: 'Wenn keine PatientIn gewählt ist, bitte eine Anmerkung schreiben',
   today: 'Heute',
   asap: 'so bald wie möglich',
   in2Weeks: 'in 2 Wochen',

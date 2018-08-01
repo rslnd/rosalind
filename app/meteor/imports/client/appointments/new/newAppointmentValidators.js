@@ -1,4 +1,5 @@
 import unidecode from 'unidecode'
+import { formValueSelector } from '../../../../node_modules/redux-form';
 
 export const validateNameCase = (name) => {
   if (name && name.length >= 4) {
@@ -18,34 +19,41 @@ export const validateDay = (day) => {
   return (typeof day === 'object' && day.year && day.month && day.day)
 }
 
-export const validate = (values) => {
+export const validate = ({ appointment, patient }) => {
   let errors = {
     patient: {},
     appointment: {}
   }
 
-  console.log('validating', values)
+  console.log('validating', { appointment, patient })
 
-  if (!values.appointment || (
+  const hasNote = appointment && appointment.note
+  const hasPatientId = patient && patient.patientId
+
+  if (!hasNote && !hasPatientId) {
+    errors.appointment.note = 'appointments.addNoteIfNoPatientSelected'
+  }
+
+  if (!appointment || (
     (
-      !values.appointment.tags ||
-      values.appointment.tags.length === 0
-    ) && !values.appointment.note)
+      !appointment.tags ||
+      appointment.tags.length === 0
+    ) && !appointment.note)
   ) {
     errors.appointment.tags = 'appointments.selectTagOrNote'
     errors.appointment.note = 'appointments.addNoteIfNoTagsSelected'
   }
 
-  if (values.patient) {
-    if (!values.patient.lastName) {
+  if (patient) {
+    if (!patient.lastName) {
       errors.patient.lastName = 'patients.lastNameRequired'
     }
 
-    if (!values.patient.firstName) {
+    if (!patient.firstName) {
       errors.patient.firstName = 'patients.firstNameRequired'
     }
 
-    if (!values.patient.birthday || values.patient.birthday && !validateDay(values.patient.birthday)) {
+    if (!patient.birthday || patient.birthday && !validateDay(patient.birthday)) {
       errors.patient.birthday = 'patients.birthdayRequired'
     }
   }

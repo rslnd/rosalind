@@ -29,6 +29,7 @@ export const NewAppointmentFields = props => {
     calendarId,
     assigneeId,
     pristine,
+    valid,
     submitting,
     handleSubmit,
     onSubmit,
@@ -89,7 +90,7 @@ export const NewAppointmentFields = props => {
           onClick={handleSubmit}
           fullWidth
           color='primary'
-          disabled={submitting || (pristine && !patientId)}>
+          disabled={submitting || pristine || !valid}>
           {
             submitting
               ? <Icon name='refresh' spin />

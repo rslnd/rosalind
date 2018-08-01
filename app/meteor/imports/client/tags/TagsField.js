@@ -1,5 +1,4 @@
 import React from 'react'
-import { __ } from '../../i18n'
 import { Tags } from '../../api/tags'
 import { TagsList } from './TagsList'
 import { getDefaultDuration } from '../../api/appointments/methods/getDefaultDuration'
@@ -84,7 +83,7 @@ export class TagsField extends React.Component {
         meta && meta.touched && (meta.error || meta.warning) &&
           <span style={errorStyle}>
             <br />
-            {__(meta.error)}
+            {meta.error}
           </span>
       }
     </div>
