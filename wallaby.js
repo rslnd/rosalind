@@ -21,7 +21,7 @@ module.exports = function (wallaby) {
     },
 
     compilers: {
-      '**/*.js*': wallaby.compilers.babel({ babel: require('./app/meteor/node_modules/babel-core') })
+      '**/*.js*': wallaby.compilers.babel({ babel: require('./app/meteor/node_modules/@babel/core') })
     },
 
     env: {

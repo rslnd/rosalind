@@ -8,6 +8,7 @@ export const ui = {
   update: 'Bearbeiten',
   insert: 'Neu',
   save: 'Speichern',
+  saved: 'Gespeichert',
   ok: 'OK',
   delete: 'Entfernen',
   close: 'Schließen',

@@ -11,6 +11,10 @@ describe('api', () => {
         expect(normalizePhoneNumber('0660 1234567')).to.equal(normalized)
       })
 
+      it('with other characters', () => {
+        expect(normalizePhoneNumber(' -() -  / 0 / 6 -60/12.3-45 --/ (6)7')).to.equal(normalized)
+      })
+
       it('without leading zero', () => {
         expect(normalizePhoneNumber('660 1234567')).to.equal(normalized)
       })
