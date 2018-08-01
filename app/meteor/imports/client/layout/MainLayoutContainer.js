@@ -1,3 +1,4 @@
+import every from 'lodash/fp/every'
 import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
@@ -18,11 +19,13 @@ const composer = (props) => {
     subscribe('inboundCalls')
   }
 
-  subscribe('roles')
-  subscribe('users')
-  subscribe('groups')
-  subscribe('tags')
-  subscribe('calendars')
+  const isReady = every(s => s.ready())([
+    subscribe('roles'),
+    subscribe('users'),
+    subscribe('groups'),
+    subscribe('tags'),
+    subscribe('calendars')
+  ])
 
   // Try to subscribe to appointments and schedules for caching
   // The server will check for currentUser or a connection from
@@ -38,6 +41,10 @@ const composer = (props) => {
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments\//)
 
   const isPrint = props.location.hash === '#print'
+
+  if (isPrint && !isReady) {
+    return { isLoading: true }
+  }
 
   return { ...props, currentUser, locale, loggingIn, sidebarOpen, isPrint }
 }
