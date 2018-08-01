@@ -6,11 +6,6 @@ import { MainLayout } from './MainLayout'
 import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = (props) => {
-  // HACK: Expose history push method globally for legacy coffeescript stuff
-  window.__deprecated_history_push = (l) => props.history.push(l)
-  window.__deprecated_history_replace = (l) => props.history.replace(l)
-  window.__deprecated_history_go_back = () => props.history.goBack()
-
   const currentUser = Meteor.user()
   const loggingIn = Meteor.loggingIn()
   const locale = 'de-AT'
@@ -23,10 +18,10 @@ const composer = (props) => {
     subscribe('inboundCalls')
   }
 
-  subscribe('roles'),
-  subscribe('users'),
-  subscribe('groups'),
-  subscribe('tags'),
+  subscribe('roles')
+  subscribe('users')
+  subscribe('groups')
+  subscribe('tags')
   subscribe('calendars')
 
   // Try to subscribe to appointments and schedules for caching

@@ -43,6 +43,8 @@ export const parseExactName = (query) => {
       }
 
       return { result, remainingQuery }
+    } else {
+      return { result: false, remainingQuery: query }
     }
   } else {
     return { result: false, remainingQuery: query }

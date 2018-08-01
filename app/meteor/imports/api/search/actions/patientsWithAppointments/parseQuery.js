@@ -17,14 +17,14 @@ export const parseQuery = (query) => {
 
   if (birthday.remainingQuery && birthday.remainingQuery.length > 0) {
     const contact = parseContact(birthday.remainingQuery)
-    if (contact.result) {
+    if (contact && contact.result) {
       parsed = { ...parsed, ...contact.result }
     }
   }
 
   if (birthday.remainingQuery && birthday.remainingQuery.length > 0) {
     const name = parseExactName(birthday.remainingQuery)
-    if (name.result) {
+    if (name && name.result) {
       parsed = { ...parsed, ...name.result }
     }
   }
