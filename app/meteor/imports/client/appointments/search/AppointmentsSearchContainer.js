@@ -51,7 +51,7 @@ const compose = (props) => {
       .then((patient) => findAppointments(patientId))
       .then(({ options }) => {
         if (!options || !options[0]) {
-          console.error('A')
+          console.log('[AppointmentsSearchContainer] No results')
           return Promise.resolve({ ...props, query, findAppointments })
         }
         const patient = options[0].patient
@@ -67,7 +67,7 @@ const compose = (props) => {
             options
           }
         } else {
-          console.error('B')
+          console.log('[AppointmentsSearchContainer] queryId does not match last query')
           return Promise.resolve({ ...props, query, findAppointments })
         }
       })
