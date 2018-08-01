@@ -37,10 +37,15 @@ export class AppointmentsScreen extends React.Component {
   scrollToCurrentTime () {
     const now = moment()
     if (now.isSame(this.props.date, 'day')) {
-      const elemId = now.floor(5, 'minutes').format('[T]HHmm')
-      const offset = document.getElementById(elemId).offsetTop
-      window.scrollTo({ top: offset })
-      console.log('[AppointmentsScreen] Scrolled to', document.getElementById(elemId), offset)
+      const elemId = now.floor(1, 'hour').format('[T]HHmm')
+      const elem = document.getElementById(elemId)
+      if (elem) {
+        const offset = elem.offsetTop
+        window.scrollTo({ top: offset })
+        console.log('[AppointmentsScreen] Scrolled to', document.getElementById(elemId), offset)
+      } else {
+        console.warn('[AppointmentsScreen] scrollToCurrentTime: Could not find element with id', elemId)
+      }
     }
   }
 
