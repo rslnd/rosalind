@@ -39,7 +39,6 @@ clinical:env
 aldeed:simple-schema
 aldeed:collection2
 aldeed:autoform
-aldeed:tabular
 dburles:collection-helpers
 dburles:mongo-collection-instances
 meteorhacks:subs-manager

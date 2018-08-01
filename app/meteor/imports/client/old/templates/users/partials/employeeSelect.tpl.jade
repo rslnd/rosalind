@@ -1,6 +1,0 @@
-select.form-control(rel='employeeSelect')
-  option(disabled='disabled' selected='selected' hidden='hidden') {{_ 'users.selectEmployee'}}
-  +each groups
-    optgroup(label='{{ name }}')
-      +each employees
-        option(data-id='{{ _id }}') not implemented

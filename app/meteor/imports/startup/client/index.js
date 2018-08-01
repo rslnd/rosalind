@@ -2,7 +2,6 @@ import shared from '../shared'
 import polyfills from './polyfills'
 import timezone from './timezone'
 import development from './development'
-import hotkeys from './hotkeys'
 import locale from './locale'
 import userStatus from './userStatus'
 import livechat from './livechat'
@@ -19,7 +18,6 @@ export default function () {
   locale()
   livechat()
   userStatus()
-  hotkeys()
   dataTransfer()
   native()
   autoLogout()

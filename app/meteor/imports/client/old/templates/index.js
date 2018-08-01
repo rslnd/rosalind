@@ -1,5 +1,1 @@
-import './application'
-import './comments'
-import './inboundCalls'
-import './system'
 import './users'

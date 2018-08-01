@@ -104,9 +104,7 @@ const sidebarItems = ({ history }) => {
         { name: 'thisCalendars', path: '/calendars' },
         { name: 'thisTags', path: '/tags' },
         { name: 'thisMessages', path: '/messages' },
-        { name: 'thisSettings', path: '/settings' },
-        { name: 'thisImporters', path: '/importers' },
-        { name: 'thisNative', path: '/native', only: () => window.native }
+        { name: 'thisSettings', path: '/settings' }
       ]
     }
   ]

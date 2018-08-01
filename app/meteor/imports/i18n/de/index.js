@@ -1,6 +1,5 @@
 export { appointments } from './appointments'
 export { groups } from './groups'
-export { hotkeys } from './hotkeys'
 export { inboundCalls } from './inboundCalls'
 export { livechat } from './livechat'
 export { login } from './login'
