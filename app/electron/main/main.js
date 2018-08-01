@@ -26,18 +26,18 @@ const logger = require('./logger')
 logger.start()
 
 const start = () => {
-  const updater = require('./updater')
-  const window = require('./window')
-  const systemInfo = require('./systemInfo')
-  const settings = require('./settings')
-  const cli = require('./cli')
-  const automation = require('./automation')
-  const print = require('./print')
-  const shortcuts = require('./shortcuts')
-  const watch = require('./watch')
-  const devtools = require('./devtools')
-
   app.on('ready', () => {
+    const updater = require('./updater')
+    const window = require('./window')
+    const systemInfo = require('./systemInfo')
+    const settings = require('./settings')
+    const cli = require('./cli')
+    const automation = require('./automation')
+    const print = require('./print')
+    const shortcuts = require('./shortcuts')
+    const watch = require('./watch')
+    const devtools = require('./devtools')
+
     let mainWindow = null
 
     const handleFocus = () => {
@@ -79,12 +79,12 @@ const start = () => {
     updater.start()
     setTimeout(updater.check, 5 * 1000)
     setInterval(updater.check, 5 * 60 * 1000)
-  })
 
-  app.on('window-all-closed', () => {
-    updater.quitAndInstall()
-    watch.stop()
-    app.quit()
+    app.on('window-all-closed', () => {
+      updater.quitAndInstall()
+      watch.stop()
+      app.quit()
+    })
   })
 }
 
