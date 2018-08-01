@@ -13,45 +13,51 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
     }).validator(),
 
     run ({ query }) {
-      this.unblock()
+      try {
+        this.unblock()
 
-      if (this.connection && !this.userId) {
-        throw new Meteor.Error(403, 'Not authorized')
-      }
+        if (this.connection && !this.userId) {
+          throw new Meteor.Error(403, 'Not authorized')
+        }
 
-      let selector
+        let selector
 
-      if (query.match(SimpleSchema.RegEx.Id)) {
-        selector = { _id: query }
-      } else {
-        selector = parseQuery(query)
-      }
+        if (query.match(SimpleSchema.RegEx.Id)) {
+          selector = { _id: query }
+        } else {
+          selector = parseQuery(query)
+        }
 
-      if (selector) {
-        const patients = Patients.find(selector, {
-          sort: { lastName: 1 },
-          limit: 100,
-          fields: Patients.fields.search
-        }).fetch()
+        if (selector) {
+          const patients = Patients.find(selector, {
+            sort: { lastName: 1 },
+            limit: 100,
+            fields: Patients.fields.search
+          }).fetch()
 
-        return patients.map((patient) => {
-          return {
-            ...patient,
-            appointments: Appointments.find({ patientId: patient._id }, {
-              sort: { start: -1 },
-              limit: 3,
-              fields: {
-                '_id': 1,
-                'tags': 1,
-                'start': 1,
-                'end': 1,
-                'assigneeId': 1,
-                'admitted': 1,
-                'treated': 1,
-                'canceled': 1
-              }
-            }).fetch() }
-        })
+          return patients.map((patient) => {
+            return {
+              ...patient,
+              appointments: Appointments.find({ patientId: patient._id }, {
+                sort: { start: -1 },
+                limit: 3,
+                fields: {
+                  '_id': 1,
+                  'tags': 1,
+                  'start': 1,
+                  'end': 1,
+                  'assigneeId': 1,
+                  'admitted': 1,
+                  'treated': 1,
+                  'canceled': 1
+                }
+              }).fetch()
+            }
+          })
+        }
+      } catch (e) {
+        console.error('[Search] patientsWithAppointments failed')
+        console.error(e)
       }
     }
   })

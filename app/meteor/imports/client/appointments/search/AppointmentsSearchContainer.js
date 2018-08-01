@@ -12,28 +12,32 @@ const findAppointments = (query) => {
       let options = []
       let lastPatientId = null
 
-      patientsWithAppointments && patientsWithAppointments.forEach((result) => {
-        if (lastPatientId !== result._id) {
-          lastPatientId = result._id
-          options.push({
-            value: `patient-${result._id}`,
-            patient: { ...result, appointments: undefined }
-          })
-        }
+      if (patientsWithAppointments) {
+        patientsWithAppointments.forEach((result) => {
+          if (lastPatientId !== result._id) {
+            lastPatientId = result._id
+            options.push({
+              value: `patient-${result._id}`,
+              patient: { ...result, appointments: undefined }
+            })
+          }
 
-        result.appointments && result.appointments.forEach((appointment) => {
-          options.push({
-            label: `appointment-${appointment._id}`,
-            assignee: appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId }),
-            value: appointment._id,
-            appointment
+          result.appointments && result.appointments.forEach((appointment) => {
+            options.push({
+              label: `appointment-${appointment._id}`,
+              assignee: appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId }),
+              value: appointment._id,
+              appointment
+            })
           })
         })
-      })
+      }
+
       return { options }
     })
     .catch(e => {
-      console.error('search/patientsWithAppointments', e)
+      console.error('[AppointmentsSearchContiner] search/patientsWithAppointments threw')
+      console.error(e)
     })
   } else {
     return Promise.resolve([])
