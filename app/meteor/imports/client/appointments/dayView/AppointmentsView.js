@@ -254,15 +254,19 @@ export class AppointmentsView extends React.Component {
   }
 
   handleMoveEnd () {
-    this.props.onMove({
-      appointmentId: this.props.move.moveAppointmentId,
-      newStart: this.props.move.moveToTime,
-      newAssigneeId: this.props.move.moveToAssigneeId
-    }).then(() => {
-      this.props.dispatch({
-        type: 'APPOINTMENT_MOVE_END'
+    const { moveAppointmentId, moveToTime, moveToAssigneeId } = this.props.move
+
+    if (moveAppointmentId && moveToTime && moveToAssigneeId) {
+      this.props.onMove({
+        appointmentId: moveAppointmentId,
+        newStart: moveToTime,
+        newAssigneeId: moveToAssigneeId
+      }).then(() => {
+        this.props.dispatch({
+          type: 'APPOINTMENT_MOVE_END'
+        })
       })
-    })
+    }
   }
 
   render () {
