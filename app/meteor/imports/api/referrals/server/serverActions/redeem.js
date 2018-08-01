@@ -8,7 +8,7 @@ export const redeem = ({ Referrals, Appointments }) => {
       const referral = Referrals.findOne({
         patientId,
         referredTo: {
-          $in: [...appointment.tags, appointment.calendarId]
+          $in: [...(appointment.tags || []), appointment.calendarId]
         },
         redeemedAt: null
       })
