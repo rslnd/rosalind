@@ -2,10 +2,14 @@ import * as Api from '../../api'
 
 export default () => {
   process.on('warning', e => {
-    console.warn('Node Process warning')
+    console.warn('[Server] Node process warning')
     console.warn(e.name)
     console.warn(e.message)
     console.warn(e.stack)
+  })
+
+  process.on('unhandledRejection', (exception, promise) => {
+    console.error('[Server] Node unhandled promise rejection', exception, exception.stack, promise)
   })
 
   // Fiber.poolSize = 1e9;
