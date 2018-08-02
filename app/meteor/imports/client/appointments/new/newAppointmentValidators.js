@@ -27,12 +27,12 @@ export const validate = ({ appointment, patient }) => {
 
   console.log('validating', { appointment, patient })
 
-  const hasNote = appointment && appointment.note
-  const hasPatientId = patient && patient.patientId
+  // const hasNote = appointment && appointment.note
+  // const hasPatientId = patient && (patient.patientId || patient.insuranceId)
 
-  if (!hasNote && !hasPatientId) {
-    errors.appointment.note = 'appointments.addNoteIfNoPatientSelected'
-  }
+  // if (!hasNote && !hasPatientId) {
+  //   errors.appointment.note = 'appointments.addNoteIfNoPatientSelected'
+  // }
 
   if (!appointment || (
     (

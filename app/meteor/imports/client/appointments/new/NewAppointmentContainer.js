@@ -47,12 +47,12 @@ export class NewAppointmentContainerComponent extends React.Component {
     }
 
     let newPatient = null
-    let patientId = values.patient.patientId
+    let patientId = values.patient && values.patient.patientId
 
-    if (!patientId && !values.appointment.note) {
-      Alert.error(__('appointments.patientOrNoteError'))
-      throw new Error('Cannot save appointment without patientId or note')
-    }
+    // if ((!patientId || !(values.patient && values.patient.insuranceId)) && !values.appointment.note) {
+    //   Alert.error(__('appointments.patientOrNoteError'))
+    //   throw new Error('Cannot save appointment without patientId or note')
+    // }
 
     if (patientId) {
       if (patientId === 'newPatient') {

@@ -19,6 +19,9 @@ const composer = (props) => {
       const patient = Patients.findOne({ _id: patientId })
 
       if (patient) {
+        if (props.patientId && !props.input.value) {
+          props.loadPatient(patient)
+        }
         return Promise.resolve({
           ...props,
           injectedValue: {
