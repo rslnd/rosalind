@@ -32,23 +32,27 @@ const actionButtonStyle = {
 export const WaitlistItem = ({ appointment, isFirst, isLast, action, handleChangeWaitlistAssignee, canChangeWaitlistAssignee }) =>
   <Paper style={isFirst ? boxStyleFirst : boxStyle}>
     <div style={patientInfoStyle}>
-      <div>
-        <span className='text-muted'>
-          {prefix(appointment.patient)}&nbsp;
-          {
-            appointment.patient.titlePrepend &&
-              <span>
-                {appointment.patient.titlePrepend}
-                &ensp;
-              </span>
-          }
-        </span>
-        <b>{namecase(appointment.patient.lastName)}</b>&ensp;
-        {namecase(appointment.patient.firstName)}&ensp;
-        <span className='text-muted'>
-          {appointment.patient.titleAppend}
-        </span>
-      </div>
+      {
+        appointment.patient
+          ? <div>
+            <span className='text-muted'>
+              {prefix(appointment.patient)}&nbsp;
+              {
+                appointment.patient.titlePrepend &&
+                  <span>
+                    {appointment.patient.titlePrepend}
+                    &ensp;
+                  </span>
+              }
+            </span>
+            <b>{namecase(appointment.patient.lastName)}</b>&ensp;
+            {namecase(appointment.patient.firstName)}&ensp;
+            <span className='text-muted'>
+              {appointment.patient.titleAppend}
+            </span>
+          </div>
+          : <div>{appointment.note}</div>
+      }
     </div>
 
     <div style={referralStyle}>
