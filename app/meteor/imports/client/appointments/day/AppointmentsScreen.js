@@ -5,7 +5,7 @@ import { __ } from '../../../i18n'
 import { weekOfYear } from '../../../util/time/format'
 import { DateNavigation } from '../../components/DateNavigation'
 import { Icon } from '../../components/Icon'
-import { AppointmentsSearchContainer } from '../search/AppointmentsSearchContainer'
+import { PatientPicker } from '../../patients/picker'
 import { background } from '../../css/global'
 import { GridContainer } from './GridContainer'
 
@@ -75,7 +75,9 @@ export class AppointmentsScreen extends React.Component {
           </h1>
 
           <div style={{ marginLeft: 30, marginRight: 15, flexGrow: 1 }}>
-            <AppointmentsSearchContainer />
+            <PatientPicker
+              withAppointments
+            />
           </div>
 
           <div style={{ marginTop: 27 }}>
