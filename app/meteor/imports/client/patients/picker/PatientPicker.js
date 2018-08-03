@@ -1,9 +1,17 @@
-import React from 'react'
-import Select from 'react-select'
+import { connect } from 'react-redux'
+import { compose } from 'recompose'
+import { PatientPickerComponent } from './PatientPickerComponent'
+import { changeInputValue } from './actions'
 
-export const PatientPicker = () =>
-  <Select
-    options={[
-      { a: 'b' }
-    ]}
-  />
+const mapStateToProps = state => ({
+  inputValue: state.patientPicker.inputValue
+})
+
+const mapDispatchToProps = dispatch => ({
+  handleInputValueChange: (newValue, { action }) =>
+    dispatch(changeInputValue(newValue, action))
+})
+
+export const PatientPicker = compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(PatientPickerComponent)
