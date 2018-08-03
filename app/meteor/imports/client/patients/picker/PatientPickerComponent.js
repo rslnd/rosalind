@@ -1,11 +1,19 @@
 import React from 'react'
 import Select from 'react-select'
+import { PatientName } from '../PatientName'
 
-export const PatientPickerComponent = ({ inputValue, handleInputValueChange }) =>
+const CustomValue = (value) => <PatientName patient={value} />
+
+const isOptionSelected = ({ _id }, selected = []) =>
+  selected.some(s => s._id === _id)
+
+export const PatientPickerComponent = ({
+  selectState,
+  selectHandlers,
+}) =>
   <Select
-    inputValue={inputValue}
-    onInputChange={handleInputValueChange}
-    options={[
-      { a: 'b' }
-    ]}
+    {...selectHandlers}
+    {...selectState}
+    formatOptionLabel={CustomValue}
+    isOptionSelected={isOptionSelected}
   />
