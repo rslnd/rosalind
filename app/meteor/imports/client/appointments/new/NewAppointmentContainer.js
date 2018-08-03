@@ -104,11 +104,6 @@ export class NewAppointmentContainerComponent extends React.Component {
       <NewAppointmentForm
         onSubmit={this.handleSubmit}
         onSubmitPause={this.handleSubmitPause}
-        initialValues={
-          this.props.patientId
-          ? { patient: { patientId: this.props.patientId } }
-          : {}
-        }
         time={this.props.time}
         calendarId={this.props.calendar._id}
         assigneeId={this.props.assigneeId}
@@ -119,11 +114,4 @@ export class NewAppointmentContainerComponent extends React.Component {
   }
 }
 
-const mapStateToProps = (store) => {
-  const state = store.appointments.search
-  const patientId = state.patientId ||
-    (state.query && state.query.patient && state.query.patient._id)
-  return { patientId }
-}
-
-export const NewAppointmentContainer = connect(mapStateToProps)(NewAppointmentContainerComponent)
+export const NewAppointmentContainer = NewAppointmentContainerComponent
