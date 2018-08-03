@@ -1,11 +1,13 @@
 import { createStore, combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form'
+import patientPicker from './patients/picker/reducers'
 import appointments from './appointments/reducers'
 import { newAppointment } from './appointments/new/reducers'
 import { form as inboundCallsForm } from './inboundCalls/reducers'
 import { form as schedulesForm } from './schedules/reducers'
 
 const reducers = {
+  patientPicker,
   appointments,
   form: formReducer.plugin({
     newAppointment,
