@@ -1,9 +1,13 @@
-import { PATIENT_CHANGE_INPUT_VALUE } from './actions'
+import {
+  PATIENT_CHANGE_INPUT_VALUE,
+  PATIENT_CHANGE_VALUE
+} from './actions'
 
 export default (state, action) => {
   if (typeof state === 'undefined') {
     return {
-      inputValue: ''
+      inputValue: '',
+      patient: null
     }
   }
 
@@ -17,6 +21,11 @@ export default (state, action) => {
         }
       } else {
         return state
+      }
+    case PATIENT_CHANGE_VALUE:
+      return {
+        ...state,
+        patient: action.patient
       }
     default:
       return state
