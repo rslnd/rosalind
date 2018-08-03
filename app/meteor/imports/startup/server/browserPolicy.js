@@ -10,18 +10,15 @@ export default () => {
 
   BrowserPolicy.content.allowInlineStyles()
 
-  BrowserPolicy.content.allowScriptOrigin('https://cdn.smooch.io/')
-  BrowserPolicy.content.allowScriptOrigin('https://api.smooch.io')
+  BrowserPolicy.content.allowScriptOrigin('https://*.smooch.io/')
   BrowserPolicy.content.allowFontOrigin('https://*.bootstrapcdn.com')
-  BrowserPolicy.content.allowImageOrigin('https://cdn.smooch.io/')
-  BrowserPolicy.content.allowImageOrigin('https://api.smooch.io')
-  BrowserPolicy.content.allowImageOrigin('https://app.smooch.io')
+  BrowserPolicy.content.allowFontOrigin('https://*.smooch.io/')
+  BrowserPolicy.content.allowImageOrigin('https://*.smooch.io/')
   BrowserPolicy.content.allowImageOrigin('https://www.gravatar.com')
-  BrowserPolicy.content.allowImageOrigin('https://media.smooch.io')
-  BrowserPolicy.content.allowConnectOrigin('wss://api.smooch.io')
-  BrowserPolicy.content.allowConnectOrigin('https://api.smooch.io')
-  BrowserPolicy.content.allowMediaOrigin('https://cdn.smooch.io')
-  BrowserPolicy.content.allowStyleOrigin('https://cdn.smooch.io')
+  BrowserPolicy.content.allowConnectOrigin('wss://*.smooch.io')
+  BrowserPolicy.content.allowConnectOrigin('https://*.smooch.io')
+  BrowserPolicy.content.allowMediaOrigin('https://*.smooch.io')
+  BrowserPolicy.content.allowStyleOrigin('https://*.smooch.io')
 
   if (process.env.NODE_ENV !== 'production') {
     BrowserPolicy.content.allowConnectOrigin('ws://*')

@@ -29,8 +29,8 @@ const init = () => {
     if (Smooch) {
       Smooch.init({
         appId: server.env.SMOOCH_APP_ID,
-        imageUploadEnabled: false,
-        customText: getTranslation()
+        customText: getTranslation(),
+        menuItems: {}
       }).then(() => {
         let currentUserId = null
         Tracker.autorun(throttle(() => {

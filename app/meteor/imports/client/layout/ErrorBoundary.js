@@ -19,8 +19,7 @@ class ErrorBoundaryComponent extends React.Component {
     // TODO: Log to sentry (error, info)
   }
 
-  getDerivedStateFromProps (props, state) {
-    console.log(props.location, state.errorUrlLocation, props.location === state.errorUrlLocation)
+  static getDerivedStateFromProps (props, state) {
     if (props.location === state.errorUrlLocation) {
       return null
     } else {
