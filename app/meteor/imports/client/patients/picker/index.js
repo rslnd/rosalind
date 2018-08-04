@@ -1,1 +1,2 @@
-export { PatientPicker } from './PatientPicker'
+export { PatientPicker } from './PatientPickerContainer'
+export { PatientPickerField } from './PatientPickerField'

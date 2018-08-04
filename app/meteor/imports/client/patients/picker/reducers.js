@@ -7,7 +7,8 @@ export default (state, action) => {
   if (typeof state === 'undefined') {
     return {
       inputValue: '',
-      patient: null
+      patient: null,
+      isUpserting: false
     }
   }
 
@@ -23,9 +24,18 @@ export default (state, action) => {
         return state
       }
     case PATIENT_CHANGE_VALUE:
-      return {
-        ...state,
-        patient: action.patient
+      if (action.patient) {
+        return {
+          ...state,
+          patient: action.patient,
+          isUpserting: true
+        }
+      } else {
+        return {
+          ...state,
+          patient: null,
+          isUpserting: false
+        }
       }
     default:
       return state

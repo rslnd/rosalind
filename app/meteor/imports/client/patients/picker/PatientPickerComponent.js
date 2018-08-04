@@ -12,8 +12,8 @@ export const PatientPickerComponent = ({
   selectHandlers,
 }) =>
   <Select
-    {...selectHandlers}
     {...selectState}
+    {...selectHandlers}
     formatOptionLabel={CustomValue}
     isOptionSelected={isOptionSelected}
   />
