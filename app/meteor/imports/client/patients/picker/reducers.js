@@ -18,6 +18,8 @@ export default (state, action) => {
       if (action.fieldAction === 'input-change') {
         return {
           ...state,
+          patient: null,
+          isUpserting: false,
           inputValue: action.inputValue
         }
       } else {
