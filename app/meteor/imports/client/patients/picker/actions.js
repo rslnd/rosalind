@@ -7,8 +7,16 @@ export const changeInputValue = (inputValue, fieldAction) => ({
   fieldAction
 })
 
-export const changeValue = (patient, fieldAction) => ({
-  type: PATIENT_CHANGE_VALUE,
-  patient,
-  fieldAction
-})
+export const changeValue = (patient, fieldAction, ownProps) => {
+  if (ownProps.input) {
+    const patientId = (patient && patient._id || null)
+    ownProps.input.onChange(patientId)
+    ownProps.input.onBlur(patientId)
+  }
+
+  return {
+    type: PATIENT_CHANGE_VALUE,
+    patient,
+    fieldAction
+  }
+}

@@ -7,7 +7,7 @@ import { TagsField } from '../../tags/TagsField'
 import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { UserHelper } from '../../users/UserHelper'
 import { Icon } from '../../components/Icon'
-import { PatientPicker } from '../../patients/picker'
+import { PatientPickerField } from '../../patients/picker'
 import { flex, grow, shrink, TextField } from '../../components/form'
 
 const pauseButtonStyle = {
@@ -42,8 +42,9 @@ export const NewAppointmentFields = props => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
       <FormSection name='patient'>
-          <PatientPicker
-          />
+        <PatientPickerField
+          upsert
+        />
       </FormSection>
 
       <FormSection name='appointment'>

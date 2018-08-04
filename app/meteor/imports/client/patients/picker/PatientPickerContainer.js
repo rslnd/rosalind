@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { compose } from 'recompose'
+import { compose, withHandlers } from 'recompose'
 import { PatientPickerComponent } from './PatientPickerComponent'
 import {
   changeInputValue,
@@ -16,16 +16,17 @@ const mapStateToProps = state => ({
   }
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   selectHandlers: {
     onInputChange: (newValue, { action }) =>
       dispatch(changeInputValue(newValue, action)),
     onChange: (newPatient, { action }) =>
-      dispatch(changeValue(newPatient, action))
+      dispatch(changeValue(newPatient, action, ownProps))
   }
 })
 
 export const PatientPicker = compose(
   connect(mapStateToProps, mapDispatchToProps)
-
 )(PatientPickerComponent)
+
+export const PatientPickerField = withHandlers({})(PatientPicker)
