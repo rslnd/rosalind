@@ -77,7 +77,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
               {
                 count < 5 &&
                   <Button
-                    onClick={() => fields.insert(i + 1, { channel })}
+                    onClick={() => fields.insert(i, { channel })}
                     style={{ minWidth: 35 }}
                     title={__('patients.addContact')}>
                     <Icon name='plus' />
