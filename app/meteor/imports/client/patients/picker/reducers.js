@@ -3,13 +3,15 @@ import {
   PATIENT_CHANGE_VALUE
 } from './actions'
 
+const initialState = {
+  inputValue: '',
+  patient: null,
+  isUpserting: false
+}
+
 export default (state, action) => {
   if (typeof state === 'undefined') {
-    return {
-      inputValue: '',
-      patient: null,
-      isUpserting: false
-    }
+    return initialState
   }
 
   switch (action.type) {
@@ -39,6 +41,8 @@ export default (state, action) => {
           isUpserting: false
         }
       }
+    case 'APPOINTMENT_INSERT_SUCCESS':
+      return initialState
     default:
       return state
   }
