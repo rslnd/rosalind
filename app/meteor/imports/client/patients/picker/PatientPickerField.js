@@ -12,6 +12,7 @@ const PatientPickerFieldComponent = ({ extended, upsert, isUpserting, input, met
           name='patientId'
           component={PatientPicker}
           formName={form}
+          upsert={upsert}
         />
     }</FormName>
 
