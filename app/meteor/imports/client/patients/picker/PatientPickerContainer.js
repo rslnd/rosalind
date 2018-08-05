@@ -38,7 +38,7 @@ const withOption = option => props => ({
 })
 
 const CustomOptionComponent = compose(
-  branch(p => p.action === 'newPatient', renderComponent(NewPatient)),
+  branch(p => p.patientId === 'newPatient', renderComponent(NewPatient)),
   mapProps(patient => ({ patient }))
 )(PatientName)
 
@@ -47,7 +47,7 @@ const isOptionSelected = ({ _id }, selected = []) =>
 
 export const PatientPicker = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  branch(p => p.upsert, mapProps(withOption({ action: 'newPatient' }))),
+  branch(p => p.upsert, mapProps(withOption({ patientId: 'newPatient' }))),
   withProps({ CustomOptionComponent, isOptionSelected })
 )(PatientPickerComponent)
 

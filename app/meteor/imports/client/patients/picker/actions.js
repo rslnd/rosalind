@@ -12,7 +12,7 @@ export const changeInputValue = (inputValue, fieldAction) => ({
 })
 
 export const changeValue = (patient, fieldAction, ownProps) => {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch({
       type: PATIENT_CHANGE_VALUE,
       patient,
@@ -24,13 +24,21 @@ export const changeValue = (patient, fieldAction, ownProps) => {
     // Setting initialValues would overwrite other form sections,
     // eg. tag is lost when patient changes
     if (ownProps.formName) {
-      const fields = mapPatientToFields(patient)
+      const matchedPatient =
+        (patient && patient.patientId === 'newPatient')
+        ? { ...patient, lastName: getState().patientPicker.inputValue }
+        : patient
+
+      const fields = mapPatientToFields(matchedPatient)
+
+      console.log('[PatientPicker] actions: changeValue: Autofilling', fields)
+
       map(fields, (value, field) =>
         dispatch(autofill(ownProps.formName, `patient.${field}`, value))
       )
 
       // Reveal validation errors only if actual patient was selected
-      const setTouched = patient.action !== 'newPatient'
+      const setTouched = patient.patientId !== 'newPatient'
       dispatch(touchPatientFields(ownProps.formName, { setTouched }))
     }
   }

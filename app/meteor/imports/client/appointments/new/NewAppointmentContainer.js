@@ -60,6 +60,7 @@ export class NewAppointmentContainerComponent extends React.Component {
         patientId = undefined
       }
 
+      // this also removes any patientId of 'newPatient'
       newPatient = mapFieldsToPatient(values.patient)
     }
 
@@ -86,7 +87,7 @@ export class NewAppointmentContainerComponent extends React.Component {
       revenue
     }
 
-    console.log('[Appointments] Inserting appointment with new patient', { appointment })
+    console.log('[Appointments] Inserting appointment with new patient', { appointment, newPatient })
 
     return Appointments.actions.insert.callPromise({ appointment, newPatient })
       .then(() => {

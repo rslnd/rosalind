@@ -12,7 +12,7 @@ export const mapPatientToFields = (patient = {}) => {
   return ({
     patientId: patient._id || patient.patientId,
     insuranceId: patient.insuranceId,
-    gender: patient.gender,
+    gender: patient.gender || 'Female',
     firstName: patient.firstName,
     lastName: patient.lastName,
     titlePrepend: patient.titlePrepend,
