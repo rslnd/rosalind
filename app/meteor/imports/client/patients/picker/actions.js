@@ -1,6 +1,6 @@
 import map from 'lodash/map'
 import { mapPatientToFields } from '../mapPatientToFields'
-import { autofill, touch } from 'redux-form'
+import { autofill, touch, untouch } from 'redux-form'
 
 export const PATIENT_CHANGE_INPUT_VALUE = 'PATIENT_CHANGE_INPUT_VALUE'
 export const PATIENT_CHANGE_VALUE = 'PATIENT_CHANGE_VALUE'
@@ -29,18 +29,22 @@ export const changeValue = (patient, fieldAction, ownProps) => {
         dispatch(autofill(ownProps.formName, `patient.${field}`, value))
       )
 
-      // Reveal validation errors
-      dispatch(touchPatientFields(ownProps.formName))
+      // Reveal validation errors only if actual patient was selected
+      const setTouched = patient.action !== 'newPatient'
+      dispatch(touchPatientFields(ownProps.formName, { setTouched }))
     }
   }
 }
 
-export const touchPatientFields = (formName) => {
+export const touchPatientFields = (formName, { setTouched = true } = {}) => {
   // Note: need to touch patient.contacts[0] and [1] separately
   const changedFields = [
     ...Object.keys(mapPatientToFields()).map(k => `patient.${k}`),
     'patient.contacts[0].value',
     'patient.contacts[1].value'
   ]
-  return touch(formName, ...changedFields)
+  return (setTouched
+    ? touch(formName, ...changedFields)
+    : untouch(formName, ...changedFields)
+  )
 }
