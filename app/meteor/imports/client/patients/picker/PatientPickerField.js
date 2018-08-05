@@ -16,9 +16,12 @@ const PatientPickerFieldComponent = ({ extended, upsert, isUpserting, input, met
         />
     }</FormName>
 
-    <PatientFormFields
-      extended={extended}
-    />
+    {
+      upsert && isUpserting &&
+        <PatientFormFields
+          extended={extended}
+        />
+    }
   </div>
 
 const mapStateToProps = (state) => ({
