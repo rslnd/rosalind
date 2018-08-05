@@ -2,9 +2,11 @@ import map from 'lodash/map'
 import { mapPatientToFields } from '../mapPatientToFields'
 import { autofill, touch, untouch } from 'redux-form'
 import { Search } from '../../../api/search'
+import { Patients } from '../../../api/patients'
 
 export const PATIENT_CHANGE_INPUT_VALUE = 'PATIENT_CHANGE_INPUT_VALUE'
 export const PATIENT_CHANGE_VALUE = 'PATIENT_CHANGE_VALUE'
+export const PATIENT_LOAD_START = 'PATIENT_LOAD_START'
 export const PATIENTS_RESULTS_LOADED = 'PATIENTS_RESULTS_LOADED'
 
 export const changeInputValue = (inputValue, fieldAction) => {
@@ -72,4 +74,19 @@ export const touchPatientFields = (formName, { setTouched = true } = {}) => {
     ? touch(formName, ...changedFields)
     : untouch(formName, ...changedFields)
   )
+}
+
+export const loadPatient = (patientId) => {
+  return (dispatch) => {
+    dispatch({
+      type: PATIENT_LOAD_START,
+      patientId
+    })
+
+    Patients.actions.findOne.callPromise({ _id: patientId })
+      .then(patient => {
+        // HACK: Get rid of hardcoded form name
+        dispatch(changeValue(patient, 'load', { formName: 'newAppointment' }))
+      })
+  }
 }
