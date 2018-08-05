@@ -1,16 +1,22 @@
 import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-const marginStyle = {
+const containerStyle = {
+  textAlign: 'center',
+  width: '100%'
+}
+
+const defaultStyle = {
   margin: 100
 }
 
-export const Loading = () => (
-  <div className='loading'>
+export const Loading = ({ size = 70, thickness = 4, style = defaultStyle }) => (
+  <div className='loading' style={containerStyle} >
     <CircularProgress
       key='loading'
-      size={70}
-      thickness={4}
-      style={marginStyle} />
+      size={size}
+      thickness={thickness}
+      style={style}
+    />
   </div>
 )

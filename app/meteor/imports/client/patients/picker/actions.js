@@ -1,15 +1,32 @@
 import map from 'lodash/map'
 import { mapPatientToFields } from '../mapPatientToFields'
 import { autofill, touch, untouch } from 'redux-form'
+import { Search } from '../../../api/search'
 
 export const PATIENT_CHANGE_INPUT_VALUE = 'PATIENT_CHANGE_INPUT_VALUE'
 export const PATIENT_CHANGE_VALUE = 'PATIENT_CHANGE_VALUE'
+export const PATIENTS_RESULTS_LOADED = 'PATIENTS_RESULTS_LOADED'
 
-export const changeInputValue = (inputValue, fieldAction) => ({
-  type: PATIENT_CHANGE_INPUT_VALUE,
-  inputValue,
-  fieldAction
-})
+export const changeInputValue = (inputValue, fieldAction) => {
+  return (dispatch) => {
+    dispatch({
+      type: PATIENT_CHANGE_INPUT_VALUE,
+      inputValue,
+      fieldAction
+    })
+
+    if (inputValue && inputValue.length >= 1) {
+      Search.actions.patientsWithAppointments
+        .callPromise({ query: inputValue })
+        .then(patients => {
+          dispatch({
+            type: PATIENTS_RESULTS_LOADED,
+            patients
+          })
+        })
+    }
+  }
+}
 
 export const changeValue = (patient, fieldAction, ownProps) => {
   return (dispatch, getState) => {

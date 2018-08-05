@@ -15,6 +15,7 @@ export const patients = {
   addedToday: 'heute neu eingetragen',
   insuranceId: 'SV-Nr.',
   searching: 'Suche...',
+  noResults: 'Keine Ergebnisse',
   birthday: 'Geburtsdatum',
   birthdayToday: 'Heute Geburtstag',
   yearsOld: '__age__ Jahre',
