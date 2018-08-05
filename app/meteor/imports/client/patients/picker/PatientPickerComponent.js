@@ -14,6 +14,7 @@ export const PatientPickerComponent = ({
     {...selectHandlers}
     formatOptionLabel={CustomOptionComponent}
     isOptionSelected={isOptionSelected}
+    isClearable
   />
 
 export const NewPatient = () =>

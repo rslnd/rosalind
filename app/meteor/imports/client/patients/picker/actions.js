@@ -38,7 +38,7 @@ export const changeValue = (patient, fieldAction, ownProps) => {
       )
 
       // Reveal validation errors only if actual patient was selected
-      const setTouched = patient.patientId !== 'newPatient'
+      const setTouched = patient && patient.patientId !== 'newPatient'
       dispatch(touchPatientFields(ownProps.formName, { setTouched }))
     }
   }
