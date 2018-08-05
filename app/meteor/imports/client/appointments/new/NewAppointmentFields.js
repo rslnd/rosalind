@@ -45,6 +45,7 @@ export const NewAppointmentFields = props => {
         <PatientPickerField
           upsert
           extended={extended}
+          change={change}
         />
       </FormSection>
 

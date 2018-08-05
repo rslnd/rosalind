@@ -9,7 +9,7 @@ import ort from 'plz-ort'
 const autofillLocality = change => (e, postalCode) => {
   if (postalCode && postalCode.length === 4) {
     const locality = ort(postalCode)
-    if (locality) {
+    if (locality && change) {
       change('patient.address.locality', locality.toString())
     }
   }
