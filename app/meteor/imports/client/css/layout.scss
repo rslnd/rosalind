@@ -139,9 +139,6 @@ i.circle {
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
 .loading {
-  width: 100%;
-  padding-top: 50px;
-  text-align: center;
   animation: fadeIn ease-in 1s;
   animation-fill-mode:forwards;
 }

@@ -1,12 +1,15 @@
 import {
   PATIENT_CHANGE_INPUT_VALUE,
-  PATIENT_CHANGE_VALUE
+  PATIENT_CHANGE_VALUE,
+  PATIENTS_RESULTS_LOADED
 } from './actions'
 
 const initialState = {
   inputValue: '',
   patient: null,
-  isUpserting: false
+  isUpserting: false,
+  options: [],
+  isLoading: false
 }
 
 export default (state, action) => {
@@ -15,6 +18,12 @@ export default (state, action) => {
   }
 
   switch (action.type) {
+    case PATIENTS_RESULTS_LOADED:
+      return {
+        ...state,
+        isLoading: false,
+        options: action.patients
+      }
     case PATIENT_CHANGE_INPUT_VALUE:
       // Keep inputValue untouched when dropdown is closed, blurred, or a selection is made
       if (action.fieldAction === 'input-change') {
@@ -22,6 +31,7 @@ export default (state, action) => {
           ...state,
           patient: null,
           isUpserting: false,
+          isLoading: Boolean(action.inputValue),
           inputValue: action.inputValue
         }
       } else {
@@ -31,6 +41,7 @@ export default (state, action) => {
       if (action.patient) {
         return {
           ...state,
+          inputValue: '',
           patient: action.patient,
           isUpserting: true
         }

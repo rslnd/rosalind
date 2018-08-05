@@ -7,13 +7,12 @@ import {
   changeValue
 } from './actions'
 
-import { Patients } from '../../../api/patients'
-
 const mapStateToProps = state => ({
   selectState: {
     inputValue: state.patientPicker.inputValue,
     value: state.patientPicker.patient,
-    options: Patients.find({}, {limit: 10}).fetch()
+    options: state.patientPicker.options,
+    isLoading: state.patientPicker.isLoading
   }
 })
 
@@ -45,10 +44,12 @@ const CustomOptionComponent = compose(
 const isOptionSelected = ({ _id }, selected = []) =>
   selected.some(s => s._id === _id)
 
+const filterOption = () => true
+
 export const PatientPicker = compose(
   connect(mapStateToProps, mapDispatchToProps),
   branch(p => p.upsert, mapProps(withOption({ patientId: 'newPatient' }))),
-  withProps({ CustomOptionComponent, isOptionSelected })
+  withProps({ CustomOptionComponent, isOptionSelected, filterOption })
 )(PatientPickerComponent)
 
 export const PatientPickerField = withHandlers({})(PatientPicker)
