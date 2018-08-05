@@ -1,11 +1,16 @@
 import React from 'react'
 import Select from 'react-select'
-import { withProps, mapProps, compose, renderComponent, branch, renderNothing } from 'recompose'
+import moment from 'moment'
+import { withProps } from 'recompose'
 import { Icon } from '../../components/Icon'
 import { __ } from '../../../i18n'
 import { Loading } from '../../components/Loading'
 import { PatientName } from '../PatientName'
 import { Birthday } from '../Birthday'
+import { TagsList } from '../../tags/TagsList'
+import { UserHelper } from '../../users/UserHelper'
+import { Indicator } from '../../appointments/appointment/Indicator'
+import { darkGrayDisabled } from '../../css/global'
 
 const loadingStyle = {
   margin: 0,
@@ -28,7 +33,7 @@ export const PatientPickerComponent = ({
   <Select
     {...selectState}
     {...selectHandlers}
-    formatOptionLabel={CustomOptionComponent}
+    formatOptionLabel={formatOptionLabel}
     isOptionSelected={isOptionSelected}
     filterOption={filterOption}
     isClearable
@@ -41,16 +46,72 @@ export const PatientPickerComponent = ({
 const NewPatient = () =>
   <span><Icon name='user-plus' /> {__('patients.thisInsert')}</span>
 
-const NameWithBirthday = (patient) =>
+const PatientWithAppointments = ({ patient }) =>
   <span>
     <PatientName patient={patient} />
     <span className='text-muted pull-right'>
-      &emsp;&emsp;
+      &emsp;
       <Birthday day={patient.birthday} />
     </span>
+    {
+      patient.appointments.map(appointment =>
+        <Appointment
+          key={appointment._id}
+          appointment={appointment}
+        />
+      )
+    }
   </span>
 
-const CustomOptionComponent = compose(
-  branch(p => p.patientId === 'newPatient', renderComponent(NewPatient)),
-  branch(p => (p.lastName || p.firstName), renderComponent(NameWithBirthday))
-)(renderNothing)
+const Appointment = ({ appointment }) => {
+  const start = moment(appointment.start)
+
+  return (
+    <span
+      style={appointmentStyle}>
+      <TagsList tiny tags={appointment.tags} />
+      &ensp;
+      <span style={{
+        textDecoration: appointment.canceled && 'line-through'
+      }}>
+        {start.format(__('time.dateFormatShort'))}
+        &nbsp;
+        {start.format(__('time.timeFormat'))}
+      </span>
+      &emsp;
+      {
+        appointment.assigneeId &&
+          <span style={assigneeNameStyle}>
+            <UserHelper userId={appointment.assigneeId} helper='lastNameWithTitle' />
+            &emsp;
+            <Indicator appointment={appointment} />
+          </span>
+      }
+    </span>
+  )
+}
+
+const formatOptionLabel = (patient, { context }) => {
+  if (patient.patientId === 'newPatient') {
+    return <NewPatient />
+  }
+
+  if (context === 'menu') {
+    return <PatientWithAppointments patient={ patient } />
+  } else {
+    return <PatientName patient={ patient } />
+  }
+}
+
+const appointmentStyle = {
+  display: 'flex',
+  marginBottom: 4,
+  marginLeft: 4
+}
+
+const assigneeNameStyle = {
+  alignSelf: 'flex-end',
+  color: darkGrayDisabled,
+  flexGrow: 1,
+  textAlign: 'right'
+}
