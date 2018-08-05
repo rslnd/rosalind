@@ -1,7 +1,8 @@
 import {
   PATIENT_CHANGE_INPUT_VALUE,
   PATIENT_CHANGE_VALUE,
-  PATIENTS_RESULTS_LOADED
+  PATIENTS_RESULTS_LOADED,
+  PATIENT_LOAD_START
 } from './actions'
 
 const initialState = {
@@ -18,6 +19,14 @@ export default (state, action) => {
   }
 
   switch (action.type) {
+    case PATIENT_LOAD_START:
+      return {
+        ...initialState,
+        isLoading: true,
+        patient: {
+          patientId: action.patientId
+        }
+      }
     case PATIENTS_RESULTS_LOADED:
       return {
         ...state,
@@ -41,6 +50,7 @@ export default (state, action) => {
       if (action.patient) {
         return {
           ...state,
+          isLoading: false,
           inputValue: '',
           patient: action.patient,
           isUpserting: true

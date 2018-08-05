@@ -3,6 +3,7 @@ import dragDrop from 'drag-drop/buffer'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import { Importers } from '../../api/importers'
+import { loadPatient } from '../../client/patients/picker/actions'
 
 export const ingest = ({ name, content, buffer, importer }) => {
   return Importers.actions.ingest.callPromise({
@@ -21,11 +22,7 @@ export const setupDragdrop = () => {
         if (typeof response === 'object') {
           const { result, importer } = response
           console.log('[Importers] Successfully ingested dragdrop data transfer', { importer })
-          store.dispatch({
-            type: 'DATA_TRANSFER_SUCCESS',
-            importer,
-            result
-          })
+          onDataTransferSuccess({ importer, result })
         }
       }).catch((err) => {
         Alert.error(err.message)
@@ -43,11 +40,7 @@ export const setupNative = () => {
         .then((response) => {
           if (typeof response === 'object') {
             const { result, importer } = response
-            store.dispatch({
-              type: 'DATA_TRANSFER_SUCCESS',
-              importer,
-              result
-            })
+            onDataTransferSuccess({ importer, result })
           }
 
           if (window.native.dataTransferSuccess) {
@@ -56,6 +49,18 @@ export const setupNative = () => {
           }
         })
     })
+  }
+}
+
+const onDataTransferSuccess = ({ importer, result }) => {
+  store.dispatch({
+    type: 'DATA_TRANSFER_SUCCESS',
+    importer,
+    result
+  })
+
+  if (importer === 'xdt') {
+    store.dispatch(loadPatient(result))
   }
 }
 
