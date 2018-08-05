@@ -31,7 +31,7 @@ export default (state, action) => {
       return {
         ...state,
         isLoading: false,
-        options: action.patients
+        options: (action.patients || [])
       }
     case PATIENT_CHANGE_INPUT_VALUE:
       // Keep inputValue untouched when dropdown is closed, blurred, or a selection is made

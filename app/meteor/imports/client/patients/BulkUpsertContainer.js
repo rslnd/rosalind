@@ -1,4 +1,5 @@
 import { reduxForm } from 'redux-form'
+import { compose } from 'recompose'
 import { withTracker } from '../components/withTracker'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
@@ -18,7 +19,6 @@ const composer = (props) => {
       })
         .then(() => {
           Alert.success(__('patients.editSuccess'))
-          props.dispatch({ type: 'LOAD_PATIENT', data: patient })
         })
         .catch(e => {
           Alert.error('Bitte noch einmal versuchen')
@@ -34,14 +34,14 @@ const composer = (props) => {
 }
 
 const formName = 'bulkPatientUpsertForm'
-let BulkUpsertContainer = reduxForm({
-  form: formName,
-  enableReinitialize: true,
-  updateUnregisteredFields: true,
-  keepDirtyOnReinitialize: false,
-  pure: false
-})(BulkUpsertScreen)
 
-BulkUpsertContainer = withTracker(composer)(BulkUpsertContainer)
-
-export { BulkUpsertContainer }
+export const BulkUpsertContainer = compose(
+  reduxForm({
+    form: formName,
+    enableReinitialize: true,
+    updateUnregisteredFields: true,
+    keepDirtyOnReinitialize: false,
+    pure: false
+  }),
+  withTracker(composer)
+)(BulkUpsertScreen)
