@@ -1,9 +1,11 @@
 import React from 'react'
 import Select from 'react-select'
-import { withProps } from 'recompose'
+import { withProps, mapProps, compose, renderComponent, branch, renderNothing } from 'recompose'
 import { Icon } from '../../components/Icon'
 import { __ } from '../../../i18n'
 import { Loading } from '../../components/Loading'
+import { PatientName } from '../PatientName'
+import { Birthday } from '../Birthday'
 
 const loadingStyle = {
   margin: 0,
@@ -20,7 +22,6 @@ const loadingMessage = () => __('patients.searching')
 export const PatientPickerComponent = ({
   selectState,
   selectHandlers,
-  CustomOptionComponent,
   isOptionSelected,
   filterOption
 }) =>
@@ -37,5 +38,19 @@ export const PatientPickerComponent = ({
     placeholder={__('patients.search')}
   />
 
-export const NewPatient = () =>
+const NewPatient = () =>
   <span><Icon name='user-plus' /> {__('patients.thisInsert')}</span>
+
+const NameWithBirthday = (patient) =>
+  <span>
+    <PatientName patient={patient} />
+    <span className='text-muted pull-right'>
+      &emsp;&emsp;
+      <Birthday day={patient.birthday} />
+    </span>
+  </span>
+
+const CustomOptionComponent = compose(
+  branch(p => p.patientId === 'newPatient', renderComponent(NewPatient)),
+  branch(p => (p.lastName || p.firstName), renderComponent(NameWithBirthday))
+)(renderNothing)

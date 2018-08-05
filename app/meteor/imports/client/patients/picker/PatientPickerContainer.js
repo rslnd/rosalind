@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
-import { compose, withHandlers, mapProps, branch, withProps, renderComponent } from 'recompose'
-import { PatientPickerComponent, NewPatient } from './PatientPickerComponent'
-import { PatientName } from '../PatientName'
+import { compose, withHandlers, mapProps, branch, withProps } from 'recompose'
+import { PatientPickerComponent } from './PatientPickerComponent'
 import {
   changeInputValue,
   changeValue
@@ -36,11 +35,6 @@ const withOption = option => props => ({
   }
 })
 
-const CustomOptionComponent = compose(
-  branch(p => p.patientId === 'newPatient', renderComponent(NewPatient)),
-  mapProps(patient => ({ patient }))
-)(PatientName)
-
 const isOptionSelected = ({ _id }, selected = []) =>
   selected.some(s => s._id === _id)
 
@@ -49,7 +43,7 @@ const filterOption = () => true
 export const PatientPicker = compose(
   connect(mapStateToProps, mapDispatchToProps),
   branch(p => p.upsert, mapProps(withOption({ patientId: 'newPatient' }))),
-  withProps({ CustomOptionComponent, isOptionSelected, filterOption })
+  withProps({ isOptionSelected, filterOption })
 )(PatientPickerComponent)
 
 export const PatientPickerField = withHandlers({})(PatientPicker)
