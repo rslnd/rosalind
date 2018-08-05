@@ -11,7 +11,7 @@ const dotStyle = {
   borderRadius: '100%'
 }
 
-export const PatientName = ({ patient }) => (
+export const PatientName = ({ patient = {} }) => (
   <span>
     <span className='text-muted'>
       {prefix(patient)}
