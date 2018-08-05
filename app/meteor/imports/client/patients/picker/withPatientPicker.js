@@ -24,7 +24,7 @@ const toDefaultValue = formName => props => {
 
   const patientFields = mapPatientToFields(patient)
 
-  const setTouched = patient.patientId !== 'newPatient'
+  const setTouched = patient && patient.patientId !== 'newPatient'
   props.dispatch(touchPatientFields(formName, { setTouched }))
 
   console.log('[withPatient] fields', patientFields)
