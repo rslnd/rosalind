@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { compose, mapProps } from 'recompose'
 import { mapPatientToFields } from '../mapPatientToFields'
+import { touchPatientFields } from './actions'
 
 const mapStateToProps = state => {
   if (state.patientPicker && state.patientPicker.patient) {
@@ -14,7 +15,7 @@ const mapStateToProps = state => {
 
 export const withPatientPicker = connect(mapStateToProps)
 
-const toDefaultValue = (props) => {
+const toDefaultValue = formName => props => {
   if (!props.patientPicker) {
     return props
   }
@@ -22,6 +23,8 @@ const toDefaultValue = (props) => {
   const { patient, ...otherState } = props.patientPicker
 
   const patientFields = mapPatientToFields(patient)
+
+  props.dispatch(touchPatientFields(formName))
 
   console.log('[withPatient] fields', patientFields)
 
@@ -35,7 +38,7 @@ const toDefaultValue = (props) => {
   }
 }
 
-export const withPatientInitialValues = compose(
+export const withPatientInitialValues = formName => compose(
   withPatientPicker,
-  mapProps(toDefaultValue)
+  mapProps(toDefaultValue(formName))
 )

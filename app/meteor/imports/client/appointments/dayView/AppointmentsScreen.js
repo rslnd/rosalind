@@ -7,7 +7,7 @@ import { DateNavigation } from '../../components/DateNavigation'
 import { Icon } from '../../components/Icon'
 import { AppointmentsView } from './AppointmentsView'
 import { PatientPicker } from '../../patients/picker'
-
+import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../css/global'
 
 const contentHeaderStyle = {
@@ -88,6 +88,7 @@ export class AppointmentsScreen extends React.Component {
           <div style={{ marginLeft: 30, marginRight: 15, flexGrow: 1 }}>
             <PatientPicker
               withAppointments
+              formName={newAppointmentFormName}
             />
           </div>
 
