@@ -5,7 +5,7 @@ import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { Box } from '../components/Box'
 import { Currency } from '../components/Currency'
-import { PatientField } from './picker'
+import { PatientPickerField } from './picker'
 import { DayField } from '../components/form/DayField'
 import { CalculatorField } from '../components/form/CalculatorField'
 import { twoPlaces } from '../../util/format'
@@ -30,7 +30,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
     <Box title='Stammdaten vervollständigen'>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
         <FormSection name='patient'>
-          <PatientField
+          <PatientPickerField
             extended
             upsert
           />

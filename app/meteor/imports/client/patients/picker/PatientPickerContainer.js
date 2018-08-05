@@ -31,7 +31,7 @@ const withOption = option => props => ({
     ...props.selectState,
     options: [
       option,
-      ...props.selectState.options
+      ...(props.selectState.options || [])
     ]
   }
 })
