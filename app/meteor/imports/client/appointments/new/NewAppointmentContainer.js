@@ -116,4 +116,4 @@ export class NewAppointmentContainerComponent extends React.Component {
   }
 }
 
-export const NewAppointmentContainer = NewAppointmentContainerComponent
+export const NewAppointmentContainer = connect()(NewAppointmentContainerComponent)

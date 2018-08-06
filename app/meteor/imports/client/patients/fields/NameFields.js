@@ -44,7 +44,6 @@ export const NameFields = ({ gender = true, titles = false }) =>
       <Field
         name='firstName'
         component={TextField}
-        autoFocus
         label={__('patients.firstName')} />
     </div>
 
