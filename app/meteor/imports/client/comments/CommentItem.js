@@ -32,7 +32,7 @@ const RemoveLink = ({ comment, onRemove }) => (
 const ChildCommentItem = ({ comment, onRemove }) => (
   <span style={childCommentStyle}>
     <span className='text-muted pull-right'>
-      <RemoveLink comment={comment} onRemove={onRemove} />
+      {onRemove && <RemoveLink comment={comment} onRemove={onRemove} />}
       <RelativeTime time={comment.createdAt} />
     </span>
     {comment.body}
@@ -51,7 +51,7 @@ export class CommentItem extends React.Component {
           <span className='username'>
             <span><UserHelper userId={createdBy} helper='fullName' /></span>
             <span className='text-muted pull-right'>
-              <RemoveLink comment={comment} onRemove={onRemove} />
+              {onRemove && <RemoveLink comment={comment} onRemove={onRemove} />}
               <RelativeTime time={createdAt} />
             </span>
           </span>
