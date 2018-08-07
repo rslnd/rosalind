@@ -58,11 +58,14 @@ export class RequestItem extends React.Component {
           </blockquote>
         }
         <HumanCommentCount docId={_id} />
-        {
-          valid
-          ? <Stamps fields={['removed', 'requested', 'approved']} doc={this.props.request} />
-          : <Stamps fields={['removed', 'requested', 'declined']} doc={this.props.request} />
-        }
+        <Stamps
+          collectionName='schedules'
+          fields={valid
+            ? ['removed', 'requested', 'approved']
+            : ['removed', 'requested', 'declined']
+          }
+          doc={this.props.request}
+        />
       </Box>
     )
   }

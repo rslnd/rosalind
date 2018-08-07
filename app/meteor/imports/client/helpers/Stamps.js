@@ -24,7 +24,7 @@ const composer = (props, onData) => {
     return props.doc[`${field}By`] && props.doc[`${field}At`]
   }).map((field) => {
     return {
-      verb: __(props.doc.collection()._name + '.' + field + 'By'),
+      verb: __(props.collectionName + '.' + field + 'By'),
       userId: props.doc[`${field}By`],
       time: props.doc[`${field}At`]
     }

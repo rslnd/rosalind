@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { process as server } from 'meteor/clinical:env'
 import { __ } from '../../i18n'
+import { Roles } from 'meteor/alanning:roles'
 import { Groups } from '../../api/groups'
 import { Users } from '../../api/users'
 
@@ -57,7 +58,7 @@ const init = () => {
                       username: user.username,
                       fullNameWithTitle: Users.methods.fullNameWithTitle(user),
                       employee: user.employee,
-                      roles: user.getRoles(),
+                      roles: Roles.getRolesForUser(user._id).join(', '),
                       group: group && group.name
                     }
                   })

@@ -6,6 +6,7 @@ import { withTracker } from '../components/withTracker'
 import { dateToDay } from '../../util/time/day'
 import { Loading } from '../components/Loading'
 import { Timesheets } from '../../api/timesheets'
+import { duration } from '../../api/timesheets/methods/sum'
 import { Schedules } from '../../api/schedules'
 import { TimesheetsScreen } from './TimesheetsScreen'
 import { subscribe } from '../../util/meteor/subscribe'
@@ -52,7 +53,7 @@ const composer = (props) => {
     }
   }).filter((s) => s.scheduledHours)
 
-  const sum = add(days.map((d) => d.timesheet.duration()))
+  const sum = add(days.map(duration))
 
   return { days, timesheets, isTracking, sum, start, end, userId, onChangeUserId }
 }

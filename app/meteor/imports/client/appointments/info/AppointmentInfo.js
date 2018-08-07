@@ -416,6 +416,7 @@ export class AppointmentInfo extends React.Component {
             <ListItem>
               <Logs format={logFormat} doc={appointment} />
               <Stamps
+                collectionName='appointments'
                 fields={['removed', 'created', 'admitted', 'canceled']}
                 doc={appointment} />
             </ListItem>

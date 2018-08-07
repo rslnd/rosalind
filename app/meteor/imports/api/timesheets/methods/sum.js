@@ -14,6 +14,8 @@ export const sum = ({ Timesheets }) => {
 
     const timesheets = Timesheets.find(selector)
 
-    return add(timesheets.map((t) => t.duration()))
+    return add(timesheets.map(duration))
   }
 }
+
+export const duration = t => moment(t.end).diff(moment(t.start))

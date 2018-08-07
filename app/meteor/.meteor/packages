@@ -21,14 +21,12 @@ fastclick@1.0.13
 promise@0.10.0-beta.32
 modules@0.11.0-beta.32
 dynamic-import@0.2.0-beta.32
-
-# React
 react-meteor-data
+browser-policy@1.1.0
+audit-argument-checks@1.0.7
 
 # Security
-browser-policy@1.1.0
 keyvan:my-force-ssl
-audit-argument-checks@1.0.7
 ongoworks:security@2.1.0
 mdg:validated-method
 clinical:env
@@ -36,9 +34,6 @@ clinical:env
 # Collections
 aldeed:simple-schema
 aldeed:collection2
-aldeed:autoform
-dburles:collection-helpers
-dburles:mongo-collection-instances
 meteorhacks:subs-manager
 tmeasday:publish-counts
 zimme:collection-softremovable
@@ -52,22 +47,12 @@ percolate:migrations
 alanning:roles
 
 # UI
-dalgard:jade
 fourseven:scss
 seba:minifiers-autoprefixer
-rochal:slimscroll
-peppelg:bootstrap-3-modal
-tsega:bootstrap3-datetimepicker@=3.1.3_3
-aldeed:autoform-bs-datetimepicker
 
 # Util
 momentjs:moment
-u2622:persistent-session
-bojicas:inflections
-copleykj:livestamp
-underscorestring:underscore.string
 mizzao:timesync
-meteorhacks:async
 dandv:rate-limit
 
 # File Upload

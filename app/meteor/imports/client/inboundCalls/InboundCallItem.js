@@ -23,7 +23,11 @@ export class InboundCallItem extends React.Component {
 
           <LinkToAppointmentContainer inboundCall={this.props.inboundCall} />
           <HumanCommentCount docId={this.props.inboundCall._id} />
-          <Stamps fields={['removed', 'created']} doc={this.props.inboundCall} />
+          <Stamps
+            collectionName='inboundCalls'
+            fields={['removed', 'created']}
+            doc={this.props.inboundCall}
+          />
         </div>
         <CommentsContainer docId={this.props.inboundCall._id} />
         <div className='box-footer'>

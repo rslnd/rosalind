@@ -18,7 +18,6 @@ const jobs = new JobCollection('messages', {
 const Messages = new Mongo.Collection('messages')
 Messages.attachSchema(schema)
 Messages.attachBehaviour('softRemovable')
-Messages.helpers({ collection: () => Messages })
 Messages.jobs = jobs
 Messages.actions = actions({ Messages })
 

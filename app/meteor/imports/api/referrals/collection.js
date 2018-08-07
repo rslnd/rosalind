@@ -7,7 +7,6 @@ const Referrals = new Mongo.Collection('referrals')
 
 Referrals.attachSchema(schema)
 Referrals.attachBehaviour('softRemovable')
-Referrals.helpers({ collection: () => Referrals })
 Referrals.methods = methods
 Referrals.actions = actions({ Referrals })
 

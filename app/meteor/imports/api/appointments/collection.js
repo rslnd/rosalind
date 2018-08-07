@@ -7,7 +7,6 @@ import Schema from './schema'
 let Appointments = new Mongo.Collection('appointments')
 Appointments.attachSchema(Schema)
 Appointments.attachBehaviour('softRemovable')
-Appointments.helpers({ collection: () => Appointments })
 Appointments.methods = methods({ Appointments })
 Appointments.actions = actions({ Appointments })
 
