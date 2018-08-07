@@ -1,6 +1,8 @@
 import React from 'react'
 import Select from 'react-select'
 import moment from 'moment'
+import { connect } from 'react-redux'
+import namecase from 'namecase'
 import { withProps } from 'recompose'
 import { Icon } from '../../components/Icon'
 import { __ } from '../../../i18n'
@@ -43,8 +45,19 @@ export const PatientPickerComponent = ({
     placeholder={__('patients.search')}
   />
 
-const NewPatient = () =>
-  <span><Icon name='user-plus' /> {__('patients.thisInsert')}</span>
+const NewPatient = ({ patient }) =>
+  <span>
+    <Icon name='user-plus' />
+    &nbsp;
+    {__('patients.thisInsert')}
+    {
+      patient && <span>
+        :
+        &nbsp;
+        <PatientName patient={patient} />
+      </span>
+    }
+  </span>
 
 const PatientWithAppointments = ({ patient }) =>
   <span>
@@ -54,7 +67,7 @@ const PatientWithAppointments = ({ patient }) =>
       <Birthday day={patient.birthday} />
     </span>
     {
-      patient.appointments.map(appointment =>
+      patient.appointments && patient.appointments.map(appointment =>
         <Appointment
           key={appointment._id}
           appointment={appointment}
@@ -91,15 +104,17 @@ const Appointment = ({ appointment }) => {
   )
 }
 
-const formatOptionLabel = (patient, { context }) => {
-  if (patient.patientId === 'newPatient') {
-    return <NewPatient />
+const formatOptionLabel = (patient, { context, inputValue, selectValue }) => {
+  console.log('fOl', patient, { context, inputValue, selectValue })
+
+  if (patient.patientId === 'newPatient' || selectValue.patientId === 'newPatient') {
+    return <NewPatient patient={patient || selectValue} />
   }
 
   if (context === 'menu') {
-    return <PatientWithAppointments patient={ patient } />
+    return <PatientWithAppointments patient={patient || selectValue} />
   } else {
-    return <PatientName patient={ patient } />
+    return <PatientName patient={patient || selectValue} />
   }
 }
 

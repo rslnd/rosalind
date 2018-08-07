@@ -4,7 +4,7 @@ import { PatientPicker } from './PatientPickerContainer'
 import { PatientFormFields } from '../formFields/PatientFormFields'
 import { connect } from 'react-redux'
 
-const PatientPickerFieldComponent = ({ change, extended, upsert, isUpserting, input, meta }) =>
+export const PatientPickerField = ({ change, extended, upsert, input, meta }) =>
   <div>
     <FormName>{
       ({ form }) =>
@@ -17,16 +17,10 @@ const PatientPickerFieldComponent = ({ change, extended, upsert, isUpserting, in
     }</FormName>
 
     {
-      upsert && isUpserting &&
+      upsert &&
         <PatientFormFields
           change={change}
           extended={extended}
         />
     }
   </div>
-
-const mapStateToProps = (state) => ({
-  isUpserting: state.patientPicker && state.patientPicker.isUpserting
-})
-
-export const PatientPickerField = connect(mapStateToProps)(PatientPickerFieldComponent)
