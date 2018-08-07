@@ -45,7 +45,6 @@ ecmascript-runtime-server@0.5.0
 ejson@1.1.0
 email@1.2.3
 fastclick@1.0.13
-fds:coffeescript-share@1.0.0
 flowkey:raven@1.1.0
 fourseven:scss@4.5.4
 geojson-utils@1.0.10

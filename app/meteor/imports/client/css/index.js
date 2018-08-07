@@ -1,6 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.css'
-import 'admin-lte/dist/css/AdminLTE.css'
-import 'admin-lte/dist/css/skins/skin-blue.css'
 import adminlte from './adminlte'
 import './reactDates'
 import './layout.scss'
