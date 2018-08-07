@@ -1,5 +1,4 @@
 import puppeteer from 'puppeteer'
-import delay from 'await-delay'
 import { dayToSlug } from '../../../util/time/day'
 
 const printOptions = {
@@ -13,6 +12,8 @@ const printOptions = {
     left: '1.3cm'
   }
 }
+
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const isLoaded = (html = '') =>
   html.match(/weekPreviewLoaded/g)

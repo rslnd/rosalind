@@ -848,10 +848,6 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-await-delay@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/await-delay/-/await-delay-1.0.0.tgz#a74ab0eaa880cd38e100cf1f8d8418d44cab1b4d"
-
 aws-sign2@~0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.6.0.tgz#14342dd38dbcc94d0e5b87d763cd63612c0e794f"

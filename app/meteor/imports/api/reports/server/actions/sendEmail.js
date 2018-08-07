@@ -14,6 +14,6 @@ export const sendEmail = new ValidatedMethod({
       return
     }
 
-    return sendEmail(args)
+    return performSendEmail(args)
   }
 })
