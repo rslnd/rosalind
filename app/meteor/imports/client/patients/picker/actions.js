@@ -43,6 +43,7 @@ export const changeValue = (patient, fieldAction, ownProps) => {
   return (dispatch, getState) => {
     switch (fieldAction) {
       case 'select-option':
+      case 'load':
         dispatch({
           type: PATIENT_CHANGE_VALUE,
           patient

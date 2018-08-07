@@ -22,7 +22,7 @@ export default (state, action) => {
   switch (action.type) {
     case PATIENT_LOAD_START:
       return {
-        ...state,
+        ...initialState,
         isLoading: true,
         patient: {
           patientId: action.patientId
