@@ -105,8 +105,6 @@ const Appointment = ({ appointment }) => {
 }
 
 const formatOptionLabel = (patient, { context, inputValue, selectValue }) => {
-  console.log('fOl', patient, { context, inputValue, selectValue })
-
   if (patient.patientId === 'newPatient' || selectValue.patientId === 'newPatient') {
     return <NewPatient patient={patient || selectValue} />
   }
