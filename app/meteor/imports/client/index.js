@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount } from 'react-mounter'
+import ReactDOM from 'react-dom'
 import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
@@ -48,5 +48,8 @@ export default () => {
   const customerName = server.env.CUSTOMER_NAME || 'Rosalind Development'
   document.title = customerName
 
-  mount(Rosalind)
+  document.addEventListener('DOMContentLoaded', () => {
+    const rootNode = document.getElementById('rosalind')
+    ReactDOM.render(<Rosalind />, rootNode)
+  })
 }
