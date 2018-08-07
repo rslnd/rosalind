@@ -83,7 +83,12 @@ export const NewAppointmentFields = props => {
         <Summary time={time} assigneeId={assigneeId} />
       </div>
 
-      <div style={flex}>
+      <div style={flex} onClick={() => {
+        // Reveal validation errors when disabled submit button is clicked
+        if (pristine || !valid) {
+          handleSubmit()
+        }
+      }}>
         <Button variant='raised' type='submit'
           onClick={handleSubmit}
           fullWidth
