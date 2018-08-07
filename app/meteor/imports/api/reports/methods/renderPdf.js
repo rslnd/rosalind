@@ -49,9 +49,12 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
       }
     } while (!loaded)
 
+    console.log('[Reports] renderPdf: Loaded, waiting 10s before rendering pdf')
     await delay(10000)
 
+    console.log('[Reports] renderPdf: Rendering pdf')
     const buffer = await page.pdf(printOptions)
+    console.log('[Reports] renderPdf: Rendered pdf')
 
     return buffer
   } catch (e) {

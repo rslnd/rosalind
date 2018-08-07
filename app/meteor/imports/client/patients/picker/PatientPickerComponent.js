@@ -52,9 +52,7 @@ const NewPatient = ({ patient }) =>
     {__('patients.thisInsert')}
     {
       patient && patient.lastName && <span>
-        :
-        &nbsp;
-        <PatientName patient={patient} />
+        : <PatientName patient={patient} />
       </span>
     }
   </span>
