@@ -1,7 +1,7 @@
 import { InboundCalls } from '../'
 import flatten from 'lodash/flatten'
+import moment from 'moment'
 import { Comments } from '../../comments'
-import Time from '../../../util/time'
 import { publish, publishComposite, publishCompositeTable } from '../../../util/meteor/publish'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 
@@ -13,7 +13,7 @@ export default () => {
       Counts.publish(this, 'inboundCalls', InboundCalls.find({}))
       Counts.publish(this, 'inboundCalls-resolvedToday', InboundCalls.find({
         removed: true,
-        removedAt: { $gte: Time.startOfToday() }
+        removedAt: { $gte: moment().startOf('day').toDate() }
       }))
       return undefined
     }
