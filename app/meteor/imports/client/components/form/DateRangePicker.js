@@ -3,7 +3,6 @@ import moment from 'moment-timezone'
 import { __ } from '../../../i18n'
 import { DateRangePicker as DateRangePickerComponent } from 'react-dates'
 import { START_DATE, END_DATE } from 'react-dates/constants'
-import './datePickerStyles.scss'
 
 export class DateRangePicker extends React.Component {
   constructor (props) {

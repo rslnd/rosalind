@@ -1,9 +1,7 @@
-@import "./global.scss";
-
 html,
 body {
   background-color: #ECF0F5;
-  font-family: $font-stack;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 body {

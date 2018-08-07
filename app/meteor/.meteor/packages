@@ -47,7 +47,6 @@ percolate:migrations
 alanning:roles
 
 # UI
-fourseven:scss
 seba:minifiers-autoprefixer
 
 # Util
