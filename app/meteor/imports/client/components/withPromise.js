@@ -78,13 +78,16 @@ export const withPromise = fetcher =>
               error: null
             })
           )
-          .catch(e =>
-            this.setState({
-              isLoading: false,
-              data: null,
-              error: e
-            }))
-      }
+          .catch(reason => {
+            if (!reason.isCanceled) {
+              this.setState({
+                isLoading: false,
+                data: null,
+                error: e
+              })
+            }
+          })
+        }
 
       render () {
         const { data, ...rest } = this.state

@@ -1,2 +1,0 @@
-import './editUser'
-import './newUser'

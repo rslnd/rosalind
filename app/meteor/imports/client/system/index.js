@@ -1,6 +1,5 @@
 import React from 'react'
 import { Switch } from 'react-router-dom'
-import Blaze from 'meteor/gadicc:blaze-react-component'
 import { SettingsContainer } from './settings/SettingsContainer'
 import { MessagesContainer } from '../messages/MessagesContainer'
 import { TagsContainer } from '../tags/TagsContainer'
