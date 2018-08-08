@@ -6,7 +6,7 @@ import quarter from './quarter'
 const moment = extendMoment(momentTz)
 
 export const relativeTimeString = d => {
-  const date = moment(date)
+  const date = moment(d)
   const isRecent = moment.range(date, moment()).diff('week') < 1
 
   return [
