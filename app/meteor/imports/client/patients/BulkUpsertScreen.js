@@ -33,6 +33,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
           <PatientPickerField
             extended
             upsert
+            change={change}
           />
 
           {
