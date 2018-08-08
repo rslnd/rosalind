@@ -11,7 +11,7 @@ export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 export BRANCH="${TRAVIS_BRANCH:-$CIRCLE_BRANCH}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
-export NPM_VERSION=5.6.0
+export NPM_VERSION=5.2.0
 
 export NPM_CONFIG_LOGLEVEL=warn
 export METEOR_PRETTY_OUTPUT=0
