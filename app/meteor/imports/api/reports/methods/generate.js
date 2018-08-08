@@ -11,7 +11,7 @@ export const generate = ({ calendar, day, appointments, pastAppointments, daySch
 
   report.calendarId = calendar._id
   report.day = {
-    day,
+    ...day,
     date: dayToDate(day)
   }
   report.assignees = mapAssignees({ day, daySchedule, calendar, appointments, pastAppointments, overrideSchedules, tagMapping })
