@@ -68,7 +68,12 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
 
           const tagMapping = Tags.methods.getMappingForReports()
 
-          const existingReport = Reports.findOne({ calendarId, day })
+          const existingReport = Reports.findOne({
+            calendarId,
+            'day.day': day.day,
+            'day.month': day.month,
+            'day.year': day.year
+          })
 
           let filteredAddendum = null
           if (addendum && (calendar.reportAddenda || []).includes(addendum.type)) {

@@ -5,6 +5,7 @@ import './2-topLevelProfile'
 import './3-createdAt'
 import './4-referredToCosmetics'
 import './5-referredToAlternative'
+import './6-reportDate'
 
 export default () => {
   Meteor.startup(() => {

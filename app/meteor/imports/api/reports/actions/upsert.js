@@ -19,7 +19,12 @@ export const upsert = ({ Reports }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const existingReport = Reports.findOne({ day: report.day })
+      const existingReport = Reports.findOne({
+        calendarId,
+        'day.day': report.day.day,
+        'day.month': report.day.month,
+        'day.year': report.day.year
+      })
 
       if (existingReport) {
         Reports.update({ _id: existingReport._id }, { $set: report })

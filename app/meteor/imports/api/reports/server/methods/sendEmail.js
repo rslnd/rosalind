@@ -26,7 +26,12 @@ export const sendEmail = async (args = {}) => {
     const test = (process.env.NODE_ENV !== 'production') || args.test
 
     const day = args.day || dateToDay(moment(args))
-    const reports = Reports.find({ day }).fetch()
+
+    const reports = Reports.find({
+      'day.day': day.day,
+      'day.month': day.month,
+      'day.year': day.year
+    }).fetch()
 
     if (reports.length === 0) {
       console.log('[Reports] There are no reports for this day, no email will be sent')

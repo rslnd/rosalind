@@ -25,8 +25,11 @@ const composer = props => {
 
   const subscription = subscribe('reports', { date: date.toDate() })
   const dayReports = Reports
-    .find({ day })
-    .fetch()
+    .find({
+      'day.day': day.day,
+      'day.month': day.month,
+      'day.year': day.year
+    }).fetch()
 
   const reportLoading = (!subscription.ready() && dayReports.length === 0)
 

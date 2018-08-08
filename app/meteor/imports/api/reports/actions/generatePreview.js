@@ -62,7 +62,13 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
 
             const tagMapping = Tags.methods.getMappingForReports()
 
-            const existingReport = Reports.findOne({ day, calendarId })
+            const existingReport = Reports.findOne({
+              calendarId,
+              'day.day': day.day,
+              'day.month': day.month,
+              'day.year': day.year
+            })
+          
             if (existingReport) {
               return existingReport
             } else {

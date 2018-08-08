@@ -41,7 +41,7 @@ const composer = props => {
 
       const assigneeReports = Reports.find({
         calendarId,
-        createdAt: {
+        'day.date': {
           $gte: from.toDate(),
           $lte: to.toDate()
         }

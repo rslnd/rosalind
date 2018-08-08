@@ -25,22 +25,22 @@ export const publication = () => {
       const selectedDate = moment(date || new Date())
 
       if (!from) {
-        from = moment(selectedDate).subtract(1, 'week').toDate()
+        from = moment(selectedDate).clone().subtract(1, 'week').toDate()
       }
 
       if (!to) {
-        to = moment(selectedDate).add(1, 'week').toDate()
+        to = moment(selectedDate).clone().add(1, 'week').toDate()
       }
 
       return Reports.find({
-        createdAt: {
+        'day.date': {
           $gte: from,
           $lte: to
         }
       }, {
         fields,
         sort: {
-          createdAt: -1
+          'day.date': -1
         }
       })
     }
