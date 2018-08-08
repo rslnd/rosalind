@@ -1,11 +1,8 @@
 #include <ScreenCapture.au3>
 #include <WinAPISys.au3>
 
-$sEoswinExe = "D:\Eoswin\ADSPraxis.exe"
-$iGenerateTimeout = 300
-
 ; Parameters:
-; generateEoswinReports.exe /day:2018-02-03
+; generateEoswinReports.exe /day:2018-02-03 /eoswinExe:D:\Eoswin\ADSPraxis.exe /reportGenerationTimeout:3000
 
 Main()
 
@@ -100,6 +97,8 @@ Func IsoDateToLocal($sYmd)
 EndFunc
 
 Func OpenEOSWin()
+  Local $sEoswinExe = GetCmdLineArg("eoswinExe", "D:\Eoswin\ADSPraxis.exe")
+  Info("Launching EOSWin via " & $sEoswinExe)
   Run($sEoswinExe, "", @SW_MAXIMIZE)
   $hLoginWnd = ExpectWindow("EOSWin Anmeldung", 20)
 
@@ -202,7 +201,8 @@ Func GenerateEOSWinReport($sReportType)
     EndIf
   EndIf
 
-  $hReportWnd = ExpectWindow($sReportType & "  [ vom", $iGenerateTimeout) ; note the two space characters
+  Local $iReportGenerationTimeout = Int(GetCmdLineArg("reportGenerationTimeout"))
+  $hReportWnd = ExpectWindow($sReportType & "  [ vom", $iReportGenerationTimeout) ; note the two space characters
 
   Info("Closing report window")
   WinClose($hReportWnd)
@@ -251,7 +251,7 @@ Func ExpectFile($sPath)
   EndIf
 EndFunc
 
-Func GetCmdLineArg($sKey)
+Func GetCmdLineArg($sKey, $iDefaultValue = 0)
   Local $sKeyRaw = "/" & $sKey & ":"
   Local $iCmdLineArgCount = $CmdLine[0]
   For $i = 1 To $iCmdLineArgCount
@@ -261,8 +261,8 @@ Func GetCmdLineArg($sKey)
       Return $sArgValue
     EndIf
   Next
-  Info("Could not find command line argument for key `" & $sKey & "`")
-  Return 0
+  Info("Could not find command line argument for key `" & $sKey & "`, returning default value `" & String($iDefaultValue) & "`")
+  Return $iDefaultValue
 EndFunc
 
 Func HoistErrors($bShouldFail = True)

@@ -29,9 +29,15 @@ const generateEoswinReports = ({ day } = {}) => {
 
     logger.info('[automation] Spawning', exePath)
 
-    const spawnArgs = day
-      ? [`/day:${day.year}-${day.month}-${day.day}`]
-      : []
+    let spawnArgs = []
+
+    if (settings.eoswinExe) {
+      spawnArgs.push(`/eoswinExe:${settings.eoswinExe}`)
+    }
+
+    if (day) {
+      spawnArgs.push(`/day:${day.year}-${day.month}-${day.day}`)
+    }
 
     const child = childProcess.spawn(exePath, spawnArgs)
     child.stdout.setEncoding('utf8')
