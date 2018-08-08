@@ -201,7 +201,7 @@ Func GenerateEOSWinReport($sReportType)
     EndIf
   EndIf
 
-  Local $iReportGenerationTimeout = Int(GetCmdLineArg("reportGenerationTimeout"))
+  Local $iReportGenerationTimeout = Int(GetCmdLineArg("reportGenerationTimeout", 300))
   $hReportWnd = ExpectWindow($sReportType & "  [ vom", $iReportGenerationTimeout) ; note the two space characters
 
   Info("Closing report window")
