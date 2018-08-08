@@ -1,9 +1,9 @@
 import idx from 'idx'
-import isEqual from 'lodash/isEqual'
 import find from 'lodash/find'
 import cloneDeep from 'lodash/cloneDeep'
 import mergeDeep from 'lodash/merge'
 import sortBy from 'lodash/fp/sortBy'
+import { isSame } from '../../../util/time/day'
 
 const mergeAssignee = (originalAssignee, addendumAssignee) => (
   mergeDeep(
@@ -63,7 +63,7 @@ const mergeAssignees = (report, addendum) => {
 }
 
 export const merge = (report, addendum) => {
-  if (addendum.day && !isEqual(addendum.day, report.day)) {
+  if (addendum.day && !isSame(addendum.day, report.day)) {
     throw new Error(`Attempting to merge reports of different days:
       Original: ${JSON.stringify(report.day)},
       Addendum: ${JSON.stringify(addendum.day)}`)
