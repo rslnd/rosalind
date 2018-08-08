@@ -11,17 +11,17 @@ const printerSettingsName = 'eoswinPrinter.reg'
 
 const start = (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
-    generateEoswinReports()
+    generateEoswinReports({ closeRosalind: true })
   }
 
-  ipcMain.on('webEvent', (name, { day }) => {
+  ipcMain.on('webEvent', (name, { day } = {}) => {
     if (name === 'automation/generateEoswinReports') {
       generateEoswinReports({ day })
     }
   })
 }
 
-const generateEoswinReports = ({ day } = {}) => {
+const generateEoswinReports = ({ day, closeRosalind = false } = {}) => {
   extractAssets([exeName, printerSettingsName], (err, [exePath, _]) => {
     if (err) {
       logger.error('[automation] Failed to extract assets', err)
@@ -38,6 +38,10 @@ const generateEoswinReports = ({ day } = {}) => {
 
     if (day) {
       spawnArgs.push(`/day:${day.year}-${day.month}-${day.day}`)
+    }
+
+    if (closeRosalind) {
+      spawnArgs.push(`/closeRosalind:yes`)
     }
 
     const child = childProcess.spawn(exePath, spawnArgs)
