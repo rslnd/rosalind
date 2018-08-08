@@ -57,6 +57,8 @@ export default (state, action) => {
       }
     case 'APPOINTMENT_INSERT_SUCCESS':
       return initialState
+    case 'BULK_UPSERT_SUCCESS':
+      return initialState
     default:
       return state
   }

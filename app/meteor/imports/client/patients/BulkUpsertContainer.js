@@ -1,3 +1,4 @@
+import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
 import { compose } from 'recompose'
 import { withTracker } from '../components/withTracker'
@@ -19,6 +20,9 @@ const composer = (props) => {
       })
         .then(() => {
           Alert.success(__('patients.editSuccess'))
+          props.dispatch({
+            type: 'BULK_UPSERT_SUCCESS'
+          })
         })
         .catch(e => {
           Alert.error('Bitte noch einmal versuchen')
@@ -43,5 +47,6 @@ export const BulkUpsertContainer = compose(
     keepDirtyOnReinitialize: false,
     pure: false
   }),
+  connect(),
   withTracker(composer)
 )(BulkUpsertScreen)
