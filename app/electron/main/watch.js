@@ -55,7 +55,11 @@ const start = ({ ipcReceiver, handleFocus }) => {
       logger.info('[Watch] Data transfer success', { path, remove })
       if (remove) {
         logger.info('[Watch] Removing file', path)
-        fs.unlink(path)
+        fs.unlink(path, (err) => {
+          if (err) {
+            logger.error(`[Watch] Failed to remove file ${err.message} ${err.stack}`)
+          }
+        })
       }
 
       // TODO: Force true until meteor is updated

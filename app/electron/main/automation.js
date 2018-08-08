@@ -4,6 +4,7 @@ const path = require('path')
 const temp = require('temp')
 const { ipcMain } = require('electron')
 const logger = require('./logger')
+const settings = require('./settings')
 
 const exeName = 'generateEoswinReports.exe'
 const printerSettingsName = 'eoswinPrinter.reg'
