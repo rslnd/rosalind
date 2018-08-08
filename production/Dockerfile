@@ -1,5 +1,14 @@
 FROM node:8.9.3
 
+# Upgrade to prerelease 8.12.0
+RUN cd /tmp/ && \
+  wget https://s3.amazonaws.com/com.meteor.jenkins/dev-bundle-node-135/node_Linux_x86_64_v8.12.0.tar.gz && \
+  tar -xzf node_Linux_x86_64_v8.12.0.tar.gz && \
+  cd node-v8.12.0-linux-x64/ && \
+  mv /tmp/node-v8.12.0-linux-x64/bin/node $(which node) && \
+  mv /tmp/node-v8.12.0-linux-x64/bin/npm $(which npm) && \
+  rm -rf /tmp/node-v8.12.0-linux-x64/
+
 COPY . /opt/app
 WORKDIR /opt/app/programs/server
 
