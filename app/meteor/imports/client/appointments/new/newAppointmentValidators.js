@@ -44,7 +44,7 @@ export const validate = ({ appointment, patient }) => {
     errors.appointment.note = 'appointments.addNoteIfNoTagsSelected'
   }
 
-  if (patient) {
+  if (patient && (patient.patientId || patient.lastName || patient.firstName)) {
     if (!patient.lastName) {
       errors.patient.lastName = 'patients.lastNameRequired'
     }
