@@ -249,7 +249,7 @@ h6,
   z-index: 1060 !important;
 }
 
-// Smooch livechat
+/* Smooch livechat */
 #web-messenger-container {
   z-index: 1070;
 }
