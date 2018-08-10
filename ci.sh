@@ -43,7 +43,7 @@ case "$1" in
     echo "npm $(npm --version)"
     echo "node $(node --version)"
 
-    echo "[CI] Machine environment setup took $SECONDS seconds"
+    mkdir -p $ARTIFACTS_PATH
 
     # Install meteor
     echo "[CI] Installing meteor"
