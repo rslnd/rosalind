@@ -11,8 +11,6 @@ export ARTIFACTS_PATH="${CIRCLE_ARTIFACTS:-"/tmp/artifacts"}"
 export BRANCH="${TRAVIS_BRANCH:-$CIRCLE_BRANCH}"
 echo "[CI] Build $BUILD_NUMBER of commit ${COMMIT_HASH:0:7}"
 
-export NPM_VERSION=5.2.0
-
 export NPM_CONFIG_LOGLEVEL=warn
 export METEOR_PRETTY_OUTPUT=0
 export METEOR_WATCH_FORCE_POLLING=true
@@ -42,14 +40,6 @@ retry() {
 
 case "$1" in
   install)
-    echo "Setting up CI environment"
-    SECONDS=0
-    npm -g install npm@$NPM_VERSION &
-
-    npm set registry https://registry.npmjs.org/
-    npm -g install yarn
-    mkdir -p $ARTIFACTS_PATH
-
     echo "npm $(npm --version)"
     echo "node $(node --version)"
 
@@ -60,7 +50,7 @@ case "$1" in
     echo -en "travis_fold:start:meteor\r"
     SECONDS=0
 
-    if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
+    if [ -d ~/.meteor ]; then ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
 
     if [ ! -e $HOME/.meteor/meteor ]; then
       METEOR_INSTALL_URL="https://install.meteor.com/"

@@ -27,5 +27,5 @@ cd -
 
 if [ ! -z "$CI" ]; then
   echo "** Fixing permissions"
-  sudo chown -R $USER:$USER ../build/
+  chown -R $USER:$USER ../build/ || true
 fi
