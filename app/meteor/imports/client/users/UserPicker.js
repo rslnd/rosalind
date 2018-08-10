@@ -47,8 +47,17 @@ export class UserPicker extends React.Component {
         onChange={this.handleQueryChange}
         options={this.options()}
         ignoreCase
+        isClearable
+        styles={customStyles}
         autoFocus={this.props.autoFocus || false}
         placeholder={this.props.placeholder || __('users.selectEmployee')} />
     )
   }
+}
+
+const customStyles = {
+  menu: (base) => ({
+    ...base,
+    zIndex: 3
+  })
 }

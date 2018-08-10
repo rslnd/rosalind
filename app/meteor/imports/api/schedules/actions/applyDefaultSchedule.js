@@ -14,11 +14,12 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       calendarId: { type: SimpleSchema.RegEx.Id },
+      assigneeId: { type: SimpleSchema.RegEx.Id, optional: true },
       from: { type: Date },
       to: { type: Date }
     }).validator(),
 
-    run ({ calendarId, from, to }) {
+    run ({ calendarId, assigneeId, from, to }) {
       if (this.connection && !this.userId ||
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
@@ -46,7 +47,7 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
       const days = rangeToDays({ from, to }).filter(excludeHolidays)
 
       // Remove all overrides in selected period
-      const countRemovedOverrides = Schedules.remove({
+      const oldOverridesSelector = {
         type: 'override',
         calendarId,
         start: {
@@ -55,21 +56,30 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
         end: {
           $lte: moment(to).endOf('day').toDate()
         }
-      })
+      }
+
+      if (assigneeId) {
+        oldOverridesSelector.userId = assigneeId
+      }
+
+      const countRemovedOverrides = Schedules.remove(oldOverridesSelector)
+      console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedOverrides, 'override schedules')
 
       // Remove all day schedules in selected period
-      const countRemovedDays = Schedules.remove({
-        type: 'day',
-        calendarId,
-        $or: days.map(day => ({
-          'day.year': day.year,
-          'day.month': day.month,
-          'day.day': day.day
-        }))
-      })
-
-      console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedOverrides, 'override schedules')
-      console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedDays, 'day schedules')
+      if (assigneeId) {
+        console.log('[Schedules] applyDefaultSchedule: Warning: Skipping removing day schedules')
+      } else {
+        const countRemovedDays = Schedules.remove({
+          type: 'day',
+          calendarId,
+          $or: days.map(day => ({
+            'day.year': day.year,
+            'day.month': day.month,
+            'day.day': day.day
+          }))
+        })
+        console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedDays, 'day schedules')
+      }
 
       // Create new overrides from schedules
       const defaultSchedules = Schedules.find({
@@ -79,7 +89,13 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
 
       const overrideSchedules = transformDefaultsToOverrides({ defaultSchedules, days })
 
-      const ids = overrideSchedules.map(s => {
+      // NB: Applying schedules for a single assignee only has an effect if the
+      // same assignee is already present in the day schedule
+      const ids = overrideSchedules.filter(s =>
+        assigneeId
+        ? s.type === 'override' && s.userId === assigneeId
+        : true
+      ).map(s => {
         const id = Schedules.insert(s)
         console.log('Inserted', id, s)
       })

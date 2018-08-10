@@ -3,15 +3,16 @@ import moment from 'moment'
 import Alert from 'react-s-alert'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'
-import { Meteor } from 'meteor/meteor'
 import { __ } from '../../../i18n'
 import { withTracker } from '../../components/withTracker'
 import { Calendars } from '../../../api/calendars'
 import { Schedules } from '../../../api/schedules'
+import { Users } from '../../../api/users'
 import { isSame, dateToDay } from '../../../util/time/day'
 import { DayPickerRangeController } from 'react-dates'
 import { END_DATE, START_DATE } from 'react-dates/constants'
 import Button from '@material-ui/core/Button'
+import { UserPicker } from '../../users/UserPicker'
 
 const composer = props => {
   const { calendarId } = props
@@ -57,11 +58,13 @@ class ApplyDefaultScheduleComponent extends React.Component {
       endDate: null,
       focusedInput: START_DATE,
       applying: false,
-      applied: false
+      applied: false,
+      assigneeId: null
     }
 
     this.handleDatesChange = this.handleDatesChange.bind(this)
     this.handleFocusChange = this.handleFocusChange.bind(this)
+    this.handleAssigneeChange = this.handleAssigneeChange.bind(this)
     this.applyDefaultSchedule = this.applyDefaultSchedule.bind(this)
     this.isOutsideRange = this.isOutsideRange.bind(this)
   }
@@ -72,6 +75,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
     })
 
     return Schedules.actions.applyDefaultSchedule.callPromise({
+      assigneeId: this.state.assigneeId,
       calendarId: this.props.calendarId,
       from: this.state.startDate.toDate(),
       to: this.state.endDate.toDate()
@@ -111,6 +115,12 @@ class ApplyDefaultScheduleComponent extends React.Component {
     })
   }
 
+  handleAssigneeChange (assigneeId) {
+    this.setState({
+      assigneeId
+    })
+  }
+
   isOutsideRange (m) {
     return this.props.lastPlannedDate
       ? m.isBefore(this.props.lastPlannedDate)
@@ -118,11 +128,19 @@ class ApplyDefaultScheduleComponent extends React.Component {
   }
 
   render () {
-    const { startDate, endDate, focusedInput, applying, applied } = this.state
-    const { calendar, lastPlannedDate } = this.props
+    const { startDate, endDate, focusedInput, applying, applied, assigneeId } = this.state
+    const { calendar, lastPlannedDate, assignees, isHoliday } = this.props
 
     return (
       <Box title='Wochenplan anwenden' icon='magic' noPadding noBorder>
+        <div style={userPickerStyle}>
+          <UserPicker
+            value={assigneeId}
+            selector={{ _id: { $in: assignees.map(a => a._id) } }}
+            onChange={this.handleAssigneeChange}
+            placeholder={'Auf alle oben geplanten MitarbeiterInnen anwenden...'}
+          />
+        </div>
         <div style={containerStyle}>
           <DayPickerRangeController
             onDatesChange={this.handleDatesChange}
@@ -130,7 +148,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
             focusedInput={focusedInput}
             startDate={startDate}
             endDate={endDate}
-            isDayBlocked={this.props.isHoliday}
+            isDayBlocked={isHoliday}
             minimumNights={0}
             initialVisibleMonth={lastPlannedDate ? () => moment(lastPlannedDate) : null}
             isOutsideRange={this.isOutsideRange}
@@ -151,6 +169,17 @@ class ApplyDefaultScheduleComponent extends React.Component {
                   <Icon name='check-circle' /> Die Arbeitszeiten sind jetzt festgelegt.
                 </p>
             }
+
+            <p>
+              {
+                assigneeId
+                ? <span>
+                  Nur für <b>{Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))}</b><br />
+                  <Icon name='info-circle' /> Die Arbeitszeiten werden nur an den Tagen geändert, an welchen {Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))} bereits anwesend ist.
+                </span>
+                : <span>Für alle oben geplanten MitarbeiterInnen</span>
+              }
+            </p>
 
             <p>
               {startDate && <span>
@@ -189,6 +218,10 @@ class ApplyDefaultScheduleComponent extends React.Component {
 
 const containerStyle = {
   display: 'flex'
+}
+
+const userPickerStyle = {
+  padding: 10
 }
 
 const summaryStyle = {

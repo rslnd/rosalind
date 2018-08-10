@@ -11,6 +11,7 @@ export const ui = {
   saved: 'Gespeichert',
   ok: 'OK',
   delete: 'Entfernen',
+  deleted: 'Gelöscht',
   close: 'Schließen',
   cancel: 'Abbrechen',
   clear: 'Auswahl aufheben',

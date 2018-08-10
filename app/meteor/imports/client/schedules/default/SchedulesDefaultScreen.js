@@ -1,5 +1,6 @@
 import React from 'react'
 import uniq from 'lodash/uniq'
+import sortBy from 'lodash/fp/sortBy'
 import identity from 'lodash/identity'
 import { Calendars } from '../../../api/calendars'
 import { Schedules } from '../../../api/schedules'
@@ -77,6 +78,11 @@ const stringToSchedule = s => {
 const composer = props => {
   const { slug } = props.match.params
   const calendar = Calendars.findOne({ slug })
+
+  if (!calendar) {
+    return { isLoading: true }
+  }
+
   const users = Users.find({}).fetch()
 
   subscribe('schedules-default')
@@ -183,10 +189,10 @@ class SchedulesDefaultScreenComponent extends React.Component {
   }
 
   renderSchedules ({ weekday, assigneeId }) {
-    const schedules = this.props.defaultSchedules.filter(s =>
+    const schedules = sortBy(s => renderTime(s.from))(this.props.defaultSchedules.filter(s =>
       s.userId === assigneeId &&
       s.weekday === weekday
-    )
+    ))
 
     const isAddingSchedule =
       this.state.edit &&
@@ -243,7 +249,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
   render () {
     const {
       calendar,
-      defaultSchedules
+      users
     } = this.props
 
     return (
@@ -302,7 +308,8 @@ class SchedulesDefaultScreenComponent extends React.Component {
           </Box>
 
           <ApplyDefaultSchedule
-            calendarId={this.props.calendar._id}
+            assignees={this.assignees()}
+            calendarId={calendar._id}
           />
         </div>
       </div>
