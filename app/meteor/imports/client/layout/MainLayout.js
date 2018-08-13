@@ -9,6 +9,7 @@ import { Login } from '../users/Login'
 import { MaintenanceMessageContainer } from './MaintenanceMessageContainer'
 import { Loading } from '../components/Loading'
 import { Lock } from './Lock'
+import { SignPad } from './SignPad'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -80,6 +81,7 @@ export class MainLayout extends React.Component {
         <Alerts />
         <MaintenanceMessageContainer />
         <Lock />
+        <SignPad />
       </div>
     )
 

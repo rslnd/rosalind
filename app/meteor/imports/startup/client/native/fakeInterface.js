@@ -2,18 +2,21 @@ import EventEmitter from 'eventemitter3'
 
 export default () => {
   const fakeClientKey = getUrlParams('clientKey')
+  console.log('fkc', fakeClientKey)
   if (fakeClientKey) {
     console.log('[Native] Faking native API')
     const events = new EventEmitter()
     window.native = {
       clientKey: fakeClientKey,
       events,
-      emit: (event, payload) => events(event, payload),
+      emit: (event, payload) => events.emit(event, payload),
       systemInfo: {
         client: 'fake'
       },
       load: () => {}
     }
+
+    setTimeout(() => window.native.emit('clientKey', 300))
   }
 }
 
@@ -31,7 +34,7 @@ const getUrlParams = (prop) => {
     params[parts[0]] = parts[1]
   })
 
-  return (prop && params[prop])
+  return prop
     ? params[prop]
     : params
 }
