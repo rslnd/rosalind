@@ -9,12 +9,10 @@ export const register = ({ Clients }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       clientKey: { type: String, min: 200 },
-      version: { type: String, min: 3 },
-      systemInfo: { type: Object, blackbox: true },
-      settings: { type: Object, blackbox: true, optional: true }
+      systemInfo: { type: Object, blackbox: true }
     }).validator(),
 
-    run ({ clientKey, systemInfo, version, settings }) {
+    run ({ clientKey, systemInfo }) {
       if (this.isSimulation) {
         return true
       }
@@ -37,8 +35,6 @@ export const register = ({ Clients }) => {
           Clients.insert({
             clientKey,
             systemInfo,
-            settings,
-            version,
             createdAt: new Date()
           })
           return true

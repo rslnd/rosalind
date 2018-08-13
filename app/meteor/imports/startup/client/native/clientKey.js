@@ -20,15 +20,14 @@ export default () => {
     const attemptRegistration = async () => {
       const clientKey = getClientKey()
       if (clientKey) {
-        const { version, systemInfo } = window.native
+        const { systemInfo } = window.native
 
         const isOk = await Clients.actions.register.callPromise({
           clientKey,
-          version,
           systemInfo
         })
 
-        console.log('[Client] Registration', { version, systemInfo, isOk })
+        console.log('[Client] Registration', { systemInfo, isOk })
         if (!isOk) {
           Alert.error(__('ui.clientRegistrationFailed'), { timeout: 'none' })
         }

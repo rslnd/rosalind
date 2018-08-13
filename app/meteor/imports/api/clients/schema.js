@@ -28,11 +28,6 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
-  version: {
-    type: String,
-    min: 3
-  },
-
   settings: {
     type: Object,
     blackbox: true,
