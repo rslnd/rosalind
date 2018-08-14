@@ -25,13 +25,17 @@ export const processJournal = mapIds => csv => {
 }
 
 export const parseDayFromRows = (rows, timezone = 'Europe/Vienna') => {
-  const isDateRow = r => r.Kurzz === 'L:' && r.Datum
-  const first = find(isDateRow)(rows).Datum
-  const last = findLast(isDateRow)(rows).Datum
+  const isDateRow = r => r && r.Kurzz === 'L:' && r.Datum
+  const first = find(isDateRow)(rows)
+  const last = findLast(isDateRow)(rows)
 
-  if (first !== last) {
-    throw new Error('Journal may only include a single day')
-  } else {
-    return dateToDay(moment.tz(first, 'DD.MM.YYYY', timezone))
+  if (!first || !last) {
+    throw new Error('Journal appears to be empty')
   }
+
+  if (first.Datum !== last.Datum) {
+    throw new Error('Journal may only include a single day')
+  }
+
+  return dateToDay(moment.tz(first, 'DD.MM.YYYY', timezone))
 }
