@@ -8,6 +8,10 @@ export const parseExactName = (query) => {
   const match = query && query.match(pattern)
   const remainingQuery = query && query.replace(pattern, '')
 
+  if (!match) {
+    return { result: false, remainingQuery: query }
+  }
+
   // Build list of potential last names
   const names = uniq([ match.join(''), ...match ]
     .filter(identity)
