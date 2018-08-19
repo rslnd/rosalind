@@ -5,6 +5,7 @@ const includes = require('lodash/includes')
 const winston = require('winston')
 require('winston-papertrail')
 const { ipcMain, app } = require('electron')
+const { inspect } = require('util')
 
 const start = () => {
   winston.add(winston.transports.File, {
@@ -66,7 +67,8 @@ const ready = log => {
 }
 
 const formatLog = logger => (...logs) => {
-  const message = logs.map(l => JSON.stringify(l)).join(' ')
+  // JSON.stringify may throw on circular object references
+  const message = logs.map(l => inspect(l)).join(' ')
   logger(message)
   return message
 }
