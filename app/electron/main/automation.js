@@ -5,6 +5,7 @@ const temp = require('temp')
 const { ipcMain } = require('electron')
 const logger = require('./logger')
 const settings = require('./settings')
+const { captureException } = require('@sentry/electron')
 
 const exeName = 'generateEoswinReports.exe'
 const printerSettingsName = 'eoswinPrinter.reg'
@@ -24,7 +25,9 @@ const start = (argv = []) => {
 const generateEoswinReports = ({ day, closeRosalind = false } = {}) => {
   extractAssets([exeName, printerSettingsName], (err, [exePath, _]) => {
     if (err) {
-      logger.error('[automation] Failed to extract assets', err)
+      captureException(new Error(
+        logger.error('[automation] Failed to extract assets', err)
+      ))
       return
     }
 
@@ -48,12 +51,15 @@ const generateEoswinReports = ({ day, closeRosalind = false } = {}) => {
     child.stdout.setEncoding('utf8')
     child.stderr.setEncoding('utf8')
 
+    let stdoutBuffer = []
+    let stderrBuffer = []
+
     child.stdout.on('data', d =>
-      logger.info('[automation] generateEoswinReports', d)
+      stdoutBuffer.push(logger.info('[automation] generateEoswinReports', d))
     )
 
     child.stderr.on('data', d =>
-      logger.error('[automation] generateEoswinReports error:', d)
+      stderrBuffer.push(logger.error('[automation] generateEoswinReports error:', d))
     )
 
     return new Promise((resolve, reject) => {
@@ -61,7 +67,9 @@ const generateEoswinReports = ({ day, closeRosalind = false } = {}) => {
         logger.info('[automation] generateEoswinReports exited with code', code)
 
         if (code !== 0) {
-          logger.error('[automation] generateEoswinReports failed')
+          captureException(new Error(
+            logger.error('[automation] generateEoswinReports failed', { stdoutBuffer, stderrBuffer })
+          ))
           reject(code)
         } else {
           resolve()

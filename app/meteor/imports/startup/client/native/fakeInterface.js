@@ -2,7 +2,6 @@ import EventEmitter from 'eventemitter3'
 
 export default () => {
   const fakeClientKey = getUrlParams('clientKey')
-  console.log('fkc', fakeClientKey)
   if (fakeClientKey) {
     console.log('[Native] Faking native API')
     const events = new EventEmitter()

@@ -2,6 +2,7 @@ const includes = require('lodash/includes')
 const { app, BrowserWindow } = require('electron')
 const logger = require('./logger')
 const settings = require('./settings')
+const { captureException } = require('@sentry/electron')
 
 const open = (callback) => {
   const { screen } = require('electron')
@@ -42,7 +43,7 @@ const open = (callback) => {
   if (includes(process.argv, '--dev')) {
     webContents.openDevTools()
   }
-  
+
   let callbackCalled = false
   webContents.on('did-finish-load', () => {
     if (!callbackCalled) {
@@ -59,24 +60,32 @@ const open = (callback) => {
     logger.warn('[Window] Developer Tools closed')
   })
 
-  webContents.on('did-fail-load', () => {
-    logger.error('[Window] Failed to load')
+  webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedUrl, isMainFrame) => {
+    const message = logger.error('[Window] Failed to load', { event, errorCode, errorDescription, validatedUrl, isMainFrame })
+    captureException(new Error(message))
     callback('did-fail-load')
   })
 
-  webContents.on('crashed', () => {
-    logger.error('[Window] Crashed')
+  webContents.on('crashed', (event, isKilled) => {
+    const message = logger.error('[Window] Crashed', { event, isKilled })
+    captureException(new Error(message))
     callback('crashed')
   })
 
-  webContents.on('plugin-crashed', () => {
-    logger.error('[Window] Plugin Crashed')
+  webContents.on('plugin-crashed', (event, name, version) => {
+    const message = logger.error('[Window] Plugin crashed', { event, name, version })
+    captureException(new Error(message))
     callback('plugin-crashed')
   })
 
-  webContents.on('certificate-error', () => {
-    logger.error('[Window] Certificate error')
+  webContents.on('certificate-error', (event, url, error, certificate) => {
+    const message = logger.error('[Window] Certificate error', { event, url, error, certificate })
+    captureException(new Error(message))
     callback('certificate-error')
+  })
+
+  webContents.on('console-message', (level, message, line, sourceId) => {
+    logger.info('[Console]', { level, message, line, sourceId })
   })
 
   mainWindow.loadURL(settings.url)

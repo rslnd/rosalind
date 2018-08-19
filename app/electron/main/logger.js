@@ -65,11 +65,17 @@ const ready = log => {
   }
 }
 
+const formatLog = logger => (...logs) => {
+  const message = logs.map(l => JSON.stringify(l)).join(' ')
+  logger(message)
+  return message
+}
+
 module.exports = {
   start,
   ready,
-  debug: winston.debug,
-  info: winston.info,
-  warn: winston.warn,
-  error: winston.error
+  debug: formatLog(winston.debug),
+  info: formatLog(winston.info),
+  warn: formatLog(winston.warn),
+  error: formatLog(winston.error)
 }

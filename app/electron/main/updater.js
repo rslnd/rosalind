@@ -3,6 +3,7 @@ const logger = require('./logger')
 const manifest = require('./manifest')
 const settings = require('./settings')
 const shortcuts = require('./shortcuts')
+const { captureException } = require('@sentry/electron')
 
 let updateDownloaded = false
 let mainWindow = null
@@ -66,7 +67,8 @@ const start = () => {
     if (err) {
       if (typeof err === 'string' && err.indexOf('Remote release File is empty or corrupted') > -1) { return }
       if (typeof err === 'object' && err.message && err.message.indexOf('Remote release File is empty or corrupted') > -1) { return }
-      logger.error('[Updater]', err)
+      captureException(err)
+      logger.error('[Updater] Errored with', err)
     }
   })
 
