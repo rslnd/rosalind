@@ -84,8 +84,8 @@ const open = (callback) => {
     callback('certificate-error')
   })
 
-  webContents.on('console-message', (level, message, line, sourceId) => {
-    logger.info('[Console]', { level, message, line, sourceId })
+  webContents.on('console-message', (event, level, message, line, sourceId) => {
+    logger.info('[Console]', message, sourceId, line)
   })
 
   mainWindow.loadURL(settings.url)
