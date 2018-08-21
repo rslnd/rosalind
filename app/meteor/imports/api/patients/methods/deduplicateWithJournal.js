@@ -69,6 +69,10 @@ const findPatientsOfDay = ({ Appointments, Patients, day }) => {
 }
 
 const findDuplicatePatients = ({ Appointments, Patients, patientsToCheck }) => {
+  if (!patientsToCheck || patientsToCheck.length === 0) {
+    return []
+  }
+
   const sameBirthday = Patients.find({
     _id: {
       $nin: patientsToCheck.map(p => p._id)
