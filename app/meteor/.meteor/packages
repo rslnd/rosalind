@@ -22,11 +22,9 @@ promise@0.10.0-beta.32
 modules@0.11.0-beta.32
 dynamic-import@0.2.0-beta.32
 react-meteor-data
-browser-policy@1.1.0
-audit-argument-checks@1.0.7
 
 # Security
-keyvan:my-force-ssl
+audit-argument-checks@1.0.7
 ongoworks:security@2.1.0
 mdg:validated-method
 clinical:env
