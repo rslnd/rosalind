@@ -37,5 +37,12 @@ export const parseDayFromRows = (rows, timezone = 'Europe/Vienna') => {
     throw new Error('Journal may only include a single day')
   }
 
-  return dateToDay(moment.tz(first, 'DD.MM.YYYY', timezone))
+  const format = 'DD.MM.YYYY'
+  const m = moment.tz(first.Datum, format, timezone)
+
+  if (!m.isValid()) {
+    throw new Error(`Parsed day is invalid: ${first.Datum} ${format} ${timezone}`)
+  }
+
+  return dateToDay(m)
 }

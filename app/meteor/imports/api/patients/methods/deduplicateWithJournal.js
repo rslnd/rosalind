@@ -65,6 +65,10 @@ const findPatientsOfDay = ({ Appointments, Patients, day }) => {
     'birthday.day': { $ne: null }
   }).fetch()
 
+  if (patients.length === 0) {
+    console.warn('[Reports] deduplicateWithJournal: No patients found on day', day, 'but journal was imported anyways')
+  }
+
   return patients
 }
 
