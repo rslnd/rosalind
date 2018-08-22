@@ -132,6 +132,7 @@ const policyToString = o =>
 Object.keys(o)
   .map(k => ({ k, v: o[k] }))
   .map(({ k, v }) => `${k} ${v.join(' ')};`)
+  .join(' ')
 
 const getFeaturePolicyHeader = () => {
   const featurePolicy = {
