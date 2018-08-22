@@ -17,7 +17,8 @@ const getHelmetConfig = () => {
   const s = Meteor.absoluteUrl().match(/(?!=http)s(?=:\/\/)/) ? 's' : ''
   const runtimeConfig = Object.assign(__meteor_runtime_config__, Autoupdate)
 
-  console.log(JSON.stringify(runtimeConfig))
+  // Debug hash generation
+  // console.log(JSON.stringify(runtimeConfig))
 
   const runtimeConfigHash = crypto.createHash('sha256').update(`__meteor_runtime_config__ = JSON.parse(decodeURIComponent("${encodeURIComponent(JSON.stringify(runtimeConfig))}"))`).digest('base64')
 
