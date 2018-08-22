@@ -1,6 +1,6 @@
 import React from 'react'
 import { timeSlots, formatter, isFullHour, isQuarterHour } from './timeSlots'
-import { grayDisabled, darkGrayActive, darkGrayDisabled } from '../../../css/global'
+import { grayDisabled, darkGrayActive, darkGrayDisabled } from '../../../layout/styles'
 
 const styles = {
   timeLegend: {

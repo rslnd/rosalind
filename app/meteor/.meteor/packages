@@ -44,9 +44,6 @@ percolate:migrations
 # Users
 alanning:roles
 
-# UI
-seba:minifiers-autoprefixer
-
 # Util
 momentjs:moment
 mizzao:timesync

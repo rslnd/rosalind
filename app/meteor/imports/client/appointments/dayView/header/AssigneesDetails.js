@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon } from '../../../components/Icon'
 import { TagsList } from '../../../tags/TagsList'
-import { background } from '../../../css/global'
+import { background } from '../../../layout/styles'
 import { InlineEdit } from '../../../components/form'
 
 const barStyle = {

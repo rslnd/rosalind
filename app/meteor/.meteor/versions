@@ -66,7 +66,6 @@ meteorhacks:picker@1.0.3
 meteorhacks:search-source@1.4.2
 meteorhacks:subs-manager@1.6.4
 meteorhacks:unblock@1.1.0
-minifier-css@1.2.16
 minimongo@1.4.0
 mizzao:timesync@0.5.0
 mobile-experience@1.0.5
@@ -98,7 +97,6 @@ reload@1.1.11
 retry@1.0.9
 reywood:publish-composite@1.5.2
 routepolicy@1.0.12
-seba:minifiers-autoprefixer@1.0.1
 service-configuration@1.0.11
 session@1.1.7
 sha@1.0.9

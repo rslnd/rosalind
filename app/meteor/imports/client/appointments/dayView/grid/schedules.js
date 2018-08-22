@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
 import { isFirstSlot, isLastSlot } from './timeSlots'
-import { darkGrayDisabled } from '../../../css/global'
+import { darkGrayDisabled } from '../../../layout/styles'
 
 monkey(moment)
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { formatter, isFullHour, isQuarterHour } from '../dayView/grid/timeSlots'
-import { grayDisabled, darkGrayActive, darkGrayDisabled } from '../../css/global'
+import { grayDisabled, darkGrayActive, darkGrayDisabled } from '../../layout/styles'
 
 const styles = {
   timeLegend: {

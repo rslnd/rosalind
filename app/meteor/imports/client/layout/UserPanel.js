@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'react-bootstrap'
 import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
-import { gray } from '../css/global'
+import { gray } from '../layout/styles'
 import { fullNameWithTitle } from '../../api/users/methods/name'
 
 const style = {

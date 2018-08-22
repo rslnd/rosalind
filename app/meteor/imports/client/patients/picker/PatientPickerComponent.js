@@ -12,7 +12,7 @@ import { Birthday } from '../Birthday'
 import { TagsList } from '../../tags/TagsList'
 import { UserHelper } from '../../users/UserHelper'
 import { Indicator } from '../../appointments/appointment/Indicator'
-import { darkGrayDisabled } from '../../css/global'
+import { darkGrayDisabled } from '../../layout/styles'
 
 const loadingStyle = {
   margin: 0,

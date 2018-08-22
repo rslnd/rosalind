@@ -8,7 +8,7 @@ import { Icon } from '../../components/Icon'
 import { AppointmentsView } from './AppointmentsView'
 import { PatientPicker } from '../../patients/picker'
 import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
-import { background } from '../../css/global'
+import { background } from '../../layout/styles'
 
 const contentHeaderStyle = {
   background,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { InfoBox } from './ReportSummary'
-import { grayActive, gray, green } from '../css/global'
+import { grayActive, gray, green } from '../layout/styles'
 import { __ } from '../../i18n'
 
 export const ReferralsDetailSummary = ({ referrals }) => {

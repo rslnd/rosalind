@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box } from '../components/Box'
 import CalendarHeatmap from 'react-calendar-heatmap'
-import './heatmap.css'
 
 import moment from 'moment-timezone'
 const values = (nudge, selected) => {

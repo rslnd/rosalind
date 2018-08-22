@@ -4,11 +4,8 @@ import {
   text,
   gray,
   grayActive,
-  primary,
-  primaryActive,
-  primaryDisabled,
-  fontSize
-} from './global'
+  primary
+} from './styles'
 
 const animationSpeed = 1.6
 

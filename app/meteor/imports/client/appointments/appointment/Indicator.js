@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment-timezone'
 import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
-import { green, red } from '../../css/global'
+import { green, red } from '../../layout/styles'
 import { Currency } from '../../components/Currency'
 
 const overlay = {

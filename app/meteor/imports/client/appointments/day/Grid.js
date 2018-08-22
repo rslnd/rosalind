@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Grid as VirtualizedGrid, AutoSizer } from 'react-virtualized'
-import 'react-virtualized/styles.css'
 import { TimeLegend } from './TimeLegend'
 
 const containerStyle = {

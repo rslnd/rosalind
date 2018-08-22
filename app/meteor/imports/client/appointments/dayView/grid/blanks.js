@@ -3,7 +3,7 @@ import injectSheet from 'react-jss'
 import moment from 'moment-timezone'
 import sortBy from 'lodash/sortBy'
 import { setTime, timeSlots, formatter, label, end } from './timeSlots'
-import { background } from '../../../css/global'
+import { background } from '../../../layout/styles'
 import { color, lightness } from 'kewler'
 
 const styles = {

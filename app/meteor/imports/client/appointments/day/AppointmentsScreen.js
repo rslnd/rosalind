@@ -6,7 +6,7 @@ import { weekOfYear } from '../../../util/time/format'
 import { DateNavigation } from '../../components/DateNavigation'
 import { Icon } from '../../components/Icon'
 import { PatientPicker } from '../../patients/picker'
-import { background } from '../../css/global'
+import { background } from '../../layout/styles'
 import { GridContainer } from './GridContainer'
 
 const contentHeaderStyle = {
