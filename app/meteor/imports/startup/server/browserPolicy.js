@@ -14,7 +14,6 @@ const none = "'none'"
 
 const getHelmetConfig = () => {
   const domain = Meteor.absoluteUrl().replace(/http(s)*:\/\//, '').replace(/\/$/, '')
-  const s = Meteor.absoluteUrl().match(/(?!=http)s(?=:\/\/)/) ? 's' : ''
   const runtimeConfig = Object.assign(__meteor_runtime_config__, Autoupdate)
 
   // Debug hash generation
@@ -39,9 +38,8 @@ const getHelmetConfig = () => {
         ],
         connectSrc: [
           self,
-          `http${s}://${domain}`,
-          `ws${s}://${domain}`,
-          'https://*.rslnd.com',
+          `https://${domain}`,
+          `wss://${domain}`,
           'wss://*.smooch.io',
           'https://*.smooch.io',
           'https://*.sentry.io'
@@ -122,6 +120,11 @@ const getHelmetConfig = () => {
       mode: 'block',
       reportUri: xssReportUri
     }
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    helmetConfig.contentSecurityPolicy.directives.connectSrc.push('http://localhost:3000')
+    helmetConfig.contentSecurityPolicy.directives.connectSrc.push('ws://localhost:3000')
   }
 
   return helmetConfig
