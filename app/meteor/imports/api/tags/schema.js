@@ -37,9 +37,8 @@ export default new SimpleSchema({
     optional: true
   },
 
-  calendarId: {
-    type: SimpleSchema.RegEx.Id,
-    optional: true
+  calendarIds: {
+    type: [SimpleSchema.RegEx.Id]
   },
 
   assigneeIds: {
