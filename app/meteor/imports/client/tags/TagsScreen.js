@@ -70,11 +70,24 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'ÄrztInnen',
+    field: 'assigneeIds',
+    type: 'userId',
+    isMulti: true,
+    unsetWhenEmpty: true,
     render: t => <span>
       {
         t.assigneeIds && t.assigneeIds
           .map(a => getAssigneeName(a)).join(', ')
       }
+    </span>
+  },
+  {
+    header: <s>ÄrztInnen</s>,
+    field: 'blacklistAssigneeIds',
+    type: 'userId',
+    isMulti: true,
+    unsetWhenEmpty: true,
+    render: t => <span>
       {
         t.blacklistAssigneeIds &&
           <span style={{ textDecoration: 'line-through' }}>

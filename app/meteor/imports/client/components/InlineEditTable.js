@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { SwatchesPicker } from 'react-color'
 import { Icon } from './Icon'
+import { UserPicker } from '../users/UserPicker'
 
 const ColHeader = ({ header, style }) => {
   const title = (typeof header === 'string') ? header : ((header && header.title) || null)
@@ -53,7 +54,7 @@ class EditModal extends React.Component {
     super(props)
 
     this.state = {
-      value: props.value[props.field]
+      value: props.value[props.structure.field]
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -70,7 +71,7 @@ class EditModal extends React.Component {
   handleUpdateClick () {
     const value = this.state.value
 
-    if (typeof this.props.value[this.props.field] === 'number') {
+    if (typeof this.props.value[this.props.structure.field] === 'number') {
       this.props.onUpdate(parseInt(value))
     } else {
       this.props.onUpdate(value)
@@ -78,7 +79,7 @@ class EditModal extends React.Component {
   }
 
   render () {
-    const { style, value, field } = this.props
+    const { style, value, structure: { field, isMulti, type } } = this.props
 
     const boxStyle = {
       zIndex: 50,
@@ -96,6 +97,20 @@ class EditModal extends React.Component {
             color={this.state.value}
             onChange={this.handleChange}
             onChangeComplete={this.handleUpdateClick} />
+          : type === 'userId'
+          ? <Paper style={{ padding: 6 }}>
+            <UserPicker
+              isMulti={isMulti}
+              initialValue={this.state.value}
+              onChange={this.handleChange}
+            />
+            <Button
+              fullWidth
+              style={{ marginTop: 6 }}
+              onClick={this.handleUpdateClick}>
+              <span><Icon name='check' /></span>
+            </Button>
+          </Paper>
           : <Paper
             style={{ padding: 6 }}
             elevation={10}>
@@ -103,7 +118,7 @@ class EditModal extends React.Component {
               fullWidth
               name='modalEditText'
               autoFocus
-              label={field.field}
+              label={field.header}
               onChange={this.handleChange}
               value={this.state.value} />
             <Button
@@ -161,7 +176,7 @@ export class Table extends React.Component {
       this.setState({
         editing: [rowIndex, colIndex],
         editingValue: this.props.rows[rowIndex],
-        editingField,
+        editingStructure: structure,
         editModalPosition: {
           top: targetRect.bottom - bodyRect.top,
           left: targetRect.left - bodyRect.left,
@@ -179,11 +194,20 @@ export class Table extends React.Component {
 
   handleUpdate (newValue) {
     const _id = this.props.rows[this.state.editing[0]]._id
-    const update = {
-      $set: {
-        [this.state.editingField]: newValue
+
+    // Cannot set an array field to null, need to unset to remove
+    const update = (this.state.editingStructure.unsetWhenEmpty && !newValue || newValue.length === 0)
+      ? {
+        $unset: {
+          [this.state.editingStructure.field]: 1
+        }
+      } : {
+        $set: {
+          [this.state.editingStructure.field]: newValue
+        }
       }
-    }
+
+    console.log('[InlineEditTable] Update', update)
 
     this.props.onUpdate(_id, update)
     this.handleEditEnd()
@@ -238,7 +262,7 @@ export class Table extends React.Component {
                       onUpdate={(x, y) => { this.handleUpdate(x, y); closePortal() }}
                       style={this.state.editModalPosition}
                       value={this.state.editingValue}
-                      field={this.state.editingField}
+                      structure={this.state.editingStructure}
                     />
                   </ClickAwayListener>
               )

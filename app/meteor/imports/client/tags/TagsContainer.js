@@ -13,7 +13,7 @@ const composer = (props) => {
   const tags = sortByCalendar(Tags.find({}, { sort: { order: 1 } }).fetch())
 
   const getCalendarName = _id => _id && ((Calendars.findOne({ _id }) || {}).name)
-  const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }))
+  const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }) || {})
   const handleUpdate = (_id, update) => {
     Tags.update({ _id }, update)
   }

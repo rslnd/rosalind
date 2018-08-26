@@ -3,12 +3,31 @@ import Select from 'react-select'
 import { __ } from '../../i18n'
 import { Users } from '../../api/users'
 
+const toUser = _id => Users.findOne({ _id })
+
+const toOption = (user) => {
+  return {
+    value: user._id,
+    label: Users.methods.fullNameWithTitle(user)
+  }
+}
+
+const toInitialOptions = (props) => {
+  if (props.initialValue) {
+    if (props.isMulti) {
+      return props.initialValue.map(toUser).map(toOption)
+    } else {
+      return toOption(toUser(props.initialValue))
+    }
+  }
+}
+
 export class UserPicker extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      query: ''
+      query: toInitialOptions(props) || ''
     }
 
     this.handleQueryChange = this.handleQueryChange.bind(this)
@@ -21,8 +40,12 @@ export class UserPicker extends React.Component {
       query: query
     })
 
-    if (this.props.onChange && query && query.value) {
-      this.props.onChange(query.value)
+    if (this.props.onChange && query) {
+      if (this.props.isMulti && query.length >= 1) {
+        this.props.onChange(query.map(q => q.value))
+      } else {
+        this.props.onChange(query.value)
+      }
     } else {
       this.props.onChange(null)
     }
@@ -32,12 +55,7 @@ export class UserPicker extends React.Component {
     const selector = this.props.selector || { groupId: { $ne: null }, employee: true }
     return Users.find(selector, {
       sort: { lastName: 1 }
-    }).fetch().map((user) => {
-      return {
-        value: user._id,
-        label: Users.methods.fullNameWithTitle(user)
-      }
-    })
+    }).fetch().map(toOption)
   }
 
   render () {
@@ -48,6 +66,7 @@ export class UserPicker extends React.Component {
         options={this.options()}
         ignoreCase
         isClearable
+        isMulti={this.props.isMulti}
         styles={customStyles}
         autoFocus={this.props.autoFocus || false}
         placeholder={this.props.placeholder || __('users.selectEmployee')} />
