@@ -48,7 +48,9 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: { icon: 'eur', title: 'Privat- oder Kassentermin' },
-    render: t => t.privateAppointment && <Icon name='eur' />
+    render: t => t.privateAppointment && <Icon name='eur' />,
+    field: 'privateAppointment',
+    type: Boolean
   },
   {
     header: 'Umsatz',

@@ -135,10 +135,22 @@ export class Table extends React.Component {
 
   handleEditStart (rowIndex, colIndex, openPortal) {
     return e => {
-      const editingField = this.props.structure(this.props)[colIndex].field
+      const structure = this.props.structure(this.props)[colIndex]
+      const editingField = structure.field
 
       if (!editingField) {
         return
+      }
+
+      // Toggle on click
+      if (structure.type === Boolean) {
+        const row = this.props.rows[rowIndex]
+        const update = {
+          $set: {
+            [editingField]: !row[editingField]
+          }
+        }
+        return this.props.onUpdate(row._id, update)
       }
 
       openPortal()
