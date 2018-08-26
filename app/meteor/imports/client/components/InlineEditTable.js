@@ -209,7 +209,7 @@ export class Table extends React.Component {
     }
 
     // Cannot set an array field to null, need to unset to remove
-    const update = (this.state.editingStructure.unsetWhenEmpty && !newValue || newValue.length === 0)
+    const update = (this.state.editingStructure.unsetWhenEmpty && (!newValue || newValue.length === 0))
       ? {
         $unset: {
           [this.state.editingStructure.field]: 1
