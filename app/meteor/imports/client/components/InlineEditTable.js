@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 import { SwatchesPicker } from 'react-color'
 import { Icon } from './Icon'
 import { DocumentPicker } from './DocumentPicker'
+import { __ } from '../../i18n';
 
 const ColHeader = ({ style, icon, header, description }) => {
   return <th style={style} title={description}>
@@ -115,7 +116,7 @@ class EditModal extends React.Component {
               autoFocus
               label={field.header}
               onChange={this.handleChange}
-              value={this.state.value} />
+              value={this.state.value || ''} />
             <Button
               fullWidth
               style={{ marginTop: 6 }}
@@ -134,13 +135,15 @@ export class Table extends React.Component {
     super(props)
 
     this.state = {
-      editing: null
+      editing: null,
+      inserting: null
     }
 
     this.handleEditStart = this.handleEditStart.bind(this)
     this.handleEditEnd = this.handleEditEnd.bind(this)
     this.isEditing = this.isEditing.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
+    this.handleInsertClick = this.handleInsertClick.bind(this)
   }
 
   handleEditStart (rowIndex, colIndex, openPortal) {
@@ -154,7 +157,7 @@ export class Table extends React.Component {
 
       // Toggle on click
       if (structure.type === Boolean) {
-        const row = this.props.rows[rowIndex]
+        const row = this.props.rows[rowIndex] || this.state.inserting
         const update = {
           $set: {
             [editingField]: !row[editingField]
@@ -170,7 +173,7 @@ export class Table extends React.Component {
 
       this.setState({
         editing: [rowIndex, colIndex],
-        editingValue: this.props.rows[rowIndex],
+        editingValue: this.props.rows[rowIndex] || '',
         editingStructure: structure,
         editModalPosition: {
           top: targetRect.bottom - bodyRect.top,
@@ -188,7 +191,22 @@ export class Table extends React.Component {
   }
 
   handleUpdate (newValue) {
-    const _id = this.props.rows[this.state.editing[0]]._id
+    const row = this.props.rows[this.state.editing[0]]
+    const _id = row ? row._id : undefined
+
+    if (!_id) {
+      this.props.onInsert({
+        ...this.state.inserting,
+        [this.state.editingStructure.field]: newValue
+      })
+
+      this.setState({
+        inserting: null
+      })
+
+      this.handleEditEnd()
+      return
+    }
 
     // Cannot set an array field to null, need to unset to remove
     const update = (this.state.editingStructure.unsetWhenEmpty && !newValue || newValue.length === 0)
@@ -212,9 +230,20 @@ export class Table extends React.Component {
     return !!(this.state.editing && isEqual(this.state.editing, [rowIndex, colIndex]))
   }
 
+  handleInsertClick () {
+    this.setState({
+      inserting: this.props.defaultValues()
+    })
+  }
+
   render () {
-    const { structure, rows } = this.props
+    const { structure, rows, onInsert, onRemove } = this.props
+    const { inserting } = this.state
     const cols = structure(this.props)
+
+    const actualRows = inserting
+      ? [...rows, inserting]
+      : rows
 
     return (
       <PortalWithState
@@ -227,27 +256,60 @@ export class Table extends React.Component {
             <div style={{ overflowX: 'scroll' }}>
               <table className='table'>
                 <thead>
-                  <tr>{
-                    cols.map((col, i) =>
-                      <ColHeader key={i} {...col} />
-                    )
-                  }</tr>
+                  <tr>
+                    {
+                      cols.map((col, i) =>
+                        <ColHeader key={i} {...col} />
+                      )
+                    }
+                    {
+                      onRemove && <td />
+                    }
+                  </tr>
                 </thead>
                 <tbody>{
-                  rows.map((row, i) =>
-                    <tr key={i}>{
-                      cols.map((col, j) =>
-                        <Cell
-                          key={j}
-                          onClick={this.handleEditStart(i, j, openPortal)}
-                          isEditing={this.isEditing(i, j)}
-                          col={col}
-                          row={row} />
-                      )
-                    }</tr>
+                  actualRows.map((row, i) =>
+                    <tr key={i}>
+                      {
+                        cols.map((col, j) =>
+                          <Cell
+                            key={j}
+                            onClick={this.handleEditStart(i, j, openPortal)}
+                            isEditing={this.isEditing(i, j)}
+                            col={col}
+                            row={row} />
+                        )
+                      }
+                      {
+                        row._id && onRemove &&
+                          <td>
+                            <Button
+                              onClick={() => onRemove(row._id)}
+                            >
+                              <Icon name='minus' />
+                            </Button>
+                          </td>
+                      }
+                    </tr>
                 )}</tbody>
               </table>
             </div>
+
+            {
+              onInsert && !inserting &&
+                <div>
+                  <Button
+                    fullWidth
+                    style={{ marginTop: 6 }}
+                    onClick={this.handleInsertClick}>
+                    {
+                      this.state.inserting
+                      ? <span><Icon name='check' /> {__('ui.save')}</span>
+                      : <span><Icon name='plus' /> {__('ui.insert')}</span>
+                    }
+                  </Button>
+                </div>
+            }
 
             {
               portal(

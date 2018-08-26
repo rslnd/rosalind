@@ -13,6 +13,7 @@ export const appointments = {
   thisPast: 'Vergangene Termine',
   thisCurrent: 'Dieser Termin',
   lockedBy: 'Reserviert von __name__',
+  tag: 'Behandlung',
   tags: 'Behandlung',
   private: 'Privat',
   insurance: 'Kasse',

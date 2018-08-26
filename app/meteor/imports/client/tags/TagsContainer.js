@@ -1,3 +1,4 @@
+import Alert from 'react-s-alert'
 import sortBy from 'lodash/fp/sortBy'
 import { withTracker } from '../components/withTracker'
 import { Tags } from '../../api/tags'
@@ -5,8 +6,8 @@ import { Users } from '../../api/users'
 import { Calendars } from '../../api/calendars'
 import { TagsScreen } from './TagsScreen'
 
-const sortByCalendar = sortBy(({ calendarIds }) =>
-  (Calendars.findOne({ _id: { $in: calendarIds }}, { sortBy: { order: 1 } }) || {}).order
+const sortByCalendar = sortBy(({ calendarIds = [] }) =>
+  (Calendars.findOne({ _id: { $in: calendarIds } }, { sortBy: { order: 1 } }) || {}).order
 )
 
 const composer = (props) => {
@@ -16,9 +17,22 @@ const composer = (props) => {
   const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }) || {})
   const handleUpdate = (_id, update) => {
     Tags.update({ _id }, update)
+    Alert.success('ui.saved')
+  }
+  const handleInsert = (newTag) => {
+    try {
+      Tags.insert(newTag)
+      Alert.success('ui.saved')
+    } catch (e) {
+      console.error(e)
+      Alert.error('ui.error')
+    }
+  }
+  const handleRemove = _id => {
+    Tags.softRemove({ _id })
   }
 
-  return { tags, getCalendarName, getAssigneeName, handleUpdate }
+  return { tags, getCalendarName, getAssigneeName, handleUpdate, handleInsert, handleRemove }
 }
 
 export const TagsContainer = withTracker(composer)(TagsScreen)

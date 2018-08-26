@@ -9,6 +9,7 @@ export const ui = {
   insert: 'Neu',
   save: 'Speichern',
   saved: 'Gespeichert',
+  error: 'Fehler',
   ok: 'OK',
   delete: 'Entfernen',
   deleted: 'Gelöscht',

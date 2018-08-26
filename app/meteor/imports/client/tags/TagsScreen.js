@@ -6,6 +6,7 @@ import { Table } from '../components/InlineEditTable'
 import { tagStyle, tagBackgroundColor, darken } from './TagsList'
 import { UserPicker } from '../users/UserPicker'
 import { CalendarPicker } from '../calendars/CalendarPicker'
+import { __ } from '../../i18n'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
@@ -122,7 +123,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   }
 ]
 
-export const TagsScreen = toClass(({ tags, getCalendarName, getAssigneeName, handleUpdate }) =>
+const defaultTag = () => ({
+  tag: __('appointments.tag'),
+  color: '#ccc'
+})
+
+export const TagsScreen = toClass(({ tags, getCalendarName, getAssigneeName, handleUpdate, handleInsert, handleRemove }) =>
   <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
@@ -133,6 +139,9 @@ export const TagsScreen = toClass(({ tags, getCalendarName, getAssigneeName, han
             getCalendarName={getCalendarName}
             getAssigneeName={getAssigneeName}
             onUpdate={handleUpdate}
+            onInsert={handleInsert}
+            onRemove={handleRemove}
+            defaultValues={defaultTag}
           />
         </Box>
       </div>
