@@ -10,15 +10,10 @@ import { SwatchesPicker } from 'react-color'
 import { Icon } from './Icon'
 import { UserPicker } from '../users/UserPicker'
 
-const ColHeader = ({ header, style }) => {
-  const title = (typeof header === 'string') ? header : ((header && header.title) || null)
-
-  return <th style={style}>
-    {
-      (header && header.icon)
-      ? <Icon name={header.icon} />
-      : title
-    }
+const ColHeader = ({ style, icon, header, description }) => {
+  return <th style={style} title={description}>
+    { icon && <Icon name={icon} /> }
+    { header || '' }
   </th>
 }
 
@@ -234,7 +229,7 @@ export class Table extends React.Component {
                 <thead>
                   <tr>{
                     cols.map((col, i) =>
-                      <ColHeader key={i} header={col.header} />
+                      <ColHeader key={i} {...col} />
                     )
                   }</tr>
                 </thead>

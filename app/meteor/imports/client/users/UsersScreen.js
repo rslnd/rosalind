@@ -8,37 +8,37 @@ import { Table } from '../components/InlineEditTable'
 const toggleablePermissions = [
   {
     permission: 'appointments',
-    title: 'Kalender',
+    description: 'Kalender',
     icon: 'calendar'
   },
   {
     permission: 'waitlist',
-    title: 'Warteliste',
+    description: 'Warteliste',
     icon: 'angle-right'
   },
   {
     permission: 'schedules-edit',
-    title: 'Anwesenheiten bearbeiten',
+    description: 'Anwesenheiten bearbeiten',
     icon: 'clock-o'
   },
   {
     permission: 'inboundCalls',
-    title: 'Anrufe',
+    description: 'Anrufe',
     icon: 'phone'
   },
   {
     permission: 'reports',
-    title: 'Berichte',
+    description: 'Berichte',
     icon: 'bar-chart'
   },
   {
     permission: 'reports-showRevenue',
-    title: 'Umsätze in Berichten',
+    description: 'Umsätze in Berichten',
     icon: 'eur'
   },
   {
     permission: 'edit-users',
-    title: 'Benutzer verwalten',
+    description: 'Benutzer verwalten',
     icon: 'user-plus'
   }
 ]
@@ -54,14 +54,16 @@ const structure = ({ getAssigneeName, isInRole }) => [
     render: u => getAssigneeName(u._id)
   },
 
-  ...toggleablePermissions.map(({ title, icon, permission }) => ({
-    header: { title, icon },
+  ...toggleablePermissions.map(({ description, icon, permission }) => ({
+    description,
+    icon,
     style: { width: 45 },
     render: u => isInRole(u, permission) && <Icon name='check' />
   })),
 
   {
-    header: { icon: 'key', title: 'Passwort' },
+    icon: 'key',
+    description: 'Passwort',
     render: u => <span>
       {(u.services && u.services.password && Object.keys(u.services.password).length >= 1) &&
         <Icon name='key' title='Passwort' />}
@@ -69,7 +71,8 @@ const structure = ({ getAssigneeName, isInRole }) => [
   },
 
   {
-    header: { icon: 'unlock-alt', title: 'Passwordless' },
+    icon: 'unlock-alt',
+    description: 'Passwordless',
     render: u => <span>
       {(u.services && u.services.passwordless) &&
         <Icon name='unlock-alt' title='Passwordless' />}

@@ -15,7 +15,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: t => t.calendarIds && t.calendarIds.map(c => getCalendarName(c)).join(', ')
   },
   {
-    header: { icon: 'paint-brush' },
+    icon: 'paint-brush',
     field: 'color',
     render: t => (
       <div style={{
@@ -43,11 +43,13 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     )
   },
   {
-    header: { icon: 'clock-o', title: 'Standard-Termindauer in Minuten' },
+    icon: 'clock-o',
+    description: 'Standard-Termindauer in Minuten',
     field: 'duration'
   },
   {
-    header: { icon: 'eur', title: 'Privat- oder Kassentermin' },
+    icon: 'eur',
+    description: 'Privat- oder Kassentermin',
     render: t => t.privateAppointment && <Icon name='eur' />,
     field: 'privateAppointment',
     type: Boolean
@@ -82,7 +84,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     </span>
   },
   {
-    header: <s>ÄrztInnen</s>,
+    header: <span style={{ textDecoration: 'line-through' }}>ÄrztInnen</span>,
     field: 'blacklistAssigneeIds',
     type: 'userId',
     isMulti: true,

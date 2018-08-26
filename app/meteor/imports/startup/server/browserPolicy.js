@@ -42,7 +42,8 @@ const getHelmetConfig = () => {
           `wss://${domain}`,
           'wss://*.smooch.io',
           'https://*.smooch.io',
-          'https://*.sentry.io'
+          'https://*.sentry.io',
+          'https://sentry.io/'
         ],
         defaultSrc: [
           none
