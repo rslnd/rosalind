@@ -53,7 +53,7 @@ const Tag = ({ tag, onClick, style, showDefaultRevenue }) => {
         borderColor: darken(tag.color || tagBackgroundColor)
       }}>
       {tag.tag}
-      <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} />
+      {/* <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} /> */}
     </span>
   )
 }
