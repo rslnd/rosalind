@@ -3,7 +3,7 @@ import { Manager, Target, Popper } from 'react-popper'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { Icon } from '../../../components/Icon'
-import { UserPickerContainer } from '../../../users/UserPickerContainer'
+import { UserPicker } from '../../../users/UserPicker'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 const buttonStyle = {
@@ -81,7 +81,7 @@ export class AddAssignee extends React.Component {
             <Popper placement='bottom-start' eventsEnabled>
               <ClickAwayListener onClickAway={this.handleAddUserPopoverClose}>
                 <Paper style={popoverStyle}>
-                  <UserPickerContainer
+                  <UserPicker
                     autoFocus
                     onChange={this.handleAddUser} />
                 </Paper>

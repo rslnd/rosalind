@@ -7,7 +7,7 @@ import { Schedules } from '../../../api/schedules'
 import { weekdays } from '../../../api/schedules/schema'
 import { Users } from '../../../api/users'
 import { Box } from '../../components/Box'
-import { UserPickerContainer } from '../../users/UserPickerContainer'
+import { UserPicker } from '../../users/UserPicker'
 import { __ } from '../../../i18n'
 import { withTracker } from '../../components/withTracker'
 import {
@@ -295,7 +295,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
 
                 <TableRow>
                   <TableCell colSpan={3}>
-                    <UserPickerContainer
+                    <UserPicker
                       onChange={this.handleAddAssignee}
                       placeholder='MitarbeiterIn hinzufügen'
                     />

@@ -13,7 +13,7 @@ import { AssigneesDetails } from './AssigneesDetails'
 import { background, grayDisabled, gray } from '../../../layout/styles'
 import { Modal } from 'react-bootstrap'
 import Button from '@material-ui/core/Button'
-import { UserPickerContainer } from '../../../users/UserPickerContainer'
+import { UserPicker } from '../../../users/UserPicker'
 
 const headerRowStyle = {
   backgroundColor: background,
@@ -235,7 +235,7 @@ export class HeaderRow extends React.Component {
           show={!!this.state.changingAssignee}
           bsSize='small'>
           <Modal.Body>
-            <UserPickerContainer
+            <UserPicker
               autoFocus
               onChange={newAssigneeId => this.setState({ changingAssignee: {
                 oldAssigneeId: this.state.changingAssignee.oldAssigneeId,

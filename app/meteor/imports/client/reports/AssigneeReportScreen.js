@@ -13,7 +13,7 @@ import { Report } from './Report'
 import { Referrals } from './Referrals'
 import { PrintSettings } from './shared/PrintSettings'
 import { FooterContainer } from '../layout/FooterContainer'
-import { UserPickerContainer } from '../users/UserPickerContainer'
+import { UserPicker } from '../users/UserPicker'
 import { fullNameWithTitle } from '../../api/users/methods/name'
 
 const formatRange = ({ start, end }) =>
@@ -103,7 +103,7 @@ export class AssigneeReportScreen extends React.Component {
         </div>
         <div className='content'>
           <div className='hide-print' style={{ paddingBottom: 15 }}>
-            <UserPickerContainer
+            <UserPicker
               autoFocus
               onChange={handleChangeAssignee} />
           </div>

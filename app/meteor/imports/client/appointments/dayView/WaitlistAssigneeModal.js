@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal } from 'react-bootstrap'
 import Button from '@material-ui/core/Button'
 import { __ } from '../../../i18n'
-import { UserPickerContainer } from '../../users/UserPickerContainer'
+import { UserPicker } from '../../users/UserPicker'
 
 export class WaitlistAssigneeModal extends React.Component {
 
@@ -41,7 +41,7 @@ export class WaitlistAssigneeModal extends React.Component {
       bsSize='small'>
       <Modal.Body>
 
-        <UserPickerContainer
+        <UserPicker
           autoFocus
           onChange={this.handleChangeAssigneeId}
         />

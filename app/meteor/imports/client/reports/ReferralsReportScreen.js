@@ -9,7 +9,7 @@ import { PrintSettings } from './shared/PrintSettings'
 import { DateRangeNavigation } from '../components/DateRangeNavigation'
 import { Box } from '../components/Box'
 import { ReferralsDetailTable } from './ReferralsDetailTable'
-import { UserPickerContainer } from '../users/UserPickerContainer'
+import { UserPicker } from '../users/UserPicker'
 import { fullNameWithTitle } from '../../api/users/methods/name'
 
 const formatRange = ({ start, end }) =>
@@ -81,7 +81,7 @@ export class ReferralsReportScreen extends React.Component {
         </div>
         <div className='content'>
           <div className='hide-print' style={{ paddingBottom: 15 }}>
-            <UserPickerContainer
+            <UserPicker
               autoFocus
               onChange={handleChangeAssignee} />
           </div>

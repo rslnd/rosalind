@@ -4,7 +4,7 @@ import FlipMove from 'react-flip-move'
 import { Modal } from 'react-bootstrap'
 import { __ } from '../../../i18n'
 import Button from '@material-ui/core/Button'
-import { UserPickerContainer } from '../../users/UserPickerContainer'
+import { UserPicker } from '../../users/UserPicker'
 
 export class WaitlistScreen extends React.Component {
   constructor (props) {
@@ -58,7 +58,7 @@ export class WaitlistScreen extends React.Component {
         {
           canViewAllWaitlists &&
             <div className='hide-print' style={{ paddingBottom: 15 }}>
-              <UserPickerContainer
+              <UserPicker
                 autoFocus
                 onChange={handleChangeAssigneeView} />
             </div>
@@ -86,7 +86,7 @@ export class WaitlistScreen extends React.Component {
           show={!!this.state.changingAssignee}
           bsSize='small'>
           <Modal.Body>
-            <UserPickerContainer
+            <UserPicker
               autoFocus
               onChange={newAssigneeId =>
                 this.setState({

@@ -5,7 +5,7 @@ import { __ } from '../../i18n'
 import { Button } from 'react-bootstrap'
 import { Icon } from '../components/Icon'
 import { DateNavigation } from '../components/DateNavigation'
-import { UserPickerContainer } from '../users/UserPickerContainer'
+import { UserPicker } from '../users/UserPicker'
 import { UserHelper } from '../users/UserHelper'
 import { Box } from '../components/Box'
 
@@ -128,7 +128,7 @@ export class TimesheetsScreen extends React.Component {
         <div className='content'>
           <Box>
             <div style={{ width: 300 }}>
-              <UserPickerContainer
+              <UserPicker
                 onChange={this.props.onChangeUserId}
                 value={this.props.userId} />
             </div>
