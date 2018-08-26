@@ -8,7 +8,7 @@ import { Tags } from '../../../api/tags'
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Kalender',
-    render: t => t.calendarIds.map(getCalendarName).join(', ')
+    render: t => getCalendarName(t.calendarId)
   },
   {
     header: 'Behandlungen',
