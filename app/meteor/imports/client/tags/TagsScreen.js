@@ -4,6 +4,8 @@ import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
 import { tagStyle, tagBackgroundColor, darken } from './TagsList'
+import { UserPicker } from '../users/UserPicker'
+import { CalendarPicker } from '../calendars/CalendarPicker'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
@@ -12,6 +14,9 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Kalender',
+    field: 'calendarIds',
+    EditComponent: CalendarPicker,
+    isMulti: true,
     render: t => t.calendarIds && t.calendarIds.map(c => getCalendarName(c)).join(', ')
   },
   {
@@ -73,7 +78,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'ÄrztInnen',
     field: 'assigneeIds',
-    type: 'userId',
+    EditComponent: UserPicker,
     isMulti: true,
     unsetWhenEmpty: true,
     render: t => <span>
@@ -86,7 +91,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: <span style={{ textDecoration: 'line-through' }}>ÄrztInnen</span>,
     field: 'blacklistAssigneeIds',
-    type: 'userId',
+    EditComponent: UserPicker,
     isMulti: true,
     unsetWhenEmpty: true,
     render: t => <span>
@@ -103,6 +108,9 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Empfehlbar von',
+    field: 'referrableFrom',
+    EditComponent: CalendarPicker,
+    isMulti: true,
     render: c => c.referrableFrom && <span>
       {c.referrableFrom.map(r =>
         <span key={r}>

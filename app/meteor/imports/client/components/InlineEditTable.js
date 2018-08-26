@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { SwatchesPicker } from 'react-color'
 import { Icon } from './Icon'
-import { UserPicker } from '../users/UserPicker'
+import { DocumentPicker } from './DocumentPicker'
 
 const ColHeader = ({ style, icon, header, description }) => {
   return <th style={style} title={description}>
@@ -74,7 +74,7 @@ class EditModal extends React.Component {
   }
 
   render () {
-    const { style, value, structure: { field, isMulti, type } } = this.props
+    const { style, value, structure: { field, isMulti, EditComponent } } = this.props
 
     const boxStyle = {
       zIndex: 50,
@@ -87,14 +87,9 @@ class EditModal extends React.Component {
       <div
         style={boxStyle}>
         {
-          field === 'color'
-          ? <SwatchesPicker
-            color={this.state.value}
-            onChange={this.handleChange}
-            onChangeComplete={this.handleUpdateClick} />
-          : type === 'userId'
+          EditComponent
           ? <Paper style={{ padding: 6 }}>
-            <UserPicker
+            <EditComponent
               isMulti={isMulti}
               initialValue={this.state.value}
               onChange={this.handleChange}
@@ -106,6 +101,11 @@ class EditModal extends React.Component {
               <span><Icon name='check' /></span>
             </Button>
           </Paper>
+          : field === 'color'
+          ? <SwatchesPicker
+            color={this.state.value}
+            onChange={this.handleChange}
+            onChangeComplete={this.handleUpdateClick} />
           : <Paper
             style={{ padding: 6 }}
             elevation={10}>

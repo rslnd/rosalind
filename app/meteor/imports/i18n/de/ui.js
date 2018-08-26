@@ -15,6 +15,7 @@ export const ui = {
   close: 'Schließen',
   cancel: 'Abbrechen',
   clear: 'Auswahl aufheben',
+  select: 'Auswählen...',
   settings: 'Einstellungen',
   date: 'Datum',
   pickDate: 'Datum wählen',
