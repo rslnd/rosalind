@@ -3,12 +3,12 @@ import identity from 'lodash/identity'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'
 import { Table } from '../../components/InlineEditTable'
-import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
+import { tagStyle, tagBackgroundColor, TagsList } from '../../tags/TagsList'
 import { Tags } from '../../../api/tags'
 import { CalendarPicker } from '../../calendars/CalendarPicker'
 import { DocumentPicker } from '../../components/DocumentPicker'
 import { __ } from '../../../i18n'
-import { withProps } from 'recompose'
+import { withProps, mapProps, renderComponent } from 'recompose'
 import { UserPicker } from '../../users/UserPicker';
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
@@ -20,6 +20,9 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Behandlungen',
+    field: 'tags',
+    EditComponent: TagsPicker,
+    isMulti: true,
     render: c => c.tags && Tags.methods.expand(c.tags).map(t =>
       <span key={t._id}>
         <span style={{
@@ -74,7 +77,13 @@ const WeekdayPicker = withProps({
   toDocument: identity,
   toLabel: toWeekdayLabel,
   toKey: identity,
-  options: () => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+  options: () => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+})(DocumentPicker)
+
+const TagsPicker = withProps({
+  toDocument: _id => Tags.findOne({ _id }),
+  toLabel: mapProps(tag => ({ tags: [ tag ] }))(TagsList),
+  options: () => Tags.find({}).fetch()
 })(DocumentPicker)
 
 export const ConstraintsScreen = ({

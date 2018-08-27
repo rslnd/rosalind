@@ -47,6 +47,12 @@ export const Schema = new SimpleSchema({
     optional: true
   },
 
+  tags: {
+    type: [SimpleSchema.RegEx.Id],
+    index: 1,
+    optional: true
+  },
+
   note: {
     type: String,
     optional: true
