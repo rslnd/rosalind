@@ -4,9 +4,17 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import de from 'date-fns/locale/de'
 import { formatDistance } from 'date-fns'
-import { toClass } from 'recompose'
+import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
 import { Table } from '../components/InlineEditTable'
+import { DocumentPicker } from '../components/DocumentPicker'
+import { Groups } from '../../api/groups'
+
+const GroupPicker = withProps({
+  toDocument: _id => Groups.findOne({ _id }),
+  toLabel: group => group.name,
+  options: () => Groups.find({}).fetch()
+})(DocumentPicker)
 
 const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   {
@@ -18,12 +26,15 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
     field: 'description'
   },
   {
-    header: 'Login ohne Passwort',
+    header: 'Login ohne Passwort nur für bestimmte Benutzergruppen',
+    field: 'passwordlessGroupIds',
+    EditComponent: GroupPicker,
+    isMulti: true,
     render: c => c.passwordlessGroupIds && c.passwordlessGroupIds
       .map(g => getGroupName(g)).join(', ')
   },
   {
-    header: 'Benutzer',
+    header: 'Letzter Benutzer',
     render: c => c.lastActionBy && getAssigneeName(c.lastActionBy)
   },
   {
@@ -40,7 +51,7 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   }
 ]
 
-export const ClientsScreen = toClass(({ clients, settings, getAssigneeName, getGroupName, handleUpdate }) =>
+export const ClientsScreen = toClass(({ clients, settings, getAssigneeName, getGroupName, handleUpdate, handleRemove }) =>
   <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
@@ -60,6 +71,7 @@ export const ClientsScreen = toClass(({ clients, settings, getAssigneeName, getG
             getAssigneeName={getAssigneeName}
             getGroupName={getGroupName}
             onUpdate={handleUpdate}
+            onRemove={handleRemove}
           />
         </Box>
       </div>

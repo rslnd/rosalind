@@ -16,12 +16,16 @@ const composer = (props) => {
   const handleUpdate = (_id, update) => {
     Clients.update({ _id }, update)
   }
+  const handleRemove = (_id) => {
+    Clients.softRemove({ _id })
+  }
 
   return {
     clients,
     getAssigneeName,
     getGroupName,
-    handleUpdate
+    handleUpdate,
+    handleRemove
   }
 }
 
