@@ -55,5 +55,6 @@ export const schedules = {
   timesheets: 'Zeiterfassung',
   softRemove: 'Löschen',
   softRemoveSuccess: 'Gelöscht',
-  constraints: 'Sonderregeln'
+  constraints: 'Sonderregeln',
+  constraint: 'Sonderregel'
 }

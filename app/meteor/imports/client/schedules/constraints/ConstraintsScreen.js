@@ -1,14 +1,22 @@
 import React from 'react'
+import identity from 'lodash/identity'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'
 import { Table } from '../../components/InlineEditTable'
 import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
 import { Tags } from '../../../api/tags'
+import { CalendarPicker } from '../../calendars/CalendarPicker'
+import { DocumentPicker } from '../../components/DocumentPicker'
+import { __ } from '../../../i18n'
+import { withProps } from 'recompose'
+import { UserPicker } from '../../users/UserPicker';
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Kalender',
-    render: t => getCalendarName(t.calendarId)
+    field: 'calendarId',
+    render: t => getCalendarName(t.calendarId),
+    EditComponent: CalendarPicker
   },
   {
     header: 'Behandlungen',
@@ -34,7 +42,17 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'ÄrztIn',
+    field: 'userId',
+    EditComponent: UserPicker,
     render: t => t.userId && getAssigneeName(t.userId)
+  },
+  {
+    header: 'Wochentage',
+    field: 'weekdays',
+    EditComponent: WeekdayPicker,
+    isMulti: true,
+    unsetWhenEmpty: true,
+    render: c => c.weekdays && c.weekdays.map(toWeekdayLabel).join(', ')
   },
   {
     header: 'Dauer',
@@ -47,14 +65,26 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'bis',
     field: 'hourEnd'
-  },
-  {
-    header: 'Wochentage',
-    render: c => c.weekdays && c.weekdays.join(', ')
   }
 ]
 
-export const ConstraintsScreen = ({ getCalendarName, constraints, getAssigneeName, handleUpdate }) =>
+const toWeekdayLabel = s => __(`time.${s}`)
+
+const WeekdayPicker = withProps({
+  toDocument: identity,
+  toLabel: toWeekdayLabel,
+  toKey: identity,
+  options: () => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+})(DocumentPicker)
+
+export const ConstraintsScreen = ({
+  getCalendarName,
+  constraints,
+  getAssigneeName,
+  handleUpdate,
+  handleInsert,
+  defaultValues
+}) =>
   <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
@@ -65,6 +95,8 @@ export const ConstraintsScreen = ({ getCalendarName, constraints, getAssigneeNam
             getCalendarName={getCalendarName}
             getAssigneeName={getAssigneeName}
             onUpdate={handleUpdate}
+            onInsert={handleInsert}
+            defaultValues={defaultValues}
           />
         </Box>
       </div>

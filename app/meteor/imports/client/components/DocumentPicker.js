@@ -4,7 +4,7 @@ import { __ } from '../../i18n'
 
 const toOption = props => doc => {
   return doc ? {
-    value: doc._id,
+    value: props.toKey ? props.toKey(doc) : doc._id,
     label: props.toLabel(doc)
   } : null
 }

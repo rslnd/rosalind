@@ -59,6 +59,7 @@ class EditModal extends React.Component {
 
   handleChange (e) {
     const value = (idx(e, _ => _.target.value) || idx(e, _ => _.hex) || e)
+
     this.setState({
       value
     })
@@ -193,11 +194,12 @@ export class Table extends React.Component {
   handleUpdate (newValue) {
     const row = this.props.rows[this.state.editing[0]]
     const _id = row ? row._id : undefined
+    const field = this.state.editingStructure.field
 
     if (!_id) {
       this.props.onInsert({
         ...this.state.inserting,
-        [this.state.editingStructure.field]: newValue
+        [field]: newValue
       })
 
       this.setState({
@@ -210,15 +212,16 @@ export class Table extends React.Component {
 
     // Cannot set an array field to null, need to unset to remove
     const update = (this.state.editingStructure.unsetWhenEmpty && (!newValue || newValue.length === 0))
-      ? {
+      ? ({
         $unset: {
-          [this.state.editingStructure.field]: 1
+          [field]: 1
         }
-      } : {
+      }) : ({
         $set: {
-          [this.state.editingStructure.field]: newValue
+          [field]: newValue,
+          a: 'b'
         }
-      }
+      })
 
     console.log('[InlineEditTable] Update', update)
 
