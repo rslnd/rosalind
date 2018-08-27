@@ -17,7 +17,7 @@ const composer = ({ query = '' }) => {
   const subscription = debouncedSubscribe('inboundCalls-resolved', { query })
 
   const selector =
-    query && query.length > 3
+    query && query.length > 2
     ? {
       $or: flatten(query.split(' ').map(word => [
         { lastName: { $regex: '^' + word, $options: 'i' } },
@@ -34,7 +34,7 @@ const composer = ({ query = '' }) => {
       removedAt: -1
     },
     removed: true,
-    limit: 200
+    limit: 60
   }).fetch()
 
   const isLoadingCalls = (subscription && !subscription.ready()) && inboundCalls.length === 0

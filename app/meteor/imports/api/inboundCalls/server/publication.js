@@ -70,7 +70,7 @@ export default () => {
               removedAt: -1
             },
             removed: true,
-            limit: 20
+            limit: 60
           })
         },
         children: [
@@ -82,30 +82,5 @@ export default () => {
         ]
       }
     }
-  })
-
-  publishCompositeTable({
-    name: 'inboundCalls-table',
-    roles: ['inboundCalls'],
-    args: {
-      ids: [String]
-    },
-    fn: function ({ ids }) {
-      this.unblock()
-      return {
-        find: function () {
-          this.unblock()
-          return InboundCalls.find({ _id: { $in: ids } }, { removed: true })
-        },
-        children: [
-          {
-            find: function (inboundCall) {
-              return Comments.find({ docId: inboundCall._id })
-            }
-          }
-        ]
-      }
-    }
-
   })
 }
