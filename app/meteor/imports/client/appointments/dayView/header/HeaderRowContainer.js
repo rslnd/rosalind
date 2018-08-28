@@ -4,6 +4,7 @@ import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { Schedules } from '../../../../api/schedules'
+import { Calendars } from '../../../../api/calendars'
 import { Appointments } from '../../../../api/appointments'
 import { dateToDay } from '../../../../util/time/day'
 import { HeaderRow } from './HeaderRow'
@@ -39,9 +40,29 @@ const composer = (props) => {
     })
   }
 
+  const onChangeCalendarNote = (newNote) => {
+    Calendars.actions.setNote.callPromise({
+      calendarId,
+      newNote
+    }).catch(err => {
+      Alert.error(__('ui.error'))
+      console.error(err)
+    }).then(() => {
+      Alert.success(__('ui.saved'))
+    })
+  }
+
   const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
 
-  return { ...props, onAddUser, onRemoveUser, onChangeAssignee, canEditSchedules, onChangeNote }
+  return {
+    ...props,
+    onAddUser,
+    onRemoveUser,
+    onChangeAssignee,
+    canEditSchedules,
+    onChangeNote,
+    onChangeCalendarNote
+  }
 }
 
 export const HeaderRowContainer = withTracker(composer)(HeaderRow)

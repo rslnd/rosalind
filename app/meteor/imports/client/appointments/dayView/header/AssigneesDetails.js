@@ -57,14 +57,32 @@ const Constraint = ({ constraint }) => (
   </div>
 )
 
-const highlightStyle = {
-  backgroundColor: '#FFF9C4'
+const infoStyle = {
+  borderRadius: '3px',
+  paddingTop: 4,
+  paddingRight: 12,
+  paddingLeft: 12,
+  paddingBottom: 4
 }
 
-const BreakLines = ({ children, placeholder }) =>
+const highlightStyle = {
+  ...infoStyle,
+  backgroundColor: '#FFFBE6',
+  border: '1px solid #FFF4C5',
+  color: '#6E5221'
+}
+
+const importantStyle = {
+  ...infoStyle,
+  backgroundColor: '#FFF0F0',
+  border: '1px solid #FED6D7',
+  color: '#FC2935'
+}
+
+export const BreakLines = ({ children, placeholder }) =>
   children
   ? children.split('\n').map((t, i) => (
-    <span key={i} style={highlightStyle}>{t}<br /></span>
+    <span key={i} style={children.indexOf('!') === -1 ? highlightStyle : importantStyle}>{t}<br /></span>
   ))
   : placeholder
 

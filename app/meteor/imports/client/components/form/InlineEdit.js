@@ -103,12 +103,19 @@ export class InlineEdit extends React.Component {
 
   render () {
     let style = { ...fieldStyle }
+    let spanStyle = {}
     if (this.props.fullWidth) {
-      style = {
-        ...style,
+      const fullWidthStyle = {
         display: 'inline-block',
         width: '100%'
       }
+
+      style = {
+        ...style,
+        ...fullWidthStyle
+      }
+
+      spanStyle = fullWidthStyle
     }
 
     if (!this.state.editing) {
@@ -133,7 +140,7 @@ export class InlineEdit extends React.Component {
         ))) || this.props.placeholder}
       </span>
     } else {
-      return <span onMouseLeave={this.handleMouseLeave}>
+      return <span style={spanStyle} onMouseLeave={this.handleMouseLeave}>
         <form onSubmit={this.handleAccept}>
           <TextField
             value={this.state.value}
@@ -141,6 +148,7 @@ export class InlineEdit extends React.Component {
             onBlur={this.handleBlur}
             autoFocus
             multiline={!!(this.props.rows || this.props.rowsMax)}
+            fullWidth={this.props.fullWidth}
             rows={this.props.rows || 1}
             rowsMax={this.props.rowsMax}
             placeholder={this.props.placeholder}

@@ -14,6 +14,7 @@ import { background, grayDisabled, gray } from '../../../layout/styles'
 import { Modal } from 'react-bootstrap'
 import Button from '@material-ui/core/Button'
 import { UserPicker } from '../../../users/UserPicker'
+import { CalendarNote } from './CalendarNote'
 
 const headerRowStyle = {
   backgroundColor: background,
@@ -219,6 +220,12 @@ export class HeaderRow extends React.Component {
             </Grow>
           )}
         </Popper>
+
+        <CalendarNote
+          calendar={this.props.calendar}
+          canEditSchedules={this.props.canEditSchedules}
+          onChangeNote={this.props.onChangeCalendarNote}
+        />
 
         <AssigneesDetails
           date={this.props.date}
