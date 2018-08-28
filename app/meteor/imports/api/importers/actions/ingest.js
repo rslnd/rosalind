@@ -72,7 +72,6 @@ export const ingest = ({ Importers }) => {
         }
       } catch (e) {
         console.error(e)
-        throw new Meteor.Error(500, 'Failed to ingest')
       }
     }
   })
