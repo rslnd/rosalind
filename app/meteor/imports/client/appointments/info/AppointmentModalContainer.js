@@ -29,10 +29,6 @@ const composer = (props) => {
       assignee,
       comments
     }
-  } else {
-    return {
-      isLoading: true
-    }
   }
 }
 
