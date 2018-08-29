@@ -17,7 +17,7 @@ const getHelmetConfig = () => {
   const domain = Meteor.absoluteUrl().replace(/http(s)*:\/\//, '').replace(/\/$/, '')
   const domains = [
     domain,
-    ...process.env.VIRTUAL_HOST.split(',')
+    ...(process.env.VIRTUAL_HOST ? process.env.VIRTUAL_HOST.split(',') : [])
   ]
   const runtimeConfig = Object.assign(__meteor_runtime_config__, Autoupdate)
 
