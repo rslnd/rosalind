@@ -44,8 +44,8 @@ const getHelmetConfig = () => {
         connectSrc: [
           self,
           ...flatten(domains.map(d => [
-            `https://${domain}`,
-            `wss://${domain}`
+            `https://${d}`,
+            `wss://${d}`
           ])),
           'wss://*.smooch.io',
           'https://*.smooch.io',
