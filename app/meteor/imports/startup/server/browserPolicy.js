@@ -1,6 +1,7 @@
 /* global __meteor_runtime_config__ */
 import { Meteor } from 'meteor/meteor'
 import { WebApp, WebAppInternals } from 'meteor/webapp'
+import flatten from 'lodash/flatten'
 import crypto from 'crypto'
 import { Autoupdate } from 'meteor/autoupdate'
 import helmet from 'helmet'
@@ -14,6 +15,10 @@ const none = "'none'"
 
 const getHelmetConfig = () => {
   const domain = Meteor.absoluteUrl().replace(/http(s)*:\/\//, '').replace(/\/$/, '')
+  const domains = [
+    domain,
+    ...process.env.VIRTUAL_HOST.split(',')
+  ]
   const runtimeConfig = Object.assign(__meteor_runtime_config__, Autoupdate)
 
   // Debug hash generation
@@ -38,8 +43,10 @@ const getHelmetConfig = () => {
         ],
         connectSrc: [
           self,
-          `https://${domain}`,
-          `wss://${domain}`,
+          ...flatten(domains.map(d => [
+            `https://${domain}`,
+            `wss://${domain}`
+          ])),
           'wss://*.smooch.io',
           'https://*.smooch.io',
           'https://*.sentry.io',
