@@ -6,6 +6,6 @@ const Calendars = new Mongo.Collection('calendars')
 
 Calendars.attachSchema(schema)
 Calendars.attachBehaviour('softRemovable')
-Calendars.actions = actions
+Calendars.actions = actions({ Calendars })
 
 export { Calendars }

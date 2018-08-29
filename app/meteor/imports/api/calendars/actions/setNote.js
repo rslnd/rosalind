@@ -3,9 +3,8 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Roles } from 'meteor/alanning:roles'
-import { Calendars } from '../../'
 
-export const setNote = () => {
+export const setNote = ({ Calendars }) => {
   return new ValidatedMethod({
     name: 'calendars/setNote',
     mixins: [CallPromiseMixin],
