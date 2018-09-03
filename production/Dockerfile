@@ -6,7 +6,7 @@ HEALTHCHECK \
   --start-period=15s \
   --retries=3 \
   CMD \
-  curl --fail --silent http://localhost:$PORT || exit 1
+  wget --quiet --tries=1 --spider http://localhost:3000 || exit 1
 
 COPY . /opt/app
 WORKDIR /opt/app/programs/server
@@ -43,7 +43,7 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
 
 USER pptruser
 ENV NODE_ICU_DATA /opt/app/programs/server/npm/node_modules/full-icu/
-ENV PORT 80
-EXPOSE 80
+ENV PORT 3000
+EXPOSE 3000
 
 CMD ["node", "main.js"]
