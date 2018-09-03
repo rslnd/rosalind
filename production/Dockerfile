@@ -3,9 +3,10 @@ FROM node:8.9.3
 HEALTHCHECK \
   --interval=3s \
   --timeout=2s \
-  --start-period=20s \
+  --start-period=15s \
+  --retries=3 \
   CMD \
-  curl --fail --silent http://localhost || exit 1
+  curl --fail --silent http://localhost:$PORT || exit 1
 
 COPY . /opt/app
 WORKDIR /opt/app/programs/server
