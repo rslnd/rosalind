@@ -6,6 +6,7 @@ import de from 'date-fns/locale/de'
 import { formatDistance } from 'date-fns'
 import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
+import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
 import { DocumentPicker } from '../components/DocumentPicker'
 import { Groups } from '../../api/groups'
@@ -24,6 +25,13 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   {
     header: 'Beschreibung',
     field: 'description'
+  },
+  {
+    icon: 'ban',
+    description: 'Gesperrt',
+    field: 'isBanned',
+    render: c => c.isBanned && <Icon name='ban' />,
+    type: Boolean
   },
   {
     header: 'Login ohne Passwort nur für bestimmte Benutzergruppen',

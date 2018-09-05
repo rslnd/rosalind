@@ -1,5 +1,4 @@
 import unidecode from 'unidecode'
-import { formValueSelector } from '../../../../node_modules/redux-form';
 
 export const validateNameCase = (name) => {
   if (name && name.length >= 4) {
@@ -24,8 +23,6 @@ export const validate = ({ appointment, patient }) => {
     patient: {},
     appointment: {}
   }
-
-  console.log('validating', { appointment, patient })
 
   const hasNote = appointment && appointment.note
   const hasPatientId = patient && (patient.patientId || patient.insuranceId)
@@ -65,8 +62,6 @@ export const validate = ({ appointment, patient }) => {
   if (Object.keys(errors.patient).length === 0) {
     delete errors.patient
   }
-
-  console.log(errors)
 
   return errors
 }

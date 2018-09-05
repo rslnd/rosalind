@@ -10,9 +10,15 @@ const withClientKey = (name, args) => {
     args = {}
   }
 
-  return {
-    ...args,
-    clientKey: getClientKey()
+  const clientKey = getClientKey()
+
+  if (clientKey) {
+    return {
+      ...args,
+      clientKey: clientKey
+    }
+  } else {
+    return args
   }
 }
 

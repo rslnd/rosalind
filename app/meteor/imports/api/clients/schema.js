@@ -8,6 +8,11 @@ export const schema = new SimpleSchema({
     index: 1
   },
 
+  isBanned: {
+    type: Boolean,
+    optional: true
+  },
+
   description: {
     type: String,
     optional: true

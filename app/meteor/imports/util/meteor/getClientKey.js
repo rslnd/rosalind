@@ -1,6 +1,6 @@
+import idx from 'idx'
+
 export const getClientKey = () =>
-  window.native &&
-    (
-      (window.native.settings && window.native.settings.clientKey) ||
-      (window.native.clientKey)
-    )
+  idx(window, _ => _.native.clientKey) ||
+  idx(window, _ => _.native.settings.clientKey) ||
+  null

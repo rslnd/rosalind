@@ -11,6 +11,10 @@ const settings = new ReactiveVar(null)
 
 const updateSettings = () => {
   const clientKey = getClientKey()
+  if (!clientKey) {
+    return {}
+  }
+
   subscribe('client-settings', { clientKey })
   const currentClient = Clients.findOne({ clientKey })
 
@@ -28,8 +32,6 @@ const updateSettings = () => {
 
   return settings.get()
 }
-
-// Tracker.autorun(updateSettings)
 
 onNativeEvent('clientKey', updateSettings)
 onNativeEvent('peripherals/screenOn', updateSettings)

@@ -5,6 +5,7 @@ import {
   isTrustedNetwork as checkTrustedNetwork,
   isLocalhost as checkLocalhost
 } from '../../api/customer/server/isTrustedNetwork'
+import { Clients } from '../../api/clients'
 
 const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
   // if (!roles) {
@@ -18,7 +19,7 @@ const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
   return function (clientArgs = {}) {
     try {
       check(clientArgs, {
-        clientKey: Match.Optional(String),
+        clientKey: Match.Maybe(String),
         ...args
       })
     } catch (e) {
@@ -29,6 +30,7 @@ const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
     const isAllowed = checkIsAllowed({
       connection: this.connection,
       userId: this.userId,
+      clientKey: clientArgs.clientKey,
       roles,
       preload
     })
@@ -47,22 +49,11 @@ export const publishComposite = options =>
 export const publish = options =>
   Meteor.publish(options.name, wrappedPublication(options))
 
-// Legacy wrapper for aldeed:tabular
-export const publishCompositeTable = options =>
-  Meteor.publishComposite(options.name, function (tableName, ids, fields) {
-    check(tableName, String)
-    check(ids, Array)
-    check(fields, Match.Optional(Object))
-
-    return wrappedPublication(options).call(this, { ids })
-  })
-
-const checkIsAllowed = ({ connection, userId, roles, preload }) => {
+const checkIsAllowed = ({ connection, userId, clientKey, roles, preload }) => {
   const isTrustedNetwork = (connection && checkTrustedNetwork(connection.clientAddress))
   const isLocalhost = (connection && checkLocalhost(connection.clientAddress))
 
-  // TODO: Implement client key check
-  const isClientKeyValid = true
+  const isClientKeyValid = checkClientKey(clientKey)
 
   const isTrusted = (preload && isTrustedNetwork && isClientKeyValid) || isLocalhost
 
@@ -86,4 +77,18 @@ const checkIsAllowed = ({ connection, userId, roles, preload }) => {
   }
 
   return false
+}
+
+const checkClientKey = (clientKey) => {
+  if (!clientKey) {
+    return false
+  }
+
+  const client = Clients.findOne({ clientKey })
+
+  if (!client || client.isBanned) {
+    return false
+  }
+
+  return true
 }
