@@ -154,7 +154,8 @@ const composer = (props) => {
           const lockedByFirstName = lockedBy && Users.methods.firstName(lockedBy)
 
           const isColliding = assigneeAppointments.find(a =>
-            a.start.getTime() === appointment.start.getTime() &&
+            a.start.getTime() >= appointment.start.getTime() &&
+            a.end.getTime() <= appointment.end.getTime() &&
             a._id !== appointment._id
           )
 
