@@ -21,7 +21,7 @@ const styles = {
     marginLeft: 0,
     paddingLeft: 4,
     whiteSpace: 'pre-wrap',
-    backgroundColor: background,
+    backgroundColor: 'rgba(236, 240, 245, 0.65)',
     '&:hover': {
       backgroundColor: color(background, lightness(3))
     }
