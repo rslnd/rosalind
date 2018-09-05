@@ -3,6 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Roles } from 'meteor/alanning:roles'
+import { Events } from '../../events'
 
 export const setNote = ({ Calendars }) => {
   return new ValidatedMethod({
@@ -27,6 +28,8 @@ export const setNote = ({ Calendars }) => {
       if (!calendar) {
         throw new Meteor.Error(404, 'Calendar not found')
       }
+
+      Events.post('calendars/setNote', { calendarId, newNote })
 
       return Calendars.update({ _id: calendarId }, {
         $set: {

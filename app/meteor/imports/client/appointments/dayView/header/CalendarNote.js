@@ -15,13 +15,18 @@ const barStyle = {
   zIndex: 39,
   paddingLeft: 64,
   paddingRight: 4,
-  paddingTop: 18,
-  paddingBottom: 9,
+  paddingTop: 11,
+  paddingBottom: 1,
   display: 'flex'
 }
 
+const alwaysShow = true
+
+export const isNoteBarVisible = ({ calendar, canEditSchedules }) =>
+  (canEditSchedules || (calendar && calendar.note) || alwaysShow)
+
 export const CalendarNote = ({ calendar, canEditSchedules, onChangeNote }) =>
-  <div style={barStyle}>
+  isNoteBarVisible({ calendar, canEditSchedules }) && <div style={barStyle}>
     {
       canEditSchedules
       ? <InlineEdit

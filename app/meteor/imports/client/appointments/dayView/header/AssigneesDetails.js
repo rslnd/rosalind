@@ -3,6 +3,7 @@ import { Icon } from '../../../components/Icon'
 import { TagsList } from '../../../tags/TagsList'
 import { background } from '../../../layout/styles'
 import { InlineEdit } from '../../../components/form'
+import { isNoteBarVisible } from './CalendarNote';
 
 const barStyle = {
   position: 'fixed',
@@ -14,7 +15,13 @@ const barStyle = {
   left: 60,
   zIndex: 39,
   paddingLeft: 60,
-  display: 'flex'
+  display: 'flex',
+  alignItems: 'flex-start'
+}
+
+const barStyleWithNote = {
+  ...barStyle,
+  marginTop: 80
 }
 
 const cellStyle = {
@@ -26,8 +33,13 @@ const cellStyle = {
   alignItems: 'center',
   paddingLeft: 4,
   paddingRight: 4,
-  paddingTop: 15,
-  paddingBottom: 12
+  paddingTop: 6,
+  paddingBottom: 6
+}
+
+const latchStyle = {
+  marginTop: -5,
+  height: 20
 }
 
 const relevantCellStyle = {
@@ -59,10 +71,12 @@ const Constraint = ({ constraint }) => (
 
 const infoStyle = {
   borderRadius: '3px',
-  paddingTop: 4,
+  paddingTop: 1,
   paddingRight: 12,
   paddingLeft: 12,
-  paddingBottom: 4
+  paddingBottom: 1,
+  display: 'inline-block',
+  width: '100%'
 }
 
 const highlightStyle = {
@@ -137,7 +151,7 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
         </div>
       }
       {
-        !expanded && canEditSchedules && !hasDayNote && <div>
+        !expanded && canEditSchedules && !hasDayNote && <div style={latchStyle}>
           <Icon name='pencil' style={{ opacity: 0.2 }} />
         </div>
       }
@@ -163,7 +177,7 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
 }
 
 export const AssigneesDetails = ({ calendar, daySchedule, assignees, expanded, canEditSchedules, onChangeNote }) => (
-  <div style={barStyle}>
+  <div style={isNoteBarVisible({ calendar, canEditSchedules }) ? barStyleWithNote : barStyle}>
     {
       assignees.map((assignee, i) =>
         <Cell

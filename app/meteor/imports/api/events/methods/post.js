@@ -13,15 +13,16 @@ export const post = ({ Events }) => {
     }).validator(),
 
     run ({ type, level, payload = {} }) {
-      console.log(`[Event] ${level || 'info'}: ${type}`, { payload })
+      const userId = (payload.userId || Meteor.userId())
+      if (!userId) { return }
 
-      if (!Meteor.userId() && !payload.userId) { return }
+      console.log(`[Event] ${level || 'info'}: ${type}`, { payload }, { userId })
       if (Object.keys(payload).length === 0) { payload = null }
 
       Events.insert({
         type: type,
         level: level || 'info',
-        createdBy: Meteor.userId() || (payload && payload.userId),
+        createdBy: userId,
         createdAt: new Date(),
         payload
       })

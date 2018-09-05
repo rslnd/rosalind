@@ -31,7 +31,6 @@ const composer = () => {
 
   const settings = getSettings()
 
-  console.log(`settings: ${JSON.stringify(settings)}`)
   if (settings && settings.lockScreenPin) {
     const { lockScreenPin } = settings
 
