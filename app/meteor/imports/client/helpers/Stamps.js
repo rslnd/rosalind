@@ -1,6 +1,5 @@
 import React from 'react'
-import { toClass } from 'recompose'
-import { compose } from 'react-komposer'
+import { mapProps, toClass } from 'recompose'
 import { __ } from '../../i18n'
 import { RelativeTime } from './RelativeTime'
 import { UserHelper } from '../users/UserHelper'
@@ -19,7 +18,7 @@ const StampsList = ({ stamps, style }) => (
   </div>
 )
 
-const composer = (props, onData) => {
+const composer = props => {
   const stamps = props.fields.filter((field) => {
     return props.doc[`${field}By`] && props.doc[`${field}At`]
   }).map((field) => {
@@ -30,9 +29,9 @@ const composer = (props, onData) => {
     }
   })
 
-  onData(null, { stamps })
+  return { stamps }
 }
 
-const Stamps = compose(composer)(toClass(StampsList))
+const Stamps = mapProps(composer)(toClass(StampsList))
 
 export { Stamps }

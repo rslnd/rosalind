@@ -1,20 +1,34 @@
 import React from 'react'
-import { toClass } from 'recompose'
-import { compose } from 'react-komposer'
 import { relativeTimeString } from '../../util/time/format'
 
-const Time = ({ time }) => {
-  return <span>{time}</span>
+export class RelativeTime extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      tick: 0
+    }
+
+    this.tick = this.tick.bind(this)
+  }
+
+  componentDidMount () {
+    this.setState({
+      intervalId: setInterval(this.tick, 10000)
+    })
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.state.intervalId)
+  }
+
+  tick () {
+    this.setState({
+      tick: this.state.tick + 1
+    })
+  }
+
+  render () {
+    return <span>{relativeTimeString(this.props.time)}</span>
+  }
 }
-
-const composer = (props, onData) => {
-  const update = () => onData(null, { time: relativeTimeString(props.time) })
-  const handler = setInterval(update, 10000)
-  update()
-  const cleanup = () => clearInterval(handler)
-  return cleanup
-}
-
-const RelativeTime = compose(composer)(toClass(Time))
-
-export { RelativeTime }
