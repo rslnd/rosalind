@@ -39,6 +39,10 @@ const styles = {
   moving: {
     opacity: 0.5
   },
+  colliding: {
+    opacity: 0.5,
+    backgroundColor: 'red'
+  },
   patientName: {
     display: 'inline-block',
     maxHeight: '100%',
@@ -62,6 +66,7 @@ class AppointmentItem extends React.Component {
 
     if (!b) { return true }
 
+    if (a.isColliding !== b.isColliding) { return true }
     if (a.admitted !== b.admitted) { return true }
     if (a.canceled !== b.canceled) { return true }
     if (a.treated !== b.treated) { return true }
@@ -93,7 +98,8 @@ class AppointmentItem extends React.Component {
       [ classes.admitted ]: appointment.admitted,
       [ classes.treated ]: appointment.treated,
       [ classes.locked ]: appointment.lockedBy,
-      [ classes.moving ]: this.props.isMoving
+      [ classes.moving ]: this.props.isMoving,
+      [ classes.colliding ]: appointment.isColliding
     })
     const tagColor = getColor(appointment.tags)
 

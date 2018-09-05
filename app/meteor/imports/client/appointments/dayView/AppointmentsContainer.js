@@ -138,7 +138,7 @@ const composer = (props) => {
           ...appointmentsSelector,
           assigneeId: assignee.assigneeId
         }
-        const appointments = Appointments.find(selector).fetch().map((appointment) => {
+        const appointments = Appointments.find(selector).fetch().map((appointment, i, assigneeAppointments) => {
           let patient = Patients.findOne({ _id: appointment.patientId })
           if (patient) {
             patient.prefix = Patients.methods.prefix(patient)
@@ -152,8 +152,19 @@ const composer = (props) => {
 
           const lockedBy = appointment.lockedBy && Users.findOne({ _id: appointment.lockedBy })
           const lockedByFirstName = lockedBy && Users.methods.firstName(lockedBy)
+
+          const isColliding = assigneeAppointments.find(a =>
+            a.start.getTime() === appointment.start.getTime() &&
+            a._id !== appointment._id
+          )
+
+          if (isColliding) {
+            console.log('colliding', isColliding, appointment)
+          }
+
           return {
             ...appointment,
+            isColliding,
             patient,
             notes,
             lockedByFirstName,
