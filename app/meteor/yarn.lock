@@ -826,7 +826,7 @@ babel-register@^6.26.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.15"
 
-babel-runtime@^6.11.6, babel-runtime@^6.23.0, babel-runtime@^6.5.0:
+babel-runtime@^6.11.6, babel-runtime@^6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
   dependencies:
@@ -1018,9 +1018,9 @@ buffer@^4.9.1:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-buffer@^5.1.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.2.0.tgz#53cf98241100099e9eeae20ee6d51d21b16e541e"
+buffer@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.2.1.tgz#dd57fa0f109ac59c602479044dca7b8b3d0b71d6"
   dependencies:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
@@ -1304,6 +1304,10 @@ d3-geo@^1.6.4:
   resolved "https://registry.yarnpkg.com/d3-geo/-/d3-geo-1.10.0.tgz#2972d18014f1e38fc1f8bb6d545377bdfb00c9ab"
   dependencies:
     d3-array "1"
+
+d3-hexbin@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/d3-hexbin/-/d3-hexbin-0.2.2.tgz#9c5837dacfd471ab05337a9e91ef10bfc4f98831"
 
 d3-hierarchy@^1.1.4:
   version "1.1.6"
@@ -1905,10 +1909,6 @@ hoek@4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.1.tgz#9634502aa12c445dd5a7c5734b572bb8738aacbb"
 
-hoist-non-react-statics@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
-
 hoist-non-react-statics@^2.3.1, hoist-non-react-statics@^2.5.0, hoist-non-react-statics@^2.5.4:
   version "2.5.5"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
@@ -1966,9 +1966,15 @@ hyphenate-style-name@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
 
-iconv-lite@0.4.23, iconv-lite@^0.4.19, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
+iconv-lite@0.4.23, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.23.tgz#297871f63be507adcfbfca715d0cd0eed84e9a63"
+  dependencies:
+    safer-buffer ">= 2.1.2 < 3"
+
+iconv-lite@^0.4.24:
+  version "0.4.24"
+  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
@@ -2306,10 +2312,6 @@ lodash-es@^4.17.5:
   version "4.17.5"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.5.tgz#9fc6e737b1c4d151d8f9cae2247305d552ce748f"
 
-lodash._getnative@^3.0.0:
-  version "3.9.1"
-  resolved "https://registry.yarnpkg.com/lodash._getnative/-/lodash._getnative-3.9.1.tgz#570bc7dede46d61cdcde687d65d3eecbaa3aaff5"
-
 lodash.every@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.every/-/lodash.every-4.6.0.tgz#eb89984bebc4364279bb3aefbbd1ca19bfa6c6a7"
@@ -2325,14 +2327,6 @@ lodash.flow@^3.3.0:
 lodash.includes@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.includes/-/lodash.includes-4.3.0.tgz#60bb98a87cb923c68ca1e51325483314849f553f"
-
-lodash.isarguments@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
-
-lodash.isarray@^3.0.0:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
 lodash.isarray@^4.0.0:
   version "4.0.0"
@@ -2365,14 +2359,6 @@ lodash.isplainobject@^4.0.6:
 lodash.isstring@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lodash.isstring/-/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
-
-lodash.keys@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/lodash.keys/-/lodash.keys-3.1.2.tgz#4dbc0472b156be50a0b286855d1bd0b0c656098a"
-  dependencies:
-    lodash._getnative "^3.0.0"
-    lodash.isarguments "^3.0.0"
-    lodash.isarray "^3.0.0"
 
 lodash.keys@^4.2.0:
   version "4.2.0"
@@ -2928,9 +2914,9 @@ punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-puppeteer@^1.6.0:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.6.2.tgz#e3c31f8184e8fb8b36e4263921bcaaab7a99b3bf"
+puppeteer@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.7.0.tgz#edcba2300a50847202c0f19fd15e7a96171ff3bd"
   dependencies:
     debug "^3.1.0"
     extract-zip "^1.6.6"
@@ -3089,16 +3075,6 @@ react-jss@^8.1.0, react-jss@^8.3.3:
     prop-types "^15.6.0"
     theming "^1.3.0"
 
-react-komposer@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-komposer/-/react-komposer-2.0.0.tgz#b964738014a9b4aee494a83c0b5b833d66072a90"
-  dependencies:
-    babel-runtime "^6.11.6"
-    hoist-non-react-statics "^1.2.0"
-    lodash.pick "^4.4.0"
-    react-stubber "^1.0.0"
-    shallowequal "^0.2.2"
-
 react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
@@ -3117,9 +3093,9 @@ react-motion@^0.5.2:
     prop-types "^15.5.8"
     raf "^3.1.0"
 
-react-number-format@^3.1.6:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-3.5.0.tgz#f319ac72dbf07d6d9d33b0c2a91de7a2dba23a5a"
+react-number-format@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-3.5.2.tgz#4c6abcb7aa28f7c6226d89030448d5957d2d3b46"
   dependencies:
     babel-runtime "^6.26.0"
     prop-types "^15.6.0"
@@ -3221,12 +3197,6 @@ react-select@^2.0.0:
     react-input-autosize "^2.2.1"
     react-transition-group "^2.2.1"
 
-react-stubber@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/react-stubber/-/react-stubber-1.0.0.tgz#41ee2cac72d4d4fd70a63896da98e13739b84628"
-  dependencies:
-    babel-runtime "^6.5.0"
-
 react-transition-group@^2.0.0, react-transition-group@^2.2.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.2.1.tgz#e9fb677b79e6455fd391b03823afe84849df4a10"
@@ -3258,9 +3228,9 @@ react-virtualized@^9.18.5:
     prop-types "^15.6.0"
     react-lifecycles-compat "^3.0.4"
 
-react-vis@^1.8.3:
-  version "1.10.4"
-  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.10.4.tgz#383a6dfb4ad2f5a8fbf686dc5419da3c7370bf6b"
+react-vis@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.10.8.tgz#d633c1aba0bf9b9653f13361ad1c7e17f1ffa167"
   dependencies:
     d3-array "^1.2.0"
     d3-collection "^1.0.3"
@@ -3268,6 +3238,7 @@ react-vis@^1.8.3:
     d3-contour "^1.1.0"
     d3-format "^1.2.0"
     d3-geo "^1.6.4"
+    d3-hexbin "^0.2.2"
     d3-hierarchy "^1.1.4"
     d3-interpolate "^1.1.4"
     d3-sankey "^0.7.1"
@@ -3524,12 +3495,6 @@ sha.js@^2.4.0, sha.js@^2.4.8:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-shallowequal@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-0.2.2.tgz#1e32fd5bcab6ad688a4812cb0cc04efc75c7014e"
-  dependencies:
-    lodash.keys "^3.1.2"
-
 signal-exit@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
@@ -3538,9 +3503,9 @@ slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
 
-smooch@^4.7.2:
-  version "4.12.11"
-  resolved "https://registry.yarnpkg.com/smooch/-/smooch-4.12.11.tgz#6bbe2f148fb7ea4a9f72df3df7d2e296e543a287"
+smooch@^4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/smooch/-/smooch-4.13.0.tgz#1e47581050a52f93f13163e85a93ea219e994b9c"
 
 source-map-support@^0.4.15, source-map-support@^0.4.2:
   version "0.4.18"
