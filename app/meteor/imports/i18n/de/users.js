@@ -8,9 +8,11 @@ export const users = {
   thisSave: 'MitarbeiterIn speichern',
   editSuccess: 'Änderungen gespeichert',
   changePassword: 'Passwort ändern',
+  newPassword: 'Neues Passwort',
   setRoles: 'Berechtigungen ändern',
   employee: 'MitarbeiterIn',
   selectEmployee: 'MitarbeiterIn auswählen',
+  profileFor: 'Profil von',
   group: 'Gruppe',
   group_plural: 'Gruppen',
   groups: {
