@@ -82,7 +82,8 @@ const sidebarItems = ({ history }) => {
       icon: 'unlock-alt',
       roles: ['admin', 'edit-users'],
       subItems: [
-        { name: 'thisAll' }
+        { name: 'thisAll' },
+        { name: 'thisNew', path: '/new' }
       ]
     },
     {

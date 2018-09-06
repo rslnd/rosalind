@@ -32,6 +32,7 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine, user 
     <Field
       name='roles'
       component={TextField}
+      label={__('users.roles')}
     />
 
     <br /><br />

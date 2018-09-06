@@ -21,7 +21,7 @@ export const action = ({ name, args = {}, roles, allowAnonymous, fn }) => {
     },
     run: function (safeArgs) {
       if (!allowAnonymous) {
-        if (!Roles.userIsInRole(this.userId, roles)) {
+        if (!Roles.userIsInRole(this.userId, roles, Roles.GLOBAL_GROUP)) {
           throw new Meteor.Error(403, 'Not authorized')
         }
       }

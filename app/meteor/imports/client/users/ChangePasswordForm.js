@@ -33,23 +33,25 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
     }</Button>
   </form>
 
-const asyncValidate = async ({ password }) => {
+export const asyncValidate = async ({ password }) => {
   const breachCount = await Users.methods.isWeakPassword(password)
   if (breachCount && breachCount > 0) {
     throw { password: __('users.passwordBreached', { breachCount }) } // eslint-disable-line
   }
 }
 
-const validate = ({ password }, props) => {
+export const validate = ({ password }, props) => {
   const minLength = 8
   if (!password || password.length < minLength) {
     return { password: __('users.passwordMinLength', { minLength }) }
   }
 
-  const profile = JSON.stringify(props.user)
-  const profileContainsPassword = profile.toLowerCase().indexOf(password.toLowerCase()) !== -1
-  if (profileContainsPassword) {
-    return { password: __('users.profileContainsPassword') }
+  if (props && props.user) {
+    const profile = JSON.stringify(props.user)
+    const profileContainsPassword = profile.toLowerCase().indexOf(password.toLowerCase()) !== -1
+    if (profileContainsPassword) {
+      return { password: __('users.profileContainsPassword') }
+    }
   }
 
   return {}

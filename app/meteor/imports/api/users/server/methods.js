@@ -23,18 +23,6 @@ export default () => {
       Events.post('users/logout', { userId })
     },
 
-    'users/create': (form) => {
-      check(form, Actions.Create)
-
-      if (!Roles.userIsInRole(Meteor.userId(), ['admin'])) {
-        throw new Meteor.Error('not-authorized')
-      }
-
-      console.log('[Users] Creating user', form.username)
-      Events.post('users/create', { form, userId: Meteor.userId() }, 'warning')
-      Accounts.createUser(form)
-    },
-
     'users/updatePassword': (form) => {
       check(form, Actions.UpdatePassword)
 

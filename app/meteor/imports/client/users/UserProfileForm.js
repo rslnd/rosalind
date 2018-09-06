@@ -29,8 +29,8 @@ const onSubmit = (fields, dispatch, props) =>
     })
   })
 
-const Fields = ({ handleSubmit, submitting, invalid, validating, pristine, user }) =>
-  <form onSubmit={handleSubmit}>
+export const UserProfileFields = () =>
+  <div>
     <NameFields gender={false} titles />
 
     <div className='row'>
@@ -62,7 +62,12 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine, user 
         />
       </div>
     </div>
+  </div>
 
+const Fields = ({ handleSubmit, submitting, invalid, validating, pristine, user }) =>
+  <form onSubmit={handleSubmit}>
+
+    <UserProfileFields />
     <br /><br />
 
     <Button
