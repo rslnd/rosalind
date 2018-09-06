@@ -1,0 +1,4 @@
+Contact: mailto:me@albertzak.com
+Contact: mailto:security@rslnd.com
+Encryption: https://keybase.io/albertzak
+Permission: none
