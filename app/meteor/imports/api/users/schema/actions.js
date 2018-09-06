@@ -29,7 +29,7 @@ const UpdatePassword = new SimpleSchema({
 
 const UpdateRoles = new SimpleSchema({
   roles: {
-    type: String
+    type: [String]
   },
 
   userId: {

@@ -23,14 +23,6 @@ export default () => {
       Events.post('users/logout', { userId })
     },
 
-    'users/getToken': () => {
-      const userId = Meteor.userId()
-      if (!userId) { return }
-
-      console.log('[Users] User requested token', { userId })
-      return user.lastToken()
-    },
-
     'users/create': (form) => {
       check(form, Actions.Create)
 
@@ -42,7 +34,6 @@ export default () => {
       Events.post('users/create', { form, userId: Meteor.userId() }, 'warning')
       Accounts.createUser(form)
     },
-
 
     'users/updatePassword': (form) => {
       check(form, Actions.UpdatePassword)
@@ -64,9 +55,9 @@ export default () => {
       }
 
       Events.post('users/updateRoles', { form, userId: Meteor.userId() }, 'warning')
-      const roles = form.roles.replace(/\s/ig, '').split(',')
-      console.log('[Users] Setting roles for user', form.userId, roles)
-      Roles.setUserRoles(form.userId, roles, Roles.GLOBAL_GROUP)
+
+      console.log('[Users] Setting roles for user', form.userId, form.roles)
+      Roles.setUserRoles(form.userId, form.roles, Roles.GLOBAL_GROUP)
     }
   })
 }

@@ -9,7 +9,7 @@ export const users = {
   editSuccess: 'Änderungen gespeichert',
   changePassword: 'Passwort ändern',
   newPassword: 'Neues Passwort',
-  setRoles: 'Berechtigungen ändern',
+  changeRoles: 'Berechtigungen ändern',
   employee: 'MitarbeiterIn',
   selectEmployee: 'MitarbeiterIn auswählen',
   profileFor: 'Profil von',
