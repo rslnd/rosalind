@@ -36,19 +36,20 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
 const asyncValidate = async ({ password }) => {
   const breachCount = await Users.methods.isWeakPassword(password)
   if (breachCount && breachCount > 0) {
-    throw { password: `Dieses Passwort wurde ${breachCount} Mal im Internet gefunden. Bitte ein sicheres, einmaliges Passwort wählen.` } // eslint-disable-line
+    throw { password: __('users.passwordBreached', { breachCount }) } // eslint-disable-line
   }
 }
 
 const validate = ({ password }, props) => {
-  if (!password || password.length < 8) {
-    return { password: `Bitte ein sicheres Passwort mit mindestens 8 Zeichen wählen` }
+  const minLength = 8
+  if (!password || password.length < minLength) {
+    return { password: __('users.passwordMinLength', { minLength }) }
   }
 
   const profile = JSON.stringify(props.user)
   const profileContainsPassword = profile.toLowerCase().indexOf(password.toLowerCase()) !== -1
   if (profileContainsPassword) {
-    return { password: 'Bitte ein anderes, sicheres Passwort wählen' }
+    return { password: __('users.profileContainsPassword') }
   }
 
   return {}

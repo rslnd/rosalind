@@ -13,6 +13,9 @@ export const users = {
   employee: 'MitarbeiterIn',
   selectEmployee: 'MitarbeiterIn auswählen',
   profileFor: 'Profil von',
+  passwordBreached: 'Dieses Passwort wurde __breachCount__ Mal im Internet gefunden. Bitte ein sicheres, einmaliges Passwort wählen.',
+  passwordMinLength: 'Bitte ein sicheres Passwort mit mindestens __minLength__ Zeichen wählen.',
+  profileContainsPassword: 'Bitte ein anderes, sicheres Passwort wählen.',
   group: 'Gruppe',
   group_plural: 'Gruppen',
   groups: {
