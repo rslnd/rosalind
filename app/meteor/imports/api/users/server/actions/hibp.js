@@ -6,6 +6,7 @@ export const hibp = action({
   args: {
     hashPrefix: String
   },
+  allowAnonymous: true,
   fn: async ({ hashPrefix }) => {
     return await queryHibp(hashPrefix)
   }

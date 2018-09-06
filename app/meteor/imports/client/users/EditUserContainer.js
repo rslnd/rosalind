@@ -7,6 +7,7 @@ import { Users } from '../../api/users'
 import { Icon } from '../components/Icon'
 import { ChangePasswordForm } from './ChangePasswordForm'
 import { ChangeRolesForm } from './ChangeRolesForm'
+import { UserProfileForm } from './UserProfileForm'
 
 const composer = (props) => {
   const _id = props.match.params.id
@@ -23,9 +24,16 @@ const composer = (props) => {
 const EditUser = ({ user }) =>
   <div>
     <ContentHeader>
-      <Icon name='user' /> {__('users.profileFor')} <b>{Users.methods.fullNameWithTitle(user)}</b>
+      <Icon name='user' /> {Users.methods.fullNameWithTitle(user)} - <b>{user.username}</b>
     </ContentHeader>
     <div className='content'>
+      <div className='row'>
+        <div className='col-md-12'>
+          <Box title={__('users.editProfile')} type='primary'>
+            <UserProfileForm user={user} />
+          </Box>
+        </div>
+      </div>
       <div className='row'>
         <div className='col-md-4'>
           <Box title={__('users.changePassword')} type='warning'>

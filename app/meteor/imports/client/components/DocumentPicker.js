@@ -50,7 +50,11 @@ export class DocumentPicker extends React.Component {
   render () {
     return (
       <Select
-        value={this.state.query}
+        value={
+          this.props.value
+          ? toOption(this.props)(this.props.toDocument(this.props.value))
+          : this.state.query
+        }
         onChange={this.handleQueryChange}
         options={this.props.options(this.props).map(toOption(this.props))}
         ignoreCase

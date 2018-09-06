@@ -8,14 +8,7 @@ import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
-import { DocumentPicker } from '../components/DocumentPicker'
-import { Groups } from '../../api/groups'
-
-const GroupPicker = withProps({
-  toDocument: _id => Groups.findOne({ _id }),
-  toLabel: group => group.name,
-  options: () => Groups.find({}).fetch()
-})(DocumentPicker)
+import { GroupPicker } from '../users/GroupPicker'
 
 const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   {

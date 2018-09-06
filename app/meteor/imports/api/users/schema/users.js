@@ -44,6 +44,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  employee: {
+    type: Boolean,
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     optional: true,
