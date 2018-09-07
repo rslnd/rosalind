@@ -22,9 +22,6 @@ export const insert = ({ Users }) =>
     fn: async (args) => {
       const { username, password, roles, ...profile } = args
 
-      console.log('aargs', args)
-      console.log('profile', profile)
-
       const userId = Accounts.createUser({
         username,
         password

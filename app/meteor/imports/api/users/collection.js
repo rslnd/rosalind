@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor'
-import { Mongo } from 'meteor/mongo'
 import * as methods from './methods'
 import Schema from './schema/users'
 import actions from './actions'
