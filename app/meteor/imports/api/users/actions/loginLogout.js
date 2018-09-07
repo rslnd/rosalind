@@ -1,15 +1,34 @@
-import { action } from '../../../util/meteor/action'
+import { action, Match } from '../../../util/meteor/action'
 import { Events } from '../../events'
 
 export const login = ({ Users }) =>
   action({
     name: 'users/login',
     allowAnonymous: true,
-    fn () {
+    args: {
+      weakPassword: Match.Maybe(Match.OneOf(Boolean, Number))
+    },
+    fn ({ weakPassword } = {}) {
       const userId = this.userId
       if (!userId) { return }
       console.log('[Users] Logged in', { userId })
-      Events.post('users/login', { userId })
+
+      if (weakPassword) {
+        Users.update({ _id: this.userId }, { $set: {
+          weakPassword
+        }})
+
+        Events.post('users/loginWithWeakPassword', { userId, weakPassword }, 'warning')
+      } else {
+        Users.update({ _id: this.userId }, { $unset: {
+          weakPassword: 1
+        }})
+        Events.post('users/login', { userId })
+      }
+
+      Users.update({ _id: this.userId }, { $set: {
+        lastLoginAt: new Date()
+      }})
     }
   })
 

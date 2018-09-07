@@ -44,6 +44,16 @@ export default new SimpleSchema({
     optional: true
   },
 
+  lastLoginAt: {
+    type: Date,
+    optional: true
+  },
+
+  weakPassword: {
+    type: Number,
+    optional: true
+  },
+
   employee: {
     type: Boolean,
     optional: true

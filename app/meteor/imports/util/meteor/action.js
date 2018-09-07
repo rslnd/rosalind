@@ -4,6 +4,8 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Roles } from 'meteor/alanning:roles'
 import { check, Match } from 'meteor/check'
 
+export { Match }
+
 export const action = ({ name, args = {}, roles, allowAnonymous, fn }) => {
   if (!name) {
     throw new Error('Action needs a name')

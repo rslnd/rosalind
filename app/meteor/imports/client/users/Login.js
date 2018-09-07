@@ -7,6 +7,7 @@ import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { getClientKey } from '../../util/meteor/getClientKey'
+import { isWeakPassword } from '../../api/users/methods'
 
 export class Login extends React.Component {
   constructor (props) {
@@ -52,9 +53,17 @@ export class Login extends React.Component {
             Alert.error(__('login.failedMessage'))
         }
       } else {
-        Meteor.call('users/login', () => {
-          console.log('[Users] Logged in successfully')
-        })
+        if (password) {
+          isWeakPassword(password).then((weakPassword) => {
+            Meteor.call('users/login', { weakPassword }, () => {
+              console.log('[Users] Logged in successfully', { weakPassword })
+            })
+          })
+        } else {
+          Meteor.call('users/login', {}, () => {
+            console.log('[Users] Logged in successfully')
+          })
+        }
       }
     }
 
