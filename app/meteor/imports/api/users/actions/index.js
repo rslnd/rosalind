@@ -3,6 +3,7 @@ import { updatePassword } from './updatePassword'
 import { updateProfile } from './updateProfile'
 import { insert } from './insert'
 import { login, logout } from './loginLogout'
+import { remove } from './remove'
 
 export default ({ Users }) => ({
   setPasswordless: setPasswordless({ Users }),
@@ -10,5 +11,6 @@ export default ({ Users }) => ({
   updateProfile: updateProfile({ Users }),
   insert: insert({ Users }),
   login: login({ Users }),
-  logout: logout({ Users })
+  logout: logout({ Users }),
+  remove: remove({ Users })
 })

@@ -9,6 +9,7 @@ import { ChangePasswordForm } from './ChangePasswordForm'
 import { ChangePasswordlessForm } from './ChangePasswordlessForm'
 import { ChangeRolesForm } from './ChangeRolesForm'
 import { UserProfileForm } from './UserProfileForm'
+import { RemoveUserForm } from './RemoveUserForm'
 import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = (props) => {
@@ -56,6 +57,12 @@ const EditUser = ({ user }) =>
         <div className='col-md-4'>
           <Box title={__('users.passwordlessLogin')} type='danger'>
             <ChangePasswordlessForm user={user} />
+          </Box>
+        </div>
+
+        <div className='col-md-4'>
+          <Box title={__('users.remove')}>
+            <RemoveUserForm user={user} />
           </Box>
         </div>
       </div>

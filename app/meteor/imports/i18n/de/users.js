@@ -15,6 +15,8 @@ export const users = {
   password: 'Passwort',
   changePassword: 'Passwort ändern',
   newPassword: 'Neues Passwort',
+  remove: 'Löschen',
+  confirmRemove: 'Ja, Benutzerkonto löschen.',
   usernameTaken: 'Bereits vergeben',
   changeRoles: 'Berechtigungen ändern',
   employee: 'Aktive MitarbeiterIn',

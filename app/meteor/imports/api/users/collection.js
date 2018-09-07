@@ -5,6 +5,7 @@ import actions from './actions'
 
 const Users = Meteor.users
 Users.attachSchema(Schema)
+Users.attachBehaviour('softRemovable')
 Users.methods = methods
 Users.actions = actions({ Users })
 
