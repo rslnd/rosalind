@@ -6,10 +6,14 @@ import { __ } from '../../i18n'
 import { Users } from '../../api/users'
 import { Icon } from '../components/Icon'
 import { ChangePasswordForm } from './ChangePasswordForm'
+import { ChangePasswordlessForm } from './ChangePasswordlessForm'
 import { ChangeRolesForm } from './ChangeRolesForm'
 import { UserProfileForm } from './UserProfileForm'
+import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = (props) => {
+  subscribe('users-permissions')
+
   const _id = props.match.params.id
   console.log(props, _id)
   const user = Users.findOne({ _id })
@@ -47,6 +51,15 @@ const EditUser = ({ user }) =>
           </Box>
         </div>
       </div>
+
+      <div className='row'>
+        <div className='col-md-4'>
+          <Box title={__('users.passwordlessLogin')} type='danger'>
+            <ChangePasswordlessForm user={user} />
+          </Box>
+        </div>
+      </div>
+
     </div>
   </div>
 
