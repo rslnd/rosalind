@@ -10,6 +10,7 @@ import livechat from './livechat'
 import passwordlessLogin from './passwordlessLogin'
 import appcache from './appcache'
 import defaultAccount from './defaultAccount'
+import rateLimiter from './rateLimiter'
 import development from './development'
 import api from './api'
 
@@ -26,6 +27,7 @@ export default function () {
   browserPolicy()
   headers()
   livechat()
+  rateLimiter()
   development()
   api()
 }
