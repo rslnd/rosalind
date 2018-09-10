@@ -53,7 +53,7 @@ export class TagsField extends React.Component {
         return true
       }
     }).filter(t => {
-      if (t.assigneeIds) {
+      if ((!allowedTags || allowedTags.length === 0) && t.assigneeIds) {
         return t.assigneeIds.includes(assigneeId)
       } else {
         return true
@@ -65,7 +65,7 @@ export class TagsField extends React.Component {
         return true
       }
     }).filter(t => {
-      if (t.calendarIds && calendarId) {
+      if ((!allowedTags || allowedTags.length === 0) && t.calendarIds && calendarId) {
         return t.calendarIds.includes(calendarId)
       } else {
         return true
