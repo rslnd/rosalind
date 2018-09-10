@@ -91,6 +91,12 @@ export const Schema = new SimpleSchema({
     allowedValues: weekdays
   },
 
+  weekday: {
+    type: String,
+    optional: true,
+    allowedValues: weekdays
+  },
+
   from: {
     type: HM,
     optional: true

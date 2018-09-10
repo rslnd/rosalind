@@ -159,10 +159,6 @@ const composer = (props) => {
             a._id !== appointment._id
           )
 
-          if (isColliding) {
-            console.log('colliding', isColliding, appointment)
-          }
-
           return {
             ...appointment,
             isColliding,
