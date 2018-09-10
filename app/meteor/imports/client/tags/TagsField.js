@@ -59,7 +59,7 @@ export class TagsField extends React.Component {
         return true
       }
     }).filter(t => {
-      if (t.blacklistAssigneeIds) {
+      if ((!allowedTags || allowedTags.length === 0) && t.blacklistAssigneeIds) {
         return !t.blacklistAssigneeIds.includes(assigneeId)
       } else {
         return true
