@@ -15,7 +15,6 @@ Func Main()
   GenerateEOSWinReport("Ärzte Statistik Umsätze")
   CloseEOSWin()
   RestorePreviousPrinter($mPreviousPrinterSettings)
-  CloseRosalind()
   Info("Success")
 EndFunc
 
@@ -143,18 +142,6 @@ Func CloseEOSWin($iRetries = 4)
   Else
     Info("No EOSWin window found, force closing last instance")
     ProcessClose("ADSPraxis.exe")
-  EndIf
-EndFunc
-
-Func CloseRosalind()
-  If GetCmdLineArg("closeRosalind", 0) Then
-    ; This is a hack, should be moved to Electron
-    Info("Waiting 7 minutes before closing Rosalind")
-    Sleep(1000 * 60 * 7)
-    ProcessClose("Rosalind.exe")
-    Info("Closed Rosalind")
-  Else
-    Info("Skipping closing Rosalind")
   EndIf
 EndFunc
 

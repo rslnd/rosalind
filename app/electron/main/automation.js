@@ -2,17 +2,23 @@ const childProcess = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const temp = require('temp')
-const { ipcMain } = require('electron')
+const { app, ipcMain } = require('electron')
 const logger = require('./logger')
 const settings = require('./settings')
 const { captureException } = require('@sentry/electron')
 
 const exeName = 'generateEoswinReports.exe'
 const printerSettingsName = 'eoswinPrinter.reg'
+const closeRosalindTimeout = 10 * 60 * 1000
 
-const start = (argv = []) => {
+const start = async (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
-    generateEoswinReports({ closeRosalind: true })
+    await generateEoswinReports()
+    logger.info('[automation] generateEoswinReports: Quitting in', closeRosalindTimeout, 'ms')
+    setTimeout(() => {
+      logger.info('[automation] generateEoswinReports: Quitting now')
+      app.quit()
+    }, closeRosalindTimeout)
   }
 
   ipcMain.on('webEvent', (name, { day } = {}) => {
@@ -22,7 +28,7 @@ const start = (argv = []) => {
   })
 }
 
-const generateEoswinReports = ({ day, closeRosalind = false } = {}) => {
+const generateEoswinReports = ({ day } = {}) => {
   extractAssets([exeName, printerSettingsName], (err, [exePath, _]) => {
     if (err) {
       captureException(new Error(
@@ -41,10 +47,6 @@ const generateEoswinReports = ({ day, closeRosalind = false } = {}) => {
 
     if (day) {
       spawnArgs.push(`/day:${day.year}-${day.month}-${day.day}`)
-    }
-
-    if (closeRosalind) {
-      spawnArgs.push(`/closeRosalind:yes`)
     }
 
     const child = childProcess.spawn(exePath, spawnArgs)
