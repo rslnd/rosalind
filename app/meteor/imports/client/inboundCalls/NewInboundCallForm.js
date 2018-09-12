@@ -8,7 +8,7 @@ import { __ } from '../../i18n'
 
 class NewInboundCallFormComponent extends React.Component {
   render () {
-    const { pristine, submitting, handleSubmit, onSubmit } = this.props
+    const { invalid, pristine, submitting, handleSubmit, onSubmit } = this.props
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} className='mui' autoComplete='off'>
@@ -52,7 +52,7 @@ class NewInboundCallFormComponent extends React.Component {
             <Button variant='raised' type='submit'
               fullWidth
               color={(!submitting && !pristine) ? 'primary' : 'default'}
-              disabled={pristine || submitting}>
+              disabled={invalid || pristine || submitting}>
               {__('inboundCalls.thisSave')}
             </Button>
           </div>
@@ -66,5 +66,15 @@ class NewInboundCallFormComponent extends React.Component {
 export const NewInboundCallForm = reduxForm({
   form: 'newInboundCall',
   fields: ['lastName', 'firstName', 'telephone', 'note', 'privatePatient'],
-  validate: () => true
+  validate: ({ lastName, note }) => {
+    let errors = {}
+    if (!lastName) {
+      errors.lastName = __('ui.required')
+    }
+
+    if (!note) {
+      errors.note = __('ui.required')
+    }
+    return errors
+  }
 })(NewInboundCallFormComponent)

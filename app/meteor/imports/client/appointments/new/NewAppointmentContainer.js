@@ -47,7 +47,7 @@ export class NewAppointmentContainerComponent extends React.Component {
     }
 
     let newPatient = null
-    let patientId = values.patient && values.patient.patientId
+    let patientId = values.patient && (values.patient.patientId || values.patient.insuranceId)
     const hasNote = values.appointment && values.appointment.note
     if (!hasNote && !patientId) {
       Alert.error(__('appointments.patientOrNoteError'))
