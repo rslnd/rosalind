@@ -27,12 +27,17 @@ const getTranslation = () => {
 }
 
 const init = () => {
+  const avatarUrl = new window.URL('/images/avatar.jpg', window.location.origin).href
+
   if (server.env.SMOOCH_APP_ID && !server.env.TEST) {
     if (Smooch) {
       Smooch.init({
         appId: server.env.SMOOCH_APP_ID,
         customText: getTranslation(),
-        menuItems: {}
+        menuItems: {},
+        soundNotificationEnabled: false,
+        imageUploadEnabled: false,
+        businessIconUrl: avatarUrl
       }).then(() => {
         let currentUserId = null
         Tracker.autorun(throttle(() => {

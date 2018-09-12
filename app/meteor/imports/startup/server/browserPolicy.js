@@ -71,8 +71,7 @@ const getHelmetConfig = () => {
         ],
         imgSrc: [
           self,
-          'https://*.smooch.io',
-          'https://www.gravatar.com'
+          'https://*.smooch.io'
         ],
         manifestSrc: [
           none
