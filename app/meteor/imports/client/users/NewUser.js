@@ -77,15 +77,17 @@ const validateProfile = ({ username }) => {
 
 const validate = values => {
   return {
-    ...validatePassword(values),
+    ...(values.password ? validatePassword(values) : {}),
     ...validateProfile(values)
   }
 }
 
 const asyncValidate = values =>
-  Promise.all([
-    asyncValidatePassword(values)
-  ])
+  values.password
+    ? Promise.all([
+      asyncValidatePassword(values)
+    ])
+    : Promise.resolve()
 
 export const NewUser = reduxForm({
   form: 'newUser',

@@ -9,7 +9,7 @@ export const insert = ({ Users }) =>
     name: 'users/insert',
     args: {
       username: String,
-      password: String,
+      password: Match.Maybe(String),
       lastName: String,
       roles: Match.Maybe(String),
       firstName: Match.Maybe(String),
@@ -22,10 +22,9 @@ export const insert = ({ Users }) =>
     fn: async (args) => {
       const { username, password, roles, ...profile } = args
 
-      const userId = Accounts.createUser({
-        username,
-        password
-      })
+      const userId = password
+        ? Accounts.createUser({ username, password })
+        : Accounts.createUser({ username })
 
       console.log('[Users] insert', userId, username)
 
