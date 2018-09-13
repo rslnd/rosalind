@@ -2,14 +2,14 @@ import { Meteor } from 'meteor/meteor'
 import { action } from '../../../util/meteor/action'
 import { Events } from '../../events'
 
-export const remove = ({ Users }) =>
+export const unsetPassword = ({ Users }) =>
   action({
-    name: 'users/remove',
+    name: 'users/unsetPassword',
     args: {
       userId: String
     },
     roles: ['admin', 'users-edit'],
-    fn: async ({ userId }) => {
+    fn: async ({ userId, passwordless }) => {
       const user = Users.findOne({ _id: userId })
 
       if (!user) {
@@ -17,22 +17,12 @@ export const remove = ({ Users }) =>
       }
 
       Users.update({ _id: userId }, {
-        $set: {
-          username: user.username + 'Deleted',
-          employee: false,
-          removed: true,
-          removedAt: new Date(),
-          removedBy: this.userId
-        }
-      })
-
-      Users.update({ _id: userId }, {
         $unset: {
-          services: 1,
+          'services.password': 1,
           weakPassword: 1
         }
       })
 
-      Events.post('users/remove', { userId }, 'warning')
+      Events.post('users/unsetPassword', { userId }, 'warning')
     }
   })

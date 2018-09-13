@@ -64,10 +64,18 @@ const structure = ({ getAssigneeName, isInRole }) => [
   {
     icon: 'key',
     description: 'Passwort',
-    render: u => <span>
-      {(u.services && u.services.password && Object.keys(u.services.password).length >= 1) &&
-        <Icon name='key' title='Passwort' />}
-    </span>
+    render: u => {
+      const hasPassword = (u.services && u.services.password && Object.keys(u.services.password).length >= 1)
+      return <span>
+        {
+          u.weakPassword
+          ? <span style={{ color: 'red' }}><Icon name='key' title='Passwort' /></span>
+          : hasPassword
+          ? <Icon name='key' title='Passwort' />
+          : null
+        }
+      </span>
+    }
   },
 
   {

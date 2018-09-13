@@ -6,6 +6,7 @@ import { __ } from '../../i18n'
 import { Users } from '../../api/users'
 import { Icon } from '../components/Icon'
 import { ChangePasswordForm } from './ChangePasswordForm'
+import { UnsetPasswordForm } from './UnsetPasswordForm'
 import { ChangePasswordlessForm } from './ChangePasswordlessForm'
 import { ChangeRolesForm } from './ChangeRolesForm'
 import { UserProfileForm } from './UserProfileForm'
@@ -41,22 +42,29 @@ const EditUser = ({ user }) =>
       </div>
       <div className='row'>
         <div className='col-md-4'>
+          <Box title={__('users.passwordlessLogin')} type='warning'>
+            <ChangePasswordlessForm user={user} />
+          </Box>
+        </div>
+
+        <div className='col-md-4'>
           <Box title={__('users.changePassword')} type='warning'>
             <ChangePasswordForm user={user} />
           </Box>
         </div>
 
-        <div className='col-md-8'>
-          <Box title={__('users.changeRoles')} type='danger'>
-            <ChangeRolesForm user={user} />
+        <div className='col-md-4'>
+          <Box title={__('users.unsetPassword')} type='warning'>
+            <UnsetPasswordForm user={user} />
           </Box>
         </div>
       </div>
 
       <div className='row'>
-        <div className='col-md-4'>
-          <Box title={__('users.passwordlessLogin')} type='danger'>
-            <ChangePasswordlessForm user={user} />
+
+        <div className='col-md-8'>
+          <Box title={__('users.changeRoles')} type='warning'>
+            <ChangeRolesForm user={user} />
           </Box>
         </div>
 

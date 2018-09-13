@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon } from '../../../components/Icon'
 import { TagsList } from '../../../tags/TagsList'
-import { background } from '../../../layout/styles'
+import { background, highlight, important } from '../../../layout/styles'
 import { InlineEdit } from '../../../components/form'
 import { isNoteBarVisible } from './CalendarNote';
 
@@ -69,34 +69,10 @@ const Constraint = ({ constraint }) => (
   </div>
 )
 
-const infoStyle = {
-  borderRadius: '3px',
-  paddingTop: 1,
-  paddingRight: 12,
-  paddingLeft: 12,
-  paddingBottom: 1,
-  display: 'inline-block',
-  width: '100%'
-}
-
-const highlightStyle = {
-  ...infoStyle,
-  backgroundColor: '#FFFBE6',
-  border: '1px solid #FFF4C5',
-  color: '#6E5221'
-}
-
-const importantStyle = {
-  ...infoStyle,
-  backgroundColor: '#FFF0F0',
-  border: '1px solid #FED6D7',
-  color: '#FC2935'
-}
-
 export const BreakLines = ({ children, placeholder }) =>
   children
   ? children.split('\n').map((t, i) => (
-    <span key={i} style={children.indexOf('!') === -1 ? highlightStyle : importantStyle}>{t}<br /></span>
+    <span key={i} style={children.indexOf('!') === -1 ? highlight : important}>{t}<br /></span>
   ))
   : placeholder
 

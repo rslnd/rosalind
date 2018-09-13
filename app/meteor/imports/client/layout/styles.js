@@ -20,3 +20,27 @@ export const red = '#e37067'
 export const text = '#333'
 
 export const fontSize = '16px'
+
+const infoStyle = {
+  borderRadius: '3px',
+  paddingTop: 1,
+  paddingRight: 12,
+  paddingLeft: 12,
+  paddingBottom: 1,
+  display: 'inline-block',
+  width: '100%'
+}
+
+export const highlight = {
+  ...infoStyle,
+  backgroundColor: '#FFFBE6',
+  border: '1px solid #FFF4C5',
+  color: '#6E5221'
+}
+
+export const important = {
+  ...infoStyle,
+  backgroundColor: '#FFF0F0',
+  border: '1px solid #FED6D7',
+  color: '#FC2935'
+}

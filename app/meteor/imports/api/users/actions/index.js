@@ -1,4 +1,5 @@
 import { setPasswordless } from './setPasswordless'
+import { unsetPassword } from './unsetPassword'
 import { updatePassword } from './updatePassword'
 import { updateProfile } from './updateProfile'
 import { updateRoles } from './updateRoles'
@@ -8,6 +9,7 @@ import { remove } from './remove'
 
 export default ({ Users }) => ({
   setPasswordless: setPasswordless({ Users }),
+  unsetPassword: unsetPassword({ Users }),
   updatePassword: updatePassword({ Users }),
   updateProfile: updateProfile({ Users }),
   updateRoles: updateRoles({ Users }),
