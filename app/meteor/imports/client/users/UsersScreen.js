@@ -37,7 +37,7 @@ const toggleablePermissions = [
     icon: 'eur'
   },
   {
-    permission: 'edit-users',
+    permission: 'users-edit',
     description: 'Benutzer verwalten',
     icon: 'user-plus'
   }
