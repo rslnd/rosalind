@@ -18,61 +18,72 @@ export const parseExactName = (query) => {
     .filter((w) => w.length > 0)
   )
 
-  if (names && names.length > 0) {
-    const normalized = normalizeName(names[1] || names[0])
+  if (names && names.length === 1) {
+    const normalized = normalizeName(names[0])
     if (normalized) {
-      let result = {
-        $or: []
-      }
-
+      let result = {}
       // Force exact match for short queries to avoid unnecessary fetching
       if (normalized.length <= 4) {
-        result.$or.push({
+        result = {
           'lastNameNormalized': normalized
-        })
+        }
       } else {
-        result.$or.push({
+        result = {
           'lastNameNormalized': {
             $regex: '^' + normalized
           }
-        })
-      }
-
-      if (names.length >= 2) {
-        // [a, b] => [ab, a]
-        // [a, b, c] => [abc, ab, a]
-        // [a, b, c, d] => [abcd, abc, ab, a]
-        const namePermutations = names =>
-          names.map((n, i) =>
-            [
-              ...names.slice(0, i),
-              n
-            ].filter(identity).join('')
-          ).reverse()
-
-        const firstName = normalizeName(names[names.length - 1])
-        if (firstName) {
-          result.$or = [
-            ...namePermutations(names).map(n => ({
-              lastNameNormalized: {
-                $regex: '^' + n,
-                $options: 'i'
-              }
-            })),
-            firstName.length >= 2 && {
-              'firstName': {
-                $regex: '^' + firstName,
-                $options: 'i'
-              }
-            }
-          ]
         }
       }
 
       return { result, remainingQuery }
-    } else {
-      return { result: false, remainingQuery: query }
     }
+  }
+
+  if (names && names.length >= 2) {
+    // Always match the first (non-combined) fragment as start of last name
+    const normalized = normalizeName(names[1])
+    if (normalized) {
+      let result = {
+        'lastNameNormalized': {
+          $regex: '^' + normalized
+        }
+      }
+
+      // In addition to requiring the last name to be at least a partial match,
+      // ???
+
+      // [a, b] => [ab, a]
+      // [a, b, c] => [abc, ab, a]
+      // [a, b, c, d] => [abcd, abc, ab, a]
+      const namePermutations = names =>
+        names.map((n, i) =>
+          [
+            ...names.slice(0, i),
+            n
+          ].filter(identity).join('')
+        ).reverse()
+
+      result.$or = [
+        // This matches combined last names such as "van der Bellen"
+        ...namePermutations(names).map(n => ({
+          lastNameNormalized: {
+            $regex: '^' + n,
+            $options: 'i'
+          }
+        })),
+        // Try to match all tokens as first name too
+        ...names.map(n => ({
+          firstName: {
+            $regex: '^' + n,
+            $options: 'i'
+          }
+        }))
+      ].filter(identity)
+
+      return { result, remainingQuery }
+    }
+
+    return { result: false, remainingQuery: query }
   } else {
     return { result: false, remainingQuery: query }
   }
