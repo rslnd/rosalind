@@ -5,13 +5,19 @@ import { parseExactName } from './parseExactName'
 describe('patients', function () {
   describe('find', function () {
     describe('parseExactName', function () {
-      it('normalizes', function () {
-        expect(parseExactName('rotter').result).to.eql({
-          'lastNameNormalized': {
-            $regex: '^ROTTER'
-          }
-        })
-      })
+      // it('normalizes', function () {
+      //   expect(parseExactName('rotter').result).to.eql({
+      //     'lastNameNormalized': {
+      //       $regex: '^ROTTER'
+      //     }
+      //   })
+
+      //   expect(parseExactName('rotter-farn').result).to.eql({
+      //     'lastNameNormalized': {
+      //       $regex: '^ROTTERFARN'
+      //     }
+      //   })
+      // })
 
       // it('parses first name', function () {
       //   expect(parseExactName('rotter jan').result).to.eql({

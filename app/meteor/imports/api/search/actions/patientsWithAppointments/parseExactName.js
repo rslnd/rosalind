@@ -21,28 +21,51 @@ export const parseExactName = (query) => {
   if (names && names.length > 0) {
     const normalized = normalizeName(names[1] || names[0])
     if (normalized) {
-      let result = {}
+      let result = {
+        $or: []
+      }
 
       // Force exact match for short queries to avoid unnecessary fetching
       if (normalized.length <= 4) {
-        result = {
+        result.$or.push({
           'lastNameNormalized': normalized
-        }
+        })
       } else {
-        result = {
+        result.$or.push({
           'lastNameNormalized': {
             $regex: '^' + normalized
           }
-        }
+        })
       }
 
       if (names.length >= 2) {
+        // [a, b] => [ab, a]
+        // [a, b, c] => [abc, ab, a]
+        // [a, b, c, d] => [abcd, abc, ab, a]
+        const namePermutations = names =>
+          names.map((n, i) =>
+            [
+              ...names.slice(0, i),
+              n
+            ].filter(identity).join('')
+          ).reverse()
+
         const firstName = normalizeName(names[names.length - 1])
         if (firstName) {
-          result['firstName'] = {
-            $regex: '^' + firstName,
-            $options: 'i'
-          }
+          result.$or = [
+            ...namePermutations(names).map(n => ({
+              lastNameNormalized: {
+                $regex: '^' + n,
+                $options: 'i'
+              }
+            })),
+            firstName.length >= 2 && {
+              'firstName': {
+                $regex: '^' + firstName,
+                $options: 'i'
+              }
+            }
+          ]
         }
       }
 
