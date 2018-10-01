@@ -1,8 +1,8 @@
-FROM node:8.9.3
+FROM node:8.12.0
 
 HEALTHCHECK \
   --interval=3s \
-  --timeout=2s \
+  --timeout=4s \
   --start-period=15s \
   --retries=3 \
   CMD \
