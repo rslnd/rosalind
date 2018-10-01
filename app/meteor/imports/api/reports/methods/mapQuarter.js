@@ -12,7 +12,7 @@ import last from 'lodash/last'
 import idx from 'idx'
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { dayToDate } from '../../../util/time/day'
+import { dayToDate, dateToDay, isSame } from '../../../util/time/day'
 import { getRange, getQ, quarter } from '../../../util/time/quarter'
 
 const moment = extendMoment(_moment)
@@ -112,37 +112,27 @@ const mapPatients = reports => ({
 })
 
 const isHoliday = holidays => d =>
-  holidays.map(h => moment.range(h.start, h.end)).some(r => r.contains(d))
+  holidays.map(h => h.day).some(h => isSame(h, dateToDay(d)))
 
 const isWeekend = d => (d.isoWeekday() === 6 || d.isoWeekday() === 7)
 
-const mapDays = ({ reports, day, overrideSchedules, holidays }) => {
+export const mapDays = ({ reports, day, holidays }) => {
   const passed = uniq(reports.map(r => dayToDate(r.day).toString())).length
 
   const date = dayToDate(day)
 
-  const planned = uniqBy(d => d.format('YYYYMMDD'))(overrideSchedules
-    .map(s => moment(s.start))
-    .filter(m => m.isAfter(date))).length
-
-  const lastPlannedSchedule = last(sortBy('start')(overrideSchedules))
-  const lastPlannedDay = lastPlannedSchedule && moment(lastPlannedSchedule.start) || date
-
   const quarter = getRange(date)
-  const unplanned = Array.from(moment.range(lastPlannedDay, quarter.end).by('day'))
+  const allDays = Array.from(moment.range(quarter.start, quarter.end).by('day'))
 
-  const unplannedAvailable = unplanned
+  const future = allDays
     .filter(negate(isWeekend))
-    .filter(negate(isHoliday(holidays))).length
+    .filter(negate(isHoliday(holidays))).length - passed
 
-  const future = planned + unplannedAvailable
   const available = passed + future
 
   return {
     available,
     passed,
-    planned,
-    future,
-    unplannedAvailable
+    future
   }
 }

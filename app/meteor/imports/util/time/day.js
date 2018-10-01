@@ -61,7 +61,8 @@ export const stringToDay = s => {
 export const isSame = (a, b) =>
   a.day === b.day &&
   a.month === b.month &&
-  a.year === b.year
+  a.year === b.year &&
+  (!a.zeroIndexMonth === !b.zeroIndexMonth)
 
 export default {
   zeroIndexMonth,

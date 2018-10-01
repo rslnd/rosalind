@@ -39,7 +39,7 @@ export const generateQuarter = ({ Reports, Calendars, Schedules }) => {
               $gt: quarter.start.toDate(),
               $lt: quarter.end.toDate()
             }
-          })
+          }).fetch()
 
           const reports = Reports.find({
             ...getQuarterSelector(date),
