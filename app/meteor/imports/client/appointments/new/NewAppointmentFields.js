@@ -61,6 +61,7 @@ export const NewAppointmentFields = props => {
               calendarId={calendarId}
               assigneeId={assigneeId}
               showDefaultRevenue={false}
+              time={time}
               fullWidth />
           </div>
           <div style={shrink}>

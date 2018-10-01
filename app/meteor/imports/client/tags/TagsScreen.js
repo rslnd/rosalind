@@ -120,6 +120,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
         </span>
       )}
     </span>
+  },
+  {
+    header: 'Max. Gleichzeitig',
+    field: 'maxParallel'
   }
 ]
 

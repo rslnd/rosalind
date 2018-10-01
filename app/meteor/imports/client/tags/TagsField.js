@@ -1,7 +1,12 @@
 import React from 'react'
 import { Tags } from '../../api/tags'
+import { Appointments } from '../../api/appointments'
 import { TagsList } from './TagsList'
 import { getDefaultDuration } from '../../api/appointments/methods/getDefaultDuration'
+import _moment from 'moment'
+import { extendMoment } from 'moment-range'
+
+const moment = extendMoment(_moment)
 
 export class TagsField extends React.Component {
   constructor (props) {
@@ -25,7 +30,16 @@ export class TagsField extends React.Component {
   }
 
   render () {
-    const { input, meta, assigneeId, allowedTags, maxDuration, calendarId, showDefaultRevenue, time } = this.props
+    const {
+      input,
+      meta,
+      assigneeId,
+      allowedTags,
+      maxDuration,
+      calendarId,
+      showDefaultRevenue,
+      time
+    } = this.props
 
     const selector = allowedTags ? { _id: { $in: allowedTags } } : {}
     const tags = Tags.find(selector, { sort: { order: 1 } }).map((t) => {
@@ -44,10 +58,22 @@ export class TagsField extends React.Component {
         calendarId,
         assigneeId,
         tags: [...(input.value || []), t._id],
-        date: time
+        date: moment(time)
       })
 
       if (duration > maxDuration) {
+        return false
+      } else {
+        return true
+      }
+    }).filter(t => {
+      if (t.maxParallel &&
+        Appointments.methods.getParallelAppointments({
+          start: time,
+          end: moment(time).clone().add(t.duration, 'minutes').subtract(1, 'second'),
+          tags: t._id
+        }).length >= t.maxParallel
+      ) {
         return false
       } else {
         return true

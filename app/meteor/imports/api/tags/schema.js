@@ -61,9 +61,14 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
-  
+
   referrableFrom: {
     type: [SimpleSchema.RegEx.Id],
+    optional: true
+  },
+
+  maxParallel: {
+    type: Number,
     optional: true
   },
 
