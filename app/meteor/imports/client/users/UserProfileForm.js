@@ -94,7 +94,7 @@ export const UserProfileForm = compose(
       titleAppend,
       employee,
       groupId
-    } = Users.findOne({ _id: props.user._id })
+    } = Users.findOne({ _id: props.user._id }, { removed: true })
 
     return {
       ...props,

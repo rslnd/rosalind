@@ -6,8 +6,8 @@ import { CalendarsScreen } from './CalendarsScreen'
 const composer = (props) => {
   const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
 
-  const getCalendarName = id => id && Calendars.findOne(id) && Calendars.findOne(id).name
-  const getAssigneeName = id => id && Users.methods.fullNameWithTitle(Users.findOne(id))
+  const getCalendarName = _id => _id && Calendars.findOne({ _id }, { removed: true }) && Calendars.findOne({ _id }, { removed: true }).name
+  const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }, { removed: true }))
   const handleUpdate = (_id, update) => {
     Calendars.update({ _id }, update)
   }

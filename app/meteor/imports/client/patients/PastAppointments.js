@@ -42,7 +42,7 @@ const dateFormat = m =>
   : m.format(__('time.dateFormatWeekdayShort'))
 
 const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => {
-  const assignee = Users.findOne({ _id: appointment.assigneeId })
+  const assignee = Users.findOne({ _id: appointment.assigneeId }, { removed: true })
   const canceled = appointment.canceled || appointment.removed
   const date = moment(appointment.start)
 

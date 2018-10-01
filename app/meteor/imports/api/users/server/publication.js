@@ -21,7 +21,8 @@ export default () => {
           roles: 1,
           settings: 1,
           external: 1
-        }
+        },
+        removed: true
       })
     }
   })
@@ -30,7 +31,7 @@ export default () => {
     name: 'users-permissions',
     roles: ['admin', 'users-edit'],
     fn: function () {
-      return Users.find({})
+      return Users.find({}, { removed: true })
     }
   })
 }

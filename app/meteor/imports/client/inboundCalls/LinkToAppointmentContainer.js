@@ -19,7 +19,7 @@ const getFormattedAppointmentData = (appointmentId) => {
     const time = start.format(__('time.timeFormat'))
 
     if (appointment.assigneeId) {
-      const assignee = Users.findOne({ _id: appointmentId })
+      const assignee = Users.findOne({ _id: appointmentId }, { removed: true })
       const assigneeName = assignee && Users.methods.fullNameWithTitle(assignee)
       return { calendarName, date, time, assigneeName }
     } else {

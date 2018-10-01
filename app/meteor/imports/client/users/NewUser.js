@@ -70,7 +70,7 @@ const validateProfile = ({ username }) => {
     return { username: __('ui.required') }
   }
 
-  if (Users.findOne({ username })) {
+  if (Users.findOne({ username }, { removed: true })) {
     return { username: __('users.usernameTaken') }
   }
 }

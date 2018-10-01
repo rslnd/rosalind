@@ -11,7 +11,7 @@ const composer = (props) => {
 
   const clients = Clients.find({}, { sort: { lastActionAt: -1 } }).fetch()
 
-  const getAssigneeName = id => id && Users.methods.fullNameWithTitle(Users.findOne(id))
+  const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }, { removed: true }))
   const getGroupName = id => id && Groups.findOne(id).name
   const handleUpdate = (_id, update) => {
     Clients.update({ _id }, update)

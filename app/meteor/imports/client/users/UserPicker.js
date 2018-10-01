@@ -3,7 +3,7 @@ import { DocumentPicker } from '../components/DocumentPicker'
 import { withProps } from 'recompose'
 
 export const UserPicker = withProps({
-  toDocument: _id => Users.findOne({ _id }),
+  toDocument: _id => Users.findOne({ _id }, { removed: true }),
   toLabel: user => Users.methods.fullNameWithTitle(user),
   options: () => {
     const selector = { groupId: { $ne: null }, employee: true }

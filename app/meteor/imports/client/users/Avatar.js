@@ -6,7 +6,7 @@ export const Avatar = ({ userId }) => {
   let user
 
   if (userId) {
-    user = Users.findOne({ _id: userId })
+    user = Users.findOne({ _id: userId }, { removed: true })
   } else {
     user = Meteor.user()
   }

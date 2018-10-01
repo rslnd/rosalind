@@ -26,7 +26,7 @@ const composer = (props) => {
     users: Users.find({ groupId: null }, { sort: { lastName: 1 } }).fetch()
   }, ...groupedUsers]
 
-  const getAssigneeName = id => id && Users.methods.fullNameWithTitle(Users.findOne(id))
+  const getAssigneeName = id => id && Users.methods.fullNameWithTitle(Users.findOne(id), { removed: true })
   const isInRole = (user, role) => Roles.userIsInRole(user, [role])
   const handleUpdate = () => {}
 

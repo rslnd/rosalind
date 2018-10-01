@@ -22,7 +22,7 @@ import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = props => {
   const username = idx(props, _ => _.match.params.username)
-  const user = username && Users.findOne({ username })
+  const user = username && Users.findOne({ username }, { removed: true })
 
   const search = fromQuery(props.location.search)
   const from = search.from && moment(search.from) || moment().startOf('month')
@@ -41,7 +41,7 @@ const composer = props => {
   }
 
   const handleChangeAssignee = (assigneeId) => {
-    const user = Users.findOne({ _id: assigneeId })
+    const user = Users.findOne({ _id: assigneeId }, { removed: true })
     const path = `/reports/referrals/${user ? user.username : ''}${props.location.search}`
     props.history.replace(path)
   }

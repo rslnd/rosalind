@@ -18,7 +18,7 @@ const composer = (props) => {
 
   const _id = props.match.params.id
   console.log(props, _id)
-  const user = Users.findOne({ _id })
+  const user = Users.findOne({ _id }, { removed: true })
 
   if (!user) {
     return { isLoading: true }
