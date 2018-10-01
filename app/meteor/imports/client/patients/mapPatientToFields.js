@@ -28,6 +28,7 @@ export const mapPatientToFields = (patient) => {
     externalRevenue: patient.externalRevenue,
     note: patient.note,
     reminders: !patient.noSMS,
+    agreedAt: !!patient.agreedAt,
     patientSince: patient.patientSince ? dateToDay(patient.patientSince) : undefined
   })
 }

@@ -308,6 +308,34 @@ const PatientNotes = ({ patient }) => (
   </div>
 )
 
+const Agreements = ({ patient, calendar }) => (
+  calendar.agreementRequired &&
+    <ListItem
+      icon='file-text-o'
+      highlight={!patient.agreedAt}
+      style={{ marginTop: 15 }}>
+      {
+        patient.agreedAt
+        ? __('patients.agreedAt', {
+          date: moment(patient.agreedAt).format(__('time.dateFormatShort'))
+        }) : __('patients.notAgreedYet')
+      }
+
+      <div className='pull-right' style={{
+        position: 'relative',
+        right: 5,
+        top: -15
+      }}>
+        <Field
+          name='agreedAt'
+          color='primary'
+          component={Switch}
+        />
+      </div>
+      <br /><br />
+    </ListItem> || null
+)
+
 const AppointmentNote = ({ appointment }) =>
   <ListItem icon='pencil' hr highlight={!!appointment.note}>
     <Field
@@ -460,6 +488,8 @@ export class AppointmentInfo extends React.Component {
                 }>
                 <FormSection name='patient'>
                   <PatientNotes patient={patient} />
+                  {/* Show first if not agreed yet */}
+                  {!patient.agreedAt && <Agreements patient={patient} calendar={calendar} />}
                   <Contacts patient={patient} />
                   <BirthdayFields collectInsuranceId />
                   <FormSection name='address'>
@@ -467,6 +497,7 @@ export class AppointmentInfo extends React.Component {
                   </FormSection>
                   <br />
                   <Reminders />
+                  {patient.agreedAt && <Agreements patient={patient} calendar={calendar} />}
                   <TotalRevenue value={totalPatientRevenue} />
                 </FormSection>
                 <input type='submit' style={{ display: 'none' }} />

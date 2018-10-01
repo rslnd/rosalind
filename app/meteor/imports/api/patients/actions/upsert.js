@@ -124,7 +124,26 @@ export const upsert = ({ Patients }) => {
           const tempBirthday = patient.birthday
           patient = omitBy((v, k) => k === 'birthday')(patient)
 
+          const agreed = patient.agreedAt
+          delete patient.agreedAt
+
           let update = dot.flatten(cleanFields(patient))
+          if (!update['$unset']) {
+            update['$unset'] = {}
+          }
+
+          if (existingPatient.agreedAt && !agreed) {
+            update['$unset'].agreedAt = 1
+          } else if (!existingPatient.agreedAt && agreed) {
+            update['$set'].agreedAt = new Date()
+          } else {
+            update['$unset'].agreedAt = 1
+          }
+
+          if (Object.keys(update['$unset']).length === 0) {
+            delete update.$unset
+          }
+
           if (update['$set']) {
             update['$set']['birthday'] = tempBirthday
             if (!replaceContacts && update['$set']['contacts'] === []) {

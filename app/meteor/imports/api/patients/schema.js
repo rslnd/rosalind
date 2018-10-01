@@ -131,6 +131,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  agreedAt: {
+    type: Date,
+    optional: true
+  },
+
   externalRevenue: {
     type: Number,
     decimal: true,

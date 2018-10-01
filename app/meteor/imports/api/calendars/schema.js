@@ -95,5 +95,10 @@ export const schema = new SimpleSchema({
   referrableFrom: {
     type: [SimpleSchema.RegEx.Id],
     optional: true
+  },
+
+  agreementRequired: {
+    type: Boolean,
+    optional: true
   }
 })

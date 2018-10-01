@@ -104,6 +104,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
         </span>
       )}
     </span>
+  },
+  {
+    header: 'Revers nötig',
+    field: 'agreementRequired',
+    type: Boolean,
+    render: c => c.agreementRequired && <Icon name='check' />
   }
 ]
 

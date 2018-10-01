@@ -9,7 +9,7 @@ import { NameFields } from '../fields/NameFields'
 import { AddressFields } from '../fields/AddressFields'
 import { ContactFields } from '../fields/ContactFields'
 import { BirthdayFields } from '../fields/BirthdayFields'
-import { iconStyle, rowStyle, grow, shrink } from '../../components/form/rowStyle';
+import { iconStyle, rowStyle, grow, shrink } from '../../components/form/rowStyle'
 
 export const PatientExtendedFormFields = ({ change }) => {
   const title = true
