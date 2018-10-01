@@ -33,7 +33,7 @@ export const float = n => n && floatFormatter.format(n)
 export const twoPlaces = n => (n && n > 0) ? twoPlacesFormatter.format(n) : '0,00'
 
 export const conditionalFloat = n => n &&
-  n < 10
+  (n > -10 && n < 10)
   ? floatFormatter.format(n)
   : integerFormatter.format(n)
 
@@ -44,6 +44,11 @@ export const percentage = (props) => {
   ) { return null }
 
   const value = props.value || (props.part / props.of)
+
+  if (Number.isNaN(value)) {
+    return null
+  }
+
   let p = conditionalFloat(100 * value)
 
   if (!props.plain) {

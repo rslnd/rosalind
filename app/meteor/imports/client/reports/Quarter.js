@@ -1,5 +1,6 @@
 import React from 'react'
 import { Round } from './shared/Round'
+import { Nil } from './shared/Nil'
 import { integer } from '../../util/format'
 
 export const Quarter = ({ quarter, calendar }) => (
@@ -88,7 +89,11 @@ const PerHour = ({ value, average }) =>
 const Currency = ({ value, average }) =>
   <span>
     <small className='text-muted'>€&nbsp;</small>
-    {integer(value)}
+    {
+      !Number.isNaN(value)
+      ? integer(value)
+      : <Nil />
+    }
     {average && <small className='text-muted'>&nbsp;⌀</small>}
   </span>
 

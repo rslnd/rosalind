@@ -4,13 +4,15 @@ import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { currency, integer, float, percentage, conditionalFloat } from '../../util/format'
 import { color as kewler, lightness } from 'kewler'
-
-const Nil = () => (
-  <span className='text-quite-muted'>?</span>
-)
+import { Nil } from './shared/Nil'
 
 const BigPercent = (props) => {
-  return <Unit append='%'>{percentage({ ...props, plain: true })}</Unit>
+  const value = percentage({ ...props, plain: true })
+  return <Unit append='%'>{
+    (!Number.isNaN(value) && value !== null)
+    ? value
+    : <Nil />
+  }</Unit>
 }
 
 export const InfoBox = ({ color, position, icon = 'eur', children, text, description }) => (
@@ -35,9 +37,10 @@ export const Unit = ({ prepend, append, children }) => (
     {prepend && <small className='text-muted'>{prepend}&nbsp;</small>}
     {
       (typeof children === 'number' ||
-      typeof children === 'string')
+      typeof children === 'string' &&
+      !Number.isNaN(children))
       ? children
-      : <span className='text-muted'>?</span>
+      : <Nil />
     }
     {append && <small className='text-muted'>&nbsp;{append}</small>}
   </span>
@@ -52,7 +55,7 @@ export const TotalRevenueBox = ({ report, position, color }) => {
 
   return <InfoBox text={__('reports.revenue')} color={color} position={position} icon='euro'>
     {
-      revenue
+      !Number.isNaN(revenue)
       ? <Unit prepend='€'>{integer(revenue)}</Unit>
       : <Nil />
     }
@@ -67,7 +70,7 @@ export const NewPatientsPerHourBox = ({ report, position, color }) => {
     <InfoBox
       text={__('reports.patientsNewPerHour')} color={color} position={position} icon='user-plus'>
       {
-        newPerHour
+        !Number.isNaN(newPerHour)
         ? <Unit append='/h'>{float(newPerHour)}</Unit>
         : <Nil />
       }
@@ -112,11 +115,13 @@ export const NoShowsBox = ({ report, position, color }) => {
 
 export const TotalPatientsBox = ({ report, position, color }) => {
   const patients = idx(report, _ => _.total.patients.total.actual) ||
-    idx(report, _ => _.total.patients.total.expected)
+    idx(report, _ => _.total.patients.total.expected) || 0
 
   return (
     <InfoBox text={__('reports.patients')} color={color} position={position} icon='users'>
-      {patients || <Nil />}
+      {
+        integer(patients)
+      }
     </InfoBox>
   )
 }
