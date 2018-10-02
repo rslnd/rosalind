@@ -313,7 +313,7 @@ const Agreements = ({ patient, calendar }) => (
     <ListItem
       icon='file-text-o'
       highlight={!patient.agreedAt}
-      style={{ marginTop: 15 }}>
+      style={{ marginTop: 10, paddingTop: 15 }}>
       {
         patient.agreedAt
         ? __('patients.agreedAt', {

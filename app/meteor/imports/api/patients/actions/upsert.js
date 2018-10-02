@@ -179,6 +179,12 @@ export const upsert = ({ Patients }) => {
         } else {
           patient = cleanFields(patient)
 
+          if (patient.agreedAt) {
+            patient.agreedAt = new Date()
+          } else {
+            delete patient.agreedAt
+          }
+
           try {
             const patientId = Patients.insert(patient, (e, patientId) => {
               if (e) {
