@@ -19,6 +19,7 @@ export const insert = ({ Users }) =>
       groupId: Match.Maybe(String)
     },
     roles: ['admin', 'users-edit'],
+    simulation: false,
     fn: async (args) => {
       const { username, password, roles, ...profile } = args
 

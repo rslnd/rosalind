@@ -6,7 +6,7 @@ import { check, Match } from 'meteor/check'
 
 export { Match }
 
-export const action = ({ name, args = {}, roles, allowAnonymous, fn }) => {
+export const action = ({ name, args = {}, roles, allowAnonymous, simulation = true, fn }) => {
   if (!name) {
     throw new Error('Action needs a name')
   }
@@ -26,6 +26,10 @@ export const action = ({ name, args = {}, roles, allowAnonymous, fn }) => {
         if (!Roles.userIsInRole(this.userId, roles, Roles.GLOBAL_GROUP)) {
           throw new Meteor.Error(403, 'Not authorized')
         }
+      }
+
+      if (!simulation && this.isSimulation) {
+        return
       }
 
       // Validate clientKey and permissions
