@@ -24,6 +24,7 @@ import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { PatientName } from '../patients/PatientName'
 import { ReferralsDetailSummary } from './ReferralsDetailSummary'
+import { Nil } from './shared/Nil'
 
 const stages = ['referred', 'pending', 'redeemed']
 
@@ -77,7 +78,15 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
                     <Date date={r.pendingAt} relativeTo={r.createdAt} />
                   </Cell>
                   <Cell style={{...separatorStyle, width: '20%'}}>
-                    <Date date={r.redeemedAt} relativeTo={r.pendingAt} />
+                    {
+                      r.redeemedAt
+                      ? <Date date={r.redeemedAt} relativeTo={r.pendingAt} />
+                      : r.pendingAt && !r.redeemedAt
+                      ? <span className='text-muted'>
+                        {__('reports.referralExpectedAt')} <Date date={r.plannedRedeemedAt} />
+                      </span>
+                      : <Nil />
+                    }
                   </Cell>
                 </TableRow>
               )
@@ -105,7 +114,7 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
 }
 
 const Date = ({ date, relativeTo }) => {
-  if (!date) { return '-' }
+  if (!date) { return <Nil /> }
 
   const absolute = moment(date).format(__('time.dateFormatShortNoYear'))
 

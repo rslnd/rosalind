@@ -31,11 +31,13 @@ export const detail = ({
       : futureAppointments.find(isPending(r))
 
     const pendingAt = pendingAppointment && pendingAppointment.createdAt
+    const plannedRedeemedAt = pendingAppointment && pendingAppointment.start
 
     return {
       ...r,
       patient,
-      pendingAt
+      pendingAt,
+      plannedRedeemedAt
     }
   })
 
