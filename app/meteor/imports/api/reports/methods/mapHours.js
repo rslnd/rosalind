@@ -61,7 +61,15 @@ const sumAppointments = ({ appointments, slotsPerHour, filter = identity }) =>
     .reduce(add, 0) / (1000 * 60 * 60)) * slotsPerHour
 
 const calculateWorkload = ({ calendar, appointments, hours }) => {
-  const slotsPerHour = Math.ceil(60 / ((calendar && calendar.slotSize) || 5))
+  const slotsPerHour = Math.ceil(
+    60 / (
+      (calendar && (
+        calendar.slotSizeAppointment ||
+        calendar.slotSize
+      )) || 5
+    )
+  )
+
   const available = hours.planned * slotsPerHour
   const planned = sumAppointments({
     filter: a => !a.canceled,

@@ -68,7 +68,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
               'day.month': day.month,
               'day.year': day.year
             })
-          
+
             if (existingReport) {
               return existingReport
             } else {
