@@ -1,3 +1,4 @@
+import idx from 'idx'
 import React from 'react'
 import Select from 'react-select'
 import moment from 'moment'
@@ -13,6 +14,7 @@ import { TagsList } from '../../tags/TagsList'
 import { UserHelper } from '../../users/UserHelper'
 import { Indicator } from '../../appointments/appointment/Indicator'
 import { darkGrayDisabled } from '../../layout/styles'
+import { Users } from '../../../api/users'
 
 const loadingStyle = {
   margin: 0,
@@ -76,6 +78,11 @@ const PatientWithAppointments = ({ patient }) =>
 
 const Appointment = ({ appointment }) => {
   const start = moment(appointment.start)
+  const assignee = idx(Users.findOne({ _id:
+    appointment.treatmentBy ||
+    appointment.waitlistAssigneeId ||
+    appointment.assigneeId
+  }, { removed: true }), _ => _._id)
 
   return (
     <span
@@ -90,14 +97,11 @@ const Appointment = ({ appointment }) => {
         {start.format(__('time.timeFormat'))}
       </span>
       &emsp;
-      {
-        appointment.assigneeId &&
-          <span style={assigneeNameStyle}>
-            <UserHelper userId={appointment.assigneeId} helper='lastNameWithTitle' />
-            &emsp;
-            <Indicator appointment={appointment} />
-          </span>
-      }
+      <span style={assigneeNameStyle}>
+        {assignee && <UserHelper userId={assignee} helper='lastNameWithTitle' />}
+        &emsp;
+        <Indicator appointment={appointment} />
+      </span>
     </span>
   )
 }

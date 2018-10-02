@@ -47,6 +47,8 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
                   'start': 1,
                   'end': 1,
                   'assigneeId': 1,
+                  'waitlistAssigneeId': 1,
+                  'treatmentBy': 1,
                   'admitted': 1,
                   'treated': 1,
                   'canceled': 1
