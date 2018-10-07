@@ -118,7 +118,11 @@ const getHelmetConfig = () => {
       action: 'deny'
     },
     hidePoweredBy: true,
-    hsts: true,
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true
+    },
     ieNoOpen: true,
     noCache: true,
     noSniff: true,
