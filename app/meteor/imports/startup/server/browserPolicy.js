@@ -32,6 +32,8 @@ const getHelmetConfig = () => {
   const ctReportUri = 'https://rosalind.report-uri.com/r/d/ct/enforce'
   const xssReportUri = 'https://rosalind.report-uri.com/r/d/xss/enforce'
 
+  // Note: No wildcard origins allowed
+
   const helmetConfig = {
     contentSecurityPolicy: {
       browserSniff: false,
@@ -49,9 +51,9 @@ const getHelmetConfig = () => {
             `https://${d}`,
             `wss://${d}`
           ])),
-          'wss://*.smooch.io',
-          'https://*.smooch.io',
-          'https://*.sentry.io',
+          `https://${process.env.SMOOCH_APP_ID}.config.smooch.io/`,
+          'wss://api.smooch.io',
+          'https://api.smooch.io',
           'https://sentry.io/'
         ],
         defaultSrc: [
@@ -59,7 +61,7 @@ const getHelmetConfig = () => {
         ],
         fontSrc: [
           self,
-          'https://*.smooch.io'
+          'https://cdn.smooch.io'
         ],
         formAction: [
           self
@@ -69,11 +71,14 @@ const getHelmetConfig = () => {
         ],
         frameSrc: [
           self,
-          'https://*.smooch.io'
+          'https://cdn.smooch.io'
         ],
         imgSrc: [
           self,
-          'https://*.smooch.io'
+          'https://app.smooch.io',
+          'https://cdn.smooch.io',
+          'https://media.smooch.io',
+          'https://www.gravatar.com/avatar/9551b5ac12bb6a04fd48d1dcb51f046a.png'
         ],
         manifestSrc: [
           none
@@ -93,11 +98,12 @@ const getHelmetConfig = () => {
         scriptSrc: [
           self,
           `'sha256-${runtimeConfigHash}'`,
-          'https://*.smooch.io'
+          'https://api.smooch.io',
+          'https://cdn.smooch.io'
         ],
         styleSrc: [
           self,
-          'https://*.smooch.io',
+          'https://cdn.smooch.io',
           // TODO: Can't use unsafe-inline and nonce- in the same clause
           // Replace unsafe-inline with nonce for react-select asap
           "'unsafe-inline'"
