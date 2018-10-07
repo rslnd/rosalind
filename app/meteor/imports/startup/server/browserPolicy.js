@@ -169,6 +169,11 @@ const getFeaturePolicyHeader = () => {
 
 export default () => {
   Meteor.startup(() => {
+    // BUG: SRI Hash for module.js is incorrect in development
+    if (process.env.NODE_ENV === 'production') {
+      WebAppInternals.enableSubresourceIntegrity()
+    }
+
     WebApp.connectHandlers.use((req, res, next) => {
       const styleNonce = new Buffer(uuidv4()).toString('base64')
 
