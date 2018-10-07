@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor'
 import { WebApp, WebAppInternals } from 'meteor/webapp'
 import flatten from 'lodash/flatten'
 import crypto from 'crypto'
-import { Autoupdate } from 'meteor/autoupdate'
 import helmet from 'helmet'
 import uuidv4 from 'uuid/v4'
 
@@ -19,7 +18,10 @@ const getHelmetConfig = () => {
     domain,
     ...(process.env.VIRTUAL_HOST ? process.env.VIRTUAL_HOST.split(',') : [])
   ]
-  const runtimeConfig = Object.assign(__meteor_runtime_config__, Autoupdate)
+  const runtimeConfig = Object.assign(
+    __meteor_runtime_config__,
+    { isModern: Meteor.isModern }
+  )
 
   // Debug hash generation
   // console.log(JSON.stringify(runtimeConfig))
