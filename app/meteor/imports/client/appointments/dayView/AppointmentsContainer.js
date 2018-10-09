@@ -20,9 +20,11 @@ import { Patients } from '../../../api/patients'
 import { Calendars } from '../../../api/calendars'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
+import { Constraints } from '../../../api/constraints'
 import { Loading } from '../../components/Loading'
 import { AppointmentsScreen } from './AppointmentsScreen'
 import { subscribeManager } from '../../../util/meteor/subscribe'
+import { toWeekday } from '../../../util/time/weekdays'
 
 const mapUncapped = map.convert({ cap: false })
 const appointmentsSubsManager = new SubsManager({
@@ -116,13 +118,10 @@ const composer = (props) => {
           end: { $lte: endOfDay }
         }).fetch()
 
-        const constraints = Schedules.find({
-          type: 'constraint',
+        const constraints = Constraints.find({
           calendarId: calendar._id,
-          userId: assignee.assigneeId,
-          weekdays: date.clone().locale('en').format('ddd').toLowerCase(),
-          start: { $lte: endOfDay },
-          end: { $gte: startOfDay }
+          assigneeIds: assignee.assigneeId,
+          weekdays: toWeekday(date)
         }).fetch()
 
         return {

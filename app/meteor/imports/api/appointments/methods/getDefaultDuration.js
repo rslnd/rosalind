@@ -1,8 +1,10 @@
 import max from 'lodash/max'
 import { Users } from '../../users'
 import { Calendars } from '../../calendars'
-import { Schedules } from '../../schedules'
+import { Constraints } from '../../constraints'
 import { Tags } from '../../tags'
+import { toWeekday } from '../../../util/time/weekdays'
+import { isWithinHMRange } from '../../../util/time/hm'
 
 const defaultDuration = 5
 const getCalendarDefaultDuration = calendarId => {
@@ -15,9 +17,9 @@ const getCalendarDefaultDuration = calendarId => {
 }
 
 export const isConstraintApplicable = ({ constraint, date }) => {
-  if (constraint.hourStart && constraint.hourEnd) {
-    return (constraint.hourStart <= date.hours() &&
-    date.hours() <= constraint.hourEnd)
+  const { from, to } = constraint
+  if (from && to) {
+    return isWithinHMRange({ from, to })(date)
   } else {
     return true
   }
@@ -28,37 +30,23 @@ const getDurationConstraint = ({ calendarId, assigneeId, date }) => {
     return getCalendarDefaultDuration(calendarId)
   }
 
-  const constraint = Schedules.findOne({
+  const constraint = Constraints.findOne({
     calendarId,
-    type: 'constraint',
-    userId: assigneeId,
-    weekdays: date.clone().locale('en').format('ddd').toLowerCase(),
-    start: { $lte: date.toDate() },
-    end: { $gte: date.toDate() }
+    assigneeIds: assigneeId,
+    weekdays: toWeekday(date)
   })
 
   return (constraint && isConstraintApplicable({ constraint, date }) && constraint.duration) || getCalendarDefaultDuration(calendarId)
 }
 
 export const getDefaultDuration = ({ calendarId, assigneeId, date, tags }) => {
-  let assigneeDuration
   let tagDurations = []
-
-  if (assigneeId) {
-    const user = Users.findOne({ _id: assigneeId })
-    if (user && user.settings && user.settings.appointments && user.settings.appointments.defaultDuration) {
-      assigneeDuration = user.settings.appointments.defaultDuration
-    }
-  }
 
   if (tags) {
     tagDurations = Tags.find({ _id: { $in: tags } }).fetch().map(t => t.duration)
   }
 
-  const maxDuration = max([
-    assigneeDuration,
-    ...tagDurations
-  ])
+  const maxDuration = max(tagDurations)
 
   const durationConstraint = getDurationConstraint({ calendarId, assigneeId, date })
   const defaultDuration = getCalendarDefaultDuration(calendarId)

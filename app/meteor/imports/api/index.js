@@ -17,6 +17,7 @@ import { Reports } from './reports'
 import { Search } from './search'
 import { Settings } from './settings'
 import { Clients } from './clients'
+import { Constraints } from './constraints'
 
 export {
   Users,
@@ -37,5 +38,6 @@ export {
   Settings,
   Tags,
   Timesheets,
-  Clients
+  Clients,
+  Constraints
 }

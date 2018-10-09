@@ -21,59 +21,8 @@ import { Icon } from '../../components/Icon'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { ApplyDefaultSchedule } from './ApplyDefaultSchedule'
-import leftPad from 'left-pad'
 import { subscribe } from '../../../util/meteor/subscribe'
-
-const renderTime = hm => {
-  if (!hm) return null
-  return [
-    leftPad(hm.h, 2, '0'),
-    leftPad(hm.m, 2, '0')
-  ].join(':')
-}
-
-const parseTime = s => {
-  const [h, m] = s.split(':')
-  return {
-    h: h ? parseInt(h, 10) : 0,
-    m: m ? parseInt(m, 10) : 0
-  }
-}
-
-const scheduleToString = (schedule) => {
-  if (!schedule) {
-    return ''
-  }
-
-  const { to, from, note } = schedule
-
-  return [
-    [
-      renderTime(from),
-      renderTime(to)
-    ].filter(identity).join('-'),
-    note
-  ].filter(identity).join(' ')
-}
-
-const stringToSchedule = s => {
-  if (!s) { return null }
-  const [from, to, ...rest] = s.split(/-|\s/)
-  const schedule = {
-    from: parseTime(from),
-    to: parseTime(to)
-  }
-
-  const note = rest && rest.join(' ')
-  if (note.length > 2) {
-    return {
-      ...schedule,
-      note
-    }
-  }
-
-  return schedule
-}
+import { HMtoString, HMRangeToString, stringToHMRange } from '../../../util/time/hm'
 
 const composer = props => {
   const { slug } = props.match.params
@@ -189,7 +138,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
   }
 
   renderSchedules ({ weekday, assigneeId }) {
-    const schedules = sortBy(s => renderTime(s.from))(this.props.defaultSchedules.filter(s =>
+    const schedules = sortBy(s => HMtoString(s.from))(this.props.defaultSchedules.filter(s =>
       s.userId === assigneeId &&
       s.weekday === weekday
     ))
@@ -220,7 +169,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
                   />
                 ) : (
                   <Button size='medium' style={{ width: '100%', fontSize: '14px' }} onClick={this.handleStartEdit(s._id)}>
-                    {scheduleToString(s)}
+                    {HMRangeToString(s)}
                   </Button>
                 )
             }
@@ -324,7 +273,7 @@ class EditSchedule extends React.Component {
     super(props)
 
     this.state = {
-      value: scheduleToString(this.props.schedule)
+      value: HMRangeToString(this.props.schedule)
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -338,7 +287,7 @@ class EditSchedule extends React.Component {
   }
 
   handleSave () {
-    this.props.onChange(stringToSchedule(this.state.value))
+    this.props.onChange(stringToHMRange(this.state.value))
   }
 
   render () {

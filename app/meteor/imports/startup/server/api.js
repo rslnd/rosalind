@@ -16,6 +16,7 @@ import schedules from '../../api/schedules/server'
 import tags from '../../api/tags/server'
 import timesheets from '../../api/timesheets/server'
 import clients from '../../api/clients/server'
+import constraints from '../../api/constraints/server'
 
 export default function () {
   settings()
@@ -36,4 +37,5 @@ export default function () {
   tags()
   timesheets()
   clients()
+  constraints()
 }

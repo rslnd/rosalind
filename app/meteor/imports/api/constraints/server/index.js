@@ -1,7 +1,7 @@
 import publication from './publication'
 import security from './security'
 
-export default function () {
+export default () => {
   publication()
   security()
 }

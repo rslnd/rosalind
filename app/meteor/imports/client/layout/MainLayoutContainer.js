@@ -33,7 +33,7 @@ const composer = (props) => {
   subscribe('appointments-today')
   subscribe('appointments-future')
   subscribe('schedules')
-  subscribe('schedules-constraints')
+  subscribe('constraints')
   subscribe('schedules-holidays')
   subscribe('settings')
   subscribe('inboundCalls-counts')

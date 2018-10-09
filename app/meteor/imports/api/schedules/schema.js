@@ -8,7 +8,6 @@ export const Schema = new SimpleSchema({
     allowedValues: [
       'default',
       'override',
-      'constraint',
       'businessHours',
       'businessHoursOverride',
       'holiday',

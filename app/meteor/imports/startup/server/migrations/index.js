@@ -6,6 +6,7 @@ import './3-createdAt'
 import './4-referredToCosmetics'
 import './5-referredToAlternative'
 import './6-reportDate'
+import './7-schedulesToConstraints'
 
 export default () => {
   Meteor.startup(() => {

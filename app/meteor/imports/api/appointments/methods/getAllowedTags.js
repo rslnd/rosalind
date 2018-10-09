@@ -1,18 +1,14 @@
 import moment from 'moment-timezone'
-import { Schedules } from '../../schedules'
+import { Constraints } from '../../constraints'
 import { isConstraintApplicable } from './getDefaultDuration'
+import { toWeekday } from '../../../util/time/weekdays'
 
 export const getAllowedTags = ({ time, assigneeId, calendarId }) => {
-  const date = moment(time)
-
-  const constraint = Schedules.findOne({
-    type: 'constraint',
+  const constraint = Constraints.findOne({
     calendarId,
-    userId: assigneeId,
-    weekdays: date.clone().locale('en').format('ddd').toLowerCase(),
-    start: { $lte: date.toDate() },
-    end: { $gte: date.toDate() }
+    assigneeIds: assigneeId,
+    weekdays: toWeekday(time)
   })
 
-  return constraint && isConstraintApplicable({ constraint, date }) && constraint.tags
+  return constraint && isConstraintApplicable({ constraint, date: moment(time) }) && constraint.tags
 }

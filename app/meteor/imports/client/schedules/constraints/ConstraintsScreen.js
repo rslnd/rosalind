@@ -9,7 +9,8 @@ import { CalendarPicker } from '../../calendars/CalendarPicker'
 import { DocumentPicker } from '../../components/DocumentPicker'
 import { __ } from '../../../i18n'
 import { withProps, mapProps, renderComponent } from 'recompose'
-import { UserPicker } from '../../users/UserPicker';
+import { UserPicker } from '../../users/UserPicker'
+import { HMRangeToString } from '../../../util/time/hm'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
@@ -45,9 +46,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'ÄrztIn',
-    field: 'userId',
+    field: 'assigneeIds',
+    isMulti: true,
     EditComponent: UserPicker,
-    render: t => t.userId && getAssigneeName(t.userId)
+    render: t => t.assigneeIds && t.assigneeIds.map(getAssigneeName).join(', ')
   },
   {
     header: 'Wochentage',
@@ -62,12 +64,8 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'duration'
   },
   {
-    header: 'von',
-    field: 'hourStart'
-  },
-  {
-    header: 'bis',
-    field: 'hourEnd'
+    header: 'Uhrzeit',
+    render: ({ from, to }) => HMRangeToString({ from, to })
   }
 ]
 
