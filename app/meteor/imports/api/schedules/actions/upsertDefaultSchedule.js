@@ -4,7 +4,8 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
-import { weekdays, HM } from '../schema'
+import { weekdays } from '../../../util/time/weekdays'
+import { HM } from '../../../util/schema'
 
 const Schedule = new SimpleSchema({
   from: { type: HM },

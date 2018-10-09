@@ -1,14 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import Auto from '../../util/schema/auto'
-import { External } from '../../util/schema/external'
-import { Day } from '../../util/schema/day'
-
-export const HM = new SimpleSchema({
-  h: { type: Number, min: 0, max: 23 },
-  m: { type: Number, min: 0, max: 59 }
-})
-
-export const weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+import { Day, HM, External, Auto } from '../../util/schema'
+import { weekdays } from '../../util/time/weekdays'
 
 export const Schema = new SimpleSchema({
   type: {
