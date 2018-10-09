@@ -253,3 +253,8 @@ h6,
 #web-messenger-container {
   z-index: 1070;
 }
+
+/* Prevent opening animation of react-dates picker */
+.DayPicker_transitionContainer__horizontal {
+  transition-property: none !important;
+}

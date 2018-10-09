@@ -134,7 +134,7 @@ class DateNavigationButtons extends React.Component {
           {
             ({ openPortal, closePortal, isOpen, portal }) =>
               <div>
-                <ButtonGroup>
+                <ButtonGroup onMouseEnter={openPortal}>
                   {this.props.before}
 
                   {
@@ -193,12 +193,6 @@ class DateNavigationButtons extends React.Component {
                 </ButtonGroup>
                 &nbsp;
                 <ButtonGroup>
-                  <Button
-                    key='calendar-button'
-                    onMouseEnter={openPortal}
-                    title={__('time.calendar')}>
-                    <Icon name='calendar' />
-                  </Button>
                   {
                     portal(
                       <div
@@ -221,7 +215,11 @@ class DateNavigationButtons extends React.Component {
                     )
                   }
 
-                  {this.props.children}
+                  {
+                    this.props.children && <div onMouseEnter={isOpen ? closePortal : null}>
+                      {this.props.children}
+                    </div>
+                  }
                 </ButtonGroup>
               </div>
             }

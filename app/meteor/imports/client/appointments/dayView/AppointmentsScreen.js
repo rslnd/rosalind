@@ -6,6 +6,7 @@ import { weekOfYear } from '../../../util/time/format'
 import { DateNavigation } from '../../components/DateNavigation'
 import { Icon } from '../../components/Icon'
 import { AppointmentsView } from './AppointmentsView'
+import { Button, ButtonGroup } from 'react-bootstrap'
 import { PatientPicker } from '../../patients/picker'
 import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../layout/styles'
@@ -99,7 +100,21 @@ export class AppointmentsScreen extends React.Component {
               basePath={`appointments/${this.props.calendar.slug}`}
               pullRight
               jumpWeekForward
-              jumpMonthForward />
+              jumpMonthForward>
+
+              {
+                // TODO: Feature flag
+                (window.location.hash.indexOf('ff-help') !== -1) && <ButtonGroup>
+                  <Button
+                    key='calendar-button'
+                    onMouseEnter={() => {}}
+                    title={__('tags.openInfo')}>
+                    <Icon name='life-saver' />
+                  </Button>
+                </ButtonGroup>
+              }
+
+            </DateNavigation>
           </div>
         </div>
 
