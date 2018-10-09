@@ -138,6 +138,20 @@ const getHelmetConfig = () => {
     xssFilter: {
       mode: 'block',
       reportUri: xssReportUri
+    },
+    featurePolicy: {
+      features: {
+        geolocation: [ none ],
+        midi: [ none ],
+        syncXhr: [ none ],
+        microphone: [ none ],
+        camera: [ none ],
+        magnetometer: [ none ],
+        gyroscope: [ none ],
+        speaker: [ none ],
+        fullscreen: [ none ],
+        payment: [ none ]
+      }
     }
   }
 
@@ -147,34 +161,6 @@ const getHelmetConfig = () => {
   }
 
   return helmetConfig
-}
-
-// TODO: Integrate with above when helmet v4 is ready
-const policyToString = o =>
-Object.keys(o)
-  .map(k => ({ k, v: o[k] }))
-  .map(({ k, v }) => `${k} ${v.join(' ')}`)
-  .join('; ')
-
-const getFeaturePolicyHeader = () => {
-  const featurePolicy = {
-    accelerometer: [ none ],
-    autoplay: [ none ],
-    camera: [ none ],
-    'encrypted-media': [ none ],
-    geolocation: [ none ],
-    gyroscope: [ none ],
-    magnetometer: [ none ],
-    microphone: [ none ],
-    midi: [ none ],
-    payment: [ none ],
-    speaker: [ none ],
-    'sync-xhr': [ none ],
-    usb: [ none ],
-    vr: [ none ]
-  }
-
-  return policyToString(featurePolicy)
 }
 
 export default () => {
@@ -199,11 +185,6 @@ export default () => {
 
     WebApp.connectHandlers.use((req, res, next) => {
       helmet(getHelmetConfig())(req, res, next)
-    })
-
-    WebApp.connectHandlers.use((req, res, next) => {
-      res.setHeader('Feature-Policy', getFeaturePolicyHeader())
-      next()
     })
 
     // JSS, used by material-ui, requires the csp-nonce meta tag
