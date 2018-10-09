@@ -14,6 +14,7 @@ export default () => {
     process.env.CUSTOMER_NAME,
     [
       Meteor.release,
+      process.versions.node,
       process.env.NODE_ENV,
       process.env.TZ_CLIENT
     ].filter(id).join(' '),

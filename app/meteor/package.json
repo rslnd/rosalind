@@ -46,7 +46,7 @@
     "papaparse": "^4.3.7",
     "plz-ort": "^1.2018.2",
     "prop-types": "^15.6.0",
-    "puppeteer": "^1.7.0",
+    "puppeteer": "^1.9.0",
     "query-string": "^6.1.0",
     "ramda": "^0.25.0",
     "react": "^16.4.1",

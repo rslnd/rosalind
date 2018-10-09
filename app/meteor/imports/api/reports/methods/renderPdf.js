@@ -20,12 +20,22 @@ const isLoaded = (html = '') =>
 
 const printToPDF = async ({ url, printOptions, isLoaded }) => {
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    headless: true, // Note: Only disable for debugging, pdf only renders in headless mode
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--no-default-browser-check',
+      '--disable-bundled-ppapi-flash'
+    ]
   })
 
   try {
     const page = await browser.newPage()
-    page.on('console', msg => console.log('[Reports] renderPdf [console]', msg.text))
+
+    // TODO UNSAFE: Fix CSP
+    await page.setBypassCSP(true)
+
+    page.on('console', msg => console.log('[Reports] renderPdf [console]', msg.text()))
 
     await page.goto(url, { waitUntil: 'networkidle2' })
     let loaded = false
@@ -44,7 +54,7 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
       if (!loaded) {
         retries++
         console.log('[Reports] renderPdf: Still loading, retry', retries)
-        if (retries > 10) {
+        if (retries > 15) {
           throw new Error(`[Reports] renderPdf: Failed to load`)
         }
       }
