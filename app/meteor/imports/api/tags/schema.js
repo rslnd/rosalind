@@ -7,6 +7,11 @@ export default new SimpleSchema({
     index: 1
   },
 
+  synonyms: {
+    type: [String],
+    optional: true
+  },
+
   order: {
     type: Number,
     optional: true
