@@ -1,5 +1,5 @@
 import idx from 'idx'
-import { compose, toClass } from 'recompose'
+import { compose, mapProps, toClass } from 'recompose'
 import omit from 'lodash/omit'
 import fromPairs from 'lodash/fromPairs'
 import sortBy from 'lodash/fp/sortBy'
@@ -72,6 +72,7 @@ const composer = props => {
   }
 
   return {
+    isPrint,
     reportLoading,
     day,
     date,
@@ -115,5 +116,13 @@ export const ReportsContainer = compose(
   withPromise(fetchQuarter),
   withPromise(fetchPreview),
   withPromise(fetchReferrals),
+  mapProps(p => {
+    if (p.isPrint && p.quarter && p.referrals && p.previews) {
+      console.log('[ReportsContainer] All loaded, now printing')
+      window.print()
+    }
+
+    return p
+  }),
   toClass
 )(ReportsScreen)

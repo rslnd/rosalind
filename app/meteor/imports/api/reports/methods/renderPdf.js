@@ -15,10 +15,7 @@ const printOptions = {
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-const isLoaded = (html = '') =>
-  html.match(/weekPreviewLoaded/g)
-
-const printToPDF = async ({ url, printOptions, isLoaded }) => {
+const printToPDF = async ({ url, printOptions }) => {
   const browser = await puppeteer.launch({
     headless: true, // Note: Only disable for debugging, pdf only renders in headless mode
     args: [
@@ -37,20 +34,14 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
 
     page.on('console', msg => console.log('[Reports] renderPdf [console]', msg.text()))
 
-    await page.goto(url, { waitUntil: 'networkidle2' })
     let loaded = false
     let retries = 0
-    let html = ''
+
+    await page.goto(url, { waitUntil: 'networkidle2' })
+    await page.exposeFunction('print', () => { loaded = true })
+
     do {
       await delay(2000)
-
-      const aHandle = await page.evaluateHandle(() => document.body)
-      const resultHandle = await page.evaluateHandle(body => body.innerHTML, aHandle)
-      html = await resultHandle.jsonValue()
-      await resultHandle.dispose()
-
-      loaded = isLoaded(html)
-
       if (!loaded) {
         retries++
         console.log('[Reports] renderPdf: Still loading, retry', retries)
@@ -58,7 +49,7 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
           throw new Error(`[Reports] renderPdf: Failed to load`)
         }
       }
-    } while (!loaded)
+    } while (!loaded) // eslint-disable-line
 
     console.log('[Reports] renderPdf: Loaded, waiting 10s before rendering pdf')
     await delay(10000)
@@ -77,8 +68,8 @@ const printToPDF = async ({ url, printOptions, isLoaded }) => {
 
 export const renderPdf = async ({ day }) => {
   const slug = dayToSlug(day)
-  const url = `http://127.0.0.1:${process.env.PORT}/reports/day/${slug}#print`
-  const pdf = await printToPDF({ url, printOptions, isLoaded })
+  const url = `http://localhost:${process.env.PORT}/reports/day/${slug}#print`
+  const pdf = await printToPDF({ url, printOptions })
 
   return pdf
 }
