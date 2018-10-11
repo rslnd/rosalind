@@ -13,7 +13,6 @@ import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { __ } from '../../../i18n'
 import { withTracker } from '../../components/withTracker'
-import { SubsManager } from 'meteor/meteorhacks:subs-manager'
 import { dateToDay } from '../../../util/time/day'
 import { Users } from '../../../api/users'
 import { Patients } from '../../../api/patients'
@@ -23,14 +22,10 @@ import { Schedules } from '../../../api/schedules'
 import { Constraints } from '../../../api/constraints'
 import { Loading } from '../../components/Loading'
 import { AppointmentsScreen } from './AppointmentsScreen'
-import { subscribeManager } from '../../../util/meteor/subscribe'
+import { subscribe } from '../../../util/meteor/subscribe'
 import { toWeekday } from '../../../util/time/weekdays'
 
 const mapUncapped = map.convert({ cap: false })
-const appointmentsSubsManager = new SubsManager({
-  cacheLimit: 30,
-  expireIn: 15 // in minutes
-})
 
 const parseDay = memoize(d => moment(d))
 
@@ -70,9 +65,9 @@ const composer = (props) => {
   let subsReady = true
   // Appointments and schedules for future dates are cached as global subscriptions
   if (date.toDate() < moment().startOf('day').toDate()) {
-    const schedulesDaySubscriptions = subscribeManager(appointmentsSubsManager, 'schedules', day)
-    const schedulesOverrideSubscriptions = subscribeManager(appointmentsSubsManager, 'schedules', dateRange)
-    const appointmentsSubscription = subscribeManager(appointmentsSubsManager, 'appointments-legacy', dateRange)
+    const schedulesDaySubscriptions = subscribe('schedules', day)
+    const schedulesOverrideSubscriptions = subscribe('schedules', dateRange)
+    const appointmentsSubscription = subscribe('appointments-legacy', dateRange)
     subsReady = schedulesDaySubscriptions.ready() && schedulesOverrideSubscriptions.ready() && appointmentsSubscription.ready()
   }
 

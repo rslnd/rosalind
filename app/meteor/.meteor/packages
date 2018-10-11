@@ -33,10 +33,9 @@ clinical:env
 # Collections
 aldeed:simple-schema
 aldeed:collection2
-meteorhacks:subs-manager
 tmeasday:publish-counts
 zimme:collection-softremovable
-reywood:publish-composite
+cultofcoders:publish-composite
 meteorhacks:unblock
 meteorhacks:search-source
 didericis:callpromise-mixin
@@ -46,7 +45,6 @@ percolate:migrations
 alanning:roles
 
 # Util
-momentjs:moment
 mizzao:timesync
 dandv:rate-limit
 

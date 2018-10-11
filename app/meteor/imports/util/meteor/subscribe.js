@@ -24,7 +24,3 @@ const withClientKey = (name, args) => {
 
 export const subscribe = (name, args) =>
   Meteor.subscribe(name, withClientKey(name, args))
-
-// Legacy
-export const subscribeManager = (subsManager, name, args) =>
-  subsManager.subscribe(name, withClientKey(name, args))
