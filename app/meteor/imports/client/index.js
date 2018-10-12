@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Meteor } from 'meteor/meteor'
 import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
-import { process as server } from 'meteor/clinical:env'
 import { muiTheme } from './layout/muiTheme'
 import { store } from './store'
 import { Error } from './components/Error'
@@ -43,7 +43,7 @@ export const Rosalind = () => (
 )
 
 export default () => {
-  const customerName = server.env.CUSTOMER_NAME || 'Rosalind Development'
+  const customerName = Meteor.settings.public.CUSTOMER_NAME || 'Rosalind Development'
   document.title = customerName
 
   document.addEventListener('DOMContentLoaded', () => {

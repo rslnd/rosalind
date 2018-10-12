@@ -1,12 +1,12 @@
 import moment from 'moment-timezone'
 import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
-import { process as server } from 'meteor/clinical:env'
+import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { Footer } from './Footer'
 
 const composer = (props) => {
-  const customerName = server.env.CUSTOMER_NAME
+  const customerName = Meteor.settings.public.CUSTOMER_NAME
   const printedStamp = __('ui.printedStamp', {
     time: moment().format(__('time.timeFormat')),
     date: moment().format(__('time.dateFormat'))

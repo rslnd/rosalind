@@ -1,7 +1,6 @@
 import identity from 'lodash/identity'
 import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
-import { process as server } from 'meteor/clinical:env'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { Counts } from 'meteor/tmeasday:publish-counts'
@@ -122,7 +121,7 @@ const composer = (props) => {
     }
   })
 
-  const customerName = server.env.CUSTOMER_NAME || 'Rosalind Development'
+  const customerName = Meteor.settings.public.CUSTOMER_NAME || 'Rosalind Development'
 
   return { ...props, items, customerName }
 }

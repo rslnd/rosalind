@@ -20,6 +20,7 @@ cd -
 mkdir -p ../build/bundle/node_modules/
 cp -r ../app/meteor/node_modules/. ../build/bundle/node_modules/
 cp ../app/meteor/package.json ../build/bundle/
+cp ../app/meteor/env.js ../build/bundle/
 
 cd ../build/bundle/
 npm prune --production

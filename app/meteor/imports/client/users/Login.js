@@ -1,7 +1,6 @@
 /* global Accounts */
 import React from 'react'
 import Alert from 'react-s-alert'
-import { process as server } from 'meteor/clinical:env'
 import { Button } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'

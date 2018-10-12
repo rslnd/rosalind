@@ -28,7 +28,6 @@ audit-argument-checks@1.0.7
 # Security
 ongoworks:security@2.1.0
 mdg:validated-method
-clinical:env
 
 # Collections
 aldeed:simple-schema

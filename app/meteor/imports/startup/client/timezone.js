@@ -1,6 +1,6 @@
 import moment from 'moment-timezone'
-import { process as server } from 'meteor/clinical:env'
+import { Meteor } from 'meteor/meteor'
 
 export default () => {
-  moment.tz.setDefault(server.env.TZ_CLIENT || 'Europe/Vienna')
+  moment.tz.setDefault(Meteor.settings.public.TZ_CLIENT || 'Europe/Vienna')
 }

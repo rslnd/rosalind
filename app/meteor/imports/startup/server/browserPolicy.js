@@ -10,8 +10,7 @@ import uuidv4 from 'uuid/v4'
 const self = "'self'"
 const none = "'none'"
 
-// TODO: Disable inline scripts when clinical:env is removed
-// WebAppInternals.setInlineScriptsAllowed(false)
+WebAppInternals.setInlineScriptsAllowed(false)
 
 const getHelmetConfig = () => {
   const domain = Meteor.absoluteUrl().replace(/http(s)*:\/\//, '').replace(/\/$/, '')

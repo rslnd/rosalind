@@ -2,7 +2,6 @@ import shared from '../shared'
 import banner from './banner'
 import intl from './intl'
 import timezone from './timezone'
-import env from './env'
 import migrations from './migrations'
 import browserPolicy from './browserPolicy'
 import headers from './headers'
@@ -19,7 +18,6 @@ export default function () {
   banner()
   intl()
   timezone()
-  env()
   migrations()
   passwordlessLogin()
   appcache()

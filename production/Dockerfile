@@ -46,4 +46,4 @@ ENV NODE_ICU_DATA /opt/app/programs/server/npm/node_modules/full-icu/
 ENV PORT 3000
 EXPOSE 3000
 
-CMD ["node", "main.js"]
+CMD ["/bin/sh", "-c", "METEOR_SETTINGS='$(node env.js)'", "node", "main.js"]

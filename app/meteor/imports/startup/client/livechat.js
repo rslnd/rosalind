@@ -2,7 +2,6 @@ import throttle from 'lodash/throttle'
 import Smooch from 'smooch'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
-import { process as server } from 'meteor/clinical:env'
 import { __ } from '../../i18n'
 import { Roles } from 'meteor/alanning:roles'
 import { Groups } from '../../api/groups'
@@ -29,10 +28,10 @@ const getTranslation = () => {
 const init = () => {
   const avatarUrl = new window.URL('/images/avatar.jpg', window.location.origin).href
 
-  if (server.env.SMOOCH_APP_ID && !server.env.TEST) {
+  if (Meteor.settings.public.SMOOCH_APP_ID) {
     if (Smooch) {
       Smooch.init({
-        appId: server.env.SMOOCH_APP_ID,
+        appId: Meteor.settings.public.SMOOCH_APP_ID,
         customText: getTranslation(),
         menuItems: {},
         soundNotificationEnabled: false,
@@ -44,7 +43,7 @@ const init = () => {
           document.querySelector('body>iframe').style.zoom = 0.8080
           const user = Meteor.user()
           if (user) {
-            const env = server.env.NODE_ENV.toUpperCase()
+            const env = process.env.NODE_ENV.toUpperCase()
             const smoochUserId = `USER-${user._id}${env === 'PRODUCTION' ? '' : `-${env}`}`
 
             if (!currentUserId) {
