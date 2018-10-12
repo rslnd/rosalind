@@ -1,4 +1,3 @@
-import debugging from './debugging'
 import shared from '../shared'
 import banner from './banner'
 import intl from './intl'
@@ -16,7 +15,6 @@ import development from './development'
 import api from './api'
 
 export default function () {
-  debugging()
   shared()
   banner()
   intl()
