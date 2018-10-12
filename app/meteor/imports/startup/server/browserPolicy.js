@@ -1,6 +1,7 @@
 /* global __meteor_runtime_config__ */
 import { Meteor } from 'meteor/meteor'
 import { WebApp, WebAppInternals } from 'meteor/webapp'
+import { Autoupdate } from 'meteor/autoupdate'
 import flatten from 'lodash/flatten'
 import crypto from 'crypto'
 import helmet from 'helmet'
@@ -20,7 +21,8 @@ const getHelmetConfig = () => {
   ]
   const runtimeConfig = Object.assign(
     __meteor_runtime_config__,
-    { isModern: Meteor.isModern }
+    Autoupdate,
+    // { isModern: Meteor.isModern }
   )
 
   // Debug hash generation
