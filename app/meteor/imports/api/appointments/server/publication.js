@@ -13,22 +13,17 @@ export default () => {
       appointmentId: String
     },
     fn: function ({ appointmentId }) {
-      this.unblock()
-
       return {
         find: function () {
-          this.unblock()
           return Appointments.find({ _id: appointmentId }, { limit: 1 })
         },
         children: [
           {
             find: function (doc) {
-              this.unblock()
               return Comments.find({ docId: doc._id })
             }
           }, {
             find: function (doc) {
-              this.unblock()
               if (doc.patientId) {
                 return Patients.find({ _id: doc.patientId }, { limit: 1 })
               }
@@ -44,14 +39,11 @@ export default () => {
     roles: [ 'appointments', 'waitlist' ],
     preload: true,
     fn: function ({ appointmentId }) {
-      this.unblock()
-
       const startOfToday = moment().startOf('day').toDate()
       const endOfToday = moment().endOf('day').toDate()
 
       return {
         find: function () {
-          this.unblock()
           return Appointments.find({
             start: {
               $gt: startOfToday,
@@ -66,7 +58,6 @@ export default () => {
         children: [
           {
             find: function (doc) {
-              this.unblock()
               if (doc.patientId) {
                 return Patients.find({ _id: doc.patientId }, {
                   limit: 1
@@ -84,13 +75,10 @@ export default () => {
     roles: [ 'appointments' ],
     preload: true,
     fn: function () {
-      this.unblock()
-
       const startOfTomorrow = moment().endOf('day').toDate()
 
       return {
         find: function () {
-          this.unblock()
           return Appointments.find({
             start: {
               $gt: startOfTomorrow
@@ -119,7 +107,6 @@ export default () => {
         children: [
           {
             find: function (doc) {
-              this.unblock()
               if (doc.patientId) {
                 return Patients.find({ _id: doc.patientId }, {
                   limit: 1,
@@ -140,11 +127,8 @@ export default () => {
     },
     roles: ['appointments'],
     fn: function ({ patientId }) {
-      this.unblock()
-
       return {
         find: function () {
-          this.unblock()
           return Appointments.find({ patientId }, {
             sort: { start: 1 },
             removed: true
@@ -153,12 +137,10 @@ export default () => {
         children: [
           {
             find: function (appointment) {
-              this.unblock()
               return Comments.find({ docId: patientId })
             }
           }, {
             find: function (appointment) {
-              this.unblock()
               return Comments.find({ docId: appointment._id })
             }
           }
@@ -180,7 +162,6 @@ export default () => {
     roles: ['appointments'],
     preload: 1,
     fn: function ({ date, start, end, within }) {
-      this.unblock()
       // If no argument are supplied, publish future appointments
       if (!within) {
         within = 'day'
@@ -196,7 +177,6 @@ export default () => {
 
       return {
         find: function () {
-          this.unblock()
           const selector = {
             start: {
               $gte: start,
@@ -210,13 +190,11 @@ export default () => {
         children: [
           {
             find: function (appointment) {
-              this.unblock()
               return Comments.find({ docId: appointment._id })
             }
           },
           {
             find: function (appointment) {
-              this.unblock()
               if (appointment.patientId) {
                 return Patients.find({ _id: appointment.patientId }, { limit: 1 })
               }

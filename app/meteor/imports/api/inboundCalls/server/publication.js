@@ -2,7 +2,7 @@ import { InboundCalls } from '../'
 import flatten from 'lodash/flatten'
 import moment from 'moment'
 import { Comments } from '../../comments'
-import { publish, publishComposite, publishCompositeTable } from '../../../util/meteor/publish'
+import { publish, publishComposite } from '../../../util/meteor/publish'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 
 export default () => {
@@ -23,10 +23,8 @@ export default () => {
     name: 'inboundCalls',
     roles: ['inboundCalls'],
     fn: function () {
-      this.unblock()
       return {
         find: function () {
-          this.unblock()
           return InboundCalls.find({ removed: { $ne: true } })
         },
         children: [
@@ -47,7 +45,6 @@ export default () => {
       query: String
     },
     fn: function ({ query }) {
-      this.unblock()
 
       const selector =
         query && query.length > 3
@@ -64,7 +61,6 @@ export default () => {
 
       return {
         find: function () {
-          this.unblock()
           return InboundCalls.find(selector, {
             sort: {
               removedAt: -1

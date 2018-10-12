@@ -50,6 +50,3 @@ simonsimcity:job-collection
 
 # Monitoring
 flowkey:raven
-
-# Legacy, remove asap
-meteorhacks:unblock

@@ -63,8 +63,6 @@ meteor@1.9.2
 meteor-base@1.4.0
 meteor-platform@1.2.6
 meteorhacks:inject-initial@1.0.4
-meteorhacks:meteorx@1.4.1
-meteorhacks:unblock@1.1.0
 minimongo@1.4.5
 mobile-experience@1.0.5
 mobile-status-bar@1.0.14

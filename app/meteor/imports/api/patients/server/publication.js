@@ -12,13 +12,11 @@ export default () => {
     fn: function ({ patientIds }) {
       return {
         find: function () {
-          this.unblock()
           return Patients.find({ _id: { $in: patientIds } })
         },
         children: [
           {
             find: function (patient) {
-              this.unblock()
               return Comments.find({ docId: patient._id })
             }
           }
