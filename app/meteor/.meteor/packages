@@ -36,8 +36,6 @@ aldeed:collection2
 tmeasday:publish-counts
 zimme:collection-softremovable
 cultofcoders:publish-composite
-meteorhacks:unblock
-meteorhacks:search-source
 didericis:callpromise-mixin
 percolate:migrations
 
@@ -45,15 +43,13 @@ percolate:migrations
 alanning:roles
 
 # Util
-mizzao:timesync
 dandv:rate-limit
-
-# File Upload
-ostrio:files
-meteorhacks:picker
 
 # Jobs
 simonsimcity:job-collection
 
 # Monitoring
 flowkey:raven
+
+# Legacy, remove asap
+meteorhacks:unblock

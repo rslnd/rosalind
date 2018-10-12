@@ -1,19 +1,20 @@
-import { Picker } from 'meteor/meteorhacks:picker'
-import bodyParser from 'body-parser'
+import parse from 'co-body'
+import { WebApp } from 'meteor/webapp'
 import { receive } from '../channels/sms'
 
 export const inboundWebhooks = () => {
-  const post = Picker.filter((req, res) => req.method === 'POST')
-  Picker.middleware(bodyParser.json())
-  post.route('/api/messages/channels/sms/receive', (params, req, res, next) => {
-    const payload = req.body
-
-    console.log('[Messages] server/inboundWebhooks: Caught webhook', { headers: req.headers })
-
-    res.setHeader('Content-Type', 'application/json; charset=utf8')
+  WebApp.connectHandlers.use('/api/messages/channels/sms/receive', async (req, res, next) => {
+    if (req.method !== 'POST') {
+      return next()
+    }
 
     try {
+      console.log('[Messages] server/inboundWebhooks: Caught webhook', { headers: req.headers })
+
+      const payload = await parse.json(req)
       const { response } = receive(payload)
+
+      res.setHeader('Content-Type', 'application/json; charset=utf8')
       res.writeHead(200)
       res.end(JSON.stringify(response))
     } catch (err) {
