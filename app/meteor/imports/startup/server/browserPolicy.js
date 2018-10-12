@@ -21,8 +21,8 @@ const getHelmetConfig = () => {
   ]
   const runtimeConfig = Object.assign(
     __meteor_runtime_config__,
-    Autoupdate,
-    // { isModern: Meteor.isModern }
+    // Autoupdate,
+    { isModern: Meteor.isModern }
   )
 
   // Debug hash generation
