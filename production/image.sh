@@ -21,6 +21,7 @@ else
   source prepare.sh
 
   cp Dockerfile ../build/bundle/Dockerfile
+  cp entrypoint.sh ../build/bundle/entrypoint.sh
 
   cd ../build/bundle/
 
