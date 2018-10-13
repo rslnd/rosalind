@@ -27,12 +27,9 @@ const sha1 = async password => {
     const passwordBuffer = (new window.TextEncoder()).encode(password)
     const hashBuffer = await window.crypto.subtle.digest({ name: 'SHA-1' }, passwordBuffer)
     return bufferToHexString(hashBuffer).toUpperCase()
-  } else {
-    const { createHash } = require('crypto')
-    return createHash('sha1')
-      .update(password)
-      .digest('hex')
-      .toUpperCase()
+  } else if (Meteor.isServer) {
+    const { sha1 } = require('./server/sha1')
+    return sha1(password)
   }
 }
 

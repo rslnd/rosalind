@@ -20,7 +20,7 @@ export const upsert = ({ Reports }) => {
       }
 
       const existingReport = Reports.findOne({
-        calendarId,
+        calendarId: report.calendarId,
         'day.day': report.day.day,
         'day.month': report.day.month,
         'day.year': report.day.year
