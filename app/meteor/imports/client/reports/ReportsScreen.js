@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import { Button } from 'react-bootstrap'
+import Button from 'react-bootstrap/lib/Button'
 import { __ } from '../../i18n'
 import { weekOfYear } from '../../util/time/format'
 import { dayToDate } from '../../util/time/day'

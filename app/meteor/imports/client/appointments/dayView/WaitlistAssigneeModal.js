@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal } from 'react-bootstrap'
+import Modal from 'react-bootstrap/lib/Modal'
 import Button from '@material-ui/core/Button'
 import { __ } from '../../../i18n'
 import { UserPicker } from '../../users/UserPicker'

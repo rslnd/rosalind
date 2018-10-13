@@ -1,7 +1,7 @@
 import React from 'react'
 import { WaitlistItem } from './WaitlistItem'
 import FlipMove from 'react-flip-move'
-import { Modal } from 'react-bootstrap'
+import Modal from 'react-bootstrap/lib/Modal'
 import { __ } from '../../../i18n'
 import Button from '@material-ui/core/Button'
 import { UserPicker } from '../../users/UserPicker'

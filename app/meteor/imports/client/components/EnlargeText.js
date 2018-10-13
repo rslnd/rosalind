@@ -1,5 +1,5 @@
 import React from 'react'
-import { Overlay } from 'react-bootstrap'
+import Overlay from 'react-bootstrap/lib/Overlay'
 import { Icon } from './Icon'
 
 const largeStyle = {

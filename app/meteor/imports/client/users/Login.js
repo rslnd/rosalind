@@ -1,7 +1,7 @@
 /* global Accounts */
 import React from 'react'
 import Alert from 'react-s-alert'
-import { Button } from 'react-bootstrap'
+import Button from 'react-bootstrap/lib/Button'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'

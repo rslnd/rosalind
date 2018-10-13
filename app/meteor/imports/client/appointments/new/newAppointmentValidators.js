@@ -1,14 +1,13 @@
-import unidecode from 'unidecode'
-
 export const validateNameCase = (name) => {
   if (name && name.length >= 4) {
-    const withoutDiacritics = unidecode(name)
-    return !!(
-      withoutDiacritics.match(/^[A-Z][a-z]/) ||
-      withoutDiacritics.match(/^[A-Z][a-z]/) ||
-      withoutDiacritics.match(/\s/) ||
-      withoutDiacritics.match(/[a-z][A-Z][a-z]/)
-    )
+    const allUpper = name.toUpperCase()
+    const allLower = name.toLowerCase()
+
+    if (name === allUpper || name === allLower) {
+      return false
+    } else {
+      return true
+    }
   } else {
     return true
   }

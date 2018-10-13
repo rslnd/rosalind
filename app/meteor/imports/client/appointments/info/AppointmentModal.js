@@ -1,6 +1,5 @@
 import React from 'react'
-import { Modal } from 'react-bootstrap'
-import Button from '@material-ui/core/Button'
+import Modal from 'react-bootstrap/lib/Modal'
 import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { AppointmentActionsContainer } from './AppointmentActionsContainer'
 import { PastAppointmentsContainer } from '../../patients/PastAppointmentsContainer'

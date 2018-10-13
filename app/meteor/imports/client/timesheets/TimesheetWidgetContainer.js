@@ -3,7 +3,7 @@ import moment from 'moment-timezone'
 import 'moment-duration-format'
 import { __ } from '../../i18n'
 import { withTracker } from '../components/withTracker'
-import { Button } from 'react-bootstrap'
+import Button from 'react-bootstrap/lib/Button'
 import { Icon } from 'client/client/components/Icon'
 import { Timesheets } from 'api/timesheets'
 
