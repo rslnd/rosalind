@@ -1,16 +1,11 @@
-/* global __meteor_runtime_config__ */
 import { Meteor } from 'meteor/meteor'
 import { WebApp, WebAppInternals } from 'meteor/webapp'
-import { Autoupdate } from 'meteor/autoupdate'
 import flatten from 'lodash/flatten'
-import crypto from 'crypto'
 import helmet from 'helmet'
 import uuidv4 from 'uuid/v4'
 
 const self = "'self'"
 const none = "'none'"
-
-WebAppInternals.setInlineScriptsAllowed(false)
 
 const getHelmetConfig = () => {
   const domain = Meteor.absoluteUrl().replace(/http(s)*:\/\//, '').replace(/\/$/, '')
@@ -18,16 +13,6 @@ const getHelmetConfig = () => {
     domain,
     ...(process.env.VIRTUAL_HOST ? process.env.VIRTUAL_HOST.split(',') : [])
   ]
-  const runtimeConfig = Object.assign(
-    __meteor_runtime_config__,
-    // Autoupdate,
-    { isModern: Meteor.isModern }
-  )
-
-  // Debug hash generation
-  // console.log(JSON.stringify(runtimeConfig))
-
-  const runtimeConfigHash = crypto.createHash('sha256').update(`__meteor_runtime_config__ = JSON.parse(decodeURIComponent("${encodeURIComponent(JSON.stringify(runtimeConfig))}"))`).digest('base64')
 
   const cspReportUri = 'https://rosalind.report-uri.com/r/d/csp/enforce'
   const ctReportUri = 'https://rosalind.report-uri.com/r/d/ct/enforce'
@@ -98,7 +83,6 @@ const getHelmetConfig = () => {
         ],
         scriptSrc: [
           self,
-          `'sha256-${runtimeConfigHash}'`,
           'https://api.smooch.io',
           'https://cdn.smooch.io'
         ],
@@ -168,6 +152,8 @@ export default () => {
   Meteor.startup(() => {
     // BUG: SRI Hash for module.js is incorrect
     // WebAppInternals.enableSubresourceIntegrity()
+
+    WebAppInternals.setInlineScriptsAllowed(false)
 
     WebApp.connectHandlers.use((req, res, next) => {
       const styleNonce = new Buffer(uuidv4()).toString('base64')
