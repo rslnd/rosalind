@@ -47,7 +47,9 @@ export default () => {
   document.title = customerName
 
   document.addEventListener('DOMContentLoaded', () => {
-    const rootNode = document.getElementById('rosalind')
+    const containerNode = document.createElement('div')
+    containerNode.id = 'rosalind'
+    const rootNode = document.body.appendChild(containerNode)
     ReactDOM.render(<Rosalind />, rootNode)
   })
 }

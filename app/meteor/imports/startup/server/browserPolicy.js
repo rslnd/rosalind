@@ -194,7 +194,10 @@ export default () => {
       // the url parsed from the original request string.
       // url.hash contains # and the nonce we just attached.
       const styleNonce = request.url.hash.substr(1)
+      data.head += `\n  <title>Connecting…</title>`
       data.head += `\n  <meta property="csp-nonce" content="${styleNonce}">`
+      data.head += `\n  <meta name='robots' content='noindex, nofollow'>`
+      data.head += `\n  <meta name='viewport' content='user-scalable=no, width=device-width, maximum-scale=1, initial-scale=1, minimum-scale=1'>`
 
       return true
     })
