@@ -1,5 +1,5 @@
 import React from 'react'
-import namecase from 'namecase'
+import { namecase } from '../../../util/namecase'
 import Paper from '@material-ui/core/Paper'
 import { prefix } from '../../../api/patients/methods/name'
 import { ReferralsContainer } from './ReferralsContainer'

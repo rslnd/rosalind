@@ -1,5 +1,5 @@
 import React from 'react'
-import namecase from 'namecase'
+import { namecase } from '../../util/namecase'
 import { __ } from '../../i18n'
 import { prefix } from '../../api/patients/methods/name'
 

@@ -10,7 +10,7 @@ import { Indicator } from '../../appointment/Indicator'
 import { format } from '../grid/timeSlots'
 import { background, primaryActive, darkGrayDisabled, darkGray } from '../../../layout/styles'
 import { color, lightness } from 'kewler'
-import namecase from 'namecase'
+import { namecase } from '../../../../util/namecase'
 import { getDefaultDuration } from '../../../../api/appointments/methods/getDefaultDuration'
 
 const styles = {

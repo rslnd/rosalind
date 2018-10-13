@@ -1,5 +1,5 @@
 import React from 'react'
-import namecase from 'namecase'
+import { namecase } from '../../util/namecase'
 import uniq from 'lodash/uniq'
 import sortBy from 'lodash/fp/sortBy'
 import { __ } from '../../i18n'

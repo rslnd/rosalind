@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import namecase from 'namecase'
+import { namecase } from '../../../util/namecase'
 import { compose, withHandlers, mapProps, branch, withProps } from 'recompose'
 import { PatientPickerComponent } from './PatientPickerComponent'
 import {
