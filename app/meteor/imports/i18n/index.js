@@ -1,7 +1,17 @@
-import dot from 'mongo-dot-notation'
 import * as de from './de'
 
-const translations = dot.flatten(de)['$set'] // Sorry...
+const flattenObject = (object, prefix = '') =>
+  Object.keys(object).reduce(
+    (acc, element) =>
+      object[element] &&
+      typeof object[element] === 'object' &&
+      !Array.isArray(object[element])
+        ? { ...acc, ...flattenObject(object[element], `${prefix}${element}.`) }
+        : { ...acc, ...{ [`${prefix}${element}`]: object[element] } },
+    {}
+  )
+
+const translations = flattenObject(de)
 
 export const __ = (originalKey, substitutions) => {
   const key = pluralizeKey(originalKey, substitutions)
@@ -36,7 +46,3 @@ const pluralizeKey = (key, substitutions) =>
   (substitutions && isPlural(substitutions.count))
   ? `${key}_plural`
   : key
-
-if (Meteor.isClient) {
-  Template.registerHelper('_', __)
-}
