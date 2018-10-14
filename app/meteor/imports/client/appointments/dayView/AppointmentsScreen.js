@@ -11,6 +11,7 @@ import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import { PatientPicker } from '../../patients/picker'
 import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../layout/styles'
+import { HelpContainer } from '../help/HelpContainer'
 
 const contentHeaderStyle = {
   background,
@@ -117,6 +118,15 @@ export class AppointmentsScreen extends React.Component {
 
             </DateNavigation>
           </div>
+
+          {
+            // Feature flag
+            (window.location.hash.indexOf('ff-help') !== -1) &&
+              <HelpContainer
+                calendarId={this.props.calendar._id}
+                date={this.props.date}
+              />
+          }
         </div>
 
         <div className='content print-zoom-1'>
@@ -133,7 +143,6 @@ export class AppointmentsScreen extends React.Component {
             move={this.props.move}
             dispatch={this.props.dispatch} />
         </div>
-
       </div>
     )
   }
