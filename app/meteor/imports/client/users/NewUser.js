@@ -41,7 +41,7 @@ const NewUserScreen = ({ submitting, invalid, validating, pristine, handleSubmit
               <Button
                 type='submit'
                 color='primary'
-                variant='raised'
+                variant='contained'
                 fullWidth
                 disabled={submitting || invalid || validating || pristine}
                 onClick={handleSubmit}

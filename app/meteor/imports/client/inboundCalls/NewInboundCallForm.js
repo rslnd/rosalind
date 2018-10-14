@@ -49,7 +49,7 @@ class NewInboundCallFormComponent extends React.Component {
 
         <div className='row form-row'>
           <div className='col-md-12'>
-            <Button variant='raised' type='submit'
+            <Button variant='contained' type='submit'
               fullWidth
               color={(!submitting && !pristine) ? 'primary' : 'default'}
               disabled={invalid || pristine || submitting}>

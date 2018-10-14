@@ -33,7 +33,7 @@ export const ActionButton = ({ appointment, isFirst, isLast, action, style = {},
     <div className='text-center' style={containerStyle}>
       <Button
         style={primaryButtonStyle}
-        variant={isFirst ? 'raised' : undefined}
+        variant={isFirst ? 'contained' : undefined}
         color={isFirst ? 'primary' : undefined}
         size='large'
         onClick={nextAction.fn}

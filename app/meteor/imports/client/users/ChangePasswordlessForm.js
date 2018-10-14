@@ -23,7 +23,7 @@ const Fields = ({ submitting, handleToggle, passwordless }) =>
     <Button
       type='submit'
       color={passwordless ? 'secondary' : 'primary'}
-      variant='raised'
+      variant='contained'
       fullWidth
       disabled={submitting}
       onClick={handleToggle}

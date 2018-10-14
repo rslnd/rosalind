@@ -90,7 +90,7 @@ export const NewAppointmentFields = props => {
           handleSubmit()
         }
       }}>
-        <Button variant='raised' type='submit'
+        <Button variant='contained' type='submit'
           onClick={handleSubmit}
           fullWidth
           color='primary'

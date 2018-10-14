@@ -22,7 +22,7 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
     <Button
       type='submit'
       color='primary'
-      variant='raised'
+      variant='contained'
       fullWidth
       disabled={submitting || invalid || validating || pristine}
       onClick={handleSubmit}

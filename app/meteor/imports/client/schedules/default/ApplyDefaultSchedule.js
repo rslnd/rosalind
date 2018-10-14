@@ -199,7 +199,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
 
             <div>
               <Button
-                variant='raised'
+                variant='contained'
                 size='large'
                 color='secondary'
                 style={buttonStyle}

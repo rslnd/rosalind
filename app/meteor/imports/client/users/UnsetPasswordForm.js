@@ -25,7 +25,7 @@ const Fields = ({ submitting, handleUnsetPassword, hasPassword, weakPassword }) 
     <Button
       type='submit'
       color='primary'
-      variant='raised'
+      variant='contained'
       fullWidth
       disabled={!hasPassword}
       onClick={handleUnsetPassword}

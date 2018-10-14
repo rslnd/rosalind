@@ -22,7 +22,7 @@ const Fields = ({ submitting, handleRemove, doubleCheck, handleToggleDoubleCheck
     <Button
       type='submit'
       color={'secondary'}
-      variant='raised'
+      variant='contained'
       fullWidth
       disabled={submitting || !doubleCheck}
       onClick={handleRemove}

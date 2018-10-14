@@ -10,14 +10,14 @@ export const AppointmentActions = (props) => (
         props.admitted
         ? <Button
           disabled={props.isLoading}
-          variant='raised'
+          variant='contained'
           style={{ backgroundColor: '#C5E1A5' }}
           onClick={props.unsetAdmitted}>
           <span><Icon name='check' />&emsp;{__('appointments.admit')}</span>
         </Button>
         : <Button
           disabled={props.isLoading}
-          variant='raised'
+          variant='contained'
           style={{ backgroundColor: '#fff' }}
           onClick={props.setAdmitted}>
           <span><Icon name='check' />&emsp;{__('appointments.admit')}</span>
