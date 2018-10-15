@@ -14,9 +14,7 @@ const getHelmetConfig = () => {
     ...(process.env.VIRTUAL_HOST ? process.env.VIRTUAL_HOST.split(',') : [])
   ]
 
-  const cspReportUri = 'https://rosalind.report-uri.com/r/d/csp/enforce'
-  const ctReportUri = 'https://rosalind.report-uri.com/r/d/ct/enforce'
-  const xssReportUri = 'https://rosalind.report-uri.com/r/d/xss/enforce'
+  const reportUri = `https://sentry.io/api/62218/security/?sentry_key=6af65eb19a37410f968d4e602ce572d7&sentry_release=${process.env.COMMIT_HASH}&sentry_environment=${process.env.NODE_ENV}`
 
   // Note: No wildcard origins allowed
 
@@ -75,7 +73,7 @@ const getHelmetConfig = () => {
         objectSrc: [
           none
         ],
-        reportUri: cspReportUri,
+        reportUri,
         sandbox: [
           'allow-same-origin',
           'allow-forms',
@@ -103,7 +101,7 @@ const getHelmetConfig = () => {
     expectCt: {
       enforce: false,
       maxAge: 604800,
-      ctReportUri
+      ctReportUri: reportUri
     },
     frameguard: {
       action: 'deny'
@@ -122,7 +120,7 @@ const getHelmetConfig = () => {
     },
     xssFilter: {
       mode: 'block',
-      reportUri: xssReportUri
+      reportUri
     },
     featurePolicy: {
       features: {
