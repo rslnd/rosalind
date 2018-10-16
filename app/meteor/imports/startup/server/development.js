@@ -28,21 +28,21 @@ export default () => {
   const multiplexers = Mongo._observeMultiplexers
 
   db.s.topology.on('close', e => {
-    console.error('[Debug] Topology close')
+    console.error('[Debug] Database topology change: closed')
     console.log(`Number of observes are active: ${Object.keys(multiplexers).length}`)
   })
 
   db.s.topology.on('reconnect', data =>
-    console.log('[Debug] Successfully reconnected to mongo'))
+    console.log('[Debug] Database topology change: Successfully reconnected to mongo'))
 
   db.s.topology.on('reconnectFailed', data =>
-    console.error('[Debug] Failed to reconnect to mongo'))
+    console.error('[Debug] Database topology change: Failed to reconnect to mongo'))
 
   db.s.topology.on('left', data =>
-    console.log('[Debug] A server left the replica set'))
+    console.log('[Debug] Database topology change: A server left the replica set'))
 
   db.s.topology.on('joined', data =>
-    console.log('[Debug] A server joined the replica set'))
+    console.log('[Debug] Database topology change: A server joined the replica set'))
 
   if (process.env.NODE_ENV === 'production') { return }
 
