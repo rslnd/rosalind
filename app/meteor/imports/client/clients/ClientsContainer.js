@@ -14,6 +14,14 @@ const composer = (props) => {
   const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }, { removed: true }))
   const getGroupName = id => id && Groups.findOne(id).name
   const handleUpdate = (_id, update) => {
+    // If there are no Ids in passwordlessGroupIds, remove the key
+    // to allow all clients to log in
+    if (update.$set.passwordlessGroupIds && update.$set.passwordlessGroupIds.length === 0) {
+      delete update.$set
+      update.$unset = {
+        passwordlessGroupIds: 1
+      }
+    }
     Clients.update({ _id }, update)
   }
   const handleRemove = (_id) => {
