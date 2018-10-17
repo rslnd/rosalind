@@ -9,7 +9,7 @@ import { Reports } from '../../'
 import { Calendars } from '../../../calendars'
 import { Events } from '../../../events'
 import { Users } from '../../../users'
-import { dateToDay, dayToDate, dayToSlug } from '../../../../util/time/day'
+import { dateToDay, dayToDate, dayToSlug, daySelector } from '../../../../util/time/day'
 import { renderEmail } from '../../methods/renderEmail'
 import { renderPdf } from '../../methods/renderPdf'
 
@@ -28,9 +28,7 @@ export const sendEmail = async (args = {}) => {
     const day = args.day || dateToDay(moment(args))
 
     const reports = Reports.find({
-      'day.day': day.day,
-      'day.month': day.month,
-      'day.year': day.year
+      ...daySelector(day)
     }).fetch()
 
     if (reports.length === 0) {

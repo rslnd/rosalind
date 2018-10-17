@@ -6,7 +6,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { transformDefaultsToOverrides } from '../methods/transformDefaultsToOverrides'
-import { rangeToDays, isSame } from '../../../util/time/day'
+import { rangeToDays, isSame, daySelector } from '../../../util/time/day'
 
 export const applyDefaultSchedule = ({ Schedules, Users }) => {
   return new ValidatedMethod({
@@ -72,11 +72,7 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
         const countRemovedDays = Schedules.remove({
           type: 'day',
           calendarId,
-          $or: days.map(day => ({
-            'day.year': day.year,
-            'day.month': day.month,
-            'day.day': day.day
-          }))
+          $or: days.map(daySelector)
         })
         console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedDays, 'day schedules')
       }

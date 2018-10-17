@@ -13,7 +13,7 @@ import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { __ } from '../../../i18n'
 import { withTracker } from '../../components/withTracker'
-import { dateToDay } from '../../../util/time/day'
+import { dateToDay, daySelector } from '../../../util/time/day'
 import { Users } from '../../../api/users'
 import { Patients } from '../../../api/patients'
 import { Calendars } from '../../../api/calendars'
@@ -181,9 +181,7 @@ const composer = (props) => {
     const daySchedule = Schedules.findOne({
       type: 'day',
       calendarId: calendar._id,
-      'day.year': day.year,
-      'day.month': day.month,
-      'day.day': day.day
+      ...daySelector(day)
     })
 
     return {

@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { dayToDate } from '../../../util/time/day'
+import { daySelector } from '../../../util/time/day'
 import { Events } from '../../events'
 
 export const upsert = ({ Reports }) => {
@@ -21,9 +21,7 @@ export const upsert = ({ Reports }) => {
 
       const existingReport = Reports.findOne({
         calendarId: report.calendarId,
-        'day.day': report.day.day,
-        'day.month': report.day.month,
-        'day.year': report.day.year
+        ...daySelector(report.day)
       })
 
       if (existingReport) {

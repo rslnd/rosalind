@@ -64,6 +64,12 @@ export const isSame = (a, b) =>
   a.year === b.year &&
   (!a.zeroIndexMonth === !b.zeroIndexMonth)
 
+export const daySelector = d => ({
+  'day.year': d.year,
+  'day.month': d.month,
+  'day.day': d.day
+})
+
 export default {
   zeroIndexMonth,
   dateToDay,

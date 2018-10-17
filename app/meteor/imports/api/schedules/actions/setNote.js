@@ -4,6 +4,7 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Day } from '../../../util/schema/day'
+import { daySelector } from '../../../util/time/day'
 import { Events } from '../../events'
 
 export const setNote = ({ Schedules }) => {
@@ -28,9 +29,7 @@ export const setNote = ({ Schedules }) => {
       const existingSchedule = Schedules.findOne({
         type: 'day',
         calendarId,
-        'day.year': day.year,
-        'day.month': day.month,
-        'day.day': day.day
+        ...daySelector(day)
       })
 
       if (existingSchedule) {

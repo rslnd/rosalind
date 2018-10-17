@@ -6,7 +6,7 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Schedules } from '../../schedules'
 import { Day } from '../../../util/schema/day'
-import { dayToDate } from '../../../util/time/day'
+import { dayToDate, daySelector } from '../../../util/time/day'
 
 // This action updates the assigneeId of someone's appointments on a given day,
 // eg. when the assignee gets ill
@@ -59,9 +59,7 @@ export const changeAssignee = ({ Appointments }) => {
 
       const dayScheduleSelector = {
         type: 'day',
-        'day.day': day.day,
-        'day.month': day.month,
-        'day.year': day.year,
+        ...daySelector(day),
         calendarId
       }
 

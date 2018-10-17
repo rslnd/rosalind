@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { dayToDate } from '../../../util/time/day'
+import { dayToDate, daySelector } from '../../../util/time/day'
 import { daysForPreview } from '../methods/daysForPreview'
 import { generate as generateReport } from '../methods/generate'
 
@@ -40,9 +40,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
               calendarId,
               type: 'day',
               removed: { $ne: true },
-              'day.day': day.day,
-              'day.month': day.month,
-              'day.year': day.year
+              ...daySelector(day)
             })
 
             const overrideSchedules = Schedules.find({
@@ -64,9 +62,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
 
             const existingReport = Reports.findOne({
               calendarId,
-              'day.day': day.day,
-              'day.month': day.month,
-              'day.year': day.year
+              ...daySelector(day)
             })
 
             if (existingReport) {

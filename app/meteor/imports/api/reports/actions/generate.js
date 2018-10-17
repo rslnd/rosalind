@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { dayToDate } from '../../../util/time/day'
+import { dayToDate, daySelector } from '../../../util/time/day'
 import { generate as generateReport } from '../methods/generate'
 import { pastAppointmentsSelector } from '../methods/mapPlannedNew'
 
@@ -56,9 +56,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
             calendarId,
             type: 'day',
             removed: { $ne: true },
-            'day.day': day.day,
-            'day.month': day.month,
-            'day.year': day.year
+            ...daySelector(day)
           })
 
           const appointmentIds = appointments.map(a => a._id)
@@ -70,9 +68,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
 
           const existingReport = Reports.findOne({
             calendarId,
-            'day.day': day.day,
-            'day.month': day.month,
-            'day.year': day.year
+            ...daySelector(day)
           })
 
           let filteredAddendum = null

@@ -8,7 +8,7 @@ import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import { dateToDay, dayToDate } from '../../util/time/day'
+import { dateToDay, dayToDate, daySelector } from '../../util/time/day'
 import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
 import { Tags } from '../../api/tags'
@@ -25,11 +25,7 @@ const composer = props => {
 
   const subscription = subscribe('reports', { date: date.toDate() })
   const dayReports = Reports
-    .find({
-      'day.day': day.day,
-      'day.month': day.month,
-      'day.year': day.year
-    }).fetch()
+    .find(daySelector(day)).fetch()
 
   const reportLoading = (!subscription.ready() && dayReports.length === 0)
 
