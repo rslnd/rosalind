@@ -16,7 +16,7 @@ const drawerStyle = {
   bottom: 0,
   width: 600,
   zIndex: 20,
-  padding: 10
+  padding: 15
 }
 
 export const Drawer = ({ isOpen, setOpen, children }) =>
