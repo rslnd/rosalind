@@ -8,15 +8,14 @@ export const Help = ({
   setOpen,
   searchValue,
   handleSearchValueChange,
-  constraintsMatchingAssignee,
-  constraintsMatchingTag
+  constraints,
 }) =>
   <Drawer isOpen={isOpen} setOpen={setOpen}>
     <div style={containerStyle}>
       <Search value={searchValue} onChange={handleSearchValueChange} />
       <div style={resultsStyle}>
         {
-          constraintsMatchingAssignee.map(group =>
+          constraints.map(byAssignee =>
             <Group key={group.assignee._id} assignee={group.assignee}>
               {
                 group.constraints.map(c =>

@@ -3,6 +3,7 @@ import { Match } from 'meteor/check'
 import { Schedules } from '../'
 import { Comments } from '../../comments'
 import { publish } from '../../../util/meteor/publish'
+import { daySelector } from '../../../util/time/day'
 
 export default () => {
   publish({
@@ -44,11 +45,7 @@ export default () => {
           }
         }
       } else if (day && month && year) {
-        selector = {
-          'day.day': day,
-          'day.month': month,
-          'day.year': year
-        }
+        selector = daySelector({ day, month, year })
       } else {
         selector = { $or: [
           { type: 'default' },

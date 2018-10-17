@@ -44,20 +44,14 @@ export const applySearchFilter = (props) => {
     match(c.tags, t => t.description)
   )
 
-  intersectionBy(constraintsMatchingAssignee, constraintsMatchingTag, c => c._id)
-
   return {
-    constraintsMatchingAssignee,
-    constraintsMatchingTag
+    constraints: intersectionBy(constraintsMatchingAssignee, constraintsMatchingTag, c => c._id)
   }
 }
 
 export const explodeConstraints = ({
-  constraintsMatchingAssignee,
-  constraintsMatchingTag
+  constraints
 }) => ({
-  constraintsMatchingAssignee: explode(constraintsMatchingAssignee, 'assignees', 'assignee'),
-  constraintsMatchingTag: explode(constraintsMatchingTag, 'tags', 'tag')
 })
 
 const explode = (constraints, groupKey, singleKey) => {
