@@ -11,6 +11,7 @@ const animationSpeed = 1.6
 
 export const muiTheme = createMuiTheme({
   typography: {
+    useNextVariants: true,
     fontFamily: fontStack
   },
   palette: {
