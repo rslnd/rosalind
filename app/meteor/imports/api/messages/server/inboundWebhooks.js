@@ -1,6 +1,7 @@
 import parse from 'co-body'
 import { WebApp } from 'meteor/webapp'
 import { receive } from '../channels/sms'
+import { sentry } from '../../../startup/shared/sentry'
 
 export const inboundWebhooks = () => {
   WebApp.connectHandlers.use('/api/messages/channels/sms/receive', async (req, res, next) => {
@@ -19,6 +20,7 @@ export const inboundWebhooks = () => {
       res.end(JSON.stringify(response))
     } catch (err) {
       console.log('[Messages] server/inboundWebhooks: Error processing webhook', err)
+      sentry(err)
       res.writeHead(500)
       res.end('Error processing webhook')
     }

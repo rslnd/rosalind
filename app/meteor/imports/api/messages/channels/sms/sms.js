@@ -77,8 +77,7 @@ export const receive = (payload) => {
     {
       channel: 'SMS',
       direction: 'outbound',
-      status: 'sent',
-      removed: { $ne: true }
+      status: 'sent'
     }, {
       sort: {
         sentAt: -1

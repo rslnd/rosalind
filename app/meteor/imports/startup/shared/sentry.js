@@ -1,7 +1,7 @@
 import RavenLogger from 'meteor/flowkey:raven'
 import { Meteor } from 'meteor/meteor'
 
-let sentry = {}
+let sentryLogger = null
 
 export default () => {
   if (process.env.NODE_ENV === 'production') {
@@ -9,7 +9,7 @@ export default () => {
       console.warn('[Sentry] Please set SENTRY_DSN_URL_PUBLIC')
     }
 
-    sentry = new RavenLogger({
+    sentryLogger = new RavenLogger({
       publicDSN: Meteor.settings.public.SENTRY_DSN_URL_PUBLIC,
       privateDSN: process.env.SENTRY_DSN_URL_PRIVATE,
       shouldCatchConsoleError: true,
@@ -17,6 +17,12 @@ export default () => {
     }, {
       release: Meteor.settings.public.COMMIT_HASH
     })
+  }
+}
+
+const sentry = (exception, additionalData) => {
+  if (sentryLogger) {
+    sentryLogger.log(exception, additionalData)
   }
 }
 

@@ -9,22 +9,26 @@ const schema = new SimpleSchema({
 
   channel: {
     type: String,
-    allowedValues: ['SMS']
+    allowedValues: ['SMS'],
+    index: 1
   },
 
   direction: {
     type: String,
-    allowedValues: ['outbound', 'inbound']
+    allowedValues: ['outbound', 'inbound'],
+    index: 1
   },
 
   status: {
     type: String,
-    allowedValues: ['unread', 'read', 'answered', 'draft', 'final', 'scheduled', 'sent', 'failed']
+    allowedValues: ['unread', 'read', 'answered', 'draft', 'final', 'scheduled', 'sent', 'failed'],
+    index: 1
   },
 
   to: {
     type: String,
-    optional: true
+    optional: true,
+    index: 1
   },
 
   from: {
@@ -61,7 +65,8 @@ const schema = new SimpleSchema({
 
   sentAt: {
     type: Date,
-    optional: true
+    optional: true,
+    index: -1
   },
 
   retries: {
