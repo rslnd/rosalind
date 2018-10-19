@@ -22,6 +22,10 @@ export const move = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      if (this.isSimulation) {
+        return
+      }
+
       const appointment = Appointments.findOne({ _id: appointmentId })
 
       if (appointment) {
