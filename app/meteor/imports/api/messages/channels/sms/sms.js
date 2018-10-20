@@ -91,65 +91,68 @@ export const receive = (payload) => {
 
     appointmentId = parentMessage.payload.appointmentId
     appointment = Appointments.findOne({ _id: appointmentId })
-    calendarId = appointment.calendarId
-    calendar = calendarId && Calendars.findOne({ _id: calendarId })
-    patientId = parentMessage.payload.patientId
-    patient = Patients.findOne({ _id: patientId })
 
-    Messages.update({ _id: messageId }, {
-      $set: {
-        parentMessageId: parentMessage._id,
-        'payload.appointmentId': appointmentId,
-        'payload.calendarId': calendarId,
-        'payload.patientId': patientId
-      }
-    })
-
-    cancelAppointment = isIntentToCancel(message.text)
-    if (appointment && cancelAppointment) {
-      console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
-      Appointments.actions.setCanceled.call({ appointmentId })
+    if (appointment) {
+      calendarId = appointment.calendarId
+      calendar = calendarId && Calendars.findOne({ _id: calendarId })
+      patientId = parentMessage.payload.patientId
+      patient = Patients.findOne({ _id: patientId })
 
       Messages.update({ _id: messageId }, {
         $set: {
-          type: 'intentToCancel',
-          status: 'answered'
+          parentMessageId: parentMessage._id,
+          'payload.appointmentId': appointmentId,
+          'payload.calendarId': calendarId,
+          'payload.patientId': patientId
         }
       })
 
-      const cancelationConfirmationText =
-        (calendar && calendar.smsAppointmentReminderCancelationConfirmationText) ||
-        Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')
+      cancelAppointment = isIntentToCancel(message.text)
+      if (appointment && cancelAppointment) {
+        console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
+        Appointments.actions.setCanceled.call({ appointmentId })
 
-      if (cancelationConfirmationText) {
-        const confirmationId = Messages.insert({
-          type: 'intentToCancelConfirmation',
-          channel: 'SMS',
-          direction: 'outbound',
-          text: buildMessageText({
-            text: cancelationConfirmationText
-          }, {
-            date: appointment.start
-          }),
-          to: message.from,
-          status: 'final',
-          invalidBefore: new Date(),
-          invalidAfter: moment().add(15, 'minutes').toDate(),
-          parentMessageId: messageId,
-          payload: {
-            appointmentId,
-            patientId
+        Messages.update({ _id: messageId }, {
+          $set: {
+            type: 'intentToCancel',
+            status: 'answered'
           }
         })
 
-        console.log('[Messages] channels/sms: Sending cancelation confirmation', confirmationId, 'for received message', messageId)
-        send(confirmationId)
-      }
+        const cancelationConfirmationText =
+          (calendar && calendar.smsAppointmentReminderCancelationConfirmationText) ||
+          Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')
 
-      return { message, response }
+        if (cancelationConfirmationText) {
+          const confirmationId = Messages.insert({
+            type: 'intentToCancelConfirmation',
+            channel: 'SMS',
+            direction: 'outbound',
+            text: buildMessageText({
+              text: cancelationConfirmationText
+            }, {
+              date: appointment.start
+            }),
+            to: message.from,
+            status: 'final',
+            invalidBefore: new Date(),
+            invalidAfter: moment().add(15, 'minutes').toDate(),
+            parentMessageId: messageId,
+            payload: {
+              appointmentId,
+              patientId
+            }
+          })
+
+          console.log('[Messages] channels/sms: Sending cancelation confirmation', confirmationId, 'for received message', messageId)
+          send(confirmationId)
+        }
+
+        return { message, response }
+      }
+    } else {
+      console.log('[Messages] channels/sms: Could not match received message', messageId, 'to any parent message')
     }
-  } else {
-    console.log('[Messages] channels/sms: Could not match received message', messageId, 'to any parent message')
   }
 
   // If we couldn't match this incoming message to a message we sent,
