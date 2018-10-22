@@ -25,6 +25,7 @@
     "eventemitter3": "^3.1.0",
     "full-icu": "^1.2.1",
     "gsm": "^0.1.4",
+    "heapdump": "^0.3.9",
     "helmet": "^3.14.0",
     "iconv-lite": "^0.4.24",
     "idx": "^2.3.0",

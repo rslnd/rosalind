@@ -1,3 +1,4 @@
+import 'heapdump'
 import * as Api from '../../api'
 
 export default () => {
