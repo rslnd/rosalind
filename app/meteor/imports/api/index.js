@@ -18,6 +18,7 @@ import { Search } from './search'
 import { Settings } from './settings'
 import { Clients } from './clients'
 import { Constraints } from './constraints'
+import { Availabilities } from './availabilities'
 
 export {
   Users,
@@ -39,5 +40,6 @@ export {
   Tags,
   Timesheets,
   Clients,
-  Constraints
+  Constraints,
+  Availabilities
 }
