@@ -13,7 +13,7 @@ export default () => {
       publicDSN: Meteor.settings.public.SENTRY_DSN_URL_PUBLIC,
       privateDSN: process.env.SENTRY_DSN_URL_PRIVATE,
       shouldCatchConsoleError: true,
-      trackUser: false
+      trackUser: true
     }, {
       release: Meteor.settings.public.COMMIT_HASH
     })
