@@ -32,6 +32,7 @@ const composer = (props) => {
   // a trusted network
   subscribe('appointments-today')
   subscribe('appointments-future')
+  subscribe('availabilities')
   subscribe('schedules')
   subscribe('constraints')
   subscribe('schedules-holidays')

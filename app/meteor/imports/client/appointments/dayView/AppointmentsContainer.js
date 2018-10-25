@@ -65,6 +65,7 @@ const composer = (props) => {
   let subsReady = true
   // Appointments and schedules for future dates are cached as global subscriptions
   if (date.toDate() < moment().startOf('day').toDate()) {
+    subscribe('availabilities-day', day)
     const schedulesDaySubscriptions = subscribe('schedules', day)
     const schedulesOverrideSubscriptions = subscribe('schedules', dateRange)
     const appointmentsSubscription = subscribe('appointments-legacy', dateRange)
