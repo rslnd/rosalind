@@ -29,7 +29,7 @@ const printToPDF = async ({ url, printOptions }) => {
   try {
     const page = await browser.newPage()
 
-    // TODO UNSAFE: Fix CSP
+    // BUG: UNSAFE: Fix CSP
     await page.setBypassCSP(true)
 
     page.on('console', msg => console.log('[Reports] renderPdf [console]', msg.text()))

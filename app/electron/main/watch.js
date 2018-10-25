@@ -62,8 +62,7 @@ const start = ({ ipcReceiver, handleFocus }) => {
         })
       }
 
-      // TODO: Force true until meteor is updated
-      if (focus || true) {
+      if (focus !== false) {
         handleFocus()
       }
     })

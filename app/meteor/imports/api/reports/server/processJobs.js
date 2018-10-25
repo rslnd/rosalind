@@ -17,7 +17,6 @@ export const processJobs = () => {
   })
 
   Meteor.setTimeout(() => {
-    // TODO: Remove guard
     if (process.env.PROCESS_JOBS === '1') {
       Reports.jobs.startJobServer()
       Reports.jobs.processJobs('dailyReport', options, dailyReportWorker)

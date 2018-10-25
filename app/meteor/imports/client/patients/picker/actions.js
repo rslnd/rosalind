@@ -82,7 +82,7 @@ export const loadPatient = (patientId) => {
 
     Patients.actions.findOne.callPromise({ _id: patientId })
       .then(patient => {
-        // HACK: Get rid of hardcoded form name
+        // TODO: Get rid of hardcoded form name
         dispatch(changeValue(patient, 'load', { formName: 'newAppointment' }))
       })
   }

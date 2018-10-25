@@ -157,7 +157,7 @@ export default () => {
       const styleNonce = new Buffer(uuidv4()).toString('base64')
 
       // A node req object has many more keys than meteor's request,
-      // HACK: attach the nonce to the request url as search fragmant
+      // HACK: Attach the nonce to the request url as search fragment
       // so that it survives the transformation from req to request.
       // Servers never receive url fragments from clients.
       req.url = req.url + '#' + styleNonce

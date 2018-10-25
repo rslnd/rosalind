@@ -4,5 +4,29 @@
     "**/.DS_Store": true,
     "**/.meteor": true,
     "**/node_modules": true
+  },
+  "todo-tree.tags": ["TODO", "FIXME", "BUG", "LEGACY", "HACK", "UNSAFE"],
+  "todo-tree.customHighlight": {
+    "HACK": {
+      "icon": "alert",
+      "type": "text",
+      "foreground": "red",
+      "background": "white",
+      "iconColour": "yellow"
+    },
+    "BUG": {
+      "icon": "alert",
+      "type": "text",
+      "foreground": "red",
+      "background": "white",
+      "iconColour": "red"
+    },
+    "LEGACY": {
+      "icon": "alert",
+      "type": "text",
+      "foreground": "blue",
+      "background": "white",
+      "iconColour": "blue"
+    }
   }
 }

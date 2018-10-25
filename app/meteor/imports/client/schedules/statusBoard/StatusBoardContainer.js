@@ -16,7 +16,7 @@ const compose = (props) => {
   if (!subscribe('timesheets-allToday').ready()) { return }
 
   const update = () => {
-    // HACK: See schedules from monday if today's a sunday
+    // See schedules from monday if today's a sunday
     let viewDay = moment()
     if (moment().day() === 0) {
       viewDay = moment().add(1, 'day')
