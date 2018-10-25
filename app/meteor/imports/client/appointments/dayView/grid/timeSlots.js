@@ -14,17 +14,17 @@ const memoize = fn => memoizeRaw(fn, cacheKeyResolver)
 export const start = () => moment().hour(7).minute(30).startOf('minute')
 export const end = () => moment().hour(20).endOf('hour')
 
-export const isFirstSlot = (m) => {
+export const isFirstSlot = m => {
   const first = start().floor(5, 'minutes')
   return first.hour() === m.hour() && first.minute() === m.minute()
 }
-export const isLastSlot = (m) => {
+export const isLastSlot = m => {
   const last = end().ceil(5, 'minutes')
   return last.hour() === m.hour() && last.minute() === m.minute()
 }
 
-export const hour = (t) => t.substr(1, 2)
-export const minute = (t) => t.substr(-2, 2)
+export const hour = t => t.substr(1, 2)
+export const minute = t => t.substr(-2, 2)
 
 export const isSlot = (slotSize, offsetMinutes) => {
   const slotsPerHour = Math.ceil(60 / slotSize)
@@ -37,21 +37,33 @@ export const isSlot = (slotSize, offsetMinutes) => {
   }
 }
 
-export const isFullHour = memoize((t) => (
+export const isFullHour = memoize(t => (
   minute(t) === '00'
 ))
 
-export const isQuarterHour = memoize((t) => {
+export const isQuarterHour = memoize(t => {
   const m = minute(t)
   return (m === '00' || m === '15' || m === '30' || m === '45')
 })
 
-export const label = (t) => t.format('[T]HHmm')
+export const label = t => t.format('[T]HHmm')
 
-const timeRange = Array.from(moment.range(start(), end()).by('minutes')).map(t => moment(t))
+const minutes = (from, to, slotSize = 1) =>
+  Array.from(
+    moment.range(from, to)
+    .by('minutes', {
+      step: slotSize,
+      excludeEnd: true
+    })
+  ).map(t => moment(t))
+
+const dayMinutes = minutes(start(), end())
+
+export const timeSlotsRange = ({ slotSize, from, to }) =>
+  minutes(from, to, slotSize).map(label)
 
 export const timeSlots = memoize((slotSize, offsetMinutes) =>
-  timeRange.map(label).filter(isSlot(slotSize, offsetMinutes)))
+  dayMinutes.map(label).filter(isSlot(slotSize, offsetMinutes)))
 
 export const timeSlotsFormatted = memoize((slotSize, offsetMinutes) =>
   fromPairs(timeSlots(slotSize, offsetMinutes).map(t => [t, `${parseInt(hour(t))}:${minute(t)}`])))
@@ -59,4 +71,4 @@ export const timeSlotsFormatted = memoize((slotSize, offsetMinutes) =>
 export const formatter = memoize((slotSize, offsetMinutes) =>
   memoize(t => timeSlotsFormatted(slotSize, offsetMinutes)[t]))
 
-export const setTime = (t) => (m) => m.clone().hour(hour(t)).minute(minute(t)).startOf('minute')
+export const setTime = t => m => m.clone().hour(hour(t)).minute(minute(t)).startOf('minute')

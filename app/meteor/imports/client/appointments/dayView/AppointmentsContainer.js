@@ -20,6 +20,7 @@ import { Calendars } from '../../../api/calendars'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
 import { Constraints } from '../../../api/constraints'
+import { Availabilities } from '../../../api/availabilities'
 import { Loading } from '../../components/Loading'
 import { AppointmentsScreen } from './AppointmentsScreen'
 import { subscribe } from '../../../util/meteor/subscribe'
@@ -48,6 +49,8 @@ const handleMove = (args) =>
   })
 
 const composer = (props) => {
+  const ffAva = !!(window.location.hash.indexOf('ff-ava') !== -1)
+
   const date = parseDay(idx(props, _ => _.match.params.date))
   const calendarSlug = idx(props, _ => _.match.params.calendar)
   const calendar = Calendars.findOne({ slug: calendarSlug })
@@ -120,10 +123,18 @@ const composer = (props) => {
           weekdays: toWeekday(date)
         }).fetch()
 
+        const availabilities = Availabilities.find({
+          calendarId: calendar._id,
+          assigneeId: assignee.assigneeId,
+          from: { $gte: startOfDay },
+          to: { $lte: endOfDay }
+        }).fetch()
+
         return {
           ...assignee,
           schedules: overrides,
-          constraints
+          constraints,
+          availabilities
         }
       }),
 

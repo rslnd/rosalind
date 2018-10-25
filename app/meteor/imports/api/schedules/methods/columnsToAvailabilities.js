@@ -1,3 +1,8 @@
+import _moment from 'moment-timezone'
+import { monkey } from 'spotoninc-moment-round'
+
+const moment = monkey(_moment)
+
 export const columnsToAvailabilities = columns =>
   columns.map(({ assigneeId, ...rest }) => ({
     ...rest,
@@ -12,6 +17,12 @@ const overridesToAvailbilities = ({ overrides, ...rest }) =>
       (o.duration < 1) ||
       (o.duration > (60 * 12))
     ))
+    // Get rid of weird +/-1 second hack
+    .map(o => ({
+      ...o,
+      start: moment(o.start).round(1, 'minute').toDate(),
+      end: moment(o.end).round(1, 'minute').toDate()
+    }))
     .reduce(({ availabilities, wip }, curr, i) => {
       if (i === 0) {
         return {

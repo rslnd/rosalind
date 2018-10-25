@@ -3,6 +3,7 @@ import { timeSlots } from './timeSlots'
 import { appointments } from './appointments'
 import { timeLegend } from './timeLegend'
 import { blanks } from './blanks'
+import { availabilities } from './availabilities'
 import { schedules } from './schedules'
 import { overrideOverlay } from './overrideOverlay'
 
@@ -37,14 +38,16 @@ export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick
       }`
   }
 
+  const ffAva = !!(window.location.hash.indexOf('ff-ava') !== -1)
+
   return (
     <div style={style}>
       {appointments({ slotSize, assignees, onClick: onAppointmentClick, move })}
-      {blanks({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
-      {overrideOverlay(override)}
-      {schedules({ slotSize, assignees, onDoubleClick: onScheduleModalOpen })}
+      {ffAva ? null : blanks({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
+      {ffAva ? availabilities({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter }) : null}
+      {ffAva ? null : overrideOverlay(override)}
+      {ffAva ? null : schedules({ slotSize, assignees, onDoubleClick: onScheduleModalOpen })}
       {timeLegend({ slotSize })}
     </div>
-
   )
 }
