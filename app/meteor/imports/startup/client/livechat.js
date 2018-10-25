@@ -73,15 +73,11 @@ const init = () => {
             currentUserId = user._id
           } else {
             currentUserId = null
-            Smooch.logout().then(() => {
-              console.log('[Livechat] Logged out')
-            }).catch((e) => {
+            Smooch.logout().catch((e) => {
               console.error('[Livechat] Failed to logout', e)
             })
           }
         }), 1500)
-      }).then(() => {
-        console.log('[Livechat] Initialized')
       }).catch((e) => {
         console.error('[Livechat] Failed to initialize', e)
       })
