@@ -15,7 +15,7 @@ import { getDefaultDuration } from '../../../../api/appointments/methods/getDefa
 
 const styles = {
   appointment: {
-    borderLeft: `16px solid ${primaryActive}`,
+    borderLeft: `10px solid ${primaryActive}`,
     borderBottom: '1px solid rgba(128, 128, 128, 0.2)',
     cursor: 'pointer',
     marginLeft: 0,
