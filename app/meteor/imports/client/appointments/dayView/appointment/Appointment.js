@@ -16,12 +16,12 @@ import { getDefaultDuration } from '../../../../api/appointments/methods/getDefa
 const styles = {
   appointment: {
     borderLeft: `10px solid ${primaryActive}`,
-    borderBottom: '1px solid rgba(128, 128, 128, 0.2)',
+    // borderBottom: '1px solid rgba(128, 128, 128, 0.2)',
     cursor: 'pointer',
     marginLeft: 0,
     paddingLeft: 4,
     whiteSpace: 'pre-wrap',
-    backgroundColor: 'rgba(236, 240, 245, 0.65)',
+    backgroundColor: 'rgba(236, 240, 245, 0.75)',
     '&:hover': {
       backgroundColor: color(background, lightness(3))
     }

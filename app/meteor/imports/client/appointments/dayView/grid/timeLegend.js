@@ -1,52 +1,82 @@
 import React from 'react'
+import flatten from 'lodash/flatten'
 import { timeSlots, formatter, isFullHour, isQuarterHour } from './timeSlots'
-import { grayDisabled, darkGrayActive, darkGrayDisabled } from '../../../layout/styles'
+import { grayDisabled, darkGrayActive, darkGrayDisabled, background, unavailable } from '../../../layout/styles'
+import { color, lightness } from 'kewler'
 
-const styles = {
-  timeLegend: {
-    color: grayDisabled,
-    gridColumn: 'time'
-  },
-  fullHour: {
-    color: `darken(${darkGrayActive}, 15%)`,
-    fontWeight: 'bold'
-  },
-  quarterHour: {
-    color: darkGrayDisabled
-  }
+
+const timeLegendStyle = {
+  color: grayDisabled,
+  gridColumn: 'time',
+}
+
+const borderStyle = {
+  gridColumnStart: 2,
+  gridColumnEnd: 'end',
+  borderTop: `1px solid ${color(unavailable, lightness(-3))}`,
+  pointerEvents: 'none',
+  zIndex: 1
+}
+
+const fullHourBorderStyle = {
+  borderTop: `1px solid ${color(unavailable, lightness(-12))}`
+}
+
+const fullHourStyle = {
+  color: `darken(${darkGrayActive}, 15%)`,
+  fontWeight: 'bold'
+}
+
+const quarterHourStyle = {
+  color: darkGrayDisabled
 }
 
 export const timeLegend = ({ slotSize }) => {
   const format = formatter(slotSize)
 
-  return timeSlots(slotSize)
+  return flatten(timeSlots(slotSize)
     .map((time, i, slots) => {
-      let style = {
-        ...styles.timeLegend,
+      let legendStyle = {
+        ...timeLegendStyle,
+        gridRow: time
+      }
+
+      let borderRowStyle = {
+        ...borderStyle,
         gridRow: time
       }
 
       if (slotSize < 15 && isQuarterHour(time) || slotSize >= 60) {
-        style = {
-          ...style,
-          ...styles.quarterHour
+        legendStyle = {
+          ...legendStyle,
+          ...quarterHourStyle
         }
       }
 
       if (slotSize < 60 && isFullHour(time)) {
-        style = {
-          ...style,
-          ...styles.fullHour
+        legendStyle = {
+          ...legendStyle,
+          ...fullHourStyle
+        }
+
+        borderRowStyle = {
+          ...borderRowStyle,
+          ...fullHourBorderStyle
         }
       }
 
-      return (
-        <span
+      return [
+        <div
           key={time}
           id={time}
-          style={style}>
+          style={legendStyle}>
           {format(time)}
-        </span>
-      )
+        </div>,
+        <div
+          key={`b-${time}`}
+          style={borderRowStyle}
+        />
+      ]
     })
+  )
 }
