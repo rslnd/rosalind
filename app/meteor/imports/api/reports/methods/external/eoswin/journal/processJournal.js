@@ -30,7 +30,8 @@ export const parseDayFromRows = (rows, timezone = 'Europe/Vienna') => {
   const last = findLast(isDateRow)(rows)
 
   if (!first || !last) {
-    throw new Error('Journal appears to be empty')
+    console.log('Journal appears to be empty')
+    return null
   }
 
   if (first.Datum !== last.Datum) {

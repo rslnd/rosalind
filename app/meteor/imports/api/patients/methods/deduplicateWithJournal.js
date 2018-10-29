@@ -17,14 +17,15 @@ import { zerofix } from '../../../util/zerofix'
 export const deduplicateWithJournal = ({ Appointments, Patients, journal }) => {
   const journalRows = parseCsv(journal)
   const day = parseDayFromRows(journalRows)
-  const dayPatients = findPatientsOfDay({ Appointments, Patients, day })
-  const duplicates = findDuplicatePatients({ Appointments, Patients, patientsToCheck: dayPatients })
-  const sortedDuplicates = sortDuplicates({ duplicates, journalRows })
-  const actions = deduplicate(sortedDuplicates)
-  const result = perform({ Appointments, Patients, actions })
+  if (day) {
+    const dayPatients = findPatientsOfDay({ Appointments, Patients, day })
+    const duplicates = findDuplicatePatients({ Appointments, Patients, patientsToCheck: dayPatients })
+    const sortedDuplicates = sortDuplicates({ duplicates, journalRows })
+    const actions = deduplicate(sortedDuplicates)
+    const result = perform({ Appointments, Patients, actions })
 
-  console.log(sortedDuplicates.length, 'sorted duplicates')
-  console.log(result)
+    console.log(sortedDuplicates.length, 'sorted duplicates')
+  }
 }
 
 const findIdForPatient = journalRows => patient => {
