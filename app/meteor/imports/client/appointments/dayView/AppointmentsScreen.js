@@ -12,6 +12,7 @@ import { PatientPicker } from '../../patients/picker'
 import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../layout/styles'
 import { HelpContainer } from '../help/HelpContainer'
+import { Drawer } from '../help/Drawer'
 
 const contentHeaderStyle = {
   background,
@@ -122,10 +123,12 @@ export class AppointmentsScreen extends React.Component {
           {
             // Feature flag
             (window.location.hash.indexOf('ff-help') !== -1) &&
-              <HelpContainer
-                calendarId={this.props.calendar._id}
-                date={this.props.date}
-              />
+              <Drawer>
+                <HelpContainer
+                  calendarId={this.props.calendar._id}
+                  date={this.props.date}
+                />
+              </Drawer>
           }
         </div>
 

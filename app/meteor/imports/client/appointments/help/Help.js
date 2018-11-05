@@ -1,44 +1,39 @@
 import React from 'react'
 import { Search } from './Search'
-import { Drawer } from './Drawer'
 import { TagsList } from '../../tags/TagsList'
 
 export const Help = ({
-  isOpen,
-  setOpen,
   searchValue,
   handleSearchValueChange,
   constraints,
 }) =>
-  <Drawer isOpen={isOpen} setOpen={setOpen}>
-    <div style={containerStyle}>
-      <Search value={searchValue} onChange={handleSearchValueChange} />
-      <div style={resultsStyle}>
-        {
-          constraints.map(byAssignee =>
-            <Group key={group.assignee._id} assignee={group.assignee}>
-              {
-                group.constraints.map(c =>
-                  <Constraint key={c.key} constraint={c} />
-                )
-              }
-            </Group>
-          )
-        }
-        {
-          constraintsMatchingTag.map(group =>
-            <Group key={group.tag._id} tag={group.tag}>
-              {
-                group.constraints.map(c =>
-                  <Constraint key={c.key} constraint={c} />
-                )
-              }
-            </Group>
-          )
-        }
-      </div>
+  <div style={containerStyle}>
+    <Search value={searchValue} onChange={handleSearchValueChange} />
+    <div style={resultsStyle}>
+      {
+        constraints.map(byAssignee =>
+          <Group key={group.assignee._id} assignee={group.assignee}>
+            {
+              group.constraints.map(c =>
+                <Constraint key={c.key} constraint={c} />
+              )
+            }
+          </Group>
+        )
+      }
+      {
+        constraintsMatchingTag.map(group =>
+          <Group key={group.tag._id} tag={group.tag}>
+            {
+              group.constraints.map(c =>
+                <Constraint key={c.key} constraint={c} />
+              )
+            }
+          </Group>
+        )
+      }
     </div>
-  </Drawer>
+  </div>
 
 const Group = ({ assignee, tag, children }) =>
   <div>

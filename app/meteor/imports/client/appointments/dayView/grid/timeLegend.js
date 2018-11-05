@@ -4,10 +4,9 @@ import { timeSlots, formatter, isFullHour, isQuarterHour } from './timeSlots'
 import { grayDisabled, darkGrayActive, darkGrayDisabled, background, unavailable } from '../../../layout/styles'
 import { color, lightness } from 'kewler'
 
-
 const timeLegendStyle = {
   color: grayDisabled,
-  gridColumn: 'time',
+  gridColumn: 'time'
 }
 
 const borderStyle = {

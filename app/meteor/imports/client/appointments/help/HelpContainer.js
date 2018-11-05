@@ -46,8 +46,6 @@ const handleSearchValueChange = props => value => {
 const log = pre => withProps(p => console.log(pre, p))
 
 export const HelpContainer = compose(
-  withState('isOpen', 'setOpen', false),
-  withProps({ isOpen: true }),
   withState('searchValue', 'setSearchValue', ''),
   withHandlers({ handleSearchValueChange }),
   withTracker(composer),
@@ -55,5 +53,5 @@ export const HelpContainer = compose(
   withProps(explodeConstraints),
   log('exploded'),
   withProps(combineConstraints),
-  log('combined'),
+  log('combined')
 )(Help)
