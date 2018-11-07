@@ -5,52 +5,26 @@ import { TagsList } from '../../tags/TagsList'
 export const Help = ({
   searchValue,
   handleSearchValueChange,
-  constraints,
+  results,
+  parsedQuery
 }) =>
   <div style={containerStyle}>
     <Search value={searchValue} onChange={handleSearchValueChange} />
     <div style={resultsStyle}>
+      {JSON.stringify(parsedQuery)}
+      {JSON.stringify(results)}
       {
-        constraints.map(byAssignee =>
-          <Group key={group.assignee._id} assignee={group.assignee}>
-            {
-              group.constraints.map(c =>
-                <Constraint key={c.key} constraint={c} />
-              )
-            }
-          </Group>
-        )
-      }
-      {
-        constraintsMatchingTag.map(group =>
-          <Group key={group.tag._id} tag={group.tag}>
-            {
-              group.constraints.map(c =>
-                <Constraint key={c.key} constraint={c} />
-              )
-            }
-          </Group>
+        results.map(result =>
+          <Result key={result.key} result={result} />
         )
       }
     </div>
   </div>
 
-const Group = ({ assignee, tag, children }) =>
+const Result = ({ result }) =>
   <div>
-    <h3>{
-      assignee
-      ? assignee.fullNameWithTitle
-      : tag
-      ? <TagsList tags={[tag]} />
-      : '---'
-    }</h3>
-    {children}
-  </div>
-
-const Constraint = ({ constraint: { tags, ...rest } }) =>
-  <div>
-    {JSON.stringify(rest)}
-    <TagsList tags={tags} tiny />
+    <h4>{result.fullNameWithTitle}</h4>
+    {JSON.stringify(result.availabilities)}
   </div>
 
 const containerStyle = {

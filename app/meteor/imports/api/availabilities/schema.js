@@ -50,10 +50,6 @@ export const schema = new SimpleSchema({
     type: Number
   },
 
-  tags: {
-    type: [SimpleSchema.RegEx.Id]
-  },
-
   pauses: {
     type: [Pause],
     optional: true

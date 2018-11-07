@@ -1,37 +1,32 @@
 import identity from 'lodash/identity'
-import { compose, withState, mapProps, withProps, withHandlers } from 'recompose'
+import { compose, withState, mapProps, nest, withProps, withHandlers } from 'recompose'
 import { Help } from './Help'
+import { Availabilities } from '../../../api/availabilities'
 import { Constraints } from '../../../api/constraints'
 import { Users } from '../../../api/users'
 import { Tags } from '../../../api/tags'
+import { Calendars } from '../../../api/calendars'
 import { withTracker } from '../../components/withTracker'
-import { applySearchFilter, explodeConstraints, combineConstraints } from './filter'
+import { prepareAvailabilities, applySearchFilter, toResults } from './filter'
+import { withDrawer, Drawer } from './Drawer'
 
 const composer = props => {
-  const constraints = Constraints.find({}).fetch().map(c => {
-    const assignees = c.assigneeIds
-      ? c.assigneeIds.map(_id => {
-        const user = Users.findOne({ _id }, { removed: true })
-        if (user) {
-          return {
-            ...user,
-            fullNameWithTitle: Users.methods.fullNameWithTitle(user)
-          }
-        }
-      }).filter(identity)
-      : []
-    const tags = c.tags ? c.tags.map(_id => Tags.findOne({ _id })) : []
-
-    return {
-      ...c,
-      assignees,
-      tags
-    }
-  })
+  const availabilities = Availabilities.find({}, { sort: { start: 1 } }).fetch()
+  const tags = Tags.find({}).fetch()
+  const constraints = Constraints.find({}).fetch()
+  const assignees = Users.find({}).fetch().map(u => ({
+    ...u,
+    fullNameWithTitle: Users.methods.fullNameWithTitle(u)
+  }))
+  const calendars = Calendars.find({}).fetch()
 
   return {
     ...props,
-    constraints
+    availabilities,
+    tags,
+    constraints,
+    assignees,
+    calendars
   }
 }
 
@@ -46,12 +41,14 @@ const handleSearchValueChange = props => value => {
 const log = pre => withProps(p => console.log(pre, p))
 
 export const HelpContainer = compose(
+  withTracker(composer),
+  withProps(prepareAvailabilities),
   withState('searchValue', 'setSearchValue', ''),
   withHandlers({ handleSearchValueChange }),
-  withTracker(composer),
   withProps(applySearchFilter),
-  withProps(explodeConstraints),
-  log('exploded'),
-  withProps(combineConstraints),
-  log('combined')
+  withDrawer,
+  // withProps(explodeConstraints),
+  // log('exploded'),
+  // withProps(combineConstraints),
+  // log('combined')
 )(Help)

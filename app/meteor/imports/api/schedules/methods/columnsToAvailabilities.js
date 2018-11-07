@@ -93,8 +93,6 @@ const endWith = (wip, o, { appointments, ...rest }) => {
     .map(a => countSlots({ from: a.start, to: a.end, slotSize }))
     .reduce(sum, 0)
 
-  const tags = getAvailableTags({ ...rest, slotSize, appointments, date: o.from })
-
   return {
     to,
     slotSize,
@@ -102,8 +100,7 @@ const endWith = (wip, o, { appointments, ...rest }) => {
     slotsAvailable,
     slotsUsed,
     duration,
-    durationAvailable: durationAvailable + duration,
-    tags
+    durationAvailable: durationAvailable + duration
   }
 }
 
@@ -126,14 +123,6 @@ const addPause = ({ slotSize, slotsAvailable, durationAvailable, ...availability
       }
     ]
   }
-}
-
-// TODO: Implement
-// TODO: Reactor to tags method
-// We don't care about a tag's maxParallel attribute here,
-// or whether its duration fits within the availability.
-const getAvailableTags = ({ date, calendar, assigneeId, constraints, tags = [] }) => {
-  return tags.map(t => t._id)
 }
 
 const slotSizeAt = ({ calendar }) =>

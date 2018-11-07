@@ -32,7 +32,9 @@ class ErrorBoundaryComponent extends React.Component {
 
   render () {
     if (this.state.hasError) {
-      return <Error />
+      return this.props.silent
+        ? null
+        : <Error />
     }
     return this.props.children
   }

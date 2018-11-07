@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { compose, withState, nest, mapProps, withProps, withHandlers, renderComponent } from 'recompose'
 import Paper from '@material-ui/core/Paper'
@@ -22,22 +21,25 @@ const drawerStyle = {
   padding: 15
 }
 
+// Apparently { display: 'none' } resets state of children
+const hiddenStyle = {
+  opacity: 0
+}
+
 const DrawerComponent = ({ isOpen, handleOpen, handleClose, children = null }) =>
   <div
     style={triggerStyle}
     onMouseEnter={handleOpen}
   >
-    {
-      isOpen && <Paper
-        elevation={10}
-        square
-        style={drawerStyle}
-        onMouseLeave={handleClose}>
-        <ErrorBoundary>
-          {children}
-        </ErrorBoundary>
-      </Paper>
-    }
+    <Paper
+      elevation={10}
+      square
+      style={isOpen ? drawerStyle : hiddenStyle}
+      onMouseLeave={handleClose}>
+      <ErrorBoundary>
+        {children}
+      </ErrorBoundary>
+    </Paper>
   </div>
 
 export const Drawer = compose(
@@ -47,3 +49,8 @@ export const Drawer = compose(
     handleClose: props => e => props.setOpen(false)
   })
 )(DrawerComponent)
+
+export const withDrawer = Component => props =>
+  <Drawer>
+    <Component {...props} />
+  </Drawer>
