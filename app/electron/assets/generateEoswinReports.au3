@@ -1,4 +1,3 @@
-#include <ScreenCapture.au3>
 #include <WinAPISys.au3>
 
 ; Parameters:
@@ -16,6 +15,7 @@ Func Main()
   CloseEOSWin()
   RestorePreviousPrinter($mPreviousPrinterSettings)
   Info("Success")
+  Exit(0)
 EndFunc
 
 Func SetReportPrinter()
@@ -35,13 +35,13 @@ Func SetReportPrinter()
   Info("Importing report printer settings")
   ExpectFile(@ScriptDir & "\" & $sReportPrinterSettingsFilename)
   If ShellExecuteWait("reg.exe","import " & $sReportPrinterSettingsFilename, @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
-    Fail("Registry import failed with code " & String($iOk))
+    Return Fail("Registry import failed with code " & String($iOk))
   EndIf
 
   Info("Previous default printer name was `" & $mPreviousPrinterSettings & "`")
   Info("Setting default printer to `" & $sReportPrinterName & "`")
   If _WinAPI_SetDefaultPrinter($sReportPrinterName) <> True Then
-    Fail("Warning: Failed to set printer as default")
+    Return Fail("Warning: Failed to set printer as default")
   EndIf
 
   Return $mPreviousPrinterSettings
@@ -60,7 +60,7 @@ Func RestorePreviousPrinter($mPreviousPrinterSettings)
   Info("Importing previous printer settings")
   ExpectFile(@ScriptDir & "\" & $mPreviousPrinterSettings["Filename"])
   If ShellExecuteWait("reg.exe","import " & $mPreviousPrinterSettings["Filename"], @ScriptDir & "\", $SHEX_OPEN) <> 0 Then
-    Fail("Registry import failed with code " & String($iOk))
+    Return Fail("Registry import failed with code " & String($iOk))
   EndIf
 
   If FileRecycle(@ScriptDir & "\" & $mPreviousPrinterSettings["Filename"]) = 0 Then
@@ -109,7 +109,7 @@ EndFunc
 
 Func CloseEOSWin($iRetries = 4)
   If ($iRetries = 0) Then
-    Fail("Exceeded maximum # of retries trying to close EOSWin")
+    Return Fail("Exceeded maximum # of retries trying to close EOSWin")
   EndIf
 
   Info("Checking whether EOSWin is running")
@@ -188,7 +188,7 @@ Func GenerateEOSWinReport($sReportType)
     ; Instead make sure the warning is gone
     Sleep(5000)
     If WinWait("Warnung","", 5) Then
-      Fail("Failed to dismiss warning")
+      Return Fail("Failed to dismiss warning")
     EndIf
   EndIf
 
@@ -207,7 +207,7 @@ Func ExpectControlSend($hWnd, $sText, $sControlId, $sSendString)
   ControlFocus($hWnd, $sText, $sControlId)
 
   If ControlSend($hWnd, $sText, $sControlId, $sSendString) = 0 Then
-    Fail("Window or control not found to send: " & $sControlId)
+    Return Fail("Window or control not found to send: " & $sControlId)
   EndIf
 EndFunc
 
@@ -215,7 +215,7 @@ Func ExpectControlClick($hWnd, $sText, $sControlId)
   ControlFocus($hWnd, $sText, $sControlId)
 
   If ControlClick($hWnd, $sText, $sControlId) = 0 Then
-    Fail("Window or control not found to click: " & $sControlId)
+    Return Fail("Window or control not found to click: " & $sControlId)
   EndIf
 EndFunc
 
@@ -224,11 +224,11 @@ Func ExpectWindow($sTitle, $iTimeout = 30)
   Local $hWnd = WinWait($sTitle, "", $iTimeout)
 
   If $hWnd = 0 Then
-    Fail("Expected window with title: " & $sTitle)
+    Return Fail("Expected window with title: " & $sTitle)
   EndIf
 
   If SendKeepActive($hWnd) = 0 Then
-    Fail("Window not found: " & $sTitle)
+    Return Fail("Window not found: " & $sTitle)
   EndIf
 
   Info("Found window")
@@ -238,7 +238,7 @@ EndFunc
 
 Func ExpectFile($sPath)
   If FileExists($sPath) = 0 Then
-    Fail("Expected file at " & $sPath)
+    Return Fail("Expected file at " & $sPath)
   EndIf
 EndFunc
 
@@ -263,19 +263,26 @@ Func HoistErrors($bShouldFail = True)
     ExpectControlClick($hError, "&>>", "[CLASS:TBitBtn; INSTANCE:2]")
     Local $sError = ControlGetText($hError, "", "[CLASS:TMemo; INSTANCE:1]")
     If ($bShouldFail) Then
-      Fail("Hoisted Error: " & $sError)
+      Return Fail("Hoisted Error: " & $sError)
     EndIf
   EndIf
 EndFunc
 
+$iRetriesAfterFailure = 4
 Func Fail($sMessage)
+  $iRetriesAfterFailure = $iRetriesAfterFailure - 1
   ConsoleWriteError("Fail: " & $sMessage & @CRLF)
   HoistErrors(False)
   ConsoleWriteError("Printing debug information" & @CRLF)
   PrintWindows()
-  Screenshot()
-  ConsoleWriteError("Failed to run automation" & @CRLF)
-  Exit(1)
+
+  If ($iRetriesAfterFailure = 0) Then
+    ConsoleWriteError("Failed to run automation" & @CRLF)
+    Exit(1)
+  Else
+    Info("Retrying")
+    Main()
+  EndIf
 EndFunc
 
 Func Info($sMessage)
@@ -293,12 +300,4 @@ Func PrintWindows()
       Info("[" & String($i) & "] " & aWindows[$i][0])
     EndIf
   Next
-EndFunc
-
-Func Screenshot()
-  Info("Taking screenshot")
-  Local $sImagePath = @TempDir & "\" & @YEAR & @MON & @MDAY & @HOUR & @MIN & @SEC & ".png"
-  Info("Saving screenshot at " & $sImagePath)
-  _ScreenCapture_Capture($sImagePath)
-  Info("Saved screenshot at " & $sImagePath)
 EndFunc
