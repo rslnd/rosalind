@@ -19,9 +19,10 @@ export const prepareAvailabilities = ({ availabilities, constraints, tags }) => 
     if (availability.slotsAvailable === 0) {
       return acc
     } else {
+      const possibleTags = getPossibleTags({ availability, tags, constraints })
       acc[availability.assigneeId].push({
         ...availability,
-        tags: getPossibleTags({ availability, tags, constraints })
+        tags: possibleTags
       })
       return acc
     }

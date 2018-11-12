@@ -5,12 +5,14 @@ import { isWithinHMRange } from '../../../util/time/hm'
 
 // Returns a union of tag ids that may be possible to schedule within the given availability
 export const getPossibleTags = ({ availability, tags, constraints }) => {
-  const constrainedTags = uniq(flatten(constraints
-    .filter(constraint => isConstraintApplicable({ constraint, availability }))
-    .map(c => tags.filter(t => c.tags && c.tags.includes(t._id)))))
+  const constrainedTags = flatten(
+    constraints
+      .filter(constraint => isConstraintApplicable({ constraint, availability }))
+      .map(c => tags.filter(t => c.tags && c.tags.includes(t._id)))
+  )
 
   if (constrainedTags && constrainedTags.length >= 1) {
-    return constrainedTags.map(t => t._id)
+    return uniq(constrainedTags.map(t => t._id))
   }
 
   // If no constraints match, return default tags for calendar
@@ -34,11 +36,11 @@ const isConstraintApplicable = ({ availability, constraint }) => {
   return !c.removed &&
     c.calendarId ? c.calendarId === availability.calendarId : true &&
     c.tags && c.tags.length >= 1 &&
-    c.assigneeIds && c.assigneeIds.indexOf(availability.assigneeId) !== -1 &&
-    c.weekdays ? c.weekdays.indexOf(toWeekday(availability.start)) !== -1 : true &&
+    c.assigneeIds && c.assigneeIds.includes(availability.assigneeId) &&
+    c.weekdays ? c.weekdays.includes(toWeekday(availability.from)) : true &&
     (
       // BUG: Naive check ignores partially overlapping constraints
-      isWithinHMRange({ from, to })(availability.start) ||
-      isWithinHMRange({ from, to })(availability.end)
+      isWithinHMRange({ from, to })(availability.from) ||
+      isWithinHMRange({ from, to })(availability.to)
     )
 }

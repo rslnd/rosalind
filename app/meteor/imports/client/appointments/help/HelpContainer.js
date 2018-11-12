@@ -14,7 +14,10 @@ const composer = props => {
   const availabilities = Availabilities.find({}, { sort: { start: 1 } }).fetch()
   const tags = Tags.find({}).fetch()
   const constraints = Constraints.find({}).fetch()
-  const assignees = Users.find({}).fetch().map(u => ({
+  const assignees = Users.find({
+    removed: { $ne: true },
+    employee: true
+  }).fetch().map(u => ({
     ...u,
     fullNameWithTitle: Users.methods.fullNameWithTitle(u)
   }))
@@ -30,10 +33,8 @@ const composer = props => {
   }
 }
 
-const handleSearchValueChange = props => value => {
-  if (!value || typeof value !== 'string') {
-    props.setSearchValue('')
-  } else {
+const handleSearchValueChange = props => (value, { action }) => {
+  if (action === 'input-change') {
     props.setSearchValue(value)
   }
 }
