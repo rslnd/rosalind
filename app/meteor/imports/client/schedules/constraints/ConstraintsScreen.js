@@ -90,6 +90,7 @@ export const ConstraintsScreen = ({
   getAssigneeName,
   handleUpdate,
   handleInsert,
+  handleRemove,
   defaultValues
 }) =>
   <div className='content'>
@@ -103,6 +104,7 @@ export const ConstraintsScreen = ({
             getAssigneeName={getAssigneeName}
             onUpdate={handleUpdate}
             onInsert={handleInsert}
+            onRemove={handleRemove}
             defaultValues={defaultValues}
           />
         </Box>

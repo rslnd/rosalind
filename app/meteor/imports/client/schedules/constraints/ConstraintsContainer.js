@@ -17,6 +17,9 @@ const composer = (props) => {
   const handleInsert = schedule => {
     Constraints.insert(schedule)
   }
+  const handleRemove = (_id) => {
+    Constraints.softRemove({ _id })
+  }
   const defaultValues = () => ({
     note: __('schedules.constraint')
   })
@@ -27,6 +30,7 @@ const composer = (props) => {
     getAssigneeName,
     handleUpdate,
     handleInsert,
+    handleRemove,
     defaultValues
   }
 }
