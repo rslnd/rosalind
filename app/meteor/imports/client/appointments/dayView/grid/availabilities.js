@@ -9,7 +9,7 @@ import { color, lightness } from 'kewler'
 const styles = {
   blank: {
     backgroundColor: color(background, lightness(10)),
-    // borderBottom: `1px solid rgba(128, 128, 128, 0.2)`,
+    borderBottom: `1px solid rgba(128, 128, 128, 0.2)`,
     marginLeft: 1,
     minHeight: 24,
     zIndex: 1,
