@@ -12,11 +12,12 @@ export const getPossibleTags = ({ availability, tags, constraints }) => {
   )
 
   if (constrainedTags && constrainedTags.length >= 1) {
-    return uniq(constrainedTags.map(t => t._id))
+    const result = uniq(constrainedTags.map(t => t._id))
+    return result
   }
 
   // If no constraints match, return default tags for calendar
-  return tags.filter(t =>
+  const result = tags.filter(t =>
     (t.assigneeIds && t.assigneeIds.length >= 1 &&
       t.assigneeIds.includes(availability.assigneeId)) ||
     (
@@ -28,19 +29,23 @@ export const getPossibleTags = ({ availability, tags, constraints }) => {
       : false
     )
   ).map(t => t._id)
+
+  return result
 }
 
 const isConstraintApplicable = ({ availability, constraint }) => {
   const { from, to, ...c } = constraint
 
-  return !c.removed &&
-    c.calendarId ? c.calendarId === availability.calendarId : true &&
-    c.tags && c.tags.length >= 1 &&
-    c.assigneeIds && c.assigneeIds.includes(availability.assigneeId) &&
-    c.weekdays ? c.weekdays.includes(toWeekday(availability.from)) : true &&
+  const isApplicable = (!c.removed) &&
+    (c.calendarId ? c.calendarId === availability.calendarId : true) &&
+    (c.tags && c.tags.length >= 1) &&
+    (c.assigneeIds && c.assigneeIds.includes(availability.assigneeId)) &&
+    (c.weekdays ? c.weekdays.includes(toWeekday(availability.from)) : true) &&
     (
       // BUG: Naive check ignores partially overlapping constraints
       isWithinHMRange({ from, to })(availability.from) ||
       isWithinHMRange({ from, to })(availability.to)
     )
+
+  return isApplicable
 }
