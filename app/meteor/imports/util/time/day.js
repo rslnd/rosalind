@@ -19,8 +19,12 @@ export const dateToDay = (date) => {
   if (date) {
     const m = moment(date)
     const year = m.year()
+    if (isNaN(year)) { return null }
     const month = m.month() + 1
+    if (isNaN(month)) { return null }
     const day = m.date() // no typo
+    if (isNaN(day)) { return null }
+
     return { year, month, day }
   }
 }
