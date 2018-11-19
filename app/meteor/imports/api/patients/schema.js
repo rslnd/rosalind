@@ -1,6 +1,28 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { External, Day, Auto } from '../../util/schema'
 
+// TODO: Refactor to collection
+export const agreements = [
+  'privacy',
+  'revers'
+]
+
+const Agreement = new SimpleSchema({
+  agreedAt: {
+    type: Date
+  },
+
+  to: {
+    type: String,
+    allowedValues: agreements
+  },
+
+  witnessBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  }
+})
+
 const Contact = new SimpleSchema({
   value: {
     type: String
@@ -131,8 +153,8 @@ export default new SimpleSchema({
     optional: true
   },
 
-  agreedAt: {
-    type: Date,
+  agreements: {
+    type: [Agreement],
     optional: true
   },
 

@@ -1,5 +1,10 @@
 import React from 'react'
-import { toClass } from 'recompose'
+import identity from 'lodash/identity'
+import { DocumentPicker } from '../components/DocumentPicker'
+import { agreements } from '../../api/patients/schema'
+import Chip from '@material-ui/core/Chip'
+import { __ } from '../../i18n'
+import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
@@ -61,8 +66,8 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Report Addenda',
-    render: c => c.reportAddenda && c.reportAddenda.map(a =>
-      <span key={a}>{a}<br /></span>
+    render: c => c.reportAddenda && c.reportAddenda.map(s =>
+      <Chip key={s} label={s} />
     )
   },
   {
@@ -76,9 +81,9 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Bericht',
-    render: c => c.reportAs ? c.reportAs.map(t =>
-      <span key={t}>{t}<br /></span>
-    ) : null
+    render: c => c.reportAs && c.reportAs.map(t =>
+      <Chip key={t} label={t} />
+    )
   },
   {
     title: 'Nur "Ist"',
@@ -96,22 +101,30 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Empfehlbar von',
-    render: c => c.referrableFrom && <span>
-      {c.referrableFrom.map(r =>
-        <span key={r}>
-          {getCalendarName(r)}
-          <br />
-        </span>
-      )}
-    </span>
+    render: c => c.referrableFrom && c.referrableFrom.map(r =>
+      <Chip key={r} label={getCalendarName(r)} />
+    )
   },
   {
-    header: 'Revers nötig',
-    field: 'agreementRequired',
-    type: Boolean,
-    render: c => c.agreementRequired && <Icon name='check' />
+    header: 'Einverständniserklärungen',
+    field: 'requiredAgreements',
+    EditComponent: AgreementsPicker,
+    isMulti: true,
+    unsetWhenEmpty: true,
+    render: c => c.requiredAgreements && c.requiredAgreements.map(s =>
+      <Chip key={s} label={toAgreementLabel(s)} />
+    )
   }
 ]
+
+const toAgreementLabel = s => __(`patients.agreements.${s}.label`)
+
+const AgreementsPicker = withProps({
+  toDocument: identity,
+  toLabel: toAgreementLabel,
+  toKey: identity,
+  options: () => agreements
+})(DocumentPicker)
 
 export const CalendarsScreen = toClass(({ calendars, getCalendarName, getAssigneeName, handleUpdate }) =>
   <div className='content'>

@@ -124,21 +124,34 @@ export const upsert = ({ Patients }) => {
           const tempBirthday = patient.birthday
           patient = omitBy((v, k) => k === 'birthday')(patient)
 
-          const agreed = patient.agreedAt
-          delete patient.agreedAt
+          const agreements = patient.agreements || []
+          delete patient.agreements
 
           let update = dot.flatten(cleanFields(patient))
           if (!update['$unset']) {
             update['$unset'] = {}
           }
 
-          if (existingPatient.agreedAt && !agreed) {
-            update['$unset'].agreedAt = 1
-          } else if (!existingPatient.agreedAt && agreed) {
-            update['$set'].agreedAt = new Date()
-          } else {
-            update['$unset'].agreedAt = 1
-          }
+          Object.keys(agreements).map(label => {
+            const agreed = agreements[label]
+            if (existingPatient.agreements &&
+              existingPatient.agreements.find(a => a.to === label) &&
+              !agreed) {
+              update['$set'].agreements = existingPatient.agreements.filter(a => a.to !== label)
+            } else if ((existingPatient.agreements &&
+              !existingPatient.agreements.find(a => a.to === label) ||
+              !existingPatient.agreements) &&
+              agreed) {
+              update['$set'].agreements = [
+                ...(existingPatient.agreements || []),
+                {
+                  to: label,
+                  witnessBy: this.userId,
+                  agreedAt: new Date()
+                }
+              ]
+            }
+          })
 
           if (Object.keys(update['$unset']).length === 0) {
             delete update.$unset

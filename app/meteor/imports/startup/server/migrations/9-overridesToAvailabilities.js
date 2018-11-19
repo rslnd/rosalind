@@ -1,3 +1,4 @@
+import idx from 'idx'
 import { Migrations } from 'meteor/percolate:migrations'
 import { Schedules } from '../../../api/schedules'
 import { Calendars } from '../../../api/calendars'
@@ -14,7 +15,7 @@ Meteor.startup(() => {
     console.log('Calendar', calendarId)
 
     const overrideDate = sort =>
-      Schedules.find({
+      idx(Schedules.find({
         type: 'override',
         calendarId
       }, {
@@ -22,7 +23,7 @@ Meteor.startup(() => {
           start: sort === 'earliest' ? 1 : -1
         },
         limit: 1
-      }).fetch()[0].start
+      }).fetch()[0], _ => _.start)
 
     const cutoffDate = dayToDate({
       year: 2018,
@@ -32,7 +33,7 @@ Meteor.startup(() => {
 
     const days = rangeToDays({
       from: cutoffDate || overrideDate('earliest'), // TODO: Remove debugging
-      to: overrideDate('latest')
+      to: overrideDate('latest') || cutoffDate
     })
 
     days.map(day => {

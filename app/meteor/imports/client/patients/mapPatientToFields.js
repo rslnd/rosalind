@@ -1,10 +1,10 @@
-import find from 'lodash/fp/find'
+import fromPairs from 'lodash/fromPairs'
 import { dateToDay } from '../../util/time/day'
 
 export const mapPatientToFields = (patient) => {
   let contacts = patient && patient.contacts || [];
   ['Phone', 'Email'].map(channel => {
-    if (!find(c => c.channel === channel)(contacts)) {
+    if (!contacts.find(c => c.channel === channel)) {
       contacts.push({ channel })
     }
   })
@@ -12,6 +12,10 @@ export const mapPatientToFields = (patient) => {
   if (!patient) {
     patient = {}
   }
+
+  const agreements = fromPairs((patient.agreements || []).map(a => (
+    [a.to, !!a.agreedAt]
+  )))
 
   return ({
     patientId: patient._id || patient.patientId,
@@ -28,7 +32,7 @@ export const mapPatientToFields = (patient) => {
     externalRevenue: patient.externalRevenue,
     note: patient.note,
     reminders: !patient.noSMS,
-    agreedAt: !!patient.agreedAt,
+    agreements,
     patientSince: patient.patientSince ? dateToDay(patient.patientSince) : undefined
   })
 }

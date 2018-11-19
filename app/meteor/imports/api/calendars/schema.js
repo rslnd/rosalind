@@ -1,4 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { agreements } from '../patients/schema'
 
 export const schema = new SimpleSchema({
   order: {
@@ -97,8 +98,9 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
-  agreementRequired: {
-    type: Boolean,
+  requiredAgreements: {
+    type: [String],
+    allowedValues: agreements,
     optional: true
   }
 })

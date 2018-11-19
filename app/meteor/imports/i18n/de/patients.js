@@ -24,8 +24,18 @@ export const patients = {
   firstName: 'Vorname',
   lastName: 'Nachname',
   email: 'Email',
-  notAgreedYet: 'Revers noch nicht abgelegt',
-  agreedAt: 'Revers abgelegt am __date__',
+  agreements: {
+    privacy: {
+      label: 'Datenschutz',
+      no: 'Datenschutz noch nicht akzeptiert',
+      yes: 'Datenschutz akzeptiert am __date__'
+    },
+    revers: {
+      label: 'Revers',
+      no: 'Revers noch nicht abgelegt',
+      yes: 'Revers abgelegt am __date__'
+    }
+  },
   titlePrepend: 'Titel vorangestellt',
   titleAppend: 'Titel nachgestellt',
   addressLine1: 'Straße',

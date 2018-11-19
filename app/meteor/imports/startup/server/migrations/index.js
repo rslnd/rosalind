@@ -7,7 +7,8 @@ import './4-referredToCosmetics'
 import './5-referredToAlternative'
 import './6-reportDate'
 import './7-schedulesToConstraints'
-import './8-overridesToAvailabilities'
+import './8-agreements'
+import './9-overridesToAvailabilities'
 
 export default () => {
   Meteor.startup(() => {
