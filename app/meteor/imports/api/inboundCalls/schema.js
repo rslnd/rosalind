@@ -1,7 +1,22 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
-export default new SimpleSchema({
+export const inboundCallsTopics = new SimpleSchema({
+  label: {
+    type: String
+  },
+
+  slug: {
+    type: String
+  },
+
+  order: {
+    type: Number,
+    optional: true
+  }
+})
+
+export const inboundCalls = new SimpleSchema({
   firstName: {
     type: String,
     optional: true
@@ -24,6 +39,12 @@ export default new SimpleSchema({
   privatePatient: {
     type: Boolean,
     defaultValue: false
+  },
+
+  topicId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true,
+    index: 1
   },
 
   createdAt: {

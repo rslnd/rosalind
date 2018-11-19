@@ -7,7 +7,7 @@ import { Tags } from './tags'
 import { Events } from './events'
 import { Customer } from './customer'
 import { Patients } from './patients'
-import { InboundCalls } from './inboundCalls'
+import { InboundCalls, InboundCallsTopics } from './inboundCalls'
 import { Calendars } from './calendars'
 import { Appointments } from './appointments'
 import { Importers } from './importers'
@@ -31,6 +31,7 @@ export {
   Events,
   Importers,
   InboundCalls,
+  InboundCallsTopics,
   Messages,
   Referrals,
   Reports,

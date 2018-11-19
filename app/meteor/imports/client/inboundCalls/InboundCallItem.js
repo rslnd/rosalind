@@ -4,37 +4,58 @@ import { zerofix } from '../../util/zerofix'
 import { Stamps } from '../helpers/Stamps'
 import { CommentsContainer, HumanCommentCount } from '../comments'
 import { LinkToAppointmentContainer } from './LinkToAppointmentContainer'
+import { InboundCallsTopics } from '../../api/inboundCalls'
 
 export class InboundCallItem extends React.Component {
   render () {
+    const {
+      inboundCall,
+      showTopic,
+      unresolve,
+      resolve
+    } = this.props
+
+    const {
+      lastName,
+      firstName,
+      note,
+      topicId,
+      removed,
+      telephone,
+      _id
+    } = inboundCall
+
+    const topic = showTopic && InboundCallsTopics.findOne({ _id: topicId })
+    const topicLabel = topic && topic.label
+
     return (
       <div className='box box-widget'>
         <div className='box-header'>
           <h4 className='username enable-select'>
-            <b>{this.props.inboundCall.lastName}</b> {this.props.inboundCall.firstName}&ensp;
-            <small>{__(`inboundCalls.${this.props.inboundCall.privatePatient ? 'private' : 'insurance'}`)}</small>
+            <b>{lastName}</b> {firstName}&ensp;
+            <small>{topicLabel}</small>
           </h4>
-          <h3 className='description enable-select'>{zerofix(this.props.inboundCall.telephone)}</h3>
+          <h3 className='description enable-select'>{zerofix(telephone)}</h3>
         </div>
         <div className='box-body'>
           <blockquote>
-            <p className='enable-select pre-wrap'>{this.props.inboundCall.note}</p>
+            <p className='enable-select pre-wrap'>{note}</p>
           </blockquote>
 
-          <LinkToAppointmentContainer inboundCall={this.props.inboundCall} />
-          <HumanCommentCount docId={this.props.inboundCall._id} />
+          <LinkToAppointmentContainer inboundCall={inboundCall} />
+          <HumanCommentCount docId={_id} />
           <Stamps
             collectionName='inboundCalls'
             fields={['removed', 'created']}
-            doc={this.props.inboundCall}
+            doc={inboundCall}
           />
         </div>
-        <CommentsContainer docId={this.props.inboundCall._id} />
+        <CommentsContainer docId={_id} />
         <div className='box-footer'>
           {
-            this.props.inboundCall.removed
-              ? <a onClick={() => this.props.unresolve(this.props.inboundCall._id)}>{__('inboundCalls.unresolve')}</a>
-            : <a onClick={() => this.props.resolve(this.props.inboundCall._id)}>{__('inboundCalls.resolve')}</a>
+            removed
+              ? <a onClick={() => unresolve(_id)}>{__('inboundCalls.unresolve')}</a>
+            : <a onClick={() => resolve(_id)}>{__('inboundCalls.resolve')}</a>
           }
         </div>
       </div>

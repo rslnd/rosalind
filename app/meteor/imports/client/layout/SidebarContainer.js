@@ -5,10 +5,12 @@ import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 import { Calendars } from '../../api/calendars'
+import { InboundCallsTopics } from '../../api/inboundCalls'
 import { Sidebar } from './Sidebar'
 
 const sidebarItems = ({ history }) => {
-  const calendars = Calendars.find({}, { sort: { order: 1 }}).fetch()
+  const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
+  const inboundCallsTopics = InboundCallsTopics.find({}, { sort: { order: 1 } }).fetch()
 
   return [
     {
@@ -47,6 +49,10 @@ const sidebarItems = ({ history }) => {
       countBadge: 'inboundCalls',
       subItems: [
         { name: 'thisOpen' },
+        ...inboundCallsTopics.map(t => ({
+          label: t.labelShort || t.label,
+          path: `/topic/${t.slug}`
+        })),
         { name: 'thisResolved', path: '/resolved' },
         { name: 'thisNew', path: '/new' }
       ]

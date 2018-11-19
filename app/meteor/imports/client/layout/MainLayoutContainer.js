@@ -38,6 +38,7 @@ const composer = (props) => {
   subscribe('schedules-holidays')
   subscribe('settings')
   subscribe('inboundCalls-counts')
+  subscribe('inboundCallsTopics')
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments\//)
 

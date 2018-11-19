@@ -32,7 +32,6 @@ export class DocumentPicker extends React.Component {
 
   handleQueryChange (query) {
     this.setState({
-      ...this.state,
       query: query
     })
 
@@ -51,7 +50,7 @@ export class DocumentPicker extends React.Component {
     return (
       <Select
         value={
-          this.props.value
+          (this.props.value || this.props.isStateless)
           ? toOption(this.props)(this.props.toDocument(this.props.value))
           : this.state.query
         }

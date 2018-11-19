@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { Checkbox } from 'redux-form-material-ui'
 import { TextField } from '../components/form/TextField'
+import { TopicPicker } from './TopicPicker'
 import { __ } from '../../i18n'
 
 class NewInboundCallFormComponent extends React.Component {
@@ -29,11 +30,7 @@ class NewInboundCallFormComponent extends React.Component {
                     label={__('inboundCalls.form.telephone.label')} />
                 </div>
                 <div className='form-row'>
-                  <FormControlLabel
-                    control={
-                      <Field name='privatePatient' component={Checkbox} />
-                    }
-                    label={__('inboundCalls.form.privatePatient.label')} />
+                  <Field name='topicId' component={TopicPicker} />
                 </div>
               </div>
               <div className='col-md-6'>
@@ -65,7 +62,7 @@ class NewInboundCallFormComponent extends React.Component {
 
 export const NewInboundCallForm = reduxForm({
   form: 'newInboundCall',
-  fields: ['lastName', 'firstName', 'telephone', 'note', 'privatePatient'],
+  fields: ['lastName', 'firstName', 'telephone', 'note', 'topicId'],
   validate: ({ lastName, note }) => {
     let errors = {}
     if (!lastName) {

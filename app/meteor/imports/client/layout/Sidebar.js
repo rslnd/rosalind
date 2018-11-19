@@ -103,7 +103,7 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
       {sidebarOpen && item.subItems &&
         <ul className='treeview-menu'>
           {item.subItems.map((subItem) => (
-            <SubItem key={subItem.name} item={item} subItem={subItem} location={location} />
+            <SubItem key={subItem.name || subItem.label} item={item} subItem={subItem} location={location} />
           ))}
         </ul>
       }

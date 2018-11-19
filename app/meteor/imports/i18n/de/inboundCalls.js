@@ -15,6 +15,7 @@ export const inboundCalls = {
   private: 'Privat',
   resolve: 'Als erledigt markieren',
   unresolve: 'Markierung als erledigt entfernen',
+  topic: 'Anrufliste',
   removedBy: 'Erledigt von',
   createdBy: 'Angenommen von',
   isSmsFromPatient: 'SMS von PatientIn',

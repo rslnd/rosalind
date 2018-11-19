@@ -114,6 +114,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: c => c.requiredAgreements && c.requiredAgreements.map(s =>
       <Chip key={s} label={toAgreementLabel(s)} />
     )
+  },
+  {
+    header: 'Anrufliste',
+    field: 'acceptInboundCalls'
   }
 ]
 

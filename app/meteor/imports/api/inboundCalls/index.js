@@ -1,3 +1,1 @@
-import InboundCalls from './collection'
-
-export { InboundCalls }
+export { InboundCalls, InboundCallsTopics } from './collection'

@@ -1,4 +1,4 @@
-import { InboundCalls } from '../'
+import { InboundCalls, InboundCallsTopics } from '../'
 import flatten from 'lodash/flatten'
 import moment from 'moment'
 import { Comments } from '../../comments'
@@ -6,6 +6,15 @@ import { publish, publishComposite } from '../../../util/meteor/publish'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 
 export default () => {
+
+  publish({
+    name: 'inboundCallsTopics',
+    roles: ['inboundCalls'],
+    fn: function () {
+      return InboundCallsTopics.find({})
+    }
+  })
+
   publish({
     name: 'inboundCalls-counts',
     roles: ['inboundCalls'],
