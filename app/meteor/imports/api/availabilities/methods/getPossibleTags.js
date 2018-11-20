@@ -16,17 +16,27 @@ export const getPossibleTags = ({ availability, tags, constraints }) => {
     return result
   }
 
+  const isListed = (list, item) =>
+    list && list.length >= 1 && list.includes(item)
+
+  const isWhitelisted = (t, a) =>
+    isListed(t.assigneeIds, a.assigneeId)
+
+  const hasWhitelist = t =>
+    t.assigneeIds && t.assigneeIds.length >= 1
+
+  const isBlacklisted = (t, a) =>
+    isListed(t.blacklistAssigneeIds, a.assigneeId)
+
+  const isCalendar = (t, a) =>
+    isListed(t.calendarIds, a.calendarId)
+
   // If no constraints match, return default tags for calendar
   const result = tags.filter(t =>
-    (t.assigneeIds && t.assigneeIds.length >= 1 &&
-      t.assigneeIds.includes(availability.assigneeId)) ||
     (
-      (t.blacklistAssigneeIds && t.blacklistAssigneeIds.length >= 1 &&
-        t.blacklistAssigneeIds.includes(availability.assigneeId))
-      ? false
-      : (t.calendarIds && t.calendarIds.length >= 1)
-      ? t.calendarIds.includes(availability.calendarId)
-      : false
+      !(hasWhitelist(t) && !isWhitelisted(t, availability)) &&
+      isCalendar(t, availability) &&
+      !isBlacklisted(t, availability)
     )
   ).map(t => t._id)
 
@@ -41,11 +51,11 @@ const isConstraintApplicable = ({ availability, constraint }) => {
     (c.tags && c.tags.length >= 1) &&
     (c.assigneeIds && c.assigneeIds.includes(availability.assigneeId)) &&
     (c.weekdays ? c.weekdays.includes(toWeekday(availability.from)) : true) &&
-    (
+    ((from && to) ? (
       // BUG: Naive check ignores partially overlapping constraints
       isWithinHMRange({ from, to })(availability.from) ||
       isWithinHMRange({ from, to })(availability.to)
-    )
+    ) : true)
 
   return isApplicable
 }
