@@ -1,7 +1,7 @@
 import React from 'react'
 import { compose, withState, nest, mapProps, withProps, withHandlers, renderComponent } from 'recompose'
 import Paper from '@material-ui/core/Paper'
-import { ErrorBoundary } from '../../layout/ErrorBoundary'
+import { ErrorBoundary } from '../layout/ErrorBoundary'
 
 const triggerStyle = {
   position: 'fixed',

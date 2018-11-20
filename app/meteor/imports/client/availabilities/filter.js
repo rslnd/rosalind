@@ -4,7 +4,7 @@ import identity from 'lodash/fp/identity'
 import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
-import { getPossibleTags } from '../../../api/availabilities/methods/getPossibleTags'
+import { getPossibleTags } from '../../api/availabilities/methods/getPossibleTags'
 
 export const prepareAvailabilities = ({ availabilities, constraints, tags }) => {
   // Group by assigneeId and limit to the next ~7 free availabilities,

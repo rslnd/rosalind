@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import React from 'react'
 import { Search } from './Search'
-import { TagsList } from '../../tags/TagsList'
+import { TagsList } from '../tags/TagsList'
 
 export const Help = ({
   searchValue,

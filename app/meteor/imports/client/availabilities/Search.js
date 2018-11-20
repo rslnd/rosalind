@@ -1,6 +1,6 @@
 import React from 'react'
 import Select from 'react-select'
-import { __ } from '../../../i18n'
+import { __ } from '../../i18n'
 
 export const Search = ({ value, onChange, autoFocus }) =>
   <Select
