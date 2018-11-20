@@ -29,9 +29,12 @@ class NewInboundCallFormComponent extends React.Component {
                   <Field name='telephone' component={TextField} fullWidth
                     label={__('inboundCalls.form.telephone.label')} />
                 </div>
-                <div className='form-row'>
-                  <Field name='topicId' component={TopicPicker} />
-                </div>
+                {
+                  process.env.NODE_ENV === 'development' &&
+                    <div className='form-row'>
+                      <Field name='topicId' component={TopicPicker} />
+                    </div>
+                }
               </div>
               <div className='col-md-6'>
                 <Field name='note'
