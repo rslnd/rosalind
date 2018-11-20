@@ -111,7 +111,13 @@ export const upsert = ({ Patients }) => {
             lastNameNormalized: patient.lastNameNormalized,
             ...daySelector(patient.birthday, 'birthday')
           }).fetch()
-          existingPatient = candidates.length === 1 ? candidates[0] : null
+          const potentialExistingPatient = candidates.length === 1 ? candidates[0] : null
+
+          const extIdA = idx(potentialExistingPatient, _ => _.external.eoswin.id)
+          const extIdB = idx(patient, _ => _.external.eoswin.id)
+          existingPatient = ((extIdA || extIdB) && (extIdA !== extIdB))
+            ? potentialExistingPatient
+            : null
         }
 
         if (existingPatient) {

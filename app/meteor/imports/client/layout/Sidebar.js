@@ -70,7 +70,6 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
         item.onClick
         ? (
           <a className='pointer level-0 link'
-            title={name}
             onClick={() => item.onClick({ item, location })}>
             <i className={`fa fa-${item.icon}`} />
             <span className={hideWhenClosed}>{name}</span>
@@ -78,8 +77,7 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
         ) : (
           <Link
             to={link}
-            className='pointer level-0 link'
-            title={name}>
+            className='pointer level-0 link'>
             <i className={`fa fa-${item.icon}`} />
             <span className={hideWhenClosed}>{name}</span>
             <FlipMove typeName='span'>
@@ -120,15 +118,13 @@ const SubItem = ({item, subItem, location}) => {
       {
         item.onClick
           ? <a className='level-1 link' onClick={() => item.onClick({ subItem, location })}>
-            <span
-              title={displayName}>
+            <span>
               {displayName}
             </span>
           </a>
           : <Link
             to={`/${item.name}${subItem.path || ''}`}
-            className='level-1 link'
-            title={displayName}>
+            className='level-1 link'>
             <span>{displayName}</span>
           </Link>
       }
