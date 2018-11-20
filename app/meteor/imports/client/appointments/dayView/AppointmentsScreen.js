@@ -4,7 +4,6 @@ import { monkey } from 'spotoninc-moment-round'
 import { __ } from '../../../i18n'
 import { weekOfYear } from '../../../util/time/format'
 import { DateNavigation } from '../../components/DateNavigation'
-import { ErrorBoundary } from '../../layout/ErrorBoundary'
 import { Icon } from '../../components/Icon'
 import { AppointmentsView } from './AppointmentsView'
 import Button from 'react-bootstrap/lib/Button'
@@ -12,7 +11,6 @@ import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import { PatientPicker } from '../../patients/picker'
 import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../layout/styles'
-import { HelpContainer } from '../help/HelpContainer'
 
 const contentHeaderStyle = {
   background,
@@ -103,33 +101,8 @@ export class AppointmentsScreen extends React.Component {
               basePath={`appointments/${this.props.calendar.slug}`}
               pullRight
               jumpWeekForward
-              jumpMonthForward>
-
-              {
-                // TODO: Feature flag
-                (window.location.hash.indexOf('ff-help') !== -1) && <ButtonGroup>
-                  <Button
-                    key='calendar-button'
-                    onMouseEnter={() => {}}
-                    title={__('tags.openInfo')}>
-                    <Icon name='life-saver' />
-                  </Button>
-                </ButtonGroup>
-              }
-
-            </DateNavigation>
+              jumpMonthForward />
           </div>
-
-          {
-            // Feature flag
-            (window.location.hash.indexOf('ff-help') !== -1) &&
-              <ErrorBoundary silent>
-                <HelpContainer
-                  calendarId={this.props.calendar._id}
-                  date={this.props.date}
-                />
-              </ErrorBoundary>
-          }
         </div>
 
         <div className='content print-zoom-1'>

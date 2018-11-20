@@ -43,15 +43,15 @@ export const applySearchFilter = ({ searchValue = '', assignees, tags, availabil
     .reduce((acc, term, i) => {
       if (acc.failed) { return { ...emptyQuery } }
 
-      const matchedAssignees = assignees.filter(a =>
+      const matchedAssignees = assignees.filter(a => (
         isMatchingString(term, a.fullNameWithTitle) ||
         isMatchingString(term, a.username)
-      )
+      ))
 
-      const matchedTags = tags.filter(t =>
+      const matchedTags = tags.filter(t => (
         isMatchingString(term, t.tag) ||
         isMatchingStrings(term, t.synonyms)
-      )
+      ))
 
       const isTermMatched =
         matchedAssignees.length > 0 ||
@@ -61,12 +61,14 @@ export const applySearchFilter = ({ searchValue = '', assignees, tags, availabil
         return { failed: true }
       }
 
-      const wanted = (i !== 0)
-        ? acc.wanted
+      const wanted =
+        (
+          acc.wanted === 'assignee' ||
+          (matchedAssignees.length >= 1 && matchedTags.length === 0) // Require term to match only assignee
+        )
+        ? 'assignee'
         : (matchedTags.length >= 1)
         ? 'tag'
-        : (matchedAssignees.length >= 1)
-        ? 'assignee'
         : null
 
       return {
@@ -77,26 +79,31 @@ export const applySearchFilter = ({ searchValue = '', assignees, tags, availabil
     }, emptyQuery)
 
   // Keep only availabilities that match all fields of parsedQuery
-  const filtered = parsedQuery.wanted === 'assignee'
-    ? parsedQuery.assignees.map(a => ({
-      key: a._id,
-      assignee: a,
-      availabilities: (availabilities[a._id] || []).filter(a =>
-        parsedQuery.tags.every(t => a.tags.includes(t._id)) // Maybe filter some here?
-      )
-    }))
-    : parsedQuery.wanted === 'tag'
+  const filtered = (parsedQuery.wanted === 'assignee')
+    ? parsedQuery.assignees
+      .filter(a => availabilities[a._id] && availabilities[a._id].length >= 1)
+      .map(a => ({
+        key: a._id,
+        assignee: a,
+        availabilities: (availabilities[a._id] || []).filter(a =>
+          (parsedQuery.tags && parsedQuery.tags.length >= 1)
+          ? parsedQuery.tags.some(t => a.tags.includes(t._id))
+          : true
+        ).map(highlightMatchedTags(parsedQuery))
+      })).filter(a => a.availabilities.length >= 1)
+    : (parsedQuery.wanted === 'tag')
     ? parsedQuery.tags.map(t => ({
       key: t._id,
       tag: t,
-      assignees: map(availabilities, (availabilities, assigneeId) => {
+      assignees: map(availabilities, (assigneeAvailabilities, assigneeId) => {
         return {
-          assignee: assignees.find(a => a._id === assigneeId),
-          availabilities: availabilities.filter(a =>
+          key: assigneeId,
+          assignee: assignees.find(a => a._id === assigneeId), // Weird, sometimes undefuned
+          availabilities: assigneeAvailabilities.filter(a =>
             a.tags.includes(t._id)
-          )
+          ).map(highlightMatchedTags(parsedQuery))
         }
-      })
+      }).filter(a => a.assignee && a.availabilities.length >= 1)
     }))
     : []
 
@@ -106,8 +113,21 @@ export const applySearchFilter = ({ searchValue = '', assignees, tags, availabil
 const isMatchingString = (term, haystack) =>
   haystack
     .toLowerCase()
-    .split(/\s|-/)
+    .split(/\s|-|\(|\)|\/|\./)
+    .map(t => t && t.trim())
+    .filter(t => t && t.length >= 1)
     .some(token => token.indexOf(term) === 0)
 
 const isMatchingStrings = (term, haystack = []) =>
   haystack.some(hay => isMatchingString(term, hay))
+
+const highlightMatchedTags = (parsedQuery) => {
+  const queryTags = parsedQuery.tags.map(t => t._id)
+  return availability =>
+    (queryTags.length === 0)
+    ? availability
+    : {
+      ...availability,
+      matchedTags: availability.tags.filter(t => queryTags.includes(t))
+    }
+}

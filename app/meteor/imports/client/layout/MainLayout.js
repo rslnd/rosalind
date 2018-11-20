@@ -7,6 +7,8 @@ import { FooterContainer } from './FooterContainer'
 import { Alerts } from './Alerts'
 import { Login } from '../users/Login'
 import { MaintenanceMessageContainer } from './MaintenanceMessageContainer'
+import { HelpContainer } from '../appointments/help/HelpContainer'
+import { ErrorBoundary } from './ErrorBoundary'
 import { Loading } from '../components/Loading'
 import { Lock } from './Lock'
 import { SignPad } from './SignPad'
@@ -113,6 +115,10 @@ export class MainLayout extends React.Component {
               ? <Loading />
               : children
             }
+
+            <ErrorBoundary silent>
+              <HelpContainer />
+            </ErrorBoundary>
           </div>
           <FooterContainer />
           {alwaysRender()}

@@ -11,10 +11,11 @@ export const Help = ({
 }) =>
   <div style={containerStyle}>
     <Search value={searchValue} onChange={handleSearchValueChange} />
+    {/* {JSON.stringify(parsedQuery)} */}
     {
-      parsedQuery.failed || results.length === 0
+      (parsedQuery.failed || results.length === 0)
       ? <span>No results</span>
-      : parsedQuery.wanted === 'assignee'
+      : (parsedQuery.wanted === 'assignee')
       ? <div style={resultsStyle}>
         {
           results.map(result =>
@@ -22,9 +23,26 @@ export const Help = ({
           )
         }
       </div>
-      : parsedQuery.wanted === 'tag'
-      ? <span>Tag search not implemented</span>
+      : (parsedQuery.wanted === 'tag')
+      ? <div style={resultsStyle}>
+        {
+          results.map(result =>
+            <Tag key={result.key} tag={result.tag} assignees={result.assignees} />
+          )
+        }
+      </div>
       : null // This should not happen
+    }
+  </div>
+
+const Tag = ({ tag, assignees }) =>
+  <div>
+    <h3><TagsList tags={[tag]} /></h3>
+    {
+      assignees.map(a =>
+        // JSON.stringify(a)
+        <Assignee key={a.key} assignee={a.assignee} availabilities={a.availabilities} />
+      )
     }
   </div>
 
@@ -40,7 +58,7 @@ const Availabilities = ({ availabilities, showTags }) =>
       availabilities.map(availability =>
         <div key={availability._id}>
           <h5>{formatDate(availability)}</h5>
-          <TagsList tiny tags={availability.tags} />
+          <TagsList tiny tags={availability.matchedTags || availability.tags} />
         </div>
       )
     }

@@ -8,7 +8,8 @@ const triggerStyle = {
   right: 0,
   top: 0,
   bottom: 0,
-  width: 5
+  width: 5,
+  zIndex: 50
 }
 
 const drawerStyle = {
@@ -17,7 +18,7 @@ const drawerStyle = {
   top: 0,
   bottom: 0,
   width: 600,
-  zIndex: 20,
+  zIndex: 51,
   padding: 15
 }
 
