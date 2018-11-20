@@ -50,7 +50,8 @@ const Tag = ({ tag, onClick, style, showDefaultRevenue }) => {
         backgroundColor: tag.selectable
           ? (tag.selected ? tag.color : tagBackgroundColor)
           : tag.color,
-        borderColor: darken(tag.color || tagBackgroundColor)
+        borderColor: darken(tag.color || tagBackgroundColor),
+        textDecoration: tag.removed ? 'line-through' : 'none'
       }}>
       {tag.tag}
       {/* <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} /> */}

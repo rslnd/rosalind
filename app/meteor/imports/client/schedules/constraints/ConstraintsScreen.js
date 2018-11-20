@@ -24,18 +24,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'tags',
     EditComponent: TagsPicker,
     isMulti: true,
-    render: c => c.tags && Tags.methods.expand(c.tags).map(t =>
-      <span key={t._id}>
-        <span style={{
-          ...tagStyle,
-          color: 'white',
-          backgroundColor: t.color || tagBackgroundColor
-        }}>
-          {t.tag}
-        </span>
-        &ensp;
-      </span>
-    ),
+    render: c => <TagsList tags={c.tags} />,
     style: {
       width: '35%'
     }

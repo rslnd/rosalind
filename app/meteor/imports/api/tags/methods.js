@@ -13,7 +13,7 @@ export default ({ Tags }) => {
   }
 
   const expand = (tags = []) =>
-    tags.map(t => t.tag ? t : Tags.findOne({ _id: t }))
+    tags.map(t => t.tag ? t : Tags.findOne({ _id: t }, { removed: true }))
 
   const isPrivate = tags =>
     some('privateAppointment')(expand(tags))

@@ -23,7 +23,7 @@ export const eoswinJournalReports = ({ Importers }) => {
       try {
         if (Meteor.isServer) {
           const { isTrustedNetwork } = require('../../../../customer/server/isTrustedNetwork')
-          if (!this.userId || (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
+          if (!this.userId && (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
             throw new Meteor.Error(403, 'Not authorized')
           }
         }

@@ -68,10 +68,10 @@ export const isSame = (a, b) =>
   a.year === b.year &&
   (!a.zeroIndexMonth === !b.zeroIndexMonth)
 
-export const daySelector = d => ({
-  'day.year': d.year,
-  'day.month': d.month,
-  'day.day': d.day
+export const daySelector = (d, prefix = 'day') => ({
+  [[prefix, 'year'].join('.')]: d.year,
+  [[prefix, 'month'].join('.')]: d.month,
+  [[prefix, 'day'].join('.')]: d.day
 })
 
 export default {

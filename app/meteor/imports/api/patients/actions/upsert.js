@@ -10,6 +10,7 @@ import { Events } from '../../events'
 import { Referrals } from '../../referrals'
 import { normalizeName } from '../util/normalizeName'
 import { zerofix } from '../../../util/zerofix'
+import { daySelector } from '../../../util/time/day'
 import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
 
 const isEmpty = (v, k) => {
@@ -98,6 +99,19 @@ export const upsert = ({ Patients }) => {
 
         if (!existingPatient && patient.external && patient.external.bioresonanz && patient.external.bioresonanz.id) {
           existingPatient = Patients.findOne({ 'external.bioresonanz.id': patient.external.bioresonanz.id })
+        }
+
+        if (!existingPatient &&
+          patient.birthday &&
+          patient.birthday.day &&
+          patient.birthday.month &&
+          patient.birthday.year) {
+          const candidates = Patients.find({
+            firstName: patient.firstName,
+            lastNameNormalized: patient.lastNameNormalized,
+            ...daySelector(patient.birthday, 'birthday')
+          }).fetch()
+          existingPatient = candidates.length === 1 ? candidates[0] : null
         }
 
         if (existingPatient) {

@@ -33,10 +33,14 @@ export const xdt = ({ Importers }) => {
           ]
         }
 
+        const insuranceIds = parsed.find('3105')
+        const insuranceId = insuranceIds && insuranceIds[0]
+
         const patient = {
           firstName: parsed.patient.firstName,
           lastName: parsed.patient.lastName,
           birthday: dateToDay(moment.tz(parsed.patient.birthday, 'DDMMYYYY', timezone)),
+          insuranceId,
           gender: parsed.patient.gender === '1' ? 'Male' : 'Female',
           contacts,
           external: {
