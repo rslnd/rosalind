@@ -7,7 +7,7 @@ export default () => {
     roles: ['appointments', 'schedules'],
     preload: 1,
     fn: function () {
-      return Constraints.find({})
+      return Constraints.find({ removed: { $ne: true } })
     }
   })
 }

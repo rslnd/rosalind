@@ -7,7 +7,7 @@ import { UserHelper } from '../users/UserHelper'
 
 const Log = ({ log, style }) => {
   return <p className='stamp text-muted' style={style}>
-    {log.formatted} <UserHelper userId={log.userId} helper='firstName' /> <RelativeTime time={log.date} /><br />
+    {log.formatted} <UserHelper userId={log.userId} helper='fullNameWithTitle' /> <RelativeTime time={log.date} /><br />
   </p>
 }
 
