@@ -2,6 +2,8 @@ import React from 'react'
 import identity from 'lodash/identity'
 import Button from '@material-ui/core/Button'
 import { __ } from '../../../i18n'
+import { compose, mapProps } from 'recompose'
+import { updateEveryMs } from '../../components/updateEveryMs'
 
 const primaryButtonStyle = {
   flexGrow: 1
@@ -12,7 +14,22 @@ const alternativeButtonStyle = {
   flexShrink: 1
 }
 
-export const ActionButton = ({ appointment, isFirst, isLast, action, style = {}, canChangeWaitlistAssignee, handleChangeWaitlistAssignee }) => {
+// Disable buttons for some time after starting treatment
+// to avoid double click immediately ending treatment
+const waitMs = 1900
+
+const composer = props => {
+  const { treatmentStart } = props.appointment
+
+  const recentlyStartedTreatment = treatmentStart && (treatmentStart.getTime() >= (new Date() - waitMs))
+
+  return {
+    disableButtons: recentlyStartedTreatment,
+    ...props
+  }
+}
+
+const ActionButtonComponent = ({ appointment, isFirst, isLast, action, style = {}, canChangeWaitlistAssignee, handleChangeWaitlistAssignee, disableButtons }) => {
   const a = appointment
   const nextAction = [
     !a.treatmentStart && action('startTreatment', a._id),
@@ -37,6 +54,7 @@ export const ActionButton = ({ appointment, isFirst, isLast, action, style = {},
         color={isFirst ? 'primary' : undefined}
         size='large'
         onClick={nextAction.fn}
+        disabled={disableButtons}
         fullWidth>
         {
           nextAction.title
@@ -48,6 +66,7 @@ export const ActionButton = ({ appointment, isFirst, isLast, action, style = {},
             style={alternativeButtonStyle}
             size='small'
             onClick={nextAction.alternativeAction.fn}
+            disabled={disableButtons}
             fullWidth>
             {nextAction.alternativeAction.title}
           </Button>
@@ -58,9 +77,15 @@ export const ActionButton = ({ appointment, isFirst, isLast, action, style = {},
             style={alternativeButtonStyle}
             size='small'
             onClick={() => handleChangeWaitlistAssignee({ appointmentId: a._id })}
+            disabled={disableButtons}
             fullWidth>
             {__('appointments.changeWaitlistAssignee')}
           </Button>
       }
     </div> || null
 }
+
+export const ActionButton = compose(
+  updateEveryMs({ ms: 1000 }),
+  mapProps(composer)
+)(ActionButtonComponent)
