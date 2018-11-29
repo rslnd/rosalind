@@ -2,7 +2,14 @@ import React from 'react'
 import { Field } from 'redux-form'
 import { __ } from '../../../i18n'
 import { TextField, ToggleField } from '../../components/form'
-import { rowStyle, buttonStyle, grow } from '../../components/form/rowStyle'
+import { grayActive } from '../../layout/styles'
+import { rowStyle, buttonStyle, grow, shrink } from '../../components/form/rowStyle'
+import { Dot } from '../../patients/Dot'
+
+const titleStyle = {
+  ...grow,
+  width: 42
+}
 
 export const GenderField = ({ onChange }) =>
   <div style={buttonStyle}>
@@ -17,7 +24,10 @@ export const GenderField = ({ onChange }) =>
       ]} />
   </div>
 
-export const NameFields = ({ gender = true, titles = false }) =>
+const TitleLabel = () =>
+  <span style={{ color: grayActive }}>{__('patients.titlePrepend')}</span>
+
+export const NameFields = ({ gender = true, titles = false, ban = false }) =>
   <div style={rowStyle}>
     {
       gender &&
@@ -26,11 +36,12 @@ export const NameFields = ({ gender = true, titles = false }) =>
 
     {
       titles &&
-        <div style={grow}>
+        <div style={titleStyle}>
           <Field
             name='titlePrepend'
-            component={TextField}
-            label={__('patients.titlePrepend')} />
+            label={<TitleLabel />}
+            fullWidth
+            component={TextField} />
         </div>
     }
 
@@ -38,23 +49,29 @@ export const NameFields = ({ gender = true, titles = false }) =>
       <Field
         name='lastName'
         component={TextField}
+        fullWidth
         label={__('patients.lastName')} />
     </div>
     <div style={grow}>
       <Field
         name='firstName'
         component={TextField}
+        fullWidth
         label={__('patients.firstName')} />
     </div>
 
     {
-      titles &&
-        <div style={grow}>
+      ban &&
+        <div style={shrink}>
           <Field
-            name='titleAppend'
-            component={TextField}
-            label={__('patients.titleAppend')} />
+            name='banned'
+            component={ToggleField}
+            button={false}
+            style={{ marginTop: 32, marginLeft: 32 }}
+            values={[
+              { value: false, label: <Dot /> },
+              { value: true, label: <Dot banned /> }
+            ]} />
         </div>
     }
-
   </div>

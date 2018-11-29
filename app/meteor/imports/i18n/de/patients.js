@@ -36,8 +36,8 @@ export const patients = {
       yes: 'Revers abgelegt am __date__'
     }
   },
-  titlePrepend: 'Titel vorangestellt',
-  titleAppend: 'Titel nachgestellt',
+  titlePrepend: 'Titel',
+  titleAppend: '', // Legacy
   addressLine1: 'Straße',
   addressLine2: 'Nr.',
   addressPostalCode: 'PLZ',

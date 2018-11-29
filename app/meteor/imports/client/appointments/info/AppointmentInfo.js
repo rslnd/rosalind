@@ -87,7 +87,7 @@ const PlainRenderField = ({ input, append, prepend }) =>
     {append}
   </span> || null
 
-const PatientName = withState('editing', 'setEditing', false)(({ patient, editing, setEditing, onChange }) => (
+const PatientName = ({ patient, onChange }) => (
   <div
     style={{
       ...rowStyle,
@@ -97,43 +97,11 @@ const PatientName = withState('editing', 'setEditing', false)(({ patient, editin
       marginBottom: -8
     }}>
     <GenderField onChange={() => setTimeout(onChange, 30)} />
-    <div
-      onMouseEnter={() => setEditing(true)}
-      onMouseLeave={() => {
-        setEditing(false)
-        onChange()
-      }}>
-
-      {
-        editing
-        ? <NameFields titles gender={false} />
-        : (
-          <h4 className='enable-select' style={{ marginLeft: -5, marginTop: 26 }}>
-            <Field
-              name='titlePrepend'
-              component={PlainRenderField}
-              append={<span>&ensp;</span>} />
-
-            <b>
-              <Field
-                name='lastName'
-                component={PlainRenderField} />
-            </b>
-            &thinsp;
-            <Field
-              name='firstName'
-              component={PlainRenderField} />
-
-            <Field
-              name='titleAppend'
-              component={PlainRenderField}
-              prepend={<span>&ensp;</span>} />
-          </h4>
-        )
-      }
+    <div onMouseLeave={onChange}>
+      <NameFields titles gender={false} />
     </div>
   </div>
-))
+)
 
 const Day = ({ appointment }) => (
   <ListItem icon='calendar' hr>

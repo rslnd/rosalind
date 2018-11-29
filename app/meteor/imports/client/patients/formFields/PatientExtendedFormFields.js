@@ -2,8 +2,7 @@ import React from 'react'
 import { Field, FieldArray, FormSection } from 'redux-form'
 import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
-import { ToggleField, TextField } from '../../components/form'
-import { Dot } from '../Dot'
+import { TextField } from '../../components/form'
 
 import { NameFields } from '../fields/NameFields'
 import { AddressFields } from '../fields/AddressFields'
@@ -12,47 +11,14 @@ import { BirthdayFields } from '../fields/BirthdayFields'
 import { iconStyle, rowStyle, grow, shrink } from '../../components/form/rowStyle'
 
 export const PatientExtendedFormFields = ({ change }) => {
-  const title = true
+  const titles = true
   const note = true
+  const ban = true
 
   return <div>
     <div className='row'>
       <div className='col-md-12'>
-        <NameFields />
-
-        {
-          title &&
-            <div style={rowStyle}>
-              <div style={iconStyle}>
-                <Icon name='university' />
-              </div>
-              <div style={grow}>
-                <Field
-                  name='titlePrepend'
-                  component={TextField}
-                  fullWidth
-                  label={__('patients.titlePrepend')} />
-              </div>
-              <div style={grow}>
-                <Field
-                  name='titleAppend'
-                  component={TextField}
-                  fullWidth
-                  label={__('patients.titleAppend')} />
-              </div>
-              <div style={shrink}>
-                <Field
-                  name='banned'
-                  component={ToggleField}
-                  button={false}
-                  style={{ marginTop: 32, marginLeft: 32 }}
-                  values={[
-                    { value: false, label: <Dot /> },
-                    { value: true, label: <Dot banned /> }
-                  ]} />
-              </div>
-            </div>
-        }
+        <NameFields titles={titles} ban={ban} />
 
         <BirthdayFields collectInsuranceId />
 
