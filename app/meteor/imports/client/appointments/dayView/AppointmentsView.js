@@ -57,10 +57,11 @@ export class AppointmentsView extends React.Component {
       return this.handleMoveEnd()
     }
 
-    if (event.type === 'contextmenu' && moment().isSame(appointment.start, 'day')) {
-      event.preventDefault()
-      return this.handleSetAdmitted(appointment)
-    }
+    // TODO: Per-calendar flag
+    // if (event.type === 'contextmenu' && moment().isSame(appointment.start, 'day')) {
+    //   event.preventDefault()
+    //   return this.handleSetAdmitted(appointment)
+    // }
 
     this.handleAppointmentModalOpen(appointment)
   }
