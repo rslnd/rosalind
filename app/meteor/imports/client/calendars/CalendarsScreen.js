@@ -8,6 +8,7 @@ import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
+import { MultiTextField } from '../components/MultiTextField'
 
 const colorStyle = {
   borderRadius: 4,
@@ -118,6 +119,16 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Anrufliste',
     field: 'acceptInboundCalls'
+  },
+  {
+    header: 'Roles',
+    field: 'roles',
+    multi: true,
+    EditComponent: MultiTextField,
+    unsetWhenEmpty: true,
+    render: c => c.roles && c.roles.map(r =>
+      <Chip key={r} label={r} />
+    )
   }
 ]
 

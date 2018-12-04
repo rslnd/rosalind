@@ -102,5 +102,10 @@ export const schema = new SimpleSchema({
     type: [String],
     allowedValues: agreements,
     optional: true
+  },
+
+  roles: {
+    type: [String],
+    optional: true
   }
 })
