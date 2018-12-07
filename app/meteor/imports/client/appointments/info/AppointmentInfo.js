@@ -1,200 +1,21 @@
 import React from 'react'
 import identity from 'lodash/identity'
-import { Users } from '../../../api/users'
-import { touch, Field, FieldArray, FormSection } from 'redux-form'
-import { Switch } from 'redux-form-material-ui'
-import moment from 'moment-timezone'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import NumberFormat from 'react-number-format'
-import { withState } from 'recompose'
-import { __ } from '../../../i18n'
-import { Icon } from '../../components/Icon'
-import { grow, rowStyle, flex, shrink, TextField, ToggleField, iconStyle } from '../../components/form'
-import { Dot } from '../../patients/Dot'
-import { ContactFields } from '../../patients/fields/ContactFields'
+import { touch, Field, FormSection } from 'redux-form'
 import { AddressFields } from '../../patients/fields/AddressFields'
 import { BirthdayFields } from '../../patients/fields/BirthdayFields'
-import { NameFields, GenderField } from '../../patients/fields/NameFields'
 import { Stamps } from '../../helpers/Stamps'
+import { logFormat } from './logFormat'
 import { Logs } from '../../helpers/Logs'
-import { Currency } from '../../components/Currency'
 import { TagsField } from '../../tags/TagsField'
-import { calculateRevenue, RevenueField } from '../new/RevenueField'
-
-const iconDefaultStyle = {
-  textAlign: 'center',
-  paddingLeft: 6,
-  paddingRight: 6,
-  minWidth: 50,
-}
-
-const logFormat = {
-  move: log => {
-    const movedDay = !moment(log.payload.oldStart).isSame(log.payload.newStart, 'day')
-    const movedTime = moment(log.payload.oldStart).format('HHmm') !== moment(log.payload.newStart).format('HHmm')
-    const movedAssignee = log.payload.oldAssigneeId !== log.payload.newAssigneeId
-
-    if (!(movedDay || movedTime || movedAssignee)) {
-      return null
-    }
-
-    const getAssigneeName = _id => {
-      if (_id) {
-        return Users.methods.fullNameWithTitle(Users.findOne({ _id }))
-      } else {
-        return '(Einschub)'
-      }
-    }
-
-    return [
-      'Verschoben von',
-      movedDay && moment(log.payload.oldStart).format(__('time.dateFormatShortNoYear')),
-      movedTime && moment(log.payload.oldStart).format(__('time.timeFormat')),
-      movedAssignee && getAssigneeName(log.payload.oldAssigneeId),
-      '→',
-      movedDay && moment(log.payload.newStart).format(__('time.dateFormatShortNoYear')),
-      movedTime && moment(log.payload.newStart).format(__('time.timeFormat')),
-      movedAssignee && getAssigneeName(log.payload.newAssigneeId),
-      'von'
-    ].filter(identity).join(' ')
-  }
-}
-
-const ListItem = ({ icon, children, hr, style, iconStyle, highlight }) => {
-  const containerStyle = highlight
-    ? {
-      ...style,
-      backgroundColor: '#FFF9C4'
-    } : style
-
-  return <div style={containerStyle}>
-    <div style={flex}>
-      <div style={{ ...iconDefaultStyle, ...iconStyle }}>
-        {icon && <Icon name={icon} />}
-      </div>
-      <div style={grow} className='enable-select'>
-        {children}
-      </div>
-    </div>
-    {hr && <hr />}
-  </div>
-}
-
-const PlainRenderField = ({ input, append, prepend }) =>
-  input.value && <span>
-    {prepend}
-    {input.value}
-    {append}
-  </span> || null
-
-const PatientName = ({ patient, onChange }) => (
-  <div
-    style={{
-      ...rowStyle,
-      paddingLeft: 10,
-      marginLeft: -10,
-      marginTop: -16,
-      marginBottom: -8
-    }}>
-    <GenderField onChange={() => setTimeout(onChange, 30)} />
-    <div onMouseLeave={onChange}>
-      <NameFields titles gender={false} />
-    </div>
-  </div>
-)
-
-const Day = ({ appointment }) => (
-  <ListItem icon='calendar' hr>
-    {moment(appointment.start).format(__('time.dateFormatWeekday'))}
-  </ListItem>
-)
-
-const Time = ({ appointment }) => (
-  <ListItem icon='clock-o' hr>
-    {moment(appointment.start).format(__('time.timeFormatShort'))}
-    &nbsp;-&nbsp;
-    {moment(appointment.end).format(__('time.timeFormat'))}
-  </ListItem>
-)
-
-const toFloat = v =>
-  v
-    ? parseFloat(v.toString().replace(/,/g, '.').replace(/\s/g, ''))
-    : null
-
-const CurrencyFieldInner = (props) => {
-  // Swallow warning about unknown inputRef prop input
-  const { inputRef, ...restProps } = props
-
-  return <NumberFormat
-    {...restProps}
-    onValueChange={values => {
-      props.onChange({
-        target: {
-          value: values.value
-        }
-      })
-    }}
-    thousandSeparator=' '
-    decimalSeparator=','
-    onKeyDown={(e) => {
-      const {key, target} = e
-      const {selectionStart, value} = target
-      if (key === '.') {
-        e.preventDefault()
-        target.value = `${value.substr(0, selectionStart)},${value.substr(selectionStart, value.length)}`
-      }
-    }}
-  />
-}
-
-const CurrencyField = (props) =>
-  <TextField
-    {...props}
-    InputProps={{
-      inputComponent: CurrencyFieldInner,
-      startAdornment: <InputAdornment position='start'>€</InputAdornment>
-    }}
-  />
-
-const Private = () => (
-  <ListItem icon='plus-circle' style={{ marginBottom: 20 }}>
-    {__('appointments.private')}
-
-    <div className='pull-right' style={{ marginTop: -10 }}>
-      <Field
-        name='revenue'
-        component={CurrencyField}
-        // format={twoPlaces}
-        normalize={toFloat}
-      />
-    </div>
-  </ListItem>
-)
-
-const Assignee = ({ assignee }) => (
-  assignee && <ListItem icon='user-md' hr>
-    {Users.methods.fullNameWithTitle(assignee)}
-  </ListItem> || null
-)
-
-const Contacts = ({ patient }) => (
-  patient &&
-    <div>
-      <FieldArray
-        name='contacts'
-        channel='Phone'
-        icon='phone'
-        zoomable
-        component={ContactFields} />
-
-      <FieldArray
-        name='contacts'
-        channel='Email'
-        icon='envelope-open-o'
-        component={ContactFields} />
-    </div> || null
-)
+import { calculateRevenue } from '../new/RevenueField'
+import { Day, Time, AppointmentNote, Assignee } from './BasicAppointmentFields'
+import { Contacts } from './Contacts'
+import { Agreements } from './Agreements'
+import { PrivateRevenue, TotalRevenue } from './PrivateRevenue'
+import { ListItem } from './ListItem'
+import { Reminders } from './Reminders'
+import { PatientName } from './PatientName'
+import { PatientNotes } from './PatientNotes'
 
 const autofillRevenue = change => (e, tags) => {
   if (tags && tags.length >= 1) {
@@ -220,117 +41,6 @@ const Tags = ({ appointment, allowedTags, maxDuration, assignee, calendar, chang
     />
   </ListItem>
 )
-
-const Reminders = () => (
-  <ListItem icon='paper-plane'>
-    {__('appointments.appointmentReminderSMS')}
-    <div className='pull-right' style={{
-      position: 'relative',
-      right: 5,
-      top: -15
-    }}>
-      <Field
-        name='reminders'
-        color='primary'
-        component={Switch}
-      />
-    </div>
-    <br /><br />
-  </ListItem> || null
-)
-
-const TotalRevenue = ({ value }) => (
-  value && value > 0 && <ListItem icon='pie-chart'>
-    Gesamtumsatz&ensp;
-    <Currency value={value} />
-  </ListItem> || null
-)
-
-const PatientNotes = ({ patient }) => (
-  <div style={rowStyle}>
-    <div style={iconStyle}>
-      <Icon name='user-plus' />
-    </div>
-    <div style={{...grow, backgroundColor: patient.note ? '#FFF9C4' : ''}}>
-      <Field
-        name='note'
-        component={TextField}
-        multiline
-        rows={1}
-        rowsMax={5}
-        label={__('patients.note')}
-      />
-    </div>
-
-    <div style={shrink}>
-      <Field
-        name='banned'
-        component={ToggleField}
-        button={false}
-        style={{ marginTop: 15, marginLeft: 20 }}
-        values={[
-          { value: false, label: <Dot /> },
-          { value: true, label: <Dot banned /> }
-        ]} />
-    </div>
-  </div>
-)
-
-const Agreements = ({ patient, calendar, showOnly = 'pending' }) => (
-  <FormSection name='agreements'>
-    {
-      calendar.requiredAgreements &&
-      calendar.requiredAgreements.length >= 1 &&
-      calendar.requiredAgreements.map(label => {
-        const agreement = patient.agreements && patient.agreements.find(a => a.to === label)
-        const agreedAt = agreement && agreement.agreedAt
-
-        if ((showOnly === 'pending' && agreedAt) ||
-          (showOnly === 'agreed' && !agreedAt)) {
-          return null
-        }
-
-        return <ListItem
-          key={label}
-          icon='file-text-o'
-          highlight={!agreedAt}
-          style={{ marginTop: 10, paddingTop: 15 }}>
-          {
-            agreedAt
-            ? __(`patients.agreements.${label}.yes`, {
-              date: moment(patient.agreedAt).format(__('time.dateFormatShort'))
-            }) : __(`patients.agreements.${label}.no`)
-          }
-
-          <div className='pull-right' style={{
-            position: 'relative',
-            right: 5,
-            top: -15
-          }}>
-            <Field
-              name={label}
-              color='primary'
-              component={Switch}
-            />
-          </div>
-          <br /><br />
-        </ListItem>
-      }) || null
-    }
-  </FormSection>
-)
-
-const AppointmentNote = ({ appointment }) =>
-  <ListItem icon='pencil' hr highlight={!!appointment.note}>
-    <Field
-      name='note'
-      label={__('appointments.note')}
-      multiline
-      rows={3}
-      component={TextField}
-      fullWidth
-    />
-  </ListItem>
 
 export class AppointmentInfo extends React.Component {
   constructor (props) {
@@ -413,7 +123,7 @@ export class AppointmentInfo extends React.Component {
                 <Day appointment={appointment} />
                 <Time appointment={appointment} />
                 <Assignee assignee={assignee} />
-                <Private appointment={appointment} />
+                <PrivateRevenue appointment={appointment} />
                 <Tags
                   appointment={appointment}
                   allowedTags={allowedTags}
@@ -491,13 +201,4 @@ export class AppointmentInfo extends React.Component {
       </div>
     )
   }
-}
-
-const loadingStyle = {
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  width: '100%',
-  top: 67,
-  height: 2
 }

@@ -107,7 +107,13 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     )
   },
   {
-    header: 'Einverständniserklärungen',
+    header: 'Revers',
+    field: 'consentRequired',
+    render: t => t.consentRequired && <Icon name='check' />,
+    type: Boolean
+  },
+  {
+    header: 'Datenschutz',
     field: 'requiredAgreements',
     EditComponent: AgreementsPicker,
     isMulti: true,
