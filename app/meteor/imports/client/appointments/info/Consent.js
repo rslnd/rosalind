@@ -8,6 +8,8 @@ import { __ } from '../../../i18n'
 import { ListItem } from './ListItem'
 import Switch from '@material-ui/core/Switch'
 import Button from '@material-ui/core/Button'
+import Tooltip from '@material-ui/core/Tooltip'
+import { Icon } from '../../components/Icon'
 
 import { Appointments } from '../../../api/appointments'
 import { Tags } from '../../../api/tags'
@@ -161,3 +163,22 @@ export const Consent = compose(
     }
   })
 )(ConsentComponent)
+
+export const ConsentIndicator = ({ appointment }) =>
+  appointment && appointment.admitted && appointment.consentedAt
+  ? (
+    <Tooltip
+      interactive
+      placement='top'
+      title={__('appointments.consentedAt', { date: formatDate(appointment.consentedAt) })}
+    >
+      <span className='text-muted' style={iconStyle}>
+        <Icon name='file-text-o' />
+      </span>
+    </Tooltip>
+  ) : null
+
+const iconStyle = {
+  display: 'inline-block',
+  marginRight: 4
+}

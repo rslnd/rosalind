@@ -41,6 +41,7 @@ export const appointments = {
   consentUnsetSuccess: 'Revers entfernt',
   usePreviousConsent: 'Revers vom __date__ für __tags__ verwenden',
   newConsent: 'Neuen Revers für diese Behandlung ablegen',
+  consentedAt: 'Revers abgelegt am __date__',
   move: 'Verschieben',
   moveSuccess: 'Termin verschoben',
   changeAssigneeSuccess: 'Termine verschoben',

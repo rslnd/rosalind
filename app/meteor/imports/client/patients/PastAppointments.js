@@ -5,6 +5,7 @@ import { withState } from 'recompose'
 import { __ } from '../../i18n'
 import { Users } from '../../api/users'
 import { Indicator, Revenue } from '../appointments/appointment/Indicator'
+import { ConsentIndicator } from '../appointments/info/Consent'
 import { TagsList } from '../tags/TagsList'
 import { CommentsContainer } from '../comments/CommentsContainer'
 import { CommentItem } from '../comments/CommentItem'
@@ -84,7 +85,8 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
             <div style={{ display: 'inline-block', verticalAlign: 'top', ...canceledStyle }}>
               <Revenue appointment={appointment} />
             </div>
-            <div style={{ display: 'inline-block', minWidth: 25 }}>
+            <div style={{ display: 'inline-block', minWidth: 45 }}>
+              <ConsentIndicator appointment={appointment} />
               <Indicator appointment={appointment} />
             </div>
           </div>

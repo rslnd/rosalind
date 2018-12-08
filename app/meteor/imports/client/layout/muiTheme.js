@@ -80,6 +80,14 @@ export const muiTheme = createMuiTheme({
       body: {
         fontSize: '14px'
       }
+    },
+    MuiTooltip: {
+      popper: {
+        zIndex: 1060
+      },
+      tooltip: {
+        fontSize: '14px'
+      }
     }
   }
 })
