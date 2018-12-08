@@ -61,8 +61,15 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'defaultDuration'
   },
   {
+    header: 'History',
+    field: 'history',
+    type: Boolean,
+    render: c => c.history && <Icon name='check' />
+  },
+  {
     header: 'Einschub',
     field: 'allowUnassigned',
+    type: Boolean,
     render: c => c.allowUnassigned && <Icon name='check' />
   },
   {
@@ -87,8 +94,9 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     )
   },
   {
-    title: 'Nur "Ist"',
+    header: 'Empfangen = Behandelt',
     field: 'reportExpectedAsActual',
+    type: Boolean,
     render: c =>
       c.reportExpectedAsActual && <Icon name='check' />
   },

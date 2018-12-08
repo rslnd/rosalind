@@ -50,7 +50,7 @@ export const patients = {
   addContact: 'Weiteren Kontakt hinzufügen',
   save: 'Speichern',
   patientSince: 'Datum der ersten Behandlung',
-  editSuccess: 'Erfolgreich gespeichert',
+  editSuccess: 'Gespeichert',
   patientNotFound: 'PatientIn nicht gefunden',
   nameCaseWarning: 'Bitte den ersten Buchstaben groß schreiben, und den Rest klein. Danke!',
   birthdayRequired: 'Bitte das Geburtsdatum eintragen',

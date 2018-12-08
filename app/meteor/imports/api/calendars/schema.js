@@ -112,5 +112,10 @@ export const schema = new SimpleSchema({
   roles: {
     type: [String],
     optional: true
+  },
+
+  history: {
+    type: Boolean,
+    optional: true
   }
 })

@@ -8,6 +8,7 @@ import { __ } from '../../../i18n'
 import { Roles } from 'meteor/alanning:roles'
 import Alert from 'react-s-alert'
 import { Appointments } from '../../../api/appointments'
+import { Calendars } from '../../../api/calendars'
 import { Users } from '../../../api/users'
 import { Patients } from '../../../api/patients'
 import { WaitlistScreen } from './WaitlistScreen'
@@ -78,10 +79,14 @@ const composer = props => {
 
   const waitlistAppointments = filteredAppointments.map(appointment => {
     const patient = Patients.findOne({ _id: appointment.patientId })
+    const calendar = Calendars.findOne({ _id: appointment.calendarId })
+
+    const { history } = calendar
 
     return {
       ...appointment,
-      patient
+      patient,
+      history
     }
   })
 

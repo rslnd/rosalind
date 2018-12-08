@@ -1,6 +1,7 @@
+import React from 'react'
 import { connect } from 'react-redux'
 import { touch, reduxForm, formValueSelector } from 'redux-form'
-import { withProps } from 'recompose'
+import { compose, branch } from 'recompose'
 import Alert from 'react-s-alert'
 import sum from 'lodash/sum'
 import isEqual from 'lodash/isEqual'
@@ -14,6 +15,7 @@ import { Users } from '../../../api/users'
 import { Comments } from '../../../api/comments'
 import { Calendars } from '../../../api/calendars'
 import { subscribe } from '../../../util/meteor/subscribe'
+import { AppointmentInfoMinimal } from './AppointmentInfoMinimal'
 import { AppointmentInfo } from './AppointmentInfo'
 import { calculateRevenue } from '../new/RevenueField'
 import { translateObject } from '../../components/form/translateObject'
@@ -22,15 +24,6 @@ import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 import { validate } from '../new/newAppointmentValidators'
 
 const formName = 'appointmentInfoForm'
-
-let AppointmentInfoContainer = reduxForm({
-  form: formName,
-  enableReinitialize: true,
-  updateUnregisteredFields: true,
-  keepDirtyOnReinitialize: false,
-  pure: false,
-  warn: (values) => translateObject(validate(values))
-})(AppointmentInfo)
 
 const composer = props => {
   const subscription = subscribe('appointment', { appointmentId: props.appointmentId })
@@ -153,6 +146,19 @@ const composer = props => {
   }
 }
 
-AppointmentInfoContainer = withTracker(composer)(AppointmentInfoContainer)
+const InfoComponent = ({ minimal, ...p }) =>
+  minimal
+  ? <AppointmentInfoMinimal {...p} />
+  : <AppointmentInfo {...p} />
 
-export { AppointmentInfoContainer }
+export const AppointmentInfoContainer = compose(
+  withTracker(composer),
+  reduxForm({
+    form: formName,
+    enableReinitialize: true,
+    updateUnregisteredFields: true,
+    keepDirtyOnReinitialize: false,
+    pure: false,
+    warn: (values) => translateObject(validate(values))
+  })
+)(InfoComponent)

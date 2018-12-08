@@ -75,6 +75,7 @@ export class WaitlistScreen extends React.Component {
                   action={action}
                   handleChangeWaitlistAssignee={this.handleStartChangeWaitlistAssignee}
                   canChangeWaitlistAssignee={canChangeWaitlistAssignee}
+                  history={appointment.history}
                 />
               </div>
             ))
@@ -115,7 +116,5 @@ export class WaitlistScreen extends React.Component {
 }
 
 const containerStyle = {
-  padding: 12,
-  overflow: 'hidden',
-  maxHeight: 'calc(100vh - 100px)'
+  padding: 12
 }
