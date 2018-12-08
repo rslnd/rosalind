@@ -13,6 +13,8 @@ import { endTreatment } from './endTreatment'
 import { nextTreatment } from './nextTreatment'
 import { changeAssignee } from './changeAssignee'
 import { changeWaitlistAssignee } from './changeWaitlistAssignee'
+import { setConsented } from './setConsented'
+import { unsetConsented } from './unsetConsented'
 
 export default function ({ Appointments }) {
   return {
@@ -30,6 +32,8 @@ export default function ({ Appointments }) {
     endTreatment: endTreatment({ Appointments }),
     nextTreatment: nextTreatment({ Appointments }),
     changeAssignee: changeAssignee({ Appointments }),
-    changeWaitlistAssignee: changeWaitlistAssignee({ Appointments })
+    changeWaitlistAssignee: changeWaitlistAssignee({ Appointments }),
+    setConsented: setConsented({ Appointments }),
+    unsetConsented: unsetConsented({ Appointments })
   }
 }

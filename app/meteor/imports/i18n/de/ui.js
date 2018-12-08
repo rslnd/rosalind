@@ -10,6 +10,7 @@ export const ui = {
   save: 'Speichern',
   saved: 'Gespeichert',
   error: 'Fehler',
+  tryAgain: 'Entschuldigung! Bitte noch einmal versuchen',
   ok: 'OK',
   delete: 'Entfernen',
   deleted: 'Gelöscht',

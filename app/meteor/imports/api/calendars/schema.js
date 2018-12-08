@@ -98,6 +98,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  consentRequired: {
+    type: Boolean,
+    optional: true
+  },
+
   requiredAgreements: {
     type: [String],
     allowedValues: agreements,

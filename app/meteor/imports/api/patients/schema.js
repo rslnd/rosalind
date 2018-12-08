@@ -3,8 +3,7 @@ import { External, Day, Auto } from '../../util/schema'
 
 // TODO: Refactor to collection
 export const agreements = [
-  'privacy',
-  'revers'
+  'privacy'
 ]
 
 const Agreement = new SimpleSchema({

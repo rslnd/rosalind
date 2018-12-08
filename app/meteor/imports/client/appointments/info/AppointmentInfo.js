@@ -16,6 +16,7 @@ import { ListItem } from './ListItem'
 import { Reminders } from './Reminders'
 import { PatientName } from './PatientName'
 import { PatientNotes } from './PatientNotes'
+import { Consent } from './Consent'
 
 const autofillRevenue = change => (e, tags) => {
   if (tags && tags.length >= 1) {
@@ -89,7 +90,6 @@ export class AppointmentInfo extends React.Component {
 
     return (
       <div>
-        {/* {loading && <LinearProgress style={loadingStyle} />} */}
         {
           patient &&
             <form onSubmit={dirty ? handleSubmit(handleEditPatient) : identity}>
@@ -183,7 +183,8 @@ export class AppointmentInfo extends React.Component {
                 <FormSection name='patient'>
                   <PatientNotes patient={patient} />
                   {/* Show first if not agreed yet */}
-                  <Agreements patient={patient} calendar={calendar} showOnly={'pending'} />
+                  <Consent appointment={appointment} calendar={calendar} showOnly='pending' />
+                  <Agreements patient={patient} calendar={calendar} showOnly='pending' />
                   <Contacts patient={patient} />
                   <BirthdayFields collectInsuranceId />
                   <FormSection name='address'>
@@ -191,7 +192,8 @@ export class AppointmentInfo extends React.Component {
                   </FormSection>
                   <br />
                   <Reminders />
-                  <Agreements patient={patient} calendar={calendar} showOnly={'agreed'} />
+                  <Consent appointment={appointment} calendar={calendar} showOnly='agreed' />
+                  <Agreements patient={patient} calendar={calendar} showOnly='agreed' />
                   <TotalRevenue value={totalPatientRevenue} />
                 </FormSection>
                 <input type='submit' style={{ display: 'none' }} />

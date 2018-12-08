@@ -10,9 +10,10 @@ export const Error = ({ message }) => (
 
       <p>Entschuldigung, das hätte nicht passieren dürfen.</p>
 
-      <p>Bitte öffne den Chat rechts unten und beschribe kurz,<br />
+      <p className='hide-print'>Bitte öffne den Chat rechts unten und beschribe kurz,<br />
       was Du gerade machen wolltest und wo Du zuletzt geklickt hast.</p>
-      <p><b>Danke</b><br /></p>
+
+      <p className='hide-print'><b>Danke</b><br /></p>
     </Box>
   </div>
 )

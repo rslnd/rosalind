@@ -72,6 +72,18 @@ export default new SimpleSchema({
     index: 1
   },
 
+  consentedAt: {
+    type: Date,
+    optional: true,
+    index: 1
+  },
+
+  consentedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true,
+    index: 1
+  },
+
   treatmentStart: {
     type: Date,
     optional: true,
