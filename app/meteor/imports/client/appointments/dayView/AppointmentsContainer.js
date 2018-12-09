@@ -157,7 +157,7 @@ const composer = (props) => {
           ].filter(s => s && s.length >= 1).join('\n')
 
           const lockedBy = appointment.lockedBy && Users.findOne({ _id: appointment.lockedBy })
-          const lockedByFirstName = lockedBy && Users.methods.firstName(lockedBy)
+          const lockedByFirstName = lockedBy && Users.methods.fullName(lockedBy)
 
           const isColliding = assigneeAppointments.find(a =>
             a.start.getTime() >= appointment.start.getTime() &&
