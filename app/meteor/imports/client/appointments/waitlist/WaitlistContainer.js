@@ -81,7 +81,7 @@ const composer = props => {
     const patient = Patients.findOne({ _id: appointment.patientId })
     const calendar = Calendars.findOne({ _id: appointment.calendarId })
 
-    const { history } = calendar
+    const history = calendar && calendar.history
 
     return {
       ...appointment,
