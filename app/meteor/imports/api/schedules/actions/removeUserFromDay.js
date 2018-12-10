@@ -5,6 +5,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Day } from '../../../util/schema/day'
 import { Events } from '../../events'
+import { daySelector } from '../../../util/time/day'
 
 export const removeUserFromDay = ({ Schedules, Users }) => {
   return new ValidatedMethod({
@@ -22,7 +23,11 @@ export const removeUserFromDay = ({ Schedules, Users }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const existingSchedule = Schedules.findOne({ day, calendarId, type: 'day' })
+      const existingSchedule = Schedules.findOne({
+        ...daySelector(day),
+        calendarId,
+        type: 'day'
+      })
 
       if (existingSchedule) {
         Schedules.update({ _id: existingSchedule._id }, {

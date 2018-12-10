@@ -86,7 +86,7 @@ const composer = (props) => {
     }
 
     const assigneeIdsScheduled = uniq(flatten(Schedules.find({
-      day,
+      ...daySelector(day),
       calendarId: calendar._id
     }).fetch().map((s) => s.userIds)))
 

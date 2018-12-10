@@ -85,11 +85,15 @@ export const applySearchFilter = ({ searchValue = '', assignees, tags, availabil
       .map(a => ({
         key: a._id,
         assignee: a,
-        availabilities: (availabilities[a._id] || []).filter(a =>
-          (parsedQuery.tags && parsedQuery.tags.length >= 1)
-          ? parsedQuery.tags.some(t => a.tags.includes(t._id))
-          : true
-        ).map(highlightMatchedTags(parsedQuery))
+        availabilities:
+          highlightAndCollapse(
+            (availabilities[a._id] || []).filter(a =>
+              (parsedQuery.tags && parsedQuery.tags.length >= 1)
+              ? parsedQuery.tags.some(t => a.tags.includes(t._id))
+              : true
+            ),
+            parsedQuery
+          )
       })).filter(a => a.availabilities.length >= 1)
     : (parsedQuery.wanted === 'tag')
     ? parsedQuery.tags.map(t => ({
@@ -99,9 +103,12 @@ export const applySearchFilter = ({ searchValue = '', assignees, tags, availabil
         return {
           key: assigneeId,
           assignee: assignees.find(a => a._id === assigneeId), // Weird, sometimes undefuned
-          availabilities: assigneeAvailabilities.filter(a =>
-            a.tags.includes(t._id)
-          ).map(highlightMatchedTags(parsedQuery))
+          availabilities: highlightAndCollapse(
+            assigneeAvailabilities.filter(a =>
+              a.tags.includes(t._id)
+            ),
+            parsedQuery
+          )
         }
       }).filter(a => a.assignee && a.availabilities.length >= 1)
     }))
@@ -121,13 +128,59 @@ const isMatchingString = (term, haystack) =>
 const isMatchingStrings = (term, haystack = []) =>
   haystack.some(hay => isMatchingString(term, hay))
 
+const highlightAndCollapse = (availabilities, parsedQuery) =>
+  availabilities
+    .map(highlightMatchedTags(parsedQuery))
+    .reduce(collapseConsecutive, {})
+
 const highlightMatchedTags = (parsedQuery) => {
   const queryTags = parsedQuery.tags.map(t => t._id)
-  return availability =>
-    (queryTags.length === 0)
-    ? availability
-    : {
-      ...availability,
-      matchedTags: availability.tags.filter(t => queryTags.includes(t))
+  return availability => ({
+    ...availability,
+    matchedTags:
+      (queryTags.length >= 1)
+      ? availability.tags.filter(t => queryTags.includes(t))
+      : availability.tags
+  })
+}
+
+const collapseConsecutive = (
+  { result = [], wip, prevKey = '' },
+  currAva,
+  i,
+  allAvas
+) => {
+  const isLast = i === (allAvas.length - 1)
+  const currKey = currAva.matchedTags.join(',')
+  const shouldCollapse = prevKey === currKey
+
+  if (shouldCollapse && wip) {
+    wip = {
+      ...wip,
+      collapsedAvailabilities: [
+        ...(wip.collapsedAvailabilities || []),
+        currAva
+      ]
     }
+  } else {
+    if (wip) {
+      result = [...result, wip]
+    }
+    wip = {
+      ...currAva,
+      collapsedAvailabilities: [
+        currAva
+      ]
+    }
+  }
+
+  if (isLast) {
+    return wip ? [...result, wip] : result
+  } else {
+    return {
+      prevKey: currKey,
+      result,
+      wip
+    }
+  }
 }

@@ -43,5 +43,9 @@ export const time = {
   thuLong: 'Donnerstag',
   friLong: 'Freitag',
   satLong: 'Samstag',
-  sunLong: 'Sonntag'
+  sunLong: 'Sonntag',
+  am: 'Vm',
+  pm: 'Nm',
+  amLong: 'Vormittag',
+  pmLong: 'Nachmittag'
 }

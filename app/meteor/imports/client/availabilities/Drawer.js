@@ -9,7 +9,7 @@ const triggerStyle = {
   top: 0,
   bottom: 0,
   width: 5,
-  zIndex: 50
+  zIndex: 1060
 }
 
 const drawerStyle = {
@@ -17,9 +17,12 @@ const drawerStyle = {
   right: 0,
   top: 0,
   bottom: 0,
-  width: 600,
+  width: 800,
   zIndex: 51,
-  padding: 15
+  paddingTop: 15,
+  paddingLeft: 15,
+  paddingRight: 15,
+  paddingBottom: 0
 }
 
 // Apparently { display: 'none' } resets state of children

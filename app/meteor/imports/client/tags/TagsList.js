@@ -59,24 +59,35 @@ const Tag = ({ tag, onClick, style, showDefaultRevenue }) => {
   )
 }
 
-export const TagsList = ({ tags = [], onClick = () => {}, style = {}, tiny, showDefaultRevenue }) => {
+export const TagsList = ({
+  tags = [],
+  onClick = () => {},
+  style = {},
+  tiny,
+  showDefaultRevenue,
+  groupTags = true
+}) => {
   const expandedTags = tags.map(slug =>
     slug.tag ? slug : Tags.findOne({ _id: slug }, { removed: true })
   ).filter(identity)
 
   // group by private, sort within groups
   const groupedTags = groupBy(t => (t.privateAppointment || false))(expandedTags)
-  const orderedTagGroups = [
-    {
-      title: 'Kasse',
-      tags: groupedTags.false
-    }, {
-      title: 'Privat',
-      tags: groupedTags.true,
-      style: { paddingTop: 6 }
+  const orderedTagGroups = groupTags
+    ? [
+      {
+        title: 'Kasse',
+        tags: groupedTags.false
+      }, {
+        title: 'Privat',
+        tags: groupedTags.true,
+        style: { paddingTop: 6 }
+      }
+    ].filter(t => t.tags && t.tags.length > 0)
+     .map(t => ({ ...t, tags: sortBy('order')(t.tags) }))
+    : [{
+      tags: expandedTags
     }]
-    .filter(t => t.tags && t.tags.length > 0)
-    .map(t => ({ ...t, tags: sortBy('order')(t.tags) }))
 
   const tinyStyle = tiny ? { zoom: 0.8 } : {}
   const tinyTagGroupTitleStyle = tiny ? { zoom: 1 / 0.8 } : {}
