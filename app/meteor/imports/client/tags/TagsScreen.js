@@ -66,6 +66,16 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'defaultRevenue'
   },
   {
+    header: 'von',
+    field: 'minRevenue',
+    unsetWhenEmpty: true
+  },
+  {
+    header: 'bis',
+    field: 'maxRevenue',
+    unsetWhenEmpty: true
+  },
+  {
     header: 'Description',
     field: 'description'
   },

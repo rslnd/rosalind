@@ -8,7 +8,16 @@ const triggerStyle = {
   right: 0,
   top: 0,
   bottom: 0,
-  width: 5,
+  width: 20,
+  zIndex: 1061
+}
+
+const closeTriggerStyle = {
+  position: 'fixed',
+  top: 10,
+  right: 10,
+  bottom: 10,
+  left: 10,
   zIndex: 1060
 }
 
@@ -18,7 +27,7 @@ const drawerStyle = {
   top: 0,
   bottom: 0,
   width: 800,
-  zIndex: 51,
+  zIndex: 1062,
   paddingTop: 15,
   paddingLeft: 15,
   paddingRight: 15,
@@ -27,7 +36,8 @@ const drawerStyle = {
 
 // Apparently { display: 'none' } resets state of children
 const hiddenStyle = {
-  opacity: 0
+  opacity: 0,
+  pointerEvents: 'none'
 }
 
 const DrawerComponent = ({ isOpen, handleOpen, handleClose, children = null }) =>
@@ -35,11 +45,15 @@ const DrawerComponent = ({ isOpen, handleOpen, handleClose, children = null }) =
     style={triggerStyle}
     onMouseEnter={handleOpen}
   >
+    <div
+      style={isOpen ? closeTriggerStyle : hiddenStyle}
+      onMouseEnter={handleClose}
+    />
     <Paper
       elevation={10}
       square
       style={isOpen ? drawerStyle : hiddenStyle}
-      onMouseLeave={handleClose}>
+    >
       <ErrorBoundary>
         {children}
       </ErrorBoundary>

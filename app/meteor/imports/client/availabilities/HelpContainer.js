@@ -9,9 +9,11 @@ import { Calendars } from '../../api/calendars'
 import { withTracker } from '../components/withTracker'
 import { prepareAvailabilities, applySearchFilter, toResults } from './filter'
 import { withDrawer, Drawer } from './Drawer'
+import { withRouter } from 'react-router-dom'
+import { dateToDay } from '../../util/time/day'
 
 const composer = props => {
-  const availabilities = Availabilities.find({}, { sort: { start: 1 } }).fetch()
+  const allAvailabilities = Availabilities.find({}, { sort: { start: 1 } }).fetch()
   const tags = Tags.find({}).fetch()
   const constraints = Constraints.find({}).fetch()
   const assignees = Users.find({
@@ -25,7 +27,7 @@ const composer = props => {
 
   return {
     ...props,
-    availabilities,
+    allAvailabilities,
     tags,
     constraints,
     assignees,
@@ -41,13 +43,48 @@ const handleSearchValueChange = props => (value, { action }) => {
 
 const log = pre => withProps(p => console.log(pre, p))
 
+const hoverTag = (props) => {
+  const hoverTag = props.hoverTag
+    ? Tags.findOne({ _id: props.hoverTag })
+    : null
+
+  return {
+    ...props,
+    hoverTag
+  }
+}
+
+const handleAvailabilityClick = props => availabilityId => {
+  console.log('Navigating to Availability', availabilityId)
+  const availability = props.allAvailabilities.find(a => a._id === availabilityId)
+  if (availability) {
+    const calendar = props.calendars.find(c => c._id === availability.calendarId)
+    const d = dateToDay(availability.from)
+    const date = [d.year, d.month, d.day].join('-')
+    const url = ['/appointments', calendar.slug, date].join('/')
+    props.history.push(url)
+    if (props.setOpen) {
+      props.setOpen(false)
+    }
+  } else {
+    throw new Error('Could not find availability')
+  }
+}
+
 export const HelpContainer = compose(
+  withRouter,
   withTracker(composer),
   withProps(prepareAvailabilities),
   withState('searchValue', 'setSearchValue', ''),
   withHandlers({ handleSearchValueChange }),
+  withState('hoverAvailability', 'setHoverAvailability'),
   withProps(applySearchFilter),
+  withState('hoverTag', 'setHoverTag'),
+  withTracker(hoverTag),
   withDrawer,
+  withHandlers({
+    handleAvailabilityClick
+  }),
   // withProps(explodeConstraints),
   // log('exploded'),
   // withProps(combineConstraints),

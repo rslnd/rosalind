@@ -2,6 +2,7 @@ import React from 'react'
 import groupBy from 'lodash/fp/groupBy'
 import sortBy from 'lodash/fp/sortBy'
 import identity from 'lodash/identity'
+import { withHandlers } from 'recompose'
 import { color, lightness } from 'kewler'
 import { Icon } from '../components/Icon'
 import { Tags } from '../../api/tags'
@@ -34,30 +35,35 @@ const overlay = {
 
 export const darken = c => color(c)(lightness(-10))()
 
-const Tag = ({ tag, onClick, style, showDefaultRevenue }) => {
-  const handleClick = () => {
-    onClick && onClick(tag._id)
-  }
-
-  return (
-    <span
-      title={tag.description}
-      onClick={handleClick}
-      style={{
-        ...tagStyle,
-        ...style,
-        color: tag.selectable && (tag.selected ? '#fff' : tagTextColor) || '#fff',
-        backgroundColor: tag.selectable
-          ? (tag.selected ? tag.color : tagBackgroundColor)
-          : tag.color,
-        borderColor: darken(tag.color || tagBackgroundColor),
-        textDecoration: tag.removed ? 'line-through' : 'none'
-      }}>
-      {tag.tag}
-      {/* <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} /> */}
-    </span>
-  )
-}
+const Tag = withHandlers({
+  handleClick: props => e => props.onClick && props.onClick(props.tag._id),
+  handleMouseEnter: props => e => props.onMouseEnter && props.onMouseEnter(props.tag._id),
+  handleMouseLeave: props => e => props.onMouseLeave && props.onMouseLeave(props.tag._id)
+})(({
+  tag,
+  handleClick,
+  handleMouseEnter,
+  handleMouseLeave,
+  style,
+  showDefaultRevenue
+}) => <span
+  title={tag.description}
+  onClick={handleClick}
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+  style={{
+    ...tagStyle,
+    ...style,
+    color: tag.selectable && (tag.selected ? '#fff' : tagTextColor) || '#fff',
+    backgroundColor: tag.selectable
+      ? (tag.selected ? tag.color : tagBackgroundColor)
+      : tag.color,
+    borderColor: darken(tag.color || tagBackgroundColor),
+    textDecoration: tag.removed ? 'line-through' : 'none'
+  }}>
+  {tag.tag}
+  {/* <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} /> */}
+</span>)
 
 export const TagsList = ({
   tags = [],
@@ -65,7 +71,9 @@ export const TagsList = ({
   style = {},
   tiny,
   showDefaultRevenue,
-  groupTags = true
+  groupTags = true,
+  onMouseEnter,
+  onMouseLeave
 }) => {
   const expandedTags = tags.map(slug =>
     slug.tag ? slug : Tags.findOne({ _id: slug }, { removed: true })
@@ -111,6 +119,8 @@ export const TagsList = ({
               key={tag._id}
               tag={tag}
               onClick={onClick}
+              onMouseEnter={onMouseEnter}
+              onMouseLeave={onMouseLeave}
               style={style}
               showDefaultRevenue={showDefaultRevenue}
             />

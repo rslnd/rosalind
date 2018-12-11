@@ -6,13 +6,13 @@ import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import { getPossibleTags } from '../../api/availabilities/methods/getPossibleTags'
 
-export const prepareAvailabilities = ({ availabilities, constraints, tags }) => {
+export const prepareAvailabilities = ({ allAvailabilities, constraints, tags }) => {
   // Group by assigneeId and limit to the next ~7 free availabilities,
   // assuming that the availabilities are sorted asc by start date
-  const upcomingAvailabilitiesByAssignee = availabilities.reduce((acc, availability, i) => {
+  const upcomingAvailabilitiesByAssignee = allAvailabilities.reduce((acc, availability, i) => {
     if (!acc[availability.assigneeId]) {
       acc[availability.assigneeId] = []
-    } else if (acc[availability.assigneeId].length >= 7) {
+    } else if (acc[availability.assigneeId].length >= 14) {
       return acc
     }
 
@@ -33,7 +33,13 @@ export const prepareAvailabilities = ({ availabilities, constraints, tags }) => 
   }
 }
 
-export const applySearchFilter = ({ searchValue = '', assignees, tags, availabilities }) => {
+export const applySearchFilter = ({
+  searchValue = '',
+  assignees,
+  tags,
+  availabilities,
+  hoverAvailability
+}) => {
   // Reduce the search string to { [assingees], [tags], wanted: 'assignee'|'tags' }
   const emptyQuery = { assignees: [], tags: [], wanted: null }
   const parsedQuery = searchValue
@@ -92,7 +98,8 @@ export const applySearchFilter = ({ searchValue = '', assignees, tags, availabil
               ? parsedQuery.tags.some(t => a.tags.includes(t._id))
               : true
             ),
-            parsedQuery
+            parsedQuery,
+            hoverAvailability
           )
       })).filter(a => a.availabilities.length >= 1)
     : (parsedQuery.wanted === 'tag')
@@ -107,7 +114,8 @@ export const applySearchFilter = ({ searchValue = '', assignees, tags, availabil
             assigneeAvailabilities.filter(a =>
               a.tags.includes(t._id)
             ),
-            parsedQuery
+            parsedQuery,
+            hoverAvailability
           )
         }
       }).filter(a => a.assignee && a.availabilities.length >= 1)
@@ -128,15 +136,16 @@ const isMatchingString = (term, haystack) =>
 const isMatchingStrings = (term, haystack = []) =>
   haystack.some(hay => isMatchingString(term, hay))
 
-const highlightAndCollapse = (availabilities, parsedQuery) =>
+const highlightAndCollapse = (availabilities, parsedQuery, hoverAvailability) =>
   availabilities
-    .map(highlightMatchedTags(parsedQuery))
+    .map(highlightMatchedTags(parsedQuery, hoverAvailability))
     .reduce(collapseConsecutive, {})
 
-const highlightMatchedTags = (parsedQuery) => {
+const highlightMatchedTags = (parsedQuery, hoverAvailability) => {
   const queryTags = parsedQuery.tags.map(t => t._id)
   return availability => ({
     ...availability,
+    isHovering: hoverAvailability === availability._id,
     matchedTags:
       (queryTags.length >= 1)
       ? availability.tags.filter(t => queryTags.includes(t))

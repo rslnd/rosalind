@@ -1,5 +1,6 @@
 import moment from 'moment-timezone'
 import React from 'react'
+import { withHandlers } from 'recompose'
 import Avatar from '@material-ui/core/Avatar'
 import Chip from '@material-ui/core/Chip'
 import { Search } from './Search'
@@ -7,12 +8,18 @@ import { TagsList } from '../tags/TagsList'
 import { rowStyle } from '../components/form'
 import { __ } from '../../i18n'
 import { grayDisabled } from '../layout/styles'
+import { TagDetails } from './TagDetails'
+import { highlight } from '../layout/styles'
 
 export const Help = ({
   searchValue,
   handleSearchValueChange,
   results,
-  parsedQuery
+  parsedQuery,
+  hoverTag,
+  setHoverTag,
+  setHoverAvailability,
+  handleAvailabilityClick
 }) =>
   <div style={containerStyle}>
     <Search value={searchValue} onChange={handleSearchValueChange} />
@@ -21,46 +28,71 @@ export const Help = ({
       (parsedQuery.failed || results.length === 0)
       ? <span>No results</span>
       : (parsedQuery.wanted === 'assignee')
-      ? <div style={resultsStyle}>
+      ? <Results hoverTag={hoverTag}>
         {
           results.map(result =>
             <Assignee
               key={result.key}
               assignee={result.assignee}
               availabilities={result.availabilities}
+              setHoverTag={setHoverTag}
+              setHoverAvailability={setHoverAvailability}
+              handleAvailabilityClick={handleAvailabilityClick}
             />
           )
         }
-      </div>
+      </Results>
       : (parsedQuery.wanted === 'tag')
-      ? <div style={resultsStyle}>
+      ? <Results hoverTag={hoverTag}>
         {
           results.map(result =>
-            <Tag key={result.key} tag={result.tag} assignees={result.assignees} />
+            <div key={result.key}>
+              <h3><TagsList tags={[result.tag]} /></h3>
+              {
+                result.assignees.map(a =>
+                  <Assignee
+                    key={a.key}
+                    assignee={a.assignee}
+                    availabilities={a.availabilities}
+                    setHoverTag={setHoverTag}
+                    setHoverAvailability={setHoverAvailability}
+                    handleAvailabilityClick={handleAvailabilityClick}
+                  />
+                )
+              }
+            </div>
           )
         }
-      </div>
+      </Results>
       : null // This should not happen
     }
   </div>
 
-const Tag = ({ tag, assignees }) =>
-  <div>
-    <h3><TagsList tags={[tag]} /></h3>
-    {
-      assignees.map(a =>
-        <Assignee key={a.key} assignee={a.assignee} availabilities={a.availabilities} />
-      )
-    }
-  </div>
-
-const Assignee = ({ assignee, availabilities }) =>
+const Assignee = ({
+  assignee,
+  availabilities,
+  setHoverTag,
+  setHoverAvailability,
+  handleAvailabilityClick
+}) =>
   <div>
     <h4>{assignee.fullNameWithTitle}</h4>
-    <Availabilities availabilities={availabilities} showTags />
+    <Availabilities
+      availabilities={availabilities}
+      showTags
+      setHoverTag={setHoverTag}
+      setHoverAvailability={setHoverAvailability}
+      handleAvailabilityClick={handleAvailabilityClick}
+    />
   </div>
 
-const Availabilities = ({ availabilities, showTags }) =>
+const Availabilities = ({
+  availabilities,
+  showTags,
+  setHoverTag,
+  setHoverAvailability,
+  handleAvailabilityClick
+}) =>
   <div>
     {
       availabilities.map(availability =>
@@ -69,15 +101,24 @@ const Availabilities = ({ availabilities, showTags }) =>
             {
               availability.collapsedAvailabilities
               ? availability.collapsedAvailabilities.map(a =>
-                <DateIndicator key={a._id} availability={a} />
+                <DateIndicator
+                  key={a._id}
+                  onClick={handleAvailabilityClick}
+                  onMouseEnter={setHoverAvailability}
+                  availability={a} />
               )
-              : <DateIndicator availability={availability} />
+              : <DateIndicator
+                availability={availability}
+                onClick={handleAvailabilityClick}
+                onMouseEnter={setHoverAvailability}
+              />
             }
           </Dates>
           <div style={tagsListStyle}>
             <TagsList
               tiny
               tags={availability.matchedTags}
+              onMouseEnter={setHoverTag}
               groupTags={false}
             />
           </div>
@@ -101,16 +142,35 @@ const Dates = ({ children }) =>
   <div style={datesStyle}>{children}</div>
 
 const datesStyle = {
-  width: 110
+  width: 110,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center'
 }
 
-const DateIndicator = ({ availability }) =>
-  <div style={dateIndicatorStyle}>
+const DateIndicator = withHandlers({
+  handleMouseEnter: props => e => props.onMouseEnter(props.availability._id),
+  handleClick: props => e => props.onClick(props.availability._id)
+})(({ availability, handleClick, handleMouseEnter }) =>
+  <div
+    onClick={handleClick}
+    onMouseEnter={handleMouseEnter}
+    style={availability.isHovering ? hoveringDateInidicatorStyle : dateIndicatorStyle}>
     {formatDate(availability)}
   </div>
+)
 
 const dateIndicatorStyle = {
-  paddingBottom: 3
+  paddingTop: 2,
+  paddingRight: 0,
+  paddingBottom: 2,
+  paddingLeft: 0
+}
+
+const hoveringDateInidicatorStyle = {
+  ...highlight,
+  ...dateIndicatorStyle,
+  margin: 0
 }
 
 const formatDate = ({ from, to }) => {
@@ -163,7 +223,32 @@ const containerStyle = {
   maxHeight: '100%'
 }
 
+const Results = (({ children, hoverTag }) =>
+  <div style={resultsStyle}>
+    <div style={resultsListStyle}>
+      {children}
+    </div>
+    <div style={hoverDetailsStyle}>
+      <HoverDetails hoverTag={hoverTag} />
+    </div>
+  </div>
+)
+
 const resultsStyle = {
   flex: 1,
+  display: 'flex'
+}
+
+const resultsListStyle = {
+  flex: 3,
   overflowY: 'scroll'
 }
+
+const hoverDetailsStyle = {
+  flex: 2
+}
+
+const HoverDetails = ({ hoverTag }) =>
+  <div>
+    <TagDetails tag={hoverTag} />
+  </div>

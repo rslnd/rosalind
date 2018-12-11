@@ -42,6 +42,16 @@ export default new SimpleSchema({
     optional: true
   },
 
+  minRevenue: {
+    type: Number,
+    optional: true
+  },
+
+  maxRevenue: {
+    type: Number,
+    optional: true
+  },
+
   calendarIds: {
     type: [SimpleSchema.RegEx.Id],
     optional: true
