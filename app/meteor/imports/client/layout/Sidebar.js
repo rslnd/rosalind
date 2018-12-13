@@ -120,16 +120,31 @@ const SubItem = ({item, subItem, location}) => {
           ? <a className='level-1 link' onClick={() => item.onClick({ subItem, location })}>
             <span>
               {displayName}
+              <SubBadge subItem={subItem} />
             </span>
           </a>
           : <Link
             to={`/${item.name}${subItem.path || ''}`}
             className='level-1 link'>
-            <span>{displayName}</span>
+            <span>
+              {displayName}
+              <SubBadge subItem={subItem} />
+            </span>
           </Link>
       }
     </li>
   )
+}
+
+const SubBadge = ({ subItem }) =>
+  subItem.badge && <div className='label label-primary pull-right' style={subBadgeStyle}>
+    {subItem.badge}
+  </div> || null
+
+const subBadgeStyle = {
+  zoom: 0.88,
+  opacity: 0.85,
+  marginTop: 2
 }
 
 class SidebarItems extends React.Component {

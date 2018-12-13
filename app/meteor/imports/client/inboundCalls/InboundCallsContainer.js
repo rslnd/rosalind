@@ -10,8 +10,11 @@ const composer = (props) => {
     const topic = props.match.params.slug &&
       InboundCallsTopics.findOne({ slug: props.match.params.slug })
 
-    const selector = topic
+    const hasTopicsDefined = InboundCallsTopics.find({}).count() > 0
+    const selector = (hasTopicsDefined && topic)
       ? { topicId: topic._id }
+      : hasTopicsDefined
+      ? { topicId: null }
       : {}
 
     const inboundCalls = InboundCalls.find(selector, { sort: { createdAt: 1 } }).fetch()

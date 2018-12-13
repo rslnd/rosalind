@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 import { Calendars } from '../../api/calendars'
-import { InboundCallsTopics } from '../../api/inboundCalls'
+import { InboundCallsTopics, InboundCalls } from '../../api/inboundCalls'
 import { Sidebar } from './Sidebar'
 
 const sidebarItems = ({ history }) => {
@@ -48,8 +48,14 @@ const sidebarItems = ({ history }) => {
       roles: ['admin', 'inboundCalls'],
       countBadge: 'inboundCalls',
       subItems: [
-        { name: 'thisOpen' },
+        {
+          name: 'thisOpen',
+          badge: inboundCallsTopics.length > 0
+            ? InboundCalls.find({ topicId: null }).count()
+            : null
+        },
         ...inboundCallsTopics.map(t => ({
+          badge: InboundCalls.find({ topicId: t._id }).count(),
           label: t.labelShort || t.label,
           path: `/topic/${t.slug}`
         })),

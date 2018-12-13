@@ -91,24 +91,26 @@ export class MainLayout extends React.Component {
       return (
         <div className='wrapper disable-select'>
           <div id='logged-in' />
-          <div
-            onMouseEnter={this.handleSidebarOpen}
-            onMouseLeave={this.handleSidebarClose}>
-            <header className='main-header' style={mainHeaderStyle}>
-              <Link to='/' className='logo' style={conditionalLogoStyle}>
-                <img src='/images/logo.svg' />
-              </Link>
-            </header>
-            {
-              currentUser &&
-                <SidebarContainer
-                  isOpen={open}
-                  userPanel={
-                    <UserPanelContainer sidebarOpen={open} />
-                  }
-                />
-            }
-          </div>
+          <ErrorBoundary>
+            <div
+              onMouseEnter={this.handleSidebarOpen}
+              onMouseLeave={this.handleSidebarClose}>
+              <header className='main-header' style={mainHeaderStyle}>
+                <Link to='/' className='logo' style={conditionalLogoStyle}>
+                  <img src='/images/logo.svg' />
+                </Link>
+              </header>
+              {
+                currentUser &&
+                  <SidebarContainer
+                    isOpen={open}
+                    userPanel={
+                      <UserPanelContainer sidebarOpen={open} />
+                    }
+                  />
+              }
+            </div>
+          </ErrorBoundary>
           <div className='content-wrapper print-no-margin' style={contentStyle}>
             {
               isLoading
