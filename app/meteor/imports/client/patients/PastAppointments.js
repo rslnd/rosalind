@@ -154,7 +154,10 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
             : <AppointmentRow
               key={item._id}
               appointment={item}
-              expandComments={item._id === selectedAppointmentId}
+              expandComments={
+                item._id === selectedAppointmentId ||
+                item._id === currentAppointment._id
+              }
               autoFocus={!!selectedAppointmentId}
               onClick={() =>
                 item._id === selectedAppointmentId

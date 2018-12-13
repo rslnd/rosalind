@@ -8,15 +8,15 @@ export const publication = () => {
     roles: ['appointments'],
     preload: true,
     fn: function () {
-      const calendars = Calendars.find({}).fetch()
+      // const calendars = Calendars.find({}).fetch()
 
-      const calendarIds = calendars.filter(c =>
-        c.roles
-        ? Roles.userIsInRole(this.userId, ['admin', ...c.roles])
-        : true
-      ).map(c => c._id)
+      // const calendarIds = calendars.filter(c =>
+      //   c.roles
+      //   ? Roles.userIsInRole(this.userId, ['admin', ...c.roles])
+      //   : true
+      // ).map(c => c._id)
 
-      return Calendars.find({ _id: { $in: calendarIds } })
+      return Calendars.find({})
     }
   })
 }

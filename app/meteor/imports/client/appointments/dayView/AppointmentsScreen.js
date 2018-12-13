@@ -90,6 +90,7 @@ export class AppointmentsScreen extends React.Component {
           <div style={{ marginLeft: 30, marginRight: 15, flexGrow: 1 }}>
             <PatientPicker
               withAppointments
+              withPatientModal
               formName={newAppointmentFormName}
             />
           </div>

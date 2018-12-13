@@ -13,6 +13,7 @@ import { UserHelper } from '../../users/UserHelper'
 import { Indicator } from '../../appointments/appointment/Indicator'
 import { darkGrayDisabled } from '../../layout/styles'
 import { Users } from '../../../api/users'
+import Button from '@material-ui/core/Button'
 
 const loadingStyle = {
   margin: 0,
@@ -30,12 +31,13 @@ export const PatientPickerComponent = ({
   selectState,
   selectHandlers,
   isOptionSelected,
-  filterOption
+  filterOption,
+  withPatientModal
 }) =>
   <Select
     {...selectState}
     {...selectHandlers}
-    formatOptionLabel={formatOptionLabel}
+    formatOptionLabel={formatOptionLabel({ withPatientModal })}
     isOptionSelected={isOptionSelected}
     filterOption={filterOption}
     isClearable
@@ -57,7 +59,7 @@ const NewPatient = ({ patient }) =>
     }
   </span>
 
-const PatientWithAppointments = ({ patient }) =>
+const PatientWithAppointments = ({ patient, withPatientModal }) =>
   <span>
     <PatientName patient={patient} />
     <span className='text-muted pull-right'>
@@ -73,6 +75,35 @@ const PatientWithAppointments = ({ patient }) =>
       )
     }
   </span>
+
+const PatientNameSelected = ({ patient, withPatientModal }) =>
+  <div style={patientNameStyle}>
+    <PatientName patient={patient} />
+    {
+      withPatientModal && <Button
+        style={modalTriggerStyle}
+        onClick={(e) => {
+          e.preventDefault()
+          console.log('modal', patient)
+        }}
+        variant='outlined'
+        size='small'
+      >
+        <Icon name='share' />&nbsp;Akte
+      </Button>
+    }
+  </div>
+
+const patientNameStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  width: '100%'
+}
+
+const modalTriggerStyle = {
+  marginLeft: 150,
+  zoom: 0.9
+}
 
 const Appointment = ({ appointment }) => {
   const start = moment(appointment.start)
@@ -104,17 +135,24 @@ const Appointment = ({ appointment }) => {
   )
 }
 
-const formatOptionLabel = (patient, { context, inputValue, selectValue }) => {
-  if (patient.patientId === 'newPatient' || selectValue.patientId === 'newPatient') {
-    return <NewPatient patient={patient || selectValue} />
-  }
+const formatOptionLabel = props =>
+  (patient, { context, inputValue, selectValue }) => {
+    if (patient.patientId === 'newPatient' || selectValue.patientId === 'newPatient') {
+      return <NewPatient patient={patient || selectValue} />
+    }
 
-  if (context === 'menu') {
-    return <PatientWithAppointments patient={patient || selectValue} />
-  } else {
-    return <PatientName patient={patient || selectValue} />
+    if (context === 'menu') {
+      return <PatientWithAppointments
+        patient={patient || selectValue}
+        withPatientModal={props.withPatientModal}
+      />
+    } else {
+      return <PatientNameSelected
+        patient={patient || selectValue}
+        withPatientModal={props.withPatientModal}
+      />
+    }
   }
-}
 
 const appointmentStyle = {
   display: 'flex',

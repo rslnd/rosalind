@@ -9,6 +9,7 @@ import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
 import { MultiTextField } from '../components/MultiTextField'
+import { CalendarPicker } from './CalendarPicker'
 
 const colorStyle = {
   borderRadius: 4,
@@ -110,6 +111,9 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Empfehlbar von',
+    field: 'referrableFrom',
+    EditComponent: CalendarPicker,
+    isMulti: true,
     render: c => c.referrableFrom && c.referrableFrom.map(r =>
       <Chip key={r} label={getCalendarName(r)} />
     )
