@@ -38,7 +38,7 @@ describe('api', () => {
           direction: 'outbound',
           status: 'final',
           to: '1234567',
-          text: 'Hello'
+          text: 'Hello this text is long enough'
         })).to.equal(true)
       })
 
