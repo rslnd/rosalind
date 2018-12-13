@@ -177,7 +177,10 @@ export class HeaderRow extends React.Component {
                   ? assignee.fullNameWithTitle
                   : <span className='text-muted'>{assignee.fullNameWithTitle}</span>
                 )
-                : __('appointments.unassigned')
+                : (
+                  this.props.calendar.unassignedLabel ||
+                  __('appointments.unassigned')
+                )
               }
             </div>
           ))}

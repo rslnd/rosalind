@@ -74,6 +74,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: c => c.allowUnassigned && <Icon name='check' />
   },
   {
+    header: 'Einschub-Spaltenbeschriftung',
+    field: 'unassignedLabel'
+  },
+  {
     header: 'Report Addenda',
     render: c => c.reportAddenda && c.reportAddenda.map(s =>
       <Chip key={s} label={s} />

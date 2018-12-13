@@ -38,6 +38,11 @@ export const schema = new SimpleSchema({
     defaultValue: true
   },
 
+  unassignedLabel: {
+    type: String,
+    optional: true
+  },
+
   privateAppointments: {
     type: Boolean,
     optional: true
