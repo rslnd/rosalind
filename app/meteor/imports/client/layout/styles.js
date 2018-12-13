@@ -1,3 +1,5 @@
+import { color, lightness } from 'kewler'
+
 export const fontStack = `'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif`
 
 export const background = '#ecf0f5'
@@ -51,3 +53,13 @@ export const important = {
   border: '1px solid #FED6D7',
   color: '#FC2935'
 }
+
+export const lighten = (c, amount = 3) => {
+  try {
+    return color(c, lightness(amount))
+  } catch (e) {
+    console.error(e)
+    return '#ccc'
+  }
+}
+export const darken = (c, amount = -10) => lighten(c, amount)

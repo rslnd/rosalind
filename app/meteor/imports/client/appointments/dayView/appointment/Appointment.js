@@ -8,8 +8,7 @@ import { Icon } from '../../../components/Icon'
 import { getColor } from '../../../tags/getColor'
 import { Indicator } from '../../appointment/Indicator'
 import { format } from '../grid/timeSlots'
-import { background, primaryActive, darkGrayDisabled, darkGray } from '../../../layout/styles'
-import { color, lightness } from 'kewler'
+import { background, primaryActive, darkGrayDisabled, darkGray, lighten } from '../../../layout/styles'
 import { namecase } from '../../../../util/namecase'
 import { getDefaultDuration } from '../../../../api/appointments/methods/getDefaultDuration'
 
@@ -23,7 +22,7 @@ const styles = {
     whiteSpace: 'pre-wrap',
     backgroundColor: 'rgba(236, 240, 245, 0.75)',
     '&:hover': {
-      backgroundColor: color(background, lightness(3))
+      backgroundColor: lighten(background)
     }
   },
   show: {

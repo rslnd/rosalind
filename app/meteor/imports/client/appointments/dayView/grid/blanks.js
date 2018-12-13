@@ -3,17 +3,16 @@ import injectSheet from 'react-jss'
 import moment from 'moment-timezone'
 import sortBy from 'lodash/sortBy'
 import { setTime, timeSlots, formatter, label, end } from './timeSlots'
-import { background } from '../../../layout/styles'
-import { color, lightness } from 'kewler'
+import { background, lighten } from '../../../layout/styles'
 
 const styles = {
   blank: {
-    backgroundColor: color(background, lightness(10)),
+    backgroundColor: lighten(background, 10),
     borderBottom: `1px solid rgba(128, 128, 128, 0.2)`,
     marginLeft: 2,
     minHeight: 24,
     '&:hover': {
-      backgroundColor: color(background, lightness(3))
+      backgroundColor: lighten(background)
     }
   }
 }

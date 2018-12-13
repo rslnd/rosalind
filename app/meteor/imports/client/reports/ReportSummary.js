@@ -3,8 +3,8 @@ import idx from 'idx'
 import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { currency, integer, float, percentage, conditionalFloat } from '../../util/format'
-import { color as kewler, lightness } from 'kewler'
 import { Nil } from './shared/Nil'
+import { lighten } from '../layout/styles'
 
 const BigPercent = (props) => {
   const value = percentage({ ...props, plain: true })
@@ -19,7 +19,7 @@ export const InfoBox = ({ color, position, icon = 'eur', children, text, descrip
   <div className='info-box'>
     <span className={`info-box-icon`} style={{
       color: '#fff',
-      backgroundColor: kewler(color)(lightness(-7 * (5 - position)))() }}>
+      backgroundColor: lighten(color, -7 * (5 - position)) }}>
       <span style={{ opacity: 0.95 }}>
         <Icon name={icon} />
       </span>

@@ -3,7 +3,7 @@ import groupBy from 'lodash/fp/groupBy'
 import sortBy from 'lodash/fp/sortBy'
 import identity from 'lodash/identity'
 import { withHandlers } from 'recompose'
-import { color, lightness } from 'kewler'
+import { darken } from '../layout/styles'
 import { Icon } from '../components/Icon'
 import { Tags } from '../../api/tags'
 import { Currency } from '../components/Currency'
@@ -32,8 +32,6 @@ const tagGroupTitleStyle = {
 const overlay = {
   opacity: 0.6
 }
-
-export const darken = c => color(c)(lightness(-10))()
 
 const Tag = withHandlers({
   handleClick: props => e => props.onClick && props.onClick(props.tag._id),

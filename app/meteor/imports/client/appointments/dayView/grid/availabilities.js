@@ -3,18 +3,17 @@ import injectSheet from 'react-jss'
 import moment from 'moment-timezone'
 import flatten from 'lodash/flatten'
 import { setTime, timeSlots, formatter, label, start, end, timeSlotsRange } from './timeSlots'
-import { darkGrayDisabled, grayDisabled, background, unavailable } from '../../../layout/styles'
-import { color, lightness } from 'kewler'
+import { darkGrayDisabled, grayDisabled, background, unavailable, lighten } from '../../../layout/styles'
 
 const styles = {
   blank: {
-    backgroundColor: color(background, lightness(10)),
+    backgroundColor: lighten(background, 10),
     borderBottom: `1px solid rgba(128, 128, 128, 0.2)`,
     marginLeft: 1,
     minHeight: 24,
     zIndex: 1,
     '&:hover': {
-      backgroundColor: color(background, lightness(3))
+      backgroundColor: lighten(background)
     }
   }
 }
@@ -113,7 +112,7 @@ const unavailableStyle = {
   gridRowStart: label(start()),
   gridRowEnd: label(end()),
   zIndex: 0,
-  borderRight: `1px solid ${color(unavailable, lightness(-6))}`,
+  borderRight: `1px solid ${lighten(unavailable, -6)}`,
   backgroundColor: unavailable
 }
 
@@ -134,7 +133,7 @@ const Pause = ({ note, from, to, assigneeId }) => {
     flexDirection: 'column',
     justifyContent: 'space-between',
     textAlign: 'center',
-    color: color(unavailable, lightness(-25))
+    color: lighten(unavailable, -25)
   }
 
   return <div style={style}>
