@@ -38,7 +38,8 @@ export const applySearchFilter = ({
   assignees,
   tags,
   availabilities,
-  hoverAvailability
+  hoverAvailability,
+  calendars
 }) => {
   // Reduce the search string to { [assingees], [tags], wanted: 'assignee'|'tags' }
   const emptyQuery = { assignees: [], tags: [], wanted: null }
@@ -97,10 +98,11 @@ export const applySearchFilter = ({
               (parsedQuery.tags && parsedQuery.tags.length >= 1)
               ? parsedQuery.tags.some(t => a.tags.includes(t._id))
               : true
-            ),
-            parsedQuery,
-            hoverAvailability
-          )
+            ), {
+              parsedQuery,
+              hoverAvailability,
+              calendars
+            })
       })).filter(a => a.availabilities.length >= 1)
     : (parsedQuery.wanted === 'tag')
     ? parsedQuery.tags.map(t => ({
@@ -113,10 +115,11 @@ export const applySearchFilter = ({
           availabilities: highlightAndCollapse(
             assigneeAvailabilities.filter(a =>
               a.tags.includes(t._id)
-            ),
-            parsedQuery,
-            hoverAvailability
-          )
+            ), {
+              parsedQuery,
+              hoverAvailability,
+              calendars
+            })
         }
       }).filter(a => a.assignee && a.availabilities.length >= 1)
     }))
@@ -136,21 +139,27 @@ const isMatchingString = (term, haystack) =>
 const isMatchingStrings = (term, haystack = []) =>
   haystack.some(hay => isMatchingString(term, hay))
 
-const highlightAndCollapse = (availabilities, parsedQuery, hoverAvailability) =>
+const highlightAndCollapse = (availabilities, { parsedQuery, hoverAvailability, calendars }) =>
   availabilities
-    .map(highlightMatchedTags(parsedQuery, hoverAvailability))
+    .map(highlightMatchedTags({ parsedQuery, hoverAvailability, calendars }))
     .reduce(collapseConsecutive, {})
 
-const highlightMatchedTags = (parsedQuery, hoverAvailability) => {
+const highlightMatchedTags = ({ parsedQuery, hoverAvailability = {}, calendars }) => {
   const queryTags = parsedQuery.tags.map(t => t._id)
-  return availability => ({
-    ...availability,
-    isHovering: hoverAvailability === availability._id,
-    matchedTags:
-      (queryTags.length >= 1)
-      ? availability.tags.filter(t => queryTags.includes(t))
-      : availability.tags
-  })
+
+  return availability => {
+    // const calendar = calendars.find(c => c._id === availability.calendarId)
+
+    return {
+      ...availability,
+      // calendar,
+      isHovering: hoverAvailability._id === availability._id,
+      matchedTags:
+        (queryTags.length >= 1)
+        ? availability.tags.filter(t => queryTags.includes(t))
+        : availability.tags
+    }
+  }
 }
 
 const collapseConsecutive = (

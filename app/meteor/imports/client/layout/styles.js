@@ -14,6 +14,9 @@ export const darkGrayActive = '#6c717a'
 export const darkGray = '#81868e'
 export const darkGrayDisabled = '#9398a1'
 
+export const sidebarBackground = '#222d31'
+export const sidebarText = '#b8c7cd'
+
 export const unavailable = '#C9CCD0'
 
 export const green = '#8fc6ae'

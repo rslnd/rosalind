@@ -2,14 +2,15 @@ import React from 'react'
 import { TagsList } from '../tags/TagsList'
 import { Icon } from '../components/Icon'
 import { __ } from '../../i18n'
+import { getDefaultDuration } from '../../api/appointments/methods/getDefaultDuration'
 
-export const TagDetails = ({ tag }) => {
+export const TagDetails = ({ tag, availability }) => {
   const t = tag
   if (!t) { return null }
 
   return <div style={containerStyle}>
     <Row><TagsList tags={[t]} /></Row>
-    <Row><Icon name='clock-o' /> {t.duration} min</Row>
+    <Row><Duration t={t} availability={availability} /></Row>
     <Row><Private t={t} /></Row>
     <Row><Revenue t={t} /></Row>
     <Row><b>{t.description}</b></Row>
@@ -26,6 +27,21 @@ const Row = ({ children }) =>
 
 const rowStyle = {
   padding: 5
+}
+
+const Duration = ({ t, availability = {} }) => {
+  const { calendarId, assigneeId, from } = availability
+
+  // BUG: Why Wrong?
+  const min = t.defaultDuration || getDefaultDuration({
+    calendarId,
+    assigneeId,
+    date: from,
+    tags: [t]
+  })
+  return <span>
+    <Icon name='clock-o' /> {min} min
+  </span>
 }
 
 const Revenue = ({ t }) =>

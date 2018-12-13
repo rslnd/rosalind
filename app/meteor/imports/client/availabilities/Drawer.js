@@ -2,14 +2,32 @@ import React from 'react'
 import { compose, withState, nest, mapProps, withProps, withHandlers, renderComponent } from 'recompose'
 import Paper from '@material-ui/core/Paper'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
+import Button from '@material-ui/core/Button'
+import { Icon } from '../components/Icon'
+import { sidebarBackground, sidebarText } from '../layout/styles'
 
-const triggerStyle = {
+const triggerContainerStyle = {
   position: 'fixed',
-  right: 0,
-  top: 0,
-  bottom: 0,
-  width: 20,
+  right: -10,
+  top: 120,
+  height: 220,
+  width: 33,
   zIndex: 1061
+}
+
+const triggerLatchStyle = {
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'space-evenly',
+  flexDirection: 'column',
+  backgroundColor: '#dbdddf'
+}
+
+const triggerLatchLabelStyle = {
+  color: '#687e95',
+  transform: 'rotate(-90deg) translateX(-10px) translateY(20px)',
+  transformOrigin: 'left bottom 0',
+  width: 50
 }
 
 const closeTriggerStyle = {
@@ -41,10 +59,21 @@ const hiddenStyle = {
 }
 
 const DrawerComponent = ({ isOpen, handleOpen, handleClose, children = null }) =>
-  <div
-    style={triggerStyle}
-    onMouseEnter={handleOpen}
-  >
+  <div>
+    <div
+      style={triggerContainerStyle}
+      onMouseEnter={handleOpen}
+      onMouseOver={handleOpen}
+    >
+      <Paper
+        elevation={3}
+        style={triggerLatchStyle}
+      >
+        <div style={triggerLatchLabelStyle}>
+          <Icon name='life-ring' /> Hilfe
+        </div>
+      </Paper>
+    </div>
     <div
       style={isOpen ? closeTriggerStyle : hiddenStyle}
       onMouseEnter={handleClose}

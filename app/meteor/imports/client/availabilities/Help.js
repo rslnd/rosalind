@@ -1,15 +1,14 @@
 import moment from 'moment-timezone'
 import React from 'react'
 import { withHandlers } from 'recompose'
-import Avatar from '@material-ui/core/Avatar'
-import Chip from '@material-ui/core/Chip'
+import Tooltip from '@material-ui/core/Tooltip'
 import { Search } from './Search'
 import { TagsList } from '../tags/TagsList'
 import { rowStyle } from '../components/form'
 import { __ } from '../../i18n'
-import { grayDisabled } from '../layout/styles'
+import { grayDisabled, highlightBackground, grayActive } from '../layout/styles'
 import { TagDetails } from './TagDetails'
-import { highlight } from '../layout/styles'
+import { Icon } from '../components/Icon'
 
 export const Help = ({
   searchValue,
@@ -18,6 +17,7 @@ export const Help = ({
   parsedQuery,
   hoverTag,
   setHoverTag,
+  hoverAvailability,
   setHoverAvailability,
   handleAvailabilityClick
 }) =>
@@ -26,9 +26,9 @@ export const Help = ({
     {/* {JSON.stringify(parsedQuery)} */}
     {
       (parsedQuery.failed || results.length === 0)
-      ? <span>No results</span>
+      ? <span /> // No results
       : (parsedQuery.wanted === 'assignee')
-      ? <Results hoverTag={hoverTag}>
+      ? <Results hoverTag={hoverTag} hoverAvailability={hoverAvailability}>
         {
           results.map(result =>
             <Assignee
@@ -43,7 +43,7 @@ export const Help = ({
         }
       </Results>
       : (parsedQuery.wanted === 'tag')
-      ? <Results hoverTag={hoverTag}>
+      ? <Results hoverTag={hoverTag} hoverAvailability={hoverAvailability}>
         {
           results.map(result =>
             <div key={result.key}>
@@ -142,7 +142,7 @@ const Dates = ({ children }) =>
   <div style={datesStyle}>{children}</div>
 
 const datesStyle = {
-  width: 110,
+  width: 140,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center'
@@ -156,33 +156,45 @@ const DateIndicator = withHandlers({
     onClick={handleClick}
     onMouseEnter={handleMouseEnter}
     style={availability.isHovering ? hoveringDateInidicatorStyle : dateIndicatorStyle}>
-    {formatDate(availability)}
+    <FormattedDate
+      availability={availability}
+      // prepend={
+      //   <Tooltip title={availability.calendar.name}>
+      //     <span style={iconStyle}><Icon name={availability.calendar.icon} />&nbsp;</span>
+      //   </Tooltip>
+      // }
+    />
   </div>
 )
+
+const iconStyle = {
+  color: grayActive
+}
 
 const dateIndicatorStyle = {
   paddingTop: 2,
   paddingRight: 0,
   paddingBottom: 2,
-  paddingLeft: 0
+  paddingLeft: 0,
+  cursor: 'pointer'
 }
 
 const hoveringDateInidicatorStyle = {
-  ...highlight,
   ...dateIndicatorStyle,
-  margin: 0
+  background: highlightBackground,
+  textDecoration: 'underline'
 }
 
-const formatDate = ({ from, to }) => {
+const FormattedDate = ({ availability: {from, to}, prepend }) => {
   const m = moment.tz(from, 'Europe/Vienna')
   return <span style={dateContainerStyle}>
+    {prepend}
     <b
       style={weekdayStyle}
       title={m.format('dddd')}
-    >{m.format('dd')}.&nbsp;</b>
+    >{m.format('dd')}.</b>
     <span style={dateStyle}>
       {m.format('D. MMM')}
-      &nbsp;&nbsp;
       {AmPmRange({ from, to })}
     </span>
   </span>
@@ -208,6 +220,7 @@ const AmPmRange = ({ from, to }) => {
   return a !== amPm(to)
     ? null
     : <span className='text-muted' title={__(`time.${a}Long`)}>
+      &nbsp;&nbsp;&nbsp;
       {__(`time.${a}`)}
     </span>
 }
@@ -223,13 +236,16 @@ const containerStyle = {
   maxHeight: '100%'
 }
 
-const Results = (({ children, hoverTag }) =>
+const Results = (({ children, hoverTag, hoverAvailability }) =>
   <div style={resultsStyle}>
     <div style={resultsListStyle}>
       {children}
     </div>
     <div style={hoverDetailsStyle}>
-      <HoverDetails hoverTag={hoverTag} />
+      <HoverDetails
+        hoverTag={hoverTag}
+        hoverAvailability={hoverAvailability}
+      />
     </div>
   </div>
 )
@@ -248,7 +264,10 @@ const hoverDetailsStyle = {
   flex: 2
 }
 
-const HoverDetails = ({ hoverTag }) =>
+const HoverDetails = ({ hoverTag, hoverAvailability }) =>
   <div>
-    <TagDetails tag={hoverTag} />
+    <TagDetails
+      tag={hoverTag}
+      availability={hoverAvailability}
+    />
   </div>
