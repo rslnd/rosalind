@@ -6,7 +6,7 @@ import { Availabilities } from '../'
 export default () => {
   publish({
     name: 'availabilities',
-    roles: ['appointments', 'schedules'],
+    roles: ['appointments-*', 'schedules'],
     preload: true,
     fn: function () {
       const startOfYesterday = moment().subtract(1, 'day').startOf('day').toDate()
@@ -26,7 +26,7 @@ export default () => {
       month: Number,
       year: Number
     },
-    roles: ['appointments', 'schedules'],
+    roles: ['appointments-*', 'schedules'],
     preload: true,
     fn: function (day) {
       const date = dayToDate(day)

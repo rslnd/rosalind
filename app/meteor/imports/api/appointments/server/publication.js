@@ -8,7 +8,7 @@ import { publishComposite } from '../../../util/meteor/publish'
 export default () => {
   publishComposite({
     name: 'appointment',
-    roles: [ 'appointments' ],
+    roles: ['appointments-*'],
     args: {
       appointmentId: String
     },
@@ -36,7 +36,7 @@ export default () => {
 
   publishComposite({
     name: 'appointments-today',
-    roles: [ 'appointments', 'waitlist' ],
+    roles: ['waitlist', 'appointments-*'],
     preload: true,
     fn: function ({ appointmentId }) {
       const startOfToday = moment().startOf('day').toDate()
@@ -72,7 +72,7 @@ export default () => {
 
   publishComposite({
     name: 'appointments-future',
-    roles: [ 'appointments' ],
+    roles: ['appointments-*'],
     preload: true,
     fn: function () {
       const startOfTomorrow = moment().endOf('day').toDate()
@@ -125,7 +125,7 @@ export default () => {
     args: {
       patientId: String
     },
-    roles: ['appointments'],
+    roles: ['appointments-*'],
     fn: function ({ patientId }) {
       return {
         find: function () {
@@ -159,7 +159,7 @@ export default () => {
       end: Match.Optional(Date),
       within: Match.Optional(String)
     },
-    roles: ['appointments'],
+    roles: ['appointments-*'],
     preload: 1,
     fn: function ({ date, start, end, within }) {
       // If no argument are supplied, publish future appointments

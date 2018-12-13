@@ -144,16 +144,6 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Anrufliste',
     field: 'acceptInboundCalls'
-  },
-  {
-    header: 'Roles',
-    field: 'roles',
-    multi: true,
-    EditComponent: MultiTextField,
-    unsetWhenEmpty: true,
-    render: c => c.roles && c.roles.map(r =>
-      <Chip key={r} label={r} />
-    )
   }
 ]
 

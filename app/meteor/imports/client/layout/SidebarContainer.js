@@ -25,7 +25,7 @@ const sidebarItems = ({ history }) => {
       icon: c.icon,
       link: '/appointments/' + c.slug,
       slug: c.slug,
-      roles: ['admin', 'appointments'],
+      roles: ['admin', 'appointments', `appointments-${c.slug}`],
       // replace calendar slug and keep selected date
       onClick: ({item, location}) => {
         const [base, _calendar, date] = location.pathname

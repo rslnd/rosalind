@@ -19,7 +19,7 @@ const DashboardComponent = ({ canSeeWaitlist, canSeeAppointments, ...props }) =>
 
 const composer = props => {
   const canSeeWaitlist = Roles.userIsInRole(Meteor.userId(), ['admin', 'waitlist'])
-  const canSeeAppointments = Roles.userIsInRole(Meteor.userId(), ['admin', 'appointments'])
+  const canSeeAppointments = Roles.userIsInRole(Meteor.userId(), ['admin', 'appointments-*'])
 
   return {
     canSeeWaitlist,

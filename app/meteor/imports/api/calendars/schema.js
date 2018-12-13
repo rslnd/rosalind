@@ -114,11 +114,6 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
-  roles: {
-    type: [String],
-    optional: true
-  },
-
   history: {
     type: Boolean,
     optional: true

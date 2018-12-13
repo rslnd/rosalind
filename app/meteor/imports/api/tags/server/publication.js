@@ -5,7 +5,7 @@ export default () => {
   publish({
     name: 'tags',
     preload: true,
-    roles: ['appointments', 'system'],
+    roles: ['appointments-*', 'system'],
     fn: function () {
       return Tags.find({}, { removed: true })
     }

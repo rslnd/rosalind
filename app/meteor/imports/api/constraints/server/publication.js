@@ -4,7 +4,7 @@ import { publish } from '../../../util/meteor/publish'
 export default () => {
   publish({
     name: 'constraints',
-    roles: ['appointments', 'schedules'],
+    roles: ['appointments-*', 'schedules'],
     preload: 1,
     fn: function () {
       return Constraints.find({ removed: { $ne: true } })

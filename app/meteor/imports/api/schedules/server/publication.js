@@ -15,7 +15,7 @@ export default () => {
       month: Match.Optional(Number),
       year: Match.Optional(Number)
     },
-    roles: ['appointments', 'schedules', 'schedules-edit'],
+    roles: ['appointments-*', 'schedules', 'schedules-edit'],
     preload: true,
     fn: function ({ start, end, day, month, year }) {
       let selector = {}
@@ -76,7 +76,7 @@ export default () => {
 
   publish({
     name: 'schedules-holidays',
-    roles: ['appointments', 'schedules-edit'],
+    roles: ['appointments-*', 'schedules-edit'],
     fn: function () {
       return Schedules.find({
         type: 'holiday',

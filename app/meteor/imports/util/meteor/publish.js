@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor'
 import { check, Match } from 'meteor/check'
-import { Roles } from 'meteor/alanning:roles'
 import {
   isTrustedNetwork as checkTrustedNetwork,
   isLocalhost as checkLocalhost
 } from '../../api/customer/server/isTrustedNetwork'
 import { Clients } from '../../api/clients'
+import { hasRole } from './hasRole'
 
 const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
   // if (!roles) {
@@ -68,7 +68,7 @@ const checkIsAllowed = ({ connection, userId, clientKey, roles, preload }) => {
   }
 
   // Path 3: Check for roles
-  if (roles && roles.length > 0 && Roles.userIsInRole(userId, [...roles, 'admin'])) {
+  if (roles && roles.length > 0 && hasRole(userId, [...roles, 'admin'])) {
     return true
   }
 
