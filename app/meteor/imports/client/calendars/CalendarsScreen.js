@@ -102,6 +102,13 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
       c.reportExpectedAsActual && <Icon name='check' />
   },
   {
+    header: 'SMS',
+    field: 'smsAppointmentReminder',
+    type: Boolean,
+    render: c =>
+      c.smsAppointmentReminder && <Icon name='check' />
+  },
+  {
     header: 'SMS Erinnerung',
     field: 'smsAppointmentReminderText'
   },

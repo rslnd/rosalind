@@ -23,6 +23,9 @@ export const hasNoRemainingPlaceholders = (message) => (
   message.text.indexOf('%') === -1
 )
 
+const hasMinimumLength = (message) =>
+  message.text.length >= 20
+
 export const notExpired = ({ invalidBefore, invalidAfter }, now = moment()) => {
   if (invalidBefore && now.isBefore(invalidBefore)) {
     return false
@@ -40,6 +43,7 @@ export const okToSend = (message) => {
     hasRequiredKeys(message) &&
     statusOk(message) &&
     isOutbound(message) &&
+    hasMinimumLength(message) &&
     hasNoRemainingPlaceholders(message) &&
     notExpired(message)
   )

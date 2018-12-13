@@ -156,6 +156,11 @@ export const createReminders = ({ Messages }) => {
 
       const messages = messagePayloads.map((payload) => {
         const calendar = Calendars.findOne({ _id: payload.calendarId })
+
+        if (calendar && !calendar.smsAppointmentReminder || !calendar) {
+          return false
+        }
+
         const text =
           (calendar && calendar.smsAppointmentReminderText) ||
           Settings.get('messages.sms.appointmentReminder.text')

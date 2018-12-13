@@ -2,6 +2,8 @@ import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { Calendars } from '../../calendars'
+import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
 import { Settings } from '../../settings'
 import { isQuietTimeRespected } from '../../messages/methods/isQuietTimeRespected'
@@ -55,6 +57,16 @@ export const sendScheduled = ({ Messages }) => {
       }).fetch().filter((message) => {
         const patient = Patients.findOne({ _id: message.patientId })
         if (patient && patient.noSMS) {
+          return false
+        }
+
+        const appointment = Appointments.findOne({ _id: message.payload.appointmentId })
+        if (!appointment) {
+          return false
+        }
+
+        const calendar = Calendars.findOne({ _id: appointment.calendarId })
+        if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
           return false
         }
 

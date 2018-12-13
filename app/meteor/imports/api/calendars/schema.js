@@ -63,6 +63,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  smsAppointmentReminder: {
+    type: Boolean,
+    optional: true
+  },
+
   smsAppointmentReminderText: {
     type: String,
     optional: true
