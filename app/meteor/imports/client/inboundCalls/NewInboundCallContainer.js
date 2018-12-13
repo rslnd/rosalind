@@ -30,7 +30,7 @@ export class NewInboundCallContainer extends React.Component {
   render () {
     return (
       <div className='content'>
-        <Box title={__('inboundCalls.thisNew')}>
+        <Box>
           <NewInboundCallForm onSubmit={this.handleSubmit} />
         </Box>
       </div>

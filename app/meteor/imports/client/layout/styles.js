@@ -33,9 +33,11 @@ const infoStyle = {
   width: '100%'
 }
 
+export const highlightBackground = '#FFFBE6'
+
 export const highlight = {
   ...infoStyle,
-  backgroundColor: '#FFFBE6',
+  backgroundColor: highlightBackground,
   border: '1px solid #FFF4C5',
   color: '#6E5221'
 }

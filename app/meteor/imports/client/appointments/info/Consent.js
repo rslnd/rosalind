@@ -169,7 +169,7 @@ export const ConsentIndicator = ({ appointment }) =>
   ? (
     <Tooltip
       interactive
-      placement='top'
+      placement='left-start'
       title={__('appointments.consentedAt', { date: formatDate(appointment.consentedAt) })}
     >
       <span className='text-muted' style={iconStyle}>

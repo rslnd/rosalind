@@ -8,7 +8,8 @@ body {
 }
 
 .content {
-  min-height: 550px;
+  min-height: 650px;
+  overflow: visible;
 }
 
 .fixed .content-wrapper, .fixed .right-side {
