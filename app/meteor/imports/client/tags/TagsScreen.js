@@ -4,10 +4,11 @@ import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
 import { MultiTextField } from '../components/MultiTextField'
-import { tagStyle, tagBackgroundColor, darken } from './TagsList'
+import { tagStyle, tagBackgroundColor } from './TagsList'
 import { UserPicker } from '../users/UserPicker'
 import { CalendarPicker } from '../calendars/CalendarPicker'
 import { __ } from '../../i18n'
+import { darken } from '../layout/styles'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
