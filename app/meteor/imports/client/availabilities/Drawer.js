@@ -6,11 +6,13 @@ import Button from '@material-ui/core/Button'
 import { Icon } from '../components/Icon'
 import { sidebarBackground, sidebarText } from '../layout/styles'
 
+const triggerHeight = 220
 const triggerContainerStyle = {
   position: 'fixed',
   right: -10,
-  top: 120,
-  height: 220,
+  top: '50%',
+  marginTop: triggerHeight / -2,
+  height: triggerHeight,
   width: 33,
   zIndex: 1061
 }
