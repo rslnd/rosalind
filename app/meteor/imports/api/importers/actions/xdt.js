@@ -34,6 +34,23 @@ export const xdt = ({ Importers }) => {
         }
 
         const insuranceIds = parsed.find('3105')
+
+        const addressLine1 = parsed.find('3107')
+        const postalCodeAndLocality = parsed.find('3106')
+        let address = null
+        if (addressLine1 && addressLine1[0] &&
+          postalCodeAndLocality && postalCodeAndLocality[0]) {
+          const postalCodeMatch = postalCodeAndLocality[0].match(/\d+/)
+          if (postalCodeMatch && postalCodeMatch[0]) {
+            const locality = postalCodeAndLocality[0].substr(postalCodeMatch[0].length).trim()
+            address = {
+              line1: addressLine1[0],
+              locality,
+              postalCode: postalCodeMatch[0]
+            }
+          }
+        }
+
         const insuranceId = insuranceIds && insuranceIds[0]
 
         const patient = {
@@ -43,6 +60,7 @@ export const xdt = ({ Importers }) => {
           insuranceId,
           gender: parsed.patient.gender === '1' ? 'Male' : 'Female',
           contacts,
+          address,
           external: {
             eoswin: {
               id: parsed.patient.id
