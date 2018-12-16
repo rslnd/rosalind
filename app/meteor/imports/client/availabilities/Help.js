@@ -86,12 +86,17 @@ const Assignee = ({
     />
   </div>
 
-const Availabilities = ({
+const Availabilities = withHandlers({
+  handleTagHover: props => availability => tag => {
+    props.setHoverTag(tag)
+    props.setHoverAvailability(availability._id)
+  }
+})(({
   availabilities,
   showTags,
-  setHoverTag,
   setHoverAvailability,
-  handleAvailabilityClick
+  handleAvailabilityClick,
+  handleTagHover
 }) =>
   <div>
     {
@@ -118,7 +123,7 @@ const Availabilities = ({
             <TagsList
               tiny
               tags={availability.matchedTags}
-              onMouseEnter={setHoverTag}
+              onMouseEnter={handleTagHover(availability)}
               groupTags={false}
             />
           </div>
@@ -126,6 +131,7 @@ const Availabilities = ({
       )
     }
   </div>
+)
 
 const tagsListStyle = {
   flex: 1

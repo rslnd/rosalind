@@ -32,12 +32,11 @@ const rowStyle = {
 const Duration = ({ t, availability = {} }) => {
   const { calendarId, assigneeId, from } = availability
 
-  // BUG: Why Wrong?
-  const min = t.defaultDuration || getDefaultDuration({
+  const min = getDefaultDuration({
     calendarId,
     assigneeId,
     date: from,
-    tags: [t]
+    tags: [t._id]
   })
   return <span>
     <Icon name='clock-o' /> {min} min

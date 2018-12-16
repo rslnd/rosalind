@@ -15,7 +15,7 @@ import { dateToDay } from '../../util/time/day'
 
 const composer = props => {
   const allAvailabilities = Availabilities.find({}, { sort: { start: 1 } }).fetch()
-  const tags = Tags.find({}).fetch()
+  const tags = Tags.find({}, { sort: { order: 1 } }).fetch()
   const constraints = Constraints.find({}).fetch()
   const assignees = Users.find({
     removed: { $ne: true },
