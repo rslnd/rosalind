@@ -1,7 +1,7 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
 import { __ } from '../../i18n'
-import { InboundCallItem } from './InboundCallItem'
+import { InboundCallContainer } from './InboundCallContainer'
 import { Box } from '../components/Box'
 import { Loading } from '../components/Loading'
 
@@ -12,7 +12,10 @@ export const InboundCallsList = ({ isLoading, inboundCalls = [], topic, resolve,
     <FlipMove>
       {inboundCalls.map((inboundCall) => (
         <div key={inboundCall._id} className='col-md-6'>
-          <InboundCallItem inboundCall={inboundCall} resolve={resolve} unresolve={unresolve} showTopic />
+          <InboundCallContainer
+            _id={inboundCall._id}
+            showTopic
+          />
         </div>
       ))}
       {

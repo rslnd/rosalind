@@ -17,7 +17,9 @@ const composer = (props) => {
       ? { topicId: null }
       : {}
 
-    const inboundCalls = InboundCalls.find(selector, { sort: { createdAt: 1 } }).fetch()
+    const inboundCalls = InboundCalls.find(selector, {
+      sort: { pinnedBy: -1, createdAt: 1 }
+    }).fetch()
     const resolve = (_id) => InboundCalls.methods.resolve.call({ _id })
     const unresolve = (_id) => InboundCalls.methods.unresolve.call({ _id })
 

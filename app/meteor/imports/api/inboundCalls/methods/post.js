@@ -12,6 +12,7 @@ export const post = ({ InboundCalls }) => {
       telephone: { type: String, optional: true },
       note: { type: String, optional: true },
       topicId: { type: String, optional: true },
+      pinnedBy: { type: String, optional: true },
       privatePatient: { type: Boolean, optional: true },
       payload: { type: Object, blackbox: true, optional: true }
     }).validator(),

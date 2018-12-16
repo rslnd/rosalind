@@ -29,7 +29,7 @@ export class NewComment extends React.Component {
 
   render () {
     return (
-      <div className='box-footer'>
+      <div className='box-footer' style={this.props.style}>
         <form onSubmit={this.handleSubmit}>
           <Avatar />
           <div className='img-push input-group input-group-sm'>

@@ -9,7 +9,7 @@ import { __ } from '../../i18n'
 
 class NewInboundCallFormComponent extends React.Component {
   render () {
-    const { invalid, pristine, submitting, handleSubmit, onSubmit } = this.props
+    const { invalid, pristine, submitting, handleSubmit, onSubmit, canPin } = this.props
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} className='mui' autoComplete='off'>
@@ -32,6 +32,19 @@ class NewInboundCallFormComponent extends React.Component {
                 <div className='form-row'>
                   <Field name='topicId' component={TopicPicker} />
                 </div>
+                {
+                  canPin && <div className='form-row'>
+                    <FormControlLabel
+                      control={
+                        <Field
+                          name='pinnedBy'
+                          component={Checkbox}
+                        />
+                      }
+                      label={__('inboundCalls.pin')}
+                    />
+                  </div>
+                }
               </div>
               <div className='col-md-6'>
                 <Field name='note'
@@ -62,7 +75,7 @@ class NewInboundCallFormComponent extends React.Component {
 
 export const NewInboundCallForm = reduxForm({
   form: 'newInboundCall',
-  fields: ['lastName', 'firstName', 'telephone', 'note', 'topicId'],
+  fields: ['lastName', 'firstName', 'telephone', 'note', 'topicId', 'pinnedBy'],
   validate: ({ lastName, note }) => {
     let errors = {}
     if (!lastName) {

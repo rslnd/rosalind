@@ -47,6 +47,11 @@ export const inboundCalls = new SimpleSchema({
     index: 1
   },
 
+  pinnedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     autoValue: Auto.createdAt,

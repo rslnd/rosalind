@@ -39,6 +39,7 @@ const infoStyle = {
 }
 
 export const highlightBackground = '#FFFBE6'
+export const highlightColor = '#6E5221'
 
 export const highlight = {
   ...infoStyle,

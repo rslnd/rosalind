@@ -69,5 +69,11 @@ describe('util', () => {
       const userRoles = ['m', 'hazelnu', 'c']
       expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(false)
     })
+
+    it('keeps schedules/schedules-edit behaviour', () => {
+      const requiredRoles = ['schedules-edit']
+      const userRoles = ['schedules']
+      expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(false)
+    })
   })
 })
