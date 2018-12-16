@@ -26,34 +26,45 @@ import { validate } from '../new/newAppointmentValidators'
 const formName = 'appointmentInfoForm'
 
 const composer = props => {
-  const subscription = subscribe('appointment', { appointmentId: props.appointmentId })
-  const appointment = Appointments.findOne({ _id: props.appointmentId })
-  const isLoading = appointment.patientId && !subscription.ready()
+  const { appointmentId } = props
+  const subscription = appointmentId && subscribe('appointment', { appointmentId: props.appointmentId })
 
-  if (appointment) {
-    const { patientId, assigneeId, calendarId } = appointment
-    const patient = Patients.findOne({ _id: patientId })
+  const appointment = props.appointmentId && Appointments.findOne({ _id: props.appointmentId })
+
+  const isLoading = appointment && appointment.patientId && subscription && !subscription.ready()
+
+  let { patientId, assigneeId, calendarId } = (appointment || {})
+
+  if (!patientId) {
+    patientId = props.patientId
+  }
+
+  patientId && subscribe('patients', { patientIds: [patientId] })
+
+  const patient = patientId && Patients.findOne({ _id: patientId })
+
+  if (appointment || patient) {
     const assignee = Users.findOne({ _id: assigneeId })
     const comments = patient ? Comments.find({
       docId: patient._id
     }, {
       sort: { createdAt: 1 }
     }).fetch() : []
-    const calendar = Calendars.findOne({ _id: calendarId })
+    const calendar = calendarId && Calendars.findOne({ _id: calendarId })
 
     const initialPatientFields = mapPatientToFields(patient)
     const initialAppointmentFields = {
-      tags: appointment.tags,
-      revenue: appointment.revenue,
-      note: appointment.note
+      tags: appointment && appointment.tags,
+      revenue: appointment && appointment.revenue,
+      note: appointment && appointment.note
     }
     const initialValues = {
       appointment: initialAppointmentFields,
       patient: initialPatientFields
     }
 
-    const allowedTags = Appointments.methods.getAllowedTags({ time: appointment.start, calendarId, assigneeId })
-    const maxDuration = Appointments.methods.getMaxDuration({ time: appointment.start, calendarId, assigneeId })
+    const allowedTags = appointment && Appointments.methods.getAllowedTags({ time: appointment.start, calendarId, assigneeId })
+    const maxDuration = appointment && Appointments.methods.getMaxDuration({ time: appointment.start, calendarId, assigneeId })
 
     // TODO: Move into action
     let totalPatientRevenue = null
@@ -67,7 +78,7 @@ const composer = props => {
     }
 
     const handleEditPatient = v => {
-      if (!isEqual(initialPatientFields, v.patient)) {
+      if (patient && !isEqual(initialPatientFields, v.patient)) {
         const patient = mapFieldsToPatient(v.patient)
 
         return Patients.actions.upsert.callPromise({
@@ -86,7 +97,7 @@ const composer = props => {
     }
 
     const handleEditAppointment = v => {
-      if (!isEqual(initialAppointmentFields, v.appointment)) {
+      if (appointment && !isEqual(initialAppointmentFields, v.appointment)) {
         return Appointments.actions.update.callPromise({
           appointmentId: appointment._id,
           update: v.appointment
@@ -100,7 +111,7 @@ const composer = props => {
     }
 
     const handleToggleGender = () => {
-      Patients.actions.toggleGender.callPromise({
+      patient && Patients.actions.toggleGender.callPromise({
         patientId: patient._id
       }).then(() => {
         Alert.success(__('patients.editSuccess'))

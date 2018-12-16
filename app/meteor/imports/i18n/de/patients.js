@@ -43,8 +43,8 @@ export const patients = {
   addressPostalCode: 'PLZ',
   addressLocality: 'Ort',
   addressCountry: 'Land',
-  note: 'Diverse Informationen zur PatientIn',
-  notePlaceholder: 'Diverse Informationen zur PatientIn hinzufügen',
+  note: 'Allgemeine Informationen zur PatientIn (zB. Allergien, Sonderkonditionen etc.)',
+  notePlaceholder: 'Allgemeine Informationen zur PatientIn (zB. Allergien, Sonderkonditionen etc.) hinzufügen',
   revenue: 'Umsatz',
   removeContact: 'Diesen Kontakt entfernen',
   addContact: 'Weiteren Kontakt hinzufügen',
@@ -61,5 +61,6 @@ export const patients = {
   messagesDisabledSuccess: 'PatientIn bekommt ab sofort keine Terminerinnerungen mehr.',
   messagesEnabledSuccess: 'PatientIn wird wieder Terminerinnerungen bekommen.',
   banned: 'Nicht erwünscht',
-  toggleBanned: 'PatientIn als erwünscht/nicht erwünscht markieren'
+  toggleBanned: 'PatientIn als erwünscht/nicht erwünscht markieren',
+  history: 'Kartei'
 }

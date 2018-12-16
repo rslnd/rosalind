@@ -109,44 +109,47 @@ export class AppointmentInfo extends React.Component {
             </form>
         }
         <div className='row'>
-          <div className='col-md-6'>
-            <form onMouseLeave={
-                dirty
-                ? handleSubmit(handleEditAppointment)
-                : identity
-              }
-              onSubmit={
-                dirty
-                ? handleSubmit(handleEditAppointment)
-                : identity
-              }>
-              <FormSection name='appointment'>
-                <Day appointment={appointment} />
-                <Time appointment={appointment} />
-                <Assignee assignee={assignee} />
-                <PrivateRevenue appointment={appointment} />
-                <Tags
-                  appointment={appointment}
-                  allowedTags={allowedTags}
-                  maxDuration={maxDuration}
-                  assignee={assignee}
-                  calendar={calendar}
-                  change={change}
-                />
-              </FormSection>
-              <input type='submit' style={{ display: 'none' }} />
-            </form>
-            <ListItem>
-              <Logs format={logFormat} doc={appointment} />
-              <Stamps
-                collectionName='appointments'
-                fields={['removed', 'created', 'admitted', 'canceled']}
-                doc={appointment} />
-            </ListItem>
-          </div>
+          {
+            appointment &&
+              <div className='col-md-6'>
+                <form onMouseLeave={
+                    dirty
+                    ? handleSubmit(handleEditAppointment)
+                    : identity
+                  }
+                  onSubmit={
+                    dirty
+                    ? handleSubmit(handleEditAppointment)
+                    : identity
+                  }>
+                  <FormSection name='appointment'>
+                    <Day appointment={appointment} />
+                    <Time appointment={appointment} />
+                    <Assignee assignee={assignee} />
+                    <PrivateRevenue appointment={appointment} />
+                    <Tags
+                      appointment={appointment}
+                      allowedTags={allowedTags}
+                      maxDuration={maxDuration}
+                      assignee={assignee}
+                      calendar={calendar}
+                      change={change}
+                    />
+                  </FormSection>
+                  <input type='submit' style={{ display: 'none' }} />
+                </form>
+                <ListItem>
+                  <Logs format={logFormat} doc={appointment} />
+                  <Stamps
+                    collectionName='appointments'
+                    fields={['removed', 'created', 'admitted', 'canceled']}
+                    doc={appointment} />
+                </ListItem>
+              </div>
+          }
 
           {
-            !patient &&
+            !patient && appointment &&
               <form
                 className='col-md-6'
                 onMouseLeave={
@@ -184,8 +187,21 @@ export class AppointmentInfo extends React.Component {
                 <FormSection name='patient'>
                   <PatientNotes patient={patient} />
                   {/* Show first if not agreed yet */}
-                  <Consent appointment={appointment} calendar={calendar} showOnly='pending' />
-                  <Agreements patient={patient} calendar={calendar} showOnly='pending' />
+                  {
+                    appointment &&
+                      <Consent
+                        appointment={appointment}
+                        calendar={calendar}
+                        showOnly='pending' />
+                  }
+                  {
+                    calendar &&
+                      <Agreements
+                        patient={patient}
+                        calendar={calendar}
+                        showOnly='pending'
+                      />
+                  }
                   <Contacts patient={patient} />
                   <BirthdayFields collectInsuranceId />
                   <FormSection name='address'>
@@ -193,8 +209,22 @@ export class AppointmentInfo extends React.Component {
                   </FormSection>
                   <br />
                   <Reminders />
-                  <Consent appointment={appointment} calendar={calendar} showOnly='agreed' />
-                  <Agreements patient={patient} calendar={calendar} showOnly='agreed' />
+                  {
+                    appointment &&
+                      <Consent
+                        appointment={appointment}
+                        calendar={calendar}
+                        showOnly='agreed'
+                      />
+                  }
+                  {
+                    calendar &&
+                      <Agreements
+                        patient={patient}
+                        calendar={calendar}
+                        showOnly='agreed'
+                      />
+                  }
                   <TotalRevenue value={totalPatientRevenue} />
                 </FormSection>
                 <input type='submit' style={{ display: 'none' }} />

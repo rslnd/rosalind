@@ -128,12 +128,12 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
     { separator: __('appointments.thisFuture'), count: futureAppointments.length },
     ...futureAppointments,
 
-    { separator: __('appointments.thisCurrent'), count: 1 },
-    currentAppointment,
+    currentAppointment && { separator: __('appointments.thisCurrent'), count: 1 },
+    currentAppointment && currentAppointment,
 
     { separator: __('appointments.thisPast'), count: pastAppointments.length },
     ...pastAppointments
-  ]
+  ].filter(identity)
 
   return (
     <div>
@@ -156,7 +156,7 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
               appointment={item}
               expandComments={
                 item._id === selectedAppointmentId ||
-                item._id === currentAppointment._id
+                item._id === currentAppointment && currentAppointment._id
               }
               autoFocus={!!selectedAppointmentId}
               onClick={() =>

@@ -15,7 +15,7 @@ export const PatientNotes = ({ patient }) => (
         name='note'
         component={TextField}
         multiline
-        rows={1}
+        rows={2}
         rowsMax={5}
         label={__('patients.note')}
       />

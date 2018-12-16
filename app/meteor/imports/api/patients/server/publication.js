@@ -1,11 +1,11 @@
-import { Patients } from '../'
+import { Patients, Appointments } from '../'
 import { Comments } from '../../comments'
-import { publish } from '../../../util/meteor/publish'
+import { publishComposite } from '../../../util/meteor/publish'
 
 export default () => {
-  publish({
+  publishComposite({
     name: 'patients',
-    roles: 'patients',
+    roles: ['patients', 'appointments', 'appointments-*'],
     args: {
       patientIds: [String]
     },
@@ -19,6 +19,18 @@ export default () => {
             find: function (patient) {
               return Comments.find({ docId: patient._id })
             }
+          },
+          {
+            find: function (patient) {
+              return Appointments.find({ docId: patient._id })
+            },
+            children: [
+              {
+                find: function (appointment) {
+                  return Comments.find({ docId: appointment._id })
+                }
+              }
+            ]
           }
         ]
       }

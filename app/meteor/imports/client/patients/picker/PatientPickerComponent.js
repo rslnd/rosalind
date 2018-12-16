@@ -32,12 +32,12 @@ export const PatientPickerComponent = ({
   selectHandlers,
   isOptionSelected,
   filterOption,
-  withPatientModal
+  onPatientModalOpen
 }) =>
   <Select
     {...selectState}
     {...selectHandlers}
-    formatOptionLabel={formatOptionLabel({ withPatientModal })}
+    formatOptionLabel={formatOptionLabel({ onPatientModalOpen })}
     isOptionSelected={isOptionSelected}
     filterOption={filterOption}
     isClearable
@@ -59,7 +59,7 @@ const NewPatient = ({ patient }) =>
     }
   </span>
 
-const PatientWithAppointments = ({ patient, withPatientModal }) =>
+const PatientWithAppointments = ({ patient, onPatientModalOpen }) =>
   <span>
     <PatientName patient={patient} />
     <span className='text-muted pull-right'>
@@ -76,20 +76,21 @@ const PatientWithAppointments = ({ patient, withPatientModal }) =>
     }
   </span>
 
-const PatientNameSelected = ({ patient, withPatientModal }) =>
+const PatientNameSelected = ({ patient, onPatientModalOpen }) =>
   <div style={patientNameStyle}>
     <PatientName patient={patient} />
     {
-      withPatientModal && <Button
+      onPatientModalOpen && <Button
         style={modalTriggerStyle}
         onClick={(e) => {
           e.preventDefault()
-          console.log('modal', patient)
+          e.stopPropagation()
+          onPatientModalOpen(patient._id)
         }}
         variant='outlined'
         size='small'
       >
-        <Icon name='share' />&nbsp;Akte
+        <Icon name='share' />&nbsp;{__('patients.history')}
       </Button>
     }
   </div>
@@ -144,12 +145,12 @@ const formatOptionLabel = props =>
     if (context === 'menu') {
       return <PatientWithAppointments
         patient={patient || selectValue}
-        withPatientModal={props.withPatientModal}
+        onPatientModalOpen={props.onPatientModalOpen}
       />
     } else {
       return <PatientNameSelected
         patient={patient || selectValue}
-        withPatientModal={props.withPatientModal}
+        onPatientModalOpen={props.onPatientModalOpen}
       />
     }
   }

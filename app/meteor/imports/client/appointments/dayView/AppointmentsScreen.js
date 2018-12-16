@@ -11,6 +11,7 @@ import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import { PatientPicker } from '../../patients/picker'
 import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../layout/styles'
+import { PatientModal } from '../../patients/PatientModal'
 
 const contentHeaderStyle = {
   background,
@@ -33,8 +34,14 @@ export class AppointmentsScreen extends React.Component {
   constructor (props) {
     super(props)
 
+    this.state = {
+      patientModalId: null
+    }
+
     this.scrollToCurrentTime = this.scrollToCurrentTime.bind(this)
     this.handlePrint = this.handlePrint.bind(this)
+    this.handlePatientModalClose = this.handlePatientModalClose.bind(this)
+    this.handlePatientModalOpen = this.handlePatientModalOpen.bind(this)
   }
 
   scrollToCurrentTime () {
@@ -64,6 +71,14 @@ export class AppointmentsScreen extends React.Component {
     }
   }
 
+  handlePatientModalOpen (patientModalId) {
+    this.setState({ patientModalId })
+  }
+
+  handlePatientModalClose () {
+    this.setState({ patientModalId: null })
+  }
+
   render () {
     if (this.props.isLoading) {
       return null
@@ -90,7 +105,7 @@ export class AppointmentsScreen extends React.Component {
           <div style={{ marginLeft: 30, marginRight: 15, flexGrow: 1 }}>
             <PatientPicker
               withAppointments
-              withPatientModal
+              onPatientModalOpen={this.handlePatientModalOpen}
               formName={newAppointmentFormName}
             />
           </div>
@@ -120,6 +135,15 @@ export class AppointmentsScreen extends React.Component {
             move={this.props.move}
             dispatch={this.props.dispatch} />
         </div>
+
+        {
+          this.state.patientModalId &&
+            <PatientModal
+              show={!!this.state.patientModalId}
+              patientId={this.state.patientModalId}
+              onClose={this.handlePatientModalClose}
+            />
+        }
       </div>
     )
   }

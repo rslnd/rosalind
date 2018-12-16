@@ -18,14 +18,6 @@ export const AppointmentModal = (props) => {
     patient
   } = props
 
-  if (!show) {
-    return null
-  }
-
-  if (isLoading) {
-    return <Loading />
-  }
-
   const Actions = () =>
     <Modal.Footer style={{ backgroundColor: '#fcfcfc' }}>
       <AppointmentActionsContainer
@@ -37,14 +29,19 @@ export const AppointmentModal = (props) => {
     </Modal.Footer>
 
   return (
-    show && <Modal
+    <Modal
       show={show}
       onHide={onClose}
       enforceFocus={false}
       animation={false}
       bsSize='large'>
       <Modal.Body>
-        <AppointmentInfoContainer {...props} />
+        {
+          isLoading && <Loading />
+        }
+        {
+          show && <AppointmentInfoContainer {...props} />
+        }
       </Modal.Body>
 
       <Actions />
