@@ -1,3 +1,4 @@
+import React from 'react'
 import idx from 'idx'
 import keyBy from 'lodash/fp/keyBy'
 import { compose, withState, mapProps, nest, withProps, withHandlers } from 'recompose'
@@ -78,7 +79,7 @@ const handleAvailabilityClick = props => availabilityId => {
   }
 }
 
-export const HelpContainer = compose(
+export const HelpContainerComponent = compose(
   withRouter,
   withTracker(composer),
   withProps(prepareAvailabilities),
@@ -88,12 +89,40 @@ export const HelpContainer = compose(
   withProps(applySearchFilter),
   withState('hoverTag', 'setHoverTag'),
   withTracker(hover),
-  withDrawer,
+  withState('isDrawerOpen', 'setDrawerOpen', false),
   withHandlers({
-    handleAvailabilityClick
+    handleAvailabilityClick,
+    handleDrawerOpen: props => e => {
+      props.setDrawerOpen(true)
+      props.focusSearch()
+    },
+    handleDrawerClose: props => e =>
+      props.setDrawerOpen(false)
   }),
+  withDrawer,
   // withProps(explodeConstraints),
   // log('exploded'),
   // withProps(combineConstraints),
   // log('combined')
 )(Help)
+
+export class HelpContainer extends React.Component {
+  constructor (props) {
+    super(props)
+    this.focusSearch = this.focusSearch.bind(this)
+  }
+
+  focusSearch () {
+    this.searchRef && this.searchRef.focus()
+  }
+
+  render () {
+    return (
+      <HelpContainerComponent
+        {...this.props}
+        focusSearch={this.focusSearch}
+        searchRef={ref => { this.searchRef = ref }}
+      />
+    )
+  }
+}

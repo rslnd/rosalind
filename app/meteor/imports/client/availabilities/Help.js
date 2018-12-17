@@ -11,6 +11,7 @@ import { TagDetails } from './TagDetails'
 import { Icon } from '../components/Icon'
 
 export const Help = ({
+  isOpen,
   searchValue,
   handleSearchValueChange,
   results,
@@ -19,10 +20,15 @@ export const Help = ({
   setHoverTag,
   hoverAvailability,
   setHoverAvailability,
-  handleAvailabilityClick
+  handleAvailabilityClick,
+  searchRef
 }) =>
   <div style={containerStyle}>
-    <Search value={searchValue} onChange={handleSearchValueChange} />
+    <Search
+      value={searchValue}
+      onChange={handleSearchValueChange}
+      searchRef={searchRef}
+    />
     {/* {JSON.stringify(parsedQuery)} */}
     {
       (parsedQuery.failed || results.length === 0)

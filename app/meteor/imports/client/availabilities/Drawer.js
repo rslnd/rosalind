@@ -60,7 +60,7 @@ const hiddenStyle = {
   pointerEvents: 'none'
 }
 
-const DrawerComponent = ({ isOpen, handleOpen, handleClose, children = null }) =>
+const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) =>
   <div>
     <div
       style={triggerContainerStyle}
@@ -91,15 +91,17 @@ const DrawerComponent = ({ isOpen, handleOpen, handleClose, children = null }) =
     </Paper>
   </div>
 
-export const Drawer = compose(
-  withState('isOpen', 'setOpen', false),
-  withHandlers({
-    handleOpen: props => e => props.setOpen(true),
-    handleClose: props => e => props.setOpen(false)
-  })
-)(DrawerComponent)
-
-export const withDrawer = Component => props =>
-  <Drawer>
-    <Component {...props} />
-  </Drawer>
+export const withDrawer = Component => props => {
+  const { handleDrawerOpen, handleDrawerClose, isDrawerOpen } = props
+  return (
+    <Drawer
+      handleOpen={handleDrawerOpen}
+      handleClose={handleDrawerClose}
+      isOpen={isDrawerOpen}
+    >
+      <Component
+        {...props}
+      />
+    </Drawer>
+  )
+}
