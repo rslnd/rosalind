@@ -40,19 +40,12 @@ export class WaitlistAssigneeModal extends React.Component {
       onHide={onClose}
       bsSize='small'>
       <Modal.Body>
-
         <UserPicker
           autoFocus
           onChange={this.handleChangeAssigneeId}
         />
-
       </Modal.Body>
       <Modal.Footer>
-        <div className='pull-left'>
-          <Button onClick={onClose}>
-            {__('ui.close')}
-          </Button>
-        </div>
         <div className='pull-right'>
           <Button
             color='primary'
