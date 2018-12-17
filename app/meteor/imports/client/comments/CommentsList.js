@@ -23,7 +23,14 @@ const accumulateBy = field => list =>
     }
   }, { lastGroup: null, stack: [] }).stack
 
-export const CommentsList = ({ style, comments, onClick, onRemove }) => {
+export const CommentsList = ({
+  style,
+  comments,
+  onClick,
+  onRemove,
+  onEdit,
+  canEdit
+}) => {
   if (comments.length === 0) {
     return null
   } else {
@@ -34,6 +41,8 @@ export const CommentsList = ({ style, comments, onClick, onRemove }) => {
             key={comment._id}
             comment={comment}
             onRemove={onRemove}
+            onEdit={onEdit}
+            canEdit={canEdit(comment)}
           />
         )}
       </div>

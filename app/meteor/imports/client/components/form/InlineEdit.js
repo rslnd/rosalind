@@ -102,7 +102,7 @@ export class InlineEdit extends React.Component {
   }
 
   render () {
-    let style = { ...fieldStyle }
+    let style = { ...defaultFieldStyle, ...(this.props.fieldStyle || {}) }
     let spanStyle = {}
     if (this.props.fullWidth) {
       const fullWidthStyle = {
@@ -125,7 +125,7 @@ export class InlineEdit extends React.Component {
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}>
         {
-          !this.props.submitOnBlur && this.state.hovering &&
+          !this.props.submitOnBlur && !this.props.noUI && this.state.hovering &&
             <div className='pull-right'>
               <TinyButton
                 onClick={this.setEditing}
@@ -177,7 +177,7 @@ export class InlineEdit extends React.Component {
   }
 }
 
-const fieldStyle = {
+const defaultFieldStyle = {
   cursor: 'pointer',
   display: 'inline-block'
 }

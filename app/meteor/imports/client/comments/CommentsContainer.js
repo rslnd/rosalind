@@ -1,7 +1,9 @@
-import { toClass } from 'recompose'
+import { toClass, compose } from 'recompose'
 import { Comments } from '../../api/comments'
 import { CommentsBox } from './CommentsBox'
 import { withTracker } from '../components/withTracker'
+import { hasRole } from '../../util/meteor/hasRole'
+import { Meteor } from 'meteor/meteor'
 
 const commentsBoxComposer = (props) => {
   const comments = Comments.find({ docId: props.docId }, { sort: { createdAt: 1 } }).fetch()
@@ -10,7 +12,18 @@ const commentsBoxComposer = (props) => {
     Comments.actions.remove.callPromise({ commentId })
   }
 
-  return { ...props, comments, onRemove }
+  const onEdit = commentId => newBody => {
+    Comments.actions.edit.callPromise({ commentId, newBody })
+  }
+
+  const canEdit = comment =>
+    comment.createdBy === Meteor.userId() ||
+    hasRole(Meteor.userId(), ['admin', 'comments-edit'])
+
+  return { ...props, comments, onRemove, onEdit, canEdit }
 }
 
-export const CommentsContainer = withTracker(commentsBoxComposer)(toClass(CommentsBox))
+export const CommentsContainer = compose(
+  withTracker(commentsBoxComposer),
+  toClass
+)(CommentsBox)

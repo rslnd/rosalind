@@ -2,11 +2,23 @@ import React from 'react'
 import { CommentsList } from './CommentsList'
 import { NewComment } from './NewComment'
 
-export const CommentsBox = ({ comments, docId, newComment = true, autoFocus, onClick, onRemove, style }) => {
+export const CommentsBox = ({
+  comments,
+  docId,
+  newComment = true,
+  autoFocus,
+  onClick,
+  onEdit,
+  onRemove,
+  canEdit,
+  style
+}) => {
   return (
     <div>
       <CommentsList
+        canEdit={canEdit}
         onClick={onClick}
+        onEdit={onEdit}
         comments={comments}
         onRemove={onRemove}
         style={style} />

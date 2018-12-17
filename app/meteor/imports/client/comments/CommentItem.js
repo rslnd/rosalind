@@ -2,12 +2,14 @@ import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import { __ } from '../../i18n'
+import { grow, shrink } from '../components/form/rowStyle'
 import { Avatar } from '../users/Avatar'
 import { UserHelper } from '../users/UserHelper'
 import { RelativeTime } from '../helpers/RelativeTime'
+import { InlineEdit } from '../components/form/InlineEdit'
 
 const childCommentStyle = {
-  display: 'block',
+  display: 'flex',
   paddingTop: 4,
   paddingBottom: 4,
   borderTop: '1px solid #eee'
@@ -29,20 +31,33 @@ const RemoveLink = ({ comment, onRemove }) => (
     </span>
 )
 
-const ChildCommentItem = ({ comment, onRemove }) => (
+const ChildCommentItem = ({ comment, onRemove, onEdit, canEdit }) => (
   <span style={childCommentStyle}>
-    <span className='text-muted pull-right'>
+    <div style={grow}>
+      {
+        canEdit
+        ? <InlineEdit
+          value={comment.body}
+          onChange={onEdit(comment._id)}
+          fieldStyle={inlineEditStyle}
+          fullWidth
+          noUI
+          submitOnBlur
+        />
+        : comment.body
+      }
+    </div>
+    <span className='text-muted align-right' style={shrink}>
       {onRemove && <RemoveLink comment={comment} onRemove={onRemove} />}
       <RelativeTime time={comment.createdAt} />
     </span>
-    {comment.body}
   </span>
 )
 
 export class CommentItem extends React.Component {
   render () {
-    const { comment, onRemove } = this.props
-    const { createdBy, createdAt, body, children } = comment    
+    const { comment, onRemove, onEdit, canEdit } = this.props
+    const { createdBy, createdAt, body, children } = comment
 
     return (
       <div className='box-comment'>
@@ -50,24 +65,43 @@ export class CommentItem extends React.Component {
         <div className='comment-text'>
           <span className='username'>
             <span><UserHelper userId={createdBy} helper='fullName' /></span>
-            <span className='text-muted pull-right'>
+            <span className='text-muted pull-right align-right'>
               {onRemove && <RemoveLink comment={comment} onRemove={onRemove} />}
               <RelativeTime time={createdAt} />
             </span>
           </span>
-          <p className='enable-select break-word'>
-            {body}
+          <div className='enable-select break-word'>
+            {
+              canEdit
+              ? <InlineEdit
+                value={body}
+                onChange={onEdit(comment._id)}
+                fieldStyle={inlineEditStyle}
+                fullWidth
+                noUI
+                submitOnBlur
+              />
+              : body
+            }
             {
               children && children.map(c =>
                 <ChildCommentItem
                   key={c._id}
                   comment={c}
-                  onRemove={onRemove} />
+                  onRemove={onRemove}
+                  onEdit={onEdit}
+                  canEdit={canEdit}
+                />
               )
             }
-          </p>
+          </div>
         </div>
       </div>
     )
   }
+}
+
+const inlineEditStyle = {
+  cursor: 'caret',
+  display: 'inline-block'
 }
