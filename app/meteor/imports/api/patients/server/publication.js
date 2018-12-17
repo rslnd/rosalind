@@ -1,5 +1,6 @@
-import { Patients, Appointments } from '../'
+import { Patients } from '../'
 import { Comments } from '../../comments'
+import { Appointments } from '../../appointments'
 import { publishComposite } from '../../../util/meteor/publish'
 
 export default () => {
