@@ -17,7 +17,7 @@ const commentsBoxComposer = (props) => {
   }
 
   const canEdit = comment =>
-    comment.createdBy === Meteor.userId() ||
+    (comment.createdBy === Meteor.userId()) ||
     hasRole(Meteor.userId(), ['admin', 'comments-edit'])
 
   return { ...props, comments, onRemove, onEdit, canEdit }
