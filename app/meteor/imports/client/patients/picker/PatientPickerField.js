@@ -4,7 +4,9 @@ import { PatientPicker } from './PatientPickerContainer'
 import { PatientFormFields } from '../formFields/PatientFormFields'
 import { connect } from 'react-redux'
 
-export const PatientPickerField = ({ change, extended, upsert, input, meta }) =>
+export const PatientPickerField = connect(state => ({
+  showFields: state.patientPicker.patient
+}))(({ change, extended, upsert, showFields }) =>
   <div>
     <FormName>{
       ({ form }) =>
@@ -17,10 +19,11 @@ export const PatientPickerField = ({ change, extended, upsert, input, meta }) =>
     }</FormName>
 
     {
-      upsert &&
+      upsert && showFields &&
         <PatientFormFields
           change={change}
           extended={extended}
         />
     }
   </div>
+)
