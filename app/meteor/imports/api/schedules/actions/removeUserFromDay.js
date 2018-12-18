@@ -23,19 +23,22 @@ export const removeUserFromDay = ({ Schedules, Users }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const existingSchedule = Schedules.findOne({
+      // BUG: Bulk applying default schedules creates multiple day schedules, we should probably do away with day schedules altogether once availabilities are live.
+      const existingSchedules = Schedules.find({
         ...daySelector(day),
         calendarId,
+        userIds: userId,
         type: 'day'
-      })
+      }).fetch()
 
-      if (existingSchedule) {
-        Schedules.update({ _id: existingSchedule._id }, {
+      if (existingSchedules.length > 0) {
+        const ids = existingSchedules.map(s => s._id)
+        Schedules.update({ _id: { $in: ids } }, {
           $pull: { userIds: userId }
         })
 
-        Events.post('schedules/removeUserFromDayUpdate', { scheduleId: existingSchedule._id, userId })
-        return existingSchedule._id
+        Events.post('schedules/removeUserFromDayUpdate', { scheduleId: ids, userId })
+        return ids
       } else {
         return false
       }

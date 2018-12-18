@@ -2,6 +2,7 @@ import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { Avatar } from '../users/Avatar'
+import { TextField, handleKeyPress } from '../components/form/TextField'
 
 export class NewComment extends React.Component {
   constructor (props) {
@@ -36,16 +37,19 @@ export class NewComment extends React.Component {
             <label className='sr-only' htmlFor={'new-comment-' + this.props.docId} >
               {__('ui.newCommentPlaceholder')}
             </label>
-            <input type='text'
-              className='form-control input-sm'
-              id={'new-comment-' + this.props.docId}
+            <TextField
+              fullWidth
+              multiline
+              value={this.state.body}
               placeholder={__('ui.newCommentPlaceholder')}
               autoFocus={this.props.autoFocus}
-              value={this.state.body}
-              onChange={this.handleBodyChange} />
+              onChange={this.handleBodyChange}
+              onKeyPress={handleKeyPress(this.handleSubmit)}
+            />
             <span className='input-group-btn'>
               <button
                 type='button'
+                style={buttonStyle}
                 onClick={this.handleSubmit}
                 title={__('ui.newCommentPost')}
                 className='btn btn-default btn-flat no-border-radius'>
@@ -57,4 +61,8 @@ export class NewComment extends React.Component {
       </div>
     )
   }
+}
+
+const buttonStyle = {
+  marginLeft: 6
 }

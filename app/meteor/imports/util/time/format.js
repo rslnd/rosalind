@@ -1,3 +1,4 @@
+import identity from 'lodash/identity'
 import momentTz from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import { __ } from '../../i18n'
@@ -7,13 +8,21 @@ const moment = extendMoment(momentTz)
 
 export const relativeTimeString = d => {
   const date = moment(d)
-  const isRecent = moment.range(date, moment()).diff('week') < 1
+  const now = moment()
+  const daysAgo = moment.range(date, now).diff('days')
+  const isToday = now.isSame(date, 'day')
+  const showRelative = daysAgo > 2 && daysAgo <= 9
+  const showYear = now.year() !== date.year()
 
   return [
-    isRecent ? date.fromNow() : date.calendar(),
+    isToday ? __('time.today') + ', ' : null,
+    showRelative ? date.fromNow() : null,
+    showYear
+      ? date.format(__('time.dateFormatWeekdayShort'))
+      : date.format(__('time.dateFormatWeekdayShortNoYear')),
     __('ui.at'),
     date.format(__('time.timeFormat'))
-  ].join(' ')
+  ].filter(identity).join(' ')
 }
 
 export const weekOfYear = (date, options = {}) => {

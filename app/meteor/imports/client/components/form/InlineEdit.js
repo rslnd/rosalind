@@ -3,6 +3,7 @@ import { __ } from '../../../i18n'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { Icon } from '../Icon'
+import { handleKeyPress } from './TextField';
 
 export const TinyButton = (props) => (
   <Button
@@ -111,7 +112,8 @@ export class InlineEdit extends React.Component {
     if (this.props.fullWidth) {
       const fullWidthStyle = {
         display: 'inline-block',
-        width: '100%'
+        width: '100%',
+        lineHeight: '16.625px'
       }
 
       style = {
@@ -140,7 +142,7 @@ export class InlineEdit extends React.Component {
         }
 
         {this.props.children || (this.props.value && this.props.value.split('\n').map((t, i) => (
-          <span key={i}>{t}<br /></span>
+          <span style={this.props.lineStyle} key={i}>{t}<br /></span>
         ))) || this.props.placeholder}
       </span>
     } else {
@@ -149,11 +151,12 @@ export class InlineEdit extends React.Component {
           <TextField
             value={this.state.value}
             onChange={this.handleChange}
+            onKeyPress={this.props.submitOnEnter ? handleKeyPress(this.handleBlur) : null}
             onBlur={this.handleBlur}
             autoFocus
-            multiline={!!(this.props.rows || this.props.rowsMax)}
+            multiline={!!(this.props.multiline || this.props.rows || this.props.rowsMax)}
             fullWidth={this.props.fullWidth}
-            rows={this.props.rows || 1}
+            rows={this.props.rows}
             rowsMax={this.props.rowsMax}
             placeholder={this.props.placeholder}
             name={this.props.label}

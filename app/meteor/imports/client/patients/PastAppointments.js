@@ -34,7 +34,7 @@ const appointmentRowStyle = {
 
 const separatorRowStyle = {
   paddingLeft: 48,
-  marginTop: 6
+  marginTop: 18
 }
 
 const dateFormat = m =>

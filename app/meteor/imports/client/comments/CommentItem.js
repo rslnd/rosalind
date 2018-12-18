@@ -10,6 +10,7 @@ import { InlineEdit } from '../components/form/InlineEdit'
 
 const childCommentStyle = {
   display: 'flex',
+  justifyContent: 'space-between',
   paddingTop: 4,
   paddingBottom: 4,
   borderTop: '1px solid #eee'
@@ -34,25 +35,18 @@ const RemoveLink = ({ comment, onRemove }) => (
 const ChildCommentItem = ({ comment, onRemove, onEdit, canEdit }) => (
   <span style={childCommentStyle}>
     <div style={grow}>
-      {
-        canEdit
-        ? <InlineEdit
-          value={comment.body}
-          onChange={onEdit(comment._id)}
-          fieldStyle={inlineEditStyle}
-          fullWidth
-          noUI
-          submitOnBlur
-        />
-        : comment.body
-      }
+      <Body comment={comment} onEdit={onEdit} canEdit={canEdit} />
     </div>
-    <span className='text-muted align-right' style={shrink}>
+    <span className='text-muted align-right' style={noWrapStyle}>
       {onRemove && <RemoveLink comment={comment} onRemove={onRemove} />}
       <RelativeTime time={comment.createdAt} />
     </span>
   </span>
 )
+
+const noWrapStyle = {
+  flexShrink: 0
+}
 
 export class CommentItem extends React.Component {
   render () {
@@ -71,18 +65,7 @@ export class CommentItem extends React.Component {
             </span>
           </span>
           <div className='enable-select break-word'>
-            {
-              canEdit
-              ? <InlineEdit
-                value={body}
-                onChange={onEdit(comment._id)}
-                fieldStyle={inlineEditStyle}
-                fullWidth
-                noUI
-                submitOnBlur
-              />
-              : body
-            }
+            <Body comment={comment} onEdit={onEdit} canEdit={canEdit} />
             {
               children && children.map(c =>
                 <ChildCommentItem
@@ -99,6 +82,29 @@ export class CommentItem extends React.Component {
       </div>
     )
   }
+}
+
+const Body = ({ canEdit, comment, onEdit }) =>
+  canEdit
+  ? <InlineEdit
+    multiline
+    value={comment.body}
+    onChange={onEdit(comment._id)}
+    fieldStyle={inlineEditStyle}
+    style={bodyStyle}
+    fullWidth
+    noUI
+    submitOnBlur
+    submitOnEnter
+  />
+  : <span style={bodyStyle}>
+    {comment.body}
+  </span>
+
+// This must match the InlineEdit and MuiPrivateTextarea line height
+const bodyStyle = {
+  lineHeight: 16.625,
+  display: 'inline-block'
 }
 
 const inlineEditStyle = {
