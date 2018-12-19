@@ -103,7 +103,7 @@ const Body = ({ canEdit, comment, onEdit }) =>
 
 // This must match the InlineEdit and MuiPrivateTextarea line height
 const bodyStyle = {
-  lineHeight: 16.625,
+  lineHeight: '16.625px',
   display: 'inline-block'
 }
 
