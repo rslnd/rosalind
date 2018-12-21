@@ -1,4 +1,5 @@
-import Meteor, { withTracker } from 'react-native-meteor'
+import Meteor from 'react-native-meteor'
+import { call } from './util'
 import { withHandlers, compose } from 'recompose'
 
 const parsePairingCode = pairingCode => {
@@ -17,10 +18,30 @@ const handlePairingFinish = props => pairingCode => {
   console.log('called handle pairing finish', pairingCode)
   const { url, pairingToken } = parsePairingCode(pairingCode)
   if (url && pairingToken) {
-    console.log('Pairing to', url, 'with code', pairingToken)
-  }
+    const wsOrigin = url.replace(/^http/, 'ws')
+    const wsUrl = [wsOrigin, 'websocket'].join('/')
 
-  // Meteor.connect('ws://10.0.0.21:3000/websocket')
+    console.log('Pairing to', url, 'with code', pairingToken, 'over websocket', wsUrl)
+
+    Meteor.disconnect()
+    Meteor.connect(wsUrl)
+
+    Meteor.ddp.on('connected', async () => {
+      try {
+        await call(props)('clients/register', {
+          systemInfo: { ios: true }
+        })
+
+        const consumerId = await call(props)('clients/pairingFinish', {
+          pairingToken
+        })
+
+        console.log('Paired to consumer', consumerId)
+      } catch (e) {
+        console.error('Failed', e)
+      }
+    })
+  }
 }
 
 export const withPairing = compose(
