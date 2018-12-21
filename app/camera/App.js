@@ -1,39 +1,14 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { CameraView } from './CameraView'
+import { compose, withProps, withHandlers } from 'recompose'
+import { MainView } from './MainView'
+import { withClientKey } from './withClientKey'
 
-export default class App extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.handlePair = this.handlePair.bind(this)
-  }
-
-  handlePair (code) {
-    console.log('Pairing to', code)
-  }
-
-  render () {
-    return (
-      <View style={styles.container}>
-        <CameraView
-          onCodeRead={this.handlePair}
-        />
-      </View>
-    )
-  }
+const handlePair = code => {
+  // Meteor.connect('ws://10.0.0.21:3000/websocket')
+  console.log('Pairing to', code)
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-    color: '#FFF'
-  },
-  camera: {
-    width: '100%',
-    height: '100%'
-  }
-})
+const log = withProps(p => console.log('Props', p))
+
+export const App = compose(
+  withClientKey
+)(MainView)
