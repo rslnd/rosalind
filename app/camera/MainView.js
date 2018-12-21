@@ -2,12 +2,14 @@ import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { CameraView } from './CameraView'
 
-export const MainView = ({ clientKey }) =>
+export const MainView = ({ clientKey, handlePairingFinish }) =>
   <View style={styles.container}>
-    <Text style={styles.text}>ClientKey: {clientKey}</Text>
-    {/* <CameraView
-      onCodeRead={this.handlePair}
-    /> */}
+    <CameraView
+      onCodeRead={handlePairingFinish}
+    />
+    <Text style={styles.text}>
+      ClientKey: {clientKey}
+    </Text>
   </View>
 
 const styles = StyleSheet.create({
