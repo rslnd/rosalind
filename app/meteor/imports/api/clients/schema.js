@@ -52,7 +52,7 @@ export const schema = new SimpleSchema({
 
   pairingToken: {
     type: String,
-    min: 200,
+    min: 90,
     optional: true
   },
 

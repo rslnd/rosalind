@@ -16,7 +16,7 @@ export const pairingStart = ({ Clients }) =>
       if (!client) { throw new Meteor.Error(404, 'Client not found') }
       if (!client.pairingAllowed) { throw new Meteor.Error(403, 'Pairing not allowed') }
 
-      const pairingToken = Random.hexString(200)
+      const pairingToken = Random.hexString(90)
 
       Events.post('clients/pairingStart', { clientId: client._id })
 
