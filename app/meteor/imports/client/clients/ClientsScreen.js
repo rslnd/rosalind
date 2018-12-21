@@ -49,6 +49,28 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   {
     header: 'Einstellungen',
     render: c => c.settings && <pre>{JSON.stringify(c.settings, null, 2)}</pre>
+  },
+  {
+    header: 'Kann mit Kamera verbunden werden',
+    field: 'pairingAllowed',
+    render: c => c.pairingAllowed && <Icon name='check' />,
+    type: Boolean
+  },
+  {
+    header: 'Pairing Token',
+    render: c => c.pairingToken && <pre>{c.pairingToken.substr(0, 6)}…</pre>
+  },
+  {
+    header: 'Verbunden mit',
+    render: c => c.pairedTo && <pre>{c.pairedTo}</pre>
+  },
+  {
+    header: 'Verbunden am',
+    render: c => c.pairedAt && formatDistance(c.pairedAt, new Date(), { locale: de })
+  },
+  {
+    header: 'Verbunden von',
+    render: c => c.pairedBy && getAssigneeName(c.pairedBy)
   }
 ]
 

@@ -2949,6 +2949,11 @@ puppeteer@^1.9.0:
     rimraf "^2.6.1"
     ws "^5.1.1"
 
+qr.js@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/qr.js/-/qr.js-0.0.0.tgz#cace86386f59a0db8050fa90d9b6b0e88a1e364f"
+  integrity sha1-ys6GOG9ZoNuAUPqQ2baw6IoeNk8=
+
 qs@^6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
@@ -3171,6 +3176,14 @@ react-prop-types@^0.4.0:
   resolved "https://registry.yarnpkg.com/react-prop-types/-/react-prop-types-0.4.0.tgz#f99b0bfb4006929c9af2051e7c1414a5c75b93d0"
   dependencies:
     warning "^3.0.0"
+
+react-qr-svg@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-qr-svg/-/react-qr-svg-2.1.0.tgz#fceaf0e8bd367f714d89ae46e46b87c5201a99e9"
+  integrity sha512-TJILjRxt62d/TWI8vovGRtJUkoS/4MdH0Miy/uCS++AXE6M8/F0nqdp9QMMvgOLM25QX538oed42mHzrKhDwUQ==
+  dependencies:
+    prop-types "^15.5.8"
+    qr.js "0.0.0"
 
 react-redux@^5.0.7:
   version "5.0.7"

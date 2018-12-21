@@ -29,12 +29,19 @@ export class NewComment extends React.Component {
   }
 
   render () {
+    const {
+      docId,
+      autoFocus,
+      style,
+      actions = null
+    } = this.props
+
     return (
-      <div className='box-footer' style={this.props.style}>
+      <div className='box-footer' style={style}>
         <form onSubmit={this.handleSubmit}>
           <Avatar />
           <div className='img-push input-group input-group-sm'>
-            <label className='sr-only' htmlFor={'new-comment-' + this.props.docId} >
+            <label className='sr-only' htmlFor={'new-comment-' + docId} >
               {__('ui.newCommentPlaceholder')}
             </label>
             <TextField
@@ -42,7 +49,7 @@ export class NewComment extends React.Component {
               multiline
               value={this.state.body}
               placeholder={__('ui.newCommentPlaceholder')}
-              autoFocus={this.props.autoFocus}
+              autoFocus={autoFocus}
               onChange={this.handleBodyChange}
               onKeyPress={handleKeyPress(this.handleSubmit)}
             />
@@ -55,6 +62,7 @@ export class NewComment extends React.Component {
                 className='btn btn-default btn-flat no-border-radius'>
                 <i className='fa fa-arrow-right text-muted' />
               </button>
+              {actions}
             </span>
           </div>
         </form>

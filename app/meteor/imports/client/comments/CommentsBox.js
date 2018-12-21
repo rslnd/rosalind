@@ -11,7 +11,8 @@ export const CommentsBox = ({
   onEdit,
   onRemove,
   canEdit,
-  style
+  style,
+  actions
 }) => {
   return (
     <div>
@@ -28,6 +29,7 @@ export const CommentsBox = ({
             docId={docId}
             autoFocus={autoFocus}
             style={style}
+            actions={actions}
           />
       }
     </div>

@@ -9,6 +9,7 @@ import { ConsentIndicator } from '../appointments/info/Consent'
 import { TagsList } from '../tags/TagsList'
 import { CommentsContainer } from '../comments/CommentsContainer'
 import { CommentItem } from '../comments/CommentItem'
+import { PairingButton } from '../clients/PairingButton'
 
 const containerStyle = {
   borderTop: '1px solid #eee',
@@ -42,7 +43,7 @@ const dateFormat = m =>
   ? m.format(__('time.dateFormatWeekdayShortNoYear'))
   : m.format(__('time.dateFormatWeekdayShort'))
 
-const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => {
+const AppointmentRow = ({ appointment, expandComments, isCurrent, onClick, autoFocus }) => {
   const assignee = Users.findOne({ _id:
     appointment.treatmentBy ||
     appointment.waitlistAssigneeId ||
@@ -109,11 +110,20 @@ const AppointmentRow = ({ appointment, expandComments, onClick, autoFocus }) => 
             docId={appointment._id}
             newComment={expandComments}
             onClick={onClick}
-            autoFocus={autoFocus} />
+            autoFocus={autoFocus}
+            actions={
+              isCurrent ? <div style={pairingButtonStyle}>
+                <PairingButton docId={appointment._id} collection='Appointments' />
+              </div> : null
+            } />
         </div>
       </div>
     </div>
   )
+}
+
+const pairingButtonStyle = {
+  display: 'inline-block'
 }
 
 export const PastAppointments = withState('selectedAppointmentId', 'handleAppointmentClick', null)(({
@@ -158,6 +168,7 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
                 item._id === selectedAppointmentId ||
                 item._id === (currentAppointment && currentAppointment._id)
               }
+              isCurrent={item._id === (currentAppointment && currentAppointment._id)}
               autoFocus={!!selectedAppointmentId}
               onClick={() =>
                 item._id === selectedAppointmentId

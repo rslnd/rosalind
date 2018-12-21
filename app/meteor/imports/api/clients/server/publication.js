@@ -11,7 +11,7 @@ export const publication = () => {
   })
 
   publish({
-    name: 'client-settings',
+    name: 'client',
     args: {
       clientKey: String
     },
@@ -23,9 +23,30 @@ export const publication = () => {
         limit: 1,
         fields: {
           clientKey: 1,
-          settings: 1
+          description: 1,
+          settings: 1,
+          pairingAllowed: 1,
+          pairingToken: 1
         }
       })
+    }
+  })
+
+  publish({
+    name: 'client-producers',
+    args: {
+      clientKey: String
+    },
+    preload: true,
+    fn: function ({ clientKey }) {
+      const consumer = Clients.findOne({ clientKey })
+      const producers = Clients.find({ pairedTo: consumer._id }, { fields: {
+        _id: 1,
+        description: 1,
+        pairedTo: 1
+      }})
+
+      return producers
     }
   })
 }

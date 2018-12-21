@@ -5,18 +5,13 @@ import { getClientKey } from '../../../util/meteor/getClientKey'
 import { Clients } from '..'
 import { onNativeEvent } from '../../../startup/client/native/events'
 import isEqual from 'lodash/isEqual'
+import { getClient } from './getClient'
 
 let previousSettings = {}
 const settings = new ReactiveVar(null)
 
 const updateSettings = () => {
-  const clientKey = getClientKey()
-  if (!clientKey) {
-    return {}
-  }
-
-  subscribe('client-settings', { clientKey })
-  const currentClient = Clients.findOne({ clientKey })
+  const currentClient = getClient()
 
   if (currentClient && currentClient.settings) {
     if (window.native && window.native.events) {

@@ -45,6 +45,38 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  pairingAllowed: {
+    type: Boolean,
+    optional: true
+  },
+
+  pairingToken: {
+    type: String,
+    min: 200,
+    optional: true
+  },
+
+  pairingTokenCreatedAt: {
+    type: Date,
+    optional: true
+  },
+
+  pairingTokenCreatedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
+  // Many producers (cameras, scanners) can be paired to one consumer (workstation)
+  pairedTo: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
+  pairedAt: {
+    type: Date,
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     autoValue: Auto.createdAt
