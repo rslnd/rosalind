@@ -2,6 +2,11 @@ import { Meteor } from 'meteor/meteor'
 
 export const isWeakPassword = async password => {
   const unsafeHashedPassword = await sha1(password)
+
+  if (!unsafeHashedPassword) {
+    return null
+  }
+
   const hibpPrefix = prefix(unsafeHashedPassword)
   const hibpResponse = await queryHibp(hibpPrefix)
   const breachCount = countBreaches(unsafeHashedPassword)(hibpResponse)
@@ -25,6 +30,10 @@ const prefix = hash => hash.substr(0, 5)
 const sha1 = async password => {
   if (Meteor.isClient) {
     const passwordBuffer = (new window.TextEncoder()).encode(password)
+    if (!window.crypto.subtle) {
+      // SubtleCrypto is undefined in insecure contexts
+      return null
+    }
     const hashBuffer = await window.crypto.subtle.digest({ name: 'SHA-1' }, passwordBuffer)
     return bufferToHexString(hashBuffer).toUpperCase()
   } else if (Meteor.isServer) {
