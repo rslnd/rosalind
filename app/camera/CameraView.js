@@ -3,6 +3,8 @@ import { RNCamera } from 'react-native-camera'
 import { StyleSheet, View } from 'react-native'
 import { CameraControls } from './CameraControls'
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 export class CameraView extends React.Component {
   constructor (props) {
     super(props)
@@ -28,20 +30,40 @@ export class CameraView extends React.Component {
     }
   }
 
-  handleTakePicture () {
-    if (this.camera) {
-      setTimeout(() => {
-        this.camera.takePictureAsync(pictureOptions).then(data => {
-          console.log('Took Picture', data.uri)
-        })
-      }, 130)
+  async handleTakePicture () {
+    if (!this.camera) {
+      throw new Error('Camera ref not available')
+    }
 
-      // data.uri
-      // this.props.onTakePicture(data.uri)
+    // Avoid UI lag
+    await delay(130)
+
+    const {
+      width,
+      height,
+      uri
+    } = await this.camera.takePictureAsync(pictureOptions)
+
+    const takenAt = new Date()
+    const mimeType = 'image/jpeg'
+
+    const media = {
+      width,
+      height,
+      localPath: uri,
+      mimeType,
+      takenAt
+    }
+
+    if (this.props.onMedia) {
+      console.log('Took Picture', media)
+      this.props.onMedia(media)
     }
   }
 
   render () {
+    const { showControls } = this.props
+
     return (
       <View style={styles.container}>
         <RNCamera
@@ -57,9 +79,12 @@ export class CameraView extends React.Component {
           onBarCodeRead={this.handleCodeRead}
         />
 
-        <CameraControls
-          onTakePicture={this.handleTakePicture}
-        />
+        {
+          showControls &&
+            <CameraControls
+              onTakePicture={this.handleTakePicture}
+            />
+        }
       </View>
     )
   }

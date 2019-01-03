@@ -26,6 +26,7 @@ const handlePairingFinish = props => pairingCode => {
     console.log('Pairing to', url, 'with code', pairingToken, 'over websocket', wsUrl)
 
     if (props.baseUrl !== url) {
+      props.setPairedTo(null)
       Meteor.disconnect()
       Meteor.connect(wsUrl)
       Meteor.ddp.on('connected', async () => {
@@ -47,6 +48,7 @@ const pair = props => async pairingToken => {
       pairingToken
     })
 
+    props.setPairedTo(consumerId)
     console.log('Paired to consumer', consumerId)
   } catch (e) {
     if (e.error === 404) {
@@ -58,6 +60,7 @@ const pair = props => async pairingToken => {
 }
 
 export const withPairing = compose(
+  withState('pairedTo', 'setPairedTo', null),
   withState('baseUrl', 'setBaseUrl', null),
   withHandlers({ handlePairingFinish })
 )
