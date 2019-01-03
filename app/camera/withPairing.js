@@ -1,9 +1,11 @@
 import Meteor from 'react-native-meteor'
 import { call } from './util'
-import { withHandlers, compose } from 'recompose'
+import { withHandlers, compose, withState } from 'recompose'
+
+const minTokenLength = 90
 
 const parsePairingCode = pairingCode => {
-  if (pairingCode.length >= 220) {
+  if (pairingCode.length >= minTokenLength + 20) {
     const match = pairingCode.match(/^rslndPair\*(https?:\/\/.*#.*)/)
     if (match && match[0]) {
       const [_, url, pairingToken] = match[0].split(/\*|#/)
@@ -23,27 +25,39 @@ const handlePairingFinish = props => pairingCode => {
 
     console.log('Pairing to', url, 'with code', pairingToken, 'over websocket', wsUrl)
 
-    Meteor.disconnect()
-    Meteor.connect(wsUrl)
-
-    Meteor.ddp.on('connected', async () => {
-      try {
+    if (props.baseUrl !== url) {
+      Meteor.disconnect()
+      Meteor.connect(wsUrl)
+      Meteor.ddp.on('connected', async () => {
         await call(props)('clients/register', {
           systemInfo: { ios: true }
         })
 
-        const consumerId = await call(props)('clients/pairingFinish', {
-          pairingToken
-        })
+        pair(props)(pairingToken)
+      })
+    } else {
+      pair(props)(pairingToken)
+    }
+  }
+}
 
-        console.log('Paired to consumer', consumerId)
-      } catch (e) {
-        console.error('Failed', e)
-      }
+const pair = props => async pairingToken => {
+  try {
+    const consumerId = await call(props)('clients/pairingFinish', {
+      pairingToken
     })
+
+    console.log('Paired to consumer', consumerId)
+  } catch (e) {
+    if (e.error === 404) {
+      console.log('No consumer matching the pairing token was found, probably just scanned an expired code')
+      return
+    }
+    console.log('Failed to pair', e)
   }
 }
 
 export const withPairing = compose(
+  withState('baseUrl', 'setBaseUrl', null),
   withHandlers({ handlePairingFinish })
 )

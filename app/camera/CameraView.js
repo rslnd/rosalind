@@ -1,6 +1,7 @@
 import React from 'react'
 import { RNCamera } from 'react-native-camera'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { CameraControls } from './CameraControls'
 
 export class CameraView extends React.Component {
   constructor (props) {
@@ -11,6 +12,7 @@ export class CameraView extends React.Component {
     }
 
     this.handleCodeRead = this.handleCodeRead.bind(this)
+    this.handleTakePicture = this.handleTakePicture.bind(this)
   }
 
   handleCodeRead (e) {
@@ -23,6 +25,19 @@ export class CameraView extends React.Component {
       this.setState({
         lastCodeRead: code
       })
+    }
+  }
+
+  handleTakePicture () {
+    if (this.camera) {
+      setTimeout(() => {
+        this.camera.takePictureAsync(pictureOptions).then(data => {
+          console.log('Took Picture', data.uri)
+        })
+      }, 130)
+
+      // data.uri
+      // this.props.onTakePicture(data.uri)
     }
   }
 
@@ -41,9 +56,17 @@ export class CameraView extends React.Component {
           barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
           onBarCodeRead={this.handleCodeRead}
         />
+
+        <CameraControls
+          onTakePicture={this.handleTakePicture}
+        />
       </View>
     )
   }
+}
+
+const pictureOptions = {
+  quality: 1
 }
 
 const styles = StyleSheet.create({
@@ -54,6 +77,11 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   camera: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
     width: '100%',
     height: '100%'
   }

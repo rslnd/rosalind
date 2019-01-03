@@ -7,9 +7,9 @@ export const MainView = ({ clientKey, handlePairingFinish }) =>
     <CameraView
       onCodeRead={handlePairingFinish}
     />
-    <Text style={styles.text}>
+    {/* <Text style={styles.text}>
       ClientKey: {clientKey}
-    </Text>
+    </Text> */}
   </View>
 
 const styles = StyleSheet.create({
