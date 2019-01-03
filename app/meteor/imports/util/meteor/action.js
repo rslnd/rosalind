@@ -19,7 +19,11 @@ export const action = ({ name, args = {}, roles, allowAnonymous, simulation = tr
     name,
     mixins: [CallPromiseMixin],
     validate (unsafeArgs = {}) {
-      check(unsafeArgs, args)
+      const argsWithClientKey = {
+        clientKey: Match.Optional(String),
+        ...args
+      }
+      check(unsafeArgs, argsWithClientKey)
     },
     run: function (safeArgs) {
       if (!allowAnonymous) {

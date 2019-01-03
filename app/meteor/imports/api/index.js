@@ -19,6 +19,7 @@ import { Settings } from './settings'
 import { Clients } from './clients'
 import { Constraints } from './constraints'
 import { Availabilities } from './availabilities'
+import { Media } from './media'
 
 export {
   Users,
@@ -42,5 +43,6 @@ export {
   Timesheets,
   Clients,
   Constraints,
-  Availabilities
+  Availabilities,
+  Media
 }

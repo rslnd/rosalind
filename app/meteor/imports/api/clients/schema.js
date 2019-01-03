@@ -77,6 +77,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  pairedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     autoValue: Auto.createdAt
