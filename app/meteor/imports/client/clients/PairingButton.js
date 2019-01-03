@@ -14,8 +14,18 @@ import { primaryActive, darken } from '../layout/styles'
 import { flex, grow } from '../components/form'
 import { __ } from '../../i18n'
 
+const isRoutableOrigin = () => {
+  if (window.location.origin.indexOf('localhost') === -1) {
+    return true
+  } else {
+    throw new Error('Origin', window.location.origin, 'is not routable')
+  }
+}
+
 const generatePairingCode = ({ pairingToken }) =>
-  pairingToken && [
+  pairingToken &&
+  isRoutableOrigin() &&
+  [
     'rslndPair*',
     window.location.origin,
     '#',
@@ -75,6 +85,7 @@ const QRModal = ({ show, onClose, value }) =>
   !!value && <Modal
     show={!!value}
     onHide={onClose}
+    animation={false}
   >
     <Modal.Body>
       <div style={flex}>
