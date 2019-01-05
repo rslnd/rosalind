@@ -45,13 +45,13 @@ export class CameraView extends React.Component {
     } = await this.camera.takePictureAsync(pictureOptions)
 
     const takenAt = new Date()
-    const mimeType = 'image/jpeg'
+    const mediaType = 'image/jpeg'
 
     const media = {
       width,
       height,
       localPath: uri,
-      mimeType,
+      mediaType,
       takenAt
     }
 

@@ -13,10 +13,37 @@ const handleMedia = props => async media => {
     ...mediaRest,
     consumerId: props.pairedTo
   }
-  const uploadUrl = await call(props)('media/insert', createMedia)
+  const signedRequest = await call(props)('media/insert', createMedia)
 
-  // upload localPath -> uploadUri
-  console.log('upload url', uploadUrl)
+  // TODO: Resize and upload thumbnail first for better UX
+  return await uploadS3({ signedRequest, localPath })
 }
+
+const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject) => {
+  const { method, host, path, url, mediaType, headers } = signedRequest
+
+  const xhr = new XMLHttpRequest()
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        resolve()
+      } else {
+        reject(xhr)
+      }
+    }
+  }
+  xhr.open(method, url)
+  xhr.setRequestHeader('Content-Type', mediaType)
+
+  Object.keys(headers).map(headerKey =>
+    xhr.setRequestHeader(headerKey, headers[headerKey])
+  )
+
+  xhr.send({
+    uri: localPath,
+    type: mediaType,
+    name: 'file.jpeg'
+  })
+})
 
 export const withMedia = withHandlers({ handleMedia })
