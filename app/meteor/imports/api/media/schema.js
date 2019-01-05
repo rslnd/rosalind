@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
-const mimeTypes = ['image/jpeg']
+export const mediaTypes = ['image/jpeg']
 
 export const media = new SimpleSchema({
   consumerId: {
@@ -16,9 +16,9 @@ export const media = new SimpleSchema({
     type: Number
   },
 
-  mimeType: {
+  mediaType: {
     type: String,
-    allowedValues: mimeTypes
+    allowedValues: mediaTypes
   },
 
   note: {
