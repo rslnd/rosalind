@@ -7,7 +7,6 @@ const handleMedia = props => async media => {
     throw new Error('Need to pair first')
   }
 
-  console.log('handleMedia')
   const { localPath, ...mediaRest } = media
   const createMedia = {
     ...mediaRest,
@@ -20,9 +19,10 @@ const handleMedia = props => async media => {
 }
 
 const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject) => {
-  const { method, host, path, url, mediaType, headers } = signedRequest
+  const { method, filename, url, mediaType, headers } = signedRequest
 
   const xhr = new XMLHttpRequest()
+  xhr.onerror = reject
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
@@ -32,6 +32,7 @@ const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject)
       }
     }
   }
+
   xhr.open(method, url)
   xhr.setRequestHeader('Content-Type', mediaType)
 
@@ -42,7 +43,7 @@ const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject)
   xhr.send({
     uri: localPath,
     type: mediaType,
-    name: 'file.jpeg'
+    name: filename
   })
 })
 
