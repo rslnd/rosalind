@@ -16,3 +16,5 @@ export const call = props => (name, args = {}) => {
     })
   })
 }
+
+export const delay = ms => new Promise(resolve => setTimeout(resolve, ms))

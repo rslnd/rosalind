@@ -21,8 +21,8 @@ const specificToGeneral = s => {
   }
 }
 
-export const applyStyle = (props, styles, className) =>
-  [
+export const applyStyle = (props, styles, ...classNames) =>
+  classNames.map(className => [
     styles[both][className],
     props.orientation &&
       styles[props.orientation] &&
@@ -30,7 +30,7 @@ export const applyStyle = (props, styles, className) =>
     props.orientationSpecific &&
       styles[props.orientationSpecific] &&
       styles[props.orientationSpecific][className]
-  ].filter(identity)
+  ].filter(identity)).filter(identity)
 
 export const withOrientation = Component =>
   class WithOrientation extends React.Component {

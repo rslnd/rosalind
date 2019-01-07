@@ -5,8 +5,7 @@ import { TapGestureHandler, State } from 'react-native-gesture-handler'
 import { CameraControls } from './CameraControls'
 import { portrait, landscapeLeft, portraitUpsideDown, landscapeRight, landscape } from './withOrientation'
 import { CameraViewfinder } from './CameraViewfinder'
-
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+import { delay } from './util'
 
 export class CameraView extends React.Component {
   constructor (props) {
@@ -23,7 +22,6 @@ export class CameraView extends React.Component {
     this.handleCodeRead = this.handleCodeRead.bind(this)
     this.handleTakePicture = this.handleTakePicture.bind(this)
     this.handleFocus = this.handleFocus.bind(this)
-    this.handleFocusChanged = this.handleFocusChanged.bind(this)
   }
 
   handleCodeRead (e) {
@@ -71,10 +69,6 @@ export class CameraView extends React.Component {
     console.log(`Focus ${orientationSpecific} (${x},${y}) (${x2},${y2})`)
   }
 
-  handleFocusChanged (e) {
-    console.log('Focus changed', e)
-  }
-
   async handleTakePicture () {
     if (!this.camera) {
       throw new Error('Camera ref not available')
@@ -113,7 +107,18 @@ export class CameraView extends React.Component {
   }
 
   render () {
-    const { showControls, orientation } = this.props
+    const {
+      showControls,
+      orientation,
+      cameraMode,
+      handleNextCameraMode,
+      nextCameraMode
+    } = this.props
+
+    const {
+      pointOfInterest,
+      absolutePointOfInterest
+    } = this.state
 
     return (
       <View style={styles.container}>
@@ -133,22 +138,26 @@ export class CameraView extends React.Component {
               defaultVideoQuality={RNCamera.Constants.VideoQuality['720p']}
               barCodeTypes={barCodeTypes}
               onBarCodeRead={this.handleCodeRead}
-              autoFocusPointOfInterest={this.state.pointOfInterest}
+              autoFocusPointOfInterest={pointOfInterest}
             />
 
             <CameraViewfinder
-              position={this.state.absolutePointOfInterest}
+              position={absolutePointOfInterest}
             />
-
-            {
-              showControls &&
-                <CameraControls
-                  onTakePicture={this.handleTakePicture}
-                  orientation={orientation}
-                />
-            }
           </View>
         </TapGestureHandler>
+
+        {
+          (true || showControls) &&
+            <CameraControls
+              onTakePicture={this.handleTakePicture}
+              cameraMode={cameraMode}
+              handleNextCameraMode={handleNextCameraMode}
+              nextCameraMode={nextCameraMode}
+              orientation={orientation}
+            />
+        }
+
       </View>
     )
   }
