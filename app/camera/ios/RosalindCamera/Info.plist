@@ -40,7 +40,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Please enable Camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fa-regular-400.ttf</string>

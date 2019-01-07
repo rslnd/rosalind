@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
-import { withOrientation, landscape, portrait, both, applyStyle } from './withOrientation'
+import { landscape, portrait, both, applyStyle } from './withOrientation'
 import { Icon } from './Icon'
 
-export const CameraControls = withOrientation(props =>
+export const CameraControls = props =>
   <View style={applyStyle(props, styles, 'controlRow')}>
     <TouchableOpacity onPress={props.onTakePicture}>
       <View style={applyStyle(props, styles, 'shutter')}>
@@ -11,7 +11,6 @@ export const CameraControls = withOrientation(props =>
       </View>
     </TouchableOpacity>
   </View>
-)
 
 const shutterSize = 130
 
