@@ -8,6 +8,14 @@ export const media = new SimpleSchema({
     type: SimpleSchema.RegEx.Id
   },
 
+  producerId: {
+    type: SimpleSchema.RegEx.Id
+  },
+
+  filename: {
+    type: String
+  },
+
   width: {
     type: Number
   },
@@ -38,9 +46,7 @@ export const media = new SimpleSchema({
   },
 
   createdBy: {
-    type: String,
-    autoValue: Auto.createdBy,
-    optional: true
+    type: String
   },
 
   removed: {

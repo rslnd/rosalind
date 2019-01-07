@@ -32,7 +32,7 @@ export const pairingFinish = ({ Clients }) =>
         }
       })
 
-      Clients.update({ _id: consumer._id }, {
+      Clients.update({ _id: producer._id }, {
         $set: {
           pairedTo: consumer._id,
           pairedBy: consumer.pairingTokenCreatedBy,
