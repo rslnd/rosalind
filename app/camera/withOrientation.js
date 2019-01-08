@@ -38,12 +38,46 @@ export const withOrientation = Component =>
       super(props)
 
       this.handleChange = this.handleChange.bind(this)
+      this.handleOrientationLock = this.handleOrientationLock.bind(this)
+      this.handleOrientationUnlock = this.handleOrientationUnlock.bind(this)
     }
 
     handleChange (newSpecific) {
       const lastOrientation = this.state.orientation
       const orientation = mapOrientation(newSpecific, lastOrientation)
+
+      if (this.state.locked &&
+        this.state.locked[0] !== orientation[0]) {
+        return
+      }
+
+      console.log('Orientation change', orientation)
       this.setState({ orientation })
+    }
+
+    handleOrientationLock (forcedOrientation) {
+      if (!forcedOrientation) {
+        forcedOrientation = this.state.orientation[0]
+      }
+
+      this.setState({
+        locked: forcedOrientation
+      })
+
+      switch (forcedOrientation) {
+        case landscape: return Orientation.lockToLandscape()
+        case landscapeLeft: return Orientation.lockToLandscapeLeft()
+        case landscapeRight: return Orientation.lockToLandscapeRight()
+        default: return Orientation.lockToPortrait()
+      }
+    }
+
+    handleOrientationUnlock () {
+      this.setState({
+        locked: null
+      })
+
+      Orientation.unlockAllOrientations()
     }
 
     componentWillMount () {
@@ -66,6 +100,8 @@ export const withOrientation = Component =>
       return (
         <Component
           {...this.props}
+          handleOrientationLock={this.handleOrientationLock}
+          handleOrientationUnlock={this.handleOrientationUnlock}
           orientation={orientation}
         />
       )

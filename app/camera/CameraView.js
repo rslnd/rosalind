@@ -8,6 +8,7 @@ import { CameraViewfinder } from './CameraViewfinder'
 import { delay } from './util'
 import { cameraMode as cameraModes } from './withCameraMode'
 import { OverlayDocument } from './OverlayDocument'
+import Crop from 'react-native-perspective-image-cropper'
 
 export class CameraView extends React.Component {
   constructor (props) {
@@ -28,10 +29,11 @@ export class CameraView extends React.Component {
 
   handleCodeRead (e) {
     const code = e.data
+    const { onCodeRead } = this.props
 
     if (this.state.lastCodeRead !== code) {
-      if (this.props.onCodeRead) {
-        this.props.onCodeRead(code)
+      if (onCodeRead) {
+        onCodeRead(code)
       }
       this.setState({
         lastCodeRead: code
@@ -40,6 +42,9 @@ export class CameraView extends React.Component {
   }
 
   handleFocus (e) {
+    const { orientation, cropMedia } = this.props
+
+    if (cropMedia) { return }
     if (e.nativeEvent.state !== State.ACTIVE) { return }
 
     if (this.autofocusTimeout) {
@@ -47,7 +52,7 @@ export class CameraView extends React.Component {
     }
 
     const { x, y } = e.nativeEvent
-    const orientationSpecific = this.props.orientation[1]
+    const orientationSpecific = orientation[1]
 
     const autofocusTimeout = 2500
 
@@ -72,6 +77,12 @@ export class CameraView extends React.Component {
   }
 
   async handleTakePicture () {
+    const {
+      onMedia,
+      cameraMode,
+      handleCropStart
+    } = this.props
+
     if (!this.camera) {
       throw new Error('Camera ref not available')
     }
@@ -96,9 +107,14 @@ export class CameraView extends React.Component {
       takenAt
     }
 
-    if (this.props.onMedia) {
+    if (cameraMode === cameraModes.photo && onMedia) {
       console.log('Took Picture', media)
-      this.props.onMedia(media)
+      onMedia(media)
+    }
+
+    if (cameraMode === cameraModes.document && handleCropStart) {
+      console.log('Scanned document')
+      handleCropStart(media)
     }
   }
 
@@ -114,7 +130,10 @@ export class CameraView extends React.Component {
       orientation,
       cameraMode,
       handleNextCameraMode,
-      nextCameraMode
+      nextCameraMode,
+      cropMedia,
+      cropCoordinates,
+      handleCropChange
     } = this.props
 
     const {
@@ -145,15 +164,30 @@ export class CameraView extends React.Component {
             />
 
             {
-              cameraMode === cameraModes.document &&
+              cameraMode === cameraModes.document && !cropMedia &&
                 <OverlayDocument
                   orientation={orientation}
                 />
             }
 
-            <CameraViewfinder
-              position={absolutePointOfInterest}
-            />
+            {
+              !cropMedia && <CameraViewfinder
+                position={absolutePointOfInterest}
+              />
+            }
+
+            {
+              cropMedia && <Crop
+                width={cropMedia.width}
+                height={cropMedia.height}
+                initialImage={cropMedia.localPath}
+                rectangleCoordinates={cropCoordinates}
+                updateImage={handleCropChange}
+                overlayColor='rgba(18,190,210, 1)'
+                overlayStrokeColor='rgba(20,190,210, 1)'
+                handlerColor='rgba(20,150,160, 1)'
+              />
+            }
           </View>
         </TapGestureHandler>
 

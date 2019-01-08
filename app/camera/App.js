@@ -5,11 +5,13 @@ import { withPairing } from './withPairing'
 import { withMedia } from './withMedia'
 import { withOrientation } from './withOrientation'
 import { withCameraMode } from './withCameraMode'
+import { withModeDocument } from './withModeDocument'
 
 export const App = compose(
   withClientKey,
   withPairing,
   withMedia,
   withOrientation,
-  withCameraMode
+  withCameraMode,
+  withModeDocument
 )(MainView)
