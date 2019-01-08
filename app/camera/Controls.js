@@ -9,7 +9,33 @@ const modeIcon = {
   [cameraMode.document]: 'file-alt'
 }
 
-export const CameraControls = ({
+export const Controls = props =>
+  props.cropMedia
+  ? <CropControls {...props} />
+  : <CameraControls {...props} />
+
+const CropControls = ({
+  handleCropFinish,
+  handleCropCancel,
+  ...props
+}) =>
+  <View style={applyStyle(props, styles, 'controlRow')}>
+    <Button
+      secondary
+      onPress={handleCropCancel}
+      icon='trash-alt'
+    />
+
+    <Button
+      primary
+      onPress={handleCropFinish}
+      icon='check'
+    />
+
+    <Placeholder />
+  </View>
+
+const CameraControls = ({
   onTakePicture,
   handleNextCameraMode,
   cameraMode,
@@ -17,32 +43,42 @@ export const CameraControls = ({
   ...props
 }) =>
   <View style={applyStyle(props, styles, 'controlRow')}>
-    <View
-      style={applyStyle(props, styles, 'secondary', 'placeholder')}
-      pointerEvents='none'
+    <Placeholder />
+
+    <Button
+      primary
+      icon={modeIcon[cameraMode]}
+      onPress={onTakePicture}
     />
 
-    <TouchableOpacity onPress={onTakePicture}>
-      <View style={applyStyle(props, styles, 'shutter')}>
-        <Icon name={modeIcon[cameraMode]} style={styles[both].icon} />
-      </View>
-    </TouchableOpacity>
-
-    <TouchableOpacity onPress={handleNextCameraMode}>
-      <View style={applyStyle(props, styles, 'secondary')}>
-        <Icon name={modeIcon[nextCameraMode]} style={[
-          styles[both].icon,
-          styles[both].iconSecondary
-        ]} />
-      </View>
-    </TouchableOpacity>
+    <Button
+      secondary
+      icon={modeIcon[nextCameraMode]}
+      onPress={handleNextCameraMode}
+    />
   </View>
 
-const shutterSize = 130
+const Button = ({ primary, onPress, icon, ...props }) =>
+  <TouchableOpacity onPress={onPress}>
+    <View style={primary ? styles[both].primary : styles[both].secondary}>
+      <Icon name={icon} style={[
+        styles[both].icon,
+        !primary ? styles[both].iconSecondary : {}
+      ]} />
+    </View>
+  </TouchableOpacity>
+
+const Placeholder = props =>
+  <View
+    style={[styles[both].secondary, styles[both].placeholder]}
+    pointerEvents='none'
+  />
+
+const primarySize = 130
 const secondarySize = 80
 const rowPadding = 15
 
-export const rowSize = shutterSize + rowPadding
+export const rowSize = primarySize + rowPadding
 
 const styles = {
   [both]: StyleSheet.create({
@@ -53,12 +89,12 @@ const styles = {
       alignItems: 'center',
       padding: rowPadding
     },
-    shutter: {
+    primary: {
       opacity: 0.8,
       backgroundColor: 'red',
-      borderRadius: shutterSize,
-      width: shutterSize,
-      height: shutterSize,
+      borderRadius: primarySize,
+      width: primarySize,
+      height: primarySize,
       justifyContent: 'center',
       alignItems: 'center'
     },
@@ -90,7 +126,7 @@ const styles = {
   }),
   [portrait]: StyleSheet.create({
     controlRow: {
-      minHeight: shutterSize,
+      minHeight: primarySize,
       left: 0,
       right: 0,
       bottom: 0
@@ -99,7 +135,7 @@ const styles = {
   [landscape]: StyleSheet.create({
     controlRow: {
       flexDirection: 'column',
-      minWidth: shutterSize,
+      minWidth: primarySize,
       right: 0,
       top: 0,
       bottom: 0

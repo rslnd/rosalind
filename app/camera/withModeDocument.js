@@ -53,16 +53,20 @@ export const withModeDocument = compose(
     },
     handleCropStart: props => media => {
       const { width, height } = media
-
-      if (props.handleOrientationLock) {
-        props.handleOrientationLock()
-      }
-
       const position = overlayPosition({ width, height })
       const handles = positionToHandles(position)
 
+      props.handleOrientationLock()
       props.setCropCoordinates(handles)
       props.setCropMedia(media)
+    },
+    handleCropFinish: props => e => {
+      props.setCropMedia(null)
+      props.handleOrientationUnlock()
+    },
+    handleCropCancel: props => e => {
+      props.setCropMedia(null)
+      props.handleOrientationUnlock()
     }
   })
 )

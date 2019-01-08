@@ -2,7 +2,7 @@ import React from 'react'
 import { RNCamera } from 'react-native-camera'
 import { StyleSheet, View, Dimensions } from 'react-native'
 import { TapGestureHandler, State } from 'react-native-gesture-handler'
-import { CameraControls } from './CameraControls'
+import { Controls } from './Controls'
 import { portrait, landscapeLeft, portraitUpsideDown, landscapeRight, landscape } from './withOrientation'
 import { CameraViewfinder } from './CameraViewfinder'
 import { delay } from './util'
@@ -133,7 +133,9 @@ export class CameraView extends React.Component {
       nextCameraMode,
       cropMedia,
       cropCoordinates,
-      handleCropChange
+      handleCropChange,
+      handleCropFinish,
+      handleCropCancel
     } = this.props
 
     const {
@@ -193,11 +195,14 @@ export class CameraView extends React.Component {
 
         {
           (true || showControls) &&
-            <CameraControls
+            <Controls
               onTakePicture={this.handleTakePicture}
               cameraMode={cameraMode}
               handleNextCameraMode={handleNextCameraMode}
               nextCameraMode={nextCameraMode}
+              cropMedia={cropMedia}
+              handleCropFinish={handleCropFinish}
+              handleCropCancel={handleCropCancel}
               orientation={orientation}
             />
         }
