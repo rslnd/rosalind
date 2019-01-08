@@ -11,13 +11,13 @@ export const portraitUpsideDown = 'PORTRAITUPSIDEDOWN'
 
 export const both = 'both'
 
-const specificToGeneral = s => {
-  switch (s) {
-    case landscapeLeft: return landscape
-    case landscapeRight: return landscape
-    case portrait: return portrait
-    case portraitUpsideDown: return portrait
-    default: return portrait
+const mapOrientation = (current, last) => {
+  switch (current) {
+    case landscapeLeft: return [landscape, landscapeLeft]
+    case landscapeRight: return [landscape, landscapeRight]
+    case portrait: return [portrait, portrait]
+    case portraitUpsideDown: return last
+    default: return last || [portrait, portrait]
   }
 }
 
@@ -25,11 +25,11 @@ export const applyStyle = (props, styles, ...classNames) =>
   classNames.map(className => [
     styles[both][className],
     props.orientation &&
-      styles[props.orientation] &&
-      styles[props.orientation][className],
-    props.orientationSpecific &&
-      styles[props.orientationSpecific] &&
-      styles[props.orientationSpecific][className]
+      styles[props.orientation[0]] &&
+      styles[props.orientation[0]][className],
+    props.orientation &&
+      styles[props.orientation[1]] &&
+      styles[props.orientation[1]][className]
   ].filter(identity)).filter(identity)
 
 export const withOrientation = Component =>
@@ -40,14 +40,15 @@ export const withOrientation = Component =>
       this.handleChange = this.handleChange.bind(this)
     }
 
-    handleChange (orientationSpecific) {
-      const orientation = specificToGeneral(orientationSpecific)
-      this.setState({ orientation, orientationSpecific })
+    handleChange (newSpecific) {
+      const lastOrientation = this.state.orientation
+      const orientation = mapOrientation(newSpecific, lastOrientation)
+      this.setState({ orientation })
     }
 
     componentWillMount () {
-      const orientation = Orientation.getInitialOrientation()
-      this.setState({ orientation, orientationSpecific: orientation })
+      const orientation = mapOrientation(Orientation.getInitialOrientation())
+      this.setState({ orientation })
     }
 
     componentDidMount () {
@@ -60,13 +61,12 @@ export const withOrientation = Component =>
     }
 
     render () {
-      const { orientation, orientationSpecific } = this.state
+      const { orientation } = this.state
 
       return (
         <Component
           {...this.props}
           orientation={orientation}
-          orientationSpecific={orientationSpecific}
         />
       )
     }

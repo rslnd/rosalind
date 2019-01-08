@@ -40,6 +40,9 @@ export const CameraControls = ({
 
 const shutterSize = 130
 const secondarySize = 80
+const rowPadding = 15
+
+export const rowSize = shutterSize + rowPadding
 
 const styles = {
   [both]: StyleSheet.create({
@@ -48,7 +51,7 @@ const styles = {
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      padding: 15
+      padding: rowPadding
     },
     shutter: {
       opacity: 0.8,

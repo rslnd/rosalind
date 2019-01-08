@@ -6,6 +6,8 @@ import { CameraControls } from './CameraControls'
 import { portrait, landscapeLeft, portraitUpsideDown, landscapeRight, landscape } from './withOrientation'
 import { CameraViewfinder } from './CameraViewfinder'
 import { delay } from './util'
+import { cameraMode as cameraModes } from './withCameraMode'
+import { OverlayDocument } from './OverlayDocument'
 
 export class CameraView extends React.Component {
   constructor (props) {
@@ -45,7 +47,7 @@ export class CameraView extends React.Component {
     }
 
     const { x, y } = e.nativeEvent
-    const { orientationSpecific } = this.props
+    const orientationSpecific = this.props.orientation[1]
 
     const autofocusTimeout = 2500
 
@@ -139,7 +141,15 @@ export class CameraView extends React.Component {
               barCodeTypes={barCodeTypes}
               onBarCodeRead={this.handleCodeRead}
               autoFocusPointOfInterest={pointOfInterest}
+              playSoundOnCapture={false}
             />
+
+            {
+              cameraMode === cameraModes.document &&
+                <OverlayDocument
+                  orientation={orientation}
+                />
+            }
 
             <CameraViewfinder
               position={absolutePointOfInterest}
