@@ -3,7 +3,6 @@ package com.rosalindcamera;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.reactlibrary.RNPdfScannerPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import net.rhogan.rnsecurerandom.RNSecureRandomPackage;
@@ -28,7 +27,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNPdfScannerPackage(),
             new OrientationPackage(),
             new RNGestureHandlerPackage(),
             new RNSecureRandomPackage(),

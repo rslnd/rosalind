@@ -137,7 +137,6 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-document-scanner')
     compile project(':react-native-orientation')
     compile project(':react-native-gesture-handler')
     compile project(':react-native-securerandom')
