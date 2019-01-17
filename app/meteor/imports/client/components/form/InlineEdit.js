@@ -107,6 +107,10 @@ export class InlineEdit extends React.Component {
   }
 
   render () {
+    if (this.props.canEdit === false) {
+      return this.props.children || this.props.value
+    }
+
     let style = { ...defaultFieldStyle, ...(this.props.fieldStyle || {}) }
     let spanStyle = {}
     if (this.props.fullWidth) {
