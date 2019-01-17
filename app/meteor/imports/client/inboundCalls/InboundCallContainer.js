@@ -10,6 +10,8 @@ const composer = (props) => {
   const inboundCall = InboundCalls.findOne({ _id: props._id }, { removed: true })
   const resolve = (_id) => InboundCalls.methods.resolve.call({ _id })
   const unresolve = (_id) => InboundCalls.methods.unresolve.call({ _id })
+  const edit = (_id, field) => value =>
+    InboundCalls.methods.edit.call({ _id, [field]: value })
   const fullNameWithTitle = _id => {
     const user = Users.findOne({ _id })
     return user && Users.methods.fullNameWithTitle(user)
@@ -23,7 +25,19 @@ const composer = (props) => {
     const canResolve = (inboundCall.pinnedBy === Meteor.userId()) ||
       hasRole(Meteor.userId(), ['admin', 'inboundCalls-pin'])
 
-    return { ...props, inboundCall, resolve, unresolve, canResolve, fullNameWithTitle }
+    const canEdit = (inboundCall.createdBy === Meteor.userId()) ||
+      hasRole(Meteor.userId(), ['admin', 'inboundCalls-edit'])
+
+    return {
+      ...props,
+      inboundCall,
+      edit,
+      resolve,
+      unresolve,
+      canResolve,
+      canEdit,
+      fullNameWithTitle
+    }
   }
 }
 

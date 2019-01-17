@@ -6,6 +6,7 @@ import { CommentsContainer, HumanCommentCount } from '../comments'
 import { LinkToAppointmentContainer } from './LinkToAppointmentContainer'
 import { InboundCallsTopics } from '../../api/inboundCalls'
 import { highlightBackground, highlightColor } from '../layout/styles';
+import { InlineEdit } from '../components/form';
 
 export class InboundCallItem extends React.Component {
   render () {
@@ -14,7 +15,9 @@ export class InboundCallItem extends React.Component {
       showTopic,
       unresolve,
       resolve,
+      edit,
       canResolve,
+      canEdit,
       fullNameWithTitle
     } = this.props
 
@@ -38,14 +41,49 @@ export class InboundCallItem extends React.Component {
       <div className='box box-widget' style={style}>
         <div className='box-header'>
           <h4 className='username enable-select'>
-            <b>{lastName}</b> {firstName}&ensp;
+            <InlineEdit
+              onChange={edit(_id, 'lastName')}
+              canEdit={canEdit}
+              value={lastName}
+              noUI
+            >
+              <b>{lastName}</b>
+            </InlineEdit>
+
+            &nbsp;
+
+            <InlineEdit
+              onChange={edit(_id, 'firstName')}
+              canEdit={canEdit}
+              value={firstName}
+              noUI
+            />
+
+            &ensp;
+
             <small>{topicLabel}</small>
           </h4>
-          <h3 className='description enable-select'>{zerofix(telephone)}</h3>
+          <InlineEdit
+            onChange={edit(_id, 'telephone')}
+            canEdit={canEdit}
+            value={zerofix(telephone)}
+            noUI
+            fullWidth>
+            <h3 className='description enable-select'>{zerofix(telephone)}</h3>
+          </InlineEdit>
         </div>
         <div className='box-body'>
           <blockquote>
-            <p className='enable-select pre-wrap'>{note}</p>
+            <InlineEdit
+              onChange={edit(_id, 'note')}
+              canEdit={canEdit}
+              multiline
+              value={note}
+              noUI
+              fullWidth>
+              <p className='enable-select pre-wrap'>{note}</p>
+            </InlineEdit>
+
           </blockquote>
 
           <LinkToAppointmentContainer inboundCall={inboundCall} />
