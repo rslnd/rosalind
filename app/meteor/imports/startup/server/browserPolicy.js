@@ -38,7 +38,8 @@ const getHelmetConfig = () => {
           `https://${process.env.SMOOCH_APP_ID}.config.smooch.io/`,
           'wss://api.smooch.io',
           'https://api.smooch.io',
-          'https://sentry.io/'
+          'https://sentry.io/',
+          'https://engine.montiapm.com'
         ],
         defaultSrc: [
           none
