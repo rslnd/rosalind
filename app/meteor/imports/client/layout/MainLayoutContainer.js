@@ -14,7 +14,6 @@ const composer = (props) => {
   Roles.getRolesForUser(currentUser)
 
   if (currentUser) {
-    subscribe('cache')
     subscribe('timesheets')
     subscribe('inboundCalls')
   }
