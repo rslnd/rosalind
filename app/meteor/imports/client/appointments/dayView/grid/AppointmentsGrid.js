@@ -42,7 +42,7 @@ export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick
 
   return (
     <div style={style}>
-      {appointments({ slotSize, assignees, onClick: onAppointmentClick, move })}
+      {appointments({ calendar, slotSize, assignees, onClick: onAppointmentClick, move })}
       {ffAva ? null : blanks({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
       {ffAva ? availabilities({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter }) : null}
       {ffAva ? null : overrideOverlay(override)}

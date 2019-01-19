@@ -2,7 +2,7 @@ import React from 'react'
 import { Appointment } from '../appointment/Appointment'
 import { formatter } from './timeSlots'
 
-export const appointments = ({ slotSize, assignees, onClick, move }) => {
+export const appointments = ({ calendar, slotSize, assignees, onClick, move }) => {
   const format = formatter(slotSize)
 
   return assignees.map((assignee) => (
@@ -23,6 +23,7 @@ export const appointments = ({ slotSize, assignees, onClick, move }) => {
           <Appointment
             key={appointment._id}
             appointment={appointment}
+            calendar={calendar}
             onClick={onClick}
             format={format}
           />

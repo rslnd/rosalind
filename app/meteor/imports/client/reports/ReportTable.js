@@ -69,7 +69,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapRe
         </span>
       }</th>
       <th style={align}>Std.</th>
-      <th colSpan={calendar.reportExpectedAsActual ? 2 : 3}>
+      <th colSpan={calendar.admittedIsTreated ? 2 : 3}>
         {(calendar && calendar.patientNamePlural) || __('reports.patients')}
       </th>
       {
@@ -95,7 +95,7 @@ export const ReportTableHeader = ({ showRevenue, assigneeReport, calendar, mapRe
       <th />
       <th style={borderLeftStyle}>Plan</th>
       {
-        calendar.reportExpectedAsActual
+        calendar.admittedIsTreated
         ? <th key='actual' style={align} title='Behandelt'>Ist</th>
         : [
           <th key='admitted' style={align} title='Anwesend'>Anw.</th>,
@@ -195,7 +195,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         <Td borderLeft>{idx(assignee, _ => _.patients.total.expected) || <Nil />}</Td>
 
         {
-          calendar.reportExpectedAsActual
+          calendar.admittedIsTreated
           ? <Td><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>
           : [
             <Td key='admitted'><Percent part={idx(assignee, _ => _.patients.total.admitted)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>,
@@ -209,7 +209,7 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
             [
               <Td key={1} borderLeft><Percent part={idx(assignee, _ => _.patients[tag].expected)} of={idx(assignee, _ => _.patients.total.expected)} /></Td>,
 
-              calendar.reportExpectedAsActual
+              calendar.admittedIsTreated
               ? <Td key={2}>{
                 (assignee.type !== 'external')
                 ? <Percent
@@ -312,7 +312,7 @@ class SummaryRow extends React.Component {
         {/* Patients [planned, admitted, weighted workload] */}
         <Td borderLeft>{idx(report, _ => _.total.patients.total.expected) || <Nil />}</Td>
         {
-          calendar.reportExpectedAsActual
+          calendar.admittedIsTreated
           ? <Td><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
           : [
             <Td key='admitted'><Percent part={idx(report, _ => _.total.patients.total.admitted)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>,
@@ -334,7 +334,7 @@ class SummaryRow extends React.Component {
             [
               <Td key={1} borderLeft><Percent part={idx(report, _ => _.total.patients[tag].expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>,
 
-              calendar.reportExpectedAsActual
+              calendar.admittedIsTreated
               ? <Td key={2}><Percent part={idx(report, _ => _.total.patients[tag].expected)} of={idx(report, _ => _.total.patients.total.expected)} /></Td>
               : <Td key={2}><Percent part={idx(report, _ => _.total.patients[tag].actual)} of={idx(report, _ => _.total.patients.total.actual)} /></Td>
             ]

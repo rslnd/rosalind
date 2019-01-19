@@ -43,7 +43,7 @@ const dateFormat = m =>
   ? m.format(__('time.dateFormatWeekdayShortNoYear'))
   : m.format(__('time.dateFormatWeekdayShort'))
 
-const AppointmentRow = ({ appointment, expandComments, isCurrent, onClick, autoFocus }) => {
+const AppointmentRow = ({ appointment, calendar, expandComments, isCurrent, onClick, autoFocus }) => {
   const assignee = Users.findOne({ _id:
     appointment.treatmentBy ||
     appointment.waitlistAssigneeId ||
@@ -88,7 +88,7 @@ const AppointmentRow = ({ appointment, expandComments, isCurrent, onClick, autoF
             </div>
             <div style={{ display: 'inline-block', minWidth: 45 }}>
               <ConsentIndicator appointment={appointment} />
-              <Indicator appointment={appointment} />
+              <Indicator appointment={appointment} calendar={calendar} />
             </div>
           </div>
         </div>
@@ -163,6 +163,7 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
               )
             : <AppointmentRow
               key={item._id}
+              calendar={item.calendar}
               appointment={item}
               expandComments={
                 item._id === selectedAppointmentId ||

@@ -1,39 +1,69 @@
 import React from 'react'
-import moment from 'moment-timezone'
 import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
 import { green, red } from '../../layout/styles'
 import { Currency } from '../../components/Currency'
 
-const overlay = {
-  opacity: 0.6
+const assumeNoShowAfterMinutes = 90
+
+export const Indicator = ({ appointment, showRevenue, calendar }) => {
+  if (!appointment.patientId || appointment.canceled || appointment.removed) {
+    return null
+  }
+
+  if (appointment.treated || (calendar && calendar.admittedIsTreated && appointment.admitted)) {
+    return <Treated />
+  }
+
+  if (appointment.admitted) {
+    return <Admitted />
+  }
+
+  const assumeNoShow = ((new Date() - appointment.end) / 1000 / 60) >= assumeNoShowAfterMinutes
+  if (assumeNoShow) {
+    return <NoShow />
+  }
+
+  return null
 }
 
-export const Indicator = ({ appointment, showRevenue }) => {
-  const canceled = appointment.canceled || appointment.removed
+const Admitted = () => <span
+  key='admitted'
+  className='pull-right'
+  title={__('appointments.admitted')}
+  style={admittedStyle}>
+  <Icon name='angle-right' />&nbsp;
+</span>
 
-  return appointment.patientId &&
-    <span className='pull-right'>
-      {
-        !canceled && <span>{
-          (appointment.treated || appointment.admitted)
-            ? (<span
-              key='show'
-              title={__('appointments.show')}
-              style={{ display: 'inline-block', color: green }}>
-              <Icon name='check' />&nbsp;
-            </span>
-          ) : ((moment().diff(appointment.end, 'minutes') >= 90) &&
-            <span
-              key='noShow'
-              title={__('appointments.noShow')}
-              style={{ display: 'inline-block', color: red }}>
-              <Icon name='times' />&nbsp;
-            </span>
-          )
-        }</span>
-      }
-    </span> || null
+const admittedStyle = {
+  display: 'inline-block',
+  color: green
+}
+
+const Treated = () => <span
+  key='treated'
+  className='pull-right'
+  title={__('appointments.treated')}
+  style={treatedStyle}>
+  <Icon name='check' />&nbsp;
+</span>
+
+const treatedStyle = {
+  display: 'inline-block',
+  color: green
+}
+
+const NoShow = () => <span
+  key='noShow'
+  className='pull-right'
+  title={__('appointments.noShow')}
+  style={noShowStyle}>
+  <Icon name='times' />&nbsp;
+</span>
+
+const noShowStyle = {
+  display: 'inline-block',
+  color: red
 }
 
 export const Revenue = ({ appointment }) =>

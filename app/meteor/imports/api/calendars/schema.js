@@ -58,7 +58,7 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
-  reportExpectedAsActual: {
+  admittedIsTreated: {
     type: Boolean,
     optional: true
   },

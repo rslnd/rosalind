@@ -89,7 +89,7 @@ class AppointmentItem extends React.Component {
   }
 
   render () {
-    const { appointment, classes, format } = this.props
+    const { appointment, calendar, classes, format } = this.props
     const start = moment(appointment.start)
     const appointmentClasses = classnames({
       [ classes.appointment ]: true,
@@ -151,7 +151,10 @@ class AppointmentItem extends React.Component {
         <span
           style={styles.patientName}
           className={appointment.canceled ? classes.canceled : undefined}>
-          <Indicator appointment={appointment} />
+          <Indicator
+            appointment={appointment}
+            calendar={calendar}
+          />
           {
             patient
             ? (

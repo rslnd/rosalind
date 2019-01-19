@@ -71,6 +71,7 @@ const PatientWithAppointments = ({ patient, onPatientModalOpen }) =>
         <Appointment
           key={appointment._id}
           appointment={appointment}
+          calendar={appointment.calendar}
         />
       )
     }
@@ -106,7 +107,7 @@ const modalTriggerStyle = {
   zoom: 0.9
 }
 
-const Appointment = ({ appointment }) => {
+const Appointment = ({ appointment, calendar }) => {
   const start = moment(appointment.start)
   const assignee = idx(Users.findOne({ _id:
     appointment.treatmentBy ||
@@ -130,7 +131,7 @@ const Appointment = ({ appointment }) => {
       <span style={assigneeNameStyle}>
         {assignee && <UserHelper userId={assignee} helper='lastNameWithTitle' />}
         &emsp;
-        <Indicator appointment={appointment} />
+        <Indicator appointment={appointment} calendar={calendar} />
       </span>
     </span>
   )

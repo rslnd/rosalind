@@ -100,10 +100,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Empfangen = Behandelt',
-    field: 'reportExpectedAsActual',
+    field: 'admittedIsTreated',
     type: Boolean,
     render: c =>
-      c.reportExpectedAsActual && <Icon name='check' />
+      c.admittedIsTreated && <Icon name='check' />
   },
   {
     header: 'SMS',
