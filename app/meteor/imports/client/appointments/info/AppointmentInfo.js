@@ -18,6 +18,7 @@ import { Reminders } from './Reminders'
 import { PatientName } from './PatientName'
 import { PatientNotes } from './PatientNotes'
 import { Consent } from './Consent'
+import { ReferralsContainer } from '../waitlist/ReferralsContainer'
 
 const autofillRevenue = change => (e, tags) => {
   if (tags && tags.length >= 1) {
@@ -84,6 +85,7 @@ export class AppointmentInfo extends React.Component {
       allowedTags,
       maxDuration,
       change,
+      canRefer,
       handleEditPatient,
       handleEditAppointment,
       handleToggleGender,
@@ -138,6 +140,14 @@ export class AppointmentInfo extends React.Component {
                   </FormSection>
                   <input type='submit' style={{ display: 'none' }} />
                 </form>
+
+                {
+                  canRefer &&
+                    <ListItem>
+                      <ReferralsContainer appointment={appointment} />
+                    </ListItem>
+                }
+
                 <ListItem>
                   <Logs format={logFormat} doc={appointment} />
                   <Stamps

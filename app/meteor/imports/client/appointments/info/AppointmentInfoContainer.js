@@ -22,6 +22,7 @@ import { translateObject } from '../../components/form/translateObject'
 import { mapPatientToFields } from '../../patients/mapPatientToFields'
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 import { validate } from '../new/newAppointmentValidators'
+import { hasRole } from '../../../util/meteor/hasRole';
 
 const formName = 'appointmentInfoForm'
 
@@ -39,7 +40,11 @@ const composer = props => {
     patientId = props.patientId
   }
 
+  const canRefer = hasRole(Meteor.userId(), ['referrals'])
   patientId && subscribe('patients', { patientIds: [patientId] })
+  patientId && canRefer && subscribe('referrals', {
+    patientIds: [ patientId ]
+  })
 
   const patient = patientId && Patients.findOne({ _id: patientId })
 
@@ -146,6 +151,7 @@ const composer = props => {
       comments,
       allowedTags,
       maxDuration,
+      canRefer,
       totalPatientRevenue,
       handleEditPatient,
       handleEditAppointment,

@@ -10,6 +10,7 @@ export const updatePassword = ({ Users }) =>
       password: String
     },
     roles: ['admin', 'users-edit'],
+    simulation: false,
     fn: async ({ userId, password }) => {
       console.log('[Users] Setting password for user', userId)
       Events.post('users/updatePassword', { userId }, 'warning')
