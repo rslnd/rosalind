@@ -12,6 +12,7 @@ export default () => {
     if (!didNotify) {
       Alert.info(<div>
         <i className='fa fa-heart' title={`v${newVersion}`} />
+        &nbsp;&nbsp;
         {__('ui.updateAvailableMessage')}
         <br />
         {
