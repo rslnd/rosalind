@@ -32,7 +32,7 @@ const composer = (props) => {
   return {
     ...props,
     patient,
-    currentAppointment: { ...currentAppointment, calendar: calendars[currentAppointment.calendarId] },
+    currentAppointment: currentAppointment && { ...currentAppointment, calendar: calendars[currentAppointment.calendarId] },
     pastAppointments,
     futureAppointments
   }
