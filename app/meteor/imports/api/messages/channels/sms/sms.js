@@ -59,6 +59,11 @@ export const send = (messageId) => {
 
 export const receive = (payload) => {
   const { message, response } = provider.receive(payload)
+
+  if (!message) {
+    return { response }
+  }
+
   const messageId = Messages.insert(message)
 
   let parentMessage

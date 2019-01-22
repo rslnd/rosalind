@@ -62,7 +62,17 @@ export const send = (message) => {
 }
 
 export const receive = (payload) => {
-  console.log('[Messages] channels/sms/websms: Received payload')
+  if (!payload || !payload.recipientAddress || !payload.textMessageContent) {
+    console.error('[Messages] channels/sms/websms: Received invalid payload', payload)
+    return {
+      response: {
+        statusCode: 500,
+        statusMessage: 'Invalid payload'
+      }
+    }
+  } else {
+    console.log('[Messages] channels/sms/websms: Received payload')
+  }
 
   const message = {
     type: 'inbound',
