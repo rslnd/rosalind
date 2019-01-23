@@ -4,7 +4,7 @@ const logger = require('./logger')
 const handleStartupEvent = callback => {
   const gotTheLock = app.requestSingleInstanceLock()
 
-  app.on('second-instance', (argv = [], cwd) => {
+  app.on('second-instance', (e, argv = [], cwd) => {
     logger.info('[CLI] Other instance was launched', 'cwd:', cwd, 'argv:', argv)
     // Quit old instance when headless is started
     const isHeadless =
