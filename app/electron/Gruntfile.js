@@ -140,8 +140,8 @@ module.exports = (grunt) => {
       packageJson: {
         files: [
           {
-            src: ['package.json'],
-            dest: 'build/javascript/package.json'
+            src: ['package.json', 'package-lock.json'],
+            dest: 'build/javascript/'
           }
         ]
       }
