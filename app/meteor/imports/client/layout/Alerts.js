@@ -43,10 +43,14 @@ const CustomAlert = ({ classNames, id, styles, message, handleClose, customField
       }}>
       {message}
     </span>
-    <span
-      className='s-alert-close'
-      onClick={handleClose}
-      style={{ top: 15, right: 10 }} />
+    {
+      customFields.canClose !== false &&
+        <span
+          className='s-alert-close'
+          onClick={handleClose}
+          style={{ top: 15, right: 10 }}
+        />
+    }
   </div>
 )
 

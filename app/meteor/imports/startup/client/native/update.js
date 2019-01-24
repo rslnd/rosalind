@@ -6,13 +6,11 @@ import { onNativeEvent } from './events'
 export default () => {
   let didNotify = false
 
-  onNativeEvent('update/available', ({ newVersion }) => {
+  const showUpdatePrompt = ({ newVersion }) => {
     console.log('[Client] Received update available event from native binding', { newVersion })
 
     if (!didNotify) {
       Alert.info(<div>
-        <i className='fa fa-heart' title={`v${newVersion}`} />
-        &nbsp;&nbsp;
         {__('ui.updateAvailableMessage')}
         <br />
         {
@@ -24,9 +22,19 @@ export default () => {
                 {__('ui.updateInstallNow')}
             </div>
         }
-      </div>, { timeout: 'none' })
+      </div>, {
+        timeout: 'none',
+        customFields: {
+          icon: 'heart',
+          canClose: false
+        }
+      })
     }
 
     didNotify = true
-  })
+  }
+
+  onNativeEvent('update/available', showUpdatePrompt)
+
+  window.showUpdatePrompt = showUpdatePrompt
 }
