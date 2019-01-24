@@ -15,24 +15,6 @@
 
 </div>
 
-
-## Quickstart
-
-### Develop
-
-`yarn run start`
-
-`yarn run client:start`
-
-### Test
-
-`yarn run test`
-
-### Deploy
-
-`yarn run client:build`
-
-
 ## Screenshots
 
 <img src="./docs/inbound_calls.png" alt="Inbound Calls"/>

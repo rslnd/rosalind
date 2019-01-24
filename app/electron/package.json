@@ -45,9 +45,9 @@
     "node": "^8.9.3"
   },
   "scripts": {
-    "client:start": "./node_modules/.bin/grunt",
-    "client:build": "./node_modules/.bin/grunt build",
-    "client:package": "./node_modules/.bin/grunt package",
-    "client:tag": "./node_modules/.bin/grunt tag"
+    "start": "./node_modules/.bin/grunt",
+    "build": "./node_modules/.bin/grunt build",
+    "package": "./node_modules/.bin/grunt package",
+    "tag": "./node_modules/.bin/grunt tag"
   }
 }
