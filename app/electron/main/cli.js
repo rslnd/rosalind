@@ -2,9 +2,17 @@ const { app } = require('electron')
 const logger = require('./logger')
 
 const handleStartupEvent = callback => {
-  const gotTheLock = app.requestSingleInstanceLock()
+  const apiVersion =
+    app.requestSingleInstanceLock
+    ? 4
+    : 3
 
-  app.on('second-instance', (e, argv = [], cwd) => {
+  // Only quit newer instance if current one is non-headless.
+  // Inversely, quit the older current instance if it was headless.
+  const isHeadless = process.argv.join(' ').indexOf('headless') !== -1
+  let isSecondInstance = null
+
+  const handleOtherInstanceLaunched = (argv, cwd) => {
     logger.info('[CLI] Other instance was launched', 'cwd:', cwd, 'argv:', argv)
     // Quit old instance when headless is started
     const isHeadless =
@@ -17,11 +25,21 @@ const handleStartupEvent = callback => {
     } else {
       callback(argv, cwd)
     }
-  })
+  }
 
-  // Only quit newer instance if it is not headless
-  const isHeadless = process.argv.join(' ').indexOf('headless') !== -1
-  if (!gotTheLock && !isHeadless) {
+  if (apiVersion === 4) {
+    isSecondInstance = !app.requestSingleInstanceLock()
+
+    app.on('second-instance', (e, argv = [], cwd) => {
+      handleOtherInstanceLaunched(argv, cwd)
+    })
+  } else {
+    isSecondInstance = app.makeSingleInstance((argv, cwd) => {
+      handleOtherInstanceLaunched(argv, cwd)
+    })
+  }
+
+  if (isSecondInstance && !isHeadless) {
     logger.info('[CLI] Quitting because other instance is already running')
     return true
   }
