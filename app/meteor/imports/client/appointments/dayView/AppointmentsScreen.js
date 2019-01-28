@@ -121,7 +121,7 @@ export class AppointmentsScreen extends React.Component {
           </div>
         </div>
 
-        <div className='content print-zoom-1'>
+        <div className='content print-zoom-1' style={appointmentsViewStyle}>
           <AppointmentsView
             assignees={this.props.assignees}
             date={this.props.date}
@@ -147,4 +147,9 @@ export class AppointmentsScreen extends React.Component {
       </div>
     )
   }
+}
+
+// Fix weird scrolling jumps while moving appointments in Chrome
+const appointmentsViewStyle = {
+  overflowAnchor: 'none'
 }

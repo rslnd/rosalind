@@ -240,32 +240,35 @@ export class HeaderRow extends React.Component {
           expanded={this.state.hovering} />
         <div style={topPaddingStyle} />
 
-        <Modal
-          enforceFocus={false}
-          show={!!this.state.changingAssignee}
-          bsSize='small'>
-          <Modal.Body>
-            <UserPicker
-              autoFocus
-              onChange={newAssigneeId => this.setState({ changingAssignee: {
-                oldAssigneeId: this.state.changingAssignee.oldAssigneeId,
-                newAssigneeId
-              }})}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <div className='pull-left'>
-              <Button onClick={() => this.setState({ changingAssignee: false })}>
-                {__('ui.close')}
-              </Button>
-            </div>
-            <div className='pull-right'>
-              <Button color='primary' onClick={this.handleChangeAssigneeFinishClick}>
-                {__('ui.ok')}
-              </Button>
-            </div>
-          </Modal.Footer>
-        </Modal>
+        {
+          this.state.changingAssignee &&
+            <Modal
+              enforceFocus={false}
+              show={!!this.state.changingAssignee}
+              bsSize='small'>
+              <Modal.Body>
+                <UserPicker
+                  autoFocus
+                  onChange={newAssigneeId => this.setState({ changingAssignee: {
+                    oldAssigneeId: this.state.changingAssignee.oldAssigneeId,
+                    newAssigneeId
+                  }})}
+                />
+              </Modal.Body>
+              <Modal.Footer>
+                <div className='pull-left'>
+                  <Button onClick={() => this.setState({ changingAssignee: false })}>
+                    {__('ui.close')}
+                  </Button>
+                </div>
+                <div className='pull-right'>
+                  <Button color='primary' onClick={this.handleChangeAssigneeFinishClick}>
+                    {__('ui.ok')}
+                  </Button>
+                </div>
+              </Modal.Footer>
+            </Modal>
+        }
       </div>
     )
   }
