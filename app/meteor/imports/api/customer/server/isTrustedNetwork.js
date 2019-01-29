@@ -28,5 +28,8 @@ export const isTrustedNetwork = ip => {
 
 export const isLocalhost = ip => {
   validateIp(ip)
-  return ip === null
+  return (
+    (ip === null) ||
+    (ip === '127.0.0.1')
+  )
 }
