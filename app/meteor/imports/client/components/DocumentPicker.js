@@ -31,37 +31,51 @@ export class DocumentPicker extends React.Component {
   }
 
   handleQueryChange (query) {
+    const { onChange, isMulti } = this.props
+
     this.setState({
       query: query
     })
 
-    if (this.props.onChange && query) {
-      if (this.props.isMulti && query.length >= 1) {
-        this.props.onChange(query.map(q => q.value))
+    if (onChange && query) {
+      if (isMulti && query.length >= 1) {
+        onChange(query.map(q => q.value))
       } else {
-        this.props.onChange(query.value)
+        onChange(query.value)
       }
     } else {
-      this.props.onChange(null)
+      onChange(null)
     }
   }
 
   render () {
+    const {
+      value,
+      isStateless,
+      render,
+      options,
+      toDocument,
+      isMulti,
+      autoFocus,
+      placeholder
+    } = this.props
+
     return (
       <Select
         value={
-          (this.props.value || this.props.isStateless)
-          ? toOption(this.props)(this.props.toDocument(this.props.value))
+          (value || isStateless)
+          ? toOption(this.props)(toDocument(value))
           : this.state.query
         }
         onChange={this.handleQueryChange}
-        options={this.props.options(this.props).map(toOption(this.props))}
+        formatOptionLabel={render}
+        options={options(this.props).map(toOption(this.props))}
         ignoreCase
         isClearable
-        isMulti={this.props.isMulti}
+        isMulti={isMulti}
         styles={customStyles}
-        autoFocus={this.props.autoFocus || false}
-        placeholder={this.props.placeholder || __('ui.select')} />
+        autoFocus={autoFocus || false}
+        placeholder={placeholder || __('ui.select')} />
     )
   }
 }
