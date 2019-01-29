@@ -218,12 +218,11 @@ export class Table extends React.Component {
         }
       }) : ({
         $set: {
-          [field]: newValue,
-          a: 'b'
+          [field]: newValue
         }
       })
 
-    console.log('[InlineEditTable] Update', update)
+    console.log('[InlineEditTable] Update', _id, update)
 
     this.props.onUpdate(_id, update)
     this.handleEditEnd()

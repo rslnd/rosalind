@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
 import { Roles } from 'meteor/alanning:roles'
@@ -28,7 +29,9 @@ const composer = (props) => {
 
   const getAssigneeName = id => id && Users.methods.fullNameWithTitle(Users.findOne(id), { removed: true })
   const isInRole = (user, role) => Roles.userIsInRole(user, [role])
-  const handleUpdate = () => {}
+  const handleUpdate = (_id, update) => {
+    Users.update({ _id }, update)
+  }
 
   return { groups, getAssigneeName, handleUpdate, isInRole }
 }

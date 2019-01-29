@@ -7,13 +7,14 @@ export const updateProfile = ({ Users }) =>
     name: 'users/updateProfile',
     args: {
       userId: String,
-      username: String,
-      lastName: String,
+      username: Match.Maybe(String),
+      lastName: Match.Maybe(String),
       firstName: Match.Maybe(String),
       titlePrepend: Match.Maybe(String),
       titleAppend: Match.Maybe(String),
       employee: Match.Maybe(Boolean),
-      groupId: Match.Maybe(String)
+      groupId: Match.Maybe(String),
+      allowedClientIds: Match.Optional([String])
     },
     roles: ['admin', 'users-edit'],
     fn: async (args) => {

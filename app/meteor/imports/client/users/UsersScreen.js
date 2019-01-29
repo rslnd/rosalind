@@ -1,9 +1,16 @@
+import idx from 'idx'
+import { Meteor } from 'meteor/meteor'
+import { withProps } from 'recompose'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import sum from 'lodash/sum'
+import { Clients } from '../../api/clients'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
+import { ClientsPicker } from '../clients/ClientsPicker'
+import { subscribe } from '../../util/meteor/subscribe'
+import { withTracker } from '../components/withTracker'
 
 const toggleablePermissions = [
   {
@@ -88,13 +95,27 @@ const structure = ({ getAssigneeName, isInRole }) => [
   },
 
   {
+    icon: 'desktop',
+    field: 'allowedClientIds',
+    description: 'Restrict Login to Client Ids',
+    isMulti: true,
+    EditComponent: ClientsPicker,
+    render: c => c.allowedClientIds && c.allowedClientIds.length
+  },
+
+  {
     header: '',
     render: u => <Link to={`/users/${u._id}/edit`}>Bearbeiten</Link>,
     style: { width: 100, textAlign: 'right' }
   }
 ]
 
-export const UsersScreen = ({ groups, getAssigneeName, handleUpdate, isInRole }) =>
+const composer = props => {
+  subscribe('clients')
+  return props
+}
+
+export const UsersScreen = withTracker(composer)(({ groups, getAssigneeName, handleUpdate, isInRole }) =>
   <div>
     <div className='content-header enable-select show-print'>
       <h1>
@@ -132,3 +153,4 @@ export const UsersScreen = ({ groups, getAssigneeName, handleUpdate, isInRole })
       </div>
     </div>
   </div>
+)

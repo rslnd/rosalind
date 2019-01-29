@@ -59,6 +59,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  allowedClientIds: {
+    type: [SimpleSchema.RegEx.Id],
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     optional: true,

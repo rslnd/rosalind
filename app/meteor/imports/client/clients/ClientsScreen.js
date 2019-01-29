@@ -30,6 +30,7 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
     header: 'Login ohne Passwort nur für bestimmte Benutzergruppen',
     field: 'passwordlessGroupIds',
     EditComponent: GroupPicker,
+    unsetWhenEmpty: true,
     isMulti: true,
     render: c => c.passwordlessGroupIds && c.passwordlessGroupIds
       .map(g => getGroupName(g)).join(', ')
