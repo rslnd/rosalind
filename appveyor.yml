@@ -36,6 +36,12 @@ build_script:
     $env:ROSALIND_VERSION = "v" + $package.version
 
 
+    $env:CERTIFICATE_FILE = "C:\signing_certificate.p12"
+
+
+    (New-Object Net.WebClient).DownloadFile($env:CERTIFICATE_URL, $env:CERTIFICATE_FILE)
+
+
     cmd /c 'npm run build 2>&1'
 
 
