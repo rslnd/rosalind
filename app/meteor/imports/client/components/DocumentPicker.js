@@ -1,6 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 import { __ } from '../../i18n'
+import { getStyleNonce } from '../layout/styles'
 
 const toOption = props => doc => {
   return doc ? {
@@ -75,7 +76,9 @@ export class DocumentPicker extends React.Component {
         isMulti={isMulti}
         styles={customStyles}
         autoFocus={autoFocus || false}
-        placeholder={placeholder || __('ui.select')} />
+        placeholder={placeholder || __('ui.select')}
+        nonce={getStyleNonce()}
+      />
     )
   }
 }

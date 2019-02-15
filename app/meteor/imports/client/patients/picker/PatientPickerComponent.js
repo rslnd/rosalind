@@ -11,7 +11,7 @@ import { Birthday } from '../Birthday'
 import { TagsList } from '../../tags/TagsList'
 import { UserHelper } from '../../users/UserHelper'
 import { Indicator } from '../../appointments/appointment/Indicator'
-import { darkGrayDisabled } from '../../layout/styles'
+import { darkGrayDisabled, getStyleNonce } from '../../layout/styles'
 import { Users } from '../../../api/users'
 import Button from '@material-ui/core/Button'
 
@@ -45,6 +45,7 @@ export const PatientPickerComponent = ({
     noOptionsMessage={noOptionsMessage}
     loadingMessage={loadingMessage}
     placeholder={__('patients.search')}
+    nonce={getStyleNonce()}
   />
 
 const NewPatient = ({ patient }) =>

@@ -88,10 +88,8 @@ const getHelmetConfig = () => {
         styleSrc: [
           self,
           'https://cdn.smooch.io',
-          // TODO: Can't use unsafe-inline and nonce- in the same clause
-          // Replace unsafe-inline with nonce for react-select asap
-          "'unsafe-inline'"
-          // (req, res) => `'nonce-${req.styleNonce}'`
+          // react-select needs a nonce
+          (req, res) => `'nonce-${req.styleNonce}'`
         ],
         workerSrc: [
           none
