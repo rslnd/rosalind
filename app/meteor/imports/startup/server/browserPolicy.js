@@ -149,8 +149,10 @@ const getHelmetConfig = () => {
 
 export default () => {
   Meteor.startup(() => {
-    // BUG: SRI Hash for module.js is incorrect
-    // WebAppInternals.enableSubresourceIntegrity()
+    // Apparently the SRI hash of modules.js is incorrect in development
+    if (process.env.NODE_ENV === 'production') {
+      WebAppInternals.enableSubresourceIntegrity()
+    }
 
     WebAppInternals.setInlineScriptsAllowed(false)
 
