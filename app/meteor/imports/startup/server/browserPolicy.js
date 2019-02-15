@@ -21,6 +21,7 @@ const getHelmetConfig = () => {
   const helmetConfig = {
     contentSecurityPolicy: {
       browserSniff: false,
+      blockAllMixedContent: true,
       directives: {
         baseUri: [
           none
@@ -52,10 +53,9 @@ const getHelmetConfig = () => {
           self
         ],
         frameAncestors: [
-          self
+          none
         ],
         frameSrc: [
-          self,
           'https://cdn.smooch.io'
         ],
         imgSrc: [
@@ -119,6 +119,7 @@ const getHelmetConfig = () => {
     referrerPolicy: {
       policy: 'no-referrer'
     },
+    setAllHeaders: true,
     xssFilter: {
       mode: 'block',
       reportUri
