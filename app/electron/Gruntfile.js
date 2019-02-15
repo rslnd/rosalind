@@ -92,7 +92,9 @@ module.exports = (grunt) => {
         exe: '<%= pkg.productName %>.exe',
         title: '<%= pkg.productName %>',
         iconUrl: 'https://raw.githubusercontent.com/rslnd/rosalind/master/app/electron/assets/appicon.ico',
-        setupIcon: 'assets/appicon.ico'
+        setupIcon: 'assets/appicon.ico',
+        certificateFile: process.env.CERTIFICATE_FILE,
+        certificatePassword: process.env.CERTIFICATE_PASSWORD
       }
     },
 
