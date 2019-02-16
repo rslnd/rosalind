@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.162",
+  "version": "0.0.163",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -39,20 +39,16 @@
     "winston-papertrail": "^1.0.5"
   },
   "build": {
-    "appId": "com.squirrel.rslnd.rosalind",
+    "appId": "com.rslnd.rosalind",
     "directories": {
       "buildResources": "assets",
       "output": "build"
     },
     "readonly": true,
     "forceCodeSigning": true,
-    "win": {
-      "target": "squirrel",
-      "icon": "assets/appicon.ico",
-      "publish": "github"
-    },
-    "squirrelWindows": {
-      "iconUrl": "https://github.com/rslnd/rosalind/blob/master/app/electron/assets/appicon.ico?raw=true",
+    "nsis": {
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": false,
       "publish": "github"
     },
     "afterPack": "./compileAutoIt.js"
@@ -60,7 +56,7 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/electron-builder install-app-deps",
     "pack": "./node_modules/.bin/electron-builder --dir",
-    "build": "./node_modules/.bin/electron-builder",
+    "build": "./node_modules/.bin/electron-builder --x64",
     "release": "build",
     "tag": "node tag.js | /bin/sh"
   }
