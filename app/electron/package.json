@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.163",
+  "version": "0.0.164",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -44,8 +44,16 @@
       "buildResources": "assets",
       "output": "build"
     },
+    "files": [
+      "**/*",
+      "assets/appicon.ico",
+      "assets/eoswinPrinter.reg"
+    ],
     "readonly": true,
     "forceCodeSigning": true,
+    "win": {
+      "icon": "assets/appicon.ico"
+    },
     "nsis": {
       "createDesktopShortcut": false,
       "createStartMenuShortcut": false,
