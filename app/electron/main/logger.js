@@ -7,6 +7,8 @@ require('winston-papertrail')
 const { ipcMain, app } = require('electron')
 const { inspect } = require('util')
 
+const PAPERTRAIL_URL = 'logs4.papertrailapp.com:20784'
+
 const start = () => {
   winston.add(winston.transports.File, {
     filename: path.join(app.getPath('userData'), 'RosalindElectron.log'),
@@ -19,25 +21,22 @@ const start = () => {
     eol: '\r\n'
   })
 
-  // Grunt replaces the @@ variables on CI
-  if ('@@CI'.indexOf('@@') === -1) {
-    const host = '@@PAPERTRAIL_URL'.split(':')[0]
-    const port = parseInt('@@PAPERTRAIL_URL'.split(':')[1])
+  const host = PAPERTRAIL_URL.split(':')[0]
+  const port = parseInt(PAPERTRAIL_URL.split(':')[1])
 
-    if (host && port) {
-      let customerHostname = 'development'
-      try {
-        const settings = require('./settings')
-        customerHostname = url.parse(settings.url).hostname
-      } catch (e) {
-        winston.error('[Log] Could not parse customer hostname for centralized logging, falling back to "development"', e)
-      }
-
-      const hostname = [os.hostname(), customerHostname].join('.')
-      const program = [ [ 'rosalind', os.platform(), os.arch() ].join('-'), app.getVersion() ].join('/')
-      winston.info('[Log] Enabling papertrail log transport', { program, hostname })
-      winston.add(winston.transports.Papertrail, { host, port, program, hostname })
+  if (host && port) {
+    let customerHostname = 'development'
+    try {
+      const settings = require('./settings')
+      customerHostname = url.parse(settings.url).hostname
+    } catch (e) {
+      winston.error('[Log] Could not parse customer hostname for centralized logging, falling back to "development"', e)
     }
+
+    const hostname = [os.hostname(), customerHostname].join('.')
+    const program = [ [ 'rosalind', os.platform(), os.arch() ].join('-'), app.getVersion() ].join('/')
+    winston.info('[Log] Enabling papertrail log transport', { program, hostname })
+    winston.add(winston.transports.Papertrail, { host, port, program, hostname })
   }
 
   winston.info('[Log] App launched in: ', process.execPath)

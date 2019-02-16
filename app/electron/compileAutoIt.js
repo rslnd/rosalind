@@ -1,16 +1,19 @@
 const path = require('path')
 const childProcess = require('child_process')
 
-const main = () => {
-  const au3Path = path.join(__dirname, 'assets', 'generateEoswinReports.au3')
-  const exePath = path.join(__dirname, 'build', 'javascript', 'generateEoswinReports.exe')
+const main = async (afterPackContext) => {
+  console.log('[compileAutoIt]', afterPackContext)
 
-  compile(au3Path, exePath)
-    .then(() => console.log('[compile] Success'))
-    .catch(code => {
-      console.error('[compile] Compiler exited with code', code)
-      process.exit(code)
-    })
+  const au3Path = path.join(__dirname, 'assets', 'generateEoswinReports.au3')
+  const exePath = path.join(afterPackContext.appOutDir, 'generateEoswinReports.exe')
+
+  try {
+    await compile(au3Path, exePath)
+  } catch (code) {
+    throw new Error(`[compileAutoIt] Compiler exited with code ${code}`)
+  }
+
+  console.log('[compileAutoIt] Success')
 }
 
 const compile = (input, output) => {
@@ -21,22 +24,22 @@ const compile = (input, output) => {
     '/console'
   ]
 
-  console.log('[compile] Compiling: Aut2exe', args)
+  console.log('[compileAutoIt] Compiling: Aut2exe', args)
 
   const compiler = childProcess.spawn('Aut2exe', args)
   compiler.stdout.setEncoding('utf8')
 
   compiler.stdout.on('data', d =>
-    console.log('[compile]', d)
+    console.log('[compileAutoIt]', d)
   )
 
   compiler.stderr.on('data', d =>
-    console.error('[compile] error:', d)
+    console.error('[compileAutoIt] error:', d)
   )
 
   return new Promise((resolve, reject) => {
     compiler.on('close', code => {
-      console.log('[compile] Compiler exited with code', code)
+      console.log('[compileAutoIt] Compiler exited with code', code)
 
       if (code === 0) {
         resolve(output)
@@ -47,4 +50,4 @@ const compile = (input, output) => {
   })
 }
 
-main()
+module.exports = main

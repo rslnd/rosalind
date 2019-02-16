@@ -1,27 +1,24 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.159",
+  "version": "0.0.160",
   "private": true,
   "description": "Rosalind",
-  "author": "Albert Zak",
+  "author": {
+    "name": "Albert Zak",
+    "email": "security@rslnd.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/albertzak/rosalind"
   },
+  "homepage": "https://update.rslnd.com",
   "main": "main/main.js",
   "devDependencies": {
     "electron": "^2.0.7",
+    "electron-builder": "^20.38.5",
+    "electron-builder-squirrel-windows": "^20.38.5",
     "electron-packager": "^12.1.1",
-    "grunt": "^1.0.3",
-    "grunt-cli": "^1.3.1",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-rename-util": "^1.0.0",
-    "grunt-electron": "^9.0.1",
-    "grunt-electron-installer": "^2.1.0",
-    "grunt-shell": "^2.1.0",
-    "grunt-string-replace": "^1.3.0",
     "shelljs": "^0.8.2"
   },
   "dependencies": {
@@ -41,13 +38,30 @@
     "winston": "^2.4.4",
     "winston-papertrail": "^1.0.5"
   },
-  "engines": {
-    "node": "^8.9.3"
+  "build": {
+    "appId": "com.squirrel.rslnd.rosalind",
+    "directories": {
+      "buildResources": "assets",
+      "output": "build"
+    },
+    "readonly": true,
+    "forceCodeSigning": true,
+    "win": {
+      "target": "squirrel",
+      "icon": "assets/appicon.ico",
+      "publish": "github"
+    },
+    "squirrelWindows": {
+      "iconUrl": "https://github.com/rslnd/rosalind/blob/master/app/electron/assets/appicon.ico?raw=true",
+      "publish": "github"
+    },
+    "afterPack": "./compileAutoIt.js"
   },
   "scripts": {
-    "start": "./node_modules/.bin/grunt",
-    "build": "./node_modules/.bin/grunt build",
-    "package": "./node_modules/.bin/grunt package",
-    "tag": "./node_modules/.bin/grunt tag"
+    "postinstall": "./node_modules/.bin/electron-builder install-app-deps",
+    "pack": "./node_modules/.bin/electron-builder --dir",
+    "build": "./node_modules/.bin/electron-builder",
+    "release": "build",
+    "tag": "node tag.js | /bin/sh"
   }
 }

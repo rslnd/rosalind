@@ -1,9 +1,11 @@
 console.log('[Electron Native] Enabling native bindings')
 const { ipcRenderer } = require('electron')
 
+const SENTRY_DSN_URL = 'https://6af65eb19a37410f968d4e602ce572d7@sentry.io/62218'
+
 const { init } = require('@sentry/electron')
 init({
-  dsn: '@@SENTRY_DSN_URL'
+  dsn: SENTRY_DSN_URL
 })
 
 const EventEmitter = require('eventemitter3')

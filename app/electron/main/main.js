@@ -5,22 +5,23 @@ module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', '
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app.asar', 'node_modules'))
 
 const { app, ipcMain, crashReporter } = require('electron')
+const { init } = require('@sentry/electron')
 
-if ('@@CI'.indexOf('@@') === -1) {
-  const { init } = require('@sentry/electron')
-  init({
-    dsn: '@@SENTRY_DSN_URL',
-    enableNative: false,
-    release: app.getVersion()
-  })
+const SENTRY_DSN_URL = 'https://6af65eb19a37410f968d4e602ce572d7@sentry.io/62218'
+const SENTRY_CRASH_URL = 'https://sentry.io/api/62218/minidump?sentry_key=6af65eb19a37410f968d4e602ce572d7'
 
-  crashReporter.start({
-    companyName: 'YourCompany',
-    productName: 'YourApp',
-    ignoreSystemCrashHandler: true,
-    submitURL: '@@SENTRY_CRASH_URL'
-  })
-}
+init({
+  dsn: SENTRY_DSN_URL,
+  enableNative: false,
+  release: app.getVersion()
+})
+
+crashReporter.start({
+  companyName: 'Rosalind',
+  productName: 'Rosalind',
+  ignoreSystemCrashHandler: true,
+  submitURL: SENTRY_CRASH_URL
+})
 
 const logger = require('./logger')
 logger.start()
