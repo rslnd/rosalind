@@ -23,6 +23,8 @@ crashReporter.start({
   submitURL: SENTRY_CRASH_URL
 })
 
+process.env.ELECTRON_ENABLE_SECURITY_WARNINGS = true
+
 const logger = require('./logger')
 logger.start()
 
