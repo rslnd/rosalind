@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.164",
+  "version": "0.0.165",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -25,6 +25,7 @@
     "@sentry/electron": "^0.8.1",
     "chokidar": "^2.0.4",
     "electron-localshortcut": "^3.1.0",
+    "electron-updater": "^4.0.6",
     "eventemitter3": "^3.1.0",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
@@ -57,6 +58,7 @@
     "nsis": {
       "createDesktopShortcut": false,
       "createStartMenuShortcut": false,
+      "language": 7,
       "publish": "github"
     },
     "afterPack": "./compileAutoIt.js"
