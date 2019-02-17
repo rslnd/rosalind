@@ -1,5 +1,8 @@
 console.log('[Electron Native] Enabling native bindings')
-const { ipcRenderer } = require('electron')
+
+window.ELECTRON_ENABLE_SECURITY_WARNINGS = true
+
+const { ipcRenderer, webFrame } = require('electron')
 
 const SENTRY_DSN_URL = 'https://6af65eb19a37410f968d4e602ce572d7@sentry.io/62218'
 
@@ -10,13 +13,10 @@ init({
 
 const EventEmitter = require('eventemitter3')
 
-// TODO Figure out how to fetch settings before loading page.
-// Client key null throws nasty exceptions on server, and
-// shows loading spinner indefinitely until user clicks somewhere
+// TODO Rework to play nice with contextIsolation: true
 
 try {
   window.native = {
-    electron: process.versions.electron,
     settings: null,
     systemInfo: null,
     editSettings: () => ipcRenderer.send('settings/edit'),

@@ -1,33 +1,30 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.172",
+  "version": "0.0.173",
   "private": true,
   "description": "Rosalind",
-  "author": "Albert Zak",
+  "author": {
+    "name": "Albert Zak",
+    "email": "security@rslnd.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/albertzak/rosalind"
   },
+  "homepage": "https://update.rslnd.com",
   "main": "main/main.js",
   "devDependencies": {
-    "electron": "^2.0.7",
+    "electron": "^4.0.5",
+    "electron-builder": "^20.38.5",
     "electron-packager": "^12.1.1",
-    "grunt": "^1.0.3",
-    "grunt-cli": "^1.3.1",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-rename-util": "^1.0.0",
-    "grunt-electron": "^9.0.1",
-    "grunt-electron-installer": "^2.1.0",
-    "grunt-shell": "^2.1.0",
-    "grunt-string-replace": "^1.3.0",
     "shelljs": "^0.8.2"
   },
   "dependencies": {
     "@sentry/electron": "^0.8.1",
     "chokidar": "^2.0.4",
     "electron-localshortcut": "^3.1.0",
+    "electron-updater": "^4.0.6",
     "eventemitter3": "^3.1.0",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
@@ -41,10 +38,36 @@
     "winston": "^2.4.4",
     "winston-papertrail": "^1.0.5"
   },
+  "build": {
+    "appId": "com.rslnd.rosalind",
+    "directories": {
+      "buildResources": "assets",
+      "output": "build"
+    },
+    "files": [
+      "**/*",
+      "assets/appicon.ico",
+      "assets/eoswinPrinter.reg"
+    ],
+    "readonly": true,
+    "forceCodeSigning": true,
+    "win": {
+      "icon": "assets/appicon.ico"
+    },
+    "nsis": {
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": false,
+      "language": 7,
+      "publish": "github"
+    },
+    "afterPack": "./compileAutoIt.js"
+  },
   "scripts": {
-    "start": "./node_modules/.bin/grunt",
-    "build": "./node_modules/.bin/grunt build",
-    "package": "./node_modules/.bin/grunt package",
-    "tag": "./node_modules/.bin/grunt tag"
+    "postinstall": "./node_modules/.bin/electron-builder install-app-deps",
+    "start": "./node_modules/.bin/electron .",
+    "pack": "./node_modules/.bin/electron-builder --dir",
+    "build": "./node_modules/.bin/electron-builder --x64",
+    "release": "build",
+    "tag": "node tag.js | /bin/sh"
   }
 }

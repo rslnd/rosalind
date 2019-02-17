@@ -1,9 +1,12 @@
-const { app, autoUpdater, ipcMain } = require('electron')
+const { app, ipcMain } = require('electron')
+const { autoUpdater } = require('electron-updater')
 const logger = require('./logger')
 const manifest = require('./manifest')
 const settings = require('./settings')
 const shortcuts = require('./shortcuts')
 const { captureException } = require('@sentry/electron')
+
+autoUpdater.logger = logger
 
 let updateDownloaded = false
 let mainWindow = null
@@ -58,29 +61,22 @@ const handleStartupEvent = () => {
 const start = () => {
   if (process.platform !== 'win32') { return }
 
-  logger.info('[Updater] Setting feed URL')
-  const feedBaseUrl = (settings && settings.updateUrl) || 'https://update.rslnd.com'
-  const feedUrl = feedBaseUrl + '/update/' + process.platform + '/v' + manifest.version
-  autoUpdater.setFeedURL(feedUrl)
-
   autoUpdater.on('error', (err) => {
     if (err) {
-      if (typeof err === 'string' && err.indexOf('Remote release File is empty or corrupted') > -1) { return }
-      if (typeof err === 'object' && err.message && err.message.indexOf('Remote release File is empty or corrupted') > -1) { return }
       captureException(err)
       logger.error('[Updater] Errored with', err)
     }
   })
 
-  autoUpdater.on('update-available', () => {
-    logger.info('[Updater] New update available')
+  autoUpdater.on('update-available', info => {
+    logger.info(`[Updater] New update available: ${info.version}`)
   })
 
-  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateURL) => {
-    logger.info('[Updater] New update downloaded', { event, releaseNotes, releaseName, releaseDate, updateURL })
+  autoUpdater.on('update-downloaded', info => {
+    logger.info(`[Updater] New update downloaded: ${info.version}`)
 
     if (mainWindow) {
-      mainWindow.webContents.send('update/available', { newVersion: releaseName })
+      mainWindow.webContents.send('update/available', { newVersion: info.version })
     }
 
     updateDownloaded = true
