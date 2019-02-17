@@ -1,5 +1,5 @@
 const includes = require('lodash/includes')
-const { app, session, BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron')
 const logger = require('./logger')
 const settings = require('./settings')
 const { captureException } = require('@sentry/electron')
@@ -7,42 +7,6 @@ const { captureException } = require('@sentry/electron')
 const open = (callback) => {
   const { screen } = require('electron')
   const display = screen.getPrimaryDisplay().workAreaSize
-
-  app.on('web-contents-created', (event, contents) => {
-    contents.on('will-attach-webview', (event, webPreferences, params) => {
-      // Strip away preload scripts if unused or verify their location is legitimate
-      delete webPreferences.preload
-      delete webPreferences.preloadURL
-
-      // Disable Node.js integration
-      webPreferences.nodeIntegration = false
-
-      // Deny, or verify URL being loaded
-      event.preventDefault()
-
-      logger.info('[Window] Denied attaching webview', params)
-    })
-
-    contents.on('will-navigate', (event, navigationUrl) => {
-      const parsedUrl = new URL(navigationUrl)
-      if (parsedUrl.origin !== 'https://*.rslnd.com') {
-        event.preventDefault()
-        logger.info('[Window] Denied navigation to', navigationUrl)
-      }
-    })
-
-    contents.on('new-window', (event, navigationUrl) => {
-      event.preventDefault()
-      logger.info('[Window] Denied opening new window', navigationUrl)
-    })
-  })
-
-  const ephemeralSession = session
-    .fromPartition('in-memory')
-    .setPermissionRequestHandler((webContents, permission, callback) => {
-      // Deny all
-      callback(false)
-    })
 
   const mainWindow = new BrowserWindow({
     x: display.x,
@@ -54,15 +18,13 @@ const open = (callback) => {
     disableAutoHideCursor: true,
     backgroundColor: '#ecf0f5',
     webPreferences: {
-      preload: require.resolve('../renderer/preload'),
+      preload: require.resolve('../renderer/native'),
+      experimentalFeatures: true,
       nodeIntegration: false,
-      contextIsolation: false, // TODO: Rework native API
-      session: ephemeralSession,
       textAreasAreResizable: false,
+      experimentalCanvasFeatures: true,
       subpixelFontScaling: true,
-      overlayScrollbars: false,
-      webgl: false,
-      webaudio: false
+      overlayScrollbars: false
     }
   })
 
