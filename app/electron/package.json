@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.169",
+  "version": "0.0.170",
   "private": true,
   "description": "Rosalind",
   "author": "Albert Zak",
@@ -40,9 +40,6 @@
     "windows-shortcuts-appid": "^0.3.2",
     "winston": "^2.4.4",
     "winston-papertrail": "^1.0.5"
-  },
-  "engines": {
-    "node": "^8.9.3"
   },
   "scripts": {
     "start": "./node_modules/.bin/grunt",
