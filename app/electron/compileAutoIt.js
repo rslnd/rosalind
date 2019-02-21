@@ -1,17 +1,24 @@
 const path = require('path')
 const childProcess = require('child_process')
 
+const autoItScripts = [
+  'focus',
+  'generateEoswinReports'
+]
+
 const main = async (afterPackContext) => {
   console.log('[compileAutoIt]', afterPackContext)
 
-  const au3Path = path.join(__dirname, 'assets', 'generateEoswinReports.au3')
-  const exePath = path.join(afterPackContext.appOutDir, 'generateEoswinReports.exe')
+  autoItScripts.forEach(async name => {
+    const au3Path = path.join(__dirname, 'assets', [name, 'au3'].join('.'))
+    const exePath = path.join(afterPackContext.appOutDir, [name, 'exe'].join('.'))
 
-  try {
-    await compile(au3Path, exePath)
-  } catch (code) {
-    throw new Error(`[compileAutoIt] Compiler exited with code ${code}`)
-  }
+    try {
+      await compile(au3Path, exePath)
+    } catch (code) {
+      throw new Error(`[compileAutoIt] Compiler exited with code ${code}`)
+    }
+  })
 
   console.log('[compileAutoIt] Success')
 }
