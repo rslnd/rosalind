@@ -7,7 +7,7 @@ branches:
 shallow_clone: true
 
 environment:
-  nodejs_version: '8.9.3'
+  nodejs_version: '10.15.1'
 
 install:
 - ps: >-
@@ -15,77 +15,17 @@ install:
 
     choco install autoit.commandline
 
+    choco install yarn
+
     echo "node version"
 
     node --version
 
-    echo "npm version"
-
-    npm --version
-
 - cmd: >-
     cd app\electron\
 
-    npm i
+    yarn
 
 build_script:
 - ps: >-
-    $package = Get-Content -Raw -Path package.json | out-string | ConvertFrom-Json
-
-
-    $env:ROSALIND_VERSION = "v" + $package.version
-
-
-    cmd /c 'npm run build 2>&1'
-
-
-after_build:
-- ps: >-
-    echo "--> Zipping app"
-
-    7z a "C:\projects\rosalind\app\electron\build\Rosalind-$env:ROSALIND_VERSION.zip" .\build\packaged\*
-
-test_script:
-- ps: >-
-    echo "--> Installing app"
-
-
-    & ".\build\installer\Rosalind-win32-x64\RosalindSetup-win-$env:ROSALIND_VERSION.exe"
-
-
-    Start-Sleep -s 30
-
-    taskkill /F /IM Rosalind.exe
-
-
-
-    echo "--> Launching app"
-
-
-    & Start-Process -Wait -ArgumentList --debug-quit-on-ready "$env:UserProfile\Desktop\Rosalind.lnk"
-
-
-    echo "--> Done"
-
-artifacts:
-- path: app\electron\build\installer\Rosalind-win32-x64\RELEASES
-  name: RELEASES-win-x64
-- path: app\electron\build\installer\Rosalind-win32-x64\*.msi
-  name: RosalindSetup-allUsers-win-x64.msi
-- path: app\electron\build\installer\Rosalind-win32-x64\*.exe
-  name: RosalindSetup-win-x64.exe
-- path: app\electron\build\installer\Rosalind-win32-x64\*.nupkg
-  name: rosalind-win-x64.nupkg
-- path: app\electron\build\Rosalind-$(ROSALIND_VERSION).zip
-  name: Rosalind.zip
-
-
-deploy:
-- provider: GitHub
-  tag: $(ROSALIND_VERSION)
-  release: $(ROSALIND_VERSION)
-  description: "🐣 Rosalind Client, Windows 64bit $(ROSALIND_VERSION)"
-  auth_token:
-    secure: PHADmhUgXdLiPP7KA7E+MqiX/CV9DMyoDfvFP+0pyzXfozFC0tiQ2QfdzlPEVU69
-  artifact: RosalindSetup-allUsers-win-x64.msi,RosalindSetup-win-x64.exe,RELEASES-win-x64,rosalind-win-x64.nupkg,Rosalind.zip
-  force_update: true
+    cmd /c 'yarn run release 2>&1'
