@@ -8,7 +8,7 @@ import { CameraViewfinder } from './CameraViewfinder'
 import { delay } from './util'
 import { cameraMode as cameraModes } from './withCameraMode'
 import { OverlayDocument } from './OverlayDocument'
-import Crop from 'react-native-perspective-image-cropper'
+import { Crop } from './Crop'
 
 export class CameraView extends React.Component {
   constructor (props) {
@@ -178,18 +178,11 @@ export class CameraView extends React.Component {
               />
             }
 
-            {
-              cropMedia && <Crop
-                width={cropMedia.width}
-                height={cropMedia.height}
-                initialImage={cropMedia.localPath}
-                rectangleCoordinates={cropCoordinates}
-                updateImage={handleCropChange}
-                overlayColor='rgba(18,190,210, 1)'
-                overlayStrokeColor='rgba(20,190,210, 1)'
-                handlerColor='rgba(20,150,160, 1)'
-              />
-            }
+            <Crop
+              cropMedia={cropMedia}
+              cropCoordinates={cropCoordinates}
+              handleCropChange={handleCropChange}
+            />
           </View>
         </TapGestureHandler>
 
