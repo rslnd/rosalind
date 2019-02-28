@@ -24,6 +24,19 @@ const Tag = new SimpleSchema({
   }
 })
 
+// Determines how appointment duration is calculated when multiple tags are selected
+const DurationStrategy = new SimpleSchema({
+  name: {
+    type: String,
+    allowedValues: ['max', 'add', 'addUpTo']
+  },
+
+  upTo: {
+    type: Number,
+    optional: true
+  }
+})
+
 export const Schema = new SimpleSchema({
   assigneeIds: {
     type: [SimpleSchema.RegEx.Id],
@@ -59,6 +72,11 @@ export const Schema = new SimpleSchema({
 
   to: {
     type: HM,
+    optional: true
+  },
+
+  durationStrategy: {
+    type: DurationStrategy,
     optional: true
   },
 

@@ -1,4 +1,3 @@
-import max from 'lodash/max'
 import { Users } from '../../users'
 import { Calendars } from '../../calendars'
 import { Constraints } from '../../constraints'
@@ -7,6 +6,7 @@ import { applyConstraintToTags } from '../../constraints/methods/applyConstraint
 import { Tags } from '../../tags'
 import { toWeekday } from '../../../util/time/weekdays'
 import { isWithinHMRange } from '../../../util/time/hm'
+import { applyDurationStrategy } from './durationStrategy'
 
 const defaultDuration = 5
 const getCalendarDefaultDuration = calendarId => {
@@ -28,22 +28,19 @@ export const isConstraintApplicable = ({ constraint, date }) => {
 }
 
 export const getDefaultDuration = ({ calendarId, assigneeId, date, tags = [] }) => {
-  let constrainedDuration = null
-
-  if (tags.length >= 1) {
-    const constraint = findConstraint(Constraints)({ calendarId, assigneeId, time: date })
-    const constrainedTags = applyConstraintToTags({
+  const unconstrainedTags = Tags.find({ _id: { $in: tags } }).fetch()
+  const constraint = findConstraint(Constraints)({ calendarId, assigneeId, time: date })
+  const constrainedTags = constraint && (unconstrainedTags.length >= 1) &&
+    applyConstraintToTags({
       constraint,
-      tags: Tags.find({ _id: { $in: tags } }).fetch()
+      tags: unconstrainedTags
     })
 
-    const tagDurations = (constrainedTags.length >= 1 ? constrainedTags : tags).map(t => t.duration)
+  const duration = applyDurationStrategy({
+    calendarId,
+    constraint,
+    tags: ((constrainedTags && constrainedTags.length >= 1) ? constrainedTags : unconstrainedTags)
+  })
 
-    // TODO: Apply durationStrategy from constraint here
-    constrainedDuration = max(tagDurations)
-  }
-
-  const defaultDuration = getCalendarDefaultDuration(calendarId)
-
-  return constrainedDuration || defaultDuration
+  return duration || getCalendarDefaultDuration({ calendarId })
 }

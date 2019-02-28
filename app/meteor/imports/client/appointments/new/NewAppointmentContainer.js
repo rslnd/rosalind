@@ -136,8 +136,6 @@ const withConstraint = props => {
     time: props.time
   })
 
-  console.log('withConstraint', constraint)
-
   return {
     ...props,
     constraint
