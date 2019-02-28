@@ -36,7 +36,8 @@ export const NewAppointmentFields = props => {
     onSubmitPause,
     patientId,
     extended,
-    change
+    change,
+    constraint
   } = props
 
   return (
@@ -62,6 +63,7 @@ export const NewAppointmentFields = props => {
               assigneeId={assigneeId}
               showDefaultRevenue={false}
               time={time}
+              constraint={constraint}
               fullWidth />
           </div>
           <div style={shrink}>

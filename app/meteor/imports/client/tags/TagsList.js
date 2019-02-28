@@ -33,6 +33,13 @@ const overlay = {
   opacity: 0.6
 }
 
+const durationStyle = {
+  opacity: 0.7,
+  verticalAlign: 'text-top',
+  display: 'inline-box',
+  marginLeft: 8
+}
+
 const Tag = withHandlers({
   handleClick: props => e => props.onClick && props.onClick(props.tag._id),
   handleMouseEnter: props => e => props.onMouseEnter && props.onMouseEnter(props.tag._id),
@@ -60,6 +67,9 @@ const Tag = withHandlers({
     textDecoration: tag.removed ? 'line-through' : 'none'
   }}>
   {tag.tag}
+  {tag.duration && <small style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
+    {tag.duration}'
+  </small>}
   {/* <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} /> */}
 </span>)
 
@@ -73,8 +83,10 @@ export const TagsList = ({
   onMouseEnter,
   onMouseLeave
 }) => {
-  const expandedTags = tags.map(slug =>
-    slug.tag ? slug : Tags.findOne({ _id: slug }, { removed: true })
+  const expandedTags = tags.map(idOrTag =>
+    typeof idOrTag === 'string'
+    ? Tags.findOne({ _id: idOrTag }, { removed: true })
+    : idOrTag
   ).filter(identity)
 
   // group by private, sort within groups

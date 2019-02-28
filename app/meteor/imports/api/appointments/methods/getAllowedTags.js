@@ -10,5 +10,6 @@ export const getAllowedTags = ({ time, assigneeId, calendarId }) => {
     weekdays: toWeekday(time)
   })
 
-  return constraint && isConstraintApplicable({ constraint, date: moment(time) }) && constraint.tags
+  // TODO: Honor tag overrides
+  return constraint && isConstraintApplicable({ constraint, date: moment(time) }) && constraint.tags && constraint.tags.length >= 1 && constraint.tags.map(t => t.tagId)
 }

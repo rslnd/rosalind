@@ -1,6 +1,9 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
+import { Constraints } from '../../../api/constraints/'
+import { findConstraint } from '../../../api/constraints/methods/findConstraint'
 import Alert from 'react-s-alert'
 import { __ } from '../../../i18n'
 import { NewAppointmentForm } from './NewAppointmentForm'
@@ -9,6 +12,7 @@ import { Tags } from '../../../api/tags'
 import { getDefaultDuration } from '../../../api/appointments/methods/getDefaultDuration'
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 import { calculateRevenue } from './RevenueField'
+import { withTracker } from '../../components/withTracker'
 
 export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {
@@ -102,18 +106,45 @@ export class NewAppointmentContainerComponent extends React.Component {
   }
 
   render () {
+    const {
+      time,
+      calendar,
+      assigneeId,
+      constraint
+    } = this.props
+
     return (
       <NewAppointmentForm
         onSubmit={this.handleSubmit}
         onSubmitPause={this.handleSubmitPause}
-        time={this.props.time}
-        calendarId={this.props.calendar._id}
-        assigneeId={this.props.assigneeId}
-        allowedTags={Appointments.methods.getAllowedTags({ time: this.props.time, calendarId: this.props.calendar._id, assigneeId: this.props.assigneeId })}
-        maxDuration={Appointments.methods.getMaxDuration({ time: this.props.time, calendarId: this.props.calendar._id, assigneeId: this.props.assigneeId })}
-        extended={this.props.calendar.privateAppointments} />
+        time={time}
+        calendarId={calendar._id}
+        assigneeId={assigneeId}
+        allowedTags={Appointments.methods.getAllowedTags({ time: time, calendarId: calendar._id, assigneeId: assigneeId })}
+        maxDuration={Appointments.methods.getMaxDuration({ time: time, calendarId: calendar._id, assigneeId: assigneeId })}
+        constraint={constraint}
+        extended={calendar.privateAppointments}
+      />
     )
   }
 }
 
-export const NewAppointmentContainer = connect()(NewAppointmentContainerComponent)
+const withConstraint = props => {
+  const constraint = findConstraint(Constraints)({
+    assigneeId: props.assigneeId,
+    calendarId: props.calendar._id,
+    time: props.time
+  })
+
+  console.log('withConstraint', constraint)
+
+  return {
+    ...props,
+    constraint
+  }
+}
+
+export const NewAppointmentContainer = compose(
+  withTracker(withConstraint),
+  connect()
+)(NewAppointmentContainerComponent)

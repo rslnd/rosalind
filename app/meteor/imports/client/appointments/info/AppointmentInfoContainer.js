@@ -13,6 +13,8 @@ import { Appointments } from '../../../api/appointments'
 import { Patients } from '../../../api/patients'
 import { Users } from '../../../api/users'
 import { Comments } from '../../../api/comments'
+import { Constraints } from '../../../api/constraints'
+import { findConstraint } from '../../../api/constraints/methods/findConstraint'
 import { Calendars } from '../../../api/calendars'
 import { subscribe } from '../../../util/meteor/subscribe'
 import { AppointmentInfoMinimal } from './AppointmentInfoMinimal'
@@ -24,7 +26,7 @@ import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 import { validate } from '../new/newAppointmentValidators'
 import { hasRole } from '../../../util/meteor/hasRole';
 
-const formName = 'appointmentInfoForm'
+export const formName = 'appointmentInfoForm'
 
 const composer = props => {
   const { appointmentId } = props
@@ -140,6 +142,12 @@ const composer = props => {
       }
     }
 
+    const constraint = appointment && assignee && findConstraint(Constraints)({
+      calendarId,
+      assigneeId: assignee._id,
+      time: appointment.start
+    })
+
     return {
       ...props,
       isLoading,
@@ -156,7 +164,8 @@ const composer = props => {
       handleEditPatient,
       handleEditAppointment,
       handleToggleGender,
-      handleSetMessagePreferences
+      handleSetMessagePreferences,
+      constraint
     }
   } else {
     return

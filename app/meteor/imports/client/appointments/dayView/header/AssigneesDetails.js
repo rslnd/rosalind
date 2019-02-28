@@ -64,7 +64,9 @@ const Constraint = ({ constraint }) => (
       </span>
     }
     {
-      constraint.tags && <div style={leftAlign}><TagsList tiny tags={constraint.tags} /></div>
+      constraint.tags && <div style={leftAlign}>
+        <TagsList tiny tags={constraint.tags.map(t => t.tagId)} />
+      </div>
     }
   </div>
 )

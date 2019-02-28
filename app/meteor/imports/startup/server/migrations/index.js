@@ -9,6 +9,7 @@ import './6-reportDate'
 import './7-schedulesToConstraints'
 import './8-agreements'
 import './9-overridesToAvailabilities'
+import './10-constraintTags'
 
 export default () => {
   Meteor.startup(() => {

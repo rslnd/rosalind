@@ -1,3 +1,4 @@
+import idx from 'idx'
 import React from 'react'
 import identity from 'lodash/identity'
 import { Box } from '../../components/Box'
@@ -11,6 +12,7 @@ import { __ } from '../../../i18n'
 import { withProps, mapProps, renderComponent } from 'recompose'
 import { UserPicker } from '../../users/UserPicker'
 import { HMRangeToString } from '../../../util/time/hm'
+import { applyConstraintToTags } from '../../../api/constraints/methods/applyConstraintToTags'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
@@ -24,7 +26,15 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'tags',
     EditComponent: TagsPicker,
     isMulti: true,
-    render: c => <TagsList tags={c.tags} />,
+    render: constraint => constraint.tags &&
+      <TagsList tags={applyConstraintToTags({
+        constraint,
+        tags: Tags.find({
+          _id: {
+            $in: constraint.tags.map(t => t.tagId)
+          }
+        }).fetch()
+      })} />,
     style: {
       width: '35%'
     }
@@ -68,9 +78,11 @@ const WeekdayPicker = withProps({
 })(DocumentPicker)
 
 const TagsPicker = withProps({
-  toDocument: _id => Tags.findOne({ _id }),
-  toLabel: mapProps(tag => ({ tags: [ tag ] }))(TagsList),
-  options: () => Tags.find({}).fetch()
+  toDocument: ({ tagId }) => ({ tagId, ...Tags.findOne({ _id: tagId }) }),
+  toLabel: ({ tagId }) => idx(Tags.findOne({ _id: tagId }), _ => _.tag),
+  render: ({ value: { tagId } }) => <TagsList tags={[tagId]} />,
+  toKey: ({ tagId }) => tagId,
+  options: () => Tags.find({}).fetch().map(({ _id, ...t }) => ({ tagId: _id, ...t }))
 })(DocumentPicker)
 
 export const ConstraintsScreen = ({

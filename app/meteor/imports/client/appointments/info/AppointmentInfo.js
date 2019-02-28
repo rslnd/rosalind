@@ -29,7 +29,7 @@ const autofillRevenue = change => (e, tags) => {
   }
 }
 
-const Tags = ({ appointment, allowedTags, maxDuration, assignee, calendar, change }) => (
+const Tags = ({ appointment, allowedTags, maxDuration, assignee, calendar, constraint, change }) => (
   <ListItem hr>
     <Field
       name='tags'
@@ -40,6 +40,7 @@ const Tags = ({ appointment, allowedTags, maxDuration, assignee, calendar, chang
       assigneeId={assignee && assignee._id}
       showDefaultRevenue={false}
       onChange={autofillRevenue(change)}
+      constraint={constraint}
       fullWidth
     />
   </ListItem>
@@ -89,7 +90,9 @@ export class AppointmentInfo extends React.Component {
       handleEditPatient,
       handleEditAppointment,
       handleToggleGender,
-      handleSetMessagePreferences } = this.props
+      handleSetMessagePreferences,
+      constraint
+    } = this.props
 
     return (
       <div>
@@ -136,6 +139,7 @@ export class AppointmentInfo extends React.Component {
                       assignee={assignee}
                       calendar={calendar}
                       change={change}
+                      constraint={constraint}
                     />
                   </FormSection>
                   <input type='submit' style={{ display: 'none' }} />

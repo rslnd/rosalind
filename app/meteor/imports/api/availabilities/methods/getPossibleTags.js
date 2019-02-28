@@ -8,7 +8,7 @@ export const getPossibleTags = ({ availability, tags, constraints }) => {
   const constrainedTags = flatten(
     constraints
       .filter(constraint => isConstraintApplicable({ constraint, availability }))
-      .map(c => tags.filter(t => c.tags && c.tags.includes(t._id)))
+      .map(c => tags.filter(t => c.tags && c.tags.map(t => t.tagId).includes(t._id)))
   )
 
   if (constrainedTags && constrainedTags.length >= 1) {

@@ -3,6 +3,7 @@ import { Tags } from '../../api/tags'
 import { Appointments } from '../../api/appointments'
 import { TagsList } from './TagsList'
 import { getDefaultDuration } from '../../api/appointments/methods/getDefaultDuration'
+import { applyConstraintToTags } from '../../api/constraints/methods/applyConstraintToTags'
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
 
@@ -38,7 +39,8 @@ export class TagsField extends React.Component {
       maxDuration,
       calendarId,
       showDefaultRevenue,
-      time
+      time,
+      constraint
     } = this.props
 
     const selector = allowedTags ? { _id: { $in: allowedTags } } : {}
@@ -98,9 +100,13 @@ export class TagsField extends React.Component {
       }
     })
 
+    const constrainedTags = constraint
+    ? applyConstraintToTags({ constraint, tags })
+    : tags
+
     return <div>
       <TagsList
-        tags={tags}
+        tags={constrainedTags}
         onClick={this.toggle}
         style={tagsListStyle}
         showDefaultRevenue={showDefaultRevenue}

@@ -26,9 +26,9 @@ Meteor.startup(() => {
       }).fetch()[0], _ => _.start)
 
     const cutoffDate = dayToDate({
-      year: 2018,
-      month: 11,
-      day: 19
+      year: 2019,
+      month: 2,
+      day: 28
     })
 
     const days = rangeToDays({

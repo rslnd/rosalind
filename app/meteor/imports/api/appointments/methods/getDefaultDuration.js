@@ -2,6 +2,8 @@ import max from 'lodash/max'
 import { Users } from '../../users'
 import { Calendars } from '../../calendars'
 import { Constraints } from '../../constraints'
+import { findConstraint } from '../../constraints/methods/findConstraint'
+import { applyConstraintToTags } from '../../constraints/methods/applyConstraintToTags'
 import { Tags } from '../../tags'
 import { toWeekday } from '../../../util/time/weekdays'
 import { isWithinHMRange } from '../../../util/time/hm'
@@ -25,35 +27,23 @@ export const isConstraintApplicable = ({ constraint, date }) => {
   }
 }
 
-const getDurationConstraint = ({ calendarId, assigneeId, date }) => {
-  if (!date || !assigneeId) {
-    return getCalendarDefaultDuration(calendarId)
+export const getDefaultDuration = ({ calendarId, assigneeId, date, tags = [] }) => {
+  let constrainedDuration = null
+
+  if (tags.length >= 1) {
+    const constraint = findConstraint(Constraints)({ calendarId, assigneeId, time: date })
+    const constrainedTags = applyConstraintToTags({
+      constraint,
+      tags: Tags.find({ _id: { $in: tags } }).fetch()
+    })
+
+    const tagDurations = (constrainedTags.length >= 1 ? constrainedTags : tags).map(t => t.duration)
+
+    // TODO: Apply durationStrategy from constraint here
+    constrainedDuration = max(tagDurations)
   }
 
-  const constraint = Constraints.findOne({
-    calendarId,
-    assigneeIds: assigneeId,
-    weekdays: toWeekday(date)
-  })
-
-  return (constraint && isConstraintApplicable({ constraint, date }) && constraint.duration) || getCalendarDefaultDuration(calendarId)
-}
-
-export const getDefaultDuration = ({ calendarId, assigneeId, date, tags }) => {
-  let tagDurations = []
-
-  if (tags) {
-    tagDurations = Tags.find({ _id: { $in: tags } }).fetch().map(t => t.duration)
-  }
-
-  const maxDuration = max(tagDurations)
-
-  const durationConstraint = getDurationConstraint({ calendarId, assigneeId, date })
   const defaultDuration = getCalendarDefaultDuration(calendarId)
 
-  if (durationConstraint === defaultDuration) {
-    return maxDuration || defaultDuration
-  } else {
-    return durationConstraint
-  }
+  return constrainedDuration || defaultDuration
 }
