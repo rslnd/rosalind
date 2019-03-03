@@ -79,10 +79,9 @@ export const BreakLines = ({ children, placeholder }) =>
   : placeholder
 
 const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onChangeNote, isLast }) => {
-  const isRelevant = (assignee.constraints && assignee.constraints.length > 0)
   const isDayNoteColumn = (!assignee.assigneeId || (!calendar.allowUnassigned && isLast))
   const hasDayNote = (daySchedule && (daySchedule.note || daySchedule.noteDetails))
-  const style = (isRelevant || (isDayNoteColumn && (canEditSchedules || hasDayNote)))
+  const style = (isDayNoteColumn && (canEditSchedules || hasDayNote))
     ? { ...relevantCellStyle, ...cellStyle }
     : cellStyle
 
@@ -138,7 +137,8 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
 
   return <div style={style}>
     { dayNote }
-    {
+    {/* TODO: Remove constraints or put behind flag? Not sure if needed anymore */}
+    {/* {
       expanded && isRelevant && assignee.constraints.map((constraint) => (
         <div key={constraint._id}>
           <Icon name='info-circle' />
@@ -150,7 +150,7 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
       !expanded && isRelevant && <div>
         <Icon name='info-circle' />
       </div>
-    }
+    } */}
   </div>
 }
 
