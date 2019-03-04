@@ -32,15 +32,6 @@ const triggerLatchLabelStyle = {
   width: 50
 }
 
-const closeTriggerStyle = {
-  position: 'fixed',
-  top: 10,
-  right: 10,
-  bottom: 10,
-  left: 10,
-  zIndex: 1060
-}
-
 const drawerStyle = {
   position: 'fixed',
   right: 0,
@@ -52,6 +43,15 @@ const drawerStyle = {
   paddingLeft: 15,
   paddingRight: 15,
   paddingBottom: 0
+}
+
+const closeTriggerStyle = {
+  position: 'fixed',
+  top: 10,
+  right: drawerStyle.width + 100,
+  bottom: 10,
+  left: 10,
+  zIndex: 1060
 }
 
 // Apparently { display: 'none' } resets state of children
