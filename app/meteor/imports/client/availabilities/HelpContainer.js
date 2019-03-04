@@ -46,18 +46,12 @@ const handleSearchValueChange = props => (value, { action }) => {
 const log = pre => withProps(p => console.log(pre, p))
 
 const hover = (props) => {
-  const hoverTag = props.hoverTag
-    ? Tags.findOne({ _id: props.hoverTag })
-    : null
-
-  const avas = ((idx(props, _ => _.results[0].availabilities) || idx(props, _ => _.results[0].assignees[0].availabilities)) || [])
   const hoverAvailability = props.hoverAvailability
-    ? avas.find(a => a._id === props.hoverAvailability)
-    : avas[0]
+    ? props.allAvailabilities.find(a => a._id === props.hoverAvailability)
+    : ((idx(props, _ => _.results[0].availabilities) || idx(props, _ => _.results[0].assignees[0].availabilities)) || [])[0]
 
   return {
     ...props,
-    hoverTag,
     hoverAvailability
   }
 }

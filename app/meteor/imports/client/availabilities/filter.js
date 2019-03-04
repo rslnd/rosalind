@@ -96,7 +96,7 @@ export const applySearchFilter = ({
           highlightAndCollapse(
             (availabilities[a._id] || []).filter(a =>
               (parsedQuery.tags && parsedQuery.tags.length >= 1)
-              ? parsedQuery.tags.some(t => a.tags.includes(t._id))
+              ? parsedQuery.tags.some(t => a.tags.map(at => at._id).includes(t._id))
               : true
             ), {
               parsedQuery,
@@ -111,10 +111,10 @@ export const applySearchFilter = ({
       assignees: map(availabilities, (assigneeAvailabilities, assigneeId) => {
         return {
           key: assigneeId,
-          assignee: assignees.find(a => a._id === assigneeId), // Weird, sometimes undefuned
+          assignee: assignees.find(a => a._id === assigneeId), // Weird, sometimes undefined
           availabilities: highlightAndCollapse(
             assigneeAvailabilities.filter(a =>
-              a.tags.includes(t._id)
+              a.tags.map(at => at._id).includes(t._id)
             ), {
               parsedQuery,
               hoverAvailability,
@@ -156,7 +156,7 @@ const highlightMatchedTags = ({ parsedQuery, hoverAvailability = {}, calendars }
       isHovering: hoverAvailability._id === availability._id,
       matchedTags:
         (queryTags.length >= 1)
-        ? availability.tags.filter(t => queryTags.includes(t))
+        ? availability.tags.filter(t => queryTags.includes(t._id))
         : availability.tags
     }
   }
@@ -169,7 +169,7 @@ const collapseConsecutive = (
   allAvas
 ) => {
   const isLast = i === (allAvas.length - 1)
-  const currKey = currAva.matchedTags.join(',')
+  const currKey = currAva.matchedTags && currAva.matchedTags.map(t => t.tagId).join(',') || i
   const shouldCollapse = prevKey === currKey
 
   if (shouldCollapse && wip) {

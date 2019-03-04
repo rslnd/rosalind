@@ -34,16 +34,20 @@ const overlay = {
 }
 
 const durationStyle = {
+  fontSize: '87%',
   opacity: 0.7,
-  verticalAlign: 'text-top',
-  display: 'inline-box',
-  marginLeft: 8
+  verticalAlign: 'top',
+  display: 'inline-block',
+  marginTop: '0.08em',
+  marginLeft: '0.7em'
 }
 
 const Tag = withHandlers({
+  // TODO: Refactor to return full tag objects on click also
   handleClick: props => e => props.onClick && props.onClick(props.tag._id),
-  handleMouseEnter: props => e => props.onMouseEnter && props.onMouseEnter(props.tag._id),
-  handleMouseLeave: props => e => props.onMouseLeave && props.onMouseLeave(props.tag._id)
+  // HACK: We return the full tag object on hover, because its fields may have been modified by constraints
+  handleMouseEnter: props => e => props.onMouseEnter && props.onMouseEnter(props.tag),
+  handleMouseLeave: props => e => props.onMouseLeave && props.onMouseLeave(props.tag)
 })(({
   tag,
   handleClick,
@@ -67,9 +71,9 @@ const Tag = withHandlers({
     textDecoration: tag.removed ? 'line-through' : 'none'
   }}>
   {tag.tag}
-  {tag.duration && <small style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
+  {tag.duration && <span style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
     {tag.duration}'
-  </small>}
+  </span>}
   {/* <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} /> */}
 </span>)
 

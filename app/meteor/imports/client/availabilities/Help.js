@@ -60,6 +60,7 @@ export const Help = ({
                     key={a.key}
                     assignee={a.assignee}
                     availabilities={a.availabilities}
+                    limit={4}
                     setHoverTag={setHoverTag}
                     setHoverAvailability={setHoverAvailability}
                     handleAvailabilityClick={handleAvailabilityClick}
@@ -77,6 +78,7 @@ export const Help = ({
 const Assignee = ({
   assignee,
   availabilities,
+  limit,
   setHoverTag,
   setHoverAvailability,
   handleAvailabilityClick
@@ -86,6 +88,7 @@ const Assignee = ({
     <Availabilities
       availabilities={availabilities}
       showTags
+      limit={limit}
       setHoverTag={setHoverTag}
       setHoverAvailability={setHoverAvailability}
       handleAvailabilityClick={handleAvailabilityClick}
@@ -100,13 +103,14 @@ const Availabilities = withHandlers({
 })(({
   availabilities,
   showTags,
+  limit,
   setHoverAvailability,
   handleAvailabilityClick,
   handleTagHover
 }) =>
   <div>
     {
-      availabilities.map(availability =>
+      availabilities.slice(0, limit || availabilities.length).map(availability =>
         <div key={availability._id} style={availabilitiesStyle}>
           <Dates>
             {
@@ -129,6 +133,7 @@ const Availabilities = withHandlers({
             <TagsList
               tiny
               tags={availability.matchedTags}
+              constraint={availability.constraint}
               onMouseEnter={handleTagHover(availability)}
               groupTags={false}
             />

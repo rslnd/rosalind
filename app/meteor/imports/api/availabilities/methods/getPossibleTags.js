@@ -2,18 +2,18 @@ import uniq from 'lodash/uniq'
 import flatten from 'lodash/flatten'
 import { toWeekday } from '../../../util/time/weekdays'
 import { isWithinHMRange } from '../../../util/time/hm'
+import { applyConstraintToTags } from '../../constraints/methods/applyConstraintToTags'
 
-// Returns a union of tag ids that may be possible to schedule within the given availability
+// Returns a union of tags that may be possible to schedule within the given availability
 export const getPossibleTags = ({ availability, tags, constraints }) => {
   const constrainedTags = flatten(
     constraints
       .filter(constraint => isConstraintApplicable({ constraint, availability }))
-      .map(c => tags.filter(t => c.tags && c.tags.map(t => t.tagId).includes(t._id)))
+      .map(constraint => applyConstraintToTags({ constraint, tags }))
   )
 
   if (constrainedTags && constrainedTags.length >= 1) {
-    const result = uniq(constrainedTags.map(t => t._id))
-    return result
+    return constrainedTags
   }
 
   const isListed = (list, item) =>
@@ -38,7 +38,7 @@ export const getPossibleTags = ({ availability, tags, constraints }) => {
       isCalendar(t, availability) &&
       !isBlacklisted(t, availability)
     )
-  ).map(t => t._id)
+  )
 
   return result
 }

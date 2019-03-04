@@ -36,6 +36,8 @@ export const getDefaultDuration = ({ calendarId, assigneeId, date, tags = [] }) 
       tags: unconstrainedTags
     })
 
+  console.log('CC', constraint, 'CT', constrainedTags, { calendarId, assigneeId, date, tags })
+
   const duration = applyDurationStrategy({
     calendarId,
     constraint,
