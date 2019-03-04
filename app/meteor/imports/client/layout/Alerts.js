@@ -11,12 +11,12 @@ const AlertIcon = ({ classNames, icon }) => (
     }}>
     {
       icon
-      ? <Icon name={icon} />
-      : (
-        (classNames.includes('s-alert-success') && <Icon name='check-circle' />) ||
+        ? <Icon name={icon} />
+        : (
+          (classNames.includes('s-alert-success') && <Icon name='check-circle' />) ||
         (classNames.includes('s-alert-error') && <Icon name='exclamation-circle' />) ||
         (classNames.includes('s-alert-warning') && <Icon name='exclamation-triangle' />)
-      )
+        )
     }
   </div>
 )

@@ -49,7 +49,7 @@ export const detail = ({ Referrals }) => {
         const redeemedInPeriod = isInRange({ from, to })(r.redeemedAt)
 
         if (!redeemedInPeriod) {
-          delete r.redeemedAt        
+          delete r.redeemedAt
         }
 
         return {

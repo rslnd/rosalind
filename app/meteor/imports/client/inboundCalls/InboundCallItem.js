@@ -5,8 +5,8 @@ import { Stamps } from '../helpers/Stamps'
 import { CommentsContainer, HumanCommentCount } from '../comments'
 import { LinkToAppointmentContainer } from './LinkToAppointmentContainer'
 import { InboundCallsTopics } from '../../api/inboundCalls'
-import { highlightBackground, highlightColor } from '../layout/styles';
-import { InlineEdit } from '../components/form';
+import { highlightBackground, highlightColor } from '../layout/styles'
+import { InlineEdit } from '../components/form'
 
 export class InboundCallItem extends React.Component {
   render () {
@@ -98,13 +98,13 @@ export class InboundCallItem extends React.Component {
         <div className='box-footer'>
           {
             (pinnedBy && canResolve || !pinnedBy)
-            ? (
-              removed
-              ? <a onClick={() => unresolve(_id)}>{__('inboundCalls.unresolve')}</a>
-              : <a onClick={() => resolve(_id)}>{__('inboundCalls.resolve')}</a>
-            ) : <span className='text-muted'>
-              {__('inboundCalls.pinnedBy', { name: fullNameWithTitle && fullNameWithTitle(pinnedBy) })}
-            </span>
+              ? (
+                removed
+                  ? <a onClick={() => unresolve(_id)}>{__('inboundCalls.unresolve')}</a>
+                  : <a onClick={() => resolve(_id)}>{__('inboundCalls.resolve')}</a>
+              ) : <span className='text-muted'>
+                {__('inboundCalls.pinnedBy', { name: fullNameWithTitle && fullNameWithTitle(pinnedBy) })}
+              </span>
           }
         </div>
       </div>

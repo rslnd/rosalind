@@ -67,25 +67,25 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
             {
               rows.map((r, i) =>
                 <TableRow key={r._id}>
-                  <Cell style={{...numberCellStyle, width: 24}}><span className='text-muted'>{i+1}</span></Cell>
+                  <Cell style={{ ...numberCellStyle, width: 24 }}><span className='text-muted'>{i + 1}</span></Cell>
                   <Cell><b>{namecase(r.patient.lastName)}</b> {namecase(r.patient.firstName)}</Cell>
                   <Cell>{r.referredToTitle}</Cell>
 
-                  <Cell style={{...separatorStyle, width: '20%'}}>
+                  <Cell style={{ ...separatorStyle, width: '20%' }}>
                     <Date date={r.createdAt} />
                   </Cell>
-                  <Cell style={{...separatorStyle, width: '20%'}}>
+                  <Cell style={{ ...separatorStyle, width: '20%' }}>
                     <Date date={r.pendingAt} relativeTo={r.createdAt} />
                   </Cell>
-                  <Cell style={{...separatorStyle, width: '20%'}}>
+                  <Cell style={{ ...separatorStyle, width: '20%' }}>
                     {
                       r.redeemedAt
-                      ? <Date date={r.redeemedAt} relativeTo={r.pendingAt} />
-                      : r.pendingAt && !r.redeemedAt
-                      ? <span className='text-muted'>
-                        {__('reports.referralExpectedAt')} <Date date={r.plannedRedeemedAt} />
-                      </span>
-                      : <Nil />
+                        ? <Date date={r.redeemedAt} relativeTo={r.pendingAt} />
+                        : r.pendingAt && !r.redeemedAt
+                          ? <span className='text-muted'>
+                            {__('reports.referralExpectedAt')} <Date date={r.plannedRedeemedAt} />
+                          </span>
+                          : <Nil />
                     }
                   </Cell>
                 </TableRow>

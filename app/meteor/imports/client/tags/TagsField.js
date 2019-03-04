@@ -101,8 +101,8 @@ export class TagsField extends React.Component {
     })
 
     const constrainedTags = constraint
-    ? applyConstraintToTags({ constraint, tags })
-    : tags
+      ? applyConstraintToTags({ constraint, tags })
+      : tags
 
     return <div>
       <TagsList

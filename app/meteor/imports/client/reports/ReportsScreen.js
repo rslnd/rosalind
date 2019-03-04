@@ -95,78 +95,78 @@ export class ReportsScreen extends React.Component {
         </div>
         {
           reportLoading
-          ? <Loading />
-          : <div className='content'>
-            <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
-            {
-              (reports && reports.length >= 1)
-              ? reports.map(report =>
-                <div key={report._id}>
-                  <Report
-                    report={report}
-                    showRevenue={this.state.showRevenue}
-                    mapUserIdToName={mapUserIdToName}
-                    mapReportAsToHeader={mapReportAsToHeader}
-                  >
-                    {
-                      quarter && this.state.showRevenue &&
-                        <div key='quarterTable' style={avoidPageBreak}>
-                          <Quarter
-                            calendar={report.calendar}
-                            quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
-                          />
-                          <span className='quarterLoaded' />
-                        </div>
-                    }
-                  </Report>
-                  <FooterContainer />
-                </div>
-              ) : <div key='noReports'>
-                <Box type='warning' title={__('ui.notice')}>
-                  <p>{__('reports.empty')}</p>
-                </Box>
-              </div>
-            }
+            ? <Loading />
+            : <div className='content'>
+              <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
+              {
+                (reports && reports.length >= 1)
+                  ? reports.map(report =>
+                    <div key={report._id}>
+                      <Report
+                        report={report}
+                        showRevenue={this.state.showRevenue}
+                        mapUserIdToName={mapUserIdToName}
+                        mapReportAsToHeader={mapReportAsToHeader}
+                      >
+                        {
+                          quarter && this.state.showRevenue &&
+                          <div key='quarterTable' style={avoidPageBreak}>
+                            <Quarter
+                              calendar={report.calendar}
+                              quarter={quarter.calendars.find(q => q.calendarId === report.calendar._id)}
+                            />
+                            <span className='quarterLoaded' />
+                          </div>
+                        }
+                      </Report>
+                      <FooterContainer />
+                    </div>
+                  ) : <div key='noReports'>
+                    <Box type='warning' title={__('ui.notice')}>
+                      <p>{__('reports.empty')}</p>
+                    </Box>
+                  </div>
+              }
 
-            { loading && <Loading />}
+              { loading && <Loading />}
 
-            {
-              previews &&
+              {
+                previews &&
                 <div>
                   <PreviewBoxes
                     previews={previews}
                     mapUserIdToUsername={mapUserIdToUsername}
                     mapUserIdToName={mapUserIdToName} />
                 </div>
-            }
+              }
 
-            {
-              referrals &&
+              {
+                referrals &&
                 <div>
                   <Referrals
                     referrals={referrals}
                     mapUserIdToName={mapUserIdToName} />
                 </div>
-            }
+              }
 
-            <div className='hide-print'>
-              <Button onClick={generateReport}>
+              <div className='hide-print'>
+                <Button onClick={generateReport}>
                   Diesen Bericht neu generieren
-              </Button>
+                </Button>
 
-              <Button onClick={viewAppointments}>
+                <Button onClick={viewAppointments}>
                   Terminkalender für diesen Tag ansehen
-              </Button>
+                </Button>
 
-              <Button onClick={sendEmailTest}>
+                <Button onClick={sendEmailTest}>
                   Test Email senden
-              </Button>
+                </Button>
 
-              <Button onClick={sendEmail}>
+                <Button onClick={sendEmail}>
                   Email senden
-              </Button>
+                </Button>
+              </div>
             </div>
-          </div>
         }
       </div>
     )

@@ -55,7 +55,7 @@ export class AppointmentInfoMinimal extends React.Component {
     // TODO: How to show validation errors even on untouched fields?
     setTimeout(() =>
       touch('appointmentInfoForm', 'contacts', 'birthday', 'insuranceId'),
-      500
+    500
     )
   }
 
@@ -93,15 +93,15 @@ export class AppointmentInfoMinimal extends React.Component {
         <div className='row'>
           <div className='col-md-6'>
             <form onMouseLeave={
-                dirty
+              dirty
                 ? handleSubmit(handleEditAppointment)
                 : identity
-              }
+            }
               onSubmit={
-                dirty
+              dirty
                 ? handleSubmit(handleEditAppointment)
                 : identity
-              }>
+            }>
               <FormSection name='appointment'>
                 <PrivateRevenue appointment={appointment} />
                 <Tags
@@ -124,13 +124,13 @@ export class AppointmentInfoMinimal extends React.Component {
                 style={{ marginTop: -25 }}
                 onMouseLeave={
                   dirty
-                  ? handleSubmit(handleEditPatient)
-                  : identity
+                    ? handleSubmit(handleEditPatient)
+                    : identity
                 }
                 onSubmit={
                   dirty
-                  ? handleSubmit(handleEditPatient)
-                  : identity
+                    ? handleSubmit(handleEditPatient)
+                    : identity
                 }>
                 <FormSection name='patient'>
                   <PatientNotes patient={patient} />

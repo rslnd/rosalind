@@ -34,8 +34,8 @@ export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick
     gridTemplateColumns: `
       [time] 60px
       ${assignees.map((assignee, index) =>
-        `[assignee-${assignee.assigneeId}] 1fr`).join(' ')
-      }`
+    `[assignee-${assignee.assigneeId}] 1fr`).join(' ')
+}`
   }
 
   const ffAva = !!(window.location.hash.indexOf('ff-ava') !== -1)

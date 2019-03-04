@@ -32,46 +32,46 @@ export const Help = ({
     {/* {JSON.stringify(parsedQuery)} */}
     {
       (parsedQuery.failed || results.length === 0)
-      ? <span /> // No results
-      : (parsedQuery.wanted === 'assignee')
-      ? <Results hoverTag={hoverTag} hoverAvailability={hoverAvailability}>
-        {
-          results.map(result =>
-            <Assignee
-              key={result.key}
-              assignee={result.assignee}
-              availabilities={result.availabilities}
-              setHoverTag={setHoverTag}
-              setHoverAvailability={setHoverAvailability}
-              handleAvailabilityClick={handleAvailabilityClick}
-            />
-          )
-        }
-      </Results>
-      : (parsedQuery.wanted === 'tag')
-      ? <Results hoverTag={hoverTag} hoverAvailability={hoverAvailability}>
-        {
-          results.map(result =>
-            <div key={result.key}>
-              <h3><TagsList tags={[result.tag]} /></h3>
+        ? <span /> // No results
+        : (parsedQuery.wanted === 'assignee')
+          ? <Results hoverTag={hoverTag} hoverAvailability={hoverAvailability}>
+            {
+              results.map(result =>
+                <Assignee
+                  key={result.key}
+                  assignee={result.assignee}
+                  availabilities={result.availabilities}
+                  setHoverTag={setHoverTag}
+                  setHoverAvailability={setHoverAvailability}
+                  handleAvailabilityClick={handleAvailabilityClick}
+                />
+              )
+            }
+          </Results>
+          : (parsedQuery.wanted === 'tag')
+            ? <Results hoverTag={hoverTag} hoverAvailability={hoverAvailability}>
               {
-                result.assignees.map(a =>
-                  <Assignee
-                    key={a.key}
-                    assignee={a.assignee}
-                    availabilities={a.availabilities}
-                    limit={4}
-                    setHoverTag={setHoverTag}
-                    setHoverAvailability={setHoverAvailability}
-                    handleAvailabilityClick={handleAvailabilityClick}
-                  />
+                results.map(result =>
+                  <div key={result.key}>
+                    <h3><TagsList tags={[result.tag]} /></h3>
+                    {
+                      result.assignees.map(a =>
+                        <Assignee
+                          key={a.key}
+                          assignee={a.assignee}
+                          availabilities={a.availabilities}
+                          limit={4}
+                          setHoverTag={setHoverTag}
+                          setHoverAvailability={setHoverAvailability}
+                          handleAvailabilityClick={handleAvailabilityClick}
+                        />
+                      )
+                    }
+                  </div>
                 )
               }
-            </div>
-          )
-        }
-      </Results>
-      : null // This should not happen
+            </Results>
+            : null // This should not happen
     }
   </div>
 
@@ -115,18 +115,18 @@ const Availabilities = withHandlers({
           <Dates>
             {
               availability.collapsedAvailabilities
-              ? availability.collapsedAvailabilities.map(a =>
-                <DateIndicator
-                  key={a._id}
+                ? availability.collapsedAvailabilities.map(a =>
+                  <DateIndicator
+                    key={a._id}
+                    onClick={handleAvailabilityClick}
+                    onMouseEnter={setHoverAvailability}
+                    availability={a} />
+                )
+                : <DateIndicator
+                  availability={availability}
                   onClick={handleAvailabilityClick}
                   onMouseEnter={setHoverAvailability}
-                  availability={a} />
-              )
-              : <DateIndicator
-                availability={availability}
-                onClick={handleAvailabilityClick}
-                onMouseEnter={setHoverAvailability}
-              />
+                />
             }
           </Dates>
           <div style={tagsListStyle}>
@@ -202,7 +202,7 @@ const hoveringDateInidicatorStyle = {
   textDecoration: 'underline'
 }
 
-const FormattedDate = ({ availability: {from, to}, prepend }) => {
+const FormattedDate = ({ availability: { from, to }, prepend }) => {
   const m = moment.tz(from, 'Europe/Vienna')
   return <span style={dateContainerStyle}>
     {prepend}
@@ -244,8 +244,8 @@ const AmPmRange = ({ from, to }) => {
 
 const amPm = d =>
   parseInt(moment.tz(d, 'Europe/Vienna').format('HH')) >= 13
-  ? 'pm'
-  : 'am'
+    ? 'pm'
+    : 'am'
 
 const containerStyle = {
   display: 'flex',
@@ -253,7 +253,7 @@ const containerStyle = {
   maxHeight: '100%'
 }
 
-const Results = (({ children, hoverTag, hoverAvailability }) =>
+const Results = ({ children, hoverTag, hoverAvailability }) =>
   <div style={resultsStyle}>
     <div style={resultsListStyle}>
       {children}
@@ -265,7 +265,6 @@ const Results = (({ children, hoverTag, hoverAvailability }) =>
       />
     </div>
   </div>
-)
 
 const resultsStyle = {
   flex: 1,

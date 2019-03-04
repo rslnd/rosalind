@@ -26,9 +26,9 @@ export const Agreements = ({ patient, calendar, showOnly = 'pending' }) => (
           style={{ marginTop: 10, paddingTop: 15 }}>
           {
             agreedAt
-            ? __(`patients.agreements.${label}.yes`, {
-              date: moment(patient.agreedAt).format(__('time.dateFormatShort'))
-            }) : __(`patients.agreements.${label}.no`)
+              ? __(`patients.agreements.${label}.yes`, {
+                date: moment(patient.agreedAt).format(__('time.dateFormatShort'))
+              }) : __(`patients.agreements.${label}.no`)
           }
 
           <div className='pull-right' style={{

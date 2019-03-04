@@ -89,8 +89,8 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
       // same assignee is already present in the day schedule
       const ids = overrideSchedules.filter(s =>
         assigneeId
-        ? s.type === 'override' && s.userId === assigneeId
-        : true
+          ? s.type === 'override' && s.userId === assigneeId
+          : true
       ).map(s => {
         const id = Schedules.insert(s)
         console.log('Inserted', id, s)

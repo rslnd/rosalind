@@ -7,23 +7,23 @@ import { Loading } from '../components/Loading'
 
 export const InboundCallsList = ({ isLoading, inboundCalls = [], topic, resolve, unresolve, noData = null }) => (
   (isLoading && inboundCalls.length === 0)
-  ? <Loading />
-  : <div className='row'>
-    <FlipMove>
-      {inboundCalls.map((inboundCall) => (
-        <div key={inboundCall._id} className='col-md-6'>
-          <InboundCallContainer
-            _id={inboundCall._id}
-            showTopic
-          />
-        </div>
-      ))}
-      {
-        (inboundCalls.length === 0)
-        ? noData : null
-      }
-    </FlipMove>
-  </div>
+    ? <Loading />
+    : <div className='row'>
+      <FlipMove>
+        {inboundCalls.map((inboundCall) => (
+          <div key={inboundCall._id} className='col-md-6'>
+            <InboundCallContainer
+              _id={inboundCall._id}
+              showTopic
+            />
+          </div>
+        ))}
+        {
+          (inboundCalls.length === 0)
+            ? noData : null
+        }
+      </FlipMove>
+    </div>
 )
 
 export const InboundCallsScreen = props =>

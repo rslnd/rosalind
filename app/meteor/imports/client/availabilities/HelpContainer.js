@@ -93,7 +93,7 @@ export const HelpContainerComponent = compose(
     handleDrawerClose: props => e =>
       props.setDrawerOpen(false)
   }),
-  withDrawer,
+  withDrawer
   // withProps(explodeConstraints),
   // log('exploded'),
   // withProps(combineConstraints),

@@ -46,5 +46,4 @@ describe('api/constraints/applyConstraintToTags', () => {
       { _id: 'B', duration: 30 }
     ])
   })
-
 })

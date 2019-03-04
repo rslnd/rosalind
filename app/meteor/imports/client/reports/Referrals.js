@@ -169,27 +169,27 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
 
 const Referred = ({ style }) =>
   <Cell
-    style={style ? {...style, ...separatorStyle, ...iconCellStyle} : {...separatorStyle, ...iconCellStyle}}
+    style={style ? { ...style, ...separatorStyle, ...iconCellStyle } : { ...separatorStyle, ...iconCellStyle }}
     title={__('reports.referralReferredTitle')}>
     <Icon name='commenting-o' />
   </Cell>
 
 const Pending = () =>
   <Cell
-    style={{...separatorStyle, ...iconCellStyle}}
+    style={{ ...separatorStyle, ...iconCellStyle }}
     title={__('reports.referralPendingTitle')}>
     <Icon name='clock-o' />
   </Cell>
 
 const Redeemed = () =>
   <Cell
-    style={{...separatorStyle, ...iconCellStyle}}
+    style={{ ...separatorStyle, ...iconCellStyle }}
     title={__('reports.referralRedeemedTitle')}>
     <Icon name='check' />
   </Cell>
 
 const Cell = ({ children, style, ...props }) =>
-  <TableCell padding='dense' style={style ? {...numberCellStyle, ...style} : numberCellStyle} {...props}>
+  <TableCell padding='dense' style={style ? { ...numberCellStyle, ...style } : numberCellStyle} {...props}>
     {children}
   </TableCell>
 

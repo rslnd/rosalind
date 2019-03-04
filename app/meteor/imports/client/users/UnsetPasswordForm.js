@@ -16,10 +16,10 @@ const Fields = ({ submitting, handleUnsetPassword, hasPassword, weakPassword }) 
     <p>
       {
         !hasPassword
-        ? __('users.hasNoPassword')
-        : weakPassword
-        ? <span style={important}>{__('users.passwordBreached', { breachCount: weakPassword })}</span>
-        : __('users.hasPassword')
+          ? __('users.hasNoPassword')
+          : weakPassword
+            ? <span style={important}>{__('users.passwordBreached', { breachCount: weakPassword })}</span>
+            : __('users.hasPassword')
       }
     </p>
     <Button
@@ -30,10 +30,10 @@ const Fields = ({ submitting, handleUnsetPassword, hasPassword, weakPassword }) 
       disabled={!hasPassword}
       onClick={handleUnsetPassword}
     >{
-      submitting
-      ? <Icon name='refresh' spin />
-      : __('users.unsetPassword')
-    }</Button>
+        submitting
+          ? <Icon name='refresh' spin />
+          : __('users.unsetPassword')
+      }</Button>
   </div>
 
 const handleUnsetPassword = ({ user, setSubmitting }) => () =>

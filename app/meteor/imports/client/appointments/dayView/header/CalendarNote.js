@@ -29,17 +29,17 @@ export const CalendarNote = ({ calendar, canEditSchedules, onChangeNote }) =>
   isNoteBarVisible({ calendar, canEditSchedules }) && <div style={barStyle}>
     {
       canEditSchedules
-      ? <InlineEdit
-        key={calendar._id} // Fix weird note copying across calendars
-        value={calendar && calendar.note || ''}
-        placeholder='Info'
-        rows={1}
-        rowsMax={3}
-        submitOnBlur
-        submitOnMouseLeave
-        fullWidth
-        onChange={newNote => onChangeNote(newNote)}
+        ? <InlineEdit
+          key={calendar._id} // Fix weird note copying across calendars
+          value={calendar && calendar.note || ''}
+          placeholder='Info'
+          rows={1}
+          rowsMax={3}
+          submitOnBlur
+          submitOnMouseLeave
+          fullWidth
+          onChange={newNote => onChangeNote(newNote)}
         ><BreakLines placeholder='Info'>{calendar && calendar.note}</BreakLines></InlineEdit>
-      : <BreakLines placeholder='Info'>{calendar && calendar.note}</BreakLines>
+        : <BreakLines placeholder='Info'>{calendar && calendar.note}</BreakLines>
     }
   </div>

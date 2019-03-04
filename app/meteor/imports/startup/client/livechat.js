@@ -6,7 +6,7 @@ import { __ } from '../../i18n'
 import { Roles } from 'meteor/alanning:roles'
 import { Groups } from '../../api/groups'
 import { Users } from '../../api/users'
-import { getSettings } from '../../api/clients/methods/getSettings';
+import { getSettings } from '../../api/clients/methods/getSettings'
 
 const getTranslation = () => {
   const keys = [ 'headerText', 'inputPlaceholder', 'sendButtonText',

@@ -81,12 +81,12 @@ const ExternalNode = new SimpleSchema({
 const External = new SimpleSchema({
   eoswin: {
     optional: true,
-    type: ExternalNode,
+    type: ExternalNode
   },
 
   terminiko: {
     optional: true,
-    type: ExternalNode,
+    type: ExternalNode
   },
 
   bioresonanz: {

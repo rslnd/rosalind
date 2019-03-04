@@ -16,19 +16,19 @@ export const login = ({ Users }) =>
       if (weakPassword) {
         Users.update({ _id: this.userId }, { $set: {
           weakPassword
-        }})
+        } })
 
         Events.post('users/loginWithWeakPassword', { userId, weakPassword }, 'warning')
       } else {
         Users.update({ _id: this.userId }, { $unset: {
           weakPassword: 1
-        }})
+        } })
         Events.post('users/login', { userId })
       }
 
       Users.update({ _id: this.userId }, { $set: {
         lastLoginAt: new Date()
-      }})
+      } })
     }
   })
 

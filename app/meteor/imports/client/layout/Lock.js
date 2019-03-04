@@ -227,8 +227,8 @@ class Digit extends React.Component {
             <span>
               {
                 isRemove
-                ? <Icon name='angle-left' />
-                : digit
+                  ? <Icon name='angle-left' />
+                  : digit
               }
             </span>
         }

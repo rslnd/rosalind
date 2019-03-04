@@ -39,8 +39,8 @@ const composer = props => {
   // }).fetch()
 
   // const lastPlannedDate = latestSchedules.length === 1
-    // ? latestSchedules[0].start
-    // : null
+  // ? latestSchedules[0].start
+  // : null
 
   return {
     ...props,
@@ -173,11 +173,11 @@ class ApplyDefaultScheduleComponent extends React.Component {
             <p>
               {
                 assigneeId
-                ? <span>
+                  ? <span>
                   Nur für <b>{Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))}</b><br />
-                  <Icon name='info-circle' /> Die Arbeitszeiten werden nur an den Tagen geändert, an welchen {Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))} bereits anwesend ist.
-                </span>
-                : <span>Für alle oben geplanten MitarbeiterInnen</span>
+                    <Icon name='info-circle' /> Die Arbeitszeiten werden nur an den Tagen geändert, an welchen {Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))} bereits anwesend ist.
+                  </span>
+                  : <span>Für alle oben geplanten MitarbeiterInnen</span>
               }
             </p>
 

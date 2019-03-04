@@ -40,8 +40,8 @@ const separatorRowStyle = {
 
 const dateFormat = m =>
   m.year() === moment().year()
-  ? m.format(__('time.dateFormatWeekdayShortNoYear'))
-  : m.format(__('time.dateFormatWeekdayShort'))
+    ? m.format(__('time.dateFormatWeekdayShortNoYear'))
+    : m.format(__('time.dateFormatWeekdayShort'))
 
 const AppointmentRow = ({ appointment, calendar, expandComments, isCurrent, onClick, autoFocus }) => {
   const assignee = Users.findOne({ _id:
@@ -127,13 +127,13 @@ const pairingButtonStyle = {
 }
 
 export const PastAppointments = withState('selectedAppointmentId', 'handleAppointmentClick', null)(({
-    patient,
-    currentAppointment,
-    pastAppointments,
-    futureAppointments,
-    selectedAppointmentId,
-    handleAppointmentClick,
-    appendIfMany }) => {
+  patient,
+  currentAppointment,
+  pastAppointments,
+  futureAppointments,
+  selectedAppointmentId,
+  handleAppointmentClick,
+  appendIfMany }) => {
   const appointmentsWithSeparators = [
     { separator: __('appointments.thisFuture'), count: futureAppointments.length },
     ...futureAppointments,
@@ -151,8 +151,8 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
         {
           appointmentsWithSeparators.filter(identity).map((item, i) =>
             item.separator
-            ? (
-              item.count > 0 &&
+              ? (
+                item.count > 0 &&
                 <div className='row' key={i}>
                   <div className='text-muted col-md-12'>
                     <div style={separatorRowStyle}>
@@ -161,21 +161,21 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
                   </div>
                 </div>
               )
-            : <AppointmentRow
-              key={item._id}
-              calendar={item.calendar}
-              appointment={item}
-              expandComments={
-                item._id === selectedAppointmentId ||
+              : <AppointmentRow
+                key={item._id}
+                calendar={item.calendar}
+                appointment={item}
+                expandComments={
+                  item._id === selectedAppointmentId ||
                 item._id === (currentAppointment && currentAppointment._id)
-              }
-              isCurrent={item._id === (currentAppointment && currentAppointment._id)}
-              autoFocus={!!selectedAppointmentId}
-              onClick={() =>
-                item._id === selectedAppointmentId
-                ? handleAppointmentClick(null)
-                : handleAppointmentClick(item._id)
-              } />
+                }
+                isCurrent={item._id === (currentAppointment && currentAppointment._id)}
+                autoFocus={!!selectedAppointmentId}
+                onClick={() =>
+                  item._id === selectedAppointmentId
+                    ? handleAppointmentClick(null)
+                    : handleAppointmentClick(item._id)
+                } />
           )
         }
         <br />

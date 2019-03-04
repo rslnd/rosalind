@@ -31,8 +31,8 @@ export class UserPanel extends React.Component {
             <b style={style.name}>
               {
                 this.props.sidebarOpen
-                ? fullNameWithTitle(this.props.currentUser)
-                : this.props.currentUser.username
+                  ? fullNameWithTitle(this.props.currentUser)
+                  : this.props.currentUser.username
               }
             </b>
         }
@@ -40,12 +40,12 @@ export class UserPanel extends React.Component {
           <div style={style.button}>
             {
               this.props.loggingOut
-              ? <Button bsStyle='default' block disabled>
-                <Icon name='refresh' spin />
-              </Button>
-              : <Button bsStyle='default' block onClick={this.props.handleLogout}>
-                <Icon name='sign-out' /> {__('login.logout')}
-              </Button>
+                ? <Button bsStyle='default' block disabled>
+                  <Icon name='refresh' spin />
+                </Button>
+                : <Button bsStyle='default' block onClick={this.props.handleLogout}>
+                  <Icon name='sign-out' /> {__('login.logout')}
+                </Button>
             }
           </div>
         </div>

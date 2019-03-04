@@ -72,14 +72,14 @@ const composer = ({ docId, collection }) => {
 
 const PairingButtonComponent = ({ canPair, hasProducers, handlePairingStart, handlePairingCancel, pairingCode }) =>
   !canPair
-  ? null
-  : <div>
-    <Button size='small' onClick={handlePairingStart}>
-      <Icon name='camera' />
-      { hasProducers && 'Bereit' }
-    </Button>
-    <QRModal value={pairingCode} onClose={handlePairingCancel} />
-  </div>
+    ? null
+    : <div>
+      <Button size='small' onClick={handlePairingStart}>
+        <Icon name='camera' />
+        { hasProducers && 'Bereit' }
+      </Button>
+      <QRModal value={pairingCode} onClose={handlePairingCancel} />
+    </div>
 
 const QRModal = ({ show, onClose, value }) =>
   !!value && <Modal

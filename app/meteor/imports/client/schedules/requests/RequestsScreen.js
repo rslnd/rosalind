@@ -9,8 +9,8 @@ export const RequestsScreen = ({ isLoading, requests, approve, decline, canEdit 
     <div className='row'>
       {
         isLoading
-        ? <Loading />
-        : <FlipMove>
+          ? <Loading />
+          : <FlipMove>
             <div key='newRequest' className='col-md-6'>
               <NewRequestContainer />
             </div>

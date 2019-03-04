@@ -18,10 +18,10 @@ const composer = props => {
 
 const Screen = ({ isSignpad }) =>
   isSignpad
-  ? (
-    <div style={lockScreenStyle}>
+    ? (
+      <div style={lockScreenStyle}>
       is Signpad
-    </div>
-  ) : null
+      </div>
+    ) : null
 
 export const SignPad = withTracker(composer)(Screen)

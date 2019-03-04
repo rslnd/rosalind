@@ -44,7 +44,7 @@ export const publication = () => {
         _id: 1,
         description: 1,
         pairedTo: 1
-      }})
+      } })
 
       return producers
     }

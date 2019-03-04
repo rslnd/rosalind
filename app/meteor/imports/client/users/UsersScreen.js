@@ -76,10 +76,10 @@ const structure = ({ getAssigneeName, isInRole }) => [
       return <span>
         {
           u.weakPassword
-          ? <span style={{ color: 'red' }}><Icon name='key' title='Passwort' /></span>
-          : hasPassword
-          ? <Icon name='key' title='Passwort' />
-          : null
+            ? <span style={{ color: 'red' }}><Icon name='key' title='Passwort' /></span>
+            : hasPassword
+              ? <Icon name='key' title='Passwort' />
+              : null
         }
       </span>
     }

@@ -3,7 +3,7 @@ import { __ } from '../../../i18n'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { Icon } from '../Icon'
-import { handleKeyPress } from './TextField';
+import { handleKeyPress } from './TextField'
 
 export const TinyButton = (props) => (
   <Button
@@ -165,7 +165,7 @@ export class InlineEdit extends React.Component {
             placeholder={this.props.placeholder}
             name={this.props.label}
             label={this.props.label}
-            />
+          />
 
           {
             !this.props.submitOnBlur &&

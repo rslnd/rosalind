@@ -118,7 +118,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
           scheduleId: _id
         })
       } else if (newSchedule && !_id) {
-        console.log('inserting new schedule', { newSchedule, assigneeId, weekday})
+        console.log('inserting new schedule', { newSchedule, assigneeId, weekday })
         Schedules.actions.upsertDefaultSchedule.callPromise({
           newSchedule,
           weekday,
@@ -179,16 +179,16 @@ class SchedulesDefaultScreenComponent extends React.Component {
 
       {
         isAddingSchedule
-        ? (
-          <EditSchedule
-            onChange={this.handleSaveEdit({ weekday, assigneeId })}
-            onCancel={this.handleEndEdit}
-          />
-        ) : (
-          canAddSchedule && <Button style={{ width: '100%' }} onClick={this.handleAddScheduleWeekday({ weekday, assigneeId })}>
-            <Icon style={{ opacity: 0.1 }} name='plus' />
-          </Button>
-        )
+          ? (
+            <EditSchedule
+              onChange={this.handleSaveEdit({ weekday, assigneeId })}
+              onCancel={this.handleEndEdit}
+            />
+          ) : (
+            canAddSchedule && <Button style={{ width: '100%' }} onClick={this.handleAddScheduleWeekday({ weekday, assigneeId })}>
+              <Icon style={{ opacity: 0.1 }} name='plus' />
+            </Button>
+          )
 
       }
 

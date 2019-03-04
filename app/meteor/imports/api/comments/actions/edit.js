@@ -27,7 +27,7 @@ export const edit = ({ Comments }) => {
 
       Comments.update({ _id: commentId }, { $set: {
         body: newBody
-      }})
+      } })
 
       Meteor.call('events/post', {
         type: 'comments/edit',

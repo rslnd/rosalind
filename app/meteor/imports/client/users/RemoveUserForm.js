@@ -27,10 +27,10 @@ const Fields = ({ submitting, handleRemove, doubleCheck, handleToggleDoubleCheck
       disabled={submitting || !doubleCheck}
       onClick={handleRemove}
     >{
-      submitting
-      ? <Icon name='refresh' spin />
-      : __('users.remove')
-    }</Button>
+        submitting
+          ? <Icon name='refresh' spin />
+          : __('users.remove')
+      }</Button>
   </div>
 
 const handleRemove = ({ setSubmitting, history, user }) => async () => {

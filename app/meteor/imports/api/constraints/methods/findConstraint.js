@@ -10,7 +10,7 @@ export const findConstraint = Constraints => ({ assigneeId, calendarId, time }) 
 
   return dayConstraints.find(c =>
     (c.from || c.to)
-    ? isWithinHMRange(c)(time)
-    : true
+      ? isWithinHMRange(c)(time)
+      : true
   )
 }

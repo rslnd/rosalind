@@ -91,8 +91,8 @@ const Currency = ({ value, average }) =>
     <small className='text-muted'>€&nbsp;</small>
     {
       !Number.isNaN(value)
-      ? integer(value)
-      : <Nil />
+        ? integer(value)
+        : <Nil />
     }
     {average && <small className='text-muted'>&nbsp;⌀</small>}
   </span>

@@ -18,14 +18,14 @@ export const dailyReportWorker = (job, callback) => {
   console.log('[Reports] dailyReportWorker: Sending email')
   try {
     sendEmail()
-    .then(() => {
-      cleanOldJobs(job)
-      job.done()
-      callback()
-    }).catch((e) => {
-      console.error('[Reports] worker: errored with', e)
-      job.fail()
-    })
+      .then(() => {
+        cleanOldJobs(job)
+        job.done()
+        callback()
+      }).catch((e) => {
+        console.error('[Reports] worker: errored with', e)
+        job.fail()
+      })
   } catch (e) {
     console.error('[Reports] worker: hard errored with', e)
   }

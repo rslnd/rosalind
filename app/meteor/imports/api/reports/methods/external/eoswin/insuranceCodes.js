@@ -44,7 +44,7 @@ export const CAUTERY = [
 ]
 
 export const CRYO = [
-  '507', // Kroytherapie mit flüssigem Stickstoff (außer Warzen)  
+  '507', // Kroytherapie mit flüssigem Stickstoff (außer Warzen)
   '72', //  Hühneraugen/Warzenentfernung, alle Methoden pro Sitzung (ausgenommen Excision und Naht)
   '26E', // Exkochleation oder Ätzung oder Kaustik von 3Stk. Warzen in einer Sitzung - Stickstiff
   '38R' // Keratosen

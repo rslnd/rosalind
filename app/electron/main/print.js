@@ -16,6 +16,7 @@ const start = (options) => {
 
 const print = (options) => {
   temp.mkdir('rosalind', (err, tmpDir) => {
+    if (err) { return logger.error(err) }
     const pdfPath = path.join(tmpDir, (options.title || 'Print') + '.pdf')
 
     const printOptions = {

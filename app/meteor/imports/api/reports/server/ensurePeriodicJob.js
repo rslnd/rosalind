@@ -6,7 +6,7 @@ export const ensurePeriodicJob = () => {
   const sendAtHourLocal = 21
   const sendAtHourUTC = moment().tz('Europe/Vienna').hour(sendAtHourLocal).startOf('hour').utc().hours()
 
-  const everyNight = {h: [sendAtHourUTC], m: [0] }
+  const everyNight = { h: [sendAtHourUTC], m: [0] }
 
   // Later.js schedule format
   const schedule = {

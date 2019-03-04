@@ -73,10 +73,10 @@ export const applySearchFilter = ({
           acc.wanted === 'assignee' ||
           (matchedAssignees.length >= 1 && matchedTags.length === 0) // Require term to match only assignee
         )
-        ? 'assignee'
-        : (matchedTags.length >= 1)
-        ? 'tag'
-        : null
+          ? 'assignee'
+          : (matchedTags.length >= 1)
+            ? 'tag'
+            : null
 
       return {
         wanted,
@@ -96,8 +96,8 @@ export const applySearchFilter = ({
           highlightAndCollapse(
             (availabilities[a._id] || []).filter(a =>
               (parsedQuery.tags && parsedQuery.tags.length >= 1)
-              ? parsedQuery.tags.some(t => a.tags.map(at => at._id).includes(t._id))
-              : true
+                ? parsedQuery.tags.some(t => a.tags.map(at => at._id).includes(t._id))
+                : true
             ), {
               parsedQuery,
               hoverAvailability,
@@ -105,25 +105,25 @@ export const applySearchFilter = ({
             })
       })).filter(a => a.availabilities.length >= 1)
     : (parsedQuery.wanted === 'tag')
-    ? parsedQuery.tags.map(t => ({
-      key: t._id,
-      tag: t,
-      assignees: map(availabilities, (assigneeAvailabilities, assigneeId) => {
-        return {
-          key: assigneeId,
-          assignee: assignees.find(a => a._id === assigneeId), // Weird, sometimes undefined
-          availabilities: highlightAndCollapse(
-            assigneeAvailabilities.filter(a =>
-              a.tags.map(at => at._id).includes(t._id)
-            ), {
-              parsedQuery,
-              hoverAvailability,
-              calendars
-            })
-        }
-      }).filter(a => a.assignee && a.availabilities.length >= 1)
-    }))
-    : []
+      ? parsedQuery.tags.map(t => ({
+        key: t._id,
+        tag: t,
+        assignees: map(availabilities, (assigneeAvailabilities, assigneeId) => {
+          return {
+            key: assigneeId,
+            assignee: assignees.find(a => a._id === assigneeId), // Weird, sometimes undefined
+            availabilities: highlightAndCollapse(
+              assigneeAvailabilities.filter(a =>
+                a.tags.map(at => at._id).includes(t._id)
+              ), {
+                parsedQuery,
+                hoverAvailability,
+                calendars
+              })
+          }
+        }).filter(a => a.assignee && a.availabilities.length >= 1)
+      }))
+      : []
 
   return { results: filtered, parsedQuery }
 }
@@ -156,8 +156,8 @@ const highlightMatchedTags = ({ parsedQuery, hoverAvailability = {}, calendars }
       isHovering: hoverAvailability._id === availability._id,
       matchedTags:
         (queryTags.length >= 1)
-        ? availability.tags.filter(t => queryTags.includes(t._id))
-        : availability.tags
+          ? availability.tags.filter(t => queryTags.includes(t._id))
+          : availability.tags
     }
   }
 }

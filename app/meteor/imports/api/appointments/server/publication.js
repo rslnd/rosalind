@@ -172,7 +172,7 @@ export default () => {
         end = moment().add(6, 'months').endOf(within).toDate()
       } else if (date) {
         start = moment(date).startOf(within).toDate()
-        end = moment(date).endOf(within).toDate()        
+        end = moment(date).endOf(within).toDate()
       }
 
       return {

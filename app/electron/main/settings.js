@@ -1,8 +1,7 @@
 const fs = require('fs')
 const crypto = require('crypto')
 const path = require('path')
-const open = require('opn')
-const { ipcMain, app, dialog } = require('electron')
+const { app, dialog } = require('electron')
 const logger = require('./logger')
 const isEqual = require('lodash/isEqual')
 

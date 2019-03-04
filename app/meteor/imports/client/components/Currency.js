@@ -7,6 +7,6 @@ const currencyStyle = {
 
 export const Currency = ({ style, value }) =>
   <span style={style}>
-    <small style={{currencyStyle}}>€&nbsp;</small>
+    <small style={{ currencyStyle }}>€&nbsp;</small>
     {twoPlaces(value)}
   </span>

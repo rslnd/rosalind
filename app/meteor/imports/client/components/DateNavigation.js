@@ -223,7 +223,7 @@ class DateNavigationButtons extends React.Component {
                   }
                 </ButtonGroup>
               </div>
-            }
+          }
         </PortalWithState>
       </div>
     )

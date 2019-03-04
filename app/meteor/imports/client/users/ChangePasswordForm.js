@@ -27,10 +27,10 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
       disabled={submitting || invalid || validating || pristine}
       onClick={handleSubmit}
     >{
-      submitting || validating
-      ? <Icon name='refresh' spin />
-      : __('users.changePassword')
-    }</Button>
+        submitting || validating
+          ? <Icon name='refresh' spin />
+          : __('users.changePassword')
+      }</Button>
   </form>
 
 export const asyncValidate = async ({ password }) => {

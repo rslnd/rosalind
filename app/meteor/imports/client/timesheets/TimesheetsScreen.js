@@ -17,11 +17,11 @@ const End = ({ end, isToday }) => (
   <span>
     {
       end
-      ? end.format('H:mm')
-      : (isToday
-        ? __('timesheets.now')
-        : <Icon name='times-circle-o' />
-      )
+        ? end.format('H:mm')
+        : (isToday
+          ? __('timesheets.now')
+          : <Icon name='times-circle-o' />
+        )
     }
   </span>
 )
@@ -54,8 +54,8 @@ class TimesheetTableRow extends React.Component {
         <td style={{ textAlign: 'right', width: 120 }}>
           {
             start && (end || isToday)
-            ? moment.duration(duration).format(__('time.durationFormat'))
-            : <Nil />
+              ? moment.duration(duration).format(__('time.durationFormat'))
+              : <Nil />
           }
         </td>
       </tr>

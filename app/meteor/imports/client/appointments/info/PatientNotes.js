@@ -10,7 +10,7 @@ export const PatientNotes = ({ patient }) => (
     <div style={iconStyle}>
       <Icon name='user-plus' />
     </div>
-    <div style={{...grow, backgroundColor: patient.note ? '#FFF9C4' : ''}}>
+    <div style={{ ...grow, backgroundColor: patient.note ? '#FFF9C4' : '' }}>
       <Field
         name='note'
         component={TextField}

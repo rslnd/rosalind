@@ -51,10 +51,10 @@ export const label = t => t.format('[T]HHmm')
 const minutes = (from, to, slotSize = 1) =>
   Array.from(
     moment.range(from, to)
-    .by('minutes', {
-      step: slotSize,
-      excludeEnd: true
-    })
+      .by('minutes', {
+        step: slotSize,
+        excludeEnd: true
+      })
   ).map(t => moment(t))
 
 const dayMinutes = minutes(start(), end())

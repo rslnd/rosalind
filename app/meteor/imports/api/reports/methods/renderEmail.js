@@ -30,10 +30,10 @@ export const renderSummary = ({ report, mapCalendar }) => {
   return dedent`
     -- ${mapCalendar(report.calendarId).name} --
     Gesamtumsatz: ${currencyRounded(
-      idx(report, _ => _.total.revenue.total.actual) ||
+    idx(report, _ => _.total.revenue.total.actual) ||
       idx(report, _ => _.total.revenue.total.expected))}
     Auslastung: ${
-      percentage({ value: report.total.workload.weighted }) ||
+  percentage({ value: report.total.workload.weighted }) ||
       percentage({ part: report.total.workload.actual, of: report.total.workload.available })}
   `
 }

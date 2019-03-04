@@ -51,10 +51,10 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
   const name = item.label
     ? item.label
     : item.name
-    ? item.name.indexOf('.') === -1
-      ? __(`${item.name}.this`)
-      : __(item.name)
-    : ''
+      ? item.name.indexOf('.') === -1
+        ? __(`${item.name}.this`)
+        : __(item.name)
+      : ''
 
   const link = item.link || `/${item.name}`
 
@@ -68,35 +68,35 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
     <li className={isActive(link, location) ? 'active' : undefined}>
       {
         item.onClick
-        ? (
-          <a className='pointer level-0 link'
-            onClick={() => item.onClick({ item, location })}>
-            <i className={`fa fa-${item.icon}`} />
-            <span className={hideWhenClosed}>{name}</span>
-          </a>
-        ) : (
-          <Link
-            to={link}
-            className='pointer level-0 link'>
-            <i className={`fa fa-${item.icon}`} />
-            <span className={hideWhenClosed}>{name}</span>
-            <FlipMove typeName='span'>
-              {
-                item.count && item.count > 0
-                ? <small
-                  key={item.count}
-                  className={`label pull-right label-primary ${!sidebarOpen && classes.badgeWhenClosed}`}>
-                  {item.count}
-                </small>
-                : (item.subItems &&
-                  <i
-                    key='subItems'
-                    className={`i fa fa-angle-left pull-right ${hideWhenClosed}`} />
-                )
-              }
-            </FlipMove>
-          </Link>
-        )
+          ? (
+            <a className='pointer level-0 link'
+              onClick={() => item.onClick({ item, location })}>
+              <i className={`fa fa-${item.icon}`} />
+              <span className={hideWhenClosed}>{name}</span>
+            </a>
+          ) : (
+            <Link
+              to={link}
+              className='pointer level-0 link'>
+              <i className={`fa fa-${item.icon}`} />
+              <span className={hideWhenClosed}>{name}</span>
+              <FlipMove typeName='span'>
+                {
+                  item.count && item.count > 0
+                    ? <small
+                      key={item.count}
+                      className={`label pull-right label-primary ${!sidebarOpen && classes.badgeWhenClosed}`}>
+                      {item.count}
+                    </small>
+                    : (item.subItems &&
+                    <i
+                      key='subItems'
+                      className={`i fa fa-angle-left pull-right ${hideWhenClosed}`} />
+                    )
+                }
+              </FlipMove>
+            </Link>
+          )
       }
       {sidebarOpen && item.subItems &&
         <ul className='treeview-menu'>
@@ -109,7 +109,7 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
   )
 })
 
-const SubItem = ({item, subItem, location}) => {
+const SubItem = ({ item, subItem, location }) => {
   const displayName = subItem.label ||
     __([item.name, subItem.name].join('.'))
 
@@ -199,7 +199,7 @@ class SidebarItems extends React.Component {
           ))}
 
           {/* TODO: Replace with flexbox */}
-          <li style={{height: '70px'}} />
+          <li style={{ height: '70px' }} />
 
           {/* <li className={`header text-center ${classes.customerName} ${this.props.isOpen && style.hidden}`}>{this.props.customerName.split(' - ').map((name, i) => (
             <span key={i}>{name}<br /></span>

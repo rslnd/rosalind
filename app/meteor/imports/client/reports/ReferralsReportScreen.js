@@ -88,21 +88,21 @@ export class ReferralsReportScreen extends React.Component {
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
           {
             !user
-            ? <Box type='info' title={__('ui.notice')}>
-              <p>{__('reports.emptySelectAssignee')}</p>
-            </Box>
-            : isLoading
-            ? <Loading />
-            : (referrals && referrals.length > 0)
-            ? <ReferralsDetailTable
-                referrals={referrals}
-                mapUserIdToName={mapUserIdToName}
-              />
-            : <div key='noReports'>
-              <Box type='info' title={__('ui.notice')}>
-                <p>{__('reports.emptyAssignee')}</p>
+              ? <Box type='info' title={__('ui.notice')}>
+                <p>{__('reports.emptySelectAssignee')}</p>
               </Box>
-            </div>
+              : isLoading
+                ? <Loading />
+                : (referrals && referrals.length > 0)
+                  ? <ReferralsDetailTable
+                    referrals={referrals}
+                    mapUserIdToName={mapUserIdToName}
+                  />
+                  : <div key='noReports'>
+                    <Box type='info' title={__('ui.notice')}>
+                      <p>{__('reports.emptyAssignee')}</p>
+                    </Box>
+                  </div>
           }
         </div>
       </div>

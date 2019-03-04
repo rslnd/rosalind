@@ -4,7 +4,7 @@ import { Calendars } from '../../api/calendars'
 
 export const CalendarSelect = ({ basePath = 'appointments' }) => {
   const calendars = Calendars
-    .find({}, { sort: { order: 1 }}).fetch()
+    .find({}, { sort: { order: 1 } }).fetch()
     .map(c => ({
       ...c,
       link: `/${basePath}/${c.slug}`

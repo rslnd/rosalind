@@ -16,8 +16,8 @@ const Fields = ({ submitting, handleToggle, passwordless }) =>
       {__('users.passwordlessLogin')}:&nbsp;
       <b>{
         passwordless
-        ? __('users.passwordessEnabled')
-        : __('users.passwordlessDisabled')
+          ? __('users.passwordessEnabled')
+          : __('users.passwordlessDisabled')
       }</b>
     </p>
     <Button
@@ -28,12 +28,12 @@ const Fields = ({ submitting, handleToggle, passwordless }) =>
       disabled={submitting}
       onClick={handleToggle}
     >{
-      submitting
-      ? <Icon name='refresh' spin />
-      : passwordless
-      ? __('users.disablePasswordless')
-      : __('users.enablePasswordless')
-    }</Button>
+        submitting
+          ? <Icon name='refresh' spin />
+          : passwordless
+            ? __('users.disablePasswordless')
+            : __('users.enablePasswordless')
+      }</Button>
   </div>
 
 const handleToggle = ({ passwordless, user, setSubmitting }) => () =>

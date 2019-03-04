@@ -72,12 +72,12 @@ export const withPromise = fetcher =>
         this.promiseInFlight = makeCancelable(fetcher(props))
 
         this.promiseInFlight.promise.then(data =>
-            this.setState({
-              isLoading: false,
-              data,
-              error: null
-            })
-          )
+          this.setState({
+            isLoading: false,
+            data,
+            error: null
+          })
+        )
           .catch(reason => {
             if (!reason.isCanceled) {
               this.setState({
@@ -87,7 +87,7 @@ export const withPromise = fetcher =>
               })
             }
           })
-        }
+      }
 
       render () {
         const { data, ...rest } = this.state
@@ -98,5 +98,4 @@ export const withPromise = fetcher =>
           {...rest}
         />
       }
-
     }

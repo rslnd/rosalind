@@ -18,16 +18,16 @@ const composer = ({ query = '' }) => {
 
   const selector =
     query && query.length > 2
-    ? {
-      $or: flatten(query.split(' ').map(word => [
-        { lastName: { $regex: '^' + word, $options: 'i' } },
-        { note: { $regex: word, $options: 'i' } },
-        { telephone: { $regex: word, $options: 'i' } },
-        { firstName: { $regex: '^' + word, $options: 'i' } }
-      ]))
-    } : {
-      removed: true
-    }
+      ? {
+        $or: flatten(query.split(' ').map(word => [
+          { lastName: { $regex: '^' + word, $options: 'i' } },
+          { note: { $regex: word, $options: 'i' } },
+          { telephone: { $regex: word, $options: 'i' } },
+          { firstName: { $regex: '^' + word, $options: 'i' } }
+        ]))
+      } : {
+        removed: true
+      }
 
   const inboundCalls = InboundCalls.find(selector, {
     sort: {

@@ -6,7 +6,6 @@ import { publish, publishComposite } from '../../../util/meteor/publish'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 
 export default () => {
-
   publish({
     name: 'inboundCallsTopics',
     roles: ['inboundCalls'],
@@ -54,19 +53,18 @@ export default () => {
       query: String
     },
     fn: function ({ query }) {
-
       const selector =
         query && query.length > 3
-        ? {
-          $or: flatten(query.split(' ').map(word => [
-            { lastName: { $regex: '^' + word, $options: 'i' } },
-            { note: { $regex: word, $options: 'i' } },
-            { telephone: { $regex: word, $options: 'i' } },
-            { firstName: { $regex: '^' + word, $options: 'i' } }
-          ]))
-        } : {
-          removed: true
-        }
+          ? {
+            $or: flatten(query.split(' ').map(word => [
+              { lastName: { $regex: '^' + word, $options: 'i' } },
+              { note: { $regex: word, $options: 'i' } },
+              { telephone: { $regex: word, $options: 'i' } },
+              { firstName: { $regex: '^' + word, $options: 'i' } }
+            ]))
+          } : {
+            removed: true
+          }
 
       return {
         find: function () {

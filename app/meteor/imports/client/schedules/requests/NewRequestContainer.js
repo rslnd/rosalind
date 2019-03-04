@@ -32,7 +32,7 @@ export class NewRequestContainer extends React.Component {
         <NewRequestForm
           onSubmit={this.handleSubmit}
           currentUser={Meteor.user()}
-          />
+        />
       </Box>
     )
   }

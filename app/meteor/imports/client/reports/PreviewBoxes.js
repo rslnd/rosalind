@@ -18,7 +18,7 @@ export const PreviewBoxes = ({ previews, mapUserIdToUsername, mapUserIdToName })
                 <span>
                   <b>{p.calendar.name}</b> &middot; Vorschau
                 </span>
-                }
+              }
               icon={p.calendar.icon}>
               <Week
                 days={p.days}

@@ -70,42 +70,42 @@ export const availabilities = ({ calendar, date, assignees, onClick, onMouseEnte
       assigneeId={assignee.assigneeId}
     /> : null,
     ...flatten(
-        (
-          assignee.assigneeId === null
+      (
+        assignee.assigneeId === null
           ? [{ slotSize: calendar.slotSize, from: start(), to: end() }]
           : assignee.availabilities
-        ).map(availability => {
-          const { slotSize, from, to, pauses = [] } = availability
-          const format = formatter(slotSize)
+      ).map(availability => {
+        const { slotSize, from, to, pauses = [] } = availability
+        const format = formatter(slotSize)
 
-          return [
-            ...timeSlotsRange({ slotSize, from, to })
-              .map((time, i, times) => (
-                <Blank
-                  key={[availability._id, time].join('')}
-                  date={date}
-                  startTime={time}
-                  endTime={times[i + 1] || label(moment(to))}
-                  format={format}
+        return [
+          ...timeSlotsRange({ slotSize, from, to })
+            .map((time, i, times) => (
+              <Blank
+                key={[availability._id, time].join('')}
+                date={date}
+                startTime={time}
+                endTime={times[i + 1] || label(moment(to))}
+                format={format}
+                assigneeId={assignee.assigneeId}
+                onClick={onClick}
+                onMouseEnter={onMouseEnter} />
+            )),
+          ...flatten(pauses.map(({ from, to, note }) =>
+            timeSlotsRange({ slotSize, from, to })
+              .map((time, i, times) =>
+                <Pause
+                  key={[availability._id, '-P', time].join('')}
                   assigneeId={assignee.assigneeId}
-                  onClick={onClick}
-                  onMouseEnter={onMouseEnter} />
-              )),
-            ...flatten(pauses.map(({ from, to, note }) =>
-              timeSlotsRange({ slotSize, from, to })
-                .map((time, i, times) =>
-                  <Pause
-                    key={[availability._id, '-P', time].join('')}
-                    assigneeId={assignee.assigneeId}
-                    note={note}
-                    from={label(moment(from))}
-                    to={label(moment(to))}
-                  />
-                )
-            ))
-          ]
-        })
-      )
+                  note={note}
+                  from={label(moment(from))}
+                  to={label(moment(to))}
+                />
+              )
+          ))
+        ]
+      })
+    )
   ]))
 
 const unavailableStyle = {

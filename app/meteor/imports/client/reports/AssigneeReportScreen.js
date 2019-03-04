@@ -110,26 +110,26 @@ export class AssigneeReportScreen extends React.Component {
           <div className='display-none show-print' style={{ width: '100%', height: 5 }} />
           {
             !user
-            ? <Box type='info' title={__('ui.notice')}>
-              <p>{__('reports.emptySelectAssignee')}</p>
-            </Box>
-            : loading
-            ? <Loading />
-            : (reports && reports.length > 0) && reports.map((report, i) =>
-              <div key={i} style={{ marginBottom: 80 }}>
-                <Report
-                  report={report}
-                  showRevenue={this.state.showRevenue}
-                  mapUserIdToName={mapUserIdToName}
-                  mapReportAsToHeader={mapReportAsToHeader}
-                  assigneeReport
-                />
-              </div>
-            ) || <div key='noReports'>
-              <Box type='info' title={__('ui.notice')}>
-                <p>{__('reports.emptyAssignee')}</p>
+              ? <Box type='info' title={__('ui.notice')}>
+                <p>{__('reports.emptySelectAssignee')}</p>
               </Box>
-            </div>
+              : loading
+                ? <Loading />
+                : (reports && reports.length > 0) && reports.map((report, i) =>
+                  <div key={i} style={{ marginBottom: 80 }}>
+                    <Report
+                      report={report}
+                      showRevenue={this.state.showRevenue}
+                      mapUserIdToName={mapUserIdToName}
+                      mapReportAsToHeader={mapReportAsToHeader}
+                      assigneeReport
+                    />
+                  </div>
+                ) || <div key='noReports'>
+                  <Box type='info' title={__('ui.notice')}>
+                    <p>{__('reports.emptyAssignee')}</p>
+                  </Box>
+                </div>
           }
           {
             user && referrals && referrals.assignees[0] &&

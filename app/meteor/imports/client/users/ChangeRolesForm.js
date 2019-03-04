@@ -45,10 +45,10 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine, user 
       disabled={submitting || invalid || validating || pristine}
       onClick={handleSubmit}
     >{
-      submitting || validating
-      ? <Icon name='refresh' spin />
-      : __('users.changeRoles')
-    }</Button>
+        submitting || validating
+          ? <Icon name='refresh' spin />
+          : __('users.changeRoles')
+      }</Button>
   </form>
 
 export const ChangeRolesForm = compose(

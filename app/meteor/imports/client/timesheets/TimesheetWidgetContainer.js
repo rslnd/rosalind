@@ -11,20 +11,20 @@ export const TimesheetWidget = ({ timesheets, isTracking, sum, stopTracking, sta
   <div>
     {
       isTracking
-      ? <div>
-        <p>{__('timesheets.youAreWorking', moment.duration(sum).format(__('time.durationFormat')))}</p>
-        <Button bsStyle='warning' block onClick={stopTracking}>
-          <Icon name='pause' />&ensp;
-          {__('timesheets.pauseAction')}
-        </Button>
-      </div>
-      : <div>
-        <p>{__('timesheets.youHaveWorkedToday', moment.duration(sum).format(__('time.durationFormat')))}</p>
-        <Button bsStyle='success' block onClick={startTracking}>
-          <Icon name='play' />&ensp;
-          {__('timesheets.resumeAction')}
-        </Button>
-      </div>
+        ? <div>
+          <p>{__('timesheets.youAreWorking', moment.duration(sum).format(__('time.durationFormat')))}</p>
+          <Button bsStyle='warning' block onClick={stopTracking}>
+            <Icon name='pause' />&ensp;
+            {__('timesheets.pauseAction')}
+          </Button>
+        </div>
+        : <div>
+          <p>{__('timesheets.youHaveWorkedToday', moment.duration(sum).format(__('time.durationFormat')))}</p>
+          <Button bsStyle='success' block onClick={startTracking}>
+            <Icon name='play' />&ensp;
+            {__('timesheets.resumeAction')}
+          </Button>
+        </div>
     }
   </div>
 )

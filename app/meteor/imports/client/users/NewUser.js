@@ -46,10 +46,10 @@ const NewUserScreen = ({ submitting, invalid, validating, pristine, handleSubmit
                 disabled={submitting || invalid || validating || pristine}
                 onClick={handleSubmit}
               >{
-                submitting || validating
-                ? <Icon name='refresh' spin />
-                : __('users.thisSave')
-              }</Button>
+                  submitting || validating
+                    ? <Icon name='refresh' spin />
+                    : __('users.thisSave')
+                }</Button>
             </form>
           </Box>
         </div>
@@ -59,11 +59,11 @@ const NewUserScreen = ({ submitting, invalid, validating, pristine, handleSubmit
 
 const onSubmit = values =>
   Users.actions.insert.callPromise(values)
-  .then(() => Alert.success(__('ui.saved')))
-  .catch((e) => {
-    console.error(e)
-    Alert.error(__('ui.error'))
-  })
+    .then(() => Alert.success(__('ui.saved')))
+    .catch((e) => {
+      console.error(e)
+      Alert.error(__('ui.error'))
+    })
 
 const validateProfile = ({ username }) => {
   if (!username) {

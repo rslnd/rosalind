@@ -172,15 +172,15 @@ export class HeaderRow extends React.Component {
 
               {
                 assignee.fullNameWithTitle
-                ? (
-                  assignee.employee
-                  ? assignee.fullNameWithTitle
-                  : <span className='text-muted'>{assignee.fullNameWithTitle}</span>
-                )
-                : (
-                  this.props.calendar.unassignedLabel ||
+                  ? (
+                    assignee.employee
+                      ? assignee.fullNameWithTitle
+                      : <span className='text-muted'>{assignee.fullNameWithTitle}</span>
+                  )
+                  : (
+                    this.props.calendar.unassignedLabel ||
                   __('appointments.unassigned')
-                )
+                  )
               }
             </div>
           ))}
@@ -252,7 +252,7 @@ export class HeaderRow extends React.Component {
                   onChange={newAssigneeId => this.setState({ changingAssignee: {
                     oldAssigneeId: this.state.changingAssignee.oldAssigneeId,
                     newAssigneeId
-                  }})}
+                  } })}
                 />
               </Modal.Body>
               <Modal.Footer>

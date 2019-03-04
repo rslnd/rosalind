@@ -22,7 +22,7 @@ const hasAccepted = note => {
   privacy.map(a =>
     accepted.map(b => {
       if (ok) {
-        return
+
       } else {
         ok = n.indexOf([a, b].join(' ')) !== -1
       }

@@ -39,7 +39,7 @@ describe('schedules', () => {
         moment.tz(d, 'Europe/Vienna')
 
       expect(m(applyHM(day, hm)).hours()).to.eql(13)
-      expect(m(applyHM({...day, month: 8}, hm)).hours()).to.eql(13)
+      expect(m(applyHM({ ...day, month: 8 }, hm)).hours()).to.eql(13)
       expect(m(applyHM(day, hm)).minutes()).to.eql(0)
       expect(m(applyHM(day, hm)).seconds()).to.eql(0)
     })

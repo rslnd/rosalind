@@ -75,8 +75,8 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
 
 const DurationStrategy = ({ durationStrategy }) =>
   durationStrategy
-  ? <span>{durationStrategy.name} {durationStrategy.upTo || null}</span>
-  : null
+    ? <span>{durationStrategy.name} {durationStrategy.upTo || null}</span>
+    : null
 
 const toWeekdayLabel = s => __(`time.${s}`)
 

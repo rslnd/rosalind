@@ -1,7 +1,7 @@
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
-const moment = extendMoment(_moment)
 import { dateToDay } from '../../../util/time/day'
+const moment = extendMoment(_moment)
 
 export const daysForPreview = (date, weeks = 3) => {
   const start = moment(date).startOf('week')

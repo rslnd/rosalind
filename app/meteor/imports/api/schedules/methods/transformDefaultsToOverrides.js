@@ -12,7 +12,7 @@ import {
   dayToString,
   stringToDay,
   dateToDay
- } from '../../../util/time/day'
+} from '../../../util/time/day'
 
 export const transformDefaultsToOverrides = ({ defaultSchedules, days }) => {
   const daysWithWeekday = days.map(day => ({

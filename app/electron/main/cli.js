@@ -4,8 +4,8 @@ const logger = require('./logger')
 const handleStartupEvent = callback => {
   const apiVersion =
     app.requestSingleInstanceLock
-    ? 4
-    : 3
+      ? 4
+      : 3
 
   // Only quit newer instance if current one is non-headless.
   // Inversely, quit the older current instance if it was headless.

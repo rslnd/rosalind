@@ -75,5 +75,5 @@ const fetchReferrals = ({ from, to, user }) => {
 export const ReferralsReportContainer = compose(
   withRouter,
   withTracker(composer),
-  withPromise(fetchReferrals),
+  withPromise(fetchReferrals)
 )(ReferralsReportScreen)

@@ -89,8 +89,8 @@ export const TagsList = ({
 }) => {
   const expandedTags = tags.map(idOrTag =>
     typeof idOrTag === 'string'
-    ? Tags.findOne({ _id: idOrTag }, { removed: true })
-    : idOrTag
+      ? Tags.findOne({ _id: idOrTag }, { removed: true })
+      : idOrTag
   ).filter(identity)
 
   // group by private, sort within groups
@@ -106,7 +106,7 @@ export const TagsList = ({
         style: { paddingTop: 6 }
       }
     ].filter(t => t.tags && t.tags.length > 0)
-     .map(t => ({ ...t, tags: sortBy('order')(t.tags) }))
+      .map(t => ({ ...t, tags: sortBy('order')(t.tags) }))
     : [{
       tags: expandedTags
     }]
@@ -118,7 +118,7 @@ export const TagsList = ({
     {orderedTagGroups.map((tagGroup, i) =>
       <span key={i}>
         {
-        orderedTagGroups.length > 1 &&
+          orderedTagGroups.length > 1 &&
           <span className='text-muted' style={{
             ...tagGroup.style,
             ...tagGroupTitleStyle,

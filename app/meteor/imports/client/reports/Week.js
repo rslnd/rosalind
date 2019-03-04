@@ -50,7 +50,7 @@ const Assignees = ({ assignees = [], workload, mapUserIdToName, mapUserIdToUsern
             className='print-color'
             style={{ ...avatarStyle, backgroundColor: colorHash.hex(id) }}
             title={mapUserIdToName(id)}>{mapUserIdToUsername(id)}</span>
-      ))}
+        ))}
     </div>
 
     <div className='pull-right'>

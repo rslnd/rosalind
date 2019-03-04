@@ -33,8 +33,8 @@ const parseDay = memoize(d => moment(d))
 // If calendar allows unassigned appointments, add null assignee if not already present
 const addNullAssignee = a =>
   (a.indexOf(null) === -1)
-  ? [...a, null]
-  : a
+    ? [...a, null]
+    : a
 
 const onNewAppointmentModalOpen = (args) => Appointments.actions.acquireLock.call(args)
 const onNewAppointmentModalClose = (args) => Appointments.actions.releaseLock.call(args)

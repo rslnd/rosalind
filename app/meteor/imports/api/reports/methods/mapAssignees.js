@@ -104,7 +104,7 @@ export const mapAssignees = ({ day, appointments, pastAppointments, daySchedule,
 
   if (day.day === 21 && day.month === 6) {
     console.log(Object.keys(overrideSchedulesByAssignees), Object.keys(appointmentsByAssignees), '--->', assigneeIds)
-  } 
+  }
 
   const assignees = sortBy('assigneeId')(assigneeIds.map((assigneeId) => {
     const appointments = appointmentsByAssignees[assigneeId]

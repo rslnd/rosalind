@@ -27,14 +27,14 @@ const sidebarItems = ({ history }) => {
       slug: c.slug,
       roles: ['admin', 'appointments', `appointments-${c.slug}`],
       // replace calendar slug and keep selected date
-      onClick: ({item, location}) => {
+      onClick: ({ item, location }) => {
         const [base, _calendar, date] = location.pathname
           .split('/').filter(x => x.length > 0)
 
         const newPath =
           base === 'appointments'
-          ? '/' + [base, item.slug, date].filter(identity).join('/')
-          : item.link
+            ? '/' + [base, item.slug, date].filter(identity).join('/')
+            : item.link
 
         history.push(newPath)
       }

@@ -156,7 +156,7 @@ export default () => {
     WebAppInternals.setInlineScriptsAllowed(false)
 
     WebApp.connectHandlers.use((req, res, next) => {
-      const styleNonce = new Buffer(uuidv4()).toString('base64')
+      const styleNonce = Buffer.from(uuidv4()).toString('base64')
 
       // A node req object has many more keys than meteor's request,
       // HACK: Attach the nonce to the request url as search fragment

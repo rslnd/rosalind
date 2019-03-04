@@ -19,7 +19,7 @@ export default () => {
               className='btn btn-lg btn-default btn-block'
               style={{ marginTop: 5 }}
               onClick={() => window.native.quitAndInstall()}>
-                {__('ui.updateInstallNow')}
+              {__('ui.updateInstallNow')}
             </div>
         }
       </div>, {

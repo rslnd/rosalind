@@ -218,14 +218,14 @@ const perform = ({ Appointments, Patients, actions }) =>
     const updatedPatients = Patients.update({ _id: { $in: a.duplicateIds } }, { $set: {
       removed: true,
       removedAt: new Date()
-    }}, { multi: true })
+    } }, { multi: true })
 
     const appointments = Appointments.find({ patientId: { $in: a.duplicateIds } }).fetch()
     console.log('[Patients] deduplicateWithJournal: Reassigning', masterId, ' <- ', appointments.length, 'appointments')
 
     const updatedAppointments = Appointments.update({ _id: { $in: appointments.map(a => a._id) } }, { $set: {
       patientId: masterId
-    }}, { multi: true })
+    } }, { multi: true })
 
     return { masterId, updatedPatients, updatedAppointments }
   })

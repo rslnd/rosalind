@@ -14,8 +14,8 @@ const composer = (props) => {
     const selector = (hasTopicsDefined && topic)
       ? { topicId: topic._id }
       : hasTopicsDefined
-      ? { topicId: null }
-      : {}
+        ? { topicId: null }
+        : {}
 
     const inboundCalls = InboundCalls.find(selector, {
       sort: { pinnedBy: -1, createdAt: 1 }

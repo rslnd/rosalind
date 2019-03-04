@@ -23,8 +23,8 @@ const CurrencyFieldInner = (props) => {
     thousandSeparator=' '
     decimalSeparator=','
     onKeyDown={(e) => {
-      const {key, target} = e
-      const {selectionStart, value} = target
+      const { key, target } = e
+      const { selectionStart, value } = target
       if (key === '.') {
         e.preventDefault()
         target.value = `${value.substr(0, selectionStart)},${value.substr(selectionStart, value.length)}`

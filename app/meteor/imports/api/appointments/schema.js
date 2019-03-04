@@ -28,7 +28,7 @@ export default new SimpleSchema({
     optional: true,
     index: 1
   },
-  
+
   waitlistAssigneeId: {
     type: SimpleSchema.RegEx.Id,
     optional: true

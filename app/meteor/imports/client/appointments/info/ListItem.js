@@ -6,7 +6,7 @@ const iconDefaultStyle = {
   textAlign: 'center',
   paddingLeft: 6,
   paddingRight: 6,
-  minWidth: 50,
+  minWidth: 50
 }
 
 export const ListItem = ({ icon, children, hr, style, iconStyle, highlight, onClick }) => {

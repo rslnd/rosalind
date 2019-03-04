@@ -86,20 +86,20 @@ export class CommentItem extends React.Component {
 
 const Body = ({ canEdit, comment, onEdit }) =>
   canEdit
-  ? <InlineEdit
-    multiline
-    value={comment.body}
-    onChange={onEdit(comment._id)}
-    fieldStyle={inlineEditStyle}
-    style={bodyStyle}
-    fullWidth
-    noUI
-    submitOnBlur
-    submitOnEnter
-  />
-  : <span style={bodyStyle}>
-    {comment.body}
-  </span>
+    ? <InlineEdit
+      multiline
+      value={comment.body}
+      onChange={onEdit(comment._id)}
+      fieldStyle={inlineEditStyle}
+      style={bodyStyle}
+      fullWidth
+      noUI
+      submitOnBlur
+      submitOnEnter
+    />
+    : <span style={bodyStyle}>
+      {comment.body}
+    </span>
 
 // This must match the InlineEdit and MuiPrivateTextarea line height
 const bodyStyle = {

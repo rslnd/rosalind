@@ -28,7 +28,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     header: 'Farbe',
     field: 'color',
     render: t => (
-      <div style={{...colorStyle, backgroundColor: t.color || '#ccc'}} />
+      <div style={{ ...colorStyle, backgroundColor: t.color || '#ccc' }} />
     )
   },
   {

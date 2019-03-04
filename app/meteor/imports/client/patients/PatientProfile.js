@@ -19,8 +19,8 @@ export class PatientProfile extends React.Component {
           {patient.contacts && uniqBy(patient.contacts, 'value').map((contact) => (
             <h4 key={contact.value}>{
               contact.channel === 'Phone'
-              ? zerofix(contact.value)
-              : contact.value
+                ? zerofix(contact.value)
+                : contact.value
             }</h4>
           ))}
           <p><Birthday day={patient.birthday} /></p>

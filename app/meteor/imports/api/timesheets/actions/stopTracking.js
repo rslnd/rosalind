@@ -20,7 +20,7 @@ export const stopTracking = ({ Timesheets }) => {
             Timesheets.update({ _id: currentTimesheet._id }, { $set: {
               end: new Date(),
               tracking: false
-            }})
+            } })
 
             Events.post('timesheets/stopTracking', { userId, timesheetId: currentTimesheet._id })
           }

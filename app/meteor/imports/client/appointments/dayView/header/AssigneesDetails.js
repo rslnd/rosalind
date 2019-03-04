@@ -3,7 +3,7 @@ import { Icon } from '../../../components/Icon'
 import { TagsList } from '../../../tags/TagsList'
 import { background, highlight, important } from '../../../layout/styles'
 import { InlineEdit } from '../../../components/form'
-import { isNoteBarVisible } from './CalendarNote';
+import { isNoteBarVisible } from './CalendarNote'
 
 const barStyle = {
   position: 'fixed',
@@ -56,12 +56,12 @@ const Constraint = ({ constraint }) => (
   <div>
     {
       constraint.duration
-      ? <span>
-        <Icon name='clock-o' /> {constraint.duration} min {constraint.note && <span>&middot; {constraint.note}</span>}
-      </span>
-      : <span>
-        {constraint.note}
-      </span>
+        ? <span>
+          <Icon name='clock-o' /> {constraint.duration} min {constraint.note && <span>&middot; {constraint.note}</span>}
+        </span>
+        : <span>
+          {constraint.note}
+        </span>
     }
     {
       constraint.tags && <div style={leftAlign}>
@@ -73,10 +73,10 @@ const Constraint = ({ constraint }) => (
 
 export const BreakLines = ({ children, placeholder }) =>
   children
-  ? children.split('\n').map((t, i) => (
-    <span key={i} style={children.indexOf('!') === -1 ? highlight : important}>{t}<br /></span>
-  ))
-  : placeholder
+    ? children.split('\n').map((t, i) => (
+      <span key={i} style={children.indexOf('!') === -1 ? highlight : important}>{t}<br /></span>
+    ))
+    : placeholder
 
 const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onChangeNote, isLast }) => {
   const isDayNoteColumn = (!assignee.assigneeId || (!calendar.allowUnassigned && isLast))
@@ -133,7 +133,7 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
         </div>
       }
     </div>
-  : null
+    : null
 
   return <div style={style}>
     { dayNote }

@@ -10,8 +10,8 @@ const BigPercent = (props) => {
   const value = percentage({ ...props, plain: true })
   return <Unit append='%'>{
     (!Number.isNaN(value) && value !== null)
-    ? value
-    : <Nil />
+      ? value
+      : <Nil />
   }</Unit>
 }
 
@@ -39,8 +39,8 @@ export const Unit = ({ prepend, append, children }) => (
       (typeof children === 'number' ||
       typeof children === 'string' &&
       !Number.isNaN(children))
-      ? children
-      : <Nil />
+        ? children
+        : <Nil />
     }
     {append && <small className='text-muted'>&nbsp;{append}</small>}
   </span>
@@ -56,8 +56,8 @@ export const TotalRevenueBox = ({ report, position, color }) => {
   return <InfoBox text={__('reports.revenue')} color={color} position={position} icon='euro'>
     {
       !Number.isNaN(revenue)
-      ? <Unit prepend='€'>{integer(revenue)}</Unit>
-      : <Nil />
+        ? <Unit prepend='€'>{integer(revenue)}</Unit>
+        : <Nil />
     }
   </InfoBox>
 }
@@ -71,8 +71,8 @@ export const NewPatientsPerHourBox = ({ report, position, color }) => {
       text={__('reports.patientsNewPerHour')} color={color} position={position} icon='user-plus'>
       {
         !Number.isNaN(newPerHour)
-        ? <Unit append='/h'>{float(newPerHour)}</Unit>
-        : <Nil />
+          ? <Unit append='/h'>{float(newPerHour)}</Unit>
+          : <Nil />
       }
     </InfoBox>
   )
@@ -93,10 +93,10 @@ export const Workload = ({ report, position, color }) => {
     <InfoBox text='Auslastung' color={color} position={position} icon='bars'>
       {
         workload
-        ? <BigPercent value={workload} />
-        : <BigPercent
-          part={idx(report, _ => _.total.patients.total.admitted)}
-          of={idx(report, _ => _.total.patients.total.expected)} />
+          ? <BigPercent value={workload} />
+          : <BigPercent
+            part={idx(report, _ => _.total.patients.total.admitted)}
+            of={idx(report, _ => _.total.patients.total.expected)} />
       }
     </InfoBox>
   )

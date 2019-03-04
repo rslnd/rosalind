@@ -124,13 +124,13 @@ export class Login extends React.Component {
                 <div className='col-sm-12'>
                   {
                     this.props.loggingIn
-                    ? (
-                      <Button bsSize='large' block disabled>
-                        <Icon name='refresh' spin />
+                      ? (
+                        <Button bsSize='large' block disabled>
+                          <Icon name='refresh' spin />
+                        </Button>
+                      ) : <Button bsStyle='success' bsSize='large' type='submit' block>
+                        {__('login.button')}
                       </Button>
-                    ) : <Button bsStyle='success' bsSize='large' type='submit' block>
-                      {__('login.button')}
-                    </Button>
                   }
                 </div>
               </div>

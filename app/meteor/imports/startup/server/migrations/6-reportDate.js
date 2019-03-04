@@ -6,7 +6,7 @@ Migrations.add({
   version: 6,
 
   up: function () {
-    const cursor = Reports.find({ day: { $ne: null }})
+    const cursor = Reports.find({ day: { $ne: null } })
 
     cursor.forEach(report => {
       const date = dayToDate(report.day)
@@ -27,4 +27,3 @@ Migrations.add({
     return true
   }
 })
-

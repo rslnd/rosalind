@@ -23,7 +23,7 @@ export const schedules = ({ assignees, onDoubleClick, slotSize }) => (
   assignees.map((assignee, i) => (
     assignee.schedules && assignee.schedules
       .filter(s => s.start && s.end)
-      .map(s => 
+      .map(s =>
         <Schedule
           key={s._id}
           scheduleId={s._id}
@@ -55,20 +55,20 @@ const Schedule = ({ start, end, note, scheduleId, assigneeId, slotSize, onDouble
 
       {
         (duration - (note ? slotSize : 0)) > slotSize
-        ? [
-          <div key={1} style={style.schedulesText}>
-            {!isFirstSlot(timeStart) && timeStart.format('H:mm')}
-          </div>,
-          note ? <div key={2} style={style.schedulesText}>
-            {note}
-          </div> : null,
-          <div key={3} style={style.schedulesText}>
-            {!isLastSlot(timeEnd) && timeEnd.format('H:mm')}
+          ? [
+            <div key={1} style={style.schedulesText}>
+              {!isFirstSlot(timeStart) && timeStart.format('H:mm')}
+            </div>,
+            note ? <div key={2} style={style.schedulesText}>
+              {note}
+            </div> : null,
+            <div key={3} style={style.schedulesText}>
+              {!isLastSlot(timeEnd) && timeEnd.format('H:mm')}
+            </div>
+          ] : <div style={style.schedulesText}>
+            {timeStart.format('H:mm')} - {timeEnd.format('H:mm')}
+            {note && <span> {note}</span>}
           </div>
-        ] : <div style={style.schedulesText}>
-          {timeStart.format('H:mm')} - {timeEnd.format('H:mm')}
-          {note && <span> {note}</span>}
-        </div>
       }
     </div>
   )

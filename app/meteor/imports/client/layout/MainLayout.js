@@ -114,8 +114,8 @@ export class MainLayout extends React.Component {
           <div className='content-wrapper print-no-margin' style={contentStyle}>
             {
               isLoading
-              ? <Loading />
-              : children
+                ? <Loading />
+                : children
             }
 
             <ErrorBoundary silent>

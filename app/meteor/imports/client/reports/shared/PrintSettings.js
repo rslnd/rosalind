@@ -12,6 +12,6 @@ export const PrintSettings = ({ orientation }) => {
   `
 
   return (
-    <style dangerouslySetInnerHTML={{__html: style}} />
+    <style dangerouslySetInnerHTML={{ __html: style }} />
   )
 }

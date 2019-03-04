@@ -80,33 +80,33 @@ export const ConsentComponent = ({
 
     {
       isSelectingPreviousConsent
-      ? [
-        <Button
-          key='new'
-          style={buttonStyle}
-          onClick={handleSelectConsent(null)}
-          variant='outlined'
-          size='small'
-        >{__('appointments.newConsent')}</Button>,
-        previousConsents.map(pc =>
+        ? [
           <Button
-            key={pc._id}
+            key='new'
             style={buttonStyle}
+            onClick={handleSelectConsent(null)}
             variant='outlined'
             size='small'
-            onClick={handleSelectConsent(pc.consentedAt)}
-          >{__('appointments.usePreviousConsent', {
-            date: formatDate(pc.consentedAt),
-            tags: explainTags(pc.tags)
-          })}
-          </Button>
-        )
-      ]
-      : consentedAt
-      ? __('appointments.consented', {
-        date: moment(consentedAt).format(__('time.dateFormatShort'))
-      })
-      : __('appointments.notConsented')
+          >{__('appointments.newConsent')}</Button>,
+          previousConsents.map(pc =>
+            <Button
+              key={pc._id}
+              style={buttonStyle}
+              variant='outlined'
+              size='small'
+              onClick={handleSelectConsent(pc.consentedAt)}
+            >{__('appointments.usePreviousConsent', {
+                date: formatDate(pc.consentedAt),
+                tags: explainTags(pc.tags)
+              })}
+            </Button>
+          )
+        ]
+        : consentedAt
+          ? __('appointments.consented', {
+            date: moment(consentedAt).format(__('time.dateFormatShort'))
+          })
+          : __('appointments.notConsented')
     }
 
     <br /><br />
@@ -166,17 +166,17 @@ export const Consent = compose(
 
 export const ConsentIndicator = ({ appointment }) =>
   appointment && appointment.admitted && appointment.consentedAt
-  ? (
-    <Tooltip
-      interactive
-      placement='left-start'
-      title={__('appointments.consentedAt', { date: formatDate(appointment.consentedAt) })}
-    >
-      <span className='text-muted' style={iconStyle}>
-        <Icon name='file-text-o' />
-      </span>
-    </Tooltip>
-  ) : null
+    ? (
+      <Tooltip
+        interactive
+        placement='left-start'
+        title={__('appointments.consentedAt', { date: formatDate(appointment.consentedAt) })}
+      >
+        <span className='text-muted' style={iconStyle}>
+          <Icon name='file-text-o' />
+        </span>
+      </Tooltip>
+    ) : null
 
 const iconStyle = {
   display: 'inline-block',

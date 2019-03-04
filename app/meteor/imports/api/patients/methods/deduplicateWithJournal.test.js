@@ -7,7 +7,6 @@ const expect = chai.expect
 describe('api', function () {
   describe('patients', function () {
     describe('deduplicateWithJournal', function () {
-
       describe('mergeContacts', () => {
         const master = [ { channel: 'Phone', value: '1234' } ]
 

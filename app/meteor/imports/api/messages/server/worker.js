@@ -19,15 +19,15 @@ export const worker = (job, callback) => {
   // when a patient wants to cancel her appointment at night
   try {
     Messages.actions.createReminders.callPromise()
-    .then(() => Messages.actions.sendScheduled.callPromise())
-    .then(() => {
-      cleanOldJobs(job)
-      job.done()
-      callback()
-    }).catch((e) => {
-      console.error('[Messages] worker: errored with', e)
-      job.fail()
-    })
+      .then(() => Messages.actions.sendScheduled.callPromise())
+      .then(() => {
+        cleanOldJobs(job)
+        job.done()
+        callback()
+      }).catch((e) => {
+        console.error('[Messages] worker: errored with', e)
+        job.fail()
+      })
   } catch (e) {
     console.error('[Messages] worker: hard errored with', e)
   }

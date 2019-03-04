@@ -112,5 +112,5 @@ const fetchReferrals = ({ from, to, user }) => {
 export const AssigneeReportContainer = compose(
   withRouter,
   withTracker(composer),
-  withPromise(fetchReferrals),
+  withPromise(fetchReferrals)
 )(AssigneeReportScreen)

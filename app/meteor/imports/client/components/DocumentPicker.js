@@ -65,8 +65,8 @@ export class DocumentPicker extends React.Component {
       <Select
         value={
           (value || isStateless)
-          ? toOption(this.props)(toDocument(value))
-          : this.state.query
+            ? toOption(this.props)(toDocument(value))
+            : this.state.query
         }
         onChange={this.handleQueryChange}
         formatOptionLabel={render}

@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button'
 import SwatchesPicker from 'react-color/lib/Swatches'
 import { Icon } from './Icon'
 import { DocumentPicker } from './DocumentPicker'
-import { __ } from '../../i18n';
+import { __ } from '../../i18n'
 
 const ColHeader = ({ style, icon, header, description }) => {
   return <th style={style} title={description}>
@@ -90,41 +90,41 @@ class EditModal extends React.Component {
         style={boxStyle}>
         {
           EditComponent
-          ? <Paper style={{ padding: 6 }}>
-            <EditComponent
-              isMulti={isMulti}
-              initialValue={this.state.value}
-              onChange={this.handleChange}
-            />
-            <Button
-              fullWidth
-              style={{ marginTop: 6 }}
-              onClick={this.handleUpdateClick}>
-              <span><Icon name='check' /></span>
-            </Button>
-          </Paper>
-          : field === 'color'
-          ? <SwatchesPicker
-            color={this.state.value}
-            onChange={this.handleChange}
-            onChangeComplete={this.handleUpdateClick} />
-          : <Paper
-            style={{ padding: 6 }}
-            elevation={10}>
-            <TextField
-              fullWidth
-              name='modalEditText'
-              autoFocus
-              label={field.header}
-              onChange={this.handleChange}
-              value={this.state.value || ''} />
-            <Button
-              fullWidth
-              style={{ marginTop: 6 }}
-              onClick={this.handleUpdateClick}>
-              <span><Icon name='check' /></span>
-            </Button>
-          </Paper>
+            ? <Paper style={{ padding: 6 }}>
+              <EditComponent
+                isMulti={isMulti}
+                initialValue={this.state.value}
+                onChange={this.handleChange}
+              />
+              <Button
+                fullWidth
+                style={{ marginTop: 6 }}
+                onClick={this.handleUpdateClick}>
+                <span><Icon name='check' /></span>
+              </Button>
+            </Paper>
+            : field === 'color'
+              ? <SwatchesPicker
+                color={this.state.value}
+                onChange={this.handleChange}
+                onChangeComplete={this.handleUpdateClick} />
+              : <Paper
+                style={{ padding: 6 }}
+                elevation={10}>
+                <TextField
+                  fullWidth
+                  name='modalEditText'
+                  autoFocus
+                  label={field.header}
+                  onChange={this.handleChange}
+                  value={this.state.value || ''} />
+                <Button
+                  fullWidth
+                  style={{ marginTop: 6 }}
+                  onClick={this.handleUpdateClick}>
+                  <span><Icon name='check' /></span>
+                </Button>
+              </Paper>
         }
       </div>
     )
@@ -253,37 +253,37 @@ export class Table extends React.Component {
         // closeOnOutsideClick
         onClose={this.handleEditEnd}
       >{
-        ({ portal, openPortal, closePortal, isOpen }) =>
-          <div>
-            <div style={{ overflowX: 'scroll' }}>
-              <table className='table'>
-                <thead>
-                  <tr>
-                    {
-                      cols.map((col, i) =>
-                        <ColHeader key={i} {...col} />
-                      )
-                    }
-                    {
-                      onRemove && <td />
-                    }
-                  </tr>
-                </thead>
-                <tbody>{
-                  actualRows.map((row, i) =>
-                    <tr key={i}>
+          ({ portal, openPortal, closePortal, isOpen }) =>
+            <div>
+              <div style={{ overflowX: 'scroll' }}>
+                <table className='table'>
+                  <thead>
+                    <tr>
                       {
-                        cols.map((col, j) =>
-                          <Cell
-                            key={j}
-                            onClick={this.handleEditStart(i, j, openPortal)}
-                            isEditing={this.isEditing(i, j)}
-                            col={col}
-                            row={row} />
+                        cols.map((col, i) =>
+                          <ColHeader key={i} {...col} />
                         )
                       }
                       {
-                        row._id && onRemove &&
+                        onRemove && <td />
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>{
+                    actualRows.map((row, i) =>
+                      <tr key={i}>
+                        {
+                          cols.map((col, j) =>
+                            <Cell
+                              key={j}
+                              onClick={this.handleEditStart(i, j, openPortal)}
+                              isEditing={this.isEditing(i, j)}
+                              col={col}
+                              row={row} />
+                          )
+                        }
+                        {
+                          row._id && onRemove &&
                           <td>
                             <Button
                               onClick={() => onRemove(row._id)}
@@ -291,14 +291,14 @@ export class Table extends React.Component {
                               <Icon name='minus' />
                             </Button>
                           </td>
-                      }
-                    </tr>
-                )}</tbody>
-              </table>
-            </div>
+                        }
+                      </tr>
+                    )}</tbody>
+                </table>
+              </div>
 
-            {
-              onInsert && !inserting &&
+              {
+                onInsert && !inserting &&
                 <div>
                   <Button
                     fullWidth
@@ -306,16 +306,16 @@ export class Table extends React.Component {
                     onClick={this.handleInsertClick}>
                     {
                       this.state.inserting
-                      ? <span><Icon name='check' /> {__('ui.save')}</span>
-                      : <span><Icon name='plus' /> {__('ui.insert')}</span>
+                        ? <span><Icon name='check' /> {__('ui.save')}</span>
+                        : <span><Icon name='plus' /> {__('ui.insert')}</span>
                     }
                   </Button>
                 </div>
-            }
+              }
 
-            {
-              portal(
-                isOpen &&
+              {
+                portal(
+                  isOpen &&
                   <ClickAwayListener onClickAway={closePortal}>
                     <EditModal
                       onUpdate={(x, y) => { this.handleUpdate(x, y); closePortal() }}
@@ -324,9 +324,9 @@ export class Table extends React.Component {
                       structure={this.state.editingStructure}
                     />
                   </ClickAwayListener>
-              )
-            }
-          </div>
+                )
+              }
+            </div>
         }
       </PortalWithState>
     )

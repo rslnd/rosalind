@@ -44,5 +44,5 @@ const isPlural = n => ((n >= 2) || (n <= -2) || (n === 0))
 
 const pluralizeKey = (key, substitutions) =>
   (substitutions && isPlural(substitutions.count))
-  ? `${key}_plural`
-  : key
+    ? `${key}_plural`
+    : key

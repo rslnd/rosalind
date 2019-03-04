@@ -42,8 +42,8 @@ export const MessagesScreen = ({ isLoading, inbound, intentToCancel, onCreateInb
   <div className='content'>
     {
       isLoading
-      ? <Loading />
-      : <div className='row'>
+        ? <Loading />
+        : <div className='row'>
           <div className='col-md-6'>
             <Box title='Inbound messages matched as intent to cancel' icon='calendar-times-o'>
               <List messages={intentToCancel} onCreateInboundCall={onCreateInboundCall} />

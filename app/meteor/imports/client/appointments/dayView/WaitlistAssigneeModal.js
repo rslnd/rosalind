@@ -5,7 +5,6 @@ import { __ } from '../../../i18n'
 import { UserPicker } from '../../users/UserPicker'
 
 export class WaitlistAssigneeModal extends React.Component {
-
   constructor (props) {
     super(props)
 

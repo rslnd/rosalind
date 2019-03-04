@@ -24,7 +24,7 @@ import { translateObject } from '../../components/form/translateObject'
 import { mapPatientToFields } from '../../patients/mapPatientToFields'
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 import { validate } from '../new/newAppointmentValidators'
-import { hasRole } from '../../../util/meteor/hasRole';
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const formName = 'appointmentInfoForm'
 
@@ -95,11 +95,11 @@ const composer = props => {
           },
           replaceContacts: true
         })
-        .then(() => Alert.success(__('patients.editSuccess')))
-        .catch(e => {
-          Alert.error('Bitte noch einmal versuchen')
-          console.error(e)
-        })
+          .then(() => Alert.success(__('patients.editSuccess')))
+          .catch(e => {
+            Alert.error('Bitte noch einmal versuchen')
+            console.error(e)
+          })
       }
     }
 
@@ -109,11 +109,11 @@ const composer = props => {
           appointmentId: appointment._id,
           update: v.appointment
         })
-        .then(() => Alert.success(__('appointments.editSuccess')))
-        .catch(e => {
-          Alert.error('Bitte noch einmal versuchen')
-          console.error(e)
-        })
+          .then(() => Alert.success(__('appointments.editSuccess')))
+          .catch(e => {
+            Alert.error('Bitte noch einmal versuchen')
+            console.error(e)
+          })
       }
     }
 
@@ -168,14 +168,14 @@ const composer = props => {
       constraint
     }
   } else {
-    return
+
   }
 }
 
 const InfoComponent = ({ minimal, ...p }) =>
   minimal
-  ? <AppointmentInfoMinimal {...p} />
-  : <AppointmentInfo {...p} />
+    ? <AppointmentInfoMinimal {...p} />
+    : <AppointmentInfo {...p} />
 
 export const AppointmentInfoContainer = compose(
   withTracker(composer),
