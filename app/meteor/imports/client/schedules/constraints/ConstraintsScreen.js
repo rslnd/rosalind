@@ -63,10 +63,20 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'duration'
   },
   {
+    header: 'Dauer-Strategie',
+    field: 'durationStrategy',
+    render: DurationStrategy
+  },
+  {
     header: 'Uhrzeit',
     render: ({ from, to }) => HMRangeToString({ from, to })
   }
 ]
+
+const DurationStrategy = ({ durationStrategy }) =>
+  durationStrategy
+  ? <span>{durationStrategy.name} {durationStrategy.upTo || null}</span>
+  : null
 
 const toWeekdayLabel = s => __(`time.${s}`)
 
