@@ -2,7 +2,6 @@ import React from 'react'
 import { withTracker as withMeteorData } from 'meteor/react-meteor-data'
 import { Loading } from './Loading'
 import { withErrorBoundary } from '../layout/ErrorBoundary'
-import { renderNothing } from 'recompose'
 
 const wrapComposer = composer => props => {
   if (!props) {

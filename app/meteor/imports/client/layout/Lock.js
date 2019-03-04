@@ -215,7 +215,7 @@ class Digit extends React.Component {
 
     const style = {
       ...digitPositionStyle,
-      ...(isDigit && !isRemove && withBorderStyle || {})
+      ...((isDigit && !isRemove && withBorderStyle) || {})
     }
 
     return (

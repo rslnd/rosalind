@@ -63,8 +63,8 @@ const toFloat = v =>
     : null
 
 export const TotalRevenue = ({ value }) => (
-  value && value > 0 && <ListItem icon='pie-chart'>
+  (value && value > 0 && <ListItem icon='pie-chart'>
     Gesamtumsatz&ensp;
     <Currency value={value} />
-  </ListItem> || null
+  </ListItem>) || null
 )

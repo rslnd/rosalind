@@ -7,7 +7,7 @@ import { Day } from '../../../util/schema/day'
 import { Events } from '../../events'
 import { daySelector } from '../../../util/time/day'
 
-export const addUserToDay = ({ Schedules, Users }) => {
+export const addUserToDay = ({ Schedules }) => {
   return new ValidatedMethod({
     name: 'schedules/addUserToDay',
     mixins: [CallPromiseMixin],
@@ -18,7 +18,7 @@ export const addUserToDay = ({ Schedules, Users }) => {
     }).validator(),
 
     run ({ day, calendarId, userId }) {
-      if (this.connection && !this.userId ||
+      if ((this.connection && !this.userId) ||
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }

@@ -1,10 +1,7 @@
 import React from 'react'
-import { compose, withState, nest, mapProps, withProps, withHandlers, renderComponent } from 'recompose'
 import Paper from '@material-ui/core/Paper'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
-import Button from '@material-ui/core/Button'
 import { Icon } from '../components/Icon'
-import { sidebarBackground, sidebarText } from '../layout/styles'
 
 const triggerHeight = 220
 const triggerContainerStyle = {

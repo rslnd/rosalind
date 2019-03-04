@@ -1,9 +1,7 @@
 import React from 'react'
-import FlipMove from 'react-flip-move'
 import moment from 'moment-timezone'
 import Button from 'react-bootstrap/lib/Button'
 import { __ } from '../../i18n'
-import { weekOfYear } from '../../util/time/format'
 import { dayToDate } from '../../util/time/day'
 import { Icon } from '../components/Icon'
 import { Loading } from '../components/Loading'
@@ -12,7 +10,6 @@ import { Box } from '../components/Box'
 import { Report } from './Report'
 import { Referrals } from './Referrals'
 import { PrintSettings } from './shared/PrintSettings'
-import { FooterContainer } from '../layout/FooterContainer'
 import { UserPicker } from '../users/UserPicker'
 import { fullNameWithTitle } from '../../api/users/methods/name'
 
@@ -73,10 +70,10 @@ export class AssigneeReportScreen extends React.Component {
       end: to
     })
 
-    const title = user &&
+    const title = (user &&
       __('reports.assigneesReportFor', {
         name: fullNameWithTitle(user)
-      }) || __('reports.assigneesReport')
+      })) || __('reports.assigneesReport')
 
     return (
       <div>
@@ -115,7 +112,7 @@ export class AssigneeReportScreen extends React.Component {
               </Box>
               : loading
                 ? <Loading />
-                : (reports && reports.length > 0) && reports.map((report, i) =>
+                : ((reports && reports.length > 0) && reports.map((report, i) =>
                   <div key={i} style={{ marginBottom: 80 }}>
                     <Report
                       report={report}
@@ -125,7 +122,7 @@ export class AssigneeReportScreen extends React.Component {
                       assigneeReport
                     />
                   </div>
-                ) || <div key='noReports'>
+                )) || <div key='noReports'>
                   <Box type='info' title={__('ui.notice')}>
                     <p>{__('reports.emptyAssignee')}</p>
                   </Box>

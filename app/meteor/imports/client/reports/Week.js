@@ -2,7 +2,6 @@ import React from 'react'
 import moment from 'moment'
 import idx from 'idx'
 import ColorHash from 'color-hash'
-import { percentage } from '../../util/format'
 import { dayToDate } from '../../util/time/day'
 
 const colorHash = new ColorHash({ saturation: 0.75, lightness: 0.65 })
@@ -116,10 +115,6 @@ const Cell = ({ day, today, style, am, pm, workload, mapUserIdToName, mapUserIdT
 )
 
 const Day = ({ day, style, mapUserIdToName, mapUserIdToUsername }) => {
-  const total = idx(day, _ => _.total.workload.available)
-  const booked = clampUpper(total)(idx(day, _ => _.total.workload.planned) || idx(day, _ => _.total.workload.actual))
-  const free = clampLower(total - booked)
-
   return <Cell
     day={moment(dayToDate(day.day)).format('dd., D.M.')}
     style={style}

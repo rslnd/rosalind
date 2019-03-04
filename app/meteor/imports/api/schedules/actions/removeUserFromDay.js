@@ -18,7 +18,7 @@ export const removeUserFromDay = ({ Schedules, Users }) => {
     }).validator(),
 
     run ({ day, calendarId, userId }) {
-      if (this.connection && !this.userId ||
+      if ((this.connection && !this.userId) ||
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }

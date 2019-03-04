@@ -22,7 +22,7 @@ export const deduplicateWithJournal = ({ Appointments, Patients, journal }) => {
     const duplicates = findDuplicatePatients({ Appointments, Patients, patientsToCheck: dayPatients })
     const sortedDuplicates = sortDuplicates({ duplicates, journalRows })
     const actions = deduplicate(sortedDuplicates)
-    const result = perform({ Appointments, Patients, actions })
+    perform({ Appointments, Patients, actions })
 
     console.log(sortedDuplicates.length, 'sorted duplicates')
   }

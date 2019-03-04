@@ -1,5 +1,4 @@
 import moment from 'moment-timezone'
-import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { Calendars } from '../../api/calendars'
 import { Appointments } from '../../api/appointments'

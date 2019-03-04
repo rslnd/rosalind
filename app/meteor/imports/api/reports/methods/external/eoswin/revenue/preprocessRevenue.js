@@ -1,6 +1,5 @@
 import identity from 'lodash/fp/identity'
 import mapValues from 'lodash/fp/mapValues'
-import { parse as csvToJson } from 'papaparse'
 import { isAny } from '../insuranceCodes'
 
 export const preprocessRevenue = (rows) => {

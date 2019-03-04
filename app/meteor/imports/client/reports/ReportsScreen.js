@@ -59,7 +59,6 @@ export class ReportsScreen extends React.Component {
       previews,
       referrals,
       canShowRevenue,
-      showRevenue,
       mapUserIdToName,
       mapUserIdToUsername,
       mapReportAsToHeader,

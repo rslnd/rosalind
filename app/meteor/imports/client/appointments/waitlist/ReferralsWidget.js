@@ -14,7 +14,7 @@ const infoTextStyle = {
 }
 
 export const ReferralsWidget = ({ isLoading, referrableTags, referrableCalendars, length }) =>
-  !isLoading && length >= 1 && <div style={containerStyle}>
+  (!isLoading && length >= 1 && <div style={containerStyle}>
     <div className='text-muted' style={infoTextStyle}>
       {__('appointments.referPatientTo')}
     </div>
@@ -36,7 +36,7 @@ export const ReferralsWidget = ({ isLoading, referrableTags, referrableCalendars
         />
       )
     }
-  </div> || null
+  </div>) || null
 
 const ReferralButton = ({ referral }) => {
   const { icon, name, tag, handleClick, isReferrable, existingReferralBySameAssignee } = referral

@@ -31,7 +31,7 @@ export const CalendarNote = ({ calendar, canEditSchedules, onChangeNote }) =>
       canEditSchedules
         ? <InlineEdit
           key={calendar._id} // Fix weird note copying across calendars
-          value={calendar && calendar.note || ''}
+          value={(calendar && calendar.note) || ''}
           placeholder='Info'
           rows={1}
           rowsMax={3}

@@ -97,7 +97,7 @@ export class InboundCallItem extends React.Component {
         <CommentsContainer docId={_id} style={style} />
         <div className='box-footer'>
           {
-            (pinnedBy && canResolve || !pinnedBy)
+            ((pinnedBy && canResolve) || !pinnedBy)
               ? (
                 removed
                   ? <a onClick={() => unresolve(_id)}>{__('inboundCalls.unresolve')}</a>

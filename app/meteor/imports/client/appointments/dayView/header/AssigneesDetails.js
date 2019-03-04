@@ -1,6 +1,5 @@
 import React from 'react'
 import { Icon } from '../../../components/Icon'
-import { TagsList } from '../../../tags/TagsList'
 import { background, highlight, important } from '../../../layout/styles'
 import { InlineEdit } from '../../../components/form'
 import { isNoteBarVisible } from './CalendarNote'
@@ -48,29 +47,6 @@ const relevantCellStyle = {
   pointerEvents: 'auto'
 }
 
-const leftAlign = {
-  textAlign: 'left'
-}
-
-const Constraint = ({ constraint }) => (
-  <div>
-    {
-      constraint.duration
-        ? <span>
-          <Icon name='clock-o' /> {constraint.duration} min {constraint.note && <span>&middot; {constraint.note}</span>}
-        </span>
-        : <span>
-          {constraint.note}
-        </span>
-    }
-    {
-      constraint.tags && <div style={leftAlign}>
-        <TagsList tiny tags={constraint.tags.map(t => t.tagId)} />
-      </div>
-    }
-  </div>
-)
-
 export const BreakLines = ({ children, placeholder }) =>
   children
     ? children.split('\n').map((t, i) => (
@@ -91,7 +67,7 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
       {
         expanded && canEditSchedules && <div>
           <InlineEdit
-            value={daySchedule && daySchedule.note || ''}
+            value={(daySchedule && daySchedule.note) || ''}
             placeholder='Info'
             rows={3}
             rowsMax={10}
@@ -104,7 +80,7 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
           <br />
 
           <InlineEdit
-            value={daySchedule && daySchedule.noteDetails || ''}
+            value={(daySchedule && daySchedule.noteDetails) || ''}
             placeholder='Details'
             rows={3}
             rowsMax={10}
@@ -137,20 +113,6 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
 
   return <div style={style}>
     { dayNote }
-    {/* TODO: Remove constraints or put behind flag? Not sure if needed anymore */}
-    {/* {
-      expanded && isRelevant && assignee.constraints.map((constraint) => (
-        <div key={constraint._id}>
-          <Icon name='info-circle' />
-          <Constraint constraint={constraint} />
-        </div>
-      ))
-    }
-    {
-      !expanded && isRelevant && <div>
-        <Icon name='info-circle' />
-      </div>
-    } */}
   </div>
 }
 

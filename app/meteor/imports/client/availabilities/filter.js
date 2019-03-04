@@ -1,7 +1,3 @@
-import groupBy from 'lodash/fp/groupBy'
-import mapValues from 'lodash/fp/mapValues'
-import identity from 'lodash/fp/identity'
-import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import { getPossibleTags } from '../../api/availabilities/methods/getPossibleTags'
@@ -169,7 +165,7 @@ const collapseConsecutive = (
   allAvas
 ) => {
   const isLast = i === (allAvas.length - 1)
-  const currKey = currAva.matchedTags && currAva.matchedTags.map(t => t.tagId).join(',') || i
+  const currKey = (currAva.matchedTags && currAva.matchedTags.map(t => t.tagId).join(',')) || i
   const shouldCollapse = prevKey === currKey
 
   if (shouldCollapse && wip) {

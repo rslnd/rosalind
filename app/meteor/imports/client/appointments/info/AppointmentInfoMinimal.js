@@ -1,20 +1,14 @@
 import React from 'react'
 import identity from 'lodash/identity'
 import { touch, Field, FormSection } from 'redux-form'
-import { AddressFields } from '../../patients/fields/AddressFields'
-import { BirthdayFields } from '../../patients/fields/BirthdayFields'
 import { Stamps } from '../../helpers/Stamps'
 import { logFormat } from './logFormat'
 import { Logs } from '../../helpers/Logs'
 import { TagsField } from '../../tags/TagsField'
 import { calculateRevenue } from '../new/RevenueField'
-import { Day, Time, AppointmentNote, Assignee } from './BasicAppointmentFields'
-import { Contacts } from './Contacts'
 import { Agreements } from './Agreements'
 import { PrivateRevenue, TotalRevenue } from './PrivateRevenue'
 import { ListItem } from './ListItem'
-import { Reminders } from './Reminders'
-import { PatientName } from './PatientName'
 import { PatientNotes } from './PatientNotes'
 import { Consent } from './Consent'
 
@@ -72,7 +66,6 @@ export class AppointmentInfoMinimal extends React.Component {
 
   render () {
     const {
-      isLoading,
       handleSubmit,
       dirty,
       appointment,
@@ -84,24 +77,25 @@ export class AppointmentInfoMinimal extends React.Component {
       maxDuration,
       change,
       handleEditPatient,
-      handleEditAppointment,
-      handleToggleGender,
-      handleSetMessagePreferences } = this.props
+      handleEditAppointment
+    } = this.props
 
     return (
       <div>
         <div className='row'>
           <div className='col-md-6'>
-            <form onMouseLeave={
-              dirty
-                ? handleSubmit(handleEditAppointment)
-                : identity
-            }
+            <form
+              onMouseLeave={
+                dirty
+                  ? handleSubmit(handleEditAppointment)
+                  : identity
+              }
               onSubmit={
-              dirty
-                ? handleSubmit(handleEditAppointment)
-                : identity
-            }>
+                dirty
+                  ? handleSubmit(handleEditAppointment)
+                  : identity
+              }
+            >
               <FormSection name='appointment'>
                 <PrivateRevenue appointment={appointment} />
                 <Tags

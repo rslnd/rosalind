@@ -1,9 +1,7 @@
 import React from 'react'
-import { reduxForm, Field, Fields } from 'redux-form'
-import Button from '@material-ui/core/Button'
+import { reduxForm, Fields } from 'redux-form'
 import { __ } from '../../../i18n'
 import { DayNoteField } from '../../components/form/DayNoteField'
-import { Icon } from '../../components/Icon'
 
 class NewHolidaysFormComponent extends React.Component {
   generatePlaceholder () {
@@ -11,7 +9,7 @@ class NewHolidaysFormComponent extends React.Component {
   }
 
   render () {
-    const { handleSubmit, onSubmit, day, note } = this.props
+    const { handleSubmit, onSubmit } = this.props
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} className='mui'>

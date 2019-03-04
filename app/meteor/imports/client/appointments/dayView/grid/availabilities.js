@@ -2,8 +2,8 @@ import React from 'react'
 import injectSheet from 'react-jss'
 import moment from 'moment-timezone'
 import flatten from 'lodash/flatten'
-import { setTime, timeSlots, formatter, label, start, end, timeSlotsRange } from './timeSlots'
-import { darkGrayDisabled, grayDisabled, background, unavailable, lighten } from '../../../layout/styles'
+import { setTime, formatter, label, start, end, timeSlotsRange } from './timeSlots'
+import { background, unavailable, lighten } from '../../../layout/styles'
 
 const styles = {
   blank: {

@@ -187,7 +187,7 @@ export const PastAppointments = withState('selectedAppointmentId', 'handleAppoin
         }
       </div>
       {
-        appointmentsWithSeparators.length > 6 && appendIfMany || null
+        (appointmentsWithSeparators.length > 6 && appendIfMany) || null
       }
     </div>
   )

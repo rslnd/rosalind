@@ -8,7 +8,7 @@ import { Switch } from 'redux-form-material-ui'
 export const Agreements = ({ patient, calendar, showOnly = 'pending' }) => (
   <FormSection name='agreements'>
     {
-      calendar.requiredAgreements &&
+      (calendar.requiredAgreements &&
       calendar.requiredAgreements.length >= 1 &&
       calendar.requiredAgreements.map(label => {
         const agreement = patient.agreements && patient.agreements.find(a => a.to === label)
@@ -44,7 +44,7 @@ export const Agreements = ({ patient, calendar, showOnly = 'pending' }) => (
           </div>
           <br /><br />
         </ListItem>
-      }) || null
+      })) || null
     }
   </FormSection>
 )

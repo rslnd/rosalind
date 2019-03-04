@@ -26,10 +26,6 @@ const summaryRowStyle = {
   backgroundColor: '#f7f8f9'
 }
 
-const rankStyle = {
-  width: 15
-}
-
 const disclaimerStyle = {
   backgroundColor: summaryRowStyle.backgroundColor,
   borderTop: '1px solid #ebf1f2',
@@ -245,11 +241,11 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
               <Td key={8}>{idx(assignee, _ => _.patients.cryo.actual) || <Nil />}</Td>,
 
               // Neu/Stunde [Plan (Abs+%) , Ist (Abs+%)]
-              <Td key={9} borderLeft>{assignee.assigneeId &&
-              <Round number={idx(assignee, _ => _.patients.new.expectedPerHour)} /> || <Nil />
+              <Td key={9} borderLeft>{(assignee.assigneeId &&
+              <Round number={idx(assignee, _ => _.patients.new.expectedPerHour)} />) || <Nil />
               }</Td>,
-              <Td key={10}>{assignee.assigneeId &&
-              <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} /> || <Nil />
+              <Td key={10}>{(assignee.assigneeId &&
+              <Round number={idx(assignee, _ => _.patients.new.actualPerHour)} />) || <Nil />
               }</Td>
             ]
         }
@@ -261,10 +257,10 @@ export const ReportTableBody = ({ showRevenue, report, mapUserIdToName, assignee
         {/* Umsatz pro Stunde (nicht VM/NM splittable) */}
         {
           (calendar && calendar.reportRevenuePerHour && showRevenue) &&
-            <Td borderLeft style={align}>{assignee.assigneeId &&
+            <Td borderLeft style={align}>{(assignee.assigneeId &&
               <Round to={0} unit='€' number={
                 idx(assignee, _ => _.revenue.total.actualPerHour) ||
-                idx(assignee, _ => _.revenue.total.expectedPerHour)} /> || <Nil />
+                idx(assignee, _ => _.revenue.total.expectedPerHour)} />) || <Nil />
             }</Td>
         }
 

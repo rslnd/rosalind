@@ -8,7 +8,6 @@ import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
-import { MultiTextField } from '../components/MultiTextField'
 import { CalendarPicker } from './CalendarPicker'
 
 const colorStyle = {

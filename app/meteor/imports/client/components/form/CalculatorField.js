@@ -31,7 +31,7 @@ export class CalculatorField extends React.Component {
   }
 
   componentWillReceiveProps (props) {
-    if (!this.state.focus && calculate(this.state.stringValue) != props.input.value) {
+    if (!this.state.focus && calculate(this.state.stringValue) !== props.input.value) {
       this.setState({
         stringValue: props.input.value
       })

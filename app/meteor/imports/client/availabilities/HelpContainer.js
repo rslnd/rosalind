@@ -1,7 +1,6 @@
 import React from 'react'
 import idx from 'idx'
-import keyBy from 'lodash/fp/keyBy'
-import { compose, withState, mapProps, nest, withProps, withHandlers } from 'recompose'
+import { compose, withState, withProps, withHandlers } from 'recompose'
 import { Help } from './Help'
 import { Availabilities } from '../../api/availabilities'
 import { Constraints } from '../../api/constraints'
@@ -9,8 +8,8 @@ import { Users } from '../../api/users'
 import { Tags } from '../../api/tags'
 import { Calendars } from '../../api/calendars'
 import { withTracker } from '../components/withTracker'
-import { prepareAvailabilities, applySearchFilter, toResults } from './filter'
-import { withDrawer, Drawer } from './Drawer'
+import { prepareAvailabilities, applySearchFilter } from './filter'
+import { withDrawer } from './Drawer'
 import { withRouter } from 'react-router-dom'
 import { dateToDay } from '../../util/time/day'
 
@@ -42,8 +41,6 @@ const handleSearchValueChange = props => (value, { action }) => {
     props.setSearchValue(value)
   }
 }
-
-const log = pre => withProps(p => console.log(pre, p))
 
 const hover = (props) => {
   const hoverAvailability = props.hoverAvailability

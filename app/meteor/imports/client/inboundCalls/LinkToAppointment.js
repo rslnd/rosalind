@@ -2,7 +2,7 @@ import React from 'react'
 import { AppointmentModal } from '../appointments/info/AppointmentModal'
 
 export const LinkToAppointment = ({ text, linkText, onClick }) => (
-  text &&
+  (text &&
     <div className='row'>
       <span className='text-muted col-md-12'>
         {
@@ -16,7 +16,8 @@ export const LinkToAppointment = ({ text, linkText, onClick }) => (
         }
       </span>
       <br />
-    </div> || null
+    </div>
+  ) || null
 )
 
 export class LinkToAppointmentWrapper extends React.Component {

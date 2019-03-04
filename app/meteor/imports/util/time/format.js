@@ -2,7 +2,6 @@ import identity from 'lodash/identity'
 import momentTz from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import { __ } from '../../i18n'
-import quarter from './quarter'
 
 const moment = extendMoment(momentTz)
 

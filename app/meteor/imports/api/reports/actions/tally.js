@@ -64,12 +64,12 @@ export const tally = ({ Reports }) => {
       )(report.assignees)
 
       report.total.hoursScheduled = flow(
-        map((a) => a && a.hours && a.hours.scheduled || 0),
+        map((a) => (a && a.hours && a.hours.scheduled) || 0),
         sum
       )(report.assignees)
 
       report.total.hoursActual = flow(
-        map((a) => a && a.hours && a.hours.actual || 0),
+        map((a) => (a && a.hours && a.hours.actual) || 0),
         sum
       )(report.assignees)
 

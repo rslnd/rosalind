@@ -49,7 +49,7 @@ export const validate = ({ appointment, patient }) => {
       errors.patient.firstName = 'patients.firstNameRequired'
     }
 
-    if (!patient.birthday || patient.birthday && !validateDay(patient.birthday)) {
+    if (!patient.birthday || (patient.birthday && !validateDay(patient.birthday))) {
       errors.patient.birthday = 'patients.birthdayRequired'
     }
   }

@@ -28,7 +28,7 @@ const sidebarItems = ({ history }) => {
       roles: ['admin', 'appointments', `appointments-${c.slug}`],
       // replace calendar slug and keep selected date
       onClick: ({ item, location }) => {
-        const [base, _calendar, date] = location.pathname
+        const [base, _calendar, date] = location.pathname // eslint-disable-line
           .split('/').filter(x => x.length > 0)
 
         const newPath =
@@ -123,7 +123,7 @@ const sidebarItems = ({ history }) => {
 
 const composer = (props) => {
   const items = sidebarItems(props).filter((item) => {
-    return (!item.roles || item.roles && Roles.userIsInRole(Meteor.user(), item.roles))
+    return (!item.roles || (item.roles && Roles.userIsInRole(Meteor.user(), item.roles)))
   }).map((item) => {
     if (item.countBadge) {
       const count = Counts.get(item.countBadge)

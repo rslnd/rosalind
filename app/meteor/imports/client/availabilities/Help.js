@@ -1,14 +1,12 @@
 import moment from 'moment-timezone'
 import React from 'react'
 import { withHandlers } from 'recompose'
-import Tooltip from '@material-ui/core/Tooltip'
 import { Search } from './Search'
 import { TagsList } from '../tags/TagsList'
 import { rowStyle } from '../components/form'
 import { __ } from '../../i18n'
-import { grayDisabled, highlightBackground, grayActive } from '../layout/styles'
+import { grayDisabled, highlightBackground } from '../layout/styles'
 import { TagDetails } from './TagDetails'
-import { Icon } from '../components/Icon'
 
 export const Help = ({
   isOpen,
@@ -183,10 +181,6 @@ const DateIndicator = withHandlers({
     />
   </div>
 )
-
-const iconStyle = {
-  color: grayActive
-}
 
 const dateIndicatorStyle = {
   paddingTop: 2,

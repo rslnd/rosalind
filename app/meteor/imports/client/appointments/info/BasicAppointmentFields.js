@@ -19,7 +19,7 @@ export const Time = ({ appointment }) => (
 )
 
 export const Assignee = ({ assignee }) => (
-  assignee && <ListItem icon='user-md' hr>
+  (assignee && <ListItem icon='user-md' hr>
     {Users.methods.fullNameWithTitle(assignee)}
-  </ListItem> || null
+  </ListItem>) || null
 )

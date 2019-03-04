@@ -6,14 +6,11 @@ import maxBy from 'lodash/fp/maxBy'
 import sum from 'lodash/sum'
 import min from 'lodash/min'
 import max from 'lodash/max'
-import sortBy from 'lodash/fp/sortBy'
-import uniqBy from 'lodash/fp/uniqBy'
-import last from 'lodash/last'
 import idx from 'idx'
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { dayToDate, dateToDay, isSame } from '../../../util/time/day'
-import { getRange, getQ, quarter } from '../../../util/time/quarter'
+import { getRange, getQ } from '../../../util/time/quarter'
 
 const moment = extendMoment(_moment)
 

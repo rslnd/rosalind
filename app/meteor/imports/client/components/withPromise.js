@@ -14,8 +14,8 @@ const makeCancelable = promise => {
 
   const wrappedPromise = new Promise((resolve, reject) => {
     promise.then(
-      val => isCanceled ? reject({ isCanceled: true }) : resolve(val),
-      error => isCanceled ? reject({ isCanceled: true }) : reject(error)
+      val => isCanceled ? reject({ isCanceled: true }) : resolve(val), //eslint-disable-line
+      error => isCanceled ? reject({ isCanceled: true }) : reject(error) //eslint-disable-line
     )
   })
 
@@ -83,7 +83,7 @@ export const withPromise = fetcher =>
               this.setState({
                 isLoading: false,
                 data: null,
-                error: e
+                error: reason
               })
             }
           })

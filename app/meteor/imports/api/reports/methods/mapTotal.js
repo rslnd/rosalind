@@ -1,7 +1,6 @@
 import identity from 'lodash/identity'
 import add from 'lodash/add'
 import sumBy from 'lodash/fp/sumBy'
-import some from 'lodash/fp/some'
 import idx from 'idx'
 import { assignedOnly, byTags, sumByKeys } from './util'
 import { mapMisattributedRevenue } from './external/eoswin/revenue/mapMisattributedRevenue'

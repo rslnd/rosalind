@@ -26,8 +26,8 @@ const composer = props => {
   const assigneeId = user && user._id
 
   const search = fromQuery(props.location.search)
-  const from = search.from && moment(search.from) || moment().startOf('month')
-  const to = search.to && moment(search.to) || moment().endOf('day')
+  const from = (search.from && moment(search.from)) || moment().startOf('month')
+  const to = (search.to && moment(search.to)) || moment().endOf('day')
 
   const subscription = subscribe('reports', {
     from: from.toDate(),

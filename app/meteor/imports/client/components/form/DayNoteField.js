@@ -46,7 +46,7 @@ export class DayNoteField extends React.Component {
 
     if (!this.state.stringValue && this.props.day.input.value) {
       this.setState({
-        stringValue: toStringValue(this.props.day.input.value, props.note.input.value)
+        stringValue: toStringValue(this.props.day.input.value, this.props.note.input.value)
       })
     }
   }

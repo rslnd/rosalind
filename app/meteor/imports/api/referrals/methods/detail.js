@@ -1,10 +1,3 @@
-import identity from 'lodash/identity'
-import sortBy from 'lodash/fp/sortBy'
-import sum from 'lodash/sum'
-import uniq from 'lodash/uniq'
-import { startOfMonth, startOfDay, endOfDay, addDays, isWithinInterval } from 'date-fns'
-import { isPending } from './tally'
-
 export const detail = ({
   from,
   to,
@@ -22,8 +15,8 @@ export const detail = ({
 
     const isPending = r => a =>
       a.patientId === r.patientId && (
-        a.calendarId === r.referredTo ||
-        a.tags && a.tags.includes(r.referredTo)
+        (a.calendarId === r.referredTo) ||
+        (a.tags && a.tags.includes(r.referredTo))
       )
 
     const pendingAppointment = r.redeemingAppointmentId

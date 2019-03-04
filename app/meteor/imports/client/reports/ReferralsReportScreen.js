@@ -46,8 +46,7 @@ export class ReferralsReportScreen extends React.Component {
       referrals,
       handleRangeChange,
       handleChangeAssignee,
-      mapUserIdToName,
-      mapReportAsToHeader
+      mapUserIdToName
     } = this.props
 
     const formattedRange = formatRange({
@@ -55,10 +54,10 @@ export class ReferralsReportScreen extends React.Component {
       end: to
     })
 
-    const title = user &&
+    const title = (user &&
       __('reports.referralsReportFor', {
         name: fullNameWithTitle(user)
-      }) || __('reports.referralsReport')
+      })) || __('reports.referralsReport')
 
     return (
       <div>

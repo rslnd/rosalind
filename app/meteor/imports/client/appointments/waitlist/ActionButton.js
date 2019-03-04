@@ -46,7 +46,7 @@ const ActionButtonComponent = ({ appointment, isFirst, isLast, action, style = {
     flexDirection: 'column'
   }
 
-  return nextAction &&
+  return (nextAction &&
     <div className='text-center' style={containerStyle}>
       <Button
         style={primaryButtonStyle}
@@ -82,7 +82,7 @@ const ActionButtonComponent = ({ appointment, isFirst, isLast, action, style = {
             {__('appointments.changeWaitlistAssignee')}
           </Button>
       }
-    </div> || null
+    </div>) || null
 }
 
 export const ActionButton = compose(

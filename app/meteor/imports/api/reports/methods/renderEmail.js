@@ -7,11 +7,13 @@ import { dayToDate } from '../../../util/time/day'
 import { float, percentage, currencyRounded } from '../../../util/format'
 
 const isNull = s => s &&
-  (typeof s === 'string' && s.match(/false|undefined| null|NaN/g) ||
-  (typeof s === 'string' && s.match(/reports\./g)) ||
-  (typeof s === 'string' && s.match(/\{|\}|\$/)) || // catch misplaced interpolation brackets
-  (typeof s === 'string' && s.length === 0) ||
-  (typeof s === 'number' && s === 0))
+  (
+    (typeof s === 'string' && s.match(/false|undefined| null|NaN/g)) ||
+    (typeof s === 'string' && s.match(/reports\./g)) ||
+    (typeof s === 'string' && s.match(/\{|\}|\$/)) || // catch misplaced interpolation brackets
+    (typeof s === 'string' && s.length === 0) ||
+    (typeof s === 'number' && s === 0)
+  )
 
 const renderLine = (text, value, separator = ': ') => {
   if (text && value && !isNull(value)) {
@@ -40,8 +42,8 @@ export const renderSummary = ({ report, mapCalendar }) => {
 
 export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
   const renderAssignee = (assignee, i) => {
-    const name = mapUserIdToName(assignee.assigneeId) || assignee.type && mapAssigneeType(assignee.type) || 'Ohne Zuweisung'
-    const rankAndName = assignee.assigneeId && `${i + 1} - ${name}` || name
+    const name = mapUserIdToName(assignee.assigneeId) || (assignee.type && mapAssigneeType(assignee.type)) || 'Ohne Zuweisung'
+    const rankAndName = (assignee.assigneeId && `${i + 1} - ${name}`) || name
     const revenue = assignee.revenue &&
       (currencyRounded(idx(assignee, _ => _.revenue.total.actual)) ||
       currencyRounded(idx(assignee, _ => _.revenue.total.expected)))

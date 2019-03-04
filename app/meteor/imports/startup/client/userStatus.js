@@ -12,7 +12,7 @@ export default () => {
       const messageTimeout = [10, 'seconds']
 
       try {
-        status = Meteor.status().status
+        const status = Meteor.status().status
         console.log('[Meteor] status', status)
         console.log('[Meteor] connection', Meteor.connection)
 
@@ -20,14 +20,14 @@ export default () => {
           if (window.offline && window.offline.alertId) {
             console.log('[Meteor] status: connected')
             Alert.close(window.offline.alertId)
-            icon = React.createElement(Icon, { name: 'thumbs-up' }, null)
+            const icon = React.createElement(Icon, { name: 'thumbs-up' }, null)
             Alert.success(__('ui.statusMessages.connected'), { timeout: 2000, customFields: { icon } })
           }
           window.offline = null
         } else {
           if (window.offline) {
             if (!window.offline.alertId && window.offline.since.isBefore(moment().subtract(messageTimeout[0], messageTimeout[1]))) {
-              icon = React.createElement(Icon, { name: 'refresh', spin: true }, null)
+              const icon = React.createElement(Icon, { name: 'refresh', spin: true }, null)
               window.offline.alertId = Alert.warning(__('ui.statusMessages.disconnected'), { timeout: 'none', customFields: { icon } })
               console.log('[Meteor] status:', status)
             }

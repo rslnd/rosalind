@@ -7,7 +7,7 @@ const values = (nudge, selected) => {
   let v = []
   for (let i = 0; i <= 365; i++) {
     const d = moment().subtract(i, 'days')
-    const off = d.day() === 0 || d.day() === 6 && Math.random() < 0.4
+    const off = d.day() === 0 || (d.day() === 6 && Math.random() < 0.4)
     const invert = selected === 'cancelations'
     if (!off) {
       const m = d.month()

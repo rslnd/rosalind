@@ -8,7 +8,6 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import SwatchesPicker from 'react-color/lib/Swatches'
 import { Icon } from './Icon'
-import { DocumentPicker } from './DocumentPicker'
 import { __ } from '../../i18n'
 
 const ColHeader = ({ style, icon, header, description }) => {
@@ -76,7 +75,7 @@ class EditModal extends React.Component {
   }
 
   render () {
-    const { style, value, structure: { field, isMulti, EditComponent } } = this.props
+    const { style, structure: { field, isMulti, EditComponent } } = this.props
 
     const boxStyle = {
       zIndex: 50,

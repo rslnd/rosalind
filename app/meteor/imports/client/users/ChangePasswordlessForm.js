@@ -1,13 +1,10 @@
 import idx from 'idx'
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import { Users } from '../../api/users'
 import { compose, withState, mapProps, withHandlers } from 'recompose'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import { Button } from '@material-ui/core'
-import { reduxForm, Field } from 'redux-form'
-import { TextField } from '../components/form/TextField'
 import { Icon } from '../components/Icon'
 
 const Fields = ({ submitting, handleToggle, passwordless }) =>

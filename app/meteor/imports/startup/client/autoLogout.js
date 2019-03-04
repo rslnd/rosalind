@@ -1,5 +1,6 @@
-import { Meteor } from 'meteor/meteor'
+// import { Meteor } from 'meteor/meteor'
 
+// TODO: Auto logout on browser close
 export default () => {
   window.addEventListener('beforeunload', function () {
     // Meteor.logout()

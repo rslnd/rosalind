@@ -21,8 +21,8 @@ const composer = props => {
 
   const existingReferral = toId => find(referrals, r => r.referredTo === toId)
   const existingAppointment = toId => find(appointments, a =>
-    a.calendarId === toId ||
-    a.tags && a.tags.includes(toId)
+    (a.calendarId === toId) ||
+    (a.tags && a.tags.includes(toId))
   )
   const isReferrable = toId =>
     !existingReferral(toId) &&

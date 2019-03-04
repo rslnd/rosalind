@@ -7,8 +7,8 @@ export const hibp = action({
     hashPrefix: String
   },
   allowAnonymous: true,
-  fn: async ({ hashPrefix }) => {
-    return await queryHibp(hashPrefix)
+  fn: ({ hashPrefix }) => {
+    return queryHibp(hashPrefix)
   }
 })
 

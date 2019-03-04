@@ -13,7 +13,7 @@ const Schedule = new SimpleSchema({
   note: { type: String, optional: true }
 })
 
-export const upsertDefaultSchedule = ({ Schedules, Users }) => {
+export const upsertDefaultSchedule = ({ Schedules }) => {
   return new ValidatedMethod({
     name: 'schedules/upsertDefaultSchedule',
     mixins: [CallPromiseMixin],
@@ -26,7 +26,7 @@ export const upsertDefaultSchedule = ({ Schedules, Users }) => {
     }).validator(),
 
     run ({ calendarId, userId, scheduleId, weekday, newSchedule }) {
-      if (this.connection && !this.userId ||
+      if ((this.connection && !this.userId) ||
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }

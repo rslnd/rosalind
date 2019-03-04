@@ -1,13 +1,9 @@
-import { Meteor } from 'meteor/meteor'
 import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
 import { Roles } from 'meteor/alanning:roles'
-import Alert from 'react-s-alert'
 import { Users } from '../../api/users'
 import { Groups } from '../../api/groups'
-import { Calendars } from '../../api/calendars'
 import { subscribe } from '../../util/meteor/subscribe'
-import { Loading } from '../components/Loading'
 import { UsersScreen } from './UsersScreen'
 
 const composer = (props) => {

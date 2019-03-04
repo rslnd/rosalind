@@ -11,7 +11,7 @@ import { subscribe } from '../../util/meteor/subscribe'
 import Modal from 'react-bootstrap/lib/Modal'
 import { QRCode } from 'react-qr-svg'
 import { primaryActive, darken } from '../layout/styles'
-import { flex, grow } from '../components/form'
+import { flex } from '../components/form'
 import { __ } from '../../i18n'
 
 const isRoutableOrigin = () => {
@@ -131,10 +131,6 @@ const helpStyle = {
   justifyContent: 'space-between',
   textAlign: 'center',
   padding: 15
-}
-
-const loadingStyle = {
-  margin: 0
 }
 
 const qrColor = darken(primaryActive)

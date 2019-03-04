@@ -10,7 +10,7 @@ import { Schedules } from '../../../api/schedules'
 import { Users } from '../../../api/users'
 import { isSame, dateToDay } from '../../../util/time/day'
 import { DayPickerRangeController } from 'react-dates'
-import { END_DATE, START_DATE } from 'react-dates/constants'
+import { START_DATE } from 'react-dates/constants'
 import Button from '@material-ui/core/Button'
 import { UserPicker } from '../../users/UserPicker'
 

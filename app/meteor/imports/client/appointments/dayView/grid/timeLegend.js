@@ -1,7 +1,7 @@
 import React from 'react'
 import flatten from 'lodash/flatten'
 import { timeSlots, formatter, isFullHour, isQuarterHour } from './timeSlots'
-import { grayDisabled, darkGrayActive, darkGrayDisabled, background, unavailable } from '../../../layout/styles'
+import { grayDisabled, darkGrayActive, darkGrayDisabled } from '../../../layout/styles'
 
 const timeLegendStyle = {
   color: grayDisabled,
@@ -27,7 +27,7 @@ export const timeLegend = ({ slotSize }) => {
         gridRow: time
       }
 
-      if (slotSize < 15 && isQuarterHour(time) || slotSize >= 60) {
+      if ((slotSize < 15) && (isQuarterHour(time) || slotSize >= 60)) {
         legendStyle = {
           ...legendStyle,
           ...quarterHourStyle

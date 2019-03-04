@@ -137,9 +137,9 @@ const SubItem = ({ item, subItem, location }) => {
 }
 
 const SubBadge = ({ subItem }) =>
-  subItem.badge && <div className='label label-primary pull-right' style={subBadgeStyle}>
+  (subItem.badge && <div className='label label-primary pull-right' style={subBadgeStyle}>
     {subItem.badge}
-  </div> || null
+  </div>) || null
 
 const subBadgeStyle = {
   zoom: 0.88,

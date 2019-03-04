@@ -158,9 +158,13 @@ export const upsert = ({ Patients }) => {
               existingPatient.agreements.find(a => a.to === label) &&
               !agreed) {
               update['$set'].agreements = existingPatient.agreements.filter(a => a.to !== label)
-            } else if ((existingPatient.agreements &&
-              !existingPatient.agreements.find(a => a.to === label) ||
-              !existingPatient.agreements) &&
+            } else if (
+              (existingPatient.agreements &&
+                (
+                  !existingPatient.agreements.find(a => a.to === label) ||
+                  !existingPatient.agreements
+                )
+              ) &&
               agreed) {
               update['$set'].agreements = [
                 ...(existingPatient.agreements || []),

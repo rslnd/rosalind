@@ -21,7 +21,7 @@ export const setNote = ({ Schedules }) => {
     run ({ calendarId, day, note, noteDetails }) {
       console.log({ calendarId, day, note, noteDetails })
 
-      if (this.connection && !this.userId ||
+      if ((this.connection && !this.userId) ||
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }

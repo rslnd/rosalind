@@ -20,9 +20,9 @@ const composer = (props) => {
         note: message.text,
         payload: {
           channel: message.channel,
-          messageId: message.payload && message.payload.messageId || undefined,
-          appointmentId: message.payload && message.payload.appointmentId || undefined,
-          patientId: message.payload && message.payload.appointmentId || undefined
+          messageId: (message.payload && message.payload.messageId) || undefined,
+          appointmentId: (message.payload && message.payload.appointmentId) || undefined,
+          patientId: (message.payload && message.payload.appointmentId) || undefined
         }
       })
 

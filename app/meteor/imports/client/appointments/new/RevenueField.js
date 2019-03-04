@@ -27,20 +27,13 @@ export class RevenueField extends React.Component {
     this.renderValue = this.renderValue.bind(this)
   }
 
-  componentWillReceiveProps (props) {
-    // if (props.revenue.meta.pristine) {
-    //   const autoRevenue = calculateRevenue(props.tags.input.value)
-    //   props.revenue.input.onChange(autoRevenue)
-    // }
-  }
-
   handleFocus () {
     this.setState({
       focused: true
     })
   }
 
-  handleBlur () {
+  handleBlur (e) {
     this.props.revenue.input.onChange(e.target.value)
 
     this.setState({
@@ -56,7 +49,7 @@ export class RevenueField extends React.Component {
     })
   }
 
-  renderValue (e) {
+  renderValue () {
     const { revenue, tags } = this.props
     const calculatedRevenue = calculateRevenue(tags.input.value)
 

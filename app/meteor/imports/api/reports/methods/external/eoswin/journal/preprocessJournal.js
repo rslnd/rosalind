@@ -44,7 +44,7 @@ const parseAppointmentType = (row, i, rows) => {
 
 export const parenthesesToArray = (string) => {
   const match = string.match(/\[([^\]]+)\]/g)
-  return match && match.map(s => s.replace(/\[|\]/g, '')) || []
+  return (match && match.map(s => s.replace(/\[|\]/g, ''))) || []
 }
 
 const isMissingReimbursement = (text) =>

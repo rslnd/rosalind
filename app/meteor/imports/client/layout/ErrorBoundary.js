@@ -11,12 +11,11 @@ class ErrorBoundaryComponent extends React.Component {
     }
   }
 
-  componentDidCatch (error, info) {
+  componentDidCatch (errorObject, info) {
     this.setState({
       hasError: true,
       errorUrlLocation: this.props.location
     })
-    // TODO: Log to sentry (error, info)
   }
 
   static getDerivedStateFromProps (props, state) {

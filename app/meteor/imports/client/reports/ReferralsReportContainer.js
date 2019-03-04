@@ -7,26 +7,19 @@ import {
 } from 'query-string'
 import moment from 'moment-timezone'
 import { withRouter } from 'react-router-dom'
-import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { withTracker } from '../components/withTracker'
-import { getAssignee } from '../../api/reports/methods/getAssignee'
-import { Calendars } from '../../api/calendars'
-import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
-import { Tags } from '../../api/tags'
 import { Referrals } from '../../api/referrals'
 import { ReferralsReportScreen } from './ReferralsReportScreen'
 import { withPromise } from '../components/withPromise'
-import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = props => {
   const username = idx(props, _ => _.match.params.username)
   const user = username && Users.findOne({ username }, { removed: true })
 
   const search = fromQuery(props.location.search)
-  const from = search.from && moment(search.from) || moment().startOf('month')
-  const to = search.to && moment(search.to) || moment().endOf('day')
+  const from = (search.from && moment(search.from)) || moment().startOf('month')
+  const to = (search.to && moment(search.to)) || moment().endOf('day')
 
   const isPrint = props.location.hash === '#print'
 

@@ -2,7 +2,6 @@ const { app, ipcMain } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const logger = require('./logger')
 const manifest = require('./manifest')
-const settings = require('./settings')
 const shortcuts = require('./shortcuts')
 const { captureException } = require('@sentry/electron')
 

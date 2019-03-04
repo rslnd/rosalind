@@ -1,7 +1,6 @@
 import moment from 'moment'
 import { Match } from 'meteor/check'
 import { Schedules } from '../'
-import { Comments } from '../../comments'
 import { publish } from '../../../util/meteor/publish'
 import { daySelector } from '../../../util/time/day'
 

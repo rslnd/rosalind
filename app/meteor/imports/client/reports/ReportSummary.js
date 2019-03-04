@@ -2,7 +2,7 @@ import React from 'react'
 import idx from 'idx'
 import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
-import { currency, integer, float, percentage, conditionalFloat } from '../../util/format'
+import { integer, float, percentage } from '../../util/format'
 import { Nil } from './shared/Nil'
 import { lighten } from '../layout/styles'
 
@@ -37,8 +37,11 @@ export const Unit = ({ prepend, append, children }) => (
     {prepend && <small className='text-muted'>{prepend}&nbsp;</small>}
     {
       (typeof children === 'number' ||
-      typeof children === 'string' &&
-      !Number.isNaN(children))
+        (
+          typeof children === 'string' &&
+          !Number.isNaN(children)
+        )
+      )
         ? children
         : <Nil />
     }

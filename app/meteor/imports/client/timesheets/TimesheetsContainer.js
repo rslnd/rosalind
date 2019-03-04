@@ -2,9 +2,9 @@ import add from 'lodash/sum'
 import moment from 'moment-timezone'
 import 'moment-duration-format'
 import { Meteor } from 'meteor/meteor'
+import { ReactiveVar } from 'meteor/reactive-var'
 import { withTracker } from '../components/withTracker'
 import { dateToDay } from '../../util/time/day'
-import { Loading } from '../components/Loading'
 import { Timesheets } from '../../api/timesheets'
 import { duration } from '../../api/timesheets/methods/sum'
 import { Schedules } from '../../api/schedules'
@@ -24,7 +24,7 @@ let userIdStore = new ReactiveVar()
 const composer = (props) => {
   const { start, end } = parseDateRange(props.match && props.match.params.dateRange)
   const userId = userIdStore.get() || Meteor.userId()
-  const subscription = subscribe('timesheets-range', {
+  subscribe('timesheets-range', {
     userId,
     start: start.toDate(),
     end: end.toDate()

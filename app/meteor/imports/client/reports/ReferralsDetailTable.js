@@ -1,6 +1,5 @@
 import React from 'react'
 import { namecase } from '../../util/namecase'
-import uniq from 'lodash/uniq'
 import sortBy from 'lodash/fp/sortBy'
 import { __ } from '../../i18n'
 import moment from 'moment'
@@ -11,22 +10,13 @@ import {
   TableHead,
   TableRow,
   numberCellStyle,
-  textCellStyle,
-  iconCellStyle,
   separatorStyle,
-  doubleSeparatorStyle,
-  headerTitleStyle,
-  doubleSeparatorHeaderTitleStyle,
   summaryRowStyle } from '../components/Table'
 import { Calendars } from '../../api/calendars'
 import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'
-import { Icon } from '../components/Icon'
-import { PatientName } from '../patients/PatientName'
 import { ReferralsDetailSummary } from './ReferralsDetailSummary'
 import { Nil } from './shared/Nil'
-
-const stages = ['referred', 'pending', 'redeemed']
 
 const referredToTitle = _id => {
   const tag = Tags.findOne({ _id })
@@ -131,40 +121,7 @@ const Date = ({ date, relativeTo }) => {
   }
 }
 
-const Referred = ({ style }) =>
-  <Cell
-    style={style || separatorStyle}
-    title='Ausgesprochene Empfehlungen'>
-    <Icon name='commenting-o' />
-  </Cell>
-
-const Pending = () =>
-  <Cell
-    style={separatorStyle}
-    title='Aufgrund von Empfehlungen geplante Termine'>
-    <Icon name='clock-o' />
-  </Cell>
-
-const Redeemed = () =>
-  <Cell
-    style={separatorStyle}
-    title='Von PatientIn in Anspruch genommene Empfehlungen'>
-    <Icon name='check' />
-  </Cell>
-
 const Cell = ({ children, ...props }) =>
   <TableCell padding='dense' {...props}>
     {children}
   </TableCell>
-
-const Value = ({ total, today }) =>
-  <span>
-    {total && total > 0 ? total : null}
-    {
-      today && today > 0
-        ? <span className='text-muted'>
-          &nbsp;
-          (+{today})
-        </span> : null
-    }
-  </span>

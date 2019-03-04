@@ -1,10 +1,9 @@
 import moment from 'moment-timezone'
-import uniq from 'lodash/uniq'
 import { Calendars } from '../../calendars'
 import { Tags } from '../../tags'
 import { Appointments } from '../../appointments'
 import { Constraints } from '../../constraints'
-import { daySelector, dayToDate } from '../../../util/time/day'
+import { dayToDate } from '../../../util/time/day'
 import { overridesToColumns } from './overridesToColumns'
 
 export default ({ Schedules }) => {

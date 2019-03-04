@@ -30,8 +30,8 @@ export default () => {
         if (!userId) {
           userId = this.userId
         }
-        const start = { $gt: moment(start).startOf('day').toDate() }
-        let selector = { userId, start }
+        const startSelector = { $gt: moment(start).startOf('day').toDate() }
+        let selector = { userId, start: startSelector }
 
         if (end) {
           selector.end = { $lt: moment(end).endOf('day').toDate() }

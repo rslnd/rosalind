@@ -4,9 +4,7 @@ import sortBy from 'lodash/fp/sortBy'
 import identity from 'lodash/identity'
 import { withHandlers } from 'recompose'
 import { darken } from '../layout/styles'
-import { Icon } from '../components/Icon'
 import { Tags } from '../../api/tags'
-import { Currency } from '../components/Currency'
 
 export const tagBackgroundColor = '#e5e5e5'
 export const tagTextColor = '#a0a0a0'
@@ -27,10 +25,6 @@ export const tagStyle = {
 const tagGroupTitleStyle = {
   display: 'block',
   fontSize: 12
-}
-
-const overlay = {
-  opacity: 0.6
 }
 
 const durationStyle = {
@@ -63,7 +57,7 @@ const Tag = withHandlers({
   style={{
     ...tagStyle,
     ...style,
-    color: tag.selectable && (tag.selected ? '#fff' : tagTextColor) || '#fff',
+    color: (tag.selectable && (tag.selected ? '#fff' : tagTextColor)) || '#fff',
     backgroundColor: tag.selectable
       ? (tag.selected ? tag.color : tagBackgroundColor)
       : tag.color,
@@ -74,7 +68,6 @@ const Tag = withHandlers({
   {tag.duration && <span style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
     {tag.duration}'
   </span>}
-  {/* <PrivateIndicator tag={tag} showDefaultRevenue={showDefaultRevenue} /> */}
 </span>)
 
 export const TagsList = ({
@@ -146,19 +139,4 @@ export const TagsList = ({
       </span>
     )}
   </span>
-}
-
-const PrivateIndicator = ({ tag, showDefaultRevenue }) => {
-  let render = null
-  if (showDefaultRevenue && tag.defaultRevenue > 0) {
-    render = <Currency value={tag.defaultRevenue} />
-  } else if (tag.privateAppointment) {
-    render = <Icon name='eur' style={overlay} />
-  }
-
-  return render &&
-    <span>
-      &ensp;
-      {render}
-    </span>
 }

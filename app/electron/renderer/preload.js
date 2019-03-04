@@ -2,7 +2,7 @@ console.log('[Electron Native] Enabling native bindings')
 
 window.ELECTRON_ENABLE_SECURITY_WARNINGS = true
 
-const { ipcRenderer, webFrame } = require('electron')
+const { ipcRenderer } = require('electron')
 
 const SENTRY_DSN_URL = 'https://6af65eb19a37410f968d4e602ce572d7@sentry.io/62218'
 

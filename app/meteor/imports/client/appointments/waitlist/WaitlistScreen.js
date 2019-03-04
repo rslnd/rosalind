@@ -49,7 +49,6 @@ export class WaitlistScreen extends React.Component {
       action,
       canViewAllWaitlists,
       handleChangeAssigneeView,
-      handleChangeWaitlistAssignee,
       canChangeWaitlistAssignee
     } = this.props
 

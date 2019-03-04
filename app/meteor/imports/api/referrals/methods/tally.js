@@ -30,8 +30,8 @@ export const tally = ({ date, from, to, referrals, futureAppointments = [] }) =>
     !r.redeemedAt &&
     !!futureAppointments.find(a =>
       a.patientId === r.patientId && (
-        a.calendarId === r.referredTo ||
-        a.tags && a.tags.includes(r.referredTo)
+        (a.calendarId === r.referredTo) ||
+        (a.tags && a.tags.includes(r.referredTo))
       )
     )
 

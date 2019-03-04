@@ -1,4 +1,3 @@
-import uniq from 'lodash/uniq'
 import flatten from 'lodash/flatten'
 import { toWeekday } from '../../../util/time/weekdays'
 import { isWithinHMRange } from '../../../util/time/hm'

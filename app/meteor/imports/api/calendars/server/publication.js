@@ -1,4 +1,3 @@
-import { Roles } from 'meteor/alanning:roles'
 import { publish } from '../../../util/meteor/publish'
 import { Calendars } from '../'
 

@@ -1,4 +1,3 @@
-import Alert from 'react-s-alert'
 import { toClass } from 'recompose'
 import { withTracker } from '../../components/withTracker'
 import { Appointments } from '../../../api/appointments'

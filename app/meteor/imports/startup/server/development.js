@@ -1,5 +1,6 @@
 import 'heapdump'
 import * as Api from '../../api'
+import { MongoInternals } from 'meteor/mongo'
 
 export default () => {
   process.on('warning', e => {

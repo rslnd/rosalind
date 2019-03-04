@@ -33,5 +33,5 @@ export const mapNoShows = ({ messages = [], appointments = [] }) => {
     noShows
   }
 
-  return mapValues(x => x && x.length || null)(values)
+  return mapValues(x => ((x && x.length) || null))(values)
 }

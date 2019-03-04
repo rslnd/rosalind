@@ -1,8 +1,4 @@
-import { Tracker } from 'meteor/tracker'
 import { ReactiveVar } from 'meteor/reactive-var'
-import { subscribe } from '../../../util/meteor/subscribe'
-import { getClientKey } from '../../../util/meteor/getClientKey'
-import { Clients } from '..'
 import { onNativeEvent } from '../../../startup/client/native/events'
 import isEqual from 'lodash/isEqual'
 import { getClient } from './getClient'

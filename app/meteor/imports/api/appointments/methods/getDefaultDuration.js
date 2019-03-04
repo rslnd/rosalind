@@ -1,10 +1,8 @@
-import { Users } from '../../users'
 import { Calendars } from '../../calendars'
 import { Constraints } from '../../constraints'
 import { findConstraint } from '../../constraints/methods/findConstraint'
 import { applyConstraintToTags } from '../../constraints/methods/applyConstraintToTags'
 import { Tags } from '../../tags'
-import { toWeekday } from '../../../util/time/weekdays'
 import { isWithinHMRange } from '../../../util/time/hm'
 import { applyDurationStrategy } from './durationStrategy'
 

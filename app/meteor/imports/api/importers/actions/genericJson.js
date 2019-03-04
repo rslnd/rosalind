@@ -1,10 +1,7 @@
-
-import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { dateToDay } from '../../../util/time/day'
 import { Patients } from '../../patients'
 
 export const genericJson = ({ Importers }) => {
@@ -20,7 +17,6 @@ export const genericJson = ({ Importers }) => {
     run ({ name, content }) {
       if (!Meteor.userId()) { return }
 
-      const timezone = 'Europe/Vienna'
       const parsed = JSON.parse(content)
 
       console.log('[Importers] genericJson: parsing', parsed.length, 'records')

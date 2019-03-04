@@ -8,7 +8,7 @@ import { Events } from '../../events'
 import { transformDefaultsToOverrides } from '../methods/transformDefaultsToOverrides'
 import { rangeToDays, isSame, daySelector } from '../../../util/time/day'
 
-export const applyDefaultSchedule = ({ Schedules, Users }) => {
+export const applyDefaultSchedule = ({ Schedules }) => {
   return new ValidatedMethod({
     name: 'schedules/applyDefaultSchedule',
     mixins: [CallPromiseMixin],
@@ -20,7 +20,7 @@ export const applyDefaultSchedule = ({ Schedules, Users }) => {
     }).validator(),
 
     run ({ calendarId, assigneeId, from, to }) {
-      if (this.connection && !this.userId ||
+      if ((this.connection && !this.userId) ||
         !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }

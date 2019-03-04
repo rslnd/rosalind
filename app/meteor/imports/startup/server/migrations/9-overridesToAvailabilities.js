@@ -1,5 +1,6 @@
 import idx from 'idx'
-import { Migrations } from 'meteor/percolate:migrations'
+// import { Migrations } from 'meteor/percolate:migrations'
+import { Meteor } from 'meteor/meteor'
 import { Schedules } from '../../../api/schedules'
 import { Calendars } from '../../../api/calendars'
 import { Availabilities } from '../../../api/availabilities'

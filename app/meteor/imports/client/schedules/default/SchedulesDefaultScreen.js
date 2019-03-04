@@ -197,8 +197,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
 
   render () {
     const {
-      calendar,
-      users
+      calendar
     } = this.props
 
     return (

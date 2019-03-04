@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor'
 import { Match } from 'meteor/check'
 import { action } from '../../../util/meteor/action'
 import { Accounts } from 'meteor/accounts-base'

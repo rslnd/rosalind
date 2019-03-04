@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import { expect } from 'chai'
 import { mapNoShows } from './mapNoShows'
-import { appointments, messages } from './mapNoShows.fixture.js'
+import { appointments } from './mapNoShows.fixture.js'
 
 describe('reports', () => {
   describe('mapNoShows', () => {
