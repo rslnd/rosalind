@@ -26,7 +26,7 @@ const print = (options) => {
       landscape: true
     }
 
-    options.ipcReceiver.webContents.printToPDF(printOptions, (err, data) => {
+    options.ipcReceiver.printToPDF(printOptions, (err, data) => {
       if (err) {
         logger.error('[Print] Failed to generate pdf: ' + err)
         return

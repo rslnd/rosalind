@@ -70,6 +70,8 @@ const isUrlValid = urlString => {
   }
 }
 
+const debug = msg => DEBUG && logger.info(`[Preload] [Debug]: ${msg}`)
+
 try {
   // Set up toNative: ipc <- web
 
@@ -78,18 +80,22 @@ try {
   const listener = (messageEvent) => {
     try {
       if (messageEvent.source !== window) {
+        debug('Discarding event because sources do not match')
         return
       }
 
       if (!isUrlValid(messageEvent.origin)) {
+        debug('Discarding event because origin is invalid')
         throw new Error('Invalid origin')
       }
 
       if (typeof messageEvent.data !== 'string') {
+        debug(`Discarding event because data is not a string: ${JSON.stringify(messageEvent.data)}`)
         return
       }
 
       if (messageEvent.data.indexOf(eventPrefix) !== 0) {
+        debug(`Discarding event because prefix is missing: ${messageEvent.data}`)
         return
       }
 
@@ -97,6 +103,7 @@ try {
       const parsed = JSON.parse(json)
 
       if (toNative.indexOf(parsed.name) === -1) {
+        debug(`Discarding event because name is not whitelisted in toWeb: ${parsed.name}`)
         return
       }
 
@@ -119,6 +126,7 @@ try {
   // Set up toWeb: ipc -> web
   toWeb.map(name => {
     ipcRenderer.on(name, (ipcEvent, payload = {}) => {
+      debug(`Received ipc->toWeb event ${name}`)
       const event = { name, payload }
       try {
         const eventString = [

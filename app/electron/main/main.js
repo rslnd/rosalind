@@ -66,8 +66,8 @@ const start = () => {
       }
 
       logger.ready('[Main] Main window loaded')
-      watch.start({ ipcReceiver: mainWindow, handleFocus })
-      print.start({ ipcReceiver: mainWindow })
+      watch.start({ ipcReceiver: mainWindow.webContents, handleFocus })
+      print.start({ ipcReceiver: mainWindow.webContents })
       automation.start(process.argv)
       shortcuts.updateShortcuts()
       devtools.start()

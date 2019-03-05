@@ -52,7 +52,7 @@ const handleStartupEvent = () => {
   }
 }
 
-const start = () => {
+const start = ({ ipcReceiver }) => {
   if (process.platform !== 'win32') { return }
 
   autoUpdater.on('error', (err) => {
@@ -70,7 +70,7 @@ const start = () => {
     logger.info(`[Updater] New update downloaded: ${info.version}`)
 
     if (mainWindow) {
-      mainWindow.webContents.send('updateAvailable', { newVersion: info.version })
+      ipcReceiver.send('updateAvailable', { newVersion: info.version })
     }
 
     updateDownloaded = true

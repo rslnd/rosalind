@@ -66,22 +66,22 @@ const listener = messageEvent => {
   debug(`Received message ${messageEvent.origin}`)
 
   if (messageEvent.source !== window) {
-    debug('Discarding event becuase sources do not match')
+    debug('Discarding event because sources do not match')
     return
   }
 
   if (!isValidOrigin(messageEvent.origin)) {
-    debug('Discarding event becuase origin is invalid')
+    debug('Discarding event because origin is invalid')
     return
   }
 
   if (typeof messageEvent.data !== 'string') {
-    debug('Discarding event because data is not a string')
+    debug(`Discarding event because data is not a string: ${JSON.stringify(messageEvent.data)}`)
     return
   }
 
   if (messageEvent.data.indexOf(eventPrefix) !== 0) {
-    debug('Discarding event because prefix is missing')
+    debug(`Discarding event because prefix is missing: ${messageEvent.data}`)
     return
   }
 
@@ -92,7 +92,7 @@ const listener = messageEvent => {
   }
 
   if (toWeb.indexOf(parsed.name) === -1) {
-    debug('Discarding event because name is not whitelisted in toWeb')
+    debug(`Discarding event because name is not whitelisted in toWeb: ${parsed.name}`)
     return
   }
 
