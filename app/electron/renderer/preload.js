@@ -76,7 +76,6 @@ try {
   // Can't just log/stringify the message object as it would just print { isTrusted: true }
   // Always need to read .data and .origin directly.
   const listener = (messageEvent) => {
-    // console.log(`preload: ${JSON.stringify(message)} (${JSON.stringify(message.data)}) [(${JSON.stringify(message.origin)})] {${message.source === window}}`)
     try {
       if (messageEvent.source !== window) {
         return
@@ -94,18 +93,17 @@ try {
         return
       }
 
-      logger.info(`[Preload] Message ${JSON.stringify(messageEvent.data)}`)
-
       const json = messageEvent.data.slice(eventPrefix.length)
-
       const parsed = JSON.parse(json)
-
-      if (!((Object.keys(parsed).length === 2) && parsed.name && parsed.payload)) {
-        throw new Error(`Invalid shape of event data: ${Object.keys(parsed).join(',')}`)
-      }
 
       if (toNative.indexOf(parsed.name) === -1) {
         return
+      }
+
+      logger.info(`[Preload] Message ${JSON.stringify(messageEvent.data)}`)
+
+      if (!((Object.keys(parsed).length === 2) && parsed.name && parsed.payload)) {
+        throw new Error(`Invalid shape of event data: ${Object.keys(parsed).join(',')}`)
       }
 
       logger.info(`[Preload] sending to ipc: ${parsed.name}`)
@@ -127,7 +125,7 @@ try {
           eventPrefix,
           JSON.stringify(event)
         ].join('')
-        logger.info(`[Preload] Posting event ${name} ${eventString}`)
+        logger.info(`[Preload] Posting event ${name}`)
         window.postMessage(eventString, targetOrigin)
       } catch (e) {
         logger.error(`[Preload] Failed to serialize event ${name}`, e)

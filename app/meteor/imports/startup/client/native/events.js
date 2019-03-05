@@ -11,6 +11,8 @@ const toWeb = [
   'dataTransfer'
 ]
 
+const DEBUG = true
+
 const eventPrefix = 'rslndNative*'
 const events = new EventEmitter()
 
@@ -47,7 +49,7 @@ export const onNativeEvent = (event, callback) => {
 }
 
 export const toNative = (name, payload = {}) => {
-  console.log('[Native] Posting message', name, payload)
+  console.log('[Native] Posting message', name)
 
   if (window.isAndroid) {
     console.error('[Native] Android interface not implemented')
@@ -58,20 +60,28 @@ export const toNative = (name, payload = {}) => {
 
 export const getClientKey = () => clientKey
 
+const debug = msg => DEBUG && console.log(`[Debug] ${msg}`)
+
 const listener = messageEvent => {
+  debug(`Received message ${messageEvent.origin}`)
+
   if (messageEvent.source !== window) {
+    debug('Discarding event becuase sources do not match')
     return
   }
 
   if (!isValidOrigin(messageEvent.origin)) {
+    debug('Discarding event becuase origin is invalid')
     return
   }
 
   if (typeof messageEvent.data !== 'string') {
+    debug('Discarding event because data is not a string')
     return
   }
 
   if (messageEvent.data.indexOf(eventPrefix) !== 0) {
+    debug('Discarding event because prefix is missing')
     return
   }
 
@@ -82,10 +92,11 @@ const listener = messageEvent => {
   }
 
   if (toWeb.indexOf(parsed.name) === -1) {
+    debug('Discarding event because name is not whitelisted in toWeb')
     return
   }
 
-  console.log(`[Native] Emitting ${parsed.name} ${JSON.stringify(parsed.payload)}`)
+  console.log(`[Native] Emitting ${parsed.name}`)
   events.emit(parsed.name, parsed.payload)
 }
 
