@@ -1,11 +1,11 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.173",
+  "version": "0.0.174",
   "private": true,
   "description": "Rosalind",
   "author": {
-    "name": "Albert Zak",
+    "name": "Albert Ronald Roland Zak",
     "email": "security@rslnd.com"
   },
   "repository": {
@@ -52,6 +52,7 @@
     "readonly": true,
     "forceCodeSigning": true,
     "win": {
+      "publisherName": ["Albert Ronald Roland Zak"],
       "icon": "assets/appicon.ico"
     },
     "nsis": {
