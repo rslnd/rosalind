@@ -10,11 +10,6 @@ autoUpdater.logger = logger
 let updateDownloaded = false
 let mainWindow = null
 
-const sendVersion = ({ ipcReceiver }) => {
-  mainWindow = ipcReceiver
-  mainWindow.webContents.send('version', app.getVersion())
-}
-
 const handleStartupEvent = () => {
   if (process.platform !== 'win32') { return }
 
@@ -75,7 +70,7 @@ const start = () => {
     logger.info(`[Updater] New update downloaded: ${info.version}`)
 
     if (mainWindow) {
-      mainWindow.webContents.send('update/available', { newVersion: info.version })
+      mainWindow.webContents.send('updateAvailable', { newVersion: info.version })
     }
 
     updateDownloaded = true
@@ -89,7 +84,7 @@ const quitAndInstall = () => {
   }
 }
 
-ipcMain.on('update/quitAndInstall', quitAndInstall)
+ipcMain.on('quitAndInstall', quitAndInstall)
 
 const check = () => {
   if (process.platform !== 'win32') { return }
@@ -100,4 +95,4 @@ const check = () => {
   }
 }
 
-module.exports = { handleStartupEvent, start, quitAndInstall, check, sendVersion }
+module.exports = { handleStartupEvent, start, quitAndInstall, check }

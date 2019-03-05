@@ -72,10 +72,11 @@ const start = () => {
       shortcuts.updateShortcuts()
       devtools.start()
 
-      ipcMain.on('window/load', (e) => {
-        settings.send({ ipcReceiver: mainWindow })
-        updater.sendVersion({ ipcReceiver: mainWindow })
-        systemInfo.send({ ipcReceiver: mainWindow })
+      ipcMain.on('hello', (e) => {
+        mainWindow.send('welcome', {
+          systemInfo,
+          clientKey: settings.clientKey
+        })
       })
     })
 

@@ -32,10 +32,10 @@ export const ingest = ({ Importers }) => {
       importer: { type: String, optional: true, allowedValues: allowedImporters },
       name: { type: String },
       content: { type: String, optional: true },
-      buffer: { type: Object, blackbox: true, optional: true }
+      base64: { type: String, optional: true }
     }).validator(),
 
-    run ({ importer, name, content, buffer }) {
+    run ({ importer, name, content, base64 }) {
       this.unblock()
       try {
         if (Meteor.isServer) {
@@ -50,16 +50,16 @@ export const ingest = ({ Importers }) => {
         }
 
         if (!importer) {
-          if (!content) {
-            content = iconv.decode(Buffer.from(buffer.blob), 'utf8')
+          if (!content && base64) {
+            content = iconv.decode(Buffer.from(base64, 'base64'), 'utf8')
           }
           importer = determineImporter({ name, content })
         }
 
-        if (!content && buffer) {
+        if (!content && base64) {
           const encoding = determineEncoding({ importer })
           if (!encoding) throw new Meteor.Error('encoding-not-recognized', `Could not determine encoding for ${name}`)
-          content = iconv.decode(Buffer.from(buffer.blob), encoding)
+          content = iconv.decode(Buffer.from(base64, 'base64'), encoding)
         }
 
         if (importer) {

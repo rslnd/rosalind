@@ -6,8 +6,12 @@ const logger = require('./logger')
 
 let watchers = []
 
+// Only honor delete requests for files that were actually transmitted, for security
+let pendingTransferPaths = []
+
 const onAdd = ({ ipcReceiver, watch, path, importer, remove, focus }) => {
   logger.info('[Watch] New file was added', { path, watch, importer, remove, focus })
+  pendingTransferPaths.push(path)
 
   fs.readFile(path, (err, buffer) => {
     if (err) { return logger.error('[Watch] Error reading file to buffer', err) }
@@ -16,10 +20,11 @@ const onAdd = ({ ipcReceiver, watch, path, importer, remove, focus }) => {
       const encoding = watch.encoding || 'ISO-8859-1'
       logger.info('[Watch] Transferring file with encoding', { path, encoding })
       const content = iconv.decode(buffer, encoding)
-      ipcReceiver.send('import/dataTransfer', { path, watch, content, importer, remove, focus })
+      ipcReceiver.send('dataTransfer', { path, watch, content, importer, remove, focus })
     } else {
-      logger.info('[Watch] Transferring file as binary', { path })
-      ipcReceiver.send('import/dataTransfer', { path, watch, buffer, importer, remove, focus })
+      logger.info('[Watch] Transferring file as base64', { path })
+      const base64 = buffer.toString('base64')
+      ipcReceiver.send('dataTransfer', { path, watch, base64, importer, remove, focus })
     }
   })
 }
@@ -51,7 +56,12 @@ const start = ({ ipcReceiver, handleFocus }) => {
     })
 
     const { ipcMain } = require('electron')
-    ipcMain.on('import/dataTransferSuccess', (e, { remove, path, focus }) => {
+    ipcMain.on('dataTransferSuccess', (e, { remove, path, focus }) => {
+      if (pendingTransferPaths.indexOf(path) === -1) {
+        logger.error('[Watch] Received success event for file that was not transferred in the current session, discarding event')
+        return
+      }
+
       logger.info('[Watch] Data transfer success', { path, remove })
       if (remove) {
         logger.info('[Watch] Removing file', path)

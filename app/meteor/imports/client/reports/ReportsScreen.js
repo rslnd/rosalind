@@ -14,6 +14,7 @@ import { Referrals } from './Referrals'
 import { PrintSettings } from './shared/PrintSettings'
 import { FooterContainer } from '../layout/FooterContainer'
 import { Loading } from '../components/Loading'
+import { getClientKey, toNative } from '../../startup/client/native/events'
 
 const avoidPageBreak = {
   pageBreakInside: 'avoid'
@@ -31,11 +32,11 @@ export class ReportsScreen extends React.Component {
   }
 
   handlePrint () {
-    if (window.native && window.native.print) {
+    if (getClientKey()) {
       console.log('[Client] Printing: native')
       const title = moment(dayToDate(this.props.day))
         .format(`YYYY-MM-DD-[${__('reports.thisDaySingular')}]`)
-      window.native.print({ title })
+      toNative('print', { title })
     } else {
       console.log('[Client] Printing: default')
       window.print()

@@ -26,19 +26,19 @@ export const register = ({ Clients }) => {
             systemInfo
           }
         })
-        return true
+        return { isOk: true, settings: existingClient.settings }
       } else {
         if (!Settings.get('clients.allowNewClients')) {
           console.error('[Clients] New client registration is disabled')
           console.error('[Clients] Blocked attempt to register new client key', clientKey)
-          return false
+          return { isOk: false }
         } else {
           Clients.insert({
             clientKey,
             systemInfo,
             createdAt: new Date()
           })
-          return true
+          return { isOk: true }
         }
       }
     }

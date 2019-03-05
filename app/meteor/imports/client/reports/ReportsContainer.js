@@ -17,6 +17,7 @@ import { Referrals } from '../../api/referrals'
 import { ReportsScreen } from './ReportsScreen'
 import { withPromise } from '../components/withPromise'
 import { subscribe } from '../../util/meteor/subscribe'
+import { getClientKey, toNative } from '../../startup/client/native/events'
 
 const composer = props => {
   const dateParam = idx(props, _ => _.match.params.date)
@@ -52,8 +53,8 @@ const composer = props => {
   }
 
   const generateReport = () => {
-    if (window.native && window.native.emit) {
-      window.native.emit('automation/generateEoswinReports', { day })
+    if (getClientKey()) {
+      toNative('automation/generateEoswinReports', { day })
     }
 
     return Reports.actions.generate.callPromise({ day })

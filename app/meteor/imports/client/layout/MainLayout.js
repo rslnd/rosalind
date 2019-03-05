@@ -11,7 +11,6 @@ import { HelpContainer } from '../availabilities/HelpContainer'
 import { ErrorBoundary } from './ErrorBoundary'
 import { Loading } from '../components/Loading'
 import { Lock } from './Lock'
-import { SignPad } from './SignPad'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -83,7 +82,6 @@ export class MainLayout extends React.Component {
         <Alerts />
         <MaintenanceMessageContainer />
         <Lock />
-        <SignPad />
       </div>
     )
 

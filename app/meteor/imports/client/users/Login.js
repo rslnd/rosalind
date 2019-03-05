@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/lib/Button'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
-import { getClientKey } from '../../util/meteor/getClientKey'
+import { getClientKey } from '../../startup/client/native/events'
 import { isWeakPassword } from '../../api/users/methods'
 
 export class Login extends React.Component {

@@ -12,6 +12,7 @@ import { Referrals } from './Referrals'
 import { PrintSettings } from './shared/PrintSettings'
 import { UserPicker } from '../users/UserPicker'
 import { fullNameWithTitle } from '../../api/users/methods/name'
+import { getClientKey, toNative } from '../../startup/client/native/events'
 
 const formatRange = ({ start, end }) =>
   ([
@@ -32,11 +33,11 @@ export class AssigneeReportScreen extends React.Component {
   }
 
   handlePrint () {
-    if (window.native && window.native.print) {
+    if (getClientKey()) {
       console.log('[Client] Printing: native')
       const title = moment(dayToDate(this.props.day))
         .format(`YYYY-MM-DD-[${__('reports.thisDaySingular')}]`)
-      window.native.print({ title })
+      toNative('print', { title })
     } else {
       console.log('[Client] Printing: default')
       window.print()

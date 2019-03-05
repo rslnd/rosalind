@@ -6,7 +6,6 @@ import { __ } from '../../i18n'
 import { Roles } from 'meteor/alanning:roles'
 import { Groups } from '../../api/groups'
 import { Users } from '../../api/users'
-import { getSettings } from '../../api/clients/methods/getSettings'
 
 const getTranslation = () => {
   const keys = [ 'headerText', 'inputPlaceholder', 'sendButtonText',
@@ -87,12 +86,4 @@ const init = () => {
 
 export default () => {
   setTimeout(init, 2000)
-
-  Tracker.autorun(() => {
-    const settings = getSettings()
-    if (settings && settings.disableLivechat) {
-      console.log('[Livechat] Disabling')
-      Smooch.destroy()
-    }
-  })
 }

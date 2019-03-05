@@ -4,20 +4,21 @@ import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import { Importers } from '../../api/importers'
 import { loadPatient } from '../../client/patients/picker/actions'
+import { getClientKey, onNativeEvent, toNative } from './native/events';
 
-export const ingest = ({ name, content, buffer, importer }) => {
+export const ingest = ({ name, content, base64, importer }) => {
   return Importers.actions.ingest.callPromise({
     name,
     content,
     importer,
-    buffer: { blob: buffer }
+    base64
   })
 }
 
 export const setupDragdrop = () => {
   dragDrop('body', (files) => {
     files.forEach((file) => {
-      ingest({ name: file.name, buffer: file }).then((response) => {
+      ingest({ name: file.name, base64: file.toString('base64') }).then((response) => {
         Alert.success(__('ui.importSuccessMessage'))
         if (typeof response === 'object') {
           const { result, importer } = response
@@ -32,27 +33,19 @@ export const setupDragdrop = () => {
   })
 }
 
-export const setupNative = () => {
-  if (window.native && window.native.events) {
-    window.native.events.on('import/dataTransfer', (file) => {
-      console.log('[Importers] Received data transfer event from native binding', { name: file.path, importer: file.importer })
-      ingest({ name: file.path, content: file.content, importer: file.importer })
-        .then((response) => {
-          if (typeof response === 'object') {
-            const { result, importer } = response
-            onDataTransferSuccess({ importer, result })
-          }
+const onDataTransfer = async file => {
+  console.log('[Importers] Received data transfer event from native binding', { name: file.path, importer: file.importer })
 
-          if (window.native.dataTransferSuccess) {
-            const { remove, path, focus } = file
-            window.native.dataTransferSuccess({ remove, path, focus })
-          }
-        })
-    })
-  }
+  const { importer, result } = await ingest({
+    name: file.path,
+    content: file.content,
+    importer: file.importer
+  })
+
+  onDataTransferSuccess({ importer, result, ...file })
 }
 
-const onDataTransferSuccess = ({ importer, result }) => {
+const onDataTransferSuccess = ({ importer, result, remove, path, focus }) => {
   store.dispatch({
     type: 'DATA_TRANSFER_SUCCESS',
     importer,
@@ -62,9 +55,11 @@ const onDataTransferSuccess = ({ importer, result }) => {
   if (importer === 'xdt') {
     store.dispatch(loadPatient(result))
   }
+
+  toNative('dataTransferSuccess', { remove, path, focus })
 }
 
 export default () => {
   setupDragdrop()
-  setupNative()
+  onNativeEvent('dataTransfer', onDataTransfer)
 }

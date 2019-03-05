@@ -1,4 +1,4 @@
-import { getClientKey } from '../../../util/meteor/getClientKey'
+import { getClientKey } from '../../../startup/client/native/events'
 import { subscribe } from '../../../util/meteor/subscribe'
 import { Clients } from '../'
 

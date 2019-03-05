@@ -10,6 +10,7 @@ import { PatientPicker } from '../../patients/picker'
 import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../layout/styles'
 import { PatientModal } from '../../patients/PatientModal'
+import { getClientKey, toNative } from '../../../startup/client/native/events'
 
 const contentHeaderStyle = {
   background,
@@ -58,11 +59,11 @@ export class AppointmentsScreen extends React.Component {
   }
 
   handlePrint () {
-    if (window.native && window.native.print) {
+    if (getClientKey()) {
       console.log('[Client] Printing: native')
       const title = moment(this.props.date)
         .format(`YYYY-MM-DD-${__('appointments.this')}-${this.props.calendar.name}`)
-      window.native.print({ title })
+      toNative('print', { title })
     } else {
       console.log('[Client] Printing: default')
       window.print()

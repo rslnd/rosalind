@@ -1,13 +1,15 @@
 import fakeInterface from './fakeInterface'
 import events from './events'
-import clientKey from './clientKey'
 import update from './update'
 import peripherals from './peripherals'
+import legacyWarning from './legacyWarning'
 
 export default () => {
-  fakeInterface()
   events()
-  clientKey()
+
+  fakeInterface()
   update()
   peripherals()
+
+  legacyWarning()
 }

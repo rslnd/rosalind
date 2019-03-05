@@ -4,6 +4,25 @@ const logger = require('./logger')
 const settings = require('./settings')
 const { captureException } = require('@sentry/electron')
 
+// IMPORTANT: Keep in sync with preload.js
+const isUrlValid = urlString => {
+  return true // DEBUG ONLY
+
+  try {
+    const url = new URL(urlString)
+    const isValid = !!(url.origin.match(/^https:\/\/.*\.rslnd\.com$/))
+    if (!isValid) {
+      logger.error(`[Window] isUrlValid failed check: ${urlString}`)
+      return false
+    } else {
+      return true
+    }
+  } catch (e) {
+    logger.error(`[Window] isUrlValid failed parse: ${urlString}`, e)
+    return false
+  }
+}
+
 const open = (callback) => {
   const { screen } = require('electron')
   const display = screen.getPrimaryDisplay().workAreaSize
@@ -24,8 +43,7 @@ const open = (callback) => {
     })
 
     contents.on('will-navigate', (event, navigationUrl) => {
-      const parsedUrl = new URL(navigationUrl)
-      if (parsedUrl.origin !== 'https://*.rslnd.com') {
+      if (!isUrlValid(navigationUrl)) {
         event.preventDefault()
         logger.info('[Window] Denied navigation to', navigationUrl)
       }
@@ -56,13 +74,14 @@ const open = (callback) => {
     webPreferences: {
       preload: require.resolve('../renderer/preload'),
       nodeIntegration: false,
-      contextIsolation: false, // TODO: Rework native API
+      contextIsolation: true,
       session: ephemeralSession,
       textAreasAreResizable: false,
       subpixelFontScaling: true,
       overlayScrollbars: false,
       webgl: false,
-      webaudio: false
+      webaudio: false,
+      safeDialogs: true
     }
   })
 
@@ -126,7 +145,11 @@ const open = (callback) => {
     logger.info('[Console]', message, sourceId, line)
   })
 
-  mainWindow.loadURL(settings.url)
+  if (isUrlValid(settings.url)) {
+    mainWindow.loadURL(settings.url)
+  } else {
+    logger.error(new Error('[Window] Refusing to load invalid origin'))
+  }
 
   return mainWindow
 }

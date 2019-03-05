@@ -147,10 +147,6 @@ const getSettings = () => {
 
   logger.info('[Settings] The main entry point is', settings.url)
   logger.info('[Settings]', settings)
-
-  settings.send = ({ ipcReceiver }) => {
-    ipcReceiver.webContents.send('settings', settings)
-  }
 }
 
 getSettings()

@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { getClientKey } from './getClientKey'
+import { getClientKey } from '../../startup/client/native/events'
 
 const withClientKey = (name, args) => {
   if (args && typeof args !== 'object') {

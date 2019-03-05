@@ -8,6 +8,7 @@ import { DateNavigation } from '../components/DateNavigation'
 import { UserPicker } from '../users/UserPicker'
 import { UserHelper } from '../users/UserHelper'
 import { Box } from '../components/Box'
+import { getClientKey, toNative } from '../../startup/client/native/events'
 
 const Nil = () => (
   <span className='text-quite-muted'>&ndash;</span>
@@ -98,11 +99,11 @@ export class TimesheetsScreen extends React.Component {
   }
 
   handlePrint () {
-    if (window.native && window.native.print) {
+    if (getClientKey()) {
       console.log('[Client] Printing: native')
       const title = moment(this.props.start)
         .format("YYYY-MM-DD-[#{__('reports.thisDaySingular')}]")
-      window.native.print({ title })
+      toNative('print', { title })
     } else {
       console.log('[Client] Printing: default')
       window.print()
