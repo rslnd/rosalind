@@ -1,8 +1,8 @@
+/* global Accounts */
 import { Events } from '../../events'
-import { AccountsCommon } from 'meteor/accounts-base'
 
 export default () => {
-  AccountsCommon.onLoginFailure((attempt) => {
+  Accounts.onLoginFailure((attempt) => {
     console.log('[Users] Failed login attempt', attempt)
 
     Events.insert({
