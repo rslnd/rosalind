@@ -38,7 +38,7 @@ const postToNative = events => (name, payload) => {
     }
   }
 
-  throw new Error(`Function ${name} is not exposed on the bridge interface rslndAndroid`)
+  console.log(`[Native] Android: Error: Function ${name} is not exposed on the bridge interface rslndAndroid`)
 }
 
 const postToWeb = events => (name, payload) => {
