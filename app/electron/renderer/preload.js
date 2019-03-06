@@ -33,11 +33,11 @@ const logger = {
     ipcRenderer.send('log', {
       level: 'error',
       message: message,
-      payload: {
+      payload: e ? {
         name: e.name,
         message: e.message,
         stack: e.stack
-      }
+      } : {}
     })
   },
   info: message => {
