@@ -15,8 +15,10 @@ const toWeb = [
   'dataTransfer'
 ]
 
-const DEBUG = false
+const DEBUG = true
 const eventPrefix = 'rslndNative*'
+
+// BUG: Non-wildcard targetOrigin swallows events, need to stay in debug mode in prod 😱
 const targetOrigin = DEBUG ? '*' : 'https://*.rslnd.com'
 
 window.ELECTRON_ENABLE_SECURITY_WARNINGS = true
