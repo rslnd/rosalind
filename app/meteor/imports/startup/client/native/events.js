@@ -112,7 +112,7 @@ const postMessageToNative = ({ name, payload }) => {
 
 const isValidOrigin = url => {
   if (!url) { return false }
-  if (url.match(/^https:\/\/*.\.rslnd\.com$/)) { return true }
+  if (url.match(/^https:\/\/.*\.rslnd\.com$/)) { return true }
   if (process.env.NODE_ENV === 'development' && url.match(/^http:\/\/localhost:3000$/)) { return true }
   return false
 }
