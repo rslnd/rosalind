@@ -24,7 +24,11 @@ export default () => {
   // If we get a welcome event back, we know we're running on a native platform
   onNativeEvent('welcome', async payload => {
     console.log('[Native] Got client key')
-    const registration = await attemptRegistration({ systemInfo, clientKey })
+    const registration = await attemptRegistration({
+      systemInfo: payload.systemInfo,
+      clientKey: payload.clientKey
+    })
+
     if (registration.isOk) {
       // Make bindings public only after successful registration
       clientKey = payload.clientKey

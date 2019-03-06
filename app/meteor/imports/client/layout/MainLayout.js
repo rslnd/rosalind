@@ -116,9 +116,13 @@ export class MainLayout extends React.Component {
                 : children
             }
 
-            <ErrorBoundary silent>
-              <HelpContainer />
-            </ErrorBoundary>
+            {
+              // TODO: Can't close drawer on android/touch
+              !window.rslndAndroid &&
+                <ErrorBoundary silent>
+                  <HelpContainer />
+                </ErrorBoundary>
+            }
           </div>
           <FooterContainer />
           {alwaysRender()}

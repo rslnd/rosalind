@@ -14,7 +14,7 @@ export const register = ({ Clients }) => {
 
     run ({ clientKey, systemInfo }) {
       if (this.isSimulation) {
-        return true
+        return { isOk: true }
       }
 
       const existingClient = Clients.findOne({ clientKey })

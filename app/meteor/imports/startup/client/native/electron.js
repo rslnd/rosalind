@@ -1,8 +1,7 @@
 // Whitelist receivable events here
 // Keep in sync with electron/renderer/preload.js
 const toWeb = [
-  'clientKey',
-  'systemInfo',
+  'welcome',
   'fileAdded',
   'updateAvailable',
   'dataTransfer'
@@ -18,7 +17,7 @@ export const handleElectronEvents = ({ events }) => {
   return { postToNative }
 }
 
-const debug = msg => DEBUG && console.log(`[Debug] ${msg}`)
+const debug = msg => DEBUG && console.log(`[handleElectronEvents] ${msg}`)
 
 const listener = events => messageEvent => {
   debug(`Received message ${messageEvent.origin}`)
