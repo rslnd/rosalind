@@ -15,7 +15,7 @@ const toWeb = [
   'dataTransfer'
 ]
 
-const DEBUG = true
+const DEBUG = false
 const eventPrefix = 'rslndNative*'
 const targetOrigin = DEBUG ? '*' : 'https://*.rslnd.com'
 

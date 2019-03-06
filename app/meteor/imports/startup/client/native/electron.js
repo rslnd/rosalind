@@ -7,7 +7,7 @@ const toWeb = [
   'dataTransfer'
 ]
 
-const DEBUG = true
+const DEBUG = false
 
 const eventPrefix = 'rslndNative*'
 

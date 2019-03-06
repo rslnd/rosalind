@@ -23,7 +23,7 @@ export default () => {
 
   // If we get a welcome event back, we know we're running on a native platform
   onNativeEvent('welcome', async payload => {
-    console.log('[Native] Got client key')
+    console.log(`[Native] Got client key ${payload.clientKey.slice(0, 6)}`)
     const registration = await attemptRegistration({
       systemInfo: payload.systemInfo,
       clientKey: payload.clientKey
@@ -41,6 +41,7 @@ export default () => {
 
   window.toNative = toNative
   window.onNativeEvent = onNativeEvent
+  window.nativeEvents = events
   window.isNative = () => !!getClientKey()
 }
 

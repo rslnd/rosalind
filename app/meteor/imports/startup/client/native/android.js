@@ -31,10 +31,14 @@ const postToNative = events => (name, payload) => {
 
   if (window.rslndAndroid[name]) {
     console.log(`[Native] Android: Calling bridge function ${name}`)
-    window.rslndAndroid[name](payload)
-  } else {
-    throw new Error(`Function ${name} is not exposed on the bridge interface rslndAndroid`)
+    try {
+      return window.rslndAndroid[name](payload)
+    } catch (e) {
+      // fallthrough
+    }
   }
+
+  throw new Error(`Function ${name} is not exposed on the bridge interface rslndAndroid`)
 }
 
 const postToWeb = events => (name, payload) => {

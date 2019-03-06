@@ -15,3 +15,6 @@ onNativeEvent('peripherals/screenOn', updateSettings)
 onNativeEvent('peripherals/screenOff', updateSettings)
 
 export const getSettings = () => settings.get()
+
+// DEBUG
+window.getSettings = getSettings
