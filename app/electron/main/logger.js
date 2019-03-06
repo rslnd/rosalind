@@ -51,9 +51,9 @@ const start = () => {
     winston.info('[Log] App quit')
   )
 
-  ipcMain.on('log', (e, err) =>
-    winston.log(err.level, err.message, err.payload)
-  )
+  ipcMain.on('log', (e, msg) => {
+    winston.info(`[ipc] ${inspect(msg)}`)
+  })
 }
 
 const ready = log => {

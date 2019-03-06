@@ -8,7 +8,6 @@ const { captureException } = require('@sentry/electron')
 autoUpdater.logger = logger
 
 let updateDownloaded = false
-let mainWindow = null
 
 const handleStartupEvent = () => {
   if (process.platform !== 'win32') { return }
@@ -69,9 +68,7 @@ const start = ({ ipcReceiver }) => {
   autoUpdater.on('update-downloaded', info => {
     logger.info(`[Updater] New update downloaded: ${info.version}`)
 
-    if (mainWindow) {
-      ipcReceiver.send('updateAvailable', { newVersion: info.version })
-    }
+    ipcReceiver.send('updateAvailable', { newVersion: info.version })
 
     updateDownloaded = true
   })

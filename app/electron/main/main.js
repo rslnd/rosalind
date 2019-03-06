@@ -71,16 +71,17 @@ const start = () => {
       automation.start(process.argv)
       shortcuts.updateShortcuts()
       devtools.start()
+    })
 
-      ipcMain.on('hello', (e) => {
-        mainWindow.send('welcome', {
-          systemInfo,
-          clientKey: settings.clientKey
-        })
+    ipcMain.on('hello', (e) => {
+      logger.info('IPC received hello, sending welcome')
+      mainWindow.webContents.send('welcome', {
+        systemInfo,
+        clientKey: settings.clientKey
       })
     })
 
-    updater.start()
+    updater.start({ ipcReceiver: mainWindow.webContents })
     setTimeout(updater.check, 5 * 1000)
     setInterval(updater.check, 5 * 60 * 1000)
 

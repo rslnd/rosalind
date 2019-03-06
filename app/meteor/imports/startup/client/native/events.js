@@ -1,20 +1,10 @@
 import EventEmitter from 'eventemitter3'
 import { attemptRegistration } from './attemptRegistration'
+import { handleAndroidEvents } from './android'
+import { handleElectronEvents } from './electron'
 
-// Whitelist receivable events here
-// Keep in sync with electron/renderer/preload.js
-const toWeb = [
-  'clientKey',
-  'systemInfo',
-  'fileAdded',
-  'updateAvailable',
-  'dataTransfer'
-]
-
-const DEBUG = true
-
-const eventPrefix = 'rslndNative*'
 const events = new EventEmitter()
+let bridge = null
 
 // This is set when the native interface is ready
 let clientKey = null
@@ -22,16 +12,21 @@ let systemInfo = null
 let settings = null
 
 export default () => {
-  window.addEventListener('message', listener, false)
+  bridge = getBridge()
+  if (!bridge) {
+    console.log('[Native] No bridge available')
+    return
+  }
 
+  // Attempt to contact the native platform
   toNative('hello')
 
-  // If we get a clientKey event, we know we're running on a native platform
+  // If we get a welcome event back, we know we're running on a native platform
   onNativeEvent('welcome', async payload => {
     console.log('[Native] Got client key')
     const registration = await attemptRegistration({ systemInfo, clientKey })
     if (registration.isOk) {
-      // Make it official
+      // Make bindings public only after successful registration
       clientKey = payload.clientKey
       systemInfo = payload.systemInfo
       settings = registration.settings
@@ -42,6 +37,7 @@ export default () => {
 
   window.toNative = toNative
   window.onNativeEvent = onNativeEvent
+  window.isNative = () => !!getClientKey()
 }
 
 export const onNativeEvent = (event, callback) => {
@@ -49,70 +45,18 @@ export const onNativeEvent = (event, callback) => {
 }
 
 export const toNative = (name, payload = {}) => {
-  console.log('[Native] Posting message', name)
-
-  if (window.isAndroid) {
-    console.error('[Native] Android interface not implemented')
-  } else {
-    postMessageToNative({ name, payload })
+  if (!bridge) {
+    throw new Error('Cannot post to native without a bridge')
   }
+
+  console.log('[Native] Posting message', name)
+  bridge.postToNative(name, payload)
 }
 
 export const getClientKey = () => clientKey
 
-const debug = msg => DEBUG && console.log(`[Debug] ${msg}`)
-
-const listener = messageEvent => {
-  debug(`Received message ${messageEvent.origin}`)
-
-  if (messageEvent.source !== window) {
-    debug('Discarding event because sources do not match')
-    return
-  }
-
-  if (!isValidOrigin(messageEvent.origin)) {
-    debug('Discarding event because origin is invalid')
-    return
-  }
-
-  if (typeof messageEvent.data !== 'string') {
-    debug(`Discarding event because data is not a string: ${JSON.stringify(messageEvent.data)}`)
-    return
-  }
-
-  if (messageEvent.data.indexOf(eventPrefix) !== 0) {
-    debug(`Discarding event because prefix is missing: ${messageEvent.data}`)
-    return
-  }
-
-  const parsed = JSON.parse(messageEvent.data.slice(eventPrefix.length))
-
-  if (!((Object.keys(parsed).length === 2) && parsed.name && parsed.payload)) {
-    throw new Error(`Invalid shape of event data: ${Object.keys(parsed).join(',')}`)
-  }
-
-  if (toWeb.indexOf(parsed.name) === -1) {
-    debug(`Discarding event because name is not whitelisted in toWeb: ${parsed.name}`)
-    return
-  }
-
-  console.log(`[Native] Emitting ${parsed.name}`)
-  events.emit(parsed.name, parsed.payload)
-}
-
-const postMessageToNative = ({ name, payload }) => {
-  const eventString = [
-    eventPrefix,
-    JSON.stringify({ name, payload })
-  ].join('')
-
-  const targetOrigin = window.location.origin
-  window.postMessage(eventString, targetOrigin)
-}
-
-const isValidOrigin = url => {
-  if (!url) { return false }
-  if (url.match(/^https:\/\/.*\.rslnd\.com$/)) { return true }
-  if (process.env.NODE_ENV === 'development' && url.match(/^http:\/\/localhost:3000$/)) { return true }
-  return false
-}
+const getBridge = () => (
+  handleAndroidEvents({ events }) ||
+  // Check electron last because it always succeeds
+  handleElectronEvents({ events })
+)

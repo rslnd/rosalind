@@ -1,5 +1,3 @@
-console.log('[Electron Native] Enabling native bindings')
-
 // Whitelist events to native: ipc <- web
 const toNative = [
   'hello',
@@ -46,7 +44,7 @@ const logger = {
     console.log(message)
     ipcRenderer.send('log', {
       level: 'info',
-      message: 'message'
+      message: message
     })
   }
 }
@@ -103,7 +101,7 @@ try {
       const parsed = JSON.parse(json)
 
       if (toNative.indexOf(parsed.name) === -1) {
-        debug(`Discarding event because name is not whitelisted in toWeb: ${parsed.name}`)
+        debug(`Discarding event because name is not whitelisted in toNative: ${parsed.name}`)
         return
       }
 
