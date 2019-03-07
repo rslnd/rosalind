@@ -43,9 +43,12 @@ const start = ({ ipcReceiver, handleFocus }) => {
         ignored: /[/\\]\./,
         depth: 0,
         usePolling: true,
+        disableGlobbing: true,
+        interval: 50,
+        binaryInterval: 50,
         awaitWriteFinish: {
-          stabilityThreshold: 2000,
-          pollInterval: 500
+          stabilityThreshold: 101,
+          pollInterval: 30
         }
       })
 
