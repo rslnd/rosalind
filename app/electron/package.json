@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.184-beta",
+  "version": "0.0.185",
   "private": true,
   "description": "Rosalind",
   "author": {

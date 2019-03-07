@@ -2,16 +2,16 @@ const path = require('path')
 const childProcess = require('child_process')
 
 const autoItScripts = [
-  'focus',
-  'generateEoswinReports'
+  ['focus', 'focus.exe'], // Place focus.exe inside root directory next to Rosalind.exe
+  ['generateEoswinReports', path.join('assets', 'generateEoswinReports.exe')] // Pack with asar
 ]
 
 const main = async (afterPackContext) => {
   console.log('[compileAutoIt]', afterPackContext)
 
-  autoItScripts.forEach(async name => {
+  autoItScripts.forEach(async ([name, outPath]) => {
     const au3Path = path.join(__dirname, 'assets', [name, 'au3'].join('.'))
-    const exePath = path.join(afterPackContext.appOutDir, 'assets', [name, 'exe'].join('.'))
+    const exePath = path.join(afterPackContext.appOutDir, outPath)
 
     try {
       await compile(au3Path, exePath)
