@@ -11,7 +11,7 @@ const main = async (afterPackContext) => {
 
   autoItScripts.forEach(async name => {
     const au3Path = path.join(__dirname, 'assets', [name, 'au3'].join('.'))
-    const exePath = path.join(afterPackContext.appOutDir, [name, 'exe'].join('.'))
+    const exePath = path.join(afterPackContext.appOutDir, 'assets', [name, 'exe'].join('.'))
 
     try {
       await compile(au3Path, exePath)
