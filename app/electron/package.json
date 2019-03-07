@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.186",
+  "version": "0.0.187",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -48,6 +48,8 @@
       "assets/appicon.ico",
       "assets/eoswinPrinter.reg"
     ],
+    "afterPack": "./compileAutoIt.js",
+    "generateUpdatesFilesForAllChannels": true,
     "readonly": true,
     "forceCodeSigning": true,
     "win": {
@@ -57,10 +59,13 @@
     "nsis": {
       "createDesktopShortcut": false,
       "createStartMenuShortcut": false,
-      "language": 7,
-      "publish": "github"
+      "language": 7
     },
-    "afterPack": "./compileAutoIt.js"
+    "publish": {
+      "provider": "github",
+      "private": false,
+      "releaseType": "release"
+    }
   },
   "scripts": {
     "postinstall": "./node_modules/.bin/electron-builder install-app-deps",
