@@ -2,14 +2,13 @@ import EventEmitter from 'eventemitter3'
 import { attemptRegistration } from './attemptRegistration'
 import { handleAndroidEvents } from './android'
 import { handleElectronEvents } from './electron'
+import { updateSettings } from '../../../api/clients/methods/getSettings'
 
 const events = new EventEmitter()
 let bridge = null
 
 // This is set when the native interface is ready
 let clientKey = null
-let systemInfo = null
-let settings = null
 
 export default () => {
   bridge = getBridge()
@@ -30,12 +29,14 @@ export default () => {
     })
 
     if (registration.isOk) {
+      console.log('[Native] Registration succeeded', payload.systemInfo)
+
       // Make bindings public only after successful registration
       clientKey = payload.clientKey
-      systemInfo = payload.systemInfo
-      settings = registration.settings
 
-      events.emit('settings', settings)
+      updateSettings(registration.settings)
+    } else {
+      console.error('[Native] Registration failed', payload.systemInfo)
     }
   })
 

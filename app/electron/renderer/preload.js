@@ -4,7 +4,8 @@ const toNative = [
   'print',
   'quitAndInstall',
   'automation/generateEoswinReports',
-  'dataTransferSuccess'
+  'dataTransferSuccess',
+  'settings'
 ]
 
 // Whitelist events to web: ipc -> web
@@ -17,9 +18,6 @@ const toWeb = [
 
 const DEBUG = true
 const eventPrefix = 'rslndNative*'
-
-// BUG: Non-wildcard targetOrigin swallows events, need to stay in debug mode in prod 😱
-const targetOrigin = DEBUG ? '*' : 'https://*.rslnd.com'
 
 window.ELECTRON_ENABLE_SECURITY_WARNINGS = true
 
@@ -73,6 +71,31 @@ const isUrlValid = urlString => {
 const debug = msg => DEBUG && logger.info(`[Preload] [Debug]: ${msg}`)
 
 try {
+  // Set up toWeb: ipc -> web
+  // Save origin of initially loaded page
+  const initialOrigin = window.location.origin
+
+  if (!isUrlValid(initialOrigin)) {
+    throw new Error(`Refusing to load invalid initial origin ${initialOrigin}`)
+  }
+
+  toWeb.map(name => {
+    ipcRenderer.on(name, (ipcEvent, payload = {}) => {
+      debug(`Received ipc->toWeb event ${name}`)
+      const event = { name, payload }
+      try {
+        const eventString = [
+          eventPrefix,
+          JSON.stringify(event)
+        ].join('')
+        logger.info(`[Preload] Posting event ${name}`)
+        window.postMessage(eventString, initialOrigin)
+      } catch (e) {
+        logger.error(`[Preload] Failed to serialize event ${name}`, e)
+      }
+    })
+  })
+
   // Set up toNative: ipc <- web
 
   // Can't just log/stringify the message object as it would just print { isTrusted: true }
@@ -90,12 +113,10 @@ try {
       }
 
       if (typeof messageEvent.data !== 'string') {
-        debug(`Discarding event because data is not a string: ${JSON.stringify(messageEvent.data)}`)
         return
       }
 
       if (messageEvent.data.indexOf(eventPrefix) !== 0) {
-        debug(`Discarding event because prefix is missing: ${messageEvent.data}`)
         return
       }
 
@@ -122,24 +143,6 @@ try {
   }
 
   window.addEventListener('message', listener, false)
-
-  // Set up toWeb: ipc -> web
-  toWeb.map(name => {
-    ipcRenderer.on(name, (ipcEvent, payload = {}) => {
-      debug(`Received ipc->toWeb event ${name}`)
-      const event = { name, payload }
-      try {
-        const eventString = [
-          eventPrefix,
-          JSON.stringify(event)
-        ].join('')
-        logger.info(`[Preload] Posting event ${name}`)
-        window.postMessage(eventString, targetOrigin)
-      } catch (e) {
-        logger.error(`[Preload] Failed to serialize event ${name}`, e)
-      }
-    })
-  })
 } catch (e) {
   logger.error('[Preload] Failed to initialize', e)
 }

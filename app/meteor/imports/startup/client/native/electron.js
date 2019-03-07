@@ -33,12 +33,10 @@ const listener = events => messageEvent => {
   }
 
   if (typeof messageEvent.data !== 'string') {
-    debug(`Discarding event because data is not a string: ${JSON.stringify(messageEvent.data)}`)
     return
   }
 
   if (messageEvent.data.indexOf(eventPrefix) !== 0) {
-    debug(`Discarding event because prefix is missing: ${messageEvent.data}`)
     return
   }
 

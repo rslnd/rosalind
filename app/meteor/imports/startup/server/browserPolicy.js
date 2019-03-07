@@ -78,7 +78,8 @@ const getHelmetConfig = () => {
         sandbox: [
           'allow-same-origin',
           'allow-forms',
-          'allow-scripts'
+          'allow-scripts',
+          'allow-modals' // needed for window.print()
         ],
         scriptSrc: [
           self,

@@ -52,6 +52,8 @@ const handleStartupEvent = () => {
 }
 
 const start = ({ ipcReceiver }) => {
+  logger.info(`[Updater] Current channel is: ${autoUpdater.channel}`)
+
   if (process.platform !== 'win32') { return }
 
   autoUpdater.on('error', (err) => {
@@ -81,7 +83,16 @@ const quitAndInstall = () => {
   }
 }
 
+const setChannel = ({ channel }) => {
+  if (typeof channel === 'string' || channel === null) {
+    logger.info(`[Updater] Setting channel to: ${channel}`)
+    autoUpdater.channel = channel
+    check()
+  }
+}
+
 ipcMain.on('quitAndInstall', quitAndInstall)
+ipcMain.on('settings', setChannel)
 
 const check = () => {
   if (process.platform !== 'win32') { return }
