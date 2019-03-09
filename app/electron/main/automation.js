@@ -88,7 +88,7 @@ const extractAssets = (filenames, cb) => {
     if (err) { return cb(err) }
 
     const promises = filenames.map(filename => {
-      const asarPath = path.join(__dirname, '..', filename)
+      const asarPath = path.join(__dirname, '..', 'assets', filename)
       const tempPath = path.join(tmpDir, filename)
 
       logger.info(`[automation] extracting asset '${filename}' from ${asarPath} -> ${tempPath}`)
