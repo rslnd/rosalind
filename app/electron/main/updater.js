@@ -96,6 +96,8 @@ ipcMain.on('settings', setChannel)
 
 const check = () => {
   if (process.platform !== 'win32') { return }
+  if (updateDownloaded) { return }
+
   try {
     autoUpdater.checkForUpdates()
   } catch (e) {
