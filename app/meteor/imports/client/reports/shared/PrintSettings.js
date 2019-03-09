@@ -1,8 +1,10 @@
 import React from 'react'
+import { getStyleNonce } from '../../layout/styles'
 
 export const PrintSettings = ({ orientation }) => {
   if (orientation !== 'landscape' && orientation !== 'portrait') {
     console.error('[PrintSettings] Invalid orientation', orientation)
+    return
   }
 
   const style = `
@@ -12,6 +14,8 @@ export const PrintSettings = ({ orientation }) => {
   `
 
   return (
-    <style dangerouslySetInnerHTML={{ __html: style }} />
+    <style nonce={getStyleNonce()}>
+      {style}
+    </style>
   )
 }

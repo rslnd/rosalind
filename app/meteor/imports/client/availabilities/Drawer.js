@@ -58,7 +58,7 @@ const hiddenStyle = {
 }
 
 const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) =>
-  <div>
+  <div className='hide-print'>
     <div
       style={triggerContainerStyle}
       onMouseEnter={handleOpen}
