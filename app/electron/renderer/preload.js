@@ -16,7 +16,7 @@ const toWeb = [
   'dataTransfer'
 ]
 
-const DEBUG = true
+const DEBUG = false
 const eventPrefix = 'rslndNative*'
 
 window.ELECTRON_ENABLE_SECURITY_WARNINGS = true
