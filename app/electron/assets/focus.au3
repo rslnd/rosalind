@@ -1,11 +1,10 @@
 #Region
 #AutoIt3Wrapper_UseUpx=n
-#AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_requestedExecutionLevel=asInvoker
 #EndRegion
 #NoTrayIcon
 
-Local $bDebug = True
+Local $bDebug = False
 
 ; Parameters:
 ; focus.exe /title:"Dr. X - ABC" /exe:"%LOCALAPPDATA%\Programs\rosalind\Rosalind.exe"

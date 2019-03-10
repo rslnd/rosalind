@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.189",
+  "version": "0.0.190",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -51,7 +51,6 @@
       "assets/eoswinPrinter.reg",
       "assets/generateEoswinReports.exe"
     ],
-    "afterPack": "./compileAutoIt.js",
     "generateUpdatesFilesForAllChannels": true,
     "readonly": true,
     "forceCodeSigning": true,
@@ -73,8 +72,8 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/electron-builder install-app-deps",
     "start": "./node_modules/.bin/electron .",
-    "pack": "./node_modules/.bin/electron-builder --dir",
-    "build": "./node_modules/.bin/electron-builder --x64",
+    "pack": "node ./compileAutoIt.js && ./node_modules/.bin/electron-builder --dir",
+    "build": "node ./compileAutoIt.js && ./node_modules/.bin/electron-builder --x64",
     "release": "build",
     "tag": "node tag.js | /bin/sh"
   }

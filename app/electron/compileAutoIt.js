@@ -6,12 +6,10 @@ const autoItScripts = [
   ['generateEoswinReports', path.join('assets', 'generateEoswinReports.exe')] // Pack with asar
 ]
 
-const main = async (afterPackContext) => {
-  console.log('[compileAutoIt]', afterPackContext)
-
+const main = async () => {
   autoItScripts.forEach(async ([name, outPath]) => {
     const au3Path = path.join(__dirname, 'assets', [name, 'au3'].join('.'))
-    const exePath = path.join(afterPackContext.appOutDir, outPath)
+    const exePath = path.resolve(outPath)
 
     try {
       await compile(au3Path, exePath)

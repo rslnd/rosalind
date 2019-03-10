@@ -1,14 +1,11 @@
 const childProcess = require('child_process')
-const fs = require('fs')
 const path = require('path')
-const temp = require('temp')
 const { app, ipcMain } = require('electron')
 const logger = require('./logger')
 const settings = require('./settings')
 const { captureException } = require('@sentry/electron')
 
-const exeName = path.resolve(path.join(process.resourcesPath, 'generateEoswinReports.exe'))
-const printerSettingsName = path.resolve(path.join(process.resourcesPath, 'eoswinPrinter.reg'))
+const exePath = path.resolve(path.join(process.resourcesPath, 'generateEoswinReports.exe'))
 const closeRosalindTimeout = 10 * 60 * 1000
 
 const start = async (argv = []) => {
@@ -21,16 +18,12 @@ const start = async (argv = []) => {
     }, closeRosalindTimeout)
   }
 
-  ipcMain.on('webEvent', (name, { day } = {}) => {
-    if (name === 'automation/generateEoswinReports') {
-      generateEoswinReports({ day })
-    }
+  ipcMain.on('automation/generateEoswinReports', ({ day } = {}) => {
+    generateEoswinReports({ day })
   })
 }
 
 const generateEoswinReports = async ({ day } = {}) => {
-  const { cleanup, paths: [exePath] } = await extractAssets([exeName, printerSettingsName])
-
   logger.info('[automation] Spawning', exePath)
 
   let spawnArgs = []
@@ -39,8 +32,10 @@ const generateEoswinReports = async ({ day } = {}) => {
     spawnArgs.push(`/eoswinExe:${settings.eoswinExe}`)
   }
 
-  if (day) {
-    spawnArgs.push(`/day:${day.year}-${day.month}-${day.day}`)
+  if (day && typeof day === 'object' && day.day && day.month && day.year && typeof day.day === 'number' && typeof day.month === 'number' && typeof day.year === 'number') {
+    const formatted = [day.year, day.month, day.day].join('-')
+    logger.info('[automation] generateEoswinReports: Setting report day to', formatted)
+    spawnArgs.push(`/day:${formatted}`)
   }
 
   const child = childProcess.spawn(exePath, spawnArgs)
@@ -62,8 +57,6 @@ const generateEoswinReports = async ({ day } = {}) => {
     child.on('close', async code => {
       logger.info('[automation] generateEoswinReports exited with code', code)
 
-      await cleanup()
-
       if (code !== 0) {
         captureException(new Error(
           logger.error('[automation] generateEoswinReports failed', { stdoutBuffer, stderrBuffer })
@@ -73,37 +66,6 @@ const generateEoswinReports = async ({ day } = {}) => {
         resolve()
       }
     })
-  })
-}
-
-const extractAssets = (sourcePaths, cb) => {
-  temp.track()
-
-  temp.mkdir('rosalind', (err, tmpDir) => {
-    if (err) { return cb(err) }
-
-    const promises = sourcePaths.map(sourcePath => {
-      const tempPath = path.join(tmpDir, path.basename(sourcePath))
-
-      logger.info(`[automation] extracting asset from ${sourcePath} -> ${tempPath}`)
-
-      const read = fs.createReadStream(sourcePath)
-      const write = fs.createWriteStream(tempPath)
-
-      return new Promise((resolve, reject) => {
-        read.on('error', e => cb(e))
-        write.on('error', e => cb(e))
-        write.on('close', e => resolve(tempPath))
-
-        read.pipe(write)
-      })
-    })
-
-    const cleanup = () => new Promise(resolve => temp.cleanup(resolve))
-
-    return Promise.all(promises).then(paths =>
-      cb(null, { cleanup, paths })
-    )
   })
 }
 
