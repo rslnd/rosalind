@@ -25,8 +25,7 @@ const compile = (input, output) => {
   const args = [
     '/in', input,
     '/out', output,
-    '/nopack',
-    '/console'
+    '/nopack'
   ]
 
   console.log('[compileAutoIt] Compiling: Aut2exe', args)

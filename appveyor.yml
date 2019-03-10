@@ -28,4 +28,6 @@ install:
 
 build_script:
 - ps: >-
+    cmd /c 'yarn run compile 2>&1'
+
     cmd /c 'yarn run release 2>&1'
