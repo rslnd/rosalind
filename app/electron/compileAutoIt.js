@@ -55,4 +55,4 @@ const compile = (input, output) => {
   })
 }
 
-module.exports = main
+main()
