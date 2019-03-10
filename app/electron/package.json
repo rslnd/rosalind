@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.192-beta",
+  "version": "0.0.193",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -65,8 +65,7 @@
     },
     "publish": {
       "provider": "github",
-      "private": false,
-      "releaseType": "release"
+      "private": false
     }
   },
   "scripts": {
