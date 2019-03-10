@@ -7,8 +7,8 @@ const logger = require('./logger')
 const settings = require('./settings')
 const { captureException } = require('@sentry/electron')
 
-const exeName = 'generateEoswinReports.exe'
-const printerSettingsName = 'eoswinPrinter.reg'
+const exeName = path.resolve(path.join(process.resourcesPath, 'generateEoswinReports.exe'))
+const printerSettingsName = path.resolve(path.join(process.resourcesPath, 'eoswinPrinter.reg'))
 const closeRosalindTimeout = 10 * 60 * 1000
 
 const start = async (argv = []) => {
@@ -28,72 +28,66 @@ const start = async (argv = []) => {
   })
 }
 
-const generateEoswinReports = ({ day } = {}) => {
-  extractAssets([exeName, printerSettingsName], (err, [exePath, _]) => {
-    if (err) {
-      captureException(new Error(
-        logger.error('[automation] Failed to extract assets', err)
-      ))
-      return
-    }
+const generateEoswinReports = async ({ day } = {}) => {
+  const { cleanup, paths: [exePath] } = await extractAssets([exeName, printerSettingsName])
 
-    logger.info('[automation] Spawning', exePath)
+  logger.info('[automation] Spawning', exePath)
 
-    let spawnArgs = []
+  let spawnArgs = []
 
-    if (settings.eoswinExe) {
-      spawnArgs.push(`/eoswinExe:${settings.eoswinExe}`)
-    }
+  if (settings.eoswinExe) {
+    spawnArgs.push(`/eoswinExe:${settings.eoswinExe}`)
+  }
 
-    if (day) {
-      spawnArgs.push(`/day:${day.year}-${day.month}-${day.day}`)
-    }
+  if (day) {
+    spawnArgs.push(`/day:${day.year}-${day.month}-${day.day}`)
+  }
 
-    const child = childProcess.spawn(exePath, spawnArgs)
-    child.stdout.setEncoding('utf8')
-    child.stderr.setEncoding('utf8')
+  const child = childProcess.spawn(exePath, spawnArgs)
+  child.stdout.setEncoding('utf8')
+  child.stderr.setEncoding('utf8')
 
-    let stdoutBuffer = []
-    let stderrBuffer = []
+  let stdoutBuffer = []
+  let stderrBuffer = []
 
-    child.stdout.on('data', d =>
-      stdoutBuffer.push(logger.info('[automation] generateEoswinReports', d))
-    )
+  child.stdout.on('data', d =>
+    stdoutBuffer.push(logger.info('[automation] generateEoswinReports', d))
+  )
 
-    child.stderr.on('data', d =>
-      stderrBuffer.push(logger.error('[automation] generateEoswinReports error:', d))
-    )
+  child.stderr.on('data', d =>
+    stderrBuffer.push(logger.error('[automation] generateEoswinReports error:', d))
+  )
 
-    return new Promise((resolve, reject) => {
-      child.on('close', code => {
-        logger.info('[automation] generateEoswinReports exited with code', code)
+  return new Promise((resolve, reject) => {
+    child.on('close', async code => {
+      logger.info('[automation] generateEoswinReports exited with code', code)
 
-        if (code !== 0) {
-          captureException(new Error(
-            logger.error('[automation] generateEoswinReports failed', { stdoutBuffer, stderrBuffer })
-          ))
-          reject(code)
-        } else {
-          resolve()
-        }
-      })
+      await cleanup()
+
+      if (code !== 0) {
+        captureException(new Error(
+          logger.error('[automation] generateEoswinReports failed', { stdoutBuffer, stderrBuffer })
+        ))
+        reject(code)
+      } else {
+        resolve()
+      }
     })
   })
 }
 
-const extractAssets = (filenames, cb) => {
+const extractAssets = (sourcePaths, cb) => {
   temp.track()
 
   temp.mkdir('rosalind', (err, tmpDir) => {
     if (err) { return cb(err) }
 
-    const promises = filenames.map(filename => {
-      const asarPath = path.join(__dirname, '..', 'assets', filename)
-      const tempPath = path.join(tmpDir, filename)
+    const promises = sourcePaths.map(sourcePath => {
+      const tempPath = path.join(tmpDir, path.basename(sourcePath))
 
-      logger.info(`[automation] extracting asset '${filename}' from ${asarPath} -> ${tempPath}`)
+      logger.info(`[automation] extracting asset from ${sourcePath} -> ${tempPath}`)
 
-      const read = fs.createReadStream(asarPath)
+      const read = fs.createReadStream(sourcePath)
       const write = fs.createWriteStream(tempPath)
 
       return new Promise((resolve, reject) => {
@@ -105,7 +99,11 @@ const extractAssets = (filenames, cb) => {
       })
     })
 
-    return Promise.all(promises).then(results => cb(null, results))
+    const cleanup = () => new Promise(resolve => temp.cleanup(resolve))
+
+    return Promise.all(promises).then(paths =>
+      cb(null, { cleanup, paths })
+    )
   })
 }
 

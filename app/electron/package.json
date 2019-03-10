@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.188",
+  "version": "0.0.189",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -45,8 +45,11 @@
     },
     "files": [
       "**/*",
-      "assets/appicon.ico",
-      "assets/eoswinPrinter.reg"
+      "assets/appicon.ico"
+    ],
+    "extraResources": [
+      "assets/eoswinPrinter.reg",
+      "assets/generateEoswinReports.exe"
     ],
     "afterPack": "./compileAutoIt.js",
     "generateUpdatesFilesForAllChannels": true,
