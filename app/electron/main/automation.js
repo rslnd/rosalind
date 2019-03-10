@@ -5,7 +5,7 @@ const logger = require('./logger')
 const settings = require('./settings')
 const { captureException } = require('@sentry/electron')
 
-const exePath = path.resolve(path.join(process.resourcesPath, 'generateEoswinReports.exe'))
+const exePath = path.resolve(path.join(process.resourcesPath, 'assets', 'generateEoswinReports.exe'))
 const closeRosalindTimeout = 10 * 60 * 1000
 
 const start = async (argv = []) => {
