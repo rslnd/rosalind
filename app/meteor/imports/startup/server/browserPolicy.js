@@ -108,7 +108,7 @@ const getHelmetConfig = () => {
     },
     hidePoweredBy: true,
     hsts: {
-      maxAge: 31536000,
+      maxAge: 63072000,
       includeSubDomains: true,
       preload: true
     },

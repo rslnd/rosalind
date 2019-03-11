@@ -1,0 +1,8 @@
+{
+  "name": "rslnd-com",
+  "private": true,
+  "dependencies": {
+    "express": "^4.16.4",
+    "hsts": "^2.2.0"
+  }
+}
