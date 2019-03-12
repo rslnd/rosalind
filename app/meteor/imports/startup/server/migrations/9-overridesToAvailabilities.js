@@ -26,11 +26,7 @@ Meteor.startup(() => {
         limit: 1
       }).fetch()[0], _ => _.start)
 
-    const cutoffDate = dayToDate({
-      year: 2019,
-      month: 2,
-      day: 28
-    })
+    const cutoffDate = new Date()
 
     const days = rangeToDays({
       from: cutoffDate || overrideDate('earliest'), // TODO: Remove debugging
