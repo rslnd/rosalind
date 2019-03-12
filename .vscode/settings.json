@@ -2,7 +2,7 @@
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
-    "**/.meteor": true,
+    "**/.meteor": false,
     "**/node_modules": true
   },
   "todo-tree.tags": ["TODO", "FIXME", "BUG", "LEGACY", "HACK", "UNSAFE"],
