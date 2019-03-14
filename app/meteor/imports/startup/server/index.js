@@ -12,6 +12,7 @@ import defaultAccount from './defaultAccount'
 import rateLimiter from './rateLimiter'
 import development from './development'
 import api from './api'
+import graphql from './graphql'
 
 export default function () {
   shared()
@@ -28,4 +29,5 @@ export default function () {
   rateLimiter()
   development()
   api()
+  graphql()
 }

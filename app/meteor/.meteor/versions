@@ -7,6 +7,7 @@ aldeed:schema-deny@1.1.0
 aldeed:schema-index@1.1.1
 aldeed:simple-schema@1.5.4
 allow-deny@1.1.0
+apollo@3.0.1
 audit-argument-checks@1.0.7
 autoupdate@1.6.0-beta181.20
 babel-compiler@7.3.4-beta181.20
