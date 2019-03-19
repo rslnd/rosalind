@@ -48,11 +48,11 @@ const relevantCellStyle = {
 }
 
 export const BreakLines = ({ children, placeholder }) =>
-  children
+  (children && children.length >= 1)
     ? children.split('\n').map((t, i) => (
       <span key={i} style={children.indexOf('!') === -1 ? highlight : important}>{t}<br /></span>
     ))
-    : placeholder
+    : (placeholder || null)
 
 const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onChangeNote, isLast }) => {
   const isDayNoteColumn = (!assignee.assigneeId || (!calendar.allowUnassigned && isLast))
