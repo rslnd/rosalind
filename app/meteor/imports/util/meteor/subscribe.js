@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor'
+import { SubsCache } from 'meteor/ccorcos:subs-cache'
 import { getClientKey } from '../../startup/client/native/events'
 
 const withClientKey = (name, args) => {
@@ -24,3 +25,14 @@ const withClientKey = (name, args) => {
 
 export const subscribe = (name, args) =>
   Meteor.subscribe(name, withClientKey(name, args))
+
+export const subscribeCache = (expireAfterMinutes, maxNumberOfSubscriptions) => {
+  const cache = new SubsCache(expireAfterMinutes, maxNumberOfSubscriptions)
+
+  return {
+    subscribe: (name, args) => cache.subscribe(name, withClientKey(name, args)),
+    ready: () => cache.ready(),
+    clear: () => cache.clear(),
+    onReady: fn => cache.onReady(fn)
+  }
+}

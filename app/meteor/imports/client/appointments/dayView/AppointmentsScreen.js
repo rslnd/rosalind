@@ -11,6 +11,7 @@ import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../layout/styles'
 import { PatientModal } from '../../patients/PatientModal'
 import { getClientKey, toNative } from '../../../startup/client/native/events'
+import { Loading } from '../../components/Loading'
 
 const contentHeaderStyle = {
   background,
@@ -80,7 +81,6 @@ export class AppointmentsScreen extends React.Component {
 
   render () {
     const {
-      data,
       calendar,
       assignees,
       appointments,
@@ -93,7 +93,8 @@ export class AppointmentsScreen extends React.Component {
       onNewAppointmentModalOpen,
       onNewAppointmentModalClose,
       move,
-      dispatch
+      dispatch,
+      isReady
     } = this.props
 
     return (
@@ -135,21 +136,23 @@ export class AppointmentsScreen extends React.Component {
 
         <div className='content print-zoom-1' style={appointmentsViewStyle}>
           {
-            <AppointmentsView
-              assignees={assignees || []}
-              appointments={appointments || []}
-              availabilities={availabilities || []}
-              date={date}
-              daySchedule={daySchedule}
-              calendar={calendar}
-              canEditSchedules={canEditSchedules}
-              onSetAdmitted={handleSetAdmitted}
-              onMove={handleMove}
-              onNewAppointmentModalOpen={onNewAppointmentModalOpen}
-              onNewAppointmentModalClose={onNewAppointmentModalClose}
-              move={move}
-              dispatch={dispatch}
-            />
+            isReady
+              ? <AppointmentsView
+                assignees={assignees || []}
+                appointments={appointments || []}
+                availabilities={availabilities || []}
+                date={date}
+                daySchedule={daySchedule}
+                calendar={calendar}
+                canEditSchedules={canEditSchedules}
+                onSetAdmitted={handleSetAdmitted}
+                onMove={handleMove}
+                onNewAppointmentModalOpen={onNewAppointmentModalOpen}
+                onNewAppointmentModalClose={onNewAppointmentModalClose}
+                move={move}
+                dispatch={dispatch}
+              />
+              : <Loading />
           }
         </div>
 

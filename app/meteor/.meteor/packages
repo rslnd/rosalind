@@ -34,6 +34,7 @@ zimme:collection-softremovable
 cultofcoders:publish-composite
 didericis:callpromise-mixin
 percolate:migrations
+ccorcos:subs-cache
 
 # Users
 alanning:roles

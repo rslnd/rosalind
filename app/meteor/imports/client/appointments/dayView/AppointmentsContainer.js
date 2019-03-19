@@ -18,9 +18,11 @@ import { Schedules } from '../../../api/schedules'
 import { Constraints } from '../../../api/constraints'
 import { Availabilities } from '../../../api/availabilities'
 import { AppointmentsScreen } from './AppointmentsScreen'
-import { subscribe } from '../../../util/meteor/subscribe'
+import { subscribeCache } from '../../../util/meteor/subscribe'
 
 const parseDay = memoize(d => moment(d))
+
+const subsCache = subscribeCache()
 
 const onNewAppointmentModalOpen = (args) => Appointments.actions.acquireLock.call(args)
 const onNewAppointmentModalClose = (args) => Appointments.actions.releaseLock.call(args)
@@ -48,8 +50,16 @@ const composer = (props) => {
   const { dispatch, move } = props
 
   console.log('subbing', { ...day, calendarId })
-  subscribe('appointments-day', { ...day, calendarId })
-  const schedulesReady = subscribe('schedules-day', { ...day, calendarId }).ready()
+
+  const appointmentsSub = subsCache.subscribe('appointments-day', { ...day, calendarId })
+  const schedulesSub = subsCache.subscribe('schedules-day', { ...day, calendarId })
+
+  // Preload next day in background
+  Meteor.defer(() => {
+    const nextDay = dateToDay(moment(date).add(1, 'day').toDate())
+    subsCache.subscribe('appointments-day', { ...nextDay, calendarId })
+    subsCache.subscribe('schedules-day', { ...nextDay, calendarId })
+  })
 
   const selector = {
     calendarId,
@@ -76,7 +86,7 @@ const composer = (props) => {
     : { ...selector, assigneeId: { $ne: null } }
 
   // Performance: Only render appts when schedules are here to avoid janky ui
-  const appointments = schedulesReady
+  const appointments = schedulesSub.ready()
     ? Appointments.find(appointmentSelector).fetch().map(a => {
       if (!a.patientId) { return a }
       const patient = Patients.findOne({ _id: a.patientId })
@@ -84,6 +94,9 @@ const composer = (props) => {
       return a
     })
     : []
+
+  const isLoading = !appointmentsSub.ready() && appointments.length === 0
+  const isReady = !isLoading
 
   return {
     day,
@@ -98,7 +111,8 @@ const composer = (props) => {
     handleMove,
     canEditSchedules,
     move,
-    dispatch
+    dispatch,
+    isReady
   }
 }
 
