@@ -49,7 +49,7 @@ const composer = (props) => {
 
   console.log('subbing', { ...day, calendarId })
   subscribe('appointments-day', { ...day, calendarId })
-  subscribe('schedules-day', { ...day, calendarId })
+  const schedulesReady = subscribe('schedules-day', { ...day, calendarId }).ready()
 
   const selector = {
     calendarId,
@@ -75,12 +75,15 @@ const composer = (props) => {
     ? selector
     : { ...selector, assigneeId: { $ne: null } }
 
-  const appointments = Appointments.find(appointmentSelector).fetch().map(a => {
-    if (!a.patientId) { return a }
-    const patient = Patients.findOne({ _id: a.patientId })
-    a.patient = patient
-    return a
-  })
+  // Performance: Only render appts when schedules are here to avoid janky ui
+  const appointments = schedulesReady
+    ? Appointments.find(appointmentSelector).fetch().map(a => {
+      if (!a.patientId) { return a }
+      const patient = Patients.findOne({ _id: a.patientId })
+      a.patient = patient
+      return a
+    })
+    : []
 
   return {
     day,
