@@ -53,7 +53,16 @@ export class MainLayout extends React.Component {
   }
 
   render () {
-    const { children, isLoading, currentUser, loggingIn, locale, isPrint } = this.props
+    const {
+      children,
+      isLoading,
+      currentUser,
+      loggingIn,
+      handleLoginSuccess,
+      handleLogout,
+      locale,
+      isPrint
+    } = this.props
 
     const open = this.props.sidebarOpen || this.state.sidebarForceOpen
 
@@ -103,7 +112,10 @@ export class MainLayout extends React.Component {
                   <SidebarContainer
                     isOpen={open}
                     userPanel={
-                      <UserPanelContainer sidebarOpen={open} />
+                      <UserPanelContainer
+                        onLogout={handleLogout}
+                        sidebarOpen={open}
+                      />
                     }
                   />
               }
@@ -137,7 +149,10 @@ export class MainLayout extends React.Component {
                 <img src='/images/logo.svg' />
               </div>
               <div className='locked-content'>
-                <Login loggingIn={loggingIn} />
+                <Login
+                  loggingIn={loggingIn}
+                  onLoginSuccess={handleLoginSuccess}
+                />
               </div>
             </div>
           </div>

@@ -3,8 +3,8 @@ import { Events } from '../../events'
 
 export const login = ({ Users }) =>
   action({
-    name: 'users/login',
-    allowAnonymous: true,
+    name: 'users/afterLogin',
+    roles: ['*'],
     args: {
       weakPassword: Match.Maybe(Match.OneOf(Boolean, Number))
     },
@@ -34,12 +34,13 @@ export const login = ({ Users }) =>
 
 export const logout = ({ Users }) =>
   action({
-    name: 'users/logout',
+    name: 'users/afterLogout',
+    args: {
+      untrustedUserId: String // For performance, client sends its previous userId after Meteor.logout() call
+    },
     allowAnonymous: true,
-    fn () {
-      const userId = this.userId
-      if (!userId) { return }
-      console.log('[Users] Logged out', { userId })
-      Events.post('users/logout', { userId })
+    fn ({ untrustedUserId }) {
+      console.log('[Users] Logged out', { untrustedUserId })
+      Events.post('users/logout', { untrustedUserId })
     }
   })

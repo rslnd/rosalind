@@ -9,26 +9,18 @@ class UserPanelContainerComponent extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      loggingOut: false
-    }
-
     this.handleLogout = this.handleLogout.bind(this)
   }
 
   handleLogout () {
-    this.setState({
-      ...this.state,
-      loggingOut: true
+    this.props.onLogout()
+    Meteor.defer(() => {
+      const untrustedUserId = Meteor.userId()
+      Meteor.logout()
+      Meteor.call('users/afterLogout', { untrustedUserId })
     })
 
     this.props.history.push('/')
-
-    Meteor.defer(() => {
-      Meteor.call('users/logout', () => {
-        Meteor.logout()
-      })
-    })
   }
 
   render () {
@@ -37,7 +29,7 @@ class UserPanelContainerComponent extends React.Component {
         {...this.props}
         currentUser={this.props.currentUser}
         handleLogout={this.handleLogout}
-        loggingOut={this.state.loggingOut} />
+      />
     )
   }
 }

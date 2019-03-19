@@ -36,7 +36,7 @@ export class Login extends React.Component {
     const username = this.state.name
     const password = this.state.password
 
-    const callback = (err) => {
+    const callback = err => Meteor.defer(() => {
       if (err) {
         console.warn('[Users] Login failed', err)
 
@@ -54,17 +54,21 @@ export class Login extends React.Component {
       } else {
         if (password) {
           isWeakPassword(password).then((weakPassword) => {
-            Meteor.call('users/login', { weakPassword }, () => {
+            Meteor.call('users/afterLogin', { weakPassword }, () => {
               console.log('[Users] Logged in successfully', { weakPassword })
             })
           })
         } else {
-          Meteor.call('users/login', {}, () => {
+          Meteor.call('users/afterLogin', {}, () => {
             console.log('[Users] Logged in successfully')
           })
         }
+
+        if (this.props.onLoginSuccess) {
+          this.props.onLoginSuccess()
+        }
       }
-    }
+    })
 
     const clientKey = getClientKey()
 
@@ -126,7 +130,7 @@ export class Login extends React.Component {
                     this.props.loggingIn
                       ? (
                         <Button bsSize='large' block disabled>
-                          <Icon name='refresh' spin />
+                          <Icon name='refresh' spin style={spinFaster} />
                         </Button>
                       ) : <Button bsStyle='success' bsSize='large' type='submit' block>
                         {__('login.button')}
@@ -140,4 +144,8 @@ export class Login extends React.Component {
       </div>
     )
   }
+}
+
+const spinFaster = {
+  animationDuration: '1s'
 }
