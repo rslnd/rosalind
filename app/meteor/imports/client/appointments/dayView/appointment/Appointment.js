@@ -158,7 +158,7 @@ class AppointmentItem extends React.Component {
             patient
               ? (
                 <span>
-                  <span className={classes.prefix}>{prefix(patient.gender)}&nbsp;</span>
+                  <span className={classes.prefix}>{prefix(patient)}&nbsp;</span>
                   {patient.lastName && <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
                   {patient.firstName && <span>{namecase(patient.firstName)}</span>}
                 </span>
