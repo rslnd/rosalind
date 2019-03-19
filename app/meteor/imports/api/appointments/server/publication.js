@@ -1,9 +1,9 @@
 import moment from 'moment'
-import { Match } from 'meteor/check'
 import { Comments } from '../../comments'
 import { Patients } from '../../patients'
 import Appointments from '../collection'
 import { publishComposite } from '../../../util/meteor/publish'
+import { dayToDate } from '../../../util/time/day'
 
 export default () => {
   publishComposite({
@@ -41,17 +41,18 @@ export default () => {
     fn: function ({ appointmentId }) {
       const startOfToday = moment().startOf('day').toDate()
       const endOfToday = moment().endOf('day').toDate()
+      const selector = {
+        start: {
+          $gte: startOfToday,
+          $lte: endOfToday
+        }
+      }
 
       return {
         find: function () {
-          return Appointments.find({
-            start: {
-              $gt: startOfToday,
-              $lt: endOfToday
-            }
-          }, {
+          return Appointments.find(selector, {
             sort: {
-              start: 1
+              start: -1
             }
           })
         },
@@ -71,19 +72,27 @@ export default () => {
   })
 
   publishComposite({
-    name: 'appointments-future',
+    name: 'appointments-day',
     roles: ['appointments-*'],
-    preload: true,
-    fn: function () {
-      const startOfTomorrow = moment().endOf('day').toDate()
+    args: {
+      year: Number,
+      month: Number,
+      day: Number,
+      calendarId: String
+    },
+    fn: function ({ day, month, year, calendarId }) {
+      const date = dayToDate({ day, month, year })
+      const selector = {
+        calendarId,
+        start: {
+          $gte: moment(date).startOf('day').toDate(),
+          $lte: moment(date).endOf('day').toDate()
+        }
+      }
 
       return {
         find: function () {
-          return Appointments.find({
-            start: {
-              $gt: startOfTomorrow
-            }
-          }, {
+          return Appointments.find(selector, {
             fields: {
               _id: 1,
               calendarId: 1,
@@ -142,62 +151,6 @@ export default () => {
           }, {
             find: function (appointment) {
               return Comments.find({ docId: appointment._id })
-            }
-          }
-        ]
-      }
-    }
-
-  })
-
-  // LEGACY
-  publishComposite({
-    name: 'appointments-legacy',
-    args: {
-      date: Match.Optional(Date),
-      start: Match.Optional(Date),
-      end: Match.Optional(Date),
-      within: Match.Optional(String)
-    },
-    roles: ['appointments-*'],
-    preload: 1,
-    fn: function ({ date, start, end, within }) {
-      // If no argument are supplied, publish future appointments
-      if (!within) {
-        within = 'day'
-      }
-
-      if (!start && !end && !date) {
-        start = moment().startOf(within).toDate()
-        end = moment().add(6, 'months').endOf(within).toDate()
-      } else if (date) {
-        start = moment(date).startOf(within).toDate()
-        end = moment(date).endOf(within).toDate()
-      }
-
-      return {
-        find: function () {
-          const selector = {
-            start: {
-              $gte: start,
-              $lte: end
-            },
-            removed: { $ne: true }
-          }
-
-          return Appointments.find(selector, { sort: { start: 1 } })
-        },
-        children: [
-          {
-            find: function (appointment) {
-              return Comments.find({ docId: appointment._id })
-            }
-          },
-          {
-            find: function (appointment) {
-              if (appointment.patientId) {
-                return Patients.find({ _id: appointment.patientId }, { limit: 1 })
-              }
             }
           }
         ]

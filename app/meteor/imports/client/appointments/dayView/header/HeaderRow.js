@@ -15,6 +15,7 @@ import Modal from 'react-bootstrap/lib/Modal'
 import Button from '@material-ui/core/Button'
 import { UserPicker } from '../../../users/UserPicker'
 import { CalendarNote } from './CalendarNote'
+import { Users } from '../../../../api/users'
 
 const headerRowStyle = {
   backgroundColor: background,
@@ -152,6 +153,17 @@ export class HeaderRow extends React.Component {
   }
 
   render () {
+    const {
+      canEditSchedules,
+      calendar,
+      assignees,
+      onAddUser,
+      onChangeCalendarNote,
+      date,
+      daySchedule,
+      onChangeNote
+    } = this.props
+
     return (
       <div
         onMouseEnter={this.handleMouseEnter}
@@ -159,26 +171,25 @@ export class HeaderRow extends React.Component {
         <div style={headerRowStyle}>
           <div className='hide-print' style={addAssigneeStyle}>
             {
-              this.props.canEditSchedules &&
-                <AddAssignee onAddUser={this.props.onAddUser} />
+              canEditSchedules &&
+                <AddAssignee onAddUser={onAddUser} />
             }
           </div>
           {/* Scheduled assignees */}
-          {this.props.assignees.map((assignee) => (
+          {assignees.map((assignee) => (
             <div
-              key={assignee.assigneeId}
+              key={assignee ? assignee._id : 'unassigned'}
               style={headerCellStyle}
-              onClick={(event) => this.handleUserDropdownOpen({ event, assigneeId: assignee.assigneeId, canRemoveUser: !assignee.hasAppointments })}>
-
+              onClick={(event) => assignee && this.handleUserDropdownOpen({ event, assigneeId: assignee._id, canRemoveUser: !assignee.hasAppointments })}>
               {
-                assignee.fullNameWithTitle
+                assignee
                   ? (
                     assignee.employee
-                      ? assignee.fullNameWithTitle
-                      : <span className='text-muted'>{assignee.fullNameWithTitle}</span>
+                      ? Users.methods.fullNameWithTitle(assignee)
+                      : <span className='text-muted'>{Users.methods.fullNameWithTitle(assignee)}</span>
                   )
                   : (
-                    this.props.calendar.unassignedLabel ||
+                    calendar.unassignedLabel ||
                   __('appointments.unassigned')
                   )
               }
@@ -225,20 +236,20 @@ export class HeaderRow extends React.Component {
         </Popper>
 
         <CalendarNote
-          calendar={this.props.calendar}
-          canEditSchedules={this.props.canEditSchedules}
-          onChangeNote={this.props.onChangeCalendarNote}
+          calendar={calendar}
+          canEditSchedules={canEditSchedules}
+          onChangeNote={onChangeCalendarNote}
         />
 
-        <AssigneesDetails
-          date={this.props.date}
-          calendar={this.props.calendar}
-          daySchedule={this.props.daySchedule}
-          canEditSchedules={this.props.canEditSchedules}
-          onChangeNote={this.props.onChangeNote}
-          assignees={this.props.assignees}
+        {/* <AssigneesDetails
+          date={date}
+          calendar={calendar}
+          daySchedule={daySchedule}
+          canEditSchedules={canEditSchedules}
+          onChangeNote={onChangeNote}
+          assignees={assignees}
           expanded={this.state.hovering} />
-        <div style={topPaddingStyle} />
+        <div style={topPaddingStyle} /> */}
 
         {
           this.state.changingAssignee &&

@@ -10,21 +10,19 @@ export const update = ({ Appointments }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       appointmentId: { type: SimpleSchema.RegEx.Id },
-      update: { type: Object, blackbox: true }
+      update: {
+        type: new SimpleSchema({
+          revenue: { type: Number, optional: true },
+          tags: { type: [SimpleSchema.RegEx.Id], optional: true },
+          note: { type: String, optional: true }
+        })
+      }
     }).validator(),
 
     run ({ appointmentId, update }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
-
-      const updateWhitelist = ['revenue', 'tags', 'note']
-      Object.keys(update).map(key => {
-        if (updateWhitelist.indexOf(key) === -1) {
-          console.error('[Appointments] update: Updating key not allowed', key)
-          throw new Meteor.Error(403, 'Update not allowed')
-        }
-      })
 
       const appointment = Appointments.findOne({ _id: appointmentId })
 

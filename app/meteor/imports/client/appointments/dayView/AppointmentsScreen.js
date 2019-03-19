@@ -79,18 +79,31 @@ export class AppointmentsScreen extends React.Component {
   }
 
   render () {
-    if (this.props.isLoading) {
-      return null
-    }
+    const {
+      data,
+      calendar,
+      assignees,
+      appointments,
+      availabilities,
+      date,
+      daySchedule,
+      canEditSchedules,
+      handleSetAdmitted,
+      handleMove,
+      onNewAppointmentModalOpen,
+      onNewAppointmentModalClose,
+      move,
+      dispatch
+    } = this.props
 
     return (
       <div>
         <div className='content-header hide-print' style={contentHeaderStyle}>
           <h1>
-            <b>{this.props.calendar.name}</b>&ensp;
-            {this.props.date.format(__('time.dateFormatWeekdayShortNoYear'))}&nbsp;
+            <b>{calendar.name}</b>&ensp;
+            {date.format(__('time.dateFormatWeekdayShortNoYear'))}&nbsp;
             <small>
-              {weekOfYear(this.props.date, { short: true })}
+              {weekOfYear(date, { short: true })}
               &nbsp;
               <span
                 style={printStyle}
@@ -111,9 +124,9 @@ export class AppointmentsScreen extends React.Component {
 
           <div style={{ marginTop: 27 }}>
             <DateNavigation
-              date={this.props.date}
+              date={date}
               onTodayClick={this.scrollToCurrentTime}
-              basePath={`appointments/${this.props.calendar.slug}`}
+              basePath={`appointments/${calendar.slug}`}
               pullRight
               jumpWeekForward
               jumpMonthForward />
@@ -121,18 +134,23 @@ export class AppointmentsScreen extends React.Component {
         </div>
 
         <div className='content print-zoom-1' style={appointmentsViewStyle}>
-          <AppointmentsView
-            assignees={this.props.assignees}
-            date={this.props.date}
-            daySchedule={this.props.daySchedule}
-            calendar={this.props.calendar}
-            canEditSchedules={this.props.canEditSchedules}
-            onSetAdmitted={this.props.handleSetAdmitted}
-            onMove={this.props.handleMove}
-            onNewAppointmentModalOpen={this.props.onNewAppointmentModalOpen}
-            onNewAppointmentModalClose={this.props.onNewAppointmentModalClose}
-            move={this.props.move}
-            dispatch={this.props.dispatch} />
+          {
+            <AppointmentsView
+              assignees={assignees || []}
+              appointments={appointments || []}
+              availabilities={availabilities || []}
+              date={date}
+              daySchedule={daySchedule}
+              calendar={calendar}
+              canEditSchedules={canEditSchedules}
+              onSetAdmitted={handleSetAdmitted}
+              onMove={handleMove}
+              onNewAppointmentModalOpen={onNewAppointmentModalOpen}
+              onNewAppointmentModalClose={onNewAppointmentModalClose}
+              move={move}
+              dispatch={dispatch}
+            />
+          }
         </div>
 
         {

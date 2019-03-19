@@ -52,7 +52,7 @@ class BlankState extends React.PureComponent {
         style={{
           gridRowStart: startTime,
           gridRowEnd: endTime,
-          gridColumn: `assignee-${assigneeId}`
+          gridColumn: `assignee-${assigneeId || 'unassigned'}`
         }}>
         &nbsp;
       </span>
@@ -67,7 +67,7 @@ export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter }) => 
 
   return assignees.map(a => {
     const scheduleOffset = slotSizeAppointment &&
-      (a.schedules && a.schedules.length >= 1) &&
+      (a && a.schedules && a.schedules.length >= 1) &&
       moment(sortBy(a.schedules, 'end')[0].end).add(1, 'second').minute()
 
     const slotSizeBlank = (scheduleOffset === 0 || scheduleOffset > 0)
@@ -81,12 +81,12 @@ export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter }) => 
     return timeSlots(slotSizeBlank, scheduleOffset)
       .map((time, i, times) => (
         <Blank
-          key={[date.unix(), time, a.assigneeId].join('')}
+          key={[date.unix(), time, a ? a._id : 'unassigned'].join('')}
           date={date}
           startTime={time}
           endTime={times[i + 1] || lastSlot}
           format={format}
-          assigneeId={a.assigneeId}
+          assigneeId={a ? a._id : null}
           onClick={onClick}
           onMouseEnter={onMouseEnter} />
       ))

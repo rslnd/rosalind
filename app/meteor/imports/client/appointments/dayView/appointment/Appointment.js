@@ -10,6 +10,7 @@ import { Indicator } from '../../appointment/Indicator'
 import { background, primaryActive, darkGrayDisabled, darkGray, lighten } from '../../../layout/styles'
 import { namecase } from '../../../../util/namecase'
 import { getDefaultDuration } from '../../../../api/appointments/methods/getDefaultDuration'
+import { prefix } from '../../../../api/patients/methods'
 
 const styles = {
   appointment: {
@@ -68,7 +69,7 @@ class AppointmentItem extends React.Component {
     if (a.admitted !== b.admitted) { return true }
     if (a.canceled !== b.canceled) { return true }
     if (a.treated !== b.treated) { return true }
-    if (a.start.getTime() !== b.start.getTime()) { return true }
+    if (a.start !== b.start) { return true }
     if (!isEqual(a.tags, b.tags)) { return true }
 
     if (this.props.isMoving || nextProps.isMoving) { return true }
@@ -89,7 +90,6 @@ class AppointmentItem extends React.Component {
 
   render () {
     const { appointment, calendar, classes, format } = this.props
-    const start = moment(appointment.start)
     const appointmentClasses = classnames({
       [ classes.appointment ]: true,
       [ classes.canceled ]: appointment.canceled,
@@ -116,8 +116,8 @@ class AppointmentItem extends React.Component {
       timeEnd = newStartTime.add(duration, 'minutes').format('[T]HHmm')
       assigneeId = newAssigneeId
     } else {
-      timeStart = appointment.timeStart || start.format('[T]HHmm')
-      timeEnd = appointment.timeEnd || moment(appointment.end).format('[T]HHmm')
+      timeStart = moment(appointment.start).format('[T]HHmm')
+      timeEnd = moment(appointment.end).format('[T]HHmm')
       assigneeId = appointment.assigneeId
     }
 
@@ -134,7 +134,7 @@ class AppointmentItem extends React.Component {
         style={{
           gridRowStart: timeStart,
           gridRowEnd: timeEnd,
-          gridColumn: `assignee-${assigneeId}`,
+          gridColumn: `assignee-${assigneeId || 'unassigned'}`,
           borderLeftColor: tagColor,
           zIndex: appointment.lockedBy ? 29 : 30
         }}>
@@ -158,12 +158,12 @@ class AppointmentItem extends React.Component {
             patient
               ? (
                 <span>
-                  <span className={classes.prefix}>{patient.prefix}&nbsp;</span>
+                  <span className={classes.prefix}>{prefix(patient.gender)}&nbsp;</span>
                   {patient.lastName && <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
                   {patient.firstName && <span>{namecase(patient.firstName)}</span>}
                 </span>
               ) : !appointment.lockedBy && (
-                this.stripNumbers(appointment.notes) || <Icon name='question-circle' />
+                this.stripNumbers(appointment.note) || <Icon name='question-circle' />
               )
           }
         </span>

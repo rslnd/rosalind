@@ -30,9 +30,7 @@ const composer = (props) => {
   // The server will check for currentUser or a connection from
   // a trusted network
   subscribe('appointments-today')
-  subscribe('appointments-future')
   subscribe('availabilities')
-  subscribe('schedules')
   subscribe('constraints')
   subscribe('schedules-holidays')
   subscribe('settings')

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Icon } from '../components/Icon'
-import { green, gray } from '../layout/styles'
+import { green } from '../layout/styles'
 
 export const Appointments = () =>
   <div style={containerStyle}>

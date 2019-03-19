@@ -23,7 +23,7 @@ export const overrideOverlay = ({ isOverriding, overrideAssigneeId, start, end }
           ...style,
           gridRowStart: label(overrideStart),
           gridRowEnd: label(overrideEnd),
-          gridColumn: `assignee-${overrideAssigneeId}`
+          gridColumn: `assignee-${overrideAssigneeId || 'unassigned'}`
         }}>
         <div>{overrideStart.format('H:mm')}</div>
         <div>{overrideEnd.format('H:mm')}</div>

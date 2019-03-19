@@ -293,6 +293,8 @@ export class AppointmentsView extends React.Component {
             calendar={this.props.calendar}
             date={this.props.date}
             assignees={this.props.assignees}
+            appointments={this.props.appointments}
+            availabilities={this.props.availabilities}
             onAppointmentClick={this.handleAppointmentClick}
             onBlankClick={this.handleBlankClick}
             onBlankMouseEnter={this.handleBlankHover}

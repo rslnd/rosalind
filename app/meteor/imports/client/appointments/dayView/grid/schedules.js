@@ -3,6 +3,8 @@ import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
 import { isFirstSlot, isLastSlot } from './timeSlots'
 import { darkGrayDisabled } from '../../../layout/styles'
+import { withTracker } from '../../../components/withTracker'
+import { Schedules } from '../../../../api/schedules'
 
 monkey(moment)
 
@@ -19,22 +21,37 @@ const style = {
   }
 }
 
-export const schedules = ({ assignees, onDoubleClick, slotSize }) => (
-  assignees.map((assignee, i) => (
-    assignee.schedules && assignee.schedules
-      .filter(s => s.start && s.end)
-      .map(s =>
-        <Schedule
-          key={s._id}
-          scheduleId={s._id}
-          assigneeId={s.userId}
-          start={s.start}
-          end={s.end}
-          note={s.note}
-          slotSize={slotSize}
-          onDoubleClick={onDoubleClick} />
-      )
-  ))
+const withSchedules = props => {
+  const selector = {
+    type: 'override',
+    calendarId: props.calendar._id,
+    start: {
+      $gt: moment(props.date).startOf('day').toDate(),
+      $lt: moment(props.date).endOf('day').toDate()
+    }
+  }
+
+  const schedules = Schedules.find(selector).fetch()
+
+  return {
+    ...props,
+    schedules
+  }
+}
+
+export const schedules = withTracker(withSchedules)(({ schedules, onDoubleClick, slotSize }) =>
+  schedules.map(s =>
+    <Schedule
+      key={s._id}
+      scheduleId={s._id}
+      assigneeId={s.userId}
+      start={s.start}
+      end={s.end}
+      note={s.note}
+      slotSize={slotSize}
+      onDoubleClick={onDoubleClick}
+    />
+  )
 )
 
 const Schedule = ({ start, end, note, scheduleId, assigneeId, slotSize, onDoubleClick }) => {
@@ -50,7 +67,7 @@ const Schedule = ({ start, end, note, scheduleId, assigneeId, slotSize, onDouble
         ...style.scheduledUnavailable,
         gridRowStart: timeStart.format('[T]HHmm'),
         gridRowEnd: timeEnd.format('[T]HHmm'),
-        gridColumn: `assignee-${assigneeId}`
+        gridColumn: `assignee-${assigneeId || 'unassigned'}`
       }}>
 
       {

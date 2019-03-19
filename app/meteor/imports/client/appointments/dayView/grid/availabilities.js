@@ -53,7 +53,7 @@ class BlankState extends React.PureComponent {
         style={{
           gridRowStart: startTime,
           gridRowEnd: endTime,
-          gridColumn: `assignee-${assigneeId}`
+          gridColumn: `assignee-${assigneeId || 'unassigned'}`
         }}>
         &nbsp;
       </span>
@@ -63,50 +63,83 @@ class BlankState extends React.PureComponent {
 
 const Blank = injectSheet(styles)(BlankState)
 
-export const availabilities = ({ calendar, date, assignees, onClick, onMouseEnter }) =>
-  flatten(assignees.map(assignee => [
-    assignee.assigneeId ? <Unavailable
-      key={assignee.assigneeId}
-      assigneeId={assignee.assigneeId}
-    /> : null,
-    ...flatten(
-      (
-        assignee.assigneeId === null
-          ? [{ slotSize: calendar.slotSize, from: start(), to: end() }]
-          : assignee.availabilities
-      ).map(availability => {
-        const { slotSize, from, to, pauses = [] } = availability
-        const format = formatter(slotSize)
+export const availabilities = ({ calendar, date, assignees, availabilities, onClick, onMouseEnter }) =>
+  <>
+    {assignees.map(assignee =>
+      assignee
+        // Block assignees by default
+        ? <Unavailable
+          key={assignee._id}
+          assigneeId={assignee._id}
+        />
+        // Unassigned column is always available
+        : <Available
+          key={'unassigned'}
+          availability={{
+            slotSize: calendar.slotSize,
+            from: start(),
+            to: end(),
+            date: date
+          }}
+          onClick={onClick}
+          onMouseEnter={onMouseEnter}
+          assigneeId={null}
+        />
+    )}
 
-        return [
-          ...timeSlotsRange({ slotSize, from, to })
-            .map((time, i, times) => (
-              <Blank
-                key={[availability._id, time].join('')}
-                date={date}
-                startTime={time}
-                endTime={times[i + 1] || label(moment(to))}
-                format={format}
-                assigneeId={assignee.assigneeId}
-                onClick={onClick}
-                onMouseEnter={onMouseEnter} />
-            )),
-          ...flatten(pauses.map(({ from, to, note }) =>
-            timeSlotsRange({ slotSize, from, to })
-              .map((time, i, times) =>
-                <Pause
-                  key={[availability._id, '-P', time].join('')}
-                  assigneeId={assignee.assigneeId}
-                  note={note}
-                  from={label(moment(from))}
-                  to={label(moment(to))}
-                />
-              )
-          ))
-        ]
-      })
-    )
-  ]))
+    {availabilities.map(availability =>
+      <Available
+        key={availability._id}
+        availability={availability}
+        date={date}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+      />
+    )}
+  </>
+
+const Available = ({
+  availability: {
+    _id,
+    slotSize,
+    from,
+    to,
+    pauses
+  },
+  date,
+  onClick,
+  onMouseEnter,
+  assigneeId
+}) => {
+  const format = formatter(slotSize)
+
+  return [
+    ...timeSlotsRange({ slotSize, from, to })
+      .map((time, i, times) => (
+        <Blank
+          key={[_id, time].join('')}
+          date={date}
+          startTime={time}
+          endTime={times[i + 1] || label(moment(to))}
+          format={format}
+          assigneeId={assigneeId}
+          onClick={onClick}
+          onMouseEnter={onMouseEnter} />
+      )),
+    ...flatten(pauses ? pauses.map(({ from, to, note }) =>
+      timeSlotsRange({ slotSize, from, to })
+        .map((time, i, times) =>
+          <Pause
+            key={[_id, '-P', time].join('')}
+            assigneeId={assigneeId}
+            note={note}
+            from={label(moment(from))}
+            to={label(moment(to))}
+          />
+        )
+    ) : [])
+  ]
+}
 
 const unavailableStyle = {
   gridRowStart: label(start()),
@@ -119,7 +152,7 @@ const unavailableStyle = {
 const Unavailable = ({ assigneeId }) =>
   <div style={{
     ...unavailableStyle,
-    gridColumn: `assignee-${assigneeId}`
+    gridColumn: `assignee-${assigneeId || 'unassigned'}`
   }} />
 
 const Pause = ({ note, from, to, assigneeId }) => {
@@ -128,7 +161,7 @@ const Pause = ({ note, from, to, assigneeId }) => {
     gridRowStart: from,
     gridRowEnd: to,
     backgroundColor: unavailable,
-    gridColumn: `assignee-${assigneeId}`,
+    gridColumn: `assignee-${assigneeId || 'unassigned'}`,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',

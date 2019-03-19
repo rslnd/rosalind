@@ -10,7 +10,7 @@ import { Appointments } from '../../../api/appointments'
 import { AppointmentActions } from './AppointmentActions'
 
 const composer = (props) => {
-  const appointment = Appointments.findOne({ _id: props.appointmentId })
+  const appointment = props.appointment || Appointments.findOne({ _id: props.appointmentId })
   if (!appointment) { return }
 
   const { admitted, canceled } = appointment

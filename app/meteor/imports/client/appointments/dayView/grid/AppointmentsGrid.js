@@ -1,9 +1,9 @@
 import React from 'react'
 import { timeSlots } from './timeSlots'
-import { appointments } from './appointments'
+import { appointments as renderAppointments } from './appointments'
 import { timeLegend } from './timeLegend'
 import { blanks } from './blanks'
-import { availabilities } from './availabilities'
+import { availabilities as renderAvailabilities } from './availabilities'
 import { schedules } from './schedules'
 import { overrideOverlay } from './overrideOverlay'
 
@@ -16,7 +16,7 @@ import { overrideOverlay } from './overrideOverlay'
 // ...         | ...
 // [21:00]     | [time] [assignee-1] [assignee-2] ... [assignee-n]
 
-export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, onScheduleModalOpen, move }) => {
+export const AppointmentsGrid = ({ calendar, date, assignees, appointments, availabilities, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, onScheduleModalOpen, move }) => {
   const slotSize = calendar.slotSize || 5
   const gridTimeSlots = timeSlots(slotSize).map((time) => `[${time}] 25px`).join(' ')
 
@@ -34,7 +34,7 @@ export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick
     gridTemplateColumns: `
       [time] 60px
       ${assignees.map((assignee, index) =>
-    `[assignee-${assignee.assigneeId}] 1fr`).join(' ')
+    `[assignee-${assignee ? assignee._id : 'unassigned'}] 1fr`).join(' ')
 }`
   }
 
@@ -42,11 +42,11 @@ export const AppointmentsGrid = ({ calendar, date, assignees, onAppointmentClick
 
   return (
     <div style={style}>
-      {appointments({ calendar, slotSize, assignees, onClick: onAppointmentClick, move })}
+      {renderAppointments({ calendar, slotSize, appointments, onClick: onAppointmentClick, move })}
       {ffAva ? null : blanks({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
-      {ffAva ? availabilities({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter }) : null}
+      {ffAva ? renderAvailabilities({ calendar, date, availabilities, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter }) : null}
       {ffAva ? null : overrideOverlay(override)}
-      {ffAva ? null : schedules({ slotSize, assignees, onDoubleClick: onScheduleModalOpen })}
+      {ffAva ? null : schedules({ slotSize, assignees, date, calendar, onDoubleClick: onScheduleModalOpen })}
       {timeLegend({ slotSize })}
     </div>
   )
