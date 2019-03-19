@@ -7,7 +7,6 @@ export default () => {
   publish({
     name: 'availabilities',
     roles: ['appointments-*', 'schedules'],
-    preload: true,
     fn: function () {
       const startOfYesterday = moment().subtract(1, 'day').startOf('day').toDate()
 
@@ -27,7 +26,6 @@ export default () => {
       year: Number
     },
     roles: ['appointments-*', 'schedules'],
-    preload: true,
     fn: function (day) {
       const date = dayToDate(day)
       const startOfDay = moment(date).startOf('day').toDate()

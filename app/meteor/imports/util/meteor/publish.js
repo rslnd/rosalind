@@ -7,13 +7,9 @@ import {
 import { Clients } from '../../api/clients'
 import { hasRole } from './hasRole'
 
-const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
+const wrappedPublication = ({ name, args = {}, roles, fn }) => {
   // if (!roles) {
   //   console.warn('Publication', name, 'is not restricted to any roles')
-  // }
-
-  // if (preload) {
-  //   console.log('Preload Publication', name)
   // }
 
   return function (clientArgs = {}) {
@@ -31,8 +27,7 @@ const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
       connection: this.connection,
       userId: this.userId,
       clientKey: clientArgs.clientKey,
-      roles,
-      preload
+      roles
     })
 
     if (isAllowed) {
@@ -49,25 +44,13 @@ export const publishComposite = options =>
 export const publish = options =>
   Meteor.publish(options.name, wrappedPublication(options))
 
-const checkIsAllowed = ({ connection, userId, clientKey, roles, preload }) => {
-  const isTrustedNetwork = (connection && checkTrustedNetwork(connection.clientAddress))
-  const isLocalhost = (connection && checkLocalhost(connection.clientAddress))
-
-  const isClientKeyValid = checkClientKey(clientKey)
-
-  const isTrusted = (preload && isTrustedNetwork && isClientKeyValid) || isLocalhost
-
-  // Path 1: Allow preload on trusted networks, and always allow localhost
-  if (isTrusted) {
-    return true
-  }
-
-  // Path 2: Don't preload anything on untrusted networks
+const checkIsAllowed = ({ connection, userId, clientKey, roles }) => {
+  // Don't preload anything on untrusted networks
   if (!userId) {
     return false
   }
 
-  // Path 3: Check for roles
+  // Check for roles
   if (roles && roles.length > 0 && hasRole(userId, [...roles, 'admin'])) {
     return true
   }
@@ -79,16 +62,17 @@ const checkIsAllowed = ({ connection, userId, clientKey, roles, preload }) => {
   return false
 }
 
-const checkClientKey = (clientKey) => {
-  if (!clientKey) {
-    return false
-  }
+// TODO: Maybe restrict publications to those authenticated with a clientKey?
+// const checkClientKey = (clientKey) => {
+//   if (!clientKey) {
+//     return false
+//   }
 
-  const client = Clients.findOne({ clientKey })
+//   const client = Clients.findOne({ clientKey })
 
-  if (!client || client.isBanned) {
-    return false
-  }
+//   if (!client || client.isBanned) {
+//     return false
+//   }
 
-  return true
-}
+//   return true
+// }

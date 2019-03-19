@@ -15,7 +15,6 @@ export const publication = () => {
     args: {
       clientKey: String
     },
-    preload: true,
     fn: function ({ clientKey }) {
       return Clients.find({
         clientKey
@@ -37,7 +36,6 @@ export const publication = () => {
     args: {
       clientKey: String
     },
-    preload: true,
     fn: function ({ clientKey }) {
       const consumer = Clients.findOne({ clientKey })
       const producers = Clients.find({ pairedTo: consumer._id }, { fields: {

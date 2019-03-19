@@ -37,7 +37,6 @@ export default () => {
   publishComposite({
     name: 'appointments-today',
     roles: ['waitlist', 'appointments-*'],
-    preload: true,
     fn: function ({ appointmentId }) {
       const startOfToday = moment().startOf('day').toDate()
       const endOfToday = moment().endOf('day').toDate()

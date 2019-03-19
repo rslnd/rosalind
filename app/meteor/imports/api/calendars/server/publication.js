@@ -5,7 +5,6 @@ export const publication = () => {
   publish({
     name: 'calendars',
     roles: ['appointments-*'],
-    preload: true,
     fn: function () {
       return Calendars.find({})
     }

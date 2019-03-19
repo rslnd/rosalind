@@ -5,7 +5,6 @@ import { Settings } from '../../settings'
 export default () => {
   publish({
     name: 'settings',
-    preload: true,
     fn: function () {
       if (this.userId && Roles.userIsInRole(this.userId, [ 'admin', 'settings-edit' ])) {
         return Settings.find({})

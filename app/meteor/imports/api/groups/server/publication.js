@@ -5,7 +5,6 @@ export const publication = () => {
   publish({
     name: 'groups',
     roles: ['appointments-*', 'users', 'reports'],
-    preload: true,
     fn: function () {
       return Groups.find({})
     }

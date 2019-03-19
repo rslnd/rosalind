@@ -5,7 +5,6 @@ export default () => {
   publish({
     name: 'constraints',
     roles: ['appointments-*', 'schedules'],
-    preload: 1,
     fn: function () {
       return Constraints.find({ removed: { $ne: true } })
     }

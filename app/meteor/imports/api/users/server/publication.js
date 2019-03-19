@@ -4,7 +4,6 @@ import { publish } from '../../../util/meteor/publish'
 export default () => {
   publish({
     name: 'users',
-    preload: true,
     fn: function () {
       return Users.find({}, {
         fields: {
