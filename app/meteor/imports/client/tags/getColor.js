@@ -5,7 +5,7 @@ import { Tags } from '../../api/tags'
 import { tagBackgroundColor } from '../tags/TagsList'
 
 export const getColor = (tags = [], defaultColor) => {
-  if (tags.length === 0) {
+  if (!tags || tags.length === 0) {
     return defaultColor || tagBackgroundColor
   } else {
     return flow(
