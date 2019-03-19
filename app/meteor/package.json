@@ -11,9 +11,6 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "@material-ui/core": "^3.9.2",
-    "apollo-client": "^2.5.1",
-    "apollo-server": "^2.4.8",
-    "apollo-server-express": "^2.4.8",
     "aws4": "^1.8.0",
     "bcrypt": "^3.0.1",
     "buffer": "^5.2.1",
@@ -28,8 +25,6 @@
     "drag-drop": "^4.2.0",
     "eventemitter3": "^3.1.0",
     "full-icu": "^1.2.1",
-    "graphql": "^14.1.1",
-    "graphql-tag": "^2.10.1",
     "gsm": "^0.1.4",
     "helmet": "^3.16.0",
     "iconv-lite": "^0.4.24",
