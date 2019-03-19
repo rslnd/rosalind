@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { Roles } from 'meteor/alanning:roles'
 import { check, Match } from 'meteor/check'
+import { hasRole } from './hasRole'
 
 export { Match }
 
@@ -27,7 +27,7 @@ export const action = ({ name, args = {}, roles, allowAnonymous, simulation = tr
     },
     run: function (safeArgs) {
       if (!allowAnonymous) {
-        if (!Roles.userIsInRole(this.userId, roles, Roles.GLOBAL_GROUP)) {
+        if (!hasRole(this.userId, roles)) {
           throw new Meteor.Error(403, 'Not authorized')
         }
       }

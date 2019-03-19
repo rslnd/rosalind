@@ -52,6 +52,24 @@ describe('util', () => {
       expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(false)
     })
 
+    it('true when only wildcard', () => {
+      const requiredRoles = ['*']
+      const userRoles = ['a']
+      expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(true)
+    })
+
+    it('false when wildcard and non-matching others', () => {
+      const requiredRoles = ['*', 'b']
+      const userRoles = ['a']
+      expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(false)
+    })
+
+    it('true when wildcard and matching others', () => {
+      const requiredRoles = ['*', 'a']
+      const userRoles = ['a']
+      expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(true)
+    })
+
     it('false when no partial wildcard match with wildcard in user role', () => {
       const requiredRoles = ['a', 'hazelnut-unicorn']
       const userRoles = ['m', 'hazelnut-*', 'c']

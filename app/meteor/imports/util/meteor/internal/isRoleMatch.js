@@ -1,4 +1,5 @@
 export const isRoleMatch = ({ requiredRoles, userRoles }) =>
+  (requiredRoles.length === 1 && requiredRoles[0] === '*' && userRoles.length >= 1) ||
   requiredRoles.some(requiredRole => {
     if (requiredRole.indexOf('-*') !== -1) {
       return userRoles.some(userRole => {
