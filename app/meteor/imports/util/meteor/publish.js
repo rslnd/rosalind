@@ -23,7 +23,7 @@ const wrappedPublication = ({ name, args = {}, roles, preload, fn }) => {
         ...args
       })
     } catch (e) {
-      console.error('Publication', name, 'failed check:', e.name, e.message)
+      console.error('Publication', name, 'was called with clientArgs', clientArgs, 'that failed check:', e.name, e.message)
       throw e
     }
 
