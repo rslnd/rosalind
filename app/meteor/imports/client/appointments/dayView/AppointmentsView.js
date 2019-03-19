@@ -173,7 +173,7 @@ export class AppointmentsView extends React.Component {
 
       console.log('[Appointments] Schedules override end event', { newSchedule })
 
-      Schedules.actions.upsert.callPromise({ schedule: newSchedule }).then(() => {
+      Schedules.actions.insert.callPromise({ schedule: newSchedule }).then(() => {
         this.setState({
           override: {
             isOverriding: false,
