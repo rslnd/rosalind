@@ -1,11 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { check, Match } from 'meteor/check'
-import {
-  isTrustedNetwork as checkTrustedNetwork,
-  isLocalhost as checkLocalhost
-} from '../../api/customer/server/isTrustedNetwork'
-import { Clients } from '../../api/clients'
+import { isLocalhost } from '../../api/customer/server/isTrustedNetwork'
 import { hasRole } from './hasRole'
+import { isTrustedAccessToken } from './withTrustedAccessToken'
 
 const wrappedPublication = ({ name, args = {}, roles, fn }) => {
   // if (!roles) {
@@ -16,6 +13,7 @@ const wrappedPublication = ({ name, args = {}, roles, fn }) => {
     try {
       check(clientArgs, {
         clientKey: Match.Maybe(String),
+        accessToken: Match.Maybe(String),
         ...args
       })
     } catch (e) {
@@ -27,6 +25,7 @@ const wrappedPublication = ({ name, args = {}, roles, fn }) => {
       connection: this.connection,
       userId: this.userId,
       clientKey: clientArgs.clientKey,
+      accessToken: clientArgs.accessToken,
       roles
     })
 
@@ -44,7 +43,14 @@ export const publishComposite = options =>
 export const publish = options =>
   Meteor.publish(options.name, wrappedPublication(options))
 
-const checkIsAllowed = ({ connection, userId, clientKey, roles }) => {
+const checkIsAllowed = ({ connection, userId, clientKey, accessToken, roles }) => {
+  const trustedAccessToken = (accessToken && isTrustedAccessToken(accessToken))
+
+  // Allow trustedAccessTokens from localhost
+  if (trustedAccessToken && isLocalhost(connection.clientAddress)) {
+    return true
+  }
+
   // Don't preload anything on untrusted networks
   if (!userId) {
     return false

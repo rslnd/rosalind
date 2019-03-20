@@ -17,25 +17,25 @@ const composer = (props) => {
   // Track reactive role changes
   Roles.getRolesForUser(currentUser)
 
-  let isReadyToPrint = true // Needed for printing only
-  if (currentUser) {
-    isReadyToPrint = every(s => s.ready())([
-      subscribe('timesheets'),
-      subscribe('inboundCalls'),
-      subscribe('appointments-today'),
-      subscribe('availabilities'),
-      subscribe('constraints'),
-      subscribe('schedules-holidays'),
-      subscribe('settings'),
-      subscribe('inboundCalls-counts'),
-      subscribe('inboundCallsTopics'),
-      subscribe('roles'),
-      subscribe('users'),
-      subscribe('groups'),
-      subscribe('tags'),
-      subscribe('calendars')
-    ])
+  if (Meteor.user()) {
+    subscribe('timesheets')
+    subscribe('inboundCalls')
+    subscribe('appointments-today')
+    subscribe('availabilities')
+    subscribe('constraints')
+    subscribe('schedules-holidays')
+    subscribe('settings')
+    subscribe('inboundCalls-counts')
+    subscribe('inboundCallsTopics')
   }
+
+  const isReadyToPrint = every(s => s.ready())([
+    subscribe('roles'),
+    subscribe('users'),
+    subscribe('groups'),
+    subscribe('tags'),
+    subscribe('calendars')
+  ])
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments\//)
 

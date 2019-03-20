@@ -11,7 +11,7 @@ const defaultStyle = {
 }
 
 export const Loading = ({ size = 70, thickness = 4, style = defaultStyle }) => (
-  <div className='loading' style={containerStyle} >
+  <div className='loading hide-print' style={containerStyle} >
     <CircularProgress
       key='loading'
       size={size}

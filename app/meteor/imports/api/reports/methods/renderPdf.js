@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer'
 import { dayToSlug } from '../../../util/time/day'
+import { withTrustedAccessToken } from '../../../util/meteor/withTrustedAccessToken'
 
 const printOptions = {
   format: 'A4',
@@ -68,8 +69,11 @@ const printToPDF = async ({ url, printOptions }) => {
 
 export const renderPdf = async ({ day }) => {
   const slug = dayToSlug(day)
-  const url = `http://localhost:${process.env.PORT}/reports/day/${slug}#print`
-  const pdf = await printToPDF({ url, printOptions })
+
+  const pdf = withTrustedAccessToken(async accessToken => {
+    const url = `http://localhost:${process.env.PORT}/reports/day/${slug}?accessToken=${accessToken}#print`
+    return printToPDF({ url, printOptions })
+  })
 
   return pdf
 }
