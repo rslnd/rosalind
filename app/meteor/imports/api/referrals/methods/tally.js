@@ -1,27 +1,32 @@
+import _moment from 'moment-timezone'
+import { extendMoment } from 'moment-range'
 import identity from 'lodash/identity'
 import sortBy from 'lodash/fp/sortBy'
 import sum from 'lodash/sum'
 import uniq from 'lodash/uniq'
-import { startOfMonth, startOfDay, endOfDay, addDays, isWithinInterval } from 'date-fns'
+
+const moment = extendMoment(_moment)
 
 export const tally = ({ date, from, to, referrals, futureAppointments = [] }) => {
   const period = (from && to)
     ? ({
-      start: startOfDay(from),
-      end: endOfDay(to)
+      start: moment(from).startOf('day').toDate(),
+      end: moment(to).endOf('day').toDate()
     }) : ({
-      start: startOfMonth(date),
-      end: endOfDay(addDays(date, 1))
+      start: moment(date).startOf('month').toDate(),
+      end: moment(date).add(1, 'day').endOf('day').toDate()
     })
 
-  const todayPeriod = {
-    start: startOfDay(addDays(date, 1)), // Ugh, time zones anyone?
-    end: endOfDay(addDays(date, 1))
-  }
+  const periodRange = moment.range(period.start, period.end)
 
-  const isWithinPeriod = d => d && isWithinInterval(d, period)
+  const todayPeriod = moment.range(
+    moment(date).startOf('day'),
+    moment(date).endOf('day')
+  )
 
-  const isToday = d => d && isWithinInterval(d, todayPeriod)
+  const isWithinPeriod = d => d && periodRange.contains(d)
+
+  const isToday = d => d && todayPeriod.contains(d)
 
   const futureAppointmentsCreatedToday = futureAppointments
     .filter(a => isToday(a.createdAt))

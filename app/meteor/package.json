@@ -19,7 +19,6 @@
     "co-body": "^6.0.0",
     "color-hash": "^1.0.3",
     "core-js": "^2.6.5",
-    "date-fns": "2.0.0-alpha.27",
     "dedent": "^0.7.0",
     "dot-object": "^1.7.1",
     "drag-drop": "^4.2.0",

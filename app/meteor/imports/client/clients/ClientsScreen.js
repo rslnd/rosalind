@@ -2,8 +2,7 @@ import React from 'react'
 import Switch from '@material-ui/core/Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import de from 'date-fns/locale/de'
-import { formatDistance } from 'date-fns'
+import moment from 'moment-timezone'
 import { toClass } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
@@ -41,7 +40,7 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   },
   {
     header: 'Letzte Aktion',
-    render: c => c.lastActionAt && formatDistance(c.lastActionAt, new Date(), { locale: de })
+    render: c => c.lastActionAt && moment(c.lastActionAt).fromNow()
   },
   {
     header: 'System-Info',
@@ -67,7 +66,7 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   },
   {
     header: 'Verbunden am',
-    render: c => c.pairedAt && formatDistance(c.pairedAt, new Date(), { locale: de })
+    render: c => c.pairedAt && moment(c.pairedAt).fromNow()
   },
   {
     header: 'Verbunden von',

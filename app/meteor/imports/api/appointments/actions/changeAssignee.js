@@ -1,4 +1,4 @@
-import { startOfDay, endOfDay } from 'date-fns'
+import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
@@ -26,13 +26,18 @@ export const changeAssignee = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      Appointments.update({
+      const date = dayToDate(day)
+      const selector = {
+        calendarId,
         start: {
-          $gte: startOfDay(dayToDate(day)),
-          $lte: endOfDay(dayToDate(day))
-        },
-        assigneeId: oldAssigneeId,
-        calendarId
+          $gte: moment(date).startOf('day').toDate(),
+          $lte: moment(date).endOf('day').toDate()
+        }
+      }
+
+      Appointments.update({
+        ...selector,
+        assigneeId: oldAssigneeId
       }, {
         $set: {
           assigneeId: newAssigneeId
@@ -42,13 +47,9 @@ export const changeAssignee = ({ Appointments }) => {
       })
 
       Schedules.update({
+        ...selector,
         type: 'override',
-        start: {
-          $gte: startOfDay(dayToDate(day)),
-          $lte: endOfDay(dayToDate(day))
-        },
-        userId: oldAssigneeId,
-        calendarId
+        userId: oldAssigneeId
       }, {
         $set: {
           userId: newAssigneeId
