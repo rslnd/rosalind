@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { Schedules } from '../'
 import { publish } from '../../../util/meteor/publish'
-import { dayToDate } from '../../../util/time/day'
+import { dayToDate, daySelector } from '../../../util/time/day'
 
 export default () => {
   publish({
@@ -17,11 +17,19 @@ export default () => {
       const date = dayToDate({ year, month, day })
       const selector = {
         calendarId,
-        type: 'override',
-        start: {
-          $gte: moment(date).startOf('day').toDate(),
-          $lte: moment(date).endOf('day').toDate()
-        }
+        $or: [
+          {
+            type: 'override',
+            start: {
+              $gte: moment(date).startOf('day').toDate(),
+              $lte: moment(date).endOf('day').toDate()
+            }
+          },
+          {
+            type: 'day',
+            ...daySelector({ year, month, day })
+          }
+        ]
       }
 
       return Schedules.find(selector, {

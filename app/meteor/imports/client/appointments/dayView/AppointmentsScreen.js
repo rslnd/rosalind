@@ -85,6 +85,7 @@ export class AppointmentsScreen extends React.Component {
       assignees,
       appointments,
       availabilities,
+      schedules,
       date,
       daySchedule,
       canEditSchedules,
@@ -141,6 +142,7 @@ export class AppointmentsScreen extends React.Component {
                 assignees={assignees || []}
                 appointments={appointments || []}
                 availabilities={availabilities || []}
+                schedules={schedules || []}
                 date={date}
                 daySchedule={daySchedule}
                 calendar={calendar}

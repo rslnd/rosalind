@@ -3,8 +3,6 @@ import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
 import { isFirstSlot, isLastSlot } from './timeSlots'
 import { darkGrayDisabled } from '../../../layout/styles'
-import { withTracker } from '../../../components/withTracker'
-import { Schedules } from '../../../../api/schedules'
 
 monkey(moment)
 
@@ -21,25 +19,7 @@ const style = {
   }
 }
 
-const withSchedules = props => {
-  const selector = {
-    type: 'override',
-    calendarId: props.calendar._id,
-    start: {
-      $gt: moment(props.date).startOf('day').toDate(),
-      $lt: moment(props.date).endOf('day').toDate()
-    }
-  }
-
-  const schedules = Schedules.find(selector).fetch()
-
-  return {
-    ...props,
-    schedules
-  }
-}
-
-export const schedules = withTracker(withSchedules)(({ schedules, onDoubleClick, slotSize }) =>
+export const schedules = ({ schedules, onDoubleClick, slotSize }) =>
   schedules.map(s =>
     <Schedule
       key={s._id}
@@ -52,7 +32,6 @@ export const schedules = withTracker(withSchedules)(({ schedules, onDoubleClick,
       onDoubleClick={onDoubleClick}
     />
   )
-)
 
 const Schedule = ({ start, end, note, scheduleId, assigneeId, slotSize, onDoubleClick }) => {
   const timeStart = moment(start).floor(5, 'minutes')

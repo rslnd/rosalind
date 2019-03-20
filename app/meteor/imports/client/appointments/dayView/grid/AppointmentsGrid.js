@@ -4,7 +4,7 @@ import { appointments as renderAppointments } from './appointments'
 import { timeLegend } from './timeLegend'
 import { blanks } from './blanks'
 import { availabilities as renderAvailabilities } from './availabilities'
-import { schedules } from './schedules'
+import { schedules as renderSchedules } from './schedules'
 import { overrideOverlay } from './overrideOverlay'
 
 // row name    | column names
@@ -16,7 +16,20 @@ import { overrideOverlay } from './overrideOverlay'
 // ...         | ...
 // [21:00]     | [time] [assignee-1] [assignee-2] ... [assignee-n]
 
-export const AppointmentsGrid = ({ calendar, date, assignees, appointments, availabilities, onAppointmentClick, onBlankMouseEnter, onBlankClick, override, onScheduleModalOpen, move }) => {
+export const AppointmentsGrid = ({
+  calendar,
+  date,
+  assignees,
+  appointments,
+  availabilities,
+  schedules,
+  onAppointmentClick,
+  onBlankMouseEnter,
+  onBlankClick,
+  override,
+  onScheduleModalOpen,
+  move
+}) => {
   const slotSize = calendar.slotSize || 5
   const gridTimeSlots = timeSlots(slotSize).map((time) => `[${time}] 25px`).join(' ')
 
@@ -46,7 +59,7 @@ export const AppointmentsGrid = ({ calendar, date, assignees, appointments, avai
       {ffAva ? null : blanks({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
       {ffAva ? renderAvailabilities({ calendar, date, availabilities, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter }) : null}
       {ffAva ? null : overrideOverlay(override)}
-      {ffAva ? null : schedules({ slotSize, assignees, date, calendar, onDoubleClick: onScheduleModalOpen })}
+      {ffAva ? null : renderSchedules({ slotSize, schedules, assignees, date, calendar, onDoubleClick: onScheduleModalOpen })}
       {timeLegend({ slotSize })}
     </div>
   )

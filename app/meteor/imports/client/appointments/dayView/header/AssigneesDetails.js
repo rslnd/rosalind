@@ -55,7 +55,7 @@ export const BreakLines = ({ children, placeholder }) =>
     : (placeholder || null)
 
 const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onChangeNote, isLast }) => {
-  const isDayNoteColumn = (!assignee.assigneeId || (!calendar.allowUnassigned && isLast))
+  const isDayNoteColumn = (!assignee || (!calendar.allowUnassigned && isLast))
   const hasDayNote = (daySchedule && (daySchedule.note || daySchedule.noteDetails))
   const style = (isDayNoteColumn && (canEditSchedules || hasDayNote))
     ? { ...relevantCellStyle, ...cellStyle }
@@ -121,7 +121,7 @@ export const AssigneesDetails = ({ calendar, daySchedule, assignees, expanded, c
     {
       assignees.map((assignee, i) =>
         <Cell
-          key={assignee.assigneeId}
+          key={assignee ? assignee._id : 'unassigned'}
           calendar={calendar}
           canEditSchedules={canEditSchedules}
           onChangeNote={onChangeNote}

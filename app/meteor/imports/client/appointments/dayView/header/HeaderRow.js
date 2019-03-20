@@ -241,7 +241,7 @@ export class HeaderRow extends React.Component {
           onChangeNote={onChangeCalendarNote}
         />
 
-        {/* <AssigneesDetails
+        <AssigneesDetails
           date={date}
           calendar={calendar}
           daySchedule={daySchedule}
@@ -249,7 +249,7 @@ export class HeaderRow extends React.Component {
           onChangeNote={onChangeNote}
           assignees={assignees}
           expanded={this.state.hovering} />
-        <div style={topPaddingStyle} /> */}
+        <div style={topPaddingStyle} />
 
         {
           this.state.changingAssignee &&

@@ -9,7 +9,7 @@ import { Roles } from 'meteor/alanning:roles'
 import { __ } from '../../../i18n'
 import { compose } from 'recompose'
 import { withTracker } from '../../components/withTracker'
-import { dateToDay } from '../../../util/time/day'
+import { dateToDay, daySelector } from '../../../util/time/day'
 import { Users } from '../../../api/users'
 import { Patients } from '../../../api/patients'
 import { Calendars } from '../../../api/calendars'
@@ -69,21 +69,27 @@ const composer = (props) => {
     }
   }
 
+  const daySchedule = Schedules.findOne({
+    type: 'day',
+    calendarId,
+    ...daySelector(day)
+  })
+
+  const assigneeIds = daySchedule ? (daySchedule.userIds || []) : []
+  const assignees = Users.find({ _id: { $in: assigneeIds } }, { sort: { lastName: 1 } }).fetch()
+
   const schedules = Schedules.find({
     type: 'override',
+    userId: { $in: assigneeIds },
     ...selector
   }).fetch()
 
-  const assigneeIds = uniq(schedules.map(s => s.userId))
-  const assignees = Users.find({ _id: { $in: assigneeIds } }, { sort: { lastName: 1 } }).fetch()
-
   if (calendar.allowUnassigned) {
     assignees.push(null)
+    assigneeIds.push(null)
   }
 
-  const appointmentSelector = calendar.allowUnassigned
-    ? selector
-    : { ...selector, assigneeId: { $ne: null } }
+  const appointmentSelector = { ...selector, assigneeId: { $in: assigneeIds } }
 
   // Performance: Only render appts when schedules are here to avoid janky ui
   const appointments = schedulesSub.ready()
@@ -100,6 +106,7 @@ const composer = (props) => {
 
   return {
     day,
+    daySchedule,
     calendar,
     date,
     appointments,

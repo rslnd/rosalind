@@ -295,6 +295,7 @@ export class AppointmentsView extends React.Component {
             assignees={this.props.assignees}
             appointments={this.props.appointments}
             availabilities={this.props.availabilities}
+            schedules={this.props.schedules}
             onAppointmentClick={this.handleAppointmentClick}
             onBlankClick={this.handleBlankClick}
             onBlankMouseEnter={this.handleBlankHover}
