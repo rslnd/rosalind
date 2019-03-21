@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.198",
+  "version": "0.0.199",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -49,7 +49,8 @@
     ],
     "extraResources": [
       "assets/eoswinPrinter.reg",
-      "assets/generateEoswinReports.exe"
+      "assets/generateEoswinReports.exe",
+      "assets/focus.exe"
     ],
     "generateUpdatesFilesForAllChannels": true,
     "readonly": true,
