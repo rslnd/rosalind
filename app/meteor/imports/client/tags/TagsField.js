@@ -1,4 +1,5 @@
 import React from 'react'
+import isEqual from 'lodash/isEqual'
 import { Tags } from '../../api/tags'
 import { Appointments } from '../../api/appointments'
 import { TagsList } from './TagsList'
@@ -105,6 +106,8 @@ export class TagsField extends React.Component {
 
   // Check if any forbidden tags were passed as value prop and dispatch update accordingly
   componentDidMount () {
+    if (!this.props.autocorrectTags) { return }
+
     const value = this.props.input.value
     if (!value || value.length === 0) { return }
 
@@ -132,8 +135,10 @@ export class TagsField extends React.Component {
 
     const constrainedValue = value.filter(v => constrainedTagIds.includes(v))
 
-    console.log('[TagsField] Filtering tag selection from', value, 'to', constrainedValue)
-    this.props.input.onChange(constrainedValue)
+    if (!isEqual(value, constrainedValue)) {
+      console.log('[TagsField] Filtering tag selection from', value, 'to', constrainedValue)
+      this.props.input.onChange(constrainedValue)
+    }
   }
 
   render () {

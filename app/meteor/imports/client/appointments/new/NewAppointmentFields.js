@@ -62,6 +62,7 @@ export const NewAppointmentFields = props => {
               calendarId={calendarId}
               assigneeId={assigneeId}
               showDefaultRevenue={false}
+              autocorrectTags
               time={time}
               constraint={constraint}
               fullWidth />
