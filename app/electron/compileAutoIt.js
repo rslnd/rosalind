@@ -3,6 +3,7 @@ const childProcess = require('child_process')
 
 const autoItScripts = [
   ['focus', 'focus.exe'], // Place focus.exe inside root directory next to Rosalind.exe
+  ['focus', path.join('assets', 'focus.exe')], // Place focus.exe also inside assets dir
   ['generateEoswinReports', path.join('assets', 'generateEoswinReports.exe')] // Pack with asar
 ]
 
