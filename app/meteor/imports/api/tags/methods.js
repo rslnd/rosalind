@@ -15,7 +15,7 @@ export default ({ Tags }) => {
   const expand = (tags = []) =>
     tags.map(t =>
       typeof t === 'string'
-        ? Tags.findOne({ _id: t }, { removed: true })
+        ? Tags.findOne({ _id: t }, { sort: { order: 1 }, removed: true })
         : t
     )
 
