@@ -14,10 +14,15 @@ export const hibp = action({
 
 // Adapted from https://github.com/pthm/hibp-checker by Patt-tom McDonnell
 export const queryHibp = hashPrefix => {
-  const api = 'https://api.pwnedpasswords.com/range'
 
   return new Promise((resolve, reject) => {
-    get([api, hashPrefix].join('/'), res => {
+    const options = {
+      host: 'api.pwnedpasswords.com',
+      headers: { 'user-agent': 'rslnd/rosalind' },
+      path: `/range/${hashPrefix}`
+    }
+
+    get(options, res => {
       let response = ''
 
       res.on('data', (d) => {
