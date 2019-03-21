@@ -133,7 +133,7 @@ export class HeaderRow extends React.Component {
     if (oldAssigneeId === newAssigneeId) { return }
 
     const todaysAssigneeIds = this.props.assignees
-      .map(a => a.assigneeId).filter(identity)
+      .map(a => a && a._id).filter(identity)
 
     if (todaysAssigneeIds.includes(newAssigneeId)) {
       Alert.error(__('appointments.changeAssigneeMustBeDifferent'))
