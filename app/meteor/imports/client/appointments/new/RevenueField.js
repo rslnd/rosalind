@@ -7,7 +7,7 @@ import { currency } from '../../../util/format'
 
 export const calculateRevenue = (tagIds = []) => {
   if (tagIds && tagIds.length > 0) {
-    const tags = Tags.find({ _id: { $in: tagIds } })
+    const tags = Tags.methods.expand(tagIds)
     return max(tags.map(t => t.defaultRevenue))
   }
 }

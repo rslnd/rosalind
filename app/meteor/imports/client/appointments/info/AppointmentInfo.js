@@ -56,10 +56,9 @@ export class AppointmentInfo extends React.Component {
   componentWillMount () {
     // TODO: This doensn't work.
     // TODO: How to show validation errors even on untouched fields?
-    setTimeout(() =>
-      touch('appointmentInfoForm', 'contacts', 'birthday', 'insuranceId'),
-      500
-    )
+    setTimeout(() => {
+      touch('appointmentInfoForm', 'patient.contacts', 'patient.birthday', 'patient.insuranceId')
+    }, 500)
   }
 
   // BUG: This seems to never get called. Why?

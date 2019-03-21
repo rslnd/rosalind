@@ -14,11 +14,7 @@ const CurrencyFieldInner = (props) => {
   return <NumberFormat
     {...restProps}
     onValueChange={values => {
-      props.onChange({
-        target: {
-          value: values.value
-        }
-      })
+      props.onChange(values.value)
     }}
     thousandSeparator=' '
     decimalSeparator=','
