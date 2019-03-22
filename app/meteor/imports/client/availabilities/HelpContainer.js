@@ -104,7 +104,13 @@ export class HelpContainer extends React.Component {
   }
 
   focusSearch () {
+    // Fix focus that scrolls the page to the end
+    const x = window.scrollX
+    const y = window.scrollY
+
     this.searchRef && this.searchRef.focus()
+
+    window.scrollTo(x, y)
   }
 
   render () {

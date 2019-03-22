@@ -49,8 +49,6 @@ const composer = (props) => {
   const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
   const { dispatch, move } = props
 
-  console.log('subbing', { ...day, calendarId })
-
   const appointmentsSub = subsCache.subscribe('appointments-day', { ...day, calendarId })
   const schedulesSub = subsCache.subscribe('schedules-day', { ...day, calendarId })
 

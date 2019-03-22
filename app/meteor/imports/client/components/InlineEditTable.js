@@ -254,7 +254,7 @@ export class Table extends React.Component {
       >{
           ({ portal, openPortal, closePortal, isOpen }) =>
             <div>
-              <div style={{ overflowX: 'scroll' }}>
+              <div style={{ overflowX: 'auto' }}>
                 <table className='table'>
                   <thead>
                     <tr>

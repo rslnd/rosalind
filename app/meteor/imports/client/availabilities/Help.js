@@ -267,7 +267,7 @@ const resultsStyle = {
 
 const resultsListStyle = {
   flex: 3,
-  overflowY: 'scroll'
+  overflowY: 'auto'
 }
 
 const hoverDetailsStyle = {
