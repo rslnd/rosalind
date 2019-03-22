@@ -10,16 +10,25 @@ const sectionStart = {
 
 export const Patient = () =>
   <div style={containerStyle}>
-    <Name />
-    <Birthday />
-    <InsuranceId />
-    <Note />
-    <Address />
-    <Loyalty />
+    <div>
+      <Name />
+      <Birthday />
+      <InsuranceId />
+      <Note />
+      <Address />
+    </div>
+    <div>
+      <Loyalty />
+      <PatientActions />
+    </div>
   </div>
 
 const containerStyle = {
-  padding: 12
+  padding: 8,
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between'
 }
 
 const Name = () =>
@@ -88,11 +97,17 @@ const addressStyle = {
 
 const Loyalty = () =>
   <div style={loyaltyStyle}>
-    <div>Patientin seit Jänner 2019</div>
     <div>Gesamtumsatz €6500</div>
+    <div>Patientin seit Jänner 2019</div>
   </div>
 
 const loyaltyStyle = {
   ...sectionStart,
   ...secondary
 }
+
+const PatientActions = () =>
+  <div style={loyaltyStyle}>
+    <div>Datenschutz akzeptiert am 12.03.2019</div>
+    <div>SMS Verlauf anzeigen</div>
+  </div>
