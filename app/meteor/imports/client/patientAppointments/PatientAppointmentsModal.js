@@ -1,5 +1,6 @@
 import React from 'react'
 import { Portal } from 'react-portal'
+import { withPropsOnChange } from 'recompose'
 import { Appointments } from './Appointments'
 import { AppointmentActionsContainer } from '../appointments/info/AppointmentActionsContainer'
 import { background, modalBackground, darkGray, grayDisabled, darkGrayActive, sidebarBackground, gray, lightBackground, mutedSeparator, mutedBackground, darkerMutedBackground } from '../layout/styles'
@@ -7,10 +8,21 @@ import { Paper } from '@material-ui/core'
 import injectSheet from 'react-jss'
 import { Patient } from './Patient'
 
-export const PatientAppointmentsModal = ({ show, onClose, ...props }) =>
+export const PatientAppointmentsModal = withPropsOnChange(
+  ['show'],
+  props => {
+    // Prevent page from scrolling while modal is open
+    if (props.show) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = null
+    }
+    return {}
+  }
+)(({ show, onClose, ...props }) =>
   <Portal>
     {
-      show && <div style={modalStyle}>
+      <div style={show ? modalStyle : hiddenStyle}>
         <div
           style={backdropStyle}
           onClick={onClose}
@@ -34,8 +46,14 @@ export const PatientAppointmentsModal = ({ show, onClose, ...props }) =>
       </div>
     }
   </Portal>
+)
 
 const borderRadius = 6
+
+const hiddenStyle = {
+  opacity: 0,
+  pointerEvents: 'none'
+}
 
 const modalStyle = {
   position: 'absolute',
@@ -90,6 +108,7 @@ const patientSidebarStyle = {
   zIndex: 2,
   boxShadow: '-4px 0px 5px -1px rgba(0,0,0,0.1)',
   width: '30%',
+  overflow: 'auto',
   backgroundColor: lightBackground,
   borderRadius: `0 ${borderRadius}px 0 0`
 }
@@ -107,6 +126,7 @@ const actionsStyle = {
 
 const closeButtonStyle = {
   closeButton: {
+    zIndex: 4,
     position: 'absolute',
     borderRadius: `0 ${borderRadius}px 0 0`,
     top: 0,
