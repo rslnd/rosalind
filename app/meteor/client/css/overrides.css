@@ -253,6 +253,8 @@ h6,
 /* Smooch livechat */
 #web-messenger-container {
   z-index: 1070;
+  user-select: none;
+  cursor: default;
 }
 
 /* Prevent opening animation of react-dates picker */
