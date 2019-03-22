@@ -12,6 +12,7 @@ import { background } from '../../layout/styles'
 import { PatientModal } from '../../patients/PatientModal'
 import { getClientKey, toNative } from '../../../startup/client/native/events'
 import { Loading } from '../../components/Loading'
+import { Tooltip } from '../../components/Tooltip'
 
 const contentHeaderStyle = {
   background,
@@ -107,12 +108,15 @@ export class AppointmentsScreen extends React.Component {
             <small>
               {weekOfYear(date, { short: true })}
               &nbsp;
-              <span
-                style={printStyle}
+              <Tooltip
                 title={__('appointments.printDayView')}
-                onClick={this.handlePrint}>
-                <Icon name='print' />
-              </span>
+              >
+                <span
+                  style={printStyle}
+                  onClick={this.handlePrint}>
+                  <Icon name='print' />
+                </span>
+              </Tooltip>
             </small>
           </h1>
 

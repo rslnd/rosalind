@@ -90,5 +90,6 @@ export const appointments = {
   nextTreatmentSuccess: 'Nächste Behandlung gestartet',
   changeWaitlistAssigneeSuccess: 'Verschoben',
   changeWaitlistAssignee: 'Verschieben',
-  error: 'Entschuldigung! Bitte noch einmal versuchen.'
+  error: 'Entschuldigung! Bitte noch einmal versuchen.',
+  oldestAppointment: 'Ältester Termin'
 }

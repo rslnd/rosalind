@@ -53,7 +53,7 @@ const firstNameStyle = {
 
 const Birthday = () =>
   <div style={birthdayStyle}>
-    1. Jänner 1953 (66 Jahre)
+    66 Jahre (1. Jänner 1953)
   </div>
 
 const birthdayStyle = {

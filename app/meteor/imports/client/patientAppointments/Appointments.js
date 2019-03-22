@@ -1,8 +1,13 @@
 import React from 'react'
 import { Icon } from '../components/Icon'
-import { green, lighterMutedBackground, darkerMutedBackground } from '../layout/styles'
+import { green, darkGray, lighterMutedBackground, darkerMutedBackground } from '../layout/styles'
+import { Tooltip } from '../components/Tooltip'
+import { TagsList } from '../tags/TagsList'
+import { __ } from '../../i18n'
 
-export const Appointments = () =>
+export const Appointments = ({
+  pastAppointments = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+}) =>
   <div style={containerStyle}>
     <div style={floatingStyle}>
       <div style={shadowStyle}>
@@ -12,10 +17,25 @@ export const Appointments = () =>
     <div style={appointmentsContainerStyle}>
       <div> {/* Inside this div things will not be reversed */}
         {
-          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(id =>
-            <Appointment key={id} isSelected={id === 9} />
+          pastAppointments.length > 6 &&
+            <Oldest />
+        }
+        {
+          pastAppointments.map(id =>
+            <Appointment
+              key={id}
+              hasMedia={(id % 3) === 0}
+            />
           )
         }
+        {
+          pastAppointments.length > 1 &&
+            <Current />
+        }
+        <Appointment
+          key='current'
+          isCurrent
+        />
       </div>
     </div>
   </div>
@@ -28,20 +48,20 @@ const containerStyle = {
 
 const floatingStyle = {
   position: 'absolute',
-  width: '70%',
+  width: '67%',
   top: 0,
   zIndex: 3,
   height: 28,
-  paddingLeft: 10,
-  paddingRight: 10
+  pointerEvents: 'none'
 }
 
 const shadowStyle = {
   position: 'relative',
   width: '100%',
   height: 25,
-  background: `linear-gradient(to bottom, ${darkerMutedBackground} 0%, rgba(0,0,0,0) 100%)`,
-  pointerEvents: 'none'
+  background: 'linear-gradient(hsla(220, 8%, 52%, 0.37) 0%, rgba(0, 0, 0, 0) 100%)',
+  pointerEvents: 'none',
+  borderRadius: '4px 0 0 0'
 }
 
 const Filter = () =>
@@ -59,7 +79,8 @@ const filterTabStyle = {
   opacity: 0.9,
   background: '#eef1f5',
   borderRadius: '0 0 5px 5px',
-  border: '1px solid #a5b0c44a'
+  border: '1px solid #a5b0c44a',
+  pointerEvents: 'auto'
 }
 
 const filterStyle = {
@@ -71,11 +92,20 @@ const filterStyle = {
   opacity: 0.9
 }
 
-const Appointment = ({ isSelected }) =>
-  <div style={isSelected ? selectedAppointmentStyle : appointmentStyle}>
+const Appointment = ({ isCurrent, hasMedia }) =>
+  <div style={
+    isCurrent
+      ? currentAppointmentStyle
+      : appointmentStyle
+  }>
     <Info />
     <Tags />
     <Note />
+
+    {
+      hasMedia &&
+        <Media />
+    }
   </div>
 
 const appointmentsContainerStyle = {
@@ -90,60 +120,144 @@ const appointmentsContainerStyle = {
 const appointmentStyle = {
   borderRadius: 4,
   background: lighterMutedBackground,
-  height: 120,
   margin: 12
 }
 
-const selectedAppointmentStyle = {
+const currentAppointmentStyle = {
   ...appointmentStyle,
-  background: '#fff'
+  background: '#fff',
+  marginBottom: 36
+}
+
+const Media = () =>
+  <div style={mediaBackgroundStyle}>
+    &nbsp;
+  </div>
+
+const mediaBackgroundStyle = {
+  height: 120,
+  width: '100%',
+  backgroundColor: '#7f8288',
+  boxShadow: 'inset 0px 0px 5px 0px rgba(0,0,0,0.24)',
+  borderRadius: `0 0 ${appointmentStyle.borderRadius}px ${appointmentStyle.borderRadius}px`
 }
 
 const Info = () =>
   <div style={infoStyle}>
-    <span style={dateNameColumnStyle}>
+    <span style={flexStyle}>
       <span style={dateColumnStyle}>
-        <Icon name='diamond' />
+        <Icon name='diamond' style={calendarIconStyle} />
         &nbsp;
         <Date />
       </span>
       <Assignee />
     </span>
 
-    <Indicator />
+    <span style={flexStyle}>
+      <Revenue />
+      <Indicator />
+    </span>
   </div>
 
 const infoStyle = {
   display: 'flex',
   width: '100%',
   justifyContent: 'space-between',
-  padding: 12
+  padding: 12,
+  paddingTop: 9,
+  opacity: 0.9
 }
 
-const dateNameColumnStyle = {
+// Fix icon alignmeht with text spans
+const infoIconStyle = {
+  marginTop: '2.5px'
+}
+
+const calendarIconStyle = {
+  ...infoIconStyle,
+  marginRight: 5
+}
+
+const flexStyle = {
   display: 'flex'
 }
 
 const dateColumnStyle = {
   display: 'flex',
-  width: 260
+  width: 240
 }
 
 const Date = () =>
-  <span>30. Jänner</span>
+  <Tooltip title={'Donnerstag, 30. Jänner 2019 um 18:33 Uhr'}>
+    <span>Do., 30. Jänner</span>
+  </Tooltip>
 
 const Assignee = () =>
   <span>Dr. Jörg Prettenhofer</span>
+
+const Revenue = () =>
+  <div style={revenueStyle}>
+    <span style={revenueUnitStyle}>€&nbsp;</span>50
+  </div>
+
+const revenueStyle = {
+  paddingRight: 14
+}
+
+const revenueUnitStyle = {
+  opacity: 0.8,
+  fontSize: '90%'
+}
 
 const Indicator = () =>
   <Icon name='check' style={indicatorStyle} />
 
 const indicatorStyle = {
+  ...infoIconStyle,
   color: green
 }
 
 const Tags = () =>
-  <div>Tags</div>
+  <div style={tagsStyle}>
+    <TagsList
+      tiny
+      tags={['DtidkFN6GSh6BMpTJ', '6XpjfwyaCrzoZKQqq']}
+    />
+  </div>
+
+const tagsStyle = {
+  paddingLeft: 10
+}
 
 const Note = () =>
-  <div>Note </div>
+  <div style={noteStyle}>
+    Note
+  </div>
+
+const noteStyle = {
+  paddingTop: 20,
+  paddingBottom: 20,
+  paddingLeft: 15,
+  paddingRight: 15
+}
+
+const Oldest = () =>
+  <div style={oldestStyle}>
+    {__('appointments.oldestAppointment')}
+  </div>
+
+const oldestStyle = {
+  paddingTop: 55,
+  marginLeft: dateColumnStyle.width + 12 + 12, // Fake same column as assignee name
+  opacity: 0.3
+}
+
+const Current = () =>
+  <div style={currentStyle}>
+    {__('appointments.thisCurrent')}
+  </div>
+
+const currentStyle = {
+  ...oldestStyle,
+  paddingTop: 25
+}

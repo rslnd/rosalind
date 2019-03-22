@@ -22,7 +22,7 @@ export const PatientAppointmentsModal = withPropsOnChange(
 )(({ show, onClose, ...props }) =>
   <Portal>
     {
-      <div style={show ? modalStyle : hiddenStyle}>
+      <div className='disable-select' style={show ? modalStyle : hiddenStyle}>
         <div
           style={backdropStyle}
           onClick={onClose}
@@ -79,8 +79,8 @@ const modalWindowStyle = {
   flex: 1,
   background: background,
   borderRadius,
-  width: '85%',
-  maxWidth: 'calc(85% - 120px)', // Keep chat bubble visible
+  width: '90%',
+  maxWidth: 'calc(90% - 120px)', // Keep chat bubble visible
   height: '90%',
   maxHeight: 'calc(90% - 35px)' // Keep clearance on top and bottom
 }
@@ -97,7 +97,7 @@ const columnsStyle = {
 }
 
 const appointmentsStyle = {
-  width: '70%',
+  width: '67%',
   height: '100%',
   background: darkerMutedBackground,
   borderRadius: `${borderRadius}px 0 0 0`
@@ -107,7 +107,7 @@ const patientSidebarStyle = {
   padding: 12,
   zIndex: 2,
   boxShadow: '-4px 0px 5px -1px rgba(0,0,0,0.1)',
-  width: '30%',
+  width: 'calc(100% - 67%)', // More obvious to replace with Cmd+F
   overflow: 'auto',
   backgroundColor: lightBackground,
   borderRadius: `0 ${borderRadius}px 0 0`
