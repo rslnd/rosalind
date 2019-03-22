@@ -2,7 +2,7 @@ import React from 'react'
 import { Portal } from 'react-portal'
 import { Appointments } from './Appointments'
 import { AppointmentActionsContainer } from '../appointments/info/AppointmentActionsContainer'
-import { background, modalBackground, darkGray, grayDisabled } from '../layout/styles'
+import { background, modalBackground, darkGray, grayDisabled, darkGrayActive, sidebarBackground, gray, lightBackground, mutedSeparator, mutedBackground, darkerMutedBackground } from '../layout/styles'
 import { Paper } from '@material-ui/core'
 import injectSheet from 'react-jss'
 import { Patient } from './Patient'
@@ -81,18 +81,28 @@ const columnsStyle = {
 const appointmentsStyle = {
   width: '70%',
   height: '100%',
-  background: grayDisabled,
+  background: darkerMutedBackground,
   borderRadius: `${borderRadius}px 0 0 0`
 }
 
 const patientSidebarStyle = {
-  width: '30%'
+  padding: 12,
+  zIndex: 2,
+  boxShadow: '-4px 0px 5px -1px rgba(0,0,0,0.1)',
+  width: '30%',
+  backgroundColor: lightBackground,
+  borderRadius: `0 ${borderRadius}px 0 0`
 }
 
 const actionsStyle = {
-  height: 50,
+  height: 80,
   width: '100%',
-  padding: 5
+  zIndex: 1,
+  padding: 15,
+  backgroundColor: mutedBackground,
+  boxShadow: '0px -3px 5px -1px rgba(0,0,0,0.1)',
+  borderTop: `1px solid ${mutedSeparator}`,
+  borderRadius: `0 0 ${borderRadius}px ${borderRadius}px`
 }
 
 const closeButtonStyle = {

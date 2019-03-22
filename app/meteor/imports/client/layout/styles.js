@@ -3,6 +3,12 @@ import { color, lightness } from 'kewler'
 export const fontStack = `'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif`
 
 export const background = '#ecf0f5'
+export const lightBackground = '#f8f9f9'
+
+export const mutedBackground = '#eef1f5'
+export const lighterMutedBackground = '#e5e7eb'
+export const darkerMutedBackground = '#d6d9df'
+export const mutedSeparator = '#abb6ca'
 
 export const primaryActive = '#357ca5'
 export const primary = '#3c8dbc'

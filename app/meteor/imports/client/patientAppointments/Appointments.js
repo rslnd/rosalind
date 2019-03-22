@@ -1,11 +1,15 @@
 import React from 'react'
 import { Icon } from '../components/Icon'
-import { green } from '../layout/styles'
+import { green, lighterMutedBackground, darkerMutedBackground } from '../layout/styles'
 
 export const Appointments = () =>
   <div style={containerStyle}>
+    <div style={floatingStyle}>
+      <div style={shadowStyle}>
+        <Filter />
+      </div>
+    </div>
     <div style={appointmentsContainerStyle}>
-      <Filter />
       <div> {/* Inside this div things will not be reversed */}
         {
           [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(id =>
@@ -22,18 +26,49 @@ const containerStyle = {
   flexDirection: 'column'
 }
 
+const floatingStyle = {
+  position: 'absolute',
+  width: '70%',
+  top: 0,
+  zIndex: 3,
+  height: 28,
+  paddingLeft: 10,
+  paddingRight: 10
+}
+
+const shadowStyle = {
+  position: 'relative',
+  width: '100%',
+  height: 25,
+  background: `linear-gradient(to bottom, ${darkerMutedBackground} 0%, rgba(0,0,0,0) 100%)`,
+  pointerEvents: 'none'
+}
+
 const Filter = () =>
-  <div style={filterStyle}>
-    Alle Termine (36) <Icon name='caret-down' />
+  <div style={filterTabStyle}>
+    <div style={filterStyle}>
+      Alle Termine (36) <Icon name='caret-down' />
+    </div>
   </div>
 
-const filterStyle = {
-  display: 'absolute',
+const filterTabStyle = {
+  position: 'absolute',
+  // right: 39,
+  left: 120,
   top: 0,
-  right: 20,
-  width: 150,
-  height: 28,
-  padding: 6
+  opacity: 0.9,
+  background: '#eef1f5',
+  borderRadius: '0 0 5px 5px',
+  border: '1px solid #a5b0c44a'
+}
+
+const filterStyle = {
+  paddingLeft: 12,
+  paddingRight: 12,
+  paddingTop: 6,
+  paddingBottom: 6,
+  fontSize: '90%',
+  opacity: 0.9
 }
 
 const Appointment = ({ isSelected }) =>
@@ -54,9 +89,9 @@ const appointmentsContainerStyle = {
 
 const appointmentStyle = {
   borderRadius: 4,
-  background: '#ddd',
+  background: lighterMutedBackground,
   height: 120,
-  margin: 6
+  margin: 12
 }
 
 const selectedAppointmentStyle = {
@@ -82,7 +117,7 @@ const infoStyle = {
   display: 'flex',
   width: '100%',
   justifyContent: 'space-between',
-  padding: 4
+  padding: 12
 }
 
 const dateNameColumnStyle = {
