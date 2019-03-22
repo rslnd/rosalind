@@ -4,6 +4,7 @@ import { green, darkGray, lighterMutedBackground, darkerMutedBackground } from '
 import { Tooltip } from '../components/Tooltip'
 import { TagsList } from '../tags/TagsList'
 import { __ } from '../../i18n'
+import { Filter } from './Filter'
 
 export const Appointments = ({
   pastAppointments = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -62,34 +63,6 @@ const shadowStyle = {
   background: 'linear-gradient(hsla(220, 8%, 52%, 0.37) 0%, rgba(0, 0, 0, 0) 100%)',
   pointerEvents: 'none',
   borderRadius: '4px 0 0 0'
-}
-
-const Filter = () =>
-  <div style={filterTabStyle}>
-    <div style={filterStyle}>
-      Alle Termine (36) <Icon name='caret-down' />
-    </div>
-  </div>
-
-const filterTabStyle = {
-  position: 'absolute',
-  // right: 39,
-  left: 120,
-  top: 0,
-  opacity: 0.9,
-  background: '#eef1f5',
-  borderRadius: '0 0 5px 5px',
-  border: '1px solid #a5b0c44a',
-  pointerEvents: 'auto'
-}
-
-const filterStyle = {
-  paddingLeft: 12,
-  paddingRight: 12,
-  paddingTop: 6,
-  paddingBottom: 6,
-  fontSize: '90%',
-  opacity: 0.9
 }
 
 const Appointment = ({ isCurrent, hasMedia }) =>
