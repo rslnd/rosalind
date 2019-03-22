@@ -48,7 +48,7 @@ export const Filter = compose(
             ? <Divider key={i} />
             : <MenuItem
               key={o.name}
-              onClick={handleSelect(o)}
+              onClick={handleSelect}
             >
               <Icon name={o.icon} style={o.muted ? iconStyleMuted : iconStyle} />
               {o.name}
