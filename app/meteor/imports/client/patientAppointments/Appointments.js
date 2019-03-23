@@ -1,13 +1,28 @@
 import React from 'react'
+import { compose, withState, withPropsOnChange } from 'recompose'
 import { Icon } from '../components/Icon'
-import { green, darkGray, lighterMutedBackground, darkerMutedBackground } from '../layout/styles'
+import { green, lighterMutedBackground } from '../layout/styles'
 import { Tooltip } from '../components/Tooltip'
 import { TagsList } from '../tags/TagsList'
 import { __ } from '../../i18n'
 import { Filter } from './Filter'
+import { twoPlacesIfNeeded } from '../../util/format'
 
-export const Appointments = ({
-  pastAppointments = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+export const Appointments = compose(
+  withState('scrollRef', 'setScrollRef'),
+  withPropsOnChange(
+    ['show'],
+    props => {
+      if (props.show && props.scrollRef) {
+        props.scrollRef.scrollTop = Number.MAX_SAFE_INTEGER
+      }
+    }
+  )
+)(({
+  currentAppointment,
+  pastAppointments = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  fullNameWithTitle,
+  setScrollRef
 }) =>
   <div style={containerStyle}>
     <div style={floatingStyle}>
@@ -15,7 +30,7 @@ export const Appointments = ({
         <Filter />
       </div>
     </div>
-    <div style={appointmentsContainerStyle}>
+    <div ref={setScrollRef} style={appointmentsContainerStyle}> {/* Scroll this to bottom */}
       <div> {/* Inside this div things will not be reversed */}
         {
           pastAppointments.length > 6 &&
@@ -26,6 +41,7 @@ export const Appointments = ({
             <Appointment
               key={id}
               hasMedia={(id % 3) === 0}
+              fullNameWithTitle={fullNameWithTitle}
             />
           )
         }
@@ -35,11 +51,14 @@ export const Appointments = ({
         }
         <Appointment
           key='current'
+          appointment={currentAppointment}
+          fullNameWithTitle={fullNameWithTitle}
           isCurrent
         />
       </div>
     </div>
   </div>
+)
 
 const containerStyle = {
   height: '100%',
@@ -65,15 +84,15 @@ const shadowStyle = {
   borderRadius: '4px 0 0 0'
 }
 
-const Appointment = ({ isCurrent, hasMedia }) =>
+const Appointment = ({ isCurrent, hasMedia, appointment, fullNameWithTitle }) =>
   <div style={
     isCurrent
       ? currentAppointmentStyle
       : appointmentStyle
   }>
-    <Info />
-    <Tags />
-    <Note />
+    <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} />
+    <Tags {...appointment} />
+    <Note {...appointment} />
 
     {
       hasMedia &&
@@ -115,20 +134,20 @@ const mediaBackgroundStyle = {
   borderRadius: `0 0 ${appointmentStyle.borderRadius}px ${appointmentStyle.borderRadius}px`
 }
 
-const Info = () =>
+const Info = ({ appointment, fullNameWithTitle }) =>
   <div style={infoStyle}>
     <span style={flexStyle}>
       <span style={dateColumnStyle}>
         <Icon name='diamond' style={calendarIconStyle} />
         &nbsp;
-        <Date />
+        <Date {...appointment} />
       </span>
-      <Assignee />
+      <Assignee {...appointment} fullNameWithTitle={fullNameWithTitle} />
     </span>
 
     <span style={flexStyle}>
-      <Revenue />
-      <Indicator />
+      <Revenue {...appointment} />
+      <Indicator {...appointment} />
     </span>
   </div>
 
@@ -165,12 +184,17 @@ const Date = () =>
     <span>Do., 30. Jänner</span>
   </Tooltip>
 
-const Assignee = () =>
-  <span>Dr. Jörg Prettenhofer</span>
+const Assignee = ({ assigneeId, fullNameWithTitle }) =>
+  <span>{fullNameWithTitle(assigneeId)}</span>
 
-const Revenue = () =>
+const Revenue = ({ revenue }) =>
   <div style={revenueStyle}>
-    <span style={revenueUnitStyle}>€&nbsp;</span>50
+    {
+      (revenue > 0 || revenue === 0) &&
+        <>
+          <span style={revenueUnitStyle}>€&nbsp;</span>{twoPlacesIfNeeded(revenue)}
+        </>
+    }
   </div>
 
 const revenueStyle = {
@@ -190,11 +214,11 @@ const indicatorStyle = {
   color: green
 }
 
-const Tags = () =>
+const Tags = ({ tags }) =>
   <div style={tagsStyle}>
     <TagsList
       tiny
-      tags={['DtidkFN6GSh6BMpTJ', '6XpjfwyaCrzoZKQqq']}
+      tags={tags}
     />
   </div>
 
@@ -202,9 +226,9 @@ const tagsStyle = {
   paddingLeft: 10
 }
 
-const Note = () =>
+const Note = ({ note }) =>
   <div style={noteStyle}>
-    Note
+    {note || 'Note'}
   </div>
 
 const noteStyle = {

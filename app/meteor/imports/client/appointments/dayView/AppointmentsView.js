@@ -11,7 +11,7 @@ import { NewAppointmentModal } from './new/NewAppointmentModal'
 import { WaitlistAssigneeModal } from './WaitlistAssigneeModal'
 import { setTime } from './grid/timeSlots'
 import { ErrorBoundary } from '../../layout/ErrorBoundary'
-import { PatientAppointmentsModal } from '../../patientAppointments/PatientAppointmentsModal'
+import { PatientsAppointmentsContainer } from '../../patientAppointments/PatientsAppointmentsContainer'
 
 export class AppointmentsView extends React.Component {
   constructor (props) {
@@ -307,7 +307,7 @@ export class AppointmentsView extends React.Component {
         <ErrorBoundary>
           {
             window.location.hash.indexOf('new') !== -1
-              ? <PatientAppointmentsModal
+              ? <PatientsAppointmentsContainer
                 appointmentId={this.state.selectedAppointmentId}
                 onStartMove={this.handleMoveStart}
                 onSetAdmitted={this.handleSetAdmitted}

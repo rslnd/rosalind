@@ -3,7 +3,7 @@ import { Portal } from 'react-portal'
 import { withPropsOnChange } from 'recompose'
 import { Appointments } from './Appointments'
 import { AppointmentActionsContainer } from '../appointments/info/AppointmentActionsContainer'
-import { background, modalBackground, darkGray, grayDisabled, darkGrayActive, sidebarBackground, gray, lightBackground, mutedSeparator, mutedBackground, darkerMutedBackground } from '../layout/styles'
+import { background, modalBackground, lightBackground, mutedSeparator, mutedBackground, darkerMutedBackground } from '../layout/styles'
 import { Paper } from '@material-ui/core'
 import injectSheet from 'react-jss'
 import { Patient } from './Patient'
@@ -32,7 +32,7 @@ export const PatientAppointmentsModal = withPropsOnChange(
           <div style={containerStyle}>
             <div style={columnsStyle}>
               <div style={appointmentsStyle}>
-                <Appointments {...props} />
+                <Appointments {...props} show={show} />
               </div>
               <div style={patientSidebarStyle}>
                 <Patient />
