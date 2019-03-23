@@ -1,5 +1,5 @@
 import React from 'react'
-import { compose, withState, withPropsOnChange } from 'recompose'
+import { compose, withState, withProps, withHandlers, withPropsOnChange } from 'recompose'
 import { Icon } from '../components/Icon'
 import { green, lighterMutedBackground } from '../layout/styles'
 import { Tooltip } from '../components/Tooltip'
@@ -10,19 +10,25 @@ import { twoPlacesIfNeeded } from '../../util/format'
 
 export const Appointments = compose(
   withState('scrollRef', 'setScrollRef'),
-  withPropsOnChange(
-    ['show'],
-    props => window.requestAnimationFrame(() => {
+  withHandlers({
+    scrollToBottom: props => e => window.requestAnimationFrame(() => {
       if (props.scrollRef) {
         props.scrollRef.scrollTop = Number.MAX_SAFE_INTEGER
       }
     })
+  }),
+  withPropsOnChange(
+    ['show'],
+    props => props.scrollToBottom()
   )
 )(({
   currentAppointment,
-  pastAppointments = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  pastAppointments,
+  futureAppointments,
   fullNameWithTitle,
-  setScrollRef
+  setScrollRef,
+  scrollToBottom,
+  show
 }) =>
   <div style={containerStyle}>
     <div style={floatingStyle}>
@@ -31,20 +37,15 @@ export const Appointments = compose(
       </div>
     </div>
     <div ref={setScrollRef} style={appointmentsContainerStyle}> {/* Scroll this to bottom */}
-      <div> {/* Inside this div things will not be reversed */}
+      <div style={appointmentsContainerInnerStyle}> {/* Inside this div things will not be reversed */}
         {
           pastAppointments.length > 6 &&
             <Oldest />
         }
-        {
-          pastAppointments.map(id =>
-            <Appointment
-              key={id}
-              hasMedia={(id % 3) === 0}
-              fullNameWithTitle={fullNameWithTitle}
-            />
-          )
-        }
+        <AppointmentsList
+          appointments={pastAppointments}
+          fullNameWithTitle={fullNameWithTitle}
+        />
         {
           pastAppointments.length > 1 &&
             <Current />
@@ -55,10 +56,26 @@ export const Appointments = compose(
           fullNameWithTitle={fullNameWithTitle}
           isCurrent
         />
+        <Future
+          futureAppointments={futureAppointments}
+          fullNameWithTitle={fullNameWithTitle}
+          scrollToBottom={scrollToBottom}
+          show={show}
+        />
       </div>
     </div>
   </div>
 )
+
+const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
+  appointments.map(a =>
+    <Appointment
+      key={a._id}
+      appointment={a}
+      hasMedia={!!a.note}
+      fullNameWithTitle={fullNameWithTitle}
+    />
+  )
 
 const containerStyle = {
   height: '100%',
@@ -109,6 +126,10 @@ const appointmentsContainerStyle = {
   flexDirection: 'column-reverse'
 }
 
+const appointmentsContainerInnerStyle = {
+  paddingTop: 50
+}
+
 const appointmentStyle = {
   borderRadius: 4,
   background: lighterMutedBackground,
@@ -117,8 +138,7 @@ const appointmentStyle = {
 
 const currentAppointmentStyle = {
   ...appointmentStyle,
-  background: '#fff',
-  marginBottom: 36
+  background: '#fff'
 }
 
 const Media = () =>
@@ -239,11 +259,11 @@ const noteStyle = {
 }
 
 const Oldest = () =>
-  <div style={oldestStyle}>
+  <div style={separatorHeadingStyle}>
     {__('appointments.oldestAppointment')}
   </div>
 
-const oldestStyle = {
+const separatorHeadingStyle = {
   paddingTop: 55,
   marginLeft: dateColumnStyle.width + 12 + 12, // Fake same column as assignee name
   opacity: 0.3
@@ -255,6 +275,78 @@ const Current = () =>
   </div>
 
 const currentStyle = {
-  ...oldestStyle,
+  ...separatorHeadingStyle,
   paddingTop: 25
+}
+
+const Future = compose(
+  withState('expanded', 'setExpanded', false),
+  withPropsOnChange(
+    ['show'],
+    props => props.setExpanded(false)
+  ),
+  withProps(props => {
+    const count = props.futureAppointments.length
+    if (count === 0) { return null }
+
+    const key = [
+      'appointments.futureToggle',
+      props.expanded ? 'Hide' : 'Show'
+    ].join('')
+
+    const icon = props.expanded ? 'caret-down' : 'caret-right'
+
+    return {
+      toggleLabel: __(key, { count }),
+      icon
+    }
+  }),
+  withHandlers({
+    handleExpand: props => e => {
+      props.setExpanded(!props.expanded)
+      props.scrollToBottom()
+    }
+  })
+)(({
+  expanded,
+  handleExpand,
+  toggleLabel,
+  futureAppointments,
+  fullNameWithTitle,
+  icon
+}) =>
+  <>
+    <div
+      style={
+        expanded
+          ? futureHeaderExpandedStyle
+          : futureHeaderStyle
+      }
+      onClick={handleExpand}
+    >
+      {icon && <Icon name={icon} style={caretStyle} />}&nbsp;{toggleLabel}
+    </div>
+    {
+      expanded &&
+        <AppointmentsList
+          appointments={futureAppointments}
+          fullNameWithTitle={fullNameWithTitle}
+        />
+    }
+  </>
+)
+
+const caretStyle = {
+  marginRight: 4
+}
+
+const futureHeaderStyle = {
+  ...separatorHeadingStyle,
+  paddingTop: 25,
+  height: 80
+}
+
+const futureHeaderExpandedStyle = {
+  ...futureHeaderStyle,
+  height: 46
 }

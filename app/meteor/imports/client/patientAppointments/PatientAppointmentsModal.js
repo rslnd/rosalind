@@ -93,7 +93,8 @@ const containerStyle = {
 
 const columnsStyle = {
   flexGrow: 1,
-  display: 'flex'
+  display: 'flex',
+  height: '100%'
 }
 
 const appointmentsStyle = {

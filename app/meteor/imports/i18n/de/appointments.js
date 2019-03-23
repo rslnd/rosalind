@@ -91,5 +91,9 @@ export const appointments = {
   changeWaitlistAssigneeSuccess: 'Verschoben',
   changeWaitlistAssignee: 'Verschieben',
   error: 'Entschuldigung! Bitte noch einmal versuchen.',
-  oldestAppointment: 'Ältester Termin'
+  oldestAppointment: 'Ältester Termin',
+  futureToggleShow: 'Einen weiteren Termin anzeigen',
+  futureToggleHide: 'Zukünftigen Termin verstecken',
+  futureToggleShow_plural: '__count__ weitere Termine anzeigen',
+  futureToggleHide_plural: '__count__ weitere Termine verstecken'
 }
