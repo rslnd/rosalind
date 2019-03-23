@@ -129,10 +129,6 @@ export default () => {
         children: [
           {
             find: function (appointment) {
-              return Comments.find({ docId: patientId })
-            }
-          }, {
-            find: function (appointment) {
               return Comments.find({ docId: appointment._id })
             }
           }
