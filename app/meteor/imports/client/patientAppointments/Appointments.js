@@ -108,7 +108,7 @@ const Appointment = ({ isCurrent, hasMedia, appointment, fullNameWithTitle }) =>
       : appointmentStyle
   }>
     <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} />
-    <Tags {...appointment} />
+    <Tags {...appointment} tiny={!isCurrent} />
     <Note {...appointment} />
 
     {
@@ -138,6 +138,10 @@ const appointmentStyle = {
 
 const currentAppointmentStyle = {
   ...appointmentStyle,
+  paddingTop: 10,
+  paddingBottom: 10,
+  paddingLeft: 5,
+  paddingRight: 5,
   background: '#fff'
 }
 
@@ -218,7 +222,8 @@ const Revenue = ({ revenue }) =>
   </div>
 
 const revenueStyle = {
-  paddingRight: 14
+  paddingRight: 14,
+  fontWeight: 600
 }
 
 const revenueUnitStyle = {
@@ -234,10 +239,10 @@ const indicatorStyle = {
   color: green
 }
 
-const Tags = ({ tags }) =>
+const Tags = ({ tags, tiny }) =>
   <div style={tagsStyle}>
     <TagsList
-      tiny
+      tiny={tiny}
       tags={tags}
     />
   </div>
@@ -303,8 +308,10 @@ const Future = compose(
   }),
   withHandlers({
     handleExpand: props => e => {
-      props.setExpanded(!props.expanded)
-      props.scrollToBottom()
+      if (props.futureAppointments.length > 0) {
+        props.setExpanded(!props.expanded)
+        props.scrollToBottom()
+      }
     }
   })
 )(({

@@ -7,3 +7,12 @@ export const prefix = p => {
     default: return ''
   }
 }
+
+export const insuranceId = p => {
+  const id = typeof p === 'string' ? p : (p && p.insuranceId)
+  if (!id) { return null }
+  return [
+    id.slice(0, 4),
+    id.slice(4)
+  ].join(' ')
+}

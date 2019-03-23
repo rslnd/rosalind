@@ -1,5 +1,5 @@
 import React from 'react'
-import { prefix } from '../../api/patients/methods'
+import { insuranceId as formatInsuranceId, prefix } from '../../api/patients/methods'
 import { namecase } from '../../util/namecase'
 import { birthday as formatBirthday } from '../../util/time/format'
 
@@ -46,7 +46,8 @@ const nameStyle = {
 }
 
 const genderStyle = {
-  ...secondary
+  ...secondary,
+  opacity: 0.5
 }
 
 const titleStyle = {
@@ -73,24 +74,25 @@ const birthdayStyle = {
   ...secondary
 }
 
-const InsuranceId = () =>
-  <div style={secondary}>
-    1234 120398
+const InsuranceId = ({ insuranceId }) =>
+  !insuranceId ? null : <div style={secondary}>
+    {formatInsuranceId(insuranceId)}
   </div>
 
-const Note = () =>
+const Note = ({ note }) =>
   <div style={noteStyle}>
-    Allergisch auf XYZ und Cefaclor/Ceclor
+    {note}
   </div>
 
 const noteStyle = {
-  ...sectionStart
+  ...sectionStart,
+  fontWeight: 600
 }
 
-const Address = () =>
-  <div style={addressStyle}>
-    <div>Stephansplatz 1</div>
-    <div>1010 Wien</div>
+const Address = ({ address }) =>
+  !address ? null : <div style={addressStyle}>
+    <div>{address.line1}</div>
+    <div>{address.postalCode} {address.locality}</div>
   </div>
 
 const addressStyle = {
