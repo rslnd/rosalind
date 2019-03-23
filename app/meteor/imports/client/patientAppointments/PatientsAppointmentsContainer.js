@@ -3,6 +3,7 @@ import { PatientAppointmentsModal } from './PatientAppointmentsModal'
 import { withTracker } from '../components/withTracker'
 import { Appointments } from '../../api/appointments'
 import { Users } from '../../api/users'
+import { Patients } from '../../api/patients'
 
 const fullNameWithTitle = _id => {
   const user = _id && Users.findOne({ _id })
@@ -19,10 +20,12 @@ const composer = props => {
   } = props
 
   const currentAppointment = Appointments.findOne({ _id: appointmentId })
+  const patient = currentAppointment && Patients.findOne({ _id: currentAppointment.patientId })
 
   return {
     ...props,
     currentAppointment,
+    patient,
     fullNameWithTitle
   }
 }

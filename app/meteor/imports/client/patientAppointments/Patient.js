@@ -1,4 +1,7 @@
 import React from 'react'
+import { prefix } from '../../api/patients/methods'
+import { namecase } from '../../util/namecase'
+import { birthday as formatBirthday } from '../../util/time/format'
 
 const secondary = {
   opacity: 0.6
@@ -8,18 +11,18 @@ const sectionStart = {
   paddingTop: 14
 }
 
-export const Patient = () =>
-  <div style={containerStyle}>
+export const Patient = ({ patient }) =>
+  !patient ? null : <div style={containerStyle}>
     <div>
-      <Name />
-      <Birthday />
-      <InsuranceId />
-      <Note />
-      <Address />
+      <Name {...patient} />
+      <Birthday {...patient} />
+      <InsuranceId {...patient} />
+      <Note {...patient} />
+      <Address {...patient} />
     </div>
     <div>
-      <Loyalty />
-      <PatientActions />
+      <Loyalty {...patient} />
+      <PatientActions {...patient} />
     </div>
   </div>
 
@@ -31,11 +34,11 @@ const containerStyle = {
   justifyContent: 'space-between'
 }
 
-const Name = () =>
+const Name = ({ gender, titlePrepend, lastName, firstName }) =>
   <div style={nameStyle}>
-    <div><span style={genderStyle}>Fr.</span> <span style={titleStyle}>Dr. med.</span></div>
-    <div style={lastNameStyle}>Grotten-Sormann</div>
-    <div style={firstNameStyle}>Brunhilda Osvaldå</div>
+    <div><span style={genderStyle}>{prefix(gender)}</span> <span style={titleStyle}>{titlePrepend}</span></div>
+    <div style={lastNameStyle}>{namecase(lastName)}</div>
+    <div style={firstNameStyle}>{namecase(firstName)}</div>
   </div>
 
 const nameStyle = {
@@ -60,9 +63,9 @@ const firstNameStyle = {
   ...secondary
 }
 
-const Birthday = () =>
+const Birthday = ({ birthday }) =>
   <div style={birthdayStyle}>
-    66 Jahre (1. Jänner 1953)
+    {formatBirthday(birthday)}
   </div>
 
 const birthdayStyle = {

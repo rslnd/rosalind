@@ -62,5 +62,7 @@ export const patients = {
   messagesEnabledSuccess: 'PatientIn wird wieder Terminerinnerungen bekommen.',
   banned: 'Nicht erwünscht',
   toggleBanned: 'PatientIn als erwünscht/nicht erwünscht markieren',
-  history: 'Kartei'
+  history: 'Kartei',
+  birthdayFormatOne: '1 Jahr (__date__)',
+  birthdayFormat: '__age__ Jahre (__date__)'
 }

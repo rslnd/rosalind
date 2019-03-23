@@ -35,7 +35,7 @@ export const PatientAppointmentsModal = withPropsOnChange(
                 <Appointments {...props} show={show} />
               </div>
               <div style={patientSidebarStyle}>
-                <Patient />
+                <Patient {...props} />
               </div>
             </div>
             <div style={actionsStyle}>

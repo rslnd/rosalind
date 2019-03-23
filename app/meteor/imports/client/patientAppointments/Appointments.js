@@ -15,8 +15,6 @@ export const Appointments = compose(
     props => window.requestAnimationFrame(() => {
       if (props.scrollRef) {
         props.scrollRef.scrollTop = Number.MAX_SAFE_INTEGER
-        window.rr = props.scrollRef
-        console.log(props.scrollRef.scrollTop)
       }
     })
   )
