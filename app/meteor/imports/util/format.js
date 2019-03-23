@@ -32,6 +32,19 @@ export const float = n => n && floatFormatter.format(n)
 
 export const twoPlaces = n => (n && n > 0) ? twoPlacesFormatter.format(n) : '0,00'
 
+export const twoPlacesIfNeeded = n => {
+  if (n === 0) { return '0' }
+  if (!n) { return null }
+
+  const two = twoPlacesFormatter.format(n)
+
+  if (two.match(/00$/)) {
+    return integer(n)
+  } else {
+    return two
+  }
+}
+
 export const conditionalFloat = n => n &&
   (n > -10 && n < 10)
   ? floatFormatter.format(n)
