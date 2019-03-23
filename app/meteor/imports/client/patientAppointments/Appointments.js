@@ -12,11 +12,13 @@ export const Appointments = compose(
   withState('scrollRef', 'setScrollRef'),
   withPropsOnChange(
     ['show'],
-    props => {
-      if (props.show && props.scrollRef) {
+    props => window.requestAnimationFrame(() => {
+      if (props.scrollRef) {
         props.scrollRef.scrollTop = Number.MAX_SAFE_INTEGER
+        window.rr = props.scrollRef
+        console.log(props.scrollRef.scrollTop)
       }
-    }
+    })
   )
 )(({
   currentAppointment,
