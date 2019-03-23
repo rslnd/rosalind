@@ -22,7 +22,7 @@ import { subscribeCache } from '../../../util/meteor/subscribe'
 
 const parseDay = memoize(d => moment(d))
 
-const subsCache = subscribeCache()
+const subsCache = subscribeCache(5, 20)
 
 const onNewAppointmentModalOpen = (args) => Appointments.actions.acquireLock.call(args)
 const onNewAppointmentModalClose = (args) => Appointments.actions.releaseLock.call(args)
