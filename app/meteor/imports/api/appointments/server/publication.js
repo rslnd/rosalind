@@ -92,21 +92,6 @@ export default () => {
       return {
         find: function () {
           return Appointments.find(selector, {
-            fields: {
-              _id: 1,
-              calendarId: 1,
-              patientId: 1,
-              assigneeId: 1,
-              waitlistAssigneeId: 1,
-              tags: 1,
-              start: 1,
-              end: 1,
-              admitted: 1,
-              treated: 1,
-              canceled: 1,
-              note: 1,
-              lockedBy: 1
-            },
             sort: {
               start: 1
             }
@@ -117,8 +102,7 @@ export default () => {
             find: function (doc) {
               if (doc.patientId) {
                 return Patients.find({ _id: doc.patientId }, {
-                  limit: 1,
-                  fields: Patients.fields.preload
+                  limit: 1
                 })
               }
             }
