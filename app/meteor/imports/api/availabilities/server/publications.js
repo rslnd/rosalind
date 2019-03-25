@@ -6,7 +6,7 @@ import { Availabilities } from '../'
 export default () => {
   publish({
     name: 'availabilities',
-    roles: ['appointments-*', 'schedules'],
+    roles: ['*'],
     fn: function () {
       const startOfYesterday = moment().subtract(1, 'day').startOf('day').toDate()
 

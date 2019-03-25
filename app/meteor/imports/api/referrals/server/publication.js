@@ -9,7 +9,7 @@ export const publication = () => {
     args: {
       patientIds: [String]
     },
-    roles: ['referrals', 'waitlist', 'waitlist-all', 'waitlist-change'],
+    roles: ['*'],
     fn: function ({ patientIds }) {
       return {
         find: function () {

@@ -4,7 +4,7 @@ import { Groups } from '../'
 export const publication = () => {
   publish({
     name: 'groups',
-    roles: ['appointments-*', 'users', 'reports'],
+    roles: ['*'],
     fn: function () {
       return Groups.find({})
     }

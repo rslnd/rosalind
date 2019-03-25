@@ -7,15 +7,9 @@ export const hasRole = (userId, requiredRoles) => {
   check(userId, String)
   check(requiredRoles, [String])
 
-  if (!userId || !requiredRoles || requiredRoles.length === 0) {
-    return false
-  }
-
-  // TODO: Replace completely with custom implementation
-  // that merges roles from the user's group
-  if (Roles.userIsInRole(userId, requiredRoles)) {
-    return true
-  }
+  if (!userId) { return false }
+  if (!requiredRoles) { return false }
+  if (requiredRoles.length === 0) { return false }
 
   const user = Users.findOne({ _id: userId })
   if (!user) {
@@ -25,6 +19,12 @@ export const hasRole = (userId, requiredRoles) => {
   const userRoles = user && user.roles && user.roles.__global_roles__
   if (!userRoles) {
     return false
+  }
+
+  // TODO: Replace completely with custom implementation
+  // that merges roles from the user's group
+  if (Roles.userIsInRole(user, requiredRoles)) {
+    return true
   }
 
   return isRoleMatch({ requiredRoles, userRoles })

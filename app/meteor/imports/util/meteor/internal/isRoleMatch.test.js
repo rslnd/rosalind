@@ -58,10 +58,10 @@ describe('util', () => {
       expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(true)
     })
 
-    it('false when wildcard and non-matching others', () => {
+    it('true when wildcard and non-matching others', () => {
       const requiredRoles = ['*', 'b']
       const userRoles = ['a']
-      expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(false)
+      expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(true)
     })
 
     it('true when wildcard and matching others', () => {

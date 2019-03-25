@@ -4,6 +4,7 @@ import { publish } from '../../../util/meteor/publish'
 export default () => {
   publish({
     name: 'users',
+    roles: ['*'],
     fn: function () {
       return Users.find({}, {
         fields: {

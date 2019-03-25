@@ -4,7 +4,7 @@ import { publish } from '../../../util/meteor/publish'
 export default () => {
   publish({
     name: 'tags',
-    roles: ['appointments-*', 'system'],
+    roles: ['*'],
     fn: function () {
       return Tags.find({}, { removed: true })
     }

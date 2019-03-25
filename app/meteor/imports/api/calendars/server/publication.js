@@ -4,7 +4,7 @@ import { Calendars } from '../'
 export const publication = () => {
   publish({
     name: 'calendars',
-    roles: ['appointments-*'],
+    roles: ['*'],
     fn: function () {
       return Calendars.find({})
     }
