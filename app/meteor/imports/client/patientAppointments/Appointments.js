@@ -1,5 +1,5 @@
 import React from 'react'
-import { compose, withState, withProps, withHandlers, withPropsOnChange } from 'recompose'
+import { compose, withState, withProps, withHandlers, withPropsOnChange, fromRenderProps } from 'recompose'
 import { Icon } from '../components/Icon'
 import { green, lighterMutedBackground } from '../layout/styles'
 import { Tooltip } from '../components/Tooltip'
@@ -28,12 +28,13 @@ export const Appointments = compose(
   fullNameWithTitle,
   setScrollRef,
   scrollToBottom,
-  show
+  show,
+  ...props
 }) =>
   <div style={containerStyle}>
     <div style={floatingStyle}>
       <div style={shadowStyle}>
-        <Filter />
+        <Filter {...props} />
       </div>
     </div>
     <div ref={setScrollRef} style={appointmentsContainerStyle}> {/* Scroll this to bottom */}
@@ -270,7 +271,7 @@ const Oldest = () =>
 
 const separatorHeadingStyle = {
   paddingTop: 55,
-  marginLeft: dateColumnStyle.width + 12 + 12, // Fake same column as assignee name
+  paddingLeft: dateColumnStyle.width + 12 + 12, // Fake same column as assignee name
   opacity: 0.3
 }
 
@@ -281,6 +282,7 @@ const Current = () =>
 
 const currentStyle = {
   ...separatorHeadingStyle,
+  paddingLeft: separatorHeadingStyle.paddingLeft + currentAppointmentStyle.paddingLeft,
   paddingTop: 25
 }
 

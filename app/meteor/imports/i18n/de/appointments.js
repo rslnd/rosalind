@@ -95,5 +95,6 @@ export const appointments = {
   futureToggleShow: 'Einen weiteren Termin anzeigen',
   futureToggleHide: 'Zukünftigen Termin verstecken',
   futureToggleShow_plural: '__count__ weitere Termine anzeigen',
-  futureToggleHide_plural: '__count__ weitere Termine verstecken'
+  futureToggleHide_plural: '__count__ weitere Termine verstecken',
+  filterCalendar: 'Nur __name__'
 }
