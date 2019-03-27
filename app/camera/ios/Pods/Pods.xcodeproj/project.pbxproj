@@ -1,0 +1,763 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00DB2BB0AE87C2ED06F37815D918B95A /* CaptureSession+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57DE4BE33BE721340649EE8C914C996 /* CaptureSession+Orientation.swift */; };
+		0624FE87921EBE3698ADE3AF707F0B26 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EB9F5A6190A04CA9861890584B09E9 /* Error.swift */; };
+		0DF68A7AF371DCC7A4751C67C55382D3 /* WeScan.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C156B1F4F0ED48BBA441D8F3A3A2E7F /* WeScan.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0EA299739FB10CF5604A72990F52F078 /* ZoomGestureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D142F9150718303B55175F459BEE27B9 /* ZoomGestureController.swift */; };
+		1359B9F5E70F8546288F1879A1CB712C /* Pods-RosalindCamera-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C82AB85C5AB7A03AE6232F7F7A826373 /* Pods-RosalindCamera-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		14A1B0BC017975423243CC48C36123BD /* ImageScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48430F149A23BEB1ACA6E2C236DE7EA7 /* ImageScannerController.swift */; };
+		16F953553A9F655F988B4FAB7FCE6EB1 /* flash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 873A3579786F2D5D9421FD9B1132E526 /* flash@2x.png */; };
+		3D15E1E0A21CE6A83267257747C2E840 /* CIImage+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9926C556B610F190506CD83E462FB1 /* CIImage+Utils.swift */; };
+		3D16CB28A09C7B940EE4A4ED1CE32FDD /* AVCaptureVideoOrientation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA4D3A131F97ABEEA9D03A99711DDAD /* AVCaptureVideoOrientation+Utils.swift */; };
+		4F4B5FBAB78871518FE13F2CC83017C0 /* flashUnavailable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 792E1C2EA8489D57237AA38FEE81EDEE /* flashUnavailable@3x.png */; };
+		533357018305B739C4B82F4FDE21AE4A /* CIRectangleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22F1208E541CD1FE7660C413BA9ABEA /* CIRectangleDetector.swift */; };
+		55677A2E830E8114597D094FACBF73A5 /* enhance@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26A32048A038DC7EBD1858D2B3274DD1 /* enhance@2x.png */; };
+		56A57C2CD4052ED46DED084560327BC6 /* RectangleFeaturesFunnel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D97FE1144F7F4E1CBFBDF5DAAB9FF81 /* RectangleFeaturesFunnel.swift */; };
+		59367DE408319E2E50AA6364E381C82C /* CaptureSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88693BF4682DE5621315ABC018D2A20 /* CaptureSessionManager.swift */; };
+		635B340825F4E0481AC538C6CF656E9B /* UIImage+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0C64C39EFE0D11A340D1022CAFC3D0 /* UIImage+Utils.swift */; };
+		7D5E476181C4F55D267F354CA56C31F1 /* flashUnavailable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84ACDA53E8FADC009461A035EACDD669 /* flashUnavailable@2x.png */; };
+		801401BE6F4449402CCE2B206F401EAB /* Transformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144FDB02E119ADAAFD44B4501CDE61F5 /* Transformable.swift */; };
+		85F572BA795E437F85D732DE727A8CD2 /* CaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EB8CCB3EE1DA21394E821081A543EA /* CaptureSession.swift */; };
+		861C8E35B12A46848EB5D9499BF39775 /* EditScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE926DE220C8AF4C8AFF00E09887CA9 /* EditScanViewController.swift */; };
+		8AEEDEBF0CDFC9DD18ACEAF9F2EA27B2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70FCBDF186A53F9ACB068DE3D659C9B2 /* Localizable.strings */; };
+		8F3B4B7DCBCF96106BB660FDFBD1EA49 /* UIImage+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717603E4AB4BE69DD9947449DC2FD5F /* UIImage+Orientation.swift */; };
+		93FABDE333737CA21007B0C6F1F7601A /* EditScanCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D44D0C09A60F9C1B32F19CB5AD9AB0 /* EditScanCornerView.swift */; };
+		97C851132DA2144AE3A546B994DA6C3E /* QuadrilateralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA1CF2CB929E7A97E1CEE23B402DCCF /* QuadrilateralView.swift */; };
+		A2AA498DB51CBF5441CD2C86B5F5A734 /* WeScan-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 491BA4D72B738D5C33D7F3B6605077E2 /* WeScan-dummy.m */; };
+		ACA08AC3434B3095C517025E274E019A /* Quadrilateral.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEC21DD9BE9D7F0DC97BC3C816C723E /* Quadrilateral.swift */; };
+		B433F5F5CE3E19DFF6F7684E9F21340F /* CGRect+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6CDC9BDA65678FEF2D6A6CA31A21E4 /* CGRect+Utils.swift */; };
+		B5F3D92DF845968B5C3FC441219F1B52 /* enhance@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E38EDA5291314FCCD0059FD8DB484045 /* enhance@3x.png */; };
+		C159BBDB2D9DFC50BC377B2789178A17 /* CGAffineTransform+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4373D9EEE156DB40E0C5E1546C13DB26 /* CGAffineTransform+Utils.swift */; };
+		C1DFD954AEC4C704DB2A4185834B07D2 /* flash.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EF3B8D8D9F664F2AA693EB6BE458FBB /* flash.png */; };
+		C3C4938FD256090E95FAF3AD4D6EADFA /* ShutterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8381E2DDC3DFA1C4686F8650CC769083 /* ShutterButton.swift */; };
+		CD74AE0406349B58923D647AF6F5E08C /* WeScan-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A879C3805440865B18962F2C6CDD976 /* WeScan-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0430B13F2BB4FB31D82DD6AA960E7E5 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BDF79373D0ED95D33545D84168764 /* ReviewViewController.swift */; };
+		E0698F05E2FA2CF8A89EF7BB7AF6A4CB /* enhance.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B51B6747CB769B561B34DABD8F36EA9 /* enhance.png */; };
+		E0FFEC0D78FD4724B83B76C4C4E3BD9D /* VisionRectangleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9687779C3E6DB5E12646A7F4644C4A /* VisionRectangleDetector.swift */; };
+		E38AE16D26CA56A99A54099AA567F1FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */; };
+		E39A723FD6BE9C74FAC55EF7944C83AC /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF56A896C68C11B038B879FC3EA20E3 /* ScannerViewController.swift */; };
+		EB2A20031A00ED13C517932B6382CD41 /* CGPoint+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486318D1D28986DC55C39140F45726DE /* CGPoint+Utils.swift */; };
+		EB7501A826C153CE486006CBFC370F1B /* Pods-RosalindCamera-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F6237A7BBC05EFC44D077940E5351EDA /* Pods-RosalindCamera-dummy.m */; };
+		F0617C1594E6FCE14F5923B2F7F12CAE /* flashUnavailable.png in Resources */ = {isa = PBXBuildFile; fileRef = 00169D0722D577920E8C61FD7EC0509C /* flashUnavailable.png */; };
+		F7984197531C39FDC7341FD617824863 /* flash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C85D1C6C4E47373701AACFC2D876B9 /* flash@3x.png */; };
+		F7A47C0970E30DC5875B0FC48D21799A /* Array+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97F6B3541F58DA7E3A242E9A8FC218D /* Array+Utils.swift */; };
+		FC0628306E5D4CEC61F5AD88D0A16413 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D18DC093FE5074D3E42E3D99B3D3BA05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F8D949C9BB158B30AB780118275AE30;
+			remoteInfo = WeScan;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		00169D0722D577920E8C61FD7EC0509C /* flashUnavailable.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = flashUnavailable.png; path = WeScan/Assets/flashUnavailable.png; sourceTree = "<group>"; };
+		13C85D1C6C4E47373701AACFC2D876B9 /* flash@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "flash@3x.png"; path = "WeScan/Assets/flash@3x.png"; sourceTree = "<group>"; };
+		144FDB02E119ADAAFD44B4501CDE61F5 /* Transformable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Transformable.swift; path = WeScan/Protocols/Transformable.swift; sourceTree = "<group>"; };
+		14BDE2EB34C4D0BFCC1F37EAEC2385AC /* WeScan.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WeScan.xcconfig; sourceTree = "<group>"; };
+		1A879C3805440865B18962F2C6CDD976 /* WeScan-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "WeScan-umbrella.h"; sourceTree = "<group>"; };
+		1AA4D3A131F97ABEEA9D03A99711DDAD /* AVCaptureVideoOrientation+Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "AVCaptureVideoOrientation+Utils.swift"; path = "WeScan/Extensions/AVCaptureVideoOrientation+Utils.swift"; sourceTree = "<group>"; };
+		1AC824905DD2BEEAFE3CE174FFF25D2D /* Pods-RosalindCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-RosalindCamera.release.xcconfig"; sourceTree = "<group>"; };
+		1C156B1F4F0ED48BBA441D8F3A3A2E7F /* WeScan.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WeScan.h; path = WeScan/WeScan.h; sourceTree = "<group>"; };
+		215BDF79373D0ED95D33545D84168764 /* ReviewViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReviewViewController.swift; path = WeScan/Review/ReviewViewController.swift; sourceTree = "<group>"; };
+		26A32048A038DC7EBD1858D2B3274DD1 /* enhance@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "enhance@2x.png"; path = "WeScan/Assets/enhance@2x.png"; sourceTree = "<group>"; };
+		2717603E4AB4BE69DD9947449DC2FD5F /* UIImage+Orientation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImage+Orientation.swift"; path = "WeScan/Extensions/UIImage+Orientation.swift"; sourceTree = "<group>"; };
+		2799B0F98C1E98DBA25EF1DE5D441E1C /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		31EB8CCB3EE1DA21394E821081A543EA /* CaptureSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptureSession.swift; path = WeScan/Session/CaptureSession.swift; sourceTree = "<group>"; };
+		356B869DF46BC6798473C7E1B491D466 /* Pods-RosalindCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-RosalindCamera.debug.xcconfig"; sourceTree = "<group>"; };
+		3F1B6B73D187EDFE4F2CE5409E56E176 /* Pods-RosalindCamera.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-RosalindCamera.modulemap"; sourceTree = "<group>"; };
+		4373D9EEE156DB40E0C5E1546C13DB26 /* CGAffineTransform+Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CGAffineTransform+Utils.swift"; path = "WeScan/Extensions/CGAffineTransform+Utils.swift"; sourceTree = "<group>"; };
+		48430F149A23BEB1ACA6E2C236DE7EA7 /* ImageScannerController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageScannerController.swift; path = WeScan/ImageScannerController.swift; sourceTree = "<group>"; };
+		486318D1D28986DC55C39140F45726DE /* CGPoint+Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CGPoint+Utils.swift"; path = "WeScan/Extensions/CGPoint+Utils.swift"; sourceTree = "<group>"; };
+		491BA4D72B738D5C33D7F3B6605077E2 /* WeScan-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "WeScan-dummy.m"; sourceTree = "<group>"; };
+		4BF56A896C68C11B038B879FC3EA20E3 /* ScannerViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScannerViewController.swift; path = WeScan/Scan/ScannerViewController.swift; sourceTree = "<group>"; };
+		5D9687779C3E6DB5E12646A7F4644C4A /* VisionRectangleDetector.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VisionRectangleDetector.swift; path = WeScan/Common/VisionRectangleDetector.swift; sourceTree = "<group>"; };
+		5D97FE1144F7F4E1CBFBDF5DAAB9FF81 /* RectangleFeaturesFunnel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RectangleFeaturesFunnel.swift; path = WeScan/Scan/RectangleFeaturesFunnel.swift; sourceTree = "<group>"; };
+		6C08BBFBADD375C8F23F532B06B1DC05 /* Pods_RosalindCamera.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RosalindCamera.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7364B72F0E9265F6CBAA0D009D695747 /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		742828B12481AB66691F352CC5FF0383 /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		792E1C2EA8489D57237AA38FEE81EDEE /* flashUnavailable@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "flashUnavailable@3x.png"; path = "WeScan/Assets/flashUnavailable@3x.png"; sourceTree = "<group>"; };
+		7DEACF30C48C5E75D3CB34C694E7A0FE /* Pods-RosalindCamera-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-RosalindCamera-acknowledgements.plist"; sourceTree = "<group>"; };
+		7E6CDC9BDA65678FEF2D6A6CA31A21E4 /* CGRect+Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CGRect+Utils.swift"; path = "WeScan/Extensions/CGRect+Utils.swift"; sourceTree = "<group>"; };
+		7EF3B8D8D9F664F2AA693EB6BE458FBB /* flash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = flash.png; path = WeScan/Assets/flash.png; sourceTree = "<group>"; };
+		8381E2DDC3DFA1C4686F8650CC769083 /* ShutterButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShutterButton.swift; path = WeScan/Scan/ShutterButton.swift; sourceTree = "<group>"; };
+		84ACDA53E8FADC009461A035EACDD669 /* flashUnavailable@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "flashUnavailable@2x.png"; path = "WeScan/Assets/flashUnavailable@2x.png"; sourceTree = "<group>"; };
+		873A3579786F2D5D9421FD9B1132E526 /* flash@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "flash@2x.png"; path = "WeScan/Assets/flash@2x.png"; sourceTree = "<group>"; };
+		88E42F412D6F03744D1BE88AB71406CE /* Pods-RosalindCamera-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-RosalindCamera-Info.plist"; sourceTree = "<group>"; };
+		8B51B6747CB769B561B34DABD8F36EA9 /* enhance.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = enhance.png; path = WeScan/Assets/enhance.png; sourceTree = "<group>"; };
+		8B9926C556B610F190506CD83E462FB1 /* CIImage+Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CIImage+Utils.swift"; path = "WeScan/Extensions/CIImage+Utils.swift"; sourceTree = "<group>"; };
+		9C0C64C39EFE0D11A340D1022CAFC3D0 /* UIImage+Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImage+Utils.swift"; path = "WeScan/Extensions/UIImage+Utils.swift"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A7C981DE85AE5151D7FE9DB6C9801CAA /* Pods-RosalindCamera-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-RosalindCamera-acknowledgements.markdown"; sourceTree = "<group>"; };
+		AAE926DE220C8AF4C8AFF00E09887CA9 /* EditScanViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EditScanViewController.swift; path = WeScan/Edit/EditScanViewController.swift; sourceTree = "<group>"; };
+		B46E7A46F387D864C4E7ECA956DB43DB /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B6C5D85606C23214A4EC38F5F178D9DB /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		B97F6B3541F58DA7E3A242E9A8FC218D /* Array+Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Array+Utils.swift"; path = "WeScan/Extensions/Array+Utils.swift"; sourceTree = "<group>"; };
+		BBA42DDB5BEB0188FA996FD0D626CA8A /* WeScan-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "WeScan-Info.plist"; sourceTree = "<group>"; };
+		C82AB85C5AB7A03AE6232F7F7A826373 /* Pods-RosalindCamera-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-RosalindCamera-umbrella.h"; sourceTree = "<group>"; };
+		CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		D142F9150718303B55175F459BEE27B9 /* ZoomGestureController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ZoomGestureController.swift; path = WeScan/Edit/ZoomGestureController.swift; sourceTree = "<group>"; };
+		D8AC007738E31A0AE25EFB97B0E1A9C1 /* Pods-RosalindCamera-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-RosalindCamera-frameworks.sh"; sourceTree = "<group>"; };
+		D8D44D0C09A60F9C1B32F19CB5AD9AB0 /* EditScanCornerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EditScanCornerView.swift; path = WeScan/Common/EditScanCornerView.swift; sourceTree = "<group>"; };
+		DAEC21DD9BE9D7F0DC97BC3C816C723E /* Quadrilateral.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Quadrilateral.swift; path = WeScan/Common/Quadrilateral.swift; sourceTree = "<group>"; };
+		DD8B94C6EB57AA00FCD8A90CE848CB66 /* WeScan-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "WeScan-prefix.pch"; sourceTree = "<group>"; };
+		E22F1208E541CD1FE7660C413BA9ABEA /* CIRectangleDetector.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CIRectangleDetector.swift; path = WeScan/Common/CIRectangleDetector.swift; sourceTree = "<group>"; };
+		E38EDA5291314FCCD0059FD8DB484045 /* enhance@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "enhance@3x.png"; path = "WeScan/Assets/enhance@3x.png"; sourceTree = "<group>"; };
+		E3EB9F5A6190A04CA9861890584B09E9 /* Error.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Error.swift; path = WeScan/Common/Error.swift; sourceTree = "<group>"; };
+		E6DD47DFBFDBD0854B0B755C7EA279CF /* WeScan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WeScan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E88693BF4682DE5621315ABC018D2A20 /* CaptureSessionManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptureSessionManager.swift; path = WeScan/Scan/CaptureSessionManager.swift; sourceTree = "<group>"; };
+		EBB65E8C367F3965B95AACE44F867BEE /* WeScan.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = WeScan.modulemap; sourceTree = "<group>"; };
+		F57DE4BE33BE721340649EE8C914C996 /* CaptureSession+Orientation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CaptureSession+Orientation.swift"; path = "WeScan/Session/CaptureSession+Orientation.swift"; sourceTree = "<group>"; };
+		F6237A7BBC05EFC44D077940E5351EDA /* Pods-RosalindCamera-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-RosalindCamera-dummy.m"; sourceTree = "<group>"; };
+		F736A39CAEB2CC42D208C681B8DD6D4F /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FBA1CF2CB929E7A97E1CEE23B402DCCF /* QuadrilateralView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuadrilateralView.swift; path = WeScan/Common/QuadrilateralView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		61CD1CA5F73D96440C00A0F9BC2659B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E38AE16D26CA56A99A54099AA567F1FD /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DEBF1BADDFE531C59D01E0D58A1A583 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC0628306E5D4CEC61F5AD88D0A16413 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		42C7AF08E822ABB83D6D940F2261929D /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				DF5F29399C3EB0C9261674AE9CA11AD1 /* Pods-RosalindCamera */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		729B8B5DAA4514A4A1196434978BB106 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6C08BBFBADD375C8F23F532B06B1DC05 /* Pods_RosalindCamera.framework */,
+				E6DD47DFBFDBD0854B0B755C7EA279CF /* WeScan.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9B055D0CFEA43187E72B03DED11F5662 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
+				F3BD597E76E7A4C76F344C57C4C29B9D /* Pods */,
+				729B8B5DAA4514A4A1196434978BB106 /* Products */,
+				42C7AF08E822ABB83D6D940F2261929D /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9B055D0CFEA43187E72B03DED11F5662 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D2D492F8148CE7074B294AE4F650E1AF /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				EBB65E8C367F3965B95AACE44F867BEE /* WeScan.modulemap */,
+				14BDE2EB34C4D0BFCC1F37EAEC2385AC /* WeScan.xcconfig */,
+				491BA4D72B738D5C33D7F3B6605077E2 /* WeScan-dummy.m */,
+				BBA42DDB5BEB0188FA996FD0D626CA8A /* WeScan-Info.plist */,
+				DD8B94C6EB57AA00FCD8A90CE848CB66 /* WeScan-prefix.pch */,
+				1A879C3805440865B18962F2C6CDD976 /* WeScan-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/WeScan";
+			sourceTree = "<group>";
+		};
+		DF5F29399C3EB0C9261674AE9CA11AD1 /* Pods-RosalindCamera */ = {
+			isa = PBXGroup;
+			children = (
+				3F1B6B73D187EDFE4F2CE5409E56E176 /* Pods-RosalindCamera.modulemap */,
+				A7C981DE85AE5151D7FE9DB6C9801CAA /* Pods-RosalindCamera-acknowledgements.markdown */,
+				7DEACF30C48C5E75D3CB34C694E7A0FE /* Pods-RosalindCamera-acknowledgements.plist */,
+				F6237A7BBC05EFC44D077940E5351EDA /* Pods-RosalindCamera-dummy.m */,
+				D8AC007738E31A0AE25EFB97B0E1A9C1 /* Pods-RosalindCamera-frameworks.sh */,
+				88E42F412D6F03744D1BE88AB71406CE /* Pods-RosalindCamera-Info.plist */,
+				C82AB85C5AB7A03AE6232F7F7A826373 /* Pods-RosalindCamera-umbrella.h */,
+				356B869DF46BC6798473C7E1B491D466 /* Pods-RosalindCamera.debug.xcconfig */,
+				1AC824905DD2BEEAFE3CE174FFF25D2D /* Pods-RosalindCamera.release.xcconfig */,
+			);
+			name = "Pods-RosalindCamera";
+			path = "Target Support Files/Pods-RosalindCamera";
+			sourceTree = "<group>";
+		};
+		E1013C72123D0B3DE45355362C1E9EDE /* WeScan */ = {
+			isa = PBXGroup;
+			children = (
+				B97F6B3541F58DA7E3A242E9A8FC218D /* Array+Utils.swift */,
+				1AA4D3A131F97ABEEA9D03A99711DDAD /* AVCaptureVideoOrientation+Utils.swift */,
+				31EB8CCB3EE1DA21394E821081A543EA /* CaptureSession.swift */,
+				F57DE4BE33BE721340649EE8C914C996 /* CaptureSession+Orientation.swift */,
+				E88693BF4682DE5621315ABC018D2A20 /* CaptureSessionManager.swift */,
+				4373D9EEE156DB40E0C5E1546C13DB26 /* CGAffineTransform+Utils.swift */,
+				486318D1D28986DC55C39140F45726DE /* CGPoint+Utils.swift */,
+				7E6CDC9BDA65678FEF2D6A6CA31A21E4 /* CGRect+Utils.swift */,
+				8B9926C556B610F190506CD83E462FB1 /* CIImage+Utils.swift */,
+				E22F1208E541CD1FE7660C413BA9ABEA /* CIRectangleDetector.swift */,
+				D8D44D0C09A60F9C1B32F19CB5AD9AB0 /* EditScanCornerView.swift */,
+				AAE926DE220C8AF4C8AFF00E09887CA9 /* EditScanViewController.swift */,
+				E3EB9F5A6190A04CA9861890584B09E9 /* Error.swift */,
+				48430F149A23BEB1ACA6E2C236DE7EA7 /* ImageScannerController.swift */,
+				DAEC21DD9BE9D7F0DC97BC3C816C723E /* Quadrilateral.swift */,
+				FBA1CF2CB929E7A97E1CEE23B402DCCF /* QuadrilateralView.swift */,
+				5D97FE1144F7F4E1CBFBDF5DAAB9FF81 /* RectangleFeaturesFunnel.swift */,
+				215BDF79373D0ED95D33545D84168764 /* ReviewViewController.swift */,
+				4BF56A896C68C11B038B879FC3EA20E3 /* ScannerViewController.swift */,
+				8381E2DDC3DFA1C4686F8650CC769083 /* ShutterButton.swift */,
+				144FDB02E119ADAAFD44B4501CDE61F5 /* Transformable.swift */,
+				2717603E4AB4BE69DD9947449DC2FD5F /* UIImage+Orientation.swift */,
+				9C0C64C39EFE0D11A340D1022CAFC3D0 /* UIImage+Utils.swift */,
+				5D9687779C3E6DB5E12646A7F4644C4A /* VisionRectangleDetector.swift */,
+				1C156B1F4F0ED48BBA441D8F3A3A2E7F /* WeScan.h */,
+				D142F9150718303B55175F459BEE27B9 /* ZoomGestureController.swift */,
+				E5390DA380B97BC76C76A36224FC8C90 /* Resources */,
+				D2D492F8148CE7074B294AE4F650E1AF /* Support Files */,
+			);
+			path = WeScan;
+			sourceTree = "<group>";
+		};
+		E5390DA380B97BC76C76A36224FC8C90 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8B51B6747CB769B561B34DABD8F36EA9 /* enhance.png */,
+				26A32048A038DC7EBD1858D2B3274DD1 /* enhance@2x.png */,
+				E38EDA5291314FCCD0059FD8DB484045 /* enhance@3x.png */,
+				7EF3B8D8D9F664F2AA693EB6BE458FBB /* flash.png */,
+				873A3579786F2D5D9421FD9B1132E526 /* flash@2x.png */,
+				13C85D1C6C4E47373701AACFC2D876B9 /* flash@3x.png */,
+				00169D0722D577920E8C61FD7EC0509C /* flashUnavailable.png */,
+				84ACDA53E8FADC009461A035EACDD669 /* flashUnavailable@2x.png */,
+				792E1C2EA8489D57237AA38FEE81EDEE /* flashUnavailable@3x.png */,
+				70FCBDF186A53F9ACB068DE3D659C9B2 /* Localizable.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		F3BD597E76E7A4C76F344C57C4C29B9D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E1013C72123D0B3DE45355362C1E9EDE /* WeScan */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A77E5412B86457E3FCC869E66A2FEDC1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD74AE0406349B58923D647AF6F5E08C /* WeScan-umbrella.h in Headers */,
+				0DF68A7AF371DCC7A4751C67C55382D3 /* WeScan.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F7D51934E969F051A9F821C89E944B17 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1359B9F5E70F8546288F1879A1CB712C /* Pods-RosalindCamera-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3F8D949C9BB158B30AB780118275AE30 /* WeScan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2C5988670148FB0A3F78AD0E0C1C9EBC /* Build configuration list for PBXNativeTarget "WeScan" */;
+			buildPhases = (
+				A77E5412B86457E3FCC869E66A2FEDC1 /* Headers */,
+				E0D0DBEEB253DD71FDF407B26937465E /* Sources */,
+				61CD1CA5F73D96440C00A0F9BC2659B3 /* Frameworks */,
+				EE4A0AC53D1F7FF277AC84F70B162E97 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WeScan;
+			productName = WeScan;
+			productReference = E6DD47DFBFDBD0854B0B755C7EA279CF /* WeScan.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		502B1207CA383FD343AD97795E813DFD /* Pods-RosalindCamera */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B720699D4E795375EB727F83FB2A8F17 /* Build configuration list for PBXNativeTarget "Pods-RosalindCamera" */;
+			buildPhases = (
+				F7D51934E969F051A9F821C89E944B17 /* Headers */,
+				9C138BF643E675F0DA3D6B09C89AE16A /* Sources */,
+				7DEBF1BADDFE531C59D01E0D58A1A583 /* Frameworks */,
+				FEFCAAD7FFFFA7B0E464F383C840396B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E5863734D7B38548A29CAAADDECABC8B /* PBXTargetDependency */,
+			);
+			name = "Pods-RosalindCamera";
+			productName = "Pods-RosalindCamera";
+			productReference = 6C08BBFBADD375C8F23F532B06B1DC05 /* Pods_RosalindCamera.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				en,
+				fr,
+				it,
+				"pt-PT",
+				"zh-Hans",
+				"zh-Hant",
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 729B8B5DAA4514A4A1196434978BB106 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				502B1207CA383FD343AD97795E813DFD /* Pods-RosalindCamera */,
+				3F8D949C9BB158B30AB780118275AE30 /* WeScan */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EE4A0AC53D1F7FF277AC84F70B162E97 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0698F05E2FA2CF8A89EF7BB7AF6A4CB /* enhance.png in Resources */,
+				55677A2E830E8114597D094FACBF73A5 /* enhance@2x.png in Resources */,
+				B5F3D92DF845968B5C3FC441219F1B52 /* enhance@3x.png in Resources */,
+				C1DFD954AEC4C704DB2A4185834B07D2 /* flash.png in Resources */,
+				16F953553A9F655F988B4FAB7FCE6EB1 /* flash@2x.png in Resources */,
+				F7984197531C39FDC7341FD617824863 /* flash@3x.png in Resources */,
+				F0617C1594E6FCE14F5923B2F7F12CAE /* flashUnavailable.png in Resources */,
+				7D5E476181C4F55D267F354CA56C31F1 /* flashUnavailable@2x.png in Resources */,
+				4F4B5FBAB78871518FE13F2CC83017C0 /* flashUnavailable@3x.png in Resources */,
+				8AEEDEBF0CDFC9DD18ACEAF9F2EA27B2 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEFCAAD7FFFFA7B0E464F383C840396B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9C138BF643E675F0DA3D6B09C89AE16A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB7501A826C153CE486006CBFC370F1B /* Pods-RosalindCamera-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0D0DBEEB253DD71FDF407B26937465E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7A47C0970E30DC5875B0FC48D21799A /* Array+Utils.swift in Sources */,
+				3D16CB28A09C7B940EE4A4ED1CE32FDD /* AVCaptureVideoOrientation+Utils.swift in Sources */,
+				00DB2BB0AE87C2ED06F37815D918B95A /* CaptureSession+Orientation.swift in Sources */,
+				85F572BA795E437F85D732DE727A8CD2 /* CaptureSession.swift in Sources */,
+				59367DE408319E2E50AA6364E381C82C /* CaptureSessionManager.swift in Sources */,
+				C159BBDB2D9DFC50BC377B2789178A17 /* CGAffineTransform+Utils.swift in Sources */,
+				EB2A20031A00ED13C517932B6382CD41 /* CGPoint+Utils.swift in Sources */,
+				B433F5F5CE3E19DFF6F7684E9F21340F /* CGRect+Utils.swift in Sources */,
+				3D15E1E0A21CE6A83267257747C2E840 /* CIImage+Utils.swift in Sources */,
+				533357018305B739C4B82F4FDE21AE4A /* CIRectangleDetector.swift in Sources */,
+				93FABDE333737CA21007B0C6F1F7601A /* EditScanCornerView.swift in Sources */,
+				861C8E35B12A46848EB5D9499BF39775 /* EditScanViewController.swift in Sources */,
+				0624FE87921EBE3698ADE3AF707F0B26 /* Error.swift in Sources */,
+				14A1B0BC017975423243CC48C36123BD /* ImageScannerController.swift in Sources */,
+				ACA08AC3434B3095C517025E274E019A /* Quadrilateral.swift in Sources */,
+				97C851132DA2144AE3A546B994DA6C3E /* QuadrilateralView.swift in Sources */,
+				56A57C2CD4052ED46DED084560327BC6 /* RectangleFeaturesFunnel.swift in Sources */,
+				D0430B13F2BB4FB31D82DD6AA960E7E5 /* ReviewViewController.swift in Sources */,
+				E39A723FD6BE9C74FAC55EF7944C83AC /* ScannerViewController.swift in Sources */,
+				C3C4938FD256090E95FAF3AD4D6EADFA /* ShutterButton.swift in Sources */,
+				801401BE6F4449402CCE2B206F401EAB /* Transformable.swift in Sources */,
+				8F3B4B7DCBCF96106BB660FDFBD1EA49 /* UIImage+Orientation.swift in Sources */,
+				635B340825F4E0481AC538C6CF656E9B /* UIImage+Utils.swift in Sources */,
+				E0FFEC0D78FD4724B83B76C4C4E3BD9D /* VisionRectangleDetector.swift in Sources */,
+				A2AA498DB51CBF5441CD2C86B5F5A734 /* WeScan-dummy.m in Sources */,
+				0EA299739FB10CF5604A72990F52F078 /* ZoomGestureController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E5863734D7B38548A29CAAADDECABC8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WeScan;
+			target = 3F8D949C9BB158B30AB780118275AE30 /* WeScan */;
+			targetProxy = D18DC093FE5074D3E42E3D99B3D3BA05 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		70FCBDF186A53F9ACB068DE3D659C9B2 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B46E7A46F387D864C4E7ECA956DB43DB /* Localizable.strings */,
+				7364B72F0E9265F6CBAA0D009D695747 /* Localizable.strings */,
+				F736A39CAEB2CC42D208C681B8DD6D4F /* Localizable.strings */,
+				B6C5D85606C23214A4EC38F5F178D9DB /* Localizable.strings */,
+				2799B0F98C1E98DBA25EF1DE5D441E1C /* Localizable.strings */,
+				742828B12481AB66691F352CC5FF0383 /* Localizable.strings */,
+			);
+			name = Localizable.strings;
+			path = WeScan;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		12F34062B98AB9AE5DE3DEC841011AD5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 14BDE2EB34C4D0BFCC1F37EAEC2385AC /* WeScan.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/WeScan/WeScan-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/WeScan/WeScan-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/WeScan/WeScan.modulemap";
+				PRODUCT_MODULE_NAME = WeScan;
+				PRODUCT_NAME = WeScan;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		3048B0C5C704DFFF688DA57F5380ED58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		5B0C8287D755FD95091CF35D87FB8B2D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		8CC29608D63E4B9C22D9BF559FD12469 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 14BDE2EB34C4D0BFCC1F37EAEC2385AC /* WeScan.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/WeScan/WeScan-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/WeScan/WeScan-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/WeScan/WeScan.modulemap";
+				PRODUCT_MODULE_NAME = WeScan;
+				PRODUCT_NAME = WeScan;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B65A3D028B526C4B62E5F0CCC3EAB5B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 356B869DF46BC6798473C7E1B491D466 /* Pods-RosalindCamera.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-RosalindCamera/Pods-RosalindCamera-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-RosalindCamera/Pods-RosalindCamera.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D5593A4116F92D6EA06F62C87A093742 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1AC824905DD2BEEAFE3CE174FFF25D2D /* Pods-RosalindCamera.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-RosalindCamera/Pods-RosalindCamera-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-RosalindCamera/Pods-RosalindCamera.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2C5988670148FB0A3F78AD0E0C1C9EBC /* Build configuration list for PBXNativeTarget "WeScan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8CC29608D63E4B9C22D9BF559FD12469 /* Debug */,
+				12F34062B98AB9AE5DE3DEC841011AD5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B0C8287D755FD95091CF35D87FB8B2D /* Debug */,
+				3048B0C5C704DFFF688DA57F5380ED58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B720699D4E795375EB727F83FB2A8F17 /* Build configuration list for PBXNativeTarget "Pods-RosalindCamera" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B65A3D028B526C4B62E5F0CCC3EAB5B6 /* Debug */,
+				D5593A4116F92D6EA06F62C87A093742 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}
