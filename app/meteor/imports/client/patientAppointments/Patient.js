@@ -13,7 +13,7 @@ const sectionStart = {
 
 export const Patient = ({ patient }) =>
   !patient ? null : <div style={containerStyle}>
-    <div>
+    <div style={fieldsContainerStyle} contentEditable>
       <Name {...patient} />
       <Birthday {...patient} />
       <InsuranceId {...patient} />
@@ -32,6 +32,10 @@ const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between'
+}
+
+const fieldsContainerStyle = {
+  outline: 0
 }
 
 const Name = ({ gender, titlePrepend, lastName, firstName }) =>

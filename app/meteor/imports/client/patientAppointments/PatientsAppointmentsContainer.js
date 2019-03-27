@@ -7,6 +7,7 @@ import { Users } from '../../api/users'
 import { Patients } from '../../api/patients'
 import { subscribe } from '../../util/meteor/subscribe'
 import { Meteor } from 'meteor/meteor'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const fullNameWithTitle = _id => {
   const user = _id && Users.findOne({ _id })
@@ -27,15 +28,15 @@ const composer = props => {
   const patient = currentAppointment && Patients.findOne({ _id: currentAppointment.patientId })
   const patientId = patient && patient._id
 
-  Meteor.defer(() => {
-    if (patient) {
-      subscribe('appointments-patient', { patientId })
-    }
-  })
+  if (patient) {
+    subscribe('appointments-patient', { patientId })
+    const canRefer = hasRole(Meteor.userId(), ['referrals'])
+    patientId && canRefer && subscribe('referrals', {
+      patientIds: [ patientId ]
+    })
+  }
 
   const { removed, ...selectorFilter } = filter
-
-  console.log(selectorFilter, removed)
 
   const otherAppointments = currentAppointment ? Appointments.find({
     _id: { $ne: currentAppointment._id },

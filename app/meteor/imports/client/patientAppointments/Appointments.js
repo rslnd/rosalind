@@ -1,5 +1,5 @@
 import React from 'react'
-import { compose, withState, withProps, withHandlers, withPropsOnChange, fromRenderProps } from 'recompose'
+import { compose, withState, withProps, withHandlers, withPropsOnChange } from 'recompose'
 import { Icon } from '../components/Icon'
 import { green, lighterMutedBackground } from '../layout/styles'
 import { Tooltip } from '../components/Tooltip'
@@ -7,6 +7,7 @@ import { TagsList } from '../tags/TagsList'
 import { __ } from '../../i18n'
 import { Filter } from './Filter'
 import { twoPlacesIfNeeded } from '../../util/format'
+import { ReferralsContainer } from '../appointments/waitlist/ReferralsContainer'
 
 export const Appointments = compose(
   withState('scrollRef', 'setScrollRef'),
@@ -57,6 +58,7 @@ export const Appointments = compose(
           fullNameWithTitle={fullNameWithTitle}
           isCurrent
         />
+        <Referrals appointment={currentAppointment} />
         <Future
           futureAppointments={futureAppointments}
           fullNameWithTitle={fullNameWithTitle}
@@ -253,11 +255,12 @@ const tagsStyle = {
 }
 
 const Note = ({ note }) =>
-  <div style={noteStyle}>
+  <div style={noteStyle} contentEditable>
     {note || 'Note'}
   </div>
 
 const noteStyle = {
+  outline: 0,
   paddingTop: 20,
   paddingBottom: 20,
   paddingLeft: 15,
@@ -358,4 +361,15 @@ const futureHeaderStyle = {
 const futureHeaderExpandedStyle = {
   ...futureHeaderStyle,
   height: 46
+}
+
+const Referrals = ({ appointment }) =>
+  !appointment
+    ? null
+    : <ReferralsContainer appointment={appointment} style={referralsStyle} />
+
+const referralsStyle = {
+  ...appointmentStyle,
+  padding: 12,
+  paddingBottom: 0
 }

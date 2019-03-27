@@ -13,8 +13,8 @@ const infoTextStyle = {
   paddingBottom: 6
 }
 
-export const ReferralsWidget = ({ isLoading, referrableTags, referrableCalendars, length }) =>
-  (!isLoading && length >= 1 && <div style={containerStyle}>
+export const ReferralsWidget = ({ style, isLoading, referrableTags, referrableCalendars, length }) =>
+  (!isLoading && length >= 1 && <div style={style ? { ...containerStyle, ...style } : style}>
     <div className='text-muted' style={infoTextStyle}>
       {__('appointments.referPatientTo')}
     </div>

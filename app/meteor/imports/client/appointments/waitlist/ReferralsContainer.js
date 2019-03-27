@@ -13,7 +13,7 @@ const composer = props => {
   const { calendarId, patientId } = props.appointment
 
   if (!patientId) {
-    return
+    return null
   }
 
   const referrals = Referrals.find({ patientId }).fetch()
@@ -61,6 +61,7 @@ const composer = props => {
   ).length
 
   return {
+    ...props,
     referrableTags,
     referrableCalendars,
     length
