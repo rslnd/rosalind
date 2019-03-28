@@ -7,7 +7,7 @@ const logger = require('./logger')
 
 const start = (options) => {
   temp.track()
-  ipcMain.on('window/print', (e, printOptions) => {
+  ipcMain.on('print', (e, printOptions) => {
     options.title = printOptions.title
     console.log(options.title)
     print(options)
