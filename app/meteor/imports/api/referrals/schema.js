@@ -28,6 +28,11 @@ export const referrables = new SimpleSchema({
   toTagId: {
     type: SimpleSchema.RegEx.Id,
     optional: true
+  },
+
+  redeemImmediately: {
+    type: Boolean,
+    optional: true
   }
 })
 
@@ -67,6 +72,11 @@ export const referrals = new SimpleSchema({
 
   redeemingAppointmentId: {
     type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
+  redeemedImmediately: {
+    type: Boolean,
     optional: true
   },
 

@@ -4,10 +4,10 @@ import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
 import { CalendarPicker } from '../calendars/CalendarPicker'
-import { DocumentPicker } from '../components/DocumentPicker';
-import idx from 'idx';
-import { Tags } from '../../api';
-import { TagsList } from '../tags/TagsList';
+import { DocumentPicker } from '../components/DocumentPicker'
+import idx from 'idx'
+import { Tags } from '../../api'
+import { TagsList } from '../tags/TagsList'
 
 const structure = ({ getCalendarName, getTag }) => [
   {

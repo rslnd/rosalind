@@ -20,7 +20,8 @@ export const insert = ({ Referrals, Referrables }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!Referrables.findOne({ _id: referrableId })) {
+      const referrable = Referrables.findOne({ _id: referrableId })
+      if (!referrable) {
         throw new Error(`[Referrals] Unknown referrableId: ${referrableId}`)
       }
 
@@ -29,7 +30,7 @@ export const insert = ({ Referrals, Referrables }) => {
         return
       }
 
-      const referralId = Referrals.insert({
+      const referral = {
         patientId,
         appointmentId,
         referredTo,
@@ -37,7 +38,16 @@ export const insert = ({ Referrals, Referrables }) => {
         referredBy: this.userId,
         referringAppointmentId: appointmentId,
         createdAt: new Date()
-      })
+      }
+
+      const referralId = referrable.redeemImmediately
+        ? Referrals.insert({
+          ...referral,
+          redeemedImmediately: true,
+          redeemedAt: new Date(),
+          redeemingAppointmentId: null
+        })
+        : Referrals.insert({ ...referral })
 
       Events.post('referrals/insert', { referralId })
 
