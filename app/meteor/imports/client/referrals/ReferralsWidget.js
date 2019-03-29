@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import { __ } from '../../../i18n'
-import { Icon } from '../../components/Icon'
+import { __ } from '../../i18n'
+import { Icon } from '../components/Icon'
 
 const defaultIcon = 'plus-square'
 
@@ -13,33 +13,24 @@ const infoTextStyle = {
   paddingBottom: 6
 }
 
-export const ReferralsWidget = ({ style, isLoading, referrableTags, referrableCalendars, length }) =>
+export const ReferralsWidget = ({ style, isLoading, referrables, length }) =>
   (!isLoading && length >= 1 && <div style={style ? { ...containerStyle, ...style } : style}>
     <div className='text-muted' style={infoTextStyle}>
       {__('appointments.referPatientTo')}
     </div>
 
     {
-      referrableCalendars.map(r =>
+      referrables.map(r =>
         <ReferralButton
           key={r._id}
-          referral={r}
-        />
-      )
-    }
-
-    {
-      referrableTags.map(r =>
-        <ReferralButton
-          key={r._id}
-          referral={r}
+          referrable={r}
         />
       )
     }
   </div>) || null
 
-const ReferralButton = ({ referral }) => {
-  const { icon, name, tag, handleClick, isReferrable, existingReferralBySameAssignee } = referral
+const ReferralButton = ({ referrable }) => {
+  const { icon, name, tag, handleClick, isReferrable, existingReferralBySameAssignee } = referrable
   const title = name || tag
   const iconOrCheckmark = existingReferralBySameAssignee
     ? 'check'

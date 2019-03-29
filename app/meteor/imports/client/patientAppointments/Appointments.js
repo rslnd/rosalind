@@ -7,7 +7,7 @@ import { TagsList } from '../tags/TagsList'
 import { __ } from '../../i18n'
 import { Filter } from './Filter'
 import { twoPlacesIfNeeded } from '../../util/format'
-import { ReferralsContainer } from '../appointments/waitlist/ReferralsContainer'
+import { ReferralsContainer } from '../referrals/ReferralsContainer'
 
 export const Appointments = compose(
   withState('scrollRef', 'setScrollRef'),

@@ -18,7 +18,7 @@ import { Reminders } from './Reminders'
 import { PatientName } from './PatientName'
 import { PatientNotes } from './PatientNotes'
 import { Consent } from './Consent'
-import { ReferralsContainer } from '../waitlist/ReferralsContainer'
+import { ReferralsContainer } from '../../referrals/ReferralsContainer'
 
 const autofillRevenue = change => (e, tags) => {
   if (tags && tags.length >= 1) {

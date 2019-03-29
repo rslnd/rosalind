@@ -4,19 +4,24 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 
-export const insert = ({ Referrals }) => {
+export const insert = ({ Referrals, Referrables }) => {
   return new ValidatedMethod({
     name: 'referrals/insert',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       patientId: { type: SimpleSchema.RegEx.Id },
       appointmentId: { type: SimpleSchema.RegEx.Id },
-      referredTo: { type: SimpleSchema.RegEx.Id }
+      referredTo: { type: SimpleSchema.RegEx.Id },
+      referrableId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ patientId, appointmentId, referredTo }) {
+    run ({ patientId, appointmentId, referredTo, referrableId }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
+      }
+
+      if (!Referrables.findOne({ _id: referrableId })) {
+        throw new Error(`[Referrals] Unknown referrableId: ${referrableId}`)
       }
 
       if (Referrals.findOne({ patientId, referredTo })) {
@@ -28,6 +33,7 @@ export const insert = ({ Referrals }) => {
         patientId,
         appointmentId,
         referredTo,
+        referrableId,
         referredBy: this.userId,
         referringAppointmentId: appointmentId,
         createdAt: new Date()

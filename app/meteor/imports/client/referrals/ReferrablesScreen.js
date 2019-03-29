@@ -1,9 +1,13 @@
 import React from 'react'
-import { toClass } from 'recompose'
+import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
 import { CalendarPicker } from '../calendars/CalendarPicker'
+import { DocumentPicker } from '../components/DocumentPicker';
+import idx from 'idx';
+import { Tags } from '../../api';
+import { TagsList } from '../tags/TagsList';
 
 const structure = ({ getCalendarName, getTag }) => [
   {
@@ -42,10 +46,18 @@ const structure = ({ getCalendarName, getTag }) => [
     header: 'Zu Behandlung',
     field: 'toTagId',
     unsetWhenEmpty: true,
-    EditComponent: CalendarPicker,
-    render: r => r.toTagId && getCalendarName(r.toTagId)
+    EditComponent: TagsPicker,
+    render: r => r.toTagId && <TagsList tiny tags={[r.toTagId]} />
   }
 ]
+
+const TagsPicker = withProps({
+  toDocument: _id => Tags.findOne({ _id }),
+  toLabel: ({ _id }) => idx(Tags.findOne({ _id }), _ => _.tag),
+  render: ({ value }) => <TagsList tiny tags={[value]} />,
+  toKey: ({ _id }) => _id,
+  options: () => Tags.find({}).fetch()
+})(DocumentPicker)
 
 export const ReferrablesScreen = toClass(({ referrables, getCalendarName, getAssigneeName, handleUpdate, handleInsert, handleRemove, defaultReferrable }) =>
   <div className='content'>

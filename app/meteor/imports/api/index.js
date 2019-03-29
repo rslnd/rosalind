@@ -12,7 +12,7 @@ import { Calendars } from './calendars'
 import { Appointments } from './appointments'
 import { Importers } from './importers'
 import { Messages } from './messages'
-import { Referrals } from './referrals'
+import { Referrals, Referrables } from './referrals'
 import { Reports } from './reports'
 import { Search } from './search'
 import { Settings } from './settings'
@@ -35,6 +35,7 @@ export {
   InboundCallsTopics,
   Messages,
   Referrals,
+  Referrables,
   Reports,
   Schedules,
   Search,
