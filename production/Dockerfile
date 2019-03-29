@@ -1,4 +1,4 @@
-FROM node:8.12.0
+FROM node:8.15.1
 
 HEALTHCHECK \
   --interval=3s \
