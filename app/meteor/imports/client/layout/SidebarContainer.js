@@ -114,6 +114,7 @@ const sidebarItems = ({ history }) => {
         { name: 'thisClients', path: '/clients' },
         { name: 'thisCalendars', path: '/calendars' },
         { name: 'thisTags', path: '/tags' },
+        { name: 'thisReferrables', path: '/referrables' },
         { name: 'thisMessages', path: '/messages' },
         { name: 'thisSettings', path: '/settings' }
       ]

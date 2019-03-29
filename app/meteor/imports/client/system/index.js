@@ -5,6 +5,7 @@ import { MessagesContainer } from '../messages/MessagesContainer'
 import { TagsContainer } from '../tags/TagsContainer'
 import { CalendarsContainer } from '../calendars/CalendarsContainer'
 import { ClientsContainer } from '../clients/ClientsContainer'
+import { ReferrablesContainer } from '../referrals/ReferrablesContainer'
 import { Route } from '../layout/SafeRoute'
 import { Error } from '../components/Error'
 
@@ -18,6 +19,7 @@ export const System = ({ match }) => (
       <Route exact path={`${match.url}/messages`} component={MessagesContainer} />
       <Route exact path={`${match.url}/tags`} component={TagsContainer} />
       <Route exact path={`${match.url}/calendars`} component={CalendarsContainer} />
+      <Route exact path={`${match.url}/referrables`} component={ReferrablesContainer} />
       <Route path={`${match.url}`} component={Events} />
     </Switch>
   </div>
