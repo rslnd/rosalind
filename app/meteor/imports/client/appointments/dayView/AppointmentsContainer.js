@@ -82,11 +82,7 @@ const composer = (props) => {
     ...selector
   }).fetch()
 
-  if (calendar.allowUnassigned) {
-    assignees.push(null)
-    assigneeIds.push(null)
-  }
-
+  assigneeIds.push(null)
   const appointmentSelector = { ...selector, assigneeId: { $in: assigneeIds } }
 
   // Performance: Only render appts when schedules are here to avoid janky ui
@@ -98,6 +94,13 @@ const composer = (props) => {
       return a
     })
     : []
+
+  if (calendar.allowUnassigned || appointments.find(a => !a.assigneeId)) {
+    if (!calendar.allowUnassigned) {
+      console.warn('Found unassigned appointments but calendar disallows unassigned', appointments.filter(a => !a.assigneeId))
+    }
+    assignees.push(null)
+  }
 
   const isLoading = !appointmentsSub.ready() && appointments.length === 0
   const isReady = !isLoading

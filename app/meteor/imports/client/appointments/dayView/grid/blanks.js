@@ -63,9 +63,11 @@ class BlankState extends React.PureComponent {
 const Blank = injectSheet(styles)(BlankState)
 
 export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter }) => {
-  const { slotSize, slotSizeAppointment } = calendar
+  const { slotSize, slotSizeAppointment, allowUnassigned } = calendar
 
   return assignees.map(a => {
+    if (!a && !allowUnassigned) { return }
+
     const scheduleOffset = slotSizeAppointment &&
       (a && a.schedules && a.schedules.length >= 1) &&
       moment(sortBy(a.schedules, 'end')[0].end).add(1, 'second').minute()
