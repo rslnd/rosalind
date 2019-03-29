@@ -1,11 +1,45 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
-export const schema = new SimpleSchema({
+// TODO: Add fromTagId, fromUserId [assignee/waitlistAssignee], byUserId [loggen in user]
+export const referrables = new SimpleSchema({
+  order: {
+    type: Number
+  },
+
+  name: {
+    type: String
+  },
+
+  icon: {
+    type: String,
+    optional: true
+  },
+
+  fromCalendarIds: {
+    type: [SimpleSchema.RegEx.Id]
+  },
+
+  toCalendarId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
+  toTagId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  }
+})
+
+export const referrals = new SimpleSchema({
   type: {
     type: String,
     optional: true,
     allowedValues: ['external']
+  },
+
+  referrableId: {
+    type: SimpleSchema.RegEx.Id
   },
 
   patientId: {

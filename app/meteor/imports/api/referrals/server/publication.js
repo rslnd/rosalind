@@ -1,9 +1,17 @@
-import { Referrals } from '../'
+import { Referrals, Referrables } from '../'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
-import { publishComposite } from '../../../util/meteor/publish'
+import { publishComposite, publish } from '../../../util/meteor/publish'
 
 export const publication = () => {
+  publish({
+    name: 'referrables',
+    roles: ['*'],
+    fn: function () {
+      return Referrables.find({})
+    }
+  })
+
   publishComposite({
     name: 'referrals',
     args: {
