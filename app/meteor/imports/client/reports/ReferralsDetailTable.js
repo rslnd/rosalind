@@ -12,30 +12,26 @@ import {
   numberCellStyle,
   separatorStyle,
   summaryRowStyle } from '../components/Table'
-import { Calendars } from '../../api/calendars'
-import { Tags } from '../../api/tags'
 import { Box } from '../components/Box'
 import { ReferralsDetailSummary } from './ReferralsDetailSummary'
 import { Nil } from './shared/Nil'
+import { Referrables } from '../../api'
 
-const referredToTitle = _id => {
-  const tag = Tags.findOne({ _id })
-  if (tag) {
-    return tag.tag
+const referredToTitle = ({ referrableId }) => {
+  const referrable = Referrables.findOne({ _id: referrableId })
+  if (referrable) {
+    return referrable.name
+  } else {
+    console.error('[Referrals] Cannot find referrable with id', referrableId)
+    return '?'
   }
-  const calendar = Calendars.findOne({ _id })
-  if (calendar) {
-    return calendar.name
-  }
-
-  console.error('[Referrals] Cannot find calendar or tag with id', _id)
 }
 
 export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
   const rows = sortBy('createdAt')(
     referrals.map(r => ({
       ...r,
-      referredToTitle: referredToTitle(r.referredTo)
+      referredToTitle: referredToTitle(r)
     })))
 
   return (
