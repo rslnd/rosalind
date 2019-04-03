@@ -86,18 +86,20 @@ const composer = props => {
       if (patient && !isEqual(initialPatientFields, v.patient)) {
         const patient = mapFieldsToPatient(v.patient)
 
-        return Patients.actions.upsert.callPromise({
+        return Meteor.call('patients/upsert', {
           patient: {
             ...patient,
             _id: patient._id
           },
           replaceContacts: true
-        })
-          .then(() => Alert.success(__('patients.editSuccess')))
-          .catch(e => {
+        }, err => {
+          if (err) {
             Alert.error('Bitte noch einmal versuchen')
-            console.error(e)
-          })
+            console.error(err)
+          } else {
+            Alert.success(__('patients.editSuccess'))
+          }
+        })
       }
     }
 

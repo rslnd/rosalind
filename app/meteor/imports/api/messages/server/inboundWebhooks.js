@@ -1,6 +1,6 @@
 import parse from 'co-body'
 import { WebApp } from 'meteor/webapp'
-import { receive } from '../channels/sms'
+import { receive } from './channels/sms'
 import { sentry } from '../../../startup/shared/sentry'
 
 export const inboundWebhooks = () => {

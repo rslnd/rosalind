@@ -10,7 +10,7 @@ import { isQuietTimeRespected } from '../../messages/methods/isQuietTimeRespecte
 
 let SMS
 if (Meteor.isServer) {
-  SMS = require('../../messages/channels/sms')
+  SMS = require('../../messages/server/channels/sms')
 }
 
 export const sendScheduled = ({ Messages }) => {

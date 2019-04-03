@@ -29,7 +29,7 @@ export const eoswinPatients = ({ Importers }) => {
         switch (action) {
           case 'insert':
           case 'update':
-            Patients.actions.upsert.call({ patient, quiet })
+            Meteor.call('patients/upsert', { patient, quiet })
             break
           case 'softRemove':
             // TODO: Add method to soft remove patients

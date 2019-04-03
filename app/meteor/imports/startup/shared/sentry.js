@@ -7,6 +7,7 @@ export default () => {
   if (process.env.NODE_ENV === 'production') {
     if (!Meteor.settings.public.SENTRY_DSN_URL_PUBLIC) {
       console.warn('[Sentry] Please set SENTRY_DSN_URL_PUBLIC')
+      return
     }
 
     sentryLogger = new RavenLogger({

@@ -6,12 +6,12 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { Events } from '../../events'
-import { Referrals } from '../../referrals'
-import { normalizeName } from '../util/normalizeName'
-import { zerofix } from '../../../util/zerofix'
-import { daySelector } from '../../../util/time/day'
-import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
+import { Events } from '../../../events'
+import { Referrals } from '../../../referrals'
+import { normalizeName } from '../../util/normalizeName'
+import { zerofix } from '../../../../util/zerofix'
+import { daySelector } from '../../../../util/time/day'
+import { normalizePhoneNumber } from '../../../messages/methods/normalizePhoneNumber'
 
 const isEmpty = (v, k) => {
   if (k === 'note') {

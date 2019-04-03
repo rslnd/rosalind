@@ -75,9 +75,10 @@ export const darken = (c, amount = -10) => lighten(c, amount)
 
 // Read the csp-nonce meta tag set by browserPolicy.js
 let styleNonce = null
-export const getStyleNonce = () => {
-  if (!styleNonce) {
-    styleNonce = document.head.querySelector('[property=csp-nonce][content]').content
-  }
-  return styleNonce
+const metaTag = document.head.querySelector('[property=csp-nonce][content]')
+if (metaTag) {
+  styleNonce = metaTag.content
+} else {
+  console.error('[styles] getStyleNonce: Could not find csp-nonce meta tag in head')
 }
+export const getStyleNonce = () => styleNonce

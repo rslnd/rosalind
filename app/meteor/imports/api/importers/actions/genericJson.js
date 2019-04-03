@@ -66,7 +66,7 @@ export const genericJson = ({ Importers }) => {
             }
           }
 
-          return Patients.actions.upsert.call({ patient })
+          return Meteor.call('patients/upsert', { patient })
         } catch (e) {
           console.error('[Importers] genericJson: Failed', e)
         }

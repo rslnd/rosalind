@@ -1,5 +1,5 @@
 import { insert } from './insert'
 
-export default ({ Media }) => ({
+export const actions = ({ Media }) => ({
   insert: insert({ Media })
 })

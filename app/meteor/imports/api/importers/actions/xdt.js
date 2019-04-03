@@ -69,7 +69,7 @@ export const xdt = ({ Importers }) => {
         }
 
         console.log('[Importers] Xdt', { externalId: parsed.patient.id })
-        return Patients.actions.upsert.call({ patient })
+        return Meteor.call('patients/upsert', { patient })
       } else {
         console.error('[Importers] Xdt: Failed to parse patient')
         throw new Meteor.Error(500, '[Importers] Xdt: Failed to parse patient')

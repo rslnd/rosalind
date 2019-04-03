@@ -1,9 +1,9 @@
-import { action, Match } from '../../../util/meteor/action'
-import { Events } from '../../events'
-import { Clients } from '../../clients'
+import { action, Match } from '../../../../util/meteor/action'
+import { Events } from '../../../events'
+import { Clients } from '../../../clients'
 import { sign } from 'aws4'
 import uuidv4 from 'uuid/v4'
-import { mediaTypes } from '../schema'
+import { mediaTypes } from '../../schema'
 
 const bucket = 'rslnd-media-dev'
 const region = 'at-vie-1'

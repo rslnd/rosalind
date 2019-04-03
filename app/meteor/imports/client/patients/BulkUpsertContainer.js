@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
 import { compose } from 'recompose'
@@ -13,21 +14,21 @@ const composer = (props) => {
     try {
       const patient = mapFieldsToPatient(v.patient)
 
-      return Patients.actions.upsert.callPromise({
+      return Meteor.call('patients/upsert', {
         patient,
         replaceContacts: true,
         createExternalReferralTo: '9MY6AiaNrAkcER8DK'
-      })
-        .then(() => {
+      }, err => {
+        if (err) {
+          Alert.error('Bitte noch einmal versuchen')
+          console.error(e)
+        } else {
           Alert.success(__('patients.editSuccess'))
           props.dispatch({
             type: 'BULK_UPSERT_SUCCESS'
           })
-        })
-        .catch(e => {
-          Alert.error('Bitte noch einmal versuchen')
-          console.error(e)
-        })
+        }
+      })
     } catch (e) {
       Alert.error('Bitte noch einmal versuchen')
       console.error(e)

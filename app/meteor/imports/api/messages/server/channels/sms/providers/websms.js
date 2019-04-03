@@ -1,8 +1,8 @@
 import memoize from 'lodash/memoize'
 import some from 'lodash/some'
 import websms from 'websmscom'
-import { Settings } from '../../../../settings'
-import { normalizePhoneNumber } from '../../../methods/normalizePhoneNumber'
+import { Settings } from '../../../../../settings'
+import { normalizePhoneNumber } from '../../../../methods/normalizePhoneNumber'
 
 export const name = 'websms'
 

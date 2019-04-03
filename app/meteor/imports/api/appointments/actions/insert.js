@@ -24,7 +24,7 @@ export const insert = ({ Appointments }) => {
       let patientId = appointment.patientId
 
       if (newPatient) {
-        patientId = Patients.actions.upsert.call({ patient: newPatient })
+        patientId = Meteor.call('patients/upsert', { patient: newPatient })
       }
 
       let appointmentId = null
