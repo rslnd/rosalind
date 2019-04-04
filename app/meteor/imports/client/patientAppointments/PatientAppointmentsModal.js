@@ -4,7 +4,7 @@ import { withPropsOnChange } from 'recompose'
 import { Appointments } from './Appointments'
 import { AppointmentActionsContainer } from '../appointments/info/AppointmentActionsContainer'
 import { background, modalBackground, lightBackground, mutedSeparator, mutedBackground, darkerMutedBackground } from '../layout/styles'
-import { Paper } from '@material-ui/core'
+import Paper from '@material-ui/core/Paper'
 import injectSheet from 'react-jss'
 import { Patient } from './Patient'
 

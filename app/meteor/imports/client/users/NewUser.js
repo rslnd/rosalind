@@ -9,7 +9,7 @@ import { TextField } from '../components/form/TextField'
 import { asyncValidate as asyncValidatePassword, validate as validatePassword } from './ChangePasswordForm'
 import { UserProfileFields } from './UserProfileForm'
 import { reduxForm, Field } from 'redux-form'
-import { Button } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 
 const NewUserScreen = ({ submitting, invalid, validating, pristine, handleSubmit }) =>
   <div>

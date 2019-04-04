@@ -1,6 +1,6 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import { Button } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 import { compose } from 'recompose'
 import { withTracker } from '../components/withTracker'
 import { Icon } from '../components/Icon'

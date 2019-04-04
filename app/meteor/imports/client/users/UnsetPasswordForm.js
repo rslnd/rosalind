@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import { compose, withState, mapProps, withHandlers } from 'recompose'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
-import { Button } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 import { important } from '../layout/styles'
 import { Icon } from '../components/Icon'
 

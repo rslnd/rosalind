@@ -4,7 +4,9 @@ import { Users } from '../../api/users'
 import { compose, withState, withHandlers } from 'recompose'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
-import { Button, Checkbox, FormControlLabel } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { Icon } from '../components/Icon'
 
 const Fields = ({ submitting, handleRemove, doubleCheck, handleToggleDoubleCheck }) =>
