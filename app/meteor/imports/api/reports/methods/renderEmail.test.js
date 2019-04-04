@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 import { expect } from 'chai'
-import dedent from 'dedent'
 import {
   renderEmail,
   renderSummary,
@@ -47,10 +46,9 @@ describe('reports', () => {
 
     it('renders assignee ranking', () => {
       const rendered = renderBody({ report, mapUserIdToName, mapAssigneeType, mapCalendar })
-      expect(equalizeWhitespace(rendered)).to.include(dedent`
-      1 - Dr. A
-      Umsatz: € 1 713
-      Neu / Stunde: 8,4`)
+      expect(equalizeWhitespace(rendered)).to.include(`1 - Dr. A
+Umsatz: € 1 713
+Neu / Stunde: 8,4`)
     })
   })
 })

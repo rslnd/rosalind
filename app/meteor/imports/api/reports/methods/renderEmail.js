@@ -2,7 +2,6 @@ import moment from 'moment-timezone'
 import idx from 'idx'
 import identity from 'lodash/identity'
 import sum from 'lodash/sum'
-import dedent from 'dedent'
 import { dayToDate } from '../../../util/time/day'
 import { float, percentage, currencyRounded } from '../../../util/format'
 
@@ -22,22 +21,22 @@ const renderLine = (text, value, separator = ': ') => {
 }
 
 export const renderHeader = ({ day }) => {
-  return dedent`
-    Tagesbericht für ${moment(dayToDate(day)).locale('de-AT').format('dddd, D. MMMM YYYY')}
-    Kalenderwoche ${moment(dayToDate(day)).isoWeek()}
+  return `
+Tagesbericht für ${moment(dayToDate(day)).locale('de-AT').format('dddd, D. MMMM YYYY')}
+Kalenderwoche ${moment(dayToDate(day)).isoWeek()}
   `
 }
 
 export const renderSummary = ({ report, mapCalendar }) => {
-  return dedent`
-    -- ${mapCalendar(report.calendarId).name} --
-    Gesamtumsatz: ${currencyRounded(
+  return `
+-- ${mapCalendar(report.calendarId).name} --
+Gesamtumsatz: ${currencyRounded(
     idx(report, _ => _.total.revenue.total.actual) ||
-      idx(report, _ => _.total.revenue.total.expected))}
-    Auslastung: ${
+    idx(report, _ => _.total.revenue.total.expected))}
+Auslastung: ${
   percentage({ value: report.total.workload.weighted }) ||
-      percentage({ part: report.total.workload.actual, of: report.total.workload.available })}
-  `
+  percentage({ part: report.total.workload.actual, of: report.total.workload.available })}
+`
 }
 
 export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
@@ -74,11 +73,11 @@ export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
 }
 
 export const renderFooter = () => {
-  return dedent`
+  return `
 
-    Der detaillierte Tagesbericht befindet sich im Anhang.
+Der detaillierte Tagesbericht befindet sich im Anhang.
 
-    Danke!
+Danke!
 
   `
 }
