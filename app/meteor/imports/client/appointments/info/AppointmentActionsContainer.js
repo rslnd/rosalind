@@ -13,12 +13,24 @@ const composer = (props) => {
   const appointment = props.appointment || Appointments.findOne({ _id: props.appointmentId })
   if (!appointment) { return }
 
-  const { admitted, canceled } = appointment
+  const { admitted, canceled, treatmentStart, treatmentEnd } = appointment
   const args = { appointmentId: props.appointmentId }
   const closeModal = () => props.onClose && props.onClose()
 
   const setAdmitted = () => {
     props.onSetAdmitted(appointment)
+    closeModal()
+  }
+
+  const startTreatment = () => {
+    Alert.success(__('appointments.startTreatmentSuccess'))
+    Appointments.actions.startTreatment.call(args)
+    closeModal()
+  }
+
+  const endTreatment = () => {
+    Alert.success(__('appointments.endTreatmentSuccess'))
+    Appointments.actions.endTreatment.call(args)
     closeModal()
   }
 
@@ -47,16 +59,19 @@ const composer = (props) => {
   }
 
   let startMove
-  if (props.onStartMove) {
+  if (props.onMoveStart) {
     startMove = () => {
       let patient = null
       if (appointment.patientId) {
         patient = Patients.findOne({ _id: appointment.patientId })
       }
 
-      props.onStartMove({
+      const calendar = Calendars.findOne({ _id: appointment.calendarId })
+
+      props.onMoveStart({
         appointment,
-        patient
+        patient,
+        allowMoveBetweenAssignees: calendar.allowMoveBetweenAssignees
       })
     }
   }
@@ -74,7 +89,11 @@ const composer = (props) => {
   return {
     canceled,
     admitted,
+    treatmentStart,
+    treatmentEnd,
     setAdmitted,
+    startTreatment,
+    endTreatment,
     unsetAdmitted,
     setCanceled,
     unsetCanceled,

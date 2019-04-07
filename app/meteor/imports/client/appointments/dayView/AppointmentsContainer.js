@@ -35,6 +35,13 @@ const handleSetAdmitted = (args) => {
 const handleMove = (args) =>
   Appointments.actions.move.callPromise(args).then(() => {
     Alert.success(__('appointments.moveSuccess'))
+  }).catch(e => {
+    console.error(e)
+    if (e.error === 'assigneeNotScheduled') {
+      Alert.error(__('appointments.moveErrorAssigneeNotScheduled'))
+    } else {
+      Alert.error(__('appointments.moveError'))
+    }
   })
 
 const composer = (props) => {

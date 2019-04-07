@@ -122,5 +122,10 @@ export const schema = new SimpleSchema({
   history: {
     type: Boolean,
     optional: true
+  },
+
+  allowMoveBetweenAssignees: {
+    type: Boolean,
+    optional: true
   }
 })

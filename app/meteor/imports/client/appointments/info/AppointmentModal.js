@@ -9,7 +9,7 @@ export const AppointmentModal = (props) => {
   const {
     isLoading,
     appointmentId,
-    onStartMove,
+    onMoveStart,
     onSetAdmitted,
     show,
     onClose,
@@ -22,7 +22,7 @@ export const AppointmentModal = (props) => {
     <Modal.Footer style={{ backgroundColor: '#fcfcfc' }}>
       <AppointmentActionsContainer
         appointmentId={appointmentId}
-        onStartMove={onStartMove}
+        onMoveStart={onMoveStart}
         onClose={onClose}
         viewInCalendar={viewInCalendar}
         onSetAdmitted={onSetAdmitted} />

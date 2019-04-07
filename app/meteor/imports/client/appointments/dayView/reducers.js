@@ -15,14 +15,18 @@ export const move = (state = initialState, action) => {
         isMoving: true,
         moveAppointmentId: action.appointment._id,
         appointment: action.appointment,
-        patient: action.patient
+        patient: action.patient,
+        allowMoveBetweenAssignees: action.allowMoveBetweenAssignees
       }
 
     case 'APPOINTMENT_MOVE_HOVER':
       return {
         ...state,
-        moveToAssigneeId: action.assigneeId,
-        moveToTime: action.time
+        moveToTime: action.time,
+        moveToAssigneeId:
+          state.allowMoveBetweenAssignees
+            ? action.assigneeId
+            : state.appointment.assigneeId
       }
 
     case 'APPOINTMENT_MOVE_END':

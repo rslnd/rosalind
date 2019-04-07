@@ -46,6 +46,8 @@ export const appointments = {
   consentedAt: 'Revers abgelegt am __date__',
   move: 'Verschieben',
   moveSuccess: 'Termin verschoben',
+  moveErrorAssigneeNotScheduled: 'Person ist an diesem Tag nicht anwesend. Bitte anderen Tag wählen.',
+  moveError: 'Verschieben nicht möglich',
   changeAssigneeSuccess: 'Termine verschoben',
   changeAssigneeMustBeDifferent: 'Bitte eine Person wählen, die noch nicht an diesem Tag anwesend ist',
   editSuccess: 'Gespeichert',

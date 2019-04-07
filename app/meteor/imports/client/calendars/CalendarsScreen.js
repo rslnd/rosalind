@@ -147,6 +147,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Anrufliste',
     field: 'acceptInboundCalls'
+  },
+  {
+    header: 'Termine zwischen Spalten verschieben',
+    field: 'allowMoveBetweenAssignees',
+    type: Boolean
   }
 ]
 
