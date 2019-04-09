@@ -44,7 +44,7 @@ export const move = ({ Appointments }) => {
         throw new Meteor.Error('assigneeNotScheduled', 'No day schedule found for target date')
       }
 
-      if (!daySchedule.userIds.includes(newAssigneeId)) {
+      if (newAssigneeId && !daySchedule.userIds.includes(newAssigneeId)) {
         throw new Meteor.Error('assigneeNotScheduled', 'Assignee is not scheduled on target date')
       }
 

@@ -151,7 +151,8 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Termine zwischen Spalten verschieben',
     field: 'allowMoveBetweenAssignees',
-    type: Boolean
+    type: Boolean,
+    render: t => t.allowMoveBetweenAssignees && <Icon name='check' />
   }
 ]
 

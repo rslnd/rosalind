@@ -26,7 +26,7 @@ export const move = (state = initialState, action) => {
         moveToAssigneeId:
           state.allowMoveBetweenAssignees
             ? action.assigneeId
-            : state.appointment.assigneeId
+            : (state.appointment.assigneeId || action.assigneeId)
       }
 
     case 'APPOINTMENT_MOVE_END':
