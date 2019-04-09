@@ -8,6 +8,8 @@ import { Patients } from '../../../api/patients'
 import { Calendars } from '../../../api/calendars'
 import { Appointments } from '../../../api/appointments'
 import { AppointmentActions } from './AppointmentActions'
+import { hasRole } from '../../../util/meteor/hasRole'
+import { Meteor } from 'meteor/meteor'
 
 const composer = (props) => {
   const appointment = props.appointment || Appointments.findOne({ _id: props.appointmentId })
@@ -71,7 +73,9 @@ const composer = (props) => {
       props.onMoveStart({
         appointment,
         patient,
-        allowMoveBetweenAssignees: calendar.allowMoveBetweenAssignees
+        allowMoveBetweenAssignees:
+          hasRole(Meteor.userId(), ['allowMoveBetweenAssignees']) ||
+          calendar.allowMoveBetweenAssignees
       })
     }
   }

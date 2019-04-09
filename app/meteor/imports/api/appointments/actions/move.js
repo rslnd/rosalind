@@ -5,9 +5,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Messages } from '../../messages'
+import { Calendars } from '../../calendars'
 import { getDefaultDuration } from '../methods/getDefaultDuration'
-import { Schedules } from '../../schedules';
-import day, { daySelector, dateToDay } from '../../../util/time/day';
+import { Schedules } from '../../schedules'
+import day, { daySelector, dateToDay } from '../../../util/time/day'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const move = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -34,18 +36,26 @@ export const move = ({ Appointments }) => {
         throw new Meteor.Error(404, 'Appointment not found')
       }
 
-      const daySchedule = Schedules.findOne({
-        type: 'day',
-        calendarId: appointment.calendarId,
-        ...daySelector(dateToDay(newStart))
-      })
+      const calendar = Calendars.findOne({ _id: appointment.calendarId })
 
-      if (!daySchedule || daySchedule.userIds === []) {
-        throw new Meteor.Error('assigneeNotScheduled', 'No day schedule found for target date')
-      }
+      const allowMoveBetweenAssignees =
+        hasRole(Meteor.userId(), ['allowMoveBetweenAssignees']) ||
+        calendar.allowMoveBetweenAssignees
 
-      if (newAssigneeId && !daySchedule.userIds.includes(newAssigneeId)) {
-        throw new Meteor.Error('assigneeNotScheduled', 'Assignee is not scheduled on target date')
+      if (!allowMoveBetweenAssignees) {
+        const daySchedule = Schedules.findOne({
+          type: 'day',
+          calendarId: appointment.calendarId,
+          ...daySelector(dateToDay(newStart))
+        })
+
+        if (!daySchedule || daySchedule.userIds === []) {
+          throw new Meteor.Error('assigneeNotScheduled', 'No day schedule found for target date')
+        }
+
+        if (newAssigneeId && !daySchedule.userIds.includes(newAssigneeId)) {
+          throw new Meteor.Error('assigneeNotScheduled', 'Assignee is not scheduled on target date')
+        }
       }
 
       const duration = getDefaultDuration({
