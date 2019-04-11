@@ -19,7 +19,6 @@ export const eoswinJournalReports = ({ Importers }) => {
     }).validator(),
 
     run ({ name, content }) {
-      this.unblock()
       try {
         if (Meteor.isServer) {
           const { isTrustedNetwork } = require('../../../../customer/server/isTrustedNetwork')

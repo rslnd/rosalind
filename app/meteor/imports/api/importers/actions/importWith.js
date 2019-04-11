@@ -15,8 +15,6 @@ export const importWith = ({ Importers }) => {
     }).validator(),
 
     run ({ importer, name, content }) {
-      this.unblock()
-
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../customer/server/isTrustedNetwork')
         if (!this.userId && (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
