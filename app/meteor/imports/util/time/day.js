@@ -54,7 +54,7 @@ export const dayToString = d => [
 ].join('-')
 
 export const stringToDay = s => {
-  const [ year, month, day ] = s.split('-')
+  const [year, month, day] = s.split('-')
   return {
     year: parseInt(year, 10),
     month: parseInt(month, 10),
@@ -64,9 +64,8 @@ export const stringToDay = s => {
 
 export const isSame = (a, b) =>
   a.day === b.day &&
-  a.month === b.month &&
   a.year === b.year &&
-  (!a.zeroIndexMonth === !b.zeroIndexMonth)
+  zeroIndexMonth(a).month === zeroIndexMonth(b).month
 
 export const daySelector = (d, prefix = 'day') => ({
   [[prefix, 'year'].join('.')]: d.year,

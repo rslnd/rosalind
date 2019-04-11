@@ -72,7 +72,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         const countRemovedDays = Schedules.remove({
           type: 'day',
           calendarId,
-          $or: days.map(daySelector)
+          $or: days.map(d => daySelector(d)) // force 1-arity to prevent map index from being set as prefix
         })
         console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedDays, 'day schedules')
       }
