@@ -1,8 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const open = require('opn')
 const temp = require('temp')
-const { ipcMain } = require('electron')
+const { shell, ipcMain } = require('electron')
 const logger = require('./logger')
 
 const start = (options) => {
@@ -38,7 +37,10 @@ const print = (options) => {
           return
         }
         logger.info('[Print] Saved pdf to path: ' + pdfPath)
-        open(pdfPath)
+        const ok = shell.openItem(pdfPath)
+        if (!ok) {
+          logger.error('[Print] failed to open pdf: ' + pdfPath)
+        }
       })
     })
   })
