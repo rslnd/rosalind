@@ -2,6 +2,7 @@ import React from 'react'
 import { insuranceId as formatInsuranceId, prefix } from '../../api/patients/methods'
 import { namecase } from '../../util/namecase'
 import { birthday as formatBirthday } from '../../util/time/format'
+import { __ } from '../../i18n'
 
 const secondary = {
   opacity: 0.6
@@ -85,12 +86,19 @@ const InsuranceId = ({ insuranceId }) =>
 
 const Note = ({ note }) =>
   <div style={noteStyle}>
-    {note}
+    <div style={noteLabelStyle}>{__('patients.noteLine1')}</div>
+    <div style={noteLabelStyle}>&emsp;{__('patients.noteLine2')}</div>
+    {note || <div>&emsp;</div>}
   </div>
 
 const noteStyle = {
   ...sectionStart,
   fontWeight: 600
+}
+
+const noteLabelStyle = {
+  fontSize: '80%',
+  opacity: 0.5
 }
 
 const Address = ({ address }) =>
