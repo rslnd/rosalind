@@ -28,7 +28,7 @@ const structure = ({ getCalendarName, getTag }) => [
   {
     header: 'Von Kalender',
     field: 'fromCalendarIds',
-    unsetWhenEmpty: true,
+    unsetWhenEmpty: false,
     isMulti: true,
     EditComponent: CalendarPicker,
     render: r => r.fromCalendarIds && r.fromCalendarIds.map(getCalendarName).join(', ')
