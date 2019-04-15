@@ -15,7 +15,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
       addendum: { type: Object, blackbox: true, optional: true }
     }).validator(),
 
-    run ({ day, addendum }) {
+    run({ day, addendum }) {
       try {
         if (this.isSimulation) { return }
 
@@ -77,6 +77,10 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
           }
 
           const generatedReport = generateReport({ calendar, day, appointments, pastAppointments, daySchedule, overrideSchedules, tagMapping, messages, existingReport, addendum: filteredAddendum })
+
+          if (generatedReport.assignees.length === 0) {
+            return null
+          }
 
           if (existingReport) {
             Events.post('reports/update', { reportId: existingReport._id })
