@@ -4,33 +4,103 @@ import { compose, withState, withHandlers, withProps } from 'recompose'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Divider from '@material-ui/core/Divider'
+import Checkbox from '@material-ui/core/Checkbox'
+import Radio from '@material-ui/core/Radio'
 import { Icon } from '../components/Icon'
 import { withTracker } from '../components/withTracker'
 import { Calendars } from '../../api/calendars'
 import { __ } from '../../i18n'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import { Meteor } from 'meteor/meteor'
+import { Appointments } from '../../api'
+
+const removeNullKeys = (filter, newPartialFilter) => {
+  const key = Object.keys(newPartialFilter)[0]
+  if (newPartialFilter[key] === null) {
+    return Object.keys(filter).reduce((acc, existingKey) =>
+      (existingKey === key)
+        ? acc
+        : ({
+          ...acc,
+          [existingKey]: filter[existingKey]
+        })
+      , {})
+  } else {
+    return {
+      ...filter,
+      ...newPartialFilter
+    }
+  }
+}
+
+const withFilters = ({ filter, setFilter, ...props }) =>
+  filters(props).map((f) => {
+    if (f.divider) { return f }
+
+    const state = filter || {}
+
+    return {
+      ...f,
+      toggle: () => setFilter(removeNullKeys(state, f.toggle(state))),
+      count: f.count ? (props.unfilteredPastAppointments || []).filter(f.count).length : null,
+      isChecked: !!f.isChecked(state)
+    }
+  })
+
+const filters = ({ currentAppointment, calendars, userId }) => [
+  {
+    key: 'assigneeId',
+    label: 'Meine Behandlungen',
+    toggle: state => ({ assigneeId: state.assigneeId ? null : userId }),
+    isChecked: state => state.assigneeId === userId,
+    count: a => a.assigneeId === userId
+  },
+  {
+    label: 'Absagen',
+    toggle: state => ({ removed: state.removed ? null : true }),
+    isChecked: state => state.removed,
+    count: a => (a.removed || a.canceled)
+  },
+  {
+    divider: true
+  },
+  {
+    key: 'calendarId',
+    label: 'Alle Kalender',
+    toggle: () => ({ calendarId: null }),
+    isChecked: state => !state.calendarId,
+    count: a => true,
+    type: 'radio'
+  },
+  ...(calendars || []).map(c => ({
+    key: 'calendarId',
+    label: 'Nur ' + c.name,
+    toggle: state => ({ calendarId: c._id }),
+    isChecked: state => state.calendarId === c._id,
+    count: a => (a.calendarId === c._id),
+    type: 'radio'
+  }))
+]
+
+// HACK: Filter by same assignee by default if logged in as assignee
+// Maybe the filter state should be persisted per user?
+const defaultFilter = props =>
+  Appointments.findOne({ assigneeId: props.userId })
+    ? { assigneeId: props.userId }
+    : null
 
 const composer = props => {
-  if (props.unfilteredPastAppointments.length <= 1) { return null }
+  const userId = Meteor.userId()
+  const calendars = Calendars.find().fetch()
 
-  const countByCalendarId = props.unfilteredPastAppointments.reduce((acc, a) =>
-    ({ ...acc, [a.calendarId]: (acc[a.calendarId] || 0) + 1 }),
-  {})
-
-  const calendarIds = Object.keys(countByCalendarId)
-
-  if (calendarIds.length <= 1) { return null }
-
-  const filterMenu = Calendars.find({ _id: {
-    $in: calendarIds
-  } }, { order: { order: 1 } }).fetch().map(c => ({
-    ...c,
-    count: countByCalendarId[c._id]
-  }))
+  if (!props.filter) {
+    props.setFilter(defaultFilter({ ...props, userId }))
+  }
 
   return {
     ...props,
-    filterMenu
+    userId,
+    calendars
   }
 }
 
@@ -42,55 +112,35 @@ export const Filter = compose(
       props.setAnchor(e.currentTarget),
     handleClose: props => e => {
       props.setAnchor(null)
-    },
-    filterRemoved: props => removed => e => props.setFilter({ ...props.filter, removed }),
-    filterCalendarId: props => calendarId => e => props.setFilter({ ...props.filter, calendarId })
+    }
   }),
   withProps(props => {
-    const options = [
-      {
-        name: 'Alle Termine',
-        count: props.unfilteredPastAppointments.length,
-        icon: 'search-plus',
-        fn: props.filterCalendarId(null)
-      },
-      ...props.filterMenu.map(calendar => ({
-        name: __('appointments.filterCalendar', { name: calendar.name }),
-        count: calendar.count,
-        icon: calendar.icon,
-        fn: props.filterCalendarId(calendar._id)
-      })),
-      (props.canceledCount >= 1) && { divider: true },
-      (props.canceledCount >= 1) && (
-        props.filter.removed
-          ? {
-            name: 'Absagen verstecken',
-            icon: 'times',
-            count: props.canceledCount,
-            fn: props.filterRemoved(false)
-          }
-          : {
-            name: 'Absagen anzeigen',
-            icon: 'times',
-            muted: true,
-            count: props.canceledCount,
-            fn: props.filterRemoved(true)
-          }
-      )
-    ].filter(identity)
+    const options = withFilters(props)
 
-    return { options }
+    const filteredCalendar = options.find(o => o.isChecked && o.key === 'calendarId')
+    const filteredAssignee = options.find(o => o.isChecked && o.key === 'assigneeId')
+
+    const filterLabel = [
+      filteredCalendar && filteredCalendar.label,
+      filteredAssignee && filteredAssignee.label
+    ].filter(identity).join(', ')
+
+    return {
+      options,
+      filterLabel
+    }
   })
 )(({
   anchor,
   options,
   handleOpen,
-  handleClose
+  handleClose,
+  filterLabel
 }) =>
   <>
     <div style={filterTabStyle} onClick={handleOpen}>
       <div style={filterStyle}>
-        Alle Termine (36) <Icon name='caret-down' />
+        Filter: {filterLabel}&emsp;<Icon name='caret-down' />
       </div>
     </div>
     <Menu
@@ -103,12 +153,17 @@ export const Filter = compose(
           o.divider
             ? <Divider key={i} />
             : <MenuItem
-              key={o.name}
-              onClick={() => { o.fn(); handleClose() }}
+              style={menuItemStyle}
+              key={o.label}
+              onClick={() => { o.toggle(); handleClose() }}
             >
-              <Icon name={o.icon} style={o.muted ? iconStyleMuted : iconStyle} />
-              {o.name} {o.count &&
-                <ListItemSecondaryAction>
+              {
+                o.type === 'radio'
+                  ? <Radio checked={o.isChecked} onChange={() => { o.toggle(); handleClose() }} />
+                  : <Checkbox checked={o.isChecked} onChange={() => { o.toggle(); handleClose() }} />
+              }
+              {o.label} {(o.count === 0 || o.count > 0) &&
+                <ListItemSecondaryAction style={o.count === 0 ? countStyleZero : countStyle}>
                   {o.count}
                 </ListItemSecondaryAction>
               }
@@ -121,7 +176,6 @@ export const Filter = compose(
 
 const filterTabStyle = {
   position: 'absolute',
-  // right: 39,
   left: 120,
   top: 0,
   opacity: 0.9,
@@ -140,11 +194,17 @@ const filterStyle = {
   opacity: 0.9
 }
 
-const iconStyle = {
-  width: 28
+const menuItemStyle = {
+  minWidth: 200
 }
 
-const iconStyleMuted = {
-  ...iconStyle,
-  opacity: 0.3
+const countStyle = {
+  pointerEvents: 'none',
+  paddingRight: 16,
+  paddingLeft: 25
+}
+
+const countStyleZero = {
+  ...countStyle,
+  opacity: 0.6
 }

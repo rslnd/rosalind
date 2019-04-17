@@ -18,7 +18,7 @@ const composer = props => {
   const {
     appointmentId,
     filter
-    // onStartMove,
+    // onMoveStart,
     // onSetAdmitted,
     // show,
     // onClose
@@ -32,24 +32,23 @@ const composer = props => {
     subscribe('appointments-patient', { patientId })
     const canRefer = hasRole(Meteor.userId(), ['referrals'])
     patientId && canRefer && subscribe('referrals', {
-      patientIds: [ patientId ]
+      patientIds: [patientId]
     })
   }
 
-  const { removed, ...selectorFilter } = filter
+  const { removed, ...selectorFilter } = (filter || {})
 
   const otherAppointments = currentAppointment ? Appointments.find({
     _id: { $ne: currentAppointment._id },
     patientId
-  }, { removed, sort: { start: 1 } }).fetch() : []
+  }, { removed: true, sort: { start: 1 } }).fetch() : []
 
   const futureAppointments = otherAppointments && takeRightWhile(otherAppointments, a => a.start > currentAppointment.start)
 
   const unfilteredPastAppointments = otherAppointments.slice(-futureAppointments.length)
   const pastAppointments = unfilteredPastAppointments.filter(a =>
-    selectorFilter.calendarId
-      ? a.calendarId === selectorFilter.calendarId
-      : true
+    (!selectorFilter.calendarId || a.calendarId === selectorFilter.calendarId) &&
+    (!selectorFilter.assigneeId || a.assigneeId === selectorFilter.assigneeId)
   )
 
   const canceledCount = otherAppointments.filter(a => (a.canceled || a.removed)).length
@@ -67,6 +66,6 @@ const composer = props => {
 }
 
 export const PatientsAppointmentsContainer = compose(
-  withState('filter', 'setFilter', {}),
+  withState('filter', 'setFilter', null), // default filter is loaded from user preferences
   withTracker(composer)
 )(PatientAppointmentsModal)
