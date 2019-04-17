@@ -14,7 +14,7 @@ const sectionStart = {
 
 export const Patient = ({ patient }) =>
   !patient ? null : <div style={containerStyle}>
-    <div style={fieldsContainerStyle} contentEditable>
+    <div style={fieldsContainerStyle}>
       <Name {...patient} />
       <Birthday {...patient} />
       <InsuranceId {...patient} />

@@ -1,13 +1,13 @@
 import React from 'react'
 import { compose, withState, withProps, withHandlers, withPropsOnChange } from 'recompose'
 import { Icon } from '../components/Icon'
-import { green, lighterMutedBackground } from '../layout/styles'
-import { Tooltip } from '../components/Tooltip'
-import { TagsList } from '../tags/TagsList'
+import { lighterMutedBackground } from '../layout/styles'
 import { __ } from '../../i18n'
 import { Filter } from './Filter'
-import { twoPlacesIfNeeded } from '../../util/format'
 import { ReferralsContainer } from '../referrals/ReferralsContainer'
+import { Info, dateColumnStyle } from './Info'
+import { Tags } from './Tags'
+import { Note } from './Note'
 
 export const Appointments = compose(
   withState('scrollRef', 'setScrollRef'),
@@ -42,7 +42,7 @@ export const Appointments = compose(
       <div style={appointmentsContainerInnerStyle}> {/* Inside this div things will not be reversed */}
         {
           pastAppointments.length > 6 &&
-            <Oldest />
+          <Oldest />
         }
         <AppointmentsList
           appointments={pastAppointments}
@@ -50,7 +50,7 @@ export const Appointments = compose(
         />
         {
           pastAppointments.length > 1 &&
-            <Current />
+          <Current />
         }
         <Appointment
           key='current'
@@ -69,16 +69,6 @@ export const Appointments = compose(
     </div>
   </div>
 )
-
-const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
-  appointments.map(a =>
-    <Appointment
-      key={a._id}
-      appointment={a}
-      hasMedia={!!a.note}
-      fullNameWithTitle={fullNameWithTitle}
-    />
-  )
 
 const containerStyle = {
   height: '100%',
@@ -104,6 +94,16 @@ const shadowStyle = {
   borderRadius: '4px 0 0 0'
 }
 
+export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
+  appointments.map(a =>
+    <Appointment
+      key={a._id}
+      appointment={a}
+      hasMedia={!!a.note}
+      fullNameWithTitle={fullNameWithTitle}
+    />
+  )
+
 const Appointment = ({ isCurrent, hasMedia, appointment, fullNameWithTitle }) =>
   <div style={
     isCurrent
@@ -116,7 +116,7 @@ const Appointment = ({ isCurrent, hasMedia, appointment, fullNameWithTitle }) =>
 
     {
       hasMedia &&
-        <Media />
+      <Media />
     }
   </div>
 
@@ -159,112 +159,6 @@ const mediaBackgroundStyle = {
   backgroundColor: '#7f8288',
   boxShadow: 'inset 0px 0px 5px 0px rgba(0,0,0,0.24)',
   borderRadius: `0 0 ${appointmentStyle.borderRadius}px ${appointmentStyle.borderRadius}px`
-}
-
-const Info = ({ appointment, fullNameWithTitle }) =>
-  <div style={infoStyle}>
-    <span style={flexStyle}>
-      <span style={dateColumnStyle}>
-        <Icon name='diamond' style={calendarIconStyle} />
-        &nbsp;
-        <Date {...appointment} />
-      </span>
-      <Assignee {...appointment} fullNameWithTitle={fullNameWithTitle} />
-    </span>
-
-    <span style={flexStyle}>
-      <Revenue {...appointment} />
-      <Indicator {...appointment} />
-    </span>
-  </div>
-
-const infoStyle = {
-  display: 'flex',
-  width: '100%',
-  justifyContent: 'space-between',
-  padding: 12,
-  paddingTop: 9,
-  opacity: 0.9
-}
-
-// Fix icon alignmeht with text spans
-const infoIconStyle = {
-  marginTop: '2.5px'
-}
-
-const calendarIconStyle = {
-  ...infoIconStyle,
-  marginRight: 5
-}
-
-const flexStyle = {
-  display: 'flex'
-}
-
-const dateColumnStyle = {
-  display: 'flex',
-  width: 240
-}
-
-const Date = () =>
-  <Tooltip title={'Donnerstag, 30. Jänner 2019 um 18:33 Uhr'}>
-    <span>Do., 30. Jänner</span>
-  </Tooltip>
-
-const Assignee = ({ assigneeId, fullNameWithTitle }) =>
-  <span>{fullNameWithTitle(assigneeId)}</span>
-
-const Revenue = ({ revenue }) =>
-  <div style={revenueStyle}>
-    {
-      (revenue > 0 || revenue === 0) &&
-        <>
-          <span style={revenueUnitStyle}>€&nbsp;</span>{twoPlacesIfNeeded(revenue)}
-        </>
-    }
-  </div>
-
-const revenueStyle = {
-  paddingRight: 14,
-  fontWeight: 600
-}
-
-const revenueUnitStyle = {
-  opacity: 0.8,
-  fontSize: '90%'
-}
-
-const Indicator = () =>
-  <Icon name='check' style={indicatorStyle} />
-
-const indicatorStyle = {
-  ...infoIconStyle,
-  color: green
-}
-
-const Tags = ({ tags, tiny }) =>
-  <div style={tagsStyle}>
-    <TagsList
-      tiny={tiny}
-      tags={tags}
-    />
-  </div>
-
-const tagsStyle = {
-  paddingLeft: 10
-}
-
-const Note = ({ note }) =>
-  <div style={noteStyle} contentEditable>
-    {note || 'Note'}
-  </div>
-
-const noteStyle = {
-  outline: 0,
-  paddingTop: 20,
-  paddingBottom: 20,
-  paddingLeft: 15,
-  paddingRight: 15
 }
 
 const Oldest = () =>
@@ -340,10 +234,10 @@ const Future = compose(
     </div>
     {
       expanded &&
-        <AppointmentsList
-          appointments={futureAppointments}
-          fullNameWithTitle={fullNameWithTitle}
-        />
+      <AppointmentsList
+        appointments={futureAppointments}
+        fullNameWithTitle={fullNameWithTitle}
+      />
     }
   </>
 )
