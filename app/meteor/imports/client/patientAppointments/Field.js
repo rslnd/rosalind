@@ -43,8 +43,8 @@ class DebouncedField extends React.Component {
 
   render() {
     const style = {
-      ...this.props.style,
-      ...fieldStyle
+      ...fieldStyle,
+      ...this.props.style
     }
 
     const value = (this.state.value !== null
@@ -67,5 +67,6 @@ export const Field = ({ ...props }) =>
 const fieldStyle = {
   outline: 0,
   border: 0,
-  background: 'rgba(255, 255, 255, 0)'
+  background: 'rgba(255, 255, 255, 0)',
+  width: '100%'
 }

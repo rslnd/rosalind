@@ -72,7 +72,6 @@ const Name = withHandlers({
   <div style={nameStyle}>
     <div>
       <span style={genderStyle} onClick={toggleGender}>{prefix(gender)}</span>
-      &emsp;
       <Field
         style={titleStyle}
         initialValue={titlePrepend}
@@ -99,11 +98,14 @@ const nameStyle = {
 const genderStyle = {
   ...secondary,
   opacity: 0.5,
-  cursor: 'pointer'
+  cursor: 'pointer',
+  width: 22,
+  display: 'inline-block'
 }
 
 const titleStyle = {
   ...secondary,
+  width: `calc(100% - ${genderStyle.width}px)`,
   display: 'inline-block'
 }
 
@@ -149,15 +151,49 @@ const noteLabelStyle = {
   opacity: 0.5
 }
 
-const Address = ({ address }) =>
-  !address ? null : <div style={addressStyle}>
-    <div>{address.line1}</div>
-    <div>{address.postalCode} {address.locality}</div>
+const Address = withHandlers({
+  updateAddressLine1: props => line1 => upsert(props, { address: { line1 } }),
+  updateLocality: props => locality => upsert(props, { address: { locality } }),
+  updatePostalCode: props => postalCode => upsert(props, { address: { postalCode } })
+})(({ address, updateAddressLine1, updateLocality, updatePostalCode }) =>
+  <div style={addressStyle}>
+    <Field
+      initialValue={address && address.line1}
+      onChange={updateAddressLine1}
+      placeholder={__('patients.addressLine1')}
+    />
+
+    <div>
+      <Field
+        initialValue={address && address.postalCode}
+        onChange={updatePostalCode}
+        style={postalCodeStyle}
+        placeholder={__('patients.addressPostalCode')}
+      />
+
+      <Field
+        initialValue={address && address.locality}
+        onChange={updateLocality}
+        style={localityStyle}
+        placeholder={__('patients.addressLocality')}
+      />
+    </div>
   </div>
+)
 
 const addressStyle = {
   ...sectionStart,
   ...secondary
+}
+
+const postalCodeStyle = {
+  width: 40,
+  display: 'inline-block'
+}
+
+const localityStyle = {
+  width: `calc(100% - ${postalCodeStyle.width}px)`,
+  display: 'inline-block'
 }
 
 const Loyalty = () =>
