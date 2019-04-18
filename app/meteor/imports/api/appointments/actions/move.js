@@ -8,7 +8,7 @@ import { Messages } from '../../messages'
 import { Calendars } from '../../calendars'
 import { getDefaultDuration } from '../methods/getDefaultDuration'
 import { Schedules } from '../../schedules'
-import day, { daySelector, dateToDay } from '../../../util/time/day'
+import { daySelector, dateToDay } from '../../../util/time/day'
 import { hasRole } from '../../../util/meteor/hasRole'
 
 export const move = ({ Appointments }) => {

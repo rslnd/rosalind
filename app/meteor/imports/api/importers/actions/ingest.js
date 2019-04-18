@@ -35,7 +35,7 @@ export const ingest = ({ Importers }) => {
       base64: { type: String, optional: true }
     }).validator(),
 
-    run({ importer, name, content, base64 }) {
+    run ({ importer, name, content, base64 }) {
       try {
         if (Meteor.isServer) {
           const { isTrustedNetwork } = require('../../customer/server/isTrustedNetwork')

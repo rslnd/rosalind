@@ -4,5 +4,8 @@ import { Patients } from '../../'
 
 export default function () {
   publication()
-  actions({ Patients })
+  Patients.actions = {
+    ...Patients.actions,
+    ...actions({ Patients })
+  }
 }

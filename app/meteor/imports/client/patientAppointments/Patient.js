@@ -6,12 +6,11 @@ import { birthday as formatBirthday } from '../../util/time/format'
 import { __ } from '../../i18n'
 import { withHandlers } from 'recompose'
 import { Patients } from '../../api/patients'
+import { Field } from './Field'
 
 const action = promise =>
   promise.then(() => {
     Alert.success(__('ui.saved'))
-  }).catch(e => {
-    Alert.error(__('ui.tryAgain'))
   })
 
 const secondary = {
@@ -49,17 +48,47 @@ const fieldsContainerStyle = {
   outline: 0
 }
 
+const upsert = (props, update) =>
+  action(
+    Patients.actions.upsert.callPromise({
+      patient: {
+        _id: props._id,
+        ...update
+      }
+    })
+  )
+
 const Name = withHandlers({
-  toggleGender: props => e => action(Patients.actions.toggleGender.callPromise({ patientId: props._id }))
-})(({ gender, titlePrepend, lastName, firstName, toggleGender }) =>
+  toggleGender: props => e => action(Patients.actions.toggleGender.callPromise({ patientId: props._id })),
+  updateLastName: props => lastName => upsert(props, { lastName }),
+  updateFirstName: props => firstName => upsert(props, { firstName }),
+  updateTitlePrepend: props => titlePrepend => upsert(props, { titlePrepend })
+})(({
+  gender, toggleGender,
+  titlePrepend, updateTitlePrepend,
+  lastName, updateLastName,
+  firstName, updateFirstName
+}) =>
   <div style={nameStyle}>
     <div>
       <span style={genderStyle} onClick={toggleGender}>{prefix(gender)}</span>
       &emsp;
-      <span style={titleStyle}>{titlePrepend}</span>
+      <Field
+        style={titleStyle}
+        initialValue={titlePrepend}
+        onChange={updateTitlePrepend}
+      />
     </div>
-    <div style={lastNameStyle}>{namecase(lastName)}</div>
-    <div style={firstNameStyle}>{namecase(firstName)}</div>
+    <Field
+      style={lastNameStyle}
+      initialValue={namecase(lastName)}
+      onChange={updateLastName}
+    />
+    <Field
+      style={firstNameStyle}
+      initialValue={namecase(firstName)}
+      onChange={updateFirstName}
+    />
   </div>
 )
 
@@ -74,7 +103,8 @@ const genderStyle = {
 }
 
 const titleStyle = {
-  ...secondary
+  ...secondary,
+  display: 'inline-block'
 }
 
 const lastNameStyle = {

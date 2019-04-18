@@ -3,6 +3,7 @@ import { findOne } from './findOne'
 import { setMessagePreferences } from './setMessagePreferences'
 import { toggleGender } from './toggleGender'
 import { setBirthday } from './setBirthday'
+import { upsert } from './upsert'
 
 export default function ({ Patients }) {
   return {
@@ -10,6 +11,7 @@ export default function ({ Patients }) {
     findOne: findOne({ Patients }),
     setMessagePreferences: setMessagePreferences({ Patients }),
     toggleGender: toggleGender({ Patients }),
-    setBirthday: setBirthday({ Patients })
+    setBirthday: setBirthday({ Patients }),
+    upsert: upsert({ Patients })
   }
 }
