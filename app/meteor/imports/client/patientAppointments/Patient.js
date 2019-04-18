@@ -1,8 +1,18 @@
 import React from 'react'
+import Alert from 'react-s-alert'
 import { insuranceId as formatInsuranceId, prefix } from '../../api/patients/methods'
 import { namecase } from '../../util/namecase'
 import { birthday as formatBirthday } from '../../util/time/format'
 import { __ } from '../../i18n'
+import { withHandlers } from 'recompose'
+import { Patients } from '../../api/patients'
+
+const action = promise =>
+  promise.then(() => {
+    Alert.success(__('ui.saved'))
+  }).catch(e => {
+    Alert.error(__('ui.tryAgain'))
+  })
 
 const secondary = {
   opacity: 0.6
@@ -39,12 +49,19 @@ const fieldsContainerStyle = {
   outline: 0
 }
 
-const Name = ({ gender, titlePrepend, lastName, firstName }) =>
+const Name = withHandlers({
+  toggleGender: props => e => action(Patients.actions.toggleGender.callPromise({ patientId: props._id }))
+})(({ gender, titlePrepend, lastName, firstName, toggleGender }) =>
   <div style={nameStyle}>
-    <div><span style={genderStyle}>{prefix(gender)}</span> <span style={titleStyle}>{titlePrepend}</span></div>
+    <div>
+      <span style={genderStyle} onClick={toggleGender}>{prefix(gender)}</span>
+      &emsp;
+      <span style={titleStyle}>{titlePrepend}</span>
+    </div>
     <div style={lastNameStyle}>{namecase(lastName)}</div>
     <div style={firstNameStyle}>{namecase(firstName)}</div>
   </div>
+)
 
 const nameStyle = {
   // paddingTop: 0
@@ -52,7 +69,8 @@ const nameStyle = {
 
 const genderStyle = {
   ...secondary,
-  opacity: 0.5
+  opacity: 0.5,
+  cursor: 'pointer'
 }
 
 const titleStyle = {
