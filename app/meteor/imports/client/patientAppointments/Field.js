@@ -11,7 +11,7 @@ class DebouncedField extends React.Component {
       value: this.props.initialValue
     }
 
-    const debounceMillis = 600
+    const debounceMillis = 850
 
     this.debouncedUpdate = debounce(newValue =>
       this.props.onChange(newValue).catch(e => {
@@ -42,17 +42,20 @@ class DebouncedField extends React.Component {
   }
 
   render() {
-    const style = {
+    const { style, initialValue, children, ...restProps } = this.props
+
+    const combinedStyle = {
       ...fieldStyle,
-      ...this.props.style
+      ...style
     }
 
     const value = (this.state.value !== null
       ? this.state.value
-      : this.props.initialValue) || ''
+      : initialValue) || ''
 
-    return this.props.children({
-      style,
+    return children({
+      ...restProps,
+      style: combinedStyle,
       value,
       onChange: this.handleChange
     })
@@ -62,6 +65,16 @@ class DebouncedField extends React.Component {
 export const Field = ({ ...props }) =>
   <DebouncedField {...props}>
     {props => <input {...props} />}
+  </DebouncedField>
+
+export const Textarea = ({ ...props }) =>
+  <DebouncedField {...props}>
+    {props =>
+      <textarea
+        rows={props.value.split('\n').length + 1}
+        {...props}
+      />
+    }
   </DebouncedField>
 
 const fieldStyle = {

@@ -1,12 +1,21 @@
 import React from 'react'
+import { withHandlers } from 'recompose'
 import { Comments } from '../../api/comments'
+import { updateAppointment } from './updateAppointment'
+import { Textarea } from './Field'
 
 // TODO: Find a way to migrate, or clean up?
-export const Note = ({ _id, note }) =>
+export const Note = withHandlers({
+  updateNote: props => note => updateAppointment(props, { note })
+  // Comments.find({ docId: _id }).fetch().map(a => <div key={a._id}>{a.body}</div>
+})(({ _id, note, updateNote }) =>
   <div style={noteStyle}>
-    {note || <div>&emsp;</div>}
-    {Comments.find({ docId: _id }).fetch().map(a => <div key={a._id}>{a.body}</div>)}
+    <Textarea
+      initialValue={note}
+      onChange={updateNote}
+    />
   </div>
+)
 
 const noteStyle = {
   outline: 0,

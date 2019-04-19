@@ -6,7 +6,7 @@ import { birthday as formatBirthday } from '../../util/time/format'
 import { __ } from '../../i18n'
 import { withHandlers } from 'recompose'
 import { Patients } from '../../api/patients'
-import { Field } from './Field'
+import { Field, Textarea } from './Field'
 
 const action = promise =>
   promise.then(() => {
@@ -129,17 +129,34 @@ const birthdayStyle = {
   ...secondary
 }
 
-const InsuranceId = ({ insuranceId }) =>
-  !insuranceId ? null : <div style={secondary}>
-    {formatInsuranceId(insuranceId)}
-  </div>
+const InsuranceId = withHandlers({
+  updateInsuranceId: props => insuranceId => upsert(props, { insuranceId })
+})(({ insuranceId, updateInsuranceId }) =>
+  <Field
+    initialValue={formatInsuranceId(insuranceId)}
+    onChange={updateInsuranceId}
+    placeholder={__('patients.insuranceId')}
+    style={secondary}
+  />
+)
 
-const Note = ({ note }) =>
+const Note = withHandlers({
+  updateNote: props => note => upsert(props, { note })
+})(({ note, updateNote }) =>
   <div style={noteStyle}>
     <div style={noteLabelStyle}>{__('patients.noteLine1')}</div>
     <div style={noteLabelStyle}>&emsp;{__('patients.noteLine2')}</div>
-    {note || <div>&emsp;</div>}
+    <Textarea
+      initialValue={note}
+      onChange={updateNote}
+      style={noteFieldStyle}
+    />
   </div>
+)
+
+const noteFieldStyle = {
+  fontWeight: 600
+}
 
 const noteStyle = {
   ...sectionStart,
