@@ -13,7 +13,7 @@ const toStringValue = v => {
 }
 
 export class DayField extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -27,7 +27,7 @@ export class DayField extends React.Component {
     this.renderValue = this.renderValue.bind(this)
   }
 
-  componentWillReceiveProps (props) {
+  componentWillReceiveProps(props) {
     if (!this.state.focus) {
       this.setState({
         stringValue: toStringValue(props.input.value)
@@ -35,7 +35,7 @@ export class DayField extends React.Component {
     }
   }
 
-  handleFocus () {
+  handleFocus() {
     this.setState({
       focus: true
     })
@@ -47,28 +47,30 @@ export class DayField extends React.Component {
     }
   }
 
-  handleChange (e) {
+  handleChange(e) {
     this.setState({
       stringValue: e.target.value
     })
   }
 
-  handleBlur (e) {
+  handleBlur(e) {
     this.setState({
       focus: false
     })
 
-    this.props.input.onBlur(e)
+    const { onBlur, onChange } = this.props.input
+
+    onBlur && onBlur(e)
 
     const day = fuzzyBirthday(this.state.stringValue)
     if (day && day.day && day.month && day.year) {
-      this.props.input.onChange(day)
+      onChange(day)
     } else {
-      this.props.input.onChange(null)
+      onChange(null)
     }
   }
 
-  renderValue () {
+  renderValue() {
     const inputValue = this.props.input.value
     const stringValue = this.state.stringValue
 
@@ -89,16 +91,27 @@ export class DayField extends React.Component {
     }
   }
 
-  render () {
-    const { input, birthday, ...props } = this.props
+  render() {
+    const { input, birthday, plain, ...props } = this.props
     const { onBlur, onFocus, onChange, value, ...keepInput } = this.props.input
 
-    return <TextField
-      {...props}
-      input={keepInput}
-      value={this.renderValue()}
-      onChange={this.handleChange}
-      onFocus={this.handleFocus}
-      onBlur={this.handleBlur} />
+    if (plain) {
+      return <input
+        {...props}
+        value={this.renderValue()}
+        onBlur={this.handleBlur}
+        onFocus={this.handleFocus}
+        onChange={this.handleChange}
+      />
+    } else {
+      return <TextField
+        {...props}
+        input={keepInput}
+        value={this.renderValue}
+        onBlur={this.handleBlur}
+        onFocus={this.handleFocus}
+        onChange={this.handleChange}
+      />
+    }
   }
 }

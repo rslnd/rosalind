@@ -140,6 +140,7 @@ describe('util', function () {
 
       it('parses other non-numeric months', function () {
         expect(fuzzyMonth('jan')).to.eql(1)
+        expect(fuzzyMonth('jän')).to.eql(1)
         expect(fuzzyMonth('jänner')).to.eql(1)
         expect(fuzzyMonth('januar')).to.eql(1)
 
@@ -149,6 +150,7 @@ describe('util', function () {
 
         expect(fuzzyMonth('März')).to.eql(3)
         expect(fuzzyMonth('mar')).to.eql(3)
+        expect(fuzzyMonth('mär')).to.eql(3)
         expect(fuzzyMonth('mrz')).to.eql(3)
 
         expect(fuzzyMonth('Apr')).to.eql(4)

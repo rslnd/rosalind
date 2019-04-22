@@ -4,31 +4,42 @@ import identity from 'lodash/identity'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Cleave from 'cleave.js/react'
+import { DayField } from '../components/form/DayField';
 
 class DebouncedField extends React.Component {
   constructor(props) {
     super(props)
 
+    const {
+      initialValue,
+      onChange,
+      parse,
+      shouldUpdate
+    } = props
+
     this.state = {
-      value: this.props.initialValue
+      value: initialValue
     }
 
     const debounceMillis = 850
 
-    const parse = this.props.parse || identity
+    const doParse = parse || identity
 
-    this.debouncedUpdate = debounce(newValue =>
-      this.props.onChange(parse(newValue)).catch(e => {
+    this.debouncedUpdate = debounce(newValue => {
+      if (shouldUpdate && !shouldUpdate(newValue)) { return }
+
+      return onChange(doParse(newValue)).catch(e => {
         console.error(e)
         Alert.error(__('ui.tryAgain'))
         this.setState({ value: null })
       })
-      , debounceMillis)
+    }, debounceMillis)
+
     this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange(e) {
-    const { value } = e.target
+    const value = (e && e.target && e.target.value) || e
     this.setState({ value })
     this.debouncedUpdate(value)
   }
@@ -47,16 +58,26 @@ class DebouncedField extends React.Component {
   }
 
   render() {
-    const { style, initialValue, children, parse, ...restProps } = this.props
+    const {
+      style,
+      initialValue,
+      children,
+      parse,
+      format,
+      shouldUpdate,
+      ...restProps
+    } = this.props
 
     const combinedStyle = {
       ...fieldStyle,
       ...style
     }
 
+    const doFormat = format || identity
+
     const value = (this.state.value !== null
       ? this.state.value
-      : initialValue) || ''
+      : doFormat(initialValue) || '')
 
     return children({
       ...restProps,
@@ -96,6 +117,18 @@ const parseMoney = v =>
     .replace(',', '.')
   )
 
+export const Day = ({ ...props }) =>
+  <DebouncedField
+    {...props}
+  >
+    {({ onChange, value, ...props }) =>
+      <DayField
+        input={{ value, onChange }}
+        {...props}
+      />
+    }
+  </DebouncedField>
+
 export const Field = ({ ...props }) =>
   <DebouncedField {...props}>
     {props => <input {...props} />}
@@ -105,7 +138,7 @@ export const Textarea = ({ ...props }) =>
   <DebouncedField {...props}>
     {props =>
       <textarea
-        rows={props.value.split('\n').length + 1}
+        rows={(props.value || '').split('\n').length + 1}
         {...props}
       />
     }

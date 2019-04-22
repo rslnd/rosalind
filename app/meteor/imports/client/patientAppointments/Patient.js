@@ -6,7 +6,7 @@ import { birthday as formatBirthday } from '../../util/time/format'
 import { __ } from '../../i18n'
 import { withHandlers } from 'recompose'
 import { Patients } from '../../api/patients'
-import { Field, Textarea } from './Field'
+import { Field, Textarea, Day } from './Field'
 
 const action = promise =>
   promise.then(() => {
@@ -123,10 +123,17 @@ const firstNameStyle = {
   ...secondary
 }
 
-const Birthday = ({ birthday }) =>
-  <div style={birthdayStyle}>
-    {formatBirthday(birthday)}
-  </div>
+const Birthday = withHandlers({
+  updateBirthday: props => birthday => upsert(props, { birthday })
+})(({ birthday, updateBirthday }) =>
+  <Day
+    initialValue={birthday}
+    style={birthdayStyle}
+    onChange={updateBirthday}
+    birthday
+    plain
+  />
+)
 
 const birthdayStyle = {
   ...sectionStart,
