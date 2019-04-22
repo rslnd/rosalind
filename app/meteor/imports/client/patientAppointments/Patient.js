@@ -7,6 +7,7 @@ import { __ } from '../../i18n'
 import { withHandlers } from 'recompose'
 import { Patients } from '../../api/patients'
 import { Field, Textarea, Day } from './Field'
+import { Consent } from '../appointments/info/Consent'
 
 const action = promise =>
   promise.then(() => {
@@ -21,17 +22,19 @@ const sectionStart = {
   paddingTop: 14
 }
 
-export const Patient = ({ patient }) =>
+export const Patient = ({ patient, currentAppointment }) =>
   !patient ? null : <div style={containerStyle}>
     <div style={fieldsContainerStyle}>
       <Name {...patient} />
       <Birthday {...patient} />
       <InsuranceId {...patient} />
       <Note {...patient} />
+      {currentAppointment && <Consent plain showOnly='pending' appointment={currentAppointment} />}
       <Address {...patient} />
     </div>
     <div style={marginBottomStyle}>
       <Loyalty {...patient} />
+      {currentAppointment && <Consent plain showOnly='agreed' appointment={currentAppointment} />}
       <PatientActions {...patient} />
     </div>
   </div>

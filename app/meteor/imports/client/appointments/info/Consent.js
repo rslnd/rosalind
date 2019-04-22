@@ -10,7 +10,7 @@ import Switch from '@material-ui/core/Switch'
 import Button from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip'
 import { Icon } from '../../components/Icon'
-
+import { Calendars } from '../../../api/calendars'
 import { Appointments } from '../../../api/appointments'
 import { Tags } from '../../../api/tags'
 
@@ -25,15 +25,18 @@ const composer = props => {
       $lt: appointment.start
     }
   }, {
-    sort: {
-      start: -1
-    }
-  }).fetch()
+      sort: {
+        start: -1
+      }
+    }).fetch()
+
+  const calendar = Calendars.findOne({ _id: appointment.calendarId })
 
   const previousConsents = uniqBy(a => a.consentedAt.getTime())(previousAppointments)
 
   return {
     ...props,
+    calendar,
     previousConsents,
     hasPreviousConsents: previousConsents.length >= 1
   }
@@ -47,7 +50,8 @@ export const ConsentComponent = ({
   previousConsents,
   hasPreviousConsents,
   handleToggle,
-  handleSelectConsent
+  handleSelectConsent,
+  ...props
 }) => {
   if (!calendar.consentRequired) {
     return null
@@ -60,17 +64,19 @@ export const ConsentComponent = ({
     return null
   }
 
-  return <ListItem
-    icon='file-text-o'
+  return <Container
     highlight={!consentedAt}
     onClick={handleToggle}
-    style={{ marginTop: 10, paddingTop: 15 }}>
-
-    <div className='pull-right' style={{
-      position: 'relative',
-      right: 5,
-      top: -15
-    }}>
+    {...props}
+  >
+    <div
+      className='pull-right'
+      style={{
+        position: 'relative',
+        right: 5,
+        top: -15
+      }}
+    >
       <Switch
         color='primary'
         disabled={isSelectingPreviousConsent}
@@ -81,6 +87,7 @@ export const ConsentComponent = ({
     {
       isSelectingPreviousConsent
         ? [
+          __('appointments.notConsented'),
           <Button
             key='new'
             style={buttonStyle}
@@ -96,9 +103,9 @@ export const ConsentComponent = ({
               size='small'
               onClick={handleSelectConsent(pc.consentedAt)}
             >{__('appointments.usePreviousConsent', {
-                date: formatDate(pc.consentedAt),
-                tags: explainTags(pc.tags)
-              })}
+              date: formatDate(pc.consentedAt),
+              tags: explainTags(pc.tags)
+            })}
             </Button>
           )
         ]
@@ -110,8 +117,19 @@ export const ConsentComponent = ({
     }
 
     <br /><br />
-  </ListItem>
+  </Container>
 }
+
+const Container = ({ onClick, highlight, style, children, plain }) =>
+  plain
+    ? <div onClick={onClick} style={style}>{children}</div>
+    : <ListItem
+      icon='file-text-o'
+      highlight={highlight}
+      onClick={onClick}
+      style={{ marginTop: 10, paddingTop: 15, ...style }}>
+      {children}
+    </ListItem>
 
 const buttonStyle = {
   marginBottom: 4
