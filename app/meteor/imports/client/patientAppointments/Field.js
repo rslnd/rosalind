@@ -1,7 +1,9 @@
 import React from 'react'
 import debounce from 'lodash/debounce'
+import identity from 'lodash/identity'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
+import Cleave from 'cleave.js/react'
 
 class DebouncedField extends React.Component {
   constructor(props) {
@@ -13,8 +15,11 @@ class DebouncedField extends React.Component {
 
     const debounceMillis = 850
 
+    const parse = this.props.parse || identity
+
     this.debouncedUpdate = debounce(newValue =>
-      this.props.onChange(newValue).catch(e => {
+      this.props.onChange(parse(newValue)).catch(e => {
+        console.error(e)
         Alert.error(__('ui.tryAgain'))
         this.setState({ value: null })
       })
@@ -42,7 +47,7 @@ class DebouncedField extends React.Component {
   }
 
   render() {
-    const { style, initialValue, children, ...restProps } = this.props
+    const { style, initialValue, children, parse, ...restProps } = this.props
 
     const combinedStyle = {
       ...fieldStyle,
@@ -61,6 +66,35 @@ class DebouncedField extends React.Component {
     })
   }
 }
+
+export const Money = ({ ...props }) =>
+  <DebouncedField
+    {...props}
+    parse={parseMoney}
+  >
+    {props =>
+      <Cleave
+        options={moneyFormat}
+        {...props}
+      />
+    }
+  </DebouncedField>
+
+const moneyFormat = {
+  prefix: '€',
+  numeral: true,
+  numeralPositiveOnly: true,
+  numeralDecimalMark: ',',
+  delimiter: '.'
+}
+
+const parseMoney = v =>
+  parseFloat(v
+    .replace(moneyFormat.prefix, '')
+    .replace(/\s/g, '')
+    .replace(/\./g, '')
+    .replace(',', '.')
+  )
 
 export const Field = ({ ...props }) =>
   <DebouncedField {...props}>

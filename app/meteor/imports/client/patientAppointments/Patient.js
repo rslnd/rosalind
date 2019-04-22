@@ -30,7 +30,7 @@ export const Patient = ({ patient }) =>
       <Note {...patient} />
       <Address {...patient} />
     </div>
-    <div>
+    <div style={marginBottomStyle}>
       <Loyalty {...patient} />
       <PatientActions {...patient} />
     </div>
@@ -42,6 +42,10 @@ const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between'
+}
+
+const marginBottomStyle = {
+  marginBottom: 25
 }
 
 const fieldsContainerStyle = {

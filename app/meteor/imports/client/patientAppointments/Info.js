@@ -5,6 +5,9 @@ import { green } from '../layout/styles'
 import { Tooltip } from '../components/Tooltip'
 import { __ } from '../../i18n'
 import { twoPlacesIfNeeded } from '../../util/format'
+import { withHandlers } from 'recompose'
+import { Money, Field } from './Field'
+import { updateAppointment } from './updateAppointment'
 
 export const Info = ({ appointment, fullNameWithTitle }) =>
   <div style={infoStyle}>
@@ -61,20 +64,23 @@ const formatDate = d => moment(d).format(__('time.dateFormatWeekdayShort'))
 const Assignee = ({ assigneeId, fullNameWithTitle }) =>
   <span>{fullNameWithTitle(assigneeId)}</span>
 
-const Revenue = ({ revenue }) =>
-  <div style={revenueStyle}>
-    {
-      (true || revenue > 0 || revenue === 0) &&
-      <>
-        <span style={revenueUnitStyle}>€&nbsp;</span>
-        <span style={{ outline: 0 }}>{twoPlacesIfNeeded(revenue || 0)}</span>
-      </>
-    }
-  </div>
+const Revenue = withHandlers({
+  updateRevenue: props => revenue => updateAppointment(props, { revenue: parseFloat(revenue) })
+})(({ revenue, updateRevenue }) =>
+  <Money
+    initialValue={twoPlacesIfNeeded(revenue || 0)}
+    onChange={updateRevenue}
+    placeholder={<span style={revenueUnitStyle}>€&nbsp;</span>}
+    style={revenueStyle}
+  />
+  // (true || revenue > 0 || revenue === 0) &&
+)
 
 const revenueStyle = {
   paddingRight: 14,
-  fontWeight: 600
+  fontWeight: 600,
+  textAlign: 'right',
+  width: 80
 }
 
 const revenueUnitStyle = {
