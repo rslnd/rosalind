@@ -8,6 +8,7 @@ import { withHandlers } from 'recompose'
 import { Patients } from '../../api/patients'
 import { Field, Textarea, Day } from './Field'
 import { Consent } from '../appointments/info/Consent'
+import { Agreements } from './Agreements'
 
 const action = promise =>
   promise.then(() => {
@@ -29,12 +30,12 @@ export const Patient = ({ patient, currentAppointment }) =>
       <Birthday {...patient} />
       <InsuranceId {...patient} />
       <Note {...patient} />
-      {currentAppointment && <Consent plain showOnly='pending' appointment={currentAppointment} />}
+      <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
       <Address {...patient} />
     </div>
     <div style={marginBottomStyle}>
       <Loyalty {...patient} />
-      {currentAppointment && <Consent plain showOnly='agreed' appointment={currentAppointment} />}
+      <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
       <PatientActions {...patient} />
     </div>
   </div>
@@ -240,6 +241,14 @@ const loyaltyStyle = {
 
 const PatientActions = () =>
   <div style={loyaltyStyle}>
-    <div>Datenschutz akzeptiert am 12.03.2019</div>
-    <div>SMS Verlauf anzeigen</div>
+    {/* <div>SMS Verlauf anzeigen</div> */}
   </div>
+
+export const Toggles = ({ patient, currentAppointment, showOnly }) => {
+  if (!currentAppointment) { return null }
+
+  return <div style={showOnly === 'agreed' ? secondary : null}>
+    <Consent plain showOnly={showOnly} appointment={currentAppointment} />
+    <Agreements showOnly={showOnly} patient={patient} calendarId={currentAppointment.calendarId} />
+  </div>
+}

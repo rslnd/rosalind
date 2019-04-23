@@ -38,7 +38,7 @@ const composer = props => {
 
   const { removed, ...selectorFilter } = (filter || {})
 
-  const otherAppointments = currentAppointment ? Appointments.find({
+  const otherAppointments = (patient && currentAppointment) ? Appointments.find({
     _id: { $ne: currentAppointment._id },
     patientId
   }, { removed: true, sort: { start: 1 } }).fetch() : []

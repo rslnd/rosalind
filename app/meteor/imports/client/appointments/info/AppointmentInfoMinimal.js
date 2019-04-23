@@ -6,7 +6,7 @@ import { logFormat } from './logFormat'
 import { Logs } from '../../helpers/Logs'
 import { TagsField } from '../../tags/TagsField'
 import { calculateRevenue } from '../new/RevenueField'
-import { Agreements } from './Agreements'
+import { Agreements } from '../../patientAppointments/Agreements'
 import { PrivateRevenue, TotalRevenue } from './PrivateRevenue'
 import { ListItem } from './ListItem'
 import { PatientNotes } from './PatientNotes'
@@ -38,23 +38,23 @@ const Tags = ({ appointment, allowedTags, maxDuration, assignee, calendar, chang
 )
 
 export class AppointmentInfoMinimal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  componentWillMount () {
+  componentWillMount() {
     // TODO: This doensn't work.
     // TODO: How to show validation errors even on untouched fields?
     setTimeout(() =>
       touch('appointmentInfoForm', 'contacts', 'birthday', 'insuranceId'),
-    500
+      500
     )
   }
 
   // BUG: This seems to never get called. Why?
-  handleSubmit (e) {
+  handleSubmit(e) {
     e && e.preventDefault && e.preventDefault()
     if (this.props.dirty) {
       return Promise.all([
@@ -64,7 +64,7 @@ export class AppointmentInfoMinimal extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const {
       handleSubmit,
       dirty,
@@ -113,41 +113,41 @@ export class AppointmentInfoMinimal extends React.Component {
 
           {
             patient &&
-              <form
-                className='col-md-6'
-                style={{ marginTop: -25 }}
-                onMouseLeave={
-                  dirty
-                    ? handleSubmit(handleEditPatient)
-                    : identity
-                }
-                onSubmit={
-                  dirty
-                    ? handleSubmit(handleEditPatient)
-                    : identity
-                }>
-                <FormSection name='patient'>
-                  <PatientNotes patient={patient} />
-                  {/* Show first if not agreed yet */}
-                  <Consent appointment={appointment} calendar={calendar} showOnly='pending' />
-                  <Agreements patient={patient} calendar={calendar} showOnly='pending' />
-                  <br />
-                  <Consent appointment={appointment} calendar={calendar} showOnly='agreed' />
-                  <Agreements patient={patient} calendar={calendar} showOnly='agreed' />
-                  <TotalRevenue value={totalPatientRevenue} />
-                </FormSection>
+            <form
+              className='col-md-6'
+              style={{ marginTop: -25 }}
+              onMouseLeave={
+                dirty
+                  ? handleSubmit(handleEditPatient)
+                  : identity
+              }
+              onSubmit={
+                dirty
+                  ? handleSubmit(handleEditPatient)
+                  : identity
+              }>
+              <FormSection name='patient'>
+                <PatientNotes patient={patient} />
+                {/* Show first if not agreed yet */}
+                <Consent appointment={appointment} calendar={calendar} showOnly='pending' />
+                <Agreements patient={patient} calendarId={appointment.calendarId} showOnly='pending' />
+                <br />
+                <Consent appointment={appointment} calendar={calendar} showOnly='agreed' />
+                <Agreements patient={patient} calendarId={appointment.calendarId} showOnly='agreed' />
+                <TotalRevenue value={totalPatientRevenue} />
+              </FormSection>
 
-                <ListItem>
-                  <br />
-                  <Logs format={logFormat} doc={appointment} />
-                  <Stamps
-                    collectionName='appointments'
-                    fields={['removed', 'created', 'admitted', 'canceled']}
-                    doc={appointment} />
-                </ListItem>
+              <ListItem>
+                <br />
+                <Logs format={logFormat} doc={appointment} />
+                <Stamps
+                  collectionName='appointments'
+                  fields={['removed', 'created', 'admitted', 'canceled']}
+                  doc={appointment} />
+              </ListItem>
 
-                <input type='submit' style={{ display: 'none' }} />
-              </form>
+              <input type='submit' style={{ display: 'none' }} />
+            </form>
           }
         </div>
       </div>

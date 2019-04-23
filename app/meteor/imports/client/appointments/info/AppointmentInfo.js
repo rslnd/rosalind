@@ -11,7 +11,7 @@ import { calculateRevenue } from '../new/RevenueField'
 import { Day, Time, Assignee } from './BasicAppointmentFields'
 import { AppointmentNote } from './AppointmentNote'
 import { Contacts } from './Contacts'
-import { Agreements } from './Agreements'
+import { Agreements } from '../../patientAppointments/Agreements'
 import { PrivateRevenue, TotalRevenue } from './PrivateRevenue'
 import { ListItem } from './ListItem'
 import { Reminders } from './Reminders'
@@ -47,13 +47,13 @@ const Tags = ({ appointment, allowedTags, maxDuration, assignee, calendar, const
 )
 
 export class AppointmentInfo extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  componentWillMount () {
+  componentWillMount() {
     // TODO: This doensn't work.
     // TODO: How to show validation errors even on untouched fields?
     setTimeout(() => {
@@ -62,7 +62,7 @@ export class AppointmentInfo extends React.Component {
   }
 
   // BUG: This seems to never get called. Why?
-  handleSubmit (e) {
+  handleSubmit(e) {
     e && e.preventDefault && e.preventDefault()
     if (this.props.dirty) {
       return Promise.all([
@@ -72,7 +72,7 @@ export class AppointmentInfo extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const {
       isLoading,
       handleSubmit,
@@ -97,151 +97,151 @@ export class AppointmentInfo extends React.Component {
       <div>
         {
           patient &&
-            <form onSubmit={dirty ? handleSubmit(handleEditPatient) : identity}>
-              <div className='row'>
-                <div className='col-md-12'>
-                  <FormSection name='patient'>
-                    <PatientName
-                      onChange={handleSubmit(handleEditPatient)}
-                      patient={patient} />
-                  </FormSection>
-                  <hr />
-                </div>
+          <form onSubmit={dirty ? handleSubmit(handleEditPatient) : identity}>
+            <div className='row'>
+              <div className='col-md-12'>
+                <FormSection name='patient'>
+                  <PatientName
+                    onChange={handleSubmit(handleEditPatient)}
+                    patient={patient} />
+                </FormSection>
+                <hr />
               </div>
+            </div>
 
-              <input type='submit' style={{ display: 'none' }} />
-            </form>
+            <input type='submit' style={{ display: 'none' }} />
+          </form>
         }
         <div className='row'>
           {
             appointment &&
-              <div className='col-md-6'>
-                <form onMouseLeave={
-                    dirty
+            <div className='col-md-6'>
+              <form onMouseLeave={
+                dirty
+                  ? handleSubmit(handleEditAppointment)
+                  : identity
+              }
+                onSubmit={
+                  dirty
                     ? handleSubmit(handleEditAppointment)
                     : identity
-                  }
-                  onSubmit={
-                    dirty
-                    ? handleSubmit(handleEditAppointment)
-                    : identity
-                  }>
-                  <FormSection name='appointment'>
-                    <Day appointment={appointment} />
-                    <Time appointment={appointment} />
-                    <Assignee assignee={assignee} />
-                    <PrivateRevenue appointment={appointment} />
-                    <Tags
-                      appointment={appointment}
-                      allowedTags={allowedTags}
-                      maxDuration={maxDuration}
-                      assignee={assignee}
-                      calendar={calendar}
-                      change={change}
-                      constraint={constraint}
-                    />
-                  </FormSection>
-                  <input type='submit' style={{ display: 'none' }} />
-                </form>
+                }>
+                <FormSection name='appointment'>
+                  <Day appointment={appointment} />
+                  <Time appointment={appointment} />
+                  <Assignee assignee={assignee} />
+                  <PrivateRevenue appointment={appointment} />
+                  <Tags
+                    appointment={appointment}
+                    allowedTags={allowedTags}
+                    maxDuration={maxDuration}
+                    assignee={assignee}
+                    calendar={calendar}
+                    change={change}
+                    constraint={constraint}
+                  />
+                </FormSection>
+                <input type='submit' style={{ display: 'none' }} />
+              </form>
 
-                {
-                  canRefer &&
-                    <ListItem>
-                      <ReferralsContainer appointment={appointment} />
-                    </ListItem>
-                }
-
+              {
+                canRefer &&
                 <ListItem>
-                  <Logs format={logFormat} doc={appointment} />
-                  <Stamps
-                    collectionName='appointments'
-                    fields={['removed', 'created', 'admitted', 'canceled']}
-                    doc={appointment} />
+                  <ReferralsContainer appointment={appointment} />
                 </ListItem>
-              </div>
+              }
+
+              <ListItem>
+                <Logs format={logFormat} doc={appointment} />
+                <Stamps
+                  collectionName='appointments'
+                  fields={['removed', 'created', 'admitted', 'canceled']}
+                  doc={appointment} />
+              </ListItem>
+            </div>
           }
 
           {
             !patient && appointment &&
-              <form
-                className='col-md-6'
-                onMouseLeave={
-                  dirty
+            <form
+              className='col-md-6'
+              onMouseLeave={
+                dirty
                   ? handleSubmit(handleEditAppointment)
                   : identity
-                }
-                onSubmit={
-                  dirty
+              }
+              onSubmit={
+                dirty
                   ? handleSubmit(handleEditAppointment)
                   : identity
-                }>
-                <FormSection name='appointment'>
-                  <AppointmentNote appointment={appointment} />
-                </FormSection>
-                <input type='submit' style={{ display: 'none' }} />
-              </form>
+              }>
+              <FormSection name='appointment'>
+                <AppointmentNote appointment={appointment} />
+              </FormSection>
+              <input type='submit' style={{ display: 'none' }} />
+            </form>
           }
 
           {
             patient &&
-              <form
-                className='col-md-6'
-                style={{ marginTop: -25 }}
-                onMouseLeave={
-                  dirty
+            <form
+              className='col-md-6'
+              style={{ marginTop: -25 }}
+              onMouseLeave={
+                dirty
                   ? handleSubmit(handleEditPatient)
                   : identity
+              }
+              onSubmit={
+                dirty
+                  ? handleSubmit(handleEditPatient)
+                  : identity
+              }>
+              <FormSection name='patient'>
+                <PatientNotes patient={patient} />
+                {/* Show first if not agreed yet */}
+                {
+                  appointment &&
+                  <Consent
+                    appointment={appointment}
+                    calendar={calendar}
+                    showOnly='pending' />
                 }
-                onSubmit={
-                  dirty
-                  ? handleSubmit(handleEditPatient)
-                  : identity
-                }>
-                <FormSection name='patient'>
-                  <PatientNotes patient={patient} />
-                  {/* Show first if not agreed yet */}
-                  {
-                    appointment &&
-                      <Consent
-                        appointment={appointment}
-                        calendar={calendar}
-                        showOnly='pending' />
-                  }
-                  {
-                    calendar &&
-                      <Agreements
-                        patient={patient}
-                        calendar={calendar}
-                        showOnly='pending'
-                      />
-                  }
-                  <Contacts patient={patient} />
-                  <BirthdayFields collectInsuranceId />
-                  <FormSection name='address'>
-                    <AddressFields change={change} />
-                  </FormSection>
-                  <br />
-                  <Reminders />
-                  {
-                    appointment &&
-                      <Consent
-                        appointment={appointment}
-                        calendar={calendar}
-                        showOnly='agreed'
-                      />
-                  }
-                  {
-                    calendar &&
-                      <Agreements
-                        patient={patient}
-                        calendar={calendar}
-                        showOnly='agreed'
-                      />
-                  }
-                  <TotalRevenue value={totalPatientRevenue} />
+                {
+                  calendar &&
+                  <Agreements
+                    patient={patient}
+                    calendarId={calendar._id}
+                    showOnly='pending'
+                  />
+                }
+                <Contacts patient={patient} />
+                <BirthdayFields collectInsuranceId />
+                <FormSection name='address'>
+                  <AddressFields change={change} />
                 </FormSection>
-                <input type='submit' style={{ display: 'none' }} />
-              </form>
+                <br />
+                <Reminders />
+                {
+                  appointment &&
+                  <Consent
+                    appointment={appointment}
+                    calendar={calendar}
+                    showOnly='agreed'
+                  />
+                }
+                {
+                  calendar &&
+                  <Agreements
+                    patient={patient}
+                    calendarId={calendar._id}
+                    showOnly='agreed'
+                  />
+                }
+                <TotalRevenue value={totalPatientRevenue} />
+              </FormSection>
+              <input type='submit' style={{ display: 'none' }} />
+            </form>
           }
         </div>
       </div>
