@@ -6,7 +6,7 @@ import { birthday as formatBirthday } from '../../util/time/format'
 import { __ } from '../../i18n'
 import { withHandlers } from 'recompose'
 import { Patients } from '../../api/patients'
-import { Field, Textarea, Day } from './Field'
+import { Field, Textarea, Day, InsuranceId as InsuranceIdField } from './Field'
 import { Consent } from '../appointments/info/Consent'
 import { Agreements } from './Agreements'
 
@@ -147,7 +147,7 @@ const birthdayStyle = {
 const InsuranceId = withHandlers({
   updateInsuranceId: props => insuranceId => upsert(props, { insuranceId })
 })(({ insuranceId, updateInsuranceId }) =>
-  <Field
+  <InsuranceIdField
     initialValue={formatInsuranceId(insuranceId)}
     onChange={updateInsuranceId}
     placeholder={__('patients.insuranceId')}

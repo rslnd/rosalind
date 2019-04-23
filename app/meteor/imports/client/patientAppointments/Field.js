@@ -4,7 +4,7 @@ import identity from 'lodash/identity'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Cleave from 'cleave.js/react'
-import { DayField } from '../components/form/DayField';
+import { DayField } from '../components/form/DayField'
 
 class DebouncedField extends React.Component {
   constructor(props) {
@@ -150,3 +150,24 @@ const fieldStyle = {
   background: 'rgba(255, 255, 255, 0)',
   width: '100%'
 }
+
+export const InsuranceId = ({ ...props }) =>
+  <DebouncedField
+    {...props}
+    parse={parseInsuranceId}
+  >
+    {props =>
+      <Cleave
+        options={insuranceIdFormat}
+        {...props}
+      />
+    }
+  </DebouncedField>
+
+const insuranceIdFormat = {
+  blocks: [4, 6],
+  delimiter: ' '
+}
+
+const parseInsuranceId = v =>
+  (v || '').replace(/\s/g, '')
