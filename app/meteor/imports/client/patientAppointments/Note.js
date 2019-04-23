@@ -9,12 +9,11 @@ export const Note = withHandlers({
   updateNote: props => note => updateAppointment(props, { note })
   // Comments.find({ docId: _id }).fetch().map(a => <div key={a._id}>{a.body}</div>
 })(({ _id, note, updateNote }) =>
-  <div style={noteStyle}>
-    <Textarea
-      initialValue={note}
-      onChange={updateNote}
-    />
-  </div>
+  <Textarea
+    initialValue={note}
+    onChange={updateNote}
+    style={noteStyle}
+  />
 )
 
 const noteStyle = {

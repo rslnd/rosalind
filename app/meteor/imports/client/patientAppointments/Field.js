@@ -39,7 +39,7 @@ class DebouncedField extends React.Component {
   }
 
   handleChange(e) {
-    const value = (e && e.target && e.target.value) || e
+    const value = (e && e.target) ? e.target.value : e
     this.setState({ value })
     this.debouncedUpdate(value)
   }
