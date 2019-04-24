@@ -38,7 +38,12 @@ const durationStyle = {
 
 const Tag = withHandlers({
   // TODO: Refactor to return full tag objects on click also
-  handleClick: props => e => props.onClick && props.onClick(props.tag._id),
+  handleClick: props => e => {
+    if (props.onClick) {
+      e.stopPropagation()
+      props.onClick(props.tag._id)
+    }
+  },
   // HACK: We return the full tag object on hover, because its fields may have been modified by constraints
   handleMouseEnter: props => e => props.onMouseEnter && props.onMouseEnter(props.tag),
   handleMouseLeave: props => e => props.onMouseLeave && props.onMouseLeave(props.tag)
@@ -64,15 +69,15 @@ const Tag = withHandlers({
     borderColor: darken(tag.color || tagBackgroundColor),
     textDecoration: tag.removed ? 'line-through' : 'none'
   }}>
-  {tag.tag}
-  {tag.duration && <span style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
-    {tag.duration}'
+    {tag.tag}
+    {tag.duration && <span style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
+      {tag.duration}'
   </span>}
-</span>)
+  </span>)
 
 export const TagsList = ({
   tags = [],
-  onClick = () => {},
+  onClick = () => { },
   style = {},
   tiny,
   showDefaultRevenue,
