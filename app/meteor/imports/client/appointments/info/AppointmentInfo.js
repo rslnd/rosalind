@@ -62,13 +62,10 @@ export class AppointmentInfo extends React.Component {
   }
 
   // BUG: This seems to never get called. Why?
-  handleSubmit(e) {
-    e && e.preventDefault && e.preventDefault()
-    if (this.props.dirty) {
-      return Promise.all([
-        this.props.handleSubmit(this.props.handleEditPatient),
-        this.props.handleSubmit(this.props.handleEditAppointment)
-      ])
+  handleSubmit(handler) {
+    return (e) => {
+      e && e.preventDefault && e.preventDefault()
+      this.props.handleSubmit(handler)(e)
     }
   }
 
@@ -97,7 +94,7 @@ export class AppointmentInfo extends React.Component {
       <div>
         {
           patient &&
-          <form onSubmit={dirty ? handleSubmit(handleEditPatient) : identity}>
+          <form onSubmit={this.handleSubmit(handleEditPatient)}>
             <div className='row'>
               <div className='col-md-12'>
                 <FormSection name='patient'>
@@ -121,11 +118,7 @@ export class AppointmentInfo extends React.Component {
                   ? handleSubmit(handleEditAppointment)
                   : identity
               }
-                onSubmit={
-                  dirty
-                    ? handleSubmit(handleEditAppointment)
-                    : identity
-                }>
+                onSubmit={this.handleSubmit(handleEditAppointment)}>
                 <FormSection name='appointment'>
                   <Day appointment={appointment} />
                   <Time appointment={appointment} />
@@ -170,11 +163,7 @@ export class AppointmentInfo extends React.Component {
                   ? handleSubmit(handleEditAppointment)
                   : identity
               }
-              onSubmit={
-                dirty
-                  ? handleSubmit(handleEditAppointment)
-                  : identity
-              }>
+              onSubmit={this.handleSubmit(handleEditAppointment)}>
               <FormSection name='appointment'>
                 <AppointmentNote appointment={appointment} />
               </FormSection>
@@ -192,11 +181,7 @@ export class AppointmentInfo extends React.Component {
                   ? handleSubmit(handleEditPatient)
                   : identity
               }
-              onSubmit={
-                dirty
-                  ? handleSubmit(handleEditPatient)
-                  : identity
-              }>
+              onSubmit={this.handleSubmit(handleEditPatient)}>
               <FormSection name='patient'>
                 <PatientNotes patient={patient} />
                 {/* Show first if not agreed yet */}

@@ -92,8 +92,7 @@ export class DayField extends React.Component {
   }
 
   render() {
-    const { input, birthday, plain, ...props } = this.props
-    const { onBlur, onFocus, onChange, value, ...keepInput } = this.props.input
+    const { input, value, birthday, plain, ...props } = this.props
 
     if (plain) {
       return <input
@@ -104,10 +103,12 @@ export class DayField extends React.Component {
         onChange={this.handleChange}
       />
     } else {
+      const { onBlur, onFocus, onChange, value, ...keepInput } = this.props.input
+
       return <TextField
         {...props}
         input={keepInput}
-        value={this.renderValue}
+        value={this.renderValue()}
         onBlur={this.handleBlur}
         onFocus={this.handleFocus}
         onChange={this.handleChange}

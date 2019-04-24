@@ -43,7 +43,7 @@ const composer = props => {
   const canRefer = hasRole(Meteor.userId(), ['referrals'])
   patientId && subscribe('patients', { patientIds: [patientId] })
   patientId && canRefer && subscribe('referrals', {
-    patientIds: [ patientId ]
+    patientIds: [patientId]
   })
 
   const patient = patientId && Patients.findOne({ _id: patientId })
@@ -53,8 +53,8 @@ const composer = props => {
     const comments = patient ? Comments.find({
       docId: patient._id
     }, {
-      sort: { createdAt: 1 }
-    }).fetch() : []
+        sort: { createdAt: 1 }
+      }).fetch() : []
     const calendar = calendarId && Calendars.findOne({ _id: calendarId })
 
     const initialPatientFields = mapPatientToFields(patient)
