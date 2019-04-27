@@ -6,6 +6,8 @@ const dotStyle = {
   dot: {
     width: 30,
     height: 30,
+    minWidth: 30,
+    minHeight: 30,
     margin: 3,
     backgroundColor: '#f2f2f2',
     borderRadius: '100%',

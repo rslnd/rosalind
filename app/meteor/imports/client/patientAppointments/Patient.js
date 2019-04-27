@@ -9,6 +9,7 @@ import { Field, Textarea, Day, InsuranceId as InsuranceIdField } from './Field'
 import { Consent } from '../appointments/info/Consent'
 import { Agreements } from './Agreements'
 import { Contacts } from './Contacts'
+import { Dot } from '../patients/Dot';
 
 const action = promise =>
   promise.then(() => {
@@ -73,12 +74,14 @@ const Name = withHandlers({
   toggleGender: props => e => action(Patients.actions.toggleGender.callPromise({ patientId: props._id })),
   updateLastName: props => lastName => upsert(props, { lastName }),
   updateFirstName: props => firstName => upsert(props, { firstName }),
-  updateTitlePrepend: props => titlePrepend => upsert(props, { titlePrepend })
+  updateTitlePrepend: props => titlePrepend => upsert(props, { titlePrepend }),
+  toggleBanned: props => banned => upsert(props, { banned: !props.banned })
 })(({
   gender, toggleGender,
   titlePrepend, updateTitlePrepend,
   lastName, updateLastName,
-  firstName, updateFirstName
+  firstName, updateFirstName,
+  banned, toggleBanned
 }) =>
   <div style={nameStyle}>
     <div>
@@ -94,16 +97,24 @@ const Name = withHandlers({
       initialValue={namecase(lastName)}
       onChange={updateLastName}
     />
-    <Field
-      style={firstNameStyle}
-      initialValue={namecase(firstName)}
-      onChange={updateFirstName}
-    />
+    <div style={bannedStyle}>
+      <Field
+        style={firstNameStyle}
+        initialValue={namecase(firstName)}
+        onChange={updateFirstName}
+      />
+      <Dot banned={banned} onClick={toggleBanned} />
+    </div>
   </div>
 )
 
 const nameStyle = {
   // paddingTop: 0
+}
+
+const bannedStyle = {
+  display: 'flex',
+  justifyContent: 'space-between'
 }
 
 const genderStyle = {
