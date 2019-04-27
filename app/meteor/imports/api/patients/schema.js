@@ -22,7 +22,7 @@ const Agreement = new SimpleSchema({
   }
 })
 
-const Contact = new SimpleSchema({
+export const Contact = new SimpleSchema({
   value: {
     type: String
   },
@@ -116,7 +116,7 @@ export default new SimpleSchema({
   },
 
   contacts: {
-    type: [ Contact ],
+    type: [Contact],
     optional: true
   },
 
