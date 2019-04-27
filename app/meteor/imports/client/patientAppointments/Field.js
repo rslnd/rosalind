@@ -6,6 +6,19 @@ import { __ } from '../../i18n'
 import Cleave from 'cleave.js/react'
 import { DayField } from '../components/form/DayField'
 
+const fieldStyle = {
+  outline: 0,
+  border: 0,
+  background: 'rgba(255, 255, 255, 0)',
+  width: '100%'
+}
+
+export const PlainField = ({ style, ...props }) =>
+  <input
+    style={style ? { ...fieldStyle, ...style } : fieldStyle}
+    {...props}
+  />
+
 class DebouncedField extends React.Component {
   constructor(props) {
     super(props)
@@ -143,13 +156,6 @@ export const Textarea = ({ ...props }) =>
       />
     }
   </DebouncedField>
-
-const fieldStyle = {
-  outline: 0,
-  border: 0,
-  background: 'rgba(255, 255, 255, 0)',
-  width: '100%'
-}
 
 export const InsuranceId = ({ ...props }) =>
   <DebouncedField

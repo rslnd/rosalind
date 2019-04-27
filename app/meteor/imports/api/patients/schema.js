@@ -46,6 +46,26 @@ export const Contact = new SimpleSchema({
   note: {
     type: String,
     optional: true
+  },
+
+  addedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
+  addedAt: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
+  noConsent: {
+    type: Boolean,
+    optional: true
+  },
+
+  hasNone: {
+    type: Boolean,
+    optional: true
   }
 })
 

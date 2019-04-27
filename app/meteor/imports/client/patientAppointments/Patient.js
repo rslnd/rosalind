@@ -8,6 +8,7 @@ import { Patients } from '../../api/patients'
 import { Field, Textarea, Day, InsuranceId as InsuranceIdField } from './Field'
 import { Consent } from '../appointments/info/Consent'
 import { Agreements } from './Agreements'
+import { Contacts } from './Contacts'
 
 const action = promise =>
   promise.then(() => {
@@ -28,13 +29,16 @@ export const Patient = ({ patient, currentAppointment }) =>
       <Name {...patient} />
       <Birthday {...patient} />
       <InsuranceId {...patient} />
-      <Note {...patient} />
-      <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
+      <Contacts {...patient} />
       <Address {...patient} />
     </div>
     <div style={marginBottomStyle}>
-      <Loyalty {...patient} />
+      <Note {...patient} />
+    </div>
+    <div style={marginBottomStyle}>
+      <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
       <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
+      <Loyalty {...patient} />
       <PatientActions {...patient} />
     </div>
   </div>
