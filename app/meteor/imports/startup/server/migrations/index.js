@@ -12,6 +12,7 @@ import './9-overridesToAvailabilities'
 import './10-constraintTags'
 import './11-referrables'
 import './12-appointmentsCommentsToNote'
+import './13-patientSince'
 
 export default () => {
   Meteor.startup(() => {
