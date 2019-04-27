@@ -19,14 +19,14 @@ const composer = props => {
   const referrals = Referrals.find({ patientId }).fetch()
   const appointments = Appointments.find({ patientId }).fetch()
 
-  const existingReferral = referrable => find(referrals, r => (r.referrableId === referrable._id))
-  const existingAppointment = referrable => find(appointments, a =>
+  const existingReferrals = referrable => referrals.filter(r => (r.referrableId === referrable._id))
+  const existingAppointment = referrable => appointments.find(a =>
     (a.calendarId === referrable.toCalendarId) ||
     (a.tags && a.tags.includes(referrable.toTagId))
   )
-  const isReferrable = r =>
-    !existingReferral(r) &&
-    !existingAppointment(r)
+  const isReferrable = referrable =>
+    (existingReferrals(referrable).length < (referrable.max || Number.MAX_SAFE_INTEGER)) &&
+    (!existingAppointment(referrable))
 
   const handleClick = referrable => () => {
     if (isReferrable(referrable)) {
@@ -40,26 +40,22 @@ const composer = props => {
     }
   }
 
+  const userId = Meteor.userId()
   const referrables = Referrables.find({ fromCalendarIds: calendarId },
     { sort: { order: 1 } }).fetch().map(referrable => {
-    const existing = existingReferral(referrable)
-    return {
-      ...referrable,
-      existingReferral: existing,
-      existingReferralBySameAssignee: existing && existing.referredBy === Meteor.userId(),
-      isReferrable: isReferrable(referrable),
-      handleClick: handleClick(referrable)
-    }
-  })
-
-  const length = referrables.filter(referrable =>
-    referrable.existingReferralBySameAssignee || isReferrable(referrable)
-  ).length
+      const existing = existingReferrals(referrable)
+      return {
+        ...referrable,
+        existingReferrals: existing,
+        existingReferralsBySameAssignee: existing && existing.filter(e => e.referredBy === userId),
+        isReferrable: isReferrable(referrable),
+        handleClick: handleClick(referrable)
+      }
+    })
 
   return {
     ...props,
-    referrables,
-    length
+    referrables
   }
 }
 

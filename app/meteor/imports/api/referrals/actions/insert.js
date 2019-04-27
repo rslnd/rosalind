@@ -11,11 +11,11 @@ export const insert = ({ Referrals, Referrables }) => {
     validate: new SimpleSchema({
       patientId: { type: SimpleSchema.RegEx.Id },
       appointmentId: { type: SimpleSchema.RegEx.Id },
-      referredTo: { type: SimpleSchema.RegEx.Id },
+      referredTo: { type: SimpleSchema.RegEx.Id, optional: true },
       referrableId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ patientId, appointmentId, referredTo, referrableId }) {
+    run({ patientId, appointmentId, referredTo, referrableId }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -25,7 +25,12 @@ export const insert = ({ Referrals, Referrables }) => {
         throw new Error(`[Referrals] Unknown referrableId: ${referrableId}`)
       }
 
-      if (Referrals.findOne({ patientId, referredTo })) {
+      if (referrable.max === 0) {
+        throw new Error('[Referrals] Maximum referrable count is zero')
+      }
+
+      const existingReferrals = Referrals.find({ patientId, referredTo, referrableId })
+      if (referrable.max >= 1 && existingReferrals.length >= referrable.max) {
         console.warn(`[Referrals] insert: Patient ${patientId} has already been referred to ${referredTo}`)
         return
       }

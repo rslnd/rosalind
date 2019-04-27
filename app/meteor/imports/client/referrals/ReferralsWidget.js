@@ -13,8 +13,8 @@ const infoTextStyle = {
   paddingBottom: 6
 }
 
-export const ReferralsWidget = ({ style, isLoading, referrables, length }) =>
-  (!isLoading && length >= 1 && <div style={style ? { ...containerStyle, ...style } : style}>
+export const ReferralsWidget = ({ style, isLoading, referrables }) =>
+  (!isLoading && <div style={style ? { ...containerStyle, ...style } : style}>
     <div className='text-muted' style={infoTextStyle}>
       {__('appointments.referPatientTo')}
     </div>
@@ -30,17 +30,17 @@ export const ReferralsWidget = ({ style, isLoading, referrables, length }) =>
   </div>) || null
 
 const ReferralButton = ({ referrable }) => {
-  const { icon, name, tag, handleClick, isReferrable, existingReferralBySameAssignee } = referrable
+  const { icon, name, tag, handleClick, isReferrable, existingReferralsBySameAssignee, existingReferrals } = referrable
   const title = name || tag
-  const iconOrCheckmark = existingReferralBySameAssignee
-    ? 'check'
-    : (icon || defaultIcon)
+  const count = (existingReferrals.length >= 2) && existingReferrals.length
+  const didRefer = existingReferralsBySameAssignee.length >= 1
+  const buttonIcon = didRefer ? 'check' : (icon || defaultIcon)
 
   return (
     <Button onClick={handleClick} disabled={!isReferrable}>
       <div style={{ textAlign: 'center' }}>
-        <Icon name={iconOrCheckmark} /><br />
-        {title}
+        <Icon name={buttonIcon} /><br />
+        {title} {count && `(${count})`}
       </div>
     </Button>
   )

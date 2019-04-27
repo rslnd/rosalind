@@ -11,27 +11,18 @@ import {
   TableRow,
   numberCellStyle,
   separatorStyle,
-  summaryRowStyle } from '../components/Table'
+  summaryRowStyle
+} from '../components/Table'
 import { Box } from '../components/Box'
 import { ReferralsDetailSummary } from './ReferralsDetailSummary'
 import { Nil } from './shared/Nil'
 import { Referrables } from '../../api'
 
-const referredToTitle = ({ referrableId }) => {
-  const referrable = Referrables.findOne({ _id: referrableId })
-  if (referrable) {
-    return referrable.name
-  } else {
-    console.error('[Referrals] Cannot find referrable with id', referrableId)
-    return '?'
-  }
-}
-
 export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
   const rows = sortBy('createdAt')(
     referrals.map(r => ({
       ...r,
-      referredToTitle: referredToTitle(r)
+      referrable: Referrables.findOne({ _id: r.referrableId })
     })))
 
   return (
@@ -55,7 +46,7 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
                 <TableRow key={r._id}>
                   <Cell style={{ ...numberCellStyle, width: 24 }}><span className='text-muted'>{i + 1}</span></Cell>
                   <Cell><b>{namecase(r.patient.lastName)}</b> {namecase(r.patient.firstName)}</Cell>
-                  <Cell>{r.referredToTitle}</Cell>
+                  <Cell>{r.referrable.name}</Cell>
 
                   <Cell style={{ ...separatorStyle, width: '20%' }}>
                     <Date date={r.createdAt} />

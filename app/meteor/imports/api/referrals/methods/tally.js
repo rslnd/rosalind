@@ -80,7 +80,7 @@ export const tally = ({ date, from, to, referrals, futureAppointments = [] }) =>
   const count = referrals => {
     const ids = referrals.reduce((acc, curr) => ({
       ...acc,
-      [curr.referredTo]: ((acc[curr.referredTo] || 0) + 1)
+      [curr.referrableId]: ((acc[curr.referrableId] || 0) + 1)
     }), {})
 
     return {

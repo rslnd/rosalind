@@ -33,6 +33,11 @@ export const referrables = new SimpleSchema({
   redeemImmediately: {
     type: Boolean,
     optional: true
+  },
+
+  max: {
+    type: Number,
+    optional: true
   }
 })
 
@@ -57,7 +62,8 @@ export const referrals = new SimpleSchema({
   },
 
   referredTo: {
-    type: SimpleSchema.RegEx.Id
+    type: SimpleSchema.RegEx.Id,
+    optional: true
   },
 
   referringAppointmentId: {

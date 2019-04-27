@@ -48,6 +48,20 @@ const structure = ({ getCalendarName, getTag }) => [
     unsetWhenEmpty: true,
     EditComponent: TagsPicker,
     render: r => r.toTagId && <TagsList tiny tags={[r.toTagId]} />
+  },
+
+  {
+    header: 'Max.',
+    field: 'max',
+    unsetWhenEmpty: true,
+    render: r => (r.max || '∞')
+  },
+
+  {
+    header: 'Sofort',
+    field: 'redeemImmediately',
+    type: Boolean,
+    render: r => r.redeemImmediately && <Icon name='check' />
   }
 ]
 
