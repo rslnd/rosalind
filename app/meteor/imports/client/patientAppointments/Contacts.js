@@ -9,6 +9,7 @@ import { Button } from '@material-ui/core'
 import { Patients } from '../../api/patients'
 import { __ } from '../../i18n'
 import { Meteor } from 'meteor/meteor'
+import { EnlargeText } from '../components/EnlargeText';
 
 const newContact = channel => ({
   channel,
@@ -126,7 +127,7 @@ const ContactsList = compose(
     )
   })
 )(({ contacts, handleAdd, handleRemove, handleChange, handleChangeConsent }) =>
-  <div>
+  <div style={listStyle}>
     {contacts.map((c, ix) =>
       <Contact
         key={c.i}
@@ -140,23 +141,53 @@ const ContactsList = compose(
   </div>
 )
 
+const listStyle = {
+  marginTop: 8,
+  marginBottom: 8
+}
+
 const Contact = ({ channel, onChange, onChangeConsent, value, noConsent, hasNone, ...rest }) =>
-  <div style={rowStyle}>
-    <Icon name={icon(channel)} />
-    {
-      (hasNone || noConsent)
-        ? <Nope hasNone={hasNone} noConsent={noConsent} />
-        : <PlainField value={value} onChange={onChange} />
-    }
-    <Actions {...rest} />
+  <div>
+    <div style={rowStyle}>
+      <Icon name={icon(channel)} style={channelIconStyle} />
+      {
+        (hasNone || noConsent)
+          ? <Nope hasNone={hasNone} noConsent={noConsent} />
+          : <>
+            <PlainField value={value} onChange={onChange} />
+            {
+              value &&
+              <EnlargeText iconOnly style={zoomIconStyle}>
+                {value}
+              </EnlargeText>
+            }
+          </>
+      }
+      <Actions {...rest} />
+    </div>
     {
       !value &&
       <Consent onChangeConsent={onChangeConsent} />
     }
   </div>
 
+const zoomIconStyle = {
+  opacity: 0.5,
+  zoom: 0.9,
+  paddingTop: 8,
+  paddingRight: 3,
+  display: 'inline-block'
+}
+
 const rowStyle = {
   display: 'flex'
+}
+
+const channelIconStyle = {
+  opacity: 0.6,
+  paddingTop: 6,
+  paddingRight: 8,
+  paddingLeft: 3
 }
 
 const icon = channel =>
@@ -166,11 +197,11 @@ const icon = channel =>
 
 const Actions = ({ onAdd, onRemove }) =>
   <div style={actionsStyle}>
-    <Button style={buttonStyle} onClick={onRemove}><Icon name='minus' style={buttonIconStyle} /></Button>
+    <Button style={buttonRemoveStyle} onClick={onRemove}><Icon name='minus' style={buttonIconStyle} /></Button>
     {
       onAdd
-        ? <Button style={buttonStyle} onClick={onAdd}><Icon name='plus' style={buttonIconStyle} /></Button>
-        : <div style={buttonStyle} />
+        ? <Button style={buttonAddStyle} onClick={onAdd}><Icon name='plus' style={buttonIconStyle} /></Button>
+        : <div style={buttonAddStyle} />
     }
   </div>
 
@@ -178,14 +209,22 @@ const actionsStyle = {
   display: 'flex'
 }
 
-const buttonStyle = {
-  width: 25,
-  height: 25,
-  marginRight: 10
+const buttonAddStyle = {
+  width: 45,
+  height: 30,
+  minWidth: 0,
+  marginRight: 0,
+  opacity: 0.8
+}
+
+const buttonRemoveStyle = {
+  ...buttonAddStyle,
+  opacity: 0.4
 }
 
 const buttonIconStyle = {
-  fontSize: '16px'
+  zoom: 0.6,
+  minWidth: 0
 }
 
 const Consent = withHandlers({
@@ -198,13 +237,28 @@ const Consent = withHandlers({
     props.onChangeConsent({ noConsent: true, value: 'noConsent' })
   }
 })(({ setHasNone, setNoConsent }) =>
-  <div>
+  <div style={consentStyle}>
     PatientIn <a href='#' onClick={setHasNone}>hat keine</a> oder <a href='#' onClick={setNoConsent}>möchte sie nicht hergeben</a>
   </div>
 )
 
+const consentStyle = {
+  fontSize: '80%',
+  opacity: 0.9,
+  paddingLeft: 8,
+  paddingBottom: 11,
+  marginTop: -2
+}
+
+// TODO: Show addedBy/addedAt in Tooltip, not only Nopes but maybe all contacts?
 const Nope = ({ hasNone, noConsent }) =>
-  <div>
+  <div style={nopeStyle}>
     {hasNone && 'hat keine'}
     {noConsent && 'möchte nicht hergeben'}
   </div>
+
+const nopeStyle = {
+  width: '100%',
+  opacity: 0.7,
+  paddingTop: 5
+}

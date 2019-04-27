@@ -14,6 +14,7 @@ const largeStyle = {
 }
 
 const modalStyle = {
+  pointerEvents: 'none',
   position: 'fixed',
   bottom: 0,
   left: 0,
@@ -31,7 +32,7 @@ const CustomModal = ({ children, onHide }) => (
 )
 
 export class EnlargeText extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -42,15 +43,15 @@ export class EnlargeText extends React.Component {
     this.handleHide = this.handleHide.bind(this)
   }
 
-  handleShow () {
+  handleShow() {
     this.setState({ show: true })
   }
 
-  handleHide () {
+  handleHide() {
     this.setState({ show: false })
   }
 
-  render () {
+  render() {
     return (
       <span>
         <span
