@@ -53,6 +53,16 @@ const composer = props => {
 
   const canceledCount = otherAppointments.filter(a => (a.canceled || a.removed)).length
 
+  if (patient) {
+    patient.totalRevenue = otherAppointments.reduce((acc, a) => {
+      if (!a.canceled && !a.removed) {
+        return acc + (a.revenue || 0)
+      } else {
+        return acc
+      }
+    }, 0) + (currentAppointment.revenue || 0)
+  }
+
   return {
     ...props,
     currentAppointment,

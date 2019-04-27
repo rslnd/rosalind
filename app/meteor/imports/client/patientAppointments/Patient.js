@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React from 'react'
 import Alert from 'react-s-alert'
 import { insuranceId as formatInsuranceId, prefix } from '../../api/patients/methods'
@@ -9,7 +10,8 @@ import { Field, Textarea, Day, InsuranceId as InsuranceIdField } from './Field'
 import { Consent } from '../appointments/info/Consent'
 import { Agreements } from './Agreements'
 import { Contacts } from './Contacts'
-import { Dot } from '../patients/Dot';
+import { Dot } from '../patients/Dot'
+import { currencyRounded } from '../../util/format'
 
 const action = promise =>
   promise.then(() => {
@@ -242,11 +244,14 @@ const localityStyle = {
   display: 'inline-block'
 }
 
-const Loyalty = () =>
+const Loyalty = ({ patientSince, totalRevenue }) =>
   <div style={loyaltyStyle}>
-    <div>Gesamtumsatz €6500</div>
-    <div>Patientin seit Jänner 2019</div>
+    <div>{totalRevenue && __('patients.totalRevenue', { revenue: currencyRounded(totalRevenue) })} </div>
+    <div>{patientSince && __('patients.patientSince', { date: formatPatientSince(patientSince) })}</div>
   </div>
+
+const formatPatientSince = d =>
+  moment(d).format(__('time.dateFormatMonthYearOnly'))
 
 const loyaltyStyle = {
   ...sectionStart,

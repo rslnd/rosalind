@@ -115,7 +115,7 @@ export const Money = ({ ...props }) =>
   </DebouncedField>
 
 const moneyFormat = {
-  prefix: '€',
+  prefix: '€ ',
   numeral: true,
   numeralPositiveOnly: true,
   numeralDecimalMark: ',',

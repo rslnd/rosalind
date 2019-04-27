@@ -51,7 +51,7 @@ export const patients = {
   removeContact: 'Diesen Kontakt entfernen',
   addContact: 'Weiteren Kontakt hinzufügen',
   save: 'Speichern',
-  patientSince: 'Datum der ersten Behandlung',
+  patientSince: 'PatientIn seit __date__',
   editSuccess: 'Gespeichert',
   patientNotFound: 'PatientIn nicht gefunden',
   nameCaseWarning: 'Bitte den ersten Buchstaben groß schreiben, und den Rest klein. Danke!',
@@ -66,5 +66,6 @@ export const patients = {
   toggleBanned: 'PatientIn als erwünscht/nicht erwünscht markieren',
   history: 'Kartei',
   birthdayFormatOne: '1 Jahr (__date__)',
-  birthdayFormat: '__age__ Jahre (__date__)'
+  birthdayFormat: '__age__ Jahre (__date__)',
+  totalRevenue: 'Gesamtumsatz __revenue__'
 }
