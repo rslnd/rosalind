@@ -24,9 +24,11 @@ const updateTags = ({ _id }, tags) =>
   })
 
 export const Tags = compose(
+  withState('editing', 'setEditing'),
   withProps(props => {
-    const { calendarId, assigneeId, start } = props
-    if (!calendarId) { return }
+    const { calendarId, assigneeId, start, editing } = props
+    const tags = props.tags || []
+    if (!editing || !calendarId) { return { tags } }
 
     const maxDuration = Appointments.methods.getMaxDuration({ time: start, assigneeId, calendarId })
 
@@ -36,23 +38,22 @@ export const Tags = compose(
       from: { $lte: start },
       to: { $gte: start }
     })
-    const tags = TagsApi.find({}).fetch()
-    const constraints = Constraints.find({ assigneeId, calendarId }).fetch()
 
     if (!availability) {
-      return { possibleTags: [], maxDuration }
+      return { possibleTags: [], maxDuration, tags }
     } else {
-      const possibleTags = getPossibleTags({ availability, tags, constraints }).map(t => {
+      const allTags = TagsApi.find({}).fetch()
+      const constraints = Constraints.find({ assigneeId, calendarId }).fetch()
+      const possibleTags = getPossibleTags({ availability, tags: allTags, constraints }).map(t => {
         return {
           ...t,
           selectable: true,
-          selected: props.tags.find(at => at === t._id)
+          selected: tags.find(at => at === t._id)
         }
       })
-      return { possibleTags, maxDuration }
+      return { possibleTags, maxDuration, tags }
     }
   }),
-  withState('editing', 'setEditing'),
   withState('hovering', 'setHovering'),
   withHandlers({
     onMouseEnter: props => e => props.setHovering(true),
@@ -94,12 +95,12 @@ export const Tags = compose(
         <TagsList
           tiny={tiny || editing}
           tags={tags}
+          showDuration={false}
           onClick={editing ? (possibleTags.length >= 1 ? toggleTag : endEdit) : startEdit}
         />
 
         {
-          hovering && (possibleTags.length !== 0) &&
-          <EditButton />
+          hovering && <EditButton />
         }
       </div>
 
@@ -110,10 +111,13 @@ export const Tags = compose(
           {
             possibleTags.length === 0
               ? __('appointments.cannotEditTags')
-              : <TagsList
-                tags={possibleTags}
-                onClick={toggleTag}
-              />
+              : <div style={tagsListStyle}>
+                <TagsList
+                  showDuration={false}
+                  tags={possibleTags}
+                  onClick={toggleTag}
+                />
+              </div>
           }
         </Paper>
       }
@@ -136,6 +140,10 @@ const editingStyle = {
   marginRight: 10,
   borderRadius: '4px',
   maxWidth: '100%'
+}
+
+const tagsListStyle = {
+  width: 'calc(100% - 45px)'
 }
 
 const EditButton = () =>

@@ -4,15 +4,17 @@ import { Info } from './Info'
 import { Tags } from './Tags'
 import { Note } from './Note'
 import { Media } from './Media'
+import { ErrorBoundary } from '../layout/ErrorBoundary'
 
 export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
   appointments.map(a =>
-    <Appointment
-      key={a._id}
-      appointment={a}
-      hasMedia={!!a.note}
-      fullNameWithTitle={fullNameWithTitle}
-    />
+    <ErrorBoundary key={a._id}>
+      <Appointment
+        appointment={a}
+        hasMedia={!!a.note}
+        fullNameWithTitle={fullNameWithTitle}
+      />
+    </ErrorBoundary>
   )
 
 export const Appointment = ({ isCurrent, hasMedia, appointment, fullNameWithTitle }) =>

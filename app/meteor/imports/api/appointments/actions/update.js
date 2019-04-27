@@ -24,7 +24,7 @@ export const update = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const appointment = Appointments.findOne({ _id: appointmentId })
+      const appointment = Appointments.findOne({ _id: appointmentId }, { removed: true })
 
       if (appointment) {
         Appointments.update({ _id: appointmentId }, {

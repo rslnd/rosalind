@@ -7,6 +7,7 @@ import { background, modalBackground, lightBackground, mutedSeparator, mutedBack
 import Paper from '@material-ui/core/Paper'
 import { Close } from './Close'
 import { Patient } from './Patient'
+import { ErrorBoundary } from '../layout/ErrorBoundary'
 
 export const PatientAppointmentsModal = withPropsOnChange(
   ['show'],
@@ -32,10 +33,14 @@ export const PatientAppointmentsModal = withPropsOnChange(
           <div style={containerStyle}>
             <div style={columnsStyle}>
               <div style={appointmentsStyle}>
-                <Appointments {...props} show={show} />
+                <ErrorBoundary>
+                  <Appointments {...props} show={show} />
+                </ErrorBoundary>
               </div>
               <div style={patientSidebarStyle}>
-                <Patient {...props} />
+                <ErrorBoundary>
+                  <Patient {...props} />
+                </ErrorBoundary>
               </div>
             </div>
             <div style={actionsStyle}>

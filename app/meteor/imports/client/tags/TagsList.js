@@ -53,7 +53,8 @@ const Tag = withHandlers({
   handleMouseEnter,
   handleMouseLeave,
   style,
-  showDefaultRevenue
+  showDefaultRevenue,
+  showDuration
 }) => <span
   title={tag.description}
   onClick={handleClick}
@@ -68,9 +69,10 @@ const Tag = withHandlers({
       : tag.color,
     borderColor: darken(tag.color || tagBackgroundColor),
     textDecoration: tag.removed ? 'line-through' : 'none'
-  }}>
+  }}
+>
     {tag.tag}
-    {tag.duration && <span style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
+    {showDuration && tag.duration && <span style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
       {tag.duration}'
   </span>}
   </span>)
@@ -81,6 +83,7 @@ export const TagsList = ({
   style = {},
   tiny,
   showDefaultRevenue,
+  showDuration = true,
   groupTags = true,
   onMouseEnter,
   onMouseLeave
@@ -135,6 +138,7 @@ export const TagsList = ({
               onMouseLeave={onMouseLeave}
               style={style}
               showDefaultRevenue={showDefaultRevenue}
+              showDuration={showDuration}
             />
           )
         }

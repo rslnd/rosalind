@@ -156,7 +156,7 @@ const Contact = ({ channel, onChange, onChangeConsent, value, noConsent, hasNone
           : <>
             <PlainField value={value} onChange={onChange} />
             {
-              value &&
+              value && channel === 'Phone' &&
               <EnlargeText iconOnly style={zoomIconStyle}>
                 {value}
               </EnlargeText>
