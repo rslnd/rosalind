@@ -5,7 +5,27 @@
     "**/.meteor": false,
     "**/node_modules": true
   },
-  "todo-tree.tags": ["TODO", "FIXME", "BUG", "LEGACY", "HACK", "UNSAFE"],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.meteor/local": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/": true,
+    "**/.meteor/local": true
+  },
+  "path-autocomplete.excludedItems": {
+    "**/{.git,node_modules,.meteor}": {
+      "when": "**"
+    }
+  },
+  "todo-tree.tags": [
+    "TODO",
+    "FIXME",
+    "BUG",
+    "LEGACY",
+    "HACK",
+    "UNSAFE"
+  ],
   "todo-tree.customHighlight": {
     "HACK": {
       "icon": "alert",
