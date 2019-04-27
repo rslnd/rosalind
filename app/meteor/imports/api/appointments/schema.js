@@ -49,6 +49,12 @@ export default new SimpleSchema({
     optional: true
   },
 
+  // See migration 12: appointmentsCommentsToNote
+  noteLegacy: {
+    type: String,
+    optional: true
+  },
+
   privateAppointment: {
     type: Boolean,
     defaultValue: false

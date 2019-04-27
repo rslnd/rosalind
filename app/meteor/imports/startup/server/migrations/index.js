@@ -11,6 +11,7 @@ import './8-agreements'
 import './9-overridesToAvailabilities'
 import './10-constraintTags'
 import './11-referrables'
+import './12-appointmentsCommentsToNote'
 
 export default () => {
   Meteor.startup(() => {
