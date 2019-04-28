@@ -1,11 +1,7 @@
-import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { withTracker } from '../components/withTracker'
-import find from 'lodash/find'
 import Alert from 'react-s-alert'
 import { Referrals, Referrables } from '../../api/referrals'
-import { Tags } from '../../api/tags'
-import { Calendars } from '../../api/calendars'
 import { Appointments } from '../../api/appointments'
 import { ReferralsWidget } from './ReferralsWidget'
 
@@ -40,14 +36,13 @@ const composer = props => {
     }
   }
 
-  const userId = Meteor.userId()
   const referrables = Referrables.find({ fromCalendarIds: calendarId },
     { sort: { order: 1 } }).fetch().map(referrable => {
-      const existing = existingReferrals(referrable)
+      const count = existingReferrals(referrable).length
+
       return {
         ...referrable,
-        existingReferrals: existing,
-        existingReferralsBySameAssignee: existing && existing.filter(e => e.referredBy === userId),
+        count,
         isReferrable: isReferrable(referrable),
         handleClick: handleClick(referrable)
       }

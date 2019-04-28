@@ -67,7 +67,7 @@ export const appointments = {
   noShow: 'Nicht Erschienen',
   revenue: 'Kosten',
   referralSuccess: 'Empfohlen',
-  referPatientTo: 'PatientIn empfehlen',
+  referPatientTo: 'Empfehlen',
   insertSuccess: 'Termin eingetragen',
   pauseInsertSuccess: 'Pause eingetragen',
   insertError: 'Entschuldigung! Bitte noch einmal versuchen.',
