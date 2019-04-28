@@ -22,7 +22,7 @@ const up = () => {
     const text = comments.map(c => c.body).join('\n\n')
 
     const newNote = [
-      appointment.note,
+      appointment.noteLegacy || appointment.note,
       text
     ].filter(identity).join('\n\n')
 
