@@ -51,6 +51,7 @@ const composer = props => {
   )
 
   return {
+    ...props,
     record,
     canEdit,
     canInsert,
@@ -95,7 +96,7 @@ export const FutureRecord = compose(
         recordId: props.record._id
       }))
   })
-)(({ record, handleChange, handleRemove, calendarId, setCalendarId, style, readOnly, canResolve }) =>
+)(({ record, handleChange, handleRemove, calendarId, setCalendarId, style, readOnly, canResolve, fieldStyle }) =>
   <div>
     {
       !readOnly
@@ -127,7 +128,9 @@ export const FutureRecord = compose(
       readOnly
         ? (
           (record && record.note) && <div>
-            {record.note}
+            <div stlye={fieldStyle}>
+              {record.note}
+            </div>
             {
               canResolve &&
               <Button
@@ -142,6 +145,7 @@ export const FutureRecord = compose(
         ) : <Textarea
           initialValue={(record && record.note) || ''}
           onChange={handleChange}
+          style={fieldStyle}
         />
     }
   </div>

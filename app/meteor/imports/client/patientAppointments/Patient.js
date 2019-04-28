@@ -35,6 +35,8 @@ export const Patient = ({ patient, currentAppointment }) =>
       <InsuranceId {...patient} />
       <Contacts {...patient} />
       <Address {...patient} />
+      <Loyalty {...patient} />
+      <PatientActions {...patient} />
     </div>
     <div style={marginBottomStyle}>
       <Note {...patient} />
@@ -42,13 +44,12 @@ export const Patient = ({ patient, currentAppointment }) =>
         patientId={patient._id}
         calendarId={currentAppointment.calendarId}
         currentAppointment={currentAppointment}
-        style={noteLabelStyle} />
+        style={noteLabelStyle}
+        fieldStyle={noteFieldStyle} />
     </div>
     <div style={marginBottomStyle}>
       <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
       <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
-      <Loyalty {...patient} />
-      <PatientActions {...patient} />
     </div>
   </div>
 
@@ -192,7 +193,12 @@ const Note = withHandlers({
 )
 
 const noteFieldStyle = {
-  fontWeight: 600
+  fontWeight: 600,
+  background: '#fff',
+  borderRadius: '4px',
+  marginTop: 6,
+  marginBottom: 14,
+  padding: 10
 }
 
 const noteStyle = {
