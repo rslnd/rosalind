@@ -20,6 +20,7 @@ import { Clients } from './clients'
 import { Constraints } from './constraints'
 import { Availabilities } from './availabilities'
 import { Media } from './media'
+import { Records } from './records'
 
 export {
   Users,
@@ -45,5 +46,6 @@ export {
   Clients,
   Constraints,
   Availabilities,
-  Media
+  Media,
+  Records
 }

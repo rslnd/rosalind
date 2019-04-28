@@ -19,6 +19,7 @@ import clients from '../../api/clients/server'
 import constraints from '../../api/constraints/server'
 import availabilities from '../../api/availabilities/server'
 import media from '../../api/media/server'
+import records from '../../api/records/server'
 
 export default function () {
   settings()
@@ -42,4 +43,5 @@ export default function () {
   constraints()
   availabilities()
   media()
+  records()
 }
