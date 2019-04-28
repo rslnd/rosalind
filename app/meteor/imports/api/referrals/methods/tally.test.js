@@ -6,6 +6,7 @@ const referrals = [
   {
     patientId: 'B2TTNxxmLPBDpmZRN',
     referredTo: 'suX7qs3DjEjooBwZP',
+    referrableId: 'blablareferrableid',
     referredBy: '5a9NQhmscSy8xSf2v',
     createdAt: new Date(),
     redeemedAt: new Date()
@@ -13,6 +14,7 @@ const referrals = [
   {
     patientId: 'B2TTNxxmLPBDpmZRN',
     referredTo: 'suX7qs3DjEjooBwZP',
+    referrableId: 'blablareferrableid',
     referredBy: '5a9NQhmscSy8xSf2v',
     createdAt: new Date(),
     redeemedAt: new Date()
@@ -28,7 +30,7 @@ describe('referrals', () => {
       })
 
       expect(result.assignees).to.have.lengthOf(1)
-      expect(result.total.redeemed.ids.suX7qs3DjEjooBwZP).to.eql(2)
+      expect(result.total.redeemed.ids.blablareferrableid).to.eql(2)
     })
   })
 })
