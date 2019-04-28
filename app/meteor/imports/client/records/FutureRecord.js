@@ -3,32 +3,59 @@ import Alert from 'react-s-alert'
 import moment from 'moment'
 import { Meteor } from 'meteor/meteor'
 import { compose, withState, withHandlers, withProps } from 'recompose'
-import { Records, Calendars } from '../../api'
+import { Records, Calendars, Users } from '../../api'
 import { subscribe } from '../../util/meteor/subscribe'
 import { withTracker } from '../components/withTracker'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { Icon } from '../components/Icon'
 import { Textarea } from '../patientAppointments/Field'
-import { __ } from '../../i18n';
+import { __ } from '../../i18n'
+import { Button } from '@material-ui/core'
+import { hasRole } from '../../util/meteor/hasRole'
+
+const fullNameWithTitle = _id => {
+  const user = _id && Users.findOne({ _id })
+  return user && Users.methods.fullNameWithTitle(user)
+}
 
 const composer = props => {
-  const { calendarId, patientId } = props
+  const { calendarId, patientId, currentAppointment } = props
 
   subscribe('records', { patientId })
 
   const record = Records.findOne({ calendarId, patientId })
 
+  const userId = Meteor.userId()
   const canEdit = record &&
-    (record.createdBy === Meteor.userId()) &&
-    moment(record.createdAt).isSame(moment(), 'day')
+    (
+      hasRole(userId, ['records-edit']) ||
+      (
+        (record.createdBy === userId) &&
+        moment(record.createdAt).isSame(moment(), 'day')
+      )
+    )
 
   const canInsert = !record
+
+  const readOnly = !(canInsert || canEdit)
+
+  const canResolve = record && (
+    hasRole(userId, ['records-edit']) || (
+      currentAppointment && currentAppointment.calendarId === record.calendarId &&
+      (
+        userId === currentAppointment.assigneeId ||
+        userId === currentAppointment.waitlistAssigneeId
+      )
+    )
+  )
 
   return {
     record,
     canEdit,
-    canInsert
+    canInsert,
+    readOnly,
+    canResolve
   }
 }
 
@@ -62,28 +89,67 @@ export const FutureRecord = compose(
           type: 'future'
         }))
       }
-    }
+    },
+    handleRemove: props => e =>
+      props.record && action(Records.actions.remove.callPromise({
+        recordId: props.record._id
+      }))
   })
-)(({ record, handleChange, calendarId, setCalendarId, style }) =>
+)(({ record, handleChange, handleRemove, calendarId, setCalendarId, style, readOnly, canResolve }) =>
   <div>
-    <CalendarSelector calendarId={calendarId} onChange={setCalendarId}>
-      {({ calendar, onClick }) =>
-        <span onClick={onClick} style={style}>
-          Nachricht an nächste KollegIn
-          &emsp;
-          <span style={muted}>
-            {calendar ? calendar.name : 'Kalender wählen'} <Icon name='caret-down' />
+    {
+      !readOnly
+        ? (
+          <CalendarSelector calendarId={calendarId} onChange={setCalendarId}>
+            {({ calendar, onClick }) =>
+              <span onClick={onClick} style={style}>
+                Nachricht an nächste KollegIn
+                &emsp;
+                <span style={muted}>
+                  {calendar ? calendar.name : 'Kalender wählen'} <Icon name='caret-down' />
+                </span>
+              </span>
+            }
+          </CalendarSelector>
+        ) : (
+          record &&
+          <span style={style} title={moment(record.createdAt).format(__('time.dateFormatWeekdayShortNoYear'))}>
+            {
+              __('records.futureLabel', {
+                name: fullNameWithTitle(record.createdBy)
+              })
+            }
           </span>
-        </span>
-      }
-    </CalendarSelector>
+        )
+    }
 
-    <Textarea
-      initialValue={record ? record.note : ''}
-      onChange={handleChange}
-    />
+    {
+      readOnly
+        ? (
+          (record && record.note) && <div>
+            {record.note}
+            {
+              canResolve &&
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={handleRemove}
+                style={resolveButtonStyle}
+                className='pull-right'
+              >OK, Gelesen</Button>
+            }
+          </div>
+        ) : <Textarea
+          initialValue={(record && record.note) || ''}
+          onChange={handleChange}
+        />
+    }
   </div>
 )
+
+const resolveButtonStyle = {
+  zoom: 0.7
+}
 
 const muted = {
   opacity: 0.8

@@ -41,6 +41,7 @@ export const Patient = ({ patient, currentAppointment }) =>
       <FutureRecord
         patientId={patient._id}
         calendarId={currentAppointment.calendarId}
+        currentAppointment={currentAppointment}
         style={noteLabelStyle} />
     </div>
     <div style={marginBottomStyle}>
@@ -251,8 +252,16 @@ const localityStyle = {
 
 const Loyalty = ({ patientSince, totalRevenue }) =>
   <div style={loyaltyStyle}>
-    <div>{totalRevenue && __('patients.totalRevenue', { revenue: currencyRounded(totalRevenue) })} </div>
-    <div>{patientSince && __('patients.patientSince', { date: formatPatientSince(patientSince) })}</div>
+    <div>{
+      totalRevenue
+        ? __('patients.totalRevenue', { revenue: currencyRounded(totalRevenue) })
+        : null
+    } </div>
+    <div>{
+      patientSince
+        ? __('patients.patientSince', { date: formatPatientSince(patientSince) })
+        : null
+    }</div>
   </div>
 
 const formatPatientSince = d =>
