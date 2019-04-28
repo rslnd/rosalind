@@ -12,6 +12,7 @@ import { Agreements } from './Agreements'
 import { Contacts } from './Contacts'
 import { Dot } from '../patients/Dot'
 import { currencyRounded } from '../../util/format'
+import { FutureRecord } from '../records/FutureRecord'
 
 const action = promise =>
   promise.then(() => {
@@ -37,6 +38,10 @@ export const Patient = ({ patient, currentAppointment }) =>
     </div>
     <div style={marginBottomStyle}>
       <Note {...patient} />
+      <FutureRecord
+        patientId={patient._id}
+        calendarId={currentAppointment.calendarId}
+        style={noteLabelStyle} />
     </div>
     <div style={marginBottomStyle}>
       <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
