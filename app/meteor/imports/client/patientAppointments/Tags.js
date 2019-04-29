@@ -13,7 +13,7 @@ import { __ } from '../../i18n'
 import { Paper } from '@material-ui/core'
 import { Close } from './Close'
 
-const updateTags = ({ _id }, tags) =>
+const updateTags = ({ _id }, tags, revenue) =>
   Appointments.actions.update.callPromise({
     appointmentId: _id,
     update: {
