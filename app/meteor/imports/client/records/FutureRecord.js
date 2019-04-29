@@ -29,7 +29,7 @@ const composer = props => {
   const userId = Meteor.userId()
   const canEdit = record &&
     (
-      hasRole(userId, ['records-edit']) ||
+      hasRole(userId, ['admin', 'records-edit']) ||
       (
         (record.createdBy === userId) &&
         moment(record.createdAt).isSame(moment(), 'day')
@@ -41,7 +41,7 @@ const composer = props => {
   const readOnly = !(canInsert || canEdit)
 
   const canResolve = record && (
-    hasRole(userId, ['records-edit']) || (
+    hasRole(userId, ['admin', 'records-edit']) || (
       currentAppointment && currentAppointment.calendarId === record.calendarId &&
       (
         userId === currentAppointment.assigneeId ||
@@ -128,7 +128,7 @@ export const FutureRecord = compose(
       readOnly
         ? (
           (record && record.note) && <div>
-            <div stlye={fieldStyle}>
+            <div style={fieldStyle}>
               {record.note}
             </div>
             {
