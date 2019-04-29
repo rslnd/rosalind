@@ -6,9 +6,9 @@ import { Events } from '../../events'
 import { Messages } from '../../messages'
 import { Referrals } from '../../referrals'
 
-export const setCanceled = ({ Appointments }) => {
+export const setNoShow = ({ Appointments }) => {
   return new ValidatedMethod({
-    name: 'appointments/setCanceled',
+    name: 'appointments/setNoShow',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       appointmentId: { type: SimpleSchema.RegEx.Id }
@@ -19,24 +19,25 @@ export const setCanceled = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).canceled) {
-        console.log('[Appointments] setCanceled: Appointment is already set to canceled', { appointmentId })
+      if (Appointments.findOne({ _id: appointmentId }).noShow) {
+        console.log('[Appointments] setNoShow: Appointment is already set to no show', { appointmentId })
         Messages.actions.removeReminder.call({ appointmentId })
         return
       }
 
       Appointments.update({ _id: appointmentId }, {
         $set: {
-          canceled: true,
-          canceledAt: new Date(),
-          canceledBy: this.userId
+          noShow: true,
+          noShowAt: new Date()
         },
         $unset: {
           admitted: 1,
           admittedAt: 1,
           admittedBy: 1,
-          noShow: 1,
-          noShowAt: 1
+          treated: 1,
+          treatmentBy: 1,
+          treatmentStart: 1,
+          treatmentEnd: 1,
         }
       })
 
@@ -45,7 +46,7 @@ export const setCanceled = ({ Appointments }) => {
         Referrals.serverActions.unredeem({ appointmentId })
       }
 
-      Events.post('appointments/setCanceled', { appointmentId })
+      Events.post('appointments/setNoShow', { appointmentId })
 
       return appointmentId
     }

@@ -55,6 +55,7 @@ export const Tags = compose(
     }
   }),
   withState('hovering', 'setHovering'),
+  withProps(props => ({ hovering: props.hovering || props.isCurrent })),
   withHandlers({
     onMouseEnter: props => e => props.setHovering(true),
     onMouseLeave: props => e => props.setHovering(false),
@@ -74,7 +75,7 @@ export const Tags = compose(
   })
 )(({
   tags,
-  tiny,
+  isCurrent,
   editing,
   startEdit,
   endEdit,
@@ -93,7 +94,7 @@ export const Tags = compose(
         onMouseLeave={onMouseLeave}
       >
         <TagsList
-          tiny={tiny || editing}
+          tiny={!isCurrent || editing}
           tags={tags}
           showDuration={false}
           onClick={editing ? (possibleTags.length >= 1 ? toggleTag : endEdit) : startEdit}

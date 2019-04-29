@@ -90,7 +90,7 @@ class DebouncedField extends React.Component {
 
     const value = (this.state.value !== null
       ? this.state.value
-      : doFormat(initialValue) || '')
+      : doFormat(initialValue)) || ''
 
     return children({
       ...restProps,

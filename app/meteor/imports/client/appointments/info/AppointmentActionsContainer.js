@@ -48,9 +48,27 @@ const composer = (props) => {
     closeModal()
   }
 
+  const setNoShow = () => {
+    Alert.success(__('appointments.setNoShowSuccess'))
+    Appointments.actions.setNoShow.call(args)
+    closeModal()
+  }
+
   const unsetCanceled = () => {
     Alert.success(__('appointments.unsetCanceledSuccess'))
     Appointments.actions.unsetCanceled.call(args)
+    closeModal()
+  }
+
+  const unsetStartTreatment = () => {
+    Alert.success(__('appointments.unsetStartTreatmentSuccess'))
+    Appointments.actions.unsetStartTreatment.call(args)
+    closeModal()
+  }
+
+  const unsetEndTreatment = () => {
+    Alert.success(__('appointments.unsetEndTreatmentSuccess'))
+    Appointments.actions.unsetEndTreatment.call(args)
     closeModal()
   }
 
@@ -60,9 +78,9 @@ const composer = (props) => {
     closeModal()
   }
 
-  let startMove
+  let move
   if (props.onMoveStart) {
-    startMove = () => {
+    move = () => {
       let patient = null
       if (appointment.patientId) {
         patient = Patients.findOne({ _id: appointment.patientId })
@@ -91,6 +109,7 @@ const composer = (props) => {
   }
 
   return {
+    appointment,
     canceled,
     admitted,
     treatmentStart,
@@ -100,9 +119,12 @@ const composer = (props) => {
     endTreatment,
     unsetAdmitted,
     setCanceled,
+    setNoShow,
     unsetCanceled,
+    unsetStartTreatment,
+    unsetEndTreatment,
     softRemove,
-    startMove,
+    move,
     viewInCalendar
   }
 }

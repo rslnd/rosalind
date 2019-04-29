@@ -14,7 +14,7 @@ export const setAdmitted = ({ Appointments }) => {
       waitlistAssigneeId: { type: SimpleSchema.RegEx.Id, optional: true }
     }).validator(),
 
-    run ({ appointmentId, waitlistAssigneeId }) {
+    run({ appointmentId, waitlistAssigneeId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -37,7 +37,9 @@ export const setAdmitted = ({ Appointments }) => {
       const $unset = {
         canceled: 1,
         canceledAt: 1,
-        canceledBy: 1
+        canceledBy: 1,
+        noShow: 1,
+        noShowAt: 1
       }
 
       Appointments.update({ _id: appointmentId }, { $set, $unset })

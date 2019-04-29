@@ -97,7 +97,7 @@ export default new SimpleSchema({
   },
 
   treatmentEnd: {
-    type: SimpleSchema.RegEx.Id,
+    type: Date,
     optional: true,
     index: 1
   },
@@ -144,6 +144,16 @@ export default new SimpleSchema({
 
   removedBy: {
     type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
+  noShow: {
+    type: Boolean,
+    optional: true
+  },
+
+  noShowAt: {
+    type: Date,
     optional: true
   },
 

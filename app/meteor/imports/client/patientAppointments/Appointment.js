@@ -24,7 +24,7 @@ export const Appointment = ({ isCurrent, hasMedia, appointment, fullNameWithTitl
       : appointmentStyle
   }>
     <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} />
-    <Tags {...appointment} tiny={!isCurrent} />
+    <Tags {...appointment} isCurrent={isCurrent} />
     <Note {...appointment} />
 
     {

@@ -3,9 +3,12 @@ import { acquireLock } from './acquireLock'
 import { releaseLock } from './releaseLock'
 import { setAdmitted } from './setAdmitted'
 import { setCanceled } from './setCanceled'
+import { setNoShow } from './setNoShow'
 import { softRemove } from './softRemove'
 import { unsetAdmitted } from './unsetAdmitted'
 import { unsetCanceled } from './unsetCanceled'
+import { unsetEndTreatment } from './unsetEndTreatment'
+import { unsetStartTreatment } from './unsetStartTreatment'
 import { move } from './move'
 import { update } from './update'
 import { startTreatment } from './startTreatment'
@@ -23,6 +26,7 @@ export default function ({ Appointments }) {
     releaseLock: releaseLock({ Appointments }),
     setAdmitted: setAdmitted({ Appointments }),
     setCanceled: setCanceled({ Appointments }),
+    setNoShow: setNoShow({ Appointments }),
     softRemove: softRemove({ Appointments }),
     unsetAdmitted: unsetAdmitted({ Appointments }),
     unsetCanceled: unsetCanceled({ Appointments }),
@@ -30,6 +34,8 @@ export default function ({ Appointments }) {
     update: update({ Appointments }),
     startTreatment: startTreatment({ Appointments }),
     endTreatment: endTreatment({ Appointments }),
+    unsetEndTreatment: unsetEndTreatment({ Appointments }),
+    unsetStartTreatment: unsetStartTreatment({ Appointments }),
     nextTreatment: nextTreatment({ Appointments }),
     changeAssignee: changeAssignee({ Appointments }),
     changeWaitlistAssignee: changeWaitlistAssignee({ Appointments }),
