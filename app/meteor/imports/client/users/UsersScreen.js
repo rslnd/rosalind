@@ -17,7 +17,7 @@ const toggleablePermissions = [
   {
     permission: 'waitlist',
     description: 'Warteliste',
-    icon: 'angle-right'
+    icon: 'angle-double-right'
   },
   {
     permission: 'schedules-edit',

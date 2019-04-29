@@ -5,9 +5,10 @@ import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { currentState } from '../../../api/appointments/states'
 
 const buttons = {
-  setAdmitted: { icon: 'angle-right', primary: true },
+  setAdmitted: { icon: 'angle-double-right', primary: true },
   startTreatment: { icon: 'circle-o-notch', primary: true },
   endTreatment: { icon: 'check', primary: true },
   setNoShow: { icon: 'times' },
@@ -28,32 +29,6 @@ const Btn = Object.keys(buttons).reduce((acc, k) => ({
       onClick={() => props.handleClick(k)}
     />
 }), {})
-
-const states = [
-  {
-    when: a => !a.admitted,
-    primaryActions: ['setAdmitted', 'setNoShow', 'setCanceled'],
-    secondaryActions: null
-  },
-  {
-    when: a => a.admitted && !a.treatmentStart,
-    primaryActions: ['startTreatment'],
-    secondaryActions: ['unsetAdmitted', 'setNoShow', 'setCanceled']
-  },
-  {
-    when: a => a.treatmentStart && !a.treatmentEnd,
-    primaryActions: ['endTreatment'],
-    secondaryActions: ['unsetAdmitted', 'unsetStartTreatment', 'setNoShow', 'setCanceled']
-  },
-  {
-    when: a => a.treated,
-    primaryActions: null,
-    secondaryActions: ['unsetAdmitted', 'unsetStartTreatment', 'unsetEndTreatment', 'setNoShow', 'setCanceled']
-  }
-]
-
-const nextAction = appointment =>
-  states.find(s => s.when(appointment))
 
 const Button = ({ icon, name, primary, ...props }) => {
   const onClick = props[name]
@@ -110,7 +85,7 @@ export const AppointmentActions = compose(
     move
   } = props
 
-  const next = nextAction(appointment)
+  const next = currentState(appointment)
 
   const primaryActions = next.primaryActions && next.primaryActions.map(n => Btn[n])
   const secondaryActions = next.secondaryActions

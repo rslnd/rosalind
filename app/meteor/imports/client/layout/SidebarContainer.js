@@ -16,7 +16,7 @@ const sidebarItems = ({ history }) => {
     {
       name: 'patients.thisNext',
       link: '/waitlist',
-      icon: 'angle-right',
+      icon: 'angle-double-right',
       roles: ['waitlist', 'waitlist-all', 'admin']
     },
     ...calendars.map(c => ({

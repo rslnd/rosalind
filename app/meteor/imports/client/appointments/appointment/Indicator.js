@@ -1,13 +1,13 @@
 import React from 'react'
 import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
-import { green, red } from '../../layout/styles'
+import { green, red, primaryActive } from '../../layout/styles'
 import { Currency } from '../../components/Currency'
 
 const assumeNoShowAfterMinutes = 90
 
 export const Indicator = ({ appointment, showRevenue, calendar }) => {
-  if (!appointment.patientId || appointment.canceled || appointment.removed) {
+  if (!appointment || !appointment.patientId || appointment.canceled || appointment.removed) {
     return null
   }
 
@@ -15,10 +15,17 @@ export const Indicator = ({ appointment, showRevenue, calendar }) => {
     return <Treated />
   }
 
+  if (appointment.treatmentStart) {
+    return <Treating />
+  }
+
   if (appointment.admitted) {
     return <Admitted />
   }
 
+  if (appointment.noShow) {
+    return <NoShow />
+  }
   const assumeNoShow = ((new Date() - appointment.end) / 1000 / 60) >= assumeNoShowAfterMinutes
   if (assumeNoShow) {
     return <NoShow />
@@ -32,7 +39,7 @@ const Admitted = () => <span
   className='pull-right'
   title={__('appointments.admitted')}
   style={admittedStyle}>
-  <Icon name='angle-right' />&nbsp;
+  <Icon name='angle-double-right' />&nbsp;
 </span>
 
 const admittedStyle = {
@@ -53,6 +60,19 @@ const treatedStyle = {
   color: green
 }
 
+const Treating = () => <span
+  key='treating'
+  className='pull-right'
+  title={__('appointments.treating')}
+  style={treatingStyle}>
+  <Icon name='circle-o-notch' />&nbsp;
+</span>
+
+const treatingStyle = {
+  display: 'inline-block',
+  color: primaryActive
+}
+
 const NoShow = () => <span
   key='noShow'
   className='pull-right'
@@ -70,8 +90,8 @@ export const Revenue = ({ appointment }) =>
   <span>
     {
       (appointment.revenue === 0 || appointment.revenue > 0) &&
-        <span>
-          <Currency value={appointment.revenue} />&nbsp;
+      <span>
+        <Currency value={appointment.revenue} />&nbsp;
         </span>
     }
   </span>

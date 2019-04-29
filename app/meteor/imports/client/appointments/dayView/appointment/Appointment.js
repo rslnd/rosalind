@@ -53,13 +53,13 @@ const styles = {
 }
 
 class AppointmentItem extends React.Component {
-  stripNumbers (text) {
+  stripNumbers(text) {
     if (typeof text === 'string') {
       return text.replace(/\d{3,}/g, '')
     }
   }
 
-  shouldComponentUpdate (nextProps) {
+  shouldComponentUpdate(nextProps) {
     const a = this.props.appointment
     const b = nextProps.appointment
 
@@ -70,6 +70,9 @@ class AppointmentItem extends React.Component {
     if (a.canceled !== b.canceled) { return true }
     if (a.treated !== b.treated) { return true }
     if (a.start !== b.start) { return true }
+    if (a.treatmentStart !== b.treatmentStart) { return true }
+    if (a.treatmentEnd !== b.treatmentEnd) { return true }
+    if (a.treated !== b.treated) { return true }
     if (!isEqual(a.tags, b.tags)) { return true }
 
     if (this.props.isMoving || nextProps.isMoving) { return true }
@@ -88,16 +91,16 @@ class AppointmentItem extends React.Component {
     return false
   }
 
-  render () {
+  render() {
     const { appointment, calendar, classes, format } = this.props
     const appointmentClasses = classnames({
-      [ classes.appointment ]: true,
-      [ classes.canceled ]: appointment.canceled,
-      [ classes.admitted ]: appointment.admitted,
-      [ classes.treated ]: appointment.treated,
-      [ classes.locked ]: appointment.lockedBy,
-      [ classes.moving ]: this.props.isMoving,
-      [ classes.colliding ]: appointment.isColliding
+      [classes.appointment]: true,
+      [classes.canceled]: appointment.canceled,
+      [classes.admitted]: appointment.admitted,
+      [classes.treated]: appointment.treated,
+      [classes.locked]: appointment.lockedBy,
+      [classes.moving]: this.props.isMoving,
+      [classes.colliding]: appointment.isColliding
     })
     const tagColor = getColor(appointment.tags)
 
@@ -141,10 +144,10 @@ class AppointmentItem extends React.Component {
 
         {
           appointment.lockedBy &&
-            <span style={styles.patientName} className='text-muted'>
-              <i className='fa fa-clock-o fa-fw' />&nbsp;
+          <span style={styles.patientName} className='text-muted'>
+            <i className='fa fa-clock-o fa-fw' />&nbsp;
               {__('appointments.lockedBy', { name: appointment.lockedByFirstName })}
-            </span>
+          </span>
         }
 
         <span

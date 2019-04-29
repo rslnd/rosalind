@@ -108,5 +108,6 @@ export const appointments = {
   futureToggleShow_plural: '__count__ geplante Termine anzeigen',
   futureToggleHide_plural: '__count__ geplante Termine verstecken',
   filterCalendar: 'Nur __name__',
-  cannotEditTags: 'Keine Auswahl möglich'
+  cannotEditTags: 'Keine Auswahl möglich',
+  treating: 'In Behandlung'
 }

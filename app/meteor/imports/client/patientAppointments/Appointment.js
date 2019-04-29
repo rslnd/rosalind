@@ -5,6 +5,8 @@ import { Tags } from './Tags'
 import { Note } from './Note'
 import { Media } from './Media'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
+import { Calendars } from '../../api/calendars'
+import { withProps } from 'recompose'
 
 export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
   appointments.map(a =>
@@ -17,13 +19,15 @@ export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
     </ErrorBoundary>
   )
 
-export const Appointment = ({ isCurrent, hasMedia, appointment, fullNameWithTitle }) =>
+export const Appointment = withProps(props => ({
+  calendar: appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
+}))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle }) =>
   <div style={
     isCurrent
       ? currentAppointmentStyle
       : appointmentStyle
   }>
-    <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} />
+    <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
     <Tags {...appointment} isCurrent={isCurrent} />
     <Note {...appointment} />
 
@@ -32,6 +36,7 @@ export const Appointment = ({ isCurrent, hasMedia, appointment, fullNameWithTitl
       <Media />
     }
   </div>
+)
 
 export const appointmentStyle = {
   borderRadius: 4,

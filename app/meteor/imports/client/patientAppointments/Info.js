@@ -1,19 +1,19 @@
 import moment from 'moment-timezone'
 import React from 'react'
 import { Icon } from '../components/Icon'
-import { green } from '../layout/styles'
 import { Tooltip } from '../components/Tooltip'
 import { __ } from '../../i18n'
 import { twoPlacesIfNeeded } from '../../util/format'
 import { withHandlers } from 'recompose'
 import { Money, Field } from './Field'
 import { updateAppointment } from './updateAppointment'
+import { Indicator } from '../appointments/appointment/Indicator'
 
-export const Info = ({ appointment, fullNameWithTitle }) =>
+export const Info = ({ appointment, calendar, fullNameWithTitle }) =>
   <div style={infoStyle}>
     <span style={flexStyle}>
       <span style={dateColumnStyle}>
-        <Icon name='diamond' style={calendarIconStyle} />
+        <Icon name={calendar && calendar.icon} style={calendarIconStyle} />
         &nbsp;
         <Date {...appointment} />
       </span>
@@ -22,7 +22,7 @@ export const Info = ({ appointment, fullNameWithTitle }) =>
 
     <span style={flexStyle}>
       <Revenue {...appointment} />
-      <Indicator {...appointment} />
+      <Indicator appointment={appointment} style={infoIconStyle} calendar={calendar} />
     </span>
   </div>
 
@@ -86,12 +86,4 @@ const revenueStyle = {
 const revenueUnitStyle = {
   opacity: 0.8,
   fontSize: '90%'
-}
-
-const Indicator = () =>
-  <Icon name='check' style={indicatorStyle} />
-
-const indicatorStyle = {
-  ...infoIconStyle,
-  color: green
 }
