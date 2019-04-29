@@ -20,7 +20,7 @@ export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
   )
 
 export const Appointment = withProps(props => ({
-  calendar: appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
+  calendar: props.appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
 }))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle }) =>
   <div style={
     isCurrent
