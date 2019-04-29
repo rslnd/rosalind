@@ -306,14 +306,14 @@ export class AppointmentsView extends React.Component {
 
         <ErrorBoundary>
           {
-            window.location.hash.indexOf('new') !== -1
-              ? <PatientsAppointmentsContainer
+            window.location.hash.indexOf('old') !== -1
+              ? <AppointmentModalContainer
                 appointmentId={this.state.selectedAppointmentId}
                 onMoveStart={this.handleMoveStart}
                 onSetAdmitted={this.handleSetAdmitted}
                 show={this.state.appointmentModalOpen}
                 onClose={this.handleAppointmentModalClose} />
-              : <AppointmentModalContainer
+              : <PatientsAppointmentsContainer
                 appointmentId={this.state.selectedAppointmentId}
                 onMoveStart={this.handleMoveStart}
                 onSetAdmitted={this.handleSetAdmitted}
