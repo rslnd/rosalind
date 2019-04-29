@@ -45,7 +45,7 @@ const up = () => {
           }
         })
       } catch (e) {
-        console.error('[Migration] Failed to migrate patient', patient._id, dateInNote[0], day)
+        console.error(`[Migration] Failed to migrate patient ${patient._id} ${dateInNote[0]} ${JSON.stringify(day)}`)
       }
     }
   })
