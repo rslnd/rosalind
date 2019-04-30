@@ -32,7 +32,7 @@ export const Appointment = withProps(props => ({
     <Note {...appointment} />
 
     {
-      hasMedia &&
+      hasMedia && window.location.hash.indexOf('media') !== -1 &&
       <Media />
     }
   </div>
