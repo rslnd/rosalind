@@ -30,7 +30,10 @@ export const update = ({ Appointments }) => {
       if (appointment) {
         // TODO: Calendar flag for setting auto revenue calculation strategy
         if (update.tags && update.tags.length >= 1 && !update.revenue) {
-          update.revenue = Math.max(...Tags.methods.expand(update.tags).map(t => t.defaultRevenue))
+          const revenue = Math.max(...Tags.methods.expand(update.tags).map(t => t.defaultRevenue))
+          if (revenue) {
+            update.revenue = revenue
+          }
         }
 
         Appointments.update({ _id: appointmentId }, {
