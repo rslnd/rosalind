@@ -13,6 +13,7 @@ import './10-constraintTags'
 import './11-referrables'
 import './12-appointmentsCommentsToNote'
 import './13-patientSince'
+import './14-fixAppointmentsComments'
 
 export default () => {
   Meteor.startup(() => {
