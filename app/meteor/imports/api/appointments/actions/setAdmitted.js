@@ -39,7 +39,10 @@ export const setAdmitted = ({ Appointments }) => {
         canceledAt: 1,
         canceledBy: 1,
         noShow: 1,
-        noShowAt: 1
+        noShowAt: 1,
+        treated: 1,
+        treatmentStart: 1,
+        treatmentEnd: 1
       }
 
       Appointments.update({ _id: appointmentId }, { $set, $unset })

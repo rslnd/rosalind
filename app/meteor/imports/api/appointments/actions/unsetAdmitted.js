@@ -13,7 +13,7 @@ export const unsetAdmitted = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ appointmentId }) {
+    run({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -24,10 +24,13 @@ export const unsetAdmitted = ({ Appointments }) => {
       }
 
       Appointments.update({ _id: appointmentId }, {
-        $set: {
-          admitted: null,
-          admittedAt: null,
-          admittedBy: null
+        $unset: {
+          admitted: 1,
+          admittedAt: 1,
+          admittedBy: 1,
+          treated: 1,
+          treatmentStart: 1,
+          treatmentEnd: 1
         }
       })
 

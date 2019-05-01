@@ -36,7 +36,10 @@ export const setCanceled = ({ Appointments }) => {
           admittedAt: 1,
           admittedBy: 1,
           noShow: 1,
-          noShowAt: 1
+          noShowAt: 1,
+          treated: 1,
+          treatmentStart: 1,
+          treatmentEnd: 1
         }
       })
 

@@ -37,7 +37,7 @@ export const setNoShow = ({ Appointments }) => {
           treated: 1,
           treatmentBy: 1,
           treatmentStart: 1,
-          treatmentEnd: 1,
+          treatmentEnd: 1
         }
       })
 
