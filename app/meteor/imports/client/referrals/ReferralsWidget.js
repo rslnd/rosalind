@@ -62,7 +62,9 @@ const ReferralButton = ({ referrable, done }) => {
 const countStyle = {
   marginRight: 4,
   display: 'inline-block',
-  opacity: 0.7
+  opacity: 0.95,
+  zoom: 1.18,
+  backgroundColor: '#444'
 }
 
 const iconStyle = {
