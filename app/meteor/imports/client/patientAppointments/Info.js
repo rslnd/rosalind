@@ -1,43 +1,69 @@
 import moment from 'moment-timezone'
 import React from 'react'
 import { Icon } from '../components/Icon'
-import { Tooltip } from '../components/Tooltip'
 import { __ } from '../../i18n'
 import { twoPlacesIfNeeded } from '../../util/format'
-import { withHandlers } from 'recompose'
-import { Money, Field } from './Field'
+import { withHandlers, compose, withState } from 'recompose'
+import { Money } from './Field'
 import { updateAppointment } from './updateAppointment'
 import { Indicator } from '../appointments/appointment/Indicator'
+import { Logs } from '../helpers/Logs';
+import { Stamps } from '../helpers/Stamps';
+import { logFormat } from '../appointments/info/logFormat';
 
-export const Info = ({ appointment, calendar, fullNameWithTitle }) =>
-  <div style={infoStyle}>
-    <span style={flexStyle}>
-      <span style={dateColumnStyle}>
-        <Icon name={calendar && calendar.icon} style={calendarIconStyle} />
-        &nbsp;
-        <Date {...appointment} />
-        &emsp;
-        {appointment.removed && <Icon name='trash-o' title={__('ui.deleted')} />}
+export const Info = compose(
+  withState('showLogs', 'setShowLogs', false),
+  withHandlers({
+    handleToggleLogs: props => e => props.setShowLogs(!props.showLogs)
+  })
+)(({ showLogs, handleToggleLogs, appointment, calendar, fullNameWithTitle }) =>
+  <>
+    <div style={infoStyle}>
+      <span style={flexStyle} onClick={handleToggleLogs}>
+        <span style={dateColumnStyle}>
+          <Icon name={calendar && calendar.icon} style={calendarIconStyle} />
+          &nbsp;
+          <Date {...appointment} />
+          &emsp;
+          {appointment.removed && <Icon name='trash-o' title={__('ui.deleted')} />}
+        </span>
+        <span style={timeColumnStyle}>
+          <Time {...appointment} />
+        </span>
+        <Assignee {...appointment} fullNameWithTitle={fullNameWithTitle} />
       </span>
-      <span style={timeColumnStyle}>
-        <Time {...appointment} />
+
+      <span style={flexStyle}>
+        <Revenue {...appointment} />
+        <Indicator appointment={appointment} style={infoIconStyle} calendar={calendar} />
       </span>
-      <Assignee {...appointment} fullNameWithTitle={fullNameWithTitle} />
-    </span>
+    </div>
+    {
+      showLogs && <div
+        onClick={handleToggleLogs}
+        style={infoPaddingStyle}
+      >
+        <Logs format={logFormat} doc={appointment} />
+        <Stamps
+          collectionName='appointments'
+          fields={['removed', 'created', 'admitted', 'canceled']}
+          doc={appointment} />
+      </div>
+    }
+  </>
+)
 
-    <span style={flexStyle}>
-      <Revenue {...appointment} />
-      <Indicator appointment={appointment} style={infoIconStyle} calendar={calendar} />
-    </span>
-  </div>
-
-const infoStyle = {
-  display: 'flex',
-  width: '100%',
-  justifyContent: 'space-between',
+const infoPaddingStyle = {
   padding: 12,
   paddingTop: 9,
-  opacity: 0.9
+  opacity: 0.9,
+  width: '100%'
+}
+
+const infoStyle = {
+  ...infoPaddingStyle,
+  display: 'flex',
+  justifyContent: 'space-between'
 }
 
 // Fix icon alignmeht with text spans
