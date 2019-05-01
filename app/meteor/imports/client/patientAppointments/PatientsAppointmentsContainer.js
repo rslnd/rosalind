@@ -1,3 +1,4 @@
+import identity from 'lodash/identity'
 import { compose, withState } from 'recompose'
 import { PatientAppointmentsModal } from './PatientAppointmentsModal'
 import { withTracker } from '../components/withTracker'
@@ -66,6 +67,15 @@ const composer = props => {
         return acc
       }
     }, 0) + ((currentAppointment && currentAppointment.revenue) || 0)
+
+    const patientSinceCandidates = [
+      patient.patientSince,
+      (unfilteredPastAppointments[0] && unfilteredPastAppointments[0].start),
+    ].filter(identity)
+
+    if (patientSinceCandidates.length >= 1) {
+      patient.patientSince = new Date(Math.min(...patientSinceCandidates))
+    }
   }
 
   const loading = !currentAppointment && !subscribe('patients', { patientIds: [patientId] }).ready()
