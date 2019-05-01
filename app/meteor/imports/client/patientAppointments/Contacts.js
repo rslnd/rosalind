@@ -66,8 +66,8 @@ export class Contacts extends React.Component {
   }
 
   render() {
-    const { contacts } = this.props
     const { tempContacts } = this.state
+    const contacts = this.props.contacts || []
 
     const channels = ['Phone', 'Email']
     channels.map(channel => {
