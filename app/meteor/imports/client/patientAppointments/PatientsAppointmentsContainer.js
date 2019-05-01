@@ -1,4 +1,3 @@
-import takeRightWhile from 'lodash/takeRightWhile'
 import { compose, withState } from 'recompose'
 import { PatientAppointmentsModal } from './PatientAppointmentsModal'
 import { withTracker } from '../components/withTracker'
@@ -36,20 +35,26 @@ const composer = props => {
     })
   }
 
-  const { removed, ...selectorFilter } = (filter || {})
-
   const otherAppointments = (patient && currentAppointment) ? Appointments.find({
     _id: { $ne: currentAppointment._id },
     patientId
   }, { removed: true, sort: { start: 1 } }).fetch() : []
 
-  const futureAppointments = otherAppointments && takeRightWhile(otherAppointments, a => a.start > currentAppointment.start)
-
-  const unfilteredPastAppointments = otherAppointments.slice(-futureAppointments.length)
-  const pastAppointments = unfilteredPastAppointments.filter(a =>
-    (!selectorFilter.calendarId || a.calendarId === selectorFilter.calendarId) &&
-    (!selectorFilter.assigneeId || a.assigneeId === selectorFilter.assigneeId)
+  const futureAppointments = otherAppointments && otherAppointments.filter(a =>
+    a.start > currentAppointment.start
   )
+
+  const unfilteredPastAppointments = otherAppointments.filter(a =>
+    a.start < currentAppointment.start
+  )
+
+  const pastAppointments = filter
+    ? unfilteredPastAppointments.filter(a =>
+      (filter.calendarId ? (a.calendarId === filter.calendarId) : true) &&
+      (filter.assigneeId ? (a.assigneeId === filter.assigneeId) : true) &&
+      (filter.removed ? true : (!(a.removed || a.canceled)))
+    )
+    : unfilteredPastAppointments.filter(a => (!(a.removed || a.canceled)))
 
   const canceledCount = otherAppointments.filter(a => (a.canceled || a.removed)).length
 
