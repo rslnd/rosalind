@@ -19,6 +19,9 @@ export const Info = ({ appointment, calendar, fullNameWithTitle }) =>
         &emsp;
         {appointment.removed && <Icon name='trash-o' title={__('ui.deleted')} />}
       </span>
+      <span style={timeColumnStyle}>
+        <Time {...appointment} />
+      </span>
       <Assignee {...appointment} fullNameWithTitle={fullNameWithTitle} />
     </span>
 
@@ -53,18 +56,34 @@ const flexStyle = {
 
 export const dateColumnStyle = {
   display: 'flex',
-  width: 240
+  width: 180
+}
+
+export const timeColumnStyle = {
+  width: 85
 }
 
 const Date = ({ start, canceled, removed }) =>
-  <span style={(canceled || removed) ? canceledStyle : null}>{start && formatDate(start)}</span>
+  <span style={(canceled || removed) ? canceledStyle : null}>
+    {start && formatDate(start)}
+  </span>
 
 const canceledStyle = {
   opacity: 0.8,
   textDecoration: 'line-through'
 }
 
+const Time = ({ start, canceled, removed }) =>
+  <span style={(canceled || removed) ? canceledStyle : null}>
+    {start && <span style={timeStyle}>{formatTime(start)}</span>}
+  </span>
+
+const timeStyle = {
+  opacity: 0.65
+}
+
 const formatDate = d => moment(d).format(__('time.dateFormatWeekdayShort'))
+const formatTime = d => moment(d).format(__('time.timeFormat'))
 
 const Assignee = ({ assigneeId, waitlistAssigneeId, fullNameWithTitle, canceled, removed }) =>
   <span style={(canceled || removed) ? canceledStyle : null}>
