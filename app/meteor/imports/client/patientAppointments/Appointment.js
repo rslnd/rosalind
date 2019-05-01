@@ -1,5 +1,5 @@
 import React from 'react'
-import { lighterMutedBackground } from '../layout/styles'
+import { lighterMutedBackground, darkerMutedBackground, mutedBackground } from '../layout/styles'
 import { Info } from './Info'
 import { Tags } from './Tags'
 import { Note } from './Note'
@@ -25,11 +25,15 @@ export const Appointment = withProps(props => ({
   <div style={
     isCurrent
       ? currentAppointmentStyle
-      : appointmentStyle
+      : (
+        (appointment.removed || appointment.canceled)
+          ? removedAppointmentStyle
+          : appointmentStyle
+      )
   }>
     <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
     <Tags {...appointment} isCurrent={isCurrent} />
-    <Note {...appointment} />
+    <Note {...appointment} isCurrent={isCurrent} />
 
     {
       hasMedia && window.location.hash.indexOf('media') !== -1 &&
@@ -40,7 +44,7 @@ export const Appointment = withProps(props => ({
 
 export const appointmentStyle = {
   borderRadius: 4,
-  background: lighterMutedBackground,
+  background: mutedBackground,
   margin: 12
 }
 
@@ -51,4 +55,9 @@ export const currentAppointmentStyle = {
   paddingLeft: 5,
   paddingRight: 5,
   background: '#fff'
+}
+
+const removedAppointmentStyle = {
+  ...appointmentStyle,
+  background: lighterMutedBackground
 }

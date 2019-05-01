@@ -147,11 +147,11 @@ export const Field = ({ ...props }) =>
     {props => <input {...props} />}
   </DebouncedField>
 
-export const Textarea = ({ ...props }) =>
+export const Textarea = ({ blankRows, ...props }) =>
   <DebouncedField {...props}>
     {props =>
       <textarea
-        rows={(props.value || '').split('\n').length + 1}
+        rows={(props.value || '').split('\n').length + (blankRows === 0 ? 0 : (blankRows || 1))}
         {...props}
       />
     }

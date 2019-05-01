@@ -56,7 +56,7 @@ const filters = ({ currentAppointment, calendars, userId }) => [
     count: a => a.assigneeId === userId
   },
   {
-    label: 'Absagen',
+    label: 'Absagen / Gelöscht',
     toggle: state => ({ removed: state.removed ? null : true }),
     isChecked: state => state.removed,
     count: a => (a.removed || a.canceled)

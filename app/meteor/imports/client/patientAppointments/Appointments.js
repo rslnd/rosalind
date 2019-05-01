@@ -48,12 +48,15 @@ export const Appointments = compose(
           pastAppointments.length > 1 &&
           <Current />
         }
-        <Appointment
-          key='current'
-          appointment={currentAppointment}
-          fullNameWithTitle={fullNameWithTitle}
-          isCurrent
-        />
+        {
+          currentAppointment &&
+          <Appointment
+            key='current'
+            appointment={currentAppointment}
+            fullNameWithTitle={fullNameWithTitle}
+            isCurrent
+          />
+        }
         <Referrals appointment={currentAppointment} />
         <Future
           futureAppointments={futureAppointments}
