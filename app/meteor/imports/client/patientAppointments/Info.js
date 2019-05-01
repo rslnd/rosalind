@@ -16,6 +16,8 @@ export const Info = ({ appointment, calendar, fullNameWithTitle }) =>
         <Icon name={calendar && calendar.icon} style={calendarIconStyle} />
         &nbsp;
         <Date {...appointment} />
+        &emsp;
+        {appointment.removed && <Icon name='trash-o' title={__('ui.deleted')} />}
       </span>
       <Assignee {...appointment} fullNameWithTitle={fullNameWithTitle} />
     </span>
@@ -54,26 +56,39 @@ export const dateColumnStyle = {
   width: 240
 }
 
-const Date = ({ start }) =>
-  <Tooltip title={'Donnerstag, 30. Jänner 2019 um 18:33 Uhr'}>
-    <span>{formatDate(start)}</span>
-  </Tooltip>
+const Date = ({ start, canceled, removed }) =>
+  <span style={(canceled || removed) ? canceledStyle : null}>{start && formatDate(start)}</span>
+
+const canceledStyle = {
+  opacity: 0.8,
+  textDecoration: 'line-through'
+}
 
 const formatDate = d => moment(d).format(__('time.dateFormatWeekdayShort'))
 
-const Assignee = ({ assigneeId, fullNameWithTitle }) =>
-  <span>{fullNameWithTitle(assigneeId)}</span>
+const Assignee = ({ assigneeId, waitlistAssigneeId, fullNameWithTitle, canceled, removed }) =>
+  <span style={(canceled || removed) ? canceledStyle : null}>
+    {fullNameWithTitle(assigneeId || waitlistAssigneeId)}
+    {waitlistAssigneeId && <>
+      &emsp;
+      <Icon name='share' title='Einschub' style={reassignedStyle} />
+    </>}
+  </span>
+
+const reassignedStyle = {
+  zoom: 0.8,
+  opacity: 0.6
+}
 
 const Revenue = withHandlers({
   updateRevenue: props => revenue => updateAppointment(props, { revenue: parseFloat(revenue) })
 })(({ revenue, updateRevenue }) =>
   <Money
-    initialValue={twoPlacesIfNeeded(revenue || 0)}
+    initialValue={(revenue > 0 || revenue === 0) ? twoPlacesIfNeeded(revenue || 0) : ''}
     onChange={updateRevenue}
-    placeholder={<span style={revenueUnitStyle}>€&nbsp;</span>}
+    placeholder={<span style={placeholderStyle}>€__</span>}
     style={revenueStyle}
   />
-  // (true || revenue > 0 || revenue === 0) &&
 )
 
 const revenueStyle = {
@@ -83,7 +98,7 @@ const revenueStyle = {
   width: 80
 }
 
-const revenueUnitStyle = {
-  opacity: 0.8,
+const placeholderStyle = {
+  opacity: 0.4,
   fontSize: '90%'
 }
