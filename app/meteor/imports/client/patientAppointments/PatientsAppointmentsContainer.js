@@ -17,35 +17,35 @@ const composer = props => {
   const {
     appointmentId,
     filter
-    // onMoveStart,
-    // onSetAdmitted,
-    // show,
-    // onClose
   } = props
 
   const currentAppointment = Appointments.findOne({ _id: appointmentId })
-  const patient = currentAppointment && Patients.findOne({ _id: currentAppointment.patientId })
-  const patientId = patient && patient._id
+  const patientId = currentAppointment ? currentAppointment.patientId : props.patientId
+  const patient = Patients.findOne({ _id: patientId })
 
-  if (patient) {
+  const canRefer = hasRole(Meteor.userId(), ['referrals'])
+  if (patientId) {
     subscribe('appointments-patient', { patientId })
-    const canRefer = hasRole(Meteor.userId(), ['referrals'])
-    patientId && canRefer && subscribe('referrals', {
+    canRefer && subscribe('referrals', {
       patientIds: [patientId]
     })
   }
 
-  const otherAppointments = (patient && currentAppointment) ? Appointments.find({
-    _id: { $ne: currentAppointment._id },
+  const otherAppointments = patient ? Appointments.find({
     patientId
-  }, { removed: true, sort: { start: 1 } }).fetch() : []
+  }, { removed: true, sort: { start: 1 } }).fetch().filter(a =>
+    currentAppointment
+      ? a._id !== currentAppointment._id
+      : true
+  ) : []
 
+  const now = currentAppointment ? currentAppointment.start : (new Date())
   const futureAppointments = otherAppointments && otherAppointments.filter(a =>
-    a.start > currentAppointment.start
+    a.start > now
   )
 
   const unfilteredPastAppointments = otherAppointments.filter(a =>
-    a.start < currentAppointment.start
+    a.start < now
   )
 
   const pastAppointments = filter
@@ -65,18 +65,22 @@ const composer = props => {
       } else {
         return acc
       }
-    }, 0) + (currentAppointment.revenue || 0)
+    }, 0) + ((currentAppointment && currentAppointment.revenue) || 0)
   }
+
+  const loading = !currentAppointment && !subscribe('patients', { patientIds: [patientId] }).ready()
 
   return {
     ...props,
+    loading,
     currentAppointment,
     patient,
     pastAppointments,
     futureAppointments,
     unfilteredPastAppointments,
     canceledCount,
-    fullNameWithTitle
+    fullNameWithTitle,
+    canRefer
   }
 }
 

@@ -42,7 +42,7 @@ export const Patient = ({ patient, currentAppointment }) =>
       <Note {...patient} />
       <FutureRecord
         patientId={patient._id}
-        calendarId={currentAppointment.calendarId}
+        calendarId={currentAppointment ? currentAppointment.calendarId : null}
         currentAppointment={currentAppointment}
         style={noteLabelStyle}
         fieldStyle={noteFieldStyle} />

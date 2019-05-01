@@ -8,6 +8,9 @@ import Paper from '@material-ui/core/Paper'
 import { Close } from './Close'
 import { Patient } from './Patient'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
+import { Loading } from '../components/Loading'
+import Button from '@material-ui/core/Button'
+import { __ } from '../../i18n'
 
 export const PatientAppointmentsModal = withPropsOnChange(
   ['show'],
@@ -20,7 +23,7 @@ export const PatientAppointmentsModal = withPropsOnChange(
     }
     return {}
   }
-)(({ show, onClose, ...props }) =>
+)(({ loading, show, onClose, ...props }) =>
   <Portal>
     {
       <div className='disable-select' style={show ? modalStyle : hiddenStyle}>
@@ -33,9 +36,13 @@ export const PatientAppointmentsModal = withPropsOnChange(
           <div style={containerStyle}>
             <div style={columnsStyle}>
               <div style={appointmentsStyle}>
-                <ErrorBoundary>
-                  <Appointments {...props} show={show} />
-                </ErrorBoundary>
+                {
+                  loading
+                    ? <Loading />
+                    : <ErrorBoundary>
+                      <Appointments {...props} show={show} />
+                    </ErrorBoundary>
+                }
               </div>
               <div style={patientSidebarStyle}>
                 <ErrorBoundary>
@@ -44,7 +51,14 @@ export const PatientAppointmentsModal = withPropsOnChange(
               </div>
             </div>
             <div style={actionsStyle}>
-              <AppointmentActionsContainer {...props} />
+              {
+                props.currentAppointment
+                  ? <AppointmentActionsContainer {...props} />
+                  : <Button
+                    style={closeButtonStyle}
+                    onClick={onClose}
+                  >{__('ui.close')}</Button>
+              }
             </div>
           </div>
         </Paper>
@@ -128,4 +142,8 @@ const actionsStyle = {
   boxShadow: '0px -3px 5px -1px rgba(0,0,0,0.1)',
   borderTop: `1px solid ${mutedSeparator}`,
   borderRadius: `0 0 ${borderRadius}px ${borderRadius}px`
+}
+
+const closeButtonStyle = {
+  opacity: 0.8
 }

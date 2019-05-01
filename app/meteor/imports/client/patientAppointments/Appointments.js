@@ -26,6 +26,7 @@ export const Appointments = compose(
   setScrollRef,
   scrollToBottom,
   show,
+  canRefer,
   ...props
 }) =>
   <div style={containerStyle}>
@@ -57,7 +58,10 @@ export const Appointments = compose(
             isCurrent
           />
         }
-        <Referrals appointment={currentAppointment} />
+        {
+          canRefer &&
+          <Referrals appointment={currentAppointment} />
+        }
         <Future
           futureAppointments={futureAppointments}
           fullNameWithTitle={fullNameWithTitle}

@@ -9,10 +9,10 @@ import { AppointmentsView } from './AppointmentsView'
 import { PatientPicker } from '../../patients/picker'
 import { formName as newAppointmentFormName } from '../new/NewAppointmentForm'
 import { background } from '../../layout/styles'
-import { PatientModal } from '../../patients/PatientModal'
 import { getClientKey, toNative } from '../../../startup/client/native/events'
 import { Loading } from '../../components/Loading'
 import { Tooltip } from '../../components/Tooltip'
+import { PatientsAppointmentsContainer } from '../../patientAppointments/PatientsAppointmentsContainer'
 
 const contentHeaderStyle = {
   background,
@@ -32,7 +32,7 @@ const printStyle = {
 monkey(moment)
 
 export class AppointmentsScreen extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -45,7 +45,7 @@ export class AppointmentsScreen extends React.Component {
     this.handlePatientModalOpen = this.handlePatientModalOpen.bind(this)
   }
 
-  scrollToCurrentTime () {
+  scrollToCurrentTime() {
     const now = moment()
     if (now.isSame(this.props.date, 'day')) {
       const elemId = now.floor(1, 'hour').format('[T]HHmm')
@@ -60,7 +60,7 @@ export class AppointmentsScreen extends React.Component {
     }
   }
 
-  handlePrint () {
+  handlePrint() {
     if (getClientKey()) {
       console.log('[Client] Printing: native')
       const title = moment(this.props.date)
@@ -72,15 +72,15 @@ export class AppointmentsScreen extends React.Component {
     }
   }
 
-  handlePatientModalOpen (patientModalId) {
+  handlePatientModalOpen(patientModalId) {
     this.setState({ patientModalId })
   }
 
-  handlePatientModalClose () {
+  handlePatientModalClose() {
     this.setState({ patientModalId: null })
   }
 
-  render () {
+  render() {
     const {
       calendar,
       assignees,
@@ -164,11 +164,11 @@ export class AppointmentsScreen extends React.Component {
 
         {
           this.state.patientModalId &&
-            <PatientModal
-              show={!!this.state.patientModalId}
-              patientId={this.state.patientModalId}
-              onClose={this.handlePatientModalClose}
-            />
+          <PatientsAppointmentsContainer
+            show
+            patientId={this.state.patientModalId}
+            onClose={this.handlePatientModalClose}
+          />
         }
       </div>
     )
