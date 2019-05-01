@@ -78,7 +78,7 @@ const composer = props => {
     }
   }
 
-  const loading = !currentAppointment && !subscribe('patients', { patientIds: [patientId] }).ready()
+  const loading = !currentAppointment && patientId && !subscribe('patients', { patientIds: [patientId] }).ready()
 
   return {
     ...props,
