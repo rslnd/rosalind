@@ -31,8 +31,7 @@ export const referrables = new SimpleSchema({
   },
 
   redeemImmediately: {
-    type: Boolean,
-    optional: true
+    type: Boolean
   },
 
   max: {

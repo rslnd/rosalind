@@ -35,7 +35,7 @@ const composer = props => {
   const reports = sortBy(r => r && r.calendar && r.calendar.order)(reportsWithCalendar)
 
   const isPrint = props.location.hash === '#print'
-  const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
+  const canShowRevenue = Roles.userIsInRole(Meteor.userId(), ['reports-showRevenue', 'admin']) || isPrint
 
   const userIdToNameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
   const mapUserIdToName = id => userIdToNameMapping[id]
@@ -104,7 +104,7 @@ const fetchQuarter = ({ day }) =>
     .then(quarter => ({ quarter }))
 
 const fetchReferrals = ({ date }) =>
-  Referrals.actions.tally.callPromise({ date: date.toDate() })
+  Referrals.actions.tally.callPromise({ date: date.toDate(), redeemImmediately: false })
     .then(referrals => ({ referrals }))
 
 export const ReportsContainer = compose(

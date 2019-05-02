@@ -7,17 +7,18 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
 
-export const detail = ({ Referrals }) => {
+export const detail = ({ Referrals, Referrables }) => {
   return new ValidatedMethod({
     name: 'referrals/detail',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       from: { type: Date, optional: true },
       to: { type: Date, optional: true },
-      referredBy: { type: SimpleSchema.RegEx.Id, optional: true }
+      referredBy: { type: SimpleSchema.RegEx.Id, optional: true },
+      redeemImmediately: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ from, to, referredBy }) {
+    run({ from, to, referredBy, redeemImmediately }) {
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../customer/server/isTrustedNetwork')
         if (!this.userId && this.connection && !isTrustedNetwork(this.connection.clientAddress)) {
@@ -32,9 +33,15 @@ export const detail = ({ Referrals }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      const referrables = Referrables.find({
+        redeemImmediately
+      }).fetch()
+      console.log('referrables', { redeemImmediately }, referrables.map(r => r.name))
+
       const selector = {
         type: { $ne: 'external' },
         referredBy,
+        referrableId: { $in: referrables.map(r => r._id) },
         $or: [
           { createdAt: { $gte: from, $lte: to } },
           { redeemedAt: { $gte: from, $lte: to } }
@@ -74,9 +81,9 @@ export const detail = ({ Referrals }) => {
       const patients = Patients.find({
         _id: { $in: patientIds }
       }, {
-        removed: true,
-        fields: Patients.fields.preload
-      }).fetch()
+          removed: true,
+          fields: Patients.fields.preload
+        }).fetch()
 
       return Referrals.methods.detail({
         from,

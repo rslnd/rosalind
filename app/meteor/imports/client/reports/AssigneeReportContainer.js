@@ -55,7 +55,7 @@ const composer = props => {
 
   const loading = !subscription.ready()
   const isPrint = props.location.hash === '#print'
-  const canShowRevenue = Roles.userIsInRole(Meteor.userId(), [ 'reports-showRevenue', 'admin' ]) || isPrint
+  const canShowRevenue = Roles.userIsInRole(Meteor.userId(), ['reports-showRevenue', 'admin']) || isPrint
 
   const handleRangeChange = ({ start, end }) => {
     const search = toQuery({
@@ -102,7 +102,8 @@ const fetchReferrals = ({ from, to, user }) => {
       date: new Date(),
       from: from.toDate(),
       to: to.toDate(),
-      referredBy: user._id
+      referredBy: user._id,
+      redeemImmediately: false
     }).then(referrals => ({ referrals }))
   } else {
     return Promise.resolve()

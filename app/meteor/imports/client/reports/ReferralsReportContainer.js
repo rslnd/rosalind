@@ -58,7 +58,8 @@ const fetchReferrals = ({ from, to, user }) => {
     return Referrals.actions.detail.callPromise({
       from: from.toDate(),
       to: to.toDate(),
-      referredBy: user._id
+      referredBy: user._id,
+      redeemImmediately: false
     })
   } else {
     return Promise.resolve()

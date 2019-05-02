@@ -35,7 +35,8 @@ const composer = (props) => {
   const defaultReferrable = () => ({
     order: 100,
     name: 'Name',
-    fromCalendarIds: Calendars.find({}).fetch().map(c => c._id)
+    fromCalendarIds: Calendars.find({}).fetch().map(c => c._id),
+    redeemImmediately: false
   })
 
   return {

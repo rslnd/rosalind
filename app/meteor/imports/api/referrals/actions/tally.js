@@ -6,7 +6,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Appointments } from '../../appointments'
 
-export const tally = ({ Referrals }) => {
+export const tally = ({ Referrals, Referrables }) => {
   return new ValidatedMethod({
     name: 'referrals/tally',
     mixins: [CallPromiseMixin],
@@ -14,10 +14,11 @@ export const tally = ({ Referrals }) => {
       date: { type: Date }, // tally [today's] referrals separately
       from: { type: Date, optional: true },
       to: { type: Date, optional: true },
-      referredBy: { type: SimpleSchema.RegEx.Id, optional: true }
+      referredBy: { type: SimpleSchema.RegEx.Id, optional: true },
+      redeemImmediately: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ date, from, to, referredBy }) {
+    run({ date, from, to, referredBy, redeemImmediately }) {
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../customer/server/isTrustedNetwork')
         if (!this.userId && this.connection && !isTrustedNetwork(this.connection.clientAddress)) {
@@ -28,8 +29,12 @@ export const tally = ({ Referrals }) => {
         return
       }
 
+      const referrables = Referrables.find({ redeemImmediately }).fetch()
+      console.log('referrables', { redeemImmediately }, referrables.map(r => r.name))
+
       const selector = {
-        type: { $ne: 'external' }
+        type: { $ne: 'external' },
+        referrableId: { $in: referrables.map(r => r._id) }
       }
 
       if (referredBy) {
