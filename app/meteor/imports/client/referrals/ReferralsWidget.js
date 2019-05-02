@@ -13,21 +13,29 @@ const infoTextStyle = {
   paddingLeft: 5
 }
 
-export const ReferralsWidget = ({ style, isLoading, referrables }) => {
+export const ReferralsWidget = ({
+  style,
+  isLoading,
+  referrables,
+  ...props
+}) => {
   const done = referrables.filter(r => r.count || !r.isReferrable)
   const pending = referrables.filter(r => !done.find(d => d._id === r._id))
+  const pendingDelayed = pending.filter(r => !r.redeemImmediately)
+  const pendingImmediate = pending.filter(r => r.redeemImmediately)
 
   return (!isLoading && <div style={style ? { ...containerStyle, ...style } : style}>
     <div className='text-muted' style={infoTextStyle}>
       {__('appointments.referPatientTo')}
     </div>
 
-    <Referrables referrables={pending} />
-    <Referrables referrables={done} done />
+    {props.canReferDelayed && <Referrables referrables={pendingDelayed} {...props} />}
+    {props.canReferImmediate && <Referrables referrables={pendingImmediate} {...props} />}
+    <Referrables referrables={done} done {...props} />
   </div>) || null
 }
 
-const Referrables = ({ referrables, done }) =>
+const Referrables = ({ referrables, done, ...props }) =>
   <div style={buttonRowStyle}>
     {
       referrables.map(r =>
@@ -35,6 +43,7 @@ const Referrables = ({ referrables, done }) =>
           key={r._id}
           referrable={r}
           done={done}
+          {...props}
         />
       )
     }
@@ -46,12 +55,18 @@ const buttonRowStyle = {
   marginTop: 10
 }
 
-const ReferralButton = ({ referrable, done }) => {
+const ReferralButton = ({ referrable, done, canReferImmediate, canReferDelayed }) => {
   const { icon, name, handleClick, isReferrable, count } = referrable
   const buttonIcon = (done && !isReferrable) ? 'check' : icon
 
+  const canRefer = referrable.redeemImmediately
+    ? canReferImmediate
+    : canReferDelayed
+
+  const enabled = canRefer && isReferrable
+
   return (
-    <Button onClick={handleClick} disabled={!isReferrable} style={(done && isReferrable) ? buttonStyleDoneAndReferrable : buttonStyle}>
+    <Button onClick={handleClick} disabled={!enabled} style={(done && isReferrable) ? buttonStyleDoneAndReferrable : buttonStyle}>
       {buttonIcon && <Icon name={buttonIcon} style={iconStyle} />}
       {isReferrable && count >= 1 && <span className='label label-default' style={countStyle}>{count}</span>}
       {name}

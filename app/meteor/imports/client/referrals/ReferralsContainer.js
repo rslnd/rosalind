@@ -4,6 +4,8 @@ import Alert from 'react-s-alert'
 import { Referrals, Referrables } from '../../api/referrals'
 import { Appointments } from '../../api/appointments'
 import { ReferralsWidget } from './ReferralsWidget'
+import { Meteor } from 'meteor/meteor'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const composer = props => {
   const { calendarId, patientId } = props.appointment
@@ -48,9 +50,15 @@ const composer = props => {
       }
     })
 
+  const userId = Meteor.userId()
+  const canReferImmediate = hasRole(userId, ['referrals-immediate', 'referrals'])
+  const canReferDelayed = hasRole(userId, ['referrals-delayed', 'referrals'])
+
   return {
     ...props,
-    referrables
+    referrables,
+    canReferImmediate,
+    canReferDelayed
   }
 }
 

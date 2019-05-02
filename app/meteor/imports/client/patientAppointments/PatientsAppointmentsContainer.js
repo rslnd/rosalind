@@ -24,7 +24,8 @@ const composer = props => {
   const patientId = currentAppointment ? currentAppointment.patientId : props.patientId
   const patient = Patients.findOne({ _id: patientId })
 
-  const canRefer = hasRole(Meteor.userId(), ['referrals'])
+  const userId = Meteor.userId()
+  const canRefer = hasRole(userId, ['referrals', 'referrals-immediate', 'referrals-delayed'])
   if (patientId) {
     subscribe('appointments-patient', { patientId })
     canRefer && subscribe('referrals', {
@@ -72,7 +73,7 @@ const composer = props => {
 
     const patientSinceCandidates = [
       patient.patientSince,
-      (unfilteredPastAppointments[0] && unfilteredPastAppointments[0].start),
+      (unfilteredPastAppointments[0] && unfilteredPastAppointments[0].start)
     ].filter(identity)
 
     if (patientSinceCandidates.length >= 1) {
