@@ -30,7 +30,6 @@ export const tally = ({ Referrals, Referrables }) => {
       }
 
       const referrables = Referrables.find({ redeemImmediately }).fetch()
-      console.log('referrables', { redeemImmediately }, referrables.map(r => r.name))
 
       const selector = {
         type: { $ne: 'external' },

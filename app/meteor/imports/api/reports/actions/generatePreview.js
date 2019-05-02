@@ -5,6 +5,7 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { dayToDate, daySelector } from '../../../util/time/day'
 import { daysForPreview } from '../methods/daysForPreview'
 import { generate as generateReport } from '../methods/generate'
+import { Users } from '../../users'
 
 export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, Tags, Messages }) => {
   return new ValidatedMethod({
@@ -14,11 +15,14 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
       day: { type: Object, blackbox: true }
     }).validator(),
 
-    run ({ day }) {
+    run({ day }) {
       try {
         if (this.isSimulation) { return }
 
         const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
+
+        // Filter out hacky hidden/assistance users
+        const allowedAssigneeIds = Users.find({ employee: { $ne: false } }).fetch().map(u => u._id)
 
         return calendars.map(calendar => {
           const calendarId = calendar._id
@@ -29,6 +33,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
             // TODO: Dry up, merge with generate action
             const appointments = Appointments.find({
               calendarId,
+              assigneeId: { $in: allowedAssigneeIds },
               removed: { $ne: true },
               start: {
                 $gt: date.startOf('day').toDate(),
@@ -42,11 +47,15 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
               removed: { $ne: true },
               ...daySelector(day)
             })
+            if (daySchedule) {
+              daySchedule.userIds = daySchedule.userIds.filter(_id => allowedAssigneeIds.includes(_id))
+            }
 
             const overrideSchedules = Schedules.find({
               calendarId,
               type: 'override',
               removed: { $ne: true },
+              userId: { $in: allowedAssigneeIds },
               start: {
                 $gt: date.startOf('day').toDate(),
                 $lt: date.endOf('day').toDate()
