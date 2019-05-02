@@ -37,7 +37,8 @@ const sendUnthrottled = (messageId) => {
         },
         $inc: {
           retries: 1
-        } })
+        }
+      })
     })
   } else {
     throw new Error('[Messages] channels/sms: Could not find message to send or failed sanity checks', messageId, { okToSend: okToSend(message) })
@@ -78,11 +79,13 @@ export const receive = (payload) => {
   console.log('[Messages] channels/sms: Received message', messageId)
 
   // Try to match received reply with a message sent by the system
+  const cutoffDate = moment().subtract(1, 'week').toDate()
   const sentMessages = Messages.find(
     {
       channel: 'SMS',
       direction: 'outbound',
-      status: 'sent'
+      status: 'sent',
+      sentAt: { $gt: cutoffDate }
     }, {
       sort: {
         sentAt: -1
@@ -136,8 +139,8 @@ export const receive = (payload) => {
             text: buildMessageText({
               text: cancelationConfirmationText
             }, {
-              date: appointment.start
-            }),
+                date: appointment.start
+              }),
             to: message.from,
             status: 'final',
             invalidBefore: new Date(),
