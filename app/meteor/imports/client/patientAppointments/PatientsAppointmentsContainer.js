@@ -61,12 +61,14 @@ const composer = props => {
 
   if (patient) {
     patient.totalRevenue = otherAppointments.reduce((acc, a) => {
-      if (!a.canceled && !a.removed) {
+      if (a.admitted) {
         return acc + (a.revenue || 0)
       } else {
         return acc
       }
-    }, 0) + ((currentAppointment && currentAppointment.revenue) || 0)
+    }, 0) +
+      ((currentAppointment && currentAppointment.revenue) || 0) +
+      (patient.externalRevenue || 0)
 
     const patientSinceCandidates = [
       patient.patientSince,
