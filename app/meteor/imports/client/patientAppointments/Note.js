@@ -16,10 +16,17 @@ export const Note = compose(
     const missingComments = comments.map(c => c.body).filter(b => currentNote.indexOf(b) === -1)
 
     if (missingComments.length > 0) {
-      console.error(`Missing comments for apppointmentId ${props._id}`)
+      console.error(`Missing comments for apppointmentId ${props._id}`, missingComments)
     }
 
-    const note = [currentNote, missingComments].filter(identity).join('\n\n').trim()
+    const note = [
+      currentNote,
+      missingComments
+    ].filter(identity)
+      .join('\n\n')
+      .trim()
+      .replace(/\[object Object\]/g, '') // Hacky
+
     return { note }
   }),
   withHandlers({
