@@ -25,7 +25,7 @@ export const Referrals = ({ referrals, mapUserIdToName }) => {
   const hasData = referrals.total.referred.total || referrals.total.redeemed.total
   if (!hasData) { return null }
 
-  const columns = Referrables.find({}).fetch()
+  const columns = Referrables.find({ redeemImmediately: false }).fetch()
 
   return (
     <div style={avoidPageBreak}>

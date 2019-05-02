@@ -19,10 +19,14 @@ import { Nil } from './shared/Nil'
 import { Referrables } from '../../api'
 
 export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
-  const rows = sortBy('createdAt')(
-    referrals.map(r => ({
+  const referrables = Referrables.find({ redeemImmediately: false }).fetch()
+  const referrablesIds = referrables.map(r => r._id)
+
+  const rows = sortBy('createdAt')(referrals
+    .filter(r => referrablesIds.includes(r._id))
+    .map(r => ({
       ...r,
-      referrable: Referrables.findOne({ _id: r.referrableId })
+      referrable: referrables.find(b => r.referrableId === b._id)
     })))
 
   return (
