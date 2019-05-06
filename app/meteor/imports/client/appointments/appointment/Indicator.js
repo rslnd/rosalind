@@ -11,7 +11,7 @@ export const Indicator = ({ appointment, showRevenue, calendar }) => {
     return null
   }
 
-  if (appointment.treated || (calendar && calendar.admittedIsTreated && appointment.admitted)) {
+  if (appointment.treated /* || (calendar && calendar.admittedIsTreated && appointment.admitted) */) {
     return <Treated />
   }
 
