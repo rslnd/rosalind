@@ -5,6 +5,7 @@ import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Cleave from 'cleave.js/react'
 import { DayField } from '../components/form/DayField'
+import { withHandlers } from 'recompose'
 
 const fieldStyle = {
   outline: 0,
@@ -147,11 +148,25 @@ export const Field = ({ ...props }) =>
     {props => <input {...props} />}
   </DebouncedField>
 
-export const Textarea = ({ blankRows, ...props }) =>
+const AutogrowTextarea = withHandlers({
+  handleInput: props => e => {
+    const ref = e.currentTarget
+    if (ref.scrollHeight > ref.clientHeight) {
+      ref.style.height = ref.scrollHeight + 'px'
+    }
+    if (props.onInput) { props.onInput(e) }
+  }
+})(({ handleInput, ...props }) =>
+  <textarea
+    {...props}
+    onInput={handleInput}
+  />
+)
+
+export const Textarea = ({ ...props }) =>
   <DebouncedField {...props}>
     {props =>
-      <textarea
-        rows={(props.value || '').split('\n').length + (blankRows === 0 ? 0 : (blankRows || 1))}
+      <AutogrowTextarea
         {...props}
       />
     }
