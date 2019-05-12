@@ -151,13 +151,13 @@ export const Field = ({ ...props }) =>
 const AutogrowTextarea = withHandlers({
   handleInput: props => e => {
     const ref = e.currentTarget
-    if (ref.scrollHeight > ref.clientHeight) {
-      ref.style.height = ref.scrollHeight + 'px'
-    }
+    ref.style.height = '' // Force reset to allow shrinking
+    ref.style.height = ref.scrollHeight + 'px'
     if (props.onInput) { props.onInput(e) }
   }
 })(({ handleInput, ...props }) =>
   <textarea
+    rows={1} // Override default of 2 rows when empty
     {...props}
     onInput={handleInput}
   />
