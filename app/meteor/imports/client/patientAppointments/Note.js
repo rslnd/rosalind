@@ -21,13 +21,12 @@ export const Note = compose(
 
     const note = [
       currentNote,
-      missingComments
+      ...missingComments
     ].filter(identity)
       .join('\n\n')
-      .trim()
       .replace(/\[object Object\]/g, '') // Hacky
 
-    return { note }
+    return { ...props, note }
   }),
   withHandlers({
     updateNote: props => note => updateAppointment(props, { note })

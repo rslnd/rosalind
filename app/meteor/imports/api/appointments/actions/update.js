@@ -38,7 +38,7 @@ export const update = ({ Appointments }) => {
 
         Appointments.update({ _id: appointmentId }, {
           $set: update
-        })
+        }, { trimStrings: false }) // collection2 flag to prevent killing space-y "layout" of note
 
         Events.post('appointments/update', { appointmentId })
       } else {
