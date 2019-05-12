@@ -33,17 +33,24 @@ export const Note = compose(
   })
 )(({ _id, note, updateNote, isCurrent }) =>
   <Textarea
-    blankRows={isCurrent ? 1 : 0}
+    autoFocus={isCurrent}
     initialValue={note}
     onChange={updateNote}
-    style={noteStyle}
+    style={isCurrent ? currentNoteStyle : noteStyle}
   />
 )
 
 const noteStyle = {
   outline: 0,
-  paddingTop: 20,
-  paddingBottom: 20,
+  paddingTop: 2,
+  paddingBottom: 2,
+  paddingLeft: 12,
+  paddingRight: 12
+}
+
+const currentNoteStyle = {
+  paddingTop: 13,
+  paddingBottom: 13,
   paddingLeft: 15,
   paddingRight: 15
 }

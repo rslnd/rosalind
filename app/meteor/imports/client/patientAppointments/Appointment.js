@@ -1,5 +1,5 @@
 import React from 'react'
-import { lighterMutedBackground, darkerMutedBackground, mutedBackground } from '../layout/styles'
+import { lighterMutedBackground, mutedBackground } from '../layout/styles'
 import { Info } from './Info'
 import { Tags } from './Tags'
 import { Note } from './Note'
@@ -45,11 +45,16 @@ export const Appointment = withProps(props => ({
 export const appointmentStyle = {
   borderRadius: 4,
   background: mutedBackground,
-  margin: 12
+  marginLeft: 12,
+  marginRight: 12,
+  marginTop: 4,
+  marginBottom: 4
 }
 
 export const currentAppointmentStyle = {
   ...appointmentStyle,
+  marginTop: 8,
+  marginBottom: 12,
   paddingTop: 10,
   paddingBottom: 10,
   paddingLeft: 5,

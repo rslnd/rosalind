@@ -7,18 +7,18 @@ import { withHandlers, compose, withState } from 'recompose'
 import { Money } from './Field'
 import { updateAppointment } from './updateAppointment'
 import { Indicator } from '../appointments/appointment/Indicator'
-import { Logs } from '../helpers/Logs';
-import { Stamps } from '../helpers/Stamps';
-import { logFormat } from '../appointments/info/logFormat';
+import { Logs } from '../helpers/Logs'
+import { Stamps } from '../helpers/Stamps'
+import { logFormat } from '../appointments/info/logFormat'
 
 export const Info = compose(
   withState('showLogs', 'setShowLogs', false),
   withHandlers({
     handleToggleLogs: props => e => props.setShowLogs(!props.showLogs)
   })
-)(({ showLogs, handleToggleLogs, appointment, calendar, fullNameWithTitle }) =>
+)(({ showLogs, handleToggleLogs, appointment, calendar, fullNameWithTitle, isCurrent }) =>
   <>
-    <div style={infoStyle}>
+    <div style={isCurrent ? currentInfoStyle : infoStyle}>
       <span style={flexStyle} onClick={handleToggleLogs}>
         <span style={dateColumnStyle}>
           <Icon name={calendar && calendar.icon} style={calendarIconStyle} />
@@ -55,7 +55,8 @@ export const Info = compose(
 
 const infoPaddingStyle = {
   padding: 12,
-  paddingTop: 9,
+  paddingTop: 7,
+  paddingBottom: 4,
   opacity: 0.9,
   width: '100%'
 }
@@ -66,6 +67,10 @@ const infoStyle = {
   justifyContent: 'space-between'
 }
 
+const currentInfoStyle = {
+  ...infoStyle
+}
+
 // Fix icon alignmeht with text spans
 const infoIconStyle = {
   marginTop: '2.5px'
@@ -73,7 +78,8 @@ const infoIconStyle = {
 
 const calendarIconStyle = {
   ...infoIconStyle,
-  marginRight: 5
+  marginRight: 5,
+  opacity: 0.7
 }
 
 const flexStyle = {
