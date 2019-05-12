@@ -22,14 +22,17 @@ export const isTrustedAccessToken = accessToken =>
 
 const addTrustedAccessToken = () => {
   console.log('[Publish] trustedAccessTokens: Adding new token')
-  const trustedAccessToken = crypto.randomBytes(265).toString('hex')
-  trustedAccessTokens.push(trustedAccessToken)
+  const trustedAccessToken = crypto.randomBytes(512).toString('hex')
+  trustedAccessTokens = [
+    ...trustedAccessTokens,
+    trustedAccessToken
+  ]
 
   // Start timer to quietly revoke access token after 5 mins, if not revoked already
   setTimeout(() => {
     const index = trustedAccessTokens.indexOf(trustedAccessToken)
     if (index !== -1) {
-      trustedAccessTokens.splice(index, 1)
+      trustedAccessTokens = trustedAccessTokens.slice(index, 1)
     }
   }, 1000 * 60 * 5)
 
@@ -40,7 +43,7 @@ const revokeTrustedAccessTokens = (trustedAccessToken) => {
   console.log('[Publish] trustedAccessTokens: Revoking token')
   const index = trustedAccessTokens.indexOf(trustedAccessToken)
   if (index !== -1) {
-    trustedAccessTokens.splice(index, 1)
+    trustedAccessTokens = trustedAccessTokens.slice(index, 1)
   } else {
     trustedAccessTokens = []
     throw new Error('[Publish] trustedAccessToken: Requested removal of unknown token, resetting token store')
