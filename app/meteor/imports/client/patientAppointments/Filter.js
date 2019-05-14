@@ -42,10 +42,15 @@ const withFilters = ({ filter, setFilter, ...props }) =>
     return {
       ...f,
       toggle: () => setFilter(removeNullKeys(state, f.toggle(state))),
-      count: f.count ? (props.unfilteredPastAppointments || []).filter(f.count).length : null,
+      count: f.count ? (props.unfilteredPastAppointments || []).filter(a => f.count(a, state)).length : null,
       isChecked: !!f.isChecked(state)
     }
   })
+
+const countRemoved = (a, state) =>
+  state.removed
+    ? true
+    : !(a.removed || a.canceled)
 
 const filters = ({ currentAppointment, calendars, userId }) => [
   {
@@ -53,7 +58,7 @@ const filters = ({ currentAppointment, calendars, userId }) => [
     label: 'Meine Behandlungen',
     toggle: state => ({ assigneeId: state.assigneeId ? null : userId }),
     isChecked: state => state.assigneeId === userId,
-    count: a => a.assigneeId === userId
+    count: (a, state) => countRemoved(a, state) && a.assigneeId === userId
   },
   {
     label: 'Absagen / Gelöscht',
@@ -69,7 +74,7 @@ const filters = ({ currentAppointment, calendars, userId }) => [
     label: 'Alle Kalender',
     toggle: () => ({ calendarId: null }),
     isChecked: state => !state.calendarId,
-    count: a => true,
+    count: (a, state) => countRemoved(a, state),
     type: 'radio'
   },
   ...(calendars || []).map(c => ({
@@ -77,7 +82,7 @@ const filters = ({ currentAppointment, calendars, userId }) => [
     label: 'Nur ' + c.name,
     toggle: state => ({ calendarId: c._id }),
     isChecked: state => state.calendarId === c._id,
-    count: a => (a.calendarId === c._id),
+    count: (a, state) => countRemoved(a, state) && (a.calendarId === c._id),
     type: 'radio'
   }))
 ]
