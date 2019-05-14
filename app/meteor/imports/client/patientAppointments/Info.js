@@ -132,7 +132,7 @@ const reassignedStyle = {
 }
 
 const Revenue = withHandlers({
-  updateRevenue: props => revenue => updateAppointment(props, { revenue: parseFloat(revenue) })
+  updateRevenue: props => revenue => updateAppointment(props, { revenue: revenue })
 })(({ revenue, updateRevenue }) =>
   <Money
     initialValue={(revenue > 0 || revenue === 0) ? twoPlacesIfNeeded(revenue || 0) : ''}

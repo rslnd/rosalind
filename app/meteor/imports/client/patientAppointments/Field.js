@@ -123,13 +123,20 @@ const moneyFormat = {
   delimiter: '.'
 }
 
-const parseMoney = v =>
-  parseFloat(v
+const parseMoney = v => {
+  const parsed = parseFloat(v
     .replace(moneyFormat.prefix, '')
     .replace(/\s/g, '')
     .replace(/\./g, '')
     .replace(',', '.')
   )
+
+  if (isNaN(parsed)) {
+    return null
+  } else {
+    return parsed
+  }
+}
 
 export const Day = ({ ...props }) =>
   <DebouncedField
