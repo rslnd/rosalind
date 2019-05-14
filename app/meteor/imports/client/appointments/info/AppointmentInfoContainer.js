@@ -41,7 +41,6 @@ const composer = props => {
   }
 
   const canRefer = hasRole(Meteor.userId(), ['referrals'])
-  patientId && subscribe('patients', { patientIds: [patientId] })
   patientId && canRefer && subscribe('referrals', {
     patientIds: [patientId]
   })

@@ -26,8 +26,10 @@ const composer = props => {
 
   const userId = Meteor.userId()
   const canRefer = hasRole(userId, ['referrals', 'referrals-immediate', 'referrals-delayed'])
-  if (patientId) {
-    subscribe('appointments-patient', { patientId })
+
+  const loading = patientId && !subscribe('appointments-patient', { patientId }).ready()
+
+  if (patientId && canRefer) {
     canRefer && subscribe('referrals', {
       patientIds: [patientId]
     })
@@ -80,8 +82,6 @@ const composer = props => {
       patient.patientSince = new Date(Math.min(...patientSinceCandidates))
     }
   }
-
-  const loading = !currentAppointment && patientId && !subscribe('patients', { patientIds: [patientId] }).ready()
 
   return {
     ...props,
