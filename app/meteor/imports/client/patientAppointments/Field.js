@@ -157,7 +157,7 @@ const AutogrowTextarea = withHandlers({
   }
 })(({ handleInput, ...props }) =>
   <textarea
-    rows={1} // Override default of 2 rows when empty
+    rows={(props.value && props.value.split('\n').length) || 1} // Override default of 2 rows when empty
     {...props}
     onInput={handleInput}
   />
