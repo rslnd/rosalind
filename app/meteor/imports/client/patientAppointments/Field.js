@@ -5,7 +5,7 @@ import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Cleave from 'cleave.js/react'
 import { DayField } from '../components/form/DayField'
-import { withHandlers } from 'recompose'
+import { withHandlers, compose, lifecycle, withState } from 'recompose'
 
 const fieldStyle = {
   outline: 0,
@@ -148,20 +148,43 @@ export const Field = ({ ...props }) =>
     {props => <input {...props} />}
   </DebouncedField>
 
-const AutogrowTextarea = withHandlers({
-  handleInput: props => e => {
-    const ref = e.currentTarget
-    ref.style.height = '' // Force reset to allow shrinking
-    ref.style.height = ref.scrollHeight + 'px'
-    if (props.onInput) { props.onInput(e) }
+class AutogrowTextarea extends React.Component {
+  constructor (props) {
+    super(props)
+    this.ref = React.createRef()
+    this.handleInput = this.handleInput.bind(this)
   }
-})(({ handleInput, ...props }) =>
-  <textarea
-    rows={(props.value && props.value.split('\n').length) || 1} // Override default of 2 rows when empty
-    {...props}
-    onInput={handleInput}
-  />
-)
+
+  autogrow (el) {
+    el.style.height = '' // Force reset to allow shrinking
+    el.style.height = el.scrollHeight + 'px'
+  }
+
+  handleInput (e) {
+    this.autogrow(e.currentTarget)
+    if (this.props.onInput) { this.props.onInput(e) }
+  }
+
+  componentDidMount () {
+    const ref = this.ref.current
+    this.autogrow(ref)
+  }
+
+  render () {
+    const { value } = this.props
+
+    // Override default of 2 rows when empty
+    const rows = (value && value.split('\n').length) || 1
+
+    return <textarea
+      ref={this.ref}
+      rows={rows}
+      {...this.props}
+      value={value || ''}
+      onInput={this.handleInput}
+    />
+  }
+}
 
 export const Textarea = ({ ...props }) =>
   <DebouncedField {...props}>
