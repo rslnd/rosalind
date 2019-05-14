@@ -44,13 +44,9 @@ export const PatientAppointmentsModal = compose(
           <div style={containerStyle}>
             <div style={columnsStyle}>
               <div style={appointmentsStyle}>
-                {
-                  loading
-                    ? <Loading />
-                    : <ErrorBoundary>
-                      <Appointments {...props} show={show} />
-                    </ErrorBoundary>
-                }
+                <ErrorBoundary>
+                  <Appointments {...props} show={show} />
+                </ErrorBoundary>
               </div>
               <div style={patientSidebarStyle}>
                 <ErrorBoundary>

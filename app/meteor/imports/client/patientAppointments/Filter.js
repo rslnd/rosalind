@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Divider from '@material-ui/core/Divider'
 import Checkbox from '@material-ui/core/Checkbox'
 import Radio from '@material-ui/core/Radio'
+import Typography from '@material-ui/core/Typography'
 import { Icon } from '../components/Icon'
 import { withTracker } from '../components/withTracker'
 import { Calendars } from '../../api/calendars'
@@ -52,10 +53,11 @@ const countRemoved = (a, state) =>
     ? true
     : !(a.removed || a.canceled)
 
-const filters = ({ currentAppointment, calendars, userId }) => [
+const filters = ({ currentAppointment, calendars, userId, fullNameWithTitle }) => [
   {
     key: 'assigneeId',
-    label: 'Meine Behandlungen',
+    label: __('appointments.treatedByName', { name: fullNameWithTitle(userId) }),
+    name: fullNameWithTitle(userId),
     toggle: state => ({ assigneeId: state.assigneeId ? null : userId }),
     isChecked: state => state.assigneeId === userId,
     count: (a, state) => countRemoved(a, state) && a.assigneeId === userId
@@ -127,7 +129,7 @@ export const Filter = compose(
 
     const filterLabel = [
       filteredCalendar && filteredCalendar.label,
-      filteredAssignee && filteredAssignee.label
+      filteredAssignee && filteredAssignee.name
     ].filter(identity).join(', ')
 
     return {
@@ -167,7 +169,12 @@ export const Filter = compose(
                   ? <Radio checked={o.isChecked} onChange={() => { o.toggle(); handleClose() }} />
                   : <Checkbox checked={o.isChecked} onChange={() => { o.toggle(); handleClose() }} />
               }
-              {o.label} {(o.count === 0 || o.count > 0) &&
+
+              <Typography variant='inherit'>
+                {o.label}
+              </Typography>
+
+              {(o.count === 0 || o.count > 0) &&
                 <ListItemSecondaryAction style={o.count === 0 ? countStyleZero : countStyle}>
                   {o.count}
                 </ListItemSecondaryAction>
@@ -200,7 +207,8 @@ const filterStyle = {
 }
 
 const menuItemStyle = {
-  minWidth: 200
+  minWidth: 350,
+  width: '100%'
 }
 
 const countStyle = {

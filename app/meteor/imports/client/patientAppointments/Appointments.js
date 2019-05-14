@@ -4,6 +4,7 @@ import { Filter } from './Filter'
 import { AppointmentsList, Appointment } from './Appointment'
 import { Referrals } from './Referrals'
 import { Oldest, Current, Future } from './Sections'
+import { Loading } from '../components/Loading'
 
 export const Appointments = compose(
   withState('scrollRef', 'setScrollRef'),
@@ -27,12 +28,13 @@ export const Appointments = compose(
   scrollToBottom,
   show,
   canRefer,
+  loading,
   ...props
 }) =>
   <div style={containerStyle}>
     <div style={floatingStyle}>
       <div style={shadowStyle}>
-        <Filter {...props} />
+        <Filter {...props} fullNameWithTitle={fullNameWithTitle} />
       </div>
     </div>
     <div ref={setScrollRef} style={appointmentsContainerStyle}> {/* Scroll this to bottom */}
@@ -45,6 +47,9 @@ export const Appointments = compose(
           appointments={pastAppointments}
           fullNameWithTitle={fullNameWithTitle}
         />
+        {
+          loading && <Loading />
+        }
         {
           currentAppointment && pastAppointments.length > 1 &&
           <Current />
@@ -59,7 +64,7 @@ export const Appointments = compose(
           />
         }
         {
-          canRefer &&
+          !loading && canRefer &&
           <Referrals appointment={currentAppointment} />
         }
         <Future

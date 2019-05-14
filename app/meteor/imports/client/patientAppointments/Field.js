@@ -5,7 +5,6 @@ import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Cleave from 'cleave.js/react'
 import { DayField } from '../components/form/DayField'
-import { withHandlers, compose, lifecycle, withState } from 'recompose'
 
 const fieldStyle = {
   outline: 0,
@@ -21,7 +20,7 @@ export const PlainField = ({ style, ...props }) =>
   />
 
 class DebouncedField extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     const {
@@ -52,14 +51,14 @@ class DebouncedField extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange(e) {
+  handleChange (e) {
     const value = (e && e.target) ? e.target.value : e
     this.setState({ value })
     this.debouncedUpdate(value)
   }
 
   // Reset state on props change
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate (prevProps, prevState) {
     if (prevProps.initialValue !== this.props.initialValue) {
       this.setState({
         value: null
@@ -67,11 +66,11 @@ class DebouncedField extends React.Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.debouncedUpdate.flush()
   }
 
-  render() {
+  render () {
     const {
       style,
       initialValue,

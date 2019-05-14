@@ -9,7 +9,7 @@ import { Button } from '@material-ui/core'
 import { Patients } from '../../api/patients'
 import { __ } from '../../i18n'
 import { Meteor } from 'meteor/meteor'
-import { EnlargeText } from '../components/EnlargeText';
+import { EnlargeText } from '../components/EnlargeText'
 
 const newContact = channel => ({
   channel,

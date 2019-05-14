@@ -20,7 +20,7 @@ export const update = ({ Appointments }) => {
       }
     }).validator(),
 
-    run({ appointmentId, update }) {
+    run ({ appointmentId, update }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
