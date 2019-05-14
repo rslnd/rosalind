@@ -46,7 +46,7 @@ export const Appointments = compose(
           fullNameWithTitle={fullNameWithTitle}
         />
         {
-          pastAppointments.length > 1 &&
+          currentAppointment && pastAppointments.length > 1 &&
           <Current />
         }
         {
