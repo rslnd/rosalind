@@ -43,7 +43,7 @@ export class Contacts extends React.Component {
   }
 
   persist() {
-    const contacts = this.state.tempContacts
+    const contacts = (this.state.tempContacts || [])
       .filter(c => (c.value || c.noConsent || c.hasNone))
       .map(({ i, ...rest }) => ({ ...rest }))
     const patientId = this.props._id
