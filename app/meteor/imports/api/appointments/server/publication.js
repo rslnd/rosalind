@@ -121,16 +121,23 @@ export default () => {
     fn: function ({ patientId }) {
       return {
         find: function () {
-          return Appointments.find({ patientId }, {
-            sort: { start: 1 },
-            removed: true
-          })
+          return Patients.find({ _id: patientId })
         },
         children: [
           {
-            find: function (appointment) {
-              return Comments.find({ docId: appointment._id })
-            }
+            find: function (patient) {
+              return Appointments.find({ patientId: patient._id }, {
+                sort: { start: 1 },
+                removed: true
+              })
+            },
+            children: [
+              {
+                find: function (appointment) {
+                  return Comments.find({ docId: appointment._id })
+                }
+              }
+            ]
           }
         ]
       }
