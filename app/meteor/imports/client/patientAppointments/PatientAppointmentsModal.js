@@ -1,6 +1,6 @@
 import React from 'react'
 import { Portal } from 'react-portal'
-import { withPropsOnChange } from 'recompose'
+import { compose, withPropsOnChange, withHandlers } from 'recompose'
 import { Appointments } from './Appointments'
 import { AppointmentActionsContainer } from '../appointments/info/AppointmentActionsContainer'
 import { background, modalBackground, lightBackground, mutedSeparator, mutedBackground, darkerMutedBackground } from '../layout/styles'
@@ -12,27 +12,35 @@ import { Loading } from '../components/Loading'
 import Button from '@material-ui/core/Button'
 import { __ } from '../../i18n'
 
-export const PatientAppointmentsModal = withPropsOnChange(
-  ['show'],
-  props => {
-    // Prevent page from scrolling while modal is open
-    if (props.show) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = null
+export const PatientAppointmentsModal = compose(
+  withPropsOnChange(
+    ['show'],
+    props => {
+      // Prevent page from scrolling while modal is open
+      if (props.show) {
+        document.body.style.overflow = 'hidden'
+      } else {
+        document.body.style.overflow = null
+      }
+      return {}
     }
-    return {}
-  }
-)(({ loading, show, onClose, ...props }) =>
+  ),
+  withHandlers({
+    handleClose: props => e => {
+      document.body.style.overflow = null
+      props.onClose(e)
+    }
+  })
+)(({ loading, show, handleClose, ...props }) =>
   <Portal>
     {
       <div className='disable-select' style={show ? modalStyle : hiddenStyle}>
         <div
           style={backdropStyle}
-          onClick={onClose}
+          onClick={handleClose}
         />
         <Paper elevation={10} style={modalWindowStyle}>
-          <Close onClick={onClose} />
+          <Close onClick={handleClose} />
           <div style={containerStyle}>
             <div style={columnsStyle}>
               <div style={appointmentsStyle}>
@@ -56,7 +64,7 @@ export const PatientAppointmentsModal = withPropsOnChange(
                   ? <AppointmentActionsContainer {...props} />
                   : <Button
                     style={closeButtonStyle}
-                    onClick={onClose}
+                    onClick={handleClose}
                   >{__('ui.close')}</Button>
               }
             </div>
