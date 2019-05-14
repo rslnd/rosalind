@@ -163,6 +163,9 @@ class AutogrowTextarea extends React.Component {
   }
 
   autogrow (el) {
+    if (!el) {
+      console.error('Cannot find el to autogrow', el, this)
+    }
     el.style.height = '' // Force reset to allow shrinking
     el.style.height = el.scrollHeight + 'px'
   }
@@ -173,6 +176,11 @@ class AutogrowTextarea extends React.Component {
   }
 
   componentDidMount () {
+    const ref = this.ref.current
+    this.autogrow(ref)
+  }
+
+  componentDidUpdate () {
     const ref = this.ref.current
     this.autogrow(ref)
   }
