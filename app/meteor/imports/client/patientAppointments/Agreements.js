@@ -46,7 +46,7 @@ export const Agreements = compose(
             {
               agreedAt
                 ? __(`patients.agreements.${label}.yes`, {
-                  date: moment(patient.agreedAt).format(__('time.dateFormatShort'))
+                  date: moment(agreedAt).format(__('time.dateFormatShort'))
                 }) : __(`patients.agreements.${label}.no`)
             }
 
