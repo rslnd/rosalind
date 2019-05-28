@@ -33,22 +33,22 @@ export class Contacts extends React.Component {
 
   // Reset state on props change
   componentDidUpdate(prevProps) {
-    if (this.state.tempContacts &&
-      (prevProps._id !== this.props._id ||
-        !isEqual(prevProps.contacts, this.props.contacts))) {
-      this.setState({
-        tempContacts: null
-      })
+    if (prevProps._id !== this.props._id) {
+      this.setState({ tempContacts: null })
     }
+
+    // BUG: When 2+ users edit the same contacts at the same time,
+    // the last one to persist will win. This should probably somehow
+    // merge this.props.contacts and this.state.tempContacts
   }
 
   persist() {
     const contacts = (this.state.tempContacts || [])
       .filter(c => (c.value || c.noConsent || c.hasNone))
       .map(({ i, ...rest }) => ({ ...rest }))
+
     const patientId = this.props._id
     Patients.actions.setContacts.callPromise({ patientId, contacts }).then(() => {
-      this.setState({ tempContacts: null })
       Alert.success(__('ui.saved'))
     }).catch(e => {
       console.error(e)

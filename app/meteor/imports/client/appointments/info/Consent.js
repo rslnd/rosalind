@@ -25,10 +25,10 @@ const composer = props => {
       $lt: appointment.start
     }
   }, {
-      sort: {
-        start: -1
-      }
-    }).fetch()
+    sort: {
+      start: -1
+    }
+  }).fetch()
 
   const calendar = Calendars.findOne({ _id: appointment.calendarId })
 
@@ -103,9 +103,9 @@ export const ConsentComponent = ({
               size='small'
               onClick={handleSelectConsent(pc.consentedAt)}
             >{__('appointments.usePreviousConsent', {
-              date: formatDate(pc.consentedAt),
-              tags: explainTags(pc.tags)
-            })}
+                date: formatDate(pc.consentedAt),
+                tags: explainTags(pc.tags)
+              })}
             </Button>
           )
         ]
