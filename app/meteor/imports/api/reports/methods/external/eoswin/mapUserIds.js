@@ -4,7 +4,7 @@ import mapKeys from 'lodash/mapKeys'
 import idx from 'idx'
 
 export const mapUserIds = ({ Users }) => {
-  const users = Users.find({}).fetch()
+  const users = Users.find({}, { removed: true }).fetch()
   const keyed = keyBy(u => idx(u, _ => _.external.eoswin.id))(users)
   const mapping = mapValues('_id')(keyed)
   delete mapping.undefined
