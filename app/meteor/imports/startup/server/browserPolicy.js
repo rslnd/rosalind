@@ -186,6 +186,8 @@ export default () => {
       data.head += '\n  <meta name="robots" content="noindex, nofollow">'
       data.head += '\n  <meta name="viewport" content="user-scalable=no, width=device-width, maximum-scale=1, initial-scale=1, minimum-scale=1">'
 
+      data.body += '\n  <noscript>Please enable JavaScript.</noscript>'
+
       return true
     })
   })
