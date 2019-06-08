@@ -23,7 +23,7 @@ export const ReferralsDetailTable = ({ referrals, mapUserIdToName }) => {
   const referrablesIds = referrables.map(r => r._id)
 
   const rows = sortBy('createdAt')(referrals
-    .filter(r => referrablesIds.includes(r._id))
+    .filter(r => referrablesIds.includes(r.referrableId))
     .map(r => ({
       ...r,
       referrable: referrables.find(b => r.referrableId === b._id)
