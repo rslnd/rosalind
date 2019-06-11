@@ -22,9 +22,8 @@ export const deduplicateWithJournal = ({ Appointments, Patients, journal }) => {
     const duplicates = findDuplicatePatients({ Appointments, Patients, patientsToCheck: dayPatients })
     const sortedDuplicates = sortDuplicates({ duplicates, journalRows })
     const actions = deduplicate(sortedDuplicates)
-    perform({ Appointments, Patients, actions })
-
     console.log(sortedDuplicates.length, 'sorted duplicates')
+    return perform({ Appointments, Patients, actions })
   }
 }
 
@@ -199,7 +198,7 @@ export const mergeContacts = (master = [], addendum = []) => {
   ]).filter(negate(isEmpty))
 }
 
-const deduplicate = duplicates =>
+export const deduplicate = duplicates =>
   duplicates.map(tuple => {
     const master = tuple[0]
     const rest = tuple.slice(1)
@@ -210,7 +209,7 @@ const deduplicate = duplicates =>
     }
   })
 
-const perform = ({ Appointments, Patients, actions }) =>
+export const perform = ({ Appointments, Patients, actions }) =>
   actions.map(a => {
     const masterId = a.master._id
     console.log('[Patients] deduplicateWithJournal: Merging', masterId, ' <- ', a.duplicateIds)
