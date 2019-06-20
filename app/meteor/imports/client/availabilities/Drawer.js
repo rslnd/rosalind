@@ -45,7 +45,7 @@ const drawerStyle = {
 const closeTriggerStyle = {
   position: 'fixed',
   top: 10,
-  right: drawerStyle.width + 100,
+  right: drawerStyle.width + 50,
   bottom: 10,
   left: 10,
   zIndex: 1060

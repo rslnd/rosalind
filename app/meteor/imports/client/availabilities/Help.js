@@ -7,9 +7,12 @@ import { rowStyle } from '../components/form'
 import { __ } from '../../i18n'
 import { grayDisabled, highlightBackground } from '../layout/styles'
 import { TagDetails } from './TagDetails'
+import { Icon } from '../components/Icon'
+import { Button } from '@material-ui/core'
 
 export const Help = ({
   isOpen,
+  handleDrawerClose,
   searchValue,
   handleSearchValueChange,
   results,
@@ -22,12 +25,21 @@ export const Help = ({
   searchRef
 }) =>
   <div style={containerStyle}>
-    <Search
-      value={searchValue}
-      onChange={handleSearchValueChange}
-      searchRef={searchRef}
-    />
-    {/* {JSON.stringify(parsedQuery)} */}
+    <div style={topBarStyle}>
+      <Search
+        style={searchBarStyle}
+        value={searchValue}
+        onChange={handleSearchValueChange}
+        searchRef={searchRef}
+      />
+
+      <Button
+        style={closeStyle}
+        onClick={handleDrawerClose}
+        title={__('ui.close')}
+      ><Icon name='times' /></Button>
+    </div>
+
     {
       (parsedQuery.failed || results.length === 0)
         ? <span /> // No results
@@ -281,3 +293,20 @@ const HoverDetails = ({ hoverTag, hoverAvailability }) =>
       availability={hoverAvailability}
     />
   </div>
+
+const topBarStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%'
+}
+
+const searchBarStyle = {
+  flexGrow: 1
+}
+
+const closeStyle = {
+  width: 40,
+  height: 40,
+  minWidth: 40,
+  opacity: 0.4
+}
