@@ -11,13 +11,13 @@ import { ChangePasswordlessForm } from './ChangePasswordlessForm'
 import { ChangeRolesForm } from './ChangeRolesForm'
 import { UserProfileForm } from './UserProfileForm'
 import { RemoveUserForm } from './RemoveUserForm'
+import { ExternalIdsForm } from './ExternalIdsForm'
 import { subscribe } from '../../util/meteor/subscribe'
 
 const composer = (props) => {
   subscribe('users-permissions')
 
   const _id = props.match.params.id
-  console.log(props, _id)
   const user = Users.findOne({ _id }, { removed: true })
 
   if (!user) {
@@ -69,7 +69,15 @@ const EditUser = ({ user }) =>
         </div>
 
         <div className='col-md-4'>
-          <Box title={__('users.remove')}>
+          <Box title='Externe IDs' type='primary'>
+            <ExternalIdsForm user={user} />
+          </Box>
+        </div>
+      </div>
+
+      <div className='row'>
+        <div className='col-md-4'>
+          <Box title={__('users.remove')} type='danger'>
             <RemoveUserForm user={user} />
           </Box>
         </div>

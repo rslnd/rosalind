@@ -14,7 +14,8 @@ export const updateProfile = ({ Users }) =>
       titleAppend: Match.Maybe(String),
       employee: Match.Maybe(Boolean),
       groupId: Match.Maybe(String),
-      allowedClientIds: Match.Optional([String])
+      allowedClientIds: Match.Optional([String]),
+      external: Match.Maybe(Object)
     },
     roles: ['admin', 'users-edit'],
     fn: async (args) => {
