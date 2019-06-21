@@ -9,10 +9,10 @@ export const setNote = ({ Records }) =>
       recordId: String,
       note: String
     },
-    fn({ recordId, note }) {
+    fn ({ recordId, note }) {
       Records.update({ _id: recordId }, {
         $set: { note }
-      })
+      }, { trimStrings: false })
 
       Events.post('records/setNote', { recordId })
 

@@ -12,7 +12,7 @@ export const insert = ({ Records }) =>
       note: String,
       type: String
     },
-    fn({ patientId, calendarId, note, type }) {
+    fn ({ patientId, calendarId, note, type }) {
       if (type === 'future') {
         const existingRecord = Records.findOne({
           patientId,
@@ -25,7 +25,8 @@ export const insert = ({ Records }) =>
         }
       }
 
-      const recordId = Records.insert({ patientId, calendarId, note, type })
+      // trimStrings collection2 flag to prevent killing space-y "layout" of notes
+      const recordId = Records.insert({ patientId, calendarId, note, type }, { trimStrings: false })
 
       Events.post('records/insert', { recordId })
 

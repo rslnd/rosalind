@@ -198,7 +198,8 @@ export const upsert = ({ Patients }) => {
           if (!isEqual(update, {}) && !isEqual(update['$set'], {})) {
             console.log('[Patients] Updating', existingPatient._id)
 
-            Patients.update({ _id: existingPatient._id }, update, (err) => {
+            // trimStrings collection2 flag to prevent killing space-y "layout" of notes
+            Patients.update({ _id: existingPatient._id }, update, { trimStrings: false }, (err) => {
               if (err) {
                 console.error('[Patients] upsert: Update failed with error', err)
                 throw err
