@@ -41,7 +41,7 @@ export const asyncValidate = async ({ password }) => {
 }
 
 export const validate = ({ password }, props) => {
-  const minLength = 8
+  const minLength = 12
   if (!password || password.length < minLength) {
     return { password: __('users.passwordMinLength', { minLength }) }
   }
