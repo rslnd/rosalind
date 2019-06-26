@@ -9,7 +9,7 @@ export default () => {
   Accounts.config({
     forbidClientAccountCreation: true,
     loginExpirationInDays: (5 * 365),
-    // bcryptRounds: 15
+    bcryptRounds: 15
   })
 
   Accounts.registerLoginHandler('clientKey passwordless', (loginRequest) => {
