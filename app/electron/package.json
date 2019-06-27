@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/albertzak/rosalind"
+    "url": "https://github.com/rslnd/rosalind"
   },
   "homepage": "https://update.rslnd.com",
   "main": "main/main.js",
