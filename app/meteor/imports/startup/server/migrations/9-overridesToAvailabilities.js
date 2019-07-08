@@ -7,6 +7,12 @@ import { Availabilities } from '../../../api/availabilities'
 import { dayToDate, rangeToDays } from '../../../util/time/day'
 
 Meteor.startup(() => {
+  // TODO: Do properly. Only do this hack on one machine, otherwise
+  // we end up with more or less duplicated availabilities
+  if (process.env.PROCESS_JOBS !== '1') {
+    return
+  }
+
   console.log('Simulating migration')
   console.log('Removing all Availabilities')
   Availabilities.remove({})
