@@ -75,7 +75,7 @@
     "start": "./node_modules/.bin/electron .",
     "pack": "./compileAutoIt.js && ./node_modules/.bin/electron-builder --dir",
     "build": "./node_modules/.bin/electron-builder --x64",
-    "release": "build",
+    "release": "./node_modules/.bin/electron-builder build --x64",
     "compile": "node ./compileAutoIt.js",
     "tag": "node tag.js | /bin/sh"
   }
