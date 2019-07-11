@@ -10,7 +10,7 @@ const AM_HOURS = 6
 const PM_HOURS = 7.5
 const DAY_HOURS = AM_HOURS + PM_HOURS
 
-export const cutoffAt = x => moment.tz(moment(x).clone(), 'Europe/Vienna').local().startOf('day').hour(13).minute(30)
+export const cutoffAt = x => moment.tz(moment(x).clone(), 'Europe/Vienna').startOf('day').hour(13).minute(30)
 
 export const splitCutoff = ({ overrideSchedules = [] }) => {
   return flatten(overrideSchedules.map(o => {
