@@ -4,7 +4,7 @@ module.paths.push(path.resolve('../node_modules'))
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app', 'node_modules'))
 module.paths.push(path.resolve(__dirname, '..', '..', '..', '..', 'resources', 'app.asar', 'node_modules'))
 
-const { app, ipcMain, crashReporter } = require('electron')
+const { app, Menu, ipcMain, crashReporter } = require('electron')
 const { init } = require('@sentry/electron')
 
 const SENTRY_DSN_URL = 'https://6af65eb19a37410f968d4e602ce572d7@sentry.io/62218'
@@ -29,6 +29,8 @@ const logger = require('./logger')
 logger.start()
 
 const start = () => {
+  Menu.setApplicationMenu(null)
+
   app.on('ready', () => {
     const updater = require('./updater')
     const window = require('./window')
