@@ -15,7 +15,7 @@ export const time = {
   timeFormat: 'HH:mm [Uhr]',
   timeFormatShort: 'HH:mm',
   durationFormat: 'h [Std] m [Min]',
-  durationFormatShort: 'h:m',
+  durationFormatShort: 'h:mm',
   dateFormatShortNoYear: 'D. MMM',
   dateFormatVeryShort: 'D. MMM YY',
   dateFormatShort: 'D. MMM YYYY',

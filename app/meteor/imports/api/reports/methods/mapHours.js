@@ -54,11 +54,11 @@ const mapRevenue = ({ revenue, hours }) => {
   return mapValues(calculatePerHour({ hours }))(revenue)
 }
 
-const sumAppointments = ({ appointments, slotsPerHour, filter = identity }) =>
+const sumAppointmentsMinutes = ({ appointments, filter = identity }) =>
   (appointments
     .filter(filter)
     .map(a => a.end - a.start)
-    .reduce(add, 0) / (1000 * 60 * 60)) * slotsPerHour
+    .reduce(add, 0) / (1000 * 60))
 
 const calculateWorkload = ({ calendar, appointments, hours }) => {
   const slotsPerHour = Math.ceil(
@@ -70,20 +70,19 @@ const calculateWorkload = ({ calendar, appointments, hours }) => {
     )
   )
 
-  const available = hours.planned * slotsPerHour
-  const planned = sumAppointments({
+  const available = hours.planned * 60
+  const planned = sumAppointmentsMinutes({
     filter: a => !a.canceled,
-    appointments,
-    slotsPerHour
+    appointments
   })
 
-  const actual = sumAppointments({
+  const actual = sumAppointmentsMinutes({
     filter: a => !a.canceled && a.admitted,
-    appointments,
-    slotsPerHour
+    appointments
   })
 
   return {
+    slotsPerHour,
     available,
     planned,
     actual

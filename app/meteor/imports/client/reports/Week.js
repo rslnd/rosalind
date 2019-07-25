@@ -1,8 +1,10 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-timezone'
+import 'moment-duration-format'
 import idx from 'idx'
 import ColorHash from 'color-hash'
 import { dayToDate } from '../../util/time/day'
+import { __ } from '../../i18n';
 
 const colorHash = new ColorHash({ saturation: 0.75, lightness: 0.65 })
 const clampLower = n => (n < 0) ? 0 : n
@@ -24,15 +26,20 @@ const avatarStyle = {
   'WebkitPrintColorAdjust': 'exact'
 }
 
+const formatDuration = mins =>
+  moment.duration(mins, 'minutes').format(__('time.durationFormatShort'), null, {
+    trim: false
+  })
+
 const Workload = ({ workload }) => {
   if (!workload || workload.available === 0) {
     return null
   }
 
-  const available = Math.round(workload.available)
-  const free = Math.round(clampUpper(available)(available - workload.planned))
+  const available = formatDuration(Math.round(workload.available))
+  const free = formatDuration(Math.round(clampUpper(workload.available)(workload.available - workload.planned)))
 
-  const title = `${free} frei von ${available}`
+  const title = `${free} Stunden frei von ${available} Stunden`
 
   return <span className='text-muted' title={title}>
     <b>{free}</b>/{available}
