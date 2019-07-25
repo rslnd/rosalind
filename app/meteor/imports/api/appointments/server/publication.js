@@ -4,6 +4,7 @@ import { Patients } from '../../patients'
 import Appointments from '../collection'
 import { publishComposite } from '../../../util/meteor/publish'
 import { dayToDate } from '../../../util/time/day'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export default () => {
   publishComposite({
@@ -13,9 +14,14 @@ export default () => {
       appointmentId: String
     },
     fn: function ({ appointmentId }) {
+      const userId = this.userId
+
       return {
         find: function () {
-          return Appointments.find({ _id: appointmentId }, { limit: 1 })
+          return Appointments.find({ _id: appointmentId }, {
+            limit: 1,
+            fields: limitFieldsByRole(userId)
+          })
         },
         children: [
           {
@@ -38,6 +44,7 @@ export default () => {
     name: 'appointments-today',
     roles: ['waitlist', 'appointments-*'],
     fn: function ({ appointmentId }) {
+      const userId = this.userId
       const startOfToday = moment().startOf('day').toDate()
       const endOfToday = moment().endOf('day').toDate()
       const selector = {
@@ -52,7 +59,8 @@ export default () => {
           return Appointments.find(selector, {
             sort: {
               start: -1
-            }
+            },
+            fields: limitFieldsByRole(userId)
           })
         },
         children: [
@@ -80,6 +88,7 @@ export default () => {
       calendarId: String
     },
     fn: function ({ day, month, year, calendarId }) {
+      const userId = this.userId
       const date = dayToDate({ day, month, year })
       const selector = {
         calendarId,
@@ -94,7 +103,8 @@ export default () => {
           return Appointments.find(selector, {
             sort: {
               start: 1
-            }
+            },
+            fields: limitFieldsByRole(userId)
           })
         },
         children: [
@@ -119,6 +129,8 @@ export default () => {
     },
     roles: ['appointments-*'],
     fn: function ({ patientId }) {
+      const userId = this.userId
+
       return {
         find: function () {
           return Patients.find({ _id: patientId })
@@ -128,6 +140,7 @@ export default () => {
             find: function (patient) {
               return Appointments.find({ patientId: patient._id }, {
                 sort: { start: 1 },
+                fields: limitFieldsByRole(userId),
                 removed: true
               })
             },
@@ -143,4 +156,14 @@ export default () => {
       }
     }
   })
+}
+
+const limitFieldsByRole = userId => {
+  if (hasRole(userId, ['appointments-note'])) {
+    return {} // Publish all fields
+  } else {
+    return {
+      note: 0
+    }
+  }
 }

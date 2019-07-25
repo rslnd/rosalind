@@ -7,6 +7,8 @@ import { Media } from './Media'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
 import { Calendars } from '../../api/calendars'
 import { withProps } from 'recompose'
+import { Meteor } from 'meteor/meteor'
+import { hasRole } from '../../util/meteor/hasRole'
 
 export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
   appointments.map(a =>
@@ -20,8 +22,9 @@ export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
   )
 
 export const Appointment = withProps(props => ({
+  canSeeNote: hasRole(Meteor.userId(), ['appointments-note']),
   calendar: props.appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
-}))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle }) =>
+}))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle, canSeeNote }) =>
   <div style={
     isCurrent
       ? currentAppointmentStyle
@@ -33,7 +36,11 @@ export const Appointment = withProps(props => ({
   }>
     <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
     <Tags {...appointment} isCurrent={isCurrent} />
-    <Note {...appointment} isCurrent={isCurrent} />
+
+    {
+      canSeeNote &&
+        <Note {...appointment} isCurrent={isCurrent} />
+    }
 
     {
       hasMedia && window.location.hash.indexOf('media') !== -1 &&
