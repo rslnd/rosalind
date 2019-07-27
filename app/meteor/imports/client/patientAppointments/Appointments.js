@@ -11,12 +11,14 @@ export const Appointments = compose(
   withHandlers({
     scrollToBottom: props => e => window.requestAnimationFrame(() => {
       if (props.scrollRef) {
-        props.scrollRef.scrollTop = Number.MAX_SAFE_INTEGER
+        window.scr = props.scrollRef
+        console.log('scrolling to bottom')
+        props.scrollRef.scrollTop = 1000000000 // FF doesn't like Number.MAX_SAFE_INTEGER
       }
     })
   }),
   withPropsOnChange(
-    ['show'],
+    ['show', 'loading'],
     props => props.scrollToBottom()
   )
 )(({
@@ -37,42 +39,44 @@ export const Appointments = compose(
         <Filter {...props} fullNameWithTitle={fullNameWithTitle} />
       </div>
     </div>
-    <div ref={setScrollRef} style={appointmentsContainerStyle}> {/* Scroll this to bottom */}
-      <div style={appointmentsContainerInnerStyle}> {/* Inside this div things will not be reversed */}
-        {
-          pastAppointments.length > 6 &&
-          <Oldest />
-        }
-        <AppointmentsList
-          appointments={pastAppointments}
-          fullNameWithTitle={fullNameWithTitle}
-        />
-        {
-          loading && <Loading />
-        }
-        {
-          currentAppointment && pastAppointments.length > 1 &&
-          <Current />
-        }
-        {
-          currentAppointment &&
-          <Appointment
-            key='current'
-            appointment={currentAppointment}
+    <div ref={setScrollRef} style={outerStyle}> {/* Scroll this to bottom */}
+      <div style={middleStyle}>
+        <div style={innerStyle}> {/* Inside this div things will not be reversed */}
+          {
+            pastAppointments.length > 6 &&
+            <Oldest />
+          }
+          <AppointmentsList
+            appointments={pastAppointments}
             fullNameWithTitle={fullNameWithTitle}
-            isCurrent
           />
-        }
-        {
-          !loading && canRefer &&
-          <Referrals appointment={currentAppointment} />
-        }
-        <Future
-          futureAppointments={futureAppointments}
-          fullNameWithTitle={fullNameWithTitle}
-          scrollToBottom={scrollToBottom}
-          show={show}
-        />
+          {
+            loading && <Loading />
+          }
+          {
+            currentAppointment && pastAppointments.length > 1 &&
+            <Current />
+          }
+          {
+            currentAppointment &&
+            <Appointment
+              key='current'
+              appointment={currentAppointment}
+              fullNameWithTitle={fullNameWithTitle}
+              isCurrent
+            />
+          }
+          {
+            !loading && canRefer &&
+            <Referrals appointment={currentAppointment} />
+          }
+          <Future
+            futureAppointments={futureAppointments}
+            fullNameWithTitle={fullNameWithTitle}
+            scrollToBottom={scrollToBottom}
+            show={show}
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -102,15 +106,18 @@ const shadowStyle = {
   borderRadius: '4px 0 0 0'
 }
 
-const appointmentsContainerStyle = {
+const outerStyle = {
   flex: 1,
   position: 'relative',
   maxHeight: '100%',
-  overflow: 'auto',
+  overflow: 'auto'
+}
+
+const middleStyle = {
   display: 'flex',
   flexDirection: 'column-reverse'
 }
 
-const appointmentsContainerInnerStyle = {
+const innerStyle = {
   paddingTop: 50
 }
