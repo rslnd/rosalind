@@ -18,5 +18,10 @@ export default new SimpleSchema({
   order: {
     type: Number,
     optional: true
+  },
+
+  baseRoles: {
+    type: [String],
+    optional: true
   }
 })
