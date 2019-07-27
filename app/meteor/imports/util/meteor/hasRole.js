@@ -1,7 +1,14 @@
 import { check } from 'meteor/check'
-import { Roles } from 'meteor/alanning:roles'
-import { Users } from '../../api/users'
 import { isRoleMatch } from './internal/isRoleMatch'
+import union from 'lodash/union'
+import difference from 'lodash/difference'
+import { Meteor } from 'meteor/meteor'
+
+// Hacky workaround for circular dependencies
+let Groups = null
+
+export const effectiveRoles = ({ baseRoles = [], addedRoles = [], removedRoles = [] }) =>
+  difference(union(baseRoles, addedRoles), removedRoles)
 
 export const hasRole = (userId, requiredRoles) => {
   check(userId, String)
@@ -11,20 +18,23 @@ export const hasRole = (userId, requiredRoles) => {
   if (!requiredRoles) { return false }
   if (requiredRoles.length === 0) { return false }
 
-  const user = Users.findOne({ _id: userId })
+  const user = Meteor.users.findOne({ _id: userId })
   if (!user) {
     return false
   }
 
-  const userRoles = user && user.roles && user.roles.__global_roles__
-  if (!userRoles) {
-    return false
-  }
+  if (!Groups) { Groups = require('../../api/groups').Groups }
+  const group = Groups.findOne({ _id: user.groupId })
+  const baseRoles = group ? group.baseRoles : []
 
-  // TODO: Replace completely with custom implementation
-  // that merges roles from the user's group
-  if (Roles.userIsInRole(user, requiredRoles)) {
-    return true
+  const userRoles = effectiveRoles({
+    baseRoles,
+    addedRoles: user.addedRoles,
+    removedRoles: user.removedRoles
+  })
+
+  if (!userRoles || userRoles.length === 0) {
+    return false
   }
 
   return isRoleMatch({ requiredRoles, userRoles })

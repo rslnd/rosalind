@@ -18,7 +18,8 @@ export default () => {
           birthday: 1,
           group: 1,
           employee: 1,
-          roles: 1,
+          addedRoles: 1,
+          removedRoles: 1,
           settings: 1,
           external: 1
         },

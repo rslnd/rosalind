@@ -26,6 +26,8 @@ export const users = {
   username: 'Anmeldename',
   saveProfile: 'Stammdaten speichern',
   roles: 'Berechtigungen',
+  addedRoles: 'Zusätzliche Berechtigungen',
+  removedRoles: 'Entfernte Berechtigungen',
   selectEmployee: 'MitarbeiterIn auswählen',
   profile: 'Stammdaten',
   editProfile: 'Stammdaten bearbeiten',

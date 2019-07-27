@@ -81,10 +81,20 @@ export default new SimpleSchema({
     blackbox: true
   },
 
-  roles: {
+  roles: { // DEPRECATED
     type: Object,
     optional: true,
     blackbox: true
+  },
+
+  addedRoles: {
+    type: [String],
+    optional: true
+  },
+
+  removedRoles: {
+    type: [String],
+    optional: true
   },
 
   status: {
