@@ -1,4 +1,6 @@
 import React from 'react'
+import isEqual from 'lodash/isEqual'
+import Alert from 'react-s-alert'
 import { Link } from 'react-router-dom'
 import sum from 'lodash/sum'
 import { Box } from '../components/Box'
@@ -7,6 +9,10 @@ import { Table } from '../components/InlineEditTable'
 import { ClientsPicker } from '../clients/ClientsPicker'
 import { subscribe } from '../../util/meteor/subscribe'
 import { withTracker } from '../components/withTracker'
+import { TextField, Button } from '@material-ui/core'
+import { compose, withState, withProps, withHandlers } from 'recompose'
+import { Groups } from '../../api/groups'
+import { rolesToString, stringToRoles } from './ChangeRolesForm'
 
 const toggleablePermissions = [
   {
@@ -135,6 +141,9 @@ export const UsersScreen = withTracker(composer)(({ groups, getAssigneeName, han
                 icon={group.icon}
                 badge={group.users.length}
                 noPadding>
+
+                <SetBaseRoles group={group} />
+
                 <Table
                   structure={structure}
                   rows={group.users}
@@ -150,3 +159,42 @@ export const UsersScreen = withTracker(composer)(({ groups, getAssigneeName, han
     </div>
   </div>
 )
+
+const SetBaseRoles = compose(
+  withState('newBaseRoles', 'setNewBaseRoles', null),
+  withProps(props => ({
+    baseRoles: rolesToString(props.group.baseRoles)
+  })),
+  withProps(props => ({
+    newBaseRoles: props.newBaseRoles === null ? props.baseRoles : props.newBaseRoles
+  })),
+  withHandlers({
+    handleSubmit: props => e => Groups.actions.setBaseRoles.callPromise({
+      groupId: props.group._id,
+      baseRoles: stringToRoles(props.newBaseRoles)
+    }).then(_ => Alert.success('OK')).catch(e => {
+      console.error(e)
+      Alert.error(e.message)
+    })
+  })
+)(({ group, newBaseRoles, setNewBaseRoles, handleSubmit }) =>
+  <div style={rolesStyle}>
+    <TextField
+      value={newBaseRoles}
+      onChange={e => setNewBaseRoles(e.target.value)}
+      fullWidth
+      label='Basis-Gruppenberechtigungen'
+    />
+
+    {
+      !isEqual(rolesToString(group.baseRoles), newBaseRoles) &&
+        <Button
+          onClick={handleSubmit}
+        >Speichern</Button>
+    }
+  </div>
+)
+
+const rolesStyle = {
+  padding: 10
+}

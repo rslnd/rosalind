@@ -3,9 +3,9 @@ import Smooch from 'smooch'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { __ } from '../../i18n'
-import { Roles } from 'meteor/alanning:roles'
 import { Groups } from '../../api/groups'
 import { Users } from '../../api/users'
+import { rolesToString } from '../../client/users/ChangeRolesForm'
 
 const getTranslation = () => {
   const keys = [ 'headerText', 'inputPlaceholder', 'sendButtonText',
@@ -62,8 +62,10 @@ const init = () => {
                       username: user.username,
                       fullNameWithTitle: Users.methods.fullNameWithTitle(user),
                       employee: user.employee,
-                      roles: Roles.getRolesForUser(user._id).join(', '),
-                      group: group && group.name
+                      group: group && group.name,
+                      baseRoles: rolesToString(group.baseRoles),
+                      addedRoles: rolesToString(user.addedRoles),
+                      removedRoles: rolesToString(user.removedRoles)
                     }
                   })
                 })

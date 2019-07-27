@@ -22,7 +22,6 @@ ddp-rate-limiter
 audit-argument-checks@1.0.7
 
 # Security
-ongoworks:security@2.1.0
 mdg:validated-method
 
 # Collections
@@ -34,9 +33,6 @@ cultofcoders:publish-composite
 didericis:callpromise-mixin
 percolate:migrations
 ccorcos:subs-cache
-
-# Users
-alanning:roles
 
 # Util
 dandv:rate-limit

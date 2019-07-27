@@ -3,7 +3,6 @@ import every from 'lodash/fp/every'
 import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { MainLayout } from './MainLayout'
 import { subscribe } from '../../util/meteor/subscribe'
 
@@ -14,8 +13,6 @@ const composer = (props) => {
   const currentUser = props.isForcedLogout ? null : Meteor.user()
   const loggingIn = Meteor.loggingIn()
   const locale = 'de-AT'
-  // Track reactive role changes
-  Roles.getRolesForUser(currentUser)
 
   if (Meteor.user()) {
     subscribe('timesheets')
