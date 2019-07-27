@@ -9,6 +9,7 @@ import { Calendars } from '../../api/calendars'
 import { withProps } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
+import { CommentsContainer } from '../comments/CommentsContainer'
 
 export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
   appointments.map(a =>
@@ -23,8 +24,9 @@ export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
 
 export const Appointment = withProps(props => ({
   canSeeNote: hasRole(Meteor.userId(), ['appointments-note']),
+  canSeeComments: hasRole(Meteor.userId(), ['appointments-comments']),
   calendar: props.appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
-}))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle, canSeeNote }) =>
+}))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle, canSeeNote, canSeeComments }) =>
   <div style={
     isCurrent
       ? currentAppointmentStyle
@@ -40,6 +42,11 @@ export const Appointment = withProps(props => ({
     {
       canSeeNote &&
         <Note {...appointment} isCurrent={isCurrent} />
+    }
+
+    {
+      canSeeComments &&
+        <CommentsContainer docId={appointment._id} />
     }
 
     {
