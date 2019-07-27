@@ -1,10 +1,10 @@
 import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
-import { Roles } from 'meteor/alanning:roles'
 import { Users } from '../../api/users'
 import { Groups } from '../../api/groups'
 import { subscribe } from '../../util/meteor/subscribe'
 import { UsersScreen } from './UsersScreen'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const composer = (props) => {
   subscribe('users-permissions')
@@ -24,7 +24,7 @@ const composer = (props) => {
   }, ...groupedUsers]
 
   const getAssigneeName = id => id && Users.methods.fullNameWithTitle(Users.findOne(id), { removed: true })
-  const isInRole = (user, role) => Roles.userIsInRole(user, [role])
+  const isInRole = (user, role) => hasRole(user._id, [role])
   const handleUpdate = (_id, update) => {
     Users.update({ _id }, update)
   }

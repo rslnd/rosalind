@@ -7,7 +7,6 @@ import moment from 'moment-timezone'
 import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { dateToDay, dayToDate, daySelector } from '../../util/time/day'
 import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
@@ -18,6 +17,7 @@ import { ReportsScreen } from './ReportsScreen'
 import { withPromise } from '../components/withPromise'
 import { subscribe } from '../../util/meteor/subscribe'
 import { getClientKey, toNative } from '../../startup/client/native/events'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const composer = props => {
   const dateParam = idx(props, _ => _.match.params.date)
@@ -35,7 +35,7 @@ const composer = props => {
   const reports = sortBy(r => r && r.calendar && r.calendar.order)(reportsWithCalendar)
 
   const isPrint = props.location.hash === '#print'
-  const canShowRevenue = Roles.userIsInRole(Meteor.userId(), ['reports-showRevenue', 'admin']) || isPrint
+  const canShowRevenue = hasRole(Meteor.userId(), ['reports-showRevenue', 'admin']) || isPrint
 
   const userIdToNameMapping = fromPairs(Users.find({}).fetch().map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
   const mapUserIdToName = id => userIdToNameMapping[id]

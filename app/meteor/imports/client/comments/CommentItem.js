@@ -1,12 +1,12 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { __ } from '../../i18n'
 import { grow } from '../components/form/rowStyle'
 import { Avatar } from '../users/Avatar'
 import { UserHelper } from '../users/UserHelper'
 import { RelativeTime } from '../helpers/RelativeTime'
 import { InlineEdit } from '../components/form/InlineEdit'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const childCommentStyle = {
   display: 'flex',
@@ -21,7 +21,7 @@ const removeLinkStyle = {
 }
 
 const RemoveLink = ({ comment, onRemove }) => (
-  (comment.createdBy === Meteor.userId() || Roles.userIsInRole(Meteor.userId(), ['admin'])) &&
+  (comment.createdBy === Meteor.userId() || hasRole(Meteor.userId(), ['admin'])) &&
     <span
       onClick={() => onRemove(comment._id)}
       style={removeLinkStyle}>

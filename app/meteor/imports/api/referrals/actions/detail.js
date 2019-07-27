@@ -1,4 +1,3 @@
-import { Roles } from 'meteor/alanning:roles'
 import identity from 'lodash/identity'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
@@ -6,6 +5,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const detail = ({ Referrals, Referrables }) => {
   return new ValidatedMethod({
@@ -29,7 +29,7 @@ export const detail = ({ Referrals, Referrables }) => {
         return
       }
 
-      if (!Roles.userIsInRole(this.userId, ['admin', 'reports'])) {
+      if (!hasRole(this.userId, ['admin', 'reports'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 

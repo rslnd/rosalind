@@ -2,12 +2,12 @@ import { withTracker } from '../../../components/withTracker'
 import { __ } from '../../../../i18n'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { Schedules } from '../../../../api/schedules'
 import { Calendars } from '../../../../api/calendars'
 import { Appointments } from '../../../../api/appointments'
 import { dateToDay } from '../../../../util/time/day'
 import { HeaderRow } from './HeaderRow'
+import { hasRole } from '../../../../util/meteor/hasRole'
 
 const composer = (props) => {
   const day = dateToDay(props.date)
@@ -52,7 +52,7 @@ const composer = (props) => {
     })
   }
 
-  const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
+  const canEditSchedules = hasRole(Meteor.userId(), ['admin', 'schedules-edit'])
 
   return {
     ...props,

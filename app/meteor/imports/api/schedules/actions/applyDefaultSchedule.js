@@ -1,12 +1,12 @@
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { transformDefaultsToOverrides } from '../methods/transformDefaultsToOverrides'
 import { rangeToDays, isSame, daySelector } from '../../../util/time/day'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const applyDefaultSchedule = ({ Schedules }) => {
   return new ValidatedMethod({
@@ -21,7 +21,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
     run ({ calendarId, assigneeId, from, to }) {
       if ((this.connection && !this.userId) ||
-        !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
+        !hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 

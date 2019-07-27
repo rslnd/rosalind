@@ -1,9 +1,9 @@
 import moment from 'moment'
 import { Match } from 'meteor/check'
-import { Roles } from 'meteor/alanning:roles'
 import { Reports } from '../'
 import { isTrustedNetwork } from '../../customer/server/isTrustedNetwork'
 import { publish } from '../../../util/meteor/publish'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const publication = () => {
   publish({
@@ -15,7 +15,7 @@ export const publication = () => {
       to: Match.Optional(Date)
     },
     fn: function ({ date, from, to }) {
-      const canShowRevenue = Roles.userIsInRole(this.userId, ['reports-showRevenue', 'admin'], Roles.GLOBAL_GROUP) || (!this.userId && this.connection && isTrustedNetwork(this.connection.clientAddress))
+      const canShowRevenue = hasRole(this.userId, ['reports-showRevenue', 'admin']) || (!this.userId && this.connection && isTrustedNetwork(this.connection.clientAddress))
 
       const fields = canShowRevenue
         ? Reports.fields.withRevenue

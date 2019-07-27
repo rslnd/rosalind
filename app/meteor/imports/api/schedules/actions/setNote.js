@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Day } from '../../../util/schema/day'
 import { daySelector } from '../../../util/time/day'
 import { Events } from '../../events'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const setNote = ({ Schedules }) => {
   return new ValidatedMethod({
@@ -22,7 +22,7 @@ export const setNote = ({ Schedules }) => {
       console.log({ calendarId, day, note, noteDetails })
 
       if ((this.connection && !this.userId) ||
-        !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
+        !hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 

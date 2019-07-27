@@ -5,7 +5,6 @@ import { toClass } from 'recompose'
 import { withTracker } from '../../components/withTracker'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../../i18n'
-import { Roles } from 'meteor/alanning:roles'
 import Alert from 'react-s-alert'
 import { Appointments } from '../../../api/appointments'
 import { Calendars } from '../../../api/calendars'
@@ -13,6 +12,7 @@ import { Users } from '../../../api/users'
 import { Patients } from '../../../api/patients'
 import { WaitlistScreen } from './WaitlistScreen'
 import { subscribe } from '../../../util/meteor/subscribe'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 const action = (action, appointmentId, options = {}, args = {}) => {
   const fn = () => Appointments.actions[action].callPromise({
@@ -90,12 +90,12 @@ const composer = props => {
     }
   })
 
-  const canViewAllWaitlists = Roles.userIsInRole(Meteor.userId(), [
+  const canViewAllWaitlists = hasRole(Meteor.userId(), [
     'admin',
     'waitlist-all'
   ])
 
-  const canChangeWaitlistAssignee = Roles.userIsInRole(Meteor.userId(), [
+  const canChangeWaitlistAssignee = hasRole(Meteor.userId(), [
     'admin',
     'waitlist-change'
   ])

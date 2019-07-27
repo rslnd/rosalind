@@ -1,9 +1,9 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { withTracker } from '../components/withTracker'
 import { CalendarSelect } from '../calendars/CalendarSelect'
 import { Waitlist } from '../appointments/waitlist'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const DashboardComponent = ({ canSeeWaitlist, canSeeAppointments, ...props }) => {
   if (!canSeeAppointments && canSeeWaitlist) {
@@ -18,8 +18,8 @@ const DashboardComponent = ({ canSeeWaitlist, canSeeAppointments, ...props }) =>
 }
 
 const composer = props => {
-  const canSeeWaitlist = Roles.userIsInRole(Meteor.userId(), ['admin', 'waitlist'])
-  const canSeeAppointments = Roles.userIsInRole(Meteor.userId(), ['admin', 'appointments-*'])
+  const canSeeWaitlist = hasRole(Meteor.userId(), ['admin', 'waitlist'])
+  const canSeeAppointments = hasRole(Meteor.userId(), ['admin', 'appointments-*'])
 
   return {
     canSeeWaitlist,

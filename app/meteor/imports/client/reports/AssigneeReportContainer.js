@@ -8,7 +8,6 @@ import {
 import moment from 'moment-timezone'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { withTracker } from '../components/withTracker'
 import { getAssignee } from '../../api/reports/methods/getAssignee'
 import { Calendars } from '../../api/calendars'
@@ -19,6 +18,7 @@ import { Referrals } from '../../api/referrals'
 import { AssigneeReportScreen } from './AssigneeReportScreen'
 import { withPromise } from '../components/withPromise'
 import { subscribe } from '../../util/meteor/subscribe'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const composer = props => {
   const username = idx(props, _ => _.match.params.username)
@@ -55,7 +55,7 @@ const composer = props => {
 
   const loading = !subscription.ready()
   const isPrint = props.location.hash === '#print'
-  const canShowRevenue = Roles.userIsInRole(Meteor.userId(), ['reports-showRevenue', 'admin']) || isPrint
+  const canShowRevenue = hasRole(Meteor.userId(), ['reports-showRevenue', 'admin']) || isPrint
 
   const handleRangeChange = ({ start, end }) => {
     const search = toQuery({

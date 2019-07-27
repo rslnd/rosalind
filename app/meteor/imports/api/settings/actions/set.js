@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { Roles } from 'meteor/alanning:roles'
 import { Events } from '../../events'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const set = ({ Settings }) => {
   return new ValidatedMethod({
@@ -14,7 +14,7 @@ export const set = ({ Settings }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!Roles.userIsInRole(this.userId, ['admin', 'settings-edit'])) {
+      if (!hasRole(this.userId, ['admin', 'settings-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 

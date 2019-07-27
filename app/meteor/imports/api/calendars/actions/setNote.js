@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { Roles } from 'meteor/alanning:roles'
 import { Events } from '../../events'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const setNote = ({ Calendars }) => {
   return new ValidatedMethod({
@@ -19,7 +19,7 @@ export const setNote = ({ Calendars }) => {
         return true
       }
 
-      if (!this.userId || !Roles.userIsInRole(this.userId, ['admin', 'schedules-edit'])) {
+      if (!this.userId || !hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 

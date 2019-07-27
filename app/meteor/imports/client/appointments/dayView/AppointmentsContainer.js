@@ -1,11 +1,9 @@
 import idx from 'idx'
 import moment from 'moment-timezone'
 import memoize from 'lodash/memoize'
-import uniq from 'lodash/uniq'
 import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { __ } from '../../../i18n'
 import { compose } from 'recompose'
 import { withTracker } from '../../components/withTracker'
@@ -15,10 +13,9 @@ import { Patients } from '../../../api/patients'
 import { Calendars } from '../../../api/calendars'
 import { Appointments } from '../../../api/appointments'
 import { Schedules } from '../../../api/schedules'
-import { Constraints } from '../../../api/constraints'
-import { Availabilities } from '../../../api/availabilities'
 import { AppointmentsScreen } from './AppointmentsScreen'
 import { subscribeCache } from '../../../util/meteor/subscribe'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 const parseDay = memoize(d => moment(d))
 
@@ -53,7 +50,7 @@ const composer = (props) => {
   calendar.slotSize = calendar.slotSize || 5
 
   const day = dateToDay(date)
-  const canEditSchedules = Roles.userIsInRole(Meteor.userId(), ['admin', 'schedules-edit'])
+  const canEditSchedules = hasRole(Meteor.userId(), ['admin', 'schedules-edit'])
   const { dispatch, move } = props
 
   const appointmentsSub = subsCache.subscribe('appointments-day', { ...day, calendarId })

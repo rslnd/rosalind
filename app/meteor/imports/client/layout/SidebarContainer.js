@@ -2,11 +2,11 @@ import identity from 'lodash/identity'
 import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 import { Calendars } from '../../api/calendars'
 import { InboundCallsTopics, InboundCalls } from '../../api/inboundCalls'
 import { Sidebar } from './Sidebar'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const sidebarItems = ({ history }) => {
   const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
@@ -124,7 +124,7 @@ const sidebarItems = ({ history }) => {
 
 const composer = (props) => {
   const items = sidebarItems(props).filter((item) => {
-    return (!item.roles || (item.roles && Roles.userIsInRole(Meteor.user(), item.roles)))
+    return (!item.roles || (item.roles && hasRole(Meteor.userId(), item.roles)))
   }).map((item) => {
     if (item.countBadge) {
       const count = Counts.get(item.countBadge)
