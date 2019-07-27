@@ -8,6 +8,7 @@ import { Patients } from '../../api/patients'
 import { subscribe } from '../../util/meteor/subscribe'
 import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
+import { connect } from 'react-redux'
 
 const fullNameWithTitle = _id => {
   const user = _id && Users.findOne({ _id })
@@ -23,6 +24,14 @@ const composer = props => {
   const currentAppointment = Appointments.findOne({ _id: appointmentId })
   const patientId = currentAppointment ? currentAppointment.patientId : props.patientId
   const patient = Patients.findOne({ _id: patientId })
+
+  // Put patient into search box
+  if (patient) {
+    props.dispatch({
+      type: 'PATIENT_CHANGE_VALUE',
+      patient
+    })
+  }
 
   const userId = Meteor.userId()
   const canRefer = hasRole(userId, ['referrals', 'referrals-immediate', 'referrals-delayed'])
@@ -98,6 +107,7 @@ const composer = props => {
 }
 
 export const PatientsAppointmentsContainer = compose(
+  connect(),
   withState('filter', 'setFilter', null), // default filter is loaded from user preferences
   withTracker(composer)
 )(PatientAppointmentsModal)
