@@ -14,44 +14,6 @@ import { compose, withState, withProps, withHandlers } from 'recompose'
 import { Groups } from '../../api/groups'
 import { rolesToString, stringToRoles } from './ChangeRolesForm'
 
-const toggleablePermissions = [
-  {
-    permission: 'appointments',
-    description: 'Kalender',
-    icon: 'calendar'
-  },
-  {
-    permission: 'waitlist',
-    description: 'Warteliste',
-    icon: 'angle-double-right'
-  },
-  {
-    permission: 'schedules-edit',
-    description: 'Anwesenheiten bearbeiten',
-    icon: 'clock-o'
-  },
-  {
-    permission: 'inboundCalls',
-    description: 'Anrufe',
-    icon: 'phone'
-  },
-  {
-    permission: 'reports',
-    description: 'Berichte',
-    icon: 'bar-chart'
-  },
-  {
-    permission: 'reports-showRevenue',
-    description: 'Umsätze in Berichten',
-    icon: 'eur'
-  },
-  {
-    permission: 'users-edit',
-    description: 'Benutzer verwalten',
-    icon: 'user-plus'
-  }
-]
-
 const structure = ({ getAssigneeName, isInRole }) => [
   {
     header: '',
@@ -63,12 +25,15 @@ const structure = ({ getAssigneeName, isInRole }) => [
     render: u => getAssigneeName(u._id)
   },
 
-  ...toggleablePermissions.map(({ description, icon, permission }) => ({
-    description,
-    icon,
-    style: { width: 45 },
-    render: u => isInRole(u, permission) && <Icon name='check' />
-  })),
+  {
+    header: 'Zusätzliche Berechtigungen',
+    render: u => rolesToString(u.addedRoles)
+  },
+
+  {
+    header: 'Entfernte Berechtigungen',
+    render: u => rolesToString(u.removedRoles)
+  },
 
   {
     icon: 'key',
