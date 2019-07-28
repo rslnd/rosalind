@@ -48,6 +48,14 @@ export const action = ({ name, args = {}, roles, allowAnonymous, simulation = tr
 
 // Macro to add insert/update/softRemove actions
 export const lifecycleActions = ({ Collection, singular, plural, roles }) => {
+  check(singular, String)
+  check(plural, String)
+  check(roles, [String])
+
+  if (!Collection) {
+    throw new Error('Need to pass a Collection instance to lifecycleActions')
+  }
+
   return {
     insert: action({
       name: `${plural}/insert`,

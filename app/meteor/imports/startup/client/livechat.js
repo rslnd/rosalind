@@ -63,7 +63,7 @@ const init = () => {
                       fullNameWithTitle: Users.methods.fullNameWithTitle(user),
                       employee: user.employee,
                       group: group && group.name,
-                      baseRoles: rolesToString(group.baseRoles),
+                      baseRoles: group && rolesToString(group.baseRoles),
                       addedRoles: rolesToString(user.addedRoles),
                       removedRoles: rolesToString(user.removedRoles)
                     }
