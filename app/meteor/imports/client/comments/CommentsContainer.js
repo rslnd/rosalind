@@ -1,4 +1,4 @@
-import { toClass, compose } from 'recompose'
+import { toClass, compose, withState, withProps } from 'recompose'
 import { Comments } from '../../api/comments'
 import { CommentsBox } from './CommentsBox'
 import { withTracker } from '../components/withTracker'
@@ -24,6 +24,11 @@ const commentsBoxComposer = (props) => {
 }
 
 export const CommentsContainer = compose(
+  withState('_collapsed', 'setCollapsed', null),
+  withProps(props => ({
+    collapsed: props._collapsed === null
+      ? props.collapsed
+      : (props.isCollapsed) })),
   withTracker(commentsBoxComposer),
   toClass
 )(CommentsBox)

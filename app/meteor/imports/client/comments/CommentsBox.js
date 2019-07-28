@@ -12,26 +12,46 @@ export const CommentsBox = ({
   onRemove,
   canEdit,
   style,
-  actions
-}) => {
-  return (
-    <div>
-      <CommentsList
-        canEdit={canEdit}
-        onClick={onClick}
-        onEdit={onEdit}
-        comments={comments}
-        onRemove={onRemove}
-        style={style} />
-      {
-        newComment &&
-          <NewComment
-            docId={docId}
-            autoFocus={autoFocus}
-            style={style}
-            actions={actions}
-          />
-      }
-    </div>
-  )
+  actions,
+  setCollapsed,
+  collapsed
+}) =>
+  collapsed
+    ? <Collapsed
+      comments={comments}
+      setCollapsed={setCollapsed}
+    />
+    : (
+      <div>
+        <CommentsList
+          canEdit={canEdit}
+          onClick={onClick}
+          onEdit={onEdit}
+          comments={comments}
+          onRemove={onRemove}
+          style={style} />
+        {
+          newComment &&
+            <NewComment
+              docId={docId}
+              autoFocus={autoFocus}
+              style={style}
+              actions={actions}
+            />
+        }
+      </div>
+    )
+
+const Collapsed = ({ comments, setCollapsed }) =>
+  <div
+    style={collapsedStyle}
+    onClick={() => setCollapsed(false)}
+  >
+    {comments.length} Anmerkungen
+  </div>
+
+const collapsedStyle = {
+  opacity: 0.8,
+  padding: 4,
+  textAlign: 'right'
 }

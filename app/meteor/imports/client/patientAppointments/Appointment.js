@@ -25,8 +25,9 @@ export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
 export const Appointment = withProps(props => ({
   canSeeNote: hasRole(Meteor.userId(), ['appointments-note']),
   canSeeComments: hasRole(Meteor.userId(), ['appointments-comments']),
+  collapseComments: hasRole(Meteor.userId(), ['appointments-commentsCollapse']),
   calendar: props.appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
-}))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle, canSeeNote, canSeeComments }) =>
+}))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle, canSeeNote, canSeeComments, collapseComments }) =>
   <div style={
     isCurrent
       ? currentAppointmentStyle
@@ -46,7 +47,7 @@ export const Appointment = withProps(props => ({
 
     {
       canSeeComments &&
-        <CommentsContainer docId={appointment._id} />
+        <CommentsContainer docId={appointment._id} collapsed={collapseComments} />
     }
 
     {
