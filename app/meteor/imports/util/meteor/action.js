@@ -45,3 +45,44 @@ export const action = ({ name, args = {}, roles, allowAnonymous, simulation = tr
     }
   })
 }
+
+// Macro to add insert/update/softRemove actions
+export const lifecycleActions = ({ Collection, singular, plural, roles }) => {
+  return {
+    insert: action({
+      name: `${plural}/insert`,
+      roles,
+      args: {
+        [singular]: Object
+      },
+      fn: function (a) {
+        const _id = Collection.insert(a[singular])
+        console.log(`[${plural}] insert (lifecycle) ${_id} by ${this.userId}`)
+        return _id
+      }
+    }),
+    update: action({
+      name: `${plural}/update`,
+      roles,
+      args: {
+        [`${singular}Id`]: String,
+        update: Object
+      },
+      fn: function (a) {
+        Collection.update({ _id: a[`${singular}Id`] }, a.update)
+        console.log(`[${plural}] update (lifecycle) ${a[`${singular}Id`]} by ${this.userId}`)
+      }
+    }),
+    softRemove: action({
+      name: `${plural}/softRemove`,
+      roles,
+      args: {
+        [`${singular}Id`]: String
+      },
+      fn: function (a) {
+        Collection.softRemove({ _id: a[`${singular}Id`] })
+        console.log(`[${plural}] softRemove (lifecycle) ${a[`${singular}Id`]} by ${this.userId}`)
+      }
+    })
+  }
+}

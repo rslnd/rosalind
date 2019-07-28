@@ -16,22 +16,19 @@ const composer = (props) => {
 
   const getCalendarName = _id => _id && ((Calendars.findOne({ _id }) || {}).name)
   const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }, { removed: true }) || {})
-  const handleUpdate = (_id, update) => {
-    Tags.update({ _id }, update)
-    Alert.success(__('ui.saved'))
-  }
-  const handleInsert = (newTag) => {
-    try {
-      Tags.insert(newTag)
-      Alert.success(__('ui.saved'))
-    } catch (e) {
-      console.error(e)
-      Alert.error(__('ui.error'))
-    }
-  }
-  const handleRemove = _id => {
-    Tags.softRemove({ _id })
-  }
+
+  const action = x => x
+    .then(_ => Alert.success(__('ui.saved')))
+    .catch(e => { console.error(e); Alert.error(__('ui.error')) })
+
+  const handleUpdate = (tagId, update) =>
+    action(Tags.actions.update.callPromise({ tagId, update }))
+
+  const handleInsert = (tag) =>
+    action(Tags.actions.insert.callPromise({ tag }))
+
+  const handleRemove = tagId =>
+    action(Tags.actions.softRemove.callPromise({ tagId }))
 
   return { tags, getCalendarName, getAssigneeName, handleUpdate, handleInsert, handleRemove }
 }
