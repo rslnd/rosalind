@@ -11,15 +11,16 @@ const composer = (props) => {
 
   const getCalendarName = _id => _id && Calendars.findOne({ _id }, { removed: true }) && Calendars.findOne({ _id }, { removed: true }).name
   const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }, { removed: true }))
-  const handleUpdate = (_id, update) => {
-    Constraints.update({ _id }, update)
-  }
-  const handleInsert = schedule => {
-    Constraints.insert(schedule)
-  }
-  const handleRemove = (_id) => {
-    Constraints.softRemove({ _id })
-  }
+
+  const handleUpdate = (_id, update) =>
+    Constraints.actions.update.callPromise({ _id }, update)
+
+  const handleInsert = schedule =>
+    Constraints.actions.insert.callPromise(schedule)
+
+  const handleRemove = (_id) =>
+    Constraints.actions.softRemove.callPromise({ _id })
+
   const defaultValues = () => ({
     note: __('schedules.constraint')
   })

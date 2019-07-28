@@ -7,6 +7,6 @@ export const actions = ({ Calendars }) => ({
     Collection: Calendars,
     singular: 'calendar',
     plural: 'calendars',
-    roles: ['admin']
+    roles: ['admin', 'calendars-edit']
   })
 })

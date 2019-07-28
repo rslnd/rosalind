@@ -14,23 +14,18 @@ const composer = (props) => {
   const getCalendarName = _id => _id && ((Calendars.findOne({ _id }) || {}).name)
   const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }, { removed: true }) || {})
 
-  const handleUpdate = (_id, update) => {
-    Referrables.update({ _id }, update)
-    Alert.success(__('ui.saved'))
-  }
+  const action = x => x
+    .then(_ => Alert.success(__('ui.saved')))
+    .catch(e => { console.error(e); Alert.error(__('ui.error')) })
 
-  const handleInsert = (newReferrable) => {
-    try {
-      Referrables.insert(newReferrable)
-      Alert.success(__('ui.saved'))
-    } catch (e) {
-      console.error(e)
-      Alert.error(__('ui.error'))
-    }
-  }
-  const handleRemove = _id => {
-    Referrables.softRemove({ _id })
-  }
+  const handleUpdate = (referrableId, update) =>
+    action(Referrables.actions.update.callPromise({ referrableId, update }))
+
+  const handleInsert = (referrable) =>
+    action(Referrables.actions.insert.callPromise({ referrable }))
+
+  const handleRemove = (referrableId) =>
+    action(Referrables.actions.softRemove.callPromise({ referrableId }))
 
   const defaultReferrable = () => ({
     order: 100,

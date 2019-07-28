@@ -30,7 +30,7 @@ export class HolidaysContainerComponent extends React.Component {
         createdBy: Meteor.userId()
       }
 
-      Schedules.insert(holidays, (err) => {
+      Schedules.actions.insert.call(holidays, (err) => {
         if (err) {
           Alert.error(__('ui.error'))
           reject(err)
@@ -46,7 +46,7 @@ export class HolidaysContainerComponent extends React.Component {
 
   handleRemove ({ _id }) {
     return () => {
-      Schedules.softRemove(({ _id }), err => {
+      Schedules.actions.softRemove.call(({ _id }), err => {
         if (err) {
           Alert.error(__('ui.error'))
           console.error(err)

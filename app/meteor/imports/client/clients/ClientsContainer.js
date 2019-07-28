@@ -13,12 +13,12 @@ const composer = (props) => {
 
   const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }, { removed: true }))
   const getGroupName = id => id && Groups.findOne(id).name
-  const handleUpdate = (_id, update) => {
-    Clients.update({ _id }, update)
-  }
-  const handleRemove = (_id) => {
-    Clients.softRemove({ _id })
-  }
+
+  const handleUpdate = (clientId, update) =>
+    Clients.actions.update.callPromise({ clientId, update })
+
+  const handleRemove = (clientId) =>
+    Clients.actions.softRemove.callPromise({ clientId })
 
   return {
     clients,
