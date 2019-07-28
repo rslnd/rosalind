@@ -10,6 +10,9 @@ import { Indicator } from '../appointments/appointment/Indicator'
 import { Logs } from '../helpers/Logs'
 import { Stamps } from '../helpers/Stamps'
 import { logFormat } from '../appointments/info/logFormat'
+import { Meteor } from 'meteor/meteor'
+import { withTracker } from '../components/withTracker'
+import { hasRole } from '../../util/meteor/hasRole'
 
 export const Info = compose(
   withState('showLogs', 'setShowLogs', false),
@@ -131,10 +134,16 @@ const reassignedStyle = {
   opacity: 0.6
 }
 
-const Revenue = withHandlers({
-  updateRevenue: props => revenue => updateAppointment(props, { revenue: revenue })
-})(({ revenue, updateRevenue }) =>
-  <Money
+const Revenue = compose(
+  withTracker(props => ({
+    ...props,
+    canSee: hasRole(Meteor.userId(), ['appointments-revenue'])
+  })),
+  withHandlers({
+    updateRevenue: props => revenue => updateAppointment(props, { revenue: revenue })
+  })
+)(({ canSee, revenue, updateRevenue }) =>
+  !canSee ? null : <Money
     initialValue={(revenue > 0 || revenue === 0) ? twoPlacesIfNeeded(revenue || 0) : ''}
     onChange={updateRevenue}
     placeholder={<span style={placeholderStyle}>€__</span>}
