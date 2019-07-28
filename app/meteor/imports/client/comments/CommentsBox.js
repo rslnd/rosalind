@@ -46,12 +46,13 @@ const Collapsed = ({ comments, setCollapsed }) =>
   <div
     style={collapsedStyle}
     onClick={() => setCollapsed(false)}
+    title='Anmerkungen'
   >
-    {comments.length} Anmerkungen
+    {comments.length} Anm.
   </div>
 
 const collapsedStyle = {
-  opacity: 0.8,
+  opacity: 0.6,
   padding: 4,
   textAlign: 'right'
 }

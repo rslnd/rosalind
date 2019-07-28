@@ -27,7 +27,9 @@ const composer = props => {
   const record = Records.findOne({ calendarId, patientId })
 
   const userId = Meteor.userId()
-  const canEdit = record &&
+  const canSee = hasRole(userId, ['records'])
+
+  const canEdit = canSee && record &&
     (
       hasRole(userId, ['admin', 'records-edit']) ||
       (
@@ -36,11 +38,11 @@ const composer = props => {
       )
     )
 
-  const canInsert = !record
+  const canInsert = canSee && !record
 
-  const readOnly = !(canInsert || canEdit)
+  const readOnly = canSee && !(canInsert || canEdit)
 
-  const canResolve = record && (
+  const canResolve = record && canSee && (
     hasRole(userId, ['admin', 'records-edit']) || (
       currentAppointment && currentAppointment.calendarId === record.calendarId &&
       (
@@ -53,6 +55,7 @@ const composer = props => {
   return {
     ...props,
     record,
+    canSee,
     canEdit,
     canInsert,
     readOnly,
@@ -96,8 +99,8 @@ export const FutureRecord = compose(
         recordId: props.record._id
       }))
   })
-)(({ record, handleChange, handleRemove, calendarId, setCalendarId, style, readOnly, canResolve, fieldStyle }) =>
-  <div>
+)(({ record, handleChange, handleRemove, calendarId, setCalendarId, style, readOnly, canResolve, fieldStyle, canSee }) =>
+  !canSee ? null : <div>
     {
       !readOnly
         ? (
