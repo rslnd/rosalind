@@ -28,7 +28,6 @@ const composer = (props) => {
   }
 
   const isReadyToPrint = every(s => s.ready())([
-    subscribe('roles'),
     subscribe('users'),
     subscribe('groups'),
     subscribe('tags'),

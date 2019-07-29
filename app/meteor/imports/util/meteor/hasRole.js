@@ -11,10 +11,11 @@ export const effectiveRoles = ({ baseRoles = [], addedRoles = [], removedRoles =
   difference(union(baseRoles, addedRoles), removedRoles)
 
 export const hasRole = (userId, requiredRoles) => {
+  if (!userId) { return false }
+
   check(userId, String)
   check(requiredRoles, [String])
 
-  if (!userId) { return false }
   if (!requiredRoles) { return false }
   if (requiredRoles.length === 0) { return false }
 

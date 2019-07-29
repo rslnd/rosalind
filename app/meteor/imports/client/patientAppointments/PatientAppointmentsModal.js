@@ -8,7 +8,6 @@ import Paper from '@material-ui/core/Paper'
 import { Close } from './Close'
 import { Patient } from './Patient'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
-import { Loading } from '../components/Loading'
 import Button from '@material-ui/core/Button'
 import { __ } from '../../i18n'
 
