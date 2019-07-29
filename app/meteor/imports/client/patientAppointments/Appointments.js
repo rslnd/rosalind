@@ -18,7 +18,7 @@ export const Appointments = compose(
     })
   }),
   withPropsOnChange(
-    ['show', 'loading'],
+    ['show', 'loading', 'appointmentsCount'],
     props => props.scrollToBottom()
   )
 )(({

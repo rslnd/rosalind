@@ -45,7 +45,15 @@ export const PatientAppointmentsModal = compose(
             <div style={columnsStyle}>
               <div style={appointmentsStyle}>
                 <ErrorBoundary>
-                  <Appointments {...props} show={show} />
+                  <Appointments
+                    {...props}
+                    show={show}
+                    appointmentsCount={(
+                      (props.pastAppointments ? props.pastAppointments.length : 0) +
+                      (props.futureAppointments ? props.futureAppointments.length : 0) +
+                      (props.currentAppointment ? 1 : 0)
+                    )} // Scrolls to bottom when changed
+                  />
                 </ErrorBoundary>
               </div>
               <div style={patientSidebarStyle}>
