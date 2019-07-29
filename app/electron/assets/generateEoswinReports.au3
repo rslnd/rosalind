@@ -99,7 +99,7 @@ Func OpenEOSWin()
   Local $sEoswinExe = GetCmdLineArg("eoswinExe", "D:\Eoswin\ADSPraxis.exe")
   Info("Launching EOSWin via " & $sEoswinExe)
   Run($sEoswinExe, "", @SW_MAXIMIZE)
-  $hLoginWnd = ExpectWindow("EOSWin Anmeldung", 20)
+  Local $hLoginWnd = ExpectWindow("EOSWin Anmeldung", 20)
 
   ExpectControlSend($hLoginWnd, "", "[CLASS:TEditName; INSTANCE: 1]", "{CAPSLOCK off}{SHIFTDOWN}{SHIFTUP}")
   ExpectControlSend($hLoginWnd, "", "[CLASS:TEditName; INSTANCE: 1]", "--")
@@ -114,10 +114,10 @@ Func CloseEOSWin($iRetries = 4)
 
   Info("Checking whether EOSWin is running")
 
-  $hSingletonMessageWnd = WinWait("Bestätigung", "OK", 2)
-  $hMainWnd = WinWait("EOSWin", "", 2)
+  Local $hSingletonMessageWnd = WinWait("Bestätigung", "OK", 2)
+  Local $hMainWnd = WinWait("EOSWin", "", 2)
 
-  $hWnd = Null
+  Local $hWnd = Null
   If ($hSingletonMessageWnd) Then
     $hWnd = $hSingletonMessageWnd
   ElseIf ($hMainWnd) Then
@@ -126,11 +126,11 @@ Func CloseEOSWin($iRetries = 4)
 
   If ($hWnd) Then
     Info("EOSWin is running, attempting to terminate process")
-    $iPid = WinGetProcess($hWnd)
+    Local $iPid = WinGetProcess($hWnd)
     Info("Terminating PID " & String($iPid))
     ProcessClose($iPid)
     Info("Termination result was " & String(@error))
-    $iOk = ProcessWaitClose($iPid, 10)
+    Local $iOk = ProcessWaitClose($iPid, 10)
     If ($iOk = 1) Then
       Info("Process was terminated")
       ; There may be more instances running
@@ -148,7 +148,7 @@ EndFunc
 Func GenerateEOSWinReport($sReportType)
   Info("Generating report " & $sReportType)
   sleep(3000)
-  $hEosWnd = ExpectWindow("EOSWin Ordination")
+  Local $hEosWnd = ExpectWindow("EOSWin Ordination")
   Local $sListWindowTitle = "Auswertungen/Serienbrief [" & $sReportType
 
   Info("Navigating menu bar")
@@ -156,7 +156,7 @@ Func GenerateEOSWinReport($sReportType)
 
   Sleep(800)
 
-  $hListWnd = ExpectWindow($sListWindowTitle)
+  Local $hListWnd = ExpectWindow($sListWindowTitle)
 
   ; Create new report: "Neu"
   Info("Sending n to create new report")
@@ -164,7 +164,7 @@ Func GenerateEOSWinReport($sReportType)
   Sleep(500)
 
   ; Date range prompt
-  $hDatePromptWnd = ExpectWindow($sReportType)
+  Local $hDatePromptWnd = ExpectWindow($sReportType)
   Info("Sending start date")
   WinActivate($hDatePromptWnd)
   ExpectControlSend($hDatePromptWnd, "", "[CLASS:TEditDate; INSTANCE:1]", GetDate())
@@ -177,7 +177,7 @@ Func GenerateEOSWinReport($sReportType)
   ExpectControlSend($hDatePromptWnd, "", "[CLASS:TEditDate; INSTANCE:2]", "{ENTER}")
 
   ; Overwrite any existing report for the same date range
-  $hOverwritePromptWnd = WinWait("Warnung","", 10)
+  Local $hOverwritePromptWnd = WinWait("Warnung","", 10)
   If ($hOverwritePromptWnd) Then
     Info("Dismissing warning about overwriting existing report")
     Sleep(500)
@@ -193,7 +193,7 @@ Func GenerateEOSWinReport($sReportType)
   EndIf
 
   Local $iReportGenerationTimeout = Int(GetCmdLineArg("reportGenerationTimeout", 300))
-  $hReportWnd = ExpectWindow($sReportType & "  [ vom", $iReportGenerationTimeout) ; note the two space characters
+  Local $hReportWnd = ExpectWindow($sReportType & "  [ vom", $iReportGenerationTimeout) ; note the two space characters
 
   Info("Closing report window")
   WinClose($hReportWnd)
