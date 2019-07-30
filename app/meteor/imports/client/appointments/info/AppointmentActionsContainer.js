@@ -17,6 +17,8 @@ const composer = (props) => {
 
   const { admitted, canceled, treatmentStart, treatmentEnd } = appointment
   const args = { appointmentId: props.appointmentId }
+  const patient = appointment.patientId && Patients.findOne({ _id: appointment.patientId })
+
   const closeModal = () => props.onClose && props.onClose()
 
   const setAdmitted = () => {
@@ -45,7 +47,7 @@ const composer = (props) => {
   const setCanceled = () => {
     Alert.success(__('appointments.setCanceledSuccess'))
     Appointments.actions.setCanceled.call(args)
-    closeModal()
+    searchForPatient()
   }
 
   const setNoShow = () => {
@@ -75,19 +77,16 @@ const composer = (props) => {
   const softRemove = () => {
     Alert.success(__('appointments.softRemoveSuccess'))
     Appointments.actions.softRemove.callPromise(args)
-    closeModal()
+    searchForPatient()
   }
 
   let move
   if (props.onMoveStart) {
     move = () => {
       let patient = null
-      if (appointment.patientId) {
-        patient = Patients.findOne({ _id: appointment.patientId })
-      }
 
       const calendar = Calendars.findOne({ _id: appointment.calendarId })
-
+      searchForPatient()
       props.onMoveStart({
         appointment,
         patient,
@@ -108,6 +107,17 @@ const composer = (props) => {
     }
   }
 
+  // Put patient into search box
+  const searchForPatient = () => {
+    if (patient) {
+      props.dispatch({
+        type: 'PATIENT_CHANGE_VALUE',
+        patient
+      })
+    }
+    closeModal()
+  }
+
   return {
     appointment,
     canceled,
@@ -125,7 +135,8 @@ const composer = (props) => {
     unsetEndTreatment,
     softRemove,
     move,
-    viewInCalendar
+    viewInCalendar,
+    searchForPatient
   }
 }
 

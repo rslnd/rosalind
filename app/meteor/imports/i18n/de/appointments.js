@@ -94,6 +94,7 @@ export const appointments = {
   unsetStartTreatmentSuccess: 'Warte auf Behandlung',
   unsetEndTreatmentSuccess: 'Behandlung fortgesetzt',
   setNoShowSuccess: 'Nicht erschienen',
+  searchForPatient: 'Suche',
   endTreatment: 'Behandlung beenden',
   endTreatmentAlternative: 'oder nur diese Behandlung beenden',
   endTreatmentSuccess: 'Behandlung beendet',

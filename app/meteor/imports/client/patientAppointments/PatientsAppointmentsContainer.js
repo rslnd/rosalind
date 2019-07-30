@@ -25,14 +25,6 @@ const composer = props => {
   const patientId = currentAppointment ? currentAppointment.patientId : props.patientId
   const patient = Patients.findOne({ _id: patientId })
 
-  // Put patient into search box
-  if (patient) {
-    props.dispatch({
-      type: 'PATIENT_CHANGE_VALUE',
-      patient
-    })
-  }
-
   const userId = Meteor.userId()
   const canRefer = hasRole(userId, ['referrals', 'referrals-immediate', 'referrals-delayed'])
 

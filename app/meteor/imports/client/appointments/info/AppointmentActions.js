@@ -15,7 +15,8 @@ const buttons = {
   setCanceled: { icon: 'minus' },
   viewInCalendar: { icon: 'calendar' },
   softRemove: { icon: 'trash-o' },
-  move: { icon: 'arrows' }
+  move: { icon: 'arrows' },
+  searchForPatient: { icon: 'search' }
 }
 
 // Usage: <Btn.admit {...props} />
@@ -82,7 +83,8 @@ export const AppointmentActions = compose(
     handleMenuOpen,
     handleMenuClose,
     viewInCalendar,
-    move
+    move,
+    searchForPatient
   } = props
 
   const next = currentState(appointment)
@@ -150,6 +152,7 @@ export const AppointmentActions = compose(
     </div>
 
     <div style={rightStyle}>
+      {searchForPatient && <Btn.searchForPatient {...props} />}
       <Btn.softRemove {...props} />
       {move && <Btn.move {...props} />}
     </div>
