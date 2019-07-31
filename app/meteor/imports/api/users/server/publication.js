@@ -21,7 +21,8 @@ export default () => {
           addedRoles: 1,
           removedRoles: 1,
           settings: 1,
-          external: 1
+          external: 1,
+          removed: 1
         },
         removed: true
       })
