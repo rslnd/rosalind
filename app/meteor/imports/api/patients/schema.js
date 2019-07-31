@@ -163,7 +163,6 @@ export default new SimpleSchema({
   insuranceId: {
     type: String,
     optional: true,
-    unique: true,
     index: 1
   },
 

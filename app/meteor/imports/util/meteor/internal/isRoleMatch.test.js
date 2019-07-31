@@ -93,5 +93,11 @@ describe('util', () => {
       const userRoles = ['schedules']
       expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(false)
     })
+
+    it('scopes appointment calendar roles correctly', () => {
+      const requiredRoles = ['appointments-aesthetics']
+      const userRoles = ['appointments-insurance', 'appointments-note']
+      expect(isRoleMatch({ requiredRoles, userRoles })).to.equal(false)
+    })
   })
 })

@@ -5,12 +5,12 @@ import { CalendarSelect } from '../calendars/CalendarSelect'
 import { Waitlist } from '../appointments/waitlist'
 import { hasRole } from '../../util/meteor/hasRole'
 
-const DashboardComponent = ({ canSeeWaitlist, canSeeAppointments, ...props }) => {
-  if (!canSeeAppointments && canSeeWaitlist) {
+const DashboardComponent = ({ canSeeWaitlist, canSeeCalendars, ...props }) => {
+  if (!canSeeCalendars && canSeeWaitlist) {
     return <Waitlist {...props} />
   }
 
-  if (canSeeAppointments) {
+  if (canSeeCalendars) {
     return <CalendarSelect {...props} />
   }
 
@@ -18,12 +18,14 @@ const DashboardComponent = ({ canSeeWaitlist, canSeeAppointments, ...props }) =>
 }
 
 const composer = props => {
-  const canSeeWaitlist = hasRole(Meteor.userId(), ['admin', 'waitlist'])
-  const canSeeAppointments = hasRole(Meteor.userId(), ['admin', 'appointments-*'])
+  const canSeeWaitlist = hasRole(Meteor.userId(), ['waitlist'])
+  const canSeeCalendars = hasRole(Meteor.userId(), [`calendar-*`])
+  const canSeeCalendar = c => hasRole(Meteor.userId(), [`calendar-${c.slug}`])
 
   return {
     canSeeWaitlist,
-    canSeeAppointments,
+    canSeeCalendars,
+    canSeeCalendar,
     ...props
   }
 }
