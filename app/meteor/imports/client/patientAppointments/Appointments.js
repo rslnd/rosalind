@@ -12,7 +12,6 @@ export const Appointments = compose(
     scrollToBottom: props => e => window.requestAnimationFrame(() => {
       if (props.scrollRef) {
         window.scr = props.scrollRef
-        console.log('scrolling to bottom')
         props.scrollRef.scrollTop = 1000000000 // FF doesn't like Number.MAX_SAFE_INTEGER
       }
     })
