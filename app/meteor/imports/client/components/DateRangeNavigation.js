@@ -3,6 +3,7 @@ import moment from 'moment-timezone'
 import Button from 'react-bootstrap/lib/Button'
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import { DayPickerRangeController } from 'react-dates'
+import { START_DATE, END_DATE } from 'react-dates/constants'
 import { PortalWithState } from 'react-portal'
 import { __ } from '../../i18n'
 import { Icon } from './Icon'
@@ -13,7 +14,7 @@ export class DateRangeNavigation extends React.Component {
     super(props)
 
     this.state = {
-      focusedInput: 'startDate',
+      focusedInput: START_DATE,
       startDate: this.props.start,
       endDate: this.props.end
     }
@@ -24,7 +25,11 @@ export class DateRangeNavigation extends React.Component {
   }
 
   handleFocusChange (focusedInput) {
-    this.setState({ focusedInput: !focusedInput ? 'startDate' : focusedInput })
+    if (focusedInput === END_DATE) {
+      this.setState({ endDate: null })
+    }
+
+    this.setState({ focusedInput: focusedInput || START_DATE })
   }
 
   handleCalendarRangeChange ({ startDate, endDate }) {
