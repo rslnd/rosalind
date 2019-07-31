@@ -43,7 +43,7 @@ export default (state, action) => {
     case PATIENT_CLEAR_VALUE:
       return {
         ...state,
-        inputValue: state.previousInputValue || state.inputValue,
+        inputValue: '',
         isLoading: false,
         patient: null
       }
