@@ -10,7 +10,8 @@ import { extendMoment } from 'moment-range'
 
 const moment = extendMoment(_moment)
 
-const getConstrainedTags = ({
+// This should be deprecated, and be merged with Appointments.methods.getAllowedTags
+export const getConstrainedTags = ({
   allowedTags,
   value,
   maxDuration,

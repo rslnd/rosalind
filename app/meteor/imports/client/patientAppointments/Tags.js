@@ -12,6 +12,7 @@ import { Tags as TagsApi } from '../../api/tags'
 import { __ } from '../../i18n'
 import { Paper } from '@material-ui/core'
 import { Close } from './Close'
+import { getConstrainedTags } from '../tags/TagsField'
 
 const updateTags = ({ _id }, tags, revenue) =>
   Appointments.actions.update.callPromise({
@@ -31,6 +32,19 @@ export const Tags = compose(
     if (!editing || !calendarId) { return { tags } }
 
     const maxDuration = Appointments.methods.getMaxDuration({ time: start, assigneeId, calendarId })
+
+    if (!assigneeId) {
+      return {
+        possibleTags: getConstrainedTags({
+          maxDuration,
+          calendarId,
+          assigneeId,
+          time: start
+        }) || [],
+        tags,
+        maxDuration
+      }
+    }
 
     const availability = Availabilities.findOne({
       assigneeId,
