@@ -25,7 +25,7 @@ const removeNullKeys = (filter, newPartialFilter) => {
           ...acc,
           [existingKey]: filter[existingKey]
         })
-      , {})
+    , {})
   } else {
     return {
       ...filter,
@@ -43,7 +43,7 @@ const withFilters = ({ filter, setFilter, ...props }) =>
     return {
       ...f,
       toggle: () => setFilter(removeNullKeys(state, f.toggle(state))),
-      count: f.count ? (props.unfilteredPastAppointments || []).filter(a => f.count(a, state)).length : null,
+      count: f.count ? (props.otherAppointments || []).filter(a => f.count(a, state)).length : null,
       isChecked: !!f.isChecked(state)
     }
   })

@@ -92,6 +92,7 @@ const composer = props => {
     pastAppointments,
     futureAppointments,
     unfilteredPastAppointments,
+    otherAppointments,
     canceledCount,
     fullNameWithTitle,
     canRefer

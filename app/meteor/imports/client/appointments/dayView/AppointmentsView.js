@@ -12,6 +12,7 @@ import { WaitlistAssigneeModal } from './WaitlistAssigneeModal'
 import { setTime } from './grid/timeSlots'
 import { ErrorBoundary } from '../../layout/ErrorBoundary'
 import { PatientsAppointmentsContainer } from '../../patientAppointments/PatientsAppointmentsContainer'
+import { RemovedAppointments } from './RemovedAppointments'
 
 export class AppointmentsView extends React.Component {
   constructor (props) {
@@ -346,7 +347,20 @@ export class AppointmentsView extends React.Component {
             onSetAdmitted={this.props.onSetAdmitted}
           />
         </ErrorBoundary>
+
+        <ErrorBoundary>
+          <div style={marginTopStyle}>
+            <RemovedAppointments
+              calendarId={this.props.calendar._id}
+              date={this.props.date}
+            />
+          </div>
+        </ErrorBoundary>
       </div>
     )
   }
+}
+
+const marginTopStyle = {
+  marginTop: 60
 }

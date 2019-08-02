@@ -156,6 +156,52 @@ export default () => {
       }
     }
   })
+
+  publishComposite({
+    name: 'appointments-day-removed',
+    roles: ['appointments-removed'],
+    args: {
+      year: Number,
+      month: Number,
+      day: Number,
+      calendarId: String
+    },
+    fn: function ({ day, month, year, calendarId }) {
+      const userId = this.userId
+      const date = dayToDate({ day, month, year })
+      const selector = {
+        calendarId,
+        start: {
+          $gte: moment(date).startOf('day').toDate(),
+          $lte: moment(date).endOf('day').toDate()
+        },
+        removed: true
+      }
+
+      return {
+        find: function () {
+          return Appointments.find(selector, {
+            removed: true,
+            sort: {
+              start: 1
+            },
+            fields: limitFieldsByRole(userId)
+          })
+        },
+        children: [
+          {
+            find: function (doc) {
+              if (doc.patientId) {
+                return Patients.find({ _id: doc.patientId }, {
+                  limit: 1
+                })
+              }
+            }
+          }
+        ]
+      }
+    }
+  })
 }
 
 const limitFieldsByRole = userId => {
