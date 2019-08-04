@@ -48,8 +48,12 @@ class EditModal extends React.Component {
   constructor (props) {
     super(props)
 
+    const initialValue = props.value[props.structure.field]
+
     this.state = {
-      value: props.value[props.structure.field]
+      value: props.structure.stringify
+        ? props.structure.stringify(initialValue)
+        : initialValue
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -65,10 +69,12 @@ class EditModal extends React.Component {
   }
 
   handleUpdateClick () {
-    const value = this.state.value
+    const value = typeof this.props.value[this.props.structure.field] === 'number'
+      ? parseInt(this.state.value)
+      : this.state.value
 
-    if (typeof this.props.value[this.props.structure.field] === 'number') {
-      this.props.onUpdate(parseInt(value))
+    if (this.props.structure.fromString) {
+      this.props.onUpdate(this.props.structure.fromString(value))
     } else {
       this.props.onUpdate(value)
     }

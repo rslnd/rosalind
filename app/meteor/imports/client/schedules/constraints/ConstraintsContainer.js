@@ -12,8 +12,8 @@ const composer = (props) => {
   const getCalendarName = _id => _id && Calendars.findOne({ _id }, { removed: true }) && Calendars.findOne({ _id }, { removed: true }).name
   const getAssigneeName = _id => _id && Users.methods.fullNameWithTitle(Users.findOne({ _id }, { removed: true }))
 
-  const handleUpdate = (_id, update) =>
-    Constraints.actions.update.callPromise({ _id }, update)
+  const handleUpdate = (constraintId, update) =>
+    Constraints.actions.update.callPromise({ constraintId, update })
 
   const handleInsert = schedule =>
     Constraints.actions.insert.callPromise(schedule)

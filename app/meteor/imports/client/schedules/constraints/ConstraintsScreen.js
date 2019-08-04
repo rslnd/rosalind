@@ -1,4 +1,3 @@
-import idx from 'idx'
 import React from 'react'
 import identity from 'lodash/identity'
 import { Box } from '../../components/Box'
@@ -23,8 +22,8 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Behandlungen',
     field: 'tags',
-    EditComponent: TagsPicker,
-    isMulti: true,
+    stringify: x => JSON.stringify(x),
+    fromString: x => JSON.parse(x),
     render: constraint => constraint.tags &&
       <TagsList tags={applyConstraintToTags({
         constraint,
@@ -84,14 +83,6 @@ const WeekdayPicker = withProps({
   toLabel: toWeekdayLabel,
   toKey: identity,
   options: () => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-})(DocumentPicker)
-
-const TagsPicker = withProps({
-  toDocument: ({ tagId }) => ({ tagId, ...Tags.findOne({ _id: tagId }) }),
-  toLabel: ({ tagId }) => idx(Tags.findOne({ _id: tagId }), _ => _.tag),
-  render: ({ value: { tagId } }) => <TagsList tags={[tagId]} />,
-  toKey: ({ tagId }) => tagId,
-  options: () => Tags.find({}).fetch().map(({ _id, ...t }) => ({ tagId: _id, ...t }))
 })(DocumentPicker)
 
 export const ConstraintsScreen = ({
