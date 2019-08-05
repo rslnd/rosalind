@@ -4,6 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { deduplicate as merge, perform } from '../../methods/deduplicateWithJournal'
 import { hasRole } from '../../../../util/meteor/hasRole'
+import { isLikelySamePatient } from '../../methods/isLikelySamePatient'
 
 export const deduplicate = ({ Patients }) => {
   return new ValidatedMethod({
@@ -29,6 +30,13 @@ export const deduplicate = ({ Patients }) => {
       if (patients.some(p => !p)) {
         throw new Meteor.Error(404, 'Not found')
       }
+
+      patients.reduce((a, b) => {
+        if (!isLikelySamePatient(a, b)) {
+          throw new Meteor.Error(400, 'Not same patients')
+        }
+        return b
+      })
 
       // Avoid circular import, this method should probably be inside a third module
       const { Appointments } = require('../../../appointments')

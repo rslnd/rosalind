@@ -14,6 +14,7 @@ import { Indicator } from '../../appointments/appointment/Indicator'
 import { darkGrayDisabled, getStyleNonce } from '../../layout/styles'
 import { Users } from '../../../api/users'
 import Button from '@material-ui/core/Button'
+import { MergePatients } from './MergePatients'
 
 const loadingStyle = {
   margin: 0,
@@ -46,10 +47,11 @@ export const PatientPickerComponent = ({
     loadingMessage={loadingMessage}
     placeholder={__('patients.search')}
     nonce={getStyleNonce()}
+    styles={customStyles}
   />
 
 const NewPatient = ({ patient }) =>
-  <span>
+  <span style={resultStyle}>
     <Icon name='user-plus' />
     &nbsp;
     {__('patients.thisInsert')}
@@ -61,12 +63,18 @@ const NewPatient = ({ patient }) =>
   </span>
 
 const PatientWithAppointments = ({ patient, onPatientModalOpen }) =>
-  <span>
-    <PatientName patient={patient} />
-    <span className='text-muted pull-right'>
-      &emsp;
-      <Birthday day={patient.birthday} />
-    </span>
+  <div style={resultStyle}>
+    <div style={selectedStyle}>
+      <PatientName patient={patient} />
+
+      <span className='text-muted pull-right'>
+        &emsp;
+        <MergePatients patient={patient} />
+        &emsp;
+        <Birthday day={patient.birthday} />
+      </span>
+    </div>
+
     {
       patient.appointments && patient.appointments.map(appointment =>
         <Appointment
@@ -76,11 +84,13 @@ const PatientWithAppointments = ({ patient, onPatientModalOpen }) =>
         />
       )
     }
-  </span>
+  </div>
 
 const PatientNameSelected = ({ patient, onPatientModalOpen }) =>
-  <div style={patientNameStyle}>
-    <PatientName patient={patient} />
+  <div style={selectedStyle}>
+    <div style={patientNameStyle}>
+      <PatientName patient={patient} />
+    </div>
     {
       onPatientModalOpen && <Button
         style={modalTriggerStyle}
@@ -97,14 +107,18 @@ const PatientNameSelected = ({ patient, onPatientModalOpen }) =>
     }
   </div>
 
-const patientNameStyle = {
+const selectedStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   width: '100%'
 }
 
+const patientNameStyle = {
+  paddingTop: 3
+}
+
 const modalTriggerStyle = {
-  marginLeft: 150,
+  marginRight: 4,
   zoom: 0.9
 }
 
@@ -157,6 +171,19 @@ const formatOptionLabel = props =>
     }
   }
 
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    padding: 0,
+    width: '100%'
+  }),
+  singleValue: (provided, state) => ({
+    ...provided,
+    padding: 0,
+    width: '100%'
+  })
+}
+
 const appointmentStyle = {
   display: 'flex',
   marginBottom: 4,
@@ -168,4 +195,10 @@ const assigneeNameStyle = {
   color: darkGrayDisabled,
   flexGrow: 1,
   textAlign: 'right'
+}
+
+const resultStyle = {
+  width: '100%',
+  display: 'inline-block',
+  padding: 8
 }
