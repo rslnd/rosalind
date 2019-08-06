@@ -47,7 +47,6 @@ const composer = (props) => {
   const setCanceled = () => {
     Alert.success(__('appointments.setCanceledSuccess'))
     Appointments.actions.setCanceled.call(args)
-    searchForPatient()
   }
 
   const setNoShow = () => {
@@ -77,7 +76,6 @@ const composer = (props) => {
   const softRemove = () => {
     Alert.success(__('appointments.softRemoveSuccess'))
     Appointments.actions.softRemove.callPromise(args)
-    searchForPatient()
   }
 
   let move
