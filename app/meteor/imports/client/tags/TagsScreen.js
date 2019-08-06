@@ -143,6 +143,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     multi: true,
     EditComponent: MultiTextField,
     render: t => t.synonyms && t.synonyms.join(', ')
+  },
+  {
+    header: 'id',
+    render: t => <pre>{t._id}</pre>
   }
 ]
 
