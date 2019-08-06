@@ -24,6 +24,8 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
 
         if (query.match(SimpleSchema.RegEx.Id)) {
           selector = { _id: query }
+        } else if (query === 'banned:true') {
+          selector = { banned: true }
         } else {
           selector = parseQuery(query)
         }
