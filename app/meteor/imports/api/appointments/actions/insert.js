@@ -31,6 +31,10 @@ export const insert = ({ Appointments }) => {
 
       const { note, ...restFields } = appointment
 
+      if (!appointment.patientId) {
+        appointment.note = note
+      }
+
       appointmentId = Appointments.insert({ ...restFields, patientId }, (err) => {
         if (err) {
           console.error('[Appointments] Appointment insert failed with error', err)
