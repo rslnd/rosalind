@@ -3,6 +3,7 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
+import { Day } from '../../../util/schema'
 
 export const insert = ({ Schedules, Users }) => {
   return new ValidatedMethod({
@@ -10,12 +11,14 @@ export const insert = ({ Schedules, Users }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       schedule: { type: new SimpleSchema({
-        type: { type: String, allowedValues: ['override'] },
-        calendarId: { type: SimpleSchema.RegEx.Id },
-        userId: { type: SimpleSchema.RegEx.Id },
+        type: { type: String, allowedValues: ['override', 'holiday'] },
+        calendarId: { type: SimpleSchema.RegEx.Id, optional: true },
+        userId: { type: SimpleSchema.RegEx.Id, optional: true },
+        day: { type: Day, optional: true },
         start: { type: Date },
         end: { type: Date },
-        available: { type: Boolean }
+        available: { type: Boolean },
+        note: { type: String, optional: true }
       }) },
       quiet: { type: Boolean, optional: true }
     }).validator(),

@@ -25,12 +25,10 @@ export class HolidaysContainerComponent extends React.Component {
         day,
         note,
         available: false,
-        type: 'holiday',
-        createdAt: new Date(),
-        createdBy: Meteor.userId()
+        type: 'holiday'
       }
 
-      Schedules.actions.insert.call(holidays, (err) => {
+      Schedules.actions.insert.call({ schedule: holidays }, (err) => {
         if (err) {
           Alert.error(__('ui.error'))
           reject(err)
