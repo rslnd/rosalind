@@ -9,7 +9,6 @@ import { DocumentPicker } from '../../components/DocumentPicker'
 import { __ } from '../../../i18n'
 import { withProps } from 'recompose'
 import { UserPicker } from '../../users/UserPicker'
-import { HMRangeToString } from '../../../util/time/hm'
 import { applyConstraintToTags } from '../../../api/constraints/methods/applyConstraintToTags'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
@@ -66,8 +65,18 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: DurationStrategy
   },
   {
-    header: 'Uhrzeit',
-    render: ({ from, to }) => HMRangeToString({ from, to })
+    header: 'Uhrzeit von',
+    render: ({ from }) => JSON.stringify(from),
+    field: 'from',
+    fromString: JSON.parse,
+    stringify: JSON.stringify
+  },
+  {
+    header: 'bis',
+    render: ({ to }) => JSON.stringify(to),
+    field: 'to',
+    fromString: JSON.parse,
+    stringify: JSON.stringify
   }
 ]
 
