@@ -15,8 +15,8 @@ const composer = (props) => {
   const handleUpdate = (constraintId, update) =>
     Constraints.actions.update.callPromise({ constraintId, update })
 
-  const handleInsert = schedule =>
-    Constraints.actions.insert.callPromise(schedule)
+  const handleInsert = constraint =>
+    Constraints.actions.insert.callPromise({ constraint })
 
   const handleRemove = (_id) =>
     Constraints.actions.softRemove.callPromise({ _id })
