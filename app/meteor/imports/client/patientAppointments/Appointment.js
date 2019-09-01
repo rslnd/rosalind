@@ -6,7 +6,7 @@ import { Note } from './Note'
 import { Media } from './Media'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
 import { Calendars } from '../../api/calendars'
-import { withProps } from 'recompose'
+import { withProps, compose } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
 import { CommentsContainer } from '../comments/CommentsContainer'
@@ -22,12 +22,14 @@ export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
     </ErrorBoundary>
   )
 
-export const Appointment = withProps(props => ({
-  canSeeNote: hasRole(Meteor.userId(), ['appointments-note']),
-  canSeeComments: hasRole(Meteor.userId(), ['appointments-comments']),
-  collapseComments: hasRole(Meteor.userId(), ['appointments-commentsCollapse']),
-  calendar: props.appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
-}))(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle, canSeeNote, canSeeComments, collapseComments }) =>
+export const Appointment = compose(
+  withProps(props => ({
+    canSeeNote: hasRole(Meteor.userId(), ['appointments-note']),
+    canSeeComments: hasRole(Meteor.userId(), ['appointments-comments']),
+    collapseComments: hasRole(Meteor.userId(), ['appointments-commentsCollapse']),
+    calendar: props.appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
+  }))
+)(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle, canSeeNote, canSeeComments, collapseComments }) =>
   <div style={
     isCurrent
       ? currentAppointmentStyle
@@ -47,7 +49,9 @@ export const Appointment = withProps(props => ({
 
     {
       canSeeComments &&
-        <CommentsContainer docId={appointment._id} collapsed={collapseComments} />
+        <CommentsContainer docId={appointment._id}
+          collapsed={collapseComments}
+        />
     }
 
     {

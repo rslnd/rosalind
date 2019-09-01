@@ -28,7 +28,7 @@ export const CommentsContainer = compose(
   withProps(props => ({
     collapsed: props._collapsed === null
       ? props.collapsed
-      : (props.isCollapsed) })),
+      : (props._collapsed) })),
   withTracker(commentsBoxComposer),
   toClass
 )(CommentsBox)

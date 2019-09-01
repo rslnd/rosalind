@@ -1,6 +1,8 @@
+
 import React from 'react'
 import { CommentsList } from './CommentsList'
 import { NewComment } from './NewComment'
+import { Icon } from '../components/Icon'
 
 export const CommentsBox = ({
   comments,
@@ -16,39 +18,45 @@ export const CommentsBox = ({
   setCollapsed,
   collapsed
 }) =>
-  collapsed
-    ? <Collapsed
-      comments={comments}
-      setCollapsed={setCollapsed}
-    />
-    : (
-      <div>
-        <CommentsList
-          canEdit={canEdit}
-          onClick={onClick}
-          onEdit={onEdit}
+  <div>
+    {
+      setCollapsed &&
+        <Collapsed
           comments={comments}
-          onRemove={onRemove}
-          style={style} />
-        {
-          newComment &&
-            <NewComment
-              docId={docId}
-              autoFocus={autoFocus}
-              style={style}
-              actions={actions}
-            />
-        }
-      </div>
-    )
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
+    }
 
-const Collapsed = ({ comments, setCollapsed }) =>
+    {!collapsed &&
+      <CommentsList
+        canEdit={canEdit}
+        onClick={onClick}
+        onEdit={onEdit}
+        comments={comments}
+        onRemove={onRemove}
+        style={style} />
+    }
+    {
+      !collapsed && newComment &&
+        <NewComment
+          docId={docId}
+          autoFocus={autoFocus}
+          style={style}
+          actions={actions}
+        />
+    }
+  </div>
+
+const Collapsed = ({ comments, setCollapsed, collapsed }) =>
   <div
     style={collapsedStyle}
-    onClick={() => setCollapsed(false)}
+    onClick={() => setCollapsed(!collapsed)}
     title='Anmerkungen'
   >
     {comments.length} Anm.
+    &nbsp;
+    <Icon name={collapsed ? 'caret-left' : 'caret-down'} />
   </div>
 
 const collapsedStyle = {

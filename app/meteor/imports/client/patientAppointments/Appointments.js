@@ -48,6 +48,7 @@ export const Appointments = compose(
           <AppointmentsList
             appointments={pastAppointments}
             fullNameWithTitle={fullNameWithTitle}
+            show={show}
           />
           {
             loading && <Loading />
@@ -63,6 +64,7 @@ export const Appointments = compose(
               appointment={currentAppointment}
               fullNameWithTitle={fullNameWithTitle}
               isCurrent
+              show={show}
             />
           }
           {
