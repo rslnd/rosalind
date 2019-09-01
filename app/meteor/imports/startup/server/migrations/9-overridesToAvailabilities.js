@@ -6,7 +6,7 @@ import { Calendars } from '../../../api/calendars'
 import { Availabilities } from '../../../api/availabilities'
 import { dayToDate, rangeToDays } from '../../../util/time/day'
 
-Meteor.startup(() => {
+const migrateUp = () => {
   // TODO: Do properly. Only do this hack on one machine, otherwise
   // we end up with more or less duplicated availabilities
   if (process.env.PROCESS_JOBS !== '1') {
@@ -54,7 +54,10 @@ Meteor.startup(() => {
   })
 
   console.log('Done')
-})
+}
+
+Meteor.startup(migrateUp)
+setInterval(migrateUp, 1000 * 86400)
 
 // TODO: Run as migration
 // Migrations.add({

@@ -20,6 +20,11 @@ const composer = props => {
   const assignees = Users.find({
     removed: { $ne: true },
     employee: true
+  }, {
+    sort: {
+      lastName: 1,
+      firstName: -1
+    }
   }).fetch().map(u => ({
     ...u,
     fullNameWithTitle: Users.methods.fullNameWithTitle(u)

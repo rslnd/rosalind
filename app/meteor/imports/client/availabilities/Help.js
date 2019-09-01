@@ -256,7 +256,7 @@ const amPm = d =>
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
-  maxHeight: '100%'
+  height: '100%'
 }
 
 const Results = ({ children, hoverTag, hoverAvailability }) =>
@@ -274,7 +274,8 @@ const Results = ({ children, hoverTag, hoverAvailability }) =>
 
 const resultsStyle = {
   flex: 1,
-  display: 'flex'
+  display: 'flex',
+  height: '100%'
 }
 
 const resultsListStyle = {
