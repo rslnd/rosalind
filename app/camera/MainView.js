@@ -1,6 +1,10 @@
 import React from 'react'
-import { StyleSheet, View, Text, NativeModules } from 'react-native'
+import { StyleSheet, View, NativeModules, NativeEventEmitter } from 'react-native'
 import { CameraView } from './CameraView'
+
+NativeModules.Scanner.initialize()
+const scannerEmitter = new NativeEventEmitter(NativeModules.Scanner)
+scannerEmitter.addListener('Scan', scan => console.log('got scan event', scan))
 
 export const MainView = ({
   handlePairingFinish,
@@ -11,7 +15,9 @@ export const MainView = ({
   <View style={styles.container}>
     <CameraView
       onCodeRead={handlePairingFinish}
-      onScan={() => NativeModules.Scanner.open()}
+      // onScan={() => {
+      //   NativeModules.Scanner.open()
+      // }}
       onMedia={handleMedia}
       showControls={!!pairedTo}
       {...props}
@@ -23,16 +29,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#ccc'
-  },
-  text: {
-    color: '#fff',
-    width: '50%',
-    height: '50%',
-    backgroundColor: '#ffbb55'
-  },
-  scannerView: {
-    width: '50%',
-    height: '50%',
-    backgroundColor: 'red'
   }
 })

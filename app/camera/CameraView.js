@@ -5,6 +5,7 @@ import { Controls } from './Controls'
 import { portrait, landscapeLeft, portraitUpsideDown, landscapeRight, landscape } from './withOrientation'
 import { CameraViewfinder } from './CameraViewfinder'
 import { delay } from './util'
+import { Icon } from './Icon';
 
 export class CameraView extends React.Component {
   constructor (props) {
@@ -115,6 +116,7 @@ export class CameraView extends React.Component {
   render () {
     const {
       orientation,
+      pairedTo
     } = this.props
 
     const {
@@ -142,11 +144,17 @@ export class CameraView extends React.Component {
           />
         </View>
 
-        <Controls
-          onTakePicture={this.handleTakePicture}
-          onScan={this.props.onScan}
-          orientation={orientation}
-        />
+        {
+          pairedTo
+            ? <Controls
+              onTakePicture={this.handleTakePicture}
+              onScan={this.props.onScan}
+              orientation={orientation}
+            />
+            : <View style={styles.pleasePair}>
+              <Icon name='expand' style={styles.pleasePairIcon} />
+            </View>
+        }
       </View>
     )
   }
@@ -175,6 +183,23 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     height: '100%'
+  },
+  pleasePair: {
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#fff',
+    opacity: 0.4
+  },
+  pleasePairIcon: {
+    flex: 1,
+    fontSize: 160,
+    color: '#000',
+    textAlign: 'center',
+    width: '100%'
   }
 })
 

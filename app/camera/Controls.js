@@ -17,11 +17,15 @@ export const Controls = ({
       onPress={onTakePicture}
     />
 
-    <Button
-      secondary
-      icon='file-alt'
-      onPress={onScan}
-    />
+    {
+      onScan
+        ? <Button
+          secondary
+          icon='file-alt'
+          onPress={onScan}
+        />
+        : <Placeholder />
+    }
   </View>
 
 const Button = ({ primary, onPress, icon, ...props }) =>
