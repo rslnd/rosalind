@@ -2,44 +2,10 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { landscape, portrait, both, applyStyle } from './withOrientation'
 import { Icon } from './Icon'
-import { cameraMode } from './withCameraMode'
 
-const modeIcon = {
-  [cameraMode.photo]: 'camera',
-  [cameraMode.document]: 'file-alt'
-}
-
-export const Controls = props =>
-  props.cropMedia
-  ? <CropControls {...props} />
-  : <CameraControls {...props} />
-
-const CropControls = ({
-  handleCropFinish,
-  handleCropCancel,
-  ...props
-}) =>
-  <View style={applyStyle(props, styles, 'controlRow')}>
-    <Button
-      secondary
-      onPress={handleCropCancel}
-      icon='trash-alt'
-    />
-
-    <Button
-      primary
-      onPress={handleCropFinish}
-      icon='check'
-    />
-
-    <Placeholder />
-  </View>
-
-const CameraControls = ({
+export const Controls = ({
   onTakePicture,
-  handleNextCameraMode,
-  cameraMode,
-  nextCameraMode,
+  onScan,
   ...props
 }) =>
   <View style={applyStyle(props, styles, 'controlRow')}>
@@ -47,20 +13,20 @@ const CameraControls = ({
 
     <Button
       primary
-      icon={modeIcon[cameraMode]}
+      icon='camera'
       onPress={onTakePicture}
     />
 
     <Button
       secondary
-      icon={modeIcon[nextCameraMode]}
-      onPress={handleNextCameraMode}
+      icon='file-alt'
+      onPress={onScan}
     />
   </View>
 
 const Button = ({ primary, onPress, icon, ...props }) =>
   <TouchableOpacity onPress={onPress}>
-    <View style={primary ? styles[both].primary : styles[both].secondary}>
+    <View style={applyStyle(props, styles, primary ? 'primary' : 'secondary')}>
       <Icon name={icon} style={[
         styles[both].icon,
         !primary ? styles[both].iconSecondary : {}

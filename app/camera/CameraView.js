@@ -1,14 +1,10 @@
 import React from 'react'
 import { RNCamera } from 'react-native-camera'
 import { StyleSheet, View, Dimensions } from 'react-native'
-import { TapGestureHandler, State } from 'react-native-gesture-handler'
 import { Controls } from './Controls'
 import { portrait, landscapeLeft, portraitUpsideDown, landscapeRight, landscape } from './withOrientation'
 import { CameraViewfinder } from './CameraViewfinder'
 import { delay } from './util'
-import { cameraMode as cameraModes } from './withCameraMode'
-import { OverlayDocument } from './OverlayDocument'
-import { Crop } from './Crop'
 
 export class CameraView extends React.Component {
   constructor (props) {
@@ -45,7 +41,7 @@ export class CameraView extends React.Component {
     const { orientation, cropMedia } = this.props
 
     if (cropMedia) { return }
-    if (e.nativeEvent.state !== State.ACTIVE) { return }
+    // if (e.nativeEvent.state !== State.ACTIVE) { return }
 
     if (this.autofocusTimeout) {
       clearTimeout(this.autofocusTimeout)
@@ -79,7 +75,6 @@ export class CameraView extends React.Component {
   async handleTakePicture () {
     const {
       onMedia,
-      cameraMode,
       handleCropStart
     } = this.props
 
@@ -107,15 +102,8 @@ export class CameraView extends React.Component {
       takenAt
     }
 
-    if (cameraMode === cameraModes.photo && onMedia) {
-      console.log('Took Picture', media)
-      onMedia(media)
-    }
-
-    if (cameraMode === cameraModes.document && handleCropStart) {
-      console.log('Scanned document')
-      handleCropStart(media)
-    }
+    console.log('Took Picture', media)
+    onMedia(media)
   }
 
   componentWillUnmount () {
@@ -126,16 +114,7 @@ export class CameraView extends React.Component {
 
   render () {
     const {
-      showControls,
       orientation,
-      cameraMode,
-      handleNextCameraMode,
-      nextCameraMode,
-      cropMedia,
-      cropCoordinates,
-      handleCropChange,
-      handleCropFinish,
-      handleCropCancel
     } = this.props
 
     const {
@@ -145,61 +124,29 @@ export class CameraView extends React.Component {
 
     return (
       <View style={styles.container}>
-        <TapGestureHandler
-          onHandlerStateChange={this.handleFocus}
-        >
-          <View style={styles.container}>
-            <RNCamera
-              ref={ref => {
-                this.camera = ref
-              }}
-              onPress={this.handleFocus}
-              style={styles.camera}
-              type={RNCamera.Constants.Type.back}
-              flashMode={RNCamera.Constants.FlashMode.off}
-              videoStabilizationMode={RNCamera.Constants.VideoStabilization.auto}
-              defaultVideoQuality={RNCamera.Constants.VideoQuality['720p']}
-              barCodeTypes={barCodeTypes}
-              onBarCodeRead={this.handleCodeRead}
-              autoFocusPointOfInterest={pointOfInterest}
-              playSoundOnCapture={false}
-            />
+        <View style={styles.container}>
+          <RNCamera
+            ref={ref => {
+              this.camera = ref
+            }}
+            onPress={this.handleFocus}
+            style={styles.camera}
+            type={RNCamera.Constants.Type.back}
+            flashMode={RNCamera.Constants.FlashMode.off}
+            videoStabilizationMode={RNCamera.Constants.VideoStabilization.auto}
+            defaultVideoQuality={RNCamera.Constants.VideoQuality['720p']}
+            barCodeTypes={barCodeTypes}
+            onBarCodeRead={this.handleCodeRead}
+            autoFocusPointOfInterest={pointOfInterest}
+            playSoundOnCapture={false}
+          />
+        </View>
 
-            {
-              cameraMode === cameraModes.document && !cropMedia &&
-                <OverlayDocument
-                  orientation={orientation}
-                />
-            }
-
-            {
-              !cropMedia && <CameraViewfinder
-                position={absolutePointOfInterest}
-              />
-            }
-
-            <Crop
-              cropMedia={cropMedia}
-              cropCoordinates={cropCoordinates}
-              handleCropChange={handleCropChange}
-            />
-          </View>
-        </TapGestureHandler>
-
-        {
-          (true || showControls) &&
-            <Controls
-              onTakePicture={this.handleTakePicture}
-              cameraMode={cameraMode}
-              handleNextCameraMode={handleNextCameraMode}
-              nextCameraMode={nextCameraMode}
-              cropMedia={cropMedia}
-              handleCropFinish={handleCropFinish}
-              handleCropCancel={handleCropCancel}
-              orientation={orientation}
-            />
-        }
-
+        <Controls
+          onTakePicture={this.handleTakePicture}
+          onScan={this.props.onScan}
+          orientation={orientation}
+        />
       </View>
     )
   }

@@ -1,10 +1,9 @@
-import { compose, withProps, withHandlers } from 'recompose'
+import { compose } from 'recompose'
 import { MainView } from './MainView'
 import { withClientKey } from './withClientKey'
 import { withPairing } from './withPairing'
 import { withMedia } from './withMedia'
 import { withOrientation } from './withOrientation'
-import { withCameraMode } from './withCameraMode'
 import { withModeDocument } from './withModeDocument'
 
 export const App = compose(
@@ -12,6 +11,5 @@ export const App = compose(
   withPairing,
   withMedia,
   withOrientation,
-  withCameraMode,
   withModeDocument
 )(MainView)

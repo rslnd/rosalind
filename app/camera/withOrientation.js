@@ -1,6 +1,5 @@
 import React from 'react'
 import identity from 'lodash/identity'
-import Orientation from 'react-native-orientation'
 
 export const portrait = 'PORTRAIT'
 export const landscape = 'LANDSCAPE'
@@ -37,6 +36,10 @@ export const withOrientation = Component =>
     constructor (props) {
       super(props)
 
+      this.state = {
+        orientation: [portrait, portrait]
+      }
+
       this.handleChange = this.handleChange.bind(this)
       this.handleOrientationLock = this.handleOrientationLock.bind(this)
       this.handleOrientationUnlock = this.handleOrientationUnlock.bind(this)
@@ -57,7 +60,7 @@ export const withOrientation = Component =>
 
     handleOrientationLock (forcedOrientation) {
       if (!forcedOrientation) {
-        forcedOrientation = this.state.orientation[0]
+        forcedOrientation = this.state.orientation && this.state.orientation[0]
       }
 
       this.setState({
@@ -65,10 +68,10 @@ export const withOrientation = Component =>
       })
 
       switch (forcedOrientation) {
-        case landscape: return Orientation.lockToLandscape()
-        case landscapeLeft: return Orientation.lockToLandscapeLeft()
-        case landscapeRight: return Orientation.lockToLandscapeRight()
-        default: return Orientation.lockToPortrait()
+        // case landscape: return Orientation.lockToLandscape()
+        // case landscapeLeft: return Orientation.lockToLandscapeLeft()
+        // case landscapeRight: return Orientation.lockToLandscapeRight()
+        // default: return Orientation.lockToPortrait()
       }
     }
 
@@ -77,21 +80,21 @@ export const withOrientation = Component =>
         locked: null
       })
 
-      Orientation.unlockAllOrientations()
+      // Orientation.unlockAllOrientations()
     }
 
     componentWillMount () {
-      const orientation = mapOrientation(Orientation.getInitialOrientation())
-      this.setState({ orientation })
+      // const orientation = mapOrientation(Orientation.getInitialOrientation())
+      // this.setState({ orientation })
     }
 
     componentDidMount () {
-      Orientation.addSpecificOrientationListener(this.handleChange)
-      Orientation.unlockAllOrientations()
+    //   Orientation.addSpecificOrientationListener(this.handleChange)
+    //   Orientation.unlockAllOrientations()
     }
 
     componentWillUnmount () {
-      Orientation.removeSpecificOrientationListener(this.handleChange)
+      // Orientation.removeSpecificOrientationListener(this.handleChange)
     }
 
     render () {
