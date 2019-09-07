@@ -1,21 +1,27 @@
-import EventEmitter from 'eventemitter3'
-
-export default () => {
+export const handleFakeEvents = ({ events }) => {
   const fakeClientKey = getUrlParams('clientKey')
   if (fakeClientKey) {
-    console.log('[Native] Faking native API')
-    const events = new EventEmitter()
-    window.native = {
-      clientKey: fakeClientKey,
-      events,
-      emit: (event, payload) => events.emit(event, payload),
-      systemInfo: {
-        client: 'fake'
-      },
-      load: () => {}
+    console.log('[Native] fakeInterface: Faking native API')
+
+    // Expose to console
+    window.postToWeb = (name, payload) => {
+      console.log('[Native] fakeInterface: postToWeb: Emitting', name, payload)
+      events.emit(name, payload)
     }
 
-    setTimeout(() => window.native.emit('clientKey', 300))
+    setTimeout(() => {
+      window.postToWeb('welcome', {
+        systemInfo: {
+          name: 'Fake Interface'
+        },
+        clientKey: fakeClientKey
+      })
+    }, 300)
+
+    return {
+      postToNative: (name, payload) =>
+        console.log('[Native] fakeInterface: postToNative', name, payload)
+    }
   }
 }
 

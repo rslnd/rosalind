@@ -1,6 +1,7 @@
 import EventEmitter from 'eventemitter3'
 import { attemptRegistration } from './attemptRegistration'
 import { handleAndroidEvents } from './android'
+import { handleFakeEvents } from './fakeInterface'
 import { handleElectronEvents } from './electron'
 import { updateSettings } from '../../../api/clients/methods/getSettings'
 
@@ -63,6 +64,7 @@ export const getClientKey = () => clientKey
 
 const getBridge = () => (
   handleAndroidEvents({ events }) ||
+  handleFakeEvents({ events }) ||
   // Check electron last because it always succeeds
   handleElectronEvents({ events })
 )
