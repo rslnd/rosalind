@@ -1,4 +1,5 @@
 import React from 'react'
+import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import Button from '@material-ui/core/Button'
 import { compose } from 'recompose'
@@ -18,7 +19,10 @@ const isRoutableOrigin = () => {
   if (window.location.origin.indexOf('localhost') === -1) {
     return true
   } else {
-    throw new Error('Origin', window.location.origin, 'is not routable')
+    const message = `Origin ${window.location.origin} is not routable`
+    Alert.error(message)
+    console.error(new Error(message))
+    return false
   }
 }
 
@@ -32,7 +36,7 @@ const generatePairingCode = ({ pairingToken }) =>
     pairingToken
   ].join('')
 
-const composer = ({ docId, collection }) => {
+const composer = () => {
   const client = getClient()
   const canPair =
     client && client.pairingAllowed &&
@@ -74,12 +78,17 @@ const PairingButtonComponent = ({ canPair, hasProducers, handlePairingStart, han
   !canPair
     ? null
     : <div>
-      <Button size='small' onClick={handlePairingStart}>
+      <Button size='small' onClick={handlePairingStart} style={hasProducers ? hasProducersStyle : {}}>
         <Icon name='camera' />
-        { hasProducers && 'Bereit' }
+        &nbsp;
+        { hasProducers ? 'Bereit' : 'Verbindung herstellen' }
       </Button>
       <QRModal value={pairingCode} onClose={handlePairingCancel} />
     </div>
+
+const hasProducersStyle = {
+  opacity: 0.5
+}
 
 const QRModal = ({ show, onClose, value }) =>
   !!value && <Modal
@@ -146,17 +155,18 @@ const qrCodeStyle = {
   height: 380
 }
 
-const logoScale = 0.18
+const logoScale = 7
 
 const qrLogoContainerStyle = {
   position: 'absolute',
-  top: (qrCodeStyle.width / 2) - ((qrCodeStyle.width * logoScale) / 2),
-  left: (qrCodeStyle.width / 2) - ((qrCodeStyle.width * logoScale) / 2),
-  width: qrCodeStyle.width * logoScale,
-  height: qrCodeStyle.width * logoScale,
+  top: (qrCodeStyle.width / 2) - (qrCodeStyle.width * logoScale / 41 / 2),
+  left: (qrCodeStyle.width / 2) - (qrCodeStyle.width * logoScale / 41 / 2),
+  width: qrCodeStyle.width * logoScale / 41,
+  height: qrCodeStyle.width * logoScale / 41,
   background: 'white',
-  // borderRadius: '100%',
-  border: '6px solid white',
+  border: `${qrCodeStyle.width / 41}px solid white`,
+  boxShadow: '0px 0px 46px #fff',
+  borderRadius: '100%',
   backgroundColor: qrColor,
   color: qrColor,
   fontSize: 40,
@@ -166,8 +176,8 @@ const qrLogoContainerStyle = {
 }
 
 const qrLogoStyle = {
-  height: qrCodeStyle.width * (logoScale / 2),
-  width: qrCodeStyle.width * (logoScale / 2)
+  height: qrCodeStyle.width * (logoScale - 2) / 41 / 2,
+  width: qrCodeStyle.width * (logoScale - 2) / 41 / 2
 }
 
 export const PairingButton = compose(

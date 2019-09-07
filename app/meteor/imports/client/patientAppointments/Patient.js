@@ -13,6 +13,7 @@ import { Contacts } from './Contacts'
 import { Dot } from '../patients/Dot'
 import { currencyRounded } from '../../util/format'
 import { FutureRecord } from '../records/FutureRecord'
+import { PairingButton } from '../clients/PairingButton'
 
 const action = promise =>
   promise.then(() => {
@@ -50,6 +51,7 @@ export const Patient = ({ patient, currentAppointment }) =>
     <div style={marginBottomStyle}>
       <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
       <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
+      <PairingButton />
     </div>
   </div>
 
