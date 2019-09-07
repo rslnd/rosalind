@@ -1,0 +1,35 @@
+version: '2.1'
+
+services:
+  minio:
+    image: 'minio/minio'
+    command: 'server /data'
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_REGION=${MINIO_REGION}
+    ports:
+      - '9000:9000'
+    volumes:
+      - './minio-data:/data'
+    restart: always
+    network_mode: bridge
+
+  # mirror-up:
+  #   image: 'minio/mc'
+  #   command: 'mirror --watch minio/minio-test-replication s3/minio-test-replication'
+  #   volumes:
+  #     - './mc.config.json:/root/.mc/config.json'
+  #   depends_on:
+  #     minio:
+  #       condition: service_healthy
+
+  # mirror-down:
+  #   image: 'minio/mc'
+  #   entrypoint: '/mirror-down.sh'
+  #   volumes:
+  #     - './mc.config.json:/root/.mc/config.json'
+  #     - './mirror-down.sh:/mirror-down.sh'
+  #   depends_on:
+  #     minio:
+  #       condition: service_healthy
