@@ -116,7 +116,7 @@ export class CameraView extends React.Component {
   render () {
     const {
       orientation,
-      pairedTo
+      showControls
     } = this.props
 
     const {
@@ -145,7 +145,7 @@ export class CameraView extends React.Component {
         </View>
 
         {
-          pairedTo
+          showControls
             ? <Controls
               onTakePicture={this.handleTakePicture}
               onScan={this.props.onScan}

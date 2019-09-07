@@ -4,9 +4,13 @@ import { withHandlers, compose, withState } from 'recompose'
 
 const minTokenLength = 90
 
+const pairingCodeRegex = global.__DEV__
+  ? /^rslndPair\*(https?:\/\/.*#.*)/
+  : /^rslndPair\*(https:\/\/.*#.*)/
+
 const parsePairingCode = pairingCode => {
   if (pairingCode.length >= minTokenLength + 20) {
-    const match = pairingCode.match(/^rslndPair\*(https?:\/\/.*#.*)/)
+    const match = pairingCode.match(pairingCodeRegex)
     if (match && match[0]) {
       const [_, url, pairingToken] = match[0].split(/\*|#/)
       return { url, pairingToken }
@@ -34,21 +38,22 @@ const handlePairingFinish = props => pairingCode => {
           systemInfo: { ios: true }
         })
 
-        pair(props)(pairingToken)
+        pair(props)({ url, pairingToken })
       })
     } else {
-      pair(props)(pairingToken)
+      pair(props)({ url, pairingToken })
     }
   }
 }
 
-const pair = props => async pairingToken => {
+const pair = props => async ({ url, pairingToken }) => {
   try {
     const consumerId = await call(props)('clients/pairingFinish', {
       pairingToken
     })
 
     props.setPairedTo(consumerId)
+    props.setBaseUrl(url)
     console.log('Paired to consumer', consumerId)
   } catch (e) {
     if (e.error === 404) {

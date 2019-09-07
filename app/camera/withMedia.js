@@ -12,14 +12,20 @@ const handleMedia = props => async media => {
     ...mediaRest,
     consumerId: props.pairedTo
   }
+  // TODO: Send image hash to media/insert
   const signedRequest = await call(props)('media/insert', createMedia)
 
   // TODO: Resize and upload thumbnail first for better UX
-  return await uploadS3({ signedRequest, localPath })
+  await uploadS3({ signedRequest, localPath })
+
+  // TODO: Call server again to signal when upload has finished
 }
 
 const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject) => {
   const { method, filename, url, mediaType, headers } = signedRequest
+
+  console.log('signedRequest', signedRequest)
+  console.log('localPath', localPath)
 
   const xhr = new XMLHttpRequest()
   xhr.onerror = reject
@@ -34,11 +40,11 @@ const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject)
   }
 
   xhr.open(method, url)
-  xhr.setRequestHeader('Content-Type', mediaType)
 
-  Object.keys(headers).map(headerKey =>
+  Object.keys(headers).map(headerKey => {
     xhr.setRequestHeader(headerKey, headers[headerKey])
-  )
+    console.log('Request Header', headerKey, headers[headerKey])
+  })
 
   xhr.send({
     uri: localPath,
