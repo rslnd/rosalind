@@ -25,9 +25,10 @@ export const insert = ({ Media }) =>
       takenAt: Date,
       mediaType: Match.OneOf(...mediaTypes),
       consumerId: String,
-      clientKey: String
+      clientKey: String,
+      preview: String
     },
-    fn ({ width, height, takenAt, mediaType, consumerId, clientKey }) {
+    fn ({ width, height, takenAt, mediaType, consumerId, preview, clientKey }) {
       const producer = Clients.findOne({ clientKey })
       if (!producer) { throw new Error(`Could not find producer by clientKey`) }
       if (!producer.pairedTo) { throw new Error(`Producer is not paired to any consumer`) }
@@ -52,7 +53,8 @@ export const insert = ({ Media }) =>
         mediaType,
         producerId: producer._id,
         consumerId,
-        createdBy: userId
+        createdBy: userId,
+        preview
       })
 
       Events.post('media/insert', { mediaId, userId })

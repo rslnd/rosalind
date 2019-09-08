@@ -30,6 +30,10 @@ const composer = props => {
 
   const loading = patientId && !subscribe('appointments-patient', { patientId }).ready()
 
+  if (patientId) {
+    subscribe('media', { patientId })
+  }
+
   if (patientId && canRefer) {
     canRefer && subscribe('referrals', {
       patientIds: [patientId]

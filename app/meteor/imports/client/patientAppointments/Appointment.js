@@ -16,7 +16,6 @@ export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
     <ErrorBoundary key={a._id}>
       <Appointment
         appointment={a}
-        hasMedia={!!a.note}
         fullNameWithTitle={fullNameWithTitle}
       />
     </ErrorBoundary>
@@ -29,7 +28,7 @@ export const Appointment = compose(
     collapseComments: hasRole(Meteor.userId(), ['appointments-commentsCollapse']),
     calendar: props.appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
   }))
-)(({ calendar, isCurrent, hasMedia, appointment, fullNameWithTitle, canSeeNote, canSeeComments, collapseComments }) =>
+)(({ calendar, isCurrent, appointment, fullNameWithTitle, canSeeNote, canSeeComments, collapseComments }) =>
   <div style={
     isCurrent
       ? currentAppointmentStyle
@@ -55,8 +54,8 @@ export const Appointment = compose(
     }
 
     {
-      hasMedia && window.location.hash.indexOf('media') !== -1 &&
-      <Media />
+      isCurrent && window.location.hash.indexOf('media') !== -1 &&
+      <Media appointment={appointment} />
     }
   </div>
 )

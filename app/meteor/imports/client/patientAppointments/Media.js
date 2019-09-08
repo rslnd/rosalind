@@ -1,9 +1,22 @@
 import React from 'react'
+import { withTracker } from '../components/withTracker'
+import { Media as MediaAPI } from '../../api/media'
 
-export const Media = () =>
+const composer = props => {
+  const media = MediaAPI.find({}).fetch()
+  return { ...props, media }
+}
+
+export const Media = withTracker(composer)(({ appointment, media }) =>
   <div style={mediaBackgroundStyle}>
+    {media.map(m =>
+      <div key={m._id}>
+        <img src={m.preview} />
+      </div>
+    )}
     &nbsp;
   </div>
+)
 
 const mediaBackgroundStyle = {
   height: 120,

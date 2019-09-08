@@ -69,5 +69,9 @@ export const media = new SimpleSchema({
     type: Object,
     optional: true,
     blackbox: true
+  },
+
+  preview: {
+    type: String
   }
 })
