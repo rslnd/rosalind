@@ -32,7 +32,8 @@ const getUrlParams = (prop) => {
       window.location.href.indexOf('?') + 1
     )
   )
-  const definitions = search.split('&')
+  const query = search.split('#')[0]
+  const definitions = query.split('&')
 
   definitions.forEach(pair => {
     const parts = pair.split('=', 2)
