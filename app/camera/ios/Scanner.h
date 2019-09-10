@@ -7,7 +7,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Scanner : RCTEventEmitter <RCTBridgeModule>
+@interface Scanner : NSObject <RCTBridgeModule>
 
 @end
 

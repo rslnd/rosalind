@@ -60,6 +60,7 @@ const getHelmetConfig = () => {
         ],
         imgSrc: [
           self,
+          'data:',
           'https://app.smooch.io',
           'https://cdn.smooch.io',
           'https://media.smooch.io',

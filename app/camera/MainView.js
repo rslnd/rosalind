@@ -2,9 +2,9 @@ import React from 'react'
 import { StyleSheet, View, NativeModules, NativeEventEmitter } from 'react-native'
 import { CameraView } from './CameraView'
 
-NativeModules.Scanner.initialize()
-const scannerEmitter = new NativeEventEmitter(NativeModules.Scanner)
-scannerEmitter.addListener('Scan', scan => console.log('got scan event', scan))
+// NativeModules.Scanner.initialize()
+// const scannerEmitter = new NativeEventEmitter(NativeModules.Scanner)
+// scannerEmitter.addListener('Scan', scan => console.log('got scan event', scan))
 
 export const MainView = ({
   handlePairingFinish,

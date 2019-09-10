@@ -1,5 +1,17 @@
 import { withHandlers } from 'recompose'
 import { call } from './util'
+import { NativeModules } from 'react-native'
+
+const createPreview = ({ path, width, height, quality }) =>
+  new Promise((resolve, reject) => {
+    NativeModules.Scanner.createPreview(path, width, height, quality, (err, base64) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(base64)
+      }
+    })
+  })
 
 const handleMedia = props => async media => {
   if (!props.pairedTo) {
@@ -8,11 +20,27 @@ const handleMedia = props => async media => {
   }
 
   const { localPath, ...mediaRest } = media
+
+  console.log('Handling new media', media)
+
+  // Create and upload thumbnail with first request
+  const quality = 20
+  const maxPx = 150
+  const preview = await createPreview({
+    path: localPath,
+    width: maxPx,
+    height: maxPx,
+    quality
+  })
+
+  console.log('Resized to base64 length', preview.length)
+
+  // TODO: Send image hash to media/insert
   const createMedia = {
     ...mediaRest,
-    consumerId: props.pairedTo
+    consumerId: props.pairedTo,
+    preview
   }
-  // TODO: Send image hash to media/insert
   const signedRequest = await call(props)('media/insert', createMedia)
 
   // TODO: Resize and upload thumbnail first for better UX
