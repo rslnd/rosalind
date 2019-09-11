@@ -1,2 +1,2 @@
-#import <WeScan-Swift.h>
+// #import <WeScan-Swift.h>
 #import "Scanner.h"
