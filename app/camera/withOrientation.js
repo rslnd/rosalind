@@ -83,12 +83,10 @@ export const withOrientation = Component =>
       // Orientation.unlockAllOrientations()
     }
 
-    componentWillMount () {
-      // const orientation = mapOrientation(Orientation.getInitialOrientation())
-      // this.setState({ orientation })
-    }
-
     componentDidMount () {
+    // const orientation = mapOrientation(Orientation.getInitialOrientation())
+    // this.setState({ orientation })
+
     //   Orientation.addSpecificOrientationListener(this.handleChange)
     //   Orientation.unlockAllOrientations()
     }

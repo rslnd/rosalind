@@ -141,6 +141,7 @@ export class CameraView extends React.Component {
             onBarCodeRead={this.handleCodeRead}
             autoFocusPointOfInterest={pointOfInterest}
             playSoundOnCapture={false}
+            captureAudio={false}
           />
         </View>
 
