@@ -3,13 +3,13 @@ import { lighterMutedBackground, mutedBackground } from '../layout/styles'
 import { Info } from './Info'
 import { Tags } from './Tags'
 import { Note } from './Note'
-import { Media } from './Media'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
 import { Calendars } from '../../api/calendars'
 import { withProps, compose } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
 import { CommentsContainer } from '../comments/CommentsContainer'
+import { Drawer } from '../media/Drawer'
 
 export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
   appointments.map(a =>
@@ -57,7 +57,9 @@ export const Appointment = compose(
 
     {
       isCurrent && window.location.hash.indexOf('media') !== -1 &&
-      <Media appointment={appointment} />
+      <ErrorBoundary>
+        <Drawer appointment={appointment} />
+      </ErrorBoundary>
     }
   </div>
 )

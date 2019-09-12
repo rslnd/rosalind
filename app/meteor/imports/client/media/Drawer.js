@@ -10,7 +10,7 @@ const composer = props => {
   return { ...props, media }
 }
 
-export const Media = withTracker(composer)(({ appointment, media }) =>
+export const Drawer = withTracker(composer)(({ appointment, media }) =>
   <div style={drawerStyle}>
     {media.map(m =>
       <Preview key={m._id} media={m} />
