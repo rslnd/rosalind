@@ -1,4 +1,4 @@
-import Meteor from 'react-native-meteor'
+import Meteor from '@albertzak/react-native-meteor'
 import { call } from './util'
 import { withHandlers, compose, withState } from 'recompose'
 

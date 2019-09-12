@@ -1,4 +1,4 @@
-import Meteor from 'react-native-meteor'
+import Meteor from '@albertzak/react-native-meteor'
 
 export const call = props => (name, args = {}) => {
   return new Promise((resolve, reject) => {
