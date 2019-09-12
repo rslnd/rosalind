@@ -38,6 +38,11 @@ export const media = new SimpleSchema({
     type: Date
   },
 
+  uploadCompletedAt: {
+    type: Date,
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     autoValue: Auto.createdAt,

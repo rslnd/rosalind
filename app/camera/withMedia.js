@@ -35,7 +35,6 @@ const handleMedia = props => async media => {
 
   console.log('Resized to base64 length', preview.length)
 
-  // TODO: Send image hash to media/insert
   const createMedia = {
     ...mediaRest,
     consumerId: props.pairedTo,
@@ -43,10 +42,11 @@ const handleMedia = props => async media => {
   }
   const signedRequest = await call(props)('media/insert', createMedia)
 
-  // TODO: Resize and upload thumbnail first for better UX
   await uploadS3({ signedRequest, localPath })
 
-  // TODO: Call server again to signal when upload has finished
+  await call(props)('media/uploadComplete', {
+    mediaId: signedRequest.mediaId
+  })
 }
 
 const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject) => {

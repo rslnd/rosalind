@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "xed ios"
+    "start": "xed ios && react-native start"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",

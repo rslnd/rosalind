@@ -4,15 +4,7 @@ import { Clients } from '../../../clients'
 import { sign } from 'aws4'
 import uuidv4 from 'uuid/v4'
 import { mediaTypes } from '../../schema'
-
-const bucket = 'hzw-media'
-const region = 'hzw-onprem'
-const host = '10.0.0.15:9000'
-const scheme = 'http'
-
-if (process.env.NODE_ENV === 'production' && scheme !== 'https') {
-  throw new Error('Connection to S3 must be encrypted in production')
-}
+import { Settings } from '../../../settings'
 
 export const insert = ({ Media }) =>
   action({
@@ -29,6 +21,17 @@ export const insert = ({ Media }) =>
       preview: String
     },
     fn ({ width, height, takenAt, mediaType, consumerId, preview, clientKey }) {
+      const bucket = process.env.MEDIA_S3_BUCKET || Settings.get('media.s3.bucket')
+      const region = process.env.MEDIA_S3_REGION || Settings.get('media.s3.region')
+      const host = process.env.MEDIA_S3_HOST || Settings.get('media.s3.host')
+      const accessKeyId = process.env.MEDIA_S3_ACCESS_KEY_ID || Settings.get('media.s3.accessKey')
+      const secretAccessKey = process.env.MEDIA_S3_SECRET_ACCESS_KEY || Settings.get('media.s3.secretAccessKey')
+      const scheme = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+
+      if (!bucket || !region || !host || !accessKeyId || !secretAccessKey) {
+        throw new Error('Missing settings values for media.s3.*')
+      }
+
       const producer = Clients.findOne({ clientKey })
       if (!producer) { throw new Error(`Could not find producer by clientKey`) }
       if (!producer.pairedTo) { throw new Error(`Producer is not paired to any consumer`) }
@@ -59,12 +62,6 @@ export const insert = ({ Media }) =>
 
       Events.post('media/insert', { mediaId, userId })
 
-      const accessKeyId = process.env.AWS_ACCESS_KEY_ID
-      const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
-      if (!accessKeyId || !secretAccessKey) {
-        throw new Error('Please set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY')
-      }
-
       // create presigned upload url
       const path = '/' + bucket + '/' + filename
       const url = scheme + '://' + host + path
@@ -88,7 +85,8 @@ export const insert = ({ Media }) =>
         ...signed,
         url,
         mediaType,
-        filename
+        filename,
+        mediaId
       }
     }
   })
