@@ -38,20 +38,22 @@ export const Appointment = compose(
           : appointmentStyle
       )
   }>
-    <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
-    <Tags {...appointment} isCurrent={isCurrent} />
+    <div style={isCurrent ? currentAppointmentInnerStyle : null}>
+      <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
+      <Tags {...appointment} isCurrent={isCurrent} />
 
-    {
-      canSeeNote &&
-        <Note {...appointment} isCurrent={isCurrent} />
-    }
+      {
+        canSeeNote &&
+          <Note {...appointment} isCurrent={isCurrent} />
+      }
 
-    {
-      canSeeComments &&
-        <CommentsContainer docId={appointment._id}
-          collapsed={collapseComments}
-        />
-    }
+      {
+        canSeeComments &&
+          <CommentsContainer docId={appointment._id}
+            collapsed={collapseComments}
+          />
+      }
+    </div>
 
     {
       isCurrent && window.location.hash.indexOf('media') !== -1 &&
@@ -69,15 +71,18 @@ export const appointmentStyle = {
   marginBottom: 4
 }
 
-export const currentAppointmentStyle = {
+const currentAppointmentStyle = {
   ...appointmentStyle,
   marginTop: 8,
   marginBottom: 12,
+  background: '#fff'
+}
+
+export const currentAppointmentInnerStyle = {
   paddingTop: 10,
   paddingBottom: 10,
   paddingLeft: 5,
-  paddingRight: 5,
-  background: '#fff'
+  paddingRight: 5
 }
 
 const removedAppointmentStyle = {

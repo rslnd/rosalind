@@ -3,7 +3,7 @@ import { compose, withState, withProps, withHandlers, withPropsOnChange } from '
 import { Icon } from '../components/Icon'
 import { __ } from '../../i18n'
 import { dateColumnStyle } from './Info'
-import { AppointmentsList, currentAppointmentStyle } from './Appointment'
+import { AppointmentsList, currentAppointmentInnerStyle } from './Appointment'
 
 export const Oldest = () =>
   <div style={separatorHeadingStyle}>
@@ -23,7 +23,7 @@ export const Current = () =>
 
 const currentStyle = {
   ...separatorHeadingStyle,
-  paddingLeft: separatorHeadingStyle.paddingLeft + currentAppointmentStyle.paddingLeft,
+  paddingLeft: separatorHeadingStyle.paddingLeft + currentAppointmentInnerStyle.paddingLeft,
   paddingTop: 25
 }
 
