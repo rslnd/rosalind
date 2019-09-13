@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@albertzak/react-native-meteor@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@albertzak/react-native-meteor/-/react-native-meteor-1.5.0.tgz#3c1f1fbe39bcbb47746279fb34cb7208438465ea"
-  integrity sha512-946vNmhlHsjj56JkLTuERlRceziVsUe7dmbpUuUrmsdvsaBXGLdVJXWNdR2ukdrlQVSV6wcQm3WjHnYchGfq7w==
+"@albertzak/react-native-meteor@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@albertzak/react-native-meteor/-/react-native-meteor-1.5.2.tgz#9452e0200e0d7dff6f1e617391054621f87befc2"
+  integrity sha512-wwPOOq6kk/+FaEPiYkgfEeXYL2Ohwpm7+ufGq9NpNuDBpl3vkWcBpi37cSaknFV9N9GfzsK6Y1EiwCGJIkPU+g==
   dependencies:
     "@react-native-community/netinfo" "^4.2.1"
     "@xvonabur/minimongo-cache" "^0.1.2"

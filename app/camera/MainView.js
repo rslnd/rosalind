@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, NativeModules, NativeEventEmitter } from 'react-native'
+import { StyleSheet, View, Text, NativeModules, NativeEventEmitter } from 'react-native'
 import { CameraView } from './CameraView'
 
 // NativeModules.Scanner.initialize()
@@ -10,16 +10,20 @@ export const MainView = ({
   handlePairingFinish,
   handleMedia,
   pairedTo,
+  currentPatient,
+  currentPatientId,
   ...props
 }) =>
   <View style={styles.container}>
+    <Text />
+    <Text>{currentPatient || (currentPatientId && 'Bereit') || 'No patient'}</Text>
     <CameraView
       onCodeRead={handlePairingFinish}
       // onScan={() => {
       //   NativeModules.Scanner.open()
       // }}
       onMedia={handleMedia}
-      showControls={!!pairedTo}
+      showControls={pairedTo && currentPatientId}
       {...props}
     />
   </View>

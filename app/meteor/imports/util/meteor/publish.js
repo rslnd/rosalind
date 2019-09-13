@@ -4,12 +4,15 @@ import { isLocalhost } from '../../api/customer/server/isTrustedNetwork'
 import { hasRole } from './hasRole'
 import { isTrustedAccessToken } from './withTrustedAccessToken'
 
-const wrappedPublication = ({ name, args = {}, roles, fn }) => {
+const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requireClientKey }) => {
   // if (!roles) {
   //   console.warn('Publication', name, 'is not restricted to any roles')
   // }
 
   return function (clientArgs = {}) {
+    if (name == 'client') {
+      console.log('Called pub', name, clientArgs)
+    }
     try {
       check(clientArgs, {
         clientKey: Match.Maybe(String),
@@ -22,6 +25,8 @@ const wrappedPublication = ({ name, args = {}, roles, fn }) => {
     }
 
     const isAllowed = checkIsAllowed({
+      allowAnonymous,
+      requireClientKey,
       connection: this.connection,
       userId: this.userId,
       clientKey: clientArgs.clientKey,
@@ -43,7 +48,7 @@ export const publishComposite = options =>
 export const publish = options =>
   Meteor.publish(options.name, wrappedPublication(options))
 
-const checkIsAllowed = ({ connection, userId, clientKey, accessToken, roles }) => {
+const checkIsAllowed = ({ connection, userId, clientKey, accessToken, roles, allowAnonymous, requireClientKey }) => {
   const trustedAccessToken = (accessToken && isTrustedAccessToken(accessToken))
 
   // Allow trustedAccessTokens from localhost
@@ -52,7 +57,13 @@ const checkIsAllowed = ({ connection, userId, clientKey, accessToken, roles }) =
   }
 
   // Don't preload anything on untrusted networks
-  if (!userId) {
+  if (!userId && !allowAnonymous) {
+    console.log('failed because missing userid')
+    return false
+  }
+
+  if (requireClientKey && !checkClientKey(clientKey)) {
+    console.log('failed because client key')
     return false
   }
 
@@ -65,20 +76,29 @@ const checkIsAllowed = ({ connection, userId, clientKey, accessToken, roles }) =
     return true
   }
 
+  if (allowAnonymous) {
+    return true
+  }
+
   return false
 }
 
-// TODO: Maybe restrict publications to those authenticated with a clientKey?
-// const checkClientKey = (clientKey) => {
-//   if (!clientKey) {
-//     return false
-//   }
+// Avoid import loop
+let Clients = null
+const checkClientKey = (clientKey) => {
+  if (!clientKey) {
+    return false
+  }
 
-//   const client = Clients.findOne({ clientKey })
+  if (!Clients) {
+    Clients = require('../../api/clients').Clients
+  }
 
-//   if (!client || client.isBanned) {
-//     return false
-//   }
+  const client = Clients.findOne({ clientKey })
 
-//   return true
-// }
+  if (!client || client.isBanned) {
+    return false
+  }
+
+  return true
+}

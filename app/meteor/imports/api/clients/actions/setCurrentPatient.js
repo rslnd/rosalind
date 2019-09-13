@@ -1,4 +1,5 @@
 import { action, Match } from '../../../util/meteor/action'
+import { Events } from '../../events'
 
 export const setCurrentPatient = ({ Clients }) =>
   action({
@@ -23,5 +24,7 @@ export const setCurrentPatient = ({ Clients }) =>
           }
         })
       }
+
+      Events.post('clients/setCurrentPatient', { clientKey: clientKey.substr(0, 10), patientId })
     }
   })

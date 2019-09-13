@@ -3,6 +3,8 @@ export const preload = {
   firstName: 1,
   lastName: 1,
   lastNameNormalized: 1,
+  titlePrepend: 1,
+  titleAppend: 1,
   insuranceId: 1,
   gender: 1
 }

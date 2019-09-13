@@ -2,6 +2,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Settings } from '../../settings'
+import { Events } from '../../events'
 
 export const register = ({ Clients }) => {
   return new ValidatedMethod({
@@ -26,18 +27,21 @@ export const register = ({ Clients }) => {
             systemInfo
           }
         })
+        Events.post('clients/register', { existingClientId: existingClient._id })
         return { isOk: true, settings: existingClient.settings }
       } else {
         if (!Settings.get('clients.allowNewClients')) {
           console.error('[Clients] New client registration is disabled')
           console.error('[Clients] Blocked attempt to register new client key', clientKey)
+          Events.post('clients/register', { blocked: true })
           return { isOk: false }
         } else {
-          Clients.insert({
+          const clientId = Clients.insert({
             clientKey,
             systemInfo,
             createdAt: new Date()
           })
+          Events.post('clients/register', { newClientId: clientId })
           return { isOk: true }
         }
       }

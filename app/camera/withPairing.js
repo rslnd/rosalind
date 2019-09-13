@@ -1,6 +1,9 @@
-import Meteor from '@albertzak/react-native-meteor'
+import Meteor, { Mongo, withTracker } from '@albertzak/react-native-meteor'
 import { call } from './util'
 import { withHandlers, compose, withState } from 'recompose'
+
+const Patients = new Mongo.Collection('patients', { cursoredFind: true })
+const Clients = new Mongo.Collection('clients', { cursoredFind: true })
 
 const minTokenLength = 90
 
@@ -64,8 +67,33 @@ const pair = props => async ({ url, pairingToken }) => {
   }
 }
 
+const withCurrentPatient = props => {
+  Meteor.subscribe('client-consumer', { clientKey: props.clientKey })
+  const consumer = Clients.findOne({ _id: props.pairedTo })
+
+  // We have the id after one roundtrip, while the patient object needs another subscription.
+  // We can start taking photos as soon as we have the id.
+  let currentPatientId = null
+  let currentPatient = null
+
+  if (consumer && consumer.currentPatientId) {
+    currentPatientId = consumer.currentPatientId
+    Meteor.subscribe('patient-name', { patientId: currentPatientId, clientKey: props.clientKey })
+
+    currentPatient = Patients.find({}).fetch().map(p => p.lastName).join(', ')
+  }
+
+  // Bug: Can't pass as prop for some reason, lags behind by one step
+  props.setCurrentPatient(currentPatient)
+  props.setCurrentPatientId(currentPatientId)
+  return {}
+}
+
 export const withPairing = compose(
   withState('pairedTo', 'setPairedTo', null),
   withState('baseUrl', 'setBaseUrl', null),
-  withHandlers({ handlePairingFinish })
+  withState('currentPatientId', 'setCurrentPatientId', null),
+  withState('currentPatient', 'setCurrentPatient', null),
+  withHandlers({ handlePairingFinish }),
+  withTracker(withCurrentPatient)
 )

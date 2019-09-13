@@ -6,7 +6,7 @@ export const pairingFinish = ({ Clients }) =>
   action({
     name: 'clients/pairingFinish',
     allowAnonymous: true,
-    // TODO: Restrict to trusted networks
+    requireClientKey: true,
     args: {
       clientKey: String,
       pairingToken: String
@@ -21,7 +21,8 @@ export const pairingFinish = ({ Clients }) =>
 
       Events.post('clients/pairingFinish', {
         consumerId: consumer._id,
-        producerId: producer._id
+        producerId: producer._id,
+        userId: consumer.pairingTokenCreatedBy
       })
 
       Clients.update({ _id: consumer._id }, {

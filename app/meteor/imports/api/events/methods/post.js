@@ -14,7 +14,6 @@ export const post = ({ Events }) => {
 
     run ({ type, level, payload = {} }) {
       const userId = (payload.userId || Meteor.userId())
-      if (!userId) { return }
 
       console.log(`[Event] ${level || 'info'}: ${type}`, { payload }, { userId })
       if (Object.keys(payload).length === 0) { payload = null }
