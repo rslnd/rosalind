@@ -80,7 +80,7 @@ const withCurrentPatient = props => {
     currentPatientId = consumer.currentPatientId
     Meteor.subscribe('patient-name', { patientId: currentPatientId, clientKey: props.clientKey })
 
-    currentPatient = Patients.find({}).fetch().map(p => p.lastName).join(', ')
+    currentPatient = Patients.findOne({ _id: currentPatientId })
   }
 
   // Bug: Can't pass as prop for some reason, lags behind by one step

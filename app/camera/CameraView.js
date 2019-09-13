@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#fff',
-    opacity: 0.4
+    opacity: 0.5
   },
   pleasePairIcon: {
     flex: 1,
