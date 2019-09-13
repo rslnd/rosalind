@@ -1,5 +1,5 @@
 import identity from 'lodash/identity'
-import { compose, withState } from 'recompose'
+import { compose, withState, withPropsOnChange } from 'recompose'
 import { PatientAppointmentsModal } from './PatientAppointmentsModal'
 import { withTracker } from '../components/withTracker'
 import { Appointments } from '../../api/appointments'
@@ -90,6 +90,7 @@ const composer = props => {
 
   return {
     ...props,
+    patientId,
     loading,
     currentAppointment,
     patient,

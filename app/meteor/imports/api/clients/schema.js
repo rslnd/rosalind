@@ -82,6 +82,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  currentPatientId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     autoValue: Auto.createdAt

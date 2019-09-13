@@ -10,6 +10,8 @@ import { Patient } from './Patient'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
 import Button from '@material-ui/core/Button'
 import { __ } from '../../i18n'
+import { Clients } from '../../api'
+import { getClientKey } from '../../startup/client/native/events'
 
 export const PatientAppointmentsModal = compose(
   withPropsOnChange(
@@ -21,6 +23,18 @@ export const PatientAppointmentsModal = compose(
       } else {
         document.body.style.overflow = null
       }
+
+      // Associate client workstation with current patient
+      setTimeout(() => {
+        const clientKey = getClientKey()
+        if (clientKey) {
+          Clients.actions.setCurrentPatient.callPromise({
+            clientKey,
+            patientId: ((props.show && props.patientId) || null)
+          })
+        }
+      }, 16)
+
       return {}
     }
   ),
