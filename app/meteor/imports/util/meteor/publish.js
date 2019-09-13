@@ -10,9 +10,6 @@ const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requir
   // }
 
   return function (clientArgs = {}) {
-    if (name == 'client') {
-      console.log('Called pub', name, clientArgs)
-    }
     try {
       check(clientArgs, {
         clientKey: Match.Maybe(String),
