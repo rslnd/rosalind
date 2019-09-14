@@ -58,7 +58,10 @@ export const Appointment = compose(
     {
       isCurrent && window.location.hash.indexOf('media') !== -1 &&
       <ErrorBoundary>
-        <Drawer appointment={appointment} />
+        <Drawer
+          patientId={appointment.patientId}
+          appointmentId={appointment._id}
+        />
       </ErrorBoundary>
     }
   </div>

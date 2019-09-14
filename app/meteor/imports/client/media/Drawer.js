@@ -4,13 +4,18 @@ import { Media as MediaAPI } from '../../api/media'
 import { Icon } from '../components/Icon'
 
 const composer = props => {
-  const media = MediaAPI.find({}, { sort: {
+  const { appointmentId, patientId } = props
+
+  const media = MediaAPI.find({
+    appointmentId
+  }, { sort: {
     createdAt: 1
   } }).fetch()
+
   return { ...props, media }
 }
 
-export const Drawer = withTracker(composer)(({ appointment, media }) =>
+export const Drawer = withTracker(composer)(({ media }) =>
   <div style={drawerStyle}>
     {media.map(m =>
       <Preview key={m._id} media={m} />

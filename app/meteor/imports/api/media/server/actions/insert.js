@@ -17,10 +17,12 @@ export const insert = ({ Media }) =>
       takenAt: Date,
       mediaType: Match.OneOf(...mediaTypes),
       consumerId: String,
+      patientId: String,
+      appointmentId: String,
       clientKey: String,
       preview: String
     },
-    fn ({ width, height, takenAt, mediaType, consumerId, preview, clientKey }) {
+    fn ({ width, height, takenAt, mediaType, consumerId, preview, clientKey, patientId, appointmentId }) {
       const bucket = process.env.MEDIA_S3_BUCKET || Settings.get('media.s3.bucket')
       const region = process.env.MEDIA_S3_REGION || Settings.get('media.s3.region')
       const host = process.env.MEDIA_S3_HOST || Settings.get('media.s3.host')
@@ -54,6 +56,8 @@ export const insert = ({ Media }) =>
         height,
         takenAt,
         mediaType,
+        patientId,
+        appointmentId,
         producerId: producer._id,
         consumerId,
         createdBy: userId,

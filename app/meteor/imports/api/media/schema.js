@@ -5,11 +5,23 @@ export const mediaTypes = ['image/jpeg']
 
 export const media = new SimpleSchema({
   consumerId: {
-    type: SimpleSchema.RegEx.Id
+    type: SimpleSchema.RegEx.Id,
+    index: 1
   },
 
   producerId: {
     type: SimpleSchema.RegEx.Id
+  },
+
+  patientId: {
+    type: SimpleSchema.RegEx.Id,
+    index: 1
+  },
+
+  appointmentId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true,
+    index: 1
   },
 
   filename: {

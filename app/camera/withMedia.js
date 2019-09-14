@@ -38,6 +38,8 @@ const handleMedia = props => async media => {
   const createMedia = {
     ...mediaRest,
     consumerId: props.pairedTo,
+    patientId: props.currentPatientId,
+    appointmentId: props.currentAppointmentId,
     preview
   }
   const signedRequest = await call(props)('media/insert', createMedia)
