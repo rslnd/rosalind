@@ -28,9 +28,10 @@ export const PatientAppointmentsModal = compose(
       setTimeout(() => {
         const clientKey = getClientKey()
         if (clientKey) {
-          Clients.actions.setCurrentPatient.callPromise({
+          Clients.actions.setCurrentView.callPromise({
             clientKey,
-            patientId: ((props.show && props.patientId) || null)
+            patientId: ((props.show && props.patientId) || null),
+            appointmentId: ((props.show && props.appointmentId) || null)
           })
         }
       }, 16)

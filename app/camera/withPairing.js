@@ -74,10 +74,12 @@ const withCurrentPatient = props => {
   // We have the id after one roundtrip, while the patient object needs another subscription.
   // We can start taking photos as soon as we have the id.
   let currentPatientId = null
+  let currentAppointmentId = null
   let currentPatient = null
 
   if (consumer && consumer.currentPatientId) {
     currentPatientId = consumer.currentPatientId
+    currentAppointmentId = consumer.currentAppointmentId
     Meteor.subscribe('patient-name', { patientId: currentPatientId, clientKey: props.clientKey })
 
     currentPatient = Patients.findOne({ _id: currentPatientId })
@@ -86,6 +88,7 @@ const withCurrentPatient = props => {
   // Bug: Can't pass as prop for some reason, lags behind by one step
   props.setCurrentPatient(currentPatient)
   props.setCurrentPatientId(currentPatientId)
+  props.setCurrentAppointmentId(currentAppointmentId)
   return {}
 }
 
@@ -93,6 +96,7 @@ export const withPairing = compose(
   withState('pairedTo', 'setPairedTo', null),
   withState('baseUrl', 'setBaseUrl', null),
   withState('currentPatientId', 'setCurrentPatientId', null),
+  withState('currentAppointmentId', 'setCurrentAppointmentId', null),
   withState('currentPatient', 'setCurrentPatient', null),
   withHandlers({ handlePairingFinish }),
   withTracker(withCurrentPatient)

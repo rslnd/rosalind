@@ -2,7 +2,7 @@ import { register } from './register'
 import { pairingStart } from './pairingStart'
 import { pairingCancel } from './pairingCancel'
 import { pairingFinish } from './pairingFinish'
-import { setCurrentPatient } from './setCurrentPatient'
+import { setCurrentView } from './setCurrentView'
 import { lifecycleActions } from '../../../util/meteor/action'
 
 export const actions = ({ Clients }) => ({
@@ -10,7 +10,7 @@ export const actions = ({ Clients }) => ({
   pairingStart: pairingStart({ Clients }),
   pairingCancel: pairingCancel({ Clients }),
   pairingFinish: pairingFinish({ Clients }),
-  setCurrentPatient: setCurrentPatient({ Clients }),
+  setCurrentView: setCurrentView({ Clients }),
   ...lifecycleActions({
     Collection: Clients,
     singular: 'client',
