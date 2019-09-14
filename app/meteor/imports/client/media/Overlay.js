@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Icon } from '../components/Icon'
+import { Media } from '../../api'
 
 export const MediaOverlay = ({ patientId, appointmentId, children }) => {
   const [currentMediaId, setCurrentMediaId] = useState()
@@ -10,11 +11,15 @@ export const MediaOverlay = ({ patientId, appointmentId, children }) => {
   }
   const handleClose = () => setCurrentMediaId(null)
 
+  const currentMedia = currentMediaId && Media.findOne({ _id: currentMediaId })
+
   return <div>
     {
       currentMediaId && <div style={overlayStyle} onClick={handleClose}>
         <div style={closeStyle} onClick={handleClose}>
           <Icon name='times' />
+
+          {currentMedia && <img src={currentMedia.url} />}
         </div>
       </div>
     }

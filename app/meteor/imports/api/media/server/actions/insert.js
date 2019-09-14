@@ -1,10 +1,9 @@
 import { action, Match } from '../../../../util/meteor/action'
 import { Events } from '../../../events'
 import { Clients } from '../../../clients'
-import { sign } from 'aws4'
 import uuidv4 from 'uuid/v4'
 import { mediaTypes } from '../../schema'
-import { Settings } from '../../../settings'
+import { getCredentials, createPresignedRequest } from '../s3'
 
 export const insert = ({ Media }) =>
   action({
@@ -23,16 +22,7 @@ export const insert = ({ Media }) =>
       preview: String
     },
     fn ({ width, height, takenAt, mediaType, consumerId, preview, clientKey, patientId, appointmentId }) {
-      const bucket = process.env.MEDIA_S3_BUCKET || Settings.get('media.s3.bucket')
-      const region = process.env.MEDIA_S3_REGION || Settings.get('media.s3.region')
-      const host = process.env.MEDIA_S3_HOST || Settings.get('media.s3.host')
-      const accessKeyId = process.env.MEDIA_S3_ACCESS_KEY_ID || Settings.get('media.s3.accessKey')
-      const secretAccessKey = process.env.MEDIA_S3_SECRET_ACCESS_KEY || Settings.get('media.s3.secretAccessKey')
-      const scheme = process.env.NODE_ENV === 'development' ? 'http' : 'https'
-
-      if (!bucket || !region || !host || !accessKeyId || !secretAccessKey) {
-        throw new Error('Missing settings values for media.s3.*')
-      }
+      const credentials = getCredentials()
 
       const producer = Clients.findOne({ clientKey })
       if (!producer) { throw new Error(`Could not find producer by clientKey`) }
@@ -66,28 +56,21 @@ export const insert = ({ Media }) =>
 
       Events.post('media/insert', { mediaId, userId })
 
-      // create presigned upload url
-      const path = '/' + bucket + '/' + filename
-      const url = scheme + '://' + host + path
-      const signed = sign({
-        service: 's3',
-        region,
-        url,
-        path,
+      const signed = createPresignedRequest({
+        credentials,
+        filename,
         method: 'PUT',
-        host,
         headers: {
           'content-type': mediaType,
           'x-amz-content-sha256': 'UNSIGNED-PAYLOAD',
-          'x-amz-bucket-region': region
+          'x-amz-bucket-region': credentials.region
         }
-      }, { accessKeyId, secretAccessKey })
+      })
 
       console.log(signed)
 
       return {
         ...signed,
-        url,
         mediaType,
         filename,
         mediaId

@@ -76,8 +76,6 @@ export const publication = () => {
         throw new Error('Consumer not found')
       }
 
-      console.log('republishing consumer.currentPatientId', consumer.currentPatientId)
-
       return consumer
     }
   })

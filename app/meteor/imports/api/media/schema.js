@@ -24,6 +24,13 @@ export const media = new SimpleSchema({
     index: 1
   },
 
+  // The publications generates a presigned GET url and attaches it as this field
+  // but it's not saved in the db
+  url: {
+    type: String,
+    optional: true
+  },
+
   filename: {
     type: String
   },
