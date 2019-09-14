@@ -104,7 +104,7 @@ class LockScreen extends React.Component {
 }
 
 export const lockScreenStyle = {
-  zIndex: 1054,
+  zIndex: 1900,
   position: 'fixed',
   backgroundColor: '#3c8dbc',
   top: 0,

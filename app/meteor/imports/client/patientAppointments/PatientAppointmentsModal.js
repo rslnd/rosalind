@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button'
 import { __ } from '../../i18n'
 import { Clients } from '../../api'
 import { getClientKey } from '../../startup/client/native/events'
+import { MediaOverlay } from '../media/Overlay'
 
 export const PatientAppointmentsModal = compose(
   withPropsOnChange(
@@ -46,51 +47,59 @@ export const PatientAppointmentsModal = compose(
     }
   })
 )(({ loading, show, handleClose, ...props }) =>
-  <Portal>
-    {
-      <div className='disable-select' style={show ? modalStyle : hiddenStyle}>
-        <div
-          style={backdropStyle}
-          onClick={handleClose}
-        />
-        <Paper elevation={10} style={modalWindowStyle}>
-          <Close onClick={handleClose} />
-          <div style={containerStyle}>
-            <div style={columnsStyle}>
-              <div style={appointmentsStyle}>
-                <ErrorBoundary>
-                  <Appointments
-                    {...props}
-                    show={show}
-                    appointmentsCount={(
-                      (props.pastAppointments ? props.pastAppointments.length : 0) +
-                      (props.futureAppointments ? props.futureAppointments.length : 0) +
-                      (props.currentAppointment ? 1 : 0)
-                    )} // Scrolls to bottom when changed
-                  />
-                </ErrorBoundary>
+  <MediaOverlay
+    patientId={props.patientId}
+    appointmentId={props.currentAppointment && props.currentAppointment._id}
+  >
+    {({ handleMediaClick }) =>
+      <Portal>
+        {
+          <div className='disable-select' style={show ? modalStyle : hiddenStyle}>
+            <div
+              style={backdropStyle}
+              onClick={handleClose}
+            />
+            <Paper elevation={10} style={modalWindowStyle}>
+              <Close onClick={handleClose} />
+              <div style={containerStyle}>
+                <div style={columnsStyle}>
+                  <div style={appointmentsStyle}>
+                    <ErrorBoundary>
+                      <Appointments
+                        {...props}
+                        show={show}
+                        handleMediaClick={handleMediaClick}
+                        appointmentsCount={(
+                          (props.pastAppointments ? props.pastAppointments.length : 0) +
+                          (props.futureAppointments ? props.futureAppointments.length : 0) +
+                          (props.currentAppointment ? 1 : 0)
+                        )} // Scrolls to bottom when changed
+                      />
+                    </ErrorBoundary>
+                  </div>
+                  <div style={patientSidebarStyle}>
+                    <ErrorBoundary>
+                      <Patient {...props} />
+                    </ErrorBoundary>
+                  </div>
+                </div>
+                <div style={actionsStyle}>
+                  {
+                    props.currentAppointment
+                      ? <AppointmentActionsContainer {...props} />
+                      : <Button
+                        style={closeButtonStyle}
+                        onClick={handleClose}
+                      >{__('ui.close')}</Button>
+                  }
+                </div>
               </div>
-              <div style={patientSidebarStyle}>
-                <ErrorBoundary>
-                  <Patient {...props} />
-                </ErrorBoundary>
-              </div>
-            </div>
-            <div style={actionsStyle}>
-              {
-                props.currentAppointment
-                  ? <AppointmentActionsContainer {...props} />
-                  : <Button
-                    style={closeButtonStyle}
-                    onClick={handleClose}
-                  >{__('ui.close')}</Button>
-              }
-            </div>
+            </Paper>
           </div>
-        </Paper>
-      </div>
+        }
+      </Portal>
     }
-  </Portal>
+  </MediaOverlay>
 )
 
 const borderRadius = 6

@@ -30,6 +30,7 @@ export const Appointments = compose(
   show,
   canRefer,
   loading,
+  handleMediaClick,
   ...props
 }) =>
   <div style={containerStyle}>
@@ -49,6 +50,7 @@ export const Appointments = compose(
             appointments={pastAppointments}
             fullNameWithTitle={fullNameWithTitle}
             show={show}
+            handleMediaClick={handleMediaClick}
           />
           {
             loading && <Loading />
@@ -64,6 +66,7 @@ export const Appointments = compose(
               appointment={currentAppointment}
               fullNameWithTitle={fullNameWithTitle}
               isCurrent
+              handleMediaClick={handleMediaClick}
               show={show}
             />
           }

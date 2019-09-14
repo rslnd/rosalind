@@ -20,7 +20,7 @@ export const PatientName = ({ patient = {} }) => (
 
 const styles = StyleSheet.create({
   muted: {
-    color: '#555'
+    opacity: 0.6
   },
   bold: {
     fontWeight: '700'

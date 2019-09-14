@@ -13,7 +13,7 @@ const composer = (props) => {
 
 const styleContainer = {
   position: 'fixed',
-  zIndex: 1055,
+  zIndex: 2000,
   bottom: 0,
   width: '100%',
   minHeight: 60,

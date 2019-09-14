@@ -11,12 +11,13 @@ import { hasRole } from '../../util/meteor/hasRole'
 import { CommentsContainer } from '../comments/CommentsContainer'
 import { Drawer } from '../media/Drawer'
 
-export const AppointmentsList = ({ appointments, fullNameWithTitle }) =>
+export const AppointmentsList = ({ appointments, handleMediaClick, fullNameWithTitle }) =>
   appointments.map(a =>
     <ErrorBoundary key={a._id}>
       <Appointment
         appointment={a}
         fullNameWithTitle={fullNameWithTitle}
+        handleMediaClick={handleMediaClick}
       />
     </ErrorBoundary>
   )
@@ -28,7 +29,16 @@ export const Appointment = compose(
     collapseComments: hasRole(Meteor.userId(), ['appointments-commentsCollapse']),
     calendar: props.appointment ? Calendars.findOne({ _id: props.appointment.calendarId }) : null
   }))
-)(({ calendar, isCurrent, appointment, fullNameWithTitle, canSeeNote, canSeeComments, collapseComments }) =>
+)(({
+  calendar,
+  isCurrent,
+  appointment,
+  fullNameWithTitle,
+  canSeeNote,
+  canSeeComments,
+  collapseComments,
+  handleMediaClick
+}) =>
   <div style={
     isCurrent
       ? currentAppointmentStyle
@@ -59,6 +69,7 @@ export const Appointment = compose(
       isCurrent && window.location.hash.indexOf('media') !== -1 &&
       <ErrorBoundary>
         <Drawer
+          handleMediaClick={handleMediaClick}
           patientId={appointment.patientId}
           appointmentId={appointment._id}
         />

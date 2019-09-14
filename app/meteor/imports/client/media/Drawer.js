@@ -2,6 +2,7 @@ import React from 'react'
 import { withTracker } from '../components/withTracker'
 import { Media as MediaAPI } from '../../api/media'
 import { Icon } from '../components/Icon'
+import { withHandlers } from 'recompose'
 
 const composer = props => {
   const { appointmentId, patientId } = props
@@ -15,20 +16,23 @@ const composer = props => {
   return { ...props, media }
 }
 
-export const Drawer = withTracker(composer)(({ media }) =>
+export const Drawer = withTracker(composer)(({ media, handleMediaClick }) =>
   <div style={drawerStyle}>
     {media.map(m =>
-      <Preview key={m._id} media={m} />
+      <Preview key={m._id} media={m} handleMediaClick={handleMediaClick} />
     )}
     &nbsp;
   </div>
 )
 
-const Preview = ({ media }) =>
-  <div style={imageContainerStyle}>
+const Preview = withHandlers({
+  handleClick: props => e => props.handleMediaClick(props.media._id)
+})(({ media, handleClick }) =>
+  <div style={imageContainerStyle} onClick={handleClick}>
     {!media.uploadCompletedAt && <Icon style={uploadingIconStyle} name='clock-o' />}
     <img src={'data:image/jpeg;base64,' + media.preview} />
   </div>
+)
 
 const imageContainerStyle = {
   position: 'relative',
