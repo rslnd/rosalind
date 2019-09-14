@@ -22,7 +22,6 @@ export const publication = ({ Media }) => {
         })
 
         doc.url = requestToUrl(request)
-        doc.request = request
         return doc
       }
 
