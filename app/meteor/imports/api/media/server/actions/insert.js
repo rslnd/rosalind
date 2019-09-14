@@ -62,8 +62,7 @@ export const insert = ({ Media }) =>
         method: 'PUT',
         headers: {
           'content-type': mediaType,
-          'x-amz-content-sha256': 'UNSIGNED-PAYLOAD',
-          'x-amz-bucket-region': credentials.region
+          'x-amz-content-sha256': 'UNSIGNED-PAYLOAD'
         }
       })
 
