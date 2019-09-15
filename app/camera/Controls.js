@@ -30,11 +30,13 @@ export const Controls = ({
 
 const Button = ({ primary, onPress, icon, ...props }) =>
   <TouchableOpacity onPress={onPress}>
-    <View style={applyStyle(props, styles, primary ? 'primary' : 'secondary')}>
-      <Icon name={icon} style={[
-        styles[both].icon,
-        !primary ? styles[both].iconSecondary : {}
-      ]} />
+    <View style={applyStyle(props, styles, primary ? 'primaryArea' : 'secondaryArea')}>
+      <View style={applyStyle(props, styles, primary ? 'primary' : 'secondary')}>
+        <Icon name={icon} style={[
+          styles[both].icon,
+          !primary ? styles[both].iconSecondary : {}
+        ]} />
+      </View>
     </View>
   </TouchableOpacity>
 
@@ -44,9 +46,10 @@ const Placeholder = props =>
     pointerEvents='none'
   />
 
-const primarySize = 130
-const secondarySize = 80
+const primarySize = 90
+const secondarySize = 60
 const rowPadding = 15
+const touchableAreaMultiplier = 1.6
 
 export const rowSize = primarySize + rowPadding
 
@@ -59,18 +62,28 @@ const styles = {
       alignItems: 'center',
       padding: rowPadding
     },
+    primaryArea: {
+      width: primarySize * touchableAreaMultiplier,
+      height: primarySize * touchableAreaMultiplier,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
     primary: {
-      opacity: 0.8,
-      backgroundColor: 'red',
+      backgroundColor: 'rgba(255,255,255,0.7)',
       borderRadius: primarySize,
       width: primarySize,
       height: primarySize,
       justifyContent: 'center',
       alignItems: 'center'
     },
+    secondayArea: {
+      width: secondarySize * touchableAreaMultiplier,
+      height: secondarySize * touchableAreaMultiplier,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
     secondary: {
-      opacity: 0.7,
-      backgroundColor: '#333',
+      backgroundColor: 'rgba(180,180,180,0.6)',
       borderRadius: secondarySize,
       width: secondarySize,
       height: secondarySize,
@@ -82,10 +95,10 @@ const styles = {
     },
     icon: {
       flex: 1,
-      paddingTop: 33,
+      paddingTop: 22,
       paddingLeft: 1,
-      fontSize: 60,
-      color: 'white'
+      fontSize: 40,
+      color: 'rgba(0,0,0,0.8)'
     },
     iconSecondary: {
       paddingTop: 24,
@@ -96,7 +109,7 @@ const styles = {
   }),
   [portrait]: StyleSheet.create({
     controlRow: {
-      minHeight: primarySize,
+      minHeight: primarySize * touchableAreaMultiplier,
       left: 0,
       right: 0,
       bottom: 0
@@ -105,7 +118,7 @@ const styles = {
   [landscape]: StyleSheet.create({
     controlRow: {
       flexDirection: 'column',
-      minWidth: primarySize,
+      minWidth: primarySize * touchableAreaMultiplier,
       right: 0,
       top: 0,
       bottom: 0
