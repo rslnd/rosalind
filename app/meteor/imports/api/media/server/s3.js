@@ -3,22 +3,27 @@ import { sign } from 'aws4'
 import { Settings } from '../../settings'
 
 export const getCredentials = () => {
-  const bucket = process.env.MEDIA_S3_BUCKET || Settings.get('media.s3.bucket')
+  const bucketUploads = process.env.MEDIA_S3_BUCKET_UPLOADS || Settings.get('media.s3.bucketUploads')
+  const bucketDownloads = process.env.MEDIA_S3_BUCKET_DOWNLOADS || Settings.get('media.s3.bucketDownloads')
   const region = process.env.MEDIA_S3_REGION || Settings.get('media.s3.region')
   const host = process.env.MEDIA_S3_HOST || Settings.get('media.s3.host')
   const accessKeyId = process.env.MEDIA_S3_ACCESS_KEY_ID || Settings.get('media.s3.accessKey')
   const secretAccessKey = process.env.MEDIA_S3_SECRET_ACCESS_KEY || Settings.get('media.s3.secretAccessKey')
   const scheme = process.env.NODE_ENV === 'development' ? 'http' : 'https'
 
-  if (!bucket || !region || !host || !accessKeyId || !secretAccessKey) {
-    throw new Error('Missing settings values for media.s3.*')
+  const credentials = { bucketUploads, bucketDownloads, region, host, accessKeyId, secretAccessKey, scheme }
+
+  const missing = Object.keys(credentials).filter(k => !credentials[k])
+  if (missing.length >= 1) {
+    throw new Error(`Missing media credentials settings for #{missing.join(', ')}`)
   }
 
-  return { bucket, region, host, accessKeyId, secretAccessKey, scheme }
+  return credentials
 }
 
 export const createPresignedRequest = ({ credentials, filename, ...properties }) => {
-  const { bucket, region, host, accessKeyId, secretAccessKey, scheme } = credentials
+  const { region, host, accessKeyId, secretAccessKey, scheme } = credentials
+  const bucket = properties.method === 'PUT' ? credentials.bucketUploads : credentials.bucketDownloads
   const path = '/' + bucket + '/' + filename
   const url = scheme + '://' + host + path
   const signed = sign({
