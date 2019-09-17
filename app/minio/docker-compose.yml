@@ -12,8 +12,27 @@ services:
       - '9000:9000'
     volumes:
       - './minio-data:/data'
-    restart: always
-    network_mode: bridge
+    links:
+      - broker
+
+  optimizer:
+    build: './optimizer'
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_REGION=${MINIO_REGION}
+      - MINIO_HOST=minio
+      - SOURCE_BUCKET=hzw-media-uploads
+      - TARGET_BUCKET=hzw-media
+      - MQTT_BROKER=tcp://broker:1883
+      - MQTT_TOPIC=minio
+    links:
+      - broker
+      - minio
+
+  broker:
+    image: eclipse-mosquitto:latest
+
 
   # mirror-up:
   #   image: 'minio/mc'

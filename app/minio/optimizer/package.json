@@ -1,0 +1,10 @@
+{
+  "name": "optimizer",
+  "version": "0.0.1",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "minio": "^7.0.12",
+    "mqtt": "^3.0.0"
+  }
+}
