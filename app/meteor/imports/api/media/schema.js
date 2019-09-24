@@ -127,6 +127,11 @@ export const mediaTags = new SimpleSchema({
     optional: true
   },
 
+  pinned: {
+    type: Boolean,
+    optional: true
+  },
+
   removed: {
     type: Boolean,
     optional: true,

@@ -52,6 +52,11 @@ const structure = () => [
     header: 'Farbe',
     field: 'color',
     render: ({ color }) => <div style={{ backgroundColor: color, width: 50, height: 32 }} />
+  },
+  {
+    header: 'Gepinnt',
+    field: 'pinned',
+    type: Boolean
   }
 ]
 

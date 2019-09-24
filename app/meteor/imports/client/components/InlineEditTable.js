@@ -35,6 +35,10 @@ const Cell = ({ isEditing, col, row, onClick }) => {
     contents = col.render(row)
   }
 
+  if (!col.render && col.type === Boolean) {
+    contents = row[col.field] ? <Icon name='check' /> : null
+  }
+
   return (
     <td
       onClick={onClick}

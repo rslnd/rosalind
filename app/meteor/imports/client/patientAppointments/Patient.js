@@ -14,6 +14,7 @@ import { Dot } from '../patients/Dot'
 import { currencyRounded } from '../../util/format'
 import { FutureRecord } from '../records/FutureRecord'
 import { PairingButton } from '../clients/PairingButton'
+import { Pinned } from '../media/Pinned'
 
 const action = promise =>
   promise.then(() => {
@@ -28,39 +29,49 @@ const sectionStart = {
   paddingTop: 14
 }
 
-export const Patient = ({ patient, currentAppointment }) =>
+export const Patient = ({ patient, currentAppointment, handleMediaClick }) =>
   !patient ? null : <div style={containerStyle}>
-    <div style={fieldsContainerStyle}>
-      <Name {...patient} />
-      <Birthday {...patient} />
-      <InsuranceId {...patient} />
-      <Contacts {...patient} />
-      <Address {...patient} />
-      <Loyalty {...patient} />
-      <PatientActions {...patient} />
+    <div style={innerContainerStyle}>
+      <div style={fieldsContainerStyle}>
+        <Name {...patient} />
+        <Birthday {...patient} />
+        <InsuranceId {...patient} />
+        <Contacts {...patient} />
+        <Address {...patient} />
+        <Loyalty {...patient} />
+        <PatientActions {...patient} />
+      </div>
+      <div style={marginBottomStyle}>
+        <Note {...patient} />
+        <FutureRecord
+          patientId={patient._id}
+          calendarId={currentAppointment ? currentAppointment.calendarId : null}
+          currentAppointment={currentAppointment}
+          style={noteLabelStyle}
+          fieldStyle={noteFieldStyle} />
+      </div>
+      <div style={marginBottomStyle}>
+        <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
+        <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
+        <PairingButton />
+      </div>
     </div>
-    <div style={marginBottomStyle}>
-      <Note {...patient} />
-      <FutureRecord
-        patientId={patient._id}
-        calendarId={currentAppointment ? currentAppointment.calendarId : null}
-        currentAppointment={currentAppointment}
-        style={noteLabelStyle}
-        fieldStyle={noteFieldStyle} />
-    </div>
-    <div style={marginBottomStyle}>
-      <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
-      <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
-      <PairingButton />
-    </div>
+    <Pinned
+      patientId={patient._id}
+      handleMediaClick={handleMediaClick}
+      style={pinnedMediaStyle}
+    />
   </div>
 
 const containerStyle = {
-  padding: 8,
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between'
+}
+
+const innerContainerStyle = {
+  padding: 20
 }
 
 const marginBottomStyle = {
@@ -292,4 +303,8 @@ export const Toggles = ({ patient, currentAppointment, showOnly }) => {
     <Consent plain showOnly={showOnly} appointment={currentAppointment} />
     <Agreements showOnly={showOnly} patient={patient} calendarId={currentAppointment.calendarId} />
   </div>
+}
+
+const pinnedMediaStyle = {
+  borderRadius: 'none'
 }

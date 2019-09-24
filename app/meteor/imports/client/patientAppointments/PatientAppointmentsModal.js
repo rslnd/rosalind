@@ -79,7 +79,7 @@ export const PatientAppointmentsModal = compose(
                   </div>
                   <div style={patientSidebarStyle}>
                     <ErrorBoundary>
-                      <Patient {...props} />
+                      <Patient {...props} handleMediaClick={handleMediaClick} />
                     </ErrorBoundary>
                   </div>
                 </div>
@@ -159,7 +159,6 @@ const appointmentsStyle = {
 }
 
 const patientSidebarStyle = {
-  padding: 12,
   zIndex: 2,
   boxShadow: '-4px 0px 5px -1px rgba(0,0,0,0.1)',
   width: 'calc(100% - 67%)', // More obvious to replace with Cmd+F

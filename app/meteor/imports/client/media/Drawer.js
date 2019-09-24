@@ -7,7 +7,7 @@ import { withHandlers } from 'recompose'
 const composer = props => {
   const { appointmentId, patientId } = props
 
-  const media = MediaAPI.find({
+  const media = props.media || MediaAPI.find({
     appointmentId
   }, { sort: {
     createdAt: 1
@@ -16,16 +16,18 @@ const composer = props => {
   return { ...props, media }
 }
 
-export const Drawer = withTracker(composer)(({ media, handleMediaClick }) =>
-  <div style={drawerStyle}>
-    {media.map(m =>
-      <Preview key={m._id} media={m} handleMediaClick={handleMediaClick} />
-    )}
-    &nbsp;
-  </div>
+export const Drawer = withTracker(composer)(({ media, handleMediaClick, style }) =>
+  media.length === 0
+    ? null
+    : <div style={style ? { ...drawerStyle, ...style } : drawerStyle}>
+      {media.map(m =>
+        <Preview key={m._id} media={m} handleMediaClick={handleMediaClick} />
+      )}
+      &nbsp;
+    </div>
 )
 
-const Preview = withHandlers({
+export const Preview = withHandlers({
   handleClick: props => e => props.handleMediaClick(props.media._id)
 })(({ media, handleClick }) =>
   <div style={imageContainerStyle} onClick={handleClick}>
@@ -50,7 +52,6 @@ const uploadingIconStyle = {
 }
 
 const drawerStyle = {
-  minHeight: 120,
   width: '100%',
   backgroundColor: '#7f8288',
   boxShadow: 'inset 0px 0px 5px 0px rgba(0,0,0,0.24)',
