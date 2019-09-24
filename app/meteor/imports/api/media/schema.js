@@ -24,6 +24,12 @@ export const media = new SimpleSchema({
     index: 1
   },
 
+  tagIds: {
+    type: [SimpleSchema.RegEx.Id],
+    optional: true,
+    index: 1
+  },
+
   // The publications generates a presigned GET url and attaches it as this field
   // but it's not saved in the db
   url: {
@@ -97,5 +103,32 @@ export const media = new SimpleSchema({
 
   preview: {
     type: String
+  }
+})
+
+export const mediaTags = new SimpleSchema({
+  tag: {
+    type: String
+  },
+
+  color: {
+    type: String,
+    optional: true
+  },
+
+  removed: {
+    type: Boolean,
+    optional: true,
+    index: 1
+  },
+
+  removedAt: {
+    type: Date,
+    optional: true
+  },
+
+  removedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
   }
 })
