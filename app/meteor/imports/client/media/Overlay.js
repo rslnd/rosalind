@@ -1,10 +1,17 @@
 import React, { useState, useRef } from 'react'
+import { compose, withState } from 'recompose'
 import { Icon } from '../components/Icon'
 import { Media } from '../../api'
 import { Sidebar } from './Sidebar'
+import { withTracker } from '../components/withTracker'
 
-export const MediaOverlay = ({ patientId, appointmentId, children }) => {
-  const [currentMediaId, setCurrentMediaId] = useState()
+export const MediaOverlay = compose(
+  withState('currentMediaId', 'setCurrentMediaId'),
+  withTracker(props => ({
+    ...props,
+    currentMedia: props.currentMediaId && Media.findOne({ _id: props.currentMediaId })
+  }))
+)(({ patientId, appointmentId, currentMedia, currentMediaId, setCurrentMediaId, children }) => {
   const [zoomed, setZoomed] = useState()
   const ref = useRef(null)
 
@@ -27,8 +34,6 @@ export const MediaOverlay = ({ patientId, appointmentId, children }) => {
     }
   }
 
-  const currentMedia = currentMediaId && Media.findOne({ _id: currentMediaId })
-
   return <div>
     {
       currentMediaId && <div
@@ -49,6 +54,7 @@ export const MediaOverlay = ({ patientId, appointmentId, children }) => {
           <Sidebar
             patientId={patientId}
             appointmentId={appointmentId}
+            media={currentMedia}
           />
         </div>
 
@@ -65,7 +71,7 @@ export const MediaOverlay = ({ patientId, appointmentId, children }) => {
     }
     {children({ handleMediaClick })}
   </div>
-}
+})
 
 const stopPropagation = e => e.stopPropagation()
 

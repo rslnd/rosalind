@@ -1,6 +1,7 @@
 import React from 'react'
 import { withTracker } from '../components/withTracker'
 import { MediaTags as MediaTagsAPI, Media as MediaAPI } from '../../api/media'
+import { darken } from '../layout/styles'
 
 const composer = (props) => {
   const { media } = props
@@ -30,7 +31,7 @@ const composer = (props) => {
 }
 
 export const MediaTags = withTracker(composer)(({ mediaTags, handleToggle }) => {
-  return <div>
+  return <div style={containerStyle}>
     {mediaTags.map(t =>
       <span
         key={t._id}
@@ -40,13 +41,22 @@ export const MediaTags = withTracker(composer)(({ mediaTags, handleToggle }) => 
   </div>
 })
 
+const containerStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-evenly',
+  flexWrap: 'wrap'
+}
+
 const tagStyle = ({ isSelected, color }) => ({
   backgroundColor: isSelected ? color : 'rgba(128,128,128,0.5)',
+  borderBottom: `3px solid ${darken(color)}`,
   color: 'white',
   display: 'inline-block',
   padding: 5,
   paddingLeft: 8,
   paddingRight: 8,
   margin: 5,
-  borderRadius: '5px'
+  borderRadius: '4px',
+  cursor: 'pointer'
 })

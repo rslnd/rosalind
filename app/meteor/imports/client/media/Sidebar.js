@@ -4,14 +4,16 @@ import { Patients } from '../../api'
 import { withTracker } from '../components/withTracker'
 import { withState } from 'recompose'
 import { Icon } from '../components/Icon'
+import { MediaTags } from './MediaTags'
 
-export const SidebarComponent = ({ patient }) =>
+export const SidebarComponent = ({ patient, media }) =>
   <div style={containerStyle}>
     <PatientName
       patient={patient}
       style={patientNameStyle}
     />
     <Explorer />
+    <MediaTags media={media} />
     <Edit />
     <Navigation />
   </div>
