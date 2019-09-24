@@ -1,8 +1,8 @@
 import React from 'react'
 import { PatientName } from '../patients/PatientName'
-import { Patients } from '../../api'
+import { Patients, Media } from '../../api'
 import { withTracker } from '../components/withTracker'
-import { withState } from 'recompose'
+import { withState, withHandlers } from 'recompose'
 import { Icon } from '../components/Icon'
 import { MediaTags } from './MediaTags'
 
@@ -14,7 +14,7 @@ export const SidebarComponent = ({ patient, media }) =>
     />
     <Explorer />
     <MediaTags media={media} />
-    <Edit />
+    <Edit media={media} />
     <Navigation />
   </div>
 
@@ -40,12 +40,23 @@ const explorerStyle = {
   flexGrow: 1
 }
 
-const Edit = () =>
+const Edit = withHandlers({
+  handleRotate: ({ media }) => e => {
+    console.log('rotate', (((media.rotation || 0) + 90) % 360))
+    Media.actions.update.callPromise({
+      mediaId: media._id,
+      update: {
+        rotation: (((media.rotation || 0) + 90) % 360)
+      }
+    })
+  }
+})(({ handleRotate }) =>
   <div style={editStyle}>
     <Button><Icon name='trash-o' /></Button>
     <Button><Icon name='crop' /></Button>
-    <Button><Icon name='retweet' /></Button>
+    <Button onClick={handleRotate}><Icon name='retweet' /></Button>
   </div>
+)
 
 const editStyle = {
   display: 'flex',
@@ -63,11 +74,12 @@ const navigationStyle = {
   height: 90
 }
 
-const Button = withState('hover', 'setHover')(({ children, hover, setHover }) =>
+const Button = withState('hover', 'setHover')(({ children, hover, setHover, ...props }) =>
   <div
     style={hover ? hoverButtonStyle : buttonStyle}
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
+    {...props}
   >
     <div style={buttonInnerStyle}>
       {children}

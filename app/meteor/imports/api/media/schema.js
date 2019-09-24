@@ -30,6 +30,12 @@ export const media = new SimpleSchema({
     index: 1
   },
 
+  rotation: {
+    type: Number,
+    optional: true,
+    allowedValues: [0, 90, 180, 270]
+  },
+
   // The publications generates a presigned GET url and attaches it as this field
   // but it's not saved in the db
   url: {

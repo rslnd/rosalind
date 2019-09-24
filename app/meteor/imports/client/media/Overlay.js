@@ -28,9 +28,12 @@ export const MediaOverlay = compose(
 
   const handleMouseMove = (e, overrideZoomed = null) => {
     if (ref.current) {
-      ref.current.style.transform = (overrideZoomed === null ? zoomed : overrideZoomed)
-        ? imgZoomedStyle(e.nativeEvent.clientX, e.nativeEvent.clientY)
-        : 'none'
+      ref.current.style.transform = imageTransform({
+        zoomed: (overrideZoomed === null ? zoomed : overrideZoomed),
+        mouseX: e.nativeEvent.clientX,
+        mouseY: e.nativeEvent.clientY,
+        rotation: currentMedia.rotation
+      })
     }
   }
 
@@ -64,7 +67,7 @@ export const MediaOverlay = compose(
               ref={ref}
               onClick={toggleZoom}
               src={currentMedia.url}
-              style={zoomed ? imgStyleZoomed : imgStyle} />
+              style={imgStyle({ zoomed, rotation: currentMedia.rotation })} />
           </div>
         }
       </div>
@@ -114,22 +117,20 @@ const fitToScreen = {
   padding: 30
 }
 
-const imgStyle = {
+const imgStyle = ({ zoomed, rotation }) => ({
   maxWidth: '100%',
   maxHeight: '100%',
-  cursor: 'zoom-in',
-  transition: 'transform 300ms cubic-bezier(0.1, 0.81, 0.24, 1)'
-}
+  cursor: zoomed ? 'zoom-out' : 'zoom-in',
+  transition: 'transform 300ms cubic-bezier(0.1, 0.81, 0.24, 1)',
+  transform: imageTransform({ zoomed, rotation })
+})
 
-const imgStyleZoomed = {
-  ...imgStyle,
-  cursor: 'zoom-out'
-}
+const imageTransform = ({ zoomed, mouseX, mouseY, rotation = 0 }) => {
+  if (!zoomed) { return `rotate(${rotation}deg)` }
 
-const imgZoomedStyle = (mouseX, mouseY) => {
   const tX = (((window.innerWidth / 2) - mouseX) * 2) + 'px'
   const tY = (((window.innerHeight / 2) - mouseY) * 2) + 'px'
-  const transform = `translateX(${tX}) translateY(${tY}) translateZ(0) scale(2)`
+  const transform = `translateX(${tX}) translateY(${tY}) translateZ(0) scale(2) rotate(${rotation}deg)`
   return transform
 }
 
