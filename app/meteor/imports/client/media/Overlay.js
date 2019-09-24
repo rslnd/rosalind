@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Icon } from '../components/Icon'
 import { Media } from '../../api'
+import { Sidebar } from './Sidebar'
 
 export const MediaOverlay = ({ patientId, appointmentId, children }) => {
   const [currentMediaId, setCurrentMediaId] = useState()
@@ -41,6 +42,16 @@ export const MediaOverlay = ({ patientId, appointmentId, children }) => {
           </div>
         }
 
+        <div
+          style={zoomed ? zoomedSidebarStyle : sidebarStyle}
+          onClick={stopPropagation}
+        >
+          <Sidebar
+            patientId={patientId}
+            appointmentId={appointmentId}
+          />
+        </div>
+
         {currentMedia &&
           <div style={fitToScreen}>
             <img
@@ -56,6 +67,8 @@ export const MediaOverlay = ({ patientId, appointmentId, children }) => {
   </div>
 }
 
+const stopPropagation = e => e.stopPropagation()
+
 const overlayStyle = {
   position: 'fixed',
   zIndex: 1080,
@@ -65,9 +78,7 @@ const overlayStyle = {
   right: 0,
   backgroundColor: 'rgba(0,0,0,0.85)',
   color: 'white',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center'
+  display: 'flex'
 }
 
 const overlayZoomedStyle = {
@@ -93,7 +104,8 @@ const fitToScreen = {
   height: 'calc(100% - 50px)',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  padding: 30
 }
 
 const imgStyle = {
@@ -113,4 +125,16 @@ const imgZoomedStyle = (mouseX, mouseY) => {
   const tY = (((window.innerHeight / 2) - mouseY) * 2) + 'px'
   const transform = `translateX(${tX}) translateY(${tY}) translateZ(0) scale(2)`
   return transform
+}
+
+const sidebarStyle = {
+  width: 280,
+  height: '100%',
+  marginRight: 30,
+  transition: 'opacity 150ms cubic-bezier(0.1, 0.81, 0.24, 1)'
+}
+
+const zoomedSidebarStyle = {
+  ...sidebarStyle,
+  opacity: 0.6
 }
