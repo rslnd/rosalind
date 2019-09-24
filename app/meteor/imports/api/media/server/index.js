@@ -1,8 +1,8 @@
 import { actions } from './actions'
 import { publication } from './publication'
-import { Media } from '../../'
+import { Media, MediaTags } from '../../'
 
 export default () => {
   actions({ Media })
-  publication({ Media })
+  publication({ Media, MediaTags })
 }

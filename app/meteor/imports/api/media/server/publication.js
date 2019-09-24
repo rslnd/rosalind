@@ -1,7 +1,7 @@
 import { publish } from '../../../util/meteor/publish'
 import { getCredentials, createPresignedRequest, requestToUrl } from './s3'
 
-export const publication = ({ Media }) => {
+export const publication = ({ Media, MediaTags }) => {
   publish({
     name: 'media',
     roles: ['media'],
@@ -39,6 +39,14 @@ export const publication = ({ Media }) => {
       })
 
       this.ready()
+    }
+  })
+
+  publish({
+    name: 'media-tags',
+    roles: ['media'],
+    fn: function () {
+      return MediaTags.find({})
     }
   })
 }
