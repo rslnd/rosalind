@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { withTracker } from '../components/withTracker'
 import { MediaTags as MediaTagsAPI, Media as MediaAPI } from '../../api/media'
 import { darken } from '../layout/styles'
+import { Icon } from '../components/Icon'
 
 const composer = (props) => {
   const { media } = props
@@ -22,22 +23,43 @@ const composer = (props) => {
       }
     })
 
+  // Collapse tag selection after 1 hour
+  const collapsedByDefault =
+    (media.tagIds && media.tagIds.length >= 1) &&
+    (new Date() - media.uploadCompletedAt) > 60 * 60 * 1000
+
   return {
     ...props,
     media,
     mediaTags,
-    handleToggle
+    handleToggle,
+    collapsedByDefault
   }
 }
 
-export const MediaTags = withTracker(composer)(({ mediaTags, handleToggle }) => {
+export const MediaTags = withTracker(composer)(({ mediaTags, handleToggle, collapsedByDefault }) => {
+  const [forceExpanded, setForceExpanded] = useState(!collapsedByDefault)
+  const selectedMediaTags = mediaTags.filter(m => m.isSelected)
+  const expanded = forceExpanded || (selectedMediaTags.length === 0)
+  const shownMediaTags = expanded ? mediaTags : selectedMediaTags
+
   return <div style={containerStyle}>
-    {mediaTags.map(t =>
+    {shownMediaTags.map(t =>
       <span
         key={t._id}
         style={tagStyle(t)}
         onClick={handleToggle(t)}>{t.tag}</span>
     )}
+
+    {
+      !expanded &&
+        <span
+          style={expandStyle}
+          onClick={() => setForceExpanded(true)}
+        >
+          <Icon name='ellipsis-h' />
+        </span>
+    }
   </div>
 })
 
@@ -48,9 +70,9 @@ const containerStyle = {
   flexWrap: 'wrap'
 }
 
-const tagStyle = ({ isSelected, color }) => ({
+const tagStyle = ({ isSelected, color } = {}) => ({
   backgroundColor: isSelected ? color : 'rgba(128,128,128,0.5)',
-  borderBottom: `3px solid ${darken(color)}`,
+  borderBottom: `3px solid ${darken(color || '#000')}`,
   color: 'white',
   display: 'inline-block',
   padding: 5,
@@ -60,3 +82,9 @@ const tagStyle = ({ isSelected, color }) => ({
   borderRadius: '4px',
   cursor: 'pointer'
 })
+
+const expandStyle = {
+  ...tagStyle(),
+  borderBottom: 'none',
+  opacity: 0.8
+}
