@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor'
+import identity from 'lodash/identity'
 import { WebApp, WebAppInternals } from 'meteor/webapp'
 import flatten from 'lodash/flatten'
 import helmet from 'helmet'
@@ -8,10 +9,13 @@ import { Settings } from '../../api'
 const self = "'self'"
 const none = "'none'"
 
-const mediaHost = () => {
-  const host = process.env.MEDIA_S3_HOST || Settings.get('media.s3.host')
+const mediaHosts = () => {
+  const hosts = [
+    process.env.MEDIA_S3_HOST,
+    Settings.get('media.s3.host')
+  ]
   const scheme = process.env.NODE_ENV === 'production' ? 'https://' : 'http://'
-  return host ? [scheme, host].join('') : ''
+  return hosts.filter(identity).map(h => [scheme, h].join(''))
 }
 
 const getHelmetConfig = () => {
@@ -68,7 +72,7 @@ const getHelmetConfig = () => {
         imgSrc: [
           self,
           'data:',
-          mediaHost(),
+          ...mediaHosts(),
           'https://app.smooch.io',
           'https://cdn.smooch.io',
           'https://media.smooch.io',
