@@ -111,6 +111,11 @@ export const mediaTags = new SimpleSchema({
     type: String
   },
 
+  order: {
+    type: Number,
+    optional: true
+  },
+
   color: {
     type: String,
     optional: true

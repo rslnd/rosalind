@@ -1,1 +1,1 @@
-export { Media } from './collection'
+export { Media, MediaTags } from './collection'

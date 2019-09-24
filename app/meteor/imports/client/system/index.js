@@ -3,6 +3,7 @@ import { Switch } from 'react-router-dom'
 import { SettingsContainer } from './settings/SettingsContainer'
 import { MessagesContainer } from '../messages/MessagesContainer'
 import { TagsContainer } from '../tags/TagsContainer'
+import { MediaTagsScreen } from '../media/MediaTagsScreen'
 import { CalendarsContainer } from '../calendars/CalendarsContainer'
 import { ClientsContainer } from '../clients/ClientsContainer'
 import { ReferrablesContainer } from '../referrals/ReferrablesContainer'
@@ -18,6 +19,7 @@ export const System = ({ match }) => (
       <Route exact path={`${match.url}/clients`} component={ClientsContainer} />
       <Route exact path={`${match.url}/messages`} component={MessagesContainer} />
       <Route exact path={`${match.url}/tags`} component={TagsContainer} />
+      <Route exact path={`${match.url}/mediaTags`} component={MediaTagsScreen} />
       <Route exact path={`${match.url}/calendars`} component={CalendarsContainer} />
       <Route exact path={`${match.url}/referrables`} component={ReferrablesContainer} />
       <Route path={`${match.url}`} component={Events} />

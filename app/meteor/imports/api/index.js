@@ -19,7 +19,7 @@ import { Settings } from './settings'
 import { Clients } from './clients'
 import { Constraints } from './constraints'
 import { Availabilities } from './availabilities'
-import { Media } from './media'
+import { Media, MediaTags } from './media'
 import { Records } from './records'
 
 export {
@@ -47,5 +47,6 @@ export {
   Constraints,
   Availabilities,
   Media,
+  MediaTags,
   Records
 }

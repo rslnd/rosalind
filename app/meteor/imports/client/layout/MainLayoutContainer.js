@@ -25,6 +25,7 @@ const composer = (props) => {
     subscribe('inboundCalls-counts')
     subscribe('inboundCallsTopics')
     subscribe('referrables')
+    subscribe('media-tags')
   }
 
   const isReadyToPrint = every(s => s.ready())([

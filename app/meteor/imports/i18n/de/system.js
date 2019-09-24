@@ -9,6 +9,7 @@ export const system = {
   thisConstraints: 'Termin-Regeln',
   thisClients: 'Clients',
   thisTags: 'Tags',
+  thisMediaTags: 'Kategorien für Medien',
   thisEvents: 'Ereignisse',
   thisNative: 'Arbeitsplatz',
   thisReferrables: 'Empfehlungen',

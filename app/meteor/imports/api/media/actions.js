@@ -1,7 +1,7 @@
-import { action, Match } from '../../../../util/meteor/action'
-import { Events } from '../../../events'
+import { action, Match } from '../../util/meteor/action'
+import { Events } from '../events'
 
-export const update = ({ Media }) =>
+const update = ({ Media }) =>
   action({
     name: 'media/update',
     allowAnonymous: true,
@@ -23,6 +23,10 @@ export const update = ({ Media }) =>
         $set: update
       })
 
-      Events.post('media/update', { mediaId, update })
+      Events.post('media/update', { mediaId, ...update })
     }
   })
+
+export const actions = ({ Media }) => ({
+  update: update({ Media })
+})
