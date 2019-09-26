@@ -6,7 +6,7 @@ export const login = ({ Users }) =>
     name: 'users/afterLogin',
     roles: ['*'],
     args: {
-      weakPassword: Match.Maybe(Match.OneOf(Boolean, Number))
+      weakPassword: Match.OneOf(Boolean, Number, null)
     },
     fn ({ weakPassword } = {}) {
       const userId = this.userId
