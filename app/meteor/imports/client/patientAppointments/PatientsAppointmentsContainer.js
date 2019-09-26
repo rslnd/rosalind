@@ -1,4 +1,5 @@
 import identity from 'lodash/identity'
+import sortBy from 'lodash/sortBy'
 import { compose, withState } from 'recompose'
 import { PatientAppointmentsModal } from './PatientAppointmentsModal'
 import { withTracker } from '../components/withTracker'
@@ -9,6 +10,7 @@ import { subscribe } from '../../util/meteor/subscribe'
 import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
 import { connect } from 'react-redux'
+import { Media } from '../../api'
 
 const fullNameWithTitle = _id => {
   const user = _id && Users.findOne({ _id })
@@ -88,6 +90,49 @@ const composer = props => {
     }
   }
 
+  const floatingMedia = Media.find({
+    patientId,
+    appointmentId: null
+  }, {
+    sort: {
+      createdAt: 1
+    }
+  }).fetch().map(m => ({
+    ...m,
+    start: m.createdAt, // Same sort key as appointments, see below
+    type: 'media'
+  }))
+
+  const pastAppointmentsWithFloatingMedia =
+    sortBy([
+      ...pastAppointments,
+      ...floatingMedia
+    ], 'start').reduce((acc, curr) => {
+      if (curr.type !== 'media') {
+        return { last: null, list: [ ...acc.list, curr ] }
+      }
+
+      if (!acc.last) {
+        return {
+          last: 'media',
+          list: [
+            ...acc.list,
+            { type: 'media', media: [curr] }
+          ] }
+      }
+
+      return {
+        last: 'media',
+        list: [
+          ...butlast(acc.list),
+          {
+            type: 'media',
+            media: [...((last(acc.list)).media), curr]
+          }
+        ]
+      }
+    }, { last: null, list: [] }).list
+
   return {
     ...props,
     patientId,
@@ -95,6 +140,7 @@ const composer = props => {
     currentAppointment,
     patient,
     pastAppointments,
+    pastAppointmentsWithFloatingMedia,
     futureAppointments,
     unfilteredPastAppointments,
     otherAppointments,
@@ -103,6 +149,9 @@ const composer = props => {
     canRefer
   }
 }
+
+const butlast = xs => xs.slice(0, xs.length - 1)
+const last = xs => xs.slice(xs.length - 1)[0]
 
 export const PatientsAppointmentsContainer = compose(
   connect(),

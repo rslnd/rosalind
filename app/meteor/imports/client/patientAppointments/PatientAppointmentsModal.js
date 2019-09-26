@@ -75,6 +75,7 @@ export const PatientAppointmentsModal = compose(
                               show={show}
                               handleMediaClick={handleMediaClick}
                               appointmentsCount={(
+                                (props.pastAppointmentsWithFloatingMedia ? props.pastAppointmentsWithFloatingMedia.length : 0) +
                                 (props.pastAppointments ? props.pastAppointments.length : 0) +
                                 (props.futureAppointments ? props.futureAppointments.length : 0) +
                                 (props.currentAppointment ? 1 : 0)

@@ -62,7 +62,7 @@ const MonthSeparator = ({ m }) =>
   <div><b>{m.format('MMMM')}</b> {m.format('YYYY')}</div>
 
 const Appointment = ({ appointment: { start } }) =>
-  <div>Appt {moment.format(start).format(__('time.dateFormatWeekdayShortNoYear'))}</div>
+  <div>Appt {moment(start).format(__('time.dateFormatWeekdayShortNoYear'))}</div>
 
 const Media = ({ media: { url, _id } }) =>
   <div>Media {_id}</div>

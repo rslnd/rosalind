@@ -23,6 +23,7 @@ export const Appointments = compose(
 )(({
   currentAppointment,
   pastAppointments,
+  pastAppointmentsWithFloatingMedia,
   futureAppointments,
   fullNameWithTitle,
   setScrollRef,
@@ -47,7 +48,7 @@ export const Appointments = compose(
             <Oldest />
           }
           <AppointmentsList
-            appointments={pastAppointments}
+            pastAppointmentsWithFloatingMedia={pastAppointmentsWithFloatingMedia}
             fullNameWithTitle={fullNameWithTitle}
             show={show}
             handleMediaClick={handleMediaClick}

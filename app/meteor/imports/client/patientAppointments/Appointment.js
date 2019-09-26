@@ -13,14 +13,22 @@ import { Drawer } from '../media/Drawer'
 import { DropZone } from './DropZone'
 import { insertMedia } from '../../startup/client/dataTransfer'
 
-export const AppointmentsList = ({ appointments, handleMediaClick, fullNameWithTitle }) =>
-  appointments.map(a =>
-    <ErrorBoundary key={a._id}>
-      <Appointment
-        appointment={a}
-        fullNameWithTitle={fullNameWithTitle}
-        handleMediaClick={handleMediaClick}
-      />
+export const AppointmentsList = ({ appointments, pastAppointmentsWithFloatingMedia, handleMediaClick, fullNameWithTitle }) =>
+  (pastAppointmentsWithFloatingMedia || appointments).map((a, i) =>
+    <ErrorBoundary key={(a._id || (a.media && a.media[0] && a.media[0]._id) || i)}>
+      {
+        a.type === 'media'
+          ? <Drawer
+            media={a.media}
+            style={drawerFullWidthStyle}
+            handleMediaClick={handleMediaClick}
+          />
+          : <Appointment
+            appointment={a}
+            fullNameWithTitle={fullNameWithTitle}
+            handleMediaClick={handleMediaClick}
+          />
+      }
     </ErrorBoundary>
   )
 
@@ -74,14 +82,15 @@ export const Appointment = compose(
         </div>
 
         {
-          isCurrent && window.location.hash.indexOf('media') !== -1 &&
-          <ErrorBoundary>
-            <Drawer
-              handleMediaClick={handleMediaClick}
-              patientId={appointment.patientId}
-              appointmentId={appointment._id}
-            />
-          </ErrorBoundary>
+          window.location.hash.indexOf('media') !== -1 &&
+            <ErrorBoundary>
+              <Drawer
+                handleMediaClick={handleMediaClick}
+                patientId={appointment.patientId}
+                appointmentId={appointment._id}
+                style={drawerAppointmentStyle}
+              />
+            </ErrorBoundary>
         }
 
         {isDropping && <div style={droppingStyle} />}
@@ -117,4 +126,14 @@ export const currentAppointmentInnerStyle = {
 const removedAppointmentStyle = {
   ...appointmentStyle,
   background: lighterMutedBackground
+}
+
+const drawerAppointmentStyle = {
+  borderRadius: `0 0 4px 4px`
+}
+
+const drawerFullWidthStyle = {
+  marginTop: 7,
+  marginBottom: 7,
+  padding: 7
 }

@@ -18,7 +18,7 @@ export const insert = ({ Media }) =>
       mediaType: Match.OneOf(...mediaTypes),
       consumerId: Match.Optional(String),
       patientId: String,
-      appointmentId: String,
+      appointmentId: Match.Optional(String),
       clientKey: Match.Optional(String),
       preview: Match.Optional(String)
     },
