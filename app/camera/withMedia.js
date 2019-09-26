@@ -26,12 +26,14 @@ const handleMedia = props => async media => {
   // Create and upload thumbnail with first request
   const quality = 20
   const maxPx = 150
-  const preview = await createPreview({
+  const rawPreview = await createPreview({
     path: localPath,
     width: maxPx,
     height: maxPx,
     quality
   })
+
+  const preview = `data:image/jpeg;base64,${rawPreview}`
 
   console.log('Resized to base64 length', preview.length)
 
@@ -57,7 +59,7 @@ const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject)
   console.log('signedRequest', signedRequest)
   console.log('localPath', localPath)
 
-  const xhr = new XMLHttpRequest()
+  const xhr = new global.XMLHttpRequest()
   xhr.onerror = reject
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {

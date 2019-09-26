@@ -11,6 +11,7 @@ import { hasRole } from '../../util/meteor/hasRole'
 import { CommentsContainer } from '../comments/CommentsContainer'
 import { Drawer } from '../media/Drawer'
 import { DropZone } from './DropZone'
+import { insertMedia } from '../../startup/client/dataTransfer'
 
 export const AppointmentsList = ({ appointments, handleMediaClick, fullNameWithTitle }) =>
   appointments.map(a =>
@@ -41,9 +42,7 @@ export const Appointment = compose(
   handleMediaClick
 }) =>
   <DropZone
-    onDrop={({ base64, mediaType }) => {
-      console.log('dropped on appointment', mediaType, base64)
-    }}
+    onDrop={f => insertMedia({ ...f, appointmentId: appointment._id, patientId: appointment.patientId })}
   >
     {({ ref, droppingStyle, isDropping }) =>
       <div ref={ref}

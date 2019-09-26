@@ -1,16 +1,20 @@
 import { useRef, useState, useEffect } from 'react'
 
-const readFile = f =>
+const readFile = file =>
   new Promise((resolve, reject) => {
     const reader = new window.FileReader()
     reader.addEventListener('load', function () {
+      // Strip `data:image/jpeg;base64,` part from beginning
+      const base64 = this.result.substr(this.result.indexOf(',') + 1)
+
       resolve({
-        name: f.name,
-        fileType: f.type,
-        base64: this.result
+        name: file.name,
+        mediaType: file.type,
+        base64,
+        file
       })
     })
-    reader.readAsDataURL(f)
+    reader.readAsDataURL(file)
   })
 
 export const DropZone = ({ children, onDrop }) => {

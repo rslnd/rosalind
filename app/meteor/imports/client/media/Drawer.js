@@ -32,7 +32,7 @@ export const Preview = withHandlers({
 })(({ media, handleClick }) =>
   <div style={imageContainerStyle} onClick={handleClick}>
     {!media.uploadCompletedAt && <Icon style={uploadingIconStyle} name='clock-o' />}
-    <img src={'data:image/jpeg;base64,' + media.preview} />
+    <img src={media.preview} />
   </div>
 )
 

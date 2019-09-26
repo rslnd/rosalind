@@ -14,6 +14,7 @@ import { Clients } from '../../api'
 import { getClientKey } from '../../startup/client/native/events'
 import { MediaOverlay } from '../media/Overlay'
 import { DropZone } from './DropZone'
+import { insertMedia } from '../../startup/client/dataTransfer'
 
 export const PatientAppointmentsModal = compose(
   withPropsOnChange(
@@ -60,7 +61,7 @@ export const PatientAppointmentsModal = compose(
               style={backdropStyle}
               onClick={handleClose}
             />
-            <DropZone onDrop={fs => console.log('dropped on patient', fs)}>
+            <DropZone onDrop={f => insertMedia({ ...f, patientId: props.patientId })}>
               {({ ref, droppingStyle, isDropping }) =>
                 <Paper elevation={10} style={modalWindowStyle}>
                   <div style={containerOuterStyle} ref={ref}>

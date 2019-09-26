@@ -47,6 +47,7 @@ const getHelmetConfig = () => {
             `https://${d}`,
             `wss://${d}`
           ])),
+          ...mediaHosts(),
           `https://${process.env.SMOOCH_APP_ID}.config.smooch.io/`,
           'wss://api.smooch.io',
           'https://api.smooch.io',

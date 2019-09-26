@@ -4,6 +4,7 @@ import { Clients } from '../../../clients'
 import uuidv4 from 'uuid/v4'
 import { mediaTypes } from '../../schema'
 import { getCredentials, createPresignedRequest } from '../s3'
+import { hasRole } from '../../../../util/meteor/hasRole'
 
 export const insert = ({ Media }) =>
   action({
@@ -15,25 +16,39 @@ export const insert = ({ Media }) =>
       height: Number,
       takenAt: Date,
       mediaType: Match.OneOf(...mediaTypes),
-      consumerId: String,
+      consumerId: Match.Optional(String),
       patientId: String,
       appointmentId: String,
-      clientKey: String,
-      preview: String
+      clientKey: Match.Optional(String),
+      preview: Match.Optional(String)
     },
-    fn ({ width, height, takenAt, mediaType, consumerId, preview, clientKey, patientId, appointmentId }) {
+    fn: function ({ width, height, takenAt, mediaType, consumerId, preview, clientKey, patientId, appointmentId }) {
       const credentials = getCredentials()
 
-      const producer = Clients.findOne({ clientKey })
-      if (!producer) { throw new Error(`Could not find producer by clientKey`) }
-      if (!producer.pairedTo) { throw new Error(`Producer is not paired to any consumer`) }
-      if (producer.pairedTo !== consumerId) { throw new Error(`Pairing ids do not match`) }
+      let userId = null
+      let producerId = null
 
-      const consumer = Clients.findOne({ _id: consumerId })
-      if (!consumer) { throw new Error(`Could not find consumer with id ${consumerId}`) }
+      if (clientKey && consumerId) {
+        const producer = Clients.findOne({ clientKey })
+        if (!producer) { throw new Error('Could not find producer by clientKey') }
+        if (!producer.pairedTo) { throw new Error('Producer is not paired to any consumer') }
+        if (producer.pairedTo !== consumerId) { throw new Error('Pairing ids do not match') }
+        producerId = producer._id
+        const consumer = Clients.findOne({ _id: consumerId })
+        if (!consumer) { throw new Error(`Could not find consumer with id ${consumerId}`) }
+        userId = producer.pairedBy
+      } else {
+        userId = this.userId
+        if (!userId || !hasRole(userId, ['media', 'admin'])) {
+          throw new Error('Authentication failed or permission denied')
+        }
+      }
 
-      const userId = producer.pairedBy
-      if (!userId) { throw new Error(`No userId found in pairing`) }
+      if (!userId) { throw new Error('No userId found in pairing or meteor auth') }
+
+      if (preview && !preview.match(/^data:image\//)) {
+        throw new Error(`Invalid preview URL, needs to start with data:image: ${preview.substr(0, 50)}`)
+      }
 
       const filename = [
         uuidv4(), // Keep v4 instead of v5 becuase v4 is random
@@ -48,7 +63,7 @@ export const insert = ({ Media }) =>
         mediaType,
         patientId,
         appointmentId,
-        producerId: producer._id,
+        producerId,
         consumerId,
         createdBy: userId,
         preview
