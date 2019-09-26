@@ -95,6 +95,7 @@ const QRModal = ({ show, onClose, value }) =>
     show={!!value}
     onHide={onClose}
     animation={false}
+    style={modalStyle}
   >
     <Modal.Body>
       <div style={flex}>
@@ -117,6 +118,10 @@ const QRModal = ({ show, onClose, value }) =>
 
     </Modal.Body>
   </Modal>
+
+const modalStyle = {
+  zIndex: 1070
+}
 
 const Help = ({ onCancel }) =>
   <div style={helpStyle}>
