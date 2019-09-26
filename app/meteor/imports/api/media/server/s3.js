@@ -15,7 +15,7 @@ export const getCredentials = () => {
 
   const missing = Object.keys(credentials).filter(k => !credentials[k])
   if (missing.length >= 1) {
-    throw new Error(`Missing media credentials settings for #{missing.join(', ')}`)
+    throw new Error(`Missing media credentials settings for ${missing.join(', ')}`)
   }
 
   return credentials
