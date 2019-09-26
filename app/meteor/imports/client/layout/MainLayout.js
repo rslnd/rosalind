@@ -11,6 +11,8 @@ import { HelpContainer } from '../availabilities/HelpContainer'
 import { ErrorBoundary } from './ErrorBoundary'
 import { Loading } from '../components/Loading'
 import { Lock } from './Lock'
+import { DropZone } from '../patientAppointments/DropZone'
+import { handleDrop } from '../../startup/client/dataTransfer'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -96,7 +98,7 @@ export class MainLayout extends React.Component {
 
     if (currentUser || isPrint) {
       return (
-        <div className='wrapper disable-select'>
+        <Wrapper>
           <div id='logged-in' />
           <ErrorBoundary>
             <div
@@ -138,11 +140,11 @@ export class MainLayout extends React.Component {
           </div>
           <FooterContainer />
           {alwaysRender()}
-        </div>
+        </Wrapper>
       )
     } else {
       return (
-        <div className='wrapper disable-select'>
+        <Wrapper>
           <div className='locked-layout'>
             <div className='locked-wrapper'>
               <div className='locked-logo'>
@@ -157,8 +159,18 @@ export class MainLayout extends React.Component {
             </div>
           </div>
           {alwaysRender()}
-        </div>
+        </Wrapper>
       )
     }
   }
 }
+
+const Wrapper = ({ children }) =>
+  <DropZone onDrop={handleDrop}>
+    {({ ref, droppingStyle, isDropping }) =>
+      <div className='wrapper disable-select' ref={ref}>
+        {isDropping && <div style={droppingStyle} />}
+        {children}
+      </div>
+    }
+  </DropZone>

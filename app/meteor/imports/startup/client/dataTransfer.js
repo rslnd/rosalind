@@ -1,10 +1,9 @@
 import { store } from '../../client/store'
-import dragDrop from 'drag-drop/buffer'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import { Importers } from '../../api/importers'
 import { loadPatient } from '../../client/patients/picker/actions'
-import { getClientKey, onNativeEvent, toNative } from './native/events';
+import { onNativeEvent, toNative } from './native/events'
 
 export const ingest = ({ name, content, base64, importer }) => {
   return Importers.actions.ingest.callPromise({
@@ -15,25 +14,22 @@ export const ingest = ({ name, content, base64, importer }) => {
   })
 }
 
-export const setupDragdrop = () => {
-  dragDrop('body', (files) => {
-    files.forEach((file) => {
-      ingest({ name: file.name, base64: file.toString('base64') }).then((response) => {
-        Alert.success(__('ui.importSuccessMessage'))
-        if (typeof response === 'object') {
-          const { result, importer } = response
-          console.log('[Importers] Successfully ingested dragdrop data transfer', { importer })
-          onDataTransferSuccess({ importer, result })
-        }
-      }).catch((err) => {
-        Alert.error(err.message)
-        throw err
-      })
-    })
-  })
+export const handleDrop = async ({ name, base64 }) => {
+  try {
+    const response = await ingest({ name, base64 })
+    Alert.success(__('ui.importSuccessMessage'))
+    if (typeof response === 'object') {
+      const { result, importer } = response
+      console.log('[Importers] Successfully ingested dragdrop data transfer', { importer })
+      onDataTransferSuccess({ importer, result })
+    }
+  } catch (err) {
+    Alert.error(err.message)
+    console.error(err)
+  }
 }
 
-const onDataTransfer = async file => {
+const onNativeDataTransfer = async file => {
   console.log('[Importers] Received data transfer event from native binding', { name: file.path, importer: file.importer })
 
   const { importer, result } = await ingest({
@@ -59,7 +55,18 @@ const onDataTransferSuccess = ({ importer, result, remove, path, focus }) => {
   toNative('dataTransferSuccess', { remove, path, focus })
 }
 
+const preventDragBody = () => {
+  const noop = e => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  document.body.addEventListener('dragenter', noop)
+  document.body.addEventListener('dragleave', noop)
+  document.body.addEventListener('dragover', noop)
+  document.body.addEventListener('drop', noop)
+}
+
 export default () => {
-  setupDragdrop()
-  onNativeEvent('dataTransfer', onDataTransfer)
+  preventDragBody()
+  onNativeEvent('dataTransfer', onNativeDataTransfer)
 }

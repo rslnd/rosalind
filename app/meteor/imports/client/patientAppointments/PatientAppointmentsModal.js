@@ -13,6 +13,7 @@ import { __ } from '../../i18n'
 import { Clients } from '../../api'
 import { getClientKey } from '../../startup/client/native/events'
 import { MediaOverlay } from '../media/Overlay'
+import { DropZone } from './DropZone'
 
 export const PatientAppointmentsModal = compose(
   withPropsOnChange(
@@ -59,42 +60,49 @@ export const PatientAppointmentsModal = compose(
               style={backdropStyle}
               onClick={handleClose}
             />
-            <Paper elevation={10} style={modalWindowStyle}>
-              <Close onClick={handleClose} />
-              <div style={containerStyle}>
-                <div style={columnsStyle}>
-                  <div style={appointmentsStyle}>
-                    <ErrorBoundary>
-                      <Appointments
-                        {...props}
-                        show={show}
-                        handleMediaClick={handleMediaClick}
-                        appointmentsCount={(
-                          (props.pastAppointments ? props.pastAppointments.length : 0) +
-                          (props.futureAppointments ? props.futureAppointments.length : 0) +
-                          (props.currentAppointment ? 1 : 0)
-                        )} // Scrolls to bottom when changed
-                      />
-                    </ErrorBoundary>
+            <DropZone onDrop={fs => console.log('dropped on patient', fs)}>
+              {({ ref, droppingStyle, isDropping }) =>
+                <Paper elevation={10} style={modalWindowStyle}>
+                  <div style={containerOuterStyle} ref={ref}>
+                    <Close onClick={handleClose} />
+                    <div style={containerStyle}>
+                      <div style={columnsStyle}>
+                        <div style={appointmentsStyle}>
+                          <ErrorBoundary>
+                            <Appointments
+                              {...props}
+                              show={show}
+                              handleMediaClick={handleMediaClick}
+                              appointmentsCount={(
+                                (props.pastAppointments ? props.pastAppointments.length : 0) +
+                                (props.futureAppointments ? props.futureAppointments.length : 0) +
+                                (props.currentAppointment ? 1 : 0)
+                              )} // Scrolls to bottom when changed
+                            />
+                          </ErrorBoundary>
+                        </div>
+                        <div style={patientSidebarStyle}>
+                          <ErrorBoundary>
+                            <Patient {...props} handleMediaClick={handleMediaClick} />
+                          </ErrorBoundary>
+                        </div>
+                      </div>
+                      <div style={actionsStyle}>
+                        {
+                          props.currentAppointment
+                            ? <AppointmentActionsContainer {...props} />
+                            : <Button
+                              style={closeButtonStyle}
+                              onClick={handleClose}
+                            >{__('ui.close')}</Button>
+                        }
+                      </div>
+                    </div>
+                    {isDropping && <div style={droppingStyle} />}
                   </div>
-                  <div style={patientSidebarStyle}>
-                    <ErrorBoundary>
-                      <Patient {...props} handleMediaClick={handleMediaClick} />
-                    </ErrorBoundary>
-                  </div>
-                </div>
-                <div style={actionsStyle}>
-                  {
-                    props.currentAppointment
-                      ? <AppointmentActionsContainer {...props} />
-                      : <Button
-                        style={closeButtonStyle}
-                        onClick={handleClose}
-                      >{__('ui.close')}</Button>
-                  }
-                </div>
-              </div>
-            </Paper>
+                </Paper>
+              }
+            </DropZone>
           </div>
         }
       </Portal>
@@ -137,6 +145,10 @@ const modalWindowStyle = {
   maxWidth: 'calc(90% - 120px)', // Keep chat bubble visible
   height: '90%',
   maxHeight: 'calc(90% - 35px)' // Keep clearance on top and bottom
+}
+
+const containerOuterStyle = {
+  height: '100%'
 }
 
 const containerStyle = {

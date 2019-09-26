@@ -10,6 +10,7 @@ import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
 import { CommentsContainer } from '../comments/CommentsContainer'
 import { Drawer } from '../media/Drawer'
+import { DropZone } from './DropZone'
 
 export const AppointmentsList = ({ appointments, handleMediaClick, fullNameWithTitle }) =>
   appointments.map(a =>
@@ -39,43 +40,55 @@ export const Appointment = compose(
   collapseComments,
   handleMediaClick
 }) =>
-  <div style={
-    isCurrent
-      ? currentAppointmentStyle
-      : (
-        (appointment.removed || appointment.canceled)
-          ? removedAppointmentStyle
-          : appointmentStyle
-      )
-  }>
-    <div style={isCurrent ? currentAppointmentInnerStyle : null}>
-      <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
-      <Tags {...appointment} isCurrent={isCurrent} />
+  <DropZone
+    onDrop={({ base64, mediaType }) => {
+      console.log('dropped on appointment', mediaType, base64)
+    }}
+  >
+    {({ ref, droppingStyle, isDropping }) =>
+      <div ref={ref}
+        style={
+          isCurrent
+            ? currentAppointmentStyle
+            : (
+              (appointment.removed || appointment.canceled)
+                ? removedAppointmentStyle
+                : appointmentStyle
+            )
+        }
+      >
+        <div style={isCurrent ? currentAppointmentInnerStyle : null}>
+          <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
+          <Tags {...appointment} isCurrent={isCurrent} />
 
-      {
-        canSeeNote &&
-          <Note {...appointment} isCurrent={isCurrent} />
-      }
+          {
+            canSeeNote &&
+              <Note {...appointment} isCurrent={isCurrent} />
+          }
 
-      {
-        canSeeComments &&
-          <CommentsContainer docId={appointment._id}
-            collapsed={collapseComments}
-          />
-      }
-    </div>
+          {
+            canSeeComments &&
+              <CommentsContainer docId={appointment._id}
+                collapsed={collapseComments}
+              />
+          }
+        </div>
 
-    {
-      isCurrent && window.location.hash.indexOf('media') !== -1 &&
-      <ErrorBoundary>
-        <Drawer
-          handleMediaClick={handleMediaClick}
-          patientId={appointment.patientId}
-          appointmentId={appointment._id}
-        />
-      </ErrorBoundary>
+        {
+          isCurrent && window.location.hash.indexOf('media') !== -1 &&
+          <ErrorBoundary>
+            <Drawer
+              handleMediaClick={handleMediaClick}
+              patientId={appointment.patientId}
+              appointmentId={appointment._id}
+            />
+          </ErrorBoundary>
+        }
+
+        {isDropping && <div style={droppingStyle} />}
+      </div>
     }
-  </div>
+  </DropZone>
 )
 
 export const appointmentStyle = {
@@ -84,7 +97,8 @@ export const appointmentStyle = {
   marginLeft: 12,
   marginRight: 12,
   marginTop: 4,
-  marginBottom: 4
+  marginBottom: 4,
+  position: 'relative'
 }
 
 const currentAppointmentStyle = {
