@@ -60,6 +60,7 @@ export const MediaOverlay = compose(
             patientId={patientId}
             appointmentId={appointmentId}
             media={currentMedia}
+            setCurrentMediaId={setCurrentMediaId}
           />
         </div>
 

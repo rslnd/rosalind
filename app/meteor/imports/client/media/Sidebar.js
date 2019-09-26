@@ -1,25 +1,94 @@
 import React from 'react'
+import { __ } from '../../i18n'
+import moment from 'moment-timezone'
 import { PatientName } from '../patients/PatientName'
-import { Patients, Media } from '../../api'
+import { Media, Appointments, Patients } from '../../api'
 import { withTracker } from '../components/withTracker'
 import { withState, withHandlers } from 'recompose'
 import { Icon } from '../components/Icon'
 import { MediaTags } from './MediaTags'
 import { Explorer } from './Explorer'
 
-export const SidebarComponent = ({ patient, media }) =>
+const composer = (props) => {
+  const { patientId } = props
+  const patient = Patients.findOne({ _id: patientId })
+  const currentMediaId = props.media._id
+
+  let prevMediaId = null
+  let nextMediaId = null
+
+  const allMedia = Media.find({
+    patientId: patient._id
+  }, { sort: { createdAt: 1 } }).fetch()
+
+  // group by months and add relevant appointment
+  const { sections } = allMedia.reduce((acc, media, i) => {
+    const m = moment(media.createdAt)
+    const currentMonth = m.format(__('time.dateFormatMonthYearOnly'))
+    const currentAppointmentId = media.appointmentId
+
+    if (!prevMediaId && media._id === currentMediaId) {
+      prevMediaId = allMedia[i - 1] && allMedia[i - 1]._id
+      nextMediaId = allMedia[i + 1] && allMedia[i + 1]._id
+    }
+
+    let sectionsToAdd = []
+
+    if (currentMonth !== acc.currentMonth) {
+      sectionsToAdd.push({
+        monthSeparator: currentMonth,
+        m
+      })
+    }
+
+    if (currentAppointmentId !== acc.currentAppointmentId) {
+      const appointment = Appointments.findOne({ currentAppointmentId })
+      sectionsToAdd.push({ appointment })
+    }
+
+    return {
+      currentMonth,
+      currentAppointmentId,
+      sections: [
+        ...acc.sections,
+        ...sectionsToAdd,
+        { media }
+      ]
+    }
+  }, { currentMonth: null, currentAppointmentId: null, sections: [] })
+
+  return {
+    ...props,
+    patient,
+    sections,
+    prevMediaId,
+    nextMediaId
+  }
+}
+
+export const Sidebar = withTracker(composer)(({
+  patient,
+  sections,
+  media,
+  prevMediaId,
+  nextMediaId,
+  setCurrentMediaId
+}) =>
   <div style={containerStyle}>
     <PatientName
       patient={patient}
       style={patientNameStyle}
     />
-    <div style={explorerStyle}>
-      <Explorer patient={patient} currentMedia={media} />
-    </div>
+    <Explorer sections={sections} style={explorerStyle} />
     <MediaTags media={media} />
     <Edit media={media} />
-    <Navigation />
+    <Navigation
+      setCurrentMediaId={setCurrentMediaId}
+      prevMediaId={prevMediaId}
+      nextMediaId={nextMediaId}
+    />
   </div>
+)
 
 const containerStyle = {
   display: 'flex',
@@ -61,10 +130,21 @@ const editStyle = {
   height: 56
 }
 
-const Navigation = () =>
+const Navigation = ({ setCurrentMediaId, prevMediaId, nextMediaId }) =>
   <div style={navigationStyle}>
-    <Button><Icon name='chevron-left' /></Button>
-    <Button><Icon name='chevron-right' /></Button>
+    <Button
+      disabled={!prevMediaId}
+      onClick={() => setCurrentMediaId(prevMediaId)}
+    >
+      <Icon name='chevron-left' />
+    </Button>
+
+    <Button
+      disabled={!nextMediaId}
+      onClick={() => setCurrentMediaId(nextMediaId)}
+    >
+      <Icon name='chevron-right' />
+    </Button>
   </div>
 
 const navigationStyle = {
@@ -72,11 +152,19 @@ const navigationStyle = {
   height: 90
 }
 
-const Button = withState('hover', 'setHover')(({ children, hover, setHover, ...props }) =>
+const Button = withState('hover', 'setHover')(({
+  children,
+  hover,
+  setHover,
+  disabled = false,
+  onClick,
+  ...props
+}) =>
   <div
-    style={hover ? hoverButtonStyle : buttonStyle}
+    style={disabled ? buttonDisabledStyle : (hover ? buttonHoverStyle : buttonStyle)}
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
+    onClick={e => (!disabled && onClick(e))}
     {...props}
   >
     <div style={buttonInnerStyle}>
@@ -98,20 +186,14 @@ const buttonInnerStyle = {
   flex: 1
 }
 
-const hoverButtonStyle = {
+const buttonHoverStyle = {
   ...buttonStyle,
   opacity: 1,
   backgroundColor: 'rgba(255,255,255,0.1)'
 }
 
-const composer = props => {
-  const { patientId } = props
-
-  const patient = Patients.findOne({ _id: patientId })
-  return {
-    ...props,
-    patient
-  }
+const buttonDisabledStyle = {
+  ...buttonStyle,
+  opacity: 0.2,
+  cursor: 'auto'
 }
-
-export const Sidebar = withTracker(composer)(SidebarComponent)
