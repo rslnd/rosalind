@@ -5,6 +5,7 @@ import { withTracker } from '../components/withTracker'
 import { withState, withHandlers } from 'recompose'
 import { Icon } from '../components/Icon'
 import { MediaTags } from './MediaTags'
+import { Explorer } from './Explorer'
 
 export const SidebarComponent = ({ patient, media }) =>
   <div style={containerStyle}>
@@ -12,7 +13,9 @@ export const SidebarComponent = ({ patient, media }) =>
       patient={patient}
       style={patientNameStyle}
     />
-    <Explorer />
+    <div style={explorerStyle}>
+      <Explorer patient={patient} currentMedia={media} />
+    </div>
     <MediaTags media={media} />
     <Edit media={media} />
     <Navigation />
@@ -30,11 +33,6 @@ const patientNameStyle = {
   padding: 10,
   display: 'inline-block'
 }
-
-const Explorer = () =>
-  <div style={explorerStyle}>
-    &nbsp;
-  </div>
 
 const explorerStyle = {
   flexGrow: 1
