@@ -3,10 +3,10 @@ import Select from 'react-select'
 import { __ } from '../../i18n'
 import { getStyleNonce } from '../layout/styles'
 
-export const Search = ({ value, onChange, searchRef, style, ...props }) =>
+export const Search = ({ value, onChange, focusRef, style, ...props }) =>
   <div style={style}>
     <Select
-      ref={searchRef}
+      ref={focusRef}
       inputValue={value}
       onInputChange={onChange}
       ignoreCase

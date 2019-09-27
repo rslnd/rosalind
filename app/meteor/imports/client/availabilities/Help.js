@@ -22,7 +22,7 @@ export const Help = ({
   hoverAvailability,
   setHoverAvailability,
   handleAvailabilityClick,
-  searchRef
+  focusRef
 }) =>
   <div style={containerStyle}>
     <div style={topBarStyle}>
@@ -30,7 +30,7 @@ export const Help = ({
         style={searchBarStyle}
         value={searchValue}
         onChange={handleSearchValueChange}
-        searchRef={searchRef}
+        focusRef={focusRef}
       />
 
       <Button

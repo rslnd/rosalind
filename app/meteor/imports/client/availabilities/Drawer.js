@@ -59,9 +59,9 @@ const hiddenStyle = {
 }
 
 const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) => {
-  const ref = useRef()
+  const focusRef = useRef()
   useEffect(() => {
-    if (isOpen) { ref.current.focus() }
+    if (isOpen) { focusRef.current.focus() }
   }, [isOpen])
 
   return <div className='hide-print'>
@@ -88,15 +88,19 @@ const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) => {
       style={isOpen ? drawerStyle : hiddenStyle}
     >
       <ErrorBoundary>
-        <HotKeys handlers={{ CLOSE: handleClose }} innerRef={ref}>
+        <HotKeys handlers={{ CLOSE: handleClose }} style={keepHeightStyle}>
           {/* Observe escape key even when search field is autofocused */}
-          <ObserveKeys only={['Escape']}>
-            {children}
+          <ObserveKeys only={['Escape']} style={keepHeightStyle}>
+            {children({ focusRef })}
           </ObserveKeys>
         </HotKeys>
       </ErrorBoundary>
     </Paper>
   </div>
+}
+
+const keepHeightStyle = {
+  height: '100%'
 }
 
 export const withDrawer = Component => props => {
@@ -107,9 +111,12 @@ export const withDrawer = Component => props => {
       handleClose={handleDrawerClose}
       isOpen={isDrawerOpen}
     >
-      <Component
-        {...props}
-      />
+      {({ focusRef }) =>
+        <Component
+          focusRef={focusRef}
+          {...props}
+        />
+      }
     </Drawer>
   )
 }

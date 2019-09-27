@@ -90,7 +90,7 @@ export const HelpContainerComponent = compose(
     handleAvailabilityClick,
     handleDrawerOpen: props => e => {
       props.setDrawerOpen(true)
-      props.focusSearch()
+      props.onDrawerOpened()
     },
     handleDrawerClose: props => e =>
       props.setDrawerOpen(false)
@@ -105,15 +105,13 @@ export const HelpContainerComponent = compose(
 export class HelpContainer extends React.Component {
   constructor (props) {
     super(props)
-    this.focusSearch = this.focusSearch.bind(this)
+    this.onDrawerOpened = this.onDrawerOpened.bind(this)
   }
 
-  focusSearch () {
+  onDrawerOpened () {
     // Fix focus that scrolls the page to the end
     const x = window.scrollX
     const y = window.scrollY
-
-    this.searchRef && this.searchRef.focus()
 
     window.scrollTo(x, y)
   }
@@ -122,8 +120,7 @@ export class HelpContainer extends React.Component {
     return (
       <HelpContainerComponent
         {...this.props}
-        focusSearch={this.focusSearch}
-        searchRef={ref => { this.searchRef = ref }}
+        onDrawerOpened={this.onDrawerOpened}
       />
     )
   }
