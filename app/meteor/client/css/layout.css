@@ -144,3 +144,7 @@ i.circle {
 .bg-white {
   background-color: white;
 }
+
+div[tabindex="-1"]:focus {
+  outline: 0;
+}

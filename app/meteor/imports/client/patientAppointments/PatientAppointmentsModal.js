@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Portal } from 'react-portal'
-import { compose, withPropsOnChange, withHandlers } from 'recompose'
 import { Appointments } from './Appointments'
 import { AppointmentActionsContainer } from '../appointments/info/AppointmentActionsContainer'
 import { background, modalBackground, lightBackground, mutedSeparator, mutedBackground, darkerMutedBackground } from '../layout/styles'
@@ -15,102 +14,105 @@ import { getClientKey } from '../../startup/client/native/events'
 import { MediaOverlay } from '../media/Overlay'
 import { DropZone } from './DropZone'
 import { insertMedia } from '../../startup/client/dataTransfer'
+import { HotKeys } from 'react-hotkeys'
 
-export const PatientAppointmentsModal = compose(
-  withPropsOnChange(
-    ['show'],
-    props => {
-      // Prevent page from scrolling while modal is open
-      if (props.show) {
-        document.body.style.overflow = 'hidden'
-      } else {
-        document.body.style.overflow = null
+export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
+  const modalRef = useRef(null)
+  useEffect(() => {
+    // Prevent page from scrolling while modal is open
+    document.body.style.overflow = show ? 'hidden' : null
+
+    // Associate client workstation with current patient
+    setTimeout(() => {
+      const clientKey = getClientKey()
+      if (clientKey) {
+        Clients.actions.setCurrentView.callPromise({
+          clientKey,
+          patientId: ((props.show && props.patientId) || null),
+          appointmentId: ((props.show && props.appointmentId) || null)
+        })
       }
+    }, 16)
 
-      // Associate client workstation with current patient
-      setTimeout(() => {
-        const clientKey = getClientKey()
-        if (clientKey) {
-          Clients.actions.setCurrentView.callPromise({
-            clientKey,
-            patientId: ((props.show && props.patientId) || null),
-            appointmentId: ((props.show && props.appointmentId) || null)
-          })
-        }
-      }, 16)
-
-      return {}
+    // Focus modal
+    if (show) {
+      setTimeout(() => modalRef.current.focus(), 16)
     }
-  ),
-  withHandlers({
-    handleClose: props => e => {
+
+    return () => {
       document.body.style.overflow = null
-      props.onClose(e)
     }
-  })
-)(({ loading, show, handleClose, ...props }) =>
-  <MediaOverlay
-    patientId={props.patientId}
-    appointmentId={props.currentAppointment && props.currentAppointment._id}
-  >
-    {({ handleMediaClick }) =>
-      <Portal>
-        {
-          <div className='disable-select' style={show ? modalStyle : hiddenStyle}>
-            <div
-              style={backdropStyle}
-              onClick={handleClose}
-            />
-            <DropZone onDrop={f => insertMedia({ ...f, patientId: props.patientId })}>
-              {({ ref, droppingStyle, isDropping }) =>
-                <Paper elevation={10} style={modalWindowStyle}>
-                  <div style={containerOuterStyle} ref={ref}>
-                    <Close onClick={handleClose} />
-                    <div style={containerStyle}>
-                      <div style={columnsStyle}>
-                        <div style={appointmentsStyle}>
-                          <ErrorBoundary>
-                            <Appointments
-                              {...props}
-                              show={show}
-                              handleMediaClick={handleMediaClick}
-                              appointmentsCount={(
-                                (props.pastAppointmentsWithFloatingMedia ? props.pastAppointmentsWithFloatingMedia.length : 0) +
-                                (props.pastAppointments ? props.pastAppointments.length : 0) +
-                                (props.futureAppointments ? props.futureAppointments.length : 0) +
-                                (props.currentAppointment ? 1 : 0)
-                              )} // Scrolls to bottom when changed
-                            />
-                          </ErrorBoundary>
+  }, [show])
+
+  const handleClose = e => {
+    document.body.style.overflow = null
+    props.onClose(e)
+  }
+
+  return (
+    <MediaOverlay
+      patientId={props.patientId}
+      appointmentId={props.currentAppointment && props.currentAppointment._id}
+    >
+      {({ handleMediaClick }) =>
+        <Portal>
+          {
+            <div className='disable-select' style={show ? modalStyle : hiddenStyle}>
+              <div
+                style={backdropStyle}
+                onClick={handleClose}
+              />
+              <DropZone onDrop={f => insertMedia({ ...f, patientId: props.patientId })}>
+                {({ ref, droppingStyle, isDropping }) =>
+                  <Paper elevation={10} style={modalWindowStyle}>
+                    <HotKeys handlers={{ CLOSE: handleClose }} innerRef={modalRef} style={containerOuterStyle}>
+                      <Close onClick={handleClose} />
+                      <div style={containerStyle} ref={ref}>
+                        <div style={columnsStyle}>
+                          <div style={appointmentsStyle}>
+                            <ErrorBoundary>
+                              <Appointments
+                                {...props}
+                                show={show}
+                                handleMediaClick={handleMediaClick}
+                                appointmentsCount={(
+                                  (props.pastAppointmentsWithFloatingMedia ? props.pastAppointmentsWithFloatingMedia.length : 0) +
+                                  (props.pastAppointments ? props.pastAppointments.length : 0) +
+                                  (props.futureAppointments ? props.futureAppointments.length : 0) +
+                                  (props.currentAppointment ? 1 : 0)
+                                )} // Scrolls to bottom when changed
+                              />
+                            </ErrorBoundary>
+                          </div>
+                          <div style={patientSidebarStyle}>
+                            <ErrorBoundary>
+                              <Patient {...props} handleMediaClick={handleMediaClick} />
+                            </ErrorBoundary>
+                          </div>
                         </div>
-                        <div style={patientSidebarStyle}>
-                          <ErrorBoundary>
-                            <Patient {...props} handleMediaClick={handleMediaClick} />
-                          </ErrorBoundary>
+                        <div style={actionsStyle}>
+                          {
+                            props.currentAppointment
+                              ? <AppointmentActionsContainer {...props} />
+                              : <Button
+                                style={closeButtonStyle}
+                                onClick={handleClose}
+                              >{__('ui.close')}</Button>
+                          }
                         </div>
                       </div>
-                      <div style={actionsStyle}>
-                        {
-                          props.currentAppointment
-                            ? <AppointmentActionsContainer {...props} />
-                            : <Button
-                              style={closeButtonStyle}
-                              onClick={handleClose}
-                            >{__('ui.close')}</Button>
-                        }
-                      </div>
-                    </div>
-                    {isDropping && <div style={droppingStyle} />}
-                  </div>
-                </Paper>
-              }
-            </DropZone>
-          </div>
-        }
-      </Portal>
-    }
-  </MediaOverlay>
-)
+                      {isDropping && <div style={droppingStyle} />}
+                    </HotKeys>
+                  </Paper>
+                }
+              </DropZone>
+            </div>
+          }
+        </Portal>
+      }
+    </MediaOverlay>
+  )
+}
 
 const borderRadius = 6
 

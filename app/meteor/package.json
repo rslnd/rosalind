@@ -46,6 +46,7 @@
     "react-dates": "^20.2.5",
     "react-dom": "^16.8.6",
     "react-flip-move": "^3.0.3",
+    "react-hotkeys": "^2.0.0",
     "react-jss": "^8.3.3",
     "react-number-format": "^4.0.8",
     "react-popper": "^0.8.2",
@@ -60,11 +61,11 @@
     "redux-form-material-ui": "^5.0.0-beta.3",
     "redux-thunk": "^2.3.0",
     "smooch": "^4.19.5",
+    "snyk": "^1.90.0",
     "spotoninc-moment-round": "2.0.0",
     "uuid": "^3.3.2",
     "websmscom": "^1.0.3",
-    "xdt": "^0.4.0",
-    "snyk": "^1.90.0"
+    "xdt": "^0.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",

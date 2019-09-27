@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { HotKeys, configure } from 'react-hotkeys'
 import { Meteor } from 'meteor/meteor'
 import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
@@ -23,20 +24,22 @@ export const Rosalind = () => (
   <ReduxProvider store={store}>
     <Router>
       <MuiThemeProvider theme={muiTheme}>
-        <MainLayoutContainer>
-          <Switch>
-            <Route path='/appointments' component={Appointments} />
-            <Route path='/waitlist' component={Waitlist} />
-            <Route path='/inboundCalls' component={InboundCalls} />
-            <Route path='/schedules' component={Schedules} />
-            <Route path='/reports' component={Reports} />
-            <Route path='/users' component={Users} />
-            <Route path='/patients' component={Patients} />
-            <Route path='/system' component={System} />
-            <Route exact path='/' component={Dashboard} />
-            <Route path='/' component={Error} />
-          </Switch>
-        </MainLayoutContainer>
+        <HotKeys keyMap={keyMap}>
+          <MainLayoutContainer>
+            <Switch>
+              <Route path='/appointments' component={Appointments} />
+              <Route path='/waitlist' component={Waitlist} />
+              <Route path='/inboundCalls' component={InboundCalls} />
+              <Route path='/schedules' component={Schedules} />
+              <Route path='/reports' component={Reports} />
+              <Route path='/users' component={Users} />
+              <Route path='/patients' component={Patients} />
+              <Route path='/system' component={System} />
+              <Route exact path='/' component={Dashboard} />
+              <Route path='/' component={Error} />
+            </Switch>
+          </MainLayoutContainer>
+        </HotKeys>
       </MuiThemeProvider>
     </Router>
   </ReduxProvider>
@@ -53,3 +56,15 @@ export default () => {
     ReactDOM.render(<Rosalind />, rootNode)
   })
 }
+
+const keyMap = {
+  CLOSE: 'Escape',
+  NEXT: 'ArrowRight',
+  PREV: 'ArrowLeft',
+  UP: 'ArrowUp',
+  DOWN: 'ArrowDown'
+}
+
+configure({
+  logLevel: 'debug'
+})
