@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import Paper from '@material-ui/core/Paper'
 import { ErrorBoundary } from '../layout/ErrorBoundary'
 import { Icon } from '../components/Icon'
+import { HotKeys, ObserveKeys } from 'react-hotkeys'
 
 const triggerHeight = 220
 const triggerContainerStyle = {
@@ -57,12 +58,16 @@ const hiddenStyle = {
   pointerEvents: 'none'
 }
 
-const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) =>
-  <div className='hide-print'>
+const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) => {
+  const ref = useRef()
+  useEffect(() => {
+    if (isOpen) { ref.current.focus() }
+  }, [isOpen])
+
+  return <div className='hide-print'>
     <div
       style={triggerContainerStyle}
       onMouseEnter={handleOpen}
-      onMouseOver={handleOpen}
     >
       <Paper
         elevation={3}
@@ -83,10 +88,16 @@ const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) =>
       style={isOpen ? drawerStyle : hiddenStyle}
     >
       <ErrorBoundary>
-        {children}
+        <HotKeys handlers={{ CLOSE: handleClose }} innerRef={ref}>
+          {/* Observe escape key even when search field is autofocused */}
+          <ObserveKeys only={['Escape']}>
+            {children}
+          </ObserveKeys>
+        </HotKeys>
       </ErrorBoundary>
     </Paper>
   </div>
+}
 
 export const withDrawer = Component => props => {
   const { handleDrawerOpen, handleDrawerClose, isDrawerOpen } = props
