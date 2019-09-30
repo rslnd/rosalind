@@ -1,7 +1,7 @@
 import { compose, withState, mapProps } from 'recompose'
 import AsyncStorage from '@react-native-community/async-storage'
 import { generateSecureRandom } from 'react-native-securerandom'
-import binaryToBase64 from 'binaryToBase64'
+import binaryToBase64 from 'react-native/Libraries/Utilities/binaryToBase64'
 
 const storageKey = '@RosalindCamera:clientKey'
 
