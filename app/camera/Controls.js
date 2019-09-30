@@ -83,7 +83,7 @@ const styles = {
       alignItems: 'center'
     },
     secondary: {
-      backgroundColor: 'rgba(180,180,180,0.6)',
+      backgroundColor: 'rgba(200,200,200,0.6)',
       borderRadius: secondarySize,
       width: secondarySize,
       height: secondarySize,
@@ -101,10 +101,12 @@ const styles = {
       color: 'rgba(0,0,0,0.8)'
     },
     iconSecondary: {
-      paddingTop: 24,
-      fontSize: 30,
+      paddingTop: 14,
+      paddingLeft: 4,
+      fontSize: 27,
       marginLeft: 16,
-      marginRight: 16
+      marginRight: 16,
+      color: 'rgba(0,0,0,0.6)'
     }
   }),
   [portrait]: StyleSheet.create({

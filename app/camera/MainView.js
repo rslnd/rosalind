@@ -27,9 +27,11 @@ export const MainView = ({
     </Text>
     <CameraView
       onCodeRead={handlePairingFinish}
-      // onScan={() => {
-      //   NativeModules.Scanner.open()
-      // }}
+      onScan={() => {
+        NativeModules.Scanner.open((err, scanned) => {
+          console.log('scanner returned', err, scanned)
+        })
+      }}
       onMedia={handleMedia}
       showControls={pairedTo && currentPatientId}
       {...props}

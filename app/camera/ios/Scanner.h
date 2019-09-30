@@ -3,7 +3,6 @@
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTEventEmitter.h>
 #import <Foundation/Foundation.h>
-#import "RosalindCamera-Bridging-Header.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -2,20 +2,11 @@
 #include "ImageHelpers.h"
 #import <React/RCTImageLoader.h>
 
-@class ImageScannerController;
-
 @implementation Scanner
 
 @synthesize bridge = _bridge;
 
 RCT_EXPORT_MODULE();
-
-ImageScannerController *scannerViewController;
-
-- (NSArray<NSString *> *)supportedEvents
-{
-  return @[@"Scan"];
-}
 
 RCT_EXPORT_METHOD(createPreview:(NSString *)path
                   width:(float)width
@@ -55,23 +46,9 @@ RCT_EXPORT_METHOD(createPreview:(NSString *)path
   }];
 }
 
-//RCT_EXPORT_METHOD(open) {
-//  dispatch_async(dispatch_get_main_queue(), ^{
-//    scannerViewController = [[ImageScannerController alloc] init];
-//
-//    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-//    UINavigationController *rootViewController = (UINavigationController *) window.rootViewController;
-//
-//    [rootViewController presentViewController:scannerViewController animated:NO completion:nil];
-//  });
-//}
-//
-//-(void)imageDataFromWeScan:(NSNotification*)notify {
-//  //NSData *imgData = [notify object];
-//  //UIImage *img = [UIImage imageWithData:imgData];
-//  //[self sendEventWithName:@"Scan" body:@{@"name": @"Unicornooo"}];
-//
-//  [scannerViewController dismissViewControllerAnimated:NO completion:nil];
-//}
+RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
+  callback(@[[NSNull null], @"Okay"]);
+}
+
 
 @end

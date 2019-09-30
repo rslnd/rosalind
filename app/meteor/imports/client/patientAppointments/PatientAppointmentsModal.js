@@ -28,8 +28,8 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
       if (clientKey) {
         Clients.actions.setCurrentView.callPromise({
           clientKey,
-          patientId: ((props.show && props.patientId) || null),
-          appointmentId: ((props.show && props.appointmentId) || null)
+          patientId: ((show && props.patientId) || null),
+          appointmentId: ((show && props.appointmentId) || null)
         })
       }
     }, 16)
@@ -42,7 +42,7 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
     return () => {
       document.body.style.overflow = null
     }
-  }, [show])
+  }, [show, props.appointmentId, props.patientId])
 
   const handleClose = e => {
     document.body.style.overflow = null
