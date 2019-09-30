@@ -4,7 +4,7 @@ import { NativeModules } from 'react-native'
 
 const createPreview = ({ path, width, height, quality }) =>
   new Promise((resolve, reject) => {
-    NativeModules.Scanner.createPreview(path, width, height, quality, (err, base64) => {
+    NativeModules.MediaResizer.createPreview(path, width, height, quality, (err, base64) => {
       if (err) {
         reject(err)
       } else {

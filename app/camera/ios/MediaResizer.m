@@ -1,8 +1,8 @@
-#import "Scanner.h"
+#import "MediaResizer.h"
 #include "ImageHelpers.h"
 #import <React/RCTImageLoader.h>
 
-@implementation Scanner
+@implementation MediaResizer
 
 @synthesize bridge = _bridge;
 
