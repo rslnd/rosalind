@@ -7,10 +7,10 @@ import { landscape, both, applyStyle, portrait } from './withOrientation'
 const { DocumentScanner } = NativeModules
 
 // NativeModules.Scanner.initialize()
-const scannerEmitter = new NativeEventEmitter(DocumentScanner)
-scannerEmitter.addListener('Scan', scan => {
-  console.log('got scan event', scan)
-})
+// const scannerEmitter = new NativeEventEmitter(DocumentScanner)
+// scannerEmitter.addListener('Scan', scan => {
+//   console.log('got scan event', scan)
+// })
 
 export const MainView = ({
   handlePairingFinish,

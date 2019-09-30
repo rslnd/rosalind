@@ -1,17 +1,6 @@
-#import "DocumentScanner.h"
+#import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@implementation DocumentScanner
-
-RCT_EXPORT_MODULE();
-
-- (NSArray<NSString *> *)supportedEvents
-{
-  return @[@"Scan"];
-}
-
-RCT_EXPORT_METHOD(open)
-{
-  [self sendEventWithName:@"Scan" body:@{@"name": @"unicorn test"}];
-}
-
+@interface RCT_EXTERN_MODULE(DocumentScanner, NSObject)
+RCT_EXTERN_METHOD(open)
 @end
