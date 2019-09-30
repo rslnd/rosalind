@@ -1,10 +1,11 @@
 import { withHandlers } from 'recompose'
 import { call } from './util'
 import { NativeModules } from 'react-native'
+const { MediaResizer } = NativeModules
 
 const createPreview = ({ path, width, height, quality }) =>
   new Promise((resolve, reject) => {
-    NativeModules.MediaResizer.createPreview(path, width, height, quality, (err, base64) => {
+    MediaResizer.createPreview(path, width, height, quality, (err, base64) => {
       if (err) {
         reject(err)
       } else {

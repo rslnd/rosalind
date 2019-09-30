@@ -4,10 +4,13 @@ import { CameraView } from './CameraView'
 import { PatientName } from './PatientName'
 import { __ } from './i18n'
 import { landscape, both, applyStyle, portrait } from './withOrientation'
+const { DocumentScanner } = NativeModules
 
 // NativeModules.Scanner.initialize()
-// const scannerEmitter = new NativeEventEmitter(NativeModules.Scanner)
-// scannerEmitter.addListener('Scan', scan => console.log('got scan event', scan))
+const scannerEmitter = new NativeEventEmitter(DocumentScanner)
+scannerEmitter.addListener('Scan', scan => {
+  console.log('got scan event', scan)
+})
 
 export const MainView = ({
   handlePairingFinish,
@@ -28,9 +31,7 @@ export const MainView = ({
     <CameraView
       onCodeRead={handlePairingFinish}
       onScan={() => {
-        NativeModules.Scanner.open((err, scanned) => {
-          console.log('scanner returned', err, scanned)
-        })
+        DocumentScanner.open()
       }}
       onMedia={handleMedia}
       showControls={pairedTo && currentPatientId}
