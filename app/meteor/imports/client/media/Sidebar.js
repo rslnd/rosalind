@@ -41,8 +41,9 @@ const composer = (props) => {
       })
     }
 
-    if (currentAppointmentId !== acc.currentAppointmentId) {
-      const appointment = Appointments.findOne({ currentAppointmentId })
+    if (currentAppointmentId &&
+        (currentAppointmentId !== acc.currentAppointmentId)) {
+      const appointment = Appointments.findOne({ _id: currentAppointmentId })
       sectionsToAdd.push({ appointment })
     }
 
@@ -56,6 +57,8 @@ const composer = (props) => {
       ]
     }
   }, { currentMonth: null, currentAppointmentId: null, sections: [] })
+
+  console.log(sections)
 
   return {
     ...props,
@@ -79,7 +82,12 @@ export const Sidebar = withTracker(composer)(({
       patient={patient}
       style={patientNameStyle}
     />
-    <Explorer sections={sections} style={explorerStyle} />
+    <Explorer
+      sections={sections}
+      style={explorerStyle}
+      setCurrentMediaId={setCurrentMediaId}
+      currentMediaId={media._id}
+    />
     <MediaTags media={media} />
     <Edit media={media} />
     <Navigation
@@ -104,7 +112,9 @@ const patientNameStyle = {
 }
 
 const explorerStyle = {
-  flexGrow: 1
+  flex: 1,
+  height: '100%',
+  overflowY: 'auto'
 }
 
 const Edit = withHandlers({

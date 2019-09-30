@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { HotKeys } from 'react-hotkeys'
 import { compose, withState } from 'recompose'
 import { Icon } from '../components/Icon'
 import { Media } from '../../api'
@@ -13,7 +14,13 @@ export const MediaOverlay = compose(
   }))
 )(({ patientId, appointmentId, currentMedia, currentMediaId, setCurrentMediaId, children }) => {
   const [zoomed, setZoomed] = useState()
-  const ref = useRef(null)
+  const imgRef = useRef(null)
+  const modalRef = useRef(null)
+  useEffect(() => {
+    if (currentMediaId) {
+      modalRef.current.focus()
+    }
+  }, [currentMediaId])
 
   const handleMediaClick = mediaId => {
     console.log('[Media] Viewing', mediaId)
@@ -27,8 +34,8 @@ export const MediaOverlay = compose(
   }
 
   const handleMouseMove = (e, overrideZoomed = null) => {
-    if (ref.current) {
-      ref.current.style.transform = imageTransform({
+    if (imgRef.current) {
+      imgRef.current.style.transform = imageTransform({
         zoomed: (overrideZoomed === null ? zoomed : overrideZoomed),
         mediaHeight: currentMedia.height,
         mediaWidth: currentMedia.width,
@@ -39,49 +46,54 @@ export const MediaOverlay = compose(
     }
   }
 
-  return <div>
+  return <>
     {
-      currentMediaId && <div
-        style={zoomed ? overlayZoomedStyle : overlayStyle}
-        onClick={zoomed ? toggleZoom : handleClose}
-        onMouseMove={zoomed ? handleMouseMove : null}
+      currentMediaId && <HotKeys
+        handler={{ CLOSE: handleClose }}
       >
-        {
-          !zoomed && <div style={closeStyle} onClick={handleClose}>
-            <Icon name='times' />
-          </div>
-        }
-
         <div
-          style={zoomed ? zoomedSidebarStyle : sidebarStyle}
-          onClick={stopPropagation}
+          ref={modalRef}
+          style={zoomed ? overlayZoomedStyle : overlayStyle}
+          onClick={zoomed ? toggleZoom : handleClose}
+          onMouseMove={zoomed ? handleMouseMove : null}
         >
-          <Sidebar
-            patientId={patientId}
-            appointmentId={appointmentId}
-            media={currentMedia}
-            setCurrentMediaId={setCurrentMediaId}
-          />
-        </div>
+          {
+            !zoomed && <div style={closeStyle} onClick={handleClose}>
+              <Icon name='times' />
+            </div>
+          }
 
-        {currentMedia &&
-          <div style={fitToScreen}>
-            <img
-              ref={ref}
-              onClick={toggleZoom}
-              src={currentMedia.url}
-              style={imgStyle({
-                zoomed,
-                rotation: currentMedia.rotation,
-                mediaWidth: currentMedia.width,
-                mediaHeight: currentMedia.height
-              })} />
+          <div
+            style={zoomed ? zoomedSidebarStyle : sidebarStyle}
+            onClick={stopPropagation}
+          >
+            <Sidebar
+              patientId={patientId}
+              appointmentId={appointmentId}
+              media={currentMedia}
+              setCurrentMediaId={setCurrentMediaId}
+            />
           </div>
-        }
-      </div>
+
+          {currentMedia &&
+            <div style={fitToScreen}>
+              <img
+                ref={imgRef}
+                onClick={toggleZoom}
+                src={currentMedia.url}
+                style={imgStyle({
+                  zoomed,
+                  rotation: currentMedia.rotation,
+                  mediaWidth: currentMedia.width,
+                  mediaHeight: currentMedia.height
+                })} />
+            </div>
+          }
+        </div>
+      </HotKeys>
     }
     {children({ handleMediaClick })}
-  </div>
+  </>
 })
 
 const stopPropagation = e => e.stopPropagation()
@@ -158,5 +170,5 @@ const sidebarStyle = {
 
 const zoomedSidebarStyle = {
   ...sidebarStyle,
-  opacity: 0.6
+  opacity: 0.3
 }

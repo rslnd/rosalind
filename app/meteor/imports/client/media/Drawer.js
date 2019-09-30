@@ -29,14 +29,17 @@ export const Drawer = withTracker(composer)(({ media, handleMediaClick, style })
 
 export const Preview = withHandlers({
   handleClick: props => e => props.handleMediaClick(props.media._id)
-})(({ media, handleClick }) =>
-  <div style={imageContainerStyle} onClick={handleClick}>
+})(({ media, handleClick, borderStyle, style }) =>
+  <div style={borderStyle ? { ...imageBorderStyle, ...borderStyle } : imageBorderStyle} onClick={handleClick}>
     {!media.uploadCompletedAt && <Icon style={uploadingIconStyle} name='clock-o' />}
-    <img src={media.preview} />
+    <img
+      src={media.preview}
+      style={style}
+    />
   </div>
 )
 
-const imageContainerStyle = {
+const imageBorderStyle = {
   position: 'relative',
   border: '4px solid #fff',
   margin: 5
