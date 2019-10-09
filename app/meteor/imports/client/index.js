@@ -65,6 +65,7 @@ const keyMap = {
   DOWN: 'ArrowDown'
 }
 
-configure({
-  logLevel: 'debug'
-})
+// Debug hotkeys
+// configure({
+//   logLevel: 'debug'
+// })
