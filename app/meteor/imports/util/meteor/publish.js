@@ -55,7 +55,6 @@ const checkIsAllowed = ({ connection, userId, clientKey, accessToken, roles, all
 
   // Don't preload anything on untrusted networks
   if (!userId && !allowAnonymous) {
-    console.log('failed because missing userid')
     return false
   }
 
