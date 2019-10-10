@@ -56,7 +56,7 @@ export const toNative = (name, payload = {}) => {
     throw new Error('Cannot post to native without a bridge')
   }
 
-  console.log('[Native] Posting message', name)
+  console.log(`[Native] Posting message to native ${name}`)
   bridge.postToNative(name, payload)
 }
 

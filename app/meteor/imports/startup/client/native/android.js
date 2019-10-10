@@ -8,7 +8,8 @@ const toWeb = [
 ]
 
 const toNative = [
-  'hello'
+  'hello',
+  'settings'
 ]
 
 export const handleAndroidEvents = ({ events }) => {
