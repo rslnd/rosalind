@@ -9,7 +9,7 @@ let settings = new ReactiveVar(null)
 export const updateSettings = newSettings => {
   if (!isEqual(settings, newSettings)) {
     settings.set(newSettings)
-    toNative('settings', settings)
+    toNative('settings', settings.get())
   }
 }
 
