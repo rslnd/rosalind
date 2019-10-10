@@ -61,21 +61,29 @@ const postToNative = events => (name, payload) => {
     return
   }
 
-  if (window.rslndAndroid[name]) {
-    console.log(`[Native] Android: Calling bridge function ${name}`)
-    try {
-      return window.rslndAndroid[name](payload)
-    } catch (e) {
-      // fallthrough
+  const a = Object.keys(window.rslndAndroid)
+  console.log(`[Native] Android: Available native methods: ${JSON.stringify(a)}`)
+
+  try {
+    // Avoids "Method not found" when calling parameters don't match what's defined in Java
+    if (payload && Object.keys(payload).length >= 1) {
+      console.log(`[Native] Android: Calling bridge function ${name} with stringified arguments ${Object.keys(payload)}`)
+      return window.rslndAndroid[name](JSON.stringify(payload))
+    } else {
+      console.log(`[Native] Android: Calling bridge function ${name} without arguments`)
+      return window.rslndAndroid[name]()
     }
+  } catch (e) {
+    console.log(`[Native] Android: Error while calling bridge function "${name}" ${e.message} ${e.stack}`)
+    // fallthrough
   }
 
-  console.log(`[Native] Android: Error: Function ${name} is not exposed on the bridge interface rslndAndroid`)
+  console.log(`[Native] Android: Error: Function "${name}" is not exposed on the bridge interface rslndAndroid, or calling parameters don't match the method signature in Java. Called with ${Object.keys(payload)}`)
 }
 
 const postToWeb = events => (name, payload) => {
-  if (!toWeb.indexOf(name)) {
-    throw new Error(`Event name not whitelisted: ${name}`)
+  if (toWeb.indexOf(name) === -1) {
+    throw new Error(`Event name not whitelisted: ${name} in ${toWeb}`)
   }
   console.log(`[Native] Android: Emitting event ${name}`)
   events.emit(name, payload)
