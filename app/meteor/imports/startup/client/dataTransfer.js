@@ -135,13 +135,18 @@ export const handleDrop = async ({ name, base64 }) => {
 const onNativeDataTransfer = async file => {
   console.log('[dataTransfer] [Importers] Received data transfer event from native binding', { name: file.path, importer: file.importer })
 
-  const { importer, result } = await ingest({
+  const response = await ingest({
     name: file.path,
     content: file.content,
     importer: file.importer
   })
 
-  onDataTransferSuccess({ importer, result, ...file })
+  if (typeof response === 'object') {
+    const { importer, result } = response
+    onDataTransferSuccess({ importer, result, ...file })
+  } else {
+    onDataTransferSuccess({ importer: file.importer, ...file })
+  }
 }
 
 const onDataTransferSuccess = ({ importer, result, remove, path, focus }) => {
