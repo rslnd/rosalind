@@ -7,7 +7,7 @@ import { onNativeEvent, toNative } from './native/events'
 import { Meteor } from 'meteor/meteor'
 
 export const ingest = ({ name, content, base64, importer }) => {
-  return Importers.actions.ingest.call({
+  return Importers.actions.ingest.callPromise({
     name,
     content,
     importer,
