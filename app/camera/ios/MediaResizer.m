@@ -15,7 +15,7 @@ RCT_EXPORT_METHOD(createPreview:(NSString *)path
                   callback:(RCTResponseSenderBlock)callback) {
   CGSize newSize = CGSizeMake(width, height);
 
-  [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
+  [[self->_bridge moduleForClass:[RCTImageLoader class]] loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
     if (error || image == nil) {
         callback(@[@"Can't retrieve the file from the path.", @""]);
         return;
