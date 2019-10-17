@@ -130,7 +130,7 @@ const Edit = withHandlers({
 })(({ handleRotate }) =>
   <div style={editStyle}>
     <Button><Icon name='trash-o' /></Button>
-    <Button><Icon name='crop' /></Button>
+    {/* <Button><Icon name='crop' /></Button> */}
     <Button onClick={handleRotate}><Icon name='retweet' /></Button>
   </div>
 )

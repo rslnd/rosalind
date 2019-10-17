@@ -47,7 +47,8 @@ const explorerStyle = {
   display: 'flex',
   flexWrap: 'wrap',
   justifyContent: 'center',
-  alignItems: 'start'
+  alignItems: 'start',
+  alignContent: 'flex-start'
 }
 
 const separatorStyle = {
