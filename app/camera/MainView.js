@@ -6,38 +6,55 @@ import { __ } from './i18n'
 import { landscape, both, applyStyle, portrait } from './withOrientation'
 const { DocumentScanner } = NativeModules
 
-// NativeModules.Scanner.initialize()
-const scannerEmitter = new NativeEventEmitter(DocumentScanner)
-scannerEmitter.addListener('Scan', scan => {
-  console.log('got scan event', scan)
-})
+export class MainView extends React.Component {
+  constructor (props) {
+    super(props)
 
-export const MainView = ({
-  handlePairingFinish,
-  handleMedia,
-  pairedTo,
-  currentPatient,
-  currentPatientId,
-  ...props
-}) =>
-  <View style={styles[both].container}>
-    <Text style={applyStyle(props, styles, 'patientName')}>
-      {
-        currentPatient
-          ? <PatientName patient={currentPatient} />
-          : (currentPatientId && __('ready')) || __('pleasePair')
-      }
-    </Text>
-    <CameraView
-      onCodeRead={handlePairingFinish}
-      onScan={() => {
-        DocumentScanner.open()
-      }}
-      onMedia={handleMedia}
-      showControls={pairedTo && currentPatientId}
-      {...props}
-    />
-  </View>
+    this.handleScan = this.handleScan.bind(this)
+  }
+
+  componentDidMount () {
+    const scannerEmitter = new NativeEventEmitter(DocumentScanner)
+    scannerEmitter.addListener('Scan', scan =>
+      this.handleScan(scan)
+    )
+  }
+
+  handleScan (scan) {
+    console.log('Handling scan', scan)
+    this.props.handleMedia(scan)
+  }
+
+  render () {
+    const {
+      handlePairingFinish,
+      handleMedia,
+      pairedTo,
+      currentPatient,
+      currentPatientId,
+      ...restProps
+    } = this.props
+
+    return <View style={styles[both].container}>
+        <Text style={applyStyle(this.props, styles, 'patientName')}>
+          {
+            currentPatient
+              ? <PatientName patient={currentPatient} />
+              : (currentPatientId && __('ready')) || __('pleasePair')
+          }
+        </Text>
+        <CameraView
+          onCodeRead={handlePairingFinish}
+          onScan={() => {
+            DocumentScanner.open()
+          }}
+          onMedia={handleMedia}
+          showControls={pairedTo && currentPatientId}
+          {...restProps}
+        />
+      </View>
+  }
+}
 
 const styles = {
   [both]: StyleSheet.create({

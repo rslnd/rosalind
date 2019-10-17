@@ -231,6 +231,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.0-rc.0):
     - React
+  - WeScan (1.1.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -265,11 +266,13 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
+  - WeScan (>= 1.1.0)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - boost-for-react-native
+    - WeScan
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -361,8 +364,9 @@ SPEC CHECKSUMS:
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
   RNCAsyncStorage: 60a80e72d95bf02a01cace55d3697d9724f0d77f
   RNSecureRandom: 1f19ad1492f7ed416b8fc79e92216a1f73f13a4c
+  WeScan: 7ebe08c966fbd7321be2be1a962423c237e3e2ec
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: bbba59758daae74800f1d469184627e44b0279f1
+PODFILE CHECKSUM: cb3a7141c247c77def94cd872017ee831d0d0537
 
 COCOAPODS: 1.6.1

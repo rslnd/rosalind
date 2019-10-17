@@ -46,9 +46,4 @@ RCT_EXPORT_METHOD(createPreview:(NSString *)path
   }];
 }
 
-RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
-  callback(@[[NSNull null], @"Okay"]);
-}
-
-
 @end

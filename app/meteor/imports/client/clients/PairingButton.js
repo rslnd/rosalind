@@ -81,7 +81,7 @@ const PairingButtonComponent = ({ canPair, hasProducers, handlePairingStart, han
       <Button size='small' onClick={handlePairingStart} style={hasProducers ? hasProducersStyle : {}}>
         <Icon name='camera' />
         &nbsp;
-        { hasProducers ? 'Bereit' : 'Verbindung herstellen' }
+        { hasProducers ? 'Kamera verbinden' : 'Verbindung herstellen' }
       </Button>
       <QRModal value={pairingCode} onClose={handlePairingCancel} />
     </div>

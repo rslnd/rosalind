@@ -40,6 +40,7 @@ const handleMedia = props => async media => {
 
   const createMedia = {
     ...mediaRest,
+    takenAt: media.takenAt || new Date(),
     consumerId: props.pairedTo,
     patientId: props.currentPatientId,
     appointmentId: props.currentAppointmentId,
