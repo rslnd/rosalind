@@ -4,7 +4,7 @@ import Alert from 'react-s-alert'
 import { insuranceId as formatInsuranceId, prefix } from '../../api/patients/methods'
 import { namecase } from '../../util/namecase'
 import { __ } from '../../i18n'
-import { withHandlers } from 'recompose'
+import { withHandlers, compose, withProps } from 'recompose'
 import { Patients } from '../../api/patients'
 import { Field, Textarea, Day, InsuranceId as InsuranceIdField } from './Field'
 import { Consent } from '../appointments/info/Consent'
@@ -15,6 +15,7 @@ import { currencyRounded } from '../../util/format'
 import { FutureRecord } from '../records/FutureRecord'
 import { PairingButton } from '../clients/PairingButton'
 import { Pinned } from '../media/Pinned'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const action = promise =>
   promise.then(() => {
@@ -29,11 +30,11 @@ const sectionStart = {
   paddingTop: 14
 }
 
-export const Patient = ({ patient, currentAppointment, handleMediaClick }) =>
+export const Patient = ({ patient, calendar, currentAppointment, handleMediaClick }) =>
   !patient ? null : <div style={containerStyle}>
     <div style={innerContainerStyle}>
       <div style={fieldsContainerStyle}>
-        <Name {...patient} />
+        <Name {...patient} calendar={calendar} />
         <Birthday {...patient} />
         <InsuranceId {...patient} />
         <Contacts {...patient} />
@@ -92,18 +93,26 @@ const upsert = (props, update) =>
     })
   )
 
-const Name = withHandlers({
-  toggleGender: props => e => action(Patients.actions.toggleGender.callPromise({ patientId: props._id })),
-  updateLastName: props => lastName => upsert(props, { lastName }),
-  updateFirstName: props => firstName => upsert(props, { firstName }),
-  updateTitlePrepend: props => titlePrepend => upsert(props, { titlePrepend }),
-  toggleBanned: props => banned => upsert(props, { banned: !props.banned })
-})(({
+const Name = compose(
+  withProps(props => ({
+    canBan: (
+      (props.calendar &&
+      props.calendar.allowBanningPatients) ||
+      hasRole(Meteor.userId(), ['admin', 'patients-ban']))
+  })),
+  withHandlers({
+    toggleGender: props => e => action(Patients.actions.toggleGender.callPromise({ patientId: props._id })),
+    updateLastName: props => lastName => upsert(props, { lastName }),
+    updateFirstName: props => firstName => upsert(props, { firstName }),
+    updateTitlePrepend: props => titlePrepend => upsert(props, { titlePrepend }),
+    toggleBanned: props => e => upsert(props, { banned: !props.banned })
+  })
+)(({
   gender, toggleGender,
   titlePrepend, updateTitlePrepend,
   lastName, updateLastName,
   firstName, updateFirstName,
-  banned, toggleBanned
+  banned, toggleBanned, canBan
 }) =>
   <div style={nameStyle}>
     <div>
@@ -125,7 +134,13 @@ const Name = withHandlers({
         initialValue={namecase(firstName)}
         onChange={updateFirstName}
       />
-      <Dot banned={banned} onClick={toggleBanned} />
+      {canBan &&
+        <Dot
+          banned={banned}
+          canBan={canBan}
+          onClick={toggleBanned}
+        />
+      }
     </div>
   </div>
 )

@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import React from 'react'
 import moment from 'moment-timezone'
 import { FormSection, Field } from 'redux-form'
@@ -9,6 +10,8 @@ import { UserHelper } from '../../users/UserHelper'
 import { Icon } from '../../components/Icon'
 import { PatientPickerField } from '../../patients/picker'
 import { flex, grow, shrink, TextField } from '../../components/form'
+import { hasRole } from '../../../util/meteor/hasRole'
+import { Calendars } from '../../../api'
 
 const pauseButtonStyle = {
   ...tagStyle,
@@ -40,6 +43,8 @@ export const NewAppointmentFields = props => {
     constraint
   } = props
 
+  const calendar = Calendars.findOne({ _id: calendarId })
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
       <FormSection name='patient'>
@@ -47,6 +52,7 @@ export const NewAppointmentFields = props => {
           upsert
           extended={extended}
           change={change}
+          allowBanningPatients={(calendar && calendar.allowBanningPatients) || hasRole(Meteor.userId(), ['admin', 'patients-ban'])}
         />
       </FormSection>
 

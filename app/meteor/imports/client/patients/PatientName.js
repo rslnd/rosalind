@@ -11,7 +11,7 @@ const dotStyle = {
   borderRadius: '100%'
 }
 
-export const PatientName = ({ patient = {}, style }) => (
+export const PatientName = ({ patient = {}, style, bannedIndicator = false }) => (
   <span style={style}>
     <span className='text-muted'>
       {prefix(patient)}
@@ -22,7 +22,7 @@ export const PatientName = ({ patient = {}, style }) => (
     {namecase(patient.firstName)}&nbsp;
     {patient.titleAppend}
     {
-      patient.banned && <span>
+      patient.banned && bannedIndicator && <span>
         &ensp;
         <span title={__('patients.banned')} style={dotStyle} />
       </span>

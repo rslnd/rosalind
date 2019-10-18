@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import React from 'react'
 import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
@@ -13,6 +14,7 @@ import { getClientKey, toNative } from '../../../startup/client/native/events'
 import { Loading } from '../../components/Loading'
 import { Tooltip } from '../../components/Tooltip'
 import { PatientsAppointmentsContainer } from '../../patientAppointments/PatientsAppointmentsContainer'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 const contentHeaderStyle = {
   background,
@@ -125,6 +127,7 @@ export class AppointmentsScreen extends React.Component {
               withAppointments
               onPatientModalOpen={this.handlePatientModalOpen}
               formName={newAppointmentFormName}
+              bannedIndicator={calendar.allowBanningPatients || hasRole(Meteor.userId(), ['admin', 'patients-ban'])}
             />
           </div>
 

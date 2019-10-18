@@ -127,5 +127,10 @@ export const schema = new SimpleSchema({
   allowMoveBetweenAssignees: {
     type: Boolean,
     optional: true
+  },
+
+  allowBanningPatients: {
+    type: Boolean,
+    optional: true
   }
 })

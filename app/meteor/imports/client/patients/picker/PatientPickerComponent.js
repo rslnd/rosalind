@@ -33,12 +33,13 @@ export const PatientPickerComponent = ({
   selectHandlers,
   isOptionSelected,
   filterOption,
-  onPatientModalOpen
+  onPatientModalOpen,
+  bannedIndicator
 }) =>
   <Select
     {...selectState}
     {...selectHandlers}
-    formatOptionLabel={formatOptionLabel({ onPatientModalOpen })}
+    formatOptionLabel={formatOptionLabel({ onPatientModalOpen, bannedIndicator })}
     isOptionSelected={isOptionSelected}
     filterOption={filterOption}
     isClearable
@@ -62,10 +63,10 @@ const NewPatient = ({ patient }) =>
     }
   </span>
 
-const PatientWithAppointments = ({ patient, onPatientModalOpen }) =>
+const PatientWithAppointments = ({ patient, onPatientModalOpen, bannedIndicator }) =>
   <div style={resultStyle}>
     <div style={selectedStyle}>
-      <PatientName patient={patient} />
+      <PatientName patient={patient} bannedIndicator={bannedIndicator} />
 
       <span className='text-muted pull-right'>
         &emsp;
@@ -86,10 +87,10 @@ const PatientWithAppointments = ({ patient, onPatientModalOpen }) =>
     }
   </div>
 
-const PatientNameSelected = ({ patient, onPatientModalOpen }) =>
+const PatientNameSelected = ({ patient, onPatientModalOpen, bannedIndicator }) =>
   <div style={selectedStyle}>
     <div style={patientNameStyle}>
-      <PatientName patient={patient} />
+      <PatientName patient={patient} bannedIndicator={bannedIndicator} />
     </div>
     {
       onPatientModalOpen && <Button
@@ -162,11 +163,13 @@ const formatOptionLabel = props =>
       return <PatientWithAppointments
         patient={patient || selectValue}
         onPatientModalOpen={props.onPatientModalOpen}
+        bannedIndicator={props.bannedIndicator}
       />
     } else {
       return <PatientNameSelected
         patient={patient || selectValue}
         onPatientModalOpen={props.onPatientModalOpen}
+        bannedIndicator={props.bannedIndicator}
       />
     }
   }

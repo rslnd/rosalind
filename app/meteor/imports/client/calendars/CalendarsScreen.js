@@ -61,6 +61,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'defaultDuration'
   },
   {
+    header: 'Schwarzer Punkt',
+    field: 'allowBanningPatients',
+    type: Boolean
+  },
+  {
     header: 'History',
     field: 'history',
     type: Boolean,

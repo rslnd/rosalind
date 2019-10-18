@@ -6,6 +6,7 @@ import { withTracker } from '../components/withTracker'
 import { Appointments } from '../../api/appointments'
 import { Users } from '../../api/users'
 import { Patients } from '../../api/patients'
+import { Calendars } from '../../api/calendars'
 import { subscribe } from '../../util/meteor/subscribe'
 import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
@@ -133,6 +134,10 @@ const composer = props => {
       }
     }, { last: null, list: [] }).list
 
+  const calendar = currentAppointment &&
+    currentAppointment.calendarId &&
+    Calendars.findOne({ _id: currentAppointment.calendarId })
+
   return {
     ...props,
     patientId,
@@ -146,7 +151,8 @@ const composer = props => {
     otherAppointments,
     canceledCount,
     fullNameWithTitle,
-    canRefer
+    canRefer,
+    calendar
   }
 }
 

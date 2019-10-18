@@ -34,6 +34,7 @@ export const BulkUpsertScreen = ({ submitting, handleSubmit, onSubmit, patientId
             extended
             upsert
             change={change}
+            allowBanningPatients={true}
           />
 
           {
