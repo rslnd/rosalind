@@ -73,6 +73,7 @@ const open = (callback) => {
     backgroundColor: '#ecf0f5',
     webPreferences: {
       preload: require.resolve('../renderer/preload'),
+      enableRemoteModule: false,
       nodeIntegration: false,
       contextIsolation: true,
       session: ephemeralSession,

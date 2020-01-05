@@ -6,6 +6,11 @@ export const inboundCallsTopics = new SimpleSchema({
     type: String
   },
 
+  labelShort: {
+    type: String,
+    optional: true
+  },
+
   slug: {
     type: String
   },

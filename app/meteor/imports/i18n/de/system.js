@@ -10,6 +10,7 @@ export const system = {
   thisClients: 'Clients',
   thisTags: 'Tags',
   thisMediaTags: 'Kategorien für Medien',
+  thisInboundCallsTopics: 'Rückruflisten',
   thisEvents: 'Ereignisse',
   thisNative: 'Arbeitsplatz',
   thisReferrables: 'Empfehlungen',

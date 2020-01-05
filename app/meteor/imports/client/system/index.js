@@ -9,6 +9,7 @@ import { ClientsContainer } from '../clients/ClientsContainer'
 import { ReferrablesContainer } from '../referrals/ReferrablesContainer'
 import { Route } from '../layout/SafeRoute'
 import { Error } from '../components/Error'
+import { InboundCallsTopicsScreen } from '../inboundCalls/InboundCallsTopicsScreen'
 
 const Events = () => <Error /> // Not implemented
 
@@ -20,6 +21,7 @@ export const System = ({ match }) => (
       <Route exact path={`${match.url}/messages`} component={MessagesContainer} />
       <Route exact path={`${match.url}/tags`} component={TagsContainer} />
       <Route exact path={`${match.url}/mediaTags`} component={MediaTagsScreen} />
+      <Route exact path={`${match.url}/inboundCallsTopics`} component={InboundCallsTopicsScreen} />
       <Route exact path={`${match.url}/calendars`} component={CalendarsContainer} />
       <Route exact path={`${match.url}/referrables`} component={ReferrablesContainer} />
       <Route path={`${match.url}`} component={Events} />

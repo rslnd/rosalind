@@ -7,6 +7,7 @@ export default () => {
 
     console.log('[Server] New connection', {
       id,
+      clientAddress,
       isTrusted
     })
   })
