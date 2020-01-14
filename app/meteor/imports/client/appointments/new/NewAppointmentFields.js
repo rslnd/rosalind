@@ -77,6 +77,15 @@ export const NewAppointmentFields = props => {
             <div
               style={pauseButtonStyle}
               onClick={onSubmitPause}>PAUSE</div>
+
+
+            {/* I'm sorry. */}
+            {(hasRole(Meteor.userId(), ['appointments-extendDuration-all']) ||
+             (hasRole(Meteor.userId(), ['appointments-extendDuration-self']) && assigneeId === Meteor.userId())) &&
+              <div
+                style={pauseButtonStyle}
+                onClick={() => onSubmitPause({ note: 'Verlängerung' })}>Verlängerung</div>
+            }
           </div>
         </div>
 

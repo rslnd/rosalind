@@ -21,21 +21,22 @@ export class NewAppointmentContainerComponent extends React.Component {
     this.handleSubmitPause = this.handleSubmitPause.bind(this)
   }
 
-  handleSubmitPause () {
+  handleSubmitPause ({ note, duration } = {}) {
+    console.log(note, duration)
     const appointment = {
-      note: 'PAUSE',
+      note: note || 'PAUSE',
       calendarId: this.props.calendar._id,
       start: moment(this.props.time).toDate(),
-      end: moment(this.props.time).add(this.props.calendar.defaultDuration || this.props.calendar.slotSize || 5, 'minutes').toDate(),
+      end: moment(this.props.time).add(duration || this.props.calendar.defaultDuration || this.props.calendar.slotSize || 5, 'minutes').toDate(),
       assigneeId: this.props.assigneeId
     }
 
-    console.log('[Appointments] Inserting pause', { appointment })
+    console.log('[Appointments] Inserting pause/special', { appointment })
 
     return Appointments.actions.insert.callPromise({ appointment })
       .then(() => {
         this.props.dispatch({ type: 'APPOINTMENT_INSERT_SUCCESS' })
-        Alert.success(__('appointments.pauseInsertSuccess'))
+        Alert.success(__('appointments.insertSuccess'))
         if (this.props.onClose) { this.props.onClose() }
       })
       .catch((e) => {

@@ -209,7 +209,8 @@ const limitFieldsByRole = userId => {
     return {} // Publish all fields
   } else {
     return {
-      note: 0
+      // note: 0
+      // TODO: Find other way to publish 'PAUSE' and 'Verlängerung' appointments. Maybe a flag?
     }
   }
 }

@@ -165,12 +165,10 @@ class AppointmentItem extends React.Component {
                   {patient.lastName && <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
                   {patient.firstName && <span>{namecase(patient.firstName)}</span>}
                 </span>
-              ) : !appointment.lockedBy && (
+              ) : (!appointment.lockedBy && (
                 this.stripNumbers(appointment.note) ||
-                ((!appointment.tags || appointment.tags.lenth === 0) &&
-                 !appointment.note && 'PAUSE') ||
-                <Icon name='question-circle' />
-              )
+                ((!appointment.tags || appointment.tags.lenth === 0) && (appointment.note || 'PAUSE')
+              ))) || <Icon name='question-circle' />
           }
         </span>
       </div>

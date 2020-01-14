@@ -31,8 +31,8 @@ export const insert = ({ Appointments }) => {
 
       const { note, ...restFields } = appointment
 
-      if (!appointment.patientId) {
-        appointment.note = note
+      if (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung') {
+        restFields.note = note
       }
 
       appointmentId = Appointments.insert({ ...restFields, patientId }, (err) => {
