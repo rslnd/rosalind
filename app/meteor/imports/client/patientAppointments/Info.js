@@ -13,6 +13,7 @@ import { logFormat } from '../appointments/info/logFormat'
 import { Meteor } from 'meteor/meteor'
 import { withTracker } from '../components/withTracker'
 import { hasRole } from '../../util/meteor/hasRole'
+import { CanceledByMessage } from './CanceledByMessage'
 
 export const Info = compose(
   withState('showLogs', 'setShowLogs', false),
@@ -51,6 +52,7 @@ export const Info = compose(
           collectionName='appointments'
           fields={['removed', 'created', 'admitted', 'canceled']}
           doc={appointment} />
+        <CanceledByMessage appointment={appointment} />
       </div>
     }
   </>
