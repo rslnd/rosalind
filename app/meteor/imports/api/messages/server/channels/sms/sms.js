@@ -118,7 +118,7 @@ export const receive = (payload) => {
       cancelAppointment = isIntentToCancel(message.text)
       if (appointment && cancelAppointment) {
         console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
-        Appointments.actions.setCanceled.call({ appointmentId })
+        Appointments.actions.setCanceled.call({ appointmentId, canceledByMessageId: messageId })
 
         Messages.update({ _id: messageId }, {
           $set: {

@@ -173,6 +173,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  canceledByMessageId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
   admitted: {
     type: Boolean,
     optional: true,

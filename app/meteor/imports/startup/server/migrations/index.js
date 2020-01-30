@@ -14,6 +14,7 @@ import './11-referrables'
 import './12-appointmentsCommentsToNote'
 import './13-patientSince'
 import './14-fixAppointmentsComments'
+import './15-canceledBySMS'
 
 export default () => {
   Meteor.startup(() => {

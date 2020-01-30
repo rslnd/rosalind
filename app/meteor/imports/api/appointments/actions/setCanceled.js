@@ -11,10 +11,11 @@ export const setCanceled = ({ Appointments }) => {
     name: 'appointments/setCanceled',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
-      appointmentId: { type: SimpleSchema.RegEx.Id }
+      appointmentId: { type: SimpleSchema.RegEx.Id },
+      canceledByMessageId: { type: SimpleSchema.RegEx.Id, optional: true }
     }).validator(),
 
-    run({ appointmentId }) {
+    run({ appointmentId, canceledByMessageId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -29,7 +30,8 @@ export const setCanceled = ({ Appointments }) => {
         $set: {
           canceled: true,
           canceledAt: new Date(),
-          canceledBy: this.userId
+          canceledBy: this.userId,
+          canceledByMessageId,
         },
         $unset: {
           admitted: 1,
