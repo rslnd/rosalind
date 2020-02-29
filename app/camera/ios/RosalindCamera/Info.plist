@@ -40,9 +40,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Please enable Camera</string>
+	<string>Take pictures and scan documents with the camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Attach location information to pictures</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Record sound in videos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fa-regular-400.ttf</string>

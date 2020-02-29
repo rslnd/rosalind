@@ -6,10 +6,11 @@ class DocumentScanner: RCTEventEmitter, ImageScannerControllerDelegate {
   func imageScannerController(_ scanner: ImageScannerController, didFinishScanningWithResults results: ImageScannerResults) {
     os_log("Scanner: finished")
 
-    let scanned = (results.doesUserPreferEnhancedImage
-      ? (results.enhancedImage ?? results.scannedImage)
-      : results.scannedImage)
-    let jpeg = scanned.jpegData(compressionQuality: 0.9)
+    let scanned = (results.doesUserPreferEnhancedScan
+      ? (results.enhancedScan ?? results.croppedScan)
+      : results.croppedScan)
+
+    let jpeg = scanned.image.jpegData(compressionQuality: 0.9)
 
     let localPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString + ".jpeg")
 
@@ -21,8 +22,8 @@ class DocumentScanner: RCTEventEmitter, ImageScannerControllerDelegate {
       let media =  [
         "localPath": localPath.absoluteString,
         "mediaType": "image/jpeg",
-        "height": scanned.size.height * scanned.scale,
-        "width": scanned.size.width * scanned.scale
+        "height": scanned.image.size.height * scanned.image.scale,
+        "width": scanned.image.size.width * scanned.image.scale
       ] as [String : Any]
 
       self.sendEvent(

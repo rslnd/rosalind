@@ -2,6 +2,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '10.0'
 use_frameworks!
+use_modular_headers!
 
 target 'RosalindCamera' do
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
