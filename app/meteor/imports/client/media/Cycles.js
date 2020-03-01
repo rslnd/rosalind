@@ -10,7 +10,7 @@ import { Clients } from '../../api'
 import { Icon } from '../components/Icon'
 
 export const patientCyclesNames = patientId => {
-  const medias = MediaAPI.find({ patientId }).fetch()
+  const medias = MediaAPI.find({ patientId }, { sort: { createdAt: -1 } }).fetch()
   const uniqueCycles = uniq(medias.map(m => m.cycle).filter(identity))
   return uniqueCycles
 }

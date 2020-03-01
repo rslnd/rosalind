@@ -81,5 +81,5 @@ const mediaBorderSelectedStyle = {
 }
 
 const mediaStyle = {
-  width: 96
+  width: 48
 }

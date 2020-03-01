@@ -8,11 +8,19 @@ import { withTracker } from '../components/withTracker'
 
 export const MediaOverlay = compose(
   withState('currentMediaId', 'setCurrentMediaId'),
-  withTracker(props => ({
-    ...props,
-    currentMedia: props.currentMediaId && Media.findOne({ _id: props.currentMediaId })
-  }))
-)(({ patientId, appointmentId, currentMedia, currentMediaId, setCurrentMediaId, children }) => {
+  withTracker(props => {
+    if (!props.currentMediaId) { return props }
+    const currentMedia = Media.findOne({ _id: props.currentMediaId })
+    if (!currentMedia) { return props }
+    const overlayCycle = currentMedia.cycle
+
+    return {
+      ...props,
+      currentMedia,
+      overlayCycle
+    }
+  })
+)(({ patientId, appointmentId, currentMedia, currentMediaId, setCurrentMediaId, overlayCycle, children }) => {
   const [zoomed, setZoomed] = useState()
   const imgRef = useRef(null)
   const modalRef = useRef(null)
@@ -72,6 +80,7 @@ export const MediaOverlay = compose(
               appointmentId={appointmentId}
               media={currentMedia}
               setCurrentMediaId={setCurrentMediaId}
+              overlayCycle={overlayCycle}
             />
           </div>
 
