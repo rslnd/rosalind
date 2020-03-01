@@ -32,6 +32,7 @@ export class MainView extends React.Component {
       pairedTo,
       currentPatient,
       currentPatientId,
+      currentCycle,
       ...restProps
     } = this.props
 
@@ -39,8 +40,11 @@ export class MainView extends React.Component {
         <Text style={applyStyle(this.props, styles, 'patientName')}>
           {
             currentPatient
-              ? <PatientName patient={currentPatient} />
-              : (currentPatientId && __('ready')) || __('pleasePair')
+              ? <>
+                <PatientName patient={currentPatient} />
+                {currentCycle && <Text>&emsp;(Zykl. {currentCycle})</Text>}
+              </>
+              : <Text>{(currentPatientId && __('ready')) || __('pleasePair')}</Text>
           }
         </Text>
         <CameraView
@@ -68,8 +72,9 @@ const styles = {
       zIndex: 2,
       top: 0,
       left: 0,
-      backgroundColor: 'rgba(128,128,128,0.5)'
-    }
+      backgroundColor: 'rgba(128,128,128,0.5)',
+      display: 'flex'
+    },
   }),
   [portrait]: StyleSheet.create({
     patientName: {

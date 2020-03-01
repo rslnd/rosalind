@@ -15,6 +15,9 @@ export const PatientName = ({ patient = {} }) => (
     <Text style={styles.bold}>{patient.lastName}&nbsp;</Text>
     {patient.firstName}&nbsp;
     {patient.titleAppend}
+    <Text style={styles.muted}>
+      &nbsp; {patient.titleAppend}
+    </Text>
   </Text>
 )
 

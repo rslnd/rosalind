@@ -75,11 +75,13 @@ const withCurrentPatient = props => {
   // We can start taking photos as soon as we have the id.
   let currentPatientId = null
   let currentAppointmentId = null
+  let currentCycle = null
   let currentPatient = null
 
   if (consumer && consumer.currentPatientId) {
     currentPatientId = consumer.currentPatientId
     currentAppointmentId = consumer.currentAppointmentId
+    currentCycle = consumer.currentCycle
     Meteor.subscribe('patient-name', { patientId: currentPatientId, clientKey: props.clientKey })
 
     currentPatient = Patients.findOne({ _id: currentPatientId })
@@ -89,6 +91,7 @@ const withCurrentPatient = props => {
   props.setCurrentPatient(currentPatient)
   props.setCurrentPatientId(currentPatientId)
   props.setCurrentAppointmentId(currentAppointmentId)
+  props.setCurrentCycle(currentCycle)
   return {}
 }
 
@@ -97,6 +100,7 @@ export const withPairing = compose(
   withState('baseUrl', 'setBaseUrl', null),
   withState('currentPatientId', 'setCurrentPatientId', null),
   withState('currentAppointmentId', 'setCurrentAppointmentId', null),
+  withState('currentCycle', 'setCurrentCycle', null),
   withState('currentPatient', 'setCurrentPatient', null),
   withHandlers({ handlePairingFinish }),
   withTracker(withCurrentPatient)
