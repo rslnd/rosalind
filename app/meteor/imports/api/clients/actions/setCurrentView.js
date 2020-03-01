@@ -10,7 +10,7 @@ export const setCurrentView = ({ Clients }) =>
       clientKey: String,
       patientId: Match.OneOf(null, String),
       appointmentId: Match.OneOf(null, String),
-      cycle: Match.OneOf(null, Number)
+      cycle: Match.OneOf(null, String)
     },
     fn ({ clientKey, patientId, appointmentId, cycle }) {
       Clients.update({ clientKey }, {

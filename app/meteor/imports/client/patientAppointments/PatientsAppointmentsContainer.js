@@ -12,6 +12,7 @@ import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
 import { connect } from 'react-redux'
 import { Media } from '../../api'
+import { getClient } from '../../api/clients/methods/getClient'
 
 const fullNameWithTitle = _id => {
   const user = _id && Users.findOne({ _id })
@@ -138,6 +139,9 @@ const composer = props => {
     currentAppointment.calendarId &&
     Calendars.findOne({ _id: currentAppointment.calendarId })
 
+  const client = getClient()
+  const currentCycle = client && client.currentCycle
+
   return {
     ...props,
     patientId,
@@ -152,7 +156,8 @@ const composer = props => {
     canceledCount,
     fullNameWithTitle,
     canRefer,
-    calendar
+    calendar,
+    currentCycle
   }
 }
 

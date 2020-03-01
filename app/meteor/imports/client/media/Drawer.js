@@ -3,9 +3,10 @@ import { withTracker } from '../components/withTracker'
 import { Media as MediaAPI } from '../../api/media'
 import { Icon } from '../components/Icon'
 import { withHandlers } from 'recompose'
+import { NewCycle, splitCycles, Cycle } from './Cycles'
 
 const composer = props => {
-  const { appointmentId, patientId } = props
+  const { appointmentId } = props
 
   const media = props.media || MediaAPI.find({
     appointmentId
@@ -16,13 +17,27 @@ const composer = props => {
   return { ...props, media }
 }
 
-export const Drawer = withTracker(composer)(({ media, handleMediaClick, style }) =>
-  media.length === 0
+export const Drawer = withTracker(composer)(({ media, patientId, appointmentId, handleMediaClick, style, currentAppointment, isCurrentAppointment, currentCycle }) =>
+  (!isCurrentAppointment && media.length === 0)
     ? null
     : <div style={style ? { ...drawerStyle, ...style } : drawerStyle}>
-      {media.map(m =>
-        <Preview key={m._id} media={m} handleMediaClick={handleMediaClick} />
+
+      {splitCycles(media).map(c =>
+        <Cycle key={c.cycle} cycle={c.cycle} patientId={patientId} appointmentId={currentAppointment && currentAppointment._id} currentCycle={currentCycle} canAppend={!!currentAppointment}>
+          {c.media.map(m =>
+             <Preview key={m._id} media={m} handleMediaClick={handleMediaClick} />
+          )}
+        </Cycle>
       )}
+
+      {isCurrentAppointment &&
+        <NewCycle
+          patientId={patientId}
+          appointmentId={appointmentId}
+          currentCycle={currentCycle}
+        />
+      }
+
       &nbsp;
     </div>
 )

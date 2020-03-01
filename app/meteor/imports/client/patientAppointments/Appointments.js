@@ -32,6 +32,7 @@ export const Appointments = compose(
   canRefer,
   loading,
   handleMediaClick,
+  currentCycle,
   ...props
 }) =>
   <div style={containerStyle}>
@@ -50,6 +51,8 @@ export const Appointments = compose(
           <AppointmentsList
             pastAppointmentsWithFloatingMedia={pastAppointmentsWithFloatingMedia}
             fullNameWithTitle={fullNameWithTitle}
+            currentAppointment={currentAppointment}
+            currentCycle={currentCycle}
             show={show}
             handleMediaClick={handleMediaClick}
           />
@@ -66,6 +69,8 @@ export const Appointments = compose(
               key='current'
               appointment={currentAppointment}
               fullNameWithTitle={fullNameWithTitle}
+              currentAppointment={currentAppointment}
+              currentCycle={currentCycle}
               isCurrent
               handleMediaClick={handleMediaClick}
               show={show}

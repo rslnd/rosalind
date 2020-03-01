@@ -13,7 +13,7 @@ import { Drawer } from '../media/Drawer'
 import { DropZone } from './DropZone'
 import { insertMedia } from '../../startup/client/dataTransfer'
 
-export const AppointmentsList = ({ appointments, pastAppointmentsWithFloatingMedia, handleMediaClick, fullNameWithTitle }) =>
+export const AppointmentsList = ({ appointments, pastAppointmentsWithFloatingMedia, currentAppointment, currentCycle, handleMediaClick, fullNameWithTitle }) =>
   (pastAppointmentsWithFloatingMedia || appointments).map((a, i) =>
     <ErrorBoundary key={(a._id || (a.media && a.media[0] && a.media[0]._id) || i)}>
       {
@@ -22,11 +22,15 @@ export const AppointmentsList = ({ appointments, pastAppointmentsWithFloatingMed
             media={a.media}
             style={drawerFullWidthStyle}
             handleMediaClick={handleMediaClick}
+            currentCycle={currentCycle}
+            currentAppointment={currentAppointment}
           />
           : <Appointment
             appointment={a}
+            currentAppointment={currentAppointment}
             fullNameWithTitle={fullNameWithTitle}
             handleMediaClick={handleMediaClick}
+            currentCycle={currentCycle}
           />
       }
     </ErrorBoundary>
@@ -42,11 +46,13 @@ export const Appointment = compose(
 )(({
   calendar,
   isCurrent,
+  currentAppointment,
   appointment,
   fullNameWithTitle,
   canSeeNote,
   canSeeComments,
   collapseComments,
+  currentCycle,
   handleMediaClick
 }) =>
   <DropZone
@@ -85,7 +91,10 @@ export const Appointment = compose(
           window.location.hash.indexOf('media') !== -1 &&
             <ErrorBoundary>
               <Drawer
+                currentAppointment={currentAppointment}
+                isCurrentAppointment={isCurrent}
                 handleMediaClick={handleMediaClick}
+                currentCycle={currentCycle}
                 patientId={appointment.patientId}
                 appointmentId={appointment._id}
                 style={drawerAppointmentStyle}

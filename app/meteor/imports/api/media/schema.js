@@ -26,6 +26,12 @@ export const media = new SimpleSchema({
     index: 1
   },
 
+  cycle: {
+    type: String,
+    optional: true,
+    index: 1
+  },
+
   tagIds: {
     type: [SimpleSchema.RegEx.Id],
     optional: true,

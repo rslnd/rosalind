@@ -19,10 +19,11 @@ export const insert = ({ Media }) =>
       consumerId: Match.Optional(String),
       patientId: String,
       appointmentId: Match.Optional(String),
+      cycle: Match.Optional(String),
       clientKey: Match.Optional(String),
       preview: Match.Optional(String)
     },
-    fn: function ({ width, height, takenAt, mediaType, consumerId, preview, clientKey, patientId, appointmentId }) {
+    fn: function ({ width, height, takenAt, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle }) {
       const credentials = getCredentials()
 
       let userId = null
@@ -64,6 +65,7 @@ export const insert = ({ Media }) =>
         patientId,
         appointmentId,
         producerId,
+        cycle,
         consumerId,
         createdBy: userId,
         preview
