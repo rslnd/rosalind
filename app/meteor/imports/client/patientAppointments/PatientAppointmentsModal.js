@@ -29,7 +29,8 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
         Clients.actions.setCurrentView.callPromise({
           clientKey,
           patientId: ((show && props.patientId) || null),
-          appointmentId: ((show && props.appointmentId) || null)
+          appointmentId: ((show && props.appointmentId) || null),
+          cycle: ((show && props.cycle) || null)
         })
       }
     }, 16)

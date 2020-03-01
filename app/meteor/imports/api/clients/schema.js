@@ -92,6 +92,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  currentCycle: {
+    type: String,
+    optional: true
+  },
+
   createdAt: {
     type: Date,
     autoValue: Auto.createdAt

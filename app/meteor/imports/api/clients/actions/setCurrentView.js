@@ -9,16 +9,18 @@ export const setCurrentView = ({ Clients }) =>
     args: {
       clientKey: String,
       patientId: Match.OneOf(null, String),
-      appointmentId: Match.OneOf(null, String)
+      appointmentId: Match.OneOf(null, String),
+      cycle: Match.OneOf(null, Number)
     },
-    fn ({ clientKey, patientId, appointmentId }) {
+    fn ({ clientKey, patientId, appointmentId, cycle }) {
       Clients.update({ clientKey }, {
         $set: {
           currentPatientId: patientId,
-          currentAppointmentId: appointmentId
+          currentAppointmentId: appointmentId,
+          currentCycle: cycle
         }
       })
 
-      Events.post('clients/setCurrentView', { clientKey: clientKey.substr(0, 10), patientId, appointmentId })
+      Events.post('clients/setCurrentView', { clientKey: clientKey.substr(0, 10), patientId, appointmentId, cycle })
     }
   })
