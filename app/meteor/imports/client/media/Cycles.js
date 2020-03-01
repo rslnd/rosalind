@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@material-ui/core'
 import { Media as MediaAPI } from '../../api/media'
 import identity from 'lodash/identity'
@@ -7,6 +7,7 @@ import groupBy from 'lodash/fp/groupBy'
 import map from 'lodash/map'
 import { getClientKey } from '../../startup/client/native/events'
 import { Clients } from '../../api'
+import { Icon } from '../components/Icon'
 
 export const patientCyclesNames = patientId => {
   const medias = MediaAPI.find({ patientId }).fetch()
@@ -32,20 +33,37 @@ export const splitCycles = media => {
   })
 }
 
-export const Placeholder = ({ isActive, onClick }) =>
-  <div
+export const Placeholder = ({ isActive, onClick }) => {
+  const [hover, setHover] = useState(false)
+
+  return <div
     onClick={onClick}
-    style={isActive ? activePlaceholderStyle : placeholderStyle}>
+    onMouseEnter={() => setHover(true)}
+    onMouseLeave={() => setHover(false)}
+    style={isActive ? activePlaceholderStyle : (hover ? hoverPlaceholderStyle : placeholderStyle)}>
+      {isActive && <Icon name='hand-o-left' />}
   </div>
+}
 
 const placeholderStyle = {
   width: 60,
   height: 60,
-  border: '3px dashed rgba(255,255,255,0.3)',
-  borderRadius: 8
+  border: '3px dashed rgba(255,255,255,0.15)',
+  borderRadius: 8,
+  alignSelf: 'center',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'rgba(255,255,255,0.9)',
+  cursor: 'pointer'
 }
 
 const activePlaceholderStyle = {
+  ...placeholderStyle,
+  border: '3px dashed rgba(255,255,255,0.9)'
+}
+
+const hoverPlaceholderStyle = {
   ...placeholderStyle,
   border: '3px dashed rgba(255,255,255,0.7)'
 }
@@ -61,22 +79,42 @@ export const NewCycle = ({ patientId, appointmentId, currentCycle }) => {
       isNewCycle
       ? <Cycle patientId={patientId} appointmentId={appointmentId} currentCycle={currentCycle} cycle={newCycleNr} canAppend={!!appointmentId}>
       </Cycle>
-      : <Button onClick={handleNewCycle}>
-        New Cycle ({newCycleNr})
+      : <Button style={newButtonStyle} onClick={handleNewCycle}>
+        Neuer Zyklus ({newCycleNr})
       </Button>
     }
   </div>
 }
 
-export const Cycle = ({ cycle, currentCycle, patientId, appointmentId, children, canAppend }) =>
-  <div>
-    Cycle {cycle}
-    {children}
+const newButtonStyle = {
+  zoom: 0.9,
+  opacity: 0.8,
+  margin: 7
+}
 
-    {canAppend && patientId && appointmentId && <Placeholder
-      isActive={(currentCycle === cycle)}
-      onClick={() => {
-        setCycle({ patientId, appointmentId, cycle })
-      }}
-    />}
+export const Cycle = ({ cycle, currentCycle, patientId, appointmentId, children, canAppend }) =>
+  <div style={cycleContainerStyle}>
+    Zyklus {cycle}
+
+    <div style={cycleInnerStyle}>
+      {children}
+
+
+      {canAppend && patientId && appointmentId && <Placeholder
+        isActive={(currentCycle === cycle)}
+        onClick={() => {
+          setCycle({ patientId, appointmentId, cycle })
+        }}
+      />}
+    </div>
   </div>
+
+const cycleInnerStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center'
+}
+
+const cycleContainerStyle = {
+  padding: 8
+}
