@@ -52,6 +52,8 @@ export const patients = {
   addContact: 'Weiteren Kontakt hinzufügen',
   save: 'Speichern',
   patientSince: 'PatientIn seit __date__',
+  patientSince_female: 'Patientin seit __date__',
+  patientSince_male: 'Patient seit __date__',
   editSuccess: 'Gespeichert',
   patientNotFound: 'PatientIn nicht gefunden',
   nameCaseWarning: 'Bitte den ersten Buchstaben groß schreiben, und den Rest klein. Danke!',

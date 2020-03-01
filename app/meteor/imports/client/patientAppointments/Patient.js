@@ -284,7 +284,7 @@ const localityStyle = {
   display: 'inline-block'
 }
 
-const Loyalty = ({ patientSince, totalRevenue }) =>
+const Loyalty = ({ patientSince, gender, totalRevenue }) =>
   <div style={loyaltyStyle}>
     <div>{
       totalRevenue
@@ -293,7 +293,7 @@ const Loyalty = ({ patientSince, totalRevenue }) =>
     } </div>
     <div>{
       patientSince
-        ? __('patients.patientSince', { date: formatPatientSince(patientSince) })
+        ? __(gender === 'Female' ? 'patients.patientSince_female' : 'patients.patientSince_male', { date: formatPatientSince(patientSince) })
         : null
     }</div>
   </div>
