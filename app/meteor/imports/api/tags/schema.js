@@ -87,6 +87,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  requireConsent: {
+    type: Boolean,
+    optional: true
+  },
+
   external: {
     type: [ String ],
     optional: true,

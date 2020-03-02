@@ -138,6 +138,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'maxParallel'
   },
   {
+    header: 'Revers?',
+    field: 'requireConsent',
+    type: Boolean
+  },
+  {
     header: 'Synonyme',
     field: 'synonyms',
     multi: true,
