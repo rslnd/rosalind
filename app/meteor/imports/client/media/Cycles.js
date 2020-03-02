@@ -46,9 +46,9 @@ export const Placeholder = ({ isActive, onClick }) => {
 }
 
 const placeholderStyle = {
-  width: 60,
-  height: 60,
-  border: '3px dashed rgba(255,255,255,0.15)',
+  width: 40,
+  height: 40,
+  border: '2px dashed rgba(255,255,255,0.15)',
   borderRadius: 8,
   alignSelf: 'center',
   display: 'flex',
@@ -60,12 +60,12 @@ const placeholderStyle = {
 
 const activePlaceholderStyle = {
   ...placeholderStyle,
-  border: '3px dashed rgba(255,255,255,0.9)'
+  border: '2px dashed rgba(255,255,255,0.9)'
 }
 
 const hoverPlaceholderStyle = {
   ...placeholderStyle,
-  border: '3px dashed rgba(255,255,255,0.7)'
+  border: '2px dashed rgba(255,255,255,0.7)'
 }
 
 export const NewCycle = ({ patientId, appointmentId, currentCycle }) => {
@@ -74,7 +74,7 @@ export const NewCycle = ({ patientId, appointmentId, currentCycle }) => {
     setCycle({ patientId, appointmentId, cycle: newCycleNr })
   const isNewCycle = currentCycle === newCycleNr
 
-  return <div>
+  return <div style={newContainerStyle}>
     {
       isNewCycle
       ? <Cycle patientId={patientId} appointmentId={appointmentId} currentCycle={currentCycle} cycle={newCycleNr} canAppend={!!appointmentId}>
@@ -84,6 +84,11 @@ export const NewCycle = ({ patientId, appointmentId, currentCycle }) => {
       </Button>
     }
   </div>
+}
+
+const newContainerStyle = {
+  flex: 'none',
+  width: '100%'
 }
 
 const newButtonStyle = {

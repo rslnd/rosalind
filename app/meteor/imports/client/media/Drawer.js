@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { withTracker } from '../components/withTracker'
 import { Media as MediaAPI } from '../../api/media'
 import { Icon } from '../components/Icon'
@@ -37,27 +37,37 @@ export const Drawer = withTracker(composer)(({ media, patientId, appointmentId, 
           currentCycle={currentCycle}
         />
       }
-
-      &nbsp;
     </div>
 )
 
-export const Preview = withHandlers({
-  handleClick: props => e => props.handleMediaClick(props.media._id)
-})(({ media, handleClick, borderStyle, style }) =>
-  <div style={borderStyle ? { ...imageBorderStyle, ...borderStyle } : imageBorderStyle} onClick={handleClick}>
+export const Preview = ({ media, handleMediaClick, borderStyle, style }) => {
+  const [hover, setHover] = useState(false)
+  const baseStyle = hover ? imageBorderHoverStyle : imageBorderStyle
+  const outerStyle = borderStyle ? ({ ...baseStyle, ...borderStyle }) : baseStyle
+
+  return <div
+    style={outerStyle}
+    onMouseEnter={() => setHover(true)}
+    onMouseLeave={() => setHover(false)}
+    onClick={() => handleMediaClick(media._id)}
+  >
     {!media.uploadCompletedAt && <Icon style={uploadingIconStyle} name='clock-o' />}
     <img
       src={media.preview}
       style={style}
     />
   </div>
-)
+}
 
 const imageBorderStyle = {
   position: 'relative',
-  border: '4px solid #fff',
+  border: '2px solid rgba(255,255,255,0.7)',
   margin: 5
+}
+
+const imageBorderHoverStyle = {
+  ...imageBorderStyle,
+  border: '2px solid rgba(255,255,255,0.9)',
 }
 
 const uploadingIconStyle = {

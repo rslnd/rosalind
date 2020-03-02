@@ -73,11 +73,11 @@ const appointmentDateStyle = {
 }
 
 const mediaBorderStyle = {
-  border: '4px solid rgba(255,255,255,0.1)'
+  border: '2px solid rgba(255,255,255,0.1)'
 }
 
 const mediaBorderSelectedStyle = {
-  border: '4px solid #fff'
+  border: '2px solid rgba(220,220,220,0.9)'
 }
 
 const mediaStyle = {
