@@ -40,6 +40,7 @@ export const Placeholder = ({ isActive, onClick }) => {
     onClick={onClick}
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
+    title={isActive ? 'Neue Fotos werden hier eingefügt' : 'Neue Fotos hier einfügen'}
     style={isActive ? activePlaceholderStyle : (hover ? hoverPlaceholderStyle : placeholderStyle)}>
       {isActive && <Icon name='hand-o-left' />}
   </div>
@@ -80,6 +81,8 @@ export const NewCycle = ({ patientId, appointmentId, currentCycle }) => {
       ? <Cycle patientId={patientId} appointmentId={appointmentId} currentCycle={currentCycle} cycle={newCycleNr} canAppend={!!appointmentId}>
       </Cycle>
       : <Button style={newButtonStyle} onClick={handleNewCycle}>
+        <Icon name='plus' />
+        &nbsp;
         Neuer Zyklus ({newCycleNr})
       </Button>
     }
@@ -92,14 +95,15 @@ const newContainerStyle = {
 }
 
 const newButtonStyle = {
-  zoom: 0.9,
-  opacity: 0.8,
+  zoom: 0.8,
+  color: 'white',
+  opacity: 0.9,
   margin: 7
 }
 
 export const Cycle = ({ cycle, currentCycle, patientId, appointmentId, children, canAppend }) =>
   <div style={cycleContainerStyle}>
-    Zyklus {cycle}
+    <span style={cycleTitleStyle}>Zyklus {cycle}</span>
 
     <div style={cycleInnerStyle}>
       {children}
@@ -121,5 +125,13 @@ const cycleInnerStyle = {
 }
 
 const cycleContainerStyle = {
-  padding: 8
+  padding: 8,
+  color: 'rgba(255,255,255,0.9)',
+  lineHeight: 1.6
+}
+
+const cycleTitleStyle = {
+  display: 'inline-block',
+  paddingLeft: 4,
+  fontSize: '90%'
 }

@@ -2,6 +2,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
 export const mediaTypes = ['image/jpeg']
+export const kinds = ['document', 'photo']
 
 export const media = new SimpleSchema({
   consumerId: {
@@ -24,6 +25,11 @@ export const media = new SimpleSchema({
     type: SimpleSchema.RegEx.Id,
     optional: true,
     index: 1
+  },
+
+  kind: {
+    type: String,
+    allowedValues: kinds
   },
 
   cycle: {
@@ -121,7 +127,16 @@ export const media = new SimpleSchema({
 })
 
 export const mediaTags = new SimpleSchema({
+  kind: {
+    type: String,
+    allowedValues: kinds
+  },
+
   tag: {
+    type: String
+  },
+
+  tagPlural: {
     type: String
   },
 
@@ -132,6 +147,11 @@ export const mediaTags = new SimpleSchema({
 
   color: {
     type: String,
+    optional: true
+  },
+
+  isConsent: {
+    type: Boolean,
     optional: true
   },
 

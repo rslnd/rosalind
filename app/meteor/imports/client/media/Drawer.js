@@ -9,7 +9,8 @@ const composer = props => {
   const { appointmentId } = props
 
   const media = props.media || MediaAPI.find({
-    appointmentId
+    appointmentId,
+    kind: 'photo'
   }, { sort: {
     createdAt: 1
   } }).fetch()

@@ -6,7 +6,7 @@ import { Icon } from '../components/Icon'
 
 const composer = (props) => {
   const { media } = props
-  const allMediaTags = MediaTagsAPI.find({}, { sort: { order: 1 } }).fetch()
+  const allMediaTags = MediaTagsAPI.find({ kind: media.kind }, { sort: { order: 1 } }).fetch()
 
   const mediaTags = allMediaTags.map(t => ({
     isSelected: media.tagIds && media.tagIds.includes(t._id),

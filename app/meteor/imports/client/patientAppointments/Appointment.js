@@ -12,6 +12,7 @@ import { CommentsContainer } from '../comments/CommentsContainer'
 import { Drawer } from '../media/Drawer'
 import { DropZone } from './DropZone'
 import { insertMedia } from '../../startup/client/dataTransfer'
+import { Documents } from './Documents'
 
 export const AppointmentsList = ({ appointments, pastAppointmentsWithFloatingMedia, currentAppointment, currentCycle, handleMediaClick, fullNameWithTitle }) =>
   (pastAppointmentsWithFloatingMedia || appointments).map((a, i) =>
@@ -72,7 +73,15 @@ export const Appointment = compose(
       >
         <div style={isCurrent ? currentAppointmentInnerStyle : null}>
           <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
-          <Tags {...appointment} isCurrent={isCurrent} />
+          <div style={tagsDocumentsRowStyle}>
+            <div style={tagsStyle}><Tags {...appointment} isCurrent={isCurrent} /></div>
+            <div style={documentsStyle}>
+              <ErrorBoundary>
+                <Documents appointment={appointment} isCurrent={isCurrent} handleMediaClick={handleMediaClick} />
+              </ErrorBoundary>
+            </div>
+          </div>
+
 
           {
             canSeeNote &&
@@ -135,6 +144,18 @@ export const currentAppointmentInnerStyle = {
 const removedAppointmentStyle = {
   ...appointmentStyle,
   background: lighterMutedBackground
+}
+
+const tagsDocumentsRowStyle = {
+  display: 'flex'
+}
+
+const tagsStyle = {
+  flex: 1
+}
+
+const documentsStyle = {
+  flex: 1
 }
 
 const drawerAppointmentStyle = {

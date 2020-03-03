@@ -32,6 +32,9 @@ export const unavailable = '#C9CCD0'
 export const green = '#8fc6ae'
 export const red = '#e37067'
 
+export const warning = '#f39c12'
+export const warningBorder = '#c87f0a'
+
 export const text = '#333'
 
 export const fontSize = '16px'

@@ -12,15 +12,13 @@ export const MediaOverlay = compose(
     if (!props.currentMediaId) { return props }
     const currentMedia = Media.findOne({ _id: props.currentMediaId })
     if (!currentMedia) { return props }
-    const overlayCycle = currentMedia.cycle
 
     return {
       ...props,
-      currentMedia,
-      overlayCycle
+      currentMedia
     }
   })
-)(({ patientId, appointmentId, currentMedia, currentMediaId, setCurrentMediaId, overlayCycle, children }) => {
+)(({ patientId, appointmentId, currentMedia, currentMediaId, setCurrentMediaId, children }) => {
   const [zoomed, setZoomed] = useState()
   const imgRef = useRef(null)
   const modalRef = useRef(null)
@@ -80,7 +78,6 @@ export const MediaOverlay = compose(
               appointmentId={appointmentId}
               media={currentMedia}
               setCurrentMediaId={setCurrentMediaId}
-              overlayCycle={overlayCycle}
             />
           </div>
 

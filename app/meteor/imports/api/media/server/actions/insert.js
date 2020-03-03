@@ -2,9 +2,12 @@ import { action, Match } from '../../../../util/meteor/action'
 import { Events } from '../../../events'
 import { Clients } from '../../../clients'
 import uuidv4 from 'uuid/v4'
-import { mediaTypes } from '../../schema'
+import uniq from 'lodash/uniq'
+import identity from 'lodash/identity'
+import { mediaTypes, kinds } from '../../schema'
 import { getCredentials, createPresignedRequest } from '../s3'
 import { hasRole } from '../../../../util/meteor/hasRole'
+
 
 export const insert = ({ Media }) =>
   action({
@@ -15,15 +18,16 @@ export const insert = ({ Media }) =>
       width: Number,
       height: Number,
       takenAt: Date,
+      kind: Match.OneOf(...kinds),
       mediaType: Match.OneOf(...mediaTypes),
-      consumerId: Match.Optional(String),
+      consumerId: Match.Maybe(String),
       patientId: String,
       appointmentId: Match.Optional(String),
       cycle: Match.Optional(String),
       clientKey: Match.Optional(String),
       preview: Match.Optional(String)
     },
-    fn: function ({ width, height, takenAt, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle }) {
+    fn: function ({ width, height, takenAt, kind, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle }) {
       const credentials = getCredentials()
 
       let userId = null
@@ -56,11 +60,34 @@ export const insert = ({ Media }) =>
         '.jpeg'
       ].join('')
 
+
+      // Automatically append photos to newest cycle if not given, and
+      // set consumer's current cycle to that new cycle so that subsequent media gets appended too
+      if (!cycle && kind === 'photo') {
+        const consumer = Clients.findOne({ _id: consumerId })
+        if (consumer.currentCycle !== null) {
+          console.error('Producer sent no cycle, but consumer has cycle selected. Appending to currently selected cycle', { producerId, consumerId, filename })
+          cycle = consumer.currentCycle
+        } else {
+          const medias = Media.find({ patientId }, { sort: { createdAt: -1 } }).fetch()
+          const uniqueCycles = uniq(medias.map(m => m.cycle).filter(identity))
+          const newCycleNr = String(uniqueCycles.length + 1)
+          Clients.update({ _id: consumer._id }, { $set: { currentCycle: newCycleNr }})
+          cycle = newCycleNr
+        }
+      }
+
+      // Documents do not have cycles
+      if (kind === 'document') {
+        cycle = null
+      }
+
       const mediaId = Media.insert({
         filename,
         width,
         height,
         takenAt,
+        kind,
         mediaType,
         patientId,
         appointmentId,

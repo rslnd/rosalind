@@ -87,7 +87,7 @@ export default new SimpleSchema({
     optional: true
   },
 
-  requireConsent: {
+  isConsentRequired: {
     type: Boolean,
     optional: true
   },

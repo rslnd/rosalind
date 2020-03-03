@@ -10,16 +10,18 @@ import { MediaTags } from './MediaTags'
 import { Explorer } from './Explorer'
 
 const composer = (props) => {
-  const { patientId, overlayCycle } = props
+  const { patientId, media } = props
   const patient = Patients.findOne({ _id: patientId })
-  const currentMediaId = props.media._id
+  const currentMediaId = media._id
 
   let prevMediaId = null
   let nextMediaId = null
 
-  const selector = overlayCycle
-    ? { patientId: patient._id, cycle: overlayCycle }
-    : { patientId: patient._id }
+  const cycle = media.cycle
+
+  const selector = cycle
+    ? { patientId: patient._id, kind: media.kind, cycle }
+    : { patientId: patient._id, kind: media.kind }
 
   const allMedia = Media.find(selector, { sort: { createdAt: 1 } }).fetch()
 
@@ -64,6 +66,7 @@ const composer = (props) => {
 
   return {
     ...props,
+    cycle,
     patient,
     sections,
     prevMediaId,
@@ -77,7 +80,7 @@ export const Sidebar = withTracker(composer)(({
   media,
   prevMediaId,
   nextMediaId,
-  overlayCycle,
+  cycle,
   setCurrentMediaId
 }) =>
   <div style={containerStyle}>
@@ -87,9 +90,9 @@ export const Sidebar = withTracker(composer)(({
     />
 
     {
-      overlayCycle &&
+      cycle &&
         <div style={cycleStyle}>
-          Zyklus {overlayCycle}
+          Zyklus {cycle}
         </div>
     }
 

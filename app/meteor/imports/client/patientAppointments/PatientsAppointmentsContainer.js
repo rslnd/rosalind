@@ -94,7 +94,8 @@ const composer = props => {
 
   const floatingMedia = Media.find({
     patientId,
-    appointmentId: null
+    appointmentId: null,
+    kind: 'photo'
   }, {
     sort: {
       createdAt: 1

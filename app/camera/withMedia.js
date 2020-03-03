@@ -44,7 +44,7 @@ const handleMedia = props => async media => {
     consumerId: props.pairedTo,
     patientId: props.currentPatientId,
     appointmentId: props.currentAppointmentId,
-    cycle: props.currentCycle,
+    cycle: (mediaRest.kind === 'document') ? '' : (props.currentCycle || ''), // work around weird match failed error when passing null. evaluates falsey anyways.
     preview
   }
   const signedRequest = await call(props)('media/insert', createMedia)

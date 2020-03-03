@@ -10,25 +10,29 @@ export class MainView extends React.Component {
   constructor (props) {
     super(props)
 
-    this.handleScan = this.handleScan.bind(this)
+    this.handleMedia = this.handleMedia.bind(this)
   }
 
   componentDidMount () {
     const scannerEmitter = new NativeEventEmitter(DocumentScanner)
-    scannerEmitter.addListener('Scan', scan =>
-      this.handleScan(scan)
-    )
+    scannerEmitter.addListener('Scan', this.handleMedia('document'))
   }
 
-  handleScan (scan) {
-    console.log('Handling scan', scan)
-    this.props.handleMedia(scan)
+  handleMedia (kind) {
+    return rawMedia => {
+      const media = {
+        ...rawMedia,
+        kind
+      }
+
+      console.log('New media of kind', kind, media)
+      this.props.handleMedia(media)
+    }
   }
 
   render () {
     const {
       handlePairingFinish,
-      handleMedia,
       pairedTo,
       currentPatient,
       currentPatientId,
@@ -42,7 +46,9 @@ export class MainView extends React.Component {
             currentPatient
               ? <>
                 <PatientName patient={currentPatient} />
-                {currentCycle && <Text>&emsp;(Zykl. {currentCycle})</Text>}
+                {currentCycle
+                  ? <Text>&emsp;(Zyklus {currentCycle})</Text>
+                  : <Text>&emsp;(Neuer Zyklus) {JSON.stringify(currentCycle)}</Text>}
               </>
               : <Text>{(currentPatientId && __('ready')) || __('pleasePair')}</Text>
           }
@@ -52,7 +58,7 @@ export class MainView extends React.Component {
           onScan={() => {
             DocumentScanner.open()
           }}
-          onMedia={handleMedia}
+          onMedia={this.handleMedia('photo')}
           showControls={pairedTo && currentPatientId}
           {...restProps}
         />

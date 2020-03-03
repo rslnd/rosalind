@@ -139,7 +139,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Revers?',
-    field: 'requireConsent',
+    field: 'isConsentRequired',
     type: Boolean
   },
   {
