@@ -44,7 +44,7 @@ export class HolidaysContainerComponent extends React.Component {
 
   handleRemove ({ _id }) {
     return () => {
-      Schedules.actions.softRemove.call(({ _id }), err => {
+      Schedules.actions.softRemove.call(({ scheduleId: _id }), err => {
         if (err) {
           Alert.error(__('ui.error'))
           console.error(err)
