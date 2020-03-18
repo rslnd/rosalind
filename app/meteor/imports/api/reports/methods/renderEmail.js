@@ -88,7 +88,7 @@ export const renderEmail = ({ reports, mapUserIdToName, mapAssigneeType, mapCale
     idx(r, _ => _.total.revenue.total.actual) ||
     idx(r, _ => _.total.revenue.total.expected) || 0))
 
-  const title = `Tagesbericht für ${moment(dayToDate(day)).locale('de-AT').format('dddd, D. MMMM YYYY')} - Umsatz ${currencyRounded(totalRevenue)}`
+  const title = `Tagesbericht für ${moment(dayToDate(day)).locale('de-AT').format('dddd, D. MMMM YYYY')} - Umsatz ${currencyRounded(totalRevenue)}`.replace(/NaN/g, "0")
 
   const header = renderHeader({ day })
 
@@ -100,15 +100,9 @@ export const renderEmail = ({ reports, mapUserIdToName, mapAssigneeType, mapCale
 
   const footer = renderFooter()
 
-  const text = [header, body, footer].join('\n\n')
-
-  if (isNull(title)) {
-    throw new Error(`Title contains 'null'`)
-  }
-
-  if (isNull(text)) {
-    throw new Error(`Text contains 'null'`)
-  }
+  const text = [header, body, footer]
+    .join('\n\n')
+    .replace(/NaN/g, "0")
 
   return { title, text }
 }
