@@ -34,6 +34,7 @@ export const setMessagePreferences = ({ Patients }) => {
               updatedAt: new Date(),
               updatedBy: this.userId
             }
+          }
         )
       }
 
