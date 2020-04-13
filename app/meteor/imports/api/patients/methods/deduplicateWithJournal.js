@@ -213,7 +213,11 @@ export const perform = ({ Appointments, Patients, actions }) =>
   actions.map(a => {
     const masterId = a.master._id
     console.log('[Patients] deduplicateWithJournal: Merging', masterId, ' <- ', a.duplicateIds)
-    Patients.update({ _id: masterId }, { $set: a.master })
+    Patients.update({ _id: masterId }, { $set: {
+      ...a.master,
+      updatedAt: new Date(),
+      updatedBy: null
+    }})
     const updatedPatients = Patients.update({ _id: { $in: a.duplicateIds } }, { $set: {
       removed: true,
       removedAt: new Date()

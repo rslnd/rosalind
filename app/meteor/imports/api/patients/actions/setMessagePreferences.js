@@ -26,7 +26,15 @@ export const setMessagePreferences = ({ Patients }) => {
       if (noCall !== undefined) { update['noCall'] = noCall }
 
       if (Object.keys(update).length > 0) {
-        Patients.update({ _id: patientId }, { $set: update })
+        Patients.update(
+          { _id: patientId },
+          {
+            $set: {
+              ...update,
+              updatedAt: new Date(),
+              updatedBy: this.userId
+            }
+        )
       }
 
       Events.post('patients/setMessagePreferences', { patientId, noSMS, noCall })

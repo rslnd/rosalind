@@ -28,7 +28,9 @@ export const toggleGender = ({ Patients }) => {
 
       Patients.update({ _id: patientId }, {
         $set: {
-          gender: newGender
+          gender: newGender,
+          updatedAt: new Date(),
+          updatedBy: this.userId
         }
       })
     }

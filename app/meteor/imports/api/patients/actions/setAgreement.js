@@ -50,7 +50,9 @@ export const setAgreement = ({ Patients }) => {
 
         return Patients.update({ _id: patientId }, {
           $set: {
-            agreements: newAgreements
+            agreements: newAgreements,
+            updatedAt: new Date(),
+            updatedBy: this.userId
           }
         })
       } else {
@@ -60,7 +62,9 @@ export const setAgreement = ({ Patients }) => {
 
         return Patients.update({ _id: patientId }, {
           $set: {
-            agreements: newAgreements
+            agreements: newAgreements,
+            updatedAt: new Date(),
+            updatedBy: this.userId
           }
         })
       }

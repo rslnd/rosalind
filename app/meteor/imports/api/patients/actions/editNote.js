@@ -23,7 +23,9 @@ export const editNote = ({ Patients }) => {
       if (patient) {
         Patients.update({ _id: patientId }, {
           $set: {
-            note: newNote
+            note: newNote,
+            updatedAt: new Date(),
+            updatedBy: this.userId
           }
         })
 

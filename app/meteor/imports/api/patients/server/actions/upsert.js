@@ -210,6 +210,13 @@ export const upsert = ({ Patients }) => {
                 patientId: existingPatient._id,
                 createExternalReferralTo
               })
+
+              Patients.update({ _id: existingPatient._id }, {
+                $set: {
+                  updatedAt: new Date(),
+                  updatedBy: this.userId
+                }
+              })
             })
           }
 

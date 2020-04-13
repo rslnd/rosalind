@@ -23,7 +23,9 @@ export const setContacts = ({ Patients }) => {
       if (patient) {
         Patients.update({ _id: patientId }, {
           $set: {
-            contacts
+            contacts,
+            updatedAt: new Date(),
+            updatedBy: this.userId
           }
         }, (err) => {
           if (err) { throw err }

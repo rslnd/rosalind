@@ -208,5 +208,16 @@ export default new SimpleSchema({
     type: Boolean,
     optional: true,
     index: 1
+  },
+
+  updatedAt: {
+    type: Date,
+    optional: true,
+    index: -1
+  },
+
+  updatedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
   }
 })
