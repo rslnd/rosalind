@@ -75,11 +75,14 @@ export const Appointment = compose(
           <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
           <div style={tagsDocumentsRowStyle}>
             <div style={tagsStyle}><Tags {...appointment} isCurrent={isCurrent} /></div>
-            <div style={documentsStyle}>
-              <ErrorBoundary>
-                <Documents appointment={appointment} isCurrent={isCurrent} handleMediaClick={handleMediaClick} />
-              </ErrorBoundary>
-            </div>
+            {
+              window.location.hash.indexOf('media') !== -1 &&
+                <div style={documentsStyle}>
+                  <ErrorBoundary>
+                    <Documents appointment={appointment} isCurrent={isCurrent} handleMediaClick={handleMediaClick} />
+                  </ErrorBoundary>
+                </div>
+            }
           </div>
 
 
