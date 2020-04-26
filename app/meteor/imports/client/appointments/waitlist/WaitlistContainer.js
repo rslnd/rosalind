@@ -42,6 +42,9 @@ const composer = props => {
   const user = username && Users.findOne({ username })
   const assigneeId = (user && user._id) || Meteor.userId()
 
+  const telemedicine = hasRole(assigneeId, ['telemedicine-provider'])
+  const showPlanned = !!telemedicine
+
   const selector = {
     $or: [
       { assigneeId },
@@ -54,6 +57,10 @@ const composer = props => {
       $gt: startOfToday,
       $lt: endOfToday
     }
+  }
+
+  if (showPlanned) {
+    delete selector.admittedAt
   }
 
   const appointments = Appointments.find(selector, {
@@ -95,6 +102,10 @@ const composer = props => {
     'waitlist-all'
   ])
 
+  const telemedicineWorker = hasRole(Meteor.userId(), [
+    'telemedicine-worker'
+  ])
+
   const canChangeWaitlistAssignee = hasRole(Meteor.userId(), [
     'admin',
     'waitlist-change'
@@ -111,7 +122,8 @@ const composer = props => {
     appointments: waitlistAppointments,
     canViewAllWaitlists,
     canChangeWaitlistAssignee,
-    handleChangeAssigneeView
+    handleChangeAssigneeView,
+    telemedicineWorker
   }
 }
 

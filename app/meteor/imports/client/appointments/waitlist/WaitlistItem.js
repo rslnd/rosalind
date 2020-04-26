@@ -7,6 +7,7 @@ import { ReferralsContainer } from '../../referrals/ReferralsContainer'
 import { ActionButton } from './ActionButton'
 import { ErrorBoundary } from '../../layout/ErrorBoundary'
 import { History } from './History'
+import { Users } from '../../../api/users'
 
 const boxStyle = {
   padding: 12,
@@ -64,6 +65,12 @@ export const WaitlistItem = ({
             </div>
             : <div>{appointment.note}</div>
         }
+
+        <div style={{ fontSize: 16, opacity: 0.9 }}>
+          {appointment.treatmentBy && (appointment.treatmentBy !== Meteor.userId()) &&
+            <small>In Behandlung bei {Users.methods.fullNameWithTitle(Users.findOne({_id: appointment.treatmentBy}))}</small>
+          }
+        </div>
       </div>
 
       <div style={referralStyle}>

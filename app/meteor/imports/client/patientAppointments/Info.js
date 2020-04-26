@@ -50,7 +50,7 @@ export const Info = compose(
         <Logs format={logFormat} doc={appointment} />
         <Stamps
           collectionName='appointments'
-          fields={['removed', 'created', 'admitted', 'canceled']}
+          fields={['removed', 'created', 'queued', 'admitted', 'canceled']}
           doc={appointment} />
         <CanceledByMessage appointment={appointment} />
       </div>

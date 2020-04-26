@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/lib/Modal'
 import { __ } from '../../../i18n'
 import Button from '@material-ui/core/Button'
 import { UserPicker } from '../../users/UserPicker'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export class WaitlistScreen extends React.Component {
   constructor (props) {
@@ -49,17 +50,23 @@ export class WaitlistScreen extends React.Component {
       action,
       canViewAllWaitlists,
       handleChangeAssigneeView,
-      canChangeWaitlistAssignee
+      canChangeWaitlistAssignee,
+      telemedicineWorker
     } = this.props
 
     return (
       <div className='content'>
         {
-          canViewAllWaitlists &&
+          (telemedicineWorker || canViewAllWaitlists) &&
             <div className='hide-print' style={{ paddingBottom: 15 }}>
               <UserPicker
                 autoFocus
-                onChange={handleChangeAssigneeView} />
+                onChange={handleChangeAssigneeView}
+                filter={a => (
+                  canViewAllWaitlists ||
+                  a._id === Meteor.userId() ||
+                  (telemedicineWorker && hasRole(a._id, ['telemedicine-provider'])))}
+              />
             </div>
 
         }

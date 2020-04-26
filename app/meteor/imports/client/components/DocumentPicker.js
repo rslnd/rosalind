@@ -1,4 +1,5 @@
 import React from 'react'
+import identity from 'lodash/identity'
 import Select from 'react-select'
 import { __ } from '../../i18n'
 import { getStyleNonce } from '../layout/styles'
@@ -58,7 +59,8 @@ export class DocumentPicker extends React.Component {
       toDocument,
       isMulti,
       autoFocus,
-      placeholder
+      placeholder,
+      filter
     } = this.props
 
     return (
@@ -70,7 +72,7 @@ export class DocumentPicker extends React.Component {
         }
         onChange={this.handleQueryChange}
         formatOptionLabel={render}
-        options={options(this.props).map(toOption(this.props))}
+        options={options(this.props).filter(filter || identity).map(toOption(this.props))}
         ignoreCase
         isClearable
         isMulti={isMulti}
