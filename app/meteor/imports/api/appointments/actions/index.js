@@ -1,10 +1,12 @@
 import { insert } from './insert'
 import { acquireLock } from './acquireLock'
 import { releaseLock } from './releaseLock'
+import { setQueued } from './setQueued'
 import { setAdmitted } from './setAdmitted'
 import { setCanceled } from './setCanceled'
 import { setNoShow } from './setNoShow'
 import { softRemove } from './softRemove'
+import { unsetQueued } from './unsetQueued'
 import { unsetAdmitted } from './unsetAdmitted'
 import { unsetCanceled } from './unsetCanceled'
 import { unsetEndTreatment } from './unsetEndTreatment'
@@ -24,10 +26,12 @@ export default function ({ Appointments }) {
     insert: insert({ Appointments }),
     acquireLock: acquireLock({ Appointments }),
     releaseLock: releaseLock({ Appointments }),
+    setQueued: setQueued({ Appointments }),
     setAdmitted: setAdmitted({ Appointments }),
     setCanceled: setCanceled({ Appointments }),
     setNoShow: setNoShow({ Appointments }),
     softRemove: softRemove({ Appointments }),
+    unsetQueued: unsetQueued({ Appointments }),
     unsetAdmitted: unsetAdmitted({ Appointments }),
     unsetCanceled: unsetCanceled({ Appointments }),
     move: move({ Appointments }),

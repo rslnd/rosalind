@@ -66,6 +66,18 @@ export default new SimpleSchema({
     optional: true
   },
 
+  queuedAt: {
+    type: Date,
+    optional: true,
+    index: 1
+  },
+
+  queuedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true,
+    index: 1
+  },
+
   admittedAt: {
     type: Date,
     optional: true,
@@ -88,6 +100,11 @@ export default new SimpleSchema({
     type: SimpleSchema.RegEx.Id,
     optional: true,
     index: 1
+  },
+
+  consentAppointmentId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
   },
 
   treatmentStart: {
@@ -176,6 +193,12 @@ export default new SimpleSchema({
   canceledByMessageId: {
     type: SimpleSchema.RegEx.Id,
     optional: true
+  },
+
+  queued: {
+    type: Boolean,
+    optional: true,
+    index: 1
   },
 
   admitted: {

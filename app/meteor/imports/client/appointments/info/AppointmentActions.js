@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { currentState } from '../../../api/appointments/states'
 
 const buttons = {
+  setQueued: { icon: 'circle', primary: true },
   setAdmitted: { icon: 'angle-double-right', primary: true },
   startTreatment: { icon: 'circle-o-notch', primary: true },
   endTreatment: { icon: 'check', primary: true },
@@ -88,6 +89,11 @@ export const AppointmentActions = compose(
   } = props
 
   const next = currentState(appointment)
+
+  if (!next) {
+    console.log(appointment)
+    throw new Error(`No next state for appoitment ${appointment._id}`)
+  }
 
   const primaryActions = next.primaryActions && next.primaryActions.map(n => Btn[n])
   const secondaryActions = next.secondaryActions
@@ -177,3 +183,5 @@ const rightStyle = {
   flexShrink: 1,
   textAlign: 'right'
 }
+
+AppointmentActions.displayName = 'AppointmentActions'

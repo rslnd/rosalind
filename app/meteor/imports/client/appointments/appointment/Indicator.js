@@ -1,7 +1,7 @@
 import React from 'react'
 import { __ } from '../../../i18n'
 import { Icon } from '../../components/Icon'
-import { green, red, primaryActive } from '../../layout/styles'
+import { green, red, warning, primaryActive } from '../../layout/styles'
 import { Currency } from '../../components/Currency'
 
 const assumeNoShowAfterMinutes = 90
@@ -23,6 +23,10 @@ export const Indicator = ({ appointment, showRevenue, calendar }) => {
     return <Admitted />
   }
 
+  if (appointment.queued) {
+    return <Queued />
+  }
+
   if (appointment.noShow) {
     return <NoShow />
   }
@@ -33,6 +37,21 @@ export const Indicator = ({ appointment, showRevenue, calendar }) => {
 
   return null
 }
+
+const Queued = () => <span
+  key='queued'
+  className='pull-right'
+  title={__('appointments.queued')}
+  style={queuedStyle}>
+  <Icon name='circle' />&nbsp;
+</span>
+
+const queuedStyle = {
+  zoom: 0.6,
+  display: 'inline-block',
+  color: warning
+}
+
 
 const Admitted = () => <span
   key='admitted'

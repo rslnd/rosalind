@@ -6,7 +6,12 @@ export const preload = {
   titlePrepend: 1,
   titleAppend: 1,
   insuranceId: 1,
-  gender: 1
+  gender: 1,
+  queued: 1,
+  admitted: 1,
+  noShow: 1,
+  canceled: 1,
+  treated: 1
 }
 
 export const search = {

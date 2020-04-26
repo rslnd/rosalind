@@ -15,11 +15,17 @@ const composer = (props) => {
   const appointment = props.appointment || Appointments.findOne({ _id: props.appointmentId })
   if (!appointment) { return }
 
-  const { admitted, canceled, treatmentStart, treatmentEnd } = appointment
+  const { queued, admitted, canceled, treatmentStart, treatmentEnd } = appointment
   const args = { appointmentId: props.appointmentId }
   const patient = appointment.patientId && Patients.findOne({ _id: appointment.patientId })
 
   const closeModal = () => props.onClose && props.onClose()
+
+  const setQueued = () => {
+    Alert.success(__('appointments.setQueued'))
+    Appointments.actions.setQueued.call(args)
+    closeModal()
+  }
 
   const setAdmitted = () => {
     props.onSetAdmitted(appointment)
@@ -35,6 +41,12 @@ const composer = (props) => {
   const endTreatment = () => {
     Alert.success(__('appointments.endTreatmentSuccess'))
     Appointments.actions.endTreatment.call(args)
+    closeModal()
+  }
+
+  const unsetQueued = () => {
+    Alert.success(__('appointments.unsetQueued'))
+    Appointments.actions.unsetQueued.call(args)
     closeModal()
   }
 
@@ -120,11 +132,14 @@ const composer = (props) => {
     appointment,
     canceled,
     admitted,
+    queued,
     treatmentStart,
     treatmentEnd,
+    setQueued,
     setAdmitted,
     startTreatment,
     endTreatment,
+    unsetQueued,
     unsetAdmitted,
     setCanceled,
     setNoShow,
