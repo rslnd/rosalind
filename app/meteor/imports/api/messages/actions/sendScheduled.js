@@ -7,6 +7,8 @@ import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
 import { Settings } from '../../settings'
 import { isQuietTimeRespected } from '../../messages/methods/isQuietTimeRespected'
+import { Tags } from '../../tags'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 let SMS
 if (Meteor.isServer) {
@@ -67,6 +69,15 @@ export const sendScheduled = ({ Messages }) => {
 
         const calendar = Calendars.findOne({ _id: appointment.calendarId })
         if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
+          return false
+        }
+
+        const tags = Tags.methods.expand(appointment.tags)
+        if (tags.some(t => t.noSmsAppointmentReminder)) {
+          return false
+        }
+
+        if (appointment.assigneeId && hasRole(appointment.assigneeId, ['noSmsAppointmentReminder'])) {
           return false
         }
 

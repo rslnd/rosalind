@@ -92,6 +92,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  noSmsAppointmentReminder: {
+    type: Boolean,
+    optional: true
+  },
+
   external: {
     type: [ String ],
     optional: true,

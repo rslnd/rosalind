@@ -150,6 +150,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: t => t.synonyms && t.synonyms.join(', ')
   },
   {
+    header: 'Keine SMS',
+    field: 'noSmsAppointmentReminder',
+    type: Boolean
+  },
+  {
     header: 'id',
     render: t => <pre>{t._id}</pre>
   }

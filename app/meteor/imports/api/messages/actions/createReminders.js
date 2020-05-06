@@ -11,11 +11,13 @@ import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
 import { Users } from '../../users'
+import { Tags } from '../../tags'
 import { Schedules } from '../../schedules'
 import { Settings } from '../../settings'
 import { isMobileNumber } from '../methods/isMobileNumber'
 import { buildMessageText } from '../methods/buildMessageText'
 import { reminderDateCalculator } from '../methods/reminderDateCalculator'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const sendDaysBeforeAppointment = 2
 
@@ -140,6 +142,7 @@ export const createReminders = ({ Messages }) => {
       const messagePayloads = uniqueAppointmentsWithMobile.map((a) => {
         return {
           appointmentId: a._id,
+          tags: a.tags,
           calendarId: a.calendarId,
           assigneeId: a.assigneeId,
           patientId: a.patient._id,
@@ -156,8 +159,16 @@ export const createReminders = ({ Messages }) => {
 
       const messages = messagePayloads.map((payload) => {
         const calendar = Calendars.findOne({ _id: payload.calendarId })
-
         if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
+          return false
+        }
+
+        const tags = Tags.methods.expand(payload.tags)
+        if (tags.some(t => t.noSmsAppointmentReminder)) {
+          return false
+        }
+
+        if (payload.assigneeId && hasRole(payload.assigneeId, ['noSmsAppointmentReminder'])) {
           return false
         }
 
