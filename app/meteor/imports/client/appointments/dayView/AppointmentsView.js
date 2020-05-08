@@ -13,6 +13,7 @@ import { setTime } from './grid/timeSlots'
 import { ErrorBoundary } from '../../layout/ErrorBoundary'
 import { PatientsAppointmentsContainer } from '../../patientAppointments/PatientsAppointmentsContainer'
 import { RemovedAppointments } from './RemovedAppointments'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export class AppointmentsView extends React.Component {
   constructor (props) {
@@ -221,7 +222,7 @@ export class AppointmentsView extends React.Component {
   }
 
   handleSetAdmitted (appointment) {
-    if (appointment.assigneeId) {
+    if (appointment.assigneeId && !hasRole(appointment.assigneeId, ['promptWaitlistAssigneeId'])) {
       this.props.onSetAdmitted({ appointmentId: appointment._id })
     } else {
       this.setState({
