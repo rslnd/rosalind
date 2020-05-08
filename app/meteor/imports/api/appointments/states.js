@@ -2,8 +2,7 @@ export const states = [
   {
     state: 'planned',
     when: a => !a.admitted && !a.queued,
-    primaryActions: ['setQueued', 'setNoShow', 'setCanceled'],
-    secondaryActions: ['setAdmitted']
+    primaryActions: ['setAdmitted', 'setNoShow', 'setCanceled'],
   },
   {
     state: 'queued',
@@ -15,19 +14,19 @@ export const states = [
     state: 'admitted',
     when: a => a.admitted && !a.treatmentStart,
     primaryActions: ['startTreatment'],
-    secondaryActions: ['unsetQueued', 'unsetAdmitted', 'setNoShow', 'setCanceled']
+    secondaryActions: ['unsetAdmitted', 'setNoShow', 'setCanceled']
   },
   {
     state: 'treating',
     when: a => a.treatmentStart && !a.treatmentEnd,
     primaryActions: ['endTreatment'],
-    secondaryActions: ['unsetQueued', 'unsetAdmitted', 'unsetStartTreatment', 'setNoShow', 'setCanceled']
+    secondaryActions: ['unsetAdmitted', 'unsetStartTreatment', 'setNoShow', 'setCanceled']
   },
   {
     state: 'treated',
     when: a => a.treated,
     primaryActions: null,
-    secondaryActions: ['unsetQueued', 'unsetAdmitted', 'unsetStartTreatment', 'unsetEndTreatment', 'setNoShow', 'setCanceled']
+    secondaryActions: ['unsetAdmitted', 'unsetStartTreatment', 'unsetEndTreatment', 'setNoShow', 'setCanceled']
   }
 ]
 
