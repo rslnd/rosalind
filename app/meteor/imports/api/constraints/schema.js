@@ -43,6 +43,11 @@ export const Schema = new SimpleSchema({
     index: 1
   },
 
+  order: {
+    type: Number,
+    optional: true
+  },
+
   tags: {
     type: [Tag],
     index: 1,

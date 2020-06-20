@@ -11,7 +11,7 @@ import { isValidAt } from '../../util/time/valid'
 
 const moment = extendMoment(_moment)
 
-// This should be deprecated, and be merged with Appointments.methods.getAllowedTags
+// This should be deprecated, and be merged with Appointments.methods.getAllowedTags once pure availabilities are "live"
 export const getConstrainedTags = ({
   allowedTags,
   value,
@@ -21,8 +21,11 @@ export const getConstrainedTags = ({
   time,
   constraint
 }) => {
-  const selector = allowedTags ? { _id: { $in: allowedTags } } : {}
-  const tags = Tags.find(selector, { sort: { order: 1 } }).map((t) => {
+  const allTags = Tags.find({}, { sort: { order: 1 } }).fetch()
+
+  const tags = allTags.filter(t =>
+    allowedTags ? allowedTags.indexOf(t._id) !== -1 : true
+  ).map((t) => {
     const selected = value && value.includes(t._id)
     return {
       ...t,
@@ -79,7 +82,7 @@ export const getConstrainedTags = ({
   })
 
   const constrainedTags = (constraint && isValidAt(constraint)(time))
-    ? applyConstraintToTags({ constraint, tags })
+    ? applyConstraintToTags({ constraint, tags: allTags })
     : tags
 
   return constrainedTags

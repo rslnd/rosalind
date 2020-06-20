@@ -21,6 +21,10 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     EditComponent: CalendarPicker
   },
   {
+    header: '#',
+    field: 'order'
+  },
+  {
     header: 'Behandlungen',
     field: 'tags',
     stringify: x => JSON.stringify(x),
@@ -87,18 +91,14 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'validFrom',
     render: ({ validFrom }) => validFrom ? validFrom.toISOString() : '',
     stringify: v => v ? v.toISOString() : null,
-    // EditComponent: DayField,
-    unsetWhenEmpty: true,
-    // plain: true
+    unsetWhenEmpty: true
   },
   {
     header: 'bis',
     field: 'validTo',
     render: ({ validTo }) => validTo ? validTo.toISOString() : '',
     stringify: v => v ? v.toISOString() : null,
-    // EditComponent: DayField,
-    unsetWhenEmpty: true,
-    // plain: true
+    unsetWhenEmpty: true
   }
 ]
 

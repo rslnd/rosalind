@@ -7,6 +7,10 @@ export const findConstraint = Constraints => ({ assigneeId, calendarId, time }) 
     calendarId,
     assigneeIds: assigneeId,
     weekdays: toWeekday(time)
+  }, {
+    sort: {
+      order: 1
+    }
   }).fetch()
 
   return dayConstraints.find(c =>
