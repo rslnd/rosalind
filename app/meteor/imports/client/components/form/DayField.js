@@ -17,7 +17,7 @@ export class DayField extends React.Component {
     super(props)
 
     this.state = {
-      stringValue: toStringValue(props.input.value),
+      stringValue: toStringValue(props.input && props.input.value || props.value),
       focus: false
     }
 
@@ -30,7 +30,7 @@ export class DayField extends React.Component {
   componentWillReceiveProps(props) {
     if (!this.state.focus) {
       this.setState({
-        stringValue: toStringValue(props.input.value)
+        stringValue: toStringValue(props.input && props.input.value || props.value)
       })
     }
   }
@@ -40,9 +40,9 @@ export class DayField extends React.Component {
       focus: true
     })
 
-    if (!this.state.stringValue && this.props.input.value) {
+    if (!this.state.stringValue && (this.props.input && this.props.input.value || this.props.value)) {
       this.setState({
-        stringValue: toStringValue(this.props.input.value)
+        stringValue: toStringValue((this.props.input && this.props.input.value) || this.props.value)
       })
     }
   }
@@ -58,7 +58,8 @@ export class DayField extends React.Component {
       focus: false
     })
 
-    const { onBlur, onChange } = this.props.input
+    const onBlur = (this.props.input && this.props.input.onBlur) || this.props.onBlur
+    const onChange = (this.props.input && this.props.input.onChange) || this.props.onChange
 
     onBlur && onBlur(e)
 
@@ -71,7 +72,7 @@ export class DayField extends React.Component {
   }
 
   renderValue() {
-    const inputValue = this.props.input.value
+    const inputValue = (this.props.input && this.props.input.value) || this.props.value
     const stringValue = this.state.stringValue
 
     if (this.state.focus) {
@@ -103,7 +104,7 @@ export class DayField extends React.Component {
         onChange={this.handleChange}
       />
     } else {
-      const { onBlur, onFocus, onChange, value, ...keepInput } = this.props.input
+      const { onBlur, onFocus, onChange, value, ...keepInput } = (this.props.input || this.props)
 
       return <TextField
         {...props}

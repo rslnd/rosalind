@@ -2,6 +2,7 @@ import flatten from 'lodash/flatten'
 import { toWeekday } from '../../../util/time/weekdays'
 import { isWithinHMRange } from '../../../util/time/hm'
 import { applyConstraintToTags } from '../../constraints/methods/applyConstraintToTags'
+import { isValidAt } from '../../../util/time/valid'
 
 // Returns a union of tags that may be possible to schedule within the given availability
 export const getPossibleTags = ({ availability, tags, constraints }) => {
@@ -45,7 +46,9 @@ export const getPossibleTags = ({ availability, tags, constraints }) => {
 const isConstraintApplicable = ({ availability, constraint }) => {
   const { from, to, ...c } = constraint
 
-  const isApplicable = (!c.removed) &&
+  const isApplicable =
+    (!c.removed) &&
+    (isValidAt(c)(availability.from)) &&
     (c.calendarId ? c.calendarId === availability.calendarId : true) &&
     (c.tags && c.tags.length >= 1) &&
     (c.assigneeIds && c.assigneeIds.includes(availability.assigneeId)) &&

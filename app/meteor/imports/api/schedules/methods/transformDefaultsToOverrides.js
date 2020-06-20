@@ -13,6 +13,7 @@ import {
   stringToDay,
   dateToDay
 } from '../../../util/time/day'
+import { HMtoString } from '../../../util/time/hm'
 
 export const transformDefaultsToOverrides = ({ defaultSchedules, days }) => {
   const daysWithWeekday = days.map(day => ({
@@ -69,12 +70,7 @@ const groupKey = s => [
   s.weekday
 ].join('-')
 
-const hmToString = ({ h, m }) => [
-  leftPad(h, 2, '0'),
-  leftPad(m, 2, '0')
-].join(':')
-
-const sortByFrom = sortBy(s => hmToString(s.from))
+const sortByFrom = sortBy(s => HMtoString(s.from))
 
 const expandColumn = days => defaultSchedulesByColumn => {
   return flatMap(day => {

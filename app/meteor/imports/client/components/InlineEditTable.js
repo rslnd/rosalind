@@ -65,8 +65,14 @@ class EditModal extends React.Component {
   }
 
   handleChange (e) {
-    const value = (idx(e, _ => _.target.value) || idx(e, _ => _.hex) || e)
+    // const value = (idx(e, _ => _.target.value) || idx(e, _ => _.hex) || e)
+    const value = (e && e.target) ? e.target.value : (
+      (e && e.hex) ? e.hex : (
+        e
+      )
+    )
 
+    console.log('setting state to', value)
     this.setState({
       value
     })

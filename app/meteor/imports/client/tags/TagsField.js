@@ -7,6 +7,7 @@ import { getDefaultDuration } from '../../api/appointments/methods/getDefaultDur
 import { applyConstraintToTags } from '../../api/constraints/methods/applyConstraintToTags'
 import _moment from 'moment'
 import { extendMoment } from 'moment-range'
+import { isValidAt } from '../../util/time/valid'
 
 const moment = extendMoment(_moment)
 
@@ -77,7 +78,7 @@ export const getConstrainedTags = ({
     }
   })
 
-  const constrainedTags = constraint
+  const constrainedTags = (constraint && isValidAt(constraint)(time))
     ? applyConstraintToTags({ constraint, tags })
     : tags
 

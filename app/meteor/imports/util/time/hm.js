@@ -24,6 +24,11 @@ export const HMtoString = hm => {
   ].join(':')
 }
 
+export const stringToHMOrNull = s => {
+  if (!s) { return null }
+  return stringToHM(s)
+}
+
 export const stringToHM = s => {
   const [h, m] = s.split(':')
   return {

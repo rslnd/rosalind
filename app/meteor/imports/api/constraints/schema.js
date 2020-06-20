@@ -75,6 +75,16 @@ export const Schema = new SimpleSchema({
     optional: true
   },
 
+  validFrom: {
+    type: Date,
+    optional: true
+  },
+
+  validTo: {
+    type: Date,
+    optional: true
+  },
+
   durationStrategy: {
     type: DurationStrategy,
     optional: true

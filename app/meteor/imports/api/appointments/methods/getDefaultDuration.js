@@ -5,6 +5,7 @@ import { applyConstraintToTags } from '../../constraints/methods/applyConstraint
 import { Tags } from '../../tags'
 import { isWithinHMRange } from '../../../util/time/hm'
 import { applyDurationStrategy } from './durationStrategy'
+import { isValidAt } from '../../../util/time/valid'
 
 const defaultDuration = 5
 const getCalendarDefaultDuration = calendarId => {
@@ -18,6 +19,11 @@ const getCalendarDefaultDuration = calendarId => {
 
 export const isConstraintApplicable = ({ constraint, date }) => {
   const { from, to } = constraint
+
+  if (!isValidAt(constraint)(date)) {
+    return false
+  }
+
   if (from && to) {
     return isWithinHMRange({ from, to })(date)
   } else {

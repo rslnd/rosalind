@@ -10,6 +10,8 @@ import { __ } from '../../../i18n'
 import { withProps } from 'recompose'
 import { UserPicker } from '../../users/UserPicker'
 import { applyConstraintToTags } from '../../../api/constraints/methods/applyConstraintToTags'
+import { HMtoString, stringToHM, stringToHMOrNull } from '../../../util/time/hm'
+import { DayField } from '../../components/form'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
@@ -66,17 +68,37 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Uhrzeit von',
-    render: ({ from }) => JSON.stringify(from),
+    render: ({ from }) => HMtoString(from),
     field: 'from',
-    fromString: JSON.parse,
-    stringify: JSON.stringify
+    fromString: stringToHMOrNull,
+    stringify: HMtoString,
+    unsetWhenEmpty: true
   },
   {
     header: 'bis',
-    render: ({ to }) => JSON.stringify(to),
+    render: ({ to }) => HMtoString(to),
     field: 'to',
-    fromString: JSON.parse,
-    stringify: JSON.stringify
+    fromString: stringToHMOrNull,
+    stringify: HMtoString,
+    unsetWhenEmpty: true
+  },
+  {
+    header: 'Gültig ab',
+    field: 'validFrom',
+    render: ({ validFrom }) => validFrom ? validFrom.toISOString() : '',
+    stringify: v => v ? v.toISOString() : null,
+    // EditComponent: DayField,
+    unsetWhenEmpty: true,
+    // plain: true
+  },
+  {
+    header: 'bis',
+    field: 'validTo',
+    render: ({ validTo }) => validTo ? validTo.toISOString() : '',
+    stringify: v => v ? v.toISOString() : null,
+    // EditComponent: DayField,
+    unsetWhenEmpty: true,
+    // plain: true
   }
 ]
 
