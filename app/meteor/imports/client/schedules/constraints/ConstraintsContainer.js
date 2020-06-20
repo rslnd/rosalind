@@ -18,8 +18,8 @@ const composer = (props) => {
   const handleInsert = constraint =>
     Constraints.actions.insert.callPromise({ constraint })
 
-  const handleRemove = (_id) =>
-    Constraints.actions.softRemove.callPromise({ _id })
+  const handleRemove = (constraintId) =>
+    Constraints.actions.softRemove.callPromise({ constraintId })
 
   const defaultValues = () => ({
     note: __('schedules.constraint')
