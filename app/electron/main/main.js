@@ -11,14 +11,15 @@ const SENTRY_DSN_URL = 'https://6af65eb19a37410f968d4e602ce572d7@sentry.io/62218
 const SENTRY_CRASH_URL = 'https://sentry.io/api/62218/minidump?sentry_key=6af65eb19a37410f968d4e602ce572d7'
 
 init({
+  appName: 'Rosalind Electron Main',
   dsn: SENTRY_DSN_URL,
   enableNative: false,
   release: app.getVersion()
 })
 
 crashReporter.start({
-  companyName: 'Rosalind',
-  productName: 'Rosalind',
+  companyName: 'Fixpoint Systems GmbH',
+  productName: 'Rosalind Electron Main',
   ignoreSystemCrashHandler: true,
   submitURL: SENTRY_CRASH_URL
 })

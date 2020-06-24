@@ -25,7 +25,10 @@ const { ipcRenderer } = require('electron')
 const { init } = require('@sentry/electron')
 
 const SENTRY_DSN_URL = 'https://6af65eb19a37410f968d4e602ce572d7@sentry.io/62218'
-init({ dsn: SENTRY_DSN_URL })
+init({
+  dsn: SENTRY_DSN_URL,
+  appName: 'Rosalind Electron Preload'
+})
 
 const logger = {
   error: (message, e) => {
