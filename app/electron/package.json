@@ -52,7 +52,6 @@
       "assets/focus.exe"
     ],
     "generateUpdatesFilesForAllChannels": true,
-    "readonly": true,
     "forceCodeSigning": true,
     "win": {
       "publisherName": [
