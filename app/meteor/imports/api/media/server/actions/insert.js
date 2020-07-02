@@ -1,7 +1,7 @@
 import { action, Match } from '../../../../util/meteor/action'
 import { Events } from '../../../events'
 import { Clients } from '../../../clients'
-import uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import uniq from 'lodash/uniq'
 import identity from 'lodash/identity'
 import { mediaTypes, kinds } from '../../schema'
