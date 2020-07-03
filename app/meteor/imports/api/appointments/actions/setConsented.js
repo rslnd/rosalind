@@ -10,10 +10,11 @@ export const setConsented = ({ Appointments }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       appointmentId: { type: SimpleSchema.RegEx.Id },
-      consentedAt: { type: Date, optional: true }
+      consentedAt: { type: Date, optional: true },
+      consentAppointmentId: { type: SimpleSchema.RegEx.Id, optional: true }
     }).validator(),
 
-    run ({ appointmentId, consentedAt }) {
+    run ({ appointmentId, consentAppointmentId, consentedAt }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -26,7 +27,8 @@ export const setConsented = ({ Appointments }) => {
       Appointments.update({ _id: appointmentId }, {
         $set: {
           consentedAt: consentedAt || new Date(),
-          consentedBy: this.userId
+          consentedBy: this.userId,
+          consentAppointmentId
         }
       })
 

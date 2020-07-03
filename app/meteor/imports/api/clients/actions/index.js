@@ -2,7 +2,7 @@ import { register } from './register'
 import { pairingStart } from './pairingStart'
 import { pairingCancel } from './pairingCancel'
 import { pairingFinish } from './pairingFinish'
-import { setCurrentView } from './setCurrentView'
+import { setNextMedia } from './setNextMedia'
 import { lifecycleActions } from '../../../util/meteor/action'
 
 export const actions = ({ Clients }) => ({
@@ -10,7 +10,7 @@ export const actions = ({ Clients }) => ({
   pairingStart: pairingStart({ Clients }),
   pairingCancel: pairingCancel({ Clients }),
   pairingFinish: pairingFinish({ Clients }),
-  setCurrentView: setCurrentView({ Clients }),
+  setNextMedia: setNextMedia({ Clients }),
   ...lifecycleActions({
     Collection: Clients,
     singular: 'client',

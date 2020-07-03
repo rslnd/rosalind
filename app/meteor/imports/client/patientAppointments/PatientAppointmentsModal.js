@@ -26,11 +26,12 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
     setTimeout(() => {
       const clientKey = getClientKey()
       if (clientKey) {
-        Clients.actions.setCurrentView.callPromise({
+        Clients.actions.setNextMedia.callPromise({
           clientKey,
           patientId: ((show && props.patientId) || null),
           appointmentId: ((show && props.appointmentId) || null),
-          cycle: ((show && props.cycle) || null)
+          cycle: ((show && props.cycle) || null),
+          tagIds: []
         })
       }
     }, 16)

@@ -55,6 +55,9 @@ export default (state, action) => {
         isLoading: false,
         patient: action.patient
       }
+    // Warning: do not keep patient in search, because then their name etc may get
+    // changed inadvertently when inserting another appointment for a different patient
+    // (this is a UX issue)
     case 'APPOINTMENT_INSERT_SUCCESS':
       return initialState
     case 'BULK_UPSERT_SUCCESS':

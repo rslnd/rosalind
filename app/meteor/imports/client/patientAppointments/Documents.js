@@ -7,6 +7,7 @@ import { Icon } from '../components/Icon'
 import { warning, warningBorder } from '../layout/styles'
 import { Media, MediaTags, Tags } from '../../api'
 import { withTracker } from '../components/withTracker'
+import { Popover, setNextMedia } from './Consents'
 
 const Document = ({ children, isCurrent, isMissing, ...props }) =>
   (!isCurrent && isMissing)
@@ -35,14 +36,49 @@ const buttonMissingStyle = {
   backgroundColor: warning
 }
 
-const Consent = ({ appointment, isCurrent, consents, isConsentRequired }) =>
-  (isCurrent && (!consents || consents.length === 0))
+const Consent = ({ appointment, isCurrent, consents, isConsentRequired, handleMediaClick, consentTags }) => {
+  const [open, setOpen] = useState(false)
+
+  const handleSelectConsentOpen = () => {
+    setOpen(true)
+
+    const consentTagId = consentTags[0]._id // TODO make explicit
+
+    setNextMedia({
+      patientId: appointment.patientId,
+      appointmentId: appointment._id,
+      cycle: null,
+      tagIds: [consentTagId]
+    })
+  }
+
+  const handleSelectConsentClose = () => {
+    setOpen(false)
+    setNextMedia({
+      patientId: appointment.patientId,
+      appointmentId: appointment._id,
+      cycle: null,
+      tagIds: []
+    })
+  }
+
+  return   (isCurrent && (!consents || consents.length === 0))
   ? (isConsentRequired
-      ? <Document isCurrent={isCurrent} isMissing>Revers benötigt</Document>
+      ? <>
+        <Document
+          isCurrent={isCurrent}
+          isMissing
+          onClick={handleSelectConsentOpen}>Revers benötigt</Document>
+        <Popover
+          open={open}
+          onClose={handleSelectConsentClose} />
+      </>
       : <Document isCurrent={isCurrent}>ohne Revers</Document>)
   : (isCurrent
-    ? <Document isCurrent>Revers</Document>
+    ? <Document isCurrent onClick={() => handleMediaClick(consents[0]._id)}>Revers</Document>
     : null) // Hide irrelevant missing past consents
+
+}
 
 const ScanButton = ({}) => {
   const [hover, setHover] = useState(false)
@@ -69,30 +105,40 @@ const scanIconStyle = {
 const composer = props => {
   const { appointment } = props
 
-  const consentTagsIds = MediaTags.find({ isConsent: true }).fetch()
+  const mediaTags = MediaTags.find({}).fetch()
+  const consentTags = MediaTags.find({ isConsent: true }).fetch()
   const docs = Media.find({ appointmentId: appointment._id, kind: 'document' }, { sortBy: { createdAt: -1 }}).fetch()
 
   const consents = docs.filter(m =>
-    consentTagsIds.length >= 0
+    consentTags.length >= 0
     && m.tagIds && m.tagIds.length >= 0
-    && m.tagIds.some(mt => consentTagsIds.map(t => t._id).indexOf(mt) !== -1))
+    && m.tagIds.some(mt => consentTags.map(t => t._id).indexOf(mt) !== -1))
 
-  const docsByTag = sortBy('order')(map(groupBy('tag')(docs), (docs, tagId) => {
+  // const docsByTag = sortBy('order')(map(groupBy('tagId')(docs), (docs, tagId) => {
+  const docsByTag = sortBy('order')(map(groupBy(m => m.tagIds && m.tagIds[0])(docs), (docs, tagId) => {
     return {
-      ...consentTagsIds.find(t => t._id === tagId),
+      ...mediaTags.find(t => t._id === tagId),
+      isConsent: consentTags.find(t => t._id === tagId),
       count: docs.length,
       docs
     }
-  }))
+  })).filter(d => !d.isConsent)
 
   const isConsentRequired = Tags.methods.expand(appointment.tags).some(t => t.isConsentRequired)
 
-  return { ...props, consents, docsByTag, isConsentRequired}
+  return { ...props, consents, docsByTag, isConsentRequired, consentTags}
 }
 
-export const Documents = withTracker(composer)(({ appointment, isCurrent, docsByTag, consents, isConsentRequired, handleMediaClick }) =>
+export const Documents = withTracker(composer)(({ appointment, isCurrent, docsByTag, consents, isConsentRequired, consentTags, handleMediaClick }) =>
   <div style={documentsStyle}>
-    <Consent isCurrent={isCurrent} consents={consents} isConsentRequired={isConsentRequired} />
+    <Consent
+      appointment={appointment}
+      isCurrent={isCurrent}
+      consents={consents}
+      isConsentRequired={isConsentRequired}
+      consentTags={consentTags}
+      handleMediaClick={handleMediaClick}
+    />
     {
       docsByTag.map((t, i) =>
         <Document

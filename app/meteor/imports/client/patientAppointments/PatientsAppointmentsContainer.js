@@ -141,7 +141,7 @@ const composer = props => {
     Calendars.findOne({ _id: currentAppointment.calendarId })
 
   const client = getClient()
-  const currentCycle = client && client.currentCycle
+  const currentCycle = client && client.nextMedia && client.nextMedia.cycle
 
   return {
     ...props,

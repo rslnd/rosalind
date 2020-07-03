@@ -23,11 +23,12 @@ export const insert = ({ Media }) =>
       consumerId: Match.Maybe(String),
       patientId: String,
       appointmentId: Match.Optional(String),
-      cycle: Match.Optional(String),
+      cycle: Match.OneOf(null, String),
+      tagIds: Match.OneOf(null, [String], []),
       clientKey: Match.Optional(String),
       preview: Match.Optional(String)
     },
-    fn: function ({ width, height, takenAt, kind, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle }) {
+    fn: function ({ width, height, takenAt, kind, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle, tagIds }) {
       const credentials = getCredentials()
 
       let userId = null
@@ -65,14 +66,14 @@ export const insert = ({ Media }) =>
       // set consumer's current cycle to that new cycle so that subsequent media gets appended too
       if (!cycle && kind === 'photo') {
         const consumer = Clients.findOne({ _id: consumerId })
-        if (consumer.currentCycle !== null) {
+        if (consumer.nextMedia && consumer.nextMedia.cycle !== null) {
           console.error('Producer sent no cycle, but consumer has cycle selected. Appending to currently selected cycle', { producerId, consumerId, filename })
-          cycle = consumer.currentCycle
-        } else {
+          cycle = consumer.nextMedia.cycle
+        } else if (consumer.nextMedia && consumer.nextMedia.patientId) {
           const medias = Media.find({ patientId }, { sort: { createdAt: -1 } }).fetch()
           const uniqueCycles = uniq(medias.map(m => m.cycle).filter(identity))
           const newCycleNr = String(uniqueCycles.length + 1)
-          Clients.update({ _id: consumer._id }, { $set: { currentCycle: newCycleNr }})
+          Clients.update({ _id: consumer._id }, { $set: { 'nextMedia.cycle': newCycleNr }})
           cycle = newCycleNr
         }
       }
@@ -93,6 +94,7 @@ export const insert = ({ Media }) =>
         appointmentId,
         producerId,
         cycle,
+        tagIds,
         consumerId,
         createdBy: userId,
         preview

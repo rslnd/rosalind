@@ -15,14 +15,15 @@ export const patientCyclesNames = patientId => {
   return uniqueCycles
 }
 
-export const setCycle = ({ patientId, appointmentId, cycle }) => {
+export const setNextMedia = ({ patientId, appointmentId, cycle }) => {
   const clientKey = getClientKey()
   if (clientKey) {
-    Clients.actions.setCurrentView.callPromise({
+    Clients.actions.setNextMedia.callPromise({
       clientKey,
       patientId,
       appointmentId,
-      cycle
+      cycle,
+      tagIds: []
     })
   }
 }
@@ -72,7 +73,7 @@ const hoverPlaceholderStyle = {
 export const NewCycle = ({ patientId, appointmentId, currentCycle }) => {
   const newCycleNr = String(patientCyclesNames(patientId).length + 1)
   const handleNewCycle = () =>
-    setCycle({ patientId, appointmentId, cycle: newCycleNr })
+    setNextMedia({ patientId, appointmentId, cycle: newCycleNr })
   const isNewCycle = currentCycle === newCycleNr
 
   return <div style={newContainerStyle}>
@@ -83,7 +84,7 @@ export const NewCycle = ({ patientId, appointmentId, currentCycle }) => {
       : <Button style={newButtonStyle} onClick={handleNewCycle}>
         <Icon name='plus' />
         &nbsp;
-        Neuer Zyklus ({newCycleNr})
+        Neue Sitzung ({newCycleNr})
       </Button>
     }
   </div>
@@ -103,7 +104,8 @@ const newButtonStyle = {
 
 export const Cycle = ({ cycle, currentCycle, patientId, appointmentId, children, canAppend }) =>
   <div style={cycleContainerStyle}>
-    <span style={cycleTitleStyle}>Zyklus {cycle}</span>
+    {cycle && cycle !== "null" && <span style={cycleTitleStyle}>Sitzung {cycle}</span>}
+    {/* UGH... */}
 
     <div style={cycleInnerStyle}>
       {children}
@@ -112,7 +114,7 @@ export const Cycle = ({ cycle, currentCycle, patientId, appointmentId, children,
       {canAppend && patientId && appointmentId && <Placeholder
         isActive={(currentCycle === cycle)}
         onClick={() => {
-          setCycle({ patientId, appointmentId, cycle })
+          setNextMedia({ patientId, appointmentId, cycle })
         }}
       />}
     </div>

@@ -76,6 +76,10 @@ const structure = () => [
     header: 'Gepinnt',
     field: 'pinned',
     type: Boolean
+  },
+  {
+    header: 'ID',
+    render: t => <pre>{t._id}</pre>
   }
 ]
 

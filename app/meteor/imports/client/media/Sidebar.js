@@ -1,16 +1,16 @@
 import React from 'react'
+import { compose, withState, withHandlers } from 'recompose'
 import { __ } from '../../i18n'
 import moment from 'moment-timezone'
 import { PatientName } from '../patients/PatientName'
 import { Media, Appointments, Patients } from '../../api'
 import { withTracker } from '../components/withTracker'
-import { withState, withHandlers } from 'recompose'
 import { Icon } from '../components/Icon'
 import { MediaTags } from './MediaTags'
 import { Explorer } from './Explorer'
 
 const composer = (props) => {
-  const { patientId, media } = props
+  const { patientId, media, selector, setSelector } = props
   const patient = Patients.findOne({ _id: patientId })
   const currentMediaId = media._id
 
@@ -19,11 +19,13 @@ const composer = (props) => {
 
   const cycle = media.cycle
 
-  const selector = cycle
-    ? { patientId: patient._id, kind: media.kind, cycle }
-    : { patientId: patient._id, kind: media.kind }
+  const baseSelector =  { patientId: patient._id }
+  const { appointmentSelector, ...mediaSelector } = selector // Separate selectors: appointments and media
+  const combinedMediaSelector = selector && ({...selector, ...baseSelector }) || (cycle
+    ? { ...baseSelector, kind: media.kind, cycle }
+    : { ...baseSelector, kind: media.kind })
 
-  const allMedia = Media.find(selector, { sort: { createdAt: 1 } }).fetch()
+  const allMedia = Media.find(combinedMediaSelector, { sort: { createdAt: 1 } }).fetch()
 
   // group by months and add relevant appointment
   const { sections } = allMedia.reduce((acc, media, i) => {
@@ -47,18 +49,28 @@ const composer = (props) => {
 
     if (currentAppointmentId &&
         (currentAppointmentId !== acc.currentAppointmentId)) {
-      const appointment = Appointments.findOne({ _id: currentAppointmentId })
-      sectionsToAdd.push({ appointment })
+      const baseSelector = { _id: currentAppointmentId }
+      const selector = appointmentSelector ? { ...baseSelector, ...appointmentSelector } : baseSelector
+      const appointment = Appointments.findOne(selector)
+
+      if (appointment) {
+        sectionsToAdd.push({ appointment })
+      } else {
+        // Skip media if appointment selector does not match
+        return acc
+      }
     }
+
+    const sections = [
+      ...acc.sections,
+      ...sectionsToAdd,
+      { media }
+    ]
 
     return {
       currentMonth,
       currentAppointmentId,
-      sections: [
-        ...acc.sections,
-        ...sectionsToAdd,
-        { media }
-      ]
+      sections
     }
   }, { currentMonth: null, currentAppointmentId: null, sections: [] })
 
@@ -70,18 +82,37 @@ const composer = (props) => {
     patient,
     sections,
     prevMediaId,
-    nextMediaId
+    nextMediaId,
+    setSelector,
+    selector
   }
 }
 
-export const Sidebar = withTracker(composer)(({
+const Selector = ({selector, setSelector}) => {
+  return <div>
+    <div onClick={() => setSelector({ appointmentSelector: { tags: 'HKtpQEatMSWzDryDp' } })}>Botox/Hyaluronsäure</div>
+    <div onClick={() => setSelector({ tagIds: 'PAygq5yeQRfD8iFpm' })}>Reverse</div>
+    <div onClick={() => setSelector({ kind: 'document'})}>Dokumente</div>
+    <div onClick={() => setSelector({ kind: 'photo'})}>Fotos</div>
+    <div onClick={() => setSelector({})}>Alles anzeigen</div>
+
+    Selector: {JSON.stringify(selector)}
+  </div>
+}
+
+export const Sidebar = compose(
+  withState('selector', 'setSelector', {}),
+  withTracker(composer)
+)(({
   patient,
   sections,
   media,
   prevMediaId,
   nextMediaId,
   cycle,
-  setCurrentMediaId
+  setCurrentMediaId,
+  selector,
+  setSelector
 }) =>
   <div style={containerStyle}>
     <PatientName
@@ -89,10 +120,12 @@ export const Sidebar = withTracker(composer)(({
       style={patientNameStyle}
     />
 
+    {/* <Selector selector={selector} setSelector={setSelector} /> */}
+
     {
       cycle &&
         <div style={cycleStyle}>
-          Zyklus {cycle}
+          Sitzung {cycle}
         </div>
     }
 

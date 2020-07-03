@@ -29,9 +29,7 @@ export const publication = () => {
           settings: 1,
           pairingAllowed: 1,
           pairingToken: 1,
-          currentPatientId: 1,
-          currentAppointmentId: 1,
-          currentCycle: 1
+          nextMedia: 1
         }
       })
     }
@@ -70,9 +68,7 @@ export const publication = () => {
       const consumer = Clients.find({ _id: producer.pairedTo }, { fields: {
         _id: 1,
         description: 1,
-        currentPatientId: 1,
-        currentAppointmentId: 1,
-        currentCycle: 1
+        nextMedia: 1
       } })
 
       if (!consumer.fetch().length === 1) {

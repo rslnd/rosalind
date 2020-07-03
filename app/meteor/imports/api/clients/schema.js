@@ -82,18 +82,12 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
-  currentPatientId: {
-    type: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-
-  currentAppointmentId: {
-    type: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-
-  currentCycle: {
-    type: String,
+  // Holds various attributes (patientId, appointmentId, cycle, tagIds) to be added to any future medias created by connected producers.
+  // Set by this client's frontend patient modal controller.
+  // Read by this client's connected producers (cameras/scanners).
+  nextMedia: {
+    type: Object,
+    blackbox: true,
     optional: true
   },
 
