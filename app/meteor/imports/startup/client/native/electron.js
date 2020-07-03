@@ -14,6 +14,10 @@ const eventPrefix = 'rslndNative*'
 export const handleElectronEvents = ({ events }) => {
   window.addEventListener('message', listener(events), false)
   console.log('[Native] Electron: handling events')
+
+  // DEBUG
+  window.postToNative = postToNative
+
   return { postToNative }
 }
 
@@ -64,9 +68,6 @@ const postToNative = (name, payload) => {
   const targetOrigin = window.location.origin
   window.postMessage(eventString, targetOrigin)
 }
-
-// DEBUG
-window.postToNative = postToNative
 
 const isValidOrigin = url => {
   if (!url) { return false }

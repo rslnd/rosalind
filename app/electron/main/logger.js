@@ -44,7 +44,11 @@ const start = () => {
   winston.info('[Log] Command line arguments: ', process.argv)
 
   process.on('uncaughtException', err =>
-    winston.error('[Main] Uncaught Exception:', err)
+    winston.error('[Main] Uncaught exception:', err)
+  )
+
+  process.on('unhandledRejection', err =>
+    winston.error('[Main] Unhandled rejection:', err)
   )
 
   app.on('quit', () =>
