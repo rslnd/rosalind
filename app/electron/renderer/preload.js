@@ -4,11 +4,13 @@ const toNative = [
   'print',
   'quitAndInstall',
   'automation/generateEoswinReports',
+  'scanStart',
   'dataTransferSuccess',
   'settings'
 ]
 
 // Whitelist events to web: ipc -> web
+// Keep in sync with app/meteor/imports/startup/client/native/electron.js
 const toWeb = [
   'welcome',
   'fileAdded',

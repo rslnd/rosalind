@@ -89,7 +89,6 @@ const start = () => {
     setInterval(updater.check, 5 * 60 * 1000)
 
     app.on('window-all-closed', () => {
-      updater.quitAndInstall()
       watch.stop()
       app.quit()
     })

@@ -65,6 +65,9 @@ const postToNative = (name, payload) => {
   window.postMessage(eventString, targetOrigin)
 }
 
+// DEBUG
+window.postToNative = postToNative
+
 const isValidOrigin = url => {
   if (!url) { return false }
   if (url.match(/^https:\/\/.*\.rslnd\.com$/)) { return true }
