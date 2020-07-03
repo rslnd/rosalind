@@ -86,7 +86,7 @@ const scan = ({ profile }) => {
     '--profile', profile || settings.scan.allowedProfiles[0]
   ]
 
-  await spawn(settings.napsConsolePath, args)
+  return spawn(settings.napsConsolePath, args)
 }
 
 const generateEoswinReports = async ({ day } = {}) => {
