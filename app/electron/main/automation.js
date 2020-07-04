@@ -59,36 +59,40 @@ const spawn = (exePath, spawnArgs) => {
 }
 
 const scan = ({ profile }) => {
-  logger.info('[automation] scan', { profile })
+  try {
+    logger.info('[automation] scan', { profile })
 
-  const settings = getSettings()
+    const settings = getSettings()
 
-  if (!settings.scan) {
-    throw new Error('Scanning requires settings.scan.[napsConsolePath|allowedProfiles|tempPath] to be set')
+    if (!settings.scan) {
+      throw new Error('Scanning requires settings.scan.[scan.napsConsolePath|allowedProfiles|tempPath] to be set')
+    }
+
+    if (!settings.scan.scan.napsConsolePath) {
+      throw new Error('Scanning requires settings.scan.scan.napsConsolePath to be set to the full path to NAPS2.Console.exe')
+    }
+
+    if (!settings.scan.allowedProfiles) {
+      throw new Error('Scanning requires settings.scan.allowedProfiles to be set to an array of strings (profile names)')
+    }
+
+    if (!settings.scan.tempPath) {
+      throw new Error('Scanning requires settings.scan.tempPath to be set to the full path of the local directory where scans should be saved before being uploaded. Make sure a watcher with the media importer is set up watching the same path.')
+    }
+
+    if (profile && settings.scan.allowedProfiles.indexOf(profile) === -1) {
+      throw new Error(`The profile ${profile} is not listed under settings.scan.allowedProfiles (${settings.scan.allowedProfiles.join(', ')})`)
+    }
+
+    const args = [
+      '--output', settings.scan.tempPath,
+      '--profile', profile || settings.scan.allowedProfiles[0]
+    ]
+
+    return spawn(settings.scan.napsConsolePath, args)
+  } catch (e) {
+    logger.error('Failed to scan', e)
   }
-
-  if (!settings.scan.napsConsolePath) {
-    throw new Error('Scanning requires settings.scan.napsConsolePath to be set to the full path to NAPS2.Console.exe')
-  }
-
-  if (!settings.scan.allowedProfiles) {
-    throw new Error('Scanning requires settings.scan.allowedProfiles to be set to an array of strings (profile names)')
-  }
-
-  if (!settings.scan.tempPath) {
-    throw new Error('Scanning requires settings.scan.tempPath to be set to the full path of the local directory where scans should be saved before being uploaded. Make sure a watcher with the media importer is set up watching the same path.')
-  }
-
-  if (profile && settings.scan.allowedProfiles.indexOf(profile) === -1) {
-    throw new Error(`The profile ${profile} is not listed under settings.scan.allowedProfiles (${settings.scan.allowedProfiles.join(', ')})`)
-  }
-
-  const args = [
-    '--output', settings.scan.tempPath,
-    '--profile', profile || settings.scan.allowedProfiles[0]
-  ]
-
-  return spawn(settings.napsConsolePath, args)
 }
 
 const generateEoswinReports = async ({ day } = {}) => {
