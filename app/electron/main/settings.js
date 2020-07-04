@@ -1,7 +1,7 @@
 const fs = require('fs')
 const crypto = require('crypto')
 const path = require('path')
-const { app, dialog } = require('electron')
+const { app, dialog, ipcMain } = require('electron')
 const logger = require('./logger')
 const isEqual = require('lodash/isEqual')
 
@@ -13,6 +13,14 @@ const localSettingsPath = path.join(app.getPath('userData'), 'RosalindSettings.j
 const emptySettings = {}
 
 let settings = {}
+let remoteSettings = {}
+
+const setRemoteSettings = (newRemoteSettings) => {
+  logger.info('[Settings] New remote settings', newRemoteSettings)
+  remoteSettings = newRemoteSettings
+}
+
+ipcMain.on('settings', setRemoteSettings)
 
 const readSettings = path => {
   if (!path) {
@@ -47,12 +55,6 @@ const readSettings = path => {
 
 const mergeSettings = (local, remote) => {
   let topLevel = Object.assign({}, local, remote)
-
-  // Keep watch as defined locally for now
-  // TODO: Move watch settings to server into clients collection
-  if (local.watch) {
-    topLevel.watch = local.watch
-  }
 
   return topLevel
 }
@@ -123,7 +125,10 @@ const getSettings = () => {
   }
 
   const mergedSettings = ensureClientKey(
-    mergeSettings(localSettings, defaultSettings)
+    mergeSettings(
+      mergeSettings(localSettings, defaultSettings),
+      remoteSettings
+    )
   )
 
   if (!validateSettings(mergedSettings)) {
@@ -147,8 +152,10 @@ const getSettings = () => {
 
   logger.info('[Settings] The main entry point is', settings.url)
   logger.info('[Settings]', settings)
+
+  return settings
 }
 
 getSettings()
 
-module.exports = settings
+module.exports = { getSettings }

@@ -36,7 +36,7 @@ const start = () => {
     const updater = require('./updater')
     const window = require('./window')
     const systemInfo = require('./systemInfo')
-    const settings = require('./settings')
+    const { getSettings } = require('./settings')
     const cli = require('./cli')
     const automation = require('./automation')
     const print = require('./print')
@@ -80,7 +80,7 @@ const start = () => {
       logger.info('IPC received hello, sending welcome')
       mainWindow.webContents.send('welcome', {
         systemInfo,
-        clientKey: settings.clientKey
+        clientKey: getSettings().clientKey
       })
     })
 

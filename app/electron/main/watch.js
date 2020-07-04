@@ -1,7 +1,7 @@
 const fs = require('fs')
 const iconv = require('iconv-lite')
 const chokidar = require('chokidar')
-const settings = require('./settings')
+const { getSettings } = require('./settings')
 const logger = require('./logger')
 
 let watchers = []
@@ -30,6 +30,8 @@ const onAdd = ({ ipcReceiver, watch, path, importer, remove, focus }) => {
 }
 
 const start = ({ ipcReceiver, handleFocus }) => {
+  const settings = getSettings()
+  
   if (settings.watch) {
     logger.info('[Watch] Watching paths', settings.watch)
 

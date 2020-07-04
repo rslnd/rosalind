@@ -1,8 +1,10 @@
 const fsx = require('fs-extra')
 const shortcut = require('windows-shortcuts-appid')
 const logger = require('./logger')
-const settings = require('./settings')
+const { getSettings } = require('./settings')
 const manifest = require('./manifest')
+
+const settings = getSettings()
 
 const shortcutPaths = [
   process.env.APPDATA + '\\Microsoft\\Windows\\Start Menu\\Programs\\' + settings.customer.name + '.lnk',

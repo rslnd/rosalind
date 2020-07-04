@@ -2,7 +2,7 @@ const childProcess = require('child_process')
 const path = require('path')
 const { app, ipcMain } = require('electron')
 const logger = require('./logger')
-const settings = require('./settings')
+const { getSettings } = require('./settings')
 const { captureException } = require('@sentry/electron')
 
 const closeRosalindTimeout = 10 * 60 * 1000
@@ -61,6 +61,8 @@ const spawn = (exePath, spawnArgs) => {
 const scan = ({ profile }) => {
   logger.info('[automation] scan', { profile })
 
+  const settings = getSettings()
+
   if (!settings.scan) {
     throw new Error('Scanning requires settings.scan.[napsConsolePath|allowedProfiles|tempPath] to be set')
   }
@@ -94,6 +96,8 @@ const generateEoswinReports = async ({ day } = {}) => {
   logger.info('[automation] Spawning', generateEoswinReportsExe)
 
   let spawnArgs = []
+
+  const settings = getSettings()
 
   if (settings.eoswinExe) {
     spawnArgs.push(`/eoswinExe:${settings.eoswinExe}`)

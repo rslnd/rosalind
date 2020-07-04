@@ -1,7 +1,7 @@
 const includes = require('lodash/includes')
 const { app, session, BrowserWindow } = require('electron')
 const logger = require('./logger')
-const settings = require('./settings')
+const { getSettings } = require('./settings')
 const { captureException } = require('@sentry/electron')
 
 // IMPORTANT: Keep in sync with preload.js
@@ -146,6 +146,7 @@ const open = (callback) => {
     logger.info('[Console]', message, sourceId, line)
   })
 
+  const settings = getSettings()
   if (isUrlValid(settings.url)) {
     mainWindow.loadURL(settings.url)
   } else {
