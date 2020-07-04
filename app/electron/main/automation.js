@@ -17,11 +17,11 @@ const start = async (argv = []) => {
     }, closeRosalindTimeout)
   }
 
-  ipcMain.on('automation/generateEoswinReports', ({ day } = {}) => {
+  ipcMain.on('automation/generateEoswinReports', (e, { day } = {}) => {
     generateEoswinReports({ day })
   })
 
-  ipcMain.on('scanStart', (payload) => {
+  ipcMain.on('scanStart', (e, payload) => {
     logger.info('[automation] scanStart', payload)
     scan({ profile: payload.profile })
   })
