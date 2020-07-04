@@ -15,7 +15,7 @@ const emptySettings = {}
 let settings = {}
 let remoteSettings = {}
 
-const setRemoteSettings = (newRemoteSettings) => {
+const setRemoteSettings = (e, newRemoteSettings) => {
   logger.info('[Settings] New remote settings', newRemoteSettings)
   remoteSettings = newRemoteSettings
 }

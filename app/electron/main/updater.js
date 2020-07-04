@@ -83,7 +83,7 @@ const quitAndInstall = () => {
   }
 }
 
-const setChannel = ({ channel }) => {
+const setChannel = (e, { channel }) => {
   if (typeof channel === 'string' || channel === null) {
     logger.info(`[Updater] Setting channel to: ${channel}`)
     autoUpdater.channel = channel
