@@ -68,7 +68,7 @@ const scan = ({ profile }) => {
       throw new Error('Scanning requires settings.scan.[scan.napsConsolePath|allowedProfiles|tempPath] to be set')
     }
 
-    if (!settings.scan.scan.napsConsolePath) {
+    if (!settings.scan.napsConsolePath) {
       throw new Error('Scanning requires settings.scan.scan.napsConsolePath to be set to the full path to NAPS2.Console.exe')
     }
 
