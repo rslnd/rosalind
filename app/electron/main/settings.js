@@ -150,8 +150,8 @@ const getSettings = () => {
   settings = mergedSettings
   settings.settingsPath = localSettingsPath
 
-  logger.info('[Settings] The main entry point is', settings.url)
-  logger.info('[Settings]', settings)
+  const {clientKey, ...nonSensitiveSettings} = settings
+  logger.info('[Settings]', nonSensitiveSettings)
 
   return settings
 }

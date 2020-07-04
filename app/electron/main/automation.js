@@ -21,8 +21,9 @@ const start = async (argv = []) => {
     generateEoswinReports({ day })
   })
 
-  ipcMain.on('scanStart', ({ profile } = {}) => {
-    scan({ profile })
+  ipcMain.on('scanStart', (payload) => {
+    logger.info('[automation] scanStart', payload)
+    scan({ profile: payload.profile })
   })
 }
 
