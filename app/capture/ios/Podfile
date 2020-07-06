@@ -1,6 +1,6 @@
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'Capture' do
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
@@ -25,7 +25,7 @@ target 'Capture' do
   pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
   pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
   pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
-  pod 'ReactCommon/jscallinvoker', :path => "../node_modules/react-native/ReactCommon"
+  pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
   pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
@@ -36,7 +36,7 @@ target 'Capture' do
   pod 'RNCAsyncStorage', path: '../node_modules/@react-native-community/async-storage'
   pod 'react-native-netinfo', path: '../node_modules/@react-native-community/netinfo'
 
-  pod 'WeScan', '>= 1.1.0'
+  pod 'WeScan', '>= 1.5.0'
 
   use_native_modules!
 end

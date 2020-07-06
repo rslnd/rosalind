@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>de_DE</string>
 	<key>CFBundleDisplayName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
@@ -40,11 +40,9 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Take pictures and scan documents with the camera</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Attach location information to pictures</string>
+	<string>Bilder aufnehmen und Dokumente scannen</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Record sound in videos</string>
+	<string>Videos mit Ton aufzeichnen</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fa-regular-400.ttf</string>

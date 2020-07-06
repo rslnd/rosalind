@@ -911,9 +911,12 @@
 				"${PODS_ROOT}/WeScan/WeScan/Assets/rotate@3x.png",
 				"${PODS_ROOT}/WeScan/WeScan/de.lproj/Localizable.strings",
 				"${PODS_ROOT}/WeScan/WeScan/en.lproj/Localizable.strings",
+				"${PODS_ROOT}/WeScan/WeScan/es-419.lproj/Localizable.strings",
+				"${PODS_ROOT}/WeScan/WeScan/es.lproj/Localizable.strings",
 				"${PODS_ROOT}/WeScan/WeScan/fr.lproj/Localizable.strings",
 				"${PODS_ROOT}/WeScan/WeScan/hu.lproj/Localizable.strings",
 				"${PODS_ROOT}/WeScan/WeScan/it.lproj/Localizable.strings",
+				"${PODS_ROOT}/WeScan/WeScan/pl.lproj/Localizable.strings",
 				"${PODS_ROOT}/WeScan/WeScan/pt-BR.lproj/Localizable.strings",
 				"${PODS_ROOT}/WeScan/WeScan/pt-PT.lproj/Localizable.strings",
 				"${PODS_ROOT}/WeScan/WeScan/zh-Hans.lproj/Localizable.strings",
@@ -1098,7 +1101,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1145,7 +1148,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
