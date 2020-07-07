@@ -7,6 +7,9 @@ const { captureException } = require('@sentry/electron')
 
 const closeRosalindTimeout = 10 * 60 * 1000
 
+const isShellSafe = s =>
+  s && s.match(/^[a-z0-9 ():\/"\\\.-]+$/i)
+
 const start = async (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
     await generateEoswinReports()
@@ -28,6 +31,14 @@ const start = async (argv = []) => {
 }
 
 const spawn = (exePath, spawnArgs) => {
+  if (!isShellSafe(generateEoswinReportsExe)) {
+    throw new Error(`Exe path is not shell safe: ${generateEoswinReportsExe}`)
+  }
+
+  if (!spawnArgs.every(isShellSafe)) {
+    throw new Error(`Exe spawn args not shell safe: ${JSON.stringify(spawnArgs)}`)
+  }
+
   const child = childProcess.spawn(exePath, spawnArgs)
   child.stdout.setEncoding('utf8')
   child.stderr.setEncoding('utf8')
@@ -64,6 +75,10 @@ const scan = ({ profile }) => {
     logger.info('[automation] scan', { profile })
 
     const settings = getSettings()
+
+    if (profile && !isShellSafe(profile)) {
+      throw new Error('Profile given is not shell safe')
+    }
 
     if (!settings.scan) {
       throw new Error('Scanning requires settings.scan.[scan.napsConsolePath|allowedProfiles|tempPath] to be set')
