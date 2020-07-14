@@ -3,10 +3,9 @@ import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import { Importers } from '../../api/importers'
 import { loadPatient } from '../../client/patients/picker/actions'
-import { onNativeEvent, toNative, getClientKey } from './native/events'
+import { onNativeEvent, toNative } from './native/events'
 import { Meteor } from 'meteor/meteor'
-import { setNextMedia } from '../../api/clients/actions/setNextMedia'
-import { Clients } from '../../api'
+import { getClient } from '../../api/clients/methods/getClient'
 
 export const ingest = ({ name, content, base64, importer }) => {
   return Importers.actions.ingest.callPromise({
@@ -17,9 +16,9 @@ export const ingest = ({ name, content, base64, importer }) => {
   })
 }
 
+getClient() // to cache subscription
 const getNextMedia = () => {
-  const clientKey = getClientKey()
-  const client = Clients.find({ clientKey })
+  const client = getClient()
   if (client) {
     return client.nextMedia
   } else {
@@ -166,8 +165,7 @@ const onNativeDataTransfer = async file => {
       return insertMedia({
         base64: file.content,
         name: file.path,
-        mediaType: 'image/jpeg',
-        ...nextMedia
+        mediaType: 'image/jpeg'
       })
     default:
       const response = await ingest({
