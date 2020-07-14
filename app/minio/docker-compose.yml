@@ -8,43 +8,21 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - MINIO_REGION=${MINIO_REGION}
-    ports:
-      - '9000:9000'
     volumes:
       - './minio-data:/data'
     links:
       - broker
 
-  # minio-config:
-  #   image: minio/mc
-  #   links:
-  #     - minio
-  #   restart: on-failure
-  #   environment:
-  #     - MINIO_HOST=minio
-  #     - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
-  #     - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
-  #     - MINIO_REGION=${MINIO_REGION}
-  #     - SOURCE_BUCKET=hzw-media-uploads
-  #     - TARGET_BUCKET=hzw-media
-  #     - MINIO_NOTIFY_MQTT_ENABLE=on
-  #     - MINIO_NOTIFY_MQTT_BROKER=tcp://broker:1883
-  #     - MINIO_NOTIFY_MQTT_TOPIC=minio
-  #     - MINIO_NOTIFY_MQTT_QOS=2
-  #   entrypoint: >
-  #     /bin/sh -c "
-  #       echo Waiting for minio service to start...;
-  #       while ! nc -z minio 9000;
-  #       do
-  #         sleep 1;
-  #       done;
-  #       echo Connected!;
-  #       mc mb hzw-media-uploads;
-  #       mc mb hzw-media;
-  #       mc admin config set local notify_mqtt:1
-  #       mc admin config get
-  #       exit 0;
-  #     "
+  caddy:
+    build: './caddy'
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy-data:/data
+    ports:
+      - '80:80'
+      - '443:443'
+    links:
+      - minio
 
   optimizer:
     build: './optimizer'
@@ -64,6 +42,24 @@ services:
   broker:
     image: eclipse-mosquitto:latest
 
+  # minio-config:
+  #   image: minio/mc
+  #   links:
+  #     - minio
+  #   restart: on-failure
+  #   environment:
+  #     - MC_HOST_minio=http://${MINIO_ACCESS_KEY}:${MINIO_SECRET_KEY}@minio:9000
+  #     - MINIO_HOST=minio
+  #     - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+  #     - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+  #     - MINIO_REGION=${MINIO_REGION}
+  #     - SOURCE_BUCKET=hzw-media-uploads
+  #     - TARGET_BUCKET=hzw-media
+  #     - MINIO_NOTIFY_MQTT_ENABLE=on
+  #     - MINIO_NOTIFY_MQTT_BROKER=tcp://broker:1883
+  #     - MINIO_NOTIFY_MQTT_TOPIC=minio
+  #     - MINIO_NOTIFY_MQTT_QOS=2
+  #   entrypoint: /bin/sh
 
   # mirror-up:
   #   image: 'minio/mc'

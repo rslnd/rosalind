@@ -1,0 +1,35 @@
+{
+  # debug
+  email security@fixpoint.co.at
+  admin off
+  key_type p384
+}
+
+(default) {
+  tls {
+    dns cloudflare {env.CLOUDFLARE_TOKEN}
+    protocols tls1.2 tls1.3
+    alpn http/1.1 # WebSocket seems to work with 1.1 only
+    key_type p384
+    curves secp384r1 secp521r1
+    ciphers TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+    # must_staple # seems to be supported only via json config
+  }
+
+  header * {
+    -Server
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+  }
+
+  log stderr
+}
+
+{env.DNS_NAME} {
+  import default
+  reverse_proxy * minio:9000 {
+    transparent
+  }
+}
