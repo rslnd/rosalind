@@ -98,10 +98,12 @@ const ensureNotifications = ({ config, minioClient }) => {
   return minioClient.setBucketNotification(config.SOURCE_BUCKET, bucketNotification)
 }
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 const retry = async (fn) => {
   const start = new Date()
   const tryUntil = start + (1000 * 60)
-  let tries = 5
+  let tries = 10
 
   do {
     try {
@@ -111,7 +113,7 @@ const retry = async (fn) => {
       return result
     } catch (e) {
       console.log('failed, retrying', tries, 'more times after delay, error was', e)
-      await delay(1000)
+      await delay(500)
       tries--
     }
   } while (tries > 0 || (new Date()) < tryUntil)
@@ -121,7 +123,6 @@ const retry = async (fn) => {
 
 const handleBucketNotification = async ({ notification, minioClient, config }) => {
   retry(async () => {
-
     const key = notification.Records[0].s3.object.key
     const bucketName = notification.Records[0].s3.bucket.name
 
