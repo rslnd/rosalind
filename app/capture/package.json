@@ -10,6 +10,7 @@
     "@albertzak/react-native-meteor": "^1.5.4",
     "@react-native-community/async-storage": "^1.6.1",
     "@react-native-community/netinfo": "^4.2.1",
+    "@sentry/react-native": "^1.6.1",
     "lodash": "^4.17.15",
     "react": "^16.13.1",
     "react-native": "^0.62.2",

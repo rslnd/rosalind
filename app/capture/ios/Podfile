@@ -36,7 +36,9 @@ target 'Capture' do
   pod 'RNCAsyncStorage', path: '../node_modules/@react-native-community/async-storage'
   pod 'react-native-netinfo', path: '../node_modules/@react-native-community/netinfo'
 
-  pod 'WeScan', '>= 1.5.0'
+  pod 'RNSentry', :podspec => '../node_modules/@sentry/react-native/RNSentry.podspec'
+
+  pod 'WeScan', '>= 1.6.0'
 
   use_native_modules!
 end

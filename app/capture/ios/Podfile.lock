@@ -255,7 +255,13 @@ PODS:
     - React
   - RNSecureRandom (1.0.0):
     - React
-  - WeScan (1.5.0)
+  - RNSentry (1.6.1):
+    - React
+    - Sentry (~> 5.1.8)
+  - Sentry (5.1.8):
+    - Sentry/Core (= 5.1.8)
+  - Sentry/Core (5.1.8)
+  - WeScan (1.6.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -290,12 +296,14 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
-  - WeScan (>= 1.5.0)
+  - "RNSentry (from `../node_modules/@sentry/react-native/RNSentry.podspec`)"
+  - WeScan (>= 1.6.0)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - boost-for-react-native
+    - Sentry
     - WeScan
 
 EXTERNAL SOURCES:
@@ -355,6 +363,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNSecureRandom:
     :path: "../node_modules/react-native-securerandom"
+  RNSentry:
+    :podspec: "../node_modules/@sentry/react-native/RNSentry.podspec"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -388,9 +398,11 @@ SPEC CHECKSUMS:
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
   RNSecureRandom: 0dcee021fdb3d50cd5cee5db0ebf583c42f5af0e
-  WeScan: b2e47d07f5da3dbf3db14b742e403a8924cf32b2
+  RNSentry: 57824da1293d03966605d682d5868b11aa1b6e5a
+  Sentry: 795e8ffe1c45d9d20b3aa398774d7ea6a443fb05
+  WeScan: 4a31ae36ce730ba4d7d1c70685ce52009ebc878a
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
 
-PODFILE CHECKSUM: 74f033190014fe8107fdcf9af9f02e1209d70a67
+PODFILE CHECKSUM: ebd9af99deeb0b9a0992d13b17d14bbcae706215
 
 COCOAPODS: 1.8.4
