@@ -26,7 +26,7 @@ const getNextMedia = () => {
   }
 }
 
-// base64DecToArr originally from https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+// base64DecToArr and b64ToUint6 originally from https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
 const base64DecToArr = (sBase64, nBlocksSize) => {
   var
     sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length,
@@ -42,6 +42,21 @@ const base64DecToArr = (sBase64, nBlocksSize) => {
     }
   }
   return taBytes
+}
+
+const b64ToUint6 = (nChr) => {
+  return nChr > 64 && nChr < 91 ?
+      nChr - 65
+    : nChr > 96 && nChr < 123 ?
+      nChr - 71
+    : nChr > 47 && nChr < 58 ?
+      nChr + 4
+    : nChr === 43 ?
+      62
+    : nChr === 47 ?
+      63
+    :
+      0
 }
 
 export const insertMedia = async ({ name, mediaType, base64, file, kind = 'document', appointmentId, patientId, cycle, tagIds }) => {
