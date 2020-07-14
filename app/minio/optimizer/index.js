@@ -88,6 +88,9 @@ const ensureNotifications = ({ config, minioClient }) => {
     '1',
     'mqtt'
   )
+
+  console.log('ARN', arn.toString())
+
   const queue = new Minio.QueueConfig(arn)
   queue.addEvent(Minio.ObjectCreatedAll)
   bucketNotification.add(queue)

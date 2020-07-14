@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
   minio:
-    image: 'minio/minio'
+    image: 'minio/minio:RELEASE.2019-09-26T19-42-35Z'
     command: 'server /data'
     environment:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
@@ -14,6 +14,37 @@ services:
       - './minio-data:/data'
     links:
       - broker
+
+  minio-config:
+    image: minio/mc
+    links:
+      - minio
+    restart: on-failure
+    environment:
+      - MINIO_HOST=minio
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_REGION=${MINIO_REGION}
+      - SOURCE_BUCKET=hzw-media-uploads
+      - TARGET_BUCKET=hzw-media
+      - MINIO_NOTIFY_MQTT_ENABLE=on
+      - MINIO_NOTIFY_MQTT_BROKER=tcp://broker:1883
+      - MINIO_NOTIFY_MQTT_TOPIC=minio
+      - MINIO_NOTIFY_MQTT_QOS=2
+    entrypoint: >
+      /bin/sh -c "
+        echo Waiting for minio service to start...;
+        while ! nc -z minio 9000;
+        do
+          sleep 1;
+        done;
+        echo Connected!;
+        mc mb hzw-media-uploads;
+        mc mb hzw-media;
+        mc admin config set local notify_mqtt:1
+        mc admin config get
+        exit 0;
+      "
 
   optimizer:
     build: './optimizer'
