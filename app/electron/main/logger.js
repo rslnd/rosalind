@@ -26,10 +26,10 @@ const formatLog = logFn => (...logs) => {
 }
 
 const log = {
-  debug: formatLog(logger.debug),
-  info: formatLog(logger.info),
-  warn: formatLog(logger.warn),
-  error: formatLog(logger.error)
+  debug: formatLog(s => logger.debug(s)), // work around this.log undefined inside logdna
+  info: formatLog(s => logger.info(s)),
+  warn: formatLog(s => logger.warn(s)),
+  error: formatLog(s => logger.error(s))
 }
 
 const ensureOldLogsRemoved = () => {
