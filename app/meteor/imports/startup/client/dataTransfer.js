@@ -27,6 +27,14 @@ const getNextMedia = () => {
 }
 
 export const insertMedia = async ({ name, mediaType, base64, file, appointmentId, patientId, cycle, tagIds }) => {
+  const nextMedia = (getNextMedia() || {
+    appointmentId,
+    patientId,
+    cycle,
+    tagIds
+  })
+
+
   console.log('[dataTransfer] insertMedia', { name, mediaType, file, ...nextMedia })
 
   // Drag&drop provides base64 and a a File object, native importer only provides base64. Convert base64 to File object if needed
@@ -53,12 +61,7 @@ export const insertMedia = async ({ name, mediaType, base64, file, appointmentId
     mediaType,
     takenAt: file.lastModifiedDate || new Date(),
     preview,
-    ...(getNextMedia() || {
-      appointmentId,
-      patientId,
-      cycle,
-      tagIds
-    })
+    ...nextMedia
   }
 
   const signedRequest = await call('media/insert', createMedia)
