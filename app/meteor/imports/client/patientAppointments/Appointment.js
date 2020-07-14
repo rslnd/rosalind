@@ -76,7 +76,7 @@ export const Appointment = compose(
           <div style={tagsDocumentsRowStyle}>
             <div style={tagsStyle}><Tags {...appointment} isCurrent={isCurrent} /></div>
             {
-              window.location.hash.indexOf('media') !== -1 &&
+              hasRole(Meteor.userId(), ['media', 'media-documents', 'media-view']) &&
                 <div style={documentsStyle}>
                   <ErrorBoundary>
                     <Documents appointment={appointment} isCurrent={isCurrent} handleMediaClick={handleMediaClick} />
@@ -100,7 +100,7 @@ export const Appointment = compose(
         </div>
 
         {
-          window.location.hash.indexOf('media') !== -1 &&
+          hasRole(Meteor.userId(), ['media', 'media-view', 'media-images']) &&
             <ErrorBoundary>
               <Drawer
                 currentAppointment={currentAppointment}
