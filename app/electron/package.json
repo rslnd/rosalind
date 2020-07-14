@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.222",
+  "version": "0.0.223",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -33,8 +33,7 @@
     "request": "^2.88.2",
     "temp": "^0.9.1",
     "windows-shortcuts-appid": "^0.3.2",
-    "winston": "^2.4.4",
-    "winston-papertrail": "^1.0.5"
+    "logdna": "^3.5.0"
   },
   "build": {
     "appId": "com.rslnd.rosalind",
