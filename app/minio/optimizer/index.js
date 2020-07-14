@@ -118,7 +118,7 @@ const retry = async (fn) => {
     }
   } while (tries > 0 || (new Date()) < tryUntil)
 
-  throw new Error(`Giving up ${logTag}`)
+  throw new Error('Giving up')
 }
 
 const handleBucketNotification = async ({ notification, minioClient, config }) => {
