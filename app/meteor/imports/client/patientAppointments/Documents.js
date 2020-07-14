@@ -83,7 +83,7 @@ const Consent = ({ appointment, isCurrent, consents, isConsentRequired, handleMe
 const ScanButton = ({}) => {
   const [hover, setHover] = useState(false)
   return <Document
-    title='Weiteres Dokument einscannen'
+    title='Dokument einscannen'
     isCurrent={true}
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
@@ -124,7 +124,7 @@ const composer = props => {
     }
   })).filter(d => !d.isConsent)
 
-  const isConsentRequired = Tags.methods.expand(appointment.tags).some(t => t.isConsentRequired)
+  const isConsentRequired = Tags.methods.expand(appointment.tags).some(t => t && t.isConsentRequired)
 
   return { ...props, consents, docsByTag, isConsentRequired, consentTags}
 }

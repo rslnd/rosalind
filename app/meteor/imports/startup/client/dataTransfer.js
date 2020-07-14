@@ -26,6 +26,24 @@ const getNextMedia = () => {
   }
 }
 
+// base64DecToArr originally from https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+const base64DecToArr = (sBase64, nBlocksSize) => {
+  var
+    sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length,
+    nOutLen = nBlocksSize ? Math.ceil((nInLen * 3 + 1 >> 2) / nBlocksSize) * nBlocksSize : nInLen * 3 + 1 >> 2, taBytes = new Uint8Array(nOutLen)
+  for (var nMod3, nMod4, nUint24 = 0, nOutIdx = 0, nInIdx = 0; nInIdx < nInLen; nInIdx++) {
+    nMod4 = nInIdx & 3
+    nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 6 * (3 - nMod4)
+    if (nMod4 === 3 || nInLen - nInIdx === 1) {
+      for (nMod3 = 0; nMod3 < 3 && nOutIdx < nOutLen; nMod3++, nOutIdx++) {
+        taBytes[nOutIdx] = nUint24 >>> (16 >>> nMod3 & 24) & 255
+      }
+      nUint24 = 0;
+    }
+  }
+  return taBytes
+}
+
 export const insertMedia = async ({ name, mediaType, base64, file, kind = 'document', appointmentId, patientId, cycle, tagIds }) => {
   const nextMedia = (getNextMedia() || {
     appointmentId,
@@ -39,13 +57,17 @@ export const insertMedia = async ({ name, mediaType, base64, file, kind = 'docum
 
   // Drag&drop provides base64 and a a File object, native importer only provides base64. Convert base64 to File object if needed
   if (!file) {
-    console.log(`Converting base64 to File: ${base64.substr(0, 100)}`)
+    console.log(`Converting base64 to File: ${base64}`)
     // const rawBase = base64.split(',')[1]
-    file = new Blob([window.atob(base64)],
-      {
-        type: mediaType,
-        encoding: 'utf-8'
-      })
+    const blob = new Blob(
+      [base64DecToArr(base64)],
+      { type: mediaType }
+    )
+
+    file = new File([blob], name, {
+      type: mediaType,
+      lastModified: Date.now()
+    })
   }
 
   // Create resized preview as base64
