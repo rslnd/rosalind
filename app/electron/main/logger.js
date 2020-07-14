@@ -71,8 +71,8 @@ const start = () => {
   ensureOldLogsRemoved()
 }
 
-const ready = log => {
-  log.info(log)
+const ready = message => {
+  log.info(message)
 
   if (includes(process.argv, '--debug-quit-on-ready')) {
     log.info('[Log] Debug: App launched successfully; now quitting')

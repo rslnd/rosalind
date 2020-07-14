@@ -34,7 +34,7 @@ const start = ({ ipcReceiver, handleFocus }) => {
     stop()
 
     setTimeout(() => {
-      startWatchers({ ipcReceiver, handleFocus})
+      startWatchers({ ipcReceiver, handleFocus })
     }, 5000)
   })
 
