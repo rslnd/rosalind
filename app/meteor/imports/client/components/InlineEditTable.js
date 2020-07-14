@@ -17,7 +17,7 @@ const ColHeader = ({ style, icon, header, description }) => {
   </th>
 }
 
-const Cell = ({ isEditing, col, row, onClick }) => {
+const Cell = ({ isEditing, col, row, onClick, rows }) => {
   let style = col.style || {}
   let contents = {}
 
@@ -32,7 +32,7 @@ const Cell = ({ isEditing, col, row, onClick }) => {
   }
 
   if (col.render) {
-    contents = col.render(row)
+    contents = col.render(row, rows)
   }
 
   if (!col.render && col.type === Boolean) {
@@ -294,7 +294,8 @@ export class Table extends React.Component {
                               onClick={this.handleEditStart(i, j, openPortal)}
                               isEditing={this.isEditing(i, j)}
                               col={col}
-                              row={row} />
+                              row={row}
+                              rows={rows} />
                           )
                         }
                         {

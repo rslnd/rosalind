@@ -65,7 +65,7 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
   },
   {
     header: 'Verbunden mit',
-    render: c => c.pairedTo && <pre>{c.pairedTo}</pre>
+    render: (c, rows) => c.pairedTo && rows.find(r => r._id === c.pairedTo) && <pre>{rows.find(r => r._id === c.pairedTo).clientKey.substr(0, 6)}</pre>
   },
   {
     header: 'Verbunden am',
