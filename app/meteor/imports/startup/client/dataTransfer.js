@@ -26,7 +26,7 @@ const getNextMedia = () => {
   }
 }
 
-export const insertMedia = async ({ name, mediaType, base64, file, appointmentId, patientId, cycle, tagIds }) => {
+export const insertMedia = async ({ name, mediaType, base64, file, kind = 'document', appointmentId, patientId, cycle, tagIds }) => {
   const nextMedia = (getNextMedia() || {
     appointmentId,
     patientId,
@@ -62,6 +62,7 @@ export const insertMedia = async ({ name, mediaType, base64, file, appointmentId
     mediaType,
     takenAt: file.lastModifiedDate || new Date(),
     preview,
+    kind,
     ...nextMedia
   }
 
