@@ -6,7 +6,8 @@ export const allowedImporters = [
   'eoswinRevenueReports',
   'eoswinJournalReports',
   'xdt',
-  'genericJson'
+  'genericJson',
+  'mediaDocument'
 ]
 
 export const isAllowedImporter = (slug) => {

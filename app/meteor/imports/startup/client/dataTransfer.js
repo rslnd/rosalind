@@ -3,8 +3,10 @@ import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import { Importers } from '../../api/importers'
 import { loadPatient } from '../../client/patients/picker/actions'
-import { onNativeEvent, toNative } from './native/events'
+import { onNativeEvent, toNative, getClientKey } from './native/events'
 import { Meteor } from 'meteor/meteor'
+import { setNextMedia } from '../../api/clients/actions/setNextMedia'
+import { Clients } from '../../api'
 
 export const ingest = ({ name, content, base64, importer }) => {
   return Importers.actions.ingest.callPromise({
@@ -15,10 +17,30 @@ export const ingest = ({ name, content, base64, importer }) => {
   })
 }
 
-export const insertMedia = async ({ name, mediaType, base64, file, patientId, appointmentId }) => {
-  console.log('[dataTransfer] insertMedia', { name, mediaType, file, patientId, appointmentId })
+const getNextMedia = () => {
+  const clientKey = getClientKey()
+  const client = Clients.find({ clientKey })
+  if (client) {
+    return client.nextMedia
+  } else {
+    return null
+  }
+}
 
-  // Read file as b64 and render to cancas
+export const insertMedia = async ({ name, mediaType, base64, file, appointmentId, patientId, cycle, tagIds }) => {
+  console.log('[dataTransfer] insertMedia', { name, mediaType, file, ...nextMedia })
+
+  // Drag&drop provides base64 and a a File object, native importer only provides base64. Convert base64 to File object if needed
+  if (!file) {
+    const rawBase = base64.split(',')[1]
+    file = new Blob([window.atob(rawBase)],
+      {
+        type: mediaType,
+        encoding: 'utf-8'
+      })
+  }
+
+  // Create resized preview as base64
   const { preview, widthOriginal, heightOriginal } = await createPreview({
     base64,
     mediaType,
@@ -30,10 +52,14 @@ export const insertMedia = async ({ name, mediaType, base64, file, patientId, ap
     width: widthOriginal,
     height: heightOriginal,
     mediaType,
-    takenAt: file.lastModifiedDate,
+    takenAt: file.lastModifiedDate || new Date(),
     preview,
-    patientId,
-    appointmentId
+    ...(getNextMedia() || {
+      appointmentId,
+      patientId,
+      cycle,
+      tagIds
+    })
   }
 
   const signedRequest = await call('media/insert', createMedia)
@@ -135,17 +161,27 @@ export const handleDrop = async ({ name, base64 }) => {
 const onNativeDataTransfer = async file => {
   console.log('[dataTransfer] [Importers] Received data transfer event from native binding', { name: file.path, importer: file.importer })
 
-  const response = await ingest({
-    name: file.path,
-    content: file.content,
-    importer: file.importer
-  })
+  switch (file.importer) {
+    case 'mediaDocument':
+      return insertMedia({
+        base64: file.content,
+        name: file.path,
+        mediaType: 'image/jpeg',
+        ...nextMedia
+      })
+    default:
+      const response = await ingest({
+        name: file.path,
+        content: file.content,
+        importer: file.importer
+      })
 
-  if (typeof response === 'object') {
-    const { importer, result } = response
-    onDataTransferSuccess({ importer, result, ...file })
-  } else {
-    onDataTransferSuccess({ importer: file.importer, ...file })
+      if (typeof response === 'object') {
+        const { importer, result } = response
+        onDataTransferSuccess({ importer, result, ...file })
+      } else {
+        onDataTransferSuccess({ importer: file.importer, ...file })
+      }
   }
 }
 
