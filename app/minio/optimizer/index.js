@@ -98,20 +98,44 @@ const ensureNotifications = ({ config, minioClient }) => {
   return minioClient.setBucketNotification(config.SOURCE_BUCKET, bucketNotification)
 }
 
+const retry = async (fn) => {
+  const start = new Date()
+  const tryUntil = start + (1000 * 60)
+  let tries = 5
+
+  do {
+    try {
+      const result = await fn()
+      const end = new Date()
+      console.log('took', end - start, 'ms')
+      return result
+    } catch (e) {
+      console.log('failed, retrying', tries, 'more times after delay, error was', e)
+      await delay(1000)
+      tries--
+    }
+  } while (tries > 0 || (new Date()) < tryUntil)
+
+  throw new Error(`Giving up ${logTag}`)
+}
+
 const handleBucketNotification = async ({ notification, minioClient, config }) => {
-  const key = notification.Records[0].s3.object.key
-  const bucketName = notification.Records[0].s3.bucket.name
+  retry(async () => {
 
-  if (bucketName !== config.SOURCE_BUCKET) {
-    console.log('Ignoring event for bucket', bucketName, 'as it is not the same as SOURCE_BUCKET:', config.SOURCE_BUCKET)
-    return
-  }
+    const key = notification.Records[0].s3.object.key
+    const bucketName = notification.Records[0].s3.bucket.name
 
-  const localPath = await downloadItem({ minioClient, config, key })
-  await optimize({ localPath })
-  await uploadItem({ minioClient, config, localPath, key })
-  fs.unlink(localPath, () => {})
-  await minioClient.removeObject(config.SOURCE_BUCKET, key)
+    if (bucketName !== config.SOURCE_BUCKET) {
+      console.log('Ignoring event for bucket', bucketName, 'as it is not the same as SOURCE_BUCKET:', config.SOURCE_BUCKET)
+      return
+    }
+
+    const localPath = await downloadItem({ minioClient, config, key })
+    await optimize({ localPath })
+    await uploadItem({ minioClient, config, localPath, key })
+    fs.unlink(localPath, () => {})
+    await minioClient.removeObject(config.SOURCE_BUCKET, key)
+  })
 }
 
 const downloadItem = async ({ minioClient, config, key }) => {
