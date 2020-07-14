@@ -166,7 +166,7 @@ const onNativeDataTransfer = async file => {
   switch (file.importer) {
     case 'mediaDocument':
       return insertMedia({
-        base64: file.content,
+        base64: file.base64 || file.content,
         name: file.path,
         mediaType: 'image/jpeg'
       })
