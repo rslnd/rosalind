@@ -22,7 +22,7 @@ export const insert = ({ Media }) =>
       mediaType: Match.OneOf(...mediaTypes),
       consumerId: Match.Maybe(String),
       patientId: String,
-      appointmentId: Match.Optional(String),
+      appointmentId: Match.OneOf(null, String),
       cycle: Match.OneOf(null, String),
       tagIds: Match.OneOf(null, [String], []),
       clientKey: Match.Optional(String),
