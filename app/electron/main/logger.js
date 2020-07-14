@@ -17,66 +17,71 @@ const logger = LogDNA.createLogger(K, {
   tags: ['electron']
 })
 
+const formatLog = logFn => (...logs) => {
+  // JSON.stringify may throw on circular object references
+  const message = logs.map(l => inspect(l)).join(' ')
+  console.log(message)
+  logFn(message)
+  return message
+}
+
+const log = {
+  debug: formatLog(logger.debug),
+  info: formatLog(logger.info),
+  warn: formatLog(logger.warn),
+  error: formatLog(logger.error)
+}
 
 const ensureOldLogsRemoved = () => {
   const oldPath = path.join(app.getPath('userData'), 'RosalindElectron.log')
 
   fs.exists(oldPath, (exists) => {
+    log.info('Old log file found, removing')
     if (exists) {
       try {
         fs.unlink(oldPath)
       } catch (e) {
-
+        log.error('Failed to remove old logfile', e)
       }
     }
   })
 }
 
 const start = () => {
-  logger.info(`[Log] App launched in: ${process.execPath}`)
-  logger.info(`[Log] App version: ${app.getVersion()}`)
-  logger.info(`[Log] Command line arguments: ${process.argv.join(' ')}`)
+  log.info(`[Log] App launched in: ${process.execPath}`)
+  log.info(`[Log] App version: ${app.getVersion()}`)
+  log.info(`[Log] Command line arguments: ${process.argv.join(' ')}`)
 
   process.on('uncaughtException', err =>
-    logger.error('[Main] Uncaught exception:', {meta: err})
+    log.error('[Main] Uncaught exception:', {meta: err})
   )
 
   process.on('unhandledRejection', err =>
-    logger.error('[Main] Unhandled rejection:', {meta: err})
+    log.error('[Main] Unhandled rejection:', {meta: err})
   )
 
   app.on('quit', () =>
-    logger.info('[Log] App quit')
+    log.info('[Log] App quit')
   )
 
   ipcMain.on('log', (e, msg) => {
-    logger.info(`[ipc] ${inspect(msg)}`)
+    log.info(`[ipc] ${inspect(msg)}`)
   })
 
   ensureOldLogsRemoved()
 }
 
 const ready = log => {
-  logger.info(log)
+  log.info(log)
 
   if (includes(process.argv, '--debug-quit-on-ready')) {
-    logger.info('[Log] Debug: App launched successfully; now quitting')
+    log.info('[Log] Debug: App launched successfully; now quitting')
     app.quit()
   }
-}
-
-const formatLog = logFn => (...logs) => {
-  // JSON.stringify may throw on circular object references
-  const message = logs.map(l => inspect(l)).join(' ')
-  logFn(message)
-  return message
 }
 
 module.exports = {
   start,
   ready,
-  debug: formatLog(logger.debug),
-  info: formatLog(logger.info),
-  warn: formatLog(logger.warn),
-  error: formatLog(logger.error)
+  ...log
 }
