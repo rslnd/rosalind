@@ -39,8 +39,9 @@ export const insertMedia = async ({ name, mediaType, base64, file, appointmentId
 
   // Drag&drop provides base64 and a a File object, native importer only provides base64. Convert base64 to File object if needed
   if (!file) {
-    const rawBase = base64.split(',')[1]
-    file = new Blob([window.atob(rawBase)],
+    console.log(`Converting base64 to File: ${base64.substr(0, 100)}`)
+    // const rawBase = base64.split(',')[1]
+    file = new Blob([window.atob(base64)],
       {
         type: mediaType,
         encoding: 'utf-8'
