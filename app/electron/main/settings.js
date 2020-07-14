@@ -14,13 +14,23 @@ const emptySettings = {}
 
 let settings = {}
 let remoteSettings = {}
+let newSettingsSubscribers = []
 
 const setRemoteSettings = (e, newRemoteSettings) => {
   logger.info('[Settings] New remote settings', newRemoteSettings)
   remoteSettings = newRemoteSettings
+
+  const newSettings = getSettings()
+  newSettingsSubscribers.forEach(handler => {
+    handler(newSettings)
+  })
 }
 
 ipcMain.on('settings', setRemoteSettings)
+
+const onNewSettings = (handler) => {
+  newSettingsSubscribers.push(handler)
+}
 
 const readSettings = path => {
   if (!path) {
@@ -150,12 +160,9 @@ const getSettings = () => {
   settings = mergedSettings
   settings.settingsPath = localSettingsPath
 
-  const {clientKey, ...nonSensitiveSettings} = settings
-  logger.info('[Settings]', nonSensitiveSettings)
-
   return settings
 }
 
 getSettings()
 
-module.exports = { getSettings }
+module.exports = { getSettings, onNewSettings }

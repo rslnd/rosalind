@@ -6,8 +6,6 @@ const { captureException } = require('@sentry/electron')
 
 // IMPORTANT: Keep in sync with preload.js
 const isUrlValid = urlString => {
-  return true // DEBUG ONLY
-
   try {
     const url = new URL(urlString)
     const isValid = !!(url.origin.match(/^https:\/\/.*\.rslnd\.com$/))
