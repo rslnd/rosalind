@@ -18,6 +18,9 @@ services:
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./caddy-data:/data
+    environment:
+      - DNS_NAME=${DNS_NAME}
+      - CLOUDFLARE_TOKEN=${CLOUDFLARE_TOKEN}
     ports:
       - '80:80'
       - '443:443'
