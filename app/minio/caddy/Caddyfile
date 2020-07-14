@@ -22,13 +22,9 @@
     X-Content-Type-Options "nosniff"
     X-Frame-Options "DENY"
   }
-
-  log stderr
 }
 
 {env.DNS_NAME} {
   import default
-  reverse_proxy * minio:9000 {
-    transparent
-  }
+  reverse_proxy * minio:9000
 }
