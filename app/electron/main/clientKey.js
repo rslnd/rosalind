@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
 const logger = require('./logger')
+const { app } = require('electron')
 
 const keyPath = path.join(app.getPath('userData'), 'clientKey')
 
