@@ -45,7 +45,26 @@ export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKe
         clientKey: safeArgs.clientKey,
         roles
       })) {
-        return fn.call(this, safeArgs)
+        const result = fn.call(this, safeArgs)
+
+        try {
+          if (safeArgs.clientKey) {
+            const { Clients } = require('../../api/clients')
+            const client = Clients.findOne({ clientKey: safeArgs.clientKey })
+            if (client) {
+              Clients.update({ _id: client._id }, {
+                $set: {
+                  lastActionAt: new Date(),
+                  lastActionBy: this.userId
+                }
+              })
+            }
+          }
+        } catch (e) {
+          console.error('[action] Failed to update lastAction stamps', e)
+        }
+
+        return result
       } else {
         console.error('[action] Denying', name, 'to user', this.userId)
         throw new Meteor.Error(403, 'Not authorized')
