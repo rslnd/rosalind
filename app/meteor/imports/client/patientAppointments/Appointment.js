@@ -76,7 +76,7 @@ export const Appointment = compose(
           <div style={tagsDocumentsRowStyle}>
             <div style={tagsStyle}><Tags {...appointment} isCurrent={isCurrent} /></div>
             {
-              hasRole(Meteor.userId(), ['media', 'media-documents', 'media-view']) &&
+              hasRole(Meteor.userId(), ['media', 'media-documents', 'media-view', 'admin']) &&
                 <div style={documentsStyle}>
                   <ErrorBoundary>
                     <Documents appointment={appointment} isCurrent={isCurrent} handleMediaClick={handleMediaClick} />
