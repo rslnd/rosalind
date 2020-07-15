@@ -29,8 +29,8 @@ export const ingest = ({ Importers }) => {
     args: {
       importer: Match.Optional(Match.OneOf(null, ...allowedImporters)),
       name: String,
-      content: Match.Optional(String),
-      base64: Match.Optional(String)
+      content: Match.OneOf(undefined, null, String),
+      base64: Match.OneOf(undefined, null, String)
     },
     allowAnonymous: true,
     requireClientKey: true,
