@@ -18,7 +18,9 @@ export const updateSettings = newSettings => {
 export const subscribeSettings = () => {
   Tracker.autorun(() => {
     const client = getClient()
-    updateSettings(client.settings)
+    if (client && client.settings) {
+      updateSettings(client.settings)
+    }
   })
 }
 

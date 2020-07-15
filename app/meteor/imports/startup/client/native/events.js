@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3'
+import Alert from 'react-s-alert'
 import { attemptRegistration } from './attemptRegistration'
 import { handleAndroidEvents } from './android'
 import { handleFakeEvents } from './fakeInterface'
