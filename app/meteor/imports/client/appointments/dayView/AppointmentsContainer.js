@@ -77,7 +77,12 @@ const composer = (props) => {
     ...daySelector(day)
   })
 
-  const assigneeIds = daySchedule ? (daySchedule.userIds || []) : []
+  let assigneeIds = daySchedule ? (daySchedule.userIds || []) : []
+
+  if (hasRole(Meteor.userId(), ['appointments-own-only'])) {
+    assigneeIds = assigneeIds.filter(_id => Meteor.userId() === _id)
+  }
+
   const assignees = Users.find({ _id: { $in: assigneeIds } }, { sort: { lastName: 1 } }).fetch()
 
   const schedules = Schedules.find({
