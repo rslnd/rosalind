@@ -12,7 +12,7 @@ const generateClientKey = () =>
 const isValid = s =>
   typeof s === 'string' &&
   s.length > 200 &&
-  s.match(/^[A-Za-z0-9]$/)
+  s.match(/^[A-Za-z0-9]+$/)
 
 const writeNewClientKey = (cb) => {
   logger.warn(`[clientKey] Generating new clientKey at ${keyPath}`)
