@@ -11,6 +11,14 @@ import { background, primaryActive, darkGrayDisabled, darkGray, lighten } from '
 import { namecase } from '../../../../util/namecase'
 import { getDefaultDuration } from '../../../../api/appointments/methods/getDefaultDuration'
 import { prefix } from '../../../../api/patients/methods'
+import { Users } from '../../../../api'
+
+const assigneeName = _id => {
+  const user = Users.findOne({ _id })
+  if (user) {
+    return Users.methods.fullName(user)
+  }
+}
 
 const styles = {
   appointment: {
@@ -146,7 +154,7 @@ class AppointmentItem extends React.Component {
           appointment.lockedBy &&
           <span style={styles.patientName} className='text-muted'>
             <i className='fa fa-clock-o fa-fw' />&nbsp;
-              {__('appointments.lockedBy', { name: appointment.lockedByFirstName })}
+              {__('appointments.lockedBy', { name: assigneeName(appointment.lockedBy) })}
           </span>
         }
 
@@ -165,10 +173,12 @@ class AppointmentItem extends React.Component {
                   {patient.lastName && <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
                   {patient.firstName && <span>{namecase(patient.firstName)}</span>}
                 </span>
-              ) : (!appointment.lockedBy && (
+              ) : (
+                (appointment.lockedBy && <span>&nbsp;</span>) ||
                 this.stripNumbers(appointment.note) ||
-                ((!appointment.tags || appointment.tags.lenth === 0) && (appointment.note || 'PAUSE')
-              ))) || <Icon name='question-circle' />
+                ((!appointment.tags || appointment.tags.length === 0) && (appointment.note || 'PAUSE')) ||
+                <Icon name='question-circle' />
+              )
           }
         </span>
       </div>
