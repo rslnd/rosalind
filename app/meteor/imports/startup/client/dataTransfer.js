@@ -72,8 +72,6 @@ export const insertMedia = async ({ name, mediaType, base64, file, kind = 'docum
 
   // Drag&drop provides base64 and a a File object, native importer only provides base64. Convert base64 to File object if needed
   if (!file) {
-    console.log(`Converting base64 to File: ${base64}`)
-    // const rawBase = base64.split(',')[1]
     const blob = new Blob(
       [base64DecToArr(base64)],
       { type: mediaType }
