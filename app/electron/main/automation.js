@@ -8,7 +8,7 @@ const { captureException } = require('@sentry/electron')
 const closeRosalindTimeout = 10 * 60 * 1000
 
 const isShellSafe = s =>
-  s && s.match(/^[a-z0-9 ():\/"\\\.-]+$/i)
+  s && s.match(/^[a-z0-9 \$():\/"\\\.-]+$/i)
 
 const start = async (argv = []) => {
   if (argv.join(' ').indexOf('generateEoswinReports') !== -1) {
