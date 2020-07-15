@@ -28,13 +28,13 @@ const addTrustedAccessToken = () => {
     trustedAccessToken
   ]
 
-  // Start timer to quietly revoke access token after 5 mins, if not revoked already
+  // Start timer to quietly revoke access token after 15 mins, if not revoked already
   setTimeout(() => {
     const index = trustedAccessTokens.indexOf(trustedAccessToken)
     if (index !== -1) {
       trustedAccessTokens = trustedAccessTokens.slice(index, 1)
     }
-  }, 1000 * 60 * 5)
+  }, 1000 * 60 * 15)
 
   return trustedAccessToken
 }
