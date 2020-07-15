@@ -10,12 +10,23 @@ const K = '840559bea375dff05893d84878a50d93'
 
 const program = [ [ 'rosalind', os.platform(), os.arch() ].join('-'), app.getVersion() ].join('/')
 
-const logger = LogDNA.createLogger(K, {
-  hostname: os.hostname(),
-  app: program,
-  env: process.env.NODE_ENV,
-  tags: ['electron']
-})
+let logger = {
+  debug: (...c) => console.log(...c),
+  info: (...c) => console.log(...c),
+  warn: (...c) => console.log(...c),
+  error: (...c) => console.log(...c)
+}
+
+try {
+  // underscore makes logger throw `invalid hostname`
+  logger = LogDNA.createLogger(K, {
+    app: program,
+    env: process.env.NODE_ENV,
+    tags: ['electron', os.hostname()]
+  })
+} catch (e) {
+  console.log('[logger] Failed to initialize logger, error was', e)
+}
 
 const formatLog = logFn => (...logs) => {
   // JSON.stringify may throw on circular object references
