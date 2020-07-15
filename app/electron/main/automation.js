@@ -31,8 +31,8 @@ const start = async (argv = []) => {
 }
 
 const spawn = (exePath, spawnArgs) => {
-  if (!isShellSafe(generateEoswinReportsExe)) {
-    throw new Error(`Exe path is not shell safe: ${generateEoswinReportsExe}`)
+  if (!isShellSafe(exePath)) {
+    throw new Error(`Exe path is not shell safe: ${exePath}`)
   }
 
   if (!spawnArgs.every(isShellSafe)) {
