@@ -1,27 +1,26 @@
 import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { processJournal, mapUserIds } from '../../../../reports/methods/external/eoswin'
 import { Reports } from '../../../../reports'
 import { Users } from '../../../../users'
 import { Patients } from '../../../../patients'
 import { Appointments } from '../../../../appointments'
 import { deduplicateWithJournal } from '../../../../patients/methods/deduplicateWithJournal'
+import { action } from '../../../../../util/meteor/action'
 
 export const eoswinJournalReports = ({ Importers }) => {
-  return new ValidatedMethod({
+  return action({
     name: 'importers/eoswinJournalReports',
-
-    validate: new SimpleSchema({
+    args: {
       importer: { type: String, optional: true, allowedValues: [ 'eoswinJournalReports' ] },
       name: { type: String },
       content: { type: String }
-    }).validator(),
-
+    },
+    allowAnonymous: true,
+    requireClientKey: true,
     run ({ name, content }) {
       try {
         if (Meteor.isServer) {
-          const { isTrustedNetwork } = require('../../../../customer/server/isTrustedNetwork')
+          const { isTrustedNetwork } = require('../../../../customer/isTrustedNetwork')
           if (!this.userId && (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
             throw new Meteor.Error(403, 'Not authorized')
           }

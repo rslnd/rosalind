@@ -59,7 +59,7 @@ export class Login extends React.Component {
             })
           })
         } else {
-          Meteor.call('users/afterLogin', {}, () => {
+          Meteor.call('users/afterLogin', { weakPassword: null }, () => {
             console.log('[Users] Logged in successfully')
           })
         }

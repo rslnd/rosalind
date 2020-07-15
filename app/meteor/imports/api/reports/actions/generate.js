@@ -1,23 +1,29 @@
+import { Meteor } from 'meteor/meteor'
 import moment from 'moment-timezone'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { dayToDate, daySelector } from '../../../util/time/day'
+import { action } from '../../../util/meteor/action'
 import { generate as generateReport } from '../methods/generate'
 import { pastAppointmentsSelector } from '../methods/mapPlannedNew'
 
 export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, Tags, Messages }) => {
-  return new ValidatedMethod({
+  return action({
     name: 'reports/generate',
-    mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
+    args: {
       day: { type: Object, blackbox: true },
       addendum: { type: Object, blackbox: true, optional: true }
-    }).validator(),
-
-    run({ day, addendum }) {
+    },
+    allowAnonymous: true,
+    requireClientKey: true,
+    fn ({ day, addendum }) {
       try {
         if (this.isSimulation) { return }
+        if (Meteor.isServer) {
+          const { isTrustedNetwork } = require('../../customer/isTrustedNetwork')
+          if (!this.userId && (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
+            throw new Meteor.Error(403, 'Not authorized')
+          }
+        }
 
         const date = moment(dayToDate(day))
 

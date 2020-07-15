@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { Match } from 'meteor/check'
 import { Reports } from '../'
-import { isTrustedNetwork } from '../../customer/server/isTrustedNetwork'
+import { isTrustedNetwork } from '../../customer/isTrustedNetwork'
 import { publish } from '../../../util/meteor/publish'
 import { hasRole } from '../../../util/meteor/hasRole'
 

@@ -22,6 +22,8 @@ const forceRefresh = (win) => {
 const start = () => {
   localShortcut.register('CmdOrCtrl+Alt+I', toggleDevTools)
   localShortcut.register('CmdOrCtrl+Shift+I', toggleDevTools)
+  localShortcut.register('F12', toggleDevTools)
+  localShortcut.register('F11', toggleDevTools)
 
   localShortcut.register('CmdOrCtrl+R', forceRefresh)
   localShortcut.register('F5', forceRefresh)

@@ -20,7 +20,7 @@ export const tally = ({ Referrals, Referrables }) => {
 
     run({ date, from, to, referredBy, redeemImmediately }) {
       if (Meteor.isServer) {
-        const { isTrustedNetwork } = require('../../customer/server/isTrustedNetwork')
+        const { isTrustedNetwork } = require('../../customer/isTrustedNetwork')
         if (!this.userId && this.connection && !isTrustedNetwork(this.connection.clientAddress)) {
           throw new Meteor.Error(403, 'Not authorized')
         }

@@ -3,9 +3,11 @@ import Alert from 'react-s-alert'
 import { __ } from '../../../i18n'
 import { onNativeEvent, toNative } from './events'
 
-export default () => {
-  let didNotify = false
+let didNotify = false
 
+export const updateAvailable = () => didNotify
+
+export default () => {
   const showUpdatePrompt = ({ newVersion }) => {
     console.log('[Client] Received update available event from native binding', { newVersion })
 

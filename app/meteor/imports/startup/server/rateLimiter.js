@@ -1,5 +1,5 @@
 import { DDPRateLimiter } from 'meteor/ddp-rate-limiter'
-import { isTrustedNetwork } from '../../api/customer/server/isTrustedNetwork'
+import { isTrustedNetwork } from '../../api/customer/isTrustedNetwork'
 
 export default () => {
   DDPRateLimiter.addRule({

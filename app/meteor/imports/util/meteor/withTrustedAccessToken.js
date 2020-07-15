@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import { v4 as uuidv4 } from 'uuid'
 
 // Temporarily allow authenticated connections from trusted networks when requested (eg for printing reports on server)
 let trustedAccessTokens = []
@@ -22,7 +22,7 @@ export const isTrustedAccessToken = accessToken =>
 
 const addTrustedAccessToken = () => {
   console.log('[Publish] trustedAccessTokens: Adding new token')
-  const trustedAccessToken = crypto.randomBytes(512).toString('hex')
+  const trustedAccessToken = uuidv4() + uuidv4()
   trustedAccessTokens = [
     ...trustedAccessTokens,
     trustedAccessToken

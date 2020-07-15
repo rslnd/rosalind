@@ -17,7 +17,7 @@ export const eoswinPatients = ({ Importers }) => {
 
     run ({ name, content, quiet }) {
       if (Meteor.isServer) {
-        const { isTrustedNetwork } = require('../../../../customer/server/isTrustedNetwork')
+        const { isTrustedNetwork } = require('../../../../customer/isTrustedNetwork')
         if (!this.userId && (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
           throw new Meteor.Error(403, 'Not authorized')
         }

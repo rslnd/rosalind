@@ -1,9 +1,20 @@
-// import { Meteor } from 'meteor/meteor'
+import { Meteor } from 'meteor/meteor'
+import { updateAvailable } from './native/update'
 
-// TODO: Auto logout on browser close
 export default () => {
-  window.addEventListener('beforeunload', function () {
-    // Meteor.logout()
-    // window.localStorage.clear()
+  window.addEventListener('beforeunload', () => {
+    if (process.env.NODE_ENV === 'development') {
+      return
+    }
+
+    // Don't force logout when just restarting app for update
+    if (updateAvailable()) {
+      return
+    }
+
+    Meteor.logout()
+    window.localStorage.clear()
+
+    return null
   })
 }

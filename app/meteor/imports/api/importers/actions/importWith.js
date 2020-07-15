@@ -1,22 +1,21 @@
 import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { allowedImporters } from '../allowedImporters'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { action } from '../../../util/meteor/action'
 
 export const importWith = ({ Importers }) => {
-  return new ValidatedMethod({
+  return action({
     name: 'importers/importWith',
-    mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
+    args: {
       importer: { type: String, allowedValues: allowedImporters },
       name: { type: String },
       content: { type: String }
-    }).validator(),
-
-    run ({ importer, name, content }) {
+    },
+    allowAnonymous: true,
+    requireClientKey: true,
+    fn ({ importer, name, content }) {
       if (Meteor.isServer) {
-        const { isTrustedNetwork } = require('../../customer/server/isTrustedNetwork')
+        const { isTrustedNetwork } = require('../../customer/isTrustedNetwork')
         if (!this.userId && (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
           throw new Meteor.Error(403, 'Not authorized')
         }

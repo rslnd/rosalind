@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { isTrustedNetwork } from './isTrustedNetwork'
+import { isTrustedNetwork } from '../isTrustedNetwork'
 
 export default () => {
   Meteor.onConnection(({ id, clientAddress }) => {

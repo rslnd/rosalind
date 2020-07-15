@@ -6,21 +6,21 @@ import { getClient } from './getClient'
 
 let settings = new ReactiveVar(null)
 
+export const getSettings = () => settings.get()
+
 export const updateSettings = newSettings => {
-  if (!isEqual(settings, newSettings)) {
+  if (!isEqual(getSettings(), newSettings)) {
     settings.set(newSettings)
-    toNative('settings', settings.get())
+    toNative('settings', getSettings())
   }
 }
 
-export const subscribeSettings = initialSettings => {
+export const subscribeSettings = () => {
   Tracker.autorun(() => {
     const client = getClient()
     updateSettings(client.settings)
   })
 }
-
-export const getSettings = () => settings.get()
 
 // DEBUG
 window.getSettings = getSettings

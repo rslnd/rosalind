@@ -27,21 +27,22 @@ export const register = ({ Clients }) => {
             systemInfo
           }
         })
-        Events.post('clients/register', { existingClientId: existingClient._id })
+        Events.post('clients/register/existing', { existingClientId: existingClient._id })
         return { isOk: true, settings: existingClient.settings }
       } else {
         if (!Settings.get('clients.allowNewClients')) {
           console.error('[Clients] New client registration is disabled')
           console.error('[Clients] Blocked attempt to register new client key', clientKey)
-          Events.post('clients/register', { blocked: true })
+          Events.post('clients/register/blocked', { blocked: true })
           return { isOk: false }
         } else {
           const clientId = Clients.insert({
             clientKey,
             systemInfo,
-            createdAt: new Date()
+            createdAt: new Date(),
+            isBanned: true
           })
-          Events.post('clients/register', { newClientId: clientId })
+          Events.post('clients/register/banned', { newClientId: clientId })
           return { isOk: true }
         }
       }

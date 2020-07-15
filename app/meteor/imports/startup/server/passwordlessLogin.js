@@ -1,6 +1,6 @@
 /* global Accounts */
 import { check, Match } from 'meteor/check'
-import { isTrustedNetwork } from '../../api/customer/server/isTrustedNetwork'
+import { isTrustedNetwork } from '../../api/customer/isTrustedNetwork'
 import { Users } from '../../api/users'
 import { Clients } from '../../api/clients'
 import { Meteor } from 'meteor/meteor'

@@ -29,70 +29,70 @@ process.env.ELECTRON_ENABLE_SECURITY_WARNINGS = true
 const logger = require('./logger')
 logger.start()
 
-const start = () => {
+app.on('ready', () => {
   Menu.setApplicationMenu(null)
+  app.setAppUserModelId('com.rslnd.rosalind')
 
-  app.on('ready', () => {
-    const updater = require('./updater')
-    const window = require('./window')
-    const systemInfo = require('./systemInfo')
-    const { getSettings } = require('./settings')
-    const cli = require('./cli')
-    const automation = require('./automation')
-    const print = require('./print')
-    const shortcuts = require('./shortcuts')
-    const watch = require('./watch')
-    const devtools = require('./devtools')
+  const { getSettings } = require('./settings')
 
-    let mainWindow = null
+  const updater = require('./updater')
+  const window = require('./window')
+  const systemInfo = require('./systemInfo')
 
-    const handleFocus = () => {
-      if (!mainWindow) { return }
-      if (mainWindow.isMinimized()) {
-        mainWindow.restore()
-      }
-      mainWindow.focus()
+  const cli = require('./cli')
+  const automation = require('./automation')
+  const print = require('./print')
+  const watch = require('./watch')
+  const devtools = require('./devtools')
+  const { ensureClientKey } = require('./clientKey')
+
+  let mainWindow = null
+
+  const handleFocus = () => {
+    if (!mainWindow) { return }
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore()
+    }
+    mainWindow.focus()
+  }
+
+  const handleOtherInstanceLaunched = (argv) => {
+    handleFocus()
+    automation.start(argv)
+  }
+
+  if (cli.handleStartupEvent(handleOtherInstanceLaunched)) { return app.quit() }
+
+  mainWindow = window.open(err => {
+    if (err) {
+      logger.error('[Main] Could not load main window', err)
+      return
     }
 
-    const handleOtherInstanceLaunched = (argv) => {
-      handleFocus()
-      automation.start(argv)
-    }
+    logger.ready('[Main] Main window loaded')
+    watch.start({ ipcReceiver: mainWindow.webContents, handleFocus })
+    print.start({ ipcReceiver: mainWindow.webContents })
+    automation.start(process.argv)
+    devtools.start()
+  })
 
-    if (updater.handleStartupEvent()) { return }
-    if (cli.handleStartupEvent(handleOtherInstanceLaunched)) { return app.quit() }
+  ipcMain.on('hello', (e) => {
+    logger.info('IPC received hello, sending welcome')
 
-    mainWindow = window.open(err => {
-      if (err) {
-        logger.error('[Main] Could not load main window', err)
-        return
-      }
-
-      logger.ready('[Main] Main window loaded')
-      watch.start({ ipcReceiver: mainWindow.webContents, handleFocus })
-      print.start({ ipcReceiver: mainWindow.webContents })
-      automation.start(process.argv)
-      shortcuts.updateShortcuts()
-      devtools.start()
-    })
-
-    ipcMain.on('hello', (e) => {
-      logger.info('IPC received hello, sending welcome')
+    ensureClientKey((clientKey) => {
       mainWindow.webContents.send('welcome', {
         systemInfo,
-        clientKey: getSettings().clientKey
+        clientKey
       })
     })
-
-    updater.start({ ipcReceiver: mainWindow.webContents })
-    setTimeout(updater.check, 5 * 1000)
-    setInterval(updater.check, 5 * 60 * 1000)
-
-    app.on('window-all-closed', () => {
-      watch.stop()
-      app.quit()
-    })
   })
-}
 
-start()
+  updater.start({ ipcReceiver: mainWindow.webContents })
+  setTimeout(updater.check, 5 * 1000)
+  setInterval(updater.check, 5 * 60 * 1000)
+
+  app.on('window-all-closed', () => {
+    watch.stop()
+    app.quit()
+  })
+})

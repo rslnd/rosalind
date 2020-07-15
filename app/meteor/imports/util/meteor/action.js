@@ -3,10 +3,11 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { check, Match } from 'meteor/check'
 import { hasRole } from './hasRole'
+import { isAllowed } from './isAllowed'
 
 export { Match }
 
-export const action = ({ name, args = {}, roles, allowAnonymous, simulation = true, fn }) => {
+export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKey, simulation = true, fn }) => {
   if (!name) {
     throw new Error('Action needs a name')
   }
@@ -36,12 +37,19 @@ export const action = ({ name, args = {}, roles, allowAnonymous, simulation = tr
         return
       }
 
-      // Validate clientKey and permissions
-      // if (this.connection && !this.userId) {
-      //   throw new Meteor.Error(403, 'Not authorized')
-      // }
-
-      return fn.call(this, safeArgs)
+      if (isAllowed({
+        allowAnonymous,
+        requireClientKey,
+        connection: this.connection,
+        userId: this.userId,
+        clientKey: safeArgs.clientKey,
+        roles
+      })) {
+        return fn.call(this, safeArgs)
+      } else {
+        console.error('[action] Denying', name, 'to user', this.userId)
+        throw new Meteor.Error(403, 'Not authorized')
+      }
     }
   })
 }
