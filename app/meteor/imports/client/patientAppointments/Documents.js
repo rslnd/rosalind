@@ -11,6 +11,7 @@ import { withTracker } from '../components/withTracker'
 import { Popover, setNextMedia } from './Consents'
 import { toNative } from '../../startup/client/native/events'
 import { getClient } from '../../api/clients/methods/getClient'
+import { hasRole } from '../../util/meteor/hasRole'
 
 const Document = ({ children, isCurrent, isMissing, ...props }) =>
   (!isCurrent && isMissing)
