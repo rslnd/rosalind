@@ -219,7 +219,7 @@ Func ExpectControlClick($hWnd, $sText, $sControlId)
   EndIf
 EndFunc
 
-Func ExpectWindow($sTitle, $iTimeout = 30)
+Func ExpectWindow($sTitle, $iTimeout = 60)
   Info("Waiting " & String($iTimeout) & "s for window with title: " & $sTitle)
   Local $hWnd = WinWait($sTitle, "", $iTimeout)
 
