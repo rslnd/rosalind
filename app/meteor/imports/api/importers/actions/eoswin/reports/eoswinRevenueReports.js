@@ -2,15 +2,15 @@ import { Meteor } from 'meteor/meteor'
 import { processRevenue, mapUserIds } from '../../../../reports/methods/external/eoswin'
 import { Reports } from '../../../../reports'
 import { Users } from '../../../../users'
-import { action } from '../../../../../util/meteor/action'
+import { action, Match } from '../../../../../util/meteor/action'
 
 export const eoswinRevenueReports = ({ Importers }) => {
   return action({
     name: 'importers/eoswinRevenueReports',
     args: {
-      importer: { type: String, optional: true, allowedValues: [ 'eoswinRevenueReports' ] },
-      name: { type: String },
-      content: { type: String }
+      importer: 'eoswinRevenueReports',
+      name: String,
+      content: String
     },
     allowAnonymous: true,
     requireClientKey: true,

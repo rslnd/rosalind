@@ -2,7 +2,7 @@ import iconv from 'iconv-lite'
 import { Meteor } from 'meteor/meteor'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { allowedImporters } from '../allowedImporters'
-import { action } from '../../../util/meteor/action'
+import { action, Match } from '../../../util/meteor/action'
 
 export const ingest = ({ Importers }) => {
   const determineImporter = ({ name, content }) => {
@@ -27,10 +27,10 @@ export const ingest = ({ Importers }) => {
   return action({
     name: 'importers/ingest',
     args: {
-      importer: { type: String, optional: true, allowedValues: allowedImporters },
-      name: { type: String },
-      content: { type: String, optional: true },
-      base64: { type: String, optional: true }
+      importer: Match.Optional(Match.OneOf(null, ...allowedImporters)),
+      name: String,
+      content: Match.Optional(String),
+      base64: Match.Optional(String)
     },
     allowAnonymous: true,
     requireClientKey: true,

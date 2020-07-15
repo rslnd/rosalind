@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import moment from 'moment-timezone'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { dayToDate, daySelector } from '../../../util/time/day'
-import { action } from '../../../util/meteor/action'
+import { action, Match } from '../../../util/meteor/action'
 import { generate as generateReport } from '../methods/generate'
 import { pastAppointmentsSelector } from '../methods/mapPlannedNew'
 
@@ -10,8 +10,8 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
   return action({
     name: 'reports/generate',
     args: {
-      day: { type: Object, blackbox: true },
-      addendum: { type: Object, blackbox: true, optional: true }
+      day: Object,
+      addendum: Match.Optional(Object)
     },
     allowAnonymous: true,
     requireClientKey: true,

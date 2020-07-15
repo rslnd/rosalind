@@ -5,15 +5,15 @@ import { Users } from '../../../../users'
 import { Patients } from '../../../../patients'
 import { Appointments } from '../../../../appointments'
 import { deduplicateWithJournal } from '../../../../patients/methods/deduplicateWithJournal'
-import { action } from '../../../../../util/meteor/action'
+import { action, Match } from '../../../../../util/meteor/action'
 
 export const eoswinJournalReports = ({ Importers }) => {
   return action({
     name: 'importers/eoswinJournalReports',
     args: {
-      importer: { type: String, optional: true, allowedValues: [ 'eoswinJournalReports' ] },
-      name: { type: String },
-      content: { type: String }
+      importer: 'eoswinJournalReports',
+      name: String,
+      content: String
     },
     allowAnonymous: true,
     requireClientKey: true,

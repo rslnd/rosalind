@@ -1,15 +1,15 @@
 import { Meteor } from 'meteor/meteor'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { allowedImporters } from '../allowedImporters'
-import { action } from '../../../util/meteor/action'
+import { action, Match } from '../../../util/meteor/action'
 
 export const importWith = ({ Importers }) => {
   return action({
     name: 'importers/importWith',
     args: {
-      importer: { type: String, allowedValues: allowedImporters },
-      name: { type: String },
-      content: { type: String }
+      importer: Match.OneOf(...allowedImporters),
+      name: String,
+      content: String
     },
     allowAnonymous: true,
     requireClientKey: true,
