@@ -34,6 +34,7 @@ export const ingest = ({ Importers }) => {
     },
     allowAnonymous: true,
     requireClientKey: true,
+    simulation: false,
     fn ({ importer, name, content, base64 }) {
       try {
         if (Meteor.isServer) {
