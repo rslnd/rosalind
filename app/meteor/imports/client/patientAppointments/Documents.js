@@ -83,7 +83,7 @@ const Consent = ({ appointment, isCurrent, consents, isConsentRequired, handleMe
 
 }
 
-const ScanButton = ({ scanProfiles }) => {
+const ScanButton = ({ allowedProfiles }) => {
   const [hover, setHover] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -118,7 +118,7 @@ const ScanButton = ({ scanProfiles }) => {
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      {scanProfiles.map(profile =>
+      {allowedProfiles.map(profile =>
         <MenuItem
           key={profile}
           onClick={scan(profile)}>
@@ -164,13 +164,13 @@ const composer = props => {
   const isConsentRequired = Tags.methods.expand(appointment.tags).some(t => t && t.isConsentRequired)
 
   const client = getClient()
-  const scanProfiles = client ? (client.settings && client.settings.scan && client.settings.scanProfiles) : []
-  const canScan = (scanProfiles.length >= 1) && hasRole(Meteor.userId(), ['media', 'media-insert', 'media-insert-documents', 'admin'])
+  const allowedProfiles = (client && client.settings && client.settings.scan && client.settings.allowedProfiles) || []
+  const canScan = (allowedProfiles.length >= 1) && hasRole(Meteor.userId(), ['media', 'media-insert', 'media-insert-documents', 'admin'])
 
-  return { ...props, consents, docsByTag, isConsentRequired, consentTags, canScan, scanProfiles }
+  return { ...props, consents, docsByTag, isConsentRequired, consentTags, canScan, allowedProfiles }
 }
 
-export const Documents = withTracker(composer)(({ appointment, isCurrent, docsByTag, consents, isConsentRequired, consentTags, handleMediaClick, canScan, scanProfiles }) =>
+export const Documents = withTracker(composer)(({ appointment, isCurrent, docsByTag, consents, isConsentRequired, consentTags, handleMediaClick, canScan, allowedProfiles }) =>
   <div style={documentsStyle}>
     <Consent
       appointment={appointment}
@@ -192,7 +192,7 @@ export const Documents = withTracker(composer)(({ appointment, isCurrent, docsBy
         </Document>
       )
     }
-    {isCurrent && canScan && <ScanButton scanProfiles={scanProfiles} />}
+    {isCurrent && canScan && <ScanButton allowedProfiles={allowedProfiles} />}
   </div>
 )
 
