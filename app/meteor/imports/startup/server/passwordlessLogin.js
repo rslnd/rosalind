@@ -56,7 +56,7 @@ export default () => {
         if (userPasswordlessAllowed) {
           if (clientKey) {
             const client = Clients.findOne({ clientKey })
-            if (client && !client.removed) {
+            if (client && !client.removed && !client.isBanned) {
               if (client.passwordlessGroupIds) {
                 if (client.passwordlessGroupIds.includes(user.groupId)) {
                   console.log('[Login] Allowing passwordless login for', userId)
