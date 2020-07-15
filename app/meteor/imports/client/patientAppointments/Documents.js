@@ -164,7 +164,7 @@ const composer = props => {
   const isConsentRequired = Tags.methods.expand(appointment.tags).some(t => t && t.isConsentRequired)
 
   const client = getClient()
-  const allowedProfiles = (client && client.settings && client.settings.scan && client.settings.allowedProfiles) || []
+  const allowedProfiles = (client && client.settings && client.settings.scan && client.settings.scan.allowedProfiles) || []
   const canScan = (allowedProfiles.length >= 1) && hasRole(Meteor.userId(), ['media', 'media-insert', 'media-insert-documents', 'admin'])
 
   return { ...props, consents, docsByTag, isConsentRequired, consentTags, canScan, allowedProfiles }
