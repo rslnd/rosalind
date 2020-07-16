@@ -11,7 +11,6 @@ export const eoswinJournalReports = ({ Importers }) => {
   return action({
     name: 'importers/eoswinJournalReports',
     args: {
-      importer: 'eoswinJournalReports',
       name: String,
       content: String
     },

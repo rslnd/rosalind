@@ -8,7 +8,6 @@ export const eoswinRevenueReports = ({ Importers }) => {
   return action({
     name: 'importers/eoswinRevenueReports',
     args: {
-      importer: 'eoswinRevenueReports',
       name: String,
       content: String
     },
