@@ -16,8 +16,6 @@ export const eoswinJournalReports = ({ Importers }) => {
       content: String
     },
     allowAnonymous: true,
-    requireClientKey: true,
-    simulation: false,
     run ({ name, content }) {
       try {
         if (Meteor.isServer) {

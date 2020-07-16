@@ -14,7 +14,6 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
       addendum: Match.Optional(Object)
     },
     allowAnonymous: true,
-    requireClientKey: true,
     fn ({ day, addendum }) {
       try {
         if (this.isSimulation) { return }

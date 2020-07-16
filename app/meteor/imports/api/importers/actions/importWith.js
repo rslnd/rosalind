@@ -12,8 +12,6 @@ export const importWith = ({ Importers }) => {
       content: String
     },
     allowAnonymous: true,
-    requireClientKey: true,
-    simulation: false,
     fn ({ importer, name, content }) {
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../customer/isTrustedNetwork')

@@ -27,14 +27,12 @@ export const ingest = ({ Importers }) => {
   return action({
     name: 'importers/ingest',
     args: {
-      importer: Match.Optional(Match.OneOf(null, ...allowedImporters)),
       name: String,
-      content: Match.OneOf(undefined, null, String),
-      base64: Match.OneOf(undefined, null, String)
+      importer: Match.Maybe(Match.OneOf(undefined, null, ...allowedImporters)),
+      content: Match.Maybe(Match.OneOf(undefined, null, String)),
+      base64: Match.Maybe(Match.OneOf(undefined, null, String))
     },
     allowAnonymous: true,
-    requireClientKey: true,
-    simulation: false,
     fn ({ importer, name, content, base64 }) {
       try {
         if (Meteor.isServer) {

@@ -13,8 +13,6 @@ export const eoswinRevenueReports = ({ Importers }) => {
       content: String
     },
     allowAnonymous: true,
-    requireClientKey: true,
-    simulation: false,
     fn ({ name, content }) {
       try {
         if (Meteor.isServer) {
