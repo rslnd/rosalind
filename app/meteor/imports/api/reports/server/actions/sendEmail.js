@@ -1,14 +1,19 @@
 import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { sendEmail as performSendEmail } from '../methods/sendEmail'
+import { action, Match } from '../../../../util/meteor/action'
 
-export const sendEmail = new ValidatedMethod({
+export const sendEmail = action({
   name: 'reports/sendEmail',
-  mixins: [CallPromiseMixin],
-  validate () {},
-
-  run (args = {}) {
+  roles: ['reports', 'admin'],
+  args: {
+    day: Match.Maybe({
+      day: Number,
+      month: Number,
+      year: Number
+    }),
+    to: Match.Maybe(String)
+  },
+  fn (args = {}) {
     if (!this.userId) {
       throw new Meteor.Error(403, 'Not authorized')
     }

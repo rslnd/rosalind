@@ -65,7 +65,7 @@ const composer = props => {
   }
 
   const sendEmail = () => {
-    Meteor.call('reports/sendEmail')
+    Meteor.call('reports/sendEmail', { day })
   }
 
   return {

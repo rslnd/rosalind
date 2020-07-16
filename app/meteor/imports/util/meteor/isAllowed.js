@@ -1,5 +1,6 @@
 import { hasRole } from './hasRole'
 import { isTrustedAccessToken } from './withTrustedAccessToken'
+import { isLocalhost } from '../../api/customer/isTrustedNetwork'
 
 export const isAllowed = ({ connection, userId, clientKey, accessToken, roles, allowAnonymous, requireClientKey }) => {
   const trustedAccessToken = (accessToken && isTrustedAccessToken(accessToken))

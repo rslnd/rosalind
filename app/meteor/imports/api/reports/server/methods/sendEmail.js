@@ -18,7 +18,7 @@ export const sendEmail = async (args = {}) => {
     throw new Meteor.Error('env-missing', 'Make sure to set all mail-related environment variables: MAIL_REPORTS_TO, MAIL_REPORTS_FROM, MAIL_URL')
   }
 
-  console.log('[Reports] sendEmail')
+  console.log('[Reports] sendEmail', args)
 
   try {
     const test = (process.env.NODE_ENV !== 'production') || args.test
