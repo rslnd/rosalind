@@ -4,6 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Comments } from '../../comments'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 export const insert = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -31,7 +32,7 @@ export const insert = ({ Appointments }) => {
 
       const { note, ...restFields } = appointment
 
-      if (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung') {
+      if (note && (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung' || hasRole(this.userId, ['appointments-note']))) {
         restFields.note = note
       }
 
@@ -39,7 +40,7 @@ export const insert = ({ Appointments }) => {
         if (err) {
           console.error('[Appointments] Appointment insert failed with error', err)
         } else {
-          if (note) {
+          if (note && !hasRole(this.userId, ['appointments-note'])) {
             Comments.actions.post.callPromise({ docId: appointmentId, body: note })
           }
           Events.post('appointments/insert', { appointmentId })
