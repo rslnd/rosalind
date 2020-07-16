@@ -12,6 +12,10 @@ export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKe
     throw new Error('Action needs a name')
   }
 
+  if (!fn) {
+    throw new Error('Action needs a fn')
+  }
+
   if ((!roles || roles.length === 0) && !allowAnonymous) {
     throw new Error(`Action ${name} needs an array of roles, or allowAnonymous: true`)
   }

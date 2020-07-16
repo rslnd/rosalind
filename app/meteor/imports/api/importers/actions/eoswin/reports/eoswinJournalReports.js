@@ -15,7 +15,7 @@ export const eoswinJournalReports = ({ Importers }) => {
       content: String
     },
     allowAnonymous: true,
-    run ({ name, content }) {
+    fn ({ name, content }) {
       try {
         if (Meteor.isServer) {
           const { isTrustedNetwork } = require('../../../../customer/isTrustedNetwork')
