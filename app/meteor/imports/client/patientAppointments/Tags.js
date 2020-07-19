@@ -31,21 +31,6 @@ export const Tags = compose(
     const tags = props.tags || []
     if (!editing || !calendarId) { return { tags } }
 
-    const maxDuration = Appointments.methods.getMaxDuration({ time: start, assigneeId, calendarId })
-
-    if (!assigneeId) {
-      return {
-        possibleTags: getConstrainedTags({
-          maxDuration,
-          calendarId,
-          assigneeId,
-          time: start
-        }) || [],
-        tags,
-        maxDuration
-      }
-    }
-
     const availability = Availabilities.findOne({
       assigneeId,
       calendarId,
@@ -55,17 +40,26 @@ export const Tags = compose(
 
     if (!availability) {
       return { possibleTags: [], maxDuration, tags }
-    } else {
-      const allTags = TagsApi.find({}).fetch()
-      const constraints = Constraints.find({ assigneeId, calendarId }).fetch()
-      const possibleTags = getPossibleTags({ availability, tags: allTags, constraints }).map(t => {
-        return {
-          ...t,
-          selectable: true,
-          selected: tags.find(at => at === t._id)
-        }
-      })
-      return { possibleTags, maxDuration, tags }
+    }
+
+    const maxDuration = Appointments.methods.getMaxDuration({ time: start, assigneeId, calendarId })
+
+    const constraints = Constraints.find({ assigneeId, calendarId }).fetch()
+
+    const allowedTags = Appointments.methods.getAllowedTags({ time: start, assigneeId, calendarId })
+
+    return {
+      possibleTags: getConstrainedTags({
+        assigneeId,
+        allowedTags,
+        maxDuration,
+        calendarId,
+        assigneeId,
+        time: start,
+        constraint: constraints[0] // BUG: Allow multiple constraints
+      }) || [],
+      tags,
+      maxDuration
     }
   }),
   withState('hovering', 'setHovering'),
