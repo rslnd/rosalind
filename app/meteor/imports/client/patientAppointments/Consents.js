@@ -12,6 +12,7 @@ import { Icon } from '../components/Icon'
 import { TagsList } from '../tags/TagsList'
 import { getClientKey } from '../../startup/client/native/events'
 import { Clients } from '../../api'
+import { Close } from './Close'
 
 export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) => {
   const clientKey = getClientKey()
@@ -57,10 +58,13 @@ const reverse = [
 
 export const Popover = ({ open, onClose }) =>
   <Dialog transitionDuration={0} onClose={onClose} open={open} PaperProps={paperProps}>
+    <Close onClick={onClose} />
     <p style={headingStyle}>Revers</p>
     <div style={newConsentStyle}>
       <div style={pickerStyle}>
         <DocumentPicker
+          onChange={() => {}}
+          // value={}
           toLabel={a => a}
           toDocument={a => a}
           toKey={a => a}
