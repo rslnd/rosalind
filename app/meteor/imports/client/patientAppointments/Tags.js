@@ -38,11 +38,11 @@ export const Tags = compose(
       to: { $gte: start }
     })
 
+    const maxDuration = Appointments.methods.getMaxDuration({ time: start, assigneeId, calendarId })
+
     if (!availability) {
       return { possibleTags: [], maxDuration, tags }
     }
-
-    const maxDuration = Appointments.methods.getMaxDuration({ time: start, assigneeId, calendarId })
 
     const constraints = Constraints.find({ assigneeId, calendarId }).fetch()
 
