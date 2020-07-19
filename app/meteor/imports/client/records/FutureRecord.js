@@ -155,7 +155,7 @@ export const FutureRecord = compose(
 )
 
 const resolveButtonStyle = {
-  zoom: 0.7
+  // zoom: 0.7
 }
 
 const muted = {

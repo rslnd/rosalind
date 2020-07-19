@@ -39,7 +39,7 @@ const init = () => {
       }).then(() => {
         let currentUserId = null
         Tracker.autorun(throttle(() => {
-          document.querySelector('body>iframe').style.zoom = 0.8080
+          // document.querySelector('body>iframe').style.zoom = 0.8080
           const user = Meteor.user()
           if (user) {
             const env = process.env.NODE_ENV.toUpperCase()

@@ -112,7 +112,7 @@ const pickerStyle = {
 const printButtonStyle = {
   marginLeft: 20,
   width: 100,
-  zoom: 0.9
+  // zoom: 0.9
 }
 
 const separatorStyle = {

@@ -173,7 +173,7 @@ const Contact = ({ channel, onChange, onChangeConsent, value, noConsent, hasNone
 
 const zoomIconStyle = {
   opacity: 0.5,
-  zoom: 0.9,
+  // zoom: 0.9,
   paddingTop: 8,
   paddingRight: 3,
   display: 'inline-block'
@@ -223,7 +223,7 @@ const buttonRemoveStyle = {
 }
 
 const buttonIconStyle = {
-  zoom: 0.6,
+  // zoom: 0.6,
   minWidth: 0
 }
 

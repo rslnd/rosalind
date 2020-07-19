@@ -7,7 +7,7 @@ import { ReportSummary } from './ReportSummary'
 // import { SquaresContainer } from './Squares'
 
 const style = {
-  zoom: 0.909,
+  // zoom: 0.909,
   pageBreakInside: 'avoid'
 }
 

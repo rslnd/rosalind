@@ -96,7 +96,7 @@ const newContainerStyle = {
 }
 
 const newButtonStyle = {
-  zoom: 0.8,
+  // zoom: 0.8,
   color: 'white',
   opacity: 0.9,
   margin: 7

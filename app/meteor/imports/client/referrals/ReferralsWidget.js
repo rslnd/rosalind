@@ -78,7 +78,7 @@ const countStyle = {
   marginRight: 4,
   display: 'inline-block',
   opacity: 0.95,
-  zoom: 1.18,
+  // zoom: 1.18,
   backgroundColor: '#444'
 }
 
@@ -89,7 +89,7 @@ const iconStyle = {
 
 const buttonStyle = {
   display: 'flex',
-  zoom: 0.8,
+  // zoom: 0.8,
   opacity: 0.8,
   marginRight: 5
 }

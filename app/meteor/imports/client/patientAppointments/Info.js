@@ -132,7 +132,7 @@ const Assignee = ({ assigneeId, waitlistAssigneeId, fullNameWithTitle, canceled,
   </span>
 
 const reassignedStyle = {
-  zoom: 0.8,
+  // zoom: 0.8,
   opacity: 0.6
 }
 

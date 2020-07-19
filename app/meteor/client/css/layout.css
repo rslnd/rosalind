@@ -5,16 +5,16 @@ body {
 }
 
 body {
-  zoom: 1.221;
+  /* zoom: 1.221; */
   transition: filter 1s cubic-bezier(.17,.67,.83,.67);
 }
 
 .zoom-1 {
-  zoom: 0.9999;
+  /* zoom: 0.9999; */
 }
 
 .zoom-2 {
-  zoom: 1.32;
+  /* zoom: 1.32; */
 }
 
 .main-header .logo img {

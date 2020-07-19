@@ -55,7 +55,7 @@ export class Box extends React.Component {
               <span>
                 &ensp;
                 <small
-                  style={{ zoom: 0.8 }}
+                  // style={{ zoom: 0.8 }}
                   className={`badge bg-${badgeColor || 'gray'}`}>
                   {badge}
                 </small>

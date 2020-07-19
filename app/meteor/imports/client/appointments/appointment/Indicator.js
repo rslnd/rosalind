@@ -47,7 +47,7 @@ const Queued = () => <span
 </span>
 
 const queuedStyle = {
-  zoom: 0.6,
+  // zoom: 0.6,
   display: 'inline-block',
   color: warning
 }

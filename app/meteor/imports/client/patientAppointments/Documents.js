@@ -27,7 +27,7 @@ const Document = ({ children, isCurrent, isMissing, ...props }) =>
   </Button>
 
 const buttonStyle = {
-  zoom: 0.7,
+  // zoom: 0.7,
   margin: 4,
   opacity: 0.6
 }

@@ -120,7 +120,7 @@ const patientNameStyle = {
 
 const modalTriggerStyle = {
   marginRight: 4,
-  zoom: 0.9
+  // zoom: 0.9
 }
 
 const Appointment = ({ appointment, calendar }) => {

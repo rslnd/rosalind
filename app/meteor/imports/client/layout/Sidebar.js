@@ -142,7 +142,7 @@ const SubBadge = ({ subItem }) =>
   </div>) || null
 
 const subBadgeStyle = {
-  zoom: 0.88,
+  // zoom: 0.88,
   opacity: 0.85,
   marginTop: 2
 }
