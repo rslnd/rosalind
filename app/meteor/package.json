@@ -9,7 +9,7 @@
     "test": "tests"
   },
   "dependencies": {
-    "@material-ui/core": "^3.9.3",
+    "@material-ui/core": "^4.11.0",
     "aws4": "^1.8.0",
     "bcrypt": "^5.0.0",
     "buffer": "^5.2.1",
@@ -56,9 +56,9 @@
     "react-router-dom": "^5.0.1",
     "react-s-alert": "^1.4.1",
     "react-select": "2.2.0",
+    "recompose": "^0.30.0",
     "redux": "^4.0.4",
     "redux-form": "^8.2.4",
-    "redux-form-material-ui": "^5.0.0-beta.3",
     "redux-thunk": "^2.3.0",
     "smooch": "^4.19.5",
     "snyk": "^1.299.0",

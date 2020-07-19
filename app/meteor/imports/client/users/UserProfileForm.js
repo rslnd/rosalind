@@ -10,7 +10,7 @@ import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { TextField } from '../components/form/TextField'
 import { NameFields } from '../patients/fields/NameFields'
-import { Checkbox } from 'redux-form-material-ui'
+import { Checkbox } from '../components/form/Checkbox'
 import { GroupPickerField } from '../users/GroupPicker'
 
 const onSubmit = (fields, dispatch, props) =>

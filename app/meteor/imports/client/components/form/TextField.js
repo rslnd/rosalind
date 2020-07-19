@@ -1,10 +1,13 @@
 import React from 'react'
-import { TextField as MuiTextField } from 'redux-form-material-ui'
+import MuiTextField from '@material-ui/core/TextField'
 
-export const TextField = (props) =>
+export const TextField = ({ meta, input, ...props }) =>
   <MuiTextField
     fullWidth
     margin='dense'
+    error={meta && meta.touched && meta.invalid}
+    helperText={meta && meta.touched && meta.error}
+    {...input}
     {...props} />
 
 // Shift+Enter to insert newline, just Enter to submit
