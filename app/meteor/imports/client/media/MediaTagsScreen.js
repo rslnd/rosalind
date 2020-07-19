@@ -56,11 +56,11 @@ const structure = () => [
   },
   {
     header: 'Name (Einzahl)',
-    field: 'tag'
+    field: 'name'
   },
   {
     header: 'Name (Mehrzahl)',
-    field: 'tagPlural'
+    field: 'namePlural'
   },
   {
     header: 'Farbe',

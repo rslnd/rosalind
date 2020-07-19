@@ -83,6 +83,13 @@ export const insert = ({ Media }) =>
         cycle = null
       }
 
+      // TODO // BUG: photos don't have tags initially, until there is a way
+      // to know when a (batch) scan of documents with tags has finished.
+      // note that photos may be taken while a document is being scanned
+      if (kind === 'photo') {
+        tagIds = []
+      }
+
       const mediaId = Media.insert({
         filename,
         width,

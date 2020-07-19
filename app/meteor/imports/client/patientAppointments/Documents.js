@@ -6,10 +6,10 @@ import map from 'lodash/map'
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import { Icon } from '../components/Icon'
 import { warning, warningBorder } from '../layout/styles'
-import { Media, MediaTags, Tags } from '../../api'
+import { Media, MediaTags, Tags, Clients } from '../../api'
 import { withTracker } from '../components/withTracker'
 import { Popover, setNextMedia } from './Consents'
-import { toNative } from '../../startup/client/native/events'
+import { toNative, getClientKey } from '../../startup/client/native/events'
 import { getClient } from '../../api/clients/methods/getClient'
 import { hasRole } from '../../util/meteor/hasRole'
 
@@ -17,6 +17,7 @@ const Document = ({ children, isCurrent, isMissing, ...props }) =>
   (!isCurrent && isMissing)
   ? null // Hide irrelevant missing docs of past appointments
   : <Button
+    size='small'
     variant={isCurrent ? 'outlined' : null}
     style={isMissing ? buttonMissingStyle : buttonStyle}
     {...props}
@@ -84,8 +85,7 @@ const Consent = ({ appointment, isCurrent, consents, isConsentRequired, handleMe
 
 }
 
-const ScanButton = ({ allowedProfiles }) => {
-  const [hover, setHover] = useState(false)
+const ScanButton = ({ mediaTags, allowedProfiles, patientId, appointmentId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleClick = (e) => {
@@ -96,8 +96,18 @@ const ScanButton = ({ allowedProfiles }) => {
     setAnchorEl(null)
   }
 
-  const scan = (profile) => () => {
+  const scan = ({ mediaTag, profile }) => () => {
     handleClose()
+    console.log('[Documents] Scanning', { mediaTag, profile })
+
+    Clients.actions.setNextMedia.callPromise({
+      clientKey: getClientKey(),
+      patientId,
+      appointmentId,
+      tagIds: [ mediaTag._id ],
+      cycle: null
+    })
+
     Alert.info('Wird gescannt')
     toNative('scanStart', { profile })
   }
@@ -106,8 +116,6 @@ const ScanButton = ({ allowedProfiles }) => {
     <Document
       title='Dokument einscannen'
       isCurrent={true}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
       onClick={handleClick}
       style={scanButtonStyle}
     >
@@ -119,11 +127,13 @@ const ScanButton = ({ allowedProfiles }) => {
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      {allowedProfiles.map(profile =>
+      {mediaTags.map((mediaTag) =>
         <MenuItem
-          key={profile}
-          onClick={scan(profile)}>
-            {profile}
+          key={mediaTag._id}
+          onClick={scan({ mediaTag, profile: allowedProfiles[0] })}>
+            <Icon name='circle' style={{ color: mediaTag.color }} />
+            &emsp;
+            {mediaTag.name}
         </MenuItem>
       )}
     </Menu>
@@ -143,7 +153,7 @@ const scanIconStyle = {
 const composer = props => {
   const { appointment } = props
 
-  const mediaTags = MediaTags.find({}).fetch()
+  const mediaTags = MediaTags.find({ kind: 'document' }, { sort: { order: 1 }}).fetch()
   const consentTags = MediaTags.find({ isConsent: true }).fetch()
   const docs = Media.find({ appointmentId: appointment._id, kind: 'document' }, { sortBy: { createdAt: -1 }}).fetch()
 
@@ -168,10 +178,10 @@ const composer = props => {
   const allowedProfiles = (client && client.settings && client.settings.scan && client.settings.scan.allowedProfiles) || []
   const canScan = (allowedProfiles.length >= 1) && hasRole(Meteor.userId(), ['media', 'media-insert', 'media-insert-documents', 'admin'])
 
-  return { ...props, consents, docsByTag, isConsentRequired, consentTags, canScan, allowedProfiles }
+  return { ...props, consents, docsByTag, isConsentRequired, consentTags, canScan, allowedProfiles, mediaTags }
 }
 
-export const Documents = withTracker(composer)(({ appointment, isCurrent, docsByTag, consents, isConsentRequired, consentTags, handleMediaClick, canScan, allowedProfiles }) =>
+export const Documents = withTracker(composer)(({ appointment, isCurrent, docsByTag, consents, isConsentRequired, consentTags, handleMediaClick, canScan, allowedProfiles, mediaTags }) =>
   <div style={documentsStyle}>
     <Consent
       appointment={appointment}
@@ -188,12 +198,19 @@ export const Documents = withTracker(composer)(({ appointment, isCurrent, docsBy
           isCurrent={isCurrent}
           onClick={() => handleMediaClick(t.docs[0]._id)}
         >
-          {(t.docs.length >= 2) ? (t.tagPlural || 'Neue Dokumente') : (t.tag || 'Neues Dokument')}
+          {(t.docs.length >= 2) ? (t.namePlural || 'Neue Dokumente') : (t.name || 'Neues Dokument')}
           {(t.docs.length >= 2) && <span>&nbsp;({t.docs.length})</span>}
         </Document>
       )
     }
-    {isCurrent && canScan && <ScanButton allowedProfiles={allowedProfiles} />}
+    {isCurrent && canScan &&
+      <ScanButton
+        mediaTags={mediaTags}
+        allowedProfiles={allowedProfiles}
+        patientId={appointment.patientId}
+        appointmentId={appointment._id}
+      />
+    }
   </div>
 )
 

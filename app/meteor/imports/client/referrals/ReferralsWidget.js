@@ -66,7 +66,12 @@ const ReferralButton = ({ referrable, done, canReferImmediate, canReferDelayed }
   const enabled = canRefer && isReferrable
 
   return (
-    <Button onClick={handleClick} disabled={!enabled} style={(done && isReferrable) ? buttonStyleDoneAndReferrable : buttonStyle}>
+    <Button
+      onClick={handleClick}
+      disabled={!enabled}
+      size='small'
+      style={(done && isReferrable) ? buttonStyleDoneAndReferrable : buttonStyle}
+    >
       {buttonIcon && <Icon name={buttonIcon} style={iconStyle} />}
       {isReferrable && count >= 1 && <span className='label label-default' style={countStyle}>{count}</span>}
       {name}

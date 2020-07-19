@@ -48,7 +48,7 @@ export const MediaTags = withTracker(composer)(({ mediaTags, handleToggle, colla
       <span
         key={t._id}
         style={tagStyle(t)}
-        onClick={handleToggle(t)}>{t.tag}</span>
+        onClick={handleToggle(t)}>{t.name}</span>
     )}
 
     {

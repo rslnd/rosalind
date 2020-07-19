@@ -28,7 +28,18 @@ export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKe
         clientKey: Match.Optional(String),
         ...args
       }
-      check(unsafeArgs, argsWithClientKey)
+
+      try {
+        check(unsafeArgs, argsWithClientKey)
+      } catch (e) {
+        e.message = `[action] ${name} validation failed: ${e.message}`
+
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Client submitted (unsafe) args', unsafeArgs)
+        }
+
+        throw new Error(e)
+      }
     },
     run: function (safeArgs) {
       if (!allowAnonymous) {

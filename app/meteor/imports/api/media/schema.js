@@ -132,11 +132,11 @@ export const mediaTags = new SimpleSchema({
     allowedValues: kinds
   },
 
-  tag: {
+  name: {
     type: String
   },
 
-  tagPlural: {
+  namePlural: {
     type: String
   },
 
