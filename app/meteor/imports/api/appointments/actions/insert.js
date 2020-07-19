@@ -32,7 +32,7 @@ export const insert = ({ Appointments }) => {
 
       const { note, ...restFields } = appointment
 
-      if (note && (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung' || hasRole(this.userId, ['appointments-note']))) {
+      if (note && (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung')) {
         restFields.note = note
       }
 
@@ -40,7 +40,7 @@ export const insert = ({ Appointments }) => {
         if (err) {
           console.error('[Appointments] Appointment insert failed with error', err)
         } else {
-          if (note && !hasRole(this.userId, ['appointments-note'])) {
+          if (note) {
             Comments.actions.post.callPromise({ docId: appointmentId, body: note })
           }
           Events.post('appointments/insert', { appointmentId })
