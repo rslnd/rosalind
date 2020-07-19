@@ -6,7 +6,7 @@ export const Checkbox = ({ value, onChange, label, input }) =>
   <div>
     <FormControlLabel
       control={
-        <Checkbox
+        <MuiCheckbox
           checked={(value || (input && input.value)) ? true : false}
           onChange={(onChange || (input && input.onChange))}
         />
