@@ -18,7 +18,7 @@ const Document = ({ children, isCurrent, isMissing, color, ...props }) =>
   ? null // Hide irrelevant missing docs of past appointments
   : <Button
     size='small'
-    variant={isCurrent ? 'outlined' : null}
+    variant='outlined'
     style={isMissing ? buttonMissingStyle : buttonStyle}
     {...props}
   >
@@ -87,14 +87,17 @@ const Consent = ({ appointment, isCurrent, consents, isConsentRequired, handleMe
           appointmentId={appointment._id}
           patientId={appointment.patientId}
           scan={scan}
+          handleMediaClick={handleMediaClick}
           onClose={handleSelectConsentClose} />
       </>
       : <Document isCurrent={isCurrent}>ohne Revers</Document>)
-  : (isCurrent
+  : (((appointment.consentMediaIds
+      && appointment.consentMediaIds.length >= 1) ||
+     (consents && consents.length >= 1))
     ? <Document
-      isCurrent
+      isCurrent={isCurrent}
       color={color}
-      onClick={() => handleMediaClick(consents[0]._id)}>
+      onClick={() => consents[0] && handleMediaClick(consents[0]._id)}>
         Revers
       </Document>
     : null) // Hide irrelevant missing past consents
@@ -208,7 +211,15 @@ const composer = props => {
 
   const mediaTags = MediaTags.find({ kind: 'document' }, { sort: { order: 1 }}).fetch()
   const consentTags = MediaTags.find({ isConsent: true }).fetch()
-  const docs = Media.find({ appointmentId: appointment._id, kind: 'document' }, { sortBy: { createdAt: -1 }}).fetch()
+  const docs = Media.find({
+    $or: [
+      { appointmentId: appointment._id },
+      { _id: { $in: (appointment.consentMediaIds || []) } }
+    ],
+    kind: 'document'
+  }, {
+    sortBy: { createdAt: -1 }
+  }).fetch()
 
   const consents = docs.filter(m =>
     consentTags.length >= 0

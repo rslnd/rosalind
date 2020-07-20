@@ -1,18 +1,26 @@
+import Alert from 'react-s-alert'
+import uniq from 'lodash/uniq'
+import moment from 'moment-timezone'
 import React, { useState } from 'react'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
-import { Button } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
 import { DocumentPicker } from '../components/DocumentPicker'
 import { Icon } from '../components/Icon'
 import { TagsList } from '../tags/TagsList'
 import { getClientKey } from '../../startup/client/native/events'
-import { Clients, MediaTags } from '../../api'
+import { Clients, MediaTags, Media, Appointments } from '../../api'
 import { Close } from './Close'
+import { withTracker } from '../components/withTracker'
+import { __ } from '../../i18n'
+import { Preview } from '../media/Drawer'
 
 export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) => {
   const clientKey = getClientKey()
@@ -56,7 +64,54 @@ const reverse = [
   'TCE'
 ]
 
-export const Popover = ({ open, onClose, appointmentId, patientId, scan }) => {
+const composer = props => {
+  const { appointmentId, patientId } = props
+
+  const appointment = Appointments.findOne({ _id: appointmentId })
+  const appointmentsWithSameTags = Appointments.find({
+    patientId,
+    tags: { $in: appointment.tags },
+    $or: [
+      { assigneeId: appointment.assigneeId },
+      { waitlistAssigneeId: appointment.assigneeId }
+    ]
+  }, {
+    sort: { start: -1 },
+    limit: 10
+  }).fetch()
+
+  const consentTags = MediaTags.find({ isConsent: true }).fetch()
+  const pastConsentMedias = Media.find({
+    tagIds: { $in: consentTags.map(t => t._id) },
+    appointmentId: { $in: appointmentsWithSameTags.map(a => a._id) }
+  }).fetch()
+
+  const pastAppointmentsWithConsents = appointmentsWithSameTags
+    .filter(pa =>
+      pastConsentMedias.map(m => m.appointmentId)
+      .indexOf(pa._id) !== -1)
+    .map(pa => ({
+      ...pa,
+      consentMedias: pastConsentMedias.filter(m => m.appointmentId === pa._id)
+    }))
+
+  return {
+    ...props,
+    appointment,
+    pastAppointmentsWithConsents
+  }
+}
+
+export const Popover = withTracker(composer)(({
+  open,
+  onClose,
+  appointmentId,
+  patientId,
+  scan,
+  handleMediaClick,
+  appointment,
+  pastAppointmentsWithConsents,
+}) => {
   const [template, setTemplate] = useState(null)
 
   const handlePrint = () => {
@@ -66,6 +121,29 @@ export const Popover = ({ open, onClose, appointmentId, patientId, scan }) => {
   const handleScan = () => {
     const mediaTag = MediaTags.findOne({ isConsent: true })
     scan({ mediaTag, patientId, appointmentId })
+  }
+
+  const handleSelectPastAppointmentConsent = appointmentId => {
+    const pastAppointment = Appointments.findOne({ _id:
+      appointmentId })
+
+    if (!pastAppointment) {
+      throw new Error(`handleSelectPastAppointmentConsent: Cannot find past appointment with id ${appointmentId}`)
+    }
+
+    const consentMediaIds = uniq([
+      ...(appointment.consentMediaIds || []),
+      ...(pastAppointment.consentMediaIds || [])
+    ])
+
+    Appointments.actions.update.callPromise({
+      appointmentId,
+      update: {
+        consentMediaIds
+      }
+    })
+
+    Alert.success('Revers weiter gültig')
   }
 
   return <Dialog transitionDuration={0} onClose={onClose} open={open} PaperProps={paperProps}>
@@ -96,13 +174,39 @@ export const Popover = ({ open, onClose, appointmentId, patientId, scan }) => {
     <small style={separatorStyle}><span style={separatorInnerStyle}>oder bestehenden Revers wählen</span></small>
 
     <List>
-      <ListItem button style={previousConsentStyle}>
-        <span>Do., 26. September 2019</span>
-        <TagsList tiny tags={['HKtpQEatMSWzDryDp']} />
-        <div>Doc</div>
-      </ListItem>
+      {pastAppointmentsWithConsents.map(a =>
+        <ListItem
+          key={a._id}
+          button
+          onClick={() => handleSelectPastAppointmentConsent(a._id)}
+          style={pastConsentStyle}>
+          <ListItemIcon>
+            <Checkbox
+              checked={!!a.consentMediaIds.some(mid => appointment.consentMediaIds.indexOf(mid) !== -1)}
+              disableRipple
+              edge='start' />
+          </ListItemIcon>
+
+          <span>{moment(a.start).format(__('time.dateFormat'))}</span>
+          <TagsList tiny tags={a.tags} />
+          <div style={drawerStyle}>
+            {a.consentMedias.map(m =>
+              <Preview
+                key={m._id}
+                media={m}
+                handleMediaClick={() => handleMediaClick(m._id)}
+              />
+            )}
+          </div>
+        </ListItem>
+      )}
     </List>
   </Dialog>
+})
+
+const drawerStyle = {
+  display: 'flex',
+  alignItems: 'flex-end'
 }
 
 const paperProps = {
@@ -149,7 +253,7 @@ const separatorInnerStyle = {
   position: 'relative'
 }
 
-const previousConsentStyle = {
+const pastConsentStyle = {
   display: 'flex',
   justifyContent: 'space-between'
 }

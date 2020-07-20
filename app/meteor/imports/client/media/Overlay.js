@@ -105,7 +105,7 @@ const stopPropagation = e => e.stopPropagation()
 
 const overlayStyle = {
   position: 'fixed',
-  zIndex: 1080,
+  zIndex: 1370,
   top: 0,
   left: 0,
   bottom: 0,

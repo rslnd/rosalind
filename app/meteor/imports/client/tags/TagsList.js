@@ -112,8 +112,8 @@ export const TagsList = ({
       tags: expandedTags
     }]
 
-  const tinyStyle = tiny ? { zoom: 1 } : {}
-  const tinyTagGroupTitleStyle = tiny ? { zoom: 1 } : {}
+  const tinyStyle = tiny ? { zoom: 0.8 } : {}
+  const tinyTagGroupTitleStyle = tiny ? { zoom: 1 / 0.8 } : {}
 
   return <span style={tinyStyle}>
     {orderedTagGroups.map((tagGroup, i) =>
