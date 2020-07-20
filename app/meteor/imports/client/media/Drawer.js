@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { withTracker } from '../components/withTracker'
-import { Media as MediaAPI } from '../../api/media'
+import { Media as MediaAPI, MediaTags } from '../../api/media'
 import { Icon } from '../components/Icon'
 import { withHandlers } from 'recompose'
 import { NewCycle, splitCycles, Cycle } from './Cycles'
@@ -46,19 +46,37 @@ export const Preview = ({ media, handleMediaClick, borderStyle, style }) => {
   const baseStyle = hover ? imageBorderHoverStyle : imageBorderStyle
   const outerStyle = borderStyle ? ({ ...baseStyle, ...borderStyle }) : baseStyle
 
+  const tag = (media.tagIds && media.tagIds.length >= 1) && MediaTags.findOne({ _id: media.tagIds[0] })
+
   return <div
+    title={tag ? tag.name : null}
     style={outerStyle}
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
     onClick={() => handleMediaClick(media._id)}
   >
     {!media.uploadCompletedAt && <Icon style={uploadingIconStyle} name='clock-o' />}
+    {tag && <Tag {...tag} />}
     <img
       src={media.preview}
       style={style}
     />
   </div>
 }
+
+const Tag = ({ color }) =>
+  <div style={tagStyle(color)}></div>
+
+const tagStyle = color => ({
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  width: 15,
+  height: 15,
+  opacity: 0.8,
+  backgroundColor: color,
+  clipPath: 'polygon(0 0, 0% 100%, 100% 100%)'
+})
 
 const imageBorderStyle = {
   position: 'relative',
