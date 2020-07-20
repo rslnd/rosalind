@@ -188,7 +188,7 @@ export const Popover = withTracker(composer)(({
           </ListItemIcon>
 
           <span>{moment(a.start).format(__('time.dateFormat'))}</span>
-          <TagsList tiny tags={a.tags} />
+          <TagsList tiny showDuration={false} tags={a.tags} />
           <div style={drawerStyle}>
             {a.consentMedias.map(m =>
               <Preview

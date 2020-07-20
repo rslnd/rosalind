@@ -3,11 +3,15 @@ import { compose, withState, withHandlers } from 'recompose'
 import { __ } from '../../i18n'
 import moment from 'moment-timezone'
 import { PatientName } from '../patients/PatientName'
-import { Media, Appointments, Patients } from '../../api'
+import { Media, Appointments, Patients, MediaTags } from '../../api'
 import { withTracker } from '../components/withTracker'
 import { Icon } from '../components/Icon'
-import { MediaTags } from './MediaTags'
 import { Explorer } from './Explorer'
+import { getStyleNonce } from '../layout/styles'
+import Select from 'react-select'
+import identity from 'lodash/identity'
+import range from 'lodash/range'
+import uniq from 'lodash/uniq'
 
 const composer = (props) => {
   const { patientId, media, selector, setSelector } = props
@@ -17,13 +21,15 @@ const composer = (props) => {
   let prevMediaId = null
   let nextMediaId = null
 
-  const cycle = media.cycle
-
   const baseSelector =  { patientId: patient._id }
-  const { appointmentSelector, ...mediaSelector } = selector // Separate selectors: appointments and media
-  const combinedMediaSelector = selector && ({...selector, ...baseSelector }) || (cycle
-    ? { ...baseSelector, kind: media.kind, cycle }
-    : { ...baseSelector, kind: media.kind })
+  const { appointmentSelector, label, ...mediaSelector } = selector // Separate selectors: appointments and media
+  const combinedMediaSelector = selector
+    ? ({...mediaSelector, ...baseSelector })
+    : (cycle
+      ? { ...baseSelector, kind: media.kind, cycle }
+      : { ...baseSelector, kind: media.kind })
+
+  console.log('[Sidebar] combined media selector', combinedMediaSelector)
 
   const allMedia = Media.find(combinedMediaSelector, { sort: { createdAt: 1 } }).fetch()
 
@@ -57,7 +63,7 @@ const composer = (props) => {
       if (appointment) {
         sectionsToAdd.push({
           appointment,
-          key: appointment._id + m._id
+          key: appointment._id + media._id
         })
       } else {
         // Skip media if appointment selector does not match
@@ -82,7 +88,7 @@ const composer = (props) => {
 
   return {
     ...props,
-    cycle,
+    cycle: selector.cycle || media.cycle,
     patient,
     sections,
     prevMediaId,
@@ -92,16 +98,66 @@ const composer = (props) => {
   }
 }
 
-const Selector = ({selector, setSelector}) => {
-  return <div>
-    <div onClick={() => setSelector({ appointmentSelector: { tags: 'HKtpQEatMSWzDryDp' } })}>Botox/Hyaluronsäure</div>
-    <div onClick={() => setSelector({ tagIds: 'PAygq5yeQRfD8iFpm' })}>Reverse</div>
-    <div onClick={() => setSelector({ kind: 'document'})}>Dokumente</div>
-    <div onClick={() => setSelector({ kind: 'photo'})}>Fotos</div>
-    <div onClick={() => setSelector({})}>Alles anzeigen</div>
+const Selector = ({ selector, setSelector, patientId, appointmentId }) => {
 
-    Selector: {JSON.stringify(selector)}
+  const allMedia = Media.find({ patientId }).fetch()
+  const maxCycle = Math.max(...allMedia.map(m => m.cycle).filter(identity))
+  const cycles = (maxCycle >= 1)
+    ? range(1, maxCycle + 1).map(cycle => ({
+      label: `Zyklus ${cycle}`,
+      value: { cycle: String(cycle) }
+    }))
+    : []
+
+  const mediaTagIds = uniq(allMedia
+    .map(m => m.tagIds && m.tagIds[0])
+    .filter(identity))
+  const usedMediaTags = mediaTagIds
+    .map(_id => MediaTags.findOne({ _id }))
+    .map(mt => ({
+      label: mt.namePlural,
+      value: { tagIds: mt._id }
+    }))
+
+  const options = [
+    { label: 'Alle Fotos', value: { kind: 'photo'} },
+    { label: 'Alle Dokumente', value: { kind: 'document'} },
+    { label: 'Dieser Termin', value: { appointmentId } },
+
+    ...usedMediaTags,
+    ...cycles
+  ]
+
+  const handleChange = ({ value }) => {
+    // const appointmentSelector = {}
+    console.log('[Sidebar] setting selector', value)
+    setSelector(value)
+  }
+
+  return <div style={selectStyle}>
+    <Select
+      value={selector.label}
+      options={options}
+      onChange={handleChange}
+      ignoreCase
+      nonce={getStyleNonce()}
+      styles={{ menuPortal: base => ({
+        ...base,
+        filter: selectStyle.filter,
+        zIndex: 3000
+      })}}
+      menuPortalTarget={document.body}
+      placeholder='Filter...'
+    />
+
+    {/* <div onClick={() => setSelector({ appointmentSelector: { tags: 'HKtpQEatMSWzDryDp' } })}>Botox/Hyaluronsäure</div> */}
   </div>
+}
+
+const selectStyle = {
+  filter: 'invert(0.8) grayscale(1)',
+  padding: 5,
+  color: '#000'
 }
 
 export const Sidebar = compose(
@@ -109,6 +165,7 @@ export const Sidebar = compose(
   withTracker(composer)
 )(({
   patient,
+  appointmentId,
   sections,
   media,
   prevMediaId,
@@ -124,14 +181,12 @@ export const Sidebar = compose(
       style={patientNameStyle}
     />
 
-    {/* <Selector selector={selector} setSelector={setSelector} /> */}
-
-    {
-      cycle &&
-        <div style={cycleStyle}>
-          Sitzung {cycle}
-        </div>
-    }
+    <Selector
+      patientId={patient._id}
+      appointmentId={appointmentId}
+      selector={selector}
+      setSelector={setSelector}
+    />
 
     <Explorer
       sections={sections}
@@ -139,7 +194,7 @@ export const Sidebar = compose(
       setCurrentMediaId={setCurrentMediaId}
       currentMediaId={media._id}
     />
-    <MediaTags media={media} />
+    {/* <MediaTags media={media} /> */}
     <Edit media={media} />
     <Navigation
       setCurrentMediaId={setCurrentMediaId}
@@ -216,7 +271,7 @@ const Navigation = ({ setCurrentMediaId, prevMediaId, nextMediaId }) =>
 
 const navigationStyle = {
   display: 'flex',
-  height: 90
+  height: 70
 }
 
 const Button = withState('hover', 'setHover')(({

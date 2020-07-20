@@ -31,7 +31,7 @@ const Appointment = ({ appointment: { start, tags } }) =>
       {moment(start).format(__('time.dateFormatWeekdayShortNoYear'))}
     </div>
     <div>
-      <TagsList tags={tags} tiny />
+      <TagsList tags={tags} tiny showDuration={false} />
     </div>
   </div>
 

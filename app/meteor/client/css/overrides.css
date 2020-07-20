@@ -231,7 +231,7 @@ h6,
 }
 
 .Select-menu-outer {
-  z-index: 30;
+  z-index: 3000 !important;
 }
 
 .row.no-pad {
