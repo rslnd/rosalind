@@ -16,6 +16,7 @@ import { FutureRecord } from '../records/FutureRecord'
 import { PairingButton } from '../clients/PairingButton'
 import { Pinned } from '../media/Pinned'
 import { hasRole } from '../../util/meteor/hasRole'
+import { ScanButton } from './Documents'
 
 const action = promise =>
   promise.then(() => {
@@ -55,6 +56,11 @@ export const Patient = ({ patient, calendar, currentAppointment, handleMediaClic
         <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
         <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
         <PairingButton />
+        <ScanButton
+          isCurrent
+          pinned
+          patientId={patient._id}
+        >Dokument scannen</ScanButton>
       </div>
     </div>
     <Pinned

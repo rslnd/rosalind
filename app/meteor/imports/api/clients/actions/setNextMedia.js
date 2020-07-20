@@ -8,11 +8,12 @@ export const setNextMedia = ({ Clients }) =>
     roles: ['admin', 'patients', 'appointments-*', 'media'],
     args: {
       clientKey: String,
-      patientId: Match.OneOf(null, String),
-      appointmentId: Match.OneOf(null, String),
-      cycle: Match.OneOf(null, String),
-      tagIds: Match.OneOf(null, [String])
+      patientId: Match.Maybe(Match.OneOf(undefined, null, String)),
+      appointmentId: Match.Maybe(Match.OneOf(undefined, null, String)),
+      cycle: Match.Maybe(Match.OneOf(undefined, null, String)),
+      tagIds: Match.Maybe(Match.OneOf(undefined, null, [String]))
     },
+    requireClientKey: true,
     fn ({ clientKey, patientId, appointmentId, cycle, tagIds }) {
       const nextMedia = {
         patientId,

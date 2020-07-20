@@ -39,8 +39,8 @@ const composer = props => {
 
 const defaultMediaTag = () => ({
   kind: 'document',
-  tag: 'Revers',
-  tagPlural: 'Reverse',
+  name: 'Revers',
+  namePlural: 'Reverse',
   color: '#ccc'
 })
 

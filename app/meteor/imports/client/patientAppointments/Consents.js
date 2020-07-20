@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -11,7 +11,7 @@ import { DocumentPicker } from '../components/DocumentPicker'
 import { Icon } from '../components/Icon'
 import { TagsList } from '../tags/TagsList'
 import { getClientKey } from '../../startup/client/native/events'
-import { Clients } from '../../api'
+import { Clients, MediaTags } from '../../api'
 import { Close } from './Close'
 
 export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) => {
@@ -56,22 +56,41 @@ const reverse = [
   'TCE'
 ]
 
-export const Popover = ({ open, onClose }) =>
-  <Dialog transitionDuration={0} onClose={onClose} open={open} PaperProps={paperProps}>
+export const Popover = ({ open, onClose, appointmentId, patientId, scan }) => {
+  const [template, setTemplate] = useState(null)
+
+  const handlePrint = () => {
+    // TODO
+  }
+
+  const handleScan = () => {
+    const mediaTag = MediaTags.findOne({ isConsent: true })
+    scan({ mediaTag, patientId, appointmentId })
+  }
+
+  return <Dialog transitionDuration={0} onClose={onClose} open={open} PaperProps={paperProps}>
     <Close onClick={onClose} />
     <p style={headingStyle}>Revers</p>
     <div style={newConsentStyle}>
       <div style={pickerStyle}>
         <DocumentPicker
-          onChange={() => {}}
-          // value={}
+          onChange={setTemplate}
+          value={template}
           toLabel={a => a}
           toDocument={a => a}
           toKey={a => a}
           options={() => reverse} />
       </div>
-      <Button style={printButtonStyle} variant='outlined' color='primary'>Drucken</Button>
-      <Button style={printButtonStyle} variant='outlined' color='primary'>Scannen</Button>
+      <Button
+        onClick={handlePrint}
+        style={printButtonStyle}
+        variant='outlined'
+        color='primary'>Drucken</Button>
+      <Button
+        onClick={handleScan}
+        style={printButtonStyle}
+        variant='outlined'
+        color='primary'>Scannen</Button>
     </div>
 
     <small style={separatorStyle}><span style={separatorInnerStyle}>oder bestehenden Revers wählen</span></small>
@@ -84,6 +103,7 @@ export const Popover = ({ open, onClose }) =>
       </ListItem>
     </List>
   </Dialog>
+}
 
 const paperProps = {
   style: {
