@@ -5,7 +5,7 @@ import sortBy from 'lodash/fp/sortBy'
 import map from 'lodash/map'
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import { Icon } from '../components/Icon'
-import { warning, warningBorder } from '../layout/styles'
+import { warning, warningBorder, darkGray, gray } from '../layout/styles'
 import { Media, MediaTags, Tags, Clients } from '../../api'
 import { withTracker } from '../components/withTracker'
 import { Popover, setNextMedia } from './Consents'
@@ -13,7 +13,7 @@ import { toNative, getClientKey } from '../../startup/client/native/events'
 import { getClient } from '../../api/clients/methods/getClient'
 import { hasRole } from '../../util/meteor/hasRole'
 
-const Document = ({ children, isCurrent, isMissing, ...props }) =>
+const Document = ({ children, isCurrent, isMissing, color, ...props }) =>
   (!isCurrent && isMissing)
   ? null // Hide irrelevant missing docs of past appointments
   : <Button
@@ -23,19 +23,25 @@ const Document = ({ children, isCurrent, isMissing, ...props }) =>
     {...props}
   >
     {isMissing
-      ? <span><Icon name='exclamation-triangle' /> &nbsp;{children}</span>
-      : children}
+      ? <span>
+        <Icon name='exclamation-triangle' />&emsp;{children}
+      </span>
+      : <span>
+        { color && <span>
+          <Icon name='circle' style={{color}} />&emsp;</span>}
+        {children}
+      </span>}
   </Button>
 
 const buttonStyle = {
   // zoom: 0.7,
   margin: 4,
-  opacity: 0.6
+  color: darkGray,
+  borderColor: gray
 }
 
 const buttonMissingStyle = {
   ...buttonStyle,
-  opacity: 0.9,
   color: 'white',
   borderColor: warningBorder,
   backgroundColor: warning
@@ -43,6 +49,8 @@ const buttonMissingStyle = {
 
 const Consent = ({ appointment, isCurrent, consents, isConsentRequired, handleMediaClick, consentTags }) => {
   const [open, setOpen] = useState(false)
+
+  const color = consentTags[0].color // TODO make explicit
 
   const handleSelectConsentOpen = () => {
     setOpen(true)
@@ -83,7 +91,12 @@ const Consent = ({ appointment, isCurrent, consents, isConsentRequired, handleMe
       </>
       : <Document isCurrent={isCurrent}>ohne Revers</Document>)
   : (isCurrent
-    ? <Document isCurrent onClick={() => handleMediaClick(consents[0]._id)}>Revers</Document>
+    ? <Document
+      isCurrent
+      color={color}
+      onClick={() => handleMediaClick(consents[0]._id)}>
+        Revers
+      </Document>
     : null) // Hide irrelevant missing past consents
 
 }
@@ -156,7 +169,7 @@ export const ScanButton = withTracker(scanButtonComposer)(({ mediaTags, profile,
       style={children ? {} : scanButtonStyle}
     >
       <Icon name='plus' style={scanIconStyle} />
-      {children && <>&emsp;{children}</>}
+      {children && <span>&emsp;{children}</span>}
     </Document>
     <Menu
       anchorEl={anchorEl}
@@ -186,7 +199,7 @@ const scanButtonStyle = {
 }
 
 const scanIconStyle = {
-  opacity: 0.8
+  opacity: 0.9
 }
 
 
@@ -231,6 +244,7 @@ export const Documents = withTracker(composer)(({ appointment, isCurrent, docsBy
       docsByTag.map((t, i) =>
         <Document
           key={t._id || i}
+          color={t.color}
           isCurrent={isCurrent}
           onClick={() => handleMediaClick(t.docs[0]._id)}
         >

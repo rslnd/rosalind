@@ -43,6 +43,7 @@ const composer = (props) => {
     if (currentMonth !== acc.currentMonth) {
       sectionsToAdd.push({
         monthSeparator: currentMonth,
+        key: currentMonth,
         m
       })
     }
@@ -54,7 +55,10 @@ const composer = (props) => {
       const appointment = Appointments.findOne(selector)
 
       if (appointment) {
-        sectionsToAdd.push({ appointment })
+        sectionsToAdd.push({
+          appointment,
+          key: appointment._id + m._id
+        })
       } else {
         // Skip media if appointment selector does not match
         return acc

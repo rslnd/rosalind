@@ -8,10 +8,10 @@ export const Explorer = ({ style, sections, setCurrentMediaId, currentMediaId })
   <div style={style ? { ...explorerStyle, ...style } : explorerStyle}>
     {
       sections.map(s =>
-        (s.monthSeparator && <MonthSeparator key={s.monthSeparator} {...s} />) ||
-        (s.appointment && <Appointment key={s.appointment._id} appointment={s.appointment} />) ||
+        (s.monthSeparator && <MonthSeparator key={s.key} {...s} />) ||
+        (s.appointment && <Appointment key={s.key} appointment={s.appointment} />) ||
         (s.media && <Media
-          key={s.media.url}
+          key={s.media._id}
           media={s.media}
           handleMediaClick={setCurrentMediaId}
           isCurrent={s.media._id === currentMediaId}

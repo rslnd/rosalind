@@ -3,6 +3,6 @@ import { publication } from './publication'
 import { Media, MediaTags } from '../../'
 
 export default () => {
-  actions({ Media })
+  actions({ Media, MediaTags })
   publication({ Media, MediaTags })
 }

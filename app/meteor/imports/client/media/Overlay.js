@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { compose, withState } from 'recompose'
-import { Icon } from '../components/Icon'
 import { Media } from '../../api'
 import { Sidebar } from './Sidebar'
 import { withTracker } from '../components/withTracker'
@@ -65,7 +64,7 @@ export const MediaOverlay = compose(
         >
           {
             !zoomed && <div style={closeStyle} onClick={handleClose}>
-              <Icon name='times' />
+              ×
             </div>
           }
 
@@ -131,7 +130,9 @@ const closeStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  cursor: 'pointer'
+  cursor: 'pointer',
+  color: 'white',
+  fontSize: '22px'
 }
 
 const fitToScreen = {

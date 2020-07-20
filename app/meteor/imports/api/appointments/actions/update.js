@@ -15,7 +15,8 @@ export const update = ({ Appointments }) => {
         type: new SimpleSchema({
           revenue: { type: Number, decimal: true, optional: true },
           tags: { type: [SimpleSchema.RegEx.Id], optional: true },
-          note: { type: String, optional: true }
+          note: { type: String, optional: true },
+          consentMediaIds: { type: [SimpleSchema.RegEx.Id], optional: true }
         })
       }
     }).validator(),

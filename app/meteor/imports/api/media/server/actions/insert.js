@@ -7,9 +7,9 @@ import identity from 'lodash/identity'
 import { mediaTypes, kinds } from '../../schema'
 import { getCredentials, createPresignedRequest } from '../s3'
 import { hasRole } from '../../../../util/meteor/hasRole'
+import { Appointments } from '../../../appointments'
 
-
-export const insert = ({ Media }) =>
+export const insert = ({ Media, MediaTags }) =>
   action({
     name: 'media/insert',
     allowAnonymous: true,
@@ -22,9 +22,9 @@ export const insert = ({ Media }) =>
       mediaType: Match.OneOf(...mediaTypes),
       consumerId: Match.Maybe(String),
       patientId: String,
-      appointmentId: Match.OneOf(null, String),
-      cycle: Match.OneOf(null, String),
-      tagIds: Match.OneOf(null, [String], []),
+      appointmentId: Match.Maybe(Match.OneOf(undefined, null, String)),
+      cycle: Match.Maybe(Match.OneOf(undefined, null, String)),
+      tagIds: Match.Maybe(Match.OneOf(undefined, null, [String], [])),
       clientKey: Match.Optional(String),
       preview: Match.Optional(String)
     },
@@ -120,6 +120,20 @@ export const insert = ({ Media }) =>
       })
 
       console.log(signed)
+
+      // If this media is a consent document, create a reference to this media in the corresponding appointment's consentMediaIds field
+      const consentTag = MediaTags.findOne({ isConsent: true })
+      if (appointmentId &&
+        kind === 'document' &&
+        consentTag &&
+        tagIds.indexOf(consentTag._id) !== -1
+      ) {
+        Appointments.update({ _id: appointmentId }, {
+          $addToSet: {
+            consentMediaIds: mediaId
+          }
+        })
+      }
 
       return {
         ...signed,

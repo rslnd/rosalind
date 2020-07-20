@@ -66,6 +66,12 @@ export default new SimpleSchema({
     optional: true
   },
 
+  consentMediaIds: {
+    type: [SimpleSchema.RegEx.Id],
+    optional: true,
+    index: 1
+  },
+
   queuedAt: {
     type: Date,
     optional: true,
