@@ -8,8 +8,8 @@ import { Meteor } from 'meteor/meteor'
 export default () => {
   Accounts.config({
     forbidClientAccountCreation: true,
-    loginExpirationInDays: (5 * 365),
-    bcryptRounds: 15
+    loginExpirationInDays: 1,
+    bcryptRounds: 20
   })
 
   Accounts.registerLoginHandler('clientKey passwordless', (loginRequest) => {
