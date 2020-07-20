@@ -10,7 +10,7 @@ body {
 }
 
 .zoom-1 {
-  /* zoom: 0.9999; */
+  /* zoom: calc(1 / 1.221); */
 }
 
 .zoom-2 {
