@@ -111,10 +111,9 @@ const scanButtonComposer = (props) => {
 
   if (!canScan) { return null }
 
-  const selector = { kind: 'document' }
-
-  if (props.pinned) {
-    selector.pinned = true
+  const selector = {
+    kind: 'document',
+    pinned: !!props.pinned
   }
 
   const mediaTags = MediaTags.find(selector, { sort: { order: 1 }}).fetch()
