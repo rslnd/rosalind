@@ -104,7 +104,7 @@ const Selector = ({ selector, setSelector, patientId, appointmentId }) => {
   const maxCycle = Math.max(...allMedia.map(m => m.cycle).filter(identity))
   const cycles = (maxCycle >= 1)
     ? range(1, maxCycle + 1).map(cycle => ({
-      label: `Zyklus ${cycle}`,
+      label: `Sitzung ${cycle}`,
       value: { cycle: String(cycle) }
     }))
     : []
@@ -113,7 +113,11 @@ const Selector = ({ selector, setSelector, patientId, appointmentId }) => {
     .map(m => m.tagIds && m.tagIds[0])
     .filter(identity))
   const usedMediaTags = mediaTagIds
-    .map(_id => MediaTags.findOne({ _id }))
+    .map(_id => MediaTags.findOne({
+      _id,
+      isHiddenInFilter: { $ne: true }
+    }))
+    .filter(identity)
     .map(mt => ({
       label: mt.namePlural,
       value: { tagIds: mt._id }

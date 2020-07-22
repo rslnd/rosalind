@@ -160,6 +160,11 @@ export const mediaTags = new SimpleSchema({
     optional: true
   },
 
+  isHiddenInFilter: {
+    type: Boolean,
+    optional: true
+  },
+
   removed: {
     type: Boolean,
     optional: true,

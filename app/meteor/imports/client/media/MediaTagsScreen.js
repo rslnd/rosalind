@@ -78,6 +78,11 @@ const structure = () => [
     type: Boolean
   },
   {
+    header: 'Versteckt',
+    field: 'isHiddenInFilter',
+    type: Boolean
+  },
+  {
     header: 'ID',
     render: t => <pre>{t._id}</pre>
   }
