@@ -42,5 +42,4 @@ simonsimcity:job-collection
 
 # Monitoring
 flowkey:raven
-montiapm:agent
 underscore
