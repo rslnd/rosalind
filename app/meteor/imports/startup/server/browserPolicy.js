@@ -52,7 +52,6 @@ const getHelmetConfig = () => {
           'wss://api.smooch.io',
           'https://api.smooch.io',
           'https://sentry.io/',
-          'https://engine.montiapm.com'
         ],
         defaultSrc: [
           none
