@@ -56,6 +56,7 @@ const logger = {
 
 // IMPORTANT: Keep in sync with preload.js
 const isUrlValid = urlString => {
+  return true
   if (DEBUG) { return true }
 
   try {
