@@ -40,7 +40,8 @@ const drawerStyle = {
   paddingTop: 15,
   paddingLeft: 15,
   paddingRight: 15,
-  paddingBottom: 0
+  paddingBottom: 0,
+  cursor: 'pointer'
 }
 
 const closeTriggerStyle = {
@@ -67,7 +68,7 @@ const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) => {
   return <div className='hide-print'>
     <div
       style={triggerContainerStyle}
-      onMouseEnter={handleOpen}
+      onClick={handleOpen}
     >
       <Paper
         elevation={3}

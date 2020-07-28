@@ -14,12 +14,12 @@ export const applyDefaultSchedule = ({ Schedules }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       calendarId: { type: SimpleSchema.RegEx.Id },
-      assigneeId: { type: SimpleSchema.RegEx.Id, optional: true },
+      assigneeIds: { type: [SimpleSchema.RegEx.Id], optional: true },
       from: { type: Date },
       to: { type: Date }
     }).validator(),
 
-    run ({ calendarId, assigneeId, from, to }) {
+    run ({ calendarId, assigneeIds, from, to }) {
       if ((this.connection && !this.userId) ||
         !hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
@@ -58,15 +58,15 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         }
       }
 
-      if (assigneeId) {
-        oldOverridesSelector.userId = assigneeId
+      if (assigneeIds) {
+        oldOverridesSelector.userId = { $in: assigneeIds }
       }
 
       const countRemovedOverrides = Schedules.remove(oldOverridesSelector)
       console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedOverrides, 'override schedules')
 
       // Remove all day schedules in selected period
-      if (assigneeId) {
+      if (assigneeIds) {
         console.log('[Schedules] applyDefaultSchedule: Warning: Skipping removing day schedules')
       } else {
         const countRemovedDays = Schedules.remove({
@@ -88,8 +88,8 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       // NB: Applying schedules for a single assignee only has an effect if the
       // same assignee is already present in the day schedule
       const ids = overrideSchedules.filter(s =>
-        assigneeId
-          ? s.type === 'override' && s.userId === assigneeId
+        assigneeIds
+          ? (s.type === 'override' && assigneeIds.indexOf(s.userId) !== -1)
           : true
       ).map(s => {
         const id = Schedules.insert(s)
@@ -102,6 +102,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         calendarId,
         from,
         to,
+        assigneeIds,
         userId: this.userId
       })
 

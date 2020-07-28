@@ -255,10 +255,13 @@ class SchedulesDefaultScreenComponent extends React.Component {
             </Table>
           </Box>
 
-          <ApplyDefaultSchedule
-            assignees={this.assignees()}
-            calendarId={calendar._id}
-          />
+          {
+            this.assignees().length >= 1 &&
+              <ApplyDefaultSchedule
+                assignees={this.assignees()}
+                calendarId={calendar._id}
+              />
+          }
         </div>
       </div>
     )

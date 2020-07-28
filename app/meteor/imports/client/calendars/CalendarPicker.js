@@ -6,7 +6,11 @@ import { Icon } from '../components/Icon'
 
 export const CalendarPicker = withProps({
   toDocument: _id => Calendars.findOne({ _id }),
-  toLabel: calendar => <span><Icon name={calendar.icon} /> {calendar.name}</span>,
+  toLabel: calendar => calendar.name,
+  render: calendar => <span>
+    <Icon name={calendar.icon} />&emsp;
+    {calendar.name}
+  </span>,
   options: () => {
     return Calendars.find({}, {
       sort: { order: 1 }

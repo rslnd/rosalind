@@ -4,8 +4,17 @@ import Select from 'react-select'
 import { __ } from '../../i18n'
 import { getStyleNonce } from '../layout/styles'
 
+const filterOption = (candidate, input) => {
+  if (input) {
+    return candidate.label.toLowerCase().indexOf(input.toLowerCase()) !== -1
+  }
+
+  return true
+}
+
 const toOption = props => doc => {
   return doc ? {
+    ...doc,
     value: props.toKey ? props.toKey(doc) : doc._id,
     label: props.toLabel(doc)
   } : null
@@ -60,14 +69,22 @@ export class DocumentPicker extends React.Component {
       isMulti,
       autoFocus,
       placeholder,
-      filter
+      filter,
+
+      // don't pass these props on to Select:
+      selector,
+      toLabel,
+      onChange,
+      ...selectProps
     } = this.props
 
     return (
       <Select
         value={
           (value || isStateless)
-            ? toOption(this.props)(toDocument(value))
+            ? ((isMulti && value)
+              ? value.map(toDocument).map(toOption(this.props))
+              : toOption(this.props)(toDocument(value)))
             : this.state.query
         }
         onChange={this.handleQueryChange}
@@ -80,6 +97,8 @@ export class DocumentPicker extends React.Component {
         autoFocus={autoFocus || false}
         placeholder={placeholder || __('ui.select')}
         nonce={getStyleNonce()}
+        filterOption={filterOption}
+        {...selectProps}
       />
     )
   }

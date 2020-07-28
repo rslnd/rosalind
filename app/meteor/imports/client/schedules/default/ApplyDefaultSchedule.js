@@ -59,14 +59,15 @@ class ApplyDefaultScheduleComponent extends React.Component {
       focusedInput: START_DATE,
       applying: false,
       applied: false,
-      assigneeId: null
+      assigneeIds: null
     }
 
     this.handleDatesChange = this.handleDatesChange.bind(this)
     this.handleFocusChange = this.handleFocusChange.bind(this)
-    this.handleAssigneeChange = this.handleAssigneeChange.bind(this)
+    this.handleAssigneesChange = this.handleAssigneesChange.bind(this)
     this.applyDefaultSchedule = this.applyDefaultSchedule.bind(this)
     this.isOutsideRange = this.isOutsideRange.bind(this)
+    this.handleSelectAllAssignees = this.handleSelectAllAssignees.bind(this)
   }
 
   applyDefaultSchedule () {
@@ -75,7 +76,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
     })
 
     return Schedules.actions.applyDefaultSchedule.callPromise({
-      assigneeId: this.state.assigneeId,
+      assigneeIds: this.state.assigneeIds,
       calendarId: this.props.calendarId,
       from: this.state.startDate.toDate(),
       to: this.state.endDate.toDate()
@@ -115,9 +116,16 @@ class ApplyDefaultScheduleComponent extends React.Component {
     })
   }
 
-  handleAssigneeChange (assigneeId) {
+  handleAssigneesChange (assigneeIds) {
+    console.log('handleChange', assigneeIds)
     this.setState({
-      assigneeId
+      assigneeIds
+    })
+  }
+
+  handleSelectAllAssignees () {
+    this.setState({
+      assigneeIds: this.props.assignees.map(a => a._id)
     })
   }
 
@@ -128,18 +136,26 @@ class ApplyDefaultScheduleComponent extends React.Component {
   }
 
   render () {
-    const { startDate, endDate, focusedInput, applying, applied, assigneeId } = this.state
+    const { startDate, endDate, focusedInput, applying, applied, assigneeIds } = this.state
     const { calendar, lastPlannedDate, assignees, isHoliday } = this.props
 
     return (
       <Box title='Wochenplan anwenden' icon='magic' noPadding noBorder>
-        <div style={userPickerStyle}>
-          <UserPicker
-            value={assigneeId}
-            selector={{ _id: { $in: assignees.map(a => a._id) } }}
-            onChange={this.handleAssigneeChange}
-            placeholder={'Auf alle oben geplanten MitarbeiterInnen anwenden...'}
-          />
+        <div style={userPickerContainerStyle}>
+          <Button
+            size='small'
+            variant='outlined'
+            onClick={this.handleSelectAllAssignees}>Alle auswählen</Button>
+          <div style={userPickerStyle}>
+            <UserPicker
+              isMulti
+              isStateless
+              value={assigneeIds}
+              selector={{ _id: { $in: assignees.map(a => a._id) } }}
+              onChange={this.handleAssigneesChange}
+              placeholder={'Auf alle oben geplanten MitarbeiterInnen anwenden...'}
+            />
+          </div>
         </div>
         <div style={containerStyle}>
           <DayPickerRangeController
@@ -172,10 +188,14 @@ class ApplyDefaultScheduleComponent extends React.Component {
 
             <p>
               {
-                assigneeId
+                (assigneeIds && assigneeIds.length >= 1)
                   ? <span>
-                  Nur für <b>{Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))}</b><br />
-                    <Icon name='info-circle' /> Die Arbeitszeiten werden nur an den Tagen geändert, an welchen {Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))} bereits anwesend ist.
+                  Nur für <b>{
+                    assigneeIds.map(assigneeId =>
+                      Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))).join(', ')
+                    }</b><br />
+
+                    <Icon name='info-circle' /> Die Arbeitszeiten werden nur an den Tagen geändert, an welchen die jeweilige Person bereits anwesend ist.
                   </span>
                   : <span>Für alle oben geplanten MitarbeiterInnen</span>
               }
@@ -220,8 +240,15 @@ const containerStyle = {
   display: 'flex'
 }
 
+const userPickerContainerStyle = {
+  padding: 10,
+  display: 'flex',
+  width: '100%'
+}
+
 const userPickerStyle = {
-  padding: 10
+  marginLeft: 10,
+  flex: 1
 }
 
 const summaryStyle = {
