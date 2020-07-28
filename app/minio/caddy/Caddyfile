@@ -1,5 +1,6 @@
 {
   # debug
+  # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
   email security@fixpoint.co.at
   admin off
   key_type p384
