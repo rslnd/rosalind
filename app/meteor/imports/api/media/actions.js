@@ -27,6 +27,33 @@ const update = ({ Media }) =>
     }
   })
 
+export const remove = ({ Media }) =>
+  action({
+    name: 'media/remove',
+    roles: ['media', 'admin'],
+    args: {
+      mediaId: String
+    },
+    fn ({ mediaId }) {
+      const media = Media.findOne({ _id: mediaId })
+      if (!media) {
+        throw new Error('Media not found')
+      }
+
+      Media.update({ _id: mediaId }, {
+        $set: {
+          removed: true,
+          removedAt: new Date(),
+          removedBy: this.userId
+        }
+      })
+
+      Events.post('media/remove', { mediaId })
+    }
+  })
+
+
 export const actions = ({ Media }) => ({
-  update: update({ Media })
+  update: update({ Media }),
+  remove: remove({ Media })
 })

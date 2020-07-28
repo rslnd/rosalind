@@ -1,4 +1,5 @@
 import React from 'react'
+import Alert from 'react-s-alert'
 import { compose, withState, withHandlers } from 'recompose'
 import { __ } from '../../i18n'
 import moment from 'moment-timezone'
@@ -86,6 +87,13 @@ const composer = (props) => {
 
   console.log(sections)
 
+  // select some "next" media when removing currently viewed media, or close modal if none left
+  const handleRemove = (mediaId) => {
+    props.setCurrentMediaId(prevMediaId || nextMediaId)
+    Media.actions.remove.callPromise({ mediaId })
+      .then(() => Alert.success(__('ui.deleted')))
+  }
+
   return {
     ...props,
     cycle: selector.cycle || media.cycle,
@@ -94,7 +102,8 @@ const composer = (props) => {
     prevMediaId,
     nextMediaId,
     setSelector,
-    selector
+    selector,
+    handleRemove
   }
 }
 
@@ -177,7 +186,8 @@ export const Sidebar = compose(
   cycle,
   setCurrentMediaId,
   selector,
-  setSelector
+  setSelector,
+  handleRemove
 }) =>
   <div style={containerStyle}>
     <PatientName
@@ -199,7 +209,7 @@ export const Sidebar = compose(
       currentMediaId={media._id}
     />
     {/* <MediaTags media={media} /> */}
-    <Edit media={media} />
+    <Edit media={media} handleRemove={handleRemove} />
     <Navigation
       setCurrentMediaId={setCurrentMediaId}
       prevMediaId={prevMediaId}
@@ -234,6 +244,8 @@ const explorerStyle = {
 }
 
 const Edit = withHandlers({
+  handleRemove: ({ media, handleRemove }) => e =>
+    handleRemove(media._id),
   handleRotate: ({ media }) => e => {
     console.log('rotate', (((media.rotation || 0) + 90) % 360))
     Media.actions.update.callPromise({
@@ -243,9 +255,9 @@ const Edit = withHandlers({
       }
     })
   }
-})(({ handleRotate }) =>
+})(({ handleRotate, handleRemove }) =>
   <div style={editStyle}>
-    <Button><Icon name='trash-o' /></Button>
+    <Button onClick={handleRemove}><Icon name='trash-o' /></Button>
     {/* <Button><Icon name='crop' /></Button> */}
     <Button onClick={handleRotate}><Icon name='retweet' /></Button>
   </div>
