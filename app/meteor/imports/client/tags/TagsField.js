@@ -23,16 +23,18 @@ export const getConstrainedTags = ({
 }) => {
   const allTags = Tags.find({}, { sort: { order: 1 } }).fetch()
 
-  const tags = allTags.filter(t =>
-    allowedTags ? allowedTags.indexOf(t._id) !== -1 : true
-  ).map((t) => {
+  const mapSelectState = (t) => {
     const selected = value && value.includes(t._id)
     return {
       ...t,
       selectable: true,
       selected
     }
-  }).filter(t => {
+  }
+
+  const tags = allTags.filter(t =>
+    allowedTags ? allowedTags.indexOf(t._id) !== -1 : true
+  ).map(mapSelectState).filter(t => {
     if (maxDuration === null) {
       return true
     }
@@ -85,7 +87,7 @@ export const getConstrainedTags = ({
     ? applyConstraintToTags({ constraint, tags: allTags })
     : tags
 
-  return constrainedTags
+  return constrainedTags.map(mapSelectState)
 }
 
 export class TagsField extends React.Component {

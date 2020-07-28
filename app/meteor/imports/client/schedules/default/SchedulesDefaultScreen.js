@@ -72,7 +72,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
       this.state.edit && this.state.edit.assigneeId
     ].filter(identity)).map(assigneeId =>
       this.props.users.find(u => u._id === assigneeId)
-    )
+    ).filter(identity) // there might exist default schedules for deleted users
   }
 
   handleAddAssignee (assigneeId) {
@@ -222,7 +222,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
               </TableHead>
               <TableBody>
                 {
-                  this.assignees().map(assignee =>
+                  this.assignees().filter(identity).map(assignee =>
                     <TableRow key={assignee._id}>
                       <TableCell>
                         {Users.methods.fullNameWithTitle(assignee)}

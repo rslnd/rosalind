@@ -22,7 +22,7 @@ const toOption = props => doc => {
 
 const toInitialOptions = (props) => {
   if (props.initialValue) {
-    if (props.isMulti) {
+    if (props.isMulti && props.initialValue.map) {
       return props.initialValue.map(props.toDocument).map(toOption(props))
     } else {
       return toOption(props)(props.toDocument(props.initialValue))
