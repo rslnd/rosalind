@@ -75,8 +75,14 @@ export class DocumentPicker extends React.Component {
       selector,
       toLabel,
       onChange,
+
+      // these break redux-form?
+      onBlur,
+      onFocus,
       ...selectProps
     } = this.props
+
+    console.log('sP', selectProps)
 
     return (
       <Select
