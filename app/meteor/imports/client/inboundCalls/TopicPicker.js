@@ -6,7 +6,10 @@ import { __ } from '../../i18n'
 
 const composer = (props) => ({
   ...props,
-  options: InboundCallsTopics.find({}, { sort: { order: 1 } }).fetch()
+  options: [
+    { _id: null, label: __('inboundCalls.thisOpen') },
+    ...InboundCallsTopics.find({}, { sort: { order: 1 } }).fetch()
+  ]
 })
 
 const asField = mapProps(p => ({

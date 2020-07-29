@@ -9,6 +9,8 @@ export const ui = {
   insert: 'Neu',
   save: 'Speichern',
   saved: 'Gespeichert',
+  move: "Verschieben",
+  moved: 'Verschoben',
   error: 'Fehler',
   tryAgain: 'Entschuldigung! Bitte noch einmal versuchen',
   ok: 'OK',

@@ -12,9 +12,10 @@ export const edit = ({ InboundCalls }) =>
       note: Match.Optional(String),
       firstName: Match.Optional(String),
       lastName: Match.Optional(String),
-      telephone: Match.Optional(String)
+      telephone: Match.Optional(String),
+      topicId: Match.Optional(Match.OneOf(String, null))
     },
-    fn: function ({ _id, note, firstName, lastName, telephone }) {
+    fn: function ({ _id, note, firstName, lastName, telephone, topicId }) {
       const inboundCall = InboundCalls.findOne({ _id })
       if (!inboundCall) {
         throw new Meteor.Error(404, 'Not found')
@@ -24,12 +25,13 @@ export const edit = ({ InboundCalls }) =>
         note,
         firstName,
         lastName,
-        telephone
+        telephone,
+        topicId
       }
 
       const $set = Object.keys(fields).filter(k => {
         const value = fields[k]
-        return (value && value.length >= 1)
+        return (value !== undefined && (typeof value === 'string' ? value.length >= 1 : true))
       }).reduce((acc, key) => ({
         ...acc,
         [key]: fields[key]

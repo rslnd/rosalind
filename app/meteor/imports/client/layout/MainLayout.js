@@ -13,6 +13,7 @@ import { Loading } from '../components/Loading'
 import { Lock } from './Lock'
 import { DropZone } from '../patientAppointments/DropZone'
 import { handleDrop } from '../../startup/client/dataTransfer'
+import { Prompts } from './Prompt'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -88,11 +89,22 @@ export class MainLayout extends React.Component {
 
     const alwaysRender = () => (
       <div id='loaded'>
-        <div className='dropzone' />
+        <ErrorBoundary>
+          <div className='dropzone' />
+        </ErrorBoundary>
         <span id='locale' className={locale} />
-        <Alerts />
-        <MaintenanceMessageContainer />
-        <Lock />
+        <ErrorBoundary>
+          <Alerts />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <Prompts />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <MaintenanceMessageContainer />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <Lock />
+        </ErrorBoundary>
       </div>
     )
 

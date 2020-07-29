@@ -1,3 +1,4 @@
+import Alert from 'react-s-alert'
 import React from 'react'
 import { __ } from '../../i18n'
 import { zerofix } from '../../util/zerofix'
@@ -7,6 +8,8 @@ import { LinkToAppointmentContainer } from './LinkToAppointmentContainer'
 import { InboundCallsTopics } from '../../api/inboundCalls'
 import { highlightBackground, highlightColor } from '../layout/styles'
 import { InlineEdit } from '../components/form'
+import { prompt } from '../layout/Prompt'
+import { TopicPicker } from './TopicPicker'
 
 export class InboundCallItem extends React.Component {
   render () {
@@ -37,6 +40,16 @@ export class InboundCallItem extends React.Component {
 
     const style = pinnedBy ? pinnedStyle : null
 
+    const handleTopicEdit = async () => {
+      const newId = await prompt({
+        // title: 'Verschieben',
+        Component: TopicPicker,
+        initialValue: topicId
+      })
+      await edit(_id, 'topicId')(newId)
+      Alert.success(__('ui.moved'))
+    }
+
     return (
       <div className='box box-widget' style={style}>
         <div className='box-header'>
@@ -61,7 +74,12 @@ export class InboundCallItem extends React.Component {
 
             &ensp;
 
-            <small>{topicLabel}</small>
+            <small
+              onClick={canEdit ? handleTopicEdit : null}
+              style={canEdit ? { cursor: 'pointer'} : null}
+            >
+              {topicLabel || (canEdit && __('inboundCalls.thisOpen'))}
+            </small>
           </h4>
           <InlineEdit
             onChange={edit(_id, 'telephone')}
