@@ -82,8 +82,6 @@ export class DocumentPicker extends React.Component {
       ...selectProps
     } = this.props
 
-    console.log('sP', selectProps)
-
     return (
       <Select
         value={
