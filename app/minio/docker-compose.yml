@@ -3,7 +3,7 @@ version: '2.1'
 services:
   minio:
     image: 'minio/minio:RELEASE.2020-07-27T18-37-02Z'
-    command: 'sh -c "cd /root/.minio/certs && openssl req -new -sha256 -newkey ec:<(openssl ecparam -name prime256v1) -days 36500 -nodes -x509 -keyout private.key -out public.crt -subj "/C=AT/L=Vienna/O=onprem/CN=minio" && server /mnt/media-1 /mnt/media-2 /mnt/media-3 /mnt/media-4"' # Minio docs: "NIST curves P-384 and P-521 are not currently supported"
+    command: '/bin/bash -c "cd /root/.minio/certs && openssl req -new -sha256 -newkey ec:<(openssl ecparam -name prime256v1) -days 36500 -nodes -x509 -keyout private.key -out public.crt -subj \"/C=AT/L=Vienna/O=onprem/CN=minio\" && server /mnt/media-1 /mnt/media-2 /mnt/media-3 /mnt/media-4"' # Minio docs: "NIST curves P-384 and P-521 are not currently supported"
     environment:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
