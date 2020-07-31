@@ -83,7 +83,7 @@ const composer = (props) => {
     assigneeIds = assigneeIds.filter(_id => Meteor.userId() === _id)
   }
 
-  const assignees = Users.find({ _id: { $in: assigneeIds } }, { sort: { lastName: 1 } }).fetch()
+  const assignees = Users.find({ _id: { $in: assigneeIds } }, { sort: { lastName: 1 }, removed: true }).fetch()
 
   const schedules = Schedules.find({
     type: 'override',
