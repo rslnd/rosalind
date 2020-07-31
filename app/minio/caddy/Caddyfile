@@ -1,6 +1,6 @@
 {
   # debug
-  # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
   email security@fixpoint.co.at
   admin off
   key_type p384
@@ -27,9 +27,5 @@
 
 {env.DNS_NAME} {
   import default
-  reverse_proxy * https://minio:9000 {
-    transport http {
-      tls_insecure_skip_verify # okay because this is on a docker internal network
-    }
-  }
+  reverse_proxy * minio:9000
 }
