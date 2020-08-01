@@ -36,11 +36,13 @@ export const register = ({ Clients }) => {
           Events.post('clients/register/blocked', { blocked: true })
           return { isOk: false }
         } else {
+          const isBanned = !(process.env.NODE_ENV === 'staging' && process.env.INSECURE_APPROVE_NEW_CLIENTS)
+
           const clientId = Clients.insert({
             clientKey,
             systemInfo,
             createdAt: new Date(),
-            isBanned: true
+            isBanned
           })
           Events.post('clients/register/banned', { newClientId: clientId })
           return { isOk: true }

@@ -45,7 +45,7 @@ export const insert = ({ Media, MediaTags }) =>
         userId = producer.pairedBy
       } else {
         userId = this.userId
-        if (!userId || !hasRole(userId, ['media', 'media-insert', 'admin'])) {
+        if (!userId || !hasRole(userId, ['documents', 'documents-insert', 'media', 'media-insert', 'admin'])) {
           throw new Error('Authentication failed or permission denied')
         }
       }
