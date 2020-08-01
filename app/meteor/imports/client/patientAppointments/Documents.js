@@ -50,6 +50,10 @@ const buttonMissingStyle = {
 const Consent = ({ appointment, isCurrent, consents, isConsentRequired, handleMediaClick, consentTags }) => {
   const [open, setOpen] = useState(false)
 
+  if (!(consentTags && consentTags[0])) {
+    return null
+  }
+
   const color = consentTags[0].color // TODO make explicit
 
   const handleSelectConsentOpen = () => {
