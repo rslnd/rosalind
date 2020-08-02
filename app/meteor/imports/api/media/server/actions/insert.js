@@ -55,9 +55,13 @@ export const insert = ({ Media, MediaTags }) =>
         throw new Error(`Invalid preview URL, needs to start with data:image: ${preview.substr(0, 50)}`)
       }
 
-      const existingMedia =
-        (nonce && Media.findOne({ nonce })) ||
-        (preview && Media.findOne({ preview }))
+      const existingMedia = (nonce && nonce.length >= 20)
+        ? Media.findOne({ nonce })
+        : false
+
+      if (existingMedia) {
+        console.log(`media/insert: Received insert for existing media ${existingMedia._id}`)
+      }
 
       const filename = existingMedia
         ? existingMedia.filename
@@ -119,6 +123,8 @@ export const insert = ({ Media, MediaTags }) =>
 
       if (!existingMedia) {
         Events.post('media/insert', { mediaId, userId })
+      } else {
+        Events.post('media/insert/existing', { mediaId, userId })
       }
 
       // Create multiple presigned requests as fallbacks, the app will try to upload to one of them starting, with the first
