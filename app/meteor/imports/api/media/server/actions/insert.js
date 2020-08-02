@@ -134,8 +134,7 @@ export const insert = ({ Media, MediaTags }) =>
       })
 
       const presignedRequests = [
-        {...signed, headers: {...signed.headers, 'x-amz-content-sha256': 'WRONG HASH HAHAHAHA'}},
-        {...signed}
+        signed
       ].map(p => ({
         ...p,
         mediaType,
