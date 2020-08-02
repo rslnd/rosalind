@@ -61,6 +61,11 @@ export const media = new SimpleSchema({
     type: String
   },
 
+  nonce: {
+    type: String,
+    optional: true
+  },
+
   width: {
     type: Number
   },

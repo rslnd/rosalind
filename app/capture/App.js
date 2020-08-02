@@ -6,23 +6,20 @@ import { withMedia } from './withMedia'
 import { withOrientation } from './withOrientation'
 import { withModeDocument } from './withModeDocument'
 
+const showAlert = level => props => message => {
+  props.setAlert({
+    level,
+    message
+  })
+  setTimeout(() => props.setAlert(null), 6500)
+}
+
 export const App = compose(
   withState('alert', 'setAlert', null),
   withHandlers({
-    showSuccess: props => message => {
-      props.setAlert({
-        level: 'success',
-        message
-      })
-      setTimeout(() => props.setAlert(null), 5000)
-    },
-    showError: props => message => {
-      props.setAlert({
-        level: 'warning',
-        message
-      })
-      setTimeout(() => props.setAlert(null), 5000)
-    }
+    showSuccess: showAlert('success'),
+    showError: showAlert('error'),
+    showWarning: showAlert('warning')
   }),
   withClientKey,
   withPairing,

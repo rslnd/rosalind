@@ -26,11 +26,10 @@ export const insert = ({ Media, MediaTags }) =>
       cycle: Match.Maybe(Match.OneOf(undefined, null, String)),
       tagIds: Match.Maybe(Match.OneOf(undefined, null, [String], [])),
       clientKey: Match.Optional(String),
-      preview: Match.Optional(String)
+      preview: Match.Optional(String),
+      nonce: Match.Optional(String)
     },
-    fn: function ({ width, height, takenAt, kind, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle, tagIds }) {
-      const credentials = getCredentials()
-
+    fn: function ({ width, height, takenAt, kind, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle, tagIds, nonce }) {
       let userId = null
       let producerId = null
 
@@ -56,10 +55,16 @@ export const insert = ({ Media, MediaTags }) =>
         throw new Error(`Invalid preview URL, needs to start with data:image: ${preview.substr(0, 50)}`)
       }
 
-      const filename = [
-        uuidv4(), // Keep v4 instead of v5 becuase v4 is random
-        '.jpeg'
-      ].join('')
+      const existingMedia =
+        (nonce && Media.findOne({ nonce })) ||
+        (preview && Media.findOne({ preview }))
+
+      const filename = existingMedia
+        ? existingMedia.filename
+        : [
+          uuidv4(), // Keep v4 instead of v5 becuase v4 is random
+          '.jpeg'
+        ].join('')
 
 
       // Automatically append photos to newest cycle if not given, and
@@ -90,25 +95,34 @@ export const insert = ({ Media, MediaTags }) =>
         tagIds = []
       }
 
-      const mediaId = Media.insert({
-        filename,
-        width,
-        height,
-        takenAt,
-        kind,
-        mediaType,
-        patientId,
-        appointmentId,
-        producerId,
-        cycle,
-        tagIds,
-        consumerId,
-        createdBy: userId,
-        preview
-      })
 
-      Events.post('media/insert', { mediaId, userId })
 
+      const mediaId = existingMedia
+        ? existingMedia._id
+        : Media.insert({
+          filename,
+          width,
+          height,
+          takenAt,
+          kind,
+          mediaType,
+          patientId,
+          appointmentId,
+          producerId,
+          cycle,
+          tagIds,
+          consumerId,
+          createdBy: userId,
+          preview,
+          nonce
+        })
+
+      if (!existingMedia) {
+        Events.post('media/insert', { mediaId, userId })
+      }
+
+      // Create multiple presigned requests as fallbacks, the app will try to upload to one of them starting, with the first
+      const credentials = getCredentials()
       const signed = createPresignedRequest({
         credentials,
         filename,
@@ -119,7 +133,15 @@ export const insert = ({ Media, MediaTags }) =>
         }
       })
 
-      console.log(signed)
+      const presignedRequests = [
+        {...signed, headers: {...signed.headers, 'x-amz-content-sha256': 'WRONG HASH HAHAHAHA'}},
+        {...signed}
+      ].map(p => ({
+        ...p,
+        mediaType,
+        filename,
+        mediaId
+      }))
 
       // If this media is a consent document, create a reference to this media in the corresponding appointment's consentMediaIds field
       const consentTag = MediaTags.findOne({ isConsent: true })
@@ -135,11 +157,6 @@ export const insert = ({ Media, MediaTags }) =>
         })
       }
 
-      return {
-        ...signed,
-        mediaType,
-        filename,
-        mediaId
-      }
+      return presignedRequests
     }
   })

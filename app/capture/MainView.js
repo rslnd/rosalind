@@ -103,7 +103,10 @@ const styles = {
       backgroundColor: 'rgba(255,229,38,0.78)'
     },
     success: {
-      backgroundColor: 'rgba(105,218,89,0.8)',
+      backgroundColor: 'rgba(105,218,89,0.8)'
+    },
+    error: {
+      backgroundColor: 'rgba(234,99,67,0.8)'
     }
   }),
   [portrait]: StyleSheet.create({

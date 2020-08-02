@@ -6,6 +6,7 @@ const de = {
   connected: 'Verbunden',
   notConnected: 'Nicht verbunden',
   tryAgain: 'Bitte noch ein Mal versuchen',
+  retryingPleaseWait: 'Verbinde neu, bitte warten...'
 }
 
 export const __ = key => (de[key] || key)
