@@ -38,7 +38,7 @@ target 'Capture' do
 
   pod 'RNSentry', :podspec => '../node_modules/@sentry/react-native/RNSentry.podspec'
 
-  pod 'WeScan', '>= 1.6.0'
+  pod 'WeScan', '>= 1.7.0'
 
   use_native_modules!
 end

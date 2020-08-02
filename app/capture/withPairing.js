@@ -32,20 +32,19 @@ const handlePairingFinish = props => pairingCode => {
 
     console.log('Pairing to', url, 'with code', pairingToken, 'over websocket', wsUrl)
 
-    if (props.baseUrl !== url) {
-      props.setPairedTo(null)
-      Meteor.disconnect()
-      Meteor.connect(wsUrl)
-      Meteor.ddp.on('connected', async () => {
-        await call(props)('clients/register', {
-          systemInfo: { ios: true }
-        })
+    Meteor.disconnect()
+    props.setPairedTo(null)
+    Meteor.connect(wsUrl)
 
-        pair(props)({ url, pairingToken })
+    props.showSuccess('connected')
+
+    Meteor.ddp.on('connected', async () => {
+      await call(props)('clients/register', {
+        systemInfo: { ios: true }
       })
-    } else {
+
       pair(props)({ url, pairingToken })
-    }
+    })
   }
 }
 
@@ -57,6 +56,7 @@ const pair = props => async ({ url, pairingToken }) => {
 
     props.setPairedTo(consumerId)
     props.setBaseUrl(url)
+    props.showSuccess('connected')
     console.log('Paired to consumer', consumerId)
   } catch (e) {
     if (e.error === 404) {
@@ -64,10 +64,15 @@ const pair = props => async ({ url, pairingToken }) => {
       return
     }
     console.log('Failed to pair', e)
+    props.showError('tryAgain')
   }
 }
 
 const withCurrentPatient = props => {
+  if (!props.pairedTo) {
+    return props
+  }
+
   Meteor.subscribe('client-consumer', { clientKey: props.clientKey })
   const consumer = Clients.findOne({ _id: props.pairedTo })
 
@@ -86,7 +91,7 @@ const withCurrentPatient = props => {
   // Bug: Can't pass as prop for some reason, lags behind by one step
   props.setCurrentPatient(currentPatient)
   props.setNextMedia(nextMedia)
-  return {}
+  return {} // Lags behind one step when passing props here
 }
 
 export const withPairing = compose(

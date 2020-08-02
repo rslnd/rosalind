@@ -258,10 +258,10 @@ PODS:
   - RNSentry (1.6.1):
     - React
     - Sentry (~> 5.1.8)
-  - Sentry (5.1.8):
-    - Sentry/Core (= 5.1.8)
-  - Sentry/Core (5.1.8)
-  - WeScan (1.6.0)
+  - Sentry (5.1.10):
+    - Sentry/Core (= 5.1.10)
+  - Sentry/Core (5.1.10)
+  - WeScan (1.7.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -297,7 +297,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
   - "RNSentry (from `../node_modules/@sentry/react-native/RNSentry.podspec`)"
-  - WeScan (>= 1.6.0)
+  - WeScan (>= 1.7.0)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -399,10 +399,10 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
   RNSecureRandom: 0dcee021fdb3d50cd5cee5db0ebf583c42f5af0e
   RNSentry: 57824da1293d03966605d682d5868b11aa1b6e5a
-  Sentry: 795e8ffe1c45d9d20b3aa398774d7ea6a443fb05
-  WeScan: 4a31ae36ce730ba4d7d1c70685ce52009ebc878a
+  Sentry: 8715e88b813bde9ad37aead365d5b04ac7302153
+  WeScan: fed582f6c38014d529afb5aa9ffd1bad38fc72b7
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
 
-PODFILE CHECKSUM: ebd9af99deeb0b9a0992d13b17d14bbcae706215
+PODFILE CHECKSUM: 2907a9b8ad36cbf5e2f775995c1d44a442ac09f4
 
 COCOAPODS: 1.8.4

@@ -1,5 +1,6 @@
 import { withHandlers } from 'recompose'
-import { call } from './util'
+import { call, delay } from './util'
+import { captureException } from '@sentry/react-native'
 import { NativeModules } from 'react-native'
 const { MediaResizer } = NativeModules
 
@@ -7,6 +8,7 @@ const createPreview = ({ path, width, height, quality }) =>
   new Promise((resolve, reject) => {
     MediaResizer.createPreview(path, width, height, quality, (err, base64) => {
       if (err) {
+        captureException(err)
         reject(err)
       } else {
         resolve(base64)
@@ -16,7 +18,7 @@ const createPreview = ({ path, width, height, quality }) =>
 
 const handleMedia = props => async media => {
   if (!props.pairedTo) {
-    // TODO: Cache and upload after pairing
+    props.showError('notConnected')
     throw new Error('Need to pair first')
   }
 
@@ -46,13 +48,46 @@ const handleMedia = props => async media => {
     cycle: (mediaRest.kind === 'document') ? '' : (props.nextMedia.cycle || ''), // work around weird match failed error when passing null. evaluates falsey anyways.
     preview
   }
-  const signedRequest = await call(props)('media/insert', createMedia)
 
-  await uploadS3({ signedRequest, localPath })
+  await enqueue({ props, createMedia, localPath })
+}
 
-  await call(props)('media/uploadComplete', {
-    mediaId: signedRequest.mediaId
-  })
+const retry = async (logTag, fn) => {
+  const start = new Date()
+  const tryUntil = start + (1000 * 60)
+  let tries = 5
+
+  do {
+    try {
+      const result = await fn()
+      const end = new Date()
+      console.log(logTag, 'took', end - start, 'ms')
+      return result
+    } catch (e) {
+      console.log(logTag, 'failed, retrying', tries, 'more times after delay, error was', e)
+      await delay(7000)
+      tries--
+    }
+  } while (tries > 0 || (new Date()) < tryUntil)
+
+  throw new Error(`Giving up ${logTag}`)
+}
+
+const enqueue = async ({ createMedia, localPath, props }) => {
+  try {
+    const signedRequest = await retry('createMedia', () =>
+      call(props)('media/insert', createMedia))
+
+    await retry('uploadS3', () => uploadS3({ signedRequest, localPath }))
+
+    await retry('uploadComplete', () => call(props)('media/uploadComplete', {
+      mediaId: signedRequest.mediaId
+    }))
+  } catch (e) {
+    props.showError('tryAgain')
+    captureException(e)
+    console.log('Giving up', e)
+  }
 }
 
 const uploadS3 = ({ signedRequest, localPath }) => new Promise((resolve, reject) => {

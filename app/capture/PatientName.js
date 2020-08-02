@@ -6,7 +6,7 @@ const prefix = ({ gender }) =>
   gender === 'Female' ? __('prefixFemale') : __('prefixMale')
 
 export const PatientName = ({ patient = {} }) => (
-  <Text>
+  <Text style={styles.container}>
     <Text style={styles.muted}>
       {prefix(patient)}
       &nbsp;
