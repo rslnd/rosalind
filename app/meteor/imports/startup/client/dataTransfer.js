@@ -101,10 +101,10 @@ export const insertMedia = async ({ name, mediaType, base64, file, kind = 'docum
     ...nextMedia
   }
 
-  const signedRequest = await call('media/insert', createMedia)
-  await uploadS3({ signedRequest, file })
+  const signedRequests = await call('media/insert', createMedia)
+  await uploadS3WithFallback({ signedRequests, file })
   await call('media/uploadComplete', {
-    mediaId: signedRequest.mediaId
+    mediaId: signedRequests[0].mediaId
   })
   console.log('[dataTransfer] uploadComplete')
 }
@@ -149,11 +149,29 @@ const call = (name, args) =>
     })
   })
 
+const uploadS3WithFallback = async ({ signedRequests, localPath }) => {
+  for (let i = 0; i < signedRequests.length; i++) {
+    const signedRequest = signedRequests[i]
+    try {
+      console.log(`upload: S3 ${i} trying`)
+      const result = await uploadS3({ signedRequest, localPath })
+      console.log(`upload: S3 ${i} succeeded`)
+      return result
+    } catch(e) {
+      console.log(`upload: S3 ${i} failed, falling back`)
+    }
+  }
+
+  throw new Error(`${signedRequests.length} S3 fallbacks exhausted, giving up`)
+}
+
 const uploadS3 = ({ signedRequest, file }) => new Promise((resolve, reject) => {
   console.log('[dataTransfer] uploadS3', signedRequest)
   const { method, url, headers } = signedRequest
   const xhr = new window.XMLHttpRequest()
   xhr.onerror = reject
+  xhr.ontimeout = reject
+  xhr.timeout = 4000
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
