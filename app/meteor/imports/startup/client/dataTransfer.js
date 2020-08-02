@@ -149,12 +149,12 @@ const call = (name, args) =>
     })
   })
 
-const uploadS3WithFallback = async ({ signedRequests, localPath }) => {
+const uploadS3WithFallback = async ({ signedRequests, file }) => {
   for (let i = 0; i < signedRequests.length; i++) {
     const signedRequest = signedRequests[i]
     try {
       console.log(`upload: S3 ${i} trying`)
-      const result = await uploadS3({ signedRequest, localPath })
+      const result = await uploadS3({ signedRequest, file })
       console.log(`upload: S3 ${i} succeeded`)
       return result
     } catch(e) {
