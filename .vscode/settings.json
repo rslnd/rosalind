@@ -3,30 +3,27 @@
     "**/.git": true,
     "**/.DS_Store": true,
     "**/.meteor": false,
-    "**/node_modules": true
+    "**/node_modules": true,
+    "**/.shadow-cljs": true,
+    "**/build": true
   },
   "search.exclude": {
     "**/node_modules": true,
-    "**/.meteor/local": true
+    "**/.meteor/local": true,
+    "**/.shadow-cljs": true,
   },
   "files.watcherExclude": {
     "**/node_modules/": true,
-    "**/.meteor/local": true
+    "**/.meteor/local": true,
+    "**/.git": true,
+    "**/.shadow-cljs": true,
   },
   "path-autocomplete.excludedItems": {
-    "**/{.git,node_modules,.meteor}": {
+    "**/{.git,node_modules,.meteor,build,.shadow-cljs}": {
       "when": "**"
     }
   },
-  "todo-tree.tags": [
-    "TODO",
-    "FIXME",
-    "BUG",
-    "LEGACY",
-    "HACK",
-    "UNSAFE"
-  ],
-  "todo-tree.customHighlight": {
+  "todo-tree.highlights.customHighlight": {
     "HACK": {
       "icon": "alert",
       "type": "text",
@@ -48,6 +45,13 @@
       "background": "white",
       "iconColour": "blue"
     }
-  }
-      "icon": "alert",
+  },
+  "todo-tree.general.tags": [
+    "TODO",
+    "FIXME",
+    "BUG",
+    "LEGACY",
+    "HACK",
+    "UNSAFE"
+  ]
 }
