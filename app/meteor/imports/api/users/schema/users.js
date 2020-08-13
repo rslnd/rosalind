@@ -59,6 +59,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  hiddenInReports: {
+    type: Boolean,
+    optional: true
+  },
+
   allowedClientIds: {
     type: [SimpleSchema.RegEx.Id],
     optional: true

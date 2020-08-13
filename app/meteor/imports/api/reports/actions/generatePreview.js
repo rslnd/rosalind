@@ -7,7 +7,7 @@ import { daysForPreview } from '../methods/daysForPreview'
 import { generate as generateReport } from '../methods/generate'
 import { Users } from '../../users'
 
-export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, Tags, Messages }) => {
+export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, Tags, Messages, Users }) => {
   return new ValidatedMethod({
     name: 'reports/generatePreview',
     mixins: [CallPromiseMixin],
@@ -22,7 +22,10 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
         const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
 
         // Filter out hacky hidden/assistance users
-        const allowedAssigneeIds = Users.find({ employee: { $ne: false } }).fetch().map(u => u._id)
+        const allowedAssigneeIds = Users.find({
+          employee: { $ne: false },
+          hiddenInReports: { $ne: true }
+        }).fetch().map(u => u._id)
 
         return calendars.map(calendar => {
           const calendarId = calendar._id

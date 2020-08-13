@@ -44,6 +44,7 @@ export const users = {
     callcenter: 'Callcenter',
     none: 'Mitarbeiter'
   },
+  hiddenInReports: 'Von Statistik ausnehmen',
   form: {
     firstName: {
       label: 'Vorname'

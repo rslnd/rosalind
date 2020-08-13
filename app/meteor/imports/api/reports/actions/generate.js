@@ -6,7 +6,7 @@ import { action, Match } from '../../../util/meteor/action'
 import { generate as generateReport } from '../methods/generate'
 import { pastAppointmentsSelector } from '../methods/mapPlannedNew'
 
-export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, Tags, Messages }) => {
+export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, Tags, Messages, Users }) => {
   return action({
     name: 'reports/generate',
     args: {
@@ -26,12 +26,17 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
 
         const date = moment(dayToDate(day))
 
+        const hiddenAssigneeIds = Users.find({
+          hiddenInReports: true
+        }).fetch().map(u => u._id)
+
         const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
         return calendars.map(calendar => {
           const calendarId = calendar._id
 
           const appointments = Appointments.find({
             calendarId,
+            assigneeId: { $nin: hiddenAssigneeIds },
             start: {
               $gt: date.startOf('day').toDate(),
               $lt: date.endOf('day').toDate()
@@ -45,7 +50,8 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
           const pastAppointments = Appointments.find(pastAppointmentsSelector({
             date,
             calendarId,
-            appointments
+            appointments,
+            hiddenAssigneeIds
           })).fetch()
 
           const overrideSchedules = Schedules.find({

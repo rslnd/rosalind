@@ -53,6 +53,16 @@ export const UserProfileFields = () =>
             />
           }
         />
+
+        <Field
+          name='hiddenInReports'
+          component={props =>
+            <FormControlLabel
+              control={<Checkbox {...props} />}
+              label={__('users.hiddenInReports')}
+            />
+          }
+        />
       </div>
 
       <div className='col-md-7' style={{ paddingTop: 10 }}>
@@ -87,14 +97,16 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine, user 
 
 export const UserProfileForm = compose(
   mapProps(props => {
+    // Do not pass unneccessary fields to redux form
     const {
-      username,
-      firstName,
-      lastName,
-      titlePrepend,
-      titleAppend,
-      employee,
-      groupId
+        username,
+        firstName,
+        lastName,
+        titlePrepend,
+        titleAppend,
+        employee,
+        groupId,
+        hiddenInReports
     } = Users.findOne({ _id: props.user._id }, { removed: true })
 
     return {
@@ -106,7 +118,8 @@ export const UserProfileForm = compose(
         titlePrepend,
         titleAppend,
         employee,
-        groupId
+        groupId,
+        hiddenInReports
       }
     }
   }),

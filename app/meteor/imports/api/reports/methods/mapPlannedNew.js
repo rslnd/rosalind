@@ -7,7 +7,7 @@ export const isNew = pastAppointments => appointment => {
   return !find(p => p.patientId === appointment.patientId)(pastAppointments)
 }
 
-export const pastAppointmentsSelector = ({ date, calendarId, appointments }) => {
+export const pastAppointmentsSelector = ({ date, calendarId, appointments, hiddenAssigneeIds }) => {
   if (!appointments || appointments.length === 0) {
     return {
       thisSelectorShouldNotFindAnything: true
@@ -20,6 +20,7 @@ export const pastAppointmentsSelector = ({ date, calendarId, appointments }) => 
 
   return {
     calendarId,
+    assigneeId: { $nin: hiddenAssigneeIds },
     patientId: { $in: patientIds },
     admittedAt: { $ne: null },
     start: {
