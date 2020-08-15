@@ -2,6 +2,7 @@ import { InboundCalls, InboundCallsTopics } from '../'
 import flatten from 'lodash/flatten'
 import moment from 'moment'
 import { Comments } from '../../comments'
+import { Patients } from '../../patients'
 import { publish, publishComposite } from '../../../util/meteor/publish'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 
@@ -39,6 +40,13 @@ export default () => {
           {
             find: function (inboundCall) {
               return Comments.find({ docId: inboundCall._id })
+            }
+          },
+          {
+            find: function(inboundCall) {
+              return Patients.find({
+                _id: inboundCall.patientId
+              }, { sort: { lastName: 1 }, limit: 1 })
             }
           }
         ]
@@ -80,6 +88,13 @@ export default () => {
           {
             find: function (inboundCall) {
               return Comments.find({ docId: inboundCall._id })
+            }
+          },
+          {
+            find: function(inboundCall) {
+              return Patients.find({
+                _id: inboundCall.patientId
+              }, { sort: { lastName: 1 }, limit: 1 })
             }
           }
         ]

@@ -4,21 +4,25 @@ import { NameFields } from '../fields/NameFields'
 import { BirthdayFields } from '../fields/BirthdayFields'
 import { ContactFields } from '../fields/ContactFields'
 
-export const PatientBasicFormFields = () =>
+export const PatientBasicFormFields = (props) =>
   <div>
-    <NameFields />
+    <NameFields {...props} />
 
-    <BirthdayFields />
+    <BirthdayFields {...props} />
 
     <FieldArray
       name='contacts'
       channel='Phone'
       icon='phone'
-      component={ContactFields} />
+      component={ContactFields}
+      {...props}
+    />
 
     <FieldArray
       name='contacts'
       channel='Email'
       icon='envelope-open-o'
-      component={ContactFields} />
+      component={ContactFields}
+      {...props}
+    />
   </div>

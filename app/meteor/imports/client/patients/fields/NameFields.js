@@ -27,7 +27,7 @@ export const GenderField = ({ onChange }) =>
 const TitleLabel = () =>
   <span style={{ color: grayActive }}>{__('patients.titlePrepend')}</span>
 
-export const NameFields = ({ gender = true, titles = false, ban = false }) =>
+export const NameFields = ({ gender = true, titles = false, ban = false, nameEditable = true }) =>
   <div style={rowStyle}>
     {
       gender &&
@@ -50,6 +50,7 @@ export const NameFields = ({ gender = true, titles = false, ban = false }) =>
         name='lastName'
         component={TextField}
         fullWidth
+        disabled={!nameEditable}
         label={__('patients.lastName')} />
     </div>
     <div style={grow}>
@@ -57,6 +58,7 @@ export const NameFields = ({ gender = true, titles = false, ban = false }) =>
         name='firstName'
         component={TextField}
         fullWidth
+        disabled={!nameEditable}
         label={__('patients.firstName')} />
     </div>
 

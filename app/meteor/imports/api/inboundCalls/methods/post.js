@@ -1,26 +1,90 @@
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
+import { action } from '../../../util/meteor/action'
 
-export const post = ({ InboundCalls }) => {
-  return new ValidatedMethod({
+export const post = ({ InboundCalls }) =>
+  action({
     name: 'inboundCalls/post',
+    roles: ['inboundCalls', 'admin', 'inboundCalls-*'],
+    args: {
+      kind: Match.OneOf('patient', 'other'),
+      note: String,
+      topicId: Match.Maybe(Match.Optional(String)),
+      pinnedBy: Match.Maybe(Match.Optional(String)),
+      privatePatient: Match.Maybe(Match.Optional(Boolean)),
 
-    validate: new SimpleSchema({
-      lastName: { type: String },
-      firstName: { type: String, optional: true },
-      telephone: { type: String, optional: true },
-      note: { type: String, optional: true },
-      topicId: { type: String, optional: true },
-      pinnedBy: { type: String, optional: true },
-      privatePatient: { type: Boolean, optional: true },
-      payload: { type: Object, blackbox: true, optional: true }
-    }).validator(),
+      lastName: Match.Maybe(Match.Optional(String)),
+      firstName: Match.Maybe(Match.Optional(String)),
+      telephone: Match.Maybe(Match.Optional(String)),
 
-    run (data) {
-      const _id = InboundCalls.insert(data)
-      Events.post('inboundCalls/post', { _id })
-      return _id
+      patient: Match.Maybe(Match.Optional(Object)),
+      payload: Match.Maybe(Match.Optional(Object)),
+    },
+    fn ({
+      kind,
+      note,
+      topicId,
+      pinnedBy,
+      privatePatient,
+      lastName,
+      firstName,
+      telephone,
+      patient,
+      payload
+    }) {
+      const call = {
+        kind,
+        note,
+        topicId,
+        pinnedBy,
+        privatePatient,
+        payload
+      }
+
+      if (kind === 'other') {
+        const _id = InboundCalls.insert({
+          ...call,
+          lastName,
+          firstName,
+          telephone
+        })
+
+        Events.post('inboundCalls/post', { _id })
+        return _id
+      } else if (kind === 'patient') {
+        const { patientId, ...patientFields } = patient
+
+        if (!patientId) {
+          throw new Meteor.Error('patientId is required when kind is patient')
+        }
+
+        if (patientId === 'newPatient') {
+          const newPatientId = Meteor.call('patients/upsert', {
+            patient: patientFields
+          })
+
+          const _id = InboundCalls.insert({
+            ...call,
+            patientId: newPatientId
+          })
+
+          Events.post('inboundCalls/post', { _id })
+          return _id
+        } else {
+          const existingPatientId = Meteor.call('patients/upsert', {
+            patient: {
+              ...patientFields,
+              _id: patientId
+            }
+          })
+
+          const _id = InboundCalls.insert({
+            ...call,
+            patientId: existingPatientId
+          })
+
+          Events.post('inboundCalls/post', { _id })
+          return _id
+        }
+      }
     }
   })
-}

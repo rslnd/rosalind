@@ -22,13 +22,20 @@ export const inboundCallsTopics = new SimpleSchema({
 })
 
 export const inboundCalls = new SimpleSchema({
+  kind: {
+    type: String,
+    allowedValues: ['patient', 'other'],
+    optional: true
+  },
+
   firstName: {
     type: String,
     optional: true
   },
 
   lastName: {
-    type: String
+    type: String,
+    optional: true
   },
 
   telephone: {
@@ -37,13 +44,18 @@ export const inboundCalls = new SimpleSchema({
   },
 
   note: {
-    type: String,
-    optional: true
+    type: String
   },
 
   privatePatient: {
     type: Boolean,
     defaultValue: false
+  },
+
+  patientId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true,
+    index: 1
   },
 
   topicId: {

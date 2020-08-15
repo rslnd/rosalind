@@ -1,5 +1,6 @@
 import { toClass } from 'recompose'
 import { InboundCalls, InboundCallsTopics } from '../../api/inboundCalls'
+import { Patients } from '../../api/patients'
 import { InboundCallsScreen } from './InboundCallsScreen'
 import { withTracker } from '../components/withTracker'
 import { subscribe } from '../../util/meteor/subscribe'
@@ -19,7 +20,13 @@ const composer = (props) => {
 
     const inboundCalls = InboundCalls.find(selector, {
       sort: { pinnedBy: -1, createdAt: 1 }
-    }).fetch()
+    }).fetch().map(inboundCall => ({
+      ...inboundCall,
+      patient: inboundCall.patientId &&
+        Patients.findOne({ _id: inboundCall.patientId })
+    }))
+
+
     const resolve = (_id) => InboundCalls.methods.resolve.call({ _id })
     const unresolve = (_id) => InboundCalls.methods.unresolve.call({ _id })
 

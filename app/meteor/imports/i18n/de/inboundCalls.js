@@ -24,6 +24,9 @@ export const inboundCalls = {
   isSmsFromPatientAsReplyToAppointmentReminder: 'SMS von PatientIn als Antwort auf die Terminerinnerung für den',
   isSmsFromPatientAsReplyToAppointmentReminderLinkText: '__calendarName__-Termin am __date__ um __time__',
   isSmsFromPatientAsReplyToAppointmentReminderLinkTextWithAssigneeName: '__calendarName__-Termin am __date__ um __time__ bei __assigneeName__',
+  telephone: 'Telefon',
+  firstName: 'Vorname',
+  lastName: 'Nachname',
   form: {
     firstName: {
       label: 'Vorname'

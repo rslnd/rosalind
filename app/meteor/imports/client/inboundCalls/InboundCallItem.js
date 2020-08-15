@@ -10,6 +10,7 @@ import { highlightBackground, highlightColor } from '../layout/styles'
 import { InlineEdit } from '../components/form'
 import { prompt } from '../layout/Prompt'
 import { TopicPicker } from './TopicPicker'
+import { PatientName } from '../patients/PatientName'
 
 export class InboundCallItem extends React.Component {
   render () {
@@ -21,6 +22,7 @@ export class InboundCallItem extends React.Component {
       edit,
       canResolve,
       canEdit,
+      patient,
       fullNameWithTitle
     } = this.props
 
@@ -54,23 +56,35 @@ export class InboundCallItem extends React.Component {
       <div className='box box-widget' style={style}>
         <div className='box-header'>
           <h4 className='username enable-select'>
-            <InlineEdit
-              onChange={edit(_id, 'lastName')}
-              canEdit={canEdit}
-              value={lastName}
-              noUI
-            >
-              <b>{lastName}</b>
-            </InlineEdit>
+            {
+              (lastName || firstName) &&
+                <>
+                  <InlineEdit
+                    onChange={edit(_id, 'lastName')}
+                    canEdit={canEdit}
+                    value={lastName}
+                    placeholder={__('inboundCalls.lastName')}
+                    noUI
+                  >
+                    <b>{lastName}</b>
+                  </InlineEdit>
 
-            &nbsp;
+                  &nbsp;
 
-            <InlineEdit
-              onChange={edit(_id, 'firstName')}
-              canEdit={canEdit}
-              value={firstName}
-              noUI
-            />
+                  <InlineEdit
+                    onChange={edit(_id, 'firstName')}
+                    canEdit={canEdit}
+                    placeholder={__('inboundCalls.firstName')}
+                    value={firstName}
+                    noUI
+                  />
+                </>
+            }
+
+            {
+              (patient || inboundCall.patient) &&
+                <PatientName patient={(patient || inboundCall.patient)} />
+            }
 
             &ensp;
 
@@ -81,14 +95,17 @@ export class InboundCallItem extends React.Component {
               {topicLabel || (canEdit && __('inboundCalls.thisOpen'))}
             </small>
           </h4>
-          <InlineEdit
-            onChange={edit(_id, 'telephone')}
-            canEdit={canEdit}
-            value={zerofix(telephone)}
-            noUI
-            fullWidth>
-            <h3 className='description enable-select'>{zerofix(telephone)}</h3>
-          </InlineEdit>
+          {telephone &&
+            <InlineEdit
+              onChange={edit(_id, 'telephone')}
+              canEdit={canEdit}
+              value={zerofix(telephone)}
+              noUI
+              placeholder={__('inboundCalls.telephone')}
+              fullWidth>
+              <h3 className='description enable-select'>{zerofix(telephone)}</h3>
+            </InlineEdit>
+          }
         </div>
         <div className='box-body'>
           <blockquote>

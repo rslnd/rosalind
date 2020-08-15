@@ -3,13 +3,19 @@ import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { InboundCalls } from '../../api/inboundCalls'
 import { Box } from '../components/Box'
-import { NewInboundCallForm } from './NewInboundCallForm'
+import { NewInboundCallForm, formName } from './NewInboundCallForm'
 import Alert from 'react-s-alert'
 import { hasRole } from '../../util/meteor/hasRole'
+import { PatientsAppointmentsContainer } from '../patientAppointments/PatientsAppointmentsContainer'
+import { reset } from 'redux-form'
 
 export class NewInboundCallContainer extends React.Component {
   constructor (props) {
     super(props)
+
+    this.state = {
+      patientModalId: null
+    }
 
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -25,7 +31,7 @@ export class NewInboundCallContainer extends React.Component {
           reject(err)
         } else {
           Alert.success(__('inboundCalls.postSuccess'))
-          dispatch({ type: 'INBOUND_CALL_POST_SUCCESS' })
+          dispatch(reset(formName))
           resolve()
         }
       })
@@ -40,6 +46,15 @@ export class NewInboundCallContainer extends React.Component {
             onSubmit={this.handleSubmit}
             canPin={hasRole(Meteor.userId(), ['admin', 'inboundCalls-pin'])} />
         </Box>
+
+        {
+          this.state.patientModalId &&
+          <PatientsAppointmentsContainer
+            show
+            patientId={this.state.patientModalId}
+            onClose={this.handlePatientModalClose}
+          />
+        }
       </div>
     )
   }

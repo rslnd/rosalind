@@ -1,5 +1,6 @@
 import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
+import { Patients } from '../../api/patients'
 import { InboundCalls } from '../../api/inboundCalls'
 import { InboundCallItem } from './InboundCallItem'
 import { hasRole } from '../../util/meteor/hasRole'
@@ -28,9 +29,13 @@ const composer = (props) => {
     const canEdit = (inboundCall.createdBy === Meteor.userId()) ||
       hasRole(Meteor.userId(), ['admin', 'inboundCalls-edit'])
 
+    const patient = inboundCall.patientId &&
+      Patients.findOne({ _id: inboundCall.patientId })
+
     return {
       ...props,
       inboundCall,
+      patient,
       edit,
       resolve,
       unresolve,
