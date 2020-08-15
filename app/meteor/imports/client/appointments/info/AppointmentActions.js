@@ -49,7 +49,10 @@ const Button = ({ icon, name, primary, ...props }) => {
 
 const buttonStyle = {
   opacity: 0.75,
-  marginRight: 20
+  marginRight: 20,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  minWidth: 30
 }
 
 const primaryButtonStyle = {
@@ -176,12 +179,18 @@ const containerStyle = {
 }
 
 const leftStyle = {
-  flexGrow: 1
+  flexGrow: 1,
+  display: 'flex',
+  flexWrap: 'nowrap',
+  minWidth: 100
 }
 
 const rightStyle = {
   flexShrink: 1,
-  textAlign: 'right'
+  display: 'flex',
+  flexWrap: 'nowrap',
+  textAlign: 'right',
+  minWidth: 100
 }
 
 AppointmentActions.displayName = 'AppointmentActions'
