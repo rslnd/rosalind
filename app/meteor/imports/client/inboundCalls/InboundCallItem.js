@@ -22,7 +22,6 @@ export class InboundCallItem extends React.Component {
       edit,
       canResolve,
       canEdit,
-      patient,
       fullNameWithTitle
     } = this.props
 
@@ -36,6 +35,8 @@ export class InboundCallItem extends React.Component {
       pinnedBy,
       _id
     } = inboundCall
+
+    const patient = this.props.patient || inboundCall.patient
 
     const topic = showTopic && InboundCallsTopics.findOne({ _id: topicId })
     const topicLabel = topic && topic.label
@@ -82,8 +83,8 @@ export class InboundCallItem extends React.Component {
             }
 
             {
-              (patient || inboundCall.patient) &&
-                <PatientName patient={(patient || inboundCall.patient)} />
+              patient &&
+                <PatientName patient={patient} />
             }
 
             &ensp;
@@ -105,6 +106,12 @@ export class InboundCallItem extends React.Component {
               fullWidth>
               <h3 className='description enable-select'>{zerofix(telephone)}</h3>
             </InlineEdit>
+          }
+          {
+            patient && patient.contacts && patient.contacts.find(c => c.channel === 'Phone') &&
+              <h3 className='description enable-select'>
+                {zerofix(patient.contacts.find(c => c.channel === 'Phone').value)}
+              </h3>
           }
         </div>
         <div className='box-body'>
