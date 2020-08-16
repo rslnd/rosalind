@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 export const PatientPickerField = connect(state => ({
   showFields: state.patientPicker.patient
-}))(({ change, extended, upsert, nameEditable, showFields }) =>
+}))(({ change, extended, upsert, nameEditable, showFields, ...pickerProps }) =>
   <div>
     <FormName>{
       ({ form }) =>
@@ -15,6 +15,7 @@ export const PatientPickerField = connect(state => ({
           component={PatientPicker}
           formName={form}
           upsert={upsert}
+          {...pickerProps}
         />
     }</FormName>
 

@@ -165,11 +165,12 @@ export const receive = (payload) => {
 
   // If we couldn't match this incoming message to a message we sent,
   // or if it is not an intent to cancel, create an inbound call
-  const inboundCallId = InboundCalls.methods.post.call({
+  const inboundCallId = InboundCalls.insert({
     lastName: (patient && patient.lastName) || 'SMS',
     firstName: (patient && patient.firstName) || undefined,
     telephone: message.from,
     note: message.text,
+    patientId: patient ? patientId : undefined,
     payload: {
       channel: 'SMS',
       messageId,

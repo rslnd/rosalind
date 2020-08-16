@@ -46,6 +46,7 @@ export class InboundCallItem extends React.Component {
     const handleTopicEdit = async () => {
       const newId = await prompt({
         // title: 'Verschieben',
+        confirm: 'Verschieben',
         Component: TopicPicker,
         initialValue: topicId
       })
@@ -65,6 +66,7 @@ export class InboundCallItem extends React.Component {
                     canEdit={canEdit}
                     value={lastName}
                     placeholder={__('inboundCalls.lastName')}
+                    hidePlaceholder
                     noUI
                   >
                     <b>{lastName}</b>
@@ -76,6 +78,7 @@ export class InboundCallItem extends React.Component {
                     onChange={edit(_id, 'firstName')}
                     canEdit={canEdit}
                     placeholder={__('inboundCalls.firstName')}
+                    hidePlaceholder
                     value={firstName}
                     noUI
                   />
@@ -84,7 +87,13 @@ export class InboundCallItem extends React.Component {
 
             {
               patient &&
-                <PatientName patient={patient} />
+                <LinkToAppointmentContainer inboundCall={inboundCall}>
+                  {({ onClick }) =>
+                    <span style={linkStyle} onClick={onClick}>
+                      <PatientName patient={patient} />
+                    </span>
+                  }
+                </LinkToAppointmentContainer>
             }
 
             &ensp;
@@ -103,6 +112,7 @@ export class InboundCallItem extends React.Component {
               value={zerofix(telephone)}
               noUI
               placeholder={__('inboundCalls.telephone')}
+              hidePlaceholder
               fullWidth>
               <h3 className='description enable-select'>{zerofix(telephone)}</h3>
             </InlineEdit>
@@ -157,4 +167,8 @@ export class InboundCallItem extends React.Component {
 const pinnedStyle = {
   backgroundColor: highlightBackground,
   color: highlightColor
+}
+
+const linkStyle = {
+  cursor: 'pointer'
 }

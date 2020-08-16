@@ -27,6 +27,7 @@ export const inboundCalls = {
   telephone: 'Telefon',
   firstName: 'Vorname',
   lastName: 'Nachname',
+  patientFile: 'Kartei',
   form: {
     firstName: {
       label: 'Vorname'

@@ -1,5 +1,5 @@
 import idx from 'idx'
-import React from 'react'
+import React, { useState } from 'react'
 import { reduxForm, FormSection, Field, formValueSelector } from 'redux-form'
 import Button from '@material-ui/core/Button'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -10,16 +10,18 @@ import { PatientPickerField } from '../patients/picker'
 import { __ } from '../../i18n'
 import { hasRole } from '../../util/meteor/hasRole'
 import { RadioField } from '../components/form/RadioField'
-import { compose } from 'recompose'
+import { compose, mapProps } from 'recompose'
 import { connect } from 'react-redux'
+import { PatientsAppointmentsContainer } from '../patientAppointments/PatientsAppointmentsContainer'
 
 export const formName = 'newInboundCall'
 
-class NewInboundCallFormComponent extends React.Component {
-  render () {
-    const { kind, patient, invalid, pristine, submitting, handleSubmit, onSubmit, canPin } = this.props
+const NewInboundCallFormComponent = (props) => {
+  const [modalPatientId, setModalPatientId] = useState(null)
+  const { kind, patient, invalid, pristine, submitting, handleSubmit, onSubmit, canPin } = props
 
-    return (
+  return (
+    <>
       <form onSubmit={handleSubmit(onSubmit)} className='mui' autoComplete='off'>
         <div className='row'>
           <div className='col-md-12'>
@@ -38,7 +40,7 @@ class NewInboundCallFormComponent extends React.Component {
                       },
                       { 
                         label:'andere',
-                        value:'other', 
+                        value:'other',
                         title:'Unternehmen, Apotheken, Einrichtungen, etc.'
                       }
                     ]}
@@ -51,7 +53,7 @@ class NewInboundCallFormComponent extends React.Component {
                       <FormSection name='patient'>
                         <PatientPickerField
                           withAppointments
-                          // onPatientModalOpen={this.handlePatientModalOpen}
+                          onPatientModalOpen={setModalPatientId}
                           formName={formName}
                           upsert
                           nameEditable={patient && patient.patientId === 'newPatient'}
@@ -121,15 +123,30 @@ class NewInboundCallFormComponent extends React.Component {
             </Button>
           </div>
         </div>
-
       </form>
-    )
-  }
+      <PatientsAppointmentsContainer
+        show={Boolean(modalPatientId)}
+        onClose={() => setModalPatientId(null)}
+        patientId={modalPatientId}
+        viewInCalendar
+      />
+    </>
+  )
 }
 
 const selector = formValueSelector(formName)
 
 export const NewInboundCallForm = compose(
+  connect(state => ({
+    patient: idx(state, _ => _.patientPicker.patient)
+  })),
+  mapProps(props => ({
+    ...props,
+    patient: props.patient ? {
+      ...(props.patient || {}),
+      patientId: props.patient._id || props.patient.patientId
+    } : undefined
+  })),
   reduxForm({
     form: formName,
     fields: [
@@ -138,6 +155,7 @@ export const NewInboundCallForm = compose(
       'lastName', 'firstName', 'telephone', 'note', 'topicId', 'pinnedBy'
     ],
     initialValues: {
+      topicId: null,
       kind: 'patient'
     },
     validate: ({ note }) => {

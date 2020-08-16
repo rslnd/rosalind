@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import debounce from 'lodash/debounce'
 import flatten from 'lodash/flatten'
 import { withTracker } from '../components/withTracker'
 import { subscribe } from '../../util/meteor/subscribe'
 import { compose, withHandlers, withState } from 'recompose'
+import { connect } from 'react-redux'
 import { InboundCalls } from '../../api/inboundCalls'
 import TextField from '@material-ui/core/TextField'
 import { InboundCallsList } from './InboundCallsScreen'
 import { __ } from '../../i18n'
 import { ContentHeader } from '../components/ContentHeader'
+import { PatientPicker } from '../patients/picker'
 
 const debouncedSubscribe = debounce(subscribe, 150)
 
-const composer = ({ query = '' }) => {
+const composer = ({ patient, query = '' }) => {
   const subscription = debouncedSubscribe('inboundCalls-resolved', { query })
 
   const selector =
@@ -24,16 +26,16 @@ const composer = ({ query = '' }) => {
           { telephone: { $regex: word, $options: 'i' } },
           { firstName: { $regex: '^' + word, $options: 'i' } }
         ]))
-      } : {
-        removed: true
-      }
+      } : (patient
+        ? { patientId: (patient.patientId || patient._id) }
+        : { removed: true })
 
   const inboundCalls = InboundCalls.find(selector, {
     sort: {
       removedAt: -1
     },
     removed: true,
-    limit: 60
+    limit: 30
   }).fetch()
 
   const isLoadingCalls = (subscription && !subscription.ready()) && inboundCalls.length === 0
@@ -45,14 +47,17 @@ const composer = ({ query = '' }) => {
     isLoadingCalls,
     inboundCalls,
     resolve,
-    unresolve
+    unresolve,
+    patient
   }
 }
 
-const ResolvedScreenComponent = ({ handleQueryChange, query, isLoadingCalls, inboundCalls, resolve, unresolve }) =>
+const ResolvedScreenComponent = ({ setPatientId, patientId, handleQueryChange, query, isLoadingCalls, inboundCalls, resolve, unresolve }) =>
   <div>
     <ContentHeader title={__('inboundCalls.thisResolved')} />
     <div className='content'>
+      <PatientPicker />
+
       <TextField
         value={query}
         onChange={handleQueryChange}
@@ -75,6 +80,9 @@ const searchStyle = {
 }
 
 export const ResolvedScreen = compose(
+  connect(state => ({
+    patient: state.patientPicker.patient
+  })),
   withState('query', 'changeQuery', ''),
   withHandlers({
     handleQueryChange: props => e => props.changeQuery(e.target.value)

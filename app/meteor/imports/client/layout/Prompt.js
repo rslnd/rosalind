@@ -64,7 +64,7 @@ export const Prompts = () => {
           <br />
           <div style={buttonsStyle}>
             <Button style={flex} fullWidth onClick={handleClose}>Abbrechen</Button>
-            <Button style={flex} color='primary' fullWidth onClick={handleOK}>OK</Button>
+            <Button style={flex} color='primary' fullWidth onClick={handleOK}>{currentOptions.confirm || 'OK'}</Button>
           </div>
         </> : null}
       </ErrorBoundary>

@@ -147,7 +147,7 @@ export class InlineEdit extends React.Component {
 
         {this.props.children || (this.props.value && this.props.value.split('\n').map((t, i) => (
           <span style={this.props.lineStyle} key={i}>{t}<br /></span>
-        ))) || this.props.placeholder}
+        ))) || (this.props.hidePlaceholder ? null : this.props.placeholder)}
       </span>
     } else {
       return <span style={spanStyle} onMouseLeave={this.handleMouseLeave}>

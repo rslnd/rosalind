@@ -8,7 +8,7 @@ export const post = ({ InboundCalls }) =>
     args: {
       kind: Match.OneOf('patient', 'other'),
       note: String,
-      topicId: Match.Maybe(Match.Optional(String)),
+      topicId: Match.Maybe(Match.OneOf(undefined, null, String)),
       pinnedBy: Match.Maybe(Match.Optional(String)),
       privatePatient: Match.Maybe(Match.Optional(Boolean)),
 

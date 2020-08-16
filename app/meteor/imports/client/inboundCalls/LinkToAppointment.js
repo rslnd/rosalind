@@ -1,15 +1,15 @@
 import React from 'react'
-import { AppointmentModal } from '../appointments/info/AppointmentModal'
+import { PatientsAppointmentsContainer } from '../patientAppointments/PatientsAppointmentsContainer'
 
 export const LinkToAppointment = ({ text, linkText, onClick }) => (
-  (text &&
+  ((text || linkText) &&
     <div className='row'>
       <span className='text-muted col-md-12'>
         {
           linkText
             ? (
               <span>
-                {text}<br />
+                {text} {text && <br />}
                 <a onClick={onClick}>{linkText}</a>
               </span>
             ) : text
@@ -41,19 +41,30 @@ export class LinkToAppointmentWrapper extends React.Component {
   }
 
   render () {
+    const {
+      patientId,
+      appointmentId,
+      children
+    } = this.props
+
     return (
-      <div>
-        <LinkToAppointment {...this.props} onClick={this.handleModalOpen} />
+      <>
         {
-          this.props.appointmentId &&
-            <AppointmentModal
+          (children && (appointmentId || patientId))
+            ? children({ onClick: this.handleModalOpen })
+            : <LinkToAppointment {...this.props} onClick={this.handleModalOpen} />
+        }
+        {
+          (appointmentId || patientId) &&
+            <PatientsAppointmentsContainer
               show={this.state.modalOpen}
               onClose={this.handleModalClose}
-              appointmentId={this.props.appointmentId}
+              appointmentId={appointmentId}
+              patientId={patientId}
               viewInCalendar
             />
         }
-      </div>
+      </>
     )
   }
 }

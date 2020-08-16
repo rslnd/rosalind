@@ -1,3 +1,5 @@
+import { darkGrayActive } from "../../layout/styles"
+
 export const flex = {
   display: 'flex'
 }
@@ -27,5 +29,6 @@ export const iconStyle = {
 
 export const buttonStyle = {
   ...iconStyle,
-  marginTop: 16
+  marginTop: 16,
+  color: darkGrayActive
 }

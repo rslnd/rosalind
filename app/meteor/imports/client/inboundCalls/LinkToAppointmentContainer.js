@@ -20,49 +20,63 @@ const getFormattedAppointmentData = (appointmentId) => {
     if (appointment.assigneeId) {
       const assignee = Users.findOne({ _id: appointmentId }, { removed: true })
       const assigneeName = assignee && Users.methods.fullNameWithTitle(assignee)
-      return { calendarName, date, time, assigneeName }
+      return { calendarName, date, time, assigneeName, patientId: appointment.patientId }
     } else {
-      return { calendarName, date, time }
+      return { calendarName, date, time, patientId: appointment.patientId }
     }
   } else {
     return {}
   }
 }
 
-const composer = ({ inboundCall }) => {
-  if (!(inboundCall && inboundCall.payload)) {
-    return {}
+const composer = ({ inboundCall, ...props }) => {
+  if (!(inboundCall && (inboundCall.payload || inboundCall.patientId))) {
+    return props
   }
 
-  if (inboundCall.payload.channel !== 'SMS') {
-    return {}
+  if (inboundCall.payload && (inboundCall.payload.channel !== 'SMS')) {
+    return props
   }
 
-  const appointmentId = inboundCall.payload.appointmentId
+  if (inboundCall.payload) {
+    const appointmentId =inboundCall.payload.appointmentId
+    const { date, time, calendarName, assigneeName, patientId } = getFormattedAppointmentData(appointmentId)
 
-  const { date, time, calendarName, assigneeName } = getFormattedAppointmentData(appointmentId)
 
-  if (!date) {
-    return { text: __('inboundCalls.isSmsFromPatient') }
-  }
+    if (!date) {
+      return { text: __('inboundCalls.isSmsFromPatient') }
+    }
 
-  if (date && !assigneeName) {
-    return {
-      text: __('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminder'),
-      linkText: __('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkText', { calendarName, date, time }),
-      appointmentId
+    if (date && !assigneeName) {
+      return {
+        text: __('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminder'),
+        linkText: __('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkText', { calendarName, date, time }),
+        appointmentId,
+        patientId,
+        ...props
+      }
+    }
+
+    if (date && assigneeName) {
+      return {
+        text: __('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminder'),
+        linkText: __('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkTextWithAssigneeName', { calendarName, date, time, assigneeName }),
+        appointmentId,
+        patientId,
+        ...props
+      }
     }
   }
 
-  if (date && assigneeName) {
+  if (inboundCall.patientId) {
     return {
-      text: __('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminder'),
-      linkText: __('inboundCalls.isSmsFromPatientAsReplyToAppointmentReminderLinkTextWithAssigneeName', { calendarName, date, time, assigneeName }),
-      appointmentId
+      linkText: __('inboundCalls.patientFile'),
+      patientId: inboundCall.patientId,
+      ...props
     }
   }
 
-  return {}
+  return props
 }
 
 export const LinkToAppointmentContainer = withTracker(composer)(LinkToAppointmentWrapper)
