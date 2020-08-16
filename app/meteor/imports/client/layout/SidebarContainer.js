@@ -116,6 +116,7 @@ const sidebarItems = ({ history }) => {
         { name: 'thisTags', path: '/tags' },
         { name: 'thisMediaTags', path: '/mediaTags' },
         { name: 'thisInboundCallsTopics', path: '/inboundCallsTopics' },
+        { name: 'thisTemplates', path: '/templates' },
         { name: 'thisReferrables', path: '/referrables' },
         { name: 'thisMessages', path: '/messages' },
         { name: 'thisSettings', path: '/settings' }

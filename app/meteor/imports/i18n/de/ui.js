@@ -51,5 +51,6 @@ export const ui = {
   pleaseFill: 'Bitte eintragen',
   composeEmail: 'Email schreiben',
   startDate: 'von',
-  endDate: 'bis'
+  endDate: 'bis',
+  printing: 'Wird gedruckt'
 }

@@ -21,6 +21,7 @@ import { Constraints } from './constraints'
 import { Availabilities } from './availabilities'
 import { Media, MediaTags } from './media'
 import { Records } from './records'
+import { Templates } from './templates'
 
 export {
   Users,
@@ -48,5 +49,6 @@ export {
   Availabilities,
   Media,
   MediaTags,
-  Records
+  Records,
+  Templates
 }

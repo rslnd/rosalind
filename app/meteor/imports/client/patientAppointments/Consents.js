@@ -1,3 +1,4 @@
+import idx from 'idx'
 import Alert from 'react-s-alert'
 import uniq from 'lodash/uniq'
 import moment from 'moment-timezone'
@@ -15,12 +16,13 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { DocumentPicker } from '../components/DocumentPicker'
 import { Icon } from '../components/Icon'
 import { TagsList } from '../tags/TagsList'
-import { getClientKey } from '../../startup/client/native/events'
-import { Clients, MediaTags, Media, Appointments } from '../../api'
+import { getClientKey, toNative } from '../../startup/client/native/events'
+import { Clients, MediaTags, Media, Appointments, Templates } from '../../api'
 import { Close } from './Close'
 import { withTracker } from '../components/withTracker'
 import { __ } from '../../i18n'
 import { Preview } from '../media/Drawer'
+import { withProps } from 'recompose'
 
 export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) => {
   const clientKey = getClientKey()
@@ -34,35 +36,6 @@ export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) =
     })
   }
 }
-
-
-const reverse = [
-  'Peelings',
-  'Blutplasma',
-  'Botox',
-  'Erbium Yag-Lager',
-  'Fadenlifting',
-  'Fett-Weg-Spritze',
-  'Gefäßlaser',
-  'Haarentfernung',
-  'Hyaluronsäure',
-  'IPL',
-  'Kryochirurgie',
-  'Microneedling',
-  'OP',
-  'Peelings',
-  'Permanent Make-up',
-  'ResurFX',
-  'Schaumsklerosierung',
-  'Schaumverödung',
-  'Tageslicht-PDT',
-  'Tattooentfernung',
-  'Vitalfeldmessung',
-  'kosmetisch störende Hautveränderungen',
-  'Abholung Vertretung',
-  'DSGVO',
-  'TCE'
-]
 
 const composer = props => {
   const { appointmentId, patientId } = props
@@ -102,6 +75,15 @@ const composer = props => {
   }
 }
 
+const TemplatePicker = withProps({
+  toDocument: _id => Templates.findOne({ _id }),
+  toLabel: ({ _id }) => idx(Templates.findOne({ _id }), _ => _.name),
+  render: ({ name }) => name,
+  toKey: ({ _id }) => _id,
+  options: () => Templates.find({}).fetch()
+})(DocumentPicker)
+
+
 export const Popover = withTracker(composer)(({
   open,
   onClose,
@@ -112,10 +94,22 @@ export const Popover = withTracker(composer)(({
   appointment,
   pastAppointmentsWithConsents,
 }) => {
-  const [template, setTemplate] = useState(null)
+  const [templateId, setTemplateId] = useState(null)
 
   const handlePrint = () => {
-    // TODO
+    if (!templateId) { return }
+    const template = Templates.findOne({ _id: templateId })
+    if (!template) { return }
+
+    console.log('printing template', template)
+
+    toNative('print', {
+      title: template.name,
+      localPath: template.localPath,
+      physical: true
+    })
+
+    Alert.info(__('ui.printing'))
   }
 
   const handleScan = () => {
@@ -151,13 +145,9 @@ export const Popover = withTracker(composer)(({
     <p style={headingStyle}>Revers</p>
     <div style={newConsentStyle}>
       <div style={pickerStyle}>
-        <DocumentPicker
-          onChange={setTemplate}
-          value={template}
-          toLabel={a => a}
-          toDocument={a => a}
-          toKey={a => a}
-          options={() => reverse} />
+        <TemplatePicker
+          onChange={setTemplateId}
+          value={templateId} />
       </div>
       <Button
         onClick={handlePrint}
@@ -182,7 +172,7 @@ export const Popover = withTracker(composer)(({
           style={pastConsentStyle}>
           <ListItemIcon>
             <Checkbox
-              checked={!!a.consentMediaIds.some(mid => appointment.consentMediaIds.indexOf(mid) !== -1)}
+              checked={Boolean(a.consentMedias && a.consentMedias.some(m => appointment.consentMediaIds && appointment.consentMediaIds.indexOf(m._id) !== -1))}
               disableRipple
               edge='start' />
           </ListItemIcon>

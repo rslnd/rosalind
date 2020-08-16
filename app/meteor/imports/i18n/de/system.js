@@ -14,6 +14,7 @@ export const system = {
   thisEvents: 'Ereignisse',
   thisNative: 'Arbeitsplatz',
   thisReferrables: 'Empfehlungen',
+  thisTemplates: 'Vorlagen',
   events: {
     'appointments/insert': 'hat einen Termin ausgemacht',
     'appointments/acquireLock': 'hat einen Termin vorübergehend reserviert',

@@ -18,6 +18,7 @@ import constraints from '../../api/constraints/server'
 import availabilities from '../../api/availabilities/server'
 import media from '../../api/media/server'
 import records from '../../api/records/server'
+import templates from '../../api/templates/server'
 
 export default function () {
   settings()
@@ -40,4 +41,5 @@ export default function () {
   availabilities()
   media()
   records()
+  templates()
 }
