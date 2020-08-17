@@ -117,12 +117,12 @@ export const Popover = withTracker(composer)(({
     scan({ mediaTag, patientId, appointmentId })
   }
 
-  const handleSelectPastAppointmentConsent = appointmentId => {
+  const handleSelectPastAppointmentConsent = pastAppointmentId => {
     const pastAppointment = Appointments.findOne({ _id:
-      appointmentId })
+      pastAppointmentId })
 
     if (!pastAppointment) {
-      throw new Error(`handleSelectPastAppointmentConsent: Cannot find past appointment with id ${appointmentId}`)
+      throw new Error(`handleSelectPastAppointmentConsent: Cannot find past appointment with id ${pastAppointmentId}`)
     }
 
     const consentMediaIds = uniq([
@@ -177,7 +177,7 @@ export const Popover = withTracker(composer)(({
               edge='start' />
           </ListItemIcon>
 
-          <span>{moment(a.start).format(__('time.dateFormat'))}</span>
+      <span>{JSON.stringify(a.consentMedias.map(m => m._id))} + {JSON.stringify(appointment.consentMediaIds)} {moment(a.start).format(__('time.dateFormat'))}</span>
           <TagsList tiny showDuration={false} tags={a.tags} />
           <div style={drawerStyle}>
             {a.consentMedias.map(m =>

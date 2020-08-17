@@ -1,4 +1,4 @@
 Contact: mailto:me@albertzak.com
-Contact: mailto:security@rslnd.com
+Contact: mailto:security@fxp.at
 Encryption: https://keybase.io/albertzak
 Preferred-Languages: en, de

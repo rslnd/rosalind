@@ -1,19 +1,16 @@
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Settings } from '../../settings'
 import { Events } from '../../events'
+import { action } from '../../../util/meteor/action'
 
-export const register = ({ Clients }) => {
-  return new ValidatedMethod({
+export const register = ({ Clients }) =>
+  action({
     name: 'clients/register',
-    mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
-      clientKey: { type: String, min: 200 },
-      systemInfo: { type: Object, blackbox: true }
-    }).validator(),
-
-    run ({ clientKey, systemInfo }) {
+    args: {
+      clientKey: String,
+      systemInfo: Object
+    },
+    allowAnonymous: true,
+    fn ({ clientKey, systemInfo }) {
       if (this.isSimulation) {
         return { isOk: true }
       }
@@ -50,4 +47,3 @@ export const register = ({ Clients }) => {
       }
     }
   })
-}
