@@ -23,6 +23,7 @@ import { withTracker } from '../components/withTracker'
 import { __ } from '../../i18n'
 import { Preview } from '../media/Drawer'
 import { withProps } from 'recompose'
+import { getClient } from '../../api/clients/methods/getClient'
 
 export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) => {
   const clientKey = getClientKey()
@@ -103,10 +104,16 @@ export const Popover = withTracker(composer)(({
 
     console.log('printing template', template)
 
+    const client = getClient()
+    const printer = (client && client.settings && client.settings.print && client.settings.print.printer) || undefined
+    const flags = (client && client.settings && client.settings.print && client.settings.print.flags) || undefined
+
     toNative('print', {
+      physical: true,
       title: template.name,
       localPath: template.localPath,
-      physical: true
+      printer,
+      flags
     })
 
     Alert.info(__('ui.printing'))

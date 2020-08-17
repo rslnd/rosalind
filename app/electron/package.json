@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.237",
+  "version": "0.0.238",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -29,10 +29,11 @@
     "glob": "^7.1.6",
     "iconv-lite": "^0.6.0",
     "lodash": "^4.17.19",
+    "logdna": "^3.5.0",
+    "pdf-to-printer": "^1.4.1",
     "pkginfo": "^0.4.1",
     "request": "^2.88.2",
-    "temp": "^0.9.1",
-    "logdna": "^3.5.0"
+    "temp": "^0.9.1"
   },
   "build": {
     "appId": "com.rslnd.rosalind",
