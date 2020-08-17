@@ -61,6 +61,12 @@ class DocumentScanner: RCTEventEmitter, ImageScannerControllerDelegate {
     return true
   }
 
+  @objc(log:)
+  func log(message: String) -> Void {
+    os_log("[console.log] %s", message)
+  }
+
+
   @objc(open)
   func open() -> Void {
     os_log("DocumentScanner: Requested open scanner");

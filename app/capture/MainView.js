@@ -93,7 +93,7 @@ const styles = {
     alert: {
       position: 'absolute',
       zIndex: 2,
-      top: 25 + 6 + 6 + 12,
+      top: 25 + 6 + 6 + 11,
       left: 0,
       color: '#000000',
       display: 'flex',

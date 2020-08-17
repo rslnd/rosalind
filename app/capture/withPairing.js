@@ -34,6 +34,9 @@ const handlePairingFinish = props => pairingCode => {
 
     Meteor.disconnect()
     props.setPairedTo(null)
+    props.setNextMedia(null)
+    props.setCurrentPatient(null)
+
     Meteor.connect(wsUrl)
 
     props.showSuccess('connected')
@@ -55,7 +58,6 @@ const pair = props => async ({ url, pairingToken }) => {
     })
 
     props.setPairedTo(consumerId)
-    props.setBaseUrl(url)
     props.showSuccess('connected')
     console.log('Paired to consumer', consumerId)
   } catch (e) {
@@ -96,7 +98,6 @@ const withCurrentPatient = props => {
 
 export const withPairing = compose(
   withState('pairedTo', 'setPairedTo', null),
-  withState('baseUrl', 'setBaseUrl', null),
   withState('nextMedia', 'setNextMedia', null),
   withState('currentPatient', 'setCurrentPatient', null),
   withHandlers({ handlePairingFinish }),
