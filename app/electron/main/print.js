@@ -60,6 +60,5 @@ const printToPdf = (options) => {
 }
 
 module.exports = {
-  start,
-  print
+  start
 }
