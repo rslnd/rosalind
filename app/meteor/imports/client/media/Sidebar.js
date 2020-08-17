@@ -112,7 +112,7 @@ const Selector = ({ selector, setSelector, patientId, appointmentId }) => {
   const allMedia = Media.find({ patientId }).fetch()
   const maxCycle = Math.max(...allMedia.map(m => m.cycle).filter(identity))
   const cycles = (maxCycle >= 1)
-    ? range(1, maxCycle + 1).map(cycle => ({
+    ? range(maxCycle + 1, 1).map(cycle => ({ // reverse range to put newest cycles first
       label: `Sitzung ${cycle}`,
       value: { cycle: String(cycle) }
     }))
