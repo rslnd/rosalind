@@ -17,7 +17,7 @@ const start = (options) => {
       }
 
       console.log(`[print] physical file "${localPath}" on printer "${printer}" with flags ${JSON.stringify(args)}`)
-      pdfToPrinter(localPath, args)
+      pdfToPrinter.print(localPath, args)
     } else {
       options.title = title
       console.log(options.title)
