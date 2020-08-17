@@ -1,5 +1,5 @@
 import React from 'react'
-import { toClass } from 'recompose'
+import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
@@ -9,6 +9,9 @@ import { UserPicker } from '../users/UserPicker'
 import { CalendarPicker } from '../calendars/CalendarPicker'
 import { __ } from '../../i18n'
 import { darken } from '../layout/styles'
+import { DocumentPicker } from '../components/DocumentPicker'
+import { Templates } from '../../api'
+import idx from 'idx'
 
 const structure = ({ getCalendarName, getAssigneeName }) => [
   {
@@ -138,7 +141,14 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'maxParallel'
   },
   {
-    header: 'Revers?',
+    header: 'Revers-Vorlage',
+    field: 'consentTemplateId',
+    unsetWhenEmpty: true,
+    EditComponent: TemplatePicker,
+    render: t => t.consentTemplateId && idx(Templates.findOne({ _id: t.consentTemplateId }), _ => _.name)
+  },
+  {
+    header: 'Revers nötig?',
     field: 'isConsentRequired',
     type: Boolean
   },
@@ -185,3 +195,10 @@ export const TagsScreen = toClass(({ tags, getCalendarName, getAssigneeName, han
     </div>
   </div>
 )
+
+const TemplatePicker = withProps({
+  toDocument: _id => Templates.findOne({ _id }),
+  toLabel: ({ _id }) => idx(Templates.findOne({ _id }), _ => _.name),
+  toKey: ({ _id }) => _id,
+  options: () => Templates.find({}).fetch()
+})(DocumentPicker)

@@ -17,7 +17,7 @@ import { DocumentPicker } from '../components/DocumentPicker'
 import { Icon } from '../components/Icon'
 import { TagsList } from '../tags/TagsList'
 import { getClientKey, toNative } from '../../startup/client/native/events'
-import { Clients, MediaTags, Media, Appointments, Templates } from '../../api'
+import { Clients, MediaTags, Media, Appointments, Templates, Tags } from '../../api'
 import { Close } from './Close'
 import { withTracker } from '../components/withTracker'
 import { __ } from '../../i18n'
@@ -95,7 +95,11 @@ export const Popover = withTracker(composer)(({
   appointment,
   pastAppointmentsWithConsents,
 }) => {
-  const [templateId, setTemplateId] = useState(null)
+  const defaultTemplateId = (
+    Tags.methods.expand(appointment.tags || [])
+    .find(t => t.consentTemplateId) || {}).consentTemplateId
+
+  const [templateId, setTemplateId] = useState(defaultTemplateId)
 
   const handlePrint = () => {
     if (!templateId) { return }
@@ -153,6 +157,7 @@ export const Popover = withTracker(composer)(({
     <div style={newConsentStyle}>
       <div style={pickerStyle}>
         <TemplatePicker
+          defaultValue={defaultTemplateId}
           onChange={setTemplateId}
           value={templateId} />
       </div>
@@ -184,7 +189,7 @@ export const Popover = withTracker(composer)(({
               edge='start' />
           </ListItemIcon>
 
-      <span>{JSON.stringify(a.consentMedias.map(m => m._id))} + {JSON.stringify(appointment.consentMediaIds)} {moment(a.start).format(__('time.dateFormat'))}</span>
+      <span>{moment(a.start).format(__('time.dateFormat'))}</span>
           <TagsList tiny showDuration={false} tags={a.tags} />
           <div style={drawerStyle}>
             {a.consentMedias.map(m =>

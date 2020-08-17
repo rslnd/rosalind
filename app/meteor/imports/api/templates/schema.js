@@ -17,10 +17,5 @@ export const Schema = new SimpleSchema({
   order: {
     type: Number,
     optional: true
-  },
-
-  tagIds: {
-    type: [SimpleSchema.RegEx.Id],
-    optional: true
   }
 })

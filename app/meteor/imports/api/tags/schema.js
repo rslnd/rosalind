@@ -92,6 +92,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  consentTemplateId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
   noSmsAppointmentReminder: {
     type: Boolean,
     optional: true
