@@ -220,11 +220,15 @@ const onNativeDataTransfer = async file => {
 
   switch (file.importer) {
     case 'mediaDocument':
-      return insertMedia({
+      const response = await insertMedia({
         base64: file.base64 || file.content,
         name: file.path,
         mediaType: 'image/jpeg'
       })
+
+      onDataTransferSuccess({ importer: file.importer, ...file })
+
+      return response
     default:
       const response = await ingest({
         name: file.path,
@@ -234,11 +238,12 @@ const onNativeDataTransfer = async file => {
 
       if (typeof response === 'object') {
         const { importer, result } = response
-        onDataTransferSuccess({ importer, result, ...file })
-      } else {
-        onDataTransferSuccess({ importer: file.importer, ...file })
+        return onDataTransferSuccess({ importer, result, ...file })
       }
   }
+
+  // Avoid 859 bug (2020-08-18) where non-removed imports pile up until they all flush into a wrong target
+  onDataTransferSuccess({ importer: file.importer, ...file })
 }
 
 const onDataTransferSuccess = ({ importer, result, remove, path, focus }) => {
