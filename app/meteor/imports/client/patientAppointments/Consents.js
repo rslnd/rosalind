@@ -179,11 +179,10 @@ export const Popover = withTracker(composer)(({
       {pastAppointmentsWithConsents.map(a =>
         <ListItem
           key={a._id}
-          button
-          onClick={() => handleSelectPastAppointmentConsent(a._id)}
           style={pastConsentStyle}>
           <ListItemIcon>
             <Checkbox
+              onClick={() => handleSelectPastAppointmentConsent(a._id)}
               checked={Boolean(a.consentMedias && a.consentMedias.some(m => appointment.consentMediaIds && appointment.consentMediaIds.indexOf(m._id) !== -1))}
               disableRipple
               edge='start' />
