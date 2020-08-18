@@ -59,7 +59,7 @@ export class InboundCallItem extends React.Component {
         <div className='box-header'>
           <h4 className='username enable-select'>
             {
-              (lastName || firstName) &&
+              ((lastName || firstName) && !patient) &&
                 <>
                   <InlineEdit
                     onChange={edit(_id, 'lastName')}
