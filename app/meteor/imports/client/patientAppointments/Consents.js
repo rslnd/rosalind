@@ -81,7 +81,7 @@ const TemplatePicker = withProps({
   toLabel: ({ _id }) => idx(Templates.findOne({ _id }), _ => _.name),
   render: ({ name }) => name,
   toKey: ({ _id }) => _id,
-  options: () => Templates.find({}).fetch()
+  options: () => Templates.find({}, { sort: { order: 1}}).fetch()
 })(DocumentPicker)
 
 
