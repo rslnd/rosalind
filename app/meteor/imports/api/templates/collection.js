@@ -4,6 +4,7 @@ import { Schema } from './schema'
 
 let Templates = new Mongo.Collection('templates')
 Templates.attachSchema(Schema)
+Templates.attachBehaviour('softRemovable')
 Templates.actions = actions({ Templates })
 
 export default Templates
