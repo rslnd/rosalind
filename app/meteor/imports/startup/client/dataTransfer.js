@@ -220,7 +220,7 @@ const onNativeDataTransfer = async file => {
 
   switch (file.importer) {
     case 'mediaDocument':
-      const response = await insertMedia({
+      const result = await insertMedia({
         base64: file.base64 || file.content,
         name: file.path,
         mediaType: 'image/jpeg'
@@ -228,7 +228,7 @@ const onNativeDataTransfer = async file => {
 
       onDataTransferSuccess({ importer: file.importer, ...file })
 
-      return response
+      return result
     default:
       const response = await ingest({
         name: file.path,
