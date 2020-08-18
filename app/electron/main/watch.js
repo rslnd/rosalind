@@ -41,36 +41,46 @@ const start = ({ ipcReceiver, handleFocus }) => {
   startWatchers({ ipcReceiver, handleFocus })
 }
 
-const startWatchers = ({ ipcReceiver, handleFocus }) => {
+const startWatchers = async ({ ipcReceiver, handleFocus }) => {
   const settings = getSettings()
   if (settings.watch) {
     logger.info('[Watch] Watching paths', settings.watch)
 
-    watchers = settings.watch.map((watch) => {
+    watchers = await Promise.all(settings.watch.map((watch) => {
       if (!watch.enabled) { return }
 
       const { importer, remove } = watch
 
-      let watcher = chokidar.watch(watch.path, {
-        persistent: true,
-        ignored: /[/\\]\./,
-        depth: 0,
-        usePolling: true,
-        disableGlobbing: true,
-        interval: 50,
-        binaryInterval: 50,
-        awaitWriteFinish: {
-          stabilityThreshold: 101,
-          pollInterval: 30
-        }
+      return new Promise((resolve, reject) => {
+        fs.mkdir(watch.path, { recursive: true }, (err) => {
+          if (err) {
+            reject(err)
+            return logger.error(`[Watch] Failed to create direcotry to watch ${watch.path} for importer ${importer}`)
+          }
+
+          let watcher = chokidar.watch(watch.path, {
+            persistent: true,
+            ignored: /[/\\]\./,
+            depth: 0,
+            usePolling: true,
+            disableGlobbing: true,
+            interval: 50,
+            binaryInterval: 50,
+            awaitWriteFinish: {
+              stabilityThreshold: 101,
+              pollInterval: 30
+            }
+          })
+  
+          watcher.on('add', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
+          watcher.on('change', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
+
+          resolve(watcher)
+        })
       })
+    }))
 
-      watcher.on('add', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
-      watcher.on('change', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
-
-      return watcher
-    })
-
+    // Optionally remove files after successful ingestion
     const { ipcMain } = require('electron')
     ipcMain.on('dataTransferSuccess', (e, { remove, path, focus }) => {
       if (pendingTransferPaths.indexOf(path) === -1) {
