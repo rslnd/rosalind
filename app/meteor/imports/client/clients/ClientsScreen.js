@@ -50,8 +50,10 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
     header: 'Einstellungen',
     field: 'settings',
     fromString: JSON.parse,
-    stringify: JSON.stringify,
-    render: c => c.settings && <pre>{JSON.stringify(c.settings, null, 2)}</pre>
+    stringify: s => JSON.stringify(s, null, 2),
+    render: c => c.settings && <pre>{JSON.stringify(c.settings, null, 2)}</pre>,
+    multiline: true,
+    rowsMax: 20
   },
   {
     header: 'Kann mit Kamera verbunden werden',

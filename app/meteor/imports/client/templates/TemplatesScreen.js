@@ -64,6 +64,15 @@ const structure = () => [
     field: 'base64',
     type: 'file',
     accept: '.pdf,application/pdf,x-pdf'
+  },
+  {
+    header: 'Platzhalter',
+    field: 'placeholders',
+    fromString: JSON.parse,
+    stringify: s => JSON.stringify(s, null, 2),
+    render: c => c.placeholders && <pre>{JSON.stringify(c.placeholders, null, 2)}</pre>,
+    multiline: true,
+    rowsMax: 20
   }
 ]
 

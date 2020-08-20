@@ -120,7 +120,7 @@ class EditModal extends React.Component {
   }
 
   render () {
-    const { style, structure: { accept, type, field, isMulti, EditComponent } } = this.props
+    const { style, structure: { accept, type, field, isMulti, EditComponent, multiline, rowsMax } } = this.props
 
     const boxStyle = {
       zIndex: 50,
@@ -176,6 +176,8 @@ class EditModal extends React.Component {
               name='modalEditText'
               autoFocus
               label={field.header}
+              multiline={multiline}
+              rowsMax={rowsMax}
               onChange={this.handleChange}
               value={this.state.value || ''} />
             <Button
