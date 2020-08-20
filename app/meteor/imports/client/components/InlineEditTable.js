@@ -39,6 +39,20 @@ const Cell = ({ isEditing, col, row, onClick, rows }) => {
     contents = row[col.field] ? <Icon name='check' /> : null
   }
 
+  if (!col.render && col.type === 'file') {
+    try {
+    contents = row[col.field]
+      ? <span>
+          <Icon name='document' />&nbsp;
+          {parseInt(row[col.field].length / 1024 ) + ' kB'}
+        </span>
+      : null
+    } catch (e) {
+      console.error(e)
+      contents = <Icon name='document' />
+    }
+  }
+
   return (
     <td
       onClick={onClick}
@@ -65,6 +79,21 @@ class EditModal extends React.Component {
   }
 
   handleChange (e) {
+    if (this.props.structure.type === 'file') {
+      const file = e.target.files[0]
+      console.log(file)
+
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        this.setState({
+          value: reader.result
+        })
+      }
+      reader.readAsDataURL(file)
+
+      return
+    }
+
     // const value = (idx(e, _ => _.target.value) || idx(e, _ => _.hex) || e)
     const value = (e && e.target) ? e.target.value : (
       (e && e.hex) ? e.hex : (
@@ -91,7 +120,7 @@ class EditModal extends React.Component {
   }
 
   render () {
-    const { style, structure: { field, isMulti, EditComponent } } = this.props
+    const { style, structure: { accept, type, field, isMulti, EditComponent } } = this.props
 
     const boxStyle = {
       zIndex: 50,
@@ -118,28 +147,44 @@ class EditModal extends React.Component {
                 <span><Icon name='check' /></span>
               </Button>
             </Paper>
-            : field === 'color'
-              ? <SwatchesPicker
-                color={this.state.value}
-                onChange={this.handleChange}
-                onChangeComplete={this.handleUpdateClick} />
-              : <Paper
-                style={{ padding: 6 }}
-                elevation={10}>
-                <TextField
-                  fullWidth
-                  name='modalEditText'
-                  autoFocus
-                  label={field.header}
-                  onChange={this.handleChange}
-                  value={this.state.value || ''} />
-                <Button
-                  fullWidth
-                  style={{ marginTop: 6 }}
-                  onClick={this.handleUpdateClick}>
-                  <span><Icon name='check' /></span>
-                </Button>
-              </Paper>
+          : field === 'color'
+          ? <SwatchesPicker
+            color={this.state.value}
+            onChange={this.handleChange}
+            onChangeComplete={this.handleUpdateClick} />
+          : type === 'file'
+          ? <Paper
+            style={{ padding: 6 }}
+            elevation={10}>
+              <input
+                type='file'
+                accept={accept}
+                onChange={this.handleChange} />
+            <Button
+              fullWidth
+              style={{ marginTop: 6 }}
+              onClick={this.handleUpdateClick}>
+              <span><Icon name='check' /></span>
+            </Button>
+          </Paper>
+
+          : <Paper
+            style={{ padding: 6 }}
+            elevation={10}>
+            <TextField
+              fullWidth
+              name='modalEditText'
+              autoFocus
+              label={field.header}
+              onChange={this.handleChange}
+              value={this.state.value || ''} />
+            <Button
+              fullWidth
+              style={{ marginTop: 6 }}
+              onClick={this.handleUpdateClick}>
+              <span><Icon name='check' /></span>
+            </Button>
+          </Paper>
         }
       </div>
     )

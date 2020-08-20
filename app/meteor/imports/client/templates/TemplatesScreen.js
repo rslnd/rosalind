@@ -58,6 +58,12 @@ const structure = () => [
   {
     header: 'Lokaler Dateipfad',
     field: 'localPath'
+  },
+  {
+    header: 'PDF',
+    field: 'base64',
+    type: 'file',
+    accept: '.pdf,application/pdf,x-pdf'
   }
 ]
 
