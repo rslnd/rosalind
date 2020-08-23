@@ -53,7 +53,9 @@ export const Patient = ({ patient, calendar, currentAppointment, handleMediaClic
           fieldStyle={noteFieldStyle} />
       </div>
       <div style={marginBottomStyle}>
-        <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} />
+        {/* Legacy, keep showing previously agreed but all future agreements should be scanned documents */}
+        {/* <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} /> */}
+
         <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
         <PairingButton />
         <ScanButton
