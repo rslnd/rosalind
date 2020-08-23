@@ -1,3 +1,4 @@
+import idx from 'idx'
 import { action, Match } from '../../../../util/meteor/action'
 import { Events } from '../../../events'
 import { Clients } from '../../../clients'
@@ -90,6 +91,11 @@ export const insert = ({ Media, MediaTags }) =>
       // Documents do not have cycles
       if (kind === 'document') {
         cycle = null
+
+        // documents with pinned tags are global for the patient
+        if (tagIds.some(t => idx(MediaTags.findOne({ _id: t }), _ => _.pinned))) {
+          appointmentId = null
+        }
       }
 
       // TODO // BUG: photos don't have tags initially, until there is a way

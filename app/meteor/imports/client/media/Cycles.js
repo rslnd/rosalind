@@ -5,6 +5,8 @@ import identity from 'lodash/identity'
 import uniq from 'lodash/uniq'
 import groupBy from 'lodash/fp/groupBy'
 import map from 'lodash/map'
+import sortBy from 'lodash/sortBy'
+import reverse from 'lodash/reverse'
 import { getClientKey } from '../../startup/client/native/events'
 import { Clients } from '../../api'
 import { Icon } from '../components/Icon'
@@ -12,7 +14,22 @@ import { Icon } from '../components/Icon'
 export const patientCyclesNames = patientId => {
   const medias = MediaAPI.find({ patientId }, { sort: { createdAt: -1 } }).fetch()
   const uniqueCycles = uniq(medias.map(m => m.cycle).filter(identity))
-  return uniqueCycles
+  return reverse(sortBy(uniqueCycles)) // newest firt, for sidebar filter
+}
+
+const nextCycleNumber = patientId => {
+  const names = patientCyclesNames(patientId)
+  if (names.length === 0) { return '1' }
+
+  const highestNumber = Math.max(...names.map(n => parseInt(n)))
+
+  // BUG
+  if (!highestNumber || isNaN(highestNumber)) {
+    console.warn(`[Media] nextCycleNumber: Fallback to buggy legacy behavior, where deleting an old cycle causes the next cycle to be equal to the last cycle: ${patientId} ${names.join(',')}`)
+    return String(names.length + 1)
+  } else {
+    return String(highestNumber + 1)
+  }
 }
 
 export const setNextMedia = ({ patientId, appointmentId, cycle }) => {
@@ -71,7 +88,7 @@ const hoverPlaceholderStyle = {
 }
 
 export const NewCycle = ({ patientId, appointmentId, currentCycle }) => {
-  const newCycleNr = String(patientCyclesNames(patientId).length + 1)
+  const newCycleNr = nextCycleNumber(patientId)
   const handleNewCycle = () =>
     setNextMedia({ patientId, appointmentId, cycle: newCycleNr })
   const isNewCycle = currentCycle === newCycleNr

@@ -60,6 +60,7 @@ export const Patient = ({ patient, calendar, currentAppointment, handleMediaClic
           isCurrent
           pinned
           patientId={patient._id}
+          appointmentId={currentAppointment ? currentAppointment._id : null}
         >Dokument scannen</ScanButton>
       </div>
     </div>

@@ -13,6 +13,7 @@ import Select from 'react-select'
 import identity from 'lodash/identity'
 import range from 'lodash/range'
 import uniq from 'lodash/uniq'
+import { patientCyclesNames } from './Cycles'
 
 const composer = (props) => {
   const { patientId, media, selector, setSelector } = props
@@ -111,7 +112,7 @@ const Selector = ({ selector, setSelector, patientId, appointmentId }) => {
   const allMedia = Media.find({ patientId }).fetch()
   const maxCycle = Math.max(...allMedia.map(m => m.cycle).filter(identity))
   const cycles = (maxCycle >= 1)
-    ? range(maxCycle, 0).map(cycle => ({ // reverse range to put newest cycles first. end of range (0) is excluded.
+    ? patientCyclesNames(patientId).map(cycle => ({
       label: `Sitzung ${cycle}`,
       value: { cycle: String(cycle) }
     }))
