@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import idx from 'idx'
 import Alert from 'react-s-alert'
 import uniq from 'lodash/uniq'
@@ -24,6 +25,7 @@ import { __ } from '../../i18n'
 import { Preview } from '../media/Drawer'
 import { withProps } from 'recompose'
 import { getClient } from '../../api/clients/methods/getClient'
+import { hasRole } from '../../util/meteor/hasRole'
 
 export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) => {
   const clientKey = getClientKey()
@@ -95,6 +97,8 @@ export const Popover = withTracker(composer)(({
   appointment,
   pastAppointmentsWithConsents,
 }) => {
+  const canPrint = hasRole(Meteor.userId(), ['templates-print'])
+
   const defaultTemplateId = (
     Tags.methods.expand(appointment.tags || [])
     .find(t => t.consentTemplateId) || {}).consentTemplateId
@@ -155,17 +159,22 @@ export const Popover = withTracker(composer)(({
     <Close onClick={onClose} />
     <p style={headingStyle}>Revers</p>
     <div style={newConsentStyle}>
-      <div style={pickerStyle}>
-        <TemplatePicker
-          defaultValue={defaultTemplateId}
-          onChange={setTemplateId}
-          value={templateId} />
-      </div>
-      <Button
-        onClick={handlePrint}
-        style={printButtonStyle}
-        variant='outlined'
-        color='primary'>Drucken</Button>
+
+      {canPrint &&
+        <>
+          <div style={pickerStyle}>
+            <TemplatePicker
+              defaultValue={defaultTemplateId}
+              onChange={setTemplateId}
+              value={templateId} />
+          </div>
+          <Button
+            onClick={handlePrint}
+            style={printButtonStyle}
+            variant='outlined'
+            color='primary'>Drucken</Button>
+        </>
+      }
       <Button
         onClick={handleScan}
         style={printButtonStyle}
