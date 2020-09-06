@@ -19,7 +19,7 @@ export const prompt = (options) => {
   currentOptions = options
   currentPrompt = new Deferred()
 
-  globalHandleChange(options.initialValue)
+  globalHandleChange(options.initialValue || true) // true for plain confirmation prompts
   globalSetOpen(true)
 
   return currentPrompt.promise
@@ -56,10 +56,12 @@ export const Prompts = () => {
         {(open && currentOptions) ? <>
           {currentOptions.title}
 
-          <currentOptions.Component
-            value={value}
-            onChange={handleChange}
-          />
+          {currentOptions.Component &&
+            <currentOptions.Component
+              value={value}
+              onChange={handleChange}
+            />
+          }
 
           <br />
           <div style={buttonsStyle}>

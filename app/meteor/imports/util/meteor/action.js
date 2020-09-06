@@ -140,6 +140,18 @@ export const lifecycleActions = ({
         Collection.softRemove({ _id: a[`${singular}Id`] })
         console.log(`[${plural}] softRemove (lifecycle) ${a[`${singular}Id`]} by ${this.userId}`)
       }
+    }),
+    hardRemove: actions.includes('hardRemove') && action({
+      name: `${plural}/hardRemove`,
+      roles,
+      args: {
+        [`${singular}Id`]: String
+      },
+      fn: function (a) {
+        Collection.remove({ _id: a[`${singular}Id`] })
+        console.log(`[${plural}] hardRemove (lifecycle) ${a[`${singular}Id`]} by ${this.userId}`)
+      }
     })
+
   }
 }
