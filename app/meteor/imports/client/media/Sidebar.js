@@ -86,8 +86,6 @@ const composer = (props) => {
     }
   }, { currentMonth: null, currentAppointmentId: null, sections: [] })
 
-  console.log(sections)
-
   // select some "next" media when removing currently viewed media, or close modal if none left
   const handleRemove = (mediaId) => {
     props.setCurrentMediaId(prevMediaId || nextMediaId)

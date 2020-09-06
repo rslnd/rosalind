@@ -18,20 +18,68 @@ export const MediaOverlay = compose(
     }
   })
 )(({ patientId, appointmentId, currentMedia, currentMediaId, setCurrentMediaId, children }) => {
+  // Reset state when media changes
+  const setCurrentMediaIdShadowed = (_id) => {
+    setCurrentMediaId(_id)
+    setZoomed(false)
+    setLoaded(false)
+  }
+
+  const [urlIndex, setUrlIndex] = useState(0)
+  const [loaded, setLoaded] = useState(false)
   const [zoomed, setZoomed] = useState()
   const imgRef = useRef(null)
   const modalRef = useRef(null)
+
+  // Work around stale prop value in timeout effect handler
+  const currentMediaRef = useRef(currentMedia)
+  currentMediaRef.current = currentMedia
+  const loadedRef = useRef(loaded)
+  loadedRef.current = loaded
+
   useEffect(() => {
     if (currentMediaId) {
       modalRef.current.focus()
     }
-  }, [currentMediaId])
+
+    const loadingTimeout = setTimeout(() => {
+      if (currentMediaRef.current && !loadedRef.current) {
+        handleError(new Error('Custom early image loading timeout fired'))
+      }
+    }, 2000)
+    return () => clearTimeout(loadingTimeout)
+  }, [currentMediaId, urlIndex])
+
+  const url = currentMedia
+  ? (currentMedia.urls[urlIndex] || currentMedia.urls[0])
+  : null
+
+  const handleLoad = () => {
+    console.log('image loaded')
+    setLoaded(true)
+  }
+
+  const handleError = (e) => {
+    if (!currentMedia) {
+      return
+    }
+
+    if (loaded) {
+      console.log(`[media] fallback: image ${currentMedia._id} at url ${urlIndex} failed to load handler called but is already loaded, ignoring`)
+      return
+    }
+
+    console.log(`[media] fallback: image ${currentMedia._id} at url ${urlIndex} failed to load`)
+
+    setLoaded(false)
+    setUrlIndex((urlIndex + 1) % currentMedia.urls.length)
+  }
 
   const handleMediaClick = mediaId => {
     console.log('[Media] Viewing', mediaId)
-    setCurrentMediaId(mediaId)
+    setCurrentMediaIdShadowed(mediaId)
   }
-  const handleClose = () => setCurrentMediaId(null)
+  const handleClose = () => setCurrentMediaIdShadowed(null)
   const toggleZoom = e => {
     e.stopPropagation()
     setZoomed(!zoomed)
@@ -76,7 +124,7 @@ export const MediaOverlay = compose(
               patientId={patientId}
               appointmentId={appointmentId}
               media={currentMedia}
-              setCurrentMediaId={setCurrentMediaId}
+              setCurrentMediaId={setCurrentMediaIdShadowed}
             />
           </div>
 
@@ -85,7 +133,9 @@ export const MediaOverlay = compose(
               <img
                 ref={imgRef}
                 onClick={toggleZoom}
-                src={currentMedia.url}
+                src={url}
+                onError={handleError}
+                onLoad={handleLoad}
                 style={imgStyle({
                   zoomed,
                   rotation: currentMedia.rotation,
