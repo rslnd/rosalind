@@ -27,7 +27,7 @@ export const insert = ({ Media, MediaTags }) =>
       cycle: Match.Maybe(Match.OneOf(undefined, null, String)),
       tagIds: Match.Maybe(Match.OneOf(undefined, null, [String], [])),
       clientKey: Match.Optional(String),
-      preview: Match.Optional(String),
+      preview: String,
       nonce: Match.Optional(String)
     },
     fn: function ({ width, height, takenAt, kind, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle, tagIds, nonce }) {
@@ -52,8 +52,8 @@ export const insert = ({ Media, MediaTags }) =>
 
       if (!userId) { throw new Error('No userId found in pairing or meteor auth') }
 
-      if (preview && !preview.match(/^data:image\//)) {
-        throw new Error(`Invalid preview URL, needs to start with data:image: ${preview.substr(0, 50)}`)
+      if (!preview.match(/^data:image\//)) {
+        throw new Error(`Invalid preview URL, needs to start with "data:image/" but was given: "${preview.substr(0, 50)}"`)
       }
 
       const existingMedia = (nonce && nonce.length >= 20)
@@ -93,7 +93,7 @@ export const insert = ({ Media, MediaTags }) =>
         cycle = null
 
         // documents with pinned tags are global for the patient
-        if (tagIds.some(t => idx(MediaTags.findOne({ _id: t }), _ => _.pinned))) {
+        if (tagIds && tagIds.some(t => idx(MediaTags.findOne({ _id: t }), _ => _.pinned))) {
           appointmentId = null
         }
       }

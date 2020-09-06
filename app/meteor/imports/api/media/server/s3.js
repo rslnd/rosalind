@@ -14,7 +14,7 @@ const requiredKeys = [
 ]
 
 export const getCredentials = () => {
-  const publicConfig = process.env.MEDIA_S3_CONFIG
+  const config = process.env.MEDIA_S3_CONFIG
     ? JSON.parse(process.env.MEDIA_S3_CONFIG)
     : Settings.get('media.s3.config')
 
@@ -22,19 +22,19 @@ export const getCredentials = () => {
     ? JSON.parse(process.env.MEDIA_S3_SECRETS)
     : Settings.get('media.s3.secrets')
 
-  if (publicConfig.length !== secrets.length) {
-    throw new Error(`There are ${publicConfig.length} S3 configs specified, but ${secrets.length} secrets`)
+  if (config.length !== secrets.length) {
+    throw new Error(`There are ${config.length} S3 configs specified, but ${secrets.length} secrets`)
   }
 
   const scheme = process.env.NODE_ENV === 'development' ? 'http' : 'https'
 
-  const config = publicConfig.map((c, i) => ({
+  const secretConfig = config.map((c, i) => ({
     ...c,
     scheme,
     secretAccessKey: secrets[i]
   }))
 
-  const errors = config.map(c => {
+  const errors = secretConfig.map(c => {
     const missing = requiredKeys.filter(k => !c[k])
     if (missing.length >= 1) {
       return `S3 config with index ${i} is missing keys: ${missing.join(',')}`
@@ -44,13 +44,13 @@ export const getCredentials = () => {
     throw new Error(`Missing media credentials: ${errors.join(', ')}`)
   }
 
-  return config
+  return secretConfig
 }
 
-export const createPresignedRequests = ({ credentials, filename, ...properties }) => {
-  return credentials.map(c => {
-    const { region, host, accessKeyId, secretAccessKey, scheme, bucketUploads, bucketDownloads } = c
-    const bucket = properties.method === 'PUT' ? bucketUploads : bucketDownloads
+export const createPresignedRequests = ({ credentials, filename, headers, method = 'GET', signQuery }) => {
+  return credentials.map(cred => {
+    const { region, host, accessKeyId, secretAccessKey, scheme, bucketUploads, bucketDownloads } = cred
+    const bucket = method === 'PUT' ? bucketUploads : bucketDownloads
     const path = '/' + bucket + '/' + filename
     const url = scheme + '://' + host + path
     const signed = sign({
@@ -58,11 +58,13 @@ export const createPresignedRequests = ({ credentials, filename, ...properties }
       region,
       url,
       path,
-      method: 'GET',
-      host,
-      ...properties
+      method,
+      headers: {...(headers || {})}, // damn mutation
+      signQuery,
+      host
+      // horrible mutability: can't splat properties here as it gets mutated inside the sign call and causes eg headers from previous signs to persist
     }, { accessKeyId, secretAccessKey })
-  
+
     return signed
   })
 }
