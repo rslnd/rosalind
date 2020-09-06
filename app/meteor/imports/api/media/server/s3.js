@@ -1,42 +1,70 @@
+import identity from 'lodash/identity'
 import { URL } from 'url'
 import { sign } from 'aws4'
 import { Settings } from '../../settings'
 
+const requiredKeys = [
+  'bucketUploads',
+  'bucketDownloads',
+  'region',
+  'host',
+  'accessKeyId',
+  'secretAccessKey',
+  'scheme'
+]
+
 export const getCredentials = () => {
-  const bucketUploads = process.env.MEDIA_S3_BUCKET_UPLOADS || Settings.get('media.s3.bucketUploads')
-  const bucketDownloads = process.env.MEDIA_S3_BUCKET_DOWNLOADS || Settings.get('media.s3.bucketDownloads')
-  const region = process.env.MEDIA_S3_REGION || Settings.get('media.s3.region')
-  const host = process.env.MEDIA_S3_HOST || Settings.get('media.s3.host')
-  const accessKeyId = process.env.MEDIA_S3_ACCESS_KEY_ID || Settings.get('media.s3.accessKey')
-  const secretAccessKey = process.env.MEDIA_S3_SECRET_ACCESS_KEY || Settings.get('media.s3.secretAccessKey')
-  const scheme = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+  const publicConfig = process.env.MEDIA_S3_CONFIG
+    ? JSON.parse(process.env.MEDIA_S3_CONFIG)
+    : Settings.get('media.s3.config')
 
-  const credentials = { bucketUploads, bucketDownloads, region, host, accessKeyId, secretAccessKey, scheme }
+  const secrets = process.env.MEDIA_S3_SECRETS
+    ? JSON.parse(process.env.MEDIA_S3_SECRETS)
+    : Settings.get('media.s3.secrets')
 
-  const missing = Object.keys(credentials).filter(k => !credentials[k])
-  if (missing.length >= 1) {
-    throw new Error(`Missing media credentials settings for ${missing.join(', ')}`)
+  if (publicConfig.length !== secrets.length) {
+    throw new Error(`There are ${publicConfig.length} S3 configs specified, but ${secrets.length} secrets`)
   }
 
-  return credentials
+  const scheme = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+
+  const config = publicConfig.map((c, i) => ({
+    ...c,
+    scheme,
+    secretAccessKey: secrets[i]
+  }))
+
+  const errors = config.map(c => {
+    const missing = requiredKeys.filter(k => !c[k])
+    if (missing.length >= 1) {
+      return `S3 config with index ${i} is missing keys: ${missing.join(',')}`
+    }
+  }).filter(identity)
+  if (errors.length >= 1) {
+    throw new Error(`Missing media credentials: ${errors.join(', ')}`)
+  }
+
+  return config
 }
 
-export const createPresignedRequest = ({ credentials, filename, ...properties }) => {
-  const { region, host, accessKeyId, secretAccessKey, scheme } = credentials
-  const bucket = properties.method === 'PUT' ? credentials.bucketUploads : credentials.bucketDownloads
-  const path = '/' + bucket + '/' + filename
-  const url = scheme + '://' + host + path
-  const signed = sign({
-    service: 's3',
-    region,
-    url,
-    path,
-    method: 'GET',
-    host,
-    ...properties
-  }, { accessKeyId, secretAccessKey })
-
-  return signed
+export const createPresignedRequests = ({ credentials, filename, ...properties }) => {
+  return credentials.map(c => {
+    const { region, host, accessKeyId, secretAccessKey, scheme, bucketUploads, bucketDownloads } = c
+    const bucket = properties.method === 'PUT' ? bucketUploads : bucketDownloads
+    const path = '/' + bucket + '/' + filename
+    const url = scheme + '://' + host + path
+    const signed = sign({
+      service: 's3',
+      region,
+      url,
+      path,
+      method: 'GET',
+      host,
+      ...properties
+    }, { accessKeyId, secretAccessKey })
+  
+    return signed
+  })
 }
 
 export const requestToUrl = request => {

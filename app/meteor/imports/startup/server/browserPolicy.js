@@ -11,9 +11,18 @@ const none = "'none'"
 
 const mediaHosts = () => {
   const hosts = [
-    process.env.MEDIA_S3_HOST,
-    Settings.get('media.s3.host')
+    process.env.MEDIA_S3_HOST, // LEGACY
+    Settings.get('media.s3.host'), // LEGACY
+    ...(process.env.MEDIA_S3_CONFIG
+      ? JSON.parse(process.env.MEDIA_S3_CONFIG).map(c => c.host)
+      : []
+    ),
+    ...(Settings.get('media.s3.config')
+      ? Settings.get('media.s3.config').map(c => c.host)
+      : []
+    )
   ]
+
   const scheme = (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') ? 'https://' : 'http://'
   return hosts.filter(identity).map(h => [scheme, h].join(''))
 }

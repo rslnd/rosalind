@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import uniq from 'lodash/uniq'
 import identity from 'lodash/identity'
 import { mediaTypes, kinds } from '../../schema'
-import { getCredentials, createPresignedRequest } from '../s3'
+import { getCredentials, createPresignedRequests } from '../s3'
 import { hasRole } from '../../../../util/meteor/hasRole'
 import { Appointments } from '../../../appointments'
 
@@ -135,7 +135,7 @@ export const insert = ({ Media, MediaTags }) =>
 
       // Create multiple presigned requests as fallbacks, the app will try to upload to one of them starting, with the first
       const credentials = getCredentials()
-      const signed = createPresignedRequest({
+      const signed = createPresignedRequests({
         credentials,
         filename,
         method: 'PUT',
@@ -145,9 +145,7 @@ export const insert = ({ Media, MediaTags }) =>
         }
       })
 
-      const presignedRequests = [
-        signed
-      ].map(p => ({
+      const presignedRequests = signed.map(p => ({
         ...p,
         mediaType,
         filename,

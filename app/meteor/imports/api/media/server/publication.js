@@ -1,5 +1,5 @@
 import { publish } from '../../../util/meteor/publish'
-import { getCredentials, createPresignedRequest, requestToUrl } from './s3'
+import { getCredentials, createPresignedRequests, requestToUrl } from './s3'
 
 export const publication = ({ Media, MediaTags }) => {
   publish({
@@ -9,19 +9,19 @@ export const publication = ({ Media, MediaTags }) => {
       patientId: String
     },
     fn: function ({ patientId }) {
-      // TODO: Scope properly
-      const selector = {}
+      const selector = { patientId }
 
       // Attach derived field on documents before publishing
       const credentials = getCredentials()
       const transform = doc => {
-        const request = createPresignedRequest({
+        const requests = createPresignedRequests({
           credentials,
           filename: doc.filename,
           signQuery: true
         })
 
-        doc.url = requestToUrl(request)
+        doc.urls = requests.map(r => requestToUrl(r))
+        doc.url = doc.urls[0] // LEGACY
         return doc
       }
 

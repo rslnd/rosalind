@@ -220,15 +220,20 @@ const onNativeDataTransfer = async file => {
 
   switch (file.importer) {
     case 'mediaDocument':
-      const result = await insertMedia({
-        base64: file.base64 || file.content,
-        name: file.path,
-        mediaType: 'image/jpeg'
-      })
+      try {
+        const result = await insertMedia({
+          base64: file.base64 || file.content,
+          name: file.path,
+          mediaType: 'image/jpeg'
+        })
 
-      onDataTransferSuccess({ importer: file.importer, ...file })
+        onDataTransferSuccess({ importer: file.importer, ...file })
 
-      return result
+        return result
+      } catch (e) {
+        console.error(e)
+        Alert.error('Entschuldigung! Bild konnte nicht gespeichert werden. Bitte Support kontaktieren.')
+      }
     default:
       const response = await ingest({
         name: file.path,
