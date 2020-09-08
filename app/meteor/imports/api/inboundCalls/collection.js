@@ -6,7 +6,6 @@ import { lifecycleActions } from '../../util/meteor/action'
 const InboundCalls = new Mongo.Collection('inboundCalls')
 InboundCalls.attachSchema(inboundCalls)
 InboundCalls.attachBehaviour('softRemovable')
-InboundCalls.methods = methods({ InboundCalls })
 
 const InboundCallsTopics = new Mongo.Collection('inboundCallsTopics')
 InboundCallsTopics.actions = lifecycleActions({
@@ -17,5 +16,7 @@ InboundCallsTopics.actions = lifecycleActions({
 })
 InboundCallsTopics.attachSchema(inboundCallsTopics)
 InboundCallsTopics.attachBehaviour('softRemovable')
+
+InboundCalls.methods = methods({ InboundCalls, InboundCallsTopics })
 
 export { InboundCalls, InboundCallsTopics }

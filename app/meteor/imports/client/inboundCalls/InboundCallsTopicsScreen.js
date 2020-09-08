@@ -56,6 +56,11 @@ const structure = () => [
   {
     header: '🐌',
     field: 'slug'
+  },
+  {
+    header: 'Kontaktformular',
+    field: 'contactForm',
+    type: Boolean
   }
 ]
 

@@ -33,6 +33,7 @@ export class InboundCallItem extends React.Component {
       removed,
       telephone,
       pinnedBy,
+      payload,
       _id
     } = inboundCall
 
@@ -61,6 +62,15 @@ export class InboundCallItem extends React.Component {
             {
               ((lastName || firstName) && !patient) &&
                 <>
+                  {
+                    payload && payload.gender === 'Male' && 'Hr.' ||
+                    payload && payload.gender === 'Female' && 'Fr.' || null
+                  }
+                  &nbsp;
+                  {
+                    payload && payload.titlePrepend
+                  }
+                  &nbsp;
                   <InlineEdit
                     onChange={edit(_id, 'lastName')}
                     canEdit={canEdit}
@@ -105,6 +115,22 @@ export class InboundCallItem extends React.Component {
               {topicLabel || (canEdit && __('inboundCalls.thisOpen'))}
             </small>
           </h4>
+
+          {
+            payload && (payload.existingPatient === false) && '(neu)'
+          }
+          &nbsp;
+
+          {
+            payload && payload.email
+          }
+          &nbsp;
+
+          {
+            payload && payload.birthdate
+          }
+          &nbsp;
+
           {telephone &&
             <InlineEdit
               onChange={edit(_id, 'telephone')}

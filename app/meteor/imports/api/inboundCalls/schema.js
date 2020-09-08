@@ -15,6 +15,12 @@ export const inboundCallsTopics = new SimpleSchema({
     type: String
   },
 
+  // If true, contact form submissions via postContactForm are placed into this topic
+  contactForm: {
+    type: Boolean,
+    optional: true
+  },
+
   order: {
     type: Number,
     optional: true

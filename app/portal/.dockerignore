@@ -1,4 +1,5 @@
 .shadow-cljs
-.calva/
+.calva
 .nrepl-port
 out/
+node_modules/
