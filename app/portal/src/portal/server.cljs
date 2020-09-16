@@ -1,6 +1,6 @@
 (ns portal.server
   (:require [express]
-            [simpleDDP]
+            [simpleddp]
             [ws]
             [clojure.walk :refer [keywordize-keys]]
             [clojure.string :refer [join]]
@@ -66,7 +66,7 @@
         client-key js/process.env.CLIENT_KEY
         ddp-url (or js/process.env.DDP_URL "ws://localhost:3000/websocket")
         app (express)
-        meteor (simpleDDP. (clj->js {:endpoint ddp-url
+        meteor (simpleddp. (clj->js {:endpoint ddp-url
                                      :SocketConstructor ws}))
         call-meteor (fn [name args] (.call meteor name (clj->js (into {:clientKey client-key} args))))]
     (.on meteor "ping" #(prn "meteor ping"))

@@ -7,7 +7,7 @@ branches:
 shallow_clone: true
 
 environment:
-  nodejs_version: '12.13.0'
+  nodejs_version: '12.18.4'
 
 install:
 - ps: >-

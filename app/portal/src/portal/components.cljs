@@ -111,7 +111,7 @@
      [checkbox "appointment" "Termin"]]
 
     [section
-     [checkbox "privacy" "Ich stimme zu, dass meine ausgefüllten persönlichen Daten: Anrede, Titel, Vorname, Nachname, Geburtsdatum, Telefonnummer und E-Mail-Adresse von Dr. Sabine Schwarz & Partner Fachärzte für Haut- und Geschlechtskrankheiten GmbH, sowie deren Datenverarbeitern (Fixpoint Systems GmbH, Hetzner Online GmbH (Hosting)) zum Zwecke der Beantwortung des ausgefüllten Kontaktformulars verarbeitet werden. Diese Zustimmung kann jederzeit ohne Angabe von Gründen per Mail an Datenschutz@hautzentrum-wien.at widerrufen werden." {:required true}]]
+     [checkbox "privacy" "* Ich stimme zu, dass meine ausgefüllten persönlichen Daten: Anrede, Titel, Vorname, Nachname, Geburtsdatum, Telefonnummer und E-Mail-Adresse von Dr. Sabine Schwarz & Partner Fachärzte für Haut- und Geschlechtskrankheiten GmbH, sowie deren Datenverarbeitern (Fixpoint Systems GmbH, Hetzner Online GmbH (Hosting)) zum Zwecke der Beantwortung des ausgefüllten Kontaktformulars verarbeitet werden. Diese Zustimmung kann jederzeit ohne Angabe von Gründen per Mail an Datenschutz@hautzentrum-wien.at widerrufen werden." {:required true}]]
 
     [section
      [:p "Ich und mein Team freuen uns, Sie bei uns begrüßen zu dürfen!" [:br] "Wir sind für Sie da!"]
@@ -125,7 +125,7 @@
 (defn contact-success []
   [:div
    [:h2 "Vielen Dank!"]
-   [:p "Wir haben Ihre Anfrage erhalten und werden Sie umgehend kontaktieren."]
+   [:p "Wir haben Ihre Anfrage erhalten und werden Sie so rasch wie möglich kontaktieren."]
    [section
     [:p "Ich und mein Team freuen uns, Sie bei uns begrüßen zu dürfen!" [:br] "Wir sind für Sie da!"]
     [:p [:i "Ihre Sabine Schwarz"]]]])
