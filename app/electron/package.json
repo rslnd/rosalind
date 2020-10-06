@@ -15,7 +15,7 @@
   "homepage": "https://update.rslnd.com",
   "main": "main/main.js",
   "devDependencies": {
-    "electron": "^9.0.5",
+    "electron": "^9.3.1",
     "electron-builder": "^22.7.0",
     "electron-packager": "^14.2.1",
     "shelljs": "^0.8.4"
