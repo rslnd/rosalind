@@ -141,9 +141,10 @@ const open = (callback) => {
     callback(new Error('certificate-error'))
   })
 
-  webContents.on('console-message', (event, level, message, line, sourceId) => {
-    logger.info('[Console]', message, sourceId, line)
-  })
+  // DEBUG
+  // webContents.on('console-message', (event, level, message, line, sourceId) => {
+  //   logger.info('[Console]', message, sourceId, line)
+  // })
 
   const settings = getSettings()
   if (isUrlValid(settings.url)) {

@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core'
 import React from 'react'
 import { reduxForm, Fields } from 'redux-form'
 import { __ } from '../../../i18n'
@@ -18,9 +19,13 @@ class NewHolidaysFormComponent extends React.Component {
             names={['day', 'note']}
             component={DayNoteField}
             autoComplete='off'
+            linesMax={20}
             placeholder={this.generatePlaceholder()}
           />
         </div>
+        <Button onClick={handleSubmit(onSubmit)}>
+          {__('ui.save')}
+        </Button>
       </form>
     )
   }

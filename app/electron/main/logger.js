@@ -75,9 +75,10 @@ const start = () => {
     log.info('[Log] App quit')
   )
 
-  ipcMain.on('log', (e, msg) => {
-    log.info(`[ipc] ${inspect(msg)}`)
-  })
+  // DEBUG
+  // ipcMain.on('log', (e, msg) => {
+  //   log.info(`[ipc] ${inspect(msg)}`)
+  // })
 
   ensureOldLogsRemoved()
 }

@@ -18,7 +18,7 @@ import { DocumentPicker } from '../components/DocumentPicker'
 import { Icon } from '../components/Icon'
 import { TagsList } from '../tags/TagsList'
 import { getClientKey, toNative } from '../../startup/client/native/events'
-import { Clients, MediaTags, Media, Appointments, Templates, Tags } from '../../api'
+import { Clients, MediaTags, Media, Appointments, Templates, Tags, Users, Patients } from '../../api'
 import { Close } from './Close'
 import { withTracker } from '../components/withTracker'
 import { __ } from '../../i18n'
@@ -26,6 +26,8 @@ import { Preview } from '../media/Drawer'
 import { withProps } from 'recompose'
 import { getClient } from '../../api/clients/methods/getClient'
 import { hasRole } from '../../util/meteor/hasRole'
+import { fillPlaceholders } from '../templates/fillPlaceholders'
+import { dayToDate } from '../../util/time/day'
 
 export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) => {
   const clientKey = getClientKey()
@@ -71,9 +73,14 @@ const composer = props => {
       consentMedias: pastConsentMedias.filter(m => m.appointmentId === pa._id)
     }))
 
+  const patient = Patients.findOne({ _id: appointment.patientId })
+  const assignee = Users.findOne({ _id: appointment.waitlistAssigneeId || appointment.assigneeId })
+
   return {
     ...props,
     appointment,
+    patient,
+    assignee,
     pastAppointmentsWithConsents
   }
 }
@@ -92,6 +99,8 @@ export const Popover = withTracker(composer)(({
   onClose,
   appointmentId,
   patientId,
+  patient,
+  assignee,
   scan,
   handleMediaClick,
   appointment,
@@ -105,12 +114,35 @@ export const Popover = withTracker(composer)(({
 
   const [templateId, setTemplateId] = useState(defaultTemplateId)
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if (!templateId) { return }
     const template = Templates.findOne({ _id: templateId })
     if (!template) { return }
 
-    console.log('printing template', template)
+    let base64 = null
+
+    try {
+      base64 = await fillPlaceholders({
+        base64: template.base64,
+        placeholders: template.placeholders,
+        values: {
+          patientFullNameWithTitle: Users.methods.fullNameWithTitle(patient),
+          assigneeFullNameWithTitle: Users.methods.fullNameWithTitle(assignee),
+          birthday: moment(dayToDate(patient.birthday)).format(__('time.dateFormatVeryShort')),
+          currentDate: moment().format(__('time.dateFormatVeryShort'))
+        }
+      })
+    } catch (e) {
+      console.log('[Consents] failed to fill placeholders, falling back to printing blank form')
+      console.error(e)
+      base64 = template.base64
+    }
+
+    if (base64) {
+      console.log('[Consents] printing template via base64')
+    } else if (template.localPath) {
+      console.log('[Consents] printing template via local path')
+    }
 
     const client = getClient()
     const printer = (client && client.settings && client.settings.print && client.settings.print.printer) || undefined
@@ -119,6 +151,7 @@ export const Popover = withTracker(composer)(({
     toNative('print', {
       physical: true,
       title: template.name,
+      base64,
       localPath: template.localPath,
       printer,
       flags

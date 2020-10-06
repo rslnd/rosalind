@@ -22,9 +22,9 @@ const Placeholder = new SimpleSchema({
     allowedValues: [
       'appointmentId',
       'currentDate',
+      'birthday',
       'patientFullNameWithTitle',
-      'assigneeFullNameWithTitle',
-      'waitlistAssigneeFullNameWithTitle'
+      'assigneeFullNameWithTitle'
     ]
   }
 })

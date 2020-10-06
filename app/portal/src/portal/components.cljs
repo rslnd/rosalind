@@ -116,7 +116,7 @@
     [section
      [:p "Ich und mein Team freuen uns, Sie bei uns begrüßen zu dürfen!" [:br] "Wir sind für Sie da!"]
 
-     [:p [:i "Ihre Sabine Schwarz"]]
+     [:p [:i "Ihre Dr. Sabine Schwarz"]]
 
      [:input.button {:type :submit :value "Senden"}]
 
@@ -128,4 +128,4 @@
    [:p "Wir haben Ihre Anfrage erhalten und werden Sie so rasch wie möglich kontaktieren."]
    [section
     [:p "Ich und mein Team freuen uns, Sie bei uns begrüßen zu dürfen!" [:br] "Wir sind für Sie da!"]
-    [:p [:i "Ihre Sabine Schwarz"]]]])
+    [:p [:i "Ihre Dr. Sabine Schwarz"]]]])

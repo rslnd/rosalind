@@ -80,6 +80,7 @@ const getHelmetConfig = () => {
         ],
         imgSrc: [
           self,
+          'blob:',
           'data:',
           ...mediaHosts(),
           'https://app.smooch.io',
@@ -114,8 +115,9 @@ const getHelmetConfig = () => {
           // react-select needs a nonce
           (req, res) => `'nonce-${req.styleNonce}'`
         ],
+        // pdfjs renders in a worker (public/pdf.worker.min.js)
         workerSrc: [
-          none
+          self
         ]
       }
     },

@@ -21,7 +21,8 @@ crashReporter.start({
   companyName: 'Fixpoint Systems GmbH',
   productName: 'Rosalind Electron Main',
   ignoreSystemCrashHandler: true,
-  submitURL: SENTRY_CRASH_URL
+  submitURL: SENTRY_CRASH_URL,
+  compress: true
 })
 
 process.env.ELECTRON_ENABLE_SECURITY_WARNINGS = true

@@ -5,6 +5,7 @@ import { MessagesContainer } from '../messages/MessagesContainer'
 import { TagsContainer } from '../tags/TagsContainer'
 import { MediaTagsScreen } from '../media/MediaTagsScreen'
 import { TemplatesScreen } from '../templates/TemplatesScreen'
+import { TemplateEditScreen } from '../templates/TemplateEditScreen'
 import { CalendarsContainer } from '../calendars/CalendarsContainer'
 import { ClientsContainer } from '../clients/ClientsContainer'
 import { ReferrablesContainer } from '../referrals/ReferrablesContainer'
@@ -26,6 +27,7 @@ export const System = ({ match }) => (
       <Route exact path={`${match.url}/calendars`} component={CalendarsContainer} />
       <Route exact path={`${match.url}/referrables`} component={ReferrablesContainer} />
       <Route exact path={`${match.url}/templates`} component={TemplatesScreen} />
+      <Route exact path={`${match.url}/templates/:id/edit`} component={TemplateEditScreen} />
       <Route path={`${match.url}`} component={Events} />
     </Switch>
   </div>

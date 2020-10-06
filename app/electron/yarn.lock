@@ -2090,6 +2090,11 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
+pdf-to-printer@^1.4.1:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/pdf-to-printer/-/pdf-to-printer-1.5.0.tgz#ac1145f87fb4b1631cf7bc011c281d2ff06ed51a"
+  integrity sha512-h+XYs3GDjHcSWQiGgTT6gwxkW5+TDRWn9xbiQDr9US5/2JnxQsUxEYYeqQQCM/kt6XW6OPQFJPtdddWNUjMsxg==
+
 pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"

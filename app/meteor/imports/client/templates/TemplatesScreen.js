@@ -1,6 +1,7 @@
 import idx from 'idx'
 import React from 'react'
 import Alert from 'react-s-alert'
+import { Link } from 'react-router-dom'
 import { withTracker } from '../components/withTracker'
 import { toClass } from 'recompose'
 import { Table } from '../components/InlineEditTable'
@@ -67,12 +68,9 @@ const structure = () => [
   },
   {
     header: 'Platzhalter',
-    field: 'placeholders',
-    fromString: JSON.parse,
-    stringify: s => JSON.stringify(s, null, 2),
-    render: c => c.placeholders && <pre>{JSON.stringify(c.placeholders, null, 2)}</pre>,
-    multiline: true,
-    rowsMax: 20
+    render: t => <Link to={`/system/templates/${t._id}/edit`}>
+      {(t.placeholders ? (t.placeholders.length + ' Platzhalter bearbeiten') : 'Platzhalter hinzufügen')}
+    </Link>
   }
 ]
 
