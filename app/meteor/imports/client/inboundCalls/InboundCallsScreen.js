@@ -8,23 +8,41 @@ import { Loading } from '../components/Loading'
 export const InboundCallsList = ({ isLoading, inboundCalls = [], topic, resolve, unresolve, noData = null }) => (
   (isLoading && inboundCalls.length === 0)
     ? <Loading />
-    : <div className='row'>
-      <FlipMove>
-        {inboundCalls.map((inboundCall) => (
-          <div key={inboundCall._id} className='col-md-6'>
-            <InboundCallContainer
-              _id={inboundCall._id}
-              showTopic
-            />
-          </div>
-        ))}
-        {
-          (inboundCalls.length === 0)
-            ? noData : null
-        }
-      </FlipMove>
+    : <div>
+      {
+        (inboundCalls.length === 0)
+          ? noData : null
+      }
+      <div style={columnsContainer}>
+        <Column mod2={0} inboundCalls={inboundCalls} />
+        <Column mod2={1} inboundCalls={inboundCalls} />
+      </div>
     </div>
 )
+
+const Column = ({ mod2, inboundCalls }) =>
+  <FlipMove style={columnStyle}>
+    {inboundCalls.filter((c, i) => ((i % 2) === mod2)).map((inboundCall) => (
+      <div key={inboundCall._id} style={callStyle}>
+        <InboundCallContainer
+          _id={inboundCall._id}
+          showTopic
+        />
+      </div>
+    ))}
+  </FlipMove>
+
+const columnsContainer = {
+  display: 'flex'
+}
+
+const columnStyle = {
+  flex: 1
+}
+
+const callStyle = {
+  padding: 10
+}
 
 export const InboundCallsScreen = props =>
   <div className='content'>
