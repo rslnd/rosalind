@@ -6,10 +6,10 @@ branches:
 
 shallow_clone: true
 
-platform: x64
+platform: 'x64'
 
 environment:
-  nodejs_version: '14.13.1'
+  nodejs_version: 'Current'
 
 install:
 - ps: >-
