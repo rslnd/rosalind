@@ -10,6 +10,34 @@ import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
 import { CalendarPicker } from './CalendarPicker'
 
+import { buildMessageText } from '../../api/messages/methods/buildMessageText'
+import moment from 'moment-timezone'
+import { TextField } from '@material-ui/core'
+
+const SMSField = ({ initialValue, ...props }) => {
+  const value = ((props.input ? props.input.value : props.value) || initialValue)
+
+  let text = false
+  let error = false
+  try {
+    text = buildMessageText({ text: value }, { date: moment('2015-11-12T14:30:00+01:00').year(moment().year()) })
+  } catch (e) {
+    error = true
+    text = e.message
+  }
+
+  text = error
+    ? `Fehler: ${text}`
+    : `${text.length} Zeichen. Beispiel: "${text}"`
+
+  return <TextField
+    {...props}
+    value={value}
+    multiline
+    error={error}
+    helperText={text} />
+}
+
 const colorStyle = {
   borderRadius: 4,
   padding: 4,
@@ -118,11 +146,13 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'SMS Erinnerung',
-    field: 'smsAppointmentReminderText'
+    field: 'smsAppointmentReminderText',
+    EditComponent: SMSField
   },
   {
     header: 'SMS Storno',
-    field: 'smsAppointmentReminderCancelationConfirmationText'
+    field: 'smsAppointmentReminderCancelationConfirmationText',
+    EditComponent: SMSField
   },
   {
     header: 'Empfehlbar von',
