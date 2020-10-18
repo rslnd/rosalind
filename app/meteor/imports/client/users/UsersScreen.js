@@ -13,6 +13,7 @@ import { TextField, Button } from '@material-ui/core'
 import { compose, withState, withProps, withHandlers } from 'recompose'
 import { Groups } from '../../api/groups'
 import { rolesToString, stringToRoles } from './ChangeRolesForm'
+import { __ } from '../../i18n'
 
 const structure = ({ getAssigneeName, isInRole }) => [
   {
@@ -82,14 +83,15 @@ const composer = props => {
   return props
 }
 
-export const UsersScreen = withTracker(composer)(({ groups, getAssigneeName, handleUpdate, isInRole }) =>
+export const UsersScreen = withTracker(composer)(({ groups, getAssigneeName, handleUpdate, isInRole, removed }) =>
   <div>
     <div className='content-header enable-select show-print'>
       <h1>
         Verwaltung
         &nbsp;
+        { removed && <span>({__('ui.removed')})&nbsp;</span>}
         <small>
-          {sum(groups.map(g => g.users.length))} aktive Zugänge
+          {sum(groups.map(g => g.users.filter(u => !u.removed).length))} aktive Zugänge
         </small>
       </h1>
     </div>
@@ -118,6 +120,20 @@ export const UsersScreen = withTracker(composer)(({ groups, getAssigneeName, han
                 />
               </Box>
             )
+          }
+        </div>
+      </div>
+
+      <div className='row'>
+        <div className='col-md-12 enable-select'>
+          {
+            removed
+            ? <Box title='Aktive Zugänge' icon='users'>
+              <Link to='/users/'>Aktive Zugänge anzeigen</Link>
+            </Box>
+            : <Box title='Gelöschte Zugänge' icon='trash'>
+              <Link to='/users/removed'>Gelöschte Zugänge anzeigen</Link>
+            </Box>
           }
         </div>
       </div>

@@ -56,3 +56,29 @@ export const RemoveUserForm = compose(
     handleToggleDoubleCheck: props => e => props.setDoubleCheck(!props.doubleCheck)
   })
 )(Fields)
+
+export const RestoreUser = ({ user }) => {
+  const handleRestore = async () => {
+    try {
+      await Users.actions.restore.callPromise({ userId: user._id })
+      Alert.success(__('ui.restored'))
+    } catch (e) {
+      console.error(e)
+      Alert.error(__('ui.error'))
+    }
+  }
+
+  return <div>
+    {__('users.ensureUniqueUsername')}
+    <br /><br />
+    <Button
+      type='submit'
+      color={'secondary'}
+      variant='contained'
+      fullWidth
+      onClick={handleRestore}
+    >{
+        __('users.restore')
+    }</Button>
+  </div>
+}

@@ -36,6 +36,7 @@ export const users = {
   profileContainsPassword: 'Bitte ein anderes, sicheres Passwort wählen.',
   group: 'Gruppe',
   group_plural: 'Gruppen',
+  ensureUniqueUsername: 'Bitte vor dem Wiederherstellen sichergehen, dass der Benutzername eindeutig ist, und keinem anderen aktiven Konto zugeordnet ist.',
   groups: {
     doctor: 'Ärzte',
     assistance: 'Assistenz',
@@ -44,6 +45,7 @@ export const users = {
     callcenter: 'Callcenter',
     none: 'Mitarbeiter'
   },
+  restore: 'Benutzer Wiederherstellen',
   hiddenInReports: 'Von Statistik ausnehmen',
   form: {
     firstName: {

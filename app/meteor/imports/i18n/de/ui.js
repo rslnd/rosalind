@@ -35,6 +35,8 @@ export const ui = {
   newCommentPlaceholder: 'Anmerkung hinzufügen...',
   newCommentPost: 'Senden',
   removeComment: 'Löschen',
+  removed: 'Gelöscht',
+  restore: 'Wiederherstellen',
   noValue: 'k.A.',
   updateAvailableMessage: 'Wenn du einen Moment Zeit hast, bitte starte das Programm neu. Es ist ein Update verfügbar, das Sicherheit und Stabilität verbessert.',
   updateInstallNow: 'OK, Los!',
@@ -52,5 +54,6 @@ export const ui = {
   composeEmail: 'Email schreiben',
   startDate: 'von',
   endDate: 'bis',
-  printing: 'Wird gedruckt'
+  printing: 'Wird gedruckt',
+  restored: 'Wiederhergestellt'
 }

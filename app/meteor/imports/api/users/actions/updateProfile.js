@@ -23,7 +23,7 @@ export const updateProfile = ({ Users }) =>
     fn: async (args) => {
       const { userId, ...fields } = args
 
-      const user = Users.findOne({ _id: userId })
+      const user = Users.findOne({ _id: userId }, { removed: true })
       if (!user) {
         throw new Meteor.Error(404, 'User not found')
       }

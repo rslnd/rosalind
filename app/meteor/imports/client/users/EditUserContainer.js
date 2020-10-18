@@ -10,7 +10,7 @@ import { UnsetPasswordForm } from './UnsetPasswordForm'
 import { ChangePasswordlessForm } from './ChangePasswordlessForm'
 import { ChangeRolesForm } from './ChangeRolesForm'
 import { UserProfileForm } from './UserProfileForm'
-import { RemoveUserForm } from './RemoveUserForm'
+import { RemoveUserForm, RestoreUser } from './RemoveUserForm'
 import { ExternalIdsForm } from './ExternalIdsForm'
 import { subscribe } from '../../util/meteor/subscribe'
 
@@ -77,9 +77,15 @@ const EditUser = ({ user }) =>
 
       <div className='row'>
         <div className='col-md-4'>
-          <Box title={__('users.remove')} type='danger'>
-            <RemoveUserForm user={user} />
-          </Box>
+          {
+            user.removed
+            ? <Box title={__('ui.restore')} type='danger'>
+              <RestoreUser user={user} />
+            </Box>
+            : <Box title={__('users.remove')} type='danger'>
+              <RemoveUserForm user={user} />
+            </Box>
+          }
         </div>
       </div>
 

@@ -84,7 +84,7 @@
 (defn contact []
   [:div
    [:h2 "Sehr geehrte Patientin, sehr geehrter Patient!"]
-   [:p "Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich telefonisch mit Ihnen in Verbindung zu setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren."]
+   [:p "Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich telefonisch mit Ihnen in Verbindung setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren."]
    [:form {:method "post"}
     [:label {:for "gender"} "Anrede"][:br]
     [:select.textfield {:id "gender" :name "gender"}

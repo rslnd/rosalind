@@ -35,7 +35,7 @@ export default new SimpleSchema({
 
   username: {
     type: String,
-    regEx: /^[a-z0-9A-Z_]*$/
+    regEx: /^[a-z0-9A-Z_-]*$/
     // Meteor takes care of the index
   },
 
