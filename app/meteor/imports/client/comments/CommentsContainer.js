@@ -6,7 +6,7 @@ import { hasRole } from '../../util/meteor/hasRole'
 import { Meteor } from 'meteor/meteor'
 
 const commentsBoxComposer = (props) => {
-  const comments = Comments.find({ docId: props.docId }, { sort: { createdAt: 1 } }).fetch()
+  const comments = props.comments || Comments.find({ docId: props.docId }, { sort: { createdAt: 1 } }).fetch()
 
   const onRemove = (commentId) => {
     Comments.actions.remove.callPromise({ commentId })

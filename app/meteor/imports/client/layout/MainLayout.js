@@ -117,7 +117,7 @@ export class MainLayout extends React.Component {
               onMouseEnter={this.handleSidebarOpen}
               onMouseLeave={this.handleSidebarClose}>
               <header className='main-header' style={mainHeaderStyle}>
-                <Link to='/' className='logo' style={conditionalLogoStyle}>
+                <Link to='/' className='fixed logo' style={conditionalLogoStyle}>
                   <img src='/images/logo.svg' />
                 </Link>
               </header>

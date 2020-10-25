@@ -48,7 +48,7 @@ class BlankState extends React.PureComponent {
         className={classes.blank}
         onClick={this.handleClick}
         onMouseEnter={this.handleOnMouseEnter}
-        title={format(endTime)}
+        title={format(startTime)}
         style={{
           gridRowStart: startTime,
           gridRowEnd: endTime,

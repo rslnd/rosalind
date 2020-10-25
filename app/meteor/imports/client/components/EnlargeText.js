@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react'
 import Overlay from 'react-bootstrap/lib/Overlay'
 import { Icon } from './Icon'
 
@@ -31,53 +32,37 @@ const CustomModal = ({ children, onHide }) => (
   </div>
 )
 
-export class EnlargeText extends React.Component {
-  constructor(props) {
-    super(props)
+export const EnlargeText = ({ children, iconOnly, style, value, icon = 'search-plus' }) => {
+  const [show, setShow] = useState(false)
 
-    this.state = {
-      show: false
-    }
+  return (
+    <span>
+      <span
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}>
+        {
+          !iconOnly && children
+        }
 
-    this.handleShow = this.handleShow.bind(this)
-    this.handleHide = this.handleHide.bind(this)
-  }
-
-  handleShow() {
-    this.setState({ show: true })
-  }
-
-  handleHide() {
-    this.setState({ show: false })
-  }
-
-  render() {
-    return (
-      <span>
-        <span
-          onMouseEnter={this.handleShow}
-          onMouseLeave={this.handleHide}>
-          {
-            !this.props.iconOnly && this.props.children
-          }
-
-          <span className='pull-right text-muted' style={{ ...this.props.style, cursor: 'pointer' }}>
-            <Icon name='search-plus' />
-          </span>
-        </span>
-
-        <Overlay
-          show={this.state.show}
-          onHide={this.handleHide}
-          enforceFocus={false}
-          animation={false}
-          backdrop={false}
-          bsSize='large'>
-          <CustomModal onHide={this.handleHide}>
-            {this.props.children}
-          </CustomModal>
-        </Overlay>
+        {
+          icon &&
+            <span className='pull-right text-muted' style={{ ...style, cursor: 'pointer' }}>
+              <Icon name={icon} />
+            </span>
+        }
       </span>
-    )
-  }
+
+      <Overlay
+        show={show}
+        onHide={() => setShow(false)}
+        enforceFocus={false}
+        animation={false}
+        backdrop={false}
+        bsSize='large'>
+        <CustomModal onHide={this.handleHide}>
+          {value || children}
+        </CustomModal>
+      </Overlay>
+    </span>
+  )
 }

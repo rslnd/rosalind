@@ -55,7 +55,7 @@ export class LinkToAppointmentWrapper extends React.Component {
             : <LinkToAppointment {...this.props} onClick={this.handleModalOpen} />
         }
         {
-          (appointmentId || patientId) &&
+          this.state.modalOpen && (appointmentId || patientId) &&
             <PatientsAppointmentsContainer
               show={this.state.modalOpen}
               onClose={this.handleModalClose}

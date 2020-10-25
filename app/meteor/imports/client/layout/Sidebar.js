@@ -165,6 +165,7 @@ class SidebarItems extends React.Component {
     const { classes } = this.props
 
     const asideClasses = classnames({
+      'fixed': true,
       'main-sidebar': true,
       'sidebar': true,
       [ classes.sidebarOpen ]: this.props.isOpen,

@@ -41,6 +41,40 @@ export default () => {
   })
 
   publishComposite({
+    name: 'appointments',
+    roles: ['appointments-*'],
+    args: {
+      appointmentIds: [String]
+    },
+    fn: function ({ appointmentIds }) {
+      const userId = this.userId
+
+      return {
+        find: function () {
+          return Appointments.find({ _id: { $in: appointmentIds } }, {
+            limit: 1,
+            fields: limitFieldsByRole(userId)
+          })
+        },
+        children: [
+          {
+            find: function (doc) {
+              return Comments.find({ docId: doc._id })
+            }
+          }, {
+            find: function (doc) {
+              if (doc.patientId) {
+                return Patients.find({ _id: doc.patientId }, { limit: 1 })
+              }
+            }
+          }
+        ]
+      }
+    }
+  })
+
+
+  publishComposite({
     name: 'appointments-today',
     roles: ['waitlist', 'appointments-*'],
     fn: function ({ appointmentId }) {

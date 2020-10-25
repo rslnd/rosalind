@@ -31,7 +31,7 @@ const substitute = (translation, substitutions) => {
     const search = Object.keys(substitutions)
 
     const replaced = search.reduce((t, s) => {
-      return t.replace('__' + s + '__', substitutions[s])
+      return t.replace('__' + s + '__', (substitutions[s] || '•••'))
     }, translation)
 
     return replaced || translation

@@ -1,11 +1,10 @@
 import React from 'react'
-import FlipMove from 'react-flip-move'
 import { __ } from '../../i18n'
-import { InboundCallContainer } from './InboundCallContainer'
+import { InboundCall } from './InboundCall'
 import { Box } from '../components/Box'
 import { Loading } from '../components/Loading'
 
-export const InboundCallsList = ({ isLoading, inboundCalls = [], topic, resolve, unresolve, noData = null }) => (
+export const InboundCallsList = ({ isLoading, inboundCalls = [], topic, resolve, unresolve, edit, noData = null, fullNameWithTitle }) => (
   (isLoading && inboundCalls.length === 0)
     ? <Loading />
     : <div>
@@ -14,23 +13,29 @@ export const InboundCallsList = ({ isLoading, inboundCalls = [], topic, resolve,
           ? noData : null
       }
       <div style={columnsContainer}>
-        <Column mod2={0} inboundCalls={inboundCalls} />
-        <Column mod2={1} inboundCalls={inboundCalls} />
+        <Column mod2={0} inboundCalls={inboundCalls} topic={topic} resolve={resolve} unresolve={unresolve} edit={edit} fullNameWithTitle={fullNameWithTitle} />
+        <Column mod2={1} inboundCalls={inboundCalls} topic={topic} resolve={resolve} unresolve={unresolve} edit={edit} fullNameWithTitle={fullNameWithTitle} />
       </div>
     </div>
 )
 
-const Column = ({ mod2, inboundCalls }) =>
-  <FlipMove style={columnStyle}>
-    {inboundCalls.filter((c, i) => ((i % 2) === mod2)).map((inboundCall) => (
-      <div key={inboundCall._id} style={callStyle}>
-        <InboundCallContainer
-          _id={inboundCall._id}
-          showTopic
-        />
-      </div>
-    ))}
-  </FlipMove>
+const Column = ({ mod2, inboundCalls, topic, resolve, unresolve, edit, fullNameWithTitle }) =>
+  <div style={columnStyle}>
+    {
+      inboundCalls.filter((c, i) => ((i % 2) === mod2)).map((inboundCall) => (
+        <div key={inboundCall._id} style={callStyle}>
+          <InboundCall
+            inboundCall={inboundCall}
+            topic={topic}
+            resolve={resolve}
+            unresolve={unresolve}
+            edit={edit}
+            fullNameWithTitle={fullNameWithTitle}
+          />
+        </div>
+      ))
+    }
+  </div>
 
 const columnsContainer = {
   display: 'flex'
@@ -41,7 +46,8 @@ const columnStyle = {
 }
 
 const callStyle = {
-  padding: 10
+  paddingLeft: 10,
+  paddingRight: 10
 }
 
 export const InboundCallsScreen = props =>

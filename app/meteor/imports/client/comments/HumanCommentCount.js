@@ -11,8 +11,9 @@ const HumanCommentCountSpan = ({ commentCount }) => (
 )
 
 const humanCommentCountComposer = (props) => {
-  const commentCount = Comments.find({ docId: props.docId }).count()
-  return { commentCount, docId: props.docId }
+  const { docId, comments } = props
+  const commentCount = comments ? comments.length : Comments.find({ docId }).count()
+  return { commentCount, docId }
 }
 
 export const HumanCommentCount = withTracker(humanCommentCountComposer)(toClass(HumanCommentCountSpan))

@@ -9,7 +9,6 @@ import { subscribe } from '../../util/meteor/subscribe'
 
 const getFormattedAppointmentData = (appointmentId) => {
   if (!appointmentId) { return {} }
-  subscribe('appointment', { appointmentId })
   const appointment = Appointments.findOne({ _id: appointmentId })
   if (appointment) {
     const calendarName = Calendars.findOne(appointment.calendarId).name

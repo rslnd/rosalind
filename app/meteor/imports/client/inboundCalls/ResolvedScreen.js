@@ -42,17 +42,20 @@ const composer = ({ patient, query = '' }) => {
 
   const resolve = (_id) => InboundCalls.methods.resolve.call({ _id })
   const unresolve = (_id) => InboundCalls.methods.unresolve.call({ _id })
+  const edit = (_id, field) => value =>
+    InboundCalls.methods.edit.call({ _id, [field]: value })
 
   return {
     isLoadingCalls,
     inboundCalls,
     resolve,
     unresolve,
+    edit,
     patient
   }
 }
 
-const ResolvedScreenComponent = ({ setPatientId, patientId, handleQueryChange, query, isLoadingCalls, inboundCalls, resolve, unresolve }) =>
+const ResolvedScreenComponent = ({ setPatientId, patientId, handleQueryChange, query, isLoadingCalls, inboundCalls, resolve, unresolve, edit }) =>
   <div>
     <ContentHeader title={__('inboundCalls.thisResolved')} />
     <div className='content'>
@@ -71,6 +74,7 @@ const ResolvedScreenComponent = ({ setPatientId, patientId, handleQueryChange, q
         inboundCalls={inboundCalls}
         resolve={resolve}
         unresolve={unresolve}
+        edit={edit}
       />
     </div>
   </div>

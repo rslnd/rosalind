@@ -15,12 +15,13 @@ export const CommentsBox = ({
   canEdit,
   style,
   actions,
+  canCollapse = true,
   setCollapsed,
   collapsed
 }) =>
   <div>
     {
-      setCollapsed &&
+      canCollapse && setCollapsed &&
         <Collapsed
           comments={comments}
           collapsed={collapsed}

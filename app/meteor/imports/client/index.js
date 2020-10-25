@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { HotKeys, configure } from 'react-hotkeys'
+import { HotKeys } from 'react-hotkeys'
 import { Meteor } from 'meteor/meteor'
 import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
