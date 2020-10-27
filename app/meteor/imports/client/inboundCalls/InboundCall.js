@@ -19,10 +19,7 @@ export const InboundCall = (props) => {
     unresolve,
     resolve,
     edit,
-    canResolve,
-    canEdit,
     fullNameWithTitle,
-    comments,
     topic
   } = props
 
@@ -35,6 +32,9 @@ export const InboundCall = (props) => {
     telephone,
     pinnedBy,
     payload,
+    canResolve,
+    canEdit,
+    comments,
     _id
   } = inboundCall
 

@@ -34,11 +34,11 @@ const composer = (props) => {
     sort: { pinnedBy: -1, createdAt: 1 }
   }).fetch().map(inboundCall => ({
     ...inboundCall,
-    canResolve:canResolve ||  (inboundCall.pinnedBy === userId),
+    canResolve: canResolve || (inboundCall.pinnedBy === userId || inboundCall.createdBy === userId),
     canEdit: canEdit || (inboundCall.createdBy === userId),
     patient: inboundCall.patientId &&
       Patients.findOne({ _id: inboundCall.patientId }),
-    comments: Comments.find({ docId: inboundCall }, { sort: { createdAt: 1 } }).fetch()
+    comments: Comments.find({ docId: inboundCall._id }, { sort: { createdAt: 1 } }).fetch()
   }))
 
   const appointmentIds = inboundCalls.map(c => c.appointmentId).filter(identity)
