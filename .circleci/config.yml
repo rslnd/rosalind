@@ -1,23 +1,10 @@
-version: 2
+version: 2.1
 jobs:
   build:
-    docker:
-      - image: circleci/node:8.11.3
-    working_directory: ~/rosalind
-    environment:
-      METEOR_WAREHOUSE_URLBASE: https://d3fm2vapipm3k9.cloudfront.net
+    machine:
+      image: 'ubuntu-2004:202010-01'
     steps:
       - checkout
-      - setup_remote_docker
-
-      - run: |
-          chmod +x ci.sh
-          ./ci.sh install
-          ./ci.sh test
-          ./ci.sh build
-
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build
+      - run: chmod +x ci.sh && ./ci.sh install
+      - run: ./ci.sh test
+      - run: ./ci.sh build
