@@ -19,7 +19,12 @@ export const translateAssigneeIds = mapIds => report => {
         [ type ]: { ...rest, type }
       }
     } else {
-      throw new Error(`Could not translate EOSWin id ${originalId}`)
+      if (originalId) {
+        throw new Error(`Could not translate EOSWin id ${originalId}`)
+      } else {
+        console.error(`Could not translate EOSWin id ${originalId} - ignoring since the external id seems to be falsy/empty string typeof ${typeof originalId}`)
+        return acc
+      }
     }
   }, {})
 }
