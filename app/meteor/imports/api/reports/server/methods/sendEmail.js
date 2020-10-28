@@ -35,8 +35,12 @@ export const sendEmail = async (args = {}) => {
     }
 
     const isTodaysReport = moment().isSame(dayToDate(day), 'day')
-    if (!test && (reports.length === 0 || !isTodaysReport)) {
-      throw new Meteor.Error(404, 'There is no report for today, and no email will be sent')
+    const isLastWeekReport = moment(dayToDate(day)).isBetween(
+      moment().subtract(2, 'weeks').startOf('week'),
+      moment().add(1, 'day')
+    )
+    if (!test && reports.length === 0 && (!isTodaysReport && !isLastWeekReport)) {
+      throw new Meteor.Error(404, 'There is no report for this date, or the date is not within the last 2 weeks, and no email will be sent')
     }
 
     const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
