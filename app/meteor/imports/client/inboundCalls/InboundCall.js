@@ -20,7 +20,6 @@ export const InboundCall = (props) => {
     resolve,
     edit,
     fullNameWithTitle,
-    topic
   } = props
 
   const {
@@ -40,6 +39,7 @@ export const InboundCall = (props) => {
 
   const patient = props.patient || inboundCall.patient
 
+  const topic = props.topic || inboundCall.topic
   const topicLabel = topic && topic.label
 
   const style = pinnedBy ? pinnedStyle : null
@@ -120,11 +120,11 @@ export const InboundCall = (props) => {
         }
 
         {
-          payload && (payload.email + ' ')
+          payload && payload.email && (payload.email + ' ')
         }
 
         {
-          payload && (payload.birthdate + ' ')
+          payload && payload.birthdate && (payload.birthdate + ' ')
         }
 
         {telephone &&

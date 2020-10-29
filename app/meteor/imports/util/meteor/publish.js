@@ -2,10 +2,14 @@ import { Meteor } from 'meteor/meteor'
 import { check, Match } from 'meteor/check'
 import { isAllowed } from './isAllowed'
 
-const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requireClientKey }) => {
+const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requireClientKey, debug = false }) => {
   // if (!roles) {
   //   console.warn('Publication', name, 'is not restricted to any roles')
   // }
+
+  if (debug && process.env.NODE_ENV !== 'development') {
+    throw new Error(`Publication ${name} has debug flag set in non-development environment`)
+  }
 
   return function (clientArgs = {}) {
     try {
@@ -28,8 +32,15 @@ const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requir
       accessToken: clientArgs.accessToken,
       roles
     })) {
-      return fn.call(this, clientArgs)
+      const result = fn.call(this, clientArgs)
+      if (debug && result && result.count) {
+        console.log(`Publication ${name} returned cursor with ${result.count()} documents`)
+      }
+      return result
     } else {
+      if (debug) {
+        console.log(`Publication ${name} not allowed`)
+      }
       return undefined
     }
   }

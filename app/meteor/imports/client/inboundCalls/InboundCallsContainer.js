@@ -30,6 +30,8 @@ const composer = (props) => {
       ? { topicId: null }
       : {}
 
+
+  // TODO: Fix duplicate logic in ResolvedScreen
   const inboundCalls = InboundCalls.find(selector, {
     sort: { pinnedBy: -1, createdAt: 1 }
   }).fetch().map(inboundCall => ({

@@ -38,11 +38,10 @@ const composer = ({ inboundCall, ...props }) => {
   }
 
   if (inboundCall.payload) {
-    const appointmentId =inboundCall.payload.appointmentId
+    const appointmentId = inboundCall.payload.appointmentId
     const { date, time, calendarName, assigneeName, patientId } = getFormattedAppointmentData(appointmentId)
 
-
-    if (!date) {
+    if (!date && !inboundCall.payload.patientId) {
       return { text: __('inboundCalls.isSmsFromPatient') }
     }
 
