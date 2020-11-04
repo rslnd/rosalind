@@ -13,7 +13,7 @@ import { ContentHeader } from '../components/ContentHeader'
 import { PatientPicker } from '../patients/picker'
 import identity from 'lodash/identity'
 import { hasRole } from '../../util/meteor/hasRole'
-import { Comments, Patients } from '../../api'
+import { Comments, Patients, Users } from '../../api'
 
 const debouncedSubscribe = debounce(subscribe, 150)
 
