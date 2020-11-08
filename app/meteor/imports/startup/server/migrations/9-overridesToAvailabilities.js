@@ -1,4 +1,5 @@
 import idx from 'idx'
+import moment from 'moment-timezone'
 // import { Migrations } from 'meteor/percolate:migrations'
 import { Meteor } from 'meteor/meteor'
 import { Schedules } from '../../../api/schedules'
@@ -57,7 +58,14 @@ const migrateUp = () => {
 }
 
 Meteor.startup(migrateUp)
-setInterval(migrateUp, 1000 * 86400)
+
+const nextMidnightInMs = moment().add(1, 'day').startOf('day').diff(moment(), 'milliseconds')
+
+setTimeout(() => {
+  migrateUp()
+  setInterval(migrateUp, 1000 * 86400)
+}, nextMidnightInMs)
+
 
 // TODO: Run as migration
 // Migrations.add({
