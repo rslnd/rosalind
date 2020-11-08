@@ -4,7 +4,7 @@ import { compose, withState, withHandlers } from 'recompose'
 import { __ } from '../../i18n'
 import moment from 'moment-timezone'
 import { PatientName } from '../patients/PatientName'
-import { Media, Appointments, Patients, MediaTags } from '../../api'
+import { Media, Appointments, Patients, MediaTags as MediaTagsAPI } from '../../api'
 import { withTracker } from '../components/withTracker'
 import { Icon } from '../components/Icon'
 import { Explorer } from './Explorer'
@@ -14,6 +14,7 @@ import identity from 'lodash/identity'
 import range from 'lodash/range'
 import uniq from 'lodash/uniq'
 import { patientCyclesNames } from './Cycles'
+import { MediaTags } from './MediaTags'
 
 const composer = (props) => {
   const { patientId, media, selector, setSelector } = props
@@ -120,7 +121,7 @@ const Selector = ({ selector, setSelector, patientId, appointmentId }) => {
     .map(m => m.tagIds && m.tagIds[0])
     .filter(identity))
   const usedMediaTags = mediaTagIds
-    .map(_id => MediaTags.findOne({
+    .map(_id => MediaTagsAPI.findOne({
       _id,
       isHiddenInFilter: { $ne: true }
     }))
@@ -160,8 +161,6 @@ const Selector = ({ selector, setSelector, patientId, appointmentId }) => {
       menuPortalTarget={document.body}
       placeholder='Filter...'
     />
-
-    {/* <div onClick={() => setSelector({ appointmentSelector: { tags: 'HKtpQEatMSWzDryDp' } })}>Botox/Hyaluronsäure</div> */}
   </div>
 }
 
@@ -206,7 +205,7 @@ export const Sidebar = compose(
       setCurrentMediaId={setCurrentMediaId}
       currentMediaId={media._id}
     />
-    {/* <MediaTags media={media} /> */}
+    <MediaTags media={media} singleTag />
     <Edit media={media} handleRemove={handleRemove} />
     <Navigation
       setCurrentMediaId={setCurrentMediaId}

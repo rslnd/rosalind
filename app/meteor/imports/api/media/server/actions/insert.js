@@ -157,7 +157,7 @@ export const insert = ({ Media, MediaTags }) =>
       if (appointmentId &&
         kind === 'document' &&
         consentTag &&
-        tagIds.indexOf(consentTag._id) !== -1
+        tagIds && tagIds.indexOf(consentTag._id) !== -1
       ) {
         Appointments.update({ _id: appointmentId }, {
           $addToSet: {
