@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 # Set the following env vars:
-#   DOCKER_SERVER
-#   DOCKER_IMAGE
+#   DOCKER_SERVER (quay.io)
+#   DOCKER_IMAGE (quay.io/rosalind/rosalind)
 #   DOCKER_USERNAME
 #   DOCKER_PASSWORD
 #   DOCKER_EMAIL

@@ -1,6 +1,6 @@
 {
   # debug
-  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
   email security@fixpoint.co.at
   admin off
   key_type p384
@@ -25,7 +25,11 @@
   }
 }
 
+# THIS VARIABLE SUBSTITUTION SEEMS NOT TO WORK, HARDCODE ON SERVER OR ???
+# CAUSES DNS solver to be not found: "Could not find solver for: dns-01" caddya
+## MAYBE JUST CF TOKEN? Try out to see soemday...
 {env.DNS_NAME} {
   import default
   reverse_proxy * minio:9000
 }
+
