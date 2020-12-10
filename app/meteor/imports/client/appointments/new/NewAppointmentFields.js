@@ -94,6 +94,8 @@ export const NewAppointmentFields = props => {
           <Field name='note'
             component={TextField}
             fullWidth
+            rows={2}
+            multiline
             label={__('appointments.note')} />
         </div>
       </FormSection>
