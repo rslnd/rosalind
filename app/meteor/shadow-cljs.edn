@@ -1,0 +1,11 @@
+{:dependencies [[reagent "1.0.0-rc1"]]
+ :source-paths ["src"]
+ :dev-http {8989 "imports/.cljs"}
+ :builds
+ {:client {:target :browser
+           :output-dir "imports/.cljs"
+           ; :asset-path "/js"
+           :modules {:main {:entries [client.core]}}
+           :js-options
+           {:js-provider :external
+            :external-index "imports/.cljs/cljs-index.js"}}}}

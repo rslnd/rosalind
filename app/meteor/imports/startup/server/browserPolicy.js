@@ -106,6 +106,7 @@ const getHelmetConfig = () => {
         ],
         scriptSrc: [
           self,
+          (req, res) => `'nonce-${req.nonce}'`,
           'https://api.smooch.io',
           'https://cdn.smooch.io'
         ],
@@ -113,7 +114,7 @@ const getHelmetConfig = () => {
           self,
           'https://cdn.smooch.io',
           // react-select needs a nonce
-          (req, res) => `'nonce-${req.styleNonce}'`
+          (req, res) => `'nonce-${req.nonce}'`
         ],
         // pdfjs renders in a worker (public/pdf.worker.min.js)
         workerSrc: [
@@ -166,6 +167,13 @@ const getHelmetConfig = () => {
   if (process.env.NODE_ENV === 'development') {
     helmetConfig.contentSecurityPolicy.directives.connectSrc.push('http://localhost:3000')
     helmetConfig.contentSecurityPolicy.directives.connectSrc.push('ws://localhost:3000')
+
+    // shadow-cljs
+    helmetConfig.contentSecurityPolicy.directives.scriptSrc.push('http://localhost:8989') // JS bundle
+    helmetConfig.contentSecurityPolicy.directives.connectSrc.push('http://localhost:54711') // nREPL
+    helmetConfig.contentSecurityPolicy.directives.connectSrc.push('ws://localhost:9630') // nREPL
+    helmetConfig.contentSecurityPolicy.directives.scriptSrc.push("'unsafe-eval'")
+    helmetConfig.contentSecurityPolicy.directives.styleSrc.push("'unsafe-inline'")
   }
 
   return helmetConfig
@@ -181,16 +189,16 @@ export default () => {
     WebAppInternals.setInlineScriptsAllowed(false)
 
     WebApp.connectHandlers.use((req, res, next) => {
-      const styleNonce = Buffer.from(uuidv4()).toString('base64')
+      const nonce = Buffer.from(uuidv4()).toString('base64')
 
       // A node req object has many more keys than meteor's request,
       // HACK: Attach the nonce to the request url as search fragment
       // so that it survives the transformation from req to request.
       // Servers never receive url fragments from clients.
-      req.url = req.url + '#' + styleNonce
+      req.url = req.url + '#' + nonce
 
       // Also attach the same nonce to the req object to build the csp
-      req.styleNonce = styleNonce
+      req.nonce = nonce
 
       next()
     })
@@ -204,13 +212,19 @@ export default () => {
       // This request object contains a stripped req, with
       // the url parsed from the original request string.
       // url.hash contains # and the nonce we just attached.
-      const styleNonce = request.url.hash.substr(1)
+      const nonce = request.url.hash.substr(1)
       data.head += '\n  <title>Connecting…</title>'
-      data.head += `\n  <meta property="csp-nonce" content="${styleNonce}">`
+      data.head += `\n  <meta property="csp-nonce" content="${nonce}">`
       data.head += '\n  <meta name="robots" content="noindex, nofollow">'
       data.head += '\n  <meta name="viewport" content="user-scalable=no, width=device-width, maximum-scale=1, initial-scale=1, minimum-scale=1">'
 
       data.body += '\n  <noscript>Please enable JavaScript.</noscript>'
+
+      // WIP: shadow-cljs
+      if (process.env.NODE_ENV === 'development') {
+        // data.body += `\n  <script type="text/javascript" nonce="${nonce}" src="http://localhost:8989/cljs-index.js"></script>`
+        data.body += `\n  <script type="text/javascript" nonce="${nonce}" src="http://localhost:8989/main.js"></script>`
+      }
 
       return true
     })
