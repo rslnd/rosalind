@@ -12,7 +12,7 @@ export const composer = (props) => {
   const get = (key) => Settings.get(key)
   const set = (key, value) => Settings.actions.set.call({ key, value })
 
-  const settings = Settings.find({}).fetch()
+  const settings = Settings.find({}, { sort: { isPublic: -1, key: 1 }}).fetch()
 
   settings.get = get
   settings.set = set

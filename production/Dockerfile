@@ -1,10 +1,10 @@
 FROM node:12.18.4
 
 HEALTHCHECK \
-  --interval=3s \
-  --timeout=4s \
+  --interval=6s \
+  --timeout=6s \
   --start-period=15s \
-  --retries=3 \
+  --retries=5 \
   CMD \
   wget --quiet --tries=1 --spider http://localhost:3000 || exit 1
 
