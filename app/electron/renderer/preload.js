@@ -56,14 +56,15 @@ const logger = {
 
 // IMPORTANT: Keep in sync with preload.js
 const isUrlValid = urlString => {
-  return true
-  if (DEBUG) { return true }
-
   try {
     const url = new URL(urlString)
-    const isValid = !!(url.origin.match(/^https:\/\/.*\.rslnd\.com$/))
+    const isValid = !!(
+      url.origin.match(/^https:\/\/.*\.rslnd\.com$/) ||
+      url.origin.match(/^https:\/\/.*\.fxp\.at$/) ||
+      (process.env.NODE_ENV === 'development' && url.origin.match(/^http:\/\/localhost:3000$/))
+    )
     if (!isValid) {
-      logger.error(`[Window] isUrlValid failed check: ${urlString}`)
+      logger.error(`[Window] isUrlValid failed check: '${urlString}' - origin '${url.origin}' not valid`)
       return false
     } else {
       return true
@@ -114,8 +115,8 @@ try {
       }
 
       if (!isUrlValid(messageEvent.origin)) {
-        debug('Discarding event because origin is invalid')
-        throw new Error('Invalid origin')
+        console.error(`Discarding event because message origin is invalid: '${messageEvent.origin}'`)
+        throw new Error(`Invalid origin '${messageEvent.origin}'`)
       }
 
       if (typeof messageEvent.data !== 'string') {

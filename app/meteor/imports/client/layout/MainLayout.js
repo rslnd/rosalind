@@ -173,7 +173,14 @@ export class MainLayout extends React.Component {
                 />
               </div>
               <small className='copyright'>
-                &copy; {new Date().getFullYear()} <a href='https://fixpoint.co.at'>Fixpoint Systems GmbH</a>
+                &copy;&nbsp;{new Date().getFullYear()}&nbsp;
+                <a
+                 href='https://fixpoint.co.at'
+                 title='fixpoint.co.at'
+                 style={{ cursor: getClientKey() ? 'pointer' : 'default'}}
+                >
+                  Fixpoint Systems GmbH
+                </a>
                 <br />
                 {/* only show in browsers, not in native wrapper */}
                 {!getClientKey() && <span>

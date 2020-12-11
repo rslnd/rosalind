@@ -12,6 +12,8 @@ COPY . /opt/app
 WORKDIR /opt/app/programs/server
 
 ENV NPM_CONFIG_LOGLEVEL warn
+ENV TZ UTC
+ENV NODE_ENV production
 
 RUN apt-get update && apt-get install -y \
     libxss1 \
