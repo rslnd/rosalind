@@ -14,6 +14,8 @@ import { Lock } from './Lock'
 import { DropZone } from '../patientAppointments/DropZone'
 import { handleDrop } from '../../startup/client/dataTransfer'
 import { Prompts } from './Prompt'
+import { isNative } from 'lodash'
+import { getClientKey } from '../../startup/client/native/events'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -64,7 +66,8 @@ export class MainLayout extends React.Component {
       handleLoginSuccess,
       handleLogout,
       locale,
-      isPrint
+      isPrint,
+      primaryColor
     } = this.props
 
     const open = this.props.sidebarOpen || this.state.sidebarForceOpen
@@ -77,7 +80,8 @@ export class MainLayout extends React.Component {
     }
 
     let conditionalLogoStyle = {
-      ...logoStyle
+      ...logoStyle,
+      backgroundColor: primaryColor
     }
 
     if (!open) {
@@ -118,7 +122,7 @@ export class MainLayout extends React.Component {
               onMouseLeave={this.handleSidebarClose}>
               <header className='main-header' style={mainHeaderStyle}>
                 <Link to='/' className='fixed logo' style={conditionalLogoStyle}>
-                  <img src='/images/logo.svg' />
+                  <img src='/logo.svg' />
                 </Link>
               </header>
               {
@@ -157,10 +161,10 @@ export class MainLayout extends React.Component {
     } else {
       return (
         <Wrapper>
-          <div className='locked-layout'>
+          <div className='locked-layout' style={{ backgroundColor: primaryColor }}>
             <div className='locked-wrapper'>
               <div className='locked-logo'>
-                <img src='/images/logo.svg' />
+                <img src='/logo.svg' />
               </div>
               <div className='locked-content'>
                 <Login
@@ -168,6 +172,15 @@ export class MainLayout extends React.Component {
                   onLoginSuccess={handleLoginSuccess}
                 />
               </div>
+              <small className='copyright'>
+                &copy; {new Date().getFullYear()} <a href='https://fixpoint.co.at'>Fixpoint Systems GmbH</a>
+                <br />
+                {/* only show in browsers, not in native wrapper */}
+                {!getClientKey() && <span>
+                  <a href='https://fixpoint.co.at/datenschutz'>Datenschutz</a> &middot; <a href='https://fixpoint.co.at/impressum'>Impressum</a>
+                </span>}
+
+              </small>
             </div>
           </div>
           {alwaysRender()}

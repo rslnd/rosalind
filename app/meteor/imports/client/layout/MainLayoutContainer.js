@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { MainLayout } from './MainLayout'
 import { subscribe } from '../../util/meteor/subscribe'
+import { Settings } from '../../api/settings'
 
 const composer = (props) => {
   // UI performance hack because logging out takes a long time
@@ -14,6 +15,8 @@ const composer = (props) => {
   const loggingIn = Meteor.loggingIn()
   const locale = 'de-AT'
 
+  subscribe('settings')
+
   if (Meteor.user()) {
     subscribe('timesheets')
     subscribe('inboundCalls')
@@ -21,7 +24,6 @@ const composer = (props) => {
     subscribe('availabilities')
     subscribe('constraints')
     subscribe('schedules-holidays')
-    subscribe('settings')
     subscribe('inboundCalls-counts')
     subscribe('inboundCallsTopics')
     subscribe('referrables')
@@ -38,6 +40,8 @@ const composer = (props) => {
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments\//)
 
+  const primaryColor = Settings.get('primaryColor')
+
   const isPrint = props.location.hash === '#print'
 
   if (isPrint && !isReadyToPrint) {
@@ -52,7 +56,8 @@ const composer = (props) => {
     handleLoginSuccess,
     handleLogout,
     sidebarOpen,
-    isPrint
+    isPrint,
+    primaryColor
   }
 }
 

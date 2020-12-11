@@ -113,7 +113,7 @@ const QRModal = ({ show, onClose, value }) =>
           <div style={qrLogoContainerStyle}>
             <img
               style={qrLogoStyle}
-              src='/images/logo.svg'
+              src='/logo.svg'
             />
           </div>
         </div>

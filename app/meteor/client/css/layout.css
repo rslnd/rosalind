@@ -17,6 +17,10 @@ body {
   /* zoom: 1.32; */
 }
 
+.main-header .logo {
+  transition: background-color 1s;
+}
+
 .main-header .logo img {
   width: 20px;
 }
@@ -147,4 +151,13 @@ i.circle {
 
 div[tabindex="-1"]:focus {
   outline: 0;
+}
+
+.copyright {
+  color: rgba(255,255,255,0.4);
+}
+
+.copyright a, .copyright a:active, .copyright a:visited, .copyright a:hover, .copyright a:focus, .copyright a:link {
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
 }

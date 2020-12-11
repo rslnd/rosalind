@@ -5,6 +5,7 @@ import { hasRole } from '../../../util/meteor/hasRole'
 export default () => {
   publish({
     name: 'settings',
+    allowAnonymous: true,
     fn: function () {
       if (this.userId && hasRole(this.userId, [ 'admin', 'settings-edit' ])) {
         return Settings.find({})

@@ -30,7 +30,17 @@ const structure = () => [
     render: s => s.value && <pre>{JSON.stringify(s.value, null, 2)}</pre>,
     multiline: true,
     rowsMax: 20
-  }
+  },
+
+  // used for keys: 'logo.svg' and 'favicon.ico'
+  {
+    header: 'Bilddatei',
+    title: 'Für "logo.svg" und "favicon.ico"',
+    field: 'base64Image',
+    type: 'file',
+    accept: '.png,.jpg,.jpeg,.svg,.gif,.ico,image/png,image/x-png,image/png,image/gif,image/jpeg,image/svg,image/svg+xml,image/x-icon,image/vnd.microsoft.icon'
+  },
+
 ]
 
 export const SettingsScreen = toClass(({ handleUpdate, handleInsert, handleRemove, settings, get, set }) => (
