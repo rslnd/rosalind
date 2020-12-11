@@ -24,6 +24,7 @@ const isUrlValid = urlString => {
 
 const open = (callback) => {
   const { screen } = require('electron')
+  const settings = getSettings()
   const display = screen.getPrimaryDisplay().workAreaSize
 
   app.on('web-contents-created', (event, contents) => {
@@ -68,6 +69,7 @@ const open = (callback) => {
     height: display.height,
     minWidth: 560,
     minHeight: 426,
+    icon: settings.iconPath || undefined,
     disableAutoHideCursor: true,
     backgroundColor: '#ecf0f5',
     webPreferences: {
@@ -146,7 +148,6 @@ const open = (callback) => {
   //   logger.info('[Console]', message, sourceId, line)
   // })
 
-  const settings = getSettings()
   if (isUrlValid(settings.url)) {
     mainWindow.loadURL(settings.url)
   } else {
