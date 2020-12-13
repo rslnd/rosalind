@@ -1,6 +1,8 @@
 const fs = require('fs')
 const iconv = require('iconv-lite')
 const chokidar = require('chokidar')
+const temp = require('temp')
+const { dbfToJSON } = require('./dbfToJSON')
 const { getSettings, onNewSettings } = require('./settings')
 const logger = require('./logger')
 
@@ -9,24 +11,40 @@ let watchers = []
 // Only honor delete requests for files that were actually transmitted, for security
 let pendingTransferPaths = []
 
-const onAdd = ({ ipcReceiver, watch, path, importer, remove, focus }) => {
+// Some importers directly access production database files, we need to enforce { remove: false }
+// and always make a copy to a temp location before accessing the file, and afterwards delete only the copy.
+const criticalImporters = ['innoPatients']
+const isCritical = i => (criticalImporters.indexOf(i) !== -1)
+
+const onAdd = async ({ ipcReceiver, watch, path, importer, remove, focus }) => {
   logger.info('[Watch] New file was added', { path, watch, importer, remove, focus })
+
+  if (isCritical(importer)) {
+    path = await copyToTemp(path)
+  }
+
   pendingTransferPaths.push(path)
 
-  fs.readFile(path, (err, buffer) => {
-    if (err) { return logger.error('[Watch] Error reading file to buffer', err) }
+  switch (importer) {
+    case 'innoPatients':
+      const patientsJSON = dbfToJSON({ path })
+      ipcReceiver.send('dataTransfer', { path, watch, content: patientsJSON, importer, remove, focus })
+    default:
+      fs.readFile(path, (err, buffer) => {
+        if (err) { return logger.error('[Watch] Error reading file to buffer', err) }
 
-    if (watch.encoding || !watch.binary) {
-      const encoding = watch.encoding || 'ISO-8859-1'
-      logger.info('[Watch] Transferring file with encoding', { path, encoding })
-      const content = iconv.decode(buffer, encoding)
-      ipcReceiver.send('dataTransfer', { path, watch, content, importer, remove, focus })
-    } else {
-      logger.info('[Watch] Transferring file as base64', { path })
-      const base64 = buffer.toString('base64')
-      ipcReceiver.send('dataTransfer', { path, watch, base64, importer, remove, focus })
-    }
-  })
+        if (watch.encoding || !watch.binary) {
+          const encoding = watch.encoding || 'ISO-8859-1'
+          logger.info('[Watch] Transferring file with encoding', { path, encoding })
+          const content = iconv.decode(buffer, encoding)
+          ipcReceiver.send('dataTransfer', { path, watch, content, importer, remove, focus })
+        } else {
+          logger.info('[Watch] Transferring file as base64', { path })
+          const base64 = buffer.toString('base64')
+          ipcReceiver.send('dataTransfer', { path, watch, base64, importer, remove, focus })
+        }
+      })
+  }
 }
 
 const start = ({ ipcReceiver, handleFocus }) => {
@@ -49,7 +67,11 @@ const startWatchers = async ({ ipcReceiver, handleFocus }) => {
     watchers = await Promise.all(settings.watch.map((watch) => {
       if (!watch.enabled) { return }
 
-      const { importer, remove } = watch
+      let { importer, remove } = watch
+
+      if (isCritical(importer)) {
+        remove = false // just to make sure, the temp file is deleted anyways
+      }
 
       return new Promise((resolve, reject) => {
         fs.mkdir(watch.path, { recursive: true }, (err) => {
@@ -88,7 +110,14 @@ const startWatchers = async ({ ipcReceiver, handleFocus }) => {
         return
       }
 
-      logger.info('[Watch] Data transfer success', { path, remove })
+      // Always remove temp files, especially temp copies of critical sources
+      if (path.indexOf('rosalind') !== -1 && path.indexOf('.tmp') !== -1) {
+        logger.info('[Watch] Data transfer success, forcing removal of temp file', { path, remove })
+        remove = true
+      } else {
+        logger.info('[Watch] Data transfer success', { path, remove })
+      }
+
       if (remove) {
         logger.info('[Watch] Removing file', path)
         fs.unlink(path, (err) => {
@@ -98,7 +127,7 @@ const startWatchers = async ({ ipcReceiver, handleFocus }) => {
         })
       }
 
-      if (focus !== false) {
+      if (focus) {
         handleFocus()
       }
     })
@@ -114,5 +143,17 @@ const stop = () => {
     }
   })
 }
+
+const copyToTemp = (originalPath) => new Promise((resolve, reject) => {
+  temp.track()
+  temp.mkdir('rosalind', (err, tmpDir) => {
+    if (err) { return reject(err) }
+    const tempPath = path.join(tmpDir, Math.random().toString(36).substring(7) + '.tmp')
+    fs.copyFile(originalPath, tempPath, (err) => {
+      if (err) { return reject(err) }
+      resolve(tempPath)
+    })
+  })
+})
 
 module.exports = { start, stop }

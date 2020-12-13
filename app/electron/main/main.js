@@ -71,7 +71,6 @@ app.on('ready', () => {
     }
 
     logger.ready('[Main] Main window loaded')
-    watch.start({ ipcReceiver: mainWindow.webContents, handleFocus })
     print.start({ ipcReceiver: mainWindow.webContents })
     automation.start(process.argv)
     devtools.start()
@@ -85,6 +84,13 @@ app.on('ready', () => {
         systemInfo,
         clientKey
       })
+
+      // Some watchers fire immediately even for files that are already present,
+      // delay their initialization to avoid perceptible lag or "unauthorized" errors
+      // when racing against client key authn
+      setTimeout(() => {
+        watch.start({ ipcReceiver: mainWindow.webContents, handleFocus })
+      }, 2500)
     })
   })
 

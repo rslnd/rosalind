@@ -17,8 +17,6 @@ install:
 
     choco install autoit.commandline
 
-    choco install yarn
-
     echo "node version"
 
     node --version
@@ -26,10 +24,10 @@ install:
 - cmd: >-
     cd app\electron\
 
-    yarn
+    npm start
 
 build_script:
 - ps: >-
-    cmd /c 'yarn run compile 2>&1'
+    cmd /c 'npm run compile 2>&1'
 
-    cmd /c 'yarn run release 2>&1'
+    cmd /c 'npm run release 2>&1'
