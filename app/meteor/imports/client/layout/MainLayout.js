@@ -161,7 +161,7 @@ export class MainLayout extends React.Component {
     } else {
       return (
         <Wrapper>
-          <div className='locked-layout' style={{ backgroundColor: primaryColor }}>
+          <div className='locked-layout' style={primaryColor ? { backgroundColor: primaryColor } : {}}>
             <div className='locked-wrapper'>
               <div className='locked-logo'>
                 <img src='/logo.svg' />
