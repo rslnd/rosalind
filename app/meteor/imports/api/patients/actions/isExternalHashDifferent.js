@@ -7,9 +7,11 @@ export const isExternalHashDifferent = ({ Patients }) =>
     name: 'patients/isExternalHashDifferent',
     allowAnonymous: true,
     requireClientKey: true,
+    simulation: false,
     args: {
       externalHashes: [String],
-      externalProvider: 'inno'
+      externalProvider: 'inno',
+      clientKey: String
     },
     fn ({ externalHashes, externalProvider }) {
       Events.post('patients/isExternalHashDifferent')

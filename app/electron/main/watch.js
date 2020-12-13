@@ -1,10 +1,27 @@
 const fs = require('fs')
+const path = require('path')
+const { ipcMain } = require('electron')
 const iconv = require('iconv-lite')
 const chokidar = require('chokidar')
 const temp = require('temp')
 const { dbfToJSON } = require('./dbfToJSON')
 const { getSettings, onNewSettings } = require('./settings')
 const logger = require('./logger')
+
+
+// This queue keeps thunks of actions that start/stop all watchers when settings change
+let actionQueue = []
+
+const performNextAction = async () => {
+  if (actionQueue[0]) {
+    await actionQueue[0]()
+    actionQueue = actionQueue.slice(1)
+  }
+
+  setTimeout(performNextAction, 2000)
+}
+
+performNextAction()
 
 let watchers = []
 
@@ -27,8 +44,9 @@ const onAdd = async ({ ipcReceiver, watch, path, importer, remove, focus }) => {
 
   switch (importer) {
     case 'innoPatients':
-      const patientsJSON = dbfToJSON({ path })
-      ipcReceiver.send('dataTransfer', { path, watch, content: patientsJSON, importer, remove, focus })
+      const patientsJSON = await dbfToJSON({ path })
+      logger.info(`Attmepting to send ${(patientsJSON.length / 1024 / 1024).toFixed(2)} MiB over IPC`)
+      return ipcReceiver.send('dataTransfer', { path, watch, content: patientsJSON, importer, remove, focus })
     default:
       fs.readFile(path, (err, buffer) => {
         if (err) { return logger.error('[Watch] Error reading file to buffer', err) }
@@ -48,15 +66,21 @@ const onAdd = async ({ ipcReceiver, watch, path, importer, remove, focus }) => {
 }
 
 const start = ({ ipcReceiver, handleFocus }) => {
-  onNewSettings(() => {
-    stop()
+  onNewSettings(actionQueue.push(async () => {
+    await stop()
 
     setTimeout(() => {
-      startWatchers({ ipcReceiver, handleFocus })
+      actionQueue.push(() =>
+        startWatchers({ ipcReceiver, handleFocus })
+      )
     }, 5000)
-  })
+  }))
 
-  startWatchers({ ipcReceiver, handleFocus })
+  actionQueue.push(async () => {
+    await startWatchers({ ipcReceiver, handleFocus })
+    // Only bind remove thing once
+    bindRemoveAfterIngest()
+  })
 }
 
 const startWatchers = async ({ ipcReceiver, handleFocus }) => {
@@ -64,8 +88,11 @@ const startWatchers = async ({ ipcReceiver, handleFocus }) => {
   if (settings.watch) {
     logger.info('[Watch] Watching paths', settings.watch)
 
-    watchers = await Promise.all(settings.watch.map((watch) => {
-      if (!watch.enabled) { return }
+    await Promise.all(settings.watch.map(async (watch) => {
+      if (!watch.enabled) {
+        logger.info(`[watch] Skip setting up watcher because it is not enabled: ${JSON.stringify(watch)}`)
+        return
+      }
 
       let { importer, remove } = watch
 
@@ -73,73 +100,77 @@ const startWatchers = async ({ ipcReceiver, handleFocus }) => {
         remove = false // just to make sure, the temp file is deleted anyways
       }
 
-      return new Promise((resolve, reject) => {
-        fs.mkdir(watch.path, { recursive: true }, (err) => {
-          if (err) {
-            reject(err)
-            return logger.error(`[Watch] Failed to create direcotry to watch ${watch.path} for importer ${importer}`)
-          }
 
-          let watcher = chokidar.watch(watch.path, {
-            persistent: true,
-            ignored: /[/\\]\./,
-            depth: 0,
-            usePolling: true,
-            disableGlobbing: true,
-            interval: 50,
-            binaryInterval: 50,
-            awaitWriteFinish: {
-              stabilityThreshold: 101,
-              pollInterval: 30
-            }
-          })
-  
-          watcher.on('add', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
-          watcher.on('change', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
+      if (!watch.singleFile) {
+        await ensureDirectoryExists(watch.path)
+      }
 
-          resolve(watcher)
-        })
+      let watcher = chokidar.watch(watch.path, {
+        persistent: true,
+        ignored: /(^|[\/\\])\../, // ignore dotfiles
+        depth: 1,
+        usePolling: true,
+        disableGlobbing: true,
+        interval: 100,
+        binaryInterval: 300,
+        awaitWriteFinish: {
+          stabilityThreshold: 300,
+          pollInterval: 50
+        }
       })
+
+      watcher.on('add', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
+      watcher.on('change', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
+
+      watchers.push(watcher)
     }))
-
-    // Optionally remove files after successful ingestion
-    const { ipcMain } = require('electron')
-    ipcMain.on('dataTransferSuccess', (e, { remove, path, focus }) => {
-      if (pendingTransferPaths.indexOf(path) === -1) {
-        logger.error('[Watch] Received success event for file that was not transferred in the current session, discarding event')
-        return
-      }
-
-      // Always remove temp files, especially temp copies of critical sources
-      if (path.indexOf('rosalind') !== -1 && path.indexOf('.tmp') !== -1) {
-        logger.info('[Watch] Data transfer success, forcing removal of temp file', { path, remove })
-        remove = true
-      } else {
-        logger.info('[Watch] Data transfer success', { path, remove })
-      }
-
-      if (remove) {
-        logger.info('[Watch] Removing file', path)
-        fs.unlink(path, (err) => {
-          if (err) {
-            logger.error(`[Watch] Failed to remove file ${err.message} ${err.stack}`)
-          }
-        })
-      }
-
-      if (focus) {
-        handleFocus()
-      }
-    })
   }
 }
 
-const stop = () => {
+const stop = async () => {
   logger.info('[Watch] Stop')
 
-  watchers.forEach((watcher) => {
-    if (watcher) {
-      watcher.close()
+  await Promise.all(watchers.map(async w => {
+    if (w) {
+      await Promise.all(Object.keys(w.getWatched()).map(async path => {
+        await w.unwatch(path)
+      }))
+      await w.close()
+      watchers = watchers.filter(wx => wx != w)
+    }
+  }))
+}
+
+// Optionally remove files after successful ingestion
+const bindRemoveAfterIngest = () => {
+  ipcMain.on('dataTransferSuccess', (e, { remove, path, focus }) => {
+    if (pendingTransferPaths.indexOf(path) === -1) {
+      logger.error('[Watch] Received success event for file that was not transferred in the current session, discarding event')
+      return
+    }
+
+    // Always remove temp files, especially temp copies of critical sources
+    if (path.indexOf('rosalind') !== -1 && path.indexOf('.tmp') !== -1) {
+      logger.info('[Watch] Data transfer success, forcing removal of temp file', { path, remove })
+      remove = true
+    } else {
+      logger.info('[Watch] Data transfer success', { path, remove })
+    }
+
+    if (remove) {
+      logger.info('[Watch] Removing file', path)
+      fs.unlink(path, (err) => {
+        if (err) {
+          logger.error(`[Watch] Failed to remove file ${err.message} ${err.stack}`)
+        }
+
+        // Remove deleted path from queue
+        pendingTransferPaths = pendingTransferPaths.filter(p => p !== path)
+      })
+    }
+
+    if (focus) {
+      handleFocus()
     }
   })
 }
@@ -153,6 +184,17 @@ const copyToTemp = (originalPath) => new Promise((resolve, reject) => {
       if (err) { return reject(err) }
       resolve(tempPath)
     })
+  })
+})
+
+const ensureDirectoryExists = watchPath => new Promise((resolve, reject) => {
+  fs.mkdir(watchPath, { recursive: true }, (err) => {
+    if (err) {
+      reject(err)
+      return logger.error(`[Watch] Failed to create direcotry to watch ${watchPath}`)
+    }
+
+    resolve(watchPath)
   })
 })
 

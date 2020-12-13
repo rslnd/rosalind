@@ -6,6 +6,7 @@ import { Meteor } from 'meteor/meteor'
 import { MainLayout } from './MainLayout'
 import { subscribe } from '../../util/meteor/subscribe'
 import { Settings } from '../../api/settings'
+import { getClientKey } from '../../startup/client/native/events'
 
 const composer = (props) => {
   // UI performance hack because logging out takes a long time
@@ -57,7 +58,8 @@ const composer = (props) => {
     handleLogout,
     sidebarOpen,
     isPrint,
-    primaryColor
+    primaryColor,
+    isNative: !!getClientKey(),
   }
 }
 

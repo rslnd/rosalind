@@ -54,6 +54,12 @@ const ExternalNode = new SimpleSchema({
     optional: true
   },
 
+  hash: {
+    type: String,
+    optional: true,
+    index: 1
+  },
+
   patientId: {
     type: String,
     index: 1,
@@ -80,6 +86,11 @@ const ExternalNode = new SimpleSchema({
 
 const External = new SimpleSchema({
   eoswin: {
+    optional: true,
+    type: ExternalNode
+  },
+
+  inno: {
     optional: true,
     type: ExternalNode
   },

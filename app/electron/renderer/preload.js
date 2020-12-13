@@ -46,11 +46,13 @@ const logger = {
     })
   },
   info: message => {
-    console.log(message)
-    ipcRenderer.send('log', {
-      level: 'info',
-      message: message
-    })
+    if (DEBUG) {
+      console.log(message)
+      ipcRenderer.send('log', {
+        level: 'info',
+        message: message
+      })
+    }
   }
 }
 

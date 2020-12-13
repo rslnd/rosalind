@@ -3,15 +3,14 @@ import idx from 'idx'
 import omitBy from 'lodash/fp/omitBy'
 import isEqual from 'lodash/isEqual'
 import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../../events'
 import { Referrals } from '../../../referrals'
 import { normalizeName } from '../../util/normalizeName'
 import { zerofix } from '../../../../util/zerofix'
 import { daySelector } from '../../../../util/time/day'
 import { normalizePhoneNumber } from '../../../messages/methods/normalizePhoneNumber'
+import { action, Match } from '../../../../util/meteor/action'
+import { Clients } from '../../../clients'
 
 const isEmpty = (v, k) => {
   if (k === 'note') {
@@ -52,21 +51,24 @@ const cleanFields = (p = {}) => {
   return omitBy(isEmpty)(p)
 }
 
-export const upsert = ({ Patients }) => {
-  return new ValidatedMethod({
+export const upsert = ({ Patients }) =>
+  action({
     name: 'patients/upsert',
-    mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
-      patient: { type: Object, blackbox: true },
-      replaceContacts: { type: Boolean, optional: true },
-      quiet: { type: Boolean, optional: true },
-      createExternalReferralTo: { type: SimpleSchema.RegEx.Id, optional: true }
-    }).validator(),
-
-    run ({ patient, quiet, replaceContacts, createReferral, createExternalReferralTo }) {
+    allowAnonymous: true,
+    requireClientKey: false,
+    args: {
+      patient: Object,
+      replaceContacts: Match.Maybe(Match.Optional(Boolean)),
+      quiet: Match.Maybe(Match.Optional(Boolean)),
+      createExternalReferralTo: Match.Maybe(Match.Optional(String))
+    },
+    fn ({ patient, quiet, replaceContacts, createExternalReferralTo, clientKey }) {
       try {
-        if (this.connection && !this.userId) {
-          throw new Meteor.Error(403, 'Not authorized')
+        if (Meteor.isServer) {
+          const { isTrustedNetwork } = require('../../../customer/isTrustedNetwork')
+          if (!this.userId && (this.connection && (!isTrustedNetwork(this.connection.clientAddress) || !(clientKey && !Clients.findOne({ clientKey }).isBanned)))) {
+            throw new Meteor.Error(403, 'Not authorized')
+          }
         }
 
         this.unblock()
@@ -256,7 +258,6 @@ export const upsert = ({ Patients }) => {
       }
     }
   })
-}
 
 const ensureExternalReferral = ({ patientId, createExternalReferralTo }) => {
   try {

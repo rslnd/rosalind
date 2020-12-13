@@ -213,8 +213,17 @@ export default () => {
       // the url parsed from the original request string.
       // url.hash contains # and the nonce we just attached.
       const nonce = request.url.hash.substr(1)
+      const primaryColor = Settings.get('primaryColor')
+
       data.head += '\n  <title>Connecting…</title>'
       data.head += `\n  <meta property="csp-nonce" content="${nonce}">`
+
+
+      // Be careful to prevent html injection here
+      if (primaryColor && primaryColor.match(/^#[a-fA-F0-9]{1,8}$/)) {
+        data.head += `\n  <meta property="theme-color" content="${primaryColor}">`
+      }
+
       data.head += '\n  <meta name="robots" content="noindex, nofollow">'
       data.head += '\n  <meta name="viewport" content="user-scalable=no, width=device-width, maximum-scale=1, initial-scale=1, minimum-scale=1">'
 

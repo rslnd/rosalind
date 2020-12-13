@@ -14,8 +14,6 @@ import { Lock } from './Lock'
 import { DropZone } from '../patientAppointments/DropZone'
 import { handleDrop } from '../../startup/client/dataTransfer'
 import { Prompts } from './Prompt'
-import { isNative } from 'lodash'
-import { getClientKey } from '../../startup/client/native/events'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -67,7 +65,8 @@ export class MainLayout extends React.Component {
       handleLogout,
       locale,
       isPrint,
-      primaryColor
+      primaryColor,
+      isNative
     } = this.props
 
     const open = this.props.sidebarOpen || this.state.sidebarForceOpen
@@ -159,9 +158,14 @@ export class MainLayout extends React.Component {
         </Wrapper>
       )
     } else {
+      const backgroundColor =
+        primaryColor ||
+        document.head.querySelector('[property=theme-color][content]') ||
+        '#3c8dbc'
+
       return (
         <Wrapper>
-          <div className='locked-layout' style={primaryColor ? { backgroundColor: primaryColor } : {}}>
+          <div className='locked-layout' style={backgroundColor ? { backgroundColor } : {}}>
             <div className='locked-wrapper'>
               <div className='locked-logo'>
                 <img src='/logo.svg' />
@@ -177,13 +181,13 @@ export class MainLayout extends React.Component {
                 <a
                  href='https://fixpoint.co.at'
                  title='fixpoint.co.at'
-                 style={{ cursor: getClientKey() ? 'pointer' : 'default'}}
+                 style={{ cursor: isNative ? 'default' : 'pointer' }}
                 >
                   Fixpoint Systems GmbH
                 </a>
                 <br />
                 {/* only show in browsers, not in native wrapper */}
-                {!getClientKey() && <span>
+                {!isNative && <span>
                   <a href='https://fixpoint.co.at/datenschutz'>Datenschutz</a> &middot; <a href='https://fixpoint.co.at/impressum'>Impressum</a>
                 </span>}
 

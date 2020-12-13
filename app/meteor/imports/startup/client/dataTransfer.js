@@ -6,6 +6,7 @@ import { loadPatient } from '../../client/patients/picker/actions'
 import { onNativeEvent, toNative } from './native/events'
 import { Meteor } from 'meteor/meteor'
 import { getClient } from '../../api/clients/methods/getClient'
+import { innoPatientsImport } from '../../api/importers/innoPatientsImport'
 
 export const ingest = ({ name, content, base64, importer }) => {
   return Importers.actions.ingest.callPromise({
@@ -234,6 +235,20 @@ const onNativeDataTransfer = async file => {
         console.error(e)
         Alert.error('Entschuldigung! Bild konnte nicht gespeichert werden. Bitte Support kontaktieren.')
       }
+      break;
+    case 'innoPatients':
+      try {
+        const result = await innoPatientsImport({
+          json: file.content
+        })
+
+        onDataTransferSuccess({ importer: file.importer, ...file })
+
+        return result
+      } catch (e) {
+        console.error(e)
+      }
+      break;
     default:
       const response = await ingest({
         name: file.path,
