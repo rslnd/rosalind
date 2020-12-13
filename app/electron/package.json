@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.251",
+  "version": "0.0.252",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -70,11 +70,11 @@
     }
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/electron-builder install-app-deps",
-    "start": "./node_modules/.bin/electron .",
-    "pack": "./compileAutoIt.js && ./node_modules/.bin/electron-builder --dir",
-    "build": "./node_modules/.bin/electron-builder --x64",
-    "release": "./node_modules/.bin/electron-builder build --x64",
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron .",
+    "pack": "node compileAutoIt.js && electron-builder --dir",
+    "build": "electron-builder --x64",
+    "release": "electron-builder build --x64",
     "compile": "node ./compileAutoIt.js",
     "tag": "node tag.js | /bin/sh"
   }
