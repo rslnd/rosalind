@@ -6,6 +6,7 @@ import { setBirthday } from './setBirthday'
 import { setContacts } from './setContacts'
 import { setAgreement } from './setAgreement'
 import { upsert } from './upsert'
+import { isExternalHashDifferent } from './isExternalHashDifferent'
 
 export default function ({ Patients }) {
   return {
@@ -16,6 +17,7 @@ export default function ({ Patients }) {
     setBirthday: setBirthday({ Patients }),
     setContacts: setContacts({ Patients }),
     setAgreement: setAgreement({ Patients }),
-    upsert: upsert({ Patients })
+    upsert: upsert({ Patients }),
+    isExternalHashDifferent: isExternalHashDifferent({ Patients })
   }
 }
