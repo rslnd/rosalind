@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.250",
+  "version": "0.0.251",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -16,8 +16,8 @@
   "main": "main/main.js",
   "devDependencies": {
     "electron": "^10.2.0",
-    "electron-builder": "^22.9.1",
-    "electron-packager": "^15.2.0",
+    "electron-builder": "^22.8.1",
+    "electron-packager": "^15.1.0",
     "shelljs": "^0.8.4"
   },
   "dependencies": {
