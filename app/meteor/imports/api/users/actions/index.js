@@ -7,6 +7,7 @@ import { insert } from './insert'
 import { login, logout } from './loginLogout'
 import { remove } from './remove'
 import { restore } from './restore'
+import { updateAllowedClientIds } from './updateAllowedClientIds'
 
 export default ({ Users }) => ({
   setPasswordless: setPasswordless({ Users }),
@@ -18,5 +19,6 @@ export default ({ Users }) => ({
   login: login({ Users }),
   logout: logout({ Users }),
   remove: remove({ Users }),
-  restore: restore({ Users })
+  restore: restore({ Users }),
+  updateAllowedClientIds: updateAllowedClientIds({ Users })
 })

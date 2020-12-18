@@ -9,6 +9,8 @@ export const login = {
   passwordlessDisallowedNetworkMessage: 'Außerhalb der Ordination ist ein Passwort notwendig.',
   passwordlessDisallowedUserMessage: 'Für diesen Zugang ist ein eigenes Passwort notwendig.',
   passwordlessNoClientKeyMessage: 'Außerhalb der Ordination ist ein Passwort notwendig.',
+  userNotAllowedOnClientMessage: 'Der Zugang ist auf diesem Arbeitsplatz nicht freigeschaltet.',
+  clientKeyRequired: 'Dieser Zugang ist nur auf bestimmten Arbeitsplätzen freigeschaltet.',
   help: 'Ich benötige Hilfe',
   sidebar_actions: 'Aktionen',
   form: {

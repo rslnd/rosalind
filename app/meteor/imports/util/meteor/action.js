@@ -35,7 +35,7 @@ export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKe
         e.message = `[action] ${name} validation failed: ${e.message}`
 
         if (process.env.NODE_ENV === 'development') {
-          console.error('Client submitted (unsafe) args', unsafeArgs)
+          console.error(`[action] ${name} validation failed: ${e.message}. Client submitted (unsafe) args: ${JSON.stringify(unsafeArgs)}`)
         }
 
         throw new Error(e)

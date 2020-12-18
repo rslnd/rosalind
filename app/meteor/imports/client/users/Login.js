@@ -47,8 +47,14 @@ export class Login extends React.Component {
           case 'passwordless-login-disallowed-for-user':
             Alert.error(__('login.passwordlessDisallowedUserMessage'))
             break
+          case 'user-not-allowed-on-client':
+            Alert.error(__('login.userNotAllowedOnClientMessage'))
+            break
+          case 'client-key-required':
+            Alert.error(__('login.clientKeyRequired'))
+            break
           default:
-            console.error(err)
+          console.error(err)
             Alert.error(__('login.failedMessage'))
         }
       } else {

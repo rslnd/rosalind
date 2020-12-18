@@ -17,7 +17,7 @@ export const isTrustedNetwork = ip => {
   // Requests from localhost are trusted
   if (isLocalhost(ip)) { return true }
 
-  let allowedIps = process.env.PASSWORDLESS_LOGIN_IP
+  let allowedIps = process.env.TENANT_IPS
   if (ip && allowedIps) {
     allowedIps = allowedIps.split(',')
     return allowedIps.includes(ip)

@@ -66,9 +66,10 @@ const structure = ({ getAssigneeName, isInRole }) => [
     icon: 'desktop',
     field: 'allowedClientIds',
     description: 'Restrict Login to Client Ids',
+    unsetWhenEmpty: true,
     isMulti: true,
     EditComponent: ClientsPicker,
-    render: c => c.allowedClientIds && c.allowedClientIds.length
+    render: u => u.allowedClientIds && u.allowedClientIds.length
   },
 
   {

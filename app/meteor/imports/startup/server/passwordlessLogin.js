@@ -83,7 +83,33 @@ export default () => {
         throw new Meteor.Error('passwordless-login-disallowed-for-network', `Passwordless Login not allowed for network`)
       }
     } else {
-      return loginAttempt.allowed
+      return loginAttempt.allowed // this just means pass through the value of other handlers
     }
   })
 }
+
+// Check allowedClientIds
+Accounts.validateLoginAttempt((loginAttempt) => {
+  if (!loginAttempt.allowed) { return false }
+  const user = loginAttempt.user
+  const clientKey = loginAttempt.methodArguments[0].clientKey
+
+  if (user.allowedClientIds) {
+    if (clientKey) {
+      const client = Clients.findOne({ clientKey })
+      if (client && !client.removed && !client.isBanned) {
+        if (user.allowedClientIds.indexOf(client._id) !== -1) {
+          return true
+        } else {
+          throw new Meteor.Error('user-not-allowed-on-client', 'User is restricted to clients, User is not allowed on this client')
+        }
+      } else {
+        throw new Meteor.Error('unknown-client-key', 'User is restricted to clients, Client key not registered or not allowed')
+      }
+    } else {
+      throw new Meteor.Error('client-key-required', 'User is restricted to clients, Client key is required')
+    }
+  } else {
+    return loginAttempt.allowed // pass through
+  }
+})
