@@ -33,6 +33,12 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  // used in Accounts.validateLoginAttempt for restricting user.allowedClientIds because we cannot pass additional arguments to loginWithPassword. When this matches the connection id of the login call, we assume the login came from this client.
+  connectionId: {
+    type: String,
+    optional: true
+  },
+
   settings: {
     type: Object,
     blackbox: true,

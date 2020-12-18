@@ -21,7 +21,8 @@ export const register = ({ Clients }) =>
         Clients.update({ clientKey }, {
           $set: {
             lastActionAt: new Date(),
-            systemInfo
+            systemInfo,
+            connectionId: this.connection.id
           }
         })
         Events.post('clients/register/existing', { existingClientId: existingClient._id })

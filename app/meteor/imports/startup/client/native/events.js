@@ -10,7 +10,7 @@ const events = new EventEmitter()
 let bridge = null
 
 // This is set when the native interface is ready
-let clientKey = null
+const clientKey = new ReactiveVar(null)
 
 export default () => {
   bridge = getBridge()
@@ -36,7 +36,7 @@ export default () => {
         console.log('[Native] Registration succeeded', payload.systemInfo)
 
         // Make bindings public only after successful registration
-        clientKey = payload.clientKey
+        clientKey.set(payload.clientKey)
 
         updateSettings(registration.settings)
         subscribeSettings()
@@ -69,7 +69,7 @@ export const toNative = (name, payload = {}) => {
   bridge.postToNative(name, payload)
 }
 
-export const getClientKey = () => clientKey
+export const getClientKey = () => clientKey.get()
 
 const getBridge = () => (
   handleAndroidEvents({ events }) ||

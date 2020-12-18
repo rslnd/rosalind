@@ -7,13 +7,23 @@ import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { getClientKey } from '../../startup/client/native/events'
 import { isWeakPassword } from '../../api/users/methods'
+import { withTracker } from '../components/withTracker'
+import { getClient } from '../../api/clients/methods/getClient'
 
-export class Login extends React.Component {
+const composer = () => {
+  const client = getClient()
+  const defaultUsername = client && client.settings.defaultUsername
+  console.log('DEFU', defaultUsername)
+  return { defaultUsername }
+}
+
+class LoginScreen extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      name: '',
+      name: props.defaultUsername || '',
+      namePristine: true, // used for asynchronously filling in defaultUsername as given in client settings
       password: ''
     }
 
@@ -22,8 +32,19 @@ export class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.defaultUsername && !prevState.name && prevState.namePristine) {
+      // dirty side effect to focus password field after username was autofilled
+      setTimeout(() => document.getElementById('passwordField').focus(), 30)
+
+      return { name: nextProps.defaultUsername }
+    } else {
+      return {}
+    }
+  }
+
   handleNameChange (e) {
-    this.setState({ ...this.state, name: e.target.value })
+    this.setState({ ...this.state, name: e.target.value, namePristine: false })
   }
 
   handlePasswordChange (e) {
@@ -53,6 +74,9 @@ export class Login extends React.Component {
           case 'client-key-required':
             Alert.error(__('login.clientKeyRequired'))
             break
+          case 'unknown-client-key':
+            Alert.error(__('login.unknownClientKey'))
+            break;
           default:
           console.error(err)
             Alert.error(__('login.failedMessage'))
@@ -88,8 +112,7 @@ export class Login extends React.Component {
         console.warn('[Users] Login failed: Attempting passwordless login without clientKey')
         Alert.error(__('login.passwordlessNoClientKeyMessage'))
       }
-    // Note that if a password is supplied, the client key is ignored for login
-    // Only passwordless login needs a client key
+    // There is no way to pass the client key along with the loginWithPassword call. The server will check for a client key be checking this.connection.id
     } else if (username && password) {
       Meteor.loginWithPassword(username, password, callback)
     } else {
@@ -113,6 +136,8 @@ export class Login extends React.Component {
                   <input
                     name='name'
                     id='nameField'
+                    autoFocus={!this.state.name}
+                    value={this.state.name}
                     className='input-lg form-control'
                     onChange={this.handleNameChange}
                     placeholder={__('login.form.name.placeholder')} />
@@ -125,6 +150,8 @@ export class Login extends React.Component {
                     type='password'
                     name='password'
                     id='passwordField'
+                    autoFocus={this.state.name && !this.state.password}
+                    value={this.state.password}
                     className='input-lg form-control'
                     onChange={this.handlePasswordChange}
                     placeholder={__('login.form.password.placeholder')} />
@@ -147,11 +174,20 @@ export class Login extends React.Component {
             </div>
           </div>
         </form>
+        {/* Just to preload fontawesome */}
+        <Icon name='refresh' style={hiddenStyle} />
       </div>
     )
   }
 }
 
+const hiddenStyle = {
+  position: 'absolute',
+  opacity: 0
+}
+
 const spinFaster = {
   animationDuration: '1s'
 }
+
+export const Login = withTracker(composer)(LoginScreen)

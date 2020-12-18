@@ -9,7 +9,7 @@ export default () => {
   Accounts.config({
     forbidClientAccountCreation: true,
     loginExpirationInDays: 1,
-    bcryptRounds: 15
+    bcryptRounds: 11
   })
 
   Accounts.registerLoginHandler('clientKey passwordless', (loginRequest) => {
@@ -92,22 +92,19 @@ export default () => {
 Accounts.validateLoginAttempt((loginAttempt) => {
   if (!loginAttempt.allowed) { return false }
   const user = loginAttempt.user
-  const clientKey = loginAttempt.methodArguments[0].clientKey
+
+  const connectionId = loginAttempt.connection.id
 
   if (user.allowedClientIds) {
-    if (clientKey) {
-      const client = Clients.findOne({ clientKey })
-      if (client && !client.removed && !client.isBanned) {
-        if (user.allowedClientIds.indexOf(client._id) !== -1) {
-          return true
-        } else {
-          throw new Meteor.Error('user-not-allowed-on-client', 'User is restricted to clients, User is not allowed on this client')
-        }
+    const client = Clients.findOne({ connectionId })
+    if (client && !client.removed && !client.isBanned) {
+      if (user.allowedClientIds.indexOf(client._id) !== -1) {
+        return true
       } else {
-        throw new Meteor.Error('unknown-client-key', 'User is restricted to clients, Client key not registered or not allowed')
+        throw new Meteor.Error('user-not-allowed-on-client', 'User is restricted to clients, User is not allowed on this client')
       }
     } else {
-      throw new Meteor.Error('client-key-required', 'User is restricted to clients, Client key is required')
+      throw new Meteor.Error('unknown-client-key', 'User is restricted to clients, Client key not registered on this connection id or client is not allowed')
     }
   } else {
     return loginAttempt.allowed // pass through
