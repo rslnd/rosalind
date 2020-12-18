@@ -6,7 +6,11 @@ import Schema from './schema'
 const Events = new Mongo.Collection('events')
 
 if (Meteor.isServer) {
-  Events._createCappedCollection(1024 * 1024 * 4)
+  const db = Meteor.users.rawDatabase()
+  const collectionExists = db.listCollections({ name: 'events' }).hasNext().await()
+  if (!collectionExists) {
+    db.createCollection('events', { capped: true, size: 1024 * 1024 * 4 }).await()
+  }
 }
 
 Events.attachSchema(Schema)
