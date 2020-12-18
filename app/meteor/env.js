@@ -1,4 +1,5 @@
 const publicEnvVars = [
+  'CUSTOMER_PREFIX',
   'CUSTOMER_NAME',
   'TZ_CLIENT',
   'COMMIT_HASH',
