@@ -215,18 +215,24 @@ export default () => {
       const nonce = request.url.hash.substr(1)
       const primaryColor = Settings.get('primaryColor')
 
-      data.head += '\n  <title>Connecting…</title>'
-      data.head += `\n  <meta property="csp-nonce" content="${nonce}">`
+      let head = ''
+
+      head += '\n  <title>Connecting…</title>'
+      head += `\n  <meta property="csp-nonce" content="${nonce}">`
 
 
       // Be careful to prevent html injection here
       if (primaryColor && primaryColor.match(/^#[a-fA-F0-9]{1,8}$/)) {
-        data.head += `\n  <meta property="theme-color" content="${primaryColor}">`
+        head += `\n  <meta property="theme-color" content="${primaryColor}">`
+        head += `\n  <style nonce="${nonce}">html, body { background-color: ${primaryColor}; }</style>`
       }
 
-      data.head += '\n  <meta name="robots" content="noindex, nofollow">'
-      data.head += '\n  <meta name="viewport" content="user-scalable=no, width=device-width, maximum-scale=1, initial-scale=1, minimum-scale=1">'
+      head += '\n  <meta name="robots" content="noindex, nofollow">'
+      head += '\n  <meta name="viewport" content="user-scalable=no, width=device-width, maximum-scale=1, initial-scale=1, minimum-scale=1">'
 
+
+      // Prepend
+      data.head = head + '\n' + data.head
       data.body += '\n  <noscript>Please enable JavaScript.</noscript>'
 
       // WIP: shadow-cljs

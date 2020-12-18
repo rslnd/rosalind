@@ -41,7 +41,8 @@ const composer = (props) => {
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments\//)
 
-  const primaryColor = Settings.get('primaryColor')
+  const metaTag = document.head.querySelector('[property=theme-color][content]')
+  const primaryColor = Settings.get('primaryColor') || (metaTag && metaTag.content.match(/^#[a-fA-F0-9]{1,8}$/ && metaTag.content))
 
   const isPrint = props.location.hash === '#print'
 
@@ -59,7 +60,11 @@ const composer = (props) => {
     sidebarOpen,
     isPrint,
     primaryColor,
-    isNative: !!getClientKey(),
+    isNative: (
+      !!getClientKey() ||
+      navigator.userAgent.toLocaleLowerCase().indexOf('rosalind') !== -1 ||
+      navigator.userAgent.toLocaleLowerCase().indexOf('electron') !== -1
+    )
   }
 }
 
