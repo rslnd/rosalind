@@ -158,9 +158,10 @@ export class MainLayout extends React.Component {
         </Wrapper>
       )
     } else {
+      const themeColor = document.head.querySelector('[property=theme-color][content]')
       const backgroundColor =
-        primaryColor ||
-        document.head.querySelector('[property=theme-color][content]') ||
+        (isColor(primaryColor) && primaryColor) ||
+        (isColor(themeColor.content) && themeColor.content) ||
         '#3c8dbc'
 
       return (
@@ -182,13 +183,14 @@ export class MainLayout extends React.Component {
                  href='https://fixpoint.co.at'
                  title='fixpoint.co.at'
                  style={{ cursor: isNative ? 'default' : 'pointer' }}
+                 tabIndex={-1}
                 >
                   Fixpoint Systems GmbH
                 </a>
                 <br />
                 {/* only show in browsers, not in native wrapper */}
                 {!isNative && <span>
-                  <a href='https://fixpoint.co.at/datenschutz'>Datenschutz</a> &middot; <a href='https://fixpoint.co.at/impressum'>Impressum</a>
+                  <a href='https://fixpoint.co.at/datenschutz' tabIndex={-1}>Datenschutz</a> &middot; <a href='https://fixpoint.co.at/impressum' tabIndex={-1}>Impressum</a>
                 </span>}
 
               </small>
@@ -210,3 +212,7 @@ const Wrapper = ({ children }) =>
       </div>
     }
   </DropZone>
+
+
+// is valid hex color? to avoid weird grey flicker after logout
+const isColor = s => s && s.match && s.match(/^#[a-fA-F0-9]{1,8}$/)

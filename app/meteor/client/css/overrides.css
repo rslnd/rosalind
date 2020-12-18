@@ -18,6 +18,9 @@ body {
 
 .content-wrapper {
   transition-property: none !important;
+
+  /* Strange number derived by trial and error, needed to make the div cover the body background color even with no content, and does not force scrollbars */
+  min-height: 81.8vh;
 }
 
 h1,
