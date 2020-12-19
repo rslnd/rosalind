@@ -9,6 +9,7 @@ import { getClientKey } from '../../startup/client/native/events'
 import { isWeakPassword } from '../../api/users/methods'
 import { withTracker } from '../components/withTracker'
 import { getClient } from '../../api/clients/methods/getClient'
+import { attemptRegistration } from '../../startup/client/native/attemptRegistration'
 
 const composer = () => {
   const client = getClient()
@@ -51,13 +52,13 @@ class LoginScreen extends React.Component {
     this.setState({ ...this.state, password: e.target.value })
   }
 
-  handleSubmit (e) {
+  handleSubmit (e, flags = {}) {
     e.preventDefault()
 
     const username = this.state.name
     const password = this.state.password
 
-    const callback = err => Meteor.defer(() => {
+    const callback = err => Meteor.defer(async () => {
       if (err) {
         console.warn('[Users] Login failed', err)
 
@@ -75,7 +76,17 @@ class LoginScreen extends React.Component {
             Alert.error(__('login.clientKeyRequired'))
             break
           case 'unknown-client-key':
-            Alert.error(__('login.unknownClientKey'))
+            // The client key attached to this.connection may be
+            // stale, eg. after a reconnect or server restart.
+            // Calling clients/register updates the connectionId of the client.
+            const clientKey = getClientKey()
+            // Retry transparently once, then fail
+            if (clientKey && flags && flags.isRetry) {
+              Alert.error(__('login.unknownClientKey'))
+            } else {
+              await attemptRegistration({ clientKey })
+              handleSubmit(e, { isRetry: true }) // try again
+            }
             break;
           default:
           console.error(err)

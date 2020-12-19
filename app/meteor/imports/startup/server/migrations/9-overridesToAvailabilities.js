@@ -61,7 +61,7 @@ Meteor.startup(migrateUp)
 
 const nextMidnightInMs = moment().add(1, 'day').startOf('day').diff(moment(), 'milliseconds')
 
-setTimeout(() => {
+Meteor.setTimeout(() => {
   migrateUp()
   setInterval(migrateUp, 1000 * 86400)
 }, nextMidnightInMs)

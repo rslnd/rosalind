@@ -5,6 +5,8 @@ import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { __ } from '../../i18n'
+import { attemptRegistration } from './native/attemptRegistration'
+import { getClientKey } from './native/events'
 
 export default () => {
   const connectionStatus = () => {
@@ -20,6 +22,10 @@ export default () => {
           if (window.offline && window.offline.alertId) {
             console.log('[Meteor] status: connected')
             Alert.close(window.offline.alertId)
+
+            if (getClientKey()) {
+              attemptRegistration({ clientKey: getClientKey() })
+            }
             const icon = React.createElement(Icon, { name: 'thumbs-up' }, null)
             Alert.success(__('ui.statusMessages.connected'), { timeout: 2000, customFields: { icon } })
           }

@@ -1,13 +1,13 @@
 import { Settings } from '../../settings'
 import { Events } from '../../events'
-import { action } from '../../../util/meteor/action'
+import { action, Match } from '../../../util/meteor/action'
 
 export const register = ({ Clients }) =>
   action({
     name: 'clients/register',
     args: {
       clientKey: String,
-      systemInfo: Object
+      systemInfo: Match.Maybe(Match.Optional(Object))
     },
     allowAnonymous: true,
     fn ({ clientKey, systemInfo }) {
@@ -21,7 +21,7 @@ export const register = ({ Clients }) =>
         Clients.update({ clientKey }, {
           $set: {
             lastActionAt: new Date(),
-            systemInfo,
+            systemInfo: systemInfo || existingClient.systemInfo,
             connectionId: this.connection.id
           }
         })
