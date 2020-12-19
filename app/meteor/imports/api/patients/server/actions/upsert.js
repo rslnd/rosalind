@@ -88,20 +88,18 @@ export const upsert = ({ Patients }) =>
           if (patient._id === 'newPatient') {
             throw new Meteor.Error('Invalid patientId `newPatient`')
           }
-          existingPatient = Patients.findOne({ _id: patient._id })
+          existingPatient = Patients.findOne({ _id: patient._id }, { removed: true })
         }
 
         if (!existingPatient && patient.insuranceId) {
-          existingPatient = Patients.findOne({ insuranceId: patient.insuranceId })
+          existingPatient = Patients.findOne({ insuranceId: patient.insuranceId }, { removed: true })
         }
 
-        if (!existingPatient && patient.external && patient.external.eoswin && patient.external.eoswin.id) {
-          existingPatient = Patients.findOne({ 'external.eoswin.id': patient.external.eoswin.id })
-        }
-
-        if (!existingPatient && patient.external && patient.external.bioresonanz && patient.external.bioresonanz.id) {
-          existingPatient = Patients.findOne({ 'external.bioresonanz.id': patient.external.bioresonanz.id })
-        }
+        ['eoswin', 'inno', 'bioresonanz'].forEach(ex => {
+          if (!existingPatient && patient.external && patient.external[ex] && patient.external[ex].id) {
+            existingPatient = Patients.findOne({ [`external.${ex}.id`]: patient.external[ex].id }, { removed: true })
+          }
+        })
 
         if (!existingPatient &&
           patient.birthday &&

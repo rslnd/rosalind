@@ -10,8 +10,7 @@ export const isExternalHashDifferent = ({ Patients }) =>
     simulation: false,
     args: {
       externalHashes: [String],
-      externalProvider: 'inno',
-      clientKey: String
+      externalProvider: 'inno'
     },
     fn ({ externalHashes, externalProvider }) {
       Events.post('patients/isExternalHashDifferent')
@@ -20,10 +19,13 @@ export const isExternalHashDifferent = ({ Patients }) =>
 
       const field = `external.${externalProvider}.hash`
       const upToDatePatients = Patients.find({
-        [field]:{ $in: externalHashes }
-      }, { fields: {
-        [field]: 1
-      }}).fetch().map(p => p.external[externalProvider].hash)
+        [field]: { $in: externalHashes }
+      }, {
+        fields: {
+          [field]: 1
+        },
+        removed: true
+      }).fetch().map(p => p.external[externalProvider].hash)
 
       let upToDatePatientsHashmap = {}
       upToDatePatients.forEach(h => {

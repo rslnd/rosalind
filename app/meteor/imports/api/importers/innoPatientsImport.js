@@ -66,8 +66,7 @@ const parsePatient = (hash, p) => {
 export const innoPatientsImport = async ({ json }) => {
   const startAt = new Date()
 
-  // DEBUG slice only a few
-  const allPatients = JSON.parse(json).slice(8000, 8003)
+  const allPatients = JSON.parse(json)
 
   // TODO: Persist diff hashes??
   const allPatientsByHash = {}

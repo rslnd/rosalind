@@ -33,8 +33,8 @@ let pendingTransferPaths = []
 const criticalImporters = ['innoPatients']
 const isCritical = i => (criticalImporters.indexOf(i) !== -1)
 
-const onAdd = async ({ ipcReceiver, watch, path, importer, remove, focus }) => {
-  logger.info('[Watch] New file was added', { path, watch, importer, remove, focus })
+const onAdd = async ({ ipcReceiver, watch, path, importer, remove, focus, encoding }) => {
+  logger.info('[Watch] New file was added', { path, watch, importer, remove, focus, encoding })
 
   if (isCritical(importer)) {
     path = await copyToTemp(path)
@@ -44,8 +44,8 @@ const onAdd = async ({ ipcReceiver, watch, path, importer, remove, focus }) => {
 
   switch (importer) {
     case 'innoPatients':
-      const patientsJSON = await dbfToJSON({ path })
-      logger.info(`Attmepting to send ${(patientsJSON.length / 1024 / 1024).toFixed(2)} MiB over IPC`)
+      const patientsJSON = await dbfToJSON({ encoding, path })
+      logger.info(`[innoPatients] Attempting to send ${(patientsJSON.length / 1024 / 1024).toFixed(2)} MiB over IPC`)
       return ipcReceiver.send('dataTransfer', { path, watch, content: patientsJSON, importer, remove, focus })
     default:
       fs.readFile(path, (err, buffer) => {
@@ -65,7 +65,12 @@ const onAdd = async ({ ipcReceiver, watch, path, importer, remove, focus }) => {
   }
 }
 
+// This is called on every IPC hello, prevent watchers from getting set up multiple times
+let didStartOnce = false
 const start = ({ ipcReceiver, handleFocus }) => {
+  if (didStartOnce) { return }
+  didStartOnce = true
+
   onNewSettings(() =>
     actionQueue.push(async () => {
       await stop()
@@ -96,7 +101,7 @@ const startWatchers = async ({ ipcReceiver, handleFocus }) => {
         return
       }
 
-      let { importer, remove } = watch
+      let { importer, remove, encoding, focus } = watch
 
       if (isCritical(importer)) {
         remove = false // just to make sure, the temp file is deleted anyways
@@ -121,8 +126,8 @@ const startWatchers = async ({ ipcReceiver, handleFocus }) => {
         }
       })
 
-      watcher.on('add', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
-      watcher.on('change', (path) => onAdd({ ipcReceiver, watch, path, importer, remove }))
+      watcher.on('add', (path) => onAdd({ ipcReceiver, watch, path, importer, remove, encoding, focus }))
+      watcher.on('change', (path) => onAdd({ ipcReceiver, watch, path, importer, remove, encoding, focus }))
 
       watchers.push(watcher)
     }))

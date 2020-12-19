@@ -21,6 +21,7 @@
     "shelljs": "^0.8.4"
   },
   "dependencies": {
+    "@mickeyjohn/dbfstream": "^2.0.0",
     "@sentry/electron": "^2.0.4",
     "chokidar": "^3.4.3",
     "electron-localshortcut": "^3.2.1",
@@ -30,7 +31,6 @@
     "iconv-lite": "^0.6.2",
     "lodash": "^4.17.20",
     "logdna": "^3.5.1",
-    "node-dbf": "^0.4.0",
     "pdf-to-printer": "^1.5.2",
     "pkginfo": "^0.4.1",
     "request": "^2.88.2",

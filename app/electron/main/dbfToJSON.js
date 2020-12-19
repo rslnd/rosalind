@@ -1,32 +1,26 @@
-const Parser = require('node-dbf').default
+const dbfstream = require('@mickeyjohn/dbfstream')
 const logger = require('./logger')
 
-const dbfToJSON = async ({ path, encoding }) => {
-  return new Promise((resolve, reject) => {
+const dbfToJSON = async ({ path, encoding = 'iso-8859-1' }) => {
+  return new Promise(async (resolve, reject) => {
     const startAt = new Date()
 
-    const dbf = new Parser(path, { encoding: encoding || 'latin1' })
-    let records = []
+    const records = []
 
-    dbf.on('header', ({ fields, ...header}) => {
-      logger.info(`[dbfToJSON] Opened ${path} with header ${JSON.stringify(header)} and ${fields.length} fields`)
-    })
+    dbfstream(path, encoding)
+      .on('data', r => {
+        records.push(r)
+      })
+      .on('end', () => {
+        const recordsJSON = JSON.stringify(records)
 
-    dbf.on('record', (record) => {
-      records.push(record)
-    })
+        logger.info(`[dbfToJSON] Opened ${path} (encoding ${encoding}) with ${records.length} parsed in ${(new Date() - startAt) / 1000} seconds`)
 
-    dbf.on('end', () => {
-      const recordsJSON = JSON.stringify(records)
-      logger.info(`[dbfToJSON] Finished parsing ${records.length} records into ${recordsJSON.length} JSON bytes in ${(new Date() - startAt) / 1000} seconds`)
-      resolve(recordsJSON)
-    })
-
-    dbf.on('error', e => {
-      reject(e)
-    })
-
-    dbf.parse()
+        resolve(recordsJSON)
+      })
+      .on('error', err => {
+        reject(err)
+      })
   })
 }
 
