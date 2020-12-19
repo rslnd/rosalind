@@ -1,7 +1,13 @@
-import { action, Match } from '../../util/meteor/action'
+import { action, lifecycleActions, Match } from '../../util/meteor/action'
 import { Meteor } from 'meteor/meteor'
 
 export const actions = ({ Groups }) => ({
+  ...lifecycleActions({
+    Collection: Groups,
+    singular: 'group',
+    plural: 'groups',
+    roles: ['admin', 'users-edit']
+  }),
   setBaseRoles: action({
     name: 'setBaseRoles',
     args: {

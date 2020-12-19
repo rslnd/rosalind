@@ -5,6 +5,11 @@ export default new SimpleSchema({
     type: String
   },
 
+  order: {
+    type: Number,
+    optional: true
+  },
+
   icon: {
     type: String,
     optional: true

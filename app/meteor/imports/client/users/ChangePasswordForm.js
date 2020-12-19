@@ -26,7 +26,7 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
       fullWidth
       disabled={submitting || invalid || validating || pristine}
       onClick={handleSubmit}
-      title={invalid && 'Danger zone: append ALLOWINSECURE directly after the password field to override checks. IMPORTANT: Make sure to restrict this user to secure workstations.'}
+      title={invalid ? 'Danger zone: append ALLOWINSECURE directly after the password field to override checks. IMPORTANT: Make sure to restrict this user to secure workstations.' : ''}
     >{
         submitting || validating
           ? <Icon name='refresh' spin />

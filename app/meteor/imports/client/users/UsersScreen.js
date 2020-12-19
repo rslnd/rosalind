@@ -11,7 +11,7 @@ import { subscribe } from '../../util/meteor/subscribe'
 import { withTracker } from '../components/withTracker'
 import { TextField, Button } from '@material-ui/core'
 import { compose, withState, withProps, withHandlers } from 'recompose'
-import { Groups } from '../../api/groups'
+import { GroupsTable } from './GroupsTable'
 import { rolesToString, stringToRoles } from './ChangeRolesForm'
 import { __ } from '../../i18n'
 
@@ -124,6 +124,13 @@ export const UsersScreen = withTracker(composer)(({ groups, getAssigneeName, han
           }
         </div>
       </div>
+
+      <div className='row'>
+        <div className='col-md-12 enable-select'>
+          <GroupsTable />
+        </div>
+      </div>
+
 
       <div className='row'>
         <div className='col-md-12 enable-select'>
