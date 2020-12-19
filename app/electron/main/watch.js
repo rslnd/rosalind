@@ -66,15 +66,17 @@ const onAdd = async ({ ipcReceiver, watch, path, importer, remove, focus }) => {
 }
 
 const start = ({ ipcReceiver, handleFocus }) => {
-  onNewSettings(actionQueue.push(async () => {
-    await stop()
+  onNewSettings(() =>
+    actionQueue.push(async () => {
+      await stop()
 
-    setTimeout(() => {
-      actionQueue.push(() =>
-        startWatchers({ ipcReceiver, handleFocus })
-      )
-    }, 5000)
-  }))
+      setTimeout(() => {
+        actionQueue.push(() =>
+          startWatchers({ ipcReceiver, handleFocus })
+        )
+      }, 1000)
+    })
+  )
 
   actionQueue.push(async () => {
     await startWatchers({ ipcReceiver, handleFocus })
