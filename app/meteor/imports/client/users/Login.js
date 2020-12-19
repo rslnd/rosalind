@@ -14,7 +14,6 @@ import { attemptRegistration } from '../../startup/client/native/attemptRegistra
 const composer = () => {
   const client = getClient()
   const defaultUsername = client && client.settings.defaultUsername
-  console.log('DEFU', defaultUsername)
   return { defaultUsername }
 }
 

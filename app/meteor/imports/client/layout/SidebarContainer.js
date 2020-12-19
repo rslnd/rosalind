@@ -19,7 +19,8 @@ const sidebarItems = ({ history }) => {
       icon: 'angle-double-right',
       roles: ['waitlist', 'waitlist-all', 'admin']
     },
-    ...calendars.map(c => ({
+    ...calendars.map((c, i) => ({
+      shouldNavigateHereAfterLoad: (i === 0),
       label: c.name,
       color: c.color,
       icon: c.icon,
@@ -125,6 +126,13 @@ const sidebarItems = ({ history }) => {
   ]
 }
 
+let didNavigationAfterLoad = false
+
+const navigateAfterLoadToItem = (items) => {
+  items.find()
+}
+
+
 const composer = (props) => {
   const items = sidebarItems(props).filter((item) => {
     return (!item.roles || (item.roles && hasRole(Meteor.userId(), item.roles)))
@@ -136,6 +144,19 @@ const composer = (props) => {
       return item
     }
   })
+
+  // Don't navigate away when custom url was loaded
+  if (!didNavigationAfterLoad && window.location.pathname !== '/') {
+    console.log('[Sidebar] Will not navigate away from', window.location.pathname)
+    didNavigationAfterLoad = true
+  }
+
+  if (!didNavigationAfterLoad && items && (items.find(i => i.shouldNavigateHereAfterLoad && i.link) || (items.length >= 1 && items[0].link))) {
+    const item = (items.find(i => i.shouldNavigateHereAfterLoad) || items[0])
+    console.log('[Sidebar] Navigating to first item', item.link)
+    didNavigationAfterLoad = true
+    props.history.replace(item.link)
+  }
 
   const customerName = Meteor.settings.public.CUSTOMER_NAME || 'Rosalind Development'
 
