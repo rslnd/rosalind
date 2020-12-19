@@ -15,7 +15,7 @@ const Fields = ({ submitting, handleUnsetPassword, hasPassword, weakPassword }) 
         !hasPassword
           ? __('users.hasNoPassword')
           : weakPassword
-            ? <span style={important}>{__('users.passwordBreached', { breachCount: weakPassword })}</span>
+            ? <span className='enable-select' style={important}>{__('users.passwordBreached', { breachCount: weakPassword })}</span>
             : __('users.hasPassword')
       }
     </p>

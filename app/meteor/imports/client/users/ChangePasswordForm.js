@@ -26,6 +26,7 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
       fullWidth
       disabled={submitting || invalid || validating || pristine}
       onClick={handleSubmit}
+      title={invalid && 'Danger zone: append ALLOWINSECURE directly after the password field to override checks. IMPORTANT: Make sure to restrict this user to secure workstations.'}
     >{
         submitting || validating
           ? <Icon name='refresh' spin />
@@ -34,13 +35,27 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
   </form>
 
 export const asyncValidate = async ({ password }) => {
+  if (allowInsecure(password)) {
+    return true
+  }
+
   const breachCount = await Users.methods.isWeakPassword(password)
   if (breachCount && breachCount > 0) {
     throw { password: __('users.passwordBreached', { breachCount }) } // eslint-disable-line
   }
 }
 
+const allowInsecure = p =>
+  p && p.indexOf('ALLOWINSECURE') !== -1
+
+const cleanPassword = p =>
+  p.replace('ALLOWINSECURE', '')
+
 export const validate = ({ password }, props) => {
+  if (allowInsecure(password)) {
+    return {}
+  }
+
   const minLength = 12
   if (!password || password.length < minLength) {
     return { password: __('users.passwordMinLength', { minLength }) }
@@ -61,7 +76,7 @@ const onSubmit = ({ password }, dispatch, props) =>
   new Promise((resolve, reject) => {
     Meteor.call('users/updatePassword', {
       userId: props.user._id,
-      password: password
+      password: cleanPassword(password)
     }, (e) => {
       if (e) {
         console.error(e)
