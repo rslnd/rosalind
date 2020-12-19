@@ -1,5 +1,4 @@
 import { compose, withState } from 'recompose'
-import every from 'lodash/fp/every'
 import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
@@ -16,28 +15,29 @@ const composer = (props) => {
   const loggingIn = Meteor.loggingIn()
   const locale = 'de-AT'
 
-  subscribe('settings')
-
-  if (Meteor.user()) {
-    subscribe('timesheets')
-    subscribe('inboundCalls')
-    subscribe('appointments-today')
-    subscribe('availabilities')
-    subscribe('constraints')
-    subscribe('schedules-holidays')
-    subscribe('inboundCalls-counts')
-    subscribe('inboundCallsTopics')
-    subscribe('referrables')
-    subscribe('media-tags')
-    subscribe('templates')
-  }
-
-  const isReadyToPrint = every(s => s.ready())([
+  const subs = [
+    subscribe('settings'),
     subscribe('users'),
     subscribe('groups'),
     subscribe('tags'),
     subscribe('calendars')
-  ])
+  ]
+
+  if (Meteor.user()) {
+    subs.push(subscribe('timesheets'))
+    subs.push(subscribe('inboundCalls'))
+    subs.push(subscribe('appointments-today'))
+    subs.push(subscribe('availabilities'))
+    subs.push(subscribe('constraints'))
+    subs.push(subscribe('schedules-holidays'))
+    subs.push(subscribe('inboundCalls-counts'))
+    subs.push(subscribe('inboundCallsTopics'))
+    subs.push(subscribe('referrables'))
+    subs.push(subscribe('media-tags'))
+    subs.push(subscribe('templates'))
+  }
+
+  const isReadyToPrint = subs.every(s => s.ready())
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments\//)
 

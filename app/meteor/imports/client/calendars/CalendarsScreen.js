@@ -200,7 +200,14 @@ const AgreementsPicker = withProps({
   options: () => agreements
 })(DocumentPicker)
 
-export const CalendarsScreen = toClass(({ calendars, getCalendarName, getAssigneeName, handleUpdate }) =>
+const defaultCalendar = () => ({
+  name: 'Termine',
+  color: '#c0ffee',
+  slug: 'termine',
+  icon: 'calendar-o'
+})
+
+export const CalendarsScreen = toClass(({ calendars, getCalendarName, getAssigneeName, handleUpdate, handleInsert, handleRemove }) =>
   <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
@@ -211,6 +218,9 @@ export const CalendarsScreen = toClass(({ calendars, getCalendarName, getAssigne
             getCalendarName={getCalendarName}
             getAssigneeName={getAssigneeName}
             onUpdate={handleUpdate}
+            onInsert={handleInsert}
+            onRemove={handleRemove}
+            defaultValues={defaultCalendar}
           />
         </Box>
       </div>

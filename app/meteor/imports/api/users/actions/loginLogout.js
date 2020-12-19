@@ -9,6 +9,8 @@ export const login = ({ Users }) =>
       weakPassword: Match.OneOf(Boolean, Number, null)
     },
     fn ({ weakPassword } = {}) {
+      if (this.simulation) { return }
+
       const userId = this.userId
       if (!userId) { return }
       console.log('[Users] Logged in', { userId })

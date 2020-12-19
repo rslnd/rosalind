@@ -30,7 +30,8 @@ const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requir
       userId: this.userId,
       clientKey: clientArgs.clientKey,
       accessToken: clientArgs.accessToken,
-      roles
+      roles,
+      debug
     })) {
       const result = fn.call(this, clientArgs)
       if (debug && result && result.count) {

@@ -25,7 +25,7 @@ const sidebarItems = ({ history }) => {
       icon: c.icon,
       link: '/appointments/' + c.slug,
       slug: c.slug,
-      roles: [`calendar-${c.slug}`],
+      roles: [`calendar-${c.slug}`, 'calendars'],
       // replace calendar slug and keep selected date
       onClick: ({ item, location }) => {
         const [base, _calendar, date] = location.pathname // eslint-disable-line
