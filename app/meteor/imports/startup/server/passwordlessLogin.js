@@ -91,8 +91,9 @@ export default () => {
 // Check allowedClientIds
 Accounts.validateLoginAttempt((loginAttempt) => {
   if (!loginAttempt.allowed) { return false }
-  const user = loginAttempt.user
+  if (loginAttempt.type !== 'password') { return loginAttempt.allowed }
 
+  const user = loginAttempt.user
   const connectionId = loginAttempt.connection.id
 
   if (user.allowedClientIds) {
