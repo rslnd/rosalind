@@ -14,6 +14,7 @@ import { compose, withState, withProps, withHandlers } from 'recompose'
 import { GroupsTable } from './GroupsTable'
 import { rolesToString, stringToRoles } from './ChangeRolesForm'
 import { __ } from '../../i18n'
+import { Groups } from '../../api/groups'
 
 const structure = ({ getAssigneeName, isInRole }) => [
   {
