@@ -44,10 +44,8 @@ export const addUserToDay = ({ Schedules }) => {
           day
         }
 
-        const scheduleId = Schedules.insert(schedule, (err) => {
-          if (err) { throw err }
-          Events.post('schedules/addUserToDayInsert', { scheduleId, userId })
-        })
+        const scheduleId = Schedules.insert(schedule)
+        Events.post('schedules/addUserToDayInsert', { scheduleId, userId })
         return scheduleId
       }
     }
