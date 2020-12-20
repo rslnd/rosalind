@@ -46,11 +46,11 @@ const parsePatient = (hash, p) => {
     insuranceId: (p.GEBDATUM && byear) ? [
       p.VNRPAT, bday, bmonth, byear.substr(2, 2)
     ].join('') : undefined,
-    removed: p['@deleted'],
+    removed: p['@deleted'] ? true : undefined, // important, if key is set at all then softRemove will filter
     external: {
       inno: {
         id: [p.PATID, p.XXREFIDXXX].join('/'),
-        removed: p['@deleted'],
+        removed: p['@deleted'] ? true : undefined,
         hash,
         timestamps: {
           importedAt: new Date(),
