@@ -63,33 +63,47 @@ const parsePatient = (hash, p) => {
   }
 }
 
+
+// Cache all known patient hashes to reduce load on the server
+// Whenever a new import arrives, send only those hashes to
+// the server that are not in this map yet, then cache them too
+const seenPatientHashes = {}
+
 export const innoPatientsImport = async ({ json }) => {
   const startAt = new Date()
 
   const allPatients = JSON.parse(json)
 
-  // TODO: Persist diff hashes??
-  const allPatientsByHash = {}
-  const allPatientsHashes = []
+  const unseenPatientsByHash = {}
+  const unseenPatientsHashes = []
 
   await Promise.all(allPatients.map(async p => {
     const hash = await sha256(JSON.stringify(p))
-    allPatientsHashes.push(hash)
-    allPatientsByHash[hash] = p
+
+    if (!seenPatientHashes[hash]) {
+      unseenPatientsHashes.push(hash)
+      unseenPatientsByHash[hash] = p
+      seenPatientHashes[hash] = true
+    }
   }))
 
   console.log(`[innoPatientsImport] Parsed and hashed ${allPatients.length} patients in ${(new Date() - startAt) / 1000} seconds`)
 
+  if (unseenPatientsHashes.length === []) {
+    console.log('[unseenPatientsHashes] No new unseen hashes, done.')
+    return
+  }
+
   const differentHashes = await call('patients/isExternalHashDifferent', {
     externalProvider: 'inno',
-    externalHashes: allPatientsHashes
+    externalHashes: unseenPatientsHashes
   })
 
   console.log(`[innoPatientsImport] ${differentHashes.length} / ${allPatients.length} patients are different, upserting`)
 
   // This will only perform a super slow one-by-one upsert of all patients when the database is basically empty
   await Promise.all(differentHashes.map(async hash => {
-    const raw = allPatientsByHash[hash]
+    const raw = unseenPatientsByHash[hash]
     const patient = parsePatient(hash, raw)
 
     await call('patients/upsert', { patient })
