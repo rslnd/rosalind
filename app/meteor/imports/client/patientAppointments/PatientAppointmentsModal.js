@@ -150,7 +150,7 @@ const modalWindowStyle = {
   width: '90%',
   maxWidth: 'calc(90% - 120px)', // Keep chat bubble visible
   height: '90%',
-  maxHeight: 'calc(90% - 35px)' // Keep clearance on top and bottom
+  maxHeight: 'calc(90% - 75px)' // Keep clearance on top and bottom
 }
 
 const containerOuterStyle = {
