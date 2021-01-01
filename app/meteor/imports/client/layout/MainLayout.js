@@ -14,6 +14,7 @@ import { Lock } from './Lock'
 import { DropZone } from '../patientAppointments/DropZone'
 import { handleDrop } from '../../startup/client/dataTransfer'
 import { Prompts } from './Prompt'
+import { Livechat } from './Livechat'
 
 const mainHeaderStyle = {
   right: 'initial'
@@ -90,7 +91,7 @@ export class MainLayout extends React.Component {
       }
     }
 
-    const alwaysRender = () => (
+    const alwaysRender = ({ primaryColor, currentUser }) => (
       <div id='loaded'>
         <ErrorBoundary>
           <div className='dropzone' />
@@ -107,6 +108,12 @@ export class MainLayout extends React.Component {
         </ErrorBoundary>
         <ErrorBoundary>
           <Lock />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <Livechat
+            primaryColor={primaryColor}
+            currentUser={currentUser}
+          />
         </ErrorBoundary>
       </div>
     )
@@ -154,19 +161,13 @@ export class MainLayout extends React.Component {
             }
           </div>
           <FooterContainer />
-          {alwaysRender()}
+          {alwaysRender({ primaryColor, currentUser })}
         </Wrapper>
       )
     } else {
-      const themeColor = document.head.querySelector('[property=theme-color][content]')
-      const backgroundColor =
-        (isColor(primaryColor) && primaryColor) ||
-        (isColor(themeColor.content) && themeColor.content) ||
-        '#3c8dbc'
-
       return (
         <Wrapper>
-          <div className='locked-layout' style={backgroundColor ? { backgroundColor } : {}}>
+          <div className='locked-layout' style={primaryColor ? { backgroundColor: primaryColor } : {}}>
             <div className='locked-wrapper'>
               <div className='locked-logo'>
                 <img src='/logo.svg' />
@@ -196,7 +197,7 @@ export class MainLayout extends React.Component {
               </small>
             </div>
           </div>
-          {alwaysRender()}
+          {alwaysRender({ primaryColor })}
         </Wrapper>
       )
     }
@@ -212,7 +213,3 @@ const Wrapper = ({ children }) =>
       </div>
     }
   </DropZone>
-
-
-// is valid hex color? to avoid weird grey flicker after logout
-const isColor = s => s && s.match && s.match(/^#[a-fA-F0-9]{1,8}$/)

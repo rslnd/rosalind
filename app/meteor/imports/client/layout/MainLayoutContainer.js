@@ -7,6 +7,9 @@ import { subscribe } from '../../util/meteor/subscribe'
 import { Settings } from '../../api/settings'
 import { getClientKey } from '../../startup/client/native/events'
 
+// is valid hex color? to avoid weird grey flicker after logout
+const isColor = s => s && s.match && s.match(/^#[a-fA-F0-9]{1,8}$/)
+
 const composer = (props) => {
   // UI performance hack because logging out takes a long time
   const handleLogout = () => props.setIsForcedLogout(true)
@@ -41,14 +44,18 @@ const composer = (props) => {
 
   const sidebarOpen = !props.location.pathname || !props.location.pathname.match(/appointments\//)
 
-  const metaTag = document.head.querySelector('[property=theme-color][content]')
-  const primaryColor = Settings.get('primaryColor') || (metaTag && metaTag.content.match(/^#[a-fA-F0-9]{1,8}$/ && metaTag.content))
-
   const isPrint = props.location.hash === '#print'
 
   if (isPrint && !isReadyToPrint) {
     return { isLoading: true }
   }
+
+  const themeColorMetaTag = document.head.querySelector('[property=theme-color][content]')
+  const primaryColor =
+    (isColor(Settings.get('primaryColor')) && Settings.get('primaryColor')) ||
+    (isColor(themeColorMetaTag.content) && themeColorMetaTag.content) ||
+    '#3c8dbc'
+
 
   return {
     ...props,
