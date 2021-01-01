@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor'
 import identity from 'lodash/identity'
 import { WebApp, WebAppInternals } from 'meteor/webapp'
 import flatten from 'lodash/flatten'
-import helmet from 'helmet'
 import { v4 as uuidv4}  from 'uuid'
 import { Settings } from '../../api'
 
@@ -27,7 +26,7 @@ const mediaHosts = () => {
   return hosts.filter(identity).map(h => [scheme, h].join(''))
 }
 
-const getHelmetConfig = () => {
+const buildCsp = (req, res) => {
   const domain = Meteor.absoluteUrl().replace(/http(s)*:\/\//, '').replace(/\/$/, '')
   const domains = [
     domain,
@@ -36,147 +35,129 @@ const getHelmetConfig = () => {
 
   const reportUri = `https://sentry.io/api/62218/security/?sentry_key=6af65eb19a37410f968d4e602ce572d7&sentry_release=${process.env.COMMIT_HASH}&sentry_environment=${process.env.NODE_ENV}`
 
-  // Note: No wildcard origins allowed
-
-  const helmetConfig = {
-    contentSecurityPolicy: {
-      browserSniff: false,
-      blockAllMixedContent: true,
-      directives: {
-        baseUri: [
-          none
-        ],
-        blockAllMixedContent: true,
-        childSrc: [
-          self
-        ],
-        connectSrc: [
-          self,
-          ...flatten(domains.map(d => [
-            `https://${d}`,
-            `wss://${d}`
-          ])),
-          ...mediaHosts(),
-          `https://${process.env.SMOOCH_APP_ID}.config.smooch.io/`,
-          'wss://api.smooch.io',
-          'https://api.smooch.io',
-          'https://sentry.io/',
-        ],
-        defaultSrc: [
-          none
-        ],
-        fontSrc: [
-          self,
-          'https://cdn.smooch.io'
-        ],
-        formAction: [
-          self
-        ],
-        frameAncestors: [
-          none
-        ],
-        frameSrc: [
-          'https://cdn.smooch.io'
-        ],
-        imgSrc: [
-          self,
-          'blob:',
-          'data:',
-          ...mediaHosts(),
-          'https://app.smooch.io',
-          'https://cdn.smooch.io',
-          'https://media.smooch.io',
-          'https://www.gravatar.com/avatar/9551b5ac12bb6a04fd48d1dcb51f046a.png'
-        ],
-        manifestSrc: [
-          none
-        ],
-        mediaSrc: [
-          none
-        ],
-        objectSrc: [
-          none
-        ],
-        reportUri,
-        sandbox: [
-          'allow-same-origin',
-          'allow-forms',
-          'allow-scripts',
-          'allow-modals' // needed for window.print()
-        ],
-        scriptSrc: [
-          self,
-          (req, res) => `'nonce-${req.nonce}'`,
-          'https://api.smooch.io',
-          'https://cdn.smooch.io'
-        ],
-        styleSrc: [
-          self,
-          'https://cdn.smooch.io',
-          // react-select needs a nonce
-          (req, res) => `'nonce-${req.nonce}'`
-        ],
-        // pdfjs renders in a worker (public/pdf.worker.min.js)
-        workerSrc: [
-          self
-        ]
-      }
-    },
-    dnsPrefetchControl: true,
-    expectCt: {
-      enforce: false,
-      maxAge: 604800,
-      ctReportUri: reportUri
-    },
-    frameguard: {
-      action: 'deny'
-    },
-    hidePoweredBy: true,
-    hsts: {
-      maxAge: 63072000,
-      includeSubDomains: true,
-      preload: true
-    },
-    ieNoOpen: true,
-    noCache: true,
-    noSniff: true,
-    referrerPolicy: {
-      policy: 'no-referrer'
-    },
-    setAllHeaders: true,
-    xssFilter: {
-      mode: 'block',
+  const csp = {
+    'connect-src': [
+      self,
+      ...flatten(domains.map(d => [
+        `https://${d}`,
+        `wss://${d}`
+      ])),
+      ...mediaHosts(),
+      `https://${process.env.SMOOCH_APP_ID}.config.smooch.io/`,
+      'wss://api.smooch.io',
+      'https://api.smooch.io',
+      'https://sentry.io/',
+    ],
+    'img-src': [
+      self,
+      'blob:',
+      'data:',
+      ...mediaHosts(),
+      'https://app.smooch.io',
+      'https://cdn.smooch.io',
+      'https://media.smooch.io',
+      'https://www.gravatar.com/avatar/9551b5ac12bb6a04fd48d1dcb51f046a.png'
+    ],
+    'script-src': [
+      self,
+      `'nonce-${req.nonce}'`,
+      'https://api.smooch.io',
+      'https://cdn.smooch.io'
+    ],
+    'style-src': [
+      self,
+      // react-select needs a nonce
+      `'nonce-${req.nonce}'`,
+      'https://cdn.smooch.io'
+    ],
+    'worker-src': [
+      self // pdfjs needs a worker
+    ],
+    'font-src': [
+      self,
+      'https://cdn.smooch.io'
+    ],
+    'frame-src': [
+      'https://cdn.smooch.io'
+    ],
+    'child-src': [
+      self
+    ],
+    'base-uri': [
+      none
+    ],
+    'default-src': [
+      none
+    ],
+    'form-action': [
+      self
+    ],
+    'report-uri': [
       reportUri
-    },
-    featurePolicy: {
-      features: {
-        geolocation: [ none ],
-        midi: [ none ],
-        syncXhr: [ none ],
-        microphone: [ none ],
-        camera: [ none ],
-        magnetometer: [ none ],
-        gyroscope: [ none ],
-        speaker: [ none ],
-        fullscreen: [ none ],
-        payment: [ none ]
-      }
-    }
+    ],
+    'frame-ancestors': [
+      none
+    ],
+    'manifest-src': [
+      none
+    ],
+    'media-src': [
+      none
+    ],
+    'object-src': [
+      none
+    ]
   }
+
+  const extra = [
+    'block-all-mixed-content',
+    'sandbox allow-same-origin allow-forms allow-scripts allow-modals'
+  ]
 
   if (process.env.NODE_ENV === 'development') {
-    helmetConfig.contentSecurityPolicy.directives.connectSrc.push('http://localhost:3000')
-    helmetConfig.contentSecurityPolicy.directives.connectSrc.push('ws://localhost:3000')
+    csp['connect-src'].push('http://localhost:3000')
+    csp['connect-src'].push('ws://localhost:3000')
 
-    // shadow-cljs
-    helmetConfig.contentSecurityPolicy.directives.scriptSrc.push('http://localhost:8989') // JS bundle
-    helmetConfig.contentSecurityPolicy.directives.connectSrc.push('http://localhost:54711') // nREPL
-    helmetConfig.contentSecurityPolicy.directives.connectSrc.push('ws://localhost:9630') // nREPL
-    helmetConfig.contentSecurityPolicy.directives.scriptSrc.push("'unsafe-eval'")
-    helmetConfig.contentSecurityPolicy.directives.styleSrc.push("'unsafe-inline'")
+    // Cannot use nonce and unsafe-inline at the same time. Need unsafe in development.
+    csp['style-src'] = csp['style-src'].filter(d => !d.match(/^'nonce-/))
+    csp['style-src'].push(["'unsafe-inline'"])
+
+    csp['script-src'] = csp['script-src'].filter(d => !d.match(/^'nonce-/))
+    csp['script-src'].push(["'unsafe-inline'"])
+    csp['script-src'].push(["'unsafe-eval'"])
+
+
+    // WIP: shadow-cljs
+    // csp['connect-src'].push('http://localhost:54711') // nREPL
+    // csp['connect-src'].push('ws://localhost:9630') // nREPL
+    // csp['script-src'].push('http://localhost:8989') // JS bundle
   }
 
-  return helmetConfig
+  return [
+    ...Object.keys(csp).map(k =>
+      [k, csp[k].join(' ')].join(' ')
+    ),
+    ...extra
+  ].join('; ')
+}
+
+const buildHeaders = (req, res) => {
+  return {
+    'content-security-policy': buildCsp(req, res),
+    'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'expect-ct': 'max-age=604800',
+    'pragma': 'no-cache',
+    'feature-policy': "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'none'; payment 'none'",
+    'referrer-policy': 'no-referrer',
+    'strict-transport-security': 'max-age=63072000; includeSubDomains; preload',
+    'surrogate-control': 'no-store',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-xss-protection': '1; mode=block',
+    'x-frame-options': 'DENY',
+    'x-security-reports': 'Please report any issues to security@fxp.at. Thank you <3'
+  }
 }
 
 export default () => {
@@ -204,7 +185,11 @@ export default () => {
     })
 
     WebApp.connectHandlers.use((req, res, next) => {
-      helmet(getHelmetConfig())(req, res, next)
+      const headers = buildHeaders(req, res)
+      Object.keys(headers).forEach(k => {
+        res.setHeader(k, headers[k])
+      })
+      next()
     })
 
     // JSS, used by material-ui, requires the csp-nonce meta tag
@@ -236,10 +221,10 @@ export default () => {
       data.body += '\n  <noscript>Please enable JavaScript.</noscript>'
 
       // WIP: shadow-cljs
-      if (process.env.NODE_ENV === 'development') {
-        // data.body += `\n  <script type="text/javascript" nonce="${nonce}" src="http://localhost:8989/cljs-index.js"></script>`
-        data.body += `\n  <script type="text/javascript" nonce="${nonce}" src="http://localhost:8989/main.js"></script>`
-      }
+      // if (process.env.NODE_ENV === 'development') {
+      //   // data.body += `\n  <script type="text/javascript" nonce="${nonce}" src="http://localhost:8989/cljs-index.js"></script>`
+      //   data.body += `\n  <script type="text/javascript" nonce="${nonce}" src="http://localhost:8989/main.js"></script>`
+      // }
 
       return true
     })

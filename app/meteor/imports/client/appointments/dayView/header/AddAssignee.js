@@ -1,5 +1,5 @@
-import React from 'react'
-import { Manager, Target, Popper } from 'react-popper'
+import React, { useState } from 'react'
+import { usePopper } from 'react-popper'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { Icon } from '../../../components/Icon'
@@ -23,72 +23,64 @@ const popoverStyle = {
   zIndex: 50,
   overflowY: 'visible',
   padding: 10,
-  width: 350
+  width: 350,
+  marginLeft: 86
 }
 
-export class AddAssignee extends React.Component {
-  constructor (props) {
-    super(props)
+export const AddAssignee = (props) => {
+  const [isOpen, setOpen] = useState(false)
+  const [referenceElement, setReferenceElement] = useState(null)
+  const [popperElement, setPopperElement] = useState(null)
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+   modifiers: [{ options: { placement: 'bottom-start' } }]
+  })
 
-    this.state = {
-      isPopoverOpen: false,
-      popoverAnchor: null
-    }
-
-    this.handleAddUserPopoverOpen = this.handleAddUserPopoverOpen.bind(this)
-    this.handleAddUserPopoverClose = this.handleAddUserPopoverClose.bind(this)
-    this.handleAddUser = this.handleAddUser.bind(this)
-  }
-  handleAddUserPopoverOpen (event) {
-    this.setState({
-      ...this.state,
-      isPopoverOpen: true,
-      popoverAnchor: event.currentTarget
-    })
+  const handleAddUserPopoverOpen = (e) => {
+    // setReferenceElement(e.currentTarget)
+    setOpen(true)
   }
 
-  handleAddUserPopoverClose () {
-    this.setState({
-      ...this.state,
-      isPopoverOpen: false
-    })
+  const handleAddUserPopoverClose = (e) => {
+    setOpen(false)
+    // setReferenceElement(null)
   }
 
-  handleAddUser (userId) {
+  const handleAddUser = (userId) => {
     if (userId) {
-      this.props.onAddUser(userId)
+      props.onAddUser(userId)
     }
   }
 
-  render () {
-    return (
-      <Manager>
-        <Target>
-          <Button
-            style={buttonStyle}
-            className='hide-print'
-            onClick={this.handleAddUserPopoverOpen}>
-            <span
-              className='text-muted'
-              style={labelStyle}>
-              <Icon name='plus' />
-            </span>
-          </Button>
-        </Target>
+  return (
+    <>
+      <Button
+        ref={setReferenceElement}
+        style={buttonStyle}
+        className='hide-print'
+        onClick={handleAddUserPopoverOpen}>
+        <span
+          className='text-muted'
+          style={labelStyle}>
+          <Icon name='plus' />
+        </span>
+      </Button>
 
-        {
-          this.state.isPopoverOpen &&
-            <Popper placement='bottom-start' eventsEnabled>
-              <ClickAwayListener onClickAway={this.handleAddUserPopoverClose}>
-                <Paper style={popoverStyle}>
-                  <UserPicker
-                    autoFocus
-                    onChange={this.handleAddUser} />
-                </Paper>
-              </ClickAwayListener>
-            </Popper>
-        }
-      </Manager>
-    )
-  }
+      {
+        isOpen &&
+          <div
+            ref={setPopperElement}
+            style={styles.popper}
+            {...attributes.popper}
+          >
+            <ClickAwayListener onClickAway={handleAddUserPopoverClose}>
+              <Paper style={popoverStyle}>
+                <UserPicker
+                  autoFocus
+                  onChange={handleAddUser} />
+              </Paper>
+            </ClickAwayListener>
+          </div>
+      }
+    </>
+  )
 }
