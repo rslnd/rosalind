@@ -24,6 +24,7 @@ const parsePatient = (hash, p) => {
     return new Date([sinceYear, sinceMonth, '01'].join('-'))
   })() : undefined
 
+  // TODO: Set insuranceNetwork and isPrivateInsurance
   return {
     lastName: p.ZUNAME,
     firstName: p.VORNAME,

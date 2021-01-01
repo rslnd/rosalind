@@ -166,6 +166,16 @@ export default new SimpleSchema({
     index: 1
   },
 
+  insuranceNetwork: {
+    type: String,
+    optional: true
+  },
+
+  isPrivateInsurance: {
+    type: Boolean,
+    optional: true
+  },
+
   note: {
     type: String,
     optional: true

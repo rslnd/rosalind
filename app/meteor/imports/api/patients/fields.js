@@ -6,6 +6,7 @@ export const preload = {
   titlePrepend: 1,
   titleAppend: 1,
   insuranceId: 1,
+  isPrivateInsurance: 1,
   gender: 1,
   queued: 1,
   admitted: 1,
@@ -19,9 +20,6 @@ export const search = {
   birthday: 1,
   contacts: 1,
   note: 1,
-  insuranceId: 1,
   address: 1,
-  titlePrepend: 1,
-  titleAppend: 1,
   banned: 1
 }

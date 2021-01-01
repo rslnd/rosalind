@@ -6,7 +6,26 @@ import { Currency } from '../../components/Currency'
 
 const assumeNoShowAfterMinutes = 90
 
-export const Indicator = ({ appointment, showRevenue, calendar }) => {
+export const Indicator = (props) => {
+  return <div className='pull-right'>
+    <InsuranceIndicator {...props} />
+    <StateIndicator {...props} />
+  </div>
+}
+
+const InsuranceIndicator = ({ appointment, calendar }) => {
+  if (!appointment || !appointment.patient || (typeof appointment.patient.isPrivateInsurance !== 'boolean')) {
+    return null
+  }
+
+  if (appointment.patient.isPrivateInsurance) {
+    return <span title={'Privat'} className='text-muted f6'>P&nbsp;</span>
+  } else {
+    return null
+  }
+}
+
+const StateIndicator = ({ appointment, showRevenue, calendar }) => {
   if (!appointment || !appointment.patientId || appointment.canceled || appointment.removed) {
     return null
   }
@@ -40,7 +59,6 @@ export const Indicator = ({ appointment, showRevenue, calendar }) => {
 
 const Queued = () => <span
   key='queued'
-  className='pull-right'
   title={__('appointments.queued')}
   style={queuedStyle}>
   <Icon name='circle' />&nbsp;
@@ -55,7 +73,6 @@ const queuedStyle = {
 
 const Admitted = () => <span
   key='admitted'
-  className='pull-right'
   title={__('appointments.admitted')}
   style={admittedStyle}>
   <Icon name='angle-double-right' />&nbsp;
@@ -68,7 +85,6 @@ const admittedStyle = {
 
 const Treated = () => <span
   key='treated'
-  className='pull-right'
   title={__('appointments.treated')}
   style={treatedStyle}>
   <Icon name='check' />&nbsp;
@@ -81,7 +97,6 @@ const treatedStyle = {
 
 const Treating = () => <span
   key='treating'
-  className='pull-right'
   title={__('appointments.treating')}
   style={treatingStyle}>
   <Icon name='circle-o-notch' />&nbsp;
@@ -94,7 +109,6 @@ const treatingStyle = {
 
 const NoShow = () => <span
   key='noShow'
-  className='pull-right'
   title={__('appointments.noShow')}
   style={noShowStyle}>
   <Icon name='times' />&nbsp;

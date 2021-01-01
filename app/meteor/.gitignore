@@ -1,2 +1,4 @@
 .shadow-cljs
 .cljs
+.clj-kondo
+.lsp

@@ -206,13 +206,19 @@ const birthdayStyle = {
 
 const InsuranceId = withHandlers({
   updateInsuranceId: props => insuranceId => upsert(props, { insuranceId })
-})(({ insuranceId, updateInsuranceId }) =>
-  <InsuranceIdField
-    initialValue={formatInsuranceId(insuranceId)}
-    onChange={updateInsuranceId}
-    placeholder={__('patients.insuranceId')}
-    style={secondary}
-  />
+})(({ insuranceId, isPrivateInsurance, updateInsuranceId }) =>
+  <div className='flex justify-between'>
+    <InsuranceIdField
+      initialValue={formatInsuranceId(insuranceId)}
+      onChange={updateInsuranceId}
+      placeholder={__('patients.insuranceId')}
+      style={secondary}
+    />
+
+    <span className='text-muted'>
+      {isPrivateInsurance && __('patient.privateInsurance')}
+    </span>
+  </div>
 )
 
 const Note = withHandlers({

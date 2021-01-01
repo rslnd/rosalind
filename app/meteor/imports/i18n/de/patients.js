@@ -69,5 +69,6 @@ export const patients = {
   history: 'Kartei',
   birthdayFormatOne: '1 Jahr (__date__)',
   birthdayFormat: '__age__ Jahre (__date__)',
-  totalRevenue: 'Gesamtumsatz __revenue__'
+  totalRevenue: 'Gesamtumsatz __revenue__',
+  privateInsurance: 'Privat'
 }
