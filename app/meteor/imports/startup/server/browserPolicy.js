@@ -147,7 +147,7 @@ const buildHeaders = (req, res) => {
     'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
     'expect-ct': 'max-age=604800',
     'pragma': 'no-cache',
-    'feature-policy': "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'none'; payment 'none'",
+    'permissions-policy': "geolocation=(), midi=(), sync-xhr=(), microphone=(), camera=(), magnetometer=(), gyroscope=(), speaker=(), payment=()",
     'referrer-policy': 'no-referrer',
     'strict-transport-security': 'max-age=63072000; includeSubDomains; preload',
     'surrogate-control': 'no-store',
