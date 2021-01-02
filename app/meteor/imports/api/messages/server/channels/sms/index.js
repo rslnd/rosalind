@@ -1,1 +1,3 @@
-export { send, receive } from './sms'
+import { send, receive } from './sms'
+const SMS = { send, receive }
+export { SMS, send, receive }

@@ -84,12 +84,14 @@ const Messages = ({ messages, ...props }) =>
   )
 
 const ComposeSms = ({ patient }) => {
-  if (!hasRole(Meteor.userId(), ['admin', 'messages-send'])) {
+  const [value, setValue] = useState('')
+  const [sending, setSending] = useState(false)
+
+  if (!hasRole(Meteor.userId(), ['admin', 'messages-sendCustomSms'])) {
     return null
   }
 
-  const [value, setValue] = useState('')
-  const [sending, setSending] = useState(false)
+  const patientId = patient._id
 
   let text = false
   let error = false
@@ -111,7 +113,8 @@ const ComposeSms = ({ patient }) => {
     })
     if (!ok) { return }
 
-    Meteor.call('messages/sendSms', { patientId, text: value }, (e) => {
+    setSending(true)
+    Meteor.call('messages/sendCustomSms', { patientId, text: value }, (e) => {
       if (e) {
         Alert.error(e.message)
         console.error(e)
@@ -119,14 +122,17 @@ const ComposeSms = ({ patient }) => {
       } else {
         Alert.success(__('ui.smsSendSuccess'))
         setSending(false)
-        setText('')
+        setValue('')
       }
     })
   }
 
+  const disabled = !!error || !value || !text || sending
+
   return <div className='flex flex-column'>
     SMS schreiben:
     <TextField
+      disabled={sending}
       multiline
       rows={4}
       rowsMax={7}
@@ -136,10 +142,14 @@ const ComposeSms = ({ patient }) => {
       onChange={e => setValue(e.target.value)}
     />
     <Button
-      disabled={(!!error) || !value || !text || sending}
+      disabled={disabled}
       onClick={handleSend}
     >
-      SMS Senden
+      {
+        sending
+          ? 'wird gesendet...'
+          : 'SMS Senden'
+      }
     </Button>
   </div>
 }
@@ -167,7 +177,7 @@ const SmsModal = ({ patient, messages, onClose }) => {
               primaryColor={primaryColor}
             />
           </div>
-          <div style={{ width: '10%', minWidth: 270 }}>
+          <div style={{ width: '10%', minWidth: 270, paddingLeft: 18 }}>
             <h3>
               Nachrichten
               &nbsp;

@@ -11,7 +11,7 @@ const validateNoRemainingPlaceholders = (text) => (
 
 export const formatDate = (format, date, options = {}) => {
   if (!date || !format) {
-    throw new Error('[Messages] buildMessageText: Message has no date field')
+    return ''
   }
 
   const tz = options.tz || process.env.TZ_CLIENT || 'Europe/Vienna'
@@ -32,7 +32,7 @@ export const getBodyText = (templates, { date }) => {
   return text
 }
 
-export const buildMessageText = (templates = {}, { date }) => {
+export const buildMessageText = (templates = {}, { date } = {}) => {
   const text = getBodyText(templates, { date })
 
   if (validateLength(text)) {
