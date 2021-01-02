@@ -17,10 +17,10 @@ const quarterHourStyle = {
   color: darkGrayDisabled
 }
 
-export const timeLegend = ({ slotSize }) => {
+export const timeLegend = ({ slotSize, scheduleOffset, atMinutes }) => {
   const format = formatter(slotSize)
 
-  return flatten(timeSlots(slotSize)
+  return flatten(timeSlots(slotSize, scheduleOffset, atMinutes)
     .map((time, i, slots) => {
       let legendStyle = {
         ...timeLegendStyle,

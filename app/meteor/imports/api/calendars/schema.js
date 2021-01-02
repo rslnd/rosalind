@@ -33,6 +33,11 @@ export const schema = new SimpleSchema({
     defaultValue: 5
   },
 
+  atMinutes: {
+    type: [Number],
+    optional: true
+  },
+
   allowUnassigned: {
     type: Boolean,
     defaultValue: true

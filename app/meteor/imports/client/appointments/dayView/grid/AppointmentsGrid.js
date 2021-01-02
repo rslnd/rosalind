@@ -30,8 +30,9 @@ export const AppointmentsGrid = ({
   onScheduleModalOpen,
   move
 }) => {
+  const { scheduleOffset, atMinutes } = calendar
   const slotSize = calendar.slotSize || 5
-  const gridTimeSlots = timeSlots(slotSize).map((time) => `[${time}] 25px`).join(' ')
+  const gridTimeSlots = timeSlots(slotSize, scheduleOffset, atMinutes).map((time) => `[${time}] 25px`).join(' ')
 
   const gridTemplateRows = `
     [header] 90px
@@ -60,7 +61,7 @@ export const AppointmentsGrid = ({
       {ffAva ? renderAvailabilities({ calendar, date, availabilities, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter }) : null}
       {ffAva ? null : overrideOverlay(override)}
       {ffAva ? null : renderSchedules({ slotSize, schedules, assignees, date, calendar, onDoubleClick: onScheduleModalOpen })}
-      {timeLegend({ slotSize })}
+      {timeLegend({ slotSize, scheduleOffset, atMinutes })}
     </div>
   )
 }

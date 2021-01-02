@@ -63,7 +63,7 @@ class BlankState extends React.PureComponent {
 const Blank = injectSheet(styles)(BlankState)
 
 export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter }) => {
-  const { slotSize, slotSizeAppointment, allowUnassigned } = calendar
+  const { slotSize, slotSizeAppointment, allowUnassigned, atMinutes } = calendar
 
   return assignees.map(a => {
     if (!a && !allowUnassigned) { return }
@@ -80,10 +80,12 @@ export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter }) => 
 
     const lastSlot = label(end())
 
-    return timeSlots(slotSizeBlank, scheduleOffset)
+    const unixday = date.unix()
+
+    return timeSlots(slotSizeBlank, scheduleOffset, atMinutes)
       .map((time, i, times) => (
         <Blank
-          key={[date.unix(), time, a ? a._id : 'unassigned'].join('')}
+          key={[unixday, time, a ? a._id : 'unassigned'].join('')}
           date={date}
           startTime={time}
           endTime={times[i + 1] || lastSlot}

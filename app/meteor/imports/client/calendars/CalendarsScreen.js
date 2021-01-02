@@ -89,6 +89,14 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'defaultDuration'
   },
   {
+    header: 'Felder nur bei bestimmten Minuten',
+    field: 'atMinutes',
+    unsetWhenEmpty: true,
+    fromString: s => (s || '').split(', ').map(x => parseInt(x)),
+    stringify: r => (r || []).join(', '),
+    render: t => t.atMinutes && t.atMinutes.join(', ')
+  },
+  {
     header: 'Schwarzer Punkt',
     field: 'allowBanningPatients',
     type: Boolean

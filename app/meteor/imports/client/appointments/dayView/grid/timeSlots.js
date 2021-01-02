@@ -8,7 +8,7 @@ import { monkey } from 'spotoninc-moment-round'
 const moment = extendMoment(momentTz)
 monkey(moment)
 
-const cacheKeyResolver = (a, b) => [a, '~', b].join('')
+const cacheKeyResolver = (a, b, c) => [a, '~', b, '$', c].join('')
 const memoize = fn => memoizeRaw(fn, cacheKeyResolver)
 
 export const start = () => moment().hour(7).minute(30).startOf('minute')
@@ -26,14 +26,18 @@ export const isLastSlot = m => {
 export const hour = t => t.substr(1, 2)
 export const minute = t => t.substr(-2, 2)
 
-export const isSlot = (slotSize, offsetMinutes) => {
+export const isSlot = (slotSize, offsetMinutes, atMinutes) => {
   const slotsPerHour = Math.ceil(60 / slotSize)
   const slotMinutes = (offsetMinutes === 0 || offsetMinutes > 0)
     ? [offsetMinutes]
     : range(0, slotsPerHour).map(s => s * slotSize)
 
+  const filteredSlotMinutes = (atMinutes && atMinutes.length >= 1)
+    ? atMinutes
+    : slotMinutes
+
   return (t) => {
-    return slotMinutes.includes(parseInt(minute(t)))
+    return filteredSlotMinutes.indexOf(parseInt(minute(t))) !== -1
   }
 }
 
@@ -60,15 +64,21 @@ const minutes = (from, to, slotSize = 1) =>
 const dayMinutes = minutes(start(), end())
 
 export const timeSlotsRange = ({ slotSize, from, to }) =>
-  minutes(from, to, slotSize).map(label)
+  minutes(from, to, slotSize)
+    .filter()
+    .map(label)
 
-export const timeSlots = memoize((slotSize, offsetMinutes) =>
-  dayMinutes.map(label).filter(isSlot(slotSize, offsetMinutes)))
+export const timeSlots = memoize((slotSize, offsetMinutes, atMinutes) =>
+  dayMinutes
+    .map(label)
+    .filter(isSlot(slotSize, offsetMinutes, atMinutes)))
 
-export const timeSlotsFormatted = memoize((slotSize, offsetMinutes) =>
-  fromPairs(timeSlots(slotSize, offsetMinutes).map(t => [t, `${parseInt(hour(t))}:${minute(t)}`])))
+export const timeSlotsFormatted = memoize((slotSize, offsetMinutes, atMinutes) =>
+  fromPairs(
+    timeSlots(slotSize, offsetMinutes, atMinutes)
+      .map(t => [t, `${parseInt(hour(t))}:${minute(t)}`])))
 
-export const formatter = memoize((slotSize, offsetMinutes) =>
-  memoize(t => timeSlotsFormatted(slotSize, offsetMinutes)[t]))
+export const formatter = memoize((slotSize, offsetMinutes, atMinutes) =>
+  memoize(t => timeSlotsFormatted(slotSize, offsetMinutes, atMinutes)[t]))
 
 export const setTime = t => m => m.clone().hour(hour(t)).minute(minute(t)).startOf('minute')
