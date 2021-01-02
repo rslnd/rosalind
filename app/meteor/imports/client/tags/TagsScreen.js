@@ -3,7 +3,6 @@ import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
-import { MultiTextField } from '../components/MultiTextField'
 import { tagStyle, tagBackgroundColor } from './TagsList'
 import { UserPicker } from '../users/UserPicker'
 import { CalendarPicker } from '../calendars/CalendarPicker'
@@ -155,8 +154,8 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Synonyme',
     field: 'synonyms',
-    multi: true,
-    EditComponent: MultiTextField,
+    fromString: s => (s || '').split(', '),
+    stringify: r => (r || []).join(', '),
     render: t => t.synonyms && t.synonyms.join(', ')
   },
   {
