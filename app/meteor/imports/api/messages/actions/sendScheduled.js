@@ -62,7 +62,7 @@ export const sendScheduled = ({ Messages }) => {
           return false
         }
 
-        const appointment = Appointments.findOne({ _id: message.payload.appointmentId })
+        const appointment = Appointments.findOne({ _id: message.appointmentId })
         if (!appointment) {
           return false
         }

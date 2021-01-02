@@ -21,7 +21,7 @@ export const removeReminder = ({ Messages }) => {
         type: 'appointmentReminder',
         status: 'scheduled',
         direction: 'outbound',
-        'payload.appointmentId': appointmentId,
+        appointmentId,
         removed: { $ne: true }
       })
 

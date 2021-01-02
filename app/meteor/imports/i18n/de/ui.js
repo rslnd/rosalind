@@ -55,5 +55,6 @@ export const ui = {
   startDate: 'von',
   endDate: 'bis',
   printing: 'Wird gedruckt',
-  restored: 'Wiederhergestellt'
+  restored: 'Wiederhergestellt',
+  smsSendSuccess: 'SMS verschickt'
 }

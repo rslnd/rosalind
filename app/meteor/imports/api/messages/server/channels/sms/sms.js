@@ -97,21 +97,21 @@ export const receive = (payload) => {
   if (parentMessage) {
     console.log('[Messages] channels/sms: Matched message', messageId, 'as reply to', parentMessage._id)
 
-    appointmentId = parentMessage.payload.appointmentId
+    appointmentId = parentMessage.appointmentId
     appointment = Appointments.findOne({ _id: appointmentId })
 
     if (appointment) {
       calendarId = appointment.calendarId
       calendar = calendarId && Calendars.findOne({ _id: calendarId })
-      patientId = parentMessage.payload.patientId
+      patientId = parentMessage.patientId
       patient = Patients.findOne({ _id: patientId })
 
       Messages.update({ _id: messageId }, {
         $set: {
           parentMessageId: parentMessage._id,
-          'payload.appointmentId': appointmentId,
-          'payload.calendarId': calendarId,
-          'payload.patientId': patientId
+          appointmentId: appointmentId,
+          calendarId: calendarId,
+          patientId: patientId
         }
       })
 

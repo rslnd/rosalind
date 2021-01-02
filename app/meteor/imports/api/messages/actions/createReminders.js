@@ -188,19 +188,21 @@ export const createReminders = ({ Messages }) => {
           }),
           invalidBefore: moment(payload.start).subtract(3, 'weeks').toDate(),
           invalidAfter: moment(payload.start).startOf('day').subtract(12, 'hours').toDate(),
+          appointmentId: payload.appointmentId,
+          patientId: payload.patientId,
           payload
         }
       }).filter(identity)
 
       messages.map((message) => {
         const existingMessage = Messages.findOne({
-          'payload.appointmentId': message.payload.appointmentId,
+          appointmentId: message.appointmentId,
           removed: { $ne: true }
         })
 
         if (existingMessage) {
           if (!isSameMessage(existingMessage, message)) {
-            Messages.update({ 'payload.appointmentId': message.payload.appointmentId }, { $set: message })
+            Messages.update({ appointmentId: message.appointmentId }, { $set: message })
           }
         } else {
           Messages.insert({

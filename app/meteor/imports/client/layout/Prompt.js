@@ -55,6 +55,7 @@ export const Prompts = () => {
       <ErrorBoundary>
         {(open && currentOptions) ? <>
           {currentOptions.title}
+          {currentOptions.body && <><br /><br />{currentOptions.body}</>}
 
           {currentOptions.Component &&
             <currentOptions.Component

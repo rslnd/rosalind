@@ -52,6 +52,12 @@ const schema = new SimpleSchema({
     index: 1
   },
 
+  calendarId: {
+    type: String,
+    optional: true,
+    index: 1
+  },
+
   appointmentId: {
     type: String,
     optional: true,

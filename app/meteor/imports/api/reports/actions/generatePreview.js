@@ -67,7 +67,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
 
             const appointmentIds = appointments.map(a => a._id)
             const messages = Messages.find({
-              'payload.appointmentId': { $in: appointmentIds }
+              appointmentId: { $in: appointmentIds }
             }).fetch()
 
             const tagMapping = Tags.methods.getMappingForReports()

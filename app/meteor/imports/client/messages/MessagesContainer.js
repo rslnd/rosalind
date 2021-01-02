@@ -21,8 +21,8 @@ const composer = (props) => {
         payload: {
           channel: message.channel,
           messageId: (message.payload && message.payload.messageId) || undefined,
-          appointmentId: (message.payload && message.payload.appointmentId) || undefined,
-          patientId: (message.payload && message.payload.appointmentId) || undefined
+          appointmentId: message.appointmentId || undefined,
+          patientId: message.patientId || undefined
         }
       })
 
