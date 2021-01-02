@@ -46,6 +46,18 @@ const schema = new SimpleSchema({
     optional: true
   },
 
+  patientId: {
+    type: String,
+    optional: true,
+    index: 1
+  },
+
+  appointmentId: {
+    type: String,
+    optional: true,
+    index: 1
+  },
+
   payload: {
     type: Object,
     blackbox: true,

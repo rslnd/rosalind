@@ -1,5 +1,5 @@
 import moment from 'moment'
-import React from 'react'
+import React, { useState } from 'react'
 import Alert from 'react-s-alert'
 import { insuranceId as formatInsuranceId, prefix } from '../../api/patients/methods'
 import { namecase } from '../../util/namecase'
@@ -17,6 +17,7 @@ import { PairingButton } from '../clients/PairingButton'
 import { Pinned } from '../media/Pinned'
 import { hasRole } from '../../util/meteor/hasRole'
 import { ScanButton } from './Documents'
+import { SmsModalContainer } from './SmsModal'
 
 const action = promise =>
   promise.then(() => {
@@ -41,7 +42,6 @@ export const Patient = ({ patient, calendar, currentAppointment, handleMediaClic
         <Contacts {...patient} />
         <Address {...patient} />
         <Loyalty {...patient} />
-        <PatientActions {...patient} />
       </div>
       <div style={marginBottomStyle}>
         <Note {...patient} />
@@ -57,6 +57,7 @@ export const Patient = ({ patient, calendar, currentAppointment, handleMediaClic
         {/* <Toggles showOnly='pending' patient={patient} currentAppointment={currentAppointment} /> */}
 
         <Toggles showOnly='agreed' patient={patient} currentAppointment={currentAppointment} />
+        <PatientActions {...patient} />
         <PairingButton />
         <ScanButton
           isCurrent
@@ -215,7 +216,7 @@ const InsuranceId = withHandlers({
       style={secondary}
     />
 
-    <span className='text-muted'>
+    <span className='text-muted pr3'>
       {isPrivateInsurance && __('patients.privateInsurance')}
     </span>
   </div>
@@ -321,10 +322,29 @@ const loyaltyStyle = {
   ...secondary
 }
 
-const PatientActions = () =>
-  <div style={loyaltyStyle}>
-    {/* <div>SMS Verlauf anzeigen</div> */}
-  </div>
+const PatientActions = (patient) => {
+  const [isSmsOpen, setSmsOpen] = useState(false)
+
+  const handleSmsOpen = (e) => {
+    e.preventDefault()
+    setSmsOpen(true)
+  }
+
+  return <>
+    <div style={loyaltyStyle}>
+      <a href='#' onClick={handleSmsOpen}>
+        SMS Verlauf
+      </a>
+    </div>
+
+    {
+      isSmsOpen && <SmsModalContainer
+        patient={patient}
+        onClose={() => setSmsOpen(false)}
+      />
+    }
+  </>
+}
 
 export const Toggles = ({ patient, currentAppointment, showOnly }) => {
   if (!currentAppointment) { return null }

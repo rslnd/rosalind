@@ -3,7 +3,7 @@ FROM node:12.18.4
 HEALTHCHECK \
   --interval=6s \
   --timeout=6s \
-  --start-period=15s \
+  --start-period=15000s \
   --retries=5 \
   CMD \
   wget --quiet --tries=1 --spider http://localhost:3000 || exit 1

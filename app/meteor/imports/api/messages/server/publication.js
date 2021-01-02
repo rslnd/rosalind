@@ -31,4 +31,21 @@ export const publication = () => {
       })
     }
   })
+
+  publish({
+    name: 'messages-patient',
+    roles: ['admin', 'messages', 'patient'],
+    args: {
+      patientId: String
+    },
+    fn: function({ patientId }) {
+      return Messages.find({
+        patientId
+      }, {
+        sort: {
+          createdAt: 1
+        }
+      })
+    }
+  })
 }
