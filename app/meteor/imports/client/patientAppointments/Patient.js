@@ -216,7 +216,7 @@ const InsuranceId = withHandlers({
     />
 
     <span className='text-muted'>
-      {isPrivateInsurance && __('patient.privateInsurance')}
+      {isPrivateInsurance && __('patients.privateInsurance')}
     </span>
   </div>
 )

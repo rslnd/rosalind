@@ -44,16 +44,20 @@ export const DropZone = ({ children, onDrop }) => {
   })
 
   useEffect(() => {
-    ref.current.addEventListener('dragenter', enter)
-    ref.current.addEventListener('dragleave', leave)
-    ref.current.addEventListener('dragover', enter)
-    ref.current.addEventListener('drop', drop)
+    if (ref.current) {
+      ref.current.addEventListener('dragenter', enter)
+      ref.current.addEventListener('dragleave', leave)
+      ref.current.addEventListener('dragover', enter)
+      ref.current.addEventListener('drop', drop)
+    }
 
     return () => {
-      ref.current.removeEventListener('dragenter', enter)
-      ref.current.removeEventListener('dragleave', leave)
-      ref.current.removeEventListener('dragover', enter)
-      ref.current.removeEventListener('drop', drop)
+      if (ref.current) {
+        ref.current.removeEventListener('dragenter', enter)
+        ref.current.removeEventListener('dragleave', leave)
+        ref.current.removeEventListener('dragover', enter)
+        ref.current.removeEventListener('drop', drop)
+      }
     }
   })
 
