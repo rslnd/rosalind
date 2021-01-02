@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { HotKeys } from 'react-hotkeys'
+import { NonceProvider } from 'react-select'
 import { Meteor } from 'meteor/meteor'
 import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
@@ -19,28 +20,31 @@ import { Users } from './users'
 import { Patients } from './patients'
 import { System } from './system'
 import { Route } from './layout/SafeRoute'
+import { getStyleNonce } from './layout/styles'
 
 export const Rosalind = () => (
   <ReduxProvider store={store}>
     <Router>
-      <MuiThemeProvider theme={muiTheme}>
-        <HotKeys keyMap={keyMap}>
-          <MainLayoutContainer>
-            <Switch>
-              <Route path='/appointments' component={Appointments} />
-              <Route path='/waitlist' component={Waitlist} />
-              <Route path='/inboundCalls' component={InboundCalls} />
-              <Route path='/schedules' component={Schedules} />
-              <Route path='/reports' component={Reports} />
-              <Route path='/users' component={Users} />
-              <Route path='/patients' component={Patients} />
-              <Route path='/system' component={System} />
-              <Route exact path='/' component={Dashboard} />
-              <Route path='/' component={Error} />
-            </Switch>
-          </MainLayoutContainer>
-        </HotKeys>
-      </MuiThemeProvider>
+      <NonceProvider nonce={getStyleNonce()}>
+        <MuiThemeProvider theme={muiTheme}>
+          <HotKeys keyMap={keyMap}>
+            <MainLayoutContainer>
+              <Switch>
+                <Route path='/appointments' component={Appointments} />
+                <Route path='/waitlist' component={Waitlist} />
+                <Route path='/inboundCalls' component={InboundCalls} />
+                <Route path='/schedules' component={Schedules} />
+                <Route path='/reports' component={Reports} />
+                <Route path='/users' component={Users} />
+                <Route path='/patients' component={Patients} />
+                <Route path='/system' component={System} />
+                <Route exact path='/' component={Dashboard} />
+                <Route path='/' component={Error} />
+              </Switch>
+            </MainLayoutContainer>
+          </HotKeys>
+        </MuiThemeProvider>
+      </NonceProvider>
     </Router>
   </ReduxProvider>
 )
