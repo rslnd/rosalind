@@ -18,10 +18,11 @@ export const move = ({ Appointments }) => {
     validate: new SimpleSchema({
       appointmentId: { type: SimpleSchema.RegEx.Id },
       newAssigneeId: { type: SimpleSchema.RegEx.Id, optional: true },
-      newStart: { type: Date }
+      newStart: { type: Date },
+      newEnd: { type: Date }
     }).validator(),
 
-    run ({ appointmentId, newStart, newAssigneeId }) {
+    run ({ appointmentId, newStart, newEnd, newAssigneeId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -70,7 +71,9 @@ export const move = ({ Appointments }) => {
       Appointments.update({ _id: appointmentId }, {
         $set: {
           start: newStart,
-          end: moment(newStart).add(duration, 'minutes').toDate(),
+          end: duration
+            ? moment(newStart).add(duration, 'minutes').toDate()
+            : newEnd,
           assigneeId: newAssigneeId
         },
         $push: {

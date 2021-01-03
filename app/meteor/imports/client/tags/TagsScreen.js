@@ -55,6 +55,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     icon: 'clock-o',
     description: 'Standard-Termindauer in Minuten',
+    unsetWhenEmpty: true,
     field: 'duration'
   },
   {
@@ -66,7 +67,8 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Umsatz',
-    field: 'defaultRevenue'
+    field: 'defaultRevenue',
+    unsetWhenEmpty: true,
   },
   {
     header: 'von',
@@ -80,15 +82,18 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Description',
-    field: 'description'
+    field: 'description',
+    unsetWhenEmpty: true,
   },
   {
     header: 'Bericht',
-    field: 'reportAs'
+    field: 'reportAs',
+    unsetWhenEmpty: true,
   },
   {
     header: 'Spalte',
-    field: 'reportHeader'
+    field: 'reportHeader',
+    unsetWhenEmpty: true,
   },
   {
     header: 'ÄrztInnen',
@@ -126,6 +131,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'referrableFrom',
     EditComponent: CalendarPicker,
     isMulti: true,
+    unsetWhenEmpty: true,
     render: c => c.referrableFrom && <span>
       {c.referrableFrom.map(r =>
         <span key={r}>
@@ -137,7 +143,8 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Max. Gleichzeitig',
-    field: 'maxParallel'
+    field: 'maxParallel',
+    unsetWhenEmpty: true,
   },
   {
     header: 'Revers-Vorlage',

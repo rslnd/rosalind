@@ -4,7 +4,7 @@ const initialState = {
   patient: {},
   moveAppointmentId: null,
   moveToAssigneeId: null,
-  moveToTime: null
+  moveToStart: null
 }
 
 export const move = (state = initialState, action) => {
@@ -22,7 +22,8 @@ export const move = (state = initialState, action) => {
     case 'APPOINTMENT_MOVE_HOVER':
       return {
         ...state,
-        moveToTime: action.time,
+        moveToStart: action.start,
+        moveToEnd: action.end,
         moveToAssigneeId:
           state.allowMoveBetweenAssignees
             ? action.assigneeId

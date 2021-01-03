@@ -26,8 +26,8 @@ export class NewAppointmentContainerComponent extends React.Component {
     const appointment = {
       note: note || 'PAUSE',
       calendarId: this.props.calendar._id,
-      start: moment(this.props.time).toDate(),
-      end: moment(this.props.time).add(duration || this.props.calendar.defaultDuration || this.props.calendar.slotSize || 5, 'minutes').toDate(),
+      start: moment(this.props.start).toDate(),
+      end: moment(this.props.start).add(duration || this.props.calendar.defaultDuration || this.props.calendar.slotSize || 5, 'minutes').toDate(),
       assigneeId: this.props.assigneeId
     }
 
@@ -73,7 +73,7 @@ export class NewAppointmentContainerComponent extends React.Component {
       calendarId: this.props.calendar._id,
       assigneeId: this.props.assigneeId,
       tags: values.appointment.tags,
-      date: moment(this.props.time)
+      date: moment(this.props.start)
     })
 
     const revenue = (values.appointment.revenue === 0 || values.appointment.revenue > 0)
@@ -85,8 +85,10 @@ export class NewAppointmentContainerComponent extends React.Component {
       patientId,
       note: values.appointment.note,
       tags: values.appointment.tags,
-      start: moment(this.props.time).toDate(),
-      end: moment(this.props.time).add(duration, 'minutes').toDate(),
+      start: moment(this.props.start).toDate(),
+      end: duration
+        ? moment(this.props.start).add(duration, 'minutes').toDate()
+        : this.props.end,
       assigneeId: this.props.assigneeId,
       privateAppointment: Tags.methods.isPrivate(values.appointment.tags),
       revenue
@@ -108,7 +110,8 @@ export class NewAppointmentContainerComponent extends React.Component {
 
   render () {
     const {
-      time,
+      start,
+      end,
       calendar,
       assigneeId,
       constraint
@@ -118,11 +121,12 @@ export class NewAppointmentContainerComponent extends React.Component {
       <NewAppointmentForm
         onSubmit={this.handleSubmit}
         onSubmitPause={this.handleSubmitPause}
-        time={time}
+        start={start}
+        end={end}
         calendarId={calendar._id}
         assigneeId={assigneeId}
-        allowedTags={Appointments.methods.getAllowedTags({ time: time, calendarId: calendar._id, assigneeId: assigneeId })}
-        maxDuration={Appointments.methods.getMaxDuration({ time: time, calendarId: calendar._id, assigneeId: assigneeId })}
+        allowedTags={Appointments.methods.getAllowedTags({ time: start, calendarId: calendar._id, assigneeId: assigneeId })}
+        maxDuration={Appointments.methods.getMaxDuration({ time: start, calendarId: calendar._id, assigneeId: assigneeId })}
         constraint={constraint}
         extended={calendar.privateAppointments}
       />
@@ -134,7 +138,7 @@ const withConstraint = props => {
   const constraint = findConstraint(Constraints)({
     assigneeId: props.assigneeId,
     calendarId: props.calendar._id,
-    time: props.time
+    time: props.start
   })
 
   return {

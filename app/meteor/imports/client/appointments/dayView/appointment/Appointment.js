@@ -115,7 +115,7 @@ class AppointmentItem extends React.Component {
     let timeStart, timeEnd, assigneeId
 
     if (this.props.isMoving) {
-      const newStartTime = moment(this.props.moveToTime)
+      const newStartTime = moment(this.props.moveToStart || appointment.start)
       const newAssigneeId = this.props.moveToAssigneeId
       const duration = getDefaultDuration({
         calendarId: appointment.calendarId,
@@ -124,7 +124,9 @@ class AppointmentItem extends React.Component {
         tags: appointment.tags
       })
       timeStart = newStartTime.format('[T]HHmm')
-      timeEnd = newStartTime.add(duration, 'minutes').format('[T]HHmm')
+      timeEnd = duration
+        ? newStartTime.add(duration, 'minutes').format('[T]HHmm')
+        : moment(this.props.moveToEnd || appointment.end).format('[T]HHmm')
       assigneeId = newAssigneeId
     } else {
       timeStart = moment(appointment.start).format('[T]HHmm')
@@ -132,7 +134,7 @@ class AppointmentItem extends React.Component {
       assigneeId = appointment.assigneeId
     }
 
-    const patient = appointment.patient || this.props.patient
+    const patient = appointment.patient
 
     return (
       <div
@@ -147,7 +149,8 @@ class AppointmentItem extends React.Component {
           gridRowEnd: timeEnd,
           gridColumn: `assignee-${assigneeId || 'unassigned'}`,
           borderLeftColor: tagColor,
-          zIndex: appointment.lockedBy ? 29 : 30
+          zIndex: appointment.lockedBy ? 29 : 30,
+          pointerEvents: this.props.isMoving ? 'none' : 'auto' // click/hover through to blank while moving
         }}>
 
         {

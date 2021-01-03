@@ -7,13 +7,12 @@ import { isWithinHMRange } from '../../../util/time/hm'
 import { applyDurationStrategy } from './durationStrategy'
 import { isValidAt } from '../../../util/time/valid'
 
-const defaultDuration = 5
 const getCalendarDefaultDuration = calendarId => {
   const calendar = Calendars.findOne(calendarId)
   if (calendar && calendar.defaultDuration) {
     return calendar.defaultDuration
   } else {
-    return defaultDuration
+    return null
   }
 }
 

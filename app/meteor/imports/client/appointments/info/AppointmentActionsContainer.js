@@ -93,12 +93,10 @@ const composer = (props) => {
   let move
   if (props.onMoveStart) {
     move = () => {
-      let patient = null
-
       const calendar = Calendars.findOne({ _id: appointment.calendarId })
       searchForPatient()
       props.onMoveStart({
-        appointment,
+        appointment: { ...appointment, patient },
         patient,
         allowMoveBetweenAssignees:
           hasRole(Meteor.userId(), ['allowMoveBetweenAssignees']) ||

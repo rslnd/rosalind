@@ -20,7 +20,7 @@ export class AppointmentsView extends React.Component {
     super(props)
 
     this.state = {
-      selectedTime: null,
+      selectedStart: null,
       selectedAssigneeId: null,
       newAppointmentModalOpen: false,
       appointmentModalOpen: false,
@@ -98,31 +98,33 @@ export class AppointmentsView extends React.Component {
   handleNewAppointmentModalClose () {
     this.props.onNewAppointmentModalClose({
       calendarId: this.props.calendar._id,
-      time: this.state.selectedTime,
+      start: this.state.selectedStart,
       assigneeId: this.state.selectedAssigneeId
     })
 
     this.setState({ newAppointmentModalOpen: false })
   }
 
-  handleNewAppointmentModalOpen ({ event, time, assigneeId }) {
+  handleNewAppointmentModalOpen ({ event, start, end, assigneeId }) {
     event.preventDefault()
 
     this.props.onNewAppointmentModalOpen({
       calendarId: this.props.calendar._id,
-      time,
+      start,
+      end,
       assigneeId
     })
 
     this.setState({
       newAppointmentModalOpen: true,
-      selectedTime: time,
+      selectedStart: start,
+      selectedEnd: end,
       selectedAssigneeId: assigneeId
     })
   }
 
   selectedDateTime () {
-    return setTime(this.state.selectedTime)(moment(this.props.date))
+    return setTime(this.state.selectedStart)(moment(this.props.date))
   }
 
   handleToggleOverrideMode ({ assigneeId }) {
@@ -134,31 +136,30 @@ export class AppointmentsView extends React.Component {
     })
   }
 
-  handleOverrideStart ({ time }) {
+  handleOverrideStart ({ start }) {
     if (this.state.override.isOverriding) {
       this.setState({
         override: {
           ...this.state.override,
-          start: time,
-          end: time
+          start: start,
+          end: start
         }
       })
     }
   }
 
-  handleOverrideHover ({ time }) {
+  handleOverrideHover ({ end }) {
     this.setState({
       override: {
         ...this.state.override,
-        end: moment(time).add(this.props.calendar.slotSize || 5, 'minutes').subtract(1, 'second').toDate()
+        end: moment(end).toDate()
       }
     })
   }
 
-  handleOverrideEnd ({ time }) {
+  handleOverrideEnd ({ end }) {
     if (this.state.override.isOverriding) {
       let start = this.state.override.start
-      let end = moment(time).add(this.props.calendar.slotSize || 5, 'minutes').subtract(1, 'second').toDate()
 
       if (this.state.override.start > this.state.override.end) {
         [ start, end ] = [ end, start ]
@@ -188,11 +189,11 @@ export class AppointmentsView extends React.Component {
     }
   }
 
-  handleOverrideStartOrEnd ({ time, assigneeId }) {
+  handleOverrideStartOrEnd ({ start, end, assigneeId }) {
     if (this.state.override.start) {
-      this.handleOverrideEnd({ time, assigneeId })
+      this.handleOverrideEnd({ start, end, assigneeId })
     } else {
-      this.handleOverrideStart({ time, assigneeId })
+      this.handleOverrideStart({ start, end, assigneeId })
     }
   }
 
@@ -249,21 +250,23 @@ export class AppointmentsView extends React.Component {
     })
   }
 
-  handleMoveHover ({ assigneeId, time }) {
+  handleMoveHover ({ assigneeId, start, end }) {
     this.props.dispatch({
       type: 'APPOINTMENT_MOVE_HOVER',
       assigneeId,
-      time
+      start,
+      end
     })
   }
 
   handleMoveEnd () {
-    const { moveAppointmentId, moveToTime, moveToAssigneeId } = this.props.move
+    const { moveAppointmentId, moveToStart, moveToEnd, moveToAssigneeId } = this.props.move
 
-    if (moveAppointmentId && moveToTime && moveToAssigneeId !== undefined) {
+    if (moveAppointmentId && moveToStart && moveToAssigneeId !== undefined) {
       this.props.onMove({
         appointmentId: moveAppointmentId,
-        newStart: moveToTime,
+        newStart: moveToStart,
+        newEnd: moveToEnd,
         newAssigneeId: moveToAssigneeId
       }).then(() => {
         this.props.dispatch({
@@ -336,7 +339,8 @@ export class AppointmentsView extends React.Component {
             calendar={this.props.calendar}
             open={this.state.newAppointmentModalOpen}
             assigneeId={this.state.selectedAssigneeId}
-            time={this.state.selectedTime}
+            start={this.state.selectedStart}
+            end={this.state.selectedEnd}
             onClose={this.handleNewAppointmentModalClose} />
         </ErrorBoundary>
 

@@ -10,9 +10,9 @@ export const birthday = d => {
   if (!d) { return null }
   const m = moment(dayToDate(d))
   const date = m.format(__('time.dateFormat'))
-  const age = moment().diff(m, 'years')
+  const age = moment().diff(m, 'years').toString()
 
-  return (age === 1
+  return (age === '1'
     ? __('patients.birthdayFormatOne', { date })
     : __('patients.birthdayFormat', { age, date })
   )

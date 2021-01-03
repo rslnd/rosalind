@@ -14,7 +14,7 @@ const innerStyle = {
   padding: 10
 }
 
-export const NewAppointmentModal = injectSheet(modalStyle)(({ open, onClose, calendar, assigneeId, time, classes }) => (
+export const NewAppointmentModal = injectSheet(modalStyle)(({ open, onClose, calendar, assigneeId, start, end, classes }) => (
   <Modal
     show={open}
     onHide={onClose}
@@ -25,7 +25,8 @@ export const NewAppointmentModal = injectSheet(modalStyle)(({ open, onClose, cal
       <NewAppointmentContainer
         calendar={calendar}
         assigneeId={assigneeId}
-        time={time}
+        start={start}
+        end={end}
         onClose={onClose} />
     </div>
   </Modal>

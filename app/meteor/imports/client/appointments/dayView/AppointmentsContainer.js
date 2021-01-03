@@ -111,6 +111,11 @@ const composer = (props) => {
     assignees.push(null)
   }
 
+  // When moving between days
+  if (move && move.appointment && !appointments.find(a => a._id === move.appointment._id)) {
+    appointments.push(move.appointment)
+  }
+
   const isLoading = !appointmentsSub.ready() && appointments.length === 0
   const isReady = !isLoading
 

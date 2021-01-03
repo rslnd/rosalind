@@ -27,7 +27,8 @@ class BlankState extends React.PureComponent {
   handleClick (event) {
     this.props.onClick({
       event,
-      time: setTime(this.props.startTime)(moment(this.props.date)).toDate(),
+      start: setTime(this.props.startTime)(moment(this.props.date)).toDate(),
+      end: setTime(this.props.endTime)(moment(this.props.date)).toDate(),
       assigneeId: this.props.assigneeId
     })
   }
@@ -35,7 +36,8 @@ class BlankState extends React.PureComponent {
   handleOnMouseEnter (event) {
     this.props.onMouseEnter({
       event,
-      time: setTime(this.props.startTime)(moment(this.props.date)).toDate(),
+      start: setTime(this.props.startTime)(moment(this.props.date)).toDate(),
+      end: setTime(this.props.endTime)(moment(this.props.date)).toDate(),
       assigneeId: this.props.assigneeId
     })
   }

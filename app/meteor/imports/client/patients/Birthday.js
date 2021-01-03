@@ -7,7 +7,7 @@ export const Birthday = ({ day, veryShort }) => {
   if (day) {
     const birthday = dayToDate(day)
     const formatted = moment(birthday).format(__(veryShort ? 'time.dateFormatVeryShort' : 'time.dateFormatShort'))
-    const age = moment().diff(birthday, 'years')
+    const age = moment().diff(birthday, 'years').toString()
 
     return (
       <span>{formatted} ({__('patients.yearsOld', { age })})</span>

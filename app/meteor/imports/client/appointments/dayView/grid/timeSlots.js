@@ -73,12 +73,42 @@ export const timeSlots = memoize((slotSize, offsetMinutes, atMinutes) =>
     .map(label)
     .filter(isSlot(slotSize, offsetMinutes, atMinutes)))
 
-export const timeSlotsFormatted = memoize((slotSize, offsetMinutes, atMinutes) =>
+const timeSlotsFormatted = memoize((slotSize, offsetMinutes, atMinutes) =>
   fromPairs(
     timeSlots(slotSize, offsetMinutes, atMinutes)
       .map(t => [t, `${parseInt(hour(t))}:${minute(t)}`])))
 
 export const formatter = memoize((slotSize, offsetMinutes, atMinutes) =>
   memoize(t => timeSlotsFormatted(slotSize, offsetMinutes, atMinutes)[t]))
+
+
+const roundDown = memoize((slotSize, offsetMinutes, atMinutes) =>
+  memoize(t => {
+    const slots = timeSlots(slotSize, offsetMinutes, atMinutes)
+    for(let i = 0; i < slots.length; i++) {
+      (slots[i])
+    }
+  }))
+
+// round start time down, round end time up. Makes all appts mostly fit on any current legend layout
+const formatterRoundDuration = memoize((slotSize, offsetMinutes, atMinutes) =>
+  memoize(({ start, end }) => {
+    const slots = timeSlots(slotSize, offsetMinutes, atMinutes)
+    let newStart = start
+    let newEnd = end
+
+    if (!slots[start]) {
+      newStart = roundDown(slotSize, offsetMinutes, atMinutes)(start)
+    }
+
+    if (!slots[end]) {
+      newEnd = roundUp(slotSize, offsetMinutes, atMinutes)(start)
+    }
+
+    return {
+      start: newStart,
+      end: newEnd
+    }
+  }))
 
 export const setTime = t => m => m.clone().hour(hour(t)).minute(minute(t)).startOf('minute')

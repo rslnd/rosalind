@@ -82,7 +82,7 @@ export class DayField extends React.Component {
       const formattedDate = date.format(__('time.dateFormat'))
 
       if (this.props.birthday) {
-        const formattedAge = __('patients.yearsOld', { age: moment().diff(date, 'years') })
+        const formattedAge = __('patients.yearsOld', { age: moment().diff(date, 'years').toString() })
         return `${formattedDate} (${formattedAge})`
       } else {
         return formattedDate

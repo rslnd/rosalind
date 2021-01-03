@@ -2,8 +2,8 @@ import React from 'react'
 import { Appointment } from '../appointment/Appointment'
 import { formatter } from './timeSlots'
 
-export const appointments = ({ calendar, slotSize, appointments, onClick, move }) => {
-  const format = formatter(slotSize)
+export const appointments = ({ calendar, slotSize, scheduleOffset, atMinutes, appointments, onClick, move }) => {
+  const format = formatter(slotSize, scheduleOffset, atMinutes)
 
   return appointments.map((appointment) => {
     if (move.isMoving && move.moveAppointmentId === appointment._id) {
@@ -11,9 +11,9 @@ export const appointments = ({ calendar, slotSize, appointments, onClick, move }
         key={appointment._id}
         isMoving
         appointment={move.appointment}
-        moveToTime={move.moveToTime}
+        moveToStart={move.moveToStart}
+        moveToEnd={move.moveToEnd}
         moveToAssigneeId={move.moveToAssigneeId}
-        patient={move.patient}
         onClick={onClick}
         format={format}
       />

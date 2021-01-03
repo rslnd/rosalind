@@ -10,11 +10,12 @@ export const releaseLock = ({ Appointments }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       calendarId: { type: SimpleSchema.RegEx.Id, optional: true },
-      time: { type: Date, optional: true },
+      start: { type: Date, optional: true },
+      end: { type: Date, optional: true },
       assigneeId: { type: String, optional: true }
     }).validator(),
 
-    run ({ calendarId, assigneeId, time }) {
+    run ({ calendarId, assigneeId, start, end }) {
       this.unblock()
 
       if (this.connection && !this.userId) {
@@ -28,8 +29,8 @@ export const releaseLock = ({ Appointments }) => {
         assigneeId
       }
 
-      if (time) {
-        selector.start = time
+      if (start) {
+        selector.start = start
       }
 
       const locks = Appointments.find(selector).fetch().map((lock) => {

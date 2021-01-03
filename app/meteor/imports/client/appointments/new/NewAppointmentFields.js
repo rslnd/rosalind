@@ -26,7 +26,8 @@ const tagsRowStyle = {
 
 export const NewAppointmentFields = props => {
   const {
-    time,
+    start,
+    end,
     allowedTags,
     maxDuration,
     calendarId,
@@ -69,7 +70,7 @@ export const NewAppointmentFields = props => {
               assigneeId={assigneeId}
               showDefaultRevenue={false}
               autocorrectTags
-              time={time}
+              start={start}
               constraint={constraint}
               fullWidth />
           </div>
@@ -101,7 +102,7 @@ export const NewAppointmentFields = props => {
       </FormSection>
 
       <div style={flex}>
-        <Summary time={time} assigneeId={assigneeId} />
+        <Summary start={start} assigneeId={assigneeId} />
       </div>
 
       <div style={flex} onClick={() => {
@@ -130,13 +131,13 @@ const summaryStyle = {
   marginBottom: 5
 }
 
-const Summary = ({ time, assigneeId }) => (
+const Summary = ({ start, assigneeId }) => (
   <div style={summaryStyle}>
     <span className='text-muted'>{__('appointments.thisSingular')}</span>&nbsp;
-    {moment(time).format(__('time.dateFormatWeekday'))}<br />
+    {moment(start).format(__('time.dateFormatWeekday'))}<br />
 
     <span className='text-muted'>{__('time.at')}</span>&nbsp;
-    <b>{moment(time).format(__('time.timeFormat'))}</b><br />
+    <b>{moment(start).format(__('time.timeFormat'))}</b><br />
 
     {
       assigneeId && <div>
