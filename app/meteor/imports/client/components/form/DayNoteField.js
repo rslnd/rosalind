@@ -6,13 +6,18 @@ import { __ } from '../../../i18n'
 import { dayToDate } from '../../../util/time/day'
 import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
 
-const toStringValue = (day, text) => {
-  if (!day) { return '' }
+const toStringValue = (day, text, isMultiline = false) => {
+  if (isMultiline) {
+    if (!text || text.length === 0) { return '' }
+    text.map((tx, i) => toStringValue(day[i], tx, false)).join('\n')
+  } else {
+    if (!day) { return '' }
 
-  const date = moment(dayToDate(day)).format(__('time.dateFormat'))
-  const note = text && text.trim()
+    const date = moment(dayToDate(day)).format(__('time.dateFormat'))
+    const note = text && text.trim()
 
-  return [date, note].filter(identity).join(' ')
+    return [date, note].filter(identity).join(' ')
+  }
 }
 
 export class DayNoteField extends React.Component {
@@ -20,7 +25,7 @@ export class DayNoteField extends React.Component {
     super(props)
 
     this.state = {
-      stringValue: toStringValue(props.day.input.value, props.note.input.value),
+      stringValue: toStringValue(props.day.input.value, props.note.input.value, props.multiline),
       focus: false
     }
 
@@ -34,7 +39,7 @@ export class DayNoteField extends React.Component {
   componentWillReceiveProps (props) {
     if (!this.state.focus) {
       this.setState({
-        stringValue: toStringValue(props.day.input.value, props.note.input.value)
+        stringValue: toStringValue(props.day.input.value, props.note.input.value, props.multiline)
       })
     }
   }
@@ -46,7 +51,7 @@ export class DayNoteField extends React.Component {
 
     if (!this.state.stringValue && this.props.day.input.value) {
       this.setState({
-        stringValue: toStringValue(this.props.day.input.value, this.props.note.input.value)
+        stringValue: toStringValue(this.props.day.input.value, this.props.note.input.value, this.props.multiline)
       })
     }
   }
@@ -69,14 +74,31 @@ export class DayNoteField extends React.Component {
   }
 
   parseFuzzy (stringValue) {
-    const { day, month, year, note } = fuzzyBirthday(stringValue || this.state.stringValue)
+    if (this.props.multiline) {
+      // dmyns = array of {day month year note}'s
+      const dmyns = (stringValue || this.state.stringValue).split('\n').map(s => fuzzyBirthday(s))
 
-    this.props.note.input.onChange(note)
+      this.props.note.input.onChange(dmyns.map(x => x.note))
 
-    if (day && month && year) {
-      this.props.day.input.onChange({ day, month, year })
+      const days = dmyns.map(({ day, month, year }) => {
+        if (day && month && year) {
+          return { day, month, year }
+        } else {
+          return null
+        }
+      })
+
+      this.props.day.input.onChange(days)
     } else {
-      this.props.day.input.onChange(null)
+      const { day, month, year, note } = fuzzyBirthday(stringValue || this.state.stringValue)
+
+      this.props.note.input.onChange(note)
+
+      if (day && month && year) {
+        this.props.day.input.onChange({ day, month, year })
+      } else {
+        this.props.day.input.onChange(null)
+      }
     }
   }
 

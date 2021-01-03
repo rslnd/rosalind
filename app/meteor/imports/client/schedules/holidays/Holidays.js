@@ -16,7 +16,7 @@ export const Holidays = ({ table, form }) => (
     </div>
 
     <div className='row'>
-      <div className='col-md-12'>
+      <div className='col-md-12 enable-select'>
         <Box
           title={__('schedules.futureHolidays')}
           noBorder>

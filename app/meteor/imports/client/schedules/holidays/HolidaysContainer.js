@@ -17,27 +17,41 @@ export class HolidaysContainerComponent extends React.Component {
   handleSubmit (data, dispatch) {
     return new Promise((resolve, reject) => {
       const { day, note } = data
-      console.log(day, note)
-      const date = dayToDate(day)
-      const holidays = {
-        start: moment(date).startOf('day').toDate(),
-        end: moment(date).endOf('day').toDate(),
-        day,
-        note,
-        available: false,
-        type: 'holiday'
-      }
-
-      Schedules.actions.insert.call({ schedule: holidays }, (err) => {
-        if (err) {
-          Alert.error(__('ui.error'))
-          reject(err)
-          console.log(err)
-        } else {
-          Alert.success(__('ui.ok'))
-          dispatch({ type: 'HOLIDAYS_INSERT_SUCCESS' })
-          resolve()
+      // day and note are arrays of days and notes because of multiline prop to DayNoteField, need to merge
+      const merged = note.map((note, i) => {
+        if (!day[i]) {
+          const e = `Ungültiges Datum bei ${note}`
+          Alert.error(e)
+          throw new Error(e)
         }
+        return {
+          note,
+          day: day[i]
+        }
+      })
+
+      console.log(day, note, merged)
+
+      return Promise.all(merged.map(({ day, note }) => {
+        const date = dayToDate(day)
+        const holidays = {
+          start: moment(date).startOf('day').toDate(),
+          end: moment(date).endOf('day').toDate(),
+          day,
+          note,
+          available: false,
+          type: 'holiday'
+        }
+
+        return Schedules.actions.insert.callPromise({ schedule: holidays })
+      })).then(() => {
+        Alert.success(__('ui.ok'))
+        dispatch({ type: 'HOLIDAYS_INSERT_SUCCESS' })
+        resolve()
+      }).catch((err) => {
+        Alert.error(__('ui.error'))
+        reject(err)
+        console.log(err)
       })
     })
   }

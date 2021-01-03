@@ -19,7 +19,8 @@ class NewHolidaysFormComponent extends React.Component {
             names={['day', 'note']}
             component={DayNoteField}
             autoComplete='off'
-            linesMax={20}
+            multiline
+            rowsMax={40}
             placeholder={this.generatePlaceholder()}
           />
         </div>
