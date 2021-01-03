@@ -22,38 +22,38 @@ const composer = (props) => {
   const closeModal = () => props.onClose && props.onClose()
 
   const setQueued = () => {
+    closeModal()
     Alert.success(__('appointments.setQueued'))
     Appointments.actions.setQueued.call(args)
-    closeModal()
   }
 
   const setAdmitted = () => {
-    props.onSetAdmitted(appointment)
     closeModal()
+    props.onSetAdmitted(appointment)
   }
 
   const startTreatment = () => {
+    closeModal()
     Alert.success(__('appointments.startTreatmentSuccess'))
     Appointments.actions.startTreatment.call(args)
-    closeModal()
   }
 
   const endTreatment = () => {
+    closeModal()
     Alert.success(__('appointments.endTreatmentSuccess'))
     Appointments.actions.endTreatment.call(args)
-    closeModal()
   }
 
   const unsetQueued = () => {
+    closeModal()
     Alert.success(__('appointments.unsetQueued'))
     Appointments.actions.unsetQueued.call(args)
-    closeModal()
   }
 
   const unsetAdmitted = () => {
+    closeModal()
     Alert.success(__('appointments.unsetAdmittedSuccess'))
     Appointments.actions.unsetAdmitted.call(args)
-    closeModal()
   }
 
   const setCanceled = () => {
@@ -62,30 +62,31 @@ const composer = (props) => {
   }
 
   const setNoShow = () => {
+    closeModal()
     Alert.success(__('appointments.setNoShowSuccess'))
     Appointments.actions.setNoShow.call(args)
-    closeModal()
   }
 
   const unsetCanceled = () => {
+    closeModal()
     Alert.success(__('appointments.unsetCanceledSuccess'))
     Appointments.actions.unsetCanceled.call(args)
-    closeModal()
   }
 
   const unsetStartTreatment = () => {
+    closeModal()
     Alert.success(__('appointments.unsetStartTreatmentSuccess'))
     Appointments.actions.unsetStartTreatment.call(args)
-    closeModal()
   }
 
   const unsetEndTreatment = () => {
+    closeModal()
     Alert.success(__('appointments.unsetEndTreatmentSuccess'))
     Appointments.actions.unsetEndTreatment.call(args)
-    closeModal()
   }
 
   const softRemove = () => {
+    closeModal()
     Alert.success(__('appointments.softRemoveSuccess'))
     Appointments.actions.softRemove.callPromise(args)
   }
