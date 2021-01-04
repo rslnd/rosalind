@@ -1,4 +1,4 @@
-FROM node:12.18.4
+FROM node:12.20.1
 
 HEALTHCHECK \
   --interval=6s \

@@ -5,7 +5,7 @@ dist: trusty
 language: node_js
 
 node_js:
-  - '12.18.4'
+  - '12.20.1'
 
 services:
   - docker

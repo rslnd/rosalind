@@ -5,7 +5,7 @@ RUN shadow-cljs npm-deps && npm install --save-dev shadow-cljs
 COPY ./ /app/
 RUN shadow-cljs release portal
 
-FROM node:alpine
+FROM node:12.20.1-alpine
 WORKDIR /app
 EXPOSE 4000
 CMD ["npm", "run", "start"]
