@@ -123,7 +123,10 @@ export const Tags = compose(
               : <div style={tagsListStyle}>
                 <TagsList
                   showDuration={false}
-                  tags={possibleTags}
+                  tags={possibleTags.map(p => ({
+                    ...p,
+                    selected: ((tags || []).indexOf(p._id) !== -1)
+                  }))}
                   onClick={toggleTag}
                 />
               </div>
