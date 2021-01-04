@@ -53,6 +53,7 @@ export const NewAppointmentFields = props => {
           upsert
           extended={extended}
           change={change}
+          requirePhone={calendar && calendar.requirePhone}
           allowBanningPatients={(calendar && calendar.allowBanningPatients) || hasRole(Meteor.userId(), ['admin', 'patients-ban'])}
         />
       </FormSection>

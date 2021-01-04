@@ -9,7 +9,7 @@ import { EnlargeText } from '../../components/EnlargeText'
 
 const filterField = channel => field => field && field.channel === channel
 
-const requirePhone = v => {
+const validatePhone = v => {
   if (!v) {
     return __('patients.telephoneRequired')
   }
@@ -32,7 +32,7 @@ const zoomIconStyle = {
   padding: 23
 }
 
-export const ContactFields = ({ fields, icon, channel, zoomable }) => {
+export const ContactFields = ({ fields, icon, channel, zoomable, requirePhone = true }) => {
   const count = (fields.getAll() || [])
     .filter(filterField(channel))
     .length
@@ -51,7 +51,7 @@ export const ContactFields = ({ fields, icon, channel, zoomable }) => {
                 name={`${member}.value`}
                 component={TextField}
                 warn={warn}
-                validate={channel === 'Phone' ? requirePhone : null}
+                validate={(channel === 'Phone' && requirePhone) ? validatePhone : null}
                 label={__(`patients.${channel.toLowerCase()}`)} />
             </div>
 

@@ -172,6 +172,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     )
   },
   {
+    header: 'Telefon Pflichtfeld?',
+    field: 'requirePhone',
+    type: Boolean,
+    render: t => t.requirePhone && <Icon name='check' />
+  },
+  {
     header: 'Revers',
     field: 'consentRequired',
     render: t => t.consentRequired && <Icon name='check' />,

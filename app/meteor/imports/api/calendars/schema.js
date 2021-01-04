@@ -113,6 +113,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  requirePhone: {
+    type: Boolean,
+    optional: true
+  },
+
   consentRequired: {
     type: Boolean,
     optional: true
