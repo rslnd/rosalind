@@ -24,7 +24,6 @@ const parsePatient = (hash, p) => {
     return new Date([sinceYear, sinceMonth, '01'].join('-'))
   })() : undefined
 
-  // TODO: Set insuranceNetwork and isPrivateInsurance
   return {
     lastName: p.ZUNAME,
     firstName: p.VORNAME,
@@ -47,6 +46,8 @@ const parsePatient = (hash, p) => {
     insuranceId: (p.GEBDATUM && byear) ? [
       p.VNRPAT, bday, bmonth, byear.substr(2, 2)
     ].join('') : undefined,
+    insuranceNetwork: [p.KASSE, p.KASSE2].filter(identity).join('/'),
+    isPrivateInsurance: p.KASSE === 'PRIV' || p.KASSE2 === 'PRIV',
     removed: p['@deleted'] ? true : undefined, // important, if key is set at all then softRemove will filter
     external: {
       inno: {

@@ -45,13 +45,13 @@ export const validate = ({ appointment, patient }) => {
       errors.patient.lastName = 'patients.lastNameRequired'
     }
 
-    if (!patient.firstName) {
-      errors.patient.firstName = 'patients.firstNameRequired'
-    }
+    // if (!patient.firstName) {
+    //   errors.patient.firstName = 'patients.firstNameRequired'
+    // }
 
-    if (!patient.birthday || (patient.birthday && !validateDay(patient.birthday))) {
-      errors.patient.birthday = 'patients.birthdayRequired'
-    }
+    // if (!patient.birthday || (patient.birthday && !validateDay(patient.birthday))) {
+    //   errors.patient.birthday = 'patients.birthdayRequired'
+    // }
   }
 
   if (Object.keys(errors.appointment).length === 0) {
