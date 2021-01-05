@@ -2,7 +2,7 @@ import { parseBirthday } from './parseBirthday'
 import { parseExactName } from './parseExactName'
 import { parseContact } from './parseContact'
 
-export const parseQuery = (query) => {
+export const parseQuery = (query, forceNgramMatching) => {
   if (!query) {
     return false
   }
@@ -23,7 +23,7 @@ export const parseQuery = (query) => {
   }
 
   if (birthday.remainingQuery && birthday.remainingQuery.length > 0) {
-    const name = parseExactName(birthday.remainingQuery)
+    const name = parseExactName(birthday.remainingQuery, forceNgramMatching)
     if (name && name.result) {
       parsed = { ...parsed, ...name.result }
     }

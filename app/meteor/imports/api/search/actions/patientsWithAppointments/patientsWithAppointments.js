@@ -9,10 +9,12 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
     name: 'search/patientsWithAppointments',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
-      query: { type: String }
+      query: { type: String },
+      // enables fuzzy matching even on short names
+      forceNgramMatching: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ query }) {
+    run ({ query, forceNgramMatching }) {
       try {
         this.unblock()
 
@@ -27,7 +29,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
         } else if (query === 'banned:true') {
           selector = { banned: true }
         } else {
-          selector = parseQuery(query)
+          selector = parseQuery(query, forceNgramMatching)
         }
 
         if (selector) {

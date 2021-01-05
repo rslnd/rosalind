@@ -2,7 +2,7 @@ import uniq from 'lodash/uniq'
 import identity from 'lodash/identity'
 import { normalizeName } from '../../../patients/util/normalizeName'
 
-export const parseExactName = (query) => {
+export const parseExactName = (query, forceNgramMatching) => {
   // Split query into single words
   const pattern = /([^-\s]{1,})/g
   const match = query && query.match(pattern)
@@ -23,7 +23,7 @@ export const parseExactName = (query) => {
     if (normalized) {
       let result = {}
       // Force exact match for short queries to avoid unnecessary fetching
-      if (normalized.length <= 4) {
+      if (!forceNgramMatching && normalized.length <= 4) {
         result = {
           'lastNameNormalized': normalized
         }
