@@ -2,7 +2,26 @@ import uniq from 'lodash/uniq'
 import identity from 'lodash/identity'
 import { normalizeName } from '../../../patients/util/normalizeName'
 
+const parseFirstName = (query) => {
+  if (query && query.trim()) {
+    return {
+      result: {
+        firstName: {
+          $regex: '^' + query.trim(),
+          $options: 'i'
+        }
+      }
+    }
+  } else {
+    return { result: false, remainingQuery: query }
+  }
+}
+
 export const parseExactName = (query, forceNgramMatching) => {
+  if (query && query[0] === '_') {
+    return parseFirstName(query.substr(1))
+  }
+
   // Split query into single words
   const pattern = /([^-\s]{1,})/g
   const match = query && query.match(pattern)

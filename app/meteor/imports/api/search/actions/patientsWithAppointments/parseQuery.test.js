@@ -18,6 +18,13 @@ describe('patients', function () {
         })
       })
 
+      it('parses first name', function () {
+        expect(parseQuery('_ Ilse')).to.eql({
+          'firstName': { $regex: '^Ilse', $options: 'i' }
+        })
+      })
+
+
       // it('parses names', function () {
       //   expect(parseQuery('walrus unicorn i')).to.eql({
       //     $or: [
