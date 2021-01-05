@@ -27,7 +27,7 @@ const updateTags = ({ _id }, tags, revenue) =>
 export const Tags = compose(
   withState('editing', 'setEditing'),
   withProps(props => {
-    const { calendarId, assigneeId, start, editing } = props
+    const { calendarId, calendar, assigneeId, start, editing } = props
     const tags = props.tags || []
     if (!editing || !calendarId) { return { tags } }
 
@@ -40,7 +40,7 @@ export const Tags = compose(
 
     const maxDuration = Appointments.methods.getMaxDuration({ time: start, assigneeId, calendarId })
 
-    if (!availability) {
+    if (!availability && !calendar.allowEditTagsWhenUnavailable) {
       return { possibleTags: [], maxDuration, tags }
     }
 

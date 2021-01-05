@@ -74,7 +74,7 @@ export const Appointment = compose(
         <div style={isCurrent ? currentAppointmentInnerStyle : null}>
           <Info appointment={appointment} fullNameWithTitle={fullNameWithTitle} calendar={calendar} />
           <div style={tagsDocumentsRowStyle}>
-            <div style={tagsStyle}><Tags {...appointment} isCurrent={isCurrent} /></div>
+            <div style={tagsStyle}><Tags {...appointment} calendar={calendar} isCurrent={isCurrent} /></div>
             {
               hasRole(Meteor.userId(), ['media', 'media-documents', 'media-view', 'admin']) &&
                 <div style={documentsStyle}>

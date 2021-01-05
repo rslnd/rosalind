@@ -73,6 +73,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  allowEditTagsWhenUnavailable: {
+    type: Boolean,
+    optional: true
+  },
+
   note: {
     type: String,
     optional: true

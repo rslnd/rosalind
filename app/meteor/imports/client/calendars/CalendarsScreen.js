@@ -178,6 +178,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: t => t.showTagNames && <Icon name='check' />
   },
   {
+    header: 'Behandlungen immer bearbeitbar?',
+    field: 'allowEditTagsWhenUnavailable',
+    type: Boolean,
+    render: t => t.allowEditTagsWhenUnavailable && <Icon name='check' />
+  },
+  {
     header: 'Telefon Pflichtfeld?',
     field: 'requirePhone',
     type: Boolean,
