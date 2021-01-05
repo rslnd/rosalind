@@ -5,6 +5,10 @@ import { parseContact } from './parseContact'
 describe('patients', function () {
   describe('find', function () {
     describe('parseContact', function () {
+      it('ignores if normalized is too short', function () {
+        expect(parseContact('0699112').result).to.eql(false)
+      })
+
       it('normalizes', function () {
         expect(parseContact('0699112233').result).to.eql({
           'contacts.valueNormalized': {
