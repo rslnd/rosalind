@@ -172,6 +172,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     )
   },
   {
+    header: 'Namen von Behandlungen anzeigen?',
+    field: 'showTagNames',
+    type: Boolean,
+    render: t => t.showTagNames && <Icon name='check' />
+  },
+  {
     header: 'Telefon Pflichtfeld?',
     field: 'requirePhone',
     type: Boolean,

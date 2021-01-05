@@ -183,10 +183,27 @@ class AppointmentItem extends React.Component {
                 <Icon name='question-circle' />
               )
           }
+          {
+            calendar.showTagNames &&
+              <TagNames tags={appointment.tags} />
+          }
         </span>
       </div>
     )
   }
+}
+
+const TagNames = ({ tags }) => {
+  if (!tags || tags.length === 0) {
+    return null
+  }
+
+  return <small className='pull-right text-muted pt1'>
+    {
+      tags.map(t => t.shortName || t.name || t.tag || '?').join(' ')
+    }
+    &nbsp;
+  </small>
 }
 
 export const Appointment = injectSheet(styles)(AppointmentItem)

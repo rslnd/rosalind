@@ -68,6 +68,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  showTagNames: {
+    type: Boolean,
+    optional: true
+  },
+
   note: {
     type: String,
     optional: true

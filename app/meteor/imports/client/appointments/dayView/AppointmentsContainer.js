@@ -16,6 +16,7 @@ import { Schedules } from '../../../api/schedules'
 import { AppointmentsScreen } from './AppointmentsScreen'
 import { subscribeCache } from '../../../util/meteor/subscribe'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { Tags } from '../../../api'
 
 const parseDay = memoize(d => moment(d))
 
@@ -100,6 +101,8 @@ const composer = (props) => {
       if (!a.patientId) { return a }
       const patient = Patients.findOne({ _id: a.patientId })
       a.patient = patient
+
+      a.tags = Tags.methods.expand(a.tags)
       return a
     })
     : []
