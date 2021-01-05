@@ -78,6 +78,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  requiredFields: {
+    type: [String],
+    optional: true
+  },
+
   note: {
     type: String,
     optional: true
@@ -120,11 +125,6 @@ export const schema = new SimpleSchema({
 
   referrableFrom: {
     type: [SimpleSchema.RegEx.Id],
-    optional: true
-  },
-
-  requirePhone: {
-    type: Boolean,
     optional: true
   },
 

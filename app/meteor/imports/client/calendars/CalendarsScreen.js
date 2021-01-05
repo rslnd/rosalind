@@ -184,10 +184,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: t => t.allowEditTagsWhenUnavailable && <Icon name='check' />
   },
   {
-    header: 'Telefon Pflichtfeld?',
-    field: 'requirePhone',
-    type: Boolean,
-    render: t => t.requirePhone && <Icon name='check' />
+    header: 'Pflichtfelder',
+    field: 'requiredFields',
+    unsetWhenEmpty: true,
+    fromString: s => (s || '').split(', '),
+    stringify: r => (r || []).join(', '),
+    render: t => t.requiredFields && t.requiredFields.join(', ')
   },
   {
     header: 'Revers',

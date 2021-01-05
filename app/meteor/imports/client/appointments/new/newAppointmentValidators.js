@@ -17,7 +17,8 @@ export const validateDay = (day) => {
   return (typeof day === 'object' && day.year && day.month && day.day)
 }
 
-export const validate = ({ appointment, patient }) => {
+export const validate = ({ appointment, patient }, requiredFields = []) => {
+  console.log('vv', appointment, patient, requiredFields)
   let errors = {
     patient: {},
     appointment: {}
@@ -45,13 +46,13 @@ export const validate = ({ appointment, patient }) => {
       errors.patient.lastName = 'patients.lastNameRequired'
     }
 
-    // if (!patient.firstName) {
-    //   errors.patient.firstName = 'patients.firstNameRequired'
-    // }
+    if (requiredFields.includes('firstName') && !patient.firstName) {
+      errors.patient.firstName = 'patients.firstNameRequired'
+    }
 
-    // if (!patient.birthday || (patient.birthday && !validateDay(patient.birthday))) {
-    //   errors.patient.birthday = 'patients.birthdayRequired'
-    // }
+    if (requiredFields.includes('birthday') && (!patient.birthday || (patient.birthday && !validateDay(patient.birthday)))) {
+      errors.patient.birthday = 'patients.birthdayRequired'
+    }
   }
 
   if (Object.keys(errors.appointment).length === 0) {

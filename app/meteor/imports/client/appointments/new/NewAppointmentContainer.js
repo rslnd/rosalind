@@ -123,6 +123,7 @@ export class NewAppointmentContainerComponent extends React.Component {
         onSubmitPause={this.handleSubmitPause}
         start={start}
         end={end}
+        calendar={calendar}
         calendarId={calendar._id}
         assigneeId={assigneeId}
         allowedTags={Appointments.methods.getAllowedTags({ time: start, calendarId: calendar._id, assigneeId: assigneeId })}
