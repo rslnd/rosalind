@@ -63,17 +63,20 @@ export const Schema = new SimpleSchema({
 
   start: {
     type: Date,
-    optional: true
+    optional: true,
+    index: 1
   },
 
   end: {
     type: Date,
-    optional: true
+    optional: true,
+    index: 1
   },
 
   day: {
     type: Day,
-    optional: true
+    optional: true,
+    index: 1
   },
 
   weekdays: {

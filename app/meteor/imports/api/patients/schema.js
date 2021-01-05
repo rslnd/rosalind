@@ -99,7 +99,8 @@ const Address = new SimpleSchema({
 export default new SimpleSchema({
   firstName: {
     type: String,
-    optional: true
+    optional: true,
+    index: 1
   },
 
   lastName: {
