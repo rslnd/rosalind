@@ -171,6 +171,16 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     type: Boolean
   },
   {
+    header: 'Kurzbezeichnung im Kalender',
+    field: 'shortTag',
+    unsetWhenEmpty: true
+  },
+  {
+    header: 'Textfarbe im Kalender',
+    field: 'textColor',
+    unsetWhenEmpty: true
+  },
+  {
     header: 'id',
     render: t => <pre>{t._id}</pre>
   }

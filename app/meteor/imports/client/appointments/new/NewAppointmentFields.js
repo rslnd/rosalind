@@ -5,7 +5,7 @@ import { FormSection, Field } from 'redux-form'
 import Button from '@material-ui/core/Button'
 import { __ } from '../../../i18n'
 import { TagsField } from '../../tags/TagsField'
-import { tagStyle, tagBackgroundColor } from '../../tags/TagsList'
+import { tagStyle, tagBackgroundColor, TagsList } from '../../tags/TagsList'
 import { UserHelper } from '../../users/UserHelper'
 import { Icon } from '../../components/Icon'
 import { PatientPickerField } from '../../patients/picker'
@@ -29,6 +29,7 @@ export const NewAppointmentFields = props => {
     start,
     end,
     allowedTags,
+    tags,
     maxDuration,
     calendarId,
     assigneeId,
@@ -103,7 +104,11 @@ export const NewAppointmentFields = props => {
       </FormSection>
 
       <div style={flex}>
-        <Summary start={start} assigneeId={assigneeId} />
+        <Summary
+          start={start}
+          assigneeId={assigneeId}
+          tags={tags}
+        />
       </div>
 
       <div style={flex} onClick={() => {
@@ -129,11 +134,14 @@ export const NewAppointmentFields = props => {
 }
 
 const summaryStyle = {
+  marginTop: 10,
   marginBottom: 5
 }
 
-const Summary = ({ start, assigneeId }) => (
+const Summary = ({ start, assigneeId, tags }) => (
   <div style={summaryStyle}>
+    <TagsList tags={tags} tiny /><br />
+
     <span className='text-muted'>{__('appointments.thisSingular')}</span>&nbsp;
     {moment(start).format(__('time.dateFormatWeekday'))}<br />
 

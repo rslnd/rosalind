@@ -18,7 +18,6 @@ export const validateDay = (day) => {
 }
 
 export const validate = ({ appointment, patient }, requiredFields = []) => {
-  console.log('vv', appointment, patient, requiredFields)
   let errors = {
     patient: {},
     appointment: {}

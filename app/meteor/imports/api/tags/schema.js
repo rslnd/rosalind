@@ -7,6 +7,11 @@ export default new SimpleSchema({
     index: 1
   },
 
+  shortTag: {
+    type: String,
+    optional: true
+  },
+
   synonyms: {
     type: [String],
     optional: true
@@ -28,6 +33,11 @@ export default new SimpleSchema({
   },
 
   color: {
+    type: String,
+    optional: true
+  },
+
+  textColor: {
     type: String,
     optional: true
   },

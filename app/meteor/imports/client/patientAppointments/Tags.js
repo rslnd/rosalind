@@ -144,7 +144,7 @@ const tagsStyle = {
 
 const editingStyle = {
   ...tagsStyle,
-  background: '#efefef',
+  background: '#fff',
   position: 'relative',
   padding: 10,
   marginTop: 4,

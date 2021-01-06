@@ -200,7 +200,21 @@ const TagNames = ({ tags }) => {
 
   return <small className='pull-right text-muted pt1'>
     {
-      tags.map(t => t.shortName || t.name || t.tag || '?').join(' ')
+      tags.map((t, i) =>
+        <span
+          key={i}
+          style={t.textColor ? { color: t.textColor } : null}
+          title={t.shortTag
+            ? [t.tag, ...(t.synonyms || [])].join(', ')
+            : null}
+        >
+          {/* <Icon
+            name='circle'
+            style={{ color: t.color }}
+          /> */}
+          {t.shortTag || t.tag || '?'}&nbsp;
+        </span>
+      )
     }
     &nbsp;
   </small>

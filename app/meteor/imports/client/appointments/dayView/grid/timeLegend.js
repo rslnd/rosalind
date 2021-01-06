@@ -14,7 +14,8 @@ const fullHourStyle = {
 }
 
 const quarterHourStyle = {
-  color: darkGrayDisabled
+  color: darkGrayDisabled,
+  fontWeight: 'bold'
 }
 
 export const timeLegend = ({ slotSize, scheduleOffset, atMinutes }) => {

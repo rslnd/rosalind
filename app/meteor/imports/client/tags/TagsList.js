@@ -3,24 +3,11 @@ import groupBy from 'lodash/fp/groupBy'
 import sortBy from 'lodash/fp/sortBy'
 import identity from 'lodash/identity'
 import { withHandlers } from 'recompose'
-import { darken } from '../layout/styles'
+import { darken, lighten } from '../layout/styles'
 import { Tags } from '../../api/tags'
+import { Icon } from '../components/Icon'
 
 export const tagBackgroundColor = '#e5e5e5'
-export const tagTextColor = '#a0a0a0'
-
-export const tagStyle = {
-  borderRadius: 4,
-  color: tagTextColor,
-  borderBottom: `3px solid ${tagBackgroundColor}`,
-  display: 'inline-block',
-  paddingTop: 4,
-  paddingLeft: 5,
-  paddingRight: 5,
-  paddingBottom: 3,
-  margin: 2,
-  userSelect: 'none'
-}
 
 const tagGroupTitleStyle = {
   display: 'block',
@@ -35,6 +22,80 @@ const durationStyle = {
   marginTop: '0.08em',
   marginLeft: '0.7em'
 }
+
+const paddings = {
+  paddingTop: 4,
+  paddingLeft: 5,
+  paddingRight: 5,
+  paddingBottom: 3
+}
+
+const getInnerTagStyle = ({ tag }) => ({
+  display: 'inline-block',
+  backgroundColor: (tag.color || tagBackgroundColor),
+  borderTopColor: (tag.color || tagBackgroundColor),
+  textDecoration: tag.removed ? 'line-through' : 'none',
+  color: '#fff',
+  ...paddings
+})
+
+const getOuterTagStyle = ({ tag, style }) => ({
+  display: 'inline-block',
+  userSelect: 'none',
+  ...style
+})
+
+const getCheckboxStyle = ({ tag }) => ({
+  display: 'inline-block',
+  color: '#fff',
+  backgroundColor: tag.selected ? darken(tag.color || tagBackgroundColor, -15) : '#eee',
+  textAlign: 'center',
+  ...paddings
+})
+
+
+const iconStyle = {
+  color: '#fff',
+  width: 24,
+  paddingRight: 6,
+  paddingLeft: 4
+}
+
+const Check = ({ tag }) =>
+  <span style={getCheckboxStyle({ tag })}>
+    {
+      tag.selected
+        ? <Icon name='check' style={selectedIconStyle} />
+        : <Icon name='circle-o' style={unselectedIconStyle} />
+    }
+  </span>
+
+const unselectedIconStyle = {
+  ...iconStyle,
+  opacity: 0.6
+}
+
+const selectedIconStyle = {
+  ...iconStyle,
+  opacity: 1
+}
+
+const borderStyle = {
+  display: 'inline-block',
+  borderRadius: 4,
+  overflow: 'hidden',
+  margin: 3
+}
+
+// used in: drawer; pause button; tags screen
+export const tagStyle = {
+  ...paddings,
+  ...borderStyle,
+  userSelect: 'none',
+  backgroundColor: tagBackgroundColor,
+  color: '#fff',
+}
+
 
 const Tag = withHandlers({
   // TODO: Refactor to return full tag objects on click also
@@ -55,31 +116,40 @@ const Tag = withHandlers({
   style,
   showDefaultRevenue,
   showDuration
-}) => <span
-  title={tag.description}
-  onClick={handleClick}
-  onMouseEnter={handleMouseEnter}
-  onMouseLeave={handleMouseLeave}
-  style={{
-    ...tagStyle,
-    ...style,
-    color: (tag.selectable && (tag.selected ? '#fff' : tagTextColor)) || '#fff',
-    backgroundColor: tag.selectable
-      ? (tag.selected ? tag.color : tagBackgroundColor)
-      : tag.color,
-    borderColor: darken(tag.color || tagBackgroundColor),
-    textDecoration: tag.removed ? 'line-through' : 'none'
-  }}
->
-    {tag.tag}
-    {showDuration && tag.duration && <span style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
-      {tag.duration}'
-  </span>}
+}) =>
+  <span
+    style={borderStyle}
+    title={tag.description}
+    onClick={handleClick}
+    onMouseEnter={handleMouseEnter}
+    onMouseLeave={handleMouseLeave}
+  >
+    <span
+      style={getOuterTagStyle({ tag, style })}
+    >
+
+      {
+        tag.selectable &&
+          <Check tag={tag} />
+      }
+
+      <span
+        style={getInnerTagStyle({ tag })}
+      >
+        {tag.tag}
+        {
+          showDuration && tag.duration &&
+            <span style={durationStyle} title={`Dauer: ${tag.duration} Minuten`}>
+              {tag.duration}'
+            </span>
+        }
+      </span>
+    </span>
   </span>)
 
 export const TagsList = ({
   tags = [],
-  onClick = () => { },
+  onClick,
   style = {},
   tiny,
   showDefaultRevenue,
