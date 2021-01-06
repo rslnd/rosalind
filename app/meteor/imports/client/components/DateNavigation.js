@@ -8,8 +8,9 @@ import { DayPickerSingleDateController } from 'react-dates'
 import { PortalWithState } from 'react-portal'
 import { __ } from '../../i18n'
 import { Schedules } from '../../api/schedules'
-import { dateToDay, isSame } from '../../util/time/day'
+import { dayToDate } from '../../util/time/day'
 import { Icon } from './Icon'
+import { skipForwards, skipBackwards } from '../../api/messages/methods/skipBackwards'
 
 export const calendarStyle = {
   position: 'fixed',
@@ -27,13 +28,11 @@ export const calendarStyleOpen = {
 const composer = props => {
   const holidays = Schedules.find({
     type: 'holiday'
-  }).fetch()
+  }).fetch().map(h => moment(dayToDate(h.day)).format('YYYY-MM-DD')).sort()
 
-  const isHoliday = m => {
-    if (m.isoWeekday() === 7) { return true }
-    const day = dateToDay(m)
-    return !!holidays.find(h => isSame(day, h.day))
-  }
+  const isHoliday = m =>
+    m.isoWeekday() === 7 ||
+    holidays.includes(m.format('YYYY-MM-DD'))
 
   return {
     ...props,
@@ -64,16 +63,20 @@ class DateNavigationButtons extends React.Component {
     return `/${this.props.basePath}/${date.format('YYYY-MM-DD')}`
   }
 
-  // TODO: Make less hacky and look at Schedules/holidays
-  goToDate (date, round = 'next') {
+  goToDate (date, nextOrPrevious = 'next') {
+    const skip = m =>
+      m.isoWeekday() === 7 ||
+      this.props.isHoliday(m)
+
     let targetDay = date
-    if (targetDay.isoWeekday() === 7) {
-      if (round === 'next') {
-        targetDay = targetDay.add(1, 'day')
+    if (skip(targetDay)) {
+      if (nextOrPrevious === 'next') {
+        targetDay = skipForwards({ start: date, skip })
       } else {
-        targetDay = targetDay.subtract(1, 'day')
+        targetDay = skipBackwards({ start: date, skip })
       }
     }
+
     const path = this.dateToPath(targetDay)
     this.props.history.replace(path)
   }
