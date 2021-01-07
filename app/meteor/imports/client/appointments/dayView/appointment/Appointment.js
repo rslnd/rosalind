@@ -184,7 +184,7 @@ class AppointmentItem extends React.Component {
               )
           }
           {
-            calendar.showTagNames &&
+            calendar && calendar.showTagNames &&
               <TagNames tags={appointment.tags} />
           }
         </span>
