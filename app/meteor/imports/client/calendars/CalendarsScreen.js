@@ -65,8 +65,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   },
   {
     header: 'Private',
-    field: 'privateAppointments',
-    render: c => c.privateAppointments && <Icon name='eur' />
+    field: 'privateAppointments'
   },
   {
     header: 'Name',
@@ -104,14 +103,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'History',
     field: 'history',
-    type: Boolean,
-    render: c => c.history && <Icon name='check' />
+    type: Boolean
   },
   {
     header: 'Einschub',
     field: 'allowUnassigned',
-    type: Boolean,
-    render: c => c.allowUnassigned && <Icon name='check' />
+    type: Boolean
   },
   {
     header: 'Einschub-Spaltenbeschriftung',
@@ -139,18 +136,9 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     )
   },
   {
-    header: 'Empfangen = Behandelt',
-    field: 'admittedIsTreated',
-    type: Boolean,
-    render: c =>
-      c.admittedIsTreated && <Icon name='check' />
-  },
-  {
     header: 'SMS',
     field: 'smsAppointmentReminder',
-    type: Boolean,
-    render: c =>
-      c.smsAppointmentReminder && <Icon name='check' />
+    type: Boolean
   },
   {
     header: 'SMS Erinnerung',
@@ -161,6 +149,20 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     header: 'SMS Storno',
     field: 'smsAppointmentReminderCancelationConfirmationText',
     EditComponent: SMSField
+  },
+  {
+    header: 'SMS Tage vorher (mind.)',
+    field: 'smsDaysBefore'
+  },
+  {
+    header: 'Empfangen = Behandelt?',
+    field: 'admittedIsTreated',
+    type: Boolean
+  },
+  {
+    header: 'Zustand Wartend?',
+    field: 'queueing',
+    type: Boolean
   },
   {
     header: 'Empfehlbar von',
@@ -194,7 +196,6 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Revers',
     field: 'consentRequired',
-    render: t => t.consentRequired && <Icon name='check' />,
     type: Boolean
   },
   {
@@ -214,8 +215,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Termine zwischen Spalten verschieben',
     field: 'allowMoveBetweenAssignees',
-    type: Boolean,
-    render: t => t.allowMoveBetweenAssignees && <Icon name='check' />
+    type: Boolean
   }
 ]
 

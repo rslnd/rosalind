@@ -93,6 +93,7 @@ const flexStyle = {
 
 export const dateColumnStyle = {
   display: 'flex',
+  cursor: 'pointer',
   width: 180
 }
 

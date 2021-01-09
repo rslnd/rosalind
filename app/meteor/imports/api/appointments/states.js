@@ -1,19 +1,22 @@
-export const states = [
+import identity from 'lodash/identity'
+
+const states = ({ queueing = false, admittedIsTreated = false }) => [
   {
     state: 'planned',
     when: a => !a.admitted && !a.queued,
-    primaryActions: ['setAdmitted', 'setNoShow', 'setCanceled'],
+    primaryActions: ['setAdmitted', (queueing && 'setQueued'), 'setCanceled'].filter(identity),
+    secondaryActions: ['setNoShow']
   },
   {
     state: 'queued',
     when: a => a.queued && !a.admitted,
-    primaryActions: ['setAdmitted', 'setNoShow', 'setCanceled'],
-    secondaryActions: ['unsetQueued']
+    primaryActions: ['setAdmitted', 'setCanceled'],
+    secondaryActions: ['unsetQueued', 'setNoShow']
   },
   {
     state: 'admitted',
     when: a => a.admitted && !a.treatmentStart,
-    primaryActions: ['startTreatment'],
+    primaryActions: [(!admittedIsTreated && 'startTreatment')].filter(identity),
     secondaryActions: ['unsetAdmitted', 'setNoShow', 'setCanceled']
   },
   {
@@ -30,5 +33,5 @@ export const states = [
   }
 ]
 
-export const currentState = appointment =>
-  states.find(s => s.when(appointment))
+export const currentState = (appointment, calendarOptions) =>
+  states(calendarOptions).find(s => s.when(appointment))

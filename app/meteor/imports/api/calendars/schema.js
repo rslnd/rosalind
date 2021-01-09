@@ -103,6 +103,16 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  smsDaysBefore: {
+    type: Number,
+    optional: true
+  },
+
+  queueing: {
+    type: Boolean,
+    optional: true
+  },
+
   assigneeName: {
     type: String,
     optional: true

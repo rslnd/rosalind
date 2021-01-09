@@ -4,15 +4,16 @@ import { ErrorBoundary } from '../layout/ErrorBoundary'
 import { Icon } from '../components/Icon'
 import { HotKeys, ObserveKeys } from 'react-hotkeys'
 
-const triggerHeight = 220
+const triggerHeight = 90
 const triggerContainerStyle = {
   position: 'fixed',
   right: -10,
-  top: '50%',
+  bottom: 120,
   marginTop: triggerHeight / -2,
   height: triggerHeight,
-  width: 33,
-  zIndex: 1061
+  width: 27,
+  zIndex: 1061,
+  opacity: 0.7
 }
 
 const triggerLatchStyle = {

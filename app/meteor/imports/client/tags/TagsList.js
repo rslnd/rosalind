@@ -84,7 +84,8 @@ const borderStyle = {
   display: 'inline-block',
   borderRadius: 4,
   overflow: 'hidden',
-  margin: 3
+  marginLeft: 3,
+  marginRight: 3
 }
 
 // used in: drawer; pause button; tags screen

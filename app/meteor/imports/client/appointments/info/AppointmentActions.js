@@ -7,9 +7,9 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { currentState } from '../../../api/appointments/states'
 
-const buttons = {
+const buttons = ({ admittedIsTreated }) => ({
   setQueued: { icon: 'circle', primary: true },
-  setAdmitted: { icon: 'angle-double-right', primary: true },
+  setAdmitted: { icon: admittedIsTreated ? 'check' : 'angle-double-right', primary: true },
   startTreatment: { icon: 'circle-o-notch', primary: true },
   endTreatment: { icon: 'check', primary: true },
   setNoShow: { icon: 'times' },
@@ -18,15 +18,15 @@ const buttons = {
   softRemove: { icon: 'trash-o' },
   move: { icon: 'arrows' },
   searchForPatient: { icon: 'search' }
-}
+})
 
 // Usage: <Btn.admit {...props} />
-const Btn = Object.keys(buttons).reduce((acc, k) => ({
+const Btn = Object.keys(buttons({})).reduce((acc, k) => ({
   ...acc,
   [k]: props =>
     <Button
       {...props}
-      {...buttons[k]}
+      {...buttons(props.calendar)[k]}
       name={k}
       onClick={() => props.handleClick(k)}
     />
@@ -88,10 +88,11 @@ export const AppointmentActions = compose(
     handleMenuClose,
     viewInCalendar,
     move,
-    searchForPatient
+    searchForPatient,
+    calendar
   } = props
 
-  const next = currentState(appointment)
+  const next = currentState(appointment, calendar)
 
   if (!next) {
     console.log(appointment)
@@ -150,7 +151,7 @@ export const AppointmentActions = compose(
                 }}
               >
                 <span style={menuIconStyle}>
-                  {buttons[a] ? <Icon name={buttons[a].icon} /> : null}
+                  {buttons(calendar)[a] ? <Icon name={buttons(calendar)[a].icon} /> : null}
                 </span>
                 {__('appointments.' + a)}
               </MenuItem>

@@ -14,6 +14,10 @@ describe('api', () => {
           expect(isMobileNumber('660 1234567')).to.equal(true)
         })
 
+        it('with slash', () => {
+          expect(isMobileNumber('0660/1234567')).to.equal(true)
+        })
+
         it('with country code', () => {
           expect(isMobileNumber('+43 660 1234567')).to.equal(true)
         })

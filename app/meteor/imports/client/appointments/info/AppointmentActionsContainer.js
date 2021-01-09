@@ -18,6 +18,7 @@ const composer = (props) => {
   const { queued, admitted, canceled, treatmentStart, treatmentEnd } = appointment
   const args = { appointmentId: props.appointmentId }
   const patient = appointment.patientId && Patients.findOne({ _id: appointment.patientId })
+  const calendar = Calendars.findOne({ _id: appointment.calendarId })
 
   const closeModal = () => props.onClose && props.onClose()
 
@@ -94,7 +95,6 @@ const composer = (props) => {
   let move
   if (props.onMoveStart) {
     move = () => {
-      const calendar = Calendars.findOne({ _id: appointment.calendarId })
       searchForPatient()
       props.onMoveStart({
         appointment: { ...appointment, patient },
@@ -110,9 +110,8 @@ const composer = (props) => {
   if (props.viewInCalendar) {
     viewInCalendar = () => {
       closeModal()
-      const calendarSlug = Calendars.findOne(appointment.calendarId).slug
       const date = moment(appointment.start).format('YYYY-MM-DD')
-      props.history.push(`/appointments/${calendarSlug}/${date}#${props.appointmentId}`)
+      props.history.push(`/appointments/${calendar.slug}/${date}#${props.appointmentId}`)
     }
   }
 
@@ -129,6 +128,7 @@ const composer = (props) => {
 
   return {
     appointment,
+    calendar,
     canceled,
     admitted,
     queued,

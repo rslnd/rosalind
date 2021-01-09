@@ -19,8 +19,6 @@ import { buildMessageText } from '../methods/buildMessageText'
 import { reminderDateCalculator } from '../methods/reminderDateCalculator'
 import { hasRole } from '../../../util/meteor/hasRole'
 
-export const sendDaysBeforeAppointment = 2
-
 // Don't immediately send out reminder if appointment is very soon,
 // We don't want the patient to receive the reminder while still
 // on the phone with the clinic.
@@ -106,123 +104,127 @@ export const createReminders = ({ Messages }) => {
 
       if (!Settings.get('messages.sms.enabled')) { return }
 
-      if (!Settings.get('messages.sms.appointmentReminder.text')) {
-        console.error('[Messages] createReminders: Skipping because messages.sms.appointmentReminder.text not set')
-        return
-      }
-
       const holidays = Schedules.find({
         type: 'holiday',
         removed: { $ne: true }
       }).fetch()
 
-      const { calculateReminderDate, calculateFutureCutoff } = reminderDateCalculator({
-        holidays,
-        days: sendDaysBeforeAppointment
-      })
+      Calendars.find({ smsAppointmentReminder: true }).fetch().map(calendar => {
+        const calendarId = calendar._id
 
-      const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
-      const appointments = findUpcomingAppointments(cutoffDate)
-      const appointmentsWithMobile = appointments.filter((a) => {
-        if (a.patient && a.patient.noSMS) {
-          return false
-        }
-
-        if (a.patient && a.patient.contacts) {
-          return some(a.patient.contacts, (c) =>
-            (c.channel === 'Phone' && isMobileNumber(c.value))
-          )
-        }
-      })
-      const uniqueAppointmentsWithMobile = uniqBy(appointmentsWithMobile, (a) => (
-        a.patient.contacts[0].value
-      ))
-
-      let insertedCount = 0
-      const messagePayloads = uniqueAppointmentsWithMobile.map((a) => {
-        return {
-          appointmentId: a._id,
-          tags: a.tags,
-          calendarId: a.calendarId,
-          assigneeId: a.assigneeId,
-          patientId: a.patient._id,
-          start: a.start,
-          lastName: a.patient.lastName,
-          prefix: a.patient.prefix,
-          gender: a.patient.gender,
-          contacts: a.patient.contacts
-        }
-      })
-
-      const phone = contacts =>
-        find(contacts, c => c.channel === 'Phone').value
-
-      const messages = messagePayloads.map((payload) => {
-        const calendar = Calendars.findOne({ _id: payload.calendarId })
-        if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
-          return false
-        }
-
-        const tags = Tags.methods.expand(payload.tags)
-        if (tags.some(t => t.noSmsAppointmentReminder)) {
-          return false
-        }
-
-        if (payload.assigneeId && hasRole(payload.assigneeId, ['noSmsAppointmentReminder'])) {
-          return false
-        }
-
-        const text =
-          (calendar && calendar.smsAppointmentReminderText) ||
-          Settings.get('messages.sms.appointmentReminder.text')
-
-        return {
-          type: 'appointmentReminder',
-          channel: 'SMS',
-          direction: 'outbound',
-          status: 'scheduled',
-          to: phone(payload.contacts),
-          scheduled: calculateReminderDate(payload.start).toDate(),
-          text: buildMessageText({ text }, {
-            date: payload.start
-          }),
-          invalidBefore: moment(payload.start).subtract(3, 'weeks').toDate(),
-          invalidAfter: moment(payload.start).startOf('day').subtract(12, 'hours').toDate(),
-          appointmentId: payload.appointmentId,
-          patientId: payload.patientId,
-          payload
-        }
-      }).filter(identity)
-
-      messages.map((message) => {
-        const existingMessage = Messages.findOne({
-          appointmentId: message.appointmentId,
-          removed: { $ne: true }
+        const { calculateReminderDate, calculateFutureCutoff } = reminderDateCalculator({
+          holidays,
+          days: (calendar.smsDaysBefore || 2)
         })
 
-        if (existingMessage) {
-          if (!isSameMessage(existingMessage, message)) {
-            Messages.update({ appointmentId: message.appointmentId }, { $set: message })
+        const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
+        const appointments = findUpcomingAppointments(cutoffDate)
+        const appointmentsWithMobile = appointments.filter((a) => {
+          if (a.patient && a.patient.noSMS) {
+            return false
           }
-        } else {
-          Messages.insert({
-            ...message,
-            createdAt: new Date()
+
+          if (a.patient && a.patient.contacts) {
+            return some(a.patient.contacts, (c) =>
+              (c.channel === 'Phone' && isMobileNumber(c.value))
+            )
+          }
+        })
+        const uniqueAppointmentsWithMobile = uniqBy(appointmentsWithMobile, (a) => (
+          a.patient.contacts[0].value
+        ))
+
+        let insertedCount = 0
+        const messagePayloads = uniqueAppointmentsWithMobile.map((a) => {
+          return {
+            appointmentId: a._id,
+            tags: a.tags,
+            calendarId: a.calendarId,
+            assigneeId: a.assigneeId,
+            patientId: a.patient._id,
+            start: a.start,
+            lastName: a.patient.lastName,
+            prefix: a.patient.prefix,
+            gender: a.patient.gender,
+            contacts: a.patient.contacts
+          }
+        })
+
+        const phone = contacts =>
+          find(contacts, c => c.channel === 'Phone').value
+
+        const messages = messagePayloads.map((payload) => {
+          const calendar = Calendars.findOne({ _id: payload.calendarId })
+          if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
+            return false
+          }
+
+          const tags = Tags.methods.expand(payload.tags)
+          if (tags.some(t => t.noSmsAppointmentReminder)) {
+            return false
+          }
+
+          if (payload.assigneeId && hasRole(payload.assigneeId, ['noSmsAppointmentReminder'])) {
+            return false
+          }
+
+          const text =
+            (calendar && calendar.smsAppointmentReminderText) ||
+            Settings.get('messages.sms.appointmentReminder.text')
+
+          if (!text) {
+            return false
+          }
+
+          return {
+            type: 'appointmentReminder',
+            channel: 'SMS',
+            direction: 'outbound',
+            status: 'scheduled',
+            to: phone(payload.contacts),
+            scheduled: calculateReminderDate(payload.start, calendar.smsDaysBefore || 2).toDate(),
+            text: buildMessageText({ text }, {
+              date: payload.start
+            }),
+            invalidBefore: moment(payload.start).subtract(3, 'weeks').toDate(),
+            invalidAfter: moment(payload.start).startOf('day').subtract(12, 'hours').toDate(),
+            appointmentId: payload.appointmentId,
+            patientId: payload.patientId,
+            payload
+          }
+        }).filter(identity)
+
+        messages.map((message) => {
+          const existingMessage = Messages.findOne({
+            appointmentId: message.appointmentId,
+            removed: { $ne: true }
           })
-          insertedCount++
+
+          if (existingMessage) {
+            if (!isSameMessage(existingMessage, message)) {
+              Messages.update({ appointmentId: message.appointmentId }, { $set: message })
+            }
+          } else {
+            Messages.insert({
+              ...message,
+              createdAt: new Date()
+            })
+            insertedCount++
+          }
+        })
+
+        if (insertedCount > 0) {
+          Events.post('messages/createReminders', {
+            calendarId,
+            appointmentsCount: appointments.length,
+            appointmentsWithMobileCount: appointmentsWithMobile.length,
+            uniqueAppointmentsWithMobileCount: uniqueAppointmentsWithMobile.length,
+            messagePayloadsCount: messagePayloads.length,
+            messagesCount: messages.length,
+            insertedCount
+          })
         }
       })
-
-      if (insertedCount > 0) {
-        Events.post('messages/createReminders', {
-          appointmentsCount: appointments.length,
-          appointmentsWithMobileCount: appointmentsWithMobile.length,
-          uniqueAppointmentsWithMobileCount: uniqueAppointmentsWithMobile.length,
-          messagePayloadsCount: messagePayloads.length,
-          messagesCount: messages.length,
-          insertedCount
-        })
-      }
     }
   })
 }

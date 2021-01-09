@@ -180,9 +180,13 @@ export class HeaderRow extends React.Component {
               {
                 assignee
                   ? (
-                    assignee.employee
-                      ? Users.methods.fullNameWithTitle(assignee)
-                      : <span className='text-muted'>{Users.methods.fullNameWithTitle(assignee)}</span>
+                    <span className='pointer'>
+                      {
+                        assignee.employee
+                          ? Users.methods.fullNameWithTitle(assignee)
+                          : <span className='text-muted'>{Users.methods.fullNameWithTitle(assignee)}</span>
+                      }
+                    </span>
                   )
                   : (
                     calendar.unassignedLabel ||

@@ -4,12 +4,19 @@ import { Icon } from '../../components/Icon'
 import { green, red, warning, primaryActive } from '../../layout/styles'
 import { Currency } from '../../components/Currency'
 
-const assumeNoShowAfterMinutes = 90
+const assumeNoShowAfterMinutes = 60
+
+const stateIndicatorStyle = {
+  width: 15,
+  display: 'inline-block'
+}
 
 export const Indicator = (props) => {
   return <div className='pull-right'>
     <InsuranceIndicator {...props} />
-    <StateIndicator {...props} />
+    <span style={stateIndicatorStyle}>
+      <StateIndicator {...props} />
+    </span>
   </div>
 }
 
@@ -19,7 +26,7 @@ const InsuranceIndicator = ({ appointment, calendar }) => {
   }
 
   if (appointment.patient.isPrivateInsurance) {
-    return <span title={'Privat'} className='text-muted f6'>P&nbsp;</span>
+    return <small title={'Privat'} className='text-muted pt1'>P&nbsp;</small>
   } else {
     return null
   }
@@ -30,7 +37,7 @@ const StateIndicator = ({ appointment, showRevenue, calendar }) => {
     return null
   }
 
-  if (appointment.treated /* || (calendar && calendar.admittedIsTreated && appointment.admitted) */) {
+  if (appointment.treated || (calendar && calendar.admittedIsTreated && appointment.admitted)) {
     return <Treated />
   }
 

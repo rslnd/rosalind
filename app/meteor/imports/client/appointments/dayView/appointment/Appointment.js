@@ -149,6 +149,7 @@ class AppointmentItem extends React.Component {
           gridRowEnd: timeEnd,
           gridColumn: `assignee-${assigneeId || 'unassigned'}`,
           borderLeftColor: tagColor,
+          overflow: 'hidden',
           zIndex: appointment.lockedBy ? 29 : 30,
           pointerEvents: this.props.isMoving ? 'none' : 'auto' // click/hover through to blank while moving
         }}>

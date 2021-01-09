@@ -10,16 +10,16 @@ export const reminderDateCalculator = ({ holidays = [], days = 1 }) => {
     upper: dayTimeTo
   })
 
-  const calculateReminderDate = (m) => clamp(skipBackwards({
+  const calculateReminderDate = (m, skipDays = days) => clamp(skipBackwards({
     start: m,
-    count: days,
+    count: skipDays,
     unit: 'days',
     skip: weekendsOrHolidays
   }))
 
-  const calculateFutureCutoff = (m) => skipForwards({
+  const calculateFutureCutoff = (m, skipDays = days) => skipForwards({
     start: m,
-    count: days,
+    count: skipDays,
     unit: 'days',
     skip: weekendsOrHolidays
   })

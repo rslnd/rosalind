@@ -26,8 +26,10 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
 
         if (query.match(SimpleSchema.RegEx.Id)) {
           selector = { _id: query }
-        } else if (query === 'banned:true') {
+        } else if (query === '!banned') { // banned
           selector = { banned: true }
+        } else if (query[0] === '!') { // special case: seach notes, return
+          return findNotes({ Appointments, Patients, query })
         } else {
           selector = parseQuery(query, forceNgramMatching)
         }
@@ -45,18 +47,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
               appointments: Appointments.find({ patientId: patient._id }, {
                 sort: { start: -1 },
                 limit: 3,
-                fields: {
-                  '_id': 1,
-                  'tags': 1,
-                  'start': 1,
-                  'end': 1,
-                  'assigneeId': 1,
-                  'waitlistAssigneeId': 1,
-                  'treatmentBy': 1,
-                  'admitted': 1,
-                  'treated': 1,
-                  'canceled': 1
-                }
+                fields: appointmentFields
               }).fetch()
             }
           })
@@ -67,4 +58,39 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
       }
     }
   })
+}
+
+const appointmentFields = {
+  _id: 1,
+  tags: 1,
+  start: 1,
+  end: 1,
+  assigneeId: 1,
+  waitlistAssigneeId: 1,
+  treatmentBy: 1,
+  admitted: 1,
+  treated: 1,
+  canceled: 1
+}
+
+const findNote = ({ Appointments, Patients, query }) => {
+  const appointments = Appointments.find({
+    note: {
+      $regex: query.substr(1).trim(),
+      $options: 'i'
+    }
+  }, {
+    sort: { start: -1 },
+    fields: appointmentFields
+  }).fetch()
+
+  const patients = Patients.find({ _id: { $in: appointments.map(a => a._id)}}).fetch()
+
+  return [
+    ...appointments.map(appointment => ({ appointment })),
+    ...patients.map(p => ({
+      patient,
+      appointments: appointments.filter(a => a.patientId === p._id)
+    }))
+  ]
 }
