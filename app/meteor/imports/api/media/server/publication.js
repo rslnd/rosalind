@@ -13,15 +13,18 @@ export const publication = ({ Media, MediaTags }) => {
 
       // Attach derived field on documents before publishing
       const credentials = getCredentials()
-      const transform = doc => {
-        const requests = createPresignedRequests({
-          credentials,
-          filename: doc.filename,
-          signQuery: true
-        })
 
-        doc.urls = requests.map(r => requestToUrl(r))
-        doc.url = doc.urls[0] // LEGACY
+      const transform = doc => {
+        if (credentials) {
+          const requests = createPresignedRequests({
+            credentials,
+            filename: doc.filename,
+            signQuery: true
+          })
+
+          doc.urls = requests.map(r => requestToUrl(r))
+          doc.url = doc.urls[0] // LEGACY
+        }
         return doc
       }
 

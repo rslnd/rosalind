@@ -22,6 +22,10 @@ export const getCredentials = () => {
     ? JSON.parse(process.env.MEDIA_S3_SECRETS)
     : Settings.get('media.s3.secrets')
 
+  if (!config || !secrets) {
+    return null
+  }
+
   if (config.length !== secrets.length) {
     throw new Error(`There are ${config.length} S3 configs specified, but ${secrets.length} secrets`)
   }
