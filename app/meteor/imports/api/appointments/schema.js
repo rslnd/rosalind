@@ -47,7 +47,7 @@ export default new SimpleSchema({
   note: {
     type: String,
     optional: true,
-    index: 1
+    index: false
   },
 
   // See migration 12: appointmentsCommentsToNote
