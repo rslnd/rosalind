@@ -2,6 +2,12 @@ import identity from 'lodash/identity'
 
 const states = ({ queueing = false, admittedIsTreated = false }) => [
   {
+    state: 'canceled',
+    when: a => a.canceled,
+    primaryActions: ['unsetCanceled'],
+    secondaryActions: ['setAdmitted', (queueing && 'setQueued'), 'setNoShow'].filter(identity)
+  },
+  {
     state: 'planned',
     when: a => !a.admitted && !a.queued,
     primaryActions: ['setAdmitted', (queueing && 'setQueued'), 'setCanceled'].filter(identity),

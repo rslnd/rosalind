@@ -94,6 +94,7 @@ export const appointments = {
   setCanceled: 'Absage',
   setNoShow: 'Nicht erschienen',
   setCanceledSuccess: 'Abgesagt',
+  unsetCanceled: '"Abgesagt" entfernen',
   unsetCanceledSuccess: 'Nicht mehr abgesagt',
   startTreatment: 'Behandlung starten',
   startTreatmentSuccess: 'Behandlung gestartet',

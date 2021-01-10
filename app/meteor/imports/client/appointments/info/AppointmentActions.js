@@ -14,6 +14,7 @@ const buttons = ({ admittedIsTreated }) => ({
   endTreatment: { icon: 'check', primary: true },
   setNoShow: { icon: 'times' },
   setCanceled: { icon: 'minus' },
+  unsetCanceled: { icon: 'minus' },
   viewInCalendar: { icon: 'calendar' },
   softRemove: { icon: 'trash-o' },
   move: { icon: 'arrows' },
