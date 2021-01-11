@@ -32,7 +32,12 @@ export class WaitlistAssigneeModal extends React.Component {
   }
 
   render () {
-    const { show, onClose } = this.props
+    const { show, onClose, assignees } = this.props
+
+    const selector = assignees
+      ? { _id: { $in: assignees.filter(a => a && a._id).map(a => a._id) } }
+      : null
+
     return <Modal
       enforceFocus={false}
       show={show}
@@ -40,6 +45,7 @@ export class WaitlistAssigneeModal extends React.Component {
       bsSize='small'>
       <Modal.Body>
         <UserPicker
+          selector={selector}
           autoFocus
           onChange={this.handleChangeAssigneeId}
         />

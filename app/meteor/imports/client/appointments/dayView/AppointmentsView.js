@@ -226,10 +226,19 @@ export class AppointmentsView extends React.Component {
     if (appointment.assigneeId && !hasRole(appointment.assigneeId, ['promptWaitlistAssigneeId'])) {
       this.props.onSetAdmitted({ appointmentId: appointment._id })
     } else {
-      this.setState({
-        selectWaitlistAssigneeModalOpen: true,
-        selectWaitlistAssigneeAppointmentId: appointment._id
-      })
+      // prompt if there is more than one one assignee today
+      const otherAssignees = this.props.assignees.filter(a => a && a._id)
+      if (otherAssignees.length === 1) {
+        this.props.onSetAdmitted({
+          appointmentId: appointment._id,
+          waitlistAssigneeId: otherAssignees[0]._id
+        })
+      } else {
+        this.setState({
+          selectWaitlistAssigneeModalOpen: true,
+          selectWaitlistAssigneeAppointmentId: appointment._id
+        })
+      }
     }
   }
 
@@ -346,6 +355,7 @@ export class AppointmentsView extends React.Component {
 
         <ErrorBoundary>
           <WaitlistAssigneeModal
+            assignees={this.props.assignees}
             show={this.state.selectWaitlistAssigneeModalOpen}
             onClose={this.handleSelectWaitlistAssigneeModalClose}
             appointmentId={this.state.selectWaitlistAssigneeAppointmentId}
