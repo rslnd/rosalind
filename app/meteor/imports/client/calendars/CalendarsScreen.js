@@ -194,6 +194,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     render: t => t.requiredFields && t.requiredFields.join(', ')
   },
   {
+    header: 'Neue Kartei Indikator (*)',
+    field: 'showNewPatientIndicator',
+    type: Boolean
+  },
+  {
     header: 'Revers',
     field: 'consentRequired',
     type: Boolean

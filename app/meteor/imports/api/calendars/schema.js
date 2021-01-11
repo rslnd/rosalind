@@ -78,6 +78,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  showNewPatientIndicator: {
+    type: Boolean,
+    optional: true
+  },
+
   requiredFields: {
     type: [String],
     optional: true

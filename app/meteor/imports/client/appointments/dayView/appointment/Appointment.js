@@ -176,6 +176,14 @@ class AppointmentItem extends React.Component {
                   <span className={classes.prefix}>{prefix(patient)}&nbsp;</span>
                   {patient.lastName && <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
                   {patient.firstName && <span>{namecase(patient.firstName)}</span>}
+
+                  {calendar && calendar.showNewPatientIndicator && !patient.external &&
+                    <span
+                      title='Neu: Kartei nur im Kalender angelegt'
+                      className='text-muted'
+                    >
+                      &nbsp;*
+                    </span>}
                 </span>
               ) : (
                 (appointment.lockedBy && <span>&nbsp;</span>) ||
