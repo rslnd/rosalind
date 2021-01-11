@@ -120,7 +120,8 @@ const outerStyle = {
   flex: 1,
   position: 'relative',
   maxHeight: '100%',
-  overflow: 'auto'
+  overflow: 'auto',
+  overscrollBehavior: 'contain'
 }
 
 const middleStyle = {

@@ -19,9 +19,6 @@ import { HotKeys } from 'react-hotkeys'
 export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
   const modalRef = useRef(null)
   useEffect(() => {
-    // Prevent page from scrolling while modal is open
-    document.body.style.overflow = show ? 'hidden' : null
-
     // Associate client workstation with current patient
     setTimeout(() => {
       const clientKey = getClientKey()
@@ -40,14 +37,9 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
     if (show) {
       setTimeout(() => modalRef.current.focus(), 16)
     }
-
-    return () => {
-      document.body.style.overflow = null
-    }
   }, [show, props.appointmentId, props.patientId])
 
   const handleClose = e => {
-    document.body.style.overflow = null
     props.onClose(e)
   }
 
@@ -181,6 +173,7 @@ const patientSidebarStyle = {
   boxShadow: '-4px 0px 5px -1px rgba(0,0,0,0.1)',
   width: 'calc(100% - 67%)', // More obvious to replace with Cmd+F
   overflow: 'auto',
+  overscrollBehavior: 'contain',
   backgroundColor: lightBackground,
   borderRadius: `0 ${borderRadius}px 0 0`
 }
