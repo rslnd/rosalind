@@ -58,11 +58,15 @@ const composer = props => {
   }
 }
 
-const Appointment = ({ start, assigneeId, fullName, getPatient, patientId, removedAt, removedBy, selectPatient }) =>
+const Appointment = ({ start, assigneeId, fullName, getPatient, patientId, removedAt, removedBy, note, selectPatient }) =>
   <tr style={appointmentStyle} onClick={() => selectPatient(getPatient(patientId))}>
     <td>{moment(start).format('HH:mm')}</td>
     <td>{fullName(assigneeId)}</td>
-    <td><PatientName patient={getPatient(patientId)} /></td>
+    <td>{
+      patientId
+        ? <PatientName patient={getPatient(patientId)} />
+        : note
+    }</td>
     <td>{fullName(removedBy)}</td>
     <td>{moment(removedAt).format(__('time.dateFormat'))}</td>
     <td>{moment(removedAt).format(__('time.timeFormat'))}</td>
