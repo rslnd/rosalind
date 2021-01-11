@@ -64,6 +64,18 @@ const open = (callback) => {
           role: 'paste',
           visible: canPaste && isEditable,
           enabled: canPaste && isEditable
+        },
+        {
+          id: 'separator',
+          type: 'separator' // type is not a typo here haha
+        },
+        {
+          id: 'undo',
+          role: 'undo'
+        },
+        {
+          id: 'redo',
+          role: 'redo'
         }
       ]
 
