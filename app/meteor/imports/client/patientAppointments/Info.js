@@ -1,5 +1,5 @@
 import moment from 'moment-timezone'
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon } from '../components/Icon'
 import { __ } from '../../i18n'
 import { twoPlacesIfNeeded } from '../../util/format'
@@ -15,13 +15,11 @@ import { withTracker } from '../components/withTracker'
 import { hasRole } from '../../util/meteor/hasRole'
 import { CanceledByMessage } from './CanceledByMessage'
 
-export const Info = compose(
-  withState('showLogs', 'setShowLogs', false),
-  withHandlers({
-    handleToggleLogs: props => e => props.setShowLogs(!props.showLogs)
-  })
-)(({ showLogs, handleToggleLogs, appointment, calendar, fullNameWithTitle, isCurrent }) =>
-  <>
+export const Info = ({ appointment, calendar, fullNameWithTitle, isCurrent }) => {
+  const [showLogs, setShowLogs] = useState((calendar && calendar.showLogsByDefault) || false)
+  const handleToggleLogs = () => setShowLogs(!showLogs)
+
+  return <>
     <div style={isCurrent ? currentInfoStyle : infoStyle}>
       <span style={flexStyle} onClick={handleToggleLogs}>
         <span style={dateColumnStyle}>
@@ -56,7 +54,7 @@ export const Info = compose(
       </div>
     }
   </>
-)
+}
 
 const infoPaddingStyle = {
   padding: 12,

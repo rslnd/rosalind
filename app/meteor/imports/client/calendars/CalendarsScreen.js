@@ -199,6 +199,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     type: Boolean
   },
   {
+    header: 'Logs öffnen',
+    field: 'showLogsByDefault',
+    type: Boolean
+  },
+  {
     header: 'Revers',
     field: 'consentRequired',
     type: Boolean

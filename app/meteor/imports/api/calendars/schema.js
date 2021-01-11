@@ -83,6 +83,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  showLogsByDefault: {
+    type: Boolean,
+    optional: true
+  },
+
   requiredFields: {
     type: [String],
     optional: true
