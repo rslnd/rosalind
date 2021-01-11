@@ -20,6 +20,7 @@ export const time = {
   dateFormatVeryShort: 'D.M.YYYY',
   dateFormatShort: 'D. MMM YYYY',
   dateFormat: 'D. MMMM YYYY',
+  dateFormatEntry: 'DDMMYYYY',
   dateFormatWeekday: 'dddd, D. MMMM YYYY',
   dateFormatWeekdayShort: 'dd., D. MMMM YYYY',
   dateFormatWeekdayShortNoYear: 'dd., D. MMMM',

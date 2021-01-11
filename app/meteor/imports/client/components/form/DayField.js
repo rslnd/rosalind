@@ -9,7 +9,7 @@ const toStringValue = v => {
   if (!v) { return '' }
 
   const date = moment(dayToDate(v))
-  return date.format(__('time.dateFormat'))
+  return date.format(__('time.dateFormatEntry'))
 }
 
 export class DayField extends React.Component {
