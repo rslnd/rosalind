@@ -10,6 +10,7 @@ import { isWeakPassword } from '../../api/users/methods'
 import { withTracker } from '../components/withTracker'
 import { getClient } from '../../api/clients/methods/getClient'
 import { attemptRegistration } from '../../startup/client/native/attemptRegistration'
+import { important } from '../layout/styles'
 
 const composer = () => {
   const client = getClient()
@@ -24,12 +25,14 @@ class LoginScreen extends React.Component {
     this.state = {
       name: props.defaultUsername || '',
       namePristine: true, // used for asynchronously filling in defaultUsername as given in client settings
-      password: ''
+      password: '',
+      capslock: false
     }
 
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -49,6 +52,14 @@ class LoginScreen extends React.Component {
 
   handlePasswordChange (e) {
     this.setState({ ...this.state, password: e.target.value })
+  }
+
+  handleKeyDown (e) {
+    if (e.getModifierState('CapsLock')) {
+      this.setState({ capslock: true })
+    } else {
+      this.setState({ capslock: false })
+    }
   }
 
   handleSubmit (e, flags = {}) {
@@ -166,9 +177,14 @@ class LoginScreen extends React.Component {
                     value={this.state.password}
                     className='input-lg form-control'
                     onChange={this.handlePasswordChange}
+                    onKeyDown={this.handleKeyDown}
                     placeholder={__('login.form.password.placeholder')} />
                 </div>
               </div>
+              {
+                this.state.capslock &&
+                  <div style={{ marginBottom: 15, ...important }}>{__('login.capsLockWarning')}</div>
+              }
               <div className='form-group no-mb'>
                 <div className='col-sm-12'>
                   {

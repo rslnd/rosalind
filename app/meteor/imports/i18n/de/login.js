@@ -12,6 +12,7 @@ export const login = {
   userNotAllowedOnClientMessage: 'Der Zugang ist auf diesem Arbeitsplatz nicht freigeschaltet.',
   clientKeyRequired: 'Dieser Zugang ist nur auf bestimmten Arbeitsplätzen freigeschaltet.',
   unknownClientKey: 'Entschuldigung! Bitte das Programm neu starten und anschließed noch ein Mal versuchen. Wenn das Problem weiterhin besteht, Support kontaktieren.',
+  capsLockWarning: 'Feststelltaste aktiv',
   help: 'Ich benötige Hilfe',
   sidebar_actions: 'Aktionen',
   form: {
