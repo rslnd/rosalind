@@ -115,7 +115,7 @@ const composer = (props) => {
   }
 
   // When moving between days
-  if (move && move.appointment && !appointments.find(a => a._id === move.appointment._id)) {
+  if (move && move.appointment && move.appointment._id && !appointments.find(a => a._id === move.appointment._id)) {
     appointments.push(move.appointment)
   }
 
