@@ -35,7 +35,11 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
 
     // Focus modal
     if (show) {
-      setTimeout(() => modalRef.current.focus(), 16)
+      setTimeout(() => {
+        if (modalRef.current) {
+          modalRef.current.focus()
+        }
+      }, 16)
     }
   }, [show, props.appointmentId, props.patientId])
 

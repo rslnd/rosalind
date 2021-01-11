@@ -63,7 +63,7 @@ const hiddenStyle = {
 const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) => {
   const focusRef = useRef()
   useEffect(() => {
-    if (isOpen) { focusRef.current.focus() }
+    if (isOpen && focusRef.current) { focusRef.current.focus() }
   }, [isOpen])
 
   return <div className='hide-print'>

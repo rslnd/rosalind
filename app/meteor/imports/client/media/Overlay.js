@@ -38,7 +38,7 @@ export const MediaOverlay = compose(
   loadedRef.current = loaded
 
   useEffect(() => {
-    if (currentMediaId) {
+    if (currentMediaId && modalRef.current) {
       modalRef.current.focus()
     }
 

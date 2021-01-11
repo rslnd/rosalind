@@ -38,7 +38,12 @@ class LoginScreen extends React.Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.defaultUsername && !prevState.name && prevState.namePristine) {
       // dirty side effect to focus password field after username was autofilled
-      setTimeout(() => document.getElementById('passwordField').focus(), 30)
+      setTimeout(() => {
+        const pwf = document.getElementById('passwordField')
+        if (pwf) {
+          pwf.focus()
+        }
+      }, 30)
 
       return { name: nextProps.defaultUsername }
     } else {
