@@ -42,7 +42,8 @@ export const parseExactName = (query, forceNgramMatching) => {
     if (normalized) {
       let result = {}
       // Force exact match for short queries to avoid unnecessary fetching
-      if (!forceNgramMatching && normalized.length <= 4) {
+      // was <= 4 - maybe < 3 is too aggressive? watch db perf
+      if (!forceNgramMatching && normalized.length < 3) {
         result = {
           'lastNameNormalized': normalized
         }
