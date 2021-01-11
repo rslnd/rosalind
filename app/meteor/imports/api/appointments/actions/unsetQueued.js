@@ -18,11 +18,6 @@ export const unsetQueued = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!Appointments.findOne({ _id: appointmentId }).queued) {
-        console.warn('[Appointments] unsetQueued: Appointment is already not queued', { appointmentId })
-        return
-      }
-
       Appointments.update({ _id: appointmentId }, {
         $unset: {
           queued: 1,

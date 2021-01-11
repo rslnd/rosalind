@@ -23,19 +23,19 @@ const states = ({ queueing = false, admittedIsTreated = false }) => [
     state: 'admitted',
     when: a => a.admitted && !a.treatmentStart,
     primaryActions: [(!admittedIsTreated && 'startTreatment')].filter(identity),
-    secondaryActions: ['unsetAdmitted', 'setNoShow', 'setCanceled']
+    secondaryActions: [(queueing && 'unsetQueued'), 'unsetAdmitted', 'setNoShow', 'setCanceled'].filter(identity)
   },
   {
     state: 'treating',
     when: a => a.treatmentStart && !a.treatmentEnd,
     primaryActions: ['endTreatment'],
-    secondaryActions: ['unsetAdmitted', 'unsetStartTreatment', 'setNoShow', 'setCanceled']
+    secondaryActions: [(queueing && 'unsetQueued'), 'unsetAdmitted', 'unsetStartTreatment', 'setNoShow', 'setCanceled'].filter(identity)
   },
   {
     state: 'treated',
     when: a => a.treated,
     primaryActions: null,
-    secondaryActions: ['unsetAdmitted', 'unsetStartTreatment', 'unsetEndTreatment', 'setNoShow', 'setCanceled']
+    secondaryActions: [(queueing && 'unsetQueued'), 'unsetAdmitted', 'unsetStartTreatment', 'unsetEndTreatment', 'setNoShow', 'setCanceled'].filter(identity)
   }
 ]
 
