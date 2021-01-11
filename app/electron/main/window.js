@@ -1,5 +1,5 @@
 const includes = require('lodash/includes')
-const { app, session, BrowserWindow } = require('electron')
+const { app, session, BrowserWindow, Menu } = require('electron')
 const logger = require('./logger')
 const { getSettings } = require('./settings')
 const { captureException } = require('@sentry/electron')
@@ -31,6 +31,45 @@ const open = (callback) => {
   const display = screen.getPrimaryDisplay().workAreaSize
 
   app.on('web-contents-created', (event, contents) => {
+    contents.on('context-menu', (event, props) => {
+      const {
+        canPaste,
+        canCut,
+        canCopy,
+        isEditable
+      } = props.editFlags
+      const isText = props.selectionText.trim().length >= 1
+
+      const menu = [
+        {
+          id: 'selectAll',
+          role: 'selectAll',
+          visible: isText,
+          enabled: isText
+        },
+        {
+          id: 'cut',
+          role: 'cut',
+          visible: canCut && isEditable,
+          enabled: canCut && isEditable
+        },
+        {
+          id: 'copy',
+          role: 'copy',
+          visible: canCopy,
+          enabled: canCopy
+        },
+        {
+          id: 'paste',
+          role: 'paste',
+          visible: canPaste && isEditable,
+          enabled: canPaste && isEditable
+        }
+      ]
+
+      Menu.buildFromTemplate(menu).popup(webContents)
+    })
+
     contents.on('will-attach-webview', (event, webPreferences, params) => {
       // Strip away preload scripts if unused or verify their location is legitimate
       delete webPreferences.preload
