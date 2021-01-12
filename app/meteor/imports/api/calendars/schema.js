@@ -172,5 +172,10 @@ export const schema = new SimpleSchema({
   allowBanningPatients: {
     type: Boolean,
     optional: true
+  },
+
+  showTitles: {
+    type: Boolean,
+    optional: true
   }
 })

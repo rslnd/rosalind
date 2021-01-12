@@ -226,7 +226,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     header: 'Termine zwischen Spalten verschieben',
     field: 'allowMoveBetweenAssignees',
     type: Boolean
-  }
+  },
+  {
+    header: 'PatienInnen mit Titel anzeigen',
+    field: 'showTitles',
+    type: Boolean
+    }
 ]
 
 const toAgreementLabel = s => __(`patients.agreements.${s}.label`)
