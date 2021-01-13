@@ -223,15 +223,20 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'acceptInboundCalls'
   },
   {
-    header: 'Termine zwischen Spalten verschieben',
+    header: 'Termine zwischen Spalten verschieben?',
     field: 'allowMoveBetweenAssignees',
     type: Boolean
   },
   {
-    header: 'PatienInnen mit Titel anzeigen',
+    header: 'PatienInnen mit Titel anzeigen?',
     field: 'showTitles',
     type: Boolean
-    }
+  },
+  {
+    header: 'Notiz neben Termin anzeigen?',
+    field: 'showAppointmentNote',
+    type: Boolean
+  }
 ]
 
 const toAgreementLabel = s => __(`patients.agreements.${s}.label`)

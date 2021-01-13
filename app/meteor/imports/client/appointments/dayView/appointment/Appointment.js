@@ -51,13 +51,40 @@ const styles = {
     backgroundColor: 'red'
   },
   patientName: {
-    display: 'inline-block',
     maxHeight: '100%',
-    minWidth: '100%',
+    flexGrow: 1,
+    minWidth: 0,
     wordBreak: 'break-all',
     hyphens: 'auto',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: '.'
   }
+}
+
+const appointmentStyle = {
+  display: 'flex',
+  minWidth: 0,
+  justifyContent: 'space-between'
+}
+
+const middleStyle = {
+  flexShrink: 50,
+  minWidth: 0,
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: '.',
+  marginTop: 2,
+  marginRight: 2,
+  marginLeft: 2
+}
+
+const rightStyle = {
+  flexShrink: 1,
+  minWidth: 0,
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: '.'
 }
 
 class AppointmentItem extends React.Component {
@@ -145,6 +172,7 @@ class AppointmentItem extends React.Component {
         onContextMenu={(e) => this.props.onClick(e, appointment)}
         title={format(timeStart)}
         style={{
+          ...appointmentStyle,
           gridRowStart: timeStart,
           gridRowEnd: timeEnd,
           gridColumn: `assignee-${assigneeId || 'unassigned'}`,
@@ -165,15 +193,11 @@ class AppointmentItem extends React.Component {
         <span
           style={styles.patientName}
           className={appointment.canceled ? classes.canceled : undefined}>
-          <Indicator
-            appointment={appointment}
-            calendar={calendar}
-          />
           {
             patient
               ? (
                 <span>
-                  <span className={classes.prefix}>
+                  <span className={classes.prefix} style={patient.gender === 'Female' ? femalePrefixStyle : null}>
                     {prefix(patient)}
                     &nbsp;
                     {
@@ -205,11 +229,23 @@ class AppointmentItem extends React.Component {
                 <Icon name='question-circle' />
               )
           }
+        </span>
+
+        {
+          calendar && calendar.showAppointmentNote && appointment.note &&
+            <small style={middleStyle} className='text-muted'>&emsp;&emsp;{appointment.note}</small>
+        }
+
+        <div style={rightStyle}>
           {
             calendar && calendar.showTagNames &&
               <TagNames tags={appointment.tags} />
           }
-        </span>
+          <Indicator
+            appointment={appointment}
+            calendar={calendar}
+          />
+        </div>
       </div>
     )
   }
@@ -220,7 +256,7 @@ const TagNames = ({ tags }) => {
     return null
   }
 
-  return <small className='pull-right text-muted pt1'>
+  return <small className='text-muted pt1'>
     {
       tags.map((t, i) =>
         <span
@@ -240,6 +276,10 @@ const TagNames = ({ tags }) => {
     }
     &nbsp;
   </small>
+}
+
+const femalePrefixStyle = {
+  color: '#b46c91'
 }
 
 export const Appointment = injectSheet(styles)(AppointmentItem)

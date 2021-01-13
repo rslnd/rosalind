@@ -177,5 +177,10 @@ export const schema = new SimpleSchema({
   showTitles: {
     type: Boolean,
     optional: true
+  },
+
+  showAppointmentNote: {
+    type: Boolean,
+    optional: true
   }
 })

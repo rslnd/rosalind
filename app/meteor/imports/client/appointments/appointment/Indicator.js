@@ -7,17 +7,17 @@ import { Currency } from '../../components/Currency'
 const assumeNoShowAfterMinutes = 60
 
 const stateIndicatorStyle = {
-  width: 15,
+  minWidth: 15,
   display: 'inline-block'
 }
 
 export const Indicator = (props) => {
-  return <div className='pull-right'>
+  return <>
     <InsuranceIndicator {...props} />
-    <span style={stateIndicatorStyle}>
+    <div style={stateIndicatorStyle}>
       <StateIndicator {...props} />
-    </span>
-  </div>
+    </div>
+  </>
 }
 
 const InsuranceIndicator = ({ appointment, calendar }) => {
