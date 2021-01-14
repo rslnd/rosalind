@@ -228,7 +228,9 @@ export class AppointmentsView extends React.Component {
     } else {
       // prompt if there is more than one one assignee today
       const otherAssignees = this.props.assignees.filter(a => a && a._id)
-      if (otherAssignees.length === 1) {
+      const calendar = this.props.calendar
+
+      if (!(calendar && calendar.allowAdmittingUnassignedToAnyone) && otherAssignees.length === 1) {
         this.props.onSetAdmitted({
           appointmentId: appointment._id,
           waitlistAssigneeId: otherAssignees[0]._id
@@ -355,11 +357,16 @@ export class AppointmentsView extends React.Component {
 
         <ErrorBoundary>
           <WaitlistAssigneeModal
-            assignees={this.props.assignees}
+            assignees={
+              (this.props.calendar && this.props.calendar.allowAdmittingUnassignedToAnyone)
+                ? null // allow all assignees
+                : this.props.assignees // only those available today
+            }
             show={this.state.selectWaitlistAssigneeModalOpen}
             onClose={this.handleSelectWaitlistAssigneeModalClose}
             appointmentId={this.state.selectWaitlistAssigneeAppointmentId}
             onSetAdmitted={this.props.onSetAdmitted}
+
           />
         </ErrorBoundary>
 

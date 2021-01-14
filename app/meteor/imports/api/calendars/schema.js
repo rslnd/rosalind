@@ -182,5 +182,16 @@ export const schema = new SimpleSchema({
   showAppointmentNote: {
     type: Boolean,
     optional: true
+  },
+
+  showGenderColor: {
+    type: String,
+    allowedValues: ['true', 'false', 'prefixOnly'],
+    optional: true
+  },
+
+  allowAdmittingUnassignedToAnyone: {
+    type: Boolean,
+    optional: true
   }
 })

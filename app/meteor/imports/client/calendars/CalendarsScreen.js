@@ -236,6 +236,16 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     header: 'Notiz neben Termin anzeigen?',
     field: 'showAppointmentNote',
     type: Boolean
+  },
+  {
+    header: 'Geschlecht Farbcodieren?',
+    field: 'showGenderColor',
+    title: 'true / false / prefixOnly'
+  },
+  {
+    header: 'Ohne Zuweisung zu allen MitarbeiterInnen?',
+    field: 'allowAdmittingUnassignedToAnyone',
+    type: Boolean
   }
 ]
 

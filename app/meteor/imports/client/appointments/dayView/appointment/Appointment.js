@@ -163,6 +163,14 @@ class AppointmentItem extends React.Component {
 
     const patient = appointment.patient
 
+    const prefixStyle =
+      ((calendar.showGenderColor === 'prefixOnly' || calendar.showGenderColor === 'true')
+      && patient && patient.gender === 'Female') ? femaleStyle : {}
+
+    const nameStyle = (calendar.showGenderColor === 'true' && patient && patient.gender === 'Female')
+      ? femaleStyle : {}
+
+
     return (
       <div
         id={appointment._id}
@@ -197,7 +205,7 @@ class AppointmentItem extends React.Component {
             patient
               ? (
                 <span>
-                  <span className={classes.prefix} style={patient.gender === 'Female' ? femalePrefixStyle : null}>
+                  <span className={classes.prefix} style={prefixStyle}>
                     {prefix(patient)}
                     &nbsp;
                     {
@@ -205,8 +213,8 @@ class AppointmentItem extends React.Component {
                         <span>{patient.titlePrepend}&nbsp;</span>
                     }
                   </span>
-                  {patient.lastName && <b>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
-                  {patient.firstName && <span>{namecase(patient.firstName)}</span>}
+                  {patient.lastName && <b style={nameStyle}>{namecase(patient.lastName)}&nbsp;&nbsp;</b>}
+                  {patient.firstName && <span style={nameStyle}>{namecase(patient.firstName)}</span>}
 
                   {
                     calendar && calendar.showNewPatientIndicator && !patient.external &&
@@ -219,7 +227,7 @@ class AppointmentItem extends React.Component {
                   }
                   {
                     calendar && calendar.showTitles && patient.titleAppend &&
-                      <span>&nbsp;{patient.titleAppend}</span>
+                      <span style={nameStyle}>&nbsp;{patient.titleAppend}</span>
                   }
                 </span>
               ) : (
@@ -278,8 +286,8 @@ const TagNames = ({ tags }) => {
   </small>
 }
 
-const femalePrefixStyle = {
-  color: '#b46c91'
+const femaleStyle = {
+  color: 'rgb(148, 88, 119)'
 }
 
 export const Appointment = injectSheet(styles)(AppointmentItem)
