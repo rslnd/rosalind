@@ -10,6 +10,7 @@ export const appointments = ({ calendar, slotSize, scheduleOffset, atMinutes, ap
       return <Appointment
         key={appointment._id}
         isMoving
+        calendar={calendar}
         appointment={move.appointment}
         moveToStart={move.moveToStart}
         moveToEnd={move.moveToEnd}
