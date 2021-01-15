@@ -164,10 +164,10 @@ class AppointmentItem extends React.Component {
     const patient = appointment.patient
 
     const prefixStyle =
-      ((calendar.showGenderColor === 'prefixOnly' || calendar.showGenderColor === 'true')
+      ((calendar && calendar.showGenderColor === 'prefixOnly' || calendar && calendar.showGenderColor === 'true')
       && patient && patient.gender === 'Female') ? femaleStyle : {}
 
-    const nameStyle = (calendar.showGenderColor === 'true' && patient && patient.gender === 'Female')
+    const nameStyle = (calendar && calendar.showGenderColor === 'true' && patient && patient.gender === 'Female')
       ? femaleStyle : {}
 
 
