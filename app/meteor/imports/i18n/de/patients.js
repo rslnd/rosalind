@@ -70,5 +70,6 @@ export const patients = {
   birthdayFormatOne: '1 Jahr (__date__)',
   birthdayFormat: '__age__ Jahre (__date__)',
   totalRevenue: 'Gesamtumsatz __revenue__',
-  privateInsurance: 'Privat'
+  privateInsurance: 'Privat',
+  selectCalendarToEditFutureNote: 'Bitte Kalender wählen, um eine Nachtricht zu schreiben.'
 }

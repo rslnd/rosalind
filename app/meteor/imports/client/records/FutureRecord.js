@@ -1,6 +1,7 @@
 import React from 'react'
 import Alert from 'react-s-alert'
 import moment from 'moment'
+import identity from 'lodash/identity'
 import { Meteor } from 'meteor/meteor'
 import { compose, withState, withHandlers, withProps } from 'recompose'
 import { Records, Calendars, Users } from '../../api'
@@ -40,7 +41,7 @@ const composer = props => {
 
   const canInsert = canSee && !record
 
-  const readOnly = canSee && !(canInsert || canEdit)
+  const readOnly = !calendarId || (canSee && !(canInsert || canEdit))
 
   const canResolve = record && canSee && (
     hasRole(userId, ['admin', 'records-edit']) || (
@@ -117,7 +118,13 @@ export const FutureRecord = compose(
           </CalendarSelector>
         ) : (
           record &&
-          <span style={style} title={moment(record.createdAt).format(__('time.dateFormatWeekdayShortNoYear'))}>
+          <span
+            style={style}
+            title={[
+              moment(record.createdAt).format(__('time.dateFormatWeekdayShortNoYear')),
+              !calendar && __('patients.selectCalendarToEditFutureNote')
+            ].filter(identity).join('\n')}
+          >
             {
               __('records.futureLabel', {
                 name: fullNameWithTitle(record.createdBy)
