@@ -3,6 +3,7 @@ import { mapPatientToFields } from '../mapPatientToFields'
 import { autofill, touch, untouch } from 'redux-form'
 import { Search } from '../../../api/search'
 import { Patients } from '../../../api/patients'
+import { Calendars } from '../../../api/calendars'
 
 export const PATIENT_CHANGE_INPUT_VALUE = 'PATIENT_CHANGE_INPUT_VALUE'
 export const PATIENT_CHANGE_VALUE = 'PATIENT_CHANGE_VALUE'
@@ -31,7 +32,13 @@ export const changeInputValue = (inputValue, fieldAction, ownProps) => {
           .then(patients => {
             dispatch({
               type: PATIENTS_RESULTS_LOADED,
-              patients
+              patients: patients.map(p => ({
+                ...p,
+                appointments: (p.appointments || []).map(a => ({
+                  ...a,
+                  calendar: Calendars.findOne({ _id: a.calendarId })
+                }))
+              }))
             })
           })
       }
