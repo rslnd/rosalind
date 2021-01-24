@@ -75,10 +75,12 @@ export class AppointmentsScreen extends React.Component {
   }
 
   handlePatientModalOpen(patientModalId) {
+    console.log('PAM in AppointmentsScreen opening', patientModalId)
     this.setState({ patientModalId })
   }
 
-  handlePatientModalClose() {
+  handlePatientModalClose(e) {
+    console.log('PAM in AppointmentsScreen closing', e)
     this.setState({ patientModalId: null })
   }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { HotKeys } from 'react-hotkeys'
+import { HotKeys, configure } from 'react-hotkeys'
 import { NonceProvider } from 'react-select'
 import { Meteor } from 'meteor/meteor'
 import { Provider as ReduxProvider } from 'react-redux'
@@ -70,6 +70,6 @@ const keyMap = {
 }
 
 // Debug hotkeys
-// configure({
-//   logLevel: 'debug'
-// })
+configure({
+  logLevel: (window.location.hash || '').indexOf('debug') !== -1 ? 'debug' : 'warn'
+})

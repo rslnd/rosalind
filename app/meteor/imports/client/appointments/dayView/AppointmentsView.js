@@ -70,10 +70,12 @@ export class AppointmentsView extends React.Component {
   }
 
   handleAppointmentModalOpen (appointment) {
+    console.log('PAM AppointmentsView handle open', appointment)
     this.setState({ appointmentModalOpen: true, selectedAppointmentId: appointment._id })
   }
 
-  handleAppointmentModalClose () {
+  handleAppointmentModalClose (e) {
+    console.log('PAM AppointmentsView handle close', e)
     this.setState({ appointmentModalOpen: false })
   }
 
