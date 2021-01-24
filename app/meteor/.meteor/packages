@@ -17,10 +17,11 @@ fastclick@1.0.13
 promise@0.11.2
 modules@0.15.0
 dynamic-import@0.5.4
-react-meteor-data
+react-meteor-data@2.2.1
 ddp-rate-limiter@1.0.9
 audit-argument-checks@1.0.7
 ddp-server@2.3.2
+hot-module-replacement
 
 # Security
 mdg:validated-method
