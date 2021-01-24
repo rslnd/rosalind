@@ -64,74 +64,69 @@ const StateIndicator = ({ appointment, showRevenue, calendar }) => {
   return null
 }
 
-const Queued = () => <span
+const Queued = () => <div
   key='queued'
   title={__('appointments.queued')}
   style={queuedStyle}>
   <Icon name='circle' />&nbsp;
-</span>
+</div>
 
 const queuedStyle = {
   // zoom: 0.6,
-  display: 'inline-block',
   color: warning
 }
 
 
-const Admitted = () => <span
+const Admitted = () => <div
   key='admitted'
   title={__('appointments.admitted')}
   style={admittedStyle}>
   <Icon name='angle-double-right' />&nbsp;
-</span>
+</div>
 
 const admittedStyle = {
-  display: 'inline-block',
   color: green
 }
 
-const Treated = () => <span
+const Treated = () => <div
   key='treated'
   title={__('appointments.treated')}
   style={treatedStyle}>
   <Icon name='check' />&nbsp;
-</span>
+</div>
 
 const treatedStyle = {
-  display: 'inline-block',
   color: green
 }
 
-const Treating = () => <span
+const Treating = () => <div
   key='treating'
   title={__('appointments.treating')}
   style={treatingStyle}>
   <Icon name='circle-o-notch' />&nbsp;
-</span>
+</div>
 
 const treatingStyle = {
-  display: 'inline-block',
   color: primaryActive
 }
 
-const NoShow = () => <span
+const NoShow = () => <div
   key='noShow'
   title={__('appointments.noShow')}
   style={noShowStyle}>
   <Icon name='times' />&nbsp;
-</span>
+</div>
 
 const noShowStyle = {
-  display: 'inline-block',
   color: red
 }
 
 export const Revenue = ({ appointment }) =>
-  <span>
+  <div>
     {
       (appointment.revenue === 0 || appointment.revenue > 0) &&
-      <span>
-        <Currency value={appointment.revenue} />&nbsp;
+        <span>
+          <Currency value={appointment.revenue} />&nbsp;
         </span>
     }
-  </span>
+  </div>

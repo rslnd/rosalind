@@ -46,8 +46,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
               ...patient,
               appointments: Appointments.find({ patientId: patient._id }, {
                 sort: { start: -1 },
-                limit: 3,
-                fields: appointmentFields
+                limit: 3
               }).fetch()
             }
           })
@@ -60,37 +59,29 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
   })
 }
 
-const appointmentFields = {
-  _id: 1,
-  tags: 1,
-  start: 1,
-  end: 1,
-  assigneeId: 1,
-  waitlistAssigneeId: 1,
-  treatmentBy: 1,
-  admitted: 1,
-  treated: 1,
-  canceled: 1
-}
+const findNotes = ({ Appointments, Patients, query }) => {
+  const searchString = query.substr(1).trim()
 
-const findNote = ({ Appointments, Patients, query }) => {
-  const appointments = Appointments.find({
-    note: {
-      $regex: query.substr(1).trim(),
-      $options: 'i'
-    }
-  }, {
-    sort: { start: -1 },
-    fields: appointmentFields
-  }).fetch()
+  if (searchString && searchString.length >= 2) {
+    const appointments = Appointments.find({
+      note: {
+        $regex: searchString,
+        $options: 'i'
+      }
+    }, {
+      sort: { start: -1 }
+    }).fetch()
 
-  const patients = Patients.find({ _id: { $in: appointments.map(a => a._id)}}).fetch()
+    const patients = Patients.find({ _id: { $in: appointments.map(a => a._id)}}).fetch()
 
-  return [
-    ...appointments.map(appointment => ({ appointment })),
-    ...patients.map(p => ({
-      patient,
-      appointments: appointments.filter(a => a.patientId === p._id)
-    }))
-  ]
+    return [
+      ...appointments.map(appointment => ({ appointment })),
+      ...patients.map(p => ({
+        patient,
+        appointments: appointments.filter(a => a.patientId === p._id)
+      }))
+    ]
+  } else {
+    return null
+  }
 }

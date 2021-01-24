@@ -132,29 +132,54 @@ const Appointment = ({ appointment, calendar }) => {
   }, { removed: true }), _ => _._id)
 
   return (
-    <span
-      style={appointmentStyle}>
-      <TagsList tiny tags={appointment.tags} />
-      &ensp;
+    <div className='flex'>
+      <TagsList tiny tags={appointment.tags} groupTags={false} />
       <span style={{
         textDecoration: appointment.canceled && 'line-through'
       }}>
         {start.format(__('time.dateFormatShort'))}
         &nbsp;
         {start.format(__('time.timeFormat'))}
+        &nbsp;
+        &nbsp;
       </span>
-      &emsp;
       <span style={assigneeNameStyle}>
         {assignee && <UserHelper userId={assignee} helper='lastNameWithTitle' />}
-        &emsp;
+        &nbsp;
+        &nbsp;
         <Indicator appointment={appointment} calendar={calendar} />
       </span>
-    </span>
+
+    </div>
+
+      //  style={appointmentStyle}>
+    //   <TagsList tiny tags={appointment.tags} />
+    //   &ensp;
+    //   <span style={{
+    //     textDecoration: appointment.canceled && 'line-through'
+    //   }}>
+    //     {start.format(__('time.dateFormatShort'))}
+    //     &nbsp;
+    //     {start.format(__('time.timeFormat'))}
+    //   </span>
+    //   &emsp;
+    //   <span style={assigneeNameStyle}>
+    //     {assignee && <UserHelper userId={assignee} helper='lastNameWithTitle' />}
+    //     &emsp;
+    //   </span>
+    //   <Indicator appointment={appointment} calendar={calendar} />
+    // </span>
   )
 }
 
 const formatOptionLabel = props =>
-  (patient, { context, inputValue, selectValue }) => {
+  (patientOrAppointment, { context, inputValue, selectValue }) => {
+    if (patientOrAppointment.start) {
+      return `Notiz: ${appointment.note}`
+    }
+
+    const patient = patientOrAppointment
+
     if (patient.patientId === 'newPatient' || selectValue.patientId === 'newPatient') {
       return <NewPatient patient={patient || selectValue} />
     }
@@ -194,9 +219,10 @@ const appointmentStyle = {
 }
 
 const assigneeNameStyle = {
-  alignSelf: 'flex-end',
+  // alignSelf: 'flex-end',
+  // display: 'flex',
   color: darkGrayDisabled,
-  flexGrow: 1,
+  // flexGrow: 1,
   textAlign: 'right'
 }
 

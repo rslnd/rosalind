@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import identity from 'lodash/identity'
 import { namecase } from '../../../util/namecase'
 import { compose, withHandlers, mapProps, withProps } from 'recompose'
 import { PatientPickerComponent } from './PatientPickerComponent'
@@ -31,9 +32,9 @@ const withOption = option => props => ({
   selectState: {
     ...props.selectState,
     options: [
-      option(props),
+      option(props) || null,
       ...(props.selectState.options || [])
-    ]
+    ].filter(identity)
   }
 })
 
@@ -44,6 +45,11 @@ const filterOption = () => true
 
 const newPatientOption = props => {
   const query = props.selectState.inputValue || props.previousInputValue
+
+  if (query && query[0] === '!') {
+    return null
+  }
+
   const [lastName, firstName] = namecase(query).split(' ')
 
   return {
