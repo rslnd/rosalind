@@ -87,13 +87,20 @@ export const parseExactName = (query, forceNgramMatching) => {
         // This matches combined last names such as "van der Bellen"
         ...namePermutations(names).map(n => ({
           lastNameNormalized: {
-            $regex: '^' + n,
+            $regex: '^' + normalizeName(n),
             $options: 'i'
           }
         })),
         // Try to match all tokens as first name too
         ...names.map(n => ({
           firstName: {
+            $regex: '^' + n,
+            $options: 'i'
+          }
+        })),
+        // And as exact last names
+        ...names.filter(n => n && n.length >= 3).map(n => ({
+          lastName: {
             $regex: '^' + n,
             $options: 'i'
           }

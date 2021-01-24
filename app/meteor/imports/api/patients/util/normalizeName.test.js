@@ -20,5 +20,9 @@ describe('util', function () {
     it('removes umlauts', function () {
       expect(normalizeName('rötter')).to.eql('RTTER')
     })
+
+    it('removes umlauts', function () {
+      expect(normalizeName('mayrhofer-ilhan-ümüht')).to.eql('MAYRHOFERILHANMHT')
+    })
   })
 })

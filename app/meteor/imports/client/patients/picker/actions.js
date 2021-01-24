@@ -32,7 +32,7 @@ export const changeInputValue = (inputValue, fieldAction, ownProps) => {
           .then(patients => {
             dispatch({
               type: PATIENTS_RESULTS_LOADED,
-              patients: patients.map(p => ({
+              patients: (patients || []).map(p => ({
                 ...p,
                 appointments: (p.appointments || []).map(a => ({
                   ...a,
