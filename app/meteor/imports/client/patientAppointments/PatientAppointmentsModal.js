@@ -37,13 +37,17 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
     if (show) {
       setTimeout(() => {
         if (modalRef.current) {
+          console.log('PAM focusing')
           modalRef.current.focus()
+        } else {
+          console.log('PAM wanted to focus, but no current ref')
         }
       }, 16)
     }
   }, [show, props.appointmentId, props.patientId])
 
   const handleClose = e => {
+    console.log('PAM handleClose called (', e)
     props.onClose(e)
   }
 
