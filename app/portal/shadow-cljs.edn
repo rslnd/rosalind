@@ -1,8 +1,0 @@
-{:source-paths ["src"]
- :dependencies [[reagent "0.10.0"]]
- :builds {:portal {:output-to "build/main.js"
-                   :main portal.server/main!
-                   :target :node-script
-                   :devtools
-                   {:after-load portal.server/start!
-                    :before-load portal.server/stop!}}}}

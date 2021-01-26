@@ -44,7 +44,8 @@ export const postContactForm = ({ InboundCalls, InboundCallsTopics }) =>
           birthdate,
           gender,
           email
-        }
+        },
+        createdAt: new Date()
       }
 
       const _id = InboundCalls.insert(call)
