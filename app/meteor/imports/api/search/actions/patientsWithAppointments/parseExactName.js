@@ -97,13 +97,6 @@ export const parseExactName = (query, forceNgramMatching) => {
             $regex: '^' + n,
             $options: 'i'
           }
-        })),
-        // And as exact last names
-        ...names.filter(n => n && n.length >= 3).map(n => ({
-          lastName: {
-            $regex: '^' + n,
-            $options: 'i'
-          }
         }))
       ].filter(identity)
 
