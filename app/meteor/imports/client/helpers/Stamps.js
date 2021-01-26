@@ -22,10 +22,12 @@ const StampsList = ({ stamps, style }) => (
 
 const composer = props => {
   const stamps = props.fields.filter((field) => {
-    return props.doc[`${field}By`] && props.doc[`${field}At`]
+    return props.doc[`${field}At`]
   }).map((field) => {
     return {
-      verb: __(props.collectionName + '.' + field + 'By'),
+      verb: props.doc[`${field}By`]
+        ? __(props.collectionName + '.' + field + 'By')
+        : __(props.collectionName + '.' + field + 'BySystem'),
       userId: props.doc[`${field}By`],
       time: props.doc[`${field}At`]
     }

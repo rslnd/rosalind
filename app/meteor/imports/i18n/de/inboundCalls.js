@@ -18,6 +18,7 @@ export const inboundCalls = {
   topic: 'Rückrufliste',
   removedBy: 'Erledigt von',
   createdBy: 'Eingetragen von',
+  createdBySystem: 'Eingegangen',
   pin: 'Oben in der Liste fixieren',
   pinnedBy: 'Zu erledigen von __name__',
   isSmsFromPatient: 'SMS von PatientIn',
