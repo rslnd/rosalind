@@ -51,8 +51,6 @@ export const validateForm = ({ args, untrusted }) => {
     }
   }, {})
 
-  console.log(argsToCheckable(args))
-  console.log(typed)
   check(typed, argsToCheckable(args))
 
   return typed
