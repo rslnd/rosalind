@@ -122,7 +122,7 @@ export const FutureRecord = compose(
             style={style}
             title={[
               moment(record.createdAt).format(__('time.dateFormatWeekdayShortNoYear')),
-              !calendar && __('patients.selectCalendarToEditFutureNote')
+              !calendarId && __('patients.selectCalendarToEditFutureNote')
             ].filter(identity).join('\n')}
           >
             {
