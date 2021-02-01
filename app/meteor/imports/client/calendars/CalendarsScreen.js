@@ -246,6 +246,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     header: 'Ohne Zuweisung zu allen MitarbeiterInnen?',
     field: 'allowAdmittingUnassignedToAnyone',
     type: Boolean
+  },
+  {
+    header: 'Notiz bei neuen Terminen',
+    field: 'keepNewAppointmentNote',
+    type: Boolean
   }
 ]
 

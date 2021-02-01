@@ -52,7 +52,7 @@ const styles = {
   },
   patientName: {
     maxHeight: '100%',
-    flexGrow: 1,
+    flexShrink:  1,
     minWidth: 0,
     wordBreak: 'break-all',
     hyphens: 'auto',
@@ -69,12 +69,13 @@ const appointmentStyle = {
 }
 
 const middleStyle = {
-  flexShrink: 50,
+  flexGrow: 1,
+  textAlign: 'center',
   minWidth: 0,
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: '.',
-  marginTop: 2,
+  marginTop: 3,
   marginRight: 2,
   marginLeft: 2
 }

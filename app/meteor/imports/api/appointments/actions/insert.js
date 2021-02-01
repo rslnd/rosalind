@@ -4,6 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Comments } from '../../comments'
+import { Calendars } from '../../calendars'
 import { hasRole } from '../../../util/meteor/hasRole'
 
 export const insert = ({ Appointments }) => {
@@ -32,7 +33,15 @@ export const insert = ({ Appointments }) => {
 
       const { note, ...restFields } = appointment
 
-      if (note && (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung')) {
+      const calendar = Calendars.findOne({ _id: appointment.calendarId })
+
+      if (!calendar) {
+        throw new Meteor.Error('Calendar not found')
+      }
+
+      if (note && (
+        (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung') ||
+        calendar.keepNewAppointmentNote)) {
         restFields.note = note
       }
 

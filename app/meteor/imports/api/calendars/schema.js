@@ -184,6 +184,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  keepNewAppointmentNote: {
+    type: Boolean,
+    optional: true
+  },
+
   showGenderColor: {
     type: String,
     allowedValues: ['true', 'false', 'prefixOnly'],
