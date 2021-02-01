@@ -39,17 +39,19 @@ export const insert = ({ Appointments }) => {
         throw new Meteor.Error('Calendar not found')
       }
 
+      let noteInAppointment = false
       if (note && (
         (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung') ||
         calendar.keepNewAppointmentNote)) {
         restFields.note = note
+        noteInAppointment = true
       }
 
       appointmentId = Appointments.insert({ ...restFields, patientId }, (err, appointmentId) => {
         if (err) {
           console.error('[Appointments] Appointment insert failed with error', err)
         } else {
-          if (note) {
+          if (note && !noteInAppointment) {
             Comments.actions.post.callPromise({ docId: appointmentId, body: note })
           }
           Events.post('appointments/insert', { appointmentId })
