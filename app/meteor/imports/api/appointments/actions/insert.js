@@ -41,8 +41,9 @@ export const insert = ({ Appointments }) => {
 
       let noteInAppointment = false
       if (note && (
-        (!appointment.patientId || note === 'PAUSE' || note === 'Verlängerung') ||
-        calendar.keepNewAppointmentNote)) {
+        ((!newPatient && !appointment.patientId) || note === 'PAUSE' || note === 'Verlängerung') ||
+        calendar.keepNewAppointmentNote)
+      ) {
         restFields.note = note
         noteInAppointment = true
       }
