@@ -55,7 +55,7 @@ const composer = (props) => {
   const edit = (_id, field) => value =>
     InboundCalls.methods.edit.call({ _id, [field]: value })
   const fullNameWithTitle = _id => {
-    const user = Users.findOne({ _id })
+    const user = Users.findOne({ _id }, { removed: true })
     return user && Users.methods.fullNameWithTitle(user)
   }
 

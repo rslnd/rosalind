@@ -15,7 +15,7 @@ import { Media } from '../../api'
 import { getClient } from '../../api/clients/methods/getClient'
 
 const fullNameWithTitle = _id => {
-  const user = _id && Users.findOne({ _id })
+  const user = _id && Users.findOne({ _id }, { removed: true })
   return user && Users.methods.fullNameWithTitle(user)
 }
 

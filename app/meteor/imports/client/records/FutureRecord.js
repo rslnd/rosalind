@@ -16,7 +16,7 @@ import { Button } from '@material-ui/core'
 import { hasRole } from '../../util/meteor/hasRole'
 
 const fullNameWithTitle = _id => {
-  const user = _id && Users.findOne({ _id })
+  const user = _id && Users.findOne({ _id }, { removed: true })
   return user && Users.methods.fullNameWithTitle(user)
 }
 
