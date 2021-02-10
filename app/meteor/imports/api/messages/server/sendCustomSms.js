@@ -8,6 +8,7 @@ import { hasRole } from '../../../util/meteor/hasRole'
 import { buildMessageText } from '../methods/buildMessageText'
 import { action } from '../../../util/meteor/action'
 import { SMS } from './channels/sms'
+import { isMobileNumber } from '../methods/isMobileNumber'
 
 export const sendCustomSms = () =>
   action({
@@ -34,10 +35,10 @@ export const sendCustomSms = () =>
         throw new Meteor.Error('Patient does not want to receive SMS')
       }
 
-      const to = patient.contacts.find(c => c.channel === 'Phone').value
+      const to = patient.contacts.find(c => c.channel === 'Phone' && isMobileNumber(c.value)).value
 
       if (!to) {
-        throw new Meteor.Error('Patient does not have a valid phone number')
+        throw new Meteor.Error('Patient does not have a valid mobile phone number')
       }
 
       const messageId = Messages.insert({
