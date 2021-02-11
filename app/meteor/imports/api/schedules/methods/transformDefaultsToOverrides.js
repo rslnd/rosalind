@@ -79,7 +79,7 @@ const expandColumn = days => defaultSchedulesByColumn => {
     }
 
     const expandedSchedules = defaultSchedulesByColumn.reduce((acc, curr, i) => {
-      const { available, from, to, calendarId, userId, note } = curr
+      const { available, from, to, calendarId, userId, note, roles } = curr
 
       const previousDefaultSchedule = defaultSchedulesByColumn[i - 1]
 
@@ -88,7 +88,8 @@ const expandColumn = days => defaultSchedulesByColumn => {
         available: false,
         calendarId,
         userId,
-        note
+        note,
+        roles
       }
 
       if (available === false) {

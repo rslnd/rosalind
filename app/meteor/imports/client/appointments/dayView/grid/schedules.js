@@ -1,8 +1,10 @@
+import { Meteor } from 'meteor/meteor'
 import React from 'react'
 import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
 import { isFirstSlot, isLastSlot } from './timeSlots'
 import { darkGrayDisabled } from '../../../layout/styles'
+import { hasRole } from '../../../../util/meteor/hasRole'
 
 monkey(moment)
 
@@ -28,15 +30,22 @@ export const schedules = ({ schedules, onDoubleClick, slotSize }) =>
       start={s.start}
       end={s.end}
       note={s.note}
+      roles={s.roles}
       slotSize={slotSize}
       onDoubleClick={onDoubleClick}
     />
   )
 
-const Schedule = ({ start, end, note, scheduleId, assigneeId, slotSize, onDoubleClick }) => {
+const Schedule = ({ start, end, note, roles, scheduleId, assigneeId, slotSize, onDoubleClick }) => {
   const timeStart = moment(start).floor(5, 'minutes')
   const timeEnd = moment(end).ceil(5, 'minutes')
   const duration = (end - start) / 1000 / 60
+
+  if (roles && roles.length >= 1) {
+    if (!hasRole(Meteor.userId(), roles)) {
+      return null
+    }
+  }
 
   return (
     <div

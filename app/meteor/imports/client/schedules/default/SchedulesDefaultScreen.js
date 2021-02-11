@@ -24,6 +24,12 @@ import { ApplyDefaultSchedule } from './ApplyDefaultSchedule'
 import { subscribe } from '../../../util/meteor/subscribe'
 import { HMtoString, HMRangeToString, stringToHMRange } from '../../../util/time/hm'
 
+const HMRangeToStringWithRoles = ({ from, to, note, roles }) =>
+  [
+    HMRangeToString({ from, to, note }),
+    roles ? roles.map(r => `role-${r}`).join(' ') : null
+  ].filter(identity).join(' ')
+
 const composer = props => {
   const { slug } = props.match.params
   const calendar = Calendars.findOne({ slug })
@@ -169,7 +175,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
                   />
                 ) : (
                   <Button size='medium' style={{ width: '100%', fontSize: '14px' }} onClick={this.handleStartEdit(s._id)}>
-                    {HMRangeToString(s)}
+                    {HMRangeToStringWithRoles(s)}
                   </Button>
                 )
             }
@@ -275,7 +281,7 @@ class EditSchedule extends React.Component {
     super(props)
 
     this.state = {
-      value: HMRangeToString(this.props.schedule)
+      value: HMRangeToStringWithRoles(this.props.schedule)
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -289,7 +295,22 @@ class EditSchedule extends React.Component {
   }
 
   handleSave () {
-    this.props.onChange(stringToHMRange(this.state.value))
+    const { note, from, to } = stringToHMRange(this.state.value)
+
+    const regex = /role-[a-zA-Z0-9-]+/g
+    const roles = (note && note.match(regex))
+      ? note.match(regex).map(r => r.replace(/^role-/, ''))
+      : undefined
+    const remainingNote = note.replace(regex, '')
+
+    const schedule = {
+      from,
+      to,
+      note: remainingNote,
+      roles
+    }
+
+    this.props.onChange(schedule)
   }
 
   render () {

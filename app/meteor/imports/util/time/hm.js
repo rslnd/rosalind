@@ -55,7 +55,8 @@ export const HMRangeToString = (schedule) => {
 
 export const stringToHMRange = s => {
   if (!s) { return null }
-  const [from, to, ...rest] = s.split(/-|\s/)
+  const [fromto, ...rest] = s.split(/\s/)
+  const [from, to] = fromto.split('-')
   const range = {
     from: stringToHM(from),
     to: stringToHM(to)

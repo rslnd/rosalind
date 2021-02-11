@@ -10,7 +10,8 @@ import { hasRole } from '../../../util/meteor/hasRole'
 const Schedule = new SimpleSchema({
   from: { type: HM },
   to: { type: HM },
-  note: { type: String, optional: true }
+  note: { type: String, optional: true },
+  roles: { type: [String], optional: true },
 })
 
 export const upsertDefaultSchedule = ({ Schedules }) => {
@@ -30,6 +31,8 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
         !hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
+
+      console.log('XXX', newSchedule)
 
       const available = !(newSchedule && newSchedule.note)
 
@@ -57,6 +60,7 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
             from: newSchedule.from,
             to: newSchedule.to,
             note: newSchedule.note,
+            roles: newSchedule.roles,
             available
           }
         }
@@ -66,6 +70,14 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
         } else {
           modifier.$unset = {
             note: 1
+          }
+        }
+
+        if (newSchedule.roles) {
+          modifier.$set.roles = newSchedule.roles
+        } else {
+          modifier.$unset = {
+            roles: 1
           }
         }
 
@@ -86,6 +98,7 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
             from: newSchedule.from,
             to: newSchedule.to,
             note: newSchedule.note,
+            roles: newSchedule.roles,
             available,
             createdAt: new Date(),
             createdBy: this.userId

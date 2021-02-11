@@ -54,6 +54,11 @@ export const Schema = new SimpleSchema({
     optional: true
   },
 
+  roles: {
+    type: [String],
+    optional: true
+  },
+
   available: {
     type: Boolean,
     index: 1,
