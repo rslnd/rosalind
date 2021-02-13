@@ -32,8 +32,6 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      console.log('XXX', newSchedule)
-
       const available = !(newSchedule && newSchedule.note)
 
       if (scheduleId) {
