@@ -24,11 +24,15 @@ import { ApplyDefaultSchedule } from './ApplyDefaultSchedule'
 import { subscribe } from '../../../util/meteor/subscribe'
 import { HMtoString, HMRangeToString, stringToHMRange } from '../../../util/time/hm'
 
-const HMRangeToStringWithRoles = ({ from, to, note, roles }) =>
-  [
+const HMRangeToStringWithRoles = (schedule) => {
+  if (!schedule || !schedule.from) { return '' }
+
+  const { from, to, note, roles } = schedule
+  return [
     HMRangeToString({ from, to, note }),
     roles ? roles.map(r => `role-${r}`).join(' ') : null
   ].filter(identity).join(' ')
+}
 
 const composer = props => {
   const { slug } = props.match.params
@@ -301,7 +305,7 @@ class EditSchedule extends React.Component {
     const roles = (note && note.match(regex))
       ? note.match(regex).map(r => r.replace(/^role-/, ''))
       : undefined
-    const remainingNote = note.replace(regex, '')
+    const remainingNote = note ? note.replace(regex, '') : undefined
 
     const schedule = {
       from,
