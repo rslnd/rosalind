@@ -1,4 +1,5 @@
 import leftPad from 'left-pad'
+import findLastFrom from 'lodash/fp/findLastFrom'
 import sortBy from 'lodash/fp/sortBy'
 import groupBy from 'lodash/fp/groupBy'
 import mapValues from 'lodash/fp/mapValues'
@@ -26,7 +27,6 @@ export const transformDefaultsToOverrides = ({ defaultSchedules, days }) => {
   // Sort within each column by schedule start time
   const byColumn = groupBy(groupKey)(defaultSchedules)
   const byColumnSorted = mapValues(sortByFrom)(byColumn)
-
   const overrideSchedules = flatMap(expandColumn(daysWithWeekday))(byColumnSorted)
 
   // Transform to day schedules
@@ -78,10 +78,28 @@ const expandColumn = days => defaultSchedulesByColumn => {
       return []
     }
 
-    const expandedSchedules = defaultSchedulesByColumn.reduce((acc, curr, i) => {
+
+    const unavailableSchedules = defaultSchedulesByColumn.filter(s => !s.available)
+    const availableSchedules = defaultSchedulesByColumn.filter(s => s.available)
+
+    const expandedUnAvailableSchedules = unavailableSchedules.map(s => {
+      const { from, to, calendarId, userId, note, roles } = s
+
+      return {
+        type: 'override',
+        available: false,
+        calendarId,
+        userId,
+        note,
+        roles,
+        start: applyHM(day, from),
+        end: applyHM(day, to)
+      }
+    })
+
+    const expandedAvailableSchedules = availableSchedules.reduce((acc, curr, i) => {
       const { available, from, to, calendarId, userId, note, roles } = curr
 
-      const previousDefaultSchedule = defaultSchedulesByColumn[i - 1]
 
       const props = {
         type: 'override',
@@ -92,16 +110,10 @@ const expandColumn = days => defaultSchedulesByColumn => {
         roles
       }
 
-      if (available === false) {
-        return [{
-          ...props,
-          start: applyHM(day, from),
-          end: applyHM(day, to)
-        }, ...acc]
-      }
+      const previousDefaultSchedule = availableSchedules[i - 1]
 
       // Only schedule of this column, block all else
-      if (defaultSchedulesByColumn.length === 1) {
+      if (availableSchedules.length === 1) {
         return [{
           ...props,
           start: startOfDay(day),
@@ -123,7 +135,7 @@ const expandColumn = days => defaultSchedulesByColumn => {
       }
 
       // Last schedule of day
-      if (i === (defaultSchedulesByColumn.length - 1)) {
+      if (i === (availableSchedules.length - 1)) {
         return [{
           ...props,
           start: applyHM(day, to),
@@ -142,6 +154,11 @@ const expandColumn = days => defaultSchedulesByColumn => {
         end: applyHM(day, from)
       }, ...acc]
     }, [])
+
+    const expandedSchedules = [
+      ...expandedUnAvailableSchedules,
+      ...expandedAvailableSchedules,
+    ]
 
     const isNonzero = s => s.start.getTime() !== s.end.getTime()
     return expandedSchedules.filter(isNonzero)
