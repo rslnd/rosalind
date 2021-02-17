@@ -299,6 +299,11 @@ class EditSchedule extends React.Component {
   }
 
   handleSave () {
+    if (!this.state.value) {
+      this.props.onChange(null)
+      return
+    }
+
     const { note, from, to } = stringToHMRange(this.state.value)
 
     const regex = /role-[a-zA-Z0-9-]+/g
