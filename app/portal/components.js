@@ -1,3 +1,5 @@
+import { Field, useField } from 'formik'
+
 export const Required = () =>
   <span style={requiredStyle}>*</span>
 
@@ -17,7 +19,8 @@ export const Input = ({ name, label, required, ...props }) =>
       <span>{label}</span>
       {required && <Required />}
     </label>
-    <input
+    <Field
+      type='text'
       className='textfield'
       name={name}
       id={name}
@@ -25,21 +28,22 @@ export const Input = ({ name, label, required, ...props }) =>
     />
   </div>
 
-export const Checkbox = ({ name, label, props }) =>
-  <>
+export const Checkbox = ({ label, ...props }) => {
+  const [field, meta] = useField({ ...props, type: 'checkbox' })
+  return <>
     <label
       className='label'
-      htmlFor={name}
+      htmlFor={field.name}
     >
       <input
         type='checkbox'
-        name={name}
-        id={name}
+        {...field}
         {...props}
       />
       {label}
     </label>
   </>
+}
 
 export const Radio = ({ name, value, label, props }) =>
   <div>
@@ -53,6 +57,20 @@ export const Radio = ({ name, value, label, props }) =>
       {label}
     </label>
   </div>
+
+export const Select = ({ label, children, ...props }) => {
+  const [field, meta] = useField(props)
+  return <div>
+    <label htmlFor={field.name}>{label}</label><br />
+    <select
+      className='textfield'
+      {...field}
+      {...props}
+    >
+      {children}
+    </select>
+  </div>
+}
 
 export const Section = ({ children }) =>
   <div style={{ paddingTop: 16 }}>
