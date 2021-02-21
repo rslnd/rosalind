@@ -58,11 +58,14 @@ const autoDeduplicate = () => {
   console.log('[autoDeduplicate] Finished, took', tookSeconds, 'seconds')
 }
 
-Meteor.startup(autoDeduplicate)
 
-const next1AMInMs = moment().add(1, 'day').startOf('day').add(1, 'hour').diff(moment(), 'milliseconds')
+if (process.env.PROCESS_JOBS === '1') {
+  Meteor.startup(autoDeduplicate)
 
-Meteor.setTimeout(() => {
-  autoDeduplicate()
-  Meteor.setInterval(autoDeduplicate, 1000 * 86400)
-}, next1AMInMs)
+  const next1AMInMs = moment().add(1, 'day').startOf('day').add(1, 'hour').diff(moment(), 'milliseconds')
+
+  Meteor.setTimeout(() => {
+    autoDeduplicate()
+    Meteor.setInterval(autoDeduplicate, 1000 * 86400)
+  }, next1AMInMs)
+}
