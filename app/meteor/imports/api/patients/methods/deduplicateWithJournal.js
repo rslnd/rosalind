@@ -14,16 +14,16 @@ import { parseCsv, parseDayFromRows } from '../../reports/methods/external/eoswi
 import { dayToDate } from '../../../util/time/day'
 import { zerofix } from '../../../util/zerofix'
 
-export const deduplicateWithJournal = ({ Appointments, Patients, journal }) => {
+export const deduplicateWithJournal = ({ journal, ...Api }) => {
   const journalRows = parseCsv(journal)
   const day = parseDayFromRows(journalRows)
   if (day) {
-    const dayPatients = findPatientsOfDay({ Appointments, Patients, day })
-    const duplicates = findDuplicatePatients({ Appointments, Patients, patientsToCheck: dayPatients })
+    const dayPatients = findPatientsOfDay({ ...Api, day })
+    const duplicates = findDuplicatePatients({ ...Api, patientsToCheck: dayPatients })
     const sortedDuplicates = sortDuplicates({ duplicates, journalRows })
     const actions = deduplicate(sortedDuplicates)
     console.log(sortedDuplicates.length, 'sorted duplicates')
-    return perform({ Appointments, Patients, actions })
+    return perform({ ...Api, actions })
   }
 }
 
@@ -119,8 +119,12 @@ const sortDuplicates = ({ duplicates, journalRows }) => {
   const findId = findIdForPatient(journalRows)
 
   return duplicates.map(tuples => {
-    // if exactly one of the duplicates has an eoswin id, it becomes the master
-    const isExternal = t => idx(t, _ => _.external.eoswin.id)
+    // if exactly one of the duplicates has an external id, it becomes the master
+    const isExternal = t => (
+      idx(t, _ => _.external.eoswin.id) ||
+      idx(t, _ => _.external.inno.id)
+    )
+
     if (tuples.map(isExternal).filter(identity).length === 1) {
       const master = tuples.find(isExternal)
       return [ master, ...tuples.filter(negate(isExternal)) ]
@@ -209,33 +213,57 @@ export const deduplicate = duplicates =>
     }
   })
 
-export const perform = ({ Appointments, Patients, actions }) =>
+export const perform = ({ actions, Patients, Appointments, InboundCalls, Media, Messages, Referrals, Records }) =>
   actions.map(a => {
     const masterId = a.master._id
     console.log('[Patients] deduplicateWithJournal: Merging', masterId, ' <- ', a.duplicateIds)
+
+    // Patients
     Patients.update({ _id: masterId }, { $set: {
       ...a.master,
       updatedAt: new Date(),
       updatedBy: null
     }})
-    const updatedPatients = Patients.update({ _id: { $in: a.duplicateIds } }, { $set: {
+    Patients.update({ _id: { $in: a.duplicateIds } }, { $set: {
       removed: true,
       removedAt: new Date()
     } }, { multi: true })
 
-    const appointments = Appointments.find({ patientId: { $in: a.duplicateIds } }).fetch()
-    console.log('[Patients] deduplicateWithJournal: Reassigning', masterId, ' <- ', appointments.length, 'appointments')
+    // helper function
+    const forceReassignPatientId = (apiName, Api) => {
+      const docs = Api.find({ patientId: { $in: a.duplicateIds } }).fetch()
+      console.log('[Patients] deduplicate: Reassigning to master patient id', masterId, ' <- ', docs.length, apiName)
 
-    const updatedAppointments = Appointments.update({ _id: { $in: appointments.map(a => a._id) } }, { $set: {
-      patientId: masterId
-    } }, { multi: true })
+      Api.update({ _id: { $in: docs.map(a => a._id) } }, { $set: {
+        patientId: masterId
+      } }, { multi: true })
 
-    return { masterId, updatedPatients, updatedAppointments }
+      return { [apiName]: docs.map(a => a._id) }
+    }
+
+    const changedIds = {
+      patients: a.duplicateIds,
+      ...forceReassignPatientId('appointments', Appointments),
+      ...forceReassignPatientId('inboundCalls', InboundCalls),
+      ...forceReassignPatientId('media', Media),
+      ...forceReassignPatientId('messages', Messages),
+      ...forceReassignPatientId('referrals', Referrals),
+      ...forceReassignPatientId('records', Records)
+    }
+
+    const result = { masterId, ...changedIds }
+
+    console.log('[Patients] deduplicate: Done, reassigned to master patient id', masterId, ' <- ', changedIds)
+
+    return result
   })
 
 const sanityCheckDuplicates = duplicates => {
-  // fail if any of the potential duplicates have different eoswin ids
-  if (uniq(duplicates.map(a => idx(a, _ => _.external.eoswin.id)).filter(identity)).length > 1) { return false }
+  // fail if any of the potential duplicates have different external ids
+  if (uniq(duplicates.map(a =>
+    idx(a, _ => _.external.eoswin.id) ||
+    idx(a, _ => _.external.inno.id)
+  ).filter(identity)).length > 1) { return false }
 
   return true
 }

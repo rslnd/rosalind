@@ -39,10 +39,10 @@ export const deduplicate = ({ Patients }) => {
       })
 
       // Avoid circular import, this method should probably be inside a third module
-      const { Appointments } = require('../../../appointments')
+      const Api = require('../../../../api')
       const actions = merge([patients])
       console.log('Deduplicate will perform', actions)
-      perform({ Appointments, Patients, actions })
+      perform({ actions, ...Api })
     }
   })
 }

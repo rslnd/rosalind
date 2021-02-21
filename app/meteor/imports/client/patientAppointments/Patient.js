@@ -193,6 +193,7 @@ const Birthday = withHandlers({
 })(({ birthday, updateBirthday }) =>
   <Day
     initialValue={birthday}
+    placeholder={__('patients.birthday')}
     style={birthdayStyle}
     onChange={updateBirthday}
     birthday

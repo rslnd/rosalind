@@ -2,8 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import { processJournal, mapUserIds } from '../../../../reports/methods/external/eoswin'
 import { Reports } from '../../../../reports'
 import { Users } from '../../../../users'
-import { Patients } from '../../../../patients'
-import { Appointments } from '../../../../appointments'
+import Api from '../../../../../api'
 import { deduplicateWithJournal } from '../../../../patients/methods/deduplicateWithJournal'
 import { action, Match } from '../../../../../util/meteor/action'
 
@@ -26,7 +25,7 @@ export const eoswinJournalReports = ({ Importers }) => {
 
         const mapIds = mapUserIds({ Users })
 
-        deduplicateWithJournal({ Appointments, Patients, journal: content })
+        deduplicateWithJournal({ journal: content, ...Api })
 
         const addendum = processJournal(mapIds)(content, name)
         Reports.actions.generate.call({ day: addendum.day, addendum })

@@ -12,6 +12,7 @@ import defaultAccount from './defaultAccount'
 import rateLimiter from './rateLimiter'
 import development from './development'
 import api from './api'
+import autoDeduplicate from './autoDeduplicate'
 import portal from './portal'
 
 export default function () {
