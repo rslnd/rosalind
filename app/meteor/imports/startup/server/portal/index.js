@@ -19,7 +19,6 @@ const respondWith = (res, Component) => {
     html = `<!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" src="/portal.css" />
     <style>${portalCss}</style>
   </head>
   <body>
