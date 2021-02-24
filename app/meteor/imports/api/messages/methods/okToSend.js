@@ -38,13 +38,23 @@ export const notExpired = ({ invalidBefore, invalidAfter }, now = moment()) => {
   return true
 }
 
+const assert = (message, fn, err) => {
+  if (!fn(message)) {
+    console.error(`[Messages] okToSend message ${message._id} failed check: ${err}`)
+    return false
+  } else {
+    return true
+  }
+}
+
 export const okToSend = (message) => {
   return (
-    hasRequiredKeys(message) &&
-    statusOk(message) &&
-    isOutbound(message) &&
-    hasMinimumLength(message) &&
-    hasNoRemainingPlaceholders(message) &&
-    notExpired(message)
+    message &&
+    assert(message, hasRequiredKeys, 'missing required keys') &&
+    assert(message, statusOk, `cannot send with status ${message.status}`) &&
+    assert(message, isOutbound, 'is not outbound') &&
+    assert(message, hasMinimumLength, 'does not have minimum length') &&
+    assert(message, hasNoRemainingPlaceholders, 'has remining placeholders') &&
+    assert(message, notExpired, 'is expired')
   )
 }

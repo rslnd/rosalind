@@ -59,25 +59,30 @@ export const sendScheduled = ({ Messages }) => {
       }).fetch().filter((message) => {
         const patient = Patients.findOne({ _id: message.patientId })
         if (patient && patient.noSMS) {
+          console.log('[Messages] sendScheduled: Skipping', message._id, 'because patient has noSMS set' )
           return false
         }
 
         const appointment = Appointments.findOne({ _id: message.appointmentId })
         if (!appointment) {
+          console.log('[Messages] sendScheduled: Skipping', message._id, 'because appointment', appointment._id, 'was not found')
           return false
         }
 
         const calendar = Calendars.findOne({ _id: appointment.calendarId })
         if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
+          console.log('[Messages] sendScheduled: Skipping', message._id, 'because calendar disabled sms reminders')
           return false
         }
 
         const tags = Tags.methods.expand(appointment.tags)
         if (tags.some(t => t.noSmsAppointmentReminder)) {
+          console.log('[Messages] sendScheduled: Skipping', message._id, 'because appointment', appointment._id, 'has a tag with noSmsAppointmentReminder set')
           return false
         }
 
         if (appointment.assigneeId && hasRole(appointment.assigneeId, ['noSmsAppointmentReminder'])) {
+          console.log('[Messages] sendScheduled: Skipping', message._id, 'because assignee of appointment', appointment._id, 'has role noSmsAppointmentReminder')
           return false
         }
 

@@ -22,7 +22,7 @@ import { hasRole } from '../../../util/meteor/hasRole'
 // Don't immediately send out reminder if appointment is very soon,
 // We don't want the patient to receive the reminder while still
 // on the phone with the clinic.
-export const waitMinutesAfterNewAppointment = 5
+export const waitMinutesAfterNewAppointment = 120
 
 // TODO: Replace with GraphQL
 export const findUpcomingAppointments = (cutoffDate) => {
