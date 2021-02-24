@@ -46,7 +46,15 @@ const Message = ({ message, patientName, primaryColor }) => {
   return <div className={`direct-chat-msg ${isOutbound ? 'right' : ''}`}>
     <div className='direct-chat-infos clearfix'>
       <div className='direct-chat-name float-left enable-select'>{senderName}</div>
-      <div className='direct-chat-timestamp float-right enable-select'>{formatDate(timestamp)}</div>
+      <div className='direct-chat-timestamp float-right enable-select'>
+        {formatDate(timestamp)}
+        {
+          message.status !== 'sent' &&
+            <span title={JSON.stringify(message)}>
+              &nbsp;({message.status})
+            </span>
+        }
+      </div>
     </div>
 
     {isOutbound &&
