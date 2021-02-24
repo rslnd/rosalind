@@ -49,7 +49,7 @@ const assert = (message, fn, err) => {
 
 export const okToSend = (message) => {
   return (
-    message &&
+    !!message &&
     assert(message, hasRequiredKeys, 'missing required keys') &&
     assert(message, statusOk, `cannot send with status ${message.status}`) &&
     assert(message, isOutbound, 'is not outbound') &&
