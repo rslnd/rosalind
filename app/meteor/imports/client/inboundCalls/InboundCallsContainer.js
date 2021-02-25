@@ -1,4 +1,4 @@
-import { toClass } from 'recompose'
+import { toClass, withState, compose } from 'recompose'
 import { InboundCalls, InboundCallsTopics } from '../../api/inboundCalls'
 import { Patients } from '../../api/patients'
 import { InboundCallsScreen } from './InboundCallsScreen'
@@ -7,6 +7,7 @@ import { subscribe } from '../../util/meteor/subscribe'
 import { Comments, Users } from '../../api'
 import { hasRole } from '../../util/meteor/hasRole'
 import identity from 'lodash/identity'
+import { filterComments } from './filterComments'
 
 const composer = (props) => {
   const handle = subscribe('inboundCalls')
@@ -34,14 +35,27 @@ const composer = (props) => {
   // TODO: Fix duplicate logic in ResolvedScreen
   const inboundCalls = InboundCalls.find(selector, {
     sort: { pinnedBy: -1, createdAt: 1 }
-  }).fetch().map(inboundCall => ({
-    ...inboundCall,
-    canResolve: canResolve || (inboundCall.pinnedBy === userId || inboundCall.createdBy === userId),
-    canEdit: canEdit || (inboundCall.createdBy === userId),
-    patient: inboundCall.patientId &&
-      Patients.findOne({ _id: inboundCall.patientId }),
-    comments: Comments.find({ docId: inboundCall._id }, { sort: { createdAt: 1 } }).fetch()
-  }))
+  }).fetch().map(inboundCall => {
+    const rawComments = Comments.find({ docId: inboundCall._id }, { sort: { createdAt: 1 } }).fetch()
+
+    const { comments, CommentsAction } = filterComments({
+      comments: rawComments,
+      Comments,
+      inboundCall,
+      enabled: props.isCommentFilterEnabled,
+      setEnabled: props.setCommentFilterEnabled
+    })
+
+    return {
+      ...inboundCall,
+      canResolve: canResolve || (inboundCall.pinnedBy === userId || inboundCall.createdBy === userId),
+      canEdit: canEdit || (inboundCall.createdBy === userId),
+      patient: inboundCall.patientId &&
+        Patients.findOne({ _id: inboundCall.patientId }),
+      comments,
+      CommentsAction
+    }
+  })
 
   const appointmentIds = inboundCalls.map(c => c.appointmentId).filter(identity)
   if (appointmentIds.length >= 1) {
@@ -62,4 +76,7 @@ const composer = (props) => {
   return { inboundCalls, resolve, unresolve, edit, fullNameWithTitle, topic }
 }
 
-export const InboundCallsContainer = withTracker(composer)(toClass(InboundCallsScreen))
+export const InboundCallsContainer = compose(
+  withState('isCommentFilterEnabled', 'setCommentFilterEnabled', true),
+  withTracker(composer),
+)(toClass(InboundCallsScreen))

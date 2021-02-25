@@ -45,5 +45,11 @@ export const inboundCalls = {
     privatePatient: {
       label: 'PrivatpatientIn'
     }
-  }
+  },
+  read: 'OK',
+  readCommentText: 'OK',
+  setRead: 'OK',
+  unavailable: 'Nicht erreicht',
+  unavailableCommentText: 'Nicht erreicht',
+  setUnavailable: 'Nicht erreicht'
 }

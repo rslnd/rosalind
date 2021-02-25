@@ -34,6 +34,7 @@ export const InboundCall = (props) => {
     canResolve,
     canEdit,
     comments,
+    CommentsAction,
     _id
   } = inboundCall
 
@@ -184,6 +185,8 @@ export const InboundCall = (props) => {
               {__('inboundCalls.pinnedBy', { name: fullNameWithTitle && fullNameWithTitle(pinnedBy) })}
             </span>
         }
+
+        <CommentsAction />
       </div>
     </div>
   )
