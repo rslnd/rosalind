@@ -60,7 +60,7 @@ const autoDeduplicate = () => {
 
 
 if (process.env.PROCESS_JOBS === '1') {
-  Meteor.startup(autoDeduplicate)
+  // Meteor.startup(autoDeduplicate)
 
   const next1AMInMs = moment().add(1, 'day').startOf('day').add(1, 'hour').diff(moment(), 'milliseconds')
 
