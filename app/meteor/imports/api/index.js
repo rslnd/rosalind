@@ -22,6 +22,7 @@ import { Availabilities } from './availabilities'
 import { Media, MediaTags } from './media'
 import { Records } from './records'
 import { Templates } from './templates'
+import { Consents } from './consents'
 
 export {
   Users,
@@ -50,5 +51,6 @@ export {
   Media,
   MediaTags,
   Records,
-  Templates
+  Templates,
+  Consents
 }

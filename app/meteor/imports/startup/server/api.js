@@ -19,6 +19,7 @@ import availabilities from '../../api/availabilities/server'
 import media from '../../api/media/server'
 import records from '../../api/records/server'
 import templates from '../../api/templates/server'
+import consents from '../../api/consents/server'
 
 export default function () {
   settings()
@@ -42,4 +43,5 @@ export default function () {
   media()
   records()
   templates()
+  consents()
 }

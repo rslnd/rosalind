@@ -7,6 +7,9 @@ import { isAllowed } from './isAllowed'
 
 export { Match }
 
+export const Optional = t =>
+  Match.Maybe(Match.OneOf(undefined, null, t))
+
 export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKey, simulation = true, fn }) => {
   if (!name) {
     throw new Error('Action needs a name')

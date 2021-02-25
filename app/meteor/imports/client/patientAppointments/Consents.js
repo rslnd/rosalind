@@ -28,6 +28,7 @@ import { getClient } from '../../api/clients/methods/getClient'
 import { hasRole } from '../../util/meteor/hasRole'
 import { fillPlaceholders } from '../templates/fillPlaceholders'
 import { dayToDate } from '../../util/time/day'
+import { Consents } from '../../api/consents/collection'
 
 export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) => {
   const clientKey = getClientKey()
@@ -119,6 +120,28 @@ export const Popover = withTracker(composer)(({
     const template = Templates.findOne({ _id: templateId })
     if (!template) { return }
 
+    const client = getClient()
+
+    const consentPayload = {
+      patientFullNameWithTitle: Users.methods.fullNameWithTitle(patient),
+      assigneeFullNameWithTitle: Users.methods.fullNameWithTitle(assignee),
+      birthday: moment(dayToDate(patient.birthday)).format(__('time.dateFormatVeryShort')),
+      currentDate: moment().format(__('time.dateFormatVeryShort')),
+    }
+
+    const consent = {
+      patientId,
+      assigneeId: appointment.assigneeId,
+      appointmentId,
+      templateId,
+      clientId: client ? client._id : null
+    }
+
+    const consentId = await Consents.actions.print.callPromise({
+      ...consent,
+      payload: consentPayload
+    })
+
     let base64 = null
 
     try {
@@ -126,10 +149,9 @@ export const Popover = withTracker(composer)(({
         base64: template.base64,
         placeholders: template.placeholders,
         values: {
-          patientFullNameWithTitle: Users.methods.fullNameWithTitle(patient),
-          assigneeFullNameWithTitle: Users.methods.fullNameWithTitle(assignee),
-          birthday: moment(dayToDate(patient.birthday)).format(__('time.dateFormatVeryShort')),
-          currentDate: moment().format(__('time.dateFormatVeryShort'))
+          ...consent,
+          ...consentPayload,
+          consentId: 'C' + consentId
         }
       })
     } catch (e) {
@@ -144,7 +166,6 @@ export const Popover = withTracker(composer)(({
       console.log('[Consents] printing template via local path')
     }
 
-    const client = getClient()
     const printer = (client && client.settings && client.settings.print && client.settings.print.printer) || undefined
     const flags = (client && client.settings && client.settings.print && client.settings.print.flags) || undefined
 
@@ -215,7 +236,12 @@ export const Popover = withTracker(composer)(({
         color='primary'>Scannen</Button>
     </div>
 
-    <small style={separatorStyle}><span style={separatorInnerStyle}>oder bestehenden Revers wählen</span></small>
+    {
+      pastAppointmentsWithConsents.length >= 1 &&
+        <>
+          <small style={separatorStyle}><span style={separatorInnerStyle}>oder bestehenden Revers wählen</span></small>
+        </>
+    }
 
     <List>
       {pastAppointmentsWithConsents.map(a =>

@@ -111,16 +111,17 @@ const sidebarItems = ({ history }) => {
       icon: 'server',
       roles: ['admin', 'system'],
       subItems: [
-        { name: 'thisEvents', path: '/events' },
-        { name: 'thisClients', path: '/clients' },
-        { name: 'thisCalendars', path: '/calendars' },
         { name: 'thisTags', path: '/tags' },
+        { name: 'thisCalendars', path: '/calendars' },
+        { name: 'thisConsents', path: '/consents' },
+        { name: 'thisClients', path: '/clients' },
+        { name: 'thisTemplates', path: '/templates' },
+        { name: 'thisEvents', path: '/events' },
         { name: 'thisMediaTags', path: '/mediaTags' },
         { name: 'thisInboundCallsTopics', path: '/inboundCallsTopics' },
-        { name: 'thisTemplates', path: '/templates' },
         { name: 'thisReferrables', path: '/referrables' },
         { name: 'thisMessages', path: '/messages' },
-        { name: 'thisSettings', path: '/settings' }
+        { name: 'thisSettings', path: '/settings' },
       ]
     }
   ]
