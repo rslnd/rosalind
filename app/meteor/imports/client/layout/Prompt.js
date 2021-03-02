@@ -66,7 +66,7 @@ export const Prompts = () => {
 
           <br />
           <div style={buttonsStyle}>
-            <Button style={flex} fullWidth onClick={handleClose}>Abbrechen</Button>
+            <Button style={flex} fullWidth onClick={handleClose}>{currentOptions.cancel || 'Abbrechen'}</Button>
             <Button style={flex} color='primary' fullWidth onClick={handleOK}>{currentOptions.confirm || 'OK'}</Button>
           </div>
         </> : null}
@@ -80,7 +80,8 @@ const modalStyle = {
   width: 500,
   top: '10%',
   left: 'calc(50% - 250px)',
-  padding: 15
+  padding: 15,
+  zIndex: 4000
 }
 
 const buttonsStyle = {

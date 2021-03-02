@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Alert from 'react-s-alert'
 import { compose, withState, withHandlers } from 'recompose'
 import { __ } from '../../i18n'
@@ -8,13 +8,16 @@ import { Media, Appointments, Patients, MediaTags as MediaTagsAPI } from '../../
 import { withTracker } from '../components/withTracker'
 import { Icon } from '../components/Icon'
 import { Explorer } from './Explorer'
-import { getStyleNonce } from '../layout/styles'
+import { darken, getStyleNonce } from '../layout/styles'
 import Select from 'react-select'
 import identity from 'lodash/identity'
 import range from 'lodash/range'
 import uniq from 'lodash/uniq'
 import { patientCyclesNames } from './Cycles'
 import { MediaTags } from './MediaTags'
+import { hasRole } from '../../util/meteor/hasRole'
+import { prompt } from '../layout/Prompt'
+import { QRCode } from 'react-qr-svg'
 
 const composer = (props) => {
   const { patientId, media, selector, setSelector } = props
@@ -240,10 +243,10 @@ const explorerStyle = {
   overflowY: 'auto'
 }
 
-const Edit = withHandlers({
-  handleRemove: ({ media, handleRemove }) => e =>
-    handleRemove(media._id),
-  handleRotate: ({ media }) => e => {
+const Edit = ({ media, handleRemove }) => {
+  const [sharing, setSharing] = useState(false)
+
+  const handleRotate = e => {
     console.log('rotate', (((media.rotation || 0) + 90) % 360))
     Media.actions.update.callPromise({
       mediaId: media._id,
@@ -252,13 +255,50 @@ const Edit = withHandlers({
       }
     })
   }
-})(({ handleRotate, handleRemove }) =>
-  <div style={editStyle}>
-    <Button onClick={handleRemove}><Icon name='trash-o' /></Button>
-    {/* <Button><Icon name='crop' /></Button> */}
-    <Button onClick={handleRotate}><Icon name='retweet' /></Button>
-  </div>
-)
+
+  const handleShare = e => {
+    setSharing(!sharing)
+  }
+
+  return <>
+    {
+      sharing &&
+        <div style={qrContainerStyle} onClick={handleShare}>
+          <div style={qrInnerStyle}>
+            <QRCode
+              style={{
+                width: 230,
+                height: 230
+              }}
+              size={230}
+              fgColor={'#000000'}
+              value={media.urls[0]}
+            />
+          </div>
+        </div>
+    }
+    <div style={editStyle}>
+      <Button onClick={() => handleRemove(media._id)}><Icon name='trash-o' /></Button>
+      {/* <Button><Icon name='crop' /></Button> */}
+      <Button onClick={handleRotate}><Icon name='retweet' /></Button>
+
+      {hasRole(Meteor.userId(), ['ff-share-media']) &&
+        <Button onClick={handleShare}><Icon name='paper-plane' /></Button>
+      }
+    </div>
+  </>
+}
+
+const qrContainerStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+}
+
+const qrInnerStyle = {
+  backgroundColor: 'white',
+  padding: 6
+}
 
 const editStyle = {
   display: 'flex',
