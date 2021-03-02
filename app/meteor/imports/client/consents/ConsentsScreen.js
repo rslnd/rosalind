@@ -1,6 +1,6 @@
 import idx from 'idx'
 import moment from 'moment-timezone'
-import React from 'react'
+import React, { useState } from 'react'
 import Alert from 'react-s-alert'
 import { Link } from 'react-router-dom'
 import { withTracker } from '../components/withTracker'
@@ -14,6 +14,7 @@ import { TagsList } from '../tags/TagsList'
 import { Appointments, Templates, Consents, Calendars, Patients, Users } from '../../api'
 import { fullNameWithTitle } from '../../api/users/methods'
 import { Icon } from '../components/Icon'
+import { PatientsAppointmentsContainer } from '../patientAppointments/PatientsAppointmentsContainer'
 
 const composer = () => {
   Meteor.subscribe('consents-pending')
@@ -37,42 +38,60 @@ const composer = () => {
   }
 }
 
+const pointerStyle = { cursor: 'pointer' }
+
 const structure = () => [
   {
     header: '',
-    render: c => c.calendar && <Icon name={c.calendar.icon} />
+    render: c => c.calendar && <Icon name={c.calendar.icon} />,
+    style: pointerStyle
   },
   {
     header: 'Termin',
-    render: c => c.appointment && moment(c.appointment.start).format(__('time.dateFormat') + ' ' + __('time.timeFormat'))
+    render: c => c.appointment && moment(c.appointment.start).format(__('time.dateFormat') + ' ' + __('time.timeFormat')),
+    style: pointerStyle
   },
   {
     header: 'PatientIn',
-    render: c => c.patient && fullNameWithTitle(c.patient)
+    render: c => c.patient && fullNameWithTitle(c.patient),
+    style: pointerStyle
   },
   {
     header: 'Behandlung',
-    render: c => c.appointment && <TagsList tags={c.appointment.tags} />
+    render: c => c.appointment && <TagsList tags={c.appointment.tags} />,
+    style: pointerStyle
   },
   {
     header: 'Behandelt von',
-    render: c => c.assignee && fullNameWithTitle(c.assignee)
+    render: c => c.assignee && fullNameWithTitle(c.assignee),
+    style: pointerStyle
   },
 ]
 
-const Screen = toClass(({ consents }) =>
-  <div className='content'>
+const Screen = ({ consents }) => {
+  const [appointmentId, setAppointmentId] = useState(null)
+  return <div className='content'>
     <div className='row'>
       <div className='col-md-12'>
-        <Box title='Noch nicht eingescannte Reverse' icon='document'>
+        <Box title='Fehlende Reverse' icon='document'>
           <Table
+            onClick={(c) => {
+              console.log('OC', c)
+              c && c.appointment && setAppointmentId(c.appointment._id)
+            }} // openLinkToAppointment
             structure={structure}
             rows={consents}
           />
         </Box>
       </div>
     </div>
+
+    <PatientsAppointmentsContainer
+      show={!!appointmentId}
+      onClose={() => setAppointmentId(null)}
+      appointmentId={appointmentId ? appointmentId : undefined}
+    />
   </div>
-)
+}
 
 export const ConsentsScreen = withTracker(composer)(Screen)

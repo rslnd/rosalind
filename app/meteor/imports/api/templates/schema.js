@@ -17,6 +17,16 @@ const Placeholder = new SimpleSchema({
     type: Number
   },
 
+  qr: {
+    type: Boolean,
+    optional: true
+  },
+
+  bold: {
+    type: Boolean,
+    optional: true
+  },
+
   value: {
     type: String,
     allowedValues: [
@@ -24,7 +34,13 @@ const Placeholder = new SimpleSchema({
       'currentDate',
       'birthday',
       'patientFullNameWithTitle',
-      'assigneeFullNameWithTitle'
+      'assigneeFullNameWithTitle',
+      'consentId',
+      'templateId',
+      'appointmentId',
+      'patientId',
+      'assigneeId',
+      'clientId',
     ]
   }
 })

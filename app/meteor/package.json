@@ -11,6 +11,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@popperjs/core": "^2.6.0",
+    "@shortcm/qr-image": "^4.1.10",
     "aws4": "^1.8.0",
     "bcrypt": "^5.0.0",
     "buffer": "^6.0.3",

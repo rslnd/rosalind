@@ -301,7 +301,7 @@ export class Table extends React.Component {
   }
 
   render () {
-    const { structure, rows, onInsert, onRemove } = this.props
+    const { structure, rows, onInsert, onRemove, onClick } = this.props
     const { inserting } = this.state
     const cols = structure(this.props)
 
@@ -338,7 +338,9 @@ export class Table extends React.Component {
                           cols.map((col, j) =>
                             <Cell
                               key={j}
-                              onClick={this.handleEditStart(i, j, openPortal)}
+                              onClick={onClick
+                                ? () => onClick(row, col)
+                                : this.handleEditStart(i, j, openPortal)}
                               isEditing={this.isEditing(i, j)}
                               col={col}
                               row={row}

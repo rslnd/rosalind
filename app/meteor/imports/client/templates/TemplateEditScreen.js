@@ -62,7 +62,13 @@ const Screen = ({ template, handleUpdate }) => {
         patientFullNameWithTitle: 'Mag. Musterpatientin Muster',
         assigneeFullNameWithTitle: 'Fr. Dr. Musterärztin Mustra',
         birthday: moment('1970-01-01').format(__('time.dateFormatVeryShort')),
-        currentDate: moment().format(__('time.dateFormatVeryShort'))
+        currentDate: moment().format(__('time.dateFormatVeryShort')),
+        patientId: 'PxEXAMPLEx8PAF2tqsn',
+        assigneeId: 'UxEXAMPLEx8PAF2tqsn',
+        appointmentId: 'AxEXAMPLEx8PAF2tqsn',
+        templateId: 'TxEXAMPLEx8PAF2tqsn',
+        consentId: 'CxEXAMPLEx8PAF2tqsn',
+        clientId: 'WxEXAMPLEx8PAF2tqsn'
       }
     })
 

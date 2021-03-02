@@ -5,7 +5,7 @@ const pdfjsUrl = window.origin + '/pdf.min.js'
 let pdfjs = window.pdfjsLib
 
 export const PDFViewer = ({ pdf }) => {
-  const [page, setPage] = useState(null)
+  const [page, setPage] = useState(1)
   const [pages, setPages] = useState(null)
   const [scale, setScale] = useState(0.7)
   const [rendering, setRendering] = useState(false)

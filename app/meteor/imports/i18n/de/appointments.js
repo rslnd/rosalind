@@ -120,5 +120,6 @@ export const appointments = {
   filterCalendar: 'Nur __name__',
   cannotEditTags: 'Keine Auswahl möglich',
   treating: 'In Behandlung',
-  treatedByName: 'Nur __name__'
+  treatedByName: 'Nur __name__',
+  onlineBlank: 'Online-Terminbuchung möglich'
 }

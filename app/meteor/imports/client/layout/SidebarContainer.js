@@ -113,7 +113,7 @@ const sidebarItems = ({ history }) => {
       subItems: [
         { name: 'thisTags', path: '/tags' },
         { name: 'thisCalendars', path: '/calendars' },
-        { name: 'thisConsents', path: '/consents' },
+        { name: 'missingConsents', path: '/consents' },
         { name: 'thisClients', path: '/clients' },
         { name: 'thisTemplates', path: '/templates' },
         { name: 'thisEvents', path: '/events' },

@@ -7,9 +7,10 @@ import { Calendars } from '../../api/calendars'
 import { TagsScreen } from './TagsScreen'
 import { __ } from '../../i18n'
 
-const sortByCalendar = sortBy(({ calendarIds = [] }) =>
-  (Calendars.findOne({ _id: { $in: calendarIds } }, { sortBy: { order: 1 } }) || {}).order
-)
+const sortByCalendar = sortBy(({ calendarIds }) => {
+  const c = Calendars.findOne({ _id: { $in: (calendarIds || []) } }, { sortBy: { order: 1 } })
+  return c && c.order || 99999999
+})
 
 const composer = (props) => {
   const tags = sortByCalendar(Tags.find({}, { sort: { order: 1 } }).fetch())
