@@ -14,10 +14,12 @@ import { PatientPicker } from '../patients/picker'
 import identity from 'lodash/identity'
 import { hasRole } from '../../util/meteor/hasRole'
 import { Comments, Patients, Users } from '../../api'
+import { filterComments } from './filterComments'
+
 
 const debouncedSubscribe = debounce(subscribe, 150)
 
-const composer = ({ patient, query = '' }) => {
+const composer = ({ patient, query = '', ...props }) => {
   const subscription = debouncedSubscribe('inboundCalls-resolved', { query })
 
   const selector =
@@ -44,16 +46,29 @@ const composer = ({ patient, query = '' }) => {
     },
     removed: true,
     limit: 30
-  }).fetch().map(inboundCall => ({
-    ...inboundCall,
-    canResolve: canResolve || (inboundCall.pinnedBy === userId || inboundCall.createdBy === userId),
-    canEdit: canEdit || (inboundCall.createdBy === userId),
-    patientId: (inboundCall.patientId || (inboundCall.payload && inboundCall.payload.patientId)),
-    patient: (inboundCall.patientId || (inboundCall.payload && inboundCall.payload.patientId)) &&
-      Patients.findOne({ _id: (inboundCall.patientId || (inboundCall.payload && inboundCall.payload.patientId)) }),
-    comments: Comments.find({ docId: inboundCall._id }, { sort: { createdAt: 1 } }).fetch(),
-    topic: inboundCall.topicId && InboundCallsTopics.findOne({ _id: inboundCall.topicId })
-  }))
+  }).fetch().map(inboundCall => {
+    const rawComments = Comments.find({ docId: inboundCall._id }, { sort: { createdAt: 1 } }).fetch()
+
+    const { comments, CommentsAction } = filterComments({
+      comments: rawComments,
+      Comments,
+      inboundCall,
+      enabled: props.isCommentFilterEnabled,
+      setEnabled: props.setCommentFilterEnabled
+    })
+
+    return {
+      ...inboundCall,
+      canResolve: canResolve || (inboundCall.pinnedBy === userId || inboundCall.createdBy === userId),
+      canEdit: canEdit || (inboundCall.createdBy === userId),
+      patientId: (inboundCall.patientId || (inboundCall.payload && inboundCall.payload.patientId)),
+      patient: (inboundCall.patientId || (inboundCall.payload && inboundCall.payload.patientId)) &&
+        Patients.findOne({ _id: (inboundCall.patientId || (inboundCall.payload && inboundCall.payload.patientId)) }),
+      comments,
+      CommentsAction,
+      topic: inboundCall.topicId && InboundCallsTopics.findOne({ _id: inboundCall.topicId })
+    }
+  })
 
   const appointmentIds = inboundCalls.map(c => c.appointmentId).filter(identity)
   if (appointmentIds.length >= 1) {
@@ -124,6 +139,7 @@ export const ResolvedScreen = compose(
   connect(state => ({
     patient: state.patientPicker.patient
   })),
+  withState('isCommentFilterEnabled', 'setCommentFilterEnabled'),
   withState('query', 'changeQuery', ''),
   withHandlers({
     handleQueryChange: props => e => props.changeQuery(e.target.value)

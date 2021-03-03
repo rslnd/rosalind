@@ -186,7 +186,7 @@ export const InboundCall = (props) => {
             </span>
         }
 
-        <CommentsAction />
+        {CommentsAction && <CommentsAction />}
       </div>
     </div>
   )
