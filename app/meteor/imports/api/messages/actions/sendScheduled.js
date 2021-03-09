@@ -77,7 +77,7 @@ export const sendScheduled = ({ Messages }) => {
 
         const tags = Tags.methods.expand(appointment.tags)
         if (tags.some(t => t.noSmsAppointmentReminder)) {
-          console.log('[Messages] sendScheduled: Skipping', message._id, 'because appointment', appointment._id, 'has a tag with noSmsAppointmentReminder set')
+          // console.log('[Messages] sendScheduled: Skipping', message._id, 'because appointment', appointment._id, 'has a tag with noSmsAppointmentReminder set')
           return false
         }
 
