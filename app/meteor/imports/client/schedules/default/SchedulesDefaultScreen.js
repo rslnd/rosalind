@@ -178,7 +178,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
                     onCancel={this.handleEndEdit}
                   />
                 ) : (
-                  <Button size='medium' style={{ width: '100%', fontSize: '14px' }} onClick={this.handleStartEdit(s._id)}>
+                  <Button size='medium' style={{ width: '100%', fontSize: '14px', opacity: s.note && s.note.toUpperCase() === 'PAUSE' ? 0.7 : 1 }} onClick={this.handleStartEdit(s._id)}>
                     {HMRangeToStringWithRoles(s)}
                   </Button>
                 )
