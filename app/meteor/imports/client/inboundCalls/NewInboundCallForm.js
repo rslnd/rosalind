@@ -140,13 +140,19 @@ export const NewInboundCallForm = compose(
   connect(state => ({
     patient: idx(state, _ => _.patientPicker.patient)
   })),
-  mapProps(props => ({
-    ...props,
-    patient: props.patient ? {
-      ...(props.patient || {}),
-      patientId: props.patient._id || props.patient.patientId
-    } : undefined
-  })),
+  mapProps(props => {
+    return {
+      ...props,
+      initialValues: {
+        patient: props.patient ? {
+          ...(props.patient || {}),
+          patientId: props.patient._id || props.patient.patientId
+        } : undefined,
+        kind: 'patient',
+        topicId: null
+      }
+    }
+  }),
   reduxForm({
     form: formName,
     fields: [
@@ -168,14 +174,9 @@ export const NewInboundCallForm = compose(
     }
   }),
   connect((state, props) => {
-    console.log('C', state, props)
     return {
       kind: selector(state, 'kind'),
       patient: selector(state, 'patient')
     }
-  }),
-  (C) => props => {
-    console.log('XX', props)
-    return <C {...props} />
-  }
+  })
 )(NewInboundCallFormComponent)
