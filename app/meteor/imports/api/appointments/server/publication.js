@@ -171,6 +171,11 @@ export default () => {
         },
         children: [
           {
+            find: function (doc) {
+              return Comments.find({ docId: doc._id })
+            }
+          },
+          {
             find: function (patient) {
               return Appointments.find({ patientId: patient._id }, {
                 sort: { start: 1 },

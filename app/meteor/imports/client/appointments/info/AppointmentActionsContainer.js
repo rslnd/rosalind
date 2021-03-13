@@ -109,7 +109,7 @@ const composer = (props) => {
   let move
   if (appointment && props.onMoveStart) {
     move = () => {
-      searchForPatient()
+      searchForPatient({ notify: false })
       props.onMoveStart({
         appointment: { ...appointment, patient },
         patient,
@@ -130,7 +130,7 @@ const composer = (props) => {
   }
 
   // Put patient into search box
-  const searchForPatient = () => {
+  const searchForPatient = ({ notify = true } = {}) => {
     if (patient) {
       props.dispatch({
         type: 'PATIENT_CHANGE_VALUE',
@@ -138,6 +138,9 @@ const composer = (props) => {
       })
     }
     closeModal()
+    if (notify) {
+      Alert.success('PatientIn in Suche übernommen')
+    }
   }
 
   return {

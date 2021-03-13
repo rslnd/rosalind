@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { useTracker } from 'meteor/react-meteor-data'
 import React, { useState } from 'react'
 import Alert from 'react-s-alert'
 import { insuranceId as formatInsuranceId, prefix } from '../../api/patients/methods'
@@ -18,6 +19,7 @@ import { Pinned } from '../media/Pinned'
 import { hasRole } from '../../util/meteor/hasRole'
 import { ScanButton } from './Documents'
 import { SmsModalContainer } from './SmsModal'
+import { CommentsContainer } from '../comments'
 
 const action = promise =>
   promise.then(() => {
@@ -223,19 +225,36 @@ const InsuranceId = withHandlers({
   </div>
 )
 
-const Note = withHandlers({
-  updateNote: props => note => upsert(props, { note })
-})(({ note, updateNote }) =>
-  <div style={noteStyle}>
-    <div style={noteLabelStyle}>{__('patients.noteLine1')}</div>
-    <div style={noteLabelStyle}>&emsp;{__('patients.noteLine2')}</div>
-    <Textarea
-      initialValue={note}
-      onChange={updateNote}
-      style={noteFieldStyle}
-    />
-  </div>
-)
+const Note = (props) => {
+  const { _id, note } = props
+  const updateNote = newNote => upsert(props, { note: newNote })
+
+  const { canComment, canSeeNote, canEditNote } = useTracker(() => {
+    const canComment = hasRole(Meteor.userId(), ['patient-comments'])
+    const canSeeNote = hasRole(Meteor.userId(), ['patient-note', 'patient-note-edit'])
+    const canEditNote = hasRole(Meteor.userId(), ['patient-note-edit'])
+    return { canComment, canSeeNote, canEditNote }
+  })
+
+  return ((canComment || canSeeNote) &&
+    <div style={noteStyle}>
+      <div style={noteLabelStyle}>{__('patients.noteLine1')}</div>
+      <div style={noteLabelStyle}>&emsp;{__('patients.noteLine2')}</div>
+
+      {canSeeNote &&
+        (canEditNote
+        ? <Textarea
+          initialValue={note}
+          onChange={updateNote}
+          style={noteFieldStyle}
+        />
+        : note)
+      }
+
+      {canComment && <CommentsContainer docId={_id} />}
+    </div>
+  )
+}
 
 const noteFieldStyle = {
   fontWeight: 600,
