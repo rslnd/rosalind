@@ -1,15 +1,21 @@
+import { Meteor } from 'meteor/meteor'
 import { InboundCallsTopics } from '../../api/inboundCalls'
 import { DocumentPicker } from '../components/DocumentPicker'
 import { withTracker } from '../components/withTracker'
 import { compose, withProps, mapProps } from 'recompose'
 import { __ } from '../../i18n'
+import { hasRole } from '../../util/meteor/hasRole'
+import identity from 'lodash/identity'
 
 const composer = (props) => ({
   ...props,
   options: [
-    { _id: null, label: __('inboundCalls.thisOpen') },
-    ...InboundCallsTopics.find({}, { sort: { order: 1 } }).fetch()
-  ]
+    hasRole(Meteor.userId(), ['inboundCalls', 'inboundCalls-topic-null']) &&
+      { _id: null, label: __('inboundCalls.thisOpen') },
+    ...InboundCallsTopics.find({}, { sort: { order: 1 } }).fetch().filter(t =>
+      hasRole(Meteor.userId(), ['inboundCalls', 'inboundCalls-topic-' + t.slug])
+    )
+  ].filter(identity)
 })
 
 const asField = mapProps(p => ({

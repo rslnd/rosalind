@@ -56,7 +56,10 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
         : __(item.name)
       : ''
 
-  const link = item.link || `/${item.name}`
+  const actualLink = (item.link || `/${item.name}`)
+  const link = item.linkToFirstSubItem
+   ? `/${item.name}`
+   : (item.link || `/${item.name}`)
 
   if (item.separator) {
     return (
@@ -76,7 +79,7 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
             </a>
           ) : (
             <Link
-              to={link}
+              to={actualLink}
               className='pointer level-0 link'>
               <i className={`fa fa-${item.icon}`} />
               <span className={hideWhenClosed}>{name}</span>
@@ -137,8 +140,8 @@ const SubItem = ({ item, subItem, location }) => {
 }
 
 const SubBadge = ({ subItem }) =>
-  (subItem.badge && <div className='label label-primary pull-right' style={subBadgeStyle}>
-    {subItem.badge}
+  (subItem.count && <div className='label label-primary pull-right' style={subBadgeStyle}>
+    {subItem.count}
   </div>) || null
 
 const subBadgeStyle = {

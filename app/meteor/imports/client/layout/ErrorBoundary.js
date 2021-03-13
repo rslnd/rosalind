@@ -6,14 +6,17 @@ class ErrorBoundaryComponent extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      hasError: false,
+      error: false,
       errorUrlLocation: null
     }
   }
 
   componentDidCatch (errorObject, info) {
+    const message = `${JSON.stringify(errorObject, null, 2)}\n${JSON.stringify(this.props.location, null, 2)}`
+    console.error(`ErrorBoundary: ${message}`)
+
     this.setState({
-      hasError: true,
+      error: message,
       errorUrlLocation: this.props.location
     })
   }
@@ -23,17 +26,17 @@ class ErrorBoundaryComponent extends React.Component {
       return null
     } else {
       return {
-        hasError: false,
+        error: false,
         errorUrlLocation: null
       }
     }
   }
 
   render () {
-    if (this.state.hasError) {
+    if (this.state.error) {
       return this.props.silent
         ? null
-        : <Error />
+        : <Error message={this.state.error} />
     }
     return this.props.children
   }

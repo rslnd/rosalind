@@ -6,6 +6,7 @@ import { Calendars } from '../../api/calendars'
 import { InboundCallsTopics, InboundCalls } from '../../api/inboundCalls'
 import { Sidebar } from './Sidebar'
 import { hasRole } from '../../util/meteor/hasRole'
+import { sumBy } from 'lodash/fp'
 
 const sidebarItems = ({ history }) => {
   const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
@@ -45,20 +46,25 @@ const sidebarItems = ({ history }) => {
     {
       name: 'inboundCalls',
       icon: 'phone',
-      roles: ['admin', 'inboundCalls'],
-      count: InboundCalls.find({}).count(),
+      roles: ['inboundCalls', 'inboundCalls-topic-*'],
+      count: 'sum',
+      linkToFirstSubItem: true,
       subItems: [
         {
           name: 'thisOpen',
-          badge: inboundCallsTopics.length > 0
+          roles: ['inboundCalls', 'inboundCalls-topic-null'],
+          count: inboundCallsTopics.length > 0
             ? InboundCalls.find({ topicId: null }).count()
             : null
         },
-        ...inboundCallsTopics.map(t => ({
-          badge: InboundCalls.find({ topicId: t._id }).count(),
-          label: t.labelShort || t.label,
-          path: `/topic/${t.slug}`
-        })),
+        ...inboundCallsTopics.map(t => {
+          return {
+            roles: ['inboundCalls', 'inboundCalls-topic-' + t.slug],
+            count: InboundCalls.find({ topicId: t._id }).count(),
+            label: t.labelShort || t.label,
+            path: `/topic/${t.slug}`
+          }
+        }).filter(identity),
         { name: 'thisResolved', path: '/resolved' },
         { name: 'thisNew', path: '/new' }
       ]
@@ -136,6 +142,27 @@ const navigateAfterLoadToItem = (items) => {
 const composer = (props) => {
   const items = sidebarItems(props).filter((item) => {
     return (!item.roles || (item.roles && hasRole(Meteor.userId(), item.roles)))
+  }).map(item => {
+    const subItems = item.subItems && item.subItems.filter(subItem => {
+      return (!subItem.roles || (subItem.roles && hasRole(Meteor.userId(), subItem.roles)))
+    })
+
+    return {
+      ...item,
+      subItems,
+      link: (item.linkToFirstSubItem && subItems && subItems[0])
+        ? '/' + [item.name, (subItems[0].path)].join('')
+        : item.link,
+      count: (item.count === 'sum' && subItems)
+        ? subItems.reduce((acc, s) => {
+          if (s.count && s.count > 0) {
+            return acc + s.count
+          } else {
+            return acc
+          }
+        }, 0)
+        : item.count
+    }
   })
 
   // Don't navigate away when custom url was loaded
