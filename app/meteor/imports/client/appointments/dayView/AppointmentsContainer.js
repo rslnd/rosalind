@@ -80,6 +80,18 @@ const composer = (props) => {
 
   let assigneeIds = daySchedule ? (daySchedule.userIds || []) : []
 
+  if (hasRole(Meteor.userId(), ['appointments-column-*'])) {
+    assigneeIds = assigneeIds.filter(_id => {
+      const assignee = Users.findOne({ _id })
+      if (assignee) {
+        return hasRole(
+          Meteor.userId(),
+          ['appointments-column-' + assignee.username]
+        )
+      }
+    })
+  }
+
   if (hasRole(Meteor.userId(), ['appointments-own-only'])) {
     assigneeIds = assigneeIds.filter(_id => Meteor.userId() === _id)
   }

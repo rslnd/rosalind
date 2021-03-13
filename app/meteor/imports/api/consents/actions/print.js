@@ -14,7 +14,7 @@ export const print = ({ Consents }) =>
       clientId: Optional(String),
       payload: Object
     },
-    roles: ['templates-print', 'media', 'patients', 'appointments', 'admin'],
+    roles: ['templates-print', 'media', 'patients', 'appointments', 'calendar-column-*', 'admin'],
     fn: function({ patientId, assigneeId, appointmentId, templateId, clientId, payload }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')

@@ -4,7 +4,7 @@ import { Messages } from '../'
 export const publication = () => {
   publish({
     name: 'message',
-    roles: ['appointments', 'inboundCalls', 'admin'],
+    roles: ['appointments', 'calendar-column-*', 'inboundCalls', 'admin'],
     args: { messageId: String },
     fn: function ({ messageId }) {
       console.log('pubbing', messageId, Messages.find({

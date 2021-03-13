@@ -42,7 +42,7 @@ export default () => {
 
   publishComposite({
     name: 'appointments',
-    roles: ['appointments-*'],
+    roles: ['appointments', 'appointments-*'],
     args: {
       appointmentIds: [String]
     },
