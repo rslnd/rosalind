@@ -29,7 +29,6 @@ mdg:validated-method
 # Collections
 aldeed:simple-schema
 aldeed:collection2
-tmeasday:publish-counts
 zimme:collection-softremovable
 cultofcoders:publish-composite
 didericis:callpromise-mixin

@@ -6,6 +6,7 @@ import { MainLayout } from './MainLayout'
 import { subscribe } from '../../util/meteor/subscribe'
 import { Settings } from '../../api/settings'
 import { getClientKey } from '../../startup/client/native/events'
+import { getClient } from '../../api/clients/methods/getClient'
 
 // is valid hex color? to avoid weird grey flicker after logout
 const isColor = s => s && s.match && s.match(/^#[a-fA-F0-9]{1,8}$/)
@@ -33,7 +34,6 @@ const composer = (props) => {
     subs.push(subscribe('availabilities'))
     subs.push(subscribe('constraints'))
     subs.push(subscribe('schedules-holidays'))
-    subs.push(subscribe('inboundCalls-counts'))
     subs.push(subscribe('inboundCallsTopics'))
     subs.push(subscribe('referrables'))
     subs.push(subscribe('media-tags'))
@@ -56,10 +56,12 @@ const composer = (props) => {
     (isColor(themeColorMetaTag.content) && themeColorMetaTag.content) ||
     '#3c8dbc'
 
+  const client = getClient()
 
   return {
     ...props,
     currentUser,
+    client,
     locale,
     loggingIn,
     handleLoginSuccess,

@@ -57,7 +57,7 @@ export const InboundCall = (props) => {
   }
 
   return (
-    <div className='box box-widget' style={style}>
+    <div className='box box-widget page-break-avoid' style={style}>
       <div className='box-header pb0'>
         <h4 className='username mb2 mt1 enable-select'>
           {

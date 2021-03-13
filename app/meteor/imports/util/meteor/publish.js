@@ -2,6 +2,9 @@ import { Meteor } from 'meteor/meteor'
 import { check, Match } from 'meteor/check'
 import { isAllowed } from './isAllowed'
 
+export const Optional = t =>
+  Match.Maybe(Match.OneOf(undefined, null, t))
+
 const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requireClientKey, debug = false }) => {
   // if (!roles) {
   //   console.warn('Publication', name, 'is not restricted to any roles')

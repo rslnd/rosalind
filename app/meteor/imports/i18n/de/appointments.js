@@ -45,7 +45,6 @@ export const appointments = {
   resolvedBy: 'Erledigt von',
   canceledBy: 'Storniert von',
   canceledByMessage: 'Storniert per SMS __date__ um __time__',
-  resolvedToday: 'Heute erledigt',
   consented: 'Revers abgelegt am __date__',
   notConsented: 'Revers noch nicht abgelegt',
   consentNewSuccess: 'Revers abgelegt',

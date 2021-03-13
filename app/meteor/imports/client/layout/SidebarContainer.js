@@ -2,7 +2,6 @@ import identity from 'lodash/identity'
 import { withTracker } from '../components/withTracker'
 import { withRouter } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
-import { Counts } from 'meteor/tmeasday:publish-counts'
 import { Calendars } from '../../api/calendars'
 import { InboundCallsTopics, InboundCalls } from '../../api/inboundCalls'
 import { Sidebar } from './Sidebar'
@@ -47,7 +46,7 @@ const sidebarItems = ({ history }) => {
       name: 'inboundCalls',
       icon: 'phone',
       roles: ['admin', 'inboundCalls'],
-      countBadge: 'inboundCalls',
+      count: InboundCalls.find({}).count(),
       subItems: [
         {
           name: 'thisOpen',
@@ -137,13 +136,6 @@ const navigateAfterLoadToItem = (items) => {
 const composer = (props) => {
   const items = sidebarItems(props).filter((item) => {
     return (!item.roles || (item.roles && hasRole(Meteor.userId(), item.roles)))
-  }).map((item) => {
-    if (item.countBadge) {
-      const count = Counts.get(item.countBadge)
-      return { ...item, count }
-    } else {
-      return item
-    }
   })
 
   // Don't navigate away when custom url was loaded

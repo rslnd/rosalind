@@ -3,9 +3,10 @@ import { __ } from '../../i18n'
 import { InboundCall } from './InboundCall'
 import { Box } from '../components/Box'
 import { Loading } from '../components/Loading'
+import { Link } from 'react-router-dom'
 
 export const InboundCallsList = ({ isLoading, inboundCalls = [], topic, resolve, unresolve, edit, noData = null, fullNameWithTitle }) => (
-  (isLoading && inboundCalls.length === 0)
+  (isLoading)
     ? <Loading />
     : <div>
       {
@@ -59,4 +60,13 @@ export const InboundCallsScreen = props =>
         </Box>
       </div>
     } />
+
+    <br />
+    <p className='tc p4'>
+      <Link to={
+        props.topic
+        ? `/inboundCalls/resolved/${props.topic.slug}#`
+        : '/inboundCalls/resolved#'
+      }>Erledigte Rückrufe anzeigen</Link>
+    </p>
   </div>

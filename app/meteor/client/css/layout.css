@@ -33,6 +33,10 @@ body {
   cursor: pointer;
 }
 
+.page-break-avoid {
+  page-break-inside: avoid;
+}
+
 .disable-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
