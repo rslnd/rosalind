@@ -264,3 +264,8 @@ h6,
 .DayPicker_transitionContainer__horizontal {
   transition-property: none !important;
 }
+
+/* Prevent mui input baseline to strike label */
+label + .MuiInput-formControl {
+  margin-top: 19px !important;
+}

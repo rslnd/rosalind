@@ -20,6 +20,7 @@ export const InboundCall = (props) => {
     resolve,
     edit,
     fullNameWithTitle,
+    onSearchPatient
   } = props
 
   const {
@@ -62,7 +63,7 @@ export const InboundCall = (props) => {
         <h4 className='username mb2 mt1 enable-select'>
           {
             ((lastName || firstName) && !patient) &&
-              <>
+              <span className='pointer' onClick={() => onSearchPatient(inboundCall)}>
                 {
                   payload && payload.gender === 'Male' && 'Hr. ' ||
                   payload && payload.gender === 'Female' && 'Fr. ' || null
@@ -71,29 +72,13 @@ export const InboundCall = (props) => {
                   payload && (payload.titlePrepend + ' ')
                 }
 
-                <InlineEdit
-                  onChange={edit(_id, 'lastName')}
-                  canEdit={canEdit}
-                  value={lastName}
-                  placeholder={__('inboundCalls.lastName')}
-                  hidePlaceholder
-                  noUI
-                >
-                  <b>{lastName}</b>
-                </InlineEdit>
+                <b>{lastName}</b>
 
                 &nbsp;
 
-                <InlineEdit
-                  onChange={edit(_id, 'firstName')}
-                  canEdit={canEdit}
-                  placeholder={__('inboundCalls.firstName')}
-                  hidePlaceholder
-                  value={firstName}
-                  noUI
-                />
+                {firstName}
                 &ensp;
-              </>
+              </span>
           }
 
           {
