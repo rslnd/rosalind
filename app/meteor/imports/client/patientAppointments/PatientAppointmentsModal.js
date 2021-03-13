@@ -93,14 +93,7 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
                           </div>
                         </div>
                         <div style={actionsStyle}>
-                          {
-                            props.currentAppointment
-                              ? <AppointmentActionsContainer {...props} />
-                              : <Button
-                                style={closeButtonStyle}
-                                onClick={handleClose}
-                              >{__('ui.close')}</Button>
-                          }
+                          <AppointmentActionsContainer {...props} />
                         </div>
                       </div>
                       {isDropping && <div style={droppingStyle} />}

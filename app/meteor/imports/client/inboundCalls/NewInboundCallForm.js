@@ -167,8 +167,15 @@ export const NewInboundCallForm = compose(
       return errors
     }
   }),
-  connect(state => ({
-    kind: selector(state, 'kind'),
-    patient: selector(state, 'patient')
-  }))
+  connect((state, props) => {
+    console.log('C', state, props)
+    return {
+      kind: selector(state, 'kind'),
+      patient: selector(state, 'patient')
+    }
+  }),
+  (C) => props => {
+    console.log('XX', props)
+    return <C {...props} />
+  }
 )(NewInboundCallFormComponent)

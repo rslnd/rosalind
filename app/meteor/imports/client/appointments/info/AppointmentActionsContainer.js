@@ -10,90 +10,104 @@ import { Appointments } from '../../../api/appointments'
 import { AppointmentActions } from './AppointmentActions'
 import { hasRole } from '../../../util/meteor/hasRole'
 import { Meteor } from 'meteor/meteor'
+import { prompt } from '../../layout/Prompt'
 
 const composer = (props) => {
   const appointment = props.appointment || Appointments.findOne({ _id: props.appointmentId })
-  if (!appointment) { return }
 
-  const { queued, admitted, canceled, treatmentStart, treatmentEnd } = appointment
+  const { queued, admitted, canceled, treatmentStart, treatmentEnd } = (appointment || {})
+
   const args = { appointmentId: props.appointmentId }
-  const patient = appointment.patientId && Patients.findOne({ _id: appointment.patientId })
-  const calendar = Calendars.findOne({ _id: appointment.calendarId })
+  const patientId = props.patientId || (props.appointment && props.appointment.patientId)
+  const patient = patientId && Patients.findOne({ _id: patientId })
+  const calendar = appointment && Calendars.findOne({ _id: appointment.calendarId })
 
   const closeModal = () => props.onClose && props.onClose()
 
-  const setQueued = () => {
+  const setQueued = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.setQueued'))
     Appointments.actions.setQueued.call(args)
-  }
+  })
 
-  const setAdmitted = () => {
+  const setAdmitted = appointment && (() => {
     closeModal()
     props.onSetAdmitted(appointment)
-  }
+  })
 
-  const startTreatment = () => {
+  const startTreatment = appointment && (async () => {
+    const missingConsent = true // TODO check new checklist collection
+    const isAssignee = (Meteor.userId() === appointment.assigneeId || Meteor.userId() === appointment.waitlistAssigneeId)
+    const needsGating = hasRole(Meteor.userId(), ['gate-consent'])
+    if (missingConsent && (isAssignee || needsGating)) {
+      await prompt({
+        title: 'Bitte zuerst einen unterschriebenen Revers für diese Behandlung einscannen.',
+        confirm: 'OK',
+        cancel: ' '
+      })
+      return
+    }
+
     closeModal()
     Alert.success(__('appointments.startTreatmentSuccess'))
     Appointments.actions.startTreatment.call(args)
-  }
+  })
 
-  const endTreatment = () => {
+  const endTreatment = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.endTreatmentSuccess'))
     Appointments.actions.endTreatment.call(args)
-  }
+  })
 
-  const unsetQueued = () => {
+  const unsetQueued = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.unsetQueued'))
     Appointments.actions.unsetQueued.call(args)
-  }
+  })
 
-  const unsetAdmitted = () => {
+  const unsetAdmitted = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.unsetAdmittedSuccess'))
     Appointments.actions.unsetAdmitted.call(args)
-  }
+  })
 
-  const setCanceled = () => {
+  const setCanceled = appointment && (() => {
     Alert.success(__('appointments.setCanceledSuccess'))
     Appointments.actions.setCanceled.call(args)
-  }
+  })
 
-  const setNoShow = () => {
+  const setNoShow = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.setNoShowSuccess'))
     Appointments.actions.setNoShow.call(args)
-  }
+  })
 
-  const unsetCanceled = () => {
+  const unsetCanceled = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.unsetCanceledSuccess'))
     Appointments.actions.unsetCanceled.call(args)
-  }
+  })
 
-  const unsetStartTreatment = () => {
+  const unsetStartTreatment = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.unsetStartTreatmentSuccess'))
     Appointments.actions.unsetStartTreatment.call(args)
-  }
+  })
 
-  const unsetEndTreatment = () => {
+  const unsetEndTreatment = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.unsetEndTreatmentSuccess'))
     Appointments.actions.unsetEndTreatment.call(args)
-  }
+  })
 
-  const softRemove = () => {
+  const softRemove = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.softRemoveSuccess'))
     Appointments.actions.softRemove.callPromise(args)
-  }
+  })
 
   let move
-  if (props.onMoveStart) {
+  if (appointment && props.onMoveStart) {
     move = () => {
       searchForPatient()
       props.onMoveStart({
@@ -107,7 +121,7 @@ const composer = (props) => {
   }
 
   let viewInCalendar
-  if (props.viewInCalendar) {
+  if (appointment && props.viewInCalendar) {
     viewInCalendar = () => {
       closeModal()
       const date = moment(appointment.start).format('YYYY-MM-DD')

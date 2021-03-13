@@ -27,7 +27,7 @@ const Btn = Object.keys(buttons({})).reduce((acc, k) => ({
   [k]: props =>
     <Button
       {...props}
-      {...buttons(props.calendar)[k]}
+      {...buttons(props.calendar || {})[k]}
       name={k}
       onClick={() => props.handleClick(k)}
     />
@@ -93,79 +93,84 @@ export const AppointmentActions = compose(
     calendar
   } = props
 
-  const next = currentState(appointment, calendar)
+  const next = appointment && currentState(appointment, calendar)
 
-  if (!next) {
+  if (appointment && !next) {
     console.log(appointment)
     throw new Error(`No next state for appoitment ${appointment._id}`)
   }
 
-  const primaryActions = next.primaryActions && next.primaryActions.map(n => Btn[n])
-  const secondaryActions = next.secondaryActions
+  const primaryActions = appointment && next.primaryActions && next.primaryActions.map(n => Btn[n])
+  const secondaryActions = appointment && next.secondaryActions
 
   return <div style={containerStyle}>
-    <div style={leftStyle}>
-      {
-        primaryActions && primaryActions.map((NextAction, i) =>
-          <NextAction
-            key={i}
-            {...props}
-          />
-        )
-      }
+    {appointment
+      ? <div style={leftStyle}>
+        {
+          primaryActions && primaryActions.map((NextAction, i) =>
+            <NextAction
+              key={i}
+              {...props}
+            />
+          )
+        }
 
-      {viewInCalendar && <Btn.viewInCalendar {...props} />}
+        {viewInCalendar && <Btn.viewInCalendar {...props} />}
 
-      {
-        secondaryActions &&
-        <MuiButton
-          variant='outlined'
-          style={menuButtonStyle}
-          onClick={handleMenuOpen}
-        >
-          <Icon name='ellipsis-h' />
-        </MuiButton>
-      }
+        {
+          secondaryActions &&
+          <MuiButton
+            variant='outlined'
+            style={menuButtonStyle}
+            onClick={handleMenuOpen}
+          >
+            <Icon name='ellipsis-h' />
+          </MuiButton>
+        }
 
-      {
-        secondaryActions && <Menu
-          open={!!anchor}
-          anchorEl={anchor}
-          getContentAnchorEl={null}
-          onClose={handleMenuClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left'
-          }}
-          transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left'
-          }}
-        >
-          {
-            secondaryActions.map(a =>
-              <MenuItem
-                key={a}
-                onClick={() => {
-                  handleMenuClose()
-                  props[a]()
-                }}
-              >
-                <span style={menuIconStyle}>
-                  {buttons(calendar)[a] ? <Icon name={buttons(calendar)[a].icon} /> : null}
-                </span>
-                {__('appointments.' + a)}
-              </MenuItem>
-            )
-          }
-        </Menu>
-      }
-    </div>
+        {
+          secondaryActions && <Menu
+            open={!!anchor}
+            anchorEl={anchor}
+            getContentAnchorEl={null}
+            onClose={handleMenuClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+            transformOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+          >
+            {
+              secondaryActions.map(a =>
+                <MenuItem
+                  key={a}
+                  onClick={() => {
+                    handleMenuClose()
+                    props[a]()
+                  }}
+                >
+                  <span style={menuIconStyle}>
+                    {buttons(calendar)[a] ? <Icon name={buttons(calendar)[a].icon} /> : null}
+                  </span>
+                  {__('appointments.' + a)}
+                </MenuItem>
+              )
+            }
+          </Menu>
+        }
+      </div>
+      : <div style={leftStyle}>
+        &nbsp;
+      </div>
+    }
 
     <div style={rightStyle}>
       {searchForPatient && <Btn.searchForPatient {...props} />}
-      <Btn.softRemove {...props} />
-      {move && <Btn.move {...props} />}
+      {appointment && <Btn.softRemove {...props} />}
+      {appointment && move && <Btn.move {...props} />}
     </div>
   </div>
 })
