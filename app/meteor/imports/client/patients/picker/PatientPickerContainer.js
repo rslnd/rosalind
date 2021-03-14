@@ -13,8 +13,9 @@ const mapStateToProps = state => ({
     inputValue: state.patientPicker.inputValue,
     value: state.patientPicker.patient,
     options: state.patientPicker.options,
-    isLoading: state.patientPicker.isLoading
+    isLoading: state.patientPicker.isLoading,
   },
+  partialPatient: state.patientPicker.partialPatient,
   previousInputValue: state.patientPicker.previousInputValue
 })
 
@@ -54,8 +55,12 @@ const newPatientOption = props => {
 
   return {
     patientId: 'newPatient',
-    firstName,
-    lastName
+    ...(props.partialPatient || { lastName, firstName }),
+    ...(props.partialPatient ? ({
+      contacts: [
+        { channel: 'Phone', value: props.partialPatient.telephone }
+      ]
+    }) : {})
   }
 }
 

@@ -3,7 +3,8 @@ import {
   PATIENT_CHANGE_VALUE,
   PATIENTS_RESULTS_LOADED,
   PATIENT_LOAD_START,
-  PATIENT_CLEAR_VALUE
+  PATIENT_CLEAR_VALUE,
+  PATIENT_SET_PARTIAL
 } from './actions'
 
 const initialState = {
@@ -45,7 +46,8 @@ export default (state, action) => {
         ...state,
         inputValue: '',
         isLoading: false,
-        patient: null
+        patient: null,
+        partialPatient: null
       }
     case PATIENT_CHANGE_VALUE:
       return {
@@ -53,8 +55,15 @@ export default (state, action) => {
         previousInputValue: state.inputValue || state.previousInputValue,
         inputValue: '',
         isLoading: false,
-        patient: action.patient
+        patient: action.patient,
+        partialPatient: null
       }
+    case PATIENT_SET_PARTIAL:
+      return {
+        ...state,
+        partialPatient: action.partialPatient
+      }
+
     // Warning: do not keep patient in search, because then their name etc may get
     // changed inadvertently when inserting another appointment for a different patient
     // (this is a UX issue)

@@ -101,6 +101,7 @@ export const InboundCall = (props) => {
           </small>
         </h4>
 
+        <span className='enable-select'>
         {
           payload && (payload.existingPatient === false) && '(neu) '
         }
@@ -112,6 +113,7 @@ export const InboundCall = (props) => {
         {
           payload && payload.birthdate && (payload.birthdate + ' ')
         }
+        </span>
 
         {telephone &&
           <InlineEdit

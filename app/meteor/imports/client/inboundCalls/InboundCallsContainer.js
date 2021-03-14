@@ -1,3 +1,4 @@
+import Alert from 'react-s-alert'
 import { toClass, withState, compose } from 'recompose'
 import { InboundCalls, InboundCallsTopics } from '../../api/inboundCalls'
 import { Patients } from '../../api/patients'
@@ -8,6 +9,23 @@ import { Comments, Users } from '../../api'
 import { hasRole } from '../../util/meteor/hasRole'
 import identity from 'lodash/identity'
 import { filterComments } from './filterComments'
+import { connect } from 'react-redux'
+import { changeInputValue } from '../patients/picker/actions'
+
+export const onSearchPatient = dispatch => (inboundCall) => {
+  const partialPatientFields = {
+    birthday: inboundCall.payload ? inboundCall.payload.birthdate : null,
+    firstName: inboundCall.firstName,
+    lastName: inboundCall.lastName,
+    telephone: inboundCall.telephone,
+    gender: inboundCall.payload ? inboundCall.payload.gender : null,
+    titlePrepend: inboundCall.payload ? inboundCall.payload.titlePrepend : null,
+  }
+
+  dispatch(changeInputValue(partialPatientFields))
+  Alert.success('Name in Suche übernommen')
+}
+
 
 const composer = (props) => {
   const handle = subscribe('inboundCalls')
@@ -73,10 +91,11 @@ const composer = (props) => {
     return user && Users.methods.fullNameWithTitle(user)
   }
 
-  return { inboundCalls, resolve, unresolve, edit, fullNameWithTitle, topic }
+  return { inboundCalls, resolve, unresolve, edit, fullNameWithTitle, topic, onSearchPatient: onSearchPatient(props.dispatch) }
 }
 
 export const InboundCallsContainer = compose(
   withState('isCommentFilterEnabled', 'setCommentFilterEnabled', true),
-  withTracker(composer),
+  connect(),
+  withTracker(composer)
 )(toClass(InboundCallsScreen))

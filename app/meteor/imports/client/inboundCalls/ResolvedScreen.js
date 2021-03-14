@@ -20,6 +20,7 @@ import { UserPicker } from '../users/UserPicker'
 import { TopicPicker } from './TopicPicker'
 import { withRouter } from 'react-router'
 import { Icon } from '../components/Icon'
+import { onSearchPatient } from './InboundCallsContainer'
 
 const debouncedSubscribe = debounce(subscribe, 150)
 
@@ -188,14 +189,15 @@ const ResolvedContainer = (props) => {
       inboundCalls,
       isLoadingCalls,
       topic,
-      selector
+      selector,
+      onSearchPatient: onSearchPatient(props.dispatch)
     }
   })
   return <Screen {...props} {...props3} {...props2} />
 }
 
 
-const Screen = ({ fullNameWithTitle, handleQueryChange, query, isLoadingCalls, inboundCalls, resolve, unresolve, edit, topic, handleChangeTopic, Pagination }) =>
+const Screen = ({ fullNameWithTitle, handleQueryChange, query, isLoadingCalls, inboundCalls, resolve, unresolve, edit, topic, handleChangeTopic, Pagination, onSearchPatient }) =>
   <div>
     <ContentHeader title={topic
       ? __('inboundCalls.thisResolvedTopic', { topic: topic.label })
@@ -229,6 +231,7 @@ const Screen = ({ fullNameWithTitle, handleQueryChange, query, isLoadingCalls, i
         unresolve={unresolve}
         edit={edit}
         fullNameWithTitle={fullNameWithTitle}
+        onSearchPatient={onSearchPatient}
       />
 
       <Pagination items={inboundCalls} />
