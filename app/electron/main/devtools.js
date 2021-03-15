@@ -20,13 +20,10 @@ const forceRefresh = (win) => {
 }
 
 const start = () => {
+  // Don't register F5 etc because they interfere with cgm ultrasonic
   localShortcut.register('CmdOrCtrl+Alt+I', toggleDevTools)
   localShortcut.register('CmdOrCtrl+Shift+I', toggleDevTools)
-  localShortcut.register('F12', toggleDevTools)
-  localShortcut.register('F11', toggleDevTools)
-
   localShortcut.register('CmdOrCtrl+R', forceRefresh)
-  localShortcut.register('F5', forceRefresh)
 }
 
 module.exports = { start }
