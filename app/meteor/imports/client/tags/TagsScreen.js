@@ -22,6 +22,7 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'calendarIds',
     EditComponent: CalendarPicker,
     isMulti: true,
+    unsetWhenEmpty: true,
     render: t => t.calendarIds && t.calendarIds.map(c => getCalendarName(c)).join(', ')
   },
   {
