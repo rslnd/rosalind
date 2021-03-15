@@ -16,15 +16,19 @@ const alternativeButtonStyle = {
 
 // Disable buttons for some time after starting treatment
 // to avoid double click immediately ending treatment
-const waitMs = 1900
+const waitMs = 1000
+let lastClickAt = 0
+
+const withClick = fn => e => {
+  lastClickAt = new Date()
+  fn(e)
+}
 
 const composer = props => {
-  const { treatmentStart } = props.appointment
-
-  const recentlyStartedTreatment = treatmentStart && (treatmentStart.getTime() >= (new Date() - waitMs))
+  const disableButtons = lastClickAt >= (new Date() - waitMs)
 
   return {
-    disableButtons: recentlyStartedTreatment,
+    disableButtons,
     ...props
   }
 }
@@ -53,7 +57,7 @@ const ActionButtonComponent = ({ appointment, isFirst, isLast, action, style = {
         variant={isFirst ? 'contained' : undefined}
         color={isFirst ? 'primary' : undefined}
         size='large'
-        onClick={nextAction.fn}
+        onClick={withClick(nextAction.fn)}
         disabled={disableButtons}
         fullWidth>
         {
@@ -65,7 +69,7 @@ const ActionButtonComponent = ({ appointment, isFirst, isLast, action, style = {
           <Button
             style={alternativeButtonStyle}
             size='small'
-            onClick={nextAction.alternativeAction.fn}
+            onClick={withClick(nextAction.alternativeAction.fn)}
             disabled={disableButtons}
             fullWidth>
             {nextAction.alternativeAction.title}
@@ -76,7 +80,7 @@ const ActionButtonComponent = ({ appointment, isFirst, isLast, action, style = {
           <Button
             style={alternativeButtonStyle}
             size='small'
-            onClick={() => handleChangeWaitlistAssignee({ appointmentId: a._id })}
+            onClick={withClick(() => handleChangeWaitlistAssignee({ appointmentId: a._id }))}
             disabled={disableButtons}
             fullWidth>
             {__('appointments.changeWaitlistAssignee')}
