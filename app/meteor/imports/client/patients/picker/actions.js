@@ -156,7 +156,7 @@ const autofillPatient = (formName, patientOrQueryString) => {
       )
 
       // patient.contacts[0] has channel: 'Phone'
-      dispatch(autofill(formName, `patient.contacts[0].value`, '01010100101010'))
+      // dispatch(autofill(formName, `patient.contacts[0].value`, '01010100101010'))
 
       // Reveal validation errors only if actual patient was selected
       const setTouched = patient.patientId !== 'newPatient'
