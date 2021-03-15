@@ -134,10 +134,6 @@ const sidebarItems = ({ history }) => {
 
 let didNavigationAfterLoad = false
 
-const navigateAfterLoadToItem = (items) => {
-  items.find()
-}
-
 
 const composer = (props) => {
   const items = sidebarItems(props).filter((item) => {

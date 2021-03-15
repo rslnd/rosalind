@@ -1,26 +1,44 @@
 import { InboundCalls, InboundCallsTopics } from '../'
 import flatten from 'lodash/flatten'
 import moment from 'moment'
+import { Meteor } from 'meteor/meteor'
 import { Comments } from '../../comments'
 import { Patients } from '../../patients'
 import { publish, publishComposite, Optional } from '../../../util/meteor/publish'
+import { hasRole } from '../../../util/meteor/hasRole'
+
+const restrictTopicsToRole = (userId, field = 'topicId') => {
+  if (hasRole(userId, ['inboundCalls'])) {
+    return {}
+  }
+
+  const topicIds = InboundCallsTopics.find({}).fetch().filter(t => {
+    return hasRole(userId, ['inboundCalls-topic-' + t.slug || 'null'])
+  }).map(t => t._id)
+
+  if (hasRole(userId, ['inboundCalls-topic-null'])) {
+    topicIds.push(null)
+  }
+
+  return { [field]: { $in: topicIds } }
+}
 
 export default () => {
   publish({
     name: 'inboundCallsTopics',
-    roles: ['inboundCalls'],
+    roles: ['inboundCalls', 'inboundCalls-topic-*'],
     fn: function () {
-      return InboundCallsTopics.find({})
+      return InboundCallsTopics.find({ ...restrictTopicsToRole(this.userId, '_id') })
     }
   })
 
   publishComposite({
     name: 'inboundCalls',
-    roles: ['inboundCalls'],
+    roles: ['inboundCalls', 'inboundCalls-topic-*'],
     fn: function () {
       return {
         find: function () {
-          return InboundCalls.find({ removed: { $ne: true } })
+          return InboundCalls.find({ ...restrictTopicsToRole(this.userId), removed: { $ne: true } })
         },
         children: [
           {
@@ -42,7 +60,7 @@ export default () => {
 
   publishComposite({
     name: 'inboundCalls-2',
-    roles: ['inboundCalls'],
+    roles: ['inboundCalls', 'inboundCalls-topic-*'],
     args: {
       topicId: Optional(String),
       patientId: Optional(String),
@@ -50,6 +68,16 @@ export default () => {
       page: Optional(Number)
     },
     fn: function ({ topicId, patientId, removed, page = 0 }) {
+      const topic = InboundCallsTopics.findOne({ _id: topicId })
+      const topicSlug = (topicId === null) ? 'null' : (topic && topic.slug)
+
+      if (!topicSlug || !hasRole(this.userId, ['inboundCalls', 'inboundCalls-topic-' + topicSlug])) {
+        // Missing role, return empty cursor
+        return {
+          find: () => InboundCalls.find({ _id: 'dummy' })
+        }
+      }
+
       const selector = {
         topicId: topicId || null
       }
