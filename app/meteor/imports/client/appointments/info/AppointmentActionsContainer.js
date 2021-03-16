@@ -39,7 +39,7 @@ const composer = (props) => {
     const missingConsent = true // TODO check new checklist collection
     const isAssignee = (Meteor.userId() === appointment.assigneeId || Meteor.userId() === appointment.waitlistAssigneeId)
     const needsGating = hasRole(Meteor.userId(), ['gate-consent'])
-    if (missingConsent && (isAssignee || needsGating)) {
+    if (missingConsent && isAssignee && needsGating) {
       await prompt({
         title: 'Bitte zuerst einen unterschriebenen Revers für diese Behandlung einscannen.',
         confirm: 'OK',
