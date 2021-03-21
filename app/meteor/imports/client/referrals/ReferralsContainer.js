@@ -1,3 +1,4 @@
+import React from 'react'
 import { __ } from '../../i18n'
 import { withTracker } from '../components/withTracker'
 import Alert from 'react-s-alert'
@@ -6,6 +7,7 @@ import { Appointments } from '../../api/appointments'
 import { ReferralsWidget } from './ReferralsWidget'
 import { Meteor } from 'meteor/meteor'
 import { hasRole } from '../../util/meteor/hasRole'
+import { ErrorBoundary } from '../layout/ErrorBoundary'
 
 const composer = props => {
   const { calendarId, patientId } = props.appointment
@@ -14,7 +16,13 @@ const composer = props => {
     return null
   }
 
-  const referrals = Referrals.find({ patientId }).fetch()
+  const referrals = Referrals.find(
+    { patientId },
+    { sort: { createdAt: -1 }}
+  ).fetch().map(r => ({
+    ...r,
+    referrable: Referrables.findOne({ _id: r.referrableId })
+  }))
   const appointments = Appointments.find({ patientId }).fetch()
 
   const existingReferrals = referrable => referrals.filter(r => (r.referrableId === referrable._id))
@@ -56,10 +64,17 @@ const composer = props => {
 
   return {
     ...props,
+    referrals,
     referrables,
     canReferImmediate,
     canReferDelayed
   }
 }
 
-export const ReferralsContainer = withTracker(composer)(ReferralsWidget)
+const R = (props) =>
+  <ErrorBoundary>
+    <ReferralsWidget {...props} />
+  </ErrorBoundary>
+
+
+export const ReferralsContainer = withTracker(composer)(R)
