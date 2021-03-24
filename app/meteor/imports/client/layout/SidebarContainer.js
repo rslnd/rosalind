@@ -20,7 +20,7 @@ const sidebarItems = ({ history }) => {
       roles: ['waitlist', 'waitlist-all', 'admin']
     },
     ...calendars.map((c, i) => ({
-      shouldNavigateHereAfterLoad: (i === 0),
+      shouldNavigateHereAfterLoad: true,
       label: c.name,
       color: c.color,
       icon: c.icon,
@@ -167,7 +167,14 @@ const composer = (props) => {
     didNavigationAfterLoad = true
   }
 
-  if (!didNavigationAfterLoad && items && (items.find(i => i.shouldNavigateHereAfterLoad && i.link) || (items.length >= 1 && items[0].link))) {
+  if (!didNavigationAfterLoad &&
+    items &&
+    items.lengt >= 1 &&
+    (
+      items.find(i => i.shouldNavigateHereAfterLoad && i.link) ||
+      (items.length >= 1 && items[0].link)
+    )
+  ) {
     const item = (items.find(i => i.shouldNavigateHereAfterLoad) || items[0])
     console.log('[Sidebar] Navigating to first item', item.link)
     didNavigationAfterLoad = true
