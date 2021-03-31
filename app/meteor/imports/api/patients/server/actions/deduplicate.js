@@ -21,7 +21,7 @@ export const deduplicate = ({ Patients }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!hasRole(this.userId, ['admin'])) {
+      if (!hasRole(this.userId, ['admin', 'patients-merge'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
