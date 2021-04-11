@@ -45,6 +45,7 @@ app.on('ready', () => {
   const print = require('./print')
   const watch = require('./watch')
   const devtools = require('./devtools')
+  const auerPhone = require('./auerPhone')
   const { ensureClientKey } = require('./clientKey')
 
   let mainWindow = null
@@ -72,12 +73,13 @@ app.on('ready', () => {
 
     logger.ready('[Main] Main window loaded')
     print.start({ ipcReceiver: mainWindow.webContents })
+    auerPhone.start({ ipcReceiver: mainWindow.webContents })
     automation.start(process.argv)
     devtools.start()
   })
 
   ipcMain.on('hello', (e) => {
-    logger.info('IPC received hello, sending welcome')
+    // logger.info('[ipc] received hello, sending welcome')
 
     ensureClientKey((clientKey) => {
       mainWindow.webContents.send('welcome', {

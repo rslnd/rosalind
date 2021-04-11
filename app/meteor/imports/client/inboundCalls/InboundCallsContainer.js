@@ -91,7 +91,7 @@ const composer = (props) => {
     return user && Users.methods.fullNameWithTitle(user)
   }
 
-  return { inboundCalls, resolve, unresolve, edit, fullNameWithTitle, topic, onSearchPatient: onSearchPatient(props.dispatch) }
+  return { inboundCalls, resolve, unresolve, edit, fullNameWithTitle, topic, onSearchPatient: onSearchPatient(props.dispatch), showTopic: hasTopicsDefined }
 }
 
 export const InboundCallsContainer = compose(

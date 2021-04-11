@@ -37,7 +37,9 @@ export const post = ({ InboundCalls }) =>
         topicId,
         pinnedBy,
         privatePatient,
-        payload
+        payload,
+        createdAt: new Date(),
+        createdBy: this.userId
       }
 
       if (kind === 'other') {

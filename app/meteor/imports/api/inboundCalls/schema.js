@@ -1,4 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { External } from '../../util/schema'
 import Auto from '../../util/schema/auto'
 
 export const inboundCallsTopics = new SimpleSchema({
@@ -77,14 +78,12 @@ export const inboundCalls = new SimpleSchema({
 
   createdAt: {
     type: Date,
-    autoValue: Auto.createdAt,
     optional: true,
     index: -1
   },
 
   createdBy: {
     type: String,
-    autoValue: Auto.createdBy,
     optional: true
   },
 
@@ -98,5 +97,10 @@ export const inboundCalls = new SimpleSchema({
     type: Object,
     optional: true,
     blackbox: true
+  },
+
+  external: {
+    type: External,
+    optional: true
   }
 })

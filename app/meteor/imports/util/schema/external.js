@@ -95,6 +95,11 @@ const External = new SimpleSchema({
     type: ExternalNode
   },
 
+  auerPhone: {
+    optional: true,
+    type: ExternalNode
+  },
+
   terminiko: {
     optional: true,
     type: ExternalNode

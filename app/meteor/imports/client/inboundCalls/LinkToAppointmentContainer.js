@@ -33,11 +33,11 @@ const composer = ({ inboundCall, ...props }) => {
     return props
   }
 
-  if (inboundCall.payload && (inboundCall.payload.channel !== 'SMS')) {
+  if (inboundCall.payload && !inboundCall.patientId && inboundCall.payload.channel !== 'SMS') {
     return props
   }
 
-  if (inboundCall.payload) {
+  if (inboundCall.payload && inboundCall.payload.appointmentId) {
     const appointmentId = inboundCall.payload.appointmentId
     const { date, time, calendarName, assigneeName, patientId } = getFormattedAppointmentData(appointmentId)
 

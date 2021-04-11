@@ -15,7 +15,8 @@ const toWeb = [
   'welcome',
   'fileAdded',
   'updateAvailable',
-  'dataTransfer'
+  'dataTransfer',
+  'auerPhone'
 ]
 
 const DEBUG = false

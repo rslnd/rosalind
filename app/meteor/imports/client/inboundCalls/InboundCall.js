@@ -12,6 +12,7 @@ import { prompt } from '../layout/Prompt'
 import { TopicPicker } from './TopicPicker'
 import { PatientName } from '../patients/PatientName'
 import { EnlargeText } from '../components/EnlargeText'
+import { normalizePhoneNumber } from '../../api/messages/methods/normalizePhoneNumber'
 
 export const InboundCall = (props) => {
   const {
@@ -20,7 +21,8 @@ export const InboundCall = (props) => {
     resolve,
     edit,
     fullNameWithTitle,
-    onSearchPatient
+    onSearchPatient,
+    showTopic = true
   } = props
 
   const {
@@ -93,12 +95,15 @@ export const InboundCall = (props) => {
           }
 
 
-          <small
-            onClick={canEdit ? handleTopicEdit : null}
-            style={canEdit ? { cursor: 'pointer'} : null}
-          >
-            {topicLabel || (canEdit && __('inboundCalls.thisOpen') + ' ')}
-          </small>
+          {
+            showTopic &&
+              <small
+                onClick={canEdit ? handleTopicEdit : null}
+                style={canEdit ? { cursor: 'pointer'} : null}
+              >
+                {topicLabel || (canEdit && __('inboundCalls.thisOpen') + ' ')}
+              </small>
+          }
         </h4>
 
         <span className='enable-select'>
@@ -130,7 +135,8 @@ export const InboundCall = (props) => {
           </InlineEdit>
         }
         {
-          patient && patient.contacts && patient.contacts.find(c => c.channel === 'Phone') &&
+          patient && patient.contacts && patient.contacts.find(c => (c.channel === 'Phone')
+            && c.valueNormalized !== normalizePhoneNumber(telephone)) &&
             <EnlargeText icon={false} value={zerofix(patient.contacts.find(c => c.channel === 'Phone').value)}>
               <h4 className='description enable-select'>
                 {zerofix(patient.contacts.find(c => c.channel === 'Phone').value)}

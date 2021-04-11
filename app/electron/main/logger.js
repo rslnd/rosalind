@@ -46,10 +46,10 @@ const log = {
 const ensureOldLogsRemoved = () => {
   const oldPath = path.join(app.getPath('userData'), 'RosalindElectron.log')
 
-  fs.exists(oldPath, (exists) => {
-    log.info('Old logfile found, removing')
+  fs.stat(oldPath, (e, exists) => {
     if (exists) {
       try {
+        log.info('Old logfile found, removing')
         fs.unlink(oldPath, () => log.info('Removed old logfile'))
       } catch (e) {
         log.error('Failed to remove old logfile', e)

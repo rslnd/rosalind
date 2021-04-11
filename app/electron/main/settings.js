@@ -12,7 +12,7 @@ let remoteSettings = {}
 let newSettingsSubscribers = []
 
 const setRemoteSettings = (e, newRemoteSettings) => {
-  logger.info('[Settings] New remote settings', newRemoteSettings)
+  logger.info(`[Settings] New remote settings: ${JSON.stringify(Object.keys(newRemoteSettings))}`)
   remoteSettings = newRemoteSettings
 
   const newSettings = getSettings()

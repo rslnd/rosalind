@@ -3,7 +3,7 @@ import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import { Importers } from '../../api/importers'
 import { loadPatient } from '../../client/patients/picker/actions'
-import { onNativeEvent, toNative } from './native/events'
+import { getClientKey, onNativeEvent, toNative } from './native/events'
 import { Meteor } from 'meteor/meteor'
 import { getClient } from '../../api/clients/methods/getClient'
 import { innoPatientsImport } from '../../api/importers/innoPatientsImport'
@@ -291,7 +291,29 @@ const preventDragBody = () => {
   document.body.addEventListener('drop', noop)
 }
 
+const setupAuerPhone = () => {
+  let auerPhonelastSeenId = null
+  onNativeEvent('auerPhone', (calls) => {
+    const clientKey = getClientKey()
+    if (!clientKey) { return }
+    const hasNew = calls && calls && calls[0] && calls[0].id && (auerPhonelastSeenId !== calls[0].id)
+    if (hasNew) {
+      console.log(`[auerPhone] Importing ${calls.length} calls, latest id ${calls[0] && calls[0].id}, previous was ${auerPhonelastSeenId}`)
+      Meteor.call('inboundCalls/auerPhone', {
+        calls: calls,
+        clientKey
+      }, (e, res) => {
+        if (!e) {
+          // auerPhonelastSeenId = calls[0].id
+        }
+        console.log(`[auerPhone] import callback ${e} ${res}`)
+      })
+    }
+  })
+}
+
 export default () => {
   preventDragBody()
   onNativeEvent('dataTransfer', onNativeDataTransfer)
+  setupAuerPhone()
 }
