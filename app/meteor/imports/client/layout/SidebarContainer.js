@@ -7,6 +7,7 @@ import { InboundCallsTopics, InboundCalls } from '../../api/inboundCalls'
 import { Sidebar } from './Sidebar'
 import { hasRole } from '../../util/meteor/hasRole'
 import { sumBy } from 'lodash/fp'
+import { subscribe } from '../../util/meteor/subscribe'
 
 const sidebarItems = ({ history }) => {
   const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
@@ -161,18 +162,23 @@ const composer = (props) => {
     }
   })
 
+  const subsReady = (
+    subscribe('calendars').ready() &&
+    subscribe('users').ready()
+  )
+
   // Don't navigate away when custom url was loaded
-  if (!didNavigationAfterLoad && window.location.pathname !== '/') {
+  if (subsReady && !didNavigationAfterLoad && window.location.pathname !== '/') {
     console.log('[Sidebar] Will not navigate away from', window.location.pathname)
     didNavigationAfterLoad = true
   }
 
-  if (!didNavigationAfterLoad &&
+  if (subsReady && !didNavigationAfterLoad &&
     items &&
-    items.lengt >= 1 &&
+    items.length >= 1 &&
     (
       items.find(i => i.shouldNavigateHereAfterLoad && i.link) ||
-      (items.length >= 1 && items[0].link)
+      items[0].link
     )
   ) {
     const item = (items.find(i => i.shouldNavigateHereAfterLoad) || items[0])
