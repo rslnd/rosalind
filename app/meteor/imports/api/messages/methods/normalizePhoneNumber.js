@@ -36,6 +36,7 @@ export const ensureLength = (s) => {
 export const normalizePhoneNumber = flow(
   checkArgument,
   zerofix,
+  checkArgument, // again because sometimes zerofix returns non-string
   stripNonNumber,
   stripLeadingZeroes,
   addCountryCode,
