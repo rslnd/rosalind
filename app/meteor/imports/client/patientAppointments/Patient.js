@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { useTracker } from 'meteor/react-meteor-data'
 import React, { useState } from 'react'
 import Alert from 'react-s-alert'
@@ -27,7 +27,7 @@ const action = promise =>
   })
 
 const secondary = {
-  opacity: 0.6
+  color: '#aaa'
 }
 
 const sectionStart = {
@@ -117,42 +117,62 @@ const Name = compose(
     updateLastName: props => lastName => upsert(props, { lastName }),
     updateFirstName: props => firstName => upsert(props, { firstName }),
     updateTitlePrepend: props => titlePrepend => upsert(props, { titlePrepend }),
+    updateLabel: props => label => upsert(props, { label }),
     toggleBanned: props => e => upsert(props, { banned: !props.banned })
   })
 )(({
   gender, toggleGender,
   titlePrepend, updateTitlePrepend,
+  label, updateLabel,
   lastName, updateLastName,
   firstName, updateFirstName,
   banned, toggleBanned, canBan
 }) =>
   <div style={nameStyle}>
-    <div>
-      <span style={genderStyle} onClick={toggleGender}>{prefix(gender)}</span>
-      <Field
-        style={titleStyle}
-        initialValue={titlePrepend}
-        onChange={updateTitlePrepend}
-      />
-    </div>
-    <Field
-      style={lastNameStyle}
-      initialValue={namecase(lastName)}
-      onChange={updateLastName}
-    />
-    <div style={bannedStyle}>
-      <Field
-        style={firstNameStyle}
-        initialValue={namecase(firstName)}
-        onChange={updateFirstName}
-      />
-      {canBan &&
-        <Dot
-          banned={banned}
-          canBan={canBan}
-          onClick={toggleBanned}
+    <div className='flex'>
+      <div className='flex-grow'>
+        <div>
+          <span style={genderStyle} onClick={toggleGender}>{prefix(gender)}</span>
+          <Field
+            style={titleStyle}
+            initialValue={titlePrepend}
+            onChange={updateTitlePrepend}
+            className='placeholder-light'
+            placeholder={'Titel'}
+          />
+          <Field
+            style={titleStyle}
+            initialValue={label}
+            onChange={updateLabel}
+            className='placeholder-light'
+            placeholder={'Zusatz'}
+          />
+
+        </div>
+        <Field
+          style={lastNameStyle}
+          initialValue={namecase(lastName)}
+          onChange={updateLastName}
+          placeholder={'(Nachname)'}
         />
-      }
+        <div style={bannedStyle}>
+          <Field
+            style={firstNameStyle}
+            initialValue={namecase(firstName)}
+            onChange={updateFirstName}
+            placeholder={'(Vorname)'}
+          />
+        </div>
+      </div>
+      <div className='flex-shrink'>
+        {canBan &&
+          <Dot
+            banned={banned}
+            canBan={canBan}
+            onClick={toggleBanned}
+          />
+        }
+      </div>
     </div>
   </div>
 )
@@ -168,7 +188,6 @@ const bannedStyle = {
 
 const genderStyle = {
   ...secondary,
-  opacity: 0.5,
   cursor: 'pointer',
   width: 22,
   display: 'inline-block'
@@ -176,7 +195,7 @@ const genderStyle = {
 
 const titleStyle = {
   ...secondary,
-  width: `calc(100% - ${genderStyle.width}px)`,
+  width: 70,
   display: 'inline-block'
 }
 

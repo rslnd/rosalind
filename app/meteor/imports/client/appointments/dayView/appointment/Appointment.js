@@ -230,6 +230,10 @@ class AppointmentItem extends React.Component {
                     calendar && calendar.showTitles && patient.titleAppend &&
                       <span style={nameStyle}>&nbsp;{patient.titleAppend}</span>
                   }
+                  {
+                    patient.label &&
+                    <span className={classes.prefix} style={nameStyle}>&ensp;{patient.label}</span>
+                  }
                 </span>
               ) : (
                 (appointment.lockedBy && <span>&nbsp;</span>) ||

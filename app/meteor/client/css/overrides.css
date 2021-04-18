@@ -269,3 +269,10 @@ h6,
 label + .MuiInput-formControl {
   margin-top: 19px !important;
 }
+
+input.placeholder-light::placeholder {
+  opacity: 1;
+  color: #aaa;
+  font-size: 80%;
+  padding-left: 2px;
+}

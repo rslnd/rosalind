@@ -136,6 +136,11 @@ export default new SimpleSchema({
     optional: true
   },
 
+  label: {
+    type: String,
+    optional: true
+  },
+
   contacts: {
     type: [Contact],
     optional: true

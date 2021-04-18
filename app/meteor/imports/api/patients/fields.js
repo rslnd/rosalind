@@ -12,7 +12,9 @@ export const preload = {
   admitted: 1,
   noShow: 1,
   canceled: 1,
-  treated: 1
+  treated: 1,
+  banned: 1,
+  label: 1
 }
 
 export const search = {
@@ -21,5 +23,6 @@ export const search = {
   contacts: 1,
   note: 1,
   address: 1,
-  banned: 1
+  banned: 1,
+  label: 1
 }

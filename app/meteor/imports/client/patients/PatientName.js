@@ -22,6 +22,10 @@ export const PatientName = ({ patient = {}, style, bannedIndicator = false }) =>
     {namecase(patient.firstName)}&nbsp;
     {patient.titleAppend}
     {
+      patient.label &&
+        <span className='text-muted'>&ensp;{patient.label}</span>
+    }
+    {
       patient.banned && bannedIndicator && <span>
         &ensp;
         <span title={__('patients.banned')} style={dotStyle} />
