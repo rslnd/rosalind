@@ -27,7 +27,7 @@ const action = promise =>
   })
 
 const secondary = {
-  color: '#aaa'
+  color: '#444'
 }
 
 const sectionStart = {
