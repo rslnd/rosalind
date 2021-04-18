@@ -13,7 +13,7 @@ export const inboundWebhooks = () => {
       console.log('[Messages] server/inboundWebhooks: Caught webhook', { headers: req.headers })
 
       const payload = await parse.json(req)
-      const { response } = receive(payload)
+      const { response } = receive(payload, { headers: req.headers })
 
       res.setHeader('Content-Type', 'application/json; charset=utf8')
       res.writeHead(200)

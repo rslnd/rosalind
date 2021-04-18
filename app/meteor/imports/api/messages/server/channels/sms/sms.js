@@ -11,6 +11,7 @@ import { findParentMessage } from '../../../methods/findParentMessage'
 import { isIntentToCancel } from '../../../methods/isIntentToCancel'
 import { buildMessageText } from '../../../methods/buildMessageText'
 import { okToSend } from '../../../methods/okToSend'
+import { normalizePhoneNumber } from '../../../methods/normalizePhoneNumber'
 
 const sendUnthrottled = (messageId) => {
   if (!Settings.get('messages.sms.enabled')) { return }
@@ -29,7 +30,7 @@ const sendUnthrottled = (messageId) => {
       })
       return res
     }).catch((err) => {
-      console.log('[Messages] channels/sms: Failed to send SMS', message._id)
+      console.log('[Messages] channels/sms: Failed to send SMS', message._id, err)
       Messages.update({ _id: message._id }, {
         $set: {
           status: 'failed',
@@ -58,8 +59,8 @@ export const send = (messageId) => {
   })
 }
 
-export const receive = (payload) => {
-  const { message, response } = provider.receive(payload)
+export const receive = (payload, req) => {
+  const { message, response } = provider.receive(payload, req)
 
   if (!message) {
     return { response }
@@ -163,6 +164,19 @@ export const receive = (payload) => {
     }
   }
 
+  if (!patientId) {
+    patient = Patients.findOne({ 'contacts.valueNormalized': normalizePhoneNumber(message.from) })
+    if (patient) {
+      patientId = patient._id
+
+      Messages.update({ _id: messageId }, {
+        $set: {
+          patientId: patientId
+        }
+      })
+    }
+  }
+
   // If we couldn't match this incoming message to a message we sent,
   // or if it is not an intent to cancel, create an inbound call
   const inboundCallId = InboundCalls.insert({
@@ -176,7 +190,8 @@ export const receive = (payload) => {
       messageId,
       appointmentId,
       patientId
-    }
+    },
+    createdAt: new Date()
   })
   console.log('[Messages] channels/sms: Created inbound call', inboundCallId, 'of received message', messageId)
 

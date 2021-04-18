@@ -2,6 +2,12 @@ import once from 'lodash/once'
 import { Meteor } from 'meteor/meteor'
 import stub from './stub'
 import websms from './websms'
+import fxpsms from './fxpsms'
+import { Settings } from '../../../../../settings'
+
+const providers = {
+  stub, websms, fxpsms
+}
 
 let provider = stub
 
@@ -15,7 +21,7 @@ const isProduction = (
 const warning = once((p) => console.warn(`[Messages] channels/sms/providers: Using provider ${p} in production mode`))
 
 if (isProduction) {
-  provider = websms
+  provider = providers[Settings.get('messages.sms.provider') || 'stub']
   warning(provider.name)
 } else {
   provider = stub
