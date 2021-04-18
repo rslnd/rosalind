@@ -178,14 +178,14 @@ const SmsModal = ({ patient, messages, onClose }) => {
       bsSize='large'>
       <Modal.Body>
         <div className='flex'>
-          <div className='h-100 overflow-y-scroll'>
+          <div className='h-100 overflow-y-scroll' style={{ width: '70%'}}>
             <Messages
               messages={messages}
               patientName={patientName}
               primaryColor={primaryColor}
             />
           </div>
-          <div style={{ width: '10%', minWidth: 270, paddingLeft: 18 }}>
+          <div style={{ width: '30%', minWidth: 270, paddingLeft: 18 }}>
             <h3>
               Nachrichten
               &nbsp;

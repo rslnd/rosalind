@@ -6,7 +6,8 @@ import { UserHelper } from '../users/UserHelper'
 
 const Stamp = ({ stamp, style }) => {
   return <p className='stamp text-muted' style={style}>
-    {stamp.verb} <UserHelper userId={stamp.userId} helper='fullNameWithTitle' />
+    {stamp.verb}
+    {stamp.userId && <span>&nbsp;<UserHelper userId={stamp.userId} helper='fullNameWithTitle' /></span>}
     &nbsp;&middot;&nbsp;
     <RelativeTime time={stamp.time} /><br />
   </p>

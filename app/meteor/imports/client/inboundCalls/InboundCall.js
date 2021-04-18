@@ -154,6 +154,18 @@ export const InboundCall = (props) => {
           fullWidth>
           <p style={noteStyle} className='enable-select pre-wrap'>{note}</p>
         </InlineEdit>
+
+        {
+          payload && patient && (payload.channel === 'SMS') && <span className='text-muted'>SMS von&nbsp;
+            {
+              patient.gender === 'Male' ? 'Patient' : (
+                patient.gender === 'Female' ? 'Patientin' : 'PatientIn'
+              )
+            }
+            <br />
+          </span>
+        }
+
         <HumanCommentCount comments={comments} />
         <Stamps
           collectionName='inboundCalls'

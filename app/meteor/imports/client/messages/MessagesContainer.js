@@ -18,6 +18,7 @@ const composer = (props) => {
         lastName: message.channel,
         telephone: message.from,
         note: message.text,
+        createdAt: new Date(),
         payload: {
           channel: message.channel,
           messageId: (message.payload && message.payload.messageId) || undefined,
