@@ -77,9 +77,12 @@ export const NewAppointmentFields = props => {
               fullWidth />
           </div>
           <div style={shrink}>
-            <div
-              style={pauseButtonStyle}
-              onClick={onSubmitPause}>PAUSE</div>
+            {(hasRole(Meteor.userId(), ['appointments-pause-all']) ||
+             (hasRole(Meteor.userId(), ['appointments-pause-self']) && assigneeId === Meteor.userId())) &&
+              <div
+                style={pauseButtonStyle}
+                onClick={onSubmitPause}>PAUSE</div>
+            }
 
 
             {/* I'm sorry. */}
