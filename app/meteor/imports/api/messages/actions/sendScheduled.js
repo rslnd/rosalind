@@ -65,7 +65,7 @@ export const sendScheduled = ({ Messages }) => {
 
         const appointment = Appointments.findOne({ _id: message.appointmentId })
         if (!appointment) {
-          console.log('[Messages] sendScheduled: Skipping', message._id, 'because appointment', appointment._id, 'was not found')
+          console.log('[Messages] sendScheduled: Skipping', message._id, 'because appointment', message.appointmentId, 'was not found (likely removed)')
           return false
         }
 
