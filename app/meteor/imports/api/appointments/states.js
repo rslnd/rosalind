@@ -1,17 +1,23 @@
 import identity from 'lodash/identity'
 
-const states = ({ queueing = false, admittedIsTreated = false }) => [
+const states = ({ queueing = false, dismissing = false, admittedIsTreated = false }) => [
   {
     state: 'canceled',
     when: a => a.canceled,
     primaryActions: ['unsetCanceled'],
-    secondaryActions: ['setAdmitted', (queueing && 'setQueued'), 'setNoShow'].filter(identity)
+    secondaryActions: ['setAdmitted', (queueing && 'setQueued'), (dismissing && 'setDismissed'), 'setNoShow'].filter(identity)
   },
   {
     state: 'planned',
-    when: a => !a.admitted && !a.queued,
-    primaryActions: ['setAdmitted', (queueing && 'setQueued'), 'setCanceled'].filter(identity),
+    when: a => !a.admitted && !a.queued && !a.dismissed,
+    primaryActions: ['setAdmitted', (queueing && 'setQueued'), (dismissing && 'setDismissed'), 'setCanceled'].filter(identity),
     secondaryActions: ['setNoShow']
+  },
+  {
+    state: 'dismissed',
+    when: a => a.dismissed,
+    primaryActions: ['setAdmitted', (queueing && 'setQueued')].filter(identity),
+    secondaryActions: ['unsetDismissed', 'setCanceled', 'setNoShow']
   },
   {
     state: 'queued',

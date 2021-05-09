@@ -35,6 +35,9 @@ export const setAdmitted = ({ Appointments }) => {
       }
 
       const $unset = {
+        dismissed: 1,
+        dismissedBy: 1,
+        dismissedAt: 1,
         canceled: 1,
         canceledAt: 1,
         canceledBy: 1,

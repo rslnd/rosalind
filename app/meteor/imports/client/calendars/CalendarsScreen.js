@@ -165,6 +165,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     type: Boolean
   },
   {
+    header: 'Zustand Weggeschickt?',
+    field: 'dismissing',
+    type: Boolean
+  },
+  {
     header: 'Empfehlbar von',
     field: 'referrableFrom',
     EditComponent: CalendarPicker,

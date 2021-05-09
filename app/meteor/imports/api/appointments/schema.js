@@ -73,7 +73,19 @@ export default new SimpleSchema({
     index: 1
   },
 
-  queuedAt: {
+  dismissedAt: {
+    type: Date,
+    optional: true,
+    index: 1
+  },
+
+  dismissedBy: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true,
+    index: 1
+  },
+
+  dismissedAt: {
     type: Date,
     optional: true,
     index: 1
@@ -200,6 +212,12 @@ export default new SimpleSchema({
   canceledByMessageId: {
     type: SimpleSchema.RegEx.Id,
     optional: true
+  },
+
+  dismissed: {
+    type: Boolean,
+    optional: true,
+    index: 1
   },
 
   queued: {

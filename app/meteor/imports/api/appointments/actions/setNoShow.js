@@ -31,6 +31,9 @@ export const setNoShow = ({ Appointments }) => {
           noShowAt: new Date()
         },
         $unset: {
+          dismissed: 1,
+          dismissedBy: 1,
+          dismissedAt: 1,  
           admitted: 1,
           admittedAt: 1,
           admittedBy: 1,

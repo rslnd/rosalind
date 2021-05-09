@@ -24,6 +24,12 @@ const composer = (props) => {
 
   const closeModal = () => props.onClose && props.onClose()
 
+  const setDismissed = appointment && (() => {
+    closeModal()
+    Alert.success(__('appointments.setDismissed'))
+    Appointments.actions.setDismissed.call(args)
+  })
+
   const setQueued = appointment && (() => {
     closeModal()
     Alert.success(__('appointments.setQueued'))
@@ -57,6 +63,12 @@ const composer = (props) => {
     closeModal()
     Alert.success(__('appointments.endTreatmentSuccess'))
     Appointments.actions.endTreatment.call(args)
+  })
+
+  const unsetDismissed = appointment && (() => {
+    closeModal()
+    Alert.success(__('appointments.unsetDismissed'))
+    Appointments.actions.unsetDismissed.call(args)
   })
 
   const unsetQueued = appointment && (() => {
@@ -151,10 +163,12 @@ const composer = (props) => {
     queued,
     treatmentStart,
     treatmentEnd,
+    setDismissed,
     setQueued,
     setAdmitted,
     startTreatment,
     endTreatment,
+    unsetDismissed,
     unsetQueued,
     unsetAdmitted,
     setCanceled,

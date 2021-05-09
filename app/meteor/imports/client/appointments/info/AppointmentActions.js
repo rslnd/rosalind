@@ -10,6 +10,7 @@ import { currentState } from '../../../api/appointments/states'
 const buttons = ({ admittedIsTreated }) => ({
   setQueued: { icon: 'circle', primary: true },
   setAdmitted: { icon: admittedIsTreated ? 'check' : 'angle-double-right', primary: true },
+  setDismissed: { icon: 'circle-o', primary: true },
   startTreatment: { icon: 'circle-o-notch', primary: true },
   endTreatment: { icon: 'check', primary: true },
   setNoShow: { icon: 'times' },

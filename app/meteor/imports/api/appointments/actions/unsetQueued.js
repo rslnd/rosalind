@@ -20,6 +20,9 @@ export const unsetQueued = ({ Appointments }) => {
 
       Appointments.update({ _id: appointmentId }, {
         $unset: {
+          dismissed: 1,
+          dismissedBy: 1,
+          dismissedAt: 1,  
           queued: 1,
           queuedAt: 1,
           queuedBy: 1,

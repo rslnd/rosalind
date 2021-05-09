@@ -4,9 +4,9 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 
-export const setQueued = ({ Appointments }) => {
+export const setDismissed = ({ Appointments }) => {
   return new ValidatedMethod({
-    name: 'appointments/setQueued',
+    name: 'appointments/setDismissed',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       appointmentId: { type: SimpleSchema.RegEx.Id }
@@ -17,21 +17,18 @@ export const setQueued = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).queued) {
-        console.warn('[Appointments] setQueued: Appointment is already set to admitted', { appointmentId })
+      if (Appointments.findOne({ _id: appointmentId }).dismissed) {
+        console.warn('[Appointments] setDismissed: Appointment is already set to admitted', { appointmentId })
         return
       }
 
       let $set = {
-        queued: true,
-        queuedAt: new Date(),
-        queuedBy: this.userId
+        dismissed: true,
+        dismissedAt: new Date(),
+        dismissedBy: this.userId
       }
 
       const $unset = {
-        dismissed: 1,
-        dismissedBy: 1,
-        dismissedAt: 1,
         canceled: 1,
         canceledAt: 1,
         canceledBy: 1,
@@ -47,7 +44,7 @@ export const setQueued = ({ Appointments }) => {
 
       Appointments.update({ _id: appointmentId }, { $set, $unset })
 
-      Events.post('appointments/setQueued', { appointmentId })
+      Events.post('appointments/setDismissed', { appointmentId })
 
       return appointmentId
     }

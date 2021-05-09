@@ -49,6 +49,10 @@ const StateIndicator = ({ appointment, showRevenue, calendar }) => {
     return <Admitted />
   }
 
+  if (appointment.dismissed) {
+    return <Dismissed />
+  }
+
   if (appointment.queued) {
     return <Queued />
   }
@@ -74,6 +78,17 @@ const Queued = () => <div
 const queuedStyle = {
   // zoom: 0.6,
   color: warning
+}
+
+const Dismissed = () => <div
+  key='dismissed'
+  title={__('appointments.dismissed')}
+  style={dismissedStyle}>
+  <Icon name='circle-o' />&nbsp;
+</div>
+
+const dismissedStyle = {
+  color: '#0000ff'
 }
 
 

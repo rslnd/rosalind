@@ -48,7 +48,7 @@ export const Info = ({ appointment, calendar, fullNameWithTitle, isCurrent }) =>
         <Logs format={logFormat} doc={appointment} />
         <Stamps
           collectionName='appointments'
-          fields={['removed', 'created', 'queued', 'admitted', 'canceled']}
+          fields={['removed', 'created', 'queued', 'dismissed', 'admitted', 'canceled']}
           doc={appointment} />
         <CanceledByMessage appointment={appointment} />
       </div>

@@ -123,6 +123,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  dismissing: {
+    type: Boolean,
+    optional: true
+  },
+
   assigneeName: {
     type: String,
     optional: true
