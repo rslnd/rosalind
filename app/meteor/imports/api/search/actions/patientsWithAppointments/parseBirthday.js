@@ -2,7 +2,8 @@ import { fuzzyBirthday, pattern } from '../../../../util/fuzzy/fuzzyBirthday'
 
 export const parseBirthday = (query) => {
   // Expect at least 1 digits
-  if (!query.match(/\d+/)) {
+  const match = query && query.match(/\d+/)
+  if (!match) {
     return { result: false, remainingQuery: query }
   }
 
