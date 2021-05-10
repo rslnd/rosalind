@@ -66,19 +66,16 @@ const composer = (props) => {
   })
 
   const unsetDismissed = appointment && (() => {
-    closeModal()
     Alert.success(__('appointments.unsetDismissed'))
     Appointments.actions.unsetDismissed.call(args)
   })
 
   const unsetQueued = appointment && (() => {
-    closeModal()
     Alert.success(__('appointments.unsetQueued'))
     Appointments.actions.unsetQueued.call(args)
   })
 
   const unsetAdmitted = appointment && (() => {
-    closeModal()
     Alert.success(__('appointments.unsetAdmittedSuccess'))
     Appointments.actions.unsetAdmitted.call(args)
   })
@@ -95,19 +92,16 @@ const composer = (props) => {
   })
 
   const unsetCanceled = appointment && (() => {
-    closeModal()
     Alert.success(__('appointments.unsetCanceledSuccess'))
     Appointments.actions.unsetCanceled.call(args)
   })
 
   const unsetStartTreatment = appointment && (() => {
-    closeModal()
     Alert.success(__('appointments.unsetStartTreatmentSuccess'))
     Appointments.actions.unsetStartTreatment.call(args)
   })
 
   const unsetEndTreatment = appointment && (() => {
-    closeModal()
     Alert.success(__('appointments.unsetEndTreatmentSuccess'))
     Appointments.actions.unsetEndTreatment.call(args)
   })
