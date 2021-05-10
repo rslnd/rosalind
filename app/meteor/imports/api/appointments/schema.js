@@ -97,6 +97,12 @@ export default new SimpleSchema({
     index: 1
   },
 
+  queuedAt: {
+    type: Date,
+    optional: true,
+    index: 1
+  },
+
   admittedAt: {
     type: Date,
     optional: true,

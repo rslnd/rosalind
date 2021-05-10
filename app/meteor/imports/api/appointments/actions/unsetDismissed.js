@@ -17,8 +17,8 @@ export const unsetDismissed = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).queued) {
-        console.warn('[Appointments] unsetDismissed: Appointment is already set to admitted', { appointmentId })
+      if (!Appointments.findOne({ _id: appointmentId }).dismissed) {
+        console.warn('[Appointments] unsetDismissed: Appointment is not set to dismissed', { appointmentId })
         return
       }
 
