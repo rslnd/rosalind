@@ -36,6 +36,7 @@ const Tags = ({ appointment, allowedTags, maxDuration, assignee, calendar, const
       component={TagsField}
       allowedTags={allowedTags}
       maxDuration={maxDuration}
+      time={appointment.start}
       calendarId={calendar._id}
       assigneeId={assignee && assignee._id}
       showDefaultRevenue={false}

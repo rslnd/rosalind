@@ -9,7 +9,7 @@ import { hasRole } from '../../../util/meteor/hasRole'
 export default () => {
   publishComposite({
     name: 'appointment',
-    roles: ['appointments-*'],
+    roles: ['appointments', 'appointments-*'],
     args: {
       appointmentId: String
     },

@@ -72,7 +72,7 @@ export const NewAppointmentFields = props => {
               assigneeId={assigneeId}
               showDefaultRevenue={false}
               autocorrectTags
-              start={start}
+              time={start}
               constraint={constraint}
               fullWidth />
           </div>
