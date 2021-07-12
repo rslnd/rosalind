@@ -1,4 +1,4 @@
-FROM node:12.22.1
+FROM node:12.22.2
 
 RUN apt-get update && apt-get install -y \
     exiftran \
