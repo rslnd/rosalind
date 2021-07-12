@@ -109,6 +109,12 @@ export const createReminders = ({ Messages }) => {
         removed: { $ne: true }
       }).fetch()
 
+      const mobilePhone = contacts =>
+        find(contacts, c =>
+          (c.channel === 'Phone' &&
+          isMobileNumber(c.value))
+        ).value
+
       Calendars.find({ smsAppointmentReminder: true }).fetch().map(calendar => {
         const calendarId = calendar._id
 
@@ -125,9 +131,7 @@ export const createReminders = ({ Messages }) => {
           }
 
           if (a.patient && a.patient.contacts) {
-            return some(a.patient.contacts, (c) =>
-              (c.channel === 'Phone' && isMobileNumber(c.value))
-            )
+            return !!mobilePhone(a.patient.contacts)
           }
         })
         const uniqueAppointmentsWithMobile = uniqBy(appointmentsWithMobile, (a) => (
@@ -149,9 +153,6 @@ export const createReminders = ({ Messages }) => {
             contacts: a.patient.contacts
           }
         })
-
-        const phone = contacts =>
-          find(contacts, c => c.channel === 'Phone').value
 
         const messages = messagePayloads.map((payload) => {
           const calendar = Calendars.findOne({ _id: payload.calendarId })
@@ -181,7 +182,7 @@ export const createReminders = ({ Messages }) => {
             channel: 'SMS',
             direction: 'outbound',
             status: 'scheduled',
-            to: phone(payload.contacts),
+            to: mobilePhone(payload.contacts),
             scheduled: calculateReminderDate(payload.start, calendar.smsDaysBefore || 2).toDate(),
             text: buildMessageText({ text }, {
               date: payload.start

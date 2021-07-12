@@ -43,6 +43,11 @@ describe('api', () => {
         it('with country code', () => {
           expect(isMobileNumber('+43 1234567')).to.not.equal(true)
         })
+
+        it('non-mobile facility rejected numbers', () => {
+          expect(isMobileNumber('43815675678')).to.not.equal(true)
+          expect(isMobileNumber('431010100101010')).to.not.equal(true)
+        })
       })
     })
   })
