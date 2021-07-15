@@ -109,11 +109,13 @@ export const createReminders = ({ Messages }) => {
         removed: { $ne: true }
       }).fetch()
 
-      const mobilePhone = contacts =>
-        find(contacts, c =>
+      const mobilePhone = (contacts = []) => {
+        const c = find(contacts, c =>
           (c.channel === 'Phone' &&
           isMobileNumber(c.value))
-        ).value
+        )
+        return c && c.value
+      }
 
       Calendars.find({ smsAppointmentReminder: true }).fetch().map(calendar => {
         const calendarId = calendar._id
