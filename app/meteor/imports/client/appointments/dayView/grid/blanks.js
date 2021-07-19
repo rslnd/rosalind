@@ -1,9 +1,13 @@
 import React from 'react'
+import Alert from 'react-s-alert'
 import injectSheet from 'react-jss'
 import moment from 'moment-timezone'
 import sortBy from 'lodash/sortBy'
 import { setTime, timeSlots, formatter, label, end } from './timeSlots'
-import { background, lighten } from '../../../layout/styles'
+import { background, green, lighten } from '../../../layout/styles'
+import { Icon } from '../../../components/Icon'
+import { __ } from '../../../../i18n'
+import { Appointments } from '../../../../api'
 
 const styles = {
   blank: {
@@ -17,11 +21,33 @@ const styles = {
   }
 }
 
+const bookableIndicatorStyle = {
+  color: '#ccc',
+  opacity: 0.9,
+  zoom: 0.8,
+  paddingTop: 3,
+  paddingBottom: 3,
+  paddingLeft: 8,
+  paddingRight: 6,
+  borderLeft: '1px solid #efefef'
+}
+
+const BookableIndicator = ({ ...props }) =>
+  <div
+    style={bookableIndicatorStyle}
+    title={__('appointments.setBookable')}
+    {...props}
+  >
+      <Icon name='square-o' />
+  </div>
+
+
 class BlankState extends React.PureComponent {
   constructor (props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)
     this.handleOnMouseEnter = this.handleOnMouseEnter.bind(this)
+    this.handleBookableClick = this.handleBookableClick.bind(this)
   }
 
   handleClick (event) {
@@ -42,8 +68,24 @@ class BlankState extends React.PureComponent {
     })
   }
 
+  handleBookableClick (event) {
+    event.preventDefault()
+    event.stopPropagation()
+    Appointments.actions.setBookable.callPromise({
+      calendarId: this.props.calendar._id,
+      start: setTime(this.props.startTime)(moment(this.props.date)).toDate(),
+      end: setTime(this.props.endTime)(moment(this.props.date)).toDate(),
+      assigneeId: this.props.assigneeId
+    }).then(a => {
+      Alert.success(__('appointments.setBookableSuccess'))
+    }).catch(e => {
+      console.error(e)
+      Alert.error(e.message)
+    })
+  }
+
   render () {
-    const { startTime, endTime, assigneeId, classes, format } = this.props
+    const { startTime, endTime, assigneeId, classes, format, canEditBookables } = this.props
 
     return (
       <span
@@ -54,8 +96,16 @@ class BlankState extends React.PureComponent {
         style={{
           gridRowStart: startTime,
           gridRowEnd: endTime,
-          gridColumn: `assignee-${assigneeId || 'unassigned'}`
+          gridColumn: `assignee-${assigneeId || 'unassigned'}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end'
         }}>
+          {assigneeId && canEditBookables &&
+            <BookableIndicator
+              onClick={this.handleBookableClick}
+            />
+          }
         &nbsp;
       </span>
     )
@@ -64,7 +114,7 @@ class BlankState extends React.PureComponent {
 
 const Blank = injectSheet(styles)(BlankState)
 
-export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter }) => {
+export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter, canSeeBookables, canEditBookables }) => {
   const { slotSize, slotSizeAppointment, allowUnassigned, atMinutes } = calendar
 
   return assignees.map(a => {
@@ -88,12 +138,15 @@ export const blanks = ({ calendar, date, assignees, onClick, onMouseEnter }) => 
       .map((time, i, times) => (
         <Blank
           key={[unixday, time, a ? a._id : 'unassigned'].join('')}
+          calendar={calendar}
           date={date}
           startTime={time}
           endTime={times[i + 1] || lastSlot}
           format={format}
           assigneeId={a ? a._id : null}
           onClick={onClick}
+          canSeeBookables={canSeeBookables}
+          canEditBookables={canEditBookables}
           onMouseEnter={onMouseEnter} />
       ))
   })

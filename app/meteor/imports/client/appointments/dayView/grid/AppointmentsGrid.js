@@ -28,7 +28,9 @@ export const AppointmentsGrid = ({
   onBlankClick,
   override,
   onScheduleModalOpen,
-  move
+  move,
+  canSeeBookables,
+  canEditBookables
 }) => {
   const { scheduleOffset, atMinutes } = calendar
   const slotSize = calendar.slotSize || 5
@@ -56,8 +58,8 @@ export const AppointmentsGrid = ({
 
   return (
     <div style={style}>
-      {renderAppointments({ calendar, slotSize, scheduleOffset, atMinutes, appointments, onClick: onAppointmentClick, move })}
-      {ffAva ? null : blanks({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter })}
+      {renderAppointments({ calendar, slotSize, scheduleOffset, atMinutes, appointments, onClick: onAppointmentClick, move, canSeeBookables, canEditBookables })}
+      {ffAva ? null : blanks({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter, canSeeBookables, canEditBookables })}
       {ffAva ? renderAvailabilities({ calendar, date, availabilities, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter }) : null}
       {ffAva ? null : overrideOverlay(override)}
       {ffAva ? null : renderSchedules({ slotSize, schedules, assignees, date, calendar, onDoubleClick: onScheduleModalOpen })}

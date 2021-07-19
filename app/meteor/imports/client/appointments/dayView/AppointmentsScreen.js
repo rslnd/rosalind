@@ -94,6 +94,8 @@ export class AppointmentsScreen extends React.Component {
       date,
       daySchedule,
       canEditSchedules,
+      canSeeBookables,
+      canEditBookables,
       handleSetAdmitted,
       handleMove,
       onNewAppointmentModalOpen,
@@ -156,6 +158,8 @@ export class AppointmentsScreen extends React.Component {
                 daySchedule={daySchedule}
                 calendar={calendar}
                 canEditSchedules={canEditSchedules}
+                canSeeBookables={canSeeBookables}
+                canEditBookables={canEditBookables}
                 onSetAdmitted={handleSetAdmitted}
                 onMove={handleMove}
                 onNewAppointmentModalOpen={onNewAppointmentModalOpen}

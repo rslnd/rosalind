@@ -131,6 +131,10 @@ const composer = (props) => {
     appointments.push(move.appointment)
   }
 
+
+  const canEditBookables = hasRole(Meteor.userId(), ['bookables-edit'])
+  const canSeeBookables = canEditBookables || hasRole(Meteor.userId(), ['bookables'])
+
   const isLoading = !appointmentsSub.ready() && appointments.length === 0
   const isReady = !isLoading
 
@@ -147,6 +151,8 @@ const composer = (props) => {
     handleSetAdmitted,
     handleMove,
     canEditSchedules,
+    canSeeBookables,
+    canEditBookables,
     move,
     dispatch,
     isReady

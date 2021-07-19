@@ -319,7 +319,10 @@ export class AppointmentsView extends React.Component {
             onBlankMouseEnter={this.handleBlankHover}
             override={this.state.override}
             onScheduleModalOpen={this.handleScheduleModalOpen}
-            move={this.props.move} />
+            move={this.props.move}
+            canSeeBookables={this.props.canSeeBookables}
+            canEditBookables={this.props.canEditBookables}
+          />
         </ErrorBoundary>
 
         <ErrorBoundary>

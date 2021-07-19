@@ -126,5 +126,8 @@ export const appointments = {
   cannotEditTags: 'Keine Auswahl möglich',
   treating: 'In Behandlung',
   treatedByName: 'Nur __name__',
-  onlineBlank: 'Online-Terminbuchung möglich'
+  setBookable: 'Für Online-Terminbuchung freigeben',
+  setBookableSuccess: 'Für Online-Terminbuchung freigegeben',
+  unsetBookable: 'Für Online-Terminbuchung sperren',
+  unsetBookableSuccess: 'Nicht mehr für Online-Terminbuchung freigegeben'
 }

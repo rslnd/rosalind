@@ -11,7 +11,8 @@ import { background, primaryActive, darkGrayDisabled, darkGray, lighten } from '
 import { namecase } from '../../../../util/namecase'
 import { getDefaultDuration } from '../../../../api/appointments/methods/getDefaultDuration'
 import { prefix } from '../../../../api/patients/methods'
-import { Users } from '../../../../api'
+import { Appointments, Users } from '../../../../api'
+import Alert from 'react-s-alert'
 
 const assigneeName = _id => {
   const user = Users.findOne({ _id })
@@ -87,6 +88,41 @@ const rightStyle = {
   whiteSpace: 'nowrap',
   textOverflow: '.'
 }
+
+const bookableStyle = {
+  color: '#6AA7FA',
+  backgroundColor: '#fff',
+  opacity: 0.9,
+  zoom: 0.8,
+  paddingTop: 3,
+  paddingBottom: 3,
+  paddingLeft: 8,
+  paddingRight: 8
+}
+
+const handleUnsetBookable = ({ _id }) => event => {
+  event.preventDefault()
+  event.stopPropagation()
+  Appointments.actions.unsetBookable.callPromise({
+    bookableId: _id
+  }).then(a => {
+    Alert.success(__('appointments.unsetBookableSuccess'))
+  }).catch(e => {
+    console.error(e)
+    Alert.error(e.message)
+  })
+}
+
+const Bookable = ({ canEdit, ...props }) =>
+  <div
+    style={bookableStyle}
+    title={__('appointments.unsetBookable')}
+    onClick={canEdit && handleUnsetBookable(props)}
+    {...props}
+  >
+      <Icon name='share-square-o' />
+  </div>
+
 
 class AppointmentItem extends React.Component {
   stripNumbers(text) {
@@ -171,6 +207,29 @@ class AppointmentItem extends React.Component {
     const nameStyle = (calendar && calendar.showGenderColor === 'true' && patient && patient.gender === 'Female')
       ? femaleStyle : {}
 
+    const isBookable = (appointment.type === 'bookable')
+
+    if (isBookable) {
+      if (!this.props.canSeeBookables) {
+        return null
+      }
+
+      return <div
+        id={appointment._id}
+        data-appointmentid={appointment._id}
+        style={{
+          gridRowStart: timeStart,
+          gridRowEnd: timeEnd,
+          gridColumn: `assignee-${assigneeId || 'unassigned'}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          zIndex: 31,
+        }}
+      >
+        <Bookable _id={appointment._id} canEdit={this.props.canEditBookables} />
+      </div>
+    }
 
     return (
       <div
@@ -236,8 +295,9 @@ class AppointmentItem extends React.Component {
                   }
                 </span>
               ) : (
-                (appointment.lockedBy && <span>&nbsp;</span>) ||
+                ((appointment.type === 'lock' || appointment.lockedBy) && <span>&nbsp;</span>) ||
                 this.stripNumbers(appointment.note) ||
+                (isBookable && 'Bookable') ||
                 ((!appointment.tags || appointment.tags.length === 0) && (appointment.note || 'PAUSE')) ||
                 <Icon name='question-circle' />
               )

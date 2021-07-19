@@ -2,7 +2,7 @@ import React from 'react'
 import { Appointment } from '../appointment/Appointment'
 import { formatter } from './timeSlots'
 
-export const appointments = ({ calendar, slotSize, scheduleOffset, atMinutes, appointments, onClick, move }) => {
+export const appointments = ({ calendar, slotSize, scheduleOffset, atMinutes, appointments, onClick, move, canSeeBookables, canEditBookables }) => {
   const format = formatter(slotSize, scheduleOffset, atMinutes)
 
   return appointments.map((appointment) => {
@@ -26,6 +26,8 @@ export const appointments = ({ calendar, slotSize, scheduleOffset, atMinutes, ap
           calendar={calendar}
           onClick={onClick}
           format={format}
+          canSeeBookables={canSeeBookables}
+          canEditBookables={canEditBookables}
         />
       )
     }
