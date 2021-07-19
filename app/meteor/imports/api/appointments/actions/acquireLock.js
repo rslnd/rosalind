@@ -27,6 +27,7 @@ export const acquireLock = ({ Appointments }) => {
         start,
         end,
         assigneeId,
+        type: 'lock',
         lockedAt: new Date(),
         lockedBy: this.userId
       })

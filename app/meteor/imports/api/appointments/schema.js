@@ -17,6 +17,13 @@ export default new SimpleSchema({
     index: -1
   },
 
+  type: {
+    type: String,
+    allowedValues: ['bookable', 'lock'],
+    optional: true,
+    index: 1
+  },
+
   patientId: {
     type: SimpleSchema.RegEx.Id,
     optional: true,
@@ -47,7 +54,7 @@ export default new SimpleSchema({
   note: {
     type: String,
     optional: true,
-    index: false
+    index: 'text' // only one full text index per collection
   },
 
   // See migration 12: appointmentsCommentsToNote
