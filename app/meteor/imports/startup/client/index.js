@@ -1,4 +1,3 @@
-import locale from './locale'
 import timezone from './timezone'
 import shared from '../shared'
 import polyfills from './polyfills'
@@ -10,7 +9,6 @@ import autoLogout from './autoLogout'
 import entry from '../../client/index'
 
 export default function () {
-  locale()
   timezone()
   polyfills()
   shared()

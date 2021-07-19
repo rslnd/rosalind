@@ -1,4 +1,5 @@
 import sentry from './sentry'
+import locale from './locale'
 
 var funcs = {
   log: console.log.bind(console),
@@ -38,6 +39,7 @@ export default () => {
   // console.error = logPrefix(_error)
 
   sentry()
+  locale()
 }
 
 

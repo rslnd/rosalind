@@ -89,8 +89,6 @@ momentTz.locale(locale)
 
 
 export default () => {
-  if (!window.testing) {
-    moment.locale(locale)
-    momentTz.locale(locale)
-  }
+  moment.locale(locale)
+  momentTz.locale(locale)
 }
