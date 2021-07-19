@@ -1,6 +1,8 @@
 import { insert } from './insert'
 import { acquireLock } from './acquireLock'
 import { releaseLock } from './releaseLock'
+import { setBookable } from './setBookable'
+import { unsetBookable } from './unsetBookable'
 import { setDismissed } from './setDismissed'
 import { setQueued } from './setQueued'
 import { setAdmitted } from './setAdmitted'
@@ -28,6 +30,8 @@ export default function ({ Appointments }) {
     insert: insert({ Appointments }),
     acquireLock: acquireLock({ Appointments }),
     releaseLock: releaseLock({ Appointments }),
+    setBookable: setBookable({ Appointments }),
+    unsetBookable: unsetBookable({ Appointments }),
     setDismissed: setDismissed({ Appointments }),
     setQueued: setQueued({ Appointments }),
     setAdmitted: setAdmitted({ Appointments }),
