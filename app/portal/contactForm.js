@@ -37,7 +37,7 @@ export const ContactForm = ({ customerName, customerEmail, greeting = '' }) => {
 
       try {
         const body = JSON.stringify(values)
-        const req = await fetch('http://localhost:3000/contact/appointments',
+        const req = await fetch('/contact/appointments',
           {
             method: 'POST',
             headers: {

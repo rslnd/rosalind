@@ -38,8 +38,8 @@ const respondWith = (res, Component) => {
 
 const respondWithJSON = (res, obj) => {
   res.setHeader('content-type', 'application/json')
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3030')
-  res.setHeader('Access-Control-Allow-Headers', 'content-type')
+  // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3030')
+  // res.setHeader('Access-Control-Allow-Headers', 'content-type')
   res.write(JSON.stringify(obj))
   res.end()
   return null
