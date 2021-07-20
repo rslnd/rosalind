@@ -129,5 +129,7 @@ export const appointments = {
   setBookable: 'Für Online-Terminbuchung freigeben',
   setBookableSuccess: 'Für Online-Terminbuchung freigegeben',
   unsetBookable: 'Für Online-Terminbuchung sperren',
-  unsetBookableSuccess: 'Nicht mehr für Online-Terminbuchung freigegeben'
+  unsetBookableSuccess: 'Nicht mehr für Online-Terminbuchung freigegeben',
+  createdBySystem: 'Vom System eingetragen',
+  createdViaPortal: 'Über Internetseite eingetragen'
 }

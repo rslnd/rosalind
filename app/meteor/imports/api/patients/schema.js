@@ -132,7 +132,6 @@ export default new SimpleSchema({
 
   gender: {
     type: String,
-    allowedValues: ['Male', 'Female'],
     optional: true
   },
 
@@ -217,6 +216,11 @@ export default new SimpleSchema({
   createdBy: {
     type: SimpleSchema.RegEx.Id,
     autoValue: Auto.createdBy,
+    optional: true
+  },
+
+  createdViaPortal: {
+    type: Boolean,
     optional: true
   },
 

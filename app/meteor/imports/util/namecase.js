@@ -1,5 +1,5 @@
-import nc from 'namecase'
 import { pseudonyms } from './pseudonyms'
+import startCase from 'lodash/startCase'
 
 const checkName = a =>
   a === a.toUpperCase() || a === a.toLowerCase()
@@ -10,7 +10,7 @@ export const namecase = (a = '') => {
   }
 
   if (checkName(a)) {
-    return nc(a)
+    return startCase(a.toLowerCase()) // apparently needed
   } else {
     return a
   }

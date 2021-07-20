@@ -45,13 +45,15 @@ export const Checkbox = ({ name, label, props }) =>
 
 export const Radio = ({ name, value, label, props }) =>
   <div>
-    <input
-      type='radio'
-      id={name}
-      name={name}
-      {...props}
-    />
-    <label htmlFor={value}>{label}</label>
+    <label htmlFor={value}>
+      <input
+        type='radio'
+        id={name}
+        name={name}
+        {...props}
+      />
+      {label}
+    </label>
   </div>
 
 export const Section = ({ children }) =>

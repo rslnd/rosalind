@@ -35,7 +35,6 @@
     "moment-range": "^4.0.2",
     "moment-timezone": "^0.5.33",
     "mongo-dot-notation": "^2.0.0",
-    "namecase": "^1.1.2",
     "papaparse": "^5.0.0",
     "pdf-lib": "^1.16.0",
     "plz-ort": "^1.2018.2",

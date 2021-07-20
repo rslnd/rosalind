@@ -1,4 +1,32 @@
+import { Component } from 'react'
 import { Field, useField } from 'formik'
+
+export const errorMessage = 'Hoppla, das hätte nicht passieren dürfen. Es ist ein technischer Fehler aufgetreten. Bitte entschuldigen Sie die Unannehmlichkeiten. Sie können uns telefonisch kontaktieren. Vielen Dank!'
+
+export class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error(error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <p>
+        <b>{errorMessage}</b>
+      </p>
+    }
+
+    return this.props.children
+  }
+}
 
 export const Required = () =>
   <span style={requiredStyle}>*</span>
@@ -33,7 +61,7 @@ export const Checkbox = ({ label, ...props }) => {
   return <>
     <label
       className='label'
-      htmlFor={field.name}
+      htmlFor={field.id}
     >
       <input
         type='checkbox'
@@ -45,18 +73,25 @@ export const Checkbox = ({ label, ...props }) => {
   </>
 }
 
-export const Radio = ({ name, value, label, props }) =>
-  <div>
-    <label htmlFor={value}>
+export const Radio = ({ label, labelStyle, checkedLabelStyle, labelInnerStyle, ...props }) => {
+  const [ field, meta ] = useField({ ...props, type: 'radio' })
+  return <div>
+    <label
+      htmlFor={field.id}
+      style={field.checked ? checkedLabelStyle : labelStyle}
+    >
       <input
         type='radio'
-        id={name}
-        name={name}
+        {...field}
         {...props}
       />
-      {label}
+      <span style={labelInnerStyle}>
+        {label}
+      </span>
+
     </label>
   </div>
+}
 
 export const Select = ({ label, children, ...props }) => {
   const [field, meta] = useField(props)

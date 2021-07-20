@@ -267,5 +267,11 @@ export default new SimpleSchema({
     type: SimpleSchema.RegEx.Id,
     optional: true,
     index: 1
-  }
+  },
+
+  createdViaPortal: {
+    type: Boolean,
+    optional: true
+  },
+
 })
