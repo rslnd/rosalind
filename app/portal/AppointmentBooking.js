@@ -133,7 +133,7 @@ const SlotPicker = () => {
   const refresh = async () => {
     setCanRefresh(false)
     setPending(true)
-    const res = await fetch('/contact/appointments')
+    const res = await fetch('/portal/appointments')
     const ps = await res.json()
     setPages(ps)
     const refreshable = setTimeout(() => setCanRefresh(true), 3000)

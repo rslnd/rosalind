@@ -46,31 +46,40 @@ const respondWithJSON = (res, obj) => {
 }
 
 export default () => {
-    // TODO: accept options:
+  // TODO: accept options:
   //  patient: {...}
   //  assignee: 'same' | 'different' | null
   //  treatment: 'XX'
   // TODO: Add available treatments list
-  WebApp.connectHandlers.use('/contact/appointments', async (req, res, next) => {
+  WebApp.connectHandlers.use('/portal', async (req, res, next) => {
     switch (req.method) {
       case 'GET':
-        try {
-          const bookables = getBookables()
+        if (req.url === '/appointments') {
+          try {
+            const bookables = getBookables()
 
-          return respondWithJSON(res, bookables)
-        } catch (e) {
-          console.error(e)
-          return respondWithJSON(res, {error: 'unknown-server-error'})
+            return respondWithJSON(res, bookables)
+          } catch (e) {
+            console.error(e)
+            return respondWithJSON(res, {error: 'unknown-server-error'})
+          }
+        } else {
+          res.writeHead(200, {
+            'Content-Type': 'text/html'
+          })
+          return res.end(Assets.getText('portal.html'))
         }
       // book appointment
       case 'POST':
-        try {
-          const body = await parse.json(req)
-          const response = await handleAppointmentBooking(body)
-          return respondWithJSON(res, response)
-        } catch (e) {
-          console.log(e)
-          return respondWithJSON(res, {error: 'unknown-server-error'})
+        if (req.url === '/appointments') {
+          try {
+            const body = await parse.json(req)
+            const response = await handleAppointmentBooking(body)
+            return respondWithJSON(res, response)
+          } catch (e) {
+            console.log(e)
+            return respondWithJSON(res, {error: 'unknown-server-error'})
+          }
         }
       default: return respondWithJSON(res, {error: 'unknown-server-error'})
     }

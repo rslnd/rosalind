@@ -1,3 +1,4 @@
 module.exports = {
-  basePath: '/portal'
+  basePath: '/portal',
+  trailingSlash: false // false: create portal.html | true: create portal/index.html
 }
