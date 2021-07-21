@@ -52,10 +52,11 @@ export default () => {
   //  treatment: 'XX'
   // TODO: Add available treatments list
   WebApp.connectHandlers.use('/portal', async (req, res, next) => {
+    console.log('[portal]', req.method, req.url)
     switch (req.method) {
       case 'GET':
         // req.url is subscoped at /portal, so it's /portal/appointments
-        if (req.url === '/appointments') {
+        if (req.url.endsWith('/appointments')) {
           try {
             const bookables = getBookables()
 
@@ -72,7 +73,7 @@ export default () => {
         }
       // book appointment
       case 'POST':
-        if (req.url === '/appointments') {
+        if (req.url.endsWith('/appointments')) {
           try {
             const body = await parse.json(req)
             const response = await handleAppointmentBooking(body)
