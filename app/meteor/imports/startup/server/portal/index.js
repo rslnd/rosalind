@@ -54,6 +54,7 @@ export default () => {
   WebApp.connectHandlers.use('/portal', async (req, res, next) => {
     switch (req.method) {
       case 'GET':
+        // req.url is subscoped at /portal, so it's /portal/appointments
         if (req.url === '/appointments') {
           try {
             const bookables = getBookables()

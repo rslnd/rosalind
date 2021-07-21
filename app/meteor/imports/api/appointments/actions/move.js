@@ -103,6 +103,13 @@ export const move = ({ Appointments }) => {
         newAssigneeId
       })
 
+      Appointments.remove({
+        type: 'bookable',
+        start: newStart,
+        calendarId: appointment.calendarId,
+        assigneeId: newAssigneeId
+      })
+
       return appointmentId
     }
   })

@@ -56,6 +56,13 @@ export const insert = ({ Appointments }) => {
             Comments.actions.post.callPromise({ docId: appointmentId, body: note })
           }
           Events.post('appointments/insert', { appointmentId })
+
+          Appointments.remove({
+            type: 'bookable',
+            start: restFields.start,
+            calendarId: restFields.calendarId,
+            assigneeId: restFields.assigneeId
+          })
         }
       })
 

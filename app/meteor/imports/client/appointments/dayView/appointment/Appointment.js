@@ -97,7 +97,8 @@ const bookableStyle = {
   paddingTop: 3,
   paddingBottom: 3,
   paddingLeft: 8,
-  paddingRight: 8
+  paddingRight: 8,
+  pointerEvents: 'auto'
 }
 
 const handleUnsetBookable = ({ _id }) => event => {
@@ -224,6 +225,7 @@ class AppointmentItem extends React.Component {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-end',
+          pointerEvents: 'none', // click through to blank
           zIndex: 31,
         }}
       >
