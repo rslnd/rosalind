@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.258",
+  "version": "0.0.259",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -15,23 +15,23 @@
   "homepage": "https://update.rslnd.com",
   "main": "main/main.js",
   "devDependencies": {
-    "electron": "^12.0.2",
-    "electron-builder": "^22.10.5",
-    "electron-packager": "^15.1.0",
+    "electron": "13.1.7",
+    "electron-builder": "^22.11.7",
+    "electron-packager": "^15.3.0",
     "shelljs": "^0.8.4"
   },
   "dependencies": {
     "@mickeyjohn/dbfstream": "^2.0.0",
-    "@sentry/electron": "^2.4.0",
-    "chokidar": "^3.5.1",
+    "@sentry/electron": "^2.5.1",
+    "chokidar": "^3.5.2",
     "electron-localshortcut": "^3.2.1",
-    "electron-updater": "^4.3.8",
-    "fs-extra": "^9.1.0",
-    "glob": "^7.1.6",
+    "electron-updater": "^4.3.9",
+    "fs-extra": "^10.0.0",
+    "glob": "^7.1.7",
     "iconv-lite": "^0.6.2",
     "lodash": "^4.17.21",
     "logdna": "^3.5.2",
-    "pdf-to-printer": "^1.7.0",
+    "pdf-to-printer": "^2.0.6",
     "pkginfo": "^0.4.1",
     "request": "^2.88.2",
     "temp": "^0.9.4"
