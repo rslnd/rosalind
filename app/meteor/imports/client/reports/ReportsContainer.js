@@ -60,6 +60,10 @@ const composer = props => {
     return Reports.actions.generate.callPromise({ day })
   }
 
+  const removeReports = () => {
+    Meteor.call('reports/remove', { day })
+  }
+
   const sendEmailTest = () => {
     Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com', day })
   }
@@ -81,7 +85,8 @@ const composer = props => {
     canShowRevenue,
     mapUserIdToName,
     mapUserIdToUsername,
-    mapReportAsToHeader
+    mapReportAsToHeader,
+    removeReports
   }
 }
 

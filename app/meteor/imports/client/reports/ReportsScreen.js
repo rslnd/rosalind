@@ -64,6 +64,7 @@ export class ReportsScreen extends React.Component {
       mapUserIdToUsername,
       mapReportAsToHeader,
       generateReport,
+      removeReports,
       viewAppointments,
       sendEmailTest,
       sendEmail
@@ -157,6 +158,11 @@ export class ReportsScreen extends React.Component {
                 <Button onClick={viewAppointments}>
                   Terminkalender für diesen Tag ansehen
                 </Button>
+
+                <Button onClick={removeReports}>
+                  Bericht Löschen
+                </Button>
+
 
                 <Button onClick={sendEmailTest}>
                   Test Email senden

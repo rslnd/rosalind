@@ -34,6 +34,22 @@ export const sendEmail = async (args = {}) => {
       return
     }
 
+    if (reports.length > Calendars.find({}).count()) {
+      throw new Error('[Reports] sendEmail: There are more reports than calendars, this should not happen (possibly a race during report generation?)')
+    }
+
+    reports.map(r => {
+      const missingRevenue = (
+        !r.total.revenue.total.expected &&
+        !r.total.revenue.total.actual
+      )
+
+      if (missingRevenue) {
+        console.log('[Reports] sendEmail: missing revenue', r.calendarId, r.total.revenue.total)
+        throw new Error('[Reports] sendEmail: missing revenue')
+      }
+    })
+
     const isTodaysReport = moment().isSame(dayToDate(day), 'day')
     const isLastWeekReport = moment(dayToDate(day)).isBetween(
       moment().subtract(2, 'weeks').startOf('week'),

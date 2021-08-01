@@ -10,6 +10,7 @@ import { tally } from './tally'
 import { generate } from './generate'
 import { generatePreview } from './generatePreview'
 import { generateQuarter } from './generateQuarter'
+import { remove } from './remove'
 
 export default function ({ Reports }) {
   return Object.assign({},
@@ -17,6 +18,7 @@ export default function ({ Reports }) {
     { tally: tally({ Reports }) },
     { generate: generate({ Events, Calendars, Reports, Schedules, Appointments, Tags, Messages, Users }) },
     { generatePreview: generatePreview({ Calendars, Reports, Schedules, Appointments, Tags, Messages, Users }) },
-    { generateQuarter: generateQuarter({ Calendars, Reports, Schedules }) }
+    { generateQuarter: generateQuarter({ Calendars, Reports, Schedules }) },
+    { remove: remove({ Reports, Events }) }
   )
 }
