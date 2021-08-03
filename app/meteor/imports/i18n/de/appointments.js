@@ -131,5 +131,6 @@ export const appointments = {
   unsetBookable: 'Für Online-Terminbuchung sperren',
   unsetBookableSuccess: 'Nicht mehr für Online-Terminbuchung freigegeben',
   createdBySystem: 'Vom System eingetragen',
-  createdViaPortal: 'Über Internetseite eingetragen'
+  createdViaPortal: 'Über Internetseite eingetragen',
+  canceledBySystem: 'Vom System abgesagt (SMS)'
 }

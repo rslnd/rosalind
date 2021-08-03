@@ -54,7 +54,10 @@ const composer = (props) => {
       return
     }
 
-    closeModal()
+    if (!isAssignee) {
+      closeModal()
+    }
+
     Alert.success(__('appointments.startTreatmentSuccess'))
     Appointments.actions.startTreatment.call(args)
   })
