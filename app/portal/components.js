@@ -1,5 +1,6 @@
 import { Component } from 'react'
-import { Field, useField } from 'formik'
+import { Field, useField, useFormikContext } from 'formik'
+import Cleave from 'cleave.js/react'
 
 export const errorMessage = 'Hoppla, das hätte nicht passieren dürfen. Es ist ein technischer Fehler aufgetreten. Bitte entschuldigen Sie die Unannehmlichkeiten. Sie können uns telefonisch kontaktieren. Vielen Dank!'
 
@@ -55,6 +56,31 @@ export const Input = ({ name, label, required, ...props }) =>
       {...props}
     />
   </div>
+
+export const CleaveInput = ({ name, label, required, ...props }) => {
+  const { handleChange } = useFormikContext()
+  return <div>
+    <label
+      className='label'
+      htmlFor={name}
+    >
+      <span>{label}</span>
+      {required && <Required />}
+    </label>
+    <Cleave
+      name={name}
+      id={name}
+      className='textfield'
+      onChange={e => {
+        e.target.value = e.target.rawValue
+        handleChange(e)
+      }}
+      {...props}
+    />
+  </div>
+}
+
+
 
 export const Checkbox = ({ label, ...props }) => {
   const [field, meta] = useField({ ...props, type: 'checkbox' })

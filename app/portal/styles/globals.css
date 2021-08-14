@@ -26,8 +26,10 @@ body {
   line-height: 1.5;
   color: #222222;
 }
-.label {
-  display: block;
+
+label {
+  display: inline-block;
+  width: 100%;
 }
 .textfield {
   background: #eeeeee;
@@ -51,6 +53,12 @@ body {
   color: #ffffff;
   max-width: 100%;
   width: 400px;
+  cursor: pointer;
+}
+.button:disabled, .button.disabled {
+  background: #d8d8d8;
+  border-bottom: 2px solid rgb(182, 182, 182);
+  cursor: default;
 }
 
 @media(max-width: 800px) {

@@ -10,7 +10,7 @@ import { __ } from '../../../i18n'
 export const getBookables = () => {
   const selector = {
     type: 'bookable',
-    start: { $gt: moment().add(5, 'minutes').toDate() },
+    start: { $gt: moment().endOf('day').toDate() },
     end: { $lte: moment().add(3, 'months').toDate() },
     lockedAt: null
   }

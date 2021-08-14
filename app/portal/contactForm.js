@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { Formik, Form } from 'formik'
 import { AppointmentBooking } from './AppointmentBooking'
-import { Section, Checkbox, Input, Required, Radio, Select, errorMessage } from './components'
+import { Section, Checkbox, Input, Required, CleaveInput, Radio, Select, errorMessage } from './components'
 
-export const ContactForm = ({ customerName, customerEmail, greeting = '' }) => {
+export const ContactForm = (props) => {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
 
   if (success) {
-    return <Success greeting={greeting} success={success} />
+    return <Success {...props} success={success} />
   }
 
   return <Formik
@@ -37,7 +37,7 @@ export const ContactForm = ({ customerName, customerEmail, greeting = '' }) => {
 
       try {
         const body = JSON.stringify(values)
-        const req = await fetch('/portal/appointments',
+        const req = await fetch((props.apiBaseUrl || '') + '/portal/appointments',
           {
             method: 'POST',
             headers: {
@@ -62,10 +62,10 @@ export const ContactForm = ({ customerName, customerEmail, greeting = '' }) => {
       }
     }}
   >
-    {({ values, isSubmitting }) =>
+    {({ values, isSubmitting, handleChange }) =>
       <div>
-        <h2>Sehr geehrte Patientin, sehr geehrter Patient!</h2>
-        <p>Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich mit Ihnen in Verbindung setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren.</p>
+        <h2>{props.welcome || 'Sehr geehrte Patientin, sehr geehrter Patient!'}</h2>
+        <p>{props.instructions || 'Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich mit Ihnen in Verbindung setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren.'}</p>
         <Form method='POST'>
           <Select label='Anrede' name='gender'>
             <option disabled value={''}>-</option>
@@ -77,9 +77,33 @@ export const ContactForm = ({ customerName, customerEmail, greeting = '' }) => {
           <Input name='titlePrepend' label='Titel' />
           <Input name='firstName' label='Vorname' required />
           <Input name='lastName' label='Nachname' required />
-          <Input name='birthday' label='Geburtstag' required placeholder='tt.mm.jjjj' />
-          <Input name='insuranceId' label='Sozialversicherungsnummer (10 Stellen)' required pattern="[0-9\s]+" placeholder='0000 000000' />
-          <Input name='telephone' label='Telefonnummer' required />
+          <CleaveInput
+            name='birthday'
+            label='Geburtstag' required placeholder='tt.mm.jjjj'
+            options={{
+              delimiter: '.',
+              blocks: [2, 2, 4],
+              numericOnly: true
+            }}
+          />
+          <CleaveInput
+            name='insuranceId'
+            label='Sozialversicherungsnummer (10 Stellen)'
+            required
+            pattern="[0-9\s]+"
+            placeholder='0000 000000'
+            options={{
+              numericOnly: true,
+              blocks: [4, 6],
+              delimiter: ' '
+            }}
+          />
+          <Input
+            name='telephone'
+            label='Telefonnummer'
+            required
+            placeholder='+43 660 0000000'
+          />
           {/* <Input name='email' label='E-Mail-Adresse' /> */}
 
           {/* <Section>
@@ -114,23 +138,23 @@ export const ContactForm = ({ customerName, customerEmail, greeting = '' }) => {
 
           {
             <AppointmentBooking
+              apiBaseUrl={props.apiBaseUrl}
               show={values.appointment === true || values.appointment === 'true'}
             />
           }
 
           <Section>
-            <Checkbox name='privacy' required label={`* Ich stimme zu, dass meine ausgefüllten persönlichen Daten: Anrede, Titel, Vorname, Nachname, Geburtsdatum, Telefonnummer und E-Mail-Adresse von ${customerName}, sowie deren Datenverarbeitern (Fixpoint Systems GmbH, Hetzner Online GmbH) zum Zwecke der Beantwortung des ausgefüllten Kontaktformulars verarbeitet werden. Diese Zustimmung kann jederzeit ohne Angabe von Gründen per Mail an ${customerEmail} widerrufen werden.`} />
+            <Checkbox name='privacy' required label={`* Ich stimme zu, dass meine ausgefüllten persönlichen Daten: Anrede, Titel, Vorname, Nachname, Geburtsdatum, Telefonnummer und E-Mail-Adresse von ${props.customerName}, sowie deren Datenverarbeitern (Fixpoint Systems GmbH, Hetzner Online GmbH) zum Zwecke der Beantwortung des ausgefüllten Kontaktformulars verarbeitet werden. Diese Zustimmung kann jederzeit ohne Angabe von Gründen per Mail an ${props.customerEmail} widerrufen werden.`} />
+            <p>{props.disclaimer}</p>
           </Section>
 
           <Section>
             <p>
-              Ich und mein Team freuen uns, Sie bei uns begrüßen zu dürfen!
-              <br />
-              Wir sind für Sie da!
+              {props.regards}
             </p>
 
             <p>
-              <i>{greeting}</i>
+              <i>{props.greeting}</i>
             </p>
 
             {error && <p><b>{errorMessage}</b></p>}
@@ -162,16 +186,11 @@ export const Success = ({ greeting = '', success }) =>
     <h2>Vielen Dank!</h2>
 
     {success && success.appointment
-      ? <p>Ihr Termin am <b>{success.appointment.date}</b> um <b>{success.appointment.time} Uhr</b> ist bestätigt.</p>
+      ? <p>Wir bestätigen Ihren Termin am <b>{success.appointment.date}</b> um <b>{success.appointment.time} Uhr</b>.</p>
       : <p>Wir haben Ihre Anfrage erhalten und werden Sie so rasch wie möglich kontaktieren.</p>
     }
 
     <Section>
-      <p>
-        Ich und mein Team freuen uns, Sie bei uns begrüßen zu dürfen!
-        <br />
-        Wir sind für Sie da!
-      </p>
       <p>
         <i>{greeting}</i>
       </p>

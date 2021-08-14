@@ -8,6 +8,7 @@
     "start": "next start -p 3030"
   },
   "dependencies": {
+    "cleave.js": "^1.6.0",
     "formik": "^2.2.6",
     "next": "10.0.7",
     "react": "17.0.1",

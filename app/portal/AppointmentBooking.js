@@ -123,7 +123,7 @@ const Day = ({ day, times, onClick }) => {
   </div>
 }
 
-const SlotPicker = () => {
+const SlotPicker = (props) => {
   const { setFieldValue, values } = useFormikContext()
   const [pages, setPages] = useState(null)
   const [page, setPage] = useState(0)
@@ -133,7 +133,7 @@ const SlotPicker = () => {
   const refresh = async () => {
     setCanRefresh(false)
     setPending(true)
-    const res = await fetch('/portal/appointments')
+    const res = await fetch((props.apiBaseUrl || '') + '/portal/appointments')
     const ps = await res.json()
     setPages(ps)
     const refreshable = setTimeout(() => setCanRefresh(true), 3000)
@@ -232,7 +232,7 @@ const SlotPicker = () => {
   </Section>
 }
 
-export const AppointmentBooking = ({ show, tags = [], requestAssignee = null }) => {
+export const AppointmentBooking = ({ show, tags = [], requestAssignee = null, apiBaseUrl }) => {
   return show && <div>
     {
       tags.length > 1 &&
@@ -253,7 +253,7 @@ export const AppointmentBooking = ({ show, tags = [], requestAssignee = null }) 
     }
     <Section>
       <ErrorBoundary>
-        <SlotPicker />
+        <SlotPicker apiBaseUrl={apiBaseUrl} />
       </ErrorBoundary>
     </Section>
   </div>
