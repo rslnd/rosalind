@@ -7,11 +7,21 @@ import { daySelector } from '../../../util/time/day'
 import chunk from 'lodash/chunk'
 import { __ } from '../../../i18n'
 
+const formatDay = (s) =>
+  moment.tz(s, 'Europe/Vienna').format('dd., D.M.')
+const formatTime = (s) =>
+  moment.tz(s, 'Europe/Vienna').format('HH:mm')
+
+// uro11
+const isReserve = ({ start }) =>
+  (!!['10', '20', '40', '50'].find(m => formatTime(start).endsWith(m)))
+
+
 export const getBookables = () => {
   const selector = {
     type: 'bookable',
     start: { $gt: moment().endOf('day').toDate() },
-    end: { $lte: moment().add(3, 'months').toDate() },
+    end: { $lte: moment().add(6, 'weeks').toDate() },
     lockedAt: null
   }
 
@@ -28,16 +38,13 @@ export const getBookables = () => {
     sort: { start: 1 }
   }).fetch()
 
-  const formatDay = (s) =>
-    moment.tz(s, 'Europe/Vienna').format('dd., D.M.')
-  const formatTime = (s) =>
-    moment.tz(s, 'Europe/Vienna').format('HH:mm')
-
   // group by days
   const bookables = appointments.reduce((acc, a, i) => {
+    const formattedTime = formatTime(a.start)
     const time = {
       _id: a._id,
-      time: formatTime(a.start),
+      time: formattedTime,
+      isReserve: isReserve(a),
       calendarId: a.calendarId,
       assigneeId: a.assigneeId
     }
@@ -203,7 +210,11 @@ export const handleAppointmentBooking = (untrustedBody) => {
       // appointment key is displayed on confirmation page
       appointment: {
         date: moment.tz(bookable.start, 'Europe/Vienna').format(__('time.dateFormatWeekday')),
-        time: moment.tz(bookable.start, 'Europe/Vienna').format(__('time.timeFormatShort'))
+        time: moment.tz(bookable.start, 'Europe/Vienna').format(__('time.timeFormatShort')),
+        isoStart: moment.tz(bookable.start, 'Europe/Vienna').toISOString(),
+        isoEnd: moment.tz(bookable.end, 'Europe/Vienna').toISOString(),
+        isReserve: isReserve(bookable),
+        bookableId: bookable._id
       }
     }
   } else {

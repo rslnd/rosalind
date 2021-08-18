@@ -89,15 +89,24 @@ const rightStyle = {
   textOverflow: '.'
 }
 
-const bookableStyle = {
+const bookableIconStyle = {
+  display: 'inline-block',
   color: '#6AA7FA',
-  backgroundColor: '#fff',
   opacity: 0.9,
   zoom: 0.8,
   paddingTop: 3,
   paddingBottom: 3,
   paddingLeft: 8,
   paddingRight: 8,
+}
+
+const bookableStyle = {
+  ...bookableIconStyle,
+  paddingTop: 3,
+  paddingBottom: 3,
+  paddingLeft: 8,
+  paddingRight: 8,
+  backgroundColor: '#fff',
   pointerEvents: 'auto'
 }
 
@@ -320,6 +329,12 @@ class AppointmentItem extends React.Component {
             appointment={appointment}
             calendar={calendar}
           />
+          {
+            appointment.createdViaPortal &&
+            <span title='Online gebucht' style={bookableIconStyle}>
+              <Icon name='square' />
+            </span>
+          }
         </div>
       </div>
     )

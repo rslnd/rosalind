@@ -40,7 +40,7 @@ const respondWithJSON = (res, obj) => {
   res.setHeader('content-type', 'application/json')
 
   if (process.env.NODE_ENV === 'development') {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3030')
+    res.setHeader('Access-Control-Allow-Origin', '*')
   }
 
   res.setHeader('Access-Control-Allow-Headers', 'content-type')

@@ -81,17 +81,23 @@ const timeLabelInnerStyle = {
   paddingRight: 10
 }
 
-const Time = ({ _id, day, time }) => {
+const Time = ({ _id, day, time, isReserve }) => {
   const [hover, setHover] = useState(false)
+  const label = isReserve
+    ? time + ' ⚠️'
+    : time
+  const title = isReserve
+    ? [day, time].join(' um ') + ' Uhr - Reservetermin mit langen Wartezeiten'
+    : [day, time].join(' um ') + ' Uhr'
   return <div
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
-    title={[day, time].join(' um ') + ' Uhr'}
+    title={title}
     >
     <Radio
       name='bookableId'
       value={_id}
-      label={time}
+      label={label}
       required
       labelStyle={hover ? timeLabelHoverStyle : timeLabelStyle}
       checkedLabelStyle={timeLabelStyleChecked}
@@ -121,6 +127,10 @@ const Day = ({ day, times, onClick }) => {
       />
     )}
   </div>
+}
+
+const arrowButtonStyle = {
+  width: 33
 }
 
 const SlotPicker = (props) => {
@@ -157,8 +167,9 @@ const SlotPicker = (props) => {
 
   useEffect(refresh, [page]) // TODO: refresh on form values change, post as params
 
-  const pageSize = 3
-  const next = pages && page < Math.floor(pages.length / pageSize) && (() => setPage(page+1))
+  // responsive hack: show one day on mobile only
+  const pageSize = (typeof document !== 'undefined' && document.body.clientWidth < 500) ? 1 : 3
+  const next = pages && page < (Math.floor(pages.length / pageSize) - 1) && (() => setPage(page+1))
   const prev = pages && page > 0 && (() => setPage(page-1))
 
   if (!pages) {
@@ -172,7 +183,21 @@ const SlotPicker = (props) => {
   }
 
   return <Section>
-    <p>Wählen Sie Ihren Wunschtermin</p>
+    <p>
+      Wählen Sie Ihren Wunschtermin
+      &emsp;
+      {canRefresh &&
+        <a
+          href='#'
+          style={{ opacity: 0.8, display: 'inline-block', paddingLeft: 20 }}
+          onClick={(e) => { e.preventDefault(); refresh(); }}
+        >
+          Neu laden
+        </a>
+      }
+    </p>
+
+    {/* {pending && <p><i>Verfügbare Termine werden gesucht...</i></p>} */}
 
     <div style={slotPickerStyle}>
       <Button
@@ -180,6 +205,7 @@ const SlotPicker = (props) => {
             ? 'Frühere Termine'
             : 'Keine früheren Termine verfügbar'}
         disabled={!prev}
+        style={arrowButtonStyle}
         onClick={(e) => { e.preventDefault(); prev() }}
       >
         &lt;
@@ -199,23 +225,11 @@ const SlotPicker = (props) => {
             ? 'Spätere Termine'
             : 'Keine späteren Termine verfügbar'}
         disabled={!next}
+        style={arrowButtonStyle}
         onClick={(e) => { e.preventDefault(); next() }}
       >
         &gt;
       </Button>
-
-      &emsp;
-
-      {(pending || canRefresh) &&
-        <Button
-          title='Neu laden'
-          style={{ width: 130 }}
-          disabled={pending}
-          onClick={(e) => { e.preventDefault(); refresh() }}
-        >
-          Neu laden
-        </Button>
-      }
     </div>
     <Section>
       {
@@ -226,6 +240,10 @@ const SlotPicker = (props) => {
            &nbsp;
            {selectedBookable.day} um {selectedBookable.time} Uhr
            </b>
+           {selectedBookable.isReserve &&
+             <p><b>
+               ⚠️ &emsp; Reservetermin bzw. Einschub: Bei diesem Termin kann es zu sehr langen Wartezeiten kommen.
+              </b></p>}
           </span>
       }
     </Section>

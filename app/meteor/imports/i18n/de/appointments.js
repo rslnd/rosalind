@@ -126,11 +126,11 @@ export const appointments = {
   cannotEditTags: 'Keine Auswahl möglich',
   treating: 'In Behandlung',
   treatedByName: 'Nur __name__',
-  setBookable: 'Für Online-Terminbuchung freigeben',
+  setBookable: 'Nicht für Online-Terminbuchung freigegeben',
   setBookableSuccess: 'Für Online-Terminbuchung freigegeben',
-  unsetBookable: 'Für Online-Terminbuchung sperren',
+  unsetBookable: 'Für Online-Terminbuchung freigegeben',
   unsetBookableSuccess: 'Nicht mehr für Online-Terminbuchung freigegeben',
-  createdBySystem: 'Vom System eingetragen',
+  createdBySystem: 'Vom System erstellt',
   createdViaPortal: 'Über Internetseite eingetragen',
-  canceledBySystem: 'Vom System abgesagt (SMS)'
+  canceledBySystem: 'Von PatientIn per SMS abgesagt'
 }
