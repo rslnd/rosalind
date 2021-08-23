@@ -44,6 +44,7 @@ export const Info = ({ appointment, calendar, fullNameWithTitle, isCurrent }) =>
       showLogs && <div
         onClick={handleToggleLogs}
         style={infoPaddingStyle}
+        className='enable-select'
       >
         <Logs format={logFormat} doc={appointment} />
         <Stamps

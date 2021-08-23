@@ -31,6 +31,7 @@ export const NewAppointmentForm = compose(
     pure: false
   }),
   connect(s => ({
-    tags: selector(s, 'appointment.tags')
+    tags: selector(s, 'appointment.tags'),
+    patientId: selector(s, 'patient.patientId')
   }))
 )(NewAppointmentFields)

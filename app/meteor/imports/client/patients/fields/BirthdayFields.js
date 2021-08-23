@@ -11,7 +11,7 @@ const insuranceIdStyle = {
   width: '20%'
 }
 
-export const BirthdayFields = ({ collectInsuranceId }) =>
+export const BirthdayFields = ({ collectInsuranceId, nameEditable = true }) =>
   <div style={rowStyle}>
     <div style={iconStyle}>
       <Icon name={collectInsuranceId ? 'id-card-o' : 'birthday-cake'} />
@@ -21,6 +21,7 @@ export const BirthdayFields = ({ collectInsuranceId }) =>
         <div style={insuranceIdStyle}>
           <Field
             name='insuranceId'
+            disabled={!nameEditable}
             component={TextField}
             label={__('patients.insuranceId')} />
         </div>
@@ -29,6 +30,7 @@ export const BirthdayFields = ({ collectInsuranceId }) =>
       <Field
         name='birthday'
         component={DayField}
+        disabled={!nameEditable}
         birthday
         label={__('patients.birthday')} />
     </div>

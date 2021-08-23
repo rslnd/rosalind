@@ -56,6 +56,7 @@ export const NewAppointmentFields = props => {
           change={change}
           requirePhone={calendar && calendar.requiredFields && calendar.requiredFields.includes('phone')}
           allowBanningPatients={(calendar && calendar.allowBanningPatients) || hasRole(Meteor.userId(), ['admin', 'patients-ban'])}
+          nameEditable={patientId === 'newPatient'}
         />
       </FormSection>
 

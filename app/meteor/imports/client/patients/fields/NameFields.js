@@ -11,13 +11,13 @@ const titleStyle = {
   width: 42
 }
 
-export const GenderField = ({ onChange }) =>
+export const GenderField = ({ onChange, disabled }) =>
   <div style={buttonStyle}>
     <Field
       name='gender'
       component={ToggleField}
       style={{ minWidth: 31, padding: 10 }}
-      onChange={onChange}
+      onChange={!disabled ? onChange : null}
       values={[
         { value: 'Female', label: __('patients.salutationFemale') },
         { value: 'Male', label: __('patients.salutationMale') }
@@ -31,7 +31,7 @@ export const NameFields = ({ gender = true, titles = false, ban = false, nameEdi
   <div style={rowStyle}>
     {
       gender &&
-        <GenderField />
+        <GenderField disabled={!nameEditable} />
     }
 
     {
