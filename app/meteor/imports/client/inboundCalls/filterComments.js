@@ -30,7 +30,7 @@ export const filterComments = ({ comments, Comments, inboundCall, enabled = true
   }
 
   const buckets = comments.reduce((acc, comment) => {
-    if (filter.commentText === comment.body) {
+    if (filter.commentText.toLowerCase() === (comment.body || '').toLowerCase()) {
       if (filter) {
         const list = [
           ...(acc[filter.name] || []),
