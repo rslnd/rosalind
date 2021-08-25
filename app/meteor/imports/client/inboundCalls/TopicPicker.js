@@ -10,6 +10,7 @@ import identity from 'lodash/identity'
 const composer = (props) => ({
   ...props,
   options: [
+    props.allTopics && { _id: false, label: __('inboundCalls.topicAll') },
     hasRole(Meteor.userId(), ['inboundCalls', 'inboundCalls-topic-null']) &&
       { _id: null, label: __('inboundCalls.thisOpen') },
     ...InboundCallsTopics.find({}, { sort: { order: 1 } }).fetch().filter(t =>

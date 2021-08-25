@@ -3,6 +3,7 @@ import debounce from 'lodash/debounce'
 import flatten from 'lodash/flatten'
 import { useTracker } from 'meteor/react-meteor-data'
 import { withTracker } from '../components/withTracker'
+import { Box } from '../components/Box'
 import { subscribe } from '../../util/meteor/subscribe'
 import { compose, withHandlers, withState } from 'recompose'
 import { connect } from 'react-redux'
@@ -63,9 +64,9 @@ const usePagination = (pageSize = 15) => {
 const ResolvedContainer = (props) => {
   const [page, Pagination] = usePagination()
   const [isCommentFilterEnabled, setCommentFilterEnabled] = useState(true)
-  const [query, changeQuery] = useState('')
+  const [query, setQuery] = useState('')
 
-  const handleQueryChange = e => changeQuery(e.target.value)
+  const handleQueryChange = e => setQuery(e.target.value)
   const resolve = (_id) => InboundCalls.methods.resolve.call({ _id })
   const unresolve = (_id) => InboundCalls.methods.unresolve.call({ _id })
   const edit = (_id, field) => value =>
@@ -76,10 +77,16 @@ const ResolvedContainer = (props) => {
   }
 
   const handleChangeTopic = (_id) => {
-    if (_id) {
-      const topic = InboundCallsTopics.findOne({ _id })
-      const path = `/inboundCalls/resolved/${topic.slug}`
-      props.history.replace(path)
+    console.log('handleChangeTopic', _id)
+    if (_id !== false) {
+      if (_id === null) {
+        const path = `/inboundCalls/resolved/null`
+        props.history.replace(path)
+      } else {
+        const topic = InboundCallsTopics.findOne({ _id })
+        const path = `/inboundCalls/resolved/${topic.slug}`
+        props.history.replace(path)
+      }
     } else {
       props.history.replace('/inboundCalls/resolved/')
     }
@@ -104,16 +111,31 @@ const ResolvedContainer = (props) => {
     const canResolve = hasRole(userId, ['admin', 'inboundCalls-pin'])
     const canEdit = hasRole(userId, ['admin', 'inboundCalls-edit'])
 
-    const topic = props.match.params.slug &&
-    InboundCallsTopics.findOne({ slug: props.match.params.slug })
-
     const selector = {
-      removed: true,
-      topicId: topic ? topic._id : null
+      removed: true
+      // query is only applied on server
     }
+
+    let topic = false
+    if (props.match.params.slug) {
+      if (props.match.params.slug === 'null') {
+        selector.topicId = null
+        topic = null
+      } else if (props.match.params.slug !== undefined) {
+        // undefined = 'false' = all
+        const t = InboundCallsTopics.findOne({ slug: props.match.params.slug })
+        selector.topicId = t._id
+        topic = t
+      }
+      // else match all topics, don't set any topicId in selector
+    }
+
+    console.log('s', props.match.params.slug, selector)
 
     const subscription = subscribe('inboundCalls-2', {
         ...selector,
+        topicId: topic ? topic._id : topic,
+        query,
         page
     })
 
@@ -167,6 +189,8 @@ const ResolvedContainer = (props) => {
       }
     })
 
+    console.log('resolved inbound calls', selector, inboundCalls.length)
+
     const appointmentIds = inboundCalls.map(c => c.appointmentId).filter(identity)
     if (appointmentIds.length >= 1) {
       subscribe('appointments', {
@@ -199,30 +223,40 @@ const ResolvedContainer = (props) => {
 
 const Screen = ({ fullNameWithTitle, handleQueryChange, query, isLoadingCalls, inboundCalls, resolve, unresolve, edit, topic, handleChangeTopic, Pagination, onSearchPatient }) =>
   <div>
-    <ContentHeader title={topic
+    <ContentHeader title={
+      topic
       ? __('inboundCalls.thisResolvedTopic', { topic: topic.label })
-      : __('inboundCalls.thisResolved')} />
+      : (
+        topic === null ? __('inboundCalls.thisResolved')
+        : __('inboundCalls.thisResolvedTopic', { topic: __('inboundCalls.topicAll') })
+      )
+    } />
     <div className='content'>
 
       <div className='flex w-100 pb3'>
         <div className='w-50 pr2'>
           <PatientPicker />
         </div>
-        <div className='w-50 pl2'>
-          <TopicPicker
-            value={topic ? topic._id : null}
-            onChange={handleChangeTopic}
-          />
+        <div className='w-50 pl2 flex'>
+          <div className='w-50 pr2'>
+            <TopicPicker
+              value={topic ? topic._id : false}
+              onChange={handleChangeTopic}
+              allTopics
+            />
+          </div>
+          <div className='w-50 pr2'>
+            <TextField
+              value={query}
+              onChange={handleQueryChange}
+              label='Suchbegriff'
+              variant='outlined'
+              fullWidth
+              style={searchStyle}
+            />
+          </div>
         </div>
       </div>
-
-      {/* <TextField
-        value={query}
-        onChange={handleQueryChange}
-        label='Suche'
-        fullWidth
-        style={searchStyle}
-      /> */}
 
       <InboundCallsList
         isLoading={isLoadingCalls}
@@ -233,6 +267,12 @@ const Screen = ({ fullNameWithTitle, handleQueryChange, query, isLoadingCalls, i
         fullNameWithTitle={fullNameWithTitle}
         onSearchPatient={onSearchPatient}
       />
+
+      {!isLoadingCalls && inboundCalls.length === 0 &&
+        <Box type='warning'>
+          Keine erledigten Rückrufe gefunden.
+        </Box>
+      }
 
       <Pagination items={inboundCalls} />
     </div>

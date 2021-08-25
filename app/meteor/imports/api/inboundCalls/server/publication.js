@@ -62,24 +62,27 @@ export default () => {
     name: 'inboundCalls-2',
     roles: ['inboundCalls', 'inboundCalls-topic-*'],
     args: {
-      topicId: Optional(String),
+      topicId: Optional(Match.OneOf(false, Optional(String))),
       patientId: Optional(String),
       removed: Optional(Boolean),
-      page: Optional(Number)
+      page: Optional(Number),
+      query: Optional(String)
     },
-    fn: function ({ topicId, patientId, removed, page = 0 }) {
-      const topic = InboundCallsTopics.findOne({ _id: topicId })
-      const topicSlug = (topicId === null) ? 'null' : (topic && topic.slug)
+    fn: function ({ topicId, patientId, removed, page = 0, query }) {
+      let selector = {}
 
-      if (!topicSlug || !hasRole(this.userId, ['inboundCalls', 'inboundCalls-topic-' + topicSlug])) {
-        // Missing role, return empty cursor
-        return {
-          find: () => InboundCalls.find({ _id: 'dummy' })
+      if (topicId !== false) { // false == all
+        const topic = InboundCallsTopics.findOne({ _id: topicId })
+        const topicSlug = (topicId === null) ? 'null' : (topic && topic.slug)
+  
+        if (!topicSlug || !hasRole(this.userId, ['inboundCalls', 'inboundCalls-topic-' + topicSlug])) {
+          // Missing role, return empty cursor
+          return {
+            find: () => InboundCalls.find({ _id: 'dummy' })
+          }
         }
-      }
 
-      const selector = {
-        topicId: topicId || null
+        selector.topicId = topicId
       }
 
       if (removed) {
@@ -88,6 +91,15 @@ export default () => {
 
       if (patientId) {
         selector.patientId = patientId
+      }
+
+      if (query && query.length >= 2) {
+        selector.$or = [
+          { note: new RegExp('\\b' + query, 'im') },
+          { lastName: new RegExp('^' + query, 'im') },
+          { firstName: new RegExp('^' + query, 'im') },
+          { telephone: new RegExp(query, 'im') }
+        ]
       }
 
       const pageSize = 15
@@ -107,7 +119,7 @@ export default () => {
       return {
         find: function () {
           const s = InboundCalls.find(selector, options)
-          console.log(selector, s.count())
+          console.log(selector, s.count(), topicId)
           return s
         },
         children: [

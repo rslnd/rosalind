@@ -153,12 +153,14 @@ const Name = compose(
           style={lastNameStyle}
           initialValue={namecase(lastName)}
           onChange={updateLastName}
+          title={namecase(lastName)}
           placeholder={'(Nachname)'}
         />
         <div style={bannedStyle}>
           <Field
             style={firstNameStyle}
             initialValue={namecase(firstName)}
+            title={namecase(firstName)}
             onChange={updateFirstName}
             placeholder={'(Vorname)'}
           />

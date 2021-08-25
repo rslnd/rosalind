@@ -16,6 +16,7 @@ export const inboundCalls = {
   resolve: 'Als erledigt markieren',
   unresolve: 'Markierung als erledigt entfernen',
   topic: 'Rückrufliste',
+  topicAll: 'Alle Listen',
   removedBy: 'Erledigt von',
   createdBy: 'Eingetragen von',
   createdBySystem: 'Eingegangen',
