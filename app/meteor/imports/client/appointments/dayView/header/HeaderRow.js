@@ -215,7 +215,12 @@ export class HeaderRow extends React.Component {
           <MenuItem
             disabled={!this.state.canRemoveUser}
             onClick={this.handleRemoveUser}>
-            Löschen
+            Spalte löschen
+          </MenuItem>
+          <hr />
+          <MenuItem
+            onClick={this.handleUserDropdownClose}>
+            Schließen
           </MenuItem>
         </Menu>
 

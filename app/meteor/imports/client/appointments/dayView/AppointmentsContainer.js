@@ -96,7 +96,7 @@ const composer = (props) => {
     assigneeIds = assigneeIds.filter(_id => Meteor.userId() === _id)
   }
 
-  const assignees = Users.find({ _id: { $in: assigneeIds } }, { sort: { lastName: 1 }, removed: true }).fetch()
+  let assignees = Users.find({ _id: { $in: assigneeIds } }, { sort: { lastName: 1 }, removed: true }).fetch()
 
   const schedules = Schedules.find({
     type: 'override',
@@ -130,6 +130,13 @@ const composer = (props) => {
   if (move && move.appointment && move.appointment._id && !appointments.find(a => a._id === move.appointment._id)) {
     appointments.push(move.appointment)
   }
+
+  assignees = assignees.map(a =>
+    ({
+      ...a,
+      hasAppointments: a && appointments.find(ap => ap.assigneeId === a._id)
+    })
+  )
 
 
   const canEditBookables = hasRole(Meteor.userId(), ['bookables-edit'])
