@@ -132,10 +132,11 @@ const composer = (props) => {
   }
 
   assignees = assignees.map(a =>
-    ({
+    a
+    ? ({
       ...a,
       hasAppointments: a && appointments.find(ap => ap.assigneeId === a._id)
-    })
+    }) : a
   )
 
 
