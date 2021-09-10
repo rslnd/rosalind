@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button'
 import { UserPicker } from '../../../users/UserPicker'
 import { CalendarNote } from './CalendarNote'
 import { Users } from '../../../../api/users'
+import { prompt } from '../../../layout/Prompt'
 
 const headerRowStyle = {
   backgroundColor: background,
@@ -82,10 +83,20 @@ export class HeaderRow extends React.Component {
     })
   }
 
-  handleRemoveUser () {
+  async handleRemoveUser () {
     if (this.state.userDropdownAssigneeId) {
-      this.props.onRemoveUser(this.state.userDropdownAssigneeId)
-        .then(this.handleUserDropdownClose)
+      const id = this.state.userDropdownAssigneeId
+      if (!this.state.canRemoveUser) {
+        const name = Users.methods.fullNameWithTitle(Users.findOne({ _id: id }))
+        const ok = await prompt({
+          title: `Spalte ${name} wirklich löschen?`,
+          confirm: 'Ja, löschen'
+        })
+        if (ok) {
+          this.handleUserDropdownClose()
+          this.props.onRemoveUser(id)
+        }
+      }
     }
   }
 
@@ -213,7 +224,9 @@ export class HeaderRow extends React.Component {
             Person ändern
           </MenuItem>
           <MenuItem
-            disabled={!this.state.canRemoveUser}
+            // no - always enable as there is a modal prompt
+            // there mey be cancenel appts, notes etc that should not keep a column from getting deleted
+            // disabled={!this.state.canRemoveUser}
             onClick={this.handleRemoveUser}>
             Spalte löschen
           </MenuItem>

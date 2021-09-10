@@ -136,7 +136,7 @@ const composer = (props) => {
     ? ({
       ...a,
       hasAppointments: a && appointments.find(ap => ap.assigneeId === a._id)
-    }) : a
+    }) : a // keep null assignee
   )
 
 
