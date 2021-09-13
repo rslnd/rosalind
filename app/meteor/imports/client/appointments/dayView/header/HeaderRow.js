@@ -86,7 +86,10 @@ export class HeaderRow extends React.Component {
   async handleRemoveUser () {
     if (this.state.userDropdownAssigneeId) {
       const id = this.state.userDropdownAssigneeId
-      if (!this.state.canRemoveUser) {
+      if (this.state.canRemoveUser) {
+        this.handleUserDropdownClose()
+        this.props.onRemoveUser(id)
+      } else {
         const name = Users.methods.fullNameWithTitle(Users.findOne({ _id: id }))
         const ok = await prompt({
           title: `Spalte ${name} wirklich löschen?`,
