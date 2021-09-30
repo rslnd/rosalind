@@ -9,7 +9,7 @@ const Root = ({ children }) => {
     customerName='Dr. Nike Morakis, Fachärztin für Urologie und Andrologie'
     customerEmail='praxis@urologie11.at'
     instructions='Um Ihren Termin zu vereinbaren, füllen Sie bitte das nachstehende Formular aus.'
-    instructionsDisclaimer='Wenn Sie ein akutes Problem haben oder ihr Wunschtermin nicht online verfügbar sein sollte, bitten wir Sie um telefonische Kontaktaufnahme.'
+    instructionsDisclaimer='Wenn Sie ein akutes Problem haben, ihr Wunschtermin nicht online verfügbar sein sollte, oder Sie einen Privattermin (z.B. Vasektomiegespräch) benötigen, bitten wir Sie um telefonische Kontaktaufnahme.'
     disclaimer='Wir bitten Sie höflichst, im Falle einer Verhinderung Ihren Termin rechtzeitig (mind. 24 Stunden vorher) abzusagen oder zu verschieben. Wir bitten um Ihr Verständnis, dass nicht rechtzeitig abgesagte Termine in Rechnung gestellt werden können.'
     greeting='Dr. Nike Morakis & Team'
     confirmationInfo={(() => {
@@ -23,6 +23,12 @@ const Root = ({ children }) => {
           href={admissionFormLink}
           target='_blank'
         >Anmeldeformular herunterladen</a>
+        <br />
+        <p>
+          <b>
+            Kommen Sie das erste Mal in unsere Ordination oder waren Sie schon länger nicht bei uns?
+          </b><br />
+          Erscheinen Sie bitte mit gefüllter Blase und nehmen Sie relevante Befunde und eine aktuelle Medikamentenliste mit.</p>
       </>
     })()}
     contactInfo={<>
