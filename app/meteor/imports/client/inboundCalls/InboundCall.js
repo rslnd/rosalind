@@ -36,6 +36,7 @@ export const InboundCall = (props) => {
     payload,
     canResolve,
     canEdit,
+    attachment,
     comments,
     CommentsAction,
     _id
@@ -154,6 +155,21 @@ export const InboundCall = (props) => {
           fullWidth>
           <p style={noteStyle} className='enable-select pre-wrap'>{note}</p>
         </InlineEdit>
+
+        {
+          attachment &&
+          <span>
+            Anhang:&nbsp;
+            <a
+              href={attachment.b64}
+              download={attachment.name}
+              title={`${attachment.mediaType} ${Math.ceil(attachment.size / 1000000)} MB`}
+              target="_blank"
+            >
+              {attachment.name}
+            </a>
+          </span>
+        }
 
         {
           payload && patient && (payload.channel === 'SMS') && <span className='text-muted'>SMS von&nbsp;

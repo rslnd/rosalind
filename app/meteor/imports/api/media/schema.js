@@ -27,6 +27,12 @@ export const media = new SimpleSchema({
     index: 1
   },
 
+  docId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true,
+    index: 1
+  },
+
   kind: {
     type: String,
     allowedValues: kinds

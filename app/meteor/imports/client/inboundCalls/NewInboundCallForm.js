@@ -1,5 +1,5 @@
 import idx from 'idx'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { reduxForm, FormSection, Field, formValueSelector } from 'redux-form'
 import Button from '@material-ui/core/Button'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -13,6 +13,62 @@ import { RadioField } from '../components/form/RadioField'
 import { compose, mapProps } from 'recompose'
 import { connect } from 'react-redux'
 import { PatientsAppointmentsContainer } from '../patientAppointments/PatientsAppointmentsContainer'
+import { safeMediaTypes } from '../../util/schema'
+
+const maxBytes = 3000000
+const FileField = ({ input, meta }, x) => {
+  const ref = useRef()
+  const [error, setError] = useState(null)
+
+  return  <div>
+    <input
+      type='file'
+      ref={ref}
+      onChange={e => {
+        const file = e.currentTarget.files[0]
+        console.log('FileField', file)
+        const fail = ( message) => {
+          console.log('FileField fail', message)
+          setError(message)
+          input.onChange(null)
+          ref.current.value = ""
+        }
+        if (!file) {
+          input.onChange(null)
+          ref.current.value = ""
+          setError(null)
+        } else {
+          if (!safeMediaTypes.includes(file.type)) {
+            fail(__("ui.mediaTypeNotAllowed"))
+            return
+          }
+
+          if (file.size > maxBytes) {
+            fail(__("ui.fileTooLarge", {maxMB: Math.ceil(maxBytes / 1000000)}))
+            return
+          }
+
+          const reader = new FileReader()
+          reader.readAsDataURL(file)
+          reader.onload = () => {
+            setError(null)
+            input.onChange({
+              b64: reader.result,
+              name: file.name,
+              size: file.size,
+              mediaType: file.type
+            })
+          }
+          reader.onerror = (error) => {
+            fail(error.message)
+            throw error
+          }
+        }
+      }}
+    />
+    {error}
+  </div>
+}
 
 export const formName = 'newInboundCall'
 
@@ -108,6 +164,13 @@ const NewInboundCallFormComponent = (props) => {
                   rowsMax={16}
                   fullWidth
                   label={__('inboundCalls.form.note.label')} />
+
+                {
+                  hasRole(Meteor.userId(), ['inboundCalls-attachment', 'admin']) &&
+                    <Field name='attachment'
+                      component={FileField}
+                    />
+                }
               </div>
             </div>
           </div>
@@ -158,7 +221,8 @@ export const NewInboundCallForm = compose(
     fields: [
       'patient', // for linking with patients
       // ...and keep these plain fields for linking with suppliers and internal comms:
-      'lastName', 'firstName', 'telephone', 'note', 'topicId', 'pinnedBy'
+      'lastName', 'firstName', 'telephone', 'note', 'topicId', 'pinnedBy',
+      'attachment'
     ],
     initialValues: {
       topicId: null,

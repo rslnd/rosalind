@@ -1,6 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { External } from '../../util/schema'
-import Auto from '../../util/schema/auto'
+import { External, File } from '../../util/schema'
 
 export const inboundCallsTopics = new SimpleSchema({
   label: {
@@ -69,6 +68,11 @@ export const inboundCalls = new SimpleSchema({
     type: SimpleSchema.RegEx.Id,
     optional: true,
     index: 1
+  },
+
+  attachment: {
+    type: File,
+    optional: true
   },
 
   pinnedBy: {

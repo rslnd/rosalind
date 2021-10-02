@@ -1,7 +1,7 @@
 {
   "name": "rosalind",
   "productName": "Rosalind",
-  "version": "0.0.259",
+  "version": "0.0.260",
   "private": true,
   "description": "Rosalind",
   "author": {
@@ -31,6 +31,7 @@
     "iconv-lite": "^0.6.2",
     "lodash": "^4.17.21",
     "logdna": "^3.5.2",
+    "open": "^8.2.1",
     "pdf-to-printer": "^2.0.6",
     "pkginfo": "^0.4.1",
     "request": "^2.88.2",

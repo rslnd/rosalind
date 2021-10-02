@@ -1,5 +1,6 @@
 import { Events } from '../../events'
-import { action } from '../../../util/meteor/action'
+import { action, Match } from '../../../util/meteor/action'
+import { safeMediaTypes } from '../../../util/schema'
 
 export const post = ({ InboundCalls }) =>
   action({
@@ -18,6 +19,12 @@ export const post = ({ InboundCalls }) =>
 
       patient: Match.Maybe(Match.Optional(Object)),
       payload: Match.Maybe(Match.Optional(Object)),
+      attachment: Match.Maybe(Match.Optional({
+        b64: String,
+        mediaType: Match.OneOf(...safeMediaTypes),
+        size: Number,
+        name: String
+      })),
     },
     fn ({
       kind,
@@ -29,7 +36,8 @@ export const post = ({ InboundCalls }) =>
       firstName,
       telephone,
       patient,
-      payload
+      payload,
+      attachment
     }) {
       const call = {
         kind,
@@ -38,6 +46,7 @@ export const post = ({ InboundCalls }) =>
         pinnedBy,
         privatePatient,
         payload,
+        attachment,
         createdAt: new Date(),
         createdBy: this.userId
       }

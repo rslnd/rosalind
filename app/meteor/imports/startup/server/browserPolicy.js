@@ -111,7 +111,7 @@ const buildCsp = (req, res) => {
 
   const extra = [
     'block-all-mixed-content',
-    'sandbox allow-same-origin allow-forms allow-scripts allow-modals'
+    'sandbox allow-same-origin allow-forms allow-scripts allow-modals allow-downloads'
   ]
 
   if (process.env.NODE_ENV === 'development') {

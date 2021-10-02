@@ -56,5 +56,7 @@ export const ui = {
   endDate: 'bis',
   printing: 'Wird gedruckt',
   restored: 'Wiederhergestellt',
-  smsSendSuccess: 'SMS verschickt'
+  smsSendSuccess: 'SMS verschickt',
+  mediaTypeNotAllowed: 'Dateityp nicht erlaubt',
+  fileTooLarge: 'Datei zu groß (max. __maxMB__ MB)'
 }

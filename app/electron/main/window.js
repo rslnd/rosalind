@@ -1,5 +1,8 @@
 const includes = require('lodash/includes')
 const { app, session, BrowserWindow, Menu } = require('electron')
+const path = require('path')
+const temp = require('temp')
+const openFile = require('open')
 const logger = require('./logger')
 const { getSettings } = require('./settings')
 const { captureException } = require('@sentry/electron')
@@ -106,6 +109,30 @@ const open = (callback) => {
     contents.on('new-window', (event, navigationUrl) => {
       event.preventDefault()
       logger.info('[Window] Denied opening new window', navigationUrl)
+    })
+
+    temp.mkdir('rosalind-attachments', (err, tmpDir) => {
+      if (err) { throw err }
+      contents.session.on('will-download', (e, item) => {
+        const filePath = path.join(tmpDir, item.getFilename())
+        logger.info('[Window] will-download', filePath)
+
+        const parts = filePath.split('.')
+        const ext = (parts[parts.length - 1] || ')')
+        const safeExts = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'jpg', 'jpeg', 'png']
+        if (safeExts.includes(ext.toLowerCase())) {
+          logger.info('[Window] safe ext, will open after download')
+          item.setSavePath(filePath)
+          item.once('done', (e, state) => {
+            if (state === 'completed') {
+              logger.error('[Window] Download completed, opening')
+              openFile(filePath)
+            } else {
+              logger.error('[Window] Download failed', state)
+            }
+          })
+        }
+      })
     })
   })
 
