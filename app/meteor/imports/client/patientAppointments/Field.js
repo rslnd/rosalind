@@ -67,6 +67,7 @@ class DebouncedField extends React.Component {
   }
 
   componentWillUnmount () {
+    console.log('Debounced will unnmount, flushing')
     this.debouncedUpdate.flush()
   }
 

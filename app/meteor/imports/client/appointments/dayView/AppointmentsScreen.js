@@ -37,6 +37,8 @@ export class AppointmentsScreen extends React.Component {
   constructor(props) {
     super(props)
 
+    console.log('Constructing AppointmentsScreen')
+
     this.state = {
       patientModalId: null
     }
@@ -147,28 +149,24 @@ export class AppointmentsScreen extends React.Component {
         </div>
 
         <div className='content print-zoom-1' style={appointmentsViewStyle}>
-          {
-            isReady
-              ? <AppointmentsView
-                assignees={assignees || []}
-                appointments={appointments || []}
-                availabilities={availabilities || []}
-                schedules={schedules || []}
-                date={date}
-                daySchedule={daySchedule}
-                calendar={calendar}
-                canEditSchedules={canEditSchedules}
-                canSeeBookables={canSeeBookables}
-                canEditBookables={canEditBookables}
-                onSetAdmitted={handleSetAdmitted}
-                onMove={handleMove}
-                onNewAppointmentModalOpen={onNewAppointmentModalOpen}
-                onNewAppointmentModalClose={onNewAppointmentModalClose}
-                move={move}
-                dispatch={dispatch}
-              />
-              : <Loading />
-          }
+          <AppointmentsView
+            assignees={assignees || []}
+            appointments={appointments || []}
+            availabilities={availabilities || []}
+            schedules={schedules || []}
+            date={date}
+            daySchedule={daySchedule}
+            calendar={calendar}
+            canEditSchedules={canEditSchedules}
+            canSeeBookables={canSeeBookables}
+            canEditBookables={canEditBookables}
+            onSetAdmitted={handleSetAdmitted}
+            onMove={handleMove}
+            onNewAppointmentModalOpen={onNewAppointmentModalOpen}
+            onNewAppointmentModalClose={onNewAppointmentModalClose}
+            move={move}
+            dispatch={dispatch}
+          />
         </div>
 
         {

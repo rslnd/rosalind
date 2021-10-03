@@ -20,6 +20,7 @@ const fullNameWithTitle = _id => {
 }
 
 const composer = props => {
+  console.log('PatientsAppointmentsContainer', props)
   const {
     appointmentId,
     filter
@@ -146,7 +147,7 @@ const composer = props => {
   return {
     ...props,
     patientId,
-    loading,
+    // loading, // debugging random closing
     currentAppointment,
     patient,
     pastAppointments,

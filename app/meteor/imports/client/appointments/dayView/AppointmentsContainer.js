@@ -45,6 +45,8 @@ const handleMove = (args) =>
 const composer = (props) => {
   const date = parseDay(idx(props, _ => _.match.params.date))
   const calendarSlug = idx(props, _ => _.match.params.calendar)
+  const patientId = idx(props, _ => _.match.params.patientId)
+  const appointmentId = idx(props, _ => _.match.params.appointmentId)
   const calendar = Calendars.findOne({ slug: calendarSlug })
   if (!calendar) { return { isLoading: true } }
   const calendarId = calendar._id
@@ -146,6 +148,10 @@ const composer = (props) => {
   const isLoading = !appointmentsSub.ready() && appointments.length === 0
   const isReady = !isLoading
 
+  if (!isReady) {
+    console.log('AppointmentsContainer not ready')
+  }
+
   return {
     day,
     daySchedule,
@@ -163,7 +169,9 @@ const composer = (props) => {
     canEditBookables,
     move,
     dispatch,
-    isReady
+    isReady: true, // debugging random closing
+    patientId,
+    appointmentId
   }
 }
 

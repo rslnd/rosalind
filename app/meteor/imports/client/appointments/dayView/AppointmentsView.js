@@ -19,6 +19,8 @@ export class AppointmentsView extends React.Component {
   constructor (props) {
     super(props)
 
+    console.log('AppointmentsView constructing')
+
     this.state = {
       selectedStart: null,
       selectedAssigneeId: null,
@@ -58,15 +60,9 @@ export class AppointmentsView extends React.Component {
   handleAppointmentClick (event, appointment) {
     if (this.props.move.isMoving) {
       return this.handleMoveEnd()
+    } else {
+      return this.handleAppointmentModalOpen(appointment)
     }
-
-    // TODO: Per-calendar flag
-    // if (event.type === 'contextmenu' && moment().isSame(appointment.start, 'day')) {
-    //   event.preventDefault()
-    //   return this.handleSetAdmitted(appointment)
-    // }
-
-    this.handleAppointmentModalOpen(appointment)
   }
 
   handleAppointmentModalOpen (appointment) {
