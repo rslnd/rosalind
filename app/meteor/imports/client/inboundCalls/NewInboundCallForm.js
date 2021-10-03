@@ -24,6 +24,7 @@ const FileField = ({ input, meta }, x) => {
     <input
       type='file'
       ref={ref}
+      id="filepicker" // to reset after submit in container
       onChange={e => {
         const file = e.currentTarget.files[0]
         console.log('FileField', file)

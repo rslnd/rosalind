@@ -32,6 +32,7 @@ export class NewInboundCallContainer extends React.Component {
         } else {
           Alert.success(__('inboundCalls.postSuccess'))
           dispatch(reset(formName))
+          document.getElementById('filepicker').value = ""
           resolve()
         }
       })
