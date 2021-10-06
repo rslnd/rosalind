@@ -38,6 +38,11 @@ export const getQ = (m) => {
   if (isQ1(t)) { return 1 }
 }
 
+export const format = m => {
+  const t = moment(m)
+  return `Q${getQ(t)} ${t.year()}`
+}
+
 export const getQuarterSelector = m => {
   const months = Q[getQ(m)]
   return {

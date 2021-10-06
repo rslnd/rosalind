@@ -106,6 +106,11 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     type: Boolean
   },
   {
+    header: 'Warnung wenn selbes Quartal',
+    field: 'sameQuarterWarning',
+    type: Boolean
+  },
+  {
     header: 'Einschub',
     field: 'allowUnassigned',
     type: Boolean

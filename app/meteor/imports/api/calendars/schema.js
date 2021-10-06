@@ -203,5 +203,10 @@ export const schema = new SimpleSchema({
   allowAdmittingUnassignedToAnyone: {
     type: Boolean,
     optional: true
+  },
+
+  sameQuarterWarning: {
+    type: Boolean,
+    optional: true
   }
 })

@@ -11,7 +11,49 @@ import { Icon } from '../../components/Icon'
 import { PatientPickerField } from '../../patients/picker'
 import { flex, grow, shrink, TextField } from '../../components/form'
 import { hasRole } from '../../../util/meteor/hasRole'
-import { Calendars } from '../../../api'
+import { Calendars, Patients, Appointments } from '../../../api'
+import { withTracker } from '../../components/withTracker'
+import { getQ, q, format } from '../../../util/time/quarter'
+import { subscribe } from '../../../util/meteor/subscribe'
+
+const QuarterWarning = withTracker(({ patientId, calendarId, start }) => {
+  if (!patientId || patientId === 'newPatient') {
+    return {}
+  }
+
+  subscribe('appointments-patient', { patientId })
+
+  const selectedQ = q(getQ(start))(start)
+
+  const sameQuarterAppointment = Appointments.findOne({
+    canceledAt: null,
+    patientId,
+    calendarId,
+    start: {
+      $gte: selectedQ.start.toDate(),
+      $lte: selectedQ.end.toDate()
+    },
+  })
+
+  const quarter = format(start)
+
+  if (!sameQuarterAppointment) {
+    return {}
+  }
+
+  const patient = Patients.findOne({ patientId })
+
+  return { sameQuarterAppointment, patient, quarter }
+})(({ patient, sameQuarterAppointment, quarter }) =>
+  sameQuarterAppointment
+  ? <div className='pt3 pb1'>
+      <div className='callout mb0 pt2 pb2 callout-warning enable-select'>
+        Im Quartal ({quarter}) ist schon ein Termin am {moment(sameQuarterAppointment.start).format(__('time.dateFormatWeekdayShortNoYear'))} gebucht.
+      </div>
+    </div>
+  : null
+)
+
 
 const pauseButtonStyle = {
   ...tagStyle,
@@ -59,6 +101,14 @@ export const NewAppointmentFields = props => {
           nameEditable={patientId === 'newPatient'}
         />
       </FormSection>
+
+      {calendar.sameQuarterWarning && patientId &&
+        <QuarterWarning
+          patientId={patientId}
+          calendarId={calendarId}
+          start={start}
+        />
+      }
 
       <FormSection name='appointment'>
         {/* Tags */}
