@@ -45,8 +45,6 @@ const handleMove = (args) =>
 const composer = (props) => {
   const date = parseDay(idx(props, _ => _.match.params.date))
   const calendarSlug = idx(props, _ => _.match.params.calendar)
-  const patientId = idx(props, _ => _.match.params.patientId)
-  const appointmentId = idx(props, _ => _.match.params.appointmentId)
   const calendar = Calendars.findOne({ slug: calendarSlug })
   if (!calendar) { return { isLoading: true } }
   const calendarId = calendar._id
@@ -169,9 +167,7 @@ const composer = (props) => {
     canEditBookables,
     move,
     dispatch,
-    isReady: true, // debugging random closing
-    patientId,
-    appointmentId
+    isReady: true // debugging random closing
   }
 }
 

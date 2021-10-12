@@ -14,6 +14,7 @@ import { Meteor } from 'meteor/meteor'
 import { withTracker } from '../components/withTracker'
 import { hasRole } from '../../util/meteor/hasRole'
 import { CanceledByMessage } from './CanceledByMessage'
+import { ErrorBoundary } from '../layout/ErrorBoundary'
 
 export const Info = ({ appointment, calendar, fullNameWithTitle, isCurrent }) => {
   const [showLogs, setShowLogs] = useState((calendar && calendar.showLogsByDefault) || false)
@@ -46,12 +47,18 @@ export const Info = ({ appointment, calendar, fullNameWithTitle, isCurrent }) =>
         style={infoPaddingStyle}
         className='enable-select'
       >
-        <Logs format={logFormat} doc={appointment} />
-        <Stamps
-          collectionName='appointments'
-          fields={['removed', 'created', 'queued', 'dismissed', 'admitted', 'canceled']}
-          doc={appointment} />
-        <CanceledByMessage appointment={appointment} />
+        <ErrorBoundary name='Logs' silent>
+          <Logs format={logFormat} doc={appointment} />
+        </ErrorBoundary>
+        <ErrorBoundary name='Stamps' silent>
+          <Stamps
+            collectionName='appointments'
+            fields={['removed', 'created', 'queued', 'dismissed', 'admitted', 'canceled']}
+            doc={appointment} />
+        </ErrorBoundary>
+        <ErrorBoundary name='CanceledBy' silent>
+          <CanceledByMessage appointment={appointment} />
+        </ErrorBoundary>
       </div>
     }
   </>

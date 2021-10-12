@@ -12,7 +12,7 @@ class ErrorBoundaryComponent extends React.Component {
   }
 
   componentDidCatch (errorObject, info) {
-    const message = `${JSON.stringify(errorObject, null, 2)}\n${JSON.stringify(this.props.location, null, 2)}`
+    const message = `${this.props.name || ''}\n${JSON.stringify(errorObject, null, 2)}\n${JSON.stringify(this.props.location, null, 2)}`
     console.error(`ErrorBoundary: ${message}`)
 
     this.setState({
