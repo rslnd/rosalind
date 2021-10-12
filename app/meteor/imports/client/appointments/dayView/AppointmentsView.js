@@ -292,7 +292,7 @@ export class AppointmentsView extends React.Component {
 
     return (
       <div>
-        <ErrorBoundary>
+        <ErrorBoundary name='AppV HRow'>
           <HeaderRowContainer
             date={this.props.date}
             daySchedule={this.props.daySchedule}
@@ -302,7 +302,7 @@ export class AppointmentsView extends React.Component {
             overrideMode={this.state.override.isOverriding} />
         </ErrorBoundary>
 
-        <ErrorBoundary>
+        <ErrorBoundary name='AppV AppGrd'>
           <AppointmentsGrid
             calendar={this.props.calendar}
             date={this.props.date}
@@ -321,7 +321,7 @@ export class AppointmentsView extends React.Component {
           />
         </ErrorBoundary>
 
-        <ErrorBoundary>
+        <ErrorBoundary name='AppV AMC'>
           {
             window.location.hash.indexOf('old') !== -1
               ? <AppointmentModalContainer
@@ -339,14 +339,14 @@ export class AppointmentsView extends React.Component {
           }
         </ErrorBoundary>
 
-        <ErrorBoundary>
+        <ErrorBoundary name='AppV SchedMod'>
           <ScheduleModal
             show={this.state.scheduleModalOpen}
             onClose={this.handleScheduleModalClose}
             onClickScheduleSoftRemove={this.handleScheduleSoftRemove} />
         </ErrorBoundary>
 
-        <ErrorBoundary>
+        <ErrorBoundary name='AppV NewAppMod'>
           <NewAppointmentModal
             calendar={this.props.calendar}
             open={this.state.newAppointmentModalOpen}
@@ -356,7 +356,7 @@ export class AppointmentsView extends React.Component {
             onClose={this.handleNewAppointmentModalClose} />
         </ErrorBoundary>
 
-        <ErrorBoundary>
+        <ErrorBoundary name='AppV WaitlAsMod'>
           <WaitlistAssigneeModal
             assignees={
               (this.props.calendar && this.props.calendar.allowAdmittingUnassignedToAnyone)
@@ -371,7 +371,7 @@ export class AppointmentsView extends React.Component {
           />
         </ErrorBoundary>
 
-        <ErrorBoundary>
+        <ErrorBoundary name='AppV RemApps'>
           <div style={marginTopStyle}>
             <RemovedAppointments
               calendarId={this.props.calendar._id}

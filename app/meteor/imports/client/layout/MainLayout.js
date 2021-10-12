@@ -93,23 +93,23 @@ export class MainLayout extends React.Component {
 
     const alwaysRender = ({ primaryColor, currentUser }) => (
       <div id='loaded'>
-        <ErrorBoundary>
+        <ErrorBoundary name='MainLayout aR dropz'>
           <div className='dropzone' />
         </ErrorBoundary>
         <span id='locale' className={locale} />
-        <ErrorBoundary>
+        <ErrorBoundary name='MainLayout aR alerts'>
           <Alerts />
         </ErrorBoundary>
-        <ErrorBoundary>
+        <ErrorBoundary name='MainLayout aR prompts'>
           <Prompts />
         </ErrorBoundary>
-        <ErrorBoundary>
+        <ErrorBoundary name='MainLayout aR maintmessgc'>
           <MaintenanceMessageContainer />
         </ErrorBoundary>
-        <ErrorBoundary>
+        <ErrorBoundary name='MainLayout aR lock'>
           <Lock />
         </ErrorBoundary>
-        <ErrorBoundary>
+        <ErrorBoundary name='MainLayout aR livechat'>
           <Livechat
             primaryColor={primaryColor}
             currentUser={currentUser}
@@ -122,7 +122,7 @@ export class MainLayout extends React.Component {
       return (
         <Wrapper>
           <div id='logged-in' />
-          <ErrorBoundary>
+          <ErrorBoundary name='MainLayout SidebarContainer'>
             <div
               onMouseEnter={this.handleSidebarOpen}
               onMouseLeave={this.handleSidebarClose}>
@@ -155,7 +155,7 @@ export class MainLayout extends React.Component {
             {
               // TODO: Can't close drawer on android/touch
               !window.rslndAndroid &&
-                <ErrorBoundary silent>
+                <ErrorBoundary silent name='MainLayout HelpContainer'>
                   <HelpContainer />
                 </ErrorBoundary>
             }

@@ -72,7 +72,7 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
                       <div style={containerStyle} ref={ref}>
                         <div style={columnsStyle}>
                           <div style={appointmentsStyle}>
-                            <ErrorBoundary>
+                            <ErrorBoundary name='PAM Appointments'>
                               <Appointments
                                 {...props}
                                 show={show}
@@ -87,7 +87,7 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
                             </ErrorBoundary>
                           </div>
                           <div style={patientSidebarStyle}>
-                            <ErrorBoundary>
+                            <ErrorBoundary name='PAM Patient'>
                               <Patient {...props} handleMediaClick={handleMediaClick} />
                             </ErrorBoundary>
                           </div>

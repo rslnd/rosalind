@@ -52,7 +52,7 @@ export const Prompts = () => {
     onClose={handleClose}
   >
     <Paper style={modalStyle}>
-      <ErrorBoundary>
+      <ErrorBoundary name='Prompt'>
         {(open && currentOptions) ? <>
           {currentOptions.title}
           {currentOptions.body && <><br /><br />{currentOptions.body}</>}

@@ -89,7 +89,7 @@ const Drawer = ({ isOpen, handleOpen, handleClose, children = null }) => {
       square
       style={isOpen ? drawerStyle : hiddenStyle}
     >
-      <ErrorBoundary>
+      <ErrorBoundary name='AvailabilitiesDrawer'>
         <HotKeys handlers={{ CLOSE: handleClose }} style={keepHeightStyle}>
           {/* Observe escape key even when search field is autofocused */}
           <ObserveKeys only={['Escape']} style={keepHeightStyle}>

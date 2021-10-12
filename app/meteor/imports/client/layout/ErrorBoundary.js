@@ -44,7 +44,7 @@ class ErrorBoundaryComponent extends React.Component {
 
 export const ErrorBoundary = withRouter(ErrorBoundaryComponent)
 
-export const withErrorBoundary = Component => props =>
-  <ErrorBoundary>
+export const withErrorBoundary = (Component, name) => props =>
+  <ErrorBoundary name={name}>
     <Component {...props} />
   </ErrorBoundary>

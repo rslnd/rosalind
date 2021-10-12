@@ -16,7 +16,9 @@ import { Documents } from './Documents'
 
 export const AppointmentsList = ({ appointments, pastAppointmentsWithFloatingMedia, currentAppointment, currentCycle, handleMediaClick, fullNameWithTitle }) =>
   (pastAppointmentsWithFloatingMedia || appointments).map((a, i) =>
-    <ErrorBoundary key={(a._id || (a.media && a.media[0] && a.media[0]._id) || i)}>
+    <ErrorBoundary
+      name='AppointmentsList'
+      key={(a._id || (a.media && a.media[0] && a.media[0]._id) || i)}>
       {
         a.type === 'media'
           ? <Drawer
@@ -78,7 +80,7 @@ export const Appointment = compose(
             {
               hasRole(Meteor.userId(), ['media', 'media-documents', 'media-view', 'admin']) &&
                 <div style={documentsStyle}>
-                  <ErrorBoundary>
+                  <ErrorBoundary name='patAppt Documents'>
                     <Documents appointment={appointment} isCurrent={isCurrent} handleMediaClick={handleMediaClick} />
                   </ErrorBoundary>
                 </div>
@@ -101,7 +103,7 @@ export const Appointment = compose(
 
         {
           hasRole(Meteor.userId(), ['media', 'media-view', 'media-images']) &&
-            <ErrorBoundary>
+            <ErrorBoundary name='Appt Drawer'>
               <Drawer
                 currentAppointment={currentAppointment}
                 isCurrentAppointment={isCurrent}

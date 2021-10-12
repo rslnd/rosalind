@@ -91,7 +91,7 @@ export const WaitlistItem = ({
     </div>
     {
       history && appointment.treatmentStart && !appointment.treatmentEnd &&
-        <ErrorBoundary>
+        <ErrorBoundary name='WItem Hist'>
           <History appointment={appointment} patient={appointment.patient} />
         </ErrorBoundary>
     }

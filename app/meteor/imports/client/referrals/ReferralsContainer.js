@@ -72,7 +72,7 @@ const composer = props => {
 }
 
 const R = (props) =>
-  <ErrorBoundary>
+  <ErrorBoundary name='ReferralsContainer Widget'>
     <ReferralsWidget {...props} />
   </ErrorBoundary>
 
