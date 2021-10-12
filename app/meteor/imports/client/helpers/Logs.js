@@ -31,12 +31,12 @@ const composer = (props) => {
         userId: log.userId
       }
     }).filter(identity)
+
+    return { logs }
   } catch (e) {
     console.error('Logs composer failed, ignoring', e)
     return {}
   }
-
-  return { logs }
 }
 
 const Logs = withTracker(composer)(toClass(LogsList))
