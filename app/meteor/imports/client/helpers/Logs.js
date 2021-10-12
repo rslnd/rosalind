@@ -20,16 +20,21 @@ const LogsList = ({ logs, style }) => (
 )
 
 const composer = (props) => {
-  const logs = (props.doc.logs || []).map(log => {
-    const format = (props.format[log.type] || (() => log.type))
-    const formatted = format(log)
-    if (!formatted) { return null }
-    return {
-      formatted,
-      date: log.date,
-      userId: log.userId
-    }
-  }).filter(identity)
+  try {
+    const logs = (props.doc.logs || []).map(log => {
+      const format = (props.format[log.type] || (() => log.type))
+      const formatted = format(log)
+      if (!formatted) { return null }
+      return {
+        formatted,
+        date: log.date,
+        userId: log.userId
+      }
+    }).filter(identity)
+  } catch (e) {
+    console.error('Logs composer failed, ignoring', e)
+    return {}
+  }
 
   return { logs }
 }

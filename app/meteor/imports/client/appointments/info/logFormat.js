@@ -15,7 +15,8 @@ export const logFormat = {
 
     const getAssigneeName = _id => {
       if (_id) {
-        return Users.methods.fullNameWithTitle(Users.findOne({ _id }))
+        const u = Users.findOne({ _id }, { removed: true })
+        return u ? Users.methods.fullNameWithTitle(u) : '(gelöschter Benutzer)'
       } else {
         return '(Einschub)'
       }

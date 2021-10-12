@@ -36,5 +36,6 @@ export const withTracker = composer => component =>
       wrapComposer(composer)
     )(
       wrapComponent(component)
-    )
+    ),
+    'WEB withTracker'
   )
