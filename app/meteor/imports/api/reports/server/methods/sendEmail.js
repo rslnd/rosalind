@@ -35,7 +35,8 @@ export const sendEmail = async (args = {}) => {
     }
 
     if (reports.length > Calendars.find({}).count()) {
-      throw new Error('[Reports] sendEmail: There are more reports than calendars, this should not happen (possibly a race during report generation?)')
+      console.error('[Reports] sendEmail: There are more reports than calendars, this should not happen (possibly a race during report generation?)')
+      return
     }
 
     reports.map(r => {
@@ -56,7 +57,7 @@ export const sendEmail = async (args = {}) => {
       moment().add(1, 'day')
     )
     if (!test && reports.length === 0 && (!isTodaysReport && !isLastWeekReport)) {
-      throw new Meteor.Error(404, 'There is no report for this date, or the date is not within the last 2 weeks, and no email will be sent')
+      throw new Meteor.Error(400, 'There is no report for this date, or the date is not within the last 2 weeks, and no email will be sent')
     }
 
     const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
@@ -104,6 +105,6 @@ export const sendEmail = async (args = {}) => {
     Events.post('reports/sendEmail', { reportIds: reports.map(r => r._id) })
   } catch (e) {
     console.error(e)
-    throw e
+    return false
   }
 }
