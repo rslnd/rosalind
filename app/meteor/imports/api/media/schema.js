@@ -4,6 +4,105 @@ import Auto from '../../util/schema/auto'
 export const mediaTypes = ['image/jpeg']
 export const kinds = ['document', 'photo']
 
+export const portalMedia = new SimpleSchema({
+  mediaId: {
+    type: SimpleSchema.RegEx.Id,
+    index: 1
+  },
+
+  patientId: {
+    type: SimpleSchema.RegEx.Id,
+    index: 1
+  },
+
+  appointmentId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true,
+    index: 1
+  },
+
+  kind: {
+    type: String,
+    allowedValues: kinds
+  },
+
+  cycle: {
+    type: String,
+    optional: true,
+    index: 1
+  },
+
+  tagIds: {
+    type: [SimpleSchema.RegEx.Id],
+    optional: true,
+    index: 1
+  },
+
+  rotation: {
+    type: Number,
+    optional: true,
+    allowedValues: [0, 90, 180, 270]
+  },
+
+  width: {
+    type: Number
+  },
+
+  height: {
+    type: Number
+  },
+
+  mediaType: {
+    type: String,
+    allowedValues: mediaTypes
+  },
+
+  note: {
+    type: String,
+    optional: true
+  },
+
+  takenAt: {
+    type: Date
+  },
+
+  preview: {
+    type: String
+  },
+
+  b64: {
+    type: String
+  },
+
+  filename: {
+    type: String
+  },
+
+  createdAt: {
+    type: Date,
+    autoValue: Auto.createdAt,
+    optional: true,
+    index: -1
+  },
+
+  createdBy: {
+    type: String
+  },
+
+  // This field is TTL indexed
+  // see collection.js for details
+  publishedAt: {
+    type: Date,
+    autoValue: Auto.createdAt,
+    optional: true,
+    index: -1
+  },
+
+  publishedBy: {
+    type: String
+  }
+})
+
 export const media = new SimpleSchema({
   consumerId: {
     type: SimpleSchema.RegEx.Id,

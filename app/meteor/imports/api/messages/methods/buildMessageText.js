@@ -22,18 +22,22 @@ export const formatDate = (format, date, options = {}) => {
     .format(format)
 }
 
-export const getBodyText = (templates, { date }) => {
+export const getBodyText = (templates, replacements) => {
   const { tz, locale } = templates
+  const { date, ...others } = replacements
 
   const text = templates.text
-    .replace('%day', formatDate(templates.dayFormat || 'dd., D.M.', date, { tz, locale }))
-    .replace('%time', formatDate(templates.timeFormat || 'HH:mm', date, { tz, locale }))
+    .replace('%day', date && formatDate(templates.dayFormat || 'dd., D.M.', date, { tz, locale }))
+    .replace('%time', date && formatDate(templates.timeFormat || 'HH:mm', date, { tz, locale }))
 
-  return text
+
+  return Object.keys(others).reduce((text, k) => {
+    return text.replace('%' + k, others[k])
+  }, text)
 }
 
-export const buildMessageText = (templates = {}, { date } = {}) => {
-  const text = getBodyText(templates, { date })
+export const buildMessageText = (templates = {}, replacements = {}) => {
+  const text = getBodyText(templates, replacements)
 
   if (validateLength(text)) {
     if (validateNoRemainingPlaceholders(text)) {

@@ -5,6 +5,8 @@ import ReactDOMServer from 'react-dom/server'
 import { ContactForm, handleContactForm } from './contactForm'
 import { getBookables, handleAppointmentBooking } from './appointmentBooking'
 import { portalCss } from './portalCss'
+import { portalLogin, twoFactor } from './portalLogin'
+import { downloadMedia, findPubilshedMedia } from './portalMedia'
 
 const ErrorMessage = () =>
   <div>
@@ -75,8 +77,8 @@ export default () => {
           })
           return res.end(Assets.getText('portal.html'))
         }
-      // book appointment
       case 'POST':
+        // book appointment
         if (req.url.endsWith('/appointments')) {
           try {
             const body = await parse.json(req)
@@ -86,6 +88,44 @@ export default () => {
             console.log(e)
             return respondWithJSON(res, {error: 'unknown-server-error'})
           }
+        } else if (req.url.endsWith('/login')) {
+          try {
+            const body = await parse.json(req)
+            const response = await portalLogin(body)
+            return respondWithJSON(res, response)
+          } catch (e) {
+            console.log(e)
+            return respondWithJSON(res, {error: 'unknown-server-error'})
+          }
+        } else if (req.url.endsWith('/two-factor')) {
+          try {
+            const body = await parse.json(req)
+            const response = await twoFactor(body)
+            return respondWithJSON(res, response)
+          } catch (e) {
+            console.log(e)
+            return respondWithJSON(res, {error: 'unknown-server-error'})
+          }
+        } else if (req.url.endsWith('/media')) {
+          try {
+            const body = await parse.json(req)
+            const response = await findPubilshedMedia(body)
+            return respondWithJSON(res, response)
+          } catch (e) {
+            console.log(e)
+            return respondWithJSON(res, {error: 'unknown-server-error'})
+          }
+        } else if (req.url.endsWith('/media-download')) {
+          try {
+            const body = await parse.json(req)
+            const response = await downloadMedia(body)
+            return respondWithJSON(res, response)
+          } catch (e) {
+            console.log(e)
+            return respondWithJSON(res, {error: 'unknown-server-error'})
+          }
+        } else {
+          return respondWithJSON(res, {error: 'unknown-server-error'})
         }
       default: return respondWithJSON(res, {error: 'unknown-server-error'})
     }

@@ -18,6 +18,8 @@ import { MediaTags } from './MediaTags'
 import { hasRole } from '../../util/meteor/hasRole'
 import { prompt } from '../layout/Prompt'
 import { QRCode } from 'react-qr-svg'
+import { dayToDate } from '../../util/time/day'
+import { isMobileNumber } from '../../api/messages/methods/isMobileNumber'
 
 const composer = (props) => {
   const { patientId, media, selector, setSelector } = props
@@ -209,7 +211,7 @@ export const Sidebar = compose(
       currentMediaId={media._id}
     />
     <MediaTags media={media} singleTag />
-    <Edit media={media} handleRemove={handleRemove} />
+    <Edit media={media} handleRemove={handleRemove} setCurrentMediaId={setCurrentMediaId} />
     <Navigation
       setCurrentMediaId={setCurrentMediaId}
       prevMediaId={prevMediaId}
@@ -243,7 +245,38 @@ const explorerStyle = {
   overflowY: 'auto'
 }
 
-const Edit = ({ media, handleRemove }) => {
+const imageUrlToBase64 = (url) => new Promise((resolve, reject) => {
+  // Soruce: https://base64.guru/developers/javascript/examples/encode-remote-file
+  // To bypass errors (“Tainted canvases may not be exported” or “SecurityError: The operation is insecure”)
+  // The browser must load the image via non-authenticated request and following CORS headers
+  const img = new Image()
+  img.crossOrigin = 'Anonymous'
+
+  img.onload = function () {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+
+    canvas.height = img.naturalHeight
+    canvas.width = img.naturalWidth
+    ctx.drawImage(img, 0, 0)
+
+    // Unfortunately, we cannot keep the original image type, so all images will be converted to JPEG
+    // For this reason, we cannot get the original Base64 string
+    const uri = canvas.toDataURL('image/jpeg');
+    const b64 = uri.replace(/^data:image.+;base64,/, '')
+
+    resolve(b64)
+  }
+
+  img.onerror = reject
+
+  // If you are loading images from a remote server, be sure to configure “Access-Control-Allow-Origin”
+  // For example, the following image can be loaded from anywhere.
+  img.src = url
+})
+
+
+const Edit = ({ media, handleRemove, setCurrentMediaId }) => {
   const [sharing, setSharing] = useState(false)
 
   const handleRotate = e => {
@@ -256,7 +289,100 @@ const Edit = ({ media, handleRemove }) => {
     })
   }
 
-  const handleShare = e => {
+  const handleShare = async (e) => {
+      try {
+      const patientId = media.patientId
+
+      const patient = Patients.findOne({ _id: patientId })
+
+      if (!patient) {
+        Alert.error(__('media.noPatientAssigned'))
+        return
+      }
+
+      if (patient.noSMS) {
+        Alert.error(__('patient.noSMSnoPortal'))
+        return
+      }
+
+      if (!patient.portalVerifiedAt ||
+          !patient.portalVerifiedBy ||
+          moment(patient.portalVerifiedAt).isBefore(moment().subtract(1, 'year'))) {
+
+          // Verify patient data for portal access
+          const phone = patient.contacts.find(c =>
+            c.value &&
+            c.valueNormalized &&
+            c.channel === 'Phone' &&
+            isMobileNumber(c.value)
+          )
+
+          if (!phone) {
+            Alert.error(__('patients.noValidMobileNumber'))
+            return
+          }
+
+          if (!patient.firstName || !patient.lastName || !patient.birthday) {
+            Alert.error(__('patients.pleaseCheckProfile'))
+            return
+          }
+
+          if (!patient.insuranceId) {
+            Alert.error(__('patients.insuranceIdRequired'))
+            return
+          }
+
+          const body =
+          <>
+            <p>
+              Um Befunde und Bilder online abzurufen müssen die bestätigten Daten exakt eingegeben werden.
+            </p>
+            <p>
+              Vorname: <b>{patient.firstName}</b><br />
+              Nachname: <b>{patient.lastName}</b><br />
+              Geburtsdatum: <b>{moment(dayToDate(patient.birthday)).format(__('time.dateFormatVeryShort'))}</b><br />
+              Sozialversicherungsnummer: <b>{patient.insuranceId}</b><br />
+              Mobiltelefonnummer: <b>{phone.valueNormalized}</b><br />
+            </p>
+          </>
+
+          // temporarily hide media overlay to avoid z-index problems with prompt modal
+          setCurrentMediaId(null)
+          const ok = await prompt({
+            title: 'Bitte bestätigen Sie die Stammdaten',
+            body,
+            confirm: 'Daten sind korrekt',
+            cancel: 'Abbrechen'
+          })
+
+          if (ok) {
+            setCurrentMediaId(media._id)
+
+            await Patients.actions.setPortalVerified.callPromise({
+              patientId,
+              phone: phone.valueNormalized
+            })
+
+            Alert.success(__('patients.portalVerifiedSuccess'))
+          } else {
+            Alert.warning(__('patients.pleaseUpdateProfile'))
+            return
+          }
+      }
+
+      Alert.info('Hochladen...')
+      const b64 = await imageUrlToBase64(media.urls[0])
+      await Media.actions.portalPublish.callPromise({
+        mediaId: media._id,
+        b64
+      })
+
+      Alert.success(__('patients.portalUploadSuccess'))
+    } catch (e) {
+      console.error('Sidebar shareMedia error', e)
+      Alert.error(__('ui.tryAgain'))
+    }
+
     setSharing(!sharing)
   }
 
@@ -264,7 +390,7 @@ const Edit = ({ media, handleRemove }) => {
     {
       sharing &&
         <div style={qrContainerStyle} onClick={handleShare}>
-          <div style={qrInnerStyle}>
+          {/* <div style={qrInnerStyle}>
             <QRCode
               style={{
                 width: 230,
@@ -274,7 +400,7 @@ const Edit = ({ media, handleRemove }) => {
               fgColor={'#000000'}
               value={media.urls[0]}
             />
-          </div>
+          </div> */}
         </div>
     }
     <div style={editStyle}>

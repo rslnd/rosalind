@@ -5,7 +5,9 @@
     "**/.meteor": false,
     "**/node_modules": true,
     "**/.shadow-cljs": true,
-    "**/build": true
+    "**/build": true,
+    "**/portal/out": true,
+    "**/portal-assets/_next": true,
   },
   "search.exclude": {
     "**/node_modules": true,

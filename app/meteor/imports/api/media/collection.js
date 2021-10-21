@@ -1,11 +1,21 @@
 import { Mongo } from 'meteor/mongo'
-import { media, mediaTags } from './schema'
+import { media, mediaTags, portalMedia } from './schema'
 import { lifecycleActions } from '../../util/meteor/action'
 import { actions } from './actions'
 
+const PortalMedia = new Mongo.Collection('portalMedia')
+PortalMedia.attachSchema(portalMedia)
+
+if (Meteor.isServer) {
+  const publishedFor = 86400 * 14 // 14 days
+  Meteor.startup(() => {
+    PortalMedia._ensureIndex({ publishedAt: 1 }, { expireAfterSeconds: publishedFor })
+  })
+}
+
 const Media = new Mongo.Collection('media')
 Media.attachSchema(media)
-Media.actions = actions({ Media })
+Media.actions = actions({ Media, PortalMedia })
 Media.attachBehaviour('softRemovable')
 
 const MediaTags = new Mongo.Collection('mediaTags')
@@ -18,4 +28,4 @@ MediaTags.actions = lifecycleActions({
   roles: ['admin', 'media-tags-edit']
 })
 
-export { Media, MediaTags }
+export { Media, MediaTags, PortalMedia }

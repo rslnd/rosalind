@@ -5,6 +5,8 @@ import { toggleGender } from './toggleGender'
 import { setBirthday } from './setBirthday'
 import { setContacts } from './setContacts'
 import { setAgreement } from './setAgreement'
+import { setPortalVerified } from './setPortalVerified'
+import { unsetPortalVerified } from './unsetPortalVerified'
 import { upsert } from './upsert'
 import { isExternalHashDifferent } from './isExternalHashDifferent'
 
@@ -17,6 +19,8 @@ export default function ({ Patients }) {
     setBirthday: setBirthday({ Patients }),
     setContacts: setContacts({ Patients }),
     setAgreement: setAgreement({ Patients }),
+    setPortalVerified: setPortalVerified({ Patients }),
+    unsetPortalVerified: unsetPortalVerified({ Patients }),
     upsert: upsert({ Patients }),
     isExternalHashDifferent: isExternalHashDifferent({ Patients })
   }

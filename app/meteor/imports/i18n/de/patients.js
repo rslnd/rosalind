@@ -71,5 +71,13 @@ export const patients = {
   birthdayFormat: '__age__ Jahre (__date__)',
   totalRevenue: 'Gesamtumsatz __revenue__',
   privateInsurance: 'Privat',
-  selectCalendarToEditFutureNote: 'Bitte Kalender wählen, um eine Nachtricht zu schreiben.'
+  selectCalendarToEditFutureNote: 'Bitte Kalender wählen, um eine Nachtricht zu schreiben.',
+  pleaseUpdateProfile: 'Bitte die Stammdaten überprüfen und aktualisieren',
+  portalVerifiedSuccess: 'Zugang freigeschaltet',
+  noValidMobileNumber: 'Es ist keine gültige Mobiltelefonnummer hinterlegt',
+  noSMSnoPortal: 'SMS-Empfang ist auf Wunsch der PatientIn deaktiviert, es können keine Bilder online abgerufen werden.',
+  pleaseCheckProfile: 'Bitte Stammdaten vervollständigen',
+  insuranceIdRequired: 'Sozialvesicherungsnummer fehlt',
+  portalVerified: 'Für Online-Befunde registriert',
+  portalUploadSuccess: 'Jetzt online abrufbar'
 }
