@@ -68,6 +68,14 @@ label {
   cursor: default;
 }
 
+.text-muted {
+  opacity: 0.8;
+}
+
+.pt3 {
+  padding-top: 18px;
+}
+
 .print-only {
   display: none;
 }

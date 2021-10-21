@@ -1,9 +1,5 @@
 import { ContactForm } from '../contactForm'
 
-const isProduction = (typeof window !== 'undefined' ? (window.location.protocol === 'https:') : true)
-const apiBaseUrl = isProduction ? '' : 'http://10.0.0.20:3000'
-
-
 const Root = ({ children }) => {
   return <ContactForm
     customerName='Dr. Nike Morakis, Fachärztin für Urologie und Andrologie'
@@ -43,7 +39,6 @@ const Root = ({ children }) => {
       name: 'Urologie11 - Dr. Nike Morakis',
       description: 'Urologie11 +43 1 877 32 79'
     }}
-    apiBaseUrl={apiBaseUrl}
   />
 }
 

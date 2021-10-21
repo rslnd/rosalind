@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useFormikContext } from 'formik'
 import { ErrorBoundary, Radio, Section, Select } from './components'
+import { apiBaseUrl } from './apiBaseUrl'
 
 const RequestSameAssignee = () => {
   return <div>
@@ -143,7 +144,7 @@ const SlotPicker = (props) => {
   const refresh = async () => {
     setCanRefresh(false)
     setPending(true)
-    const res = await fetch((props.apiBaseUrl || '') + '/portal/appointments')
+    const res = await fetch((apiBaseUrl || '') + '/portal/appointments')
     const ps = await res.json()
     setPages(ps)
     const refreshable = setTimeout(() => setCanRefresh(true), 3000)
@@ -271,7 +272,7 @@ export const AppointmentBooking = ({ show, tags = [], requestAssignee = null, ap
     }
     <Section>
       <ErrorBoundary>
-        <SlotPicker apiBaseUrl={apiBaseUrl} />
+        <SlotPicker />
       </ErrorBoundary>
     </Section>
   </div>

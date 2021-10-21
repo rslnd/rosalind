@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Formik, Form } from 'formik'
 import { AppointmentBooking } from './AppointmentBooking'
 import { Section, Checkbox, Input, Required, CleaveInput, Radio, Select, errorMessage } from './components'
+import { apiBaseUrl } from './apiBaseUrl'
 
 export const ContactForm = (props) => {
   const [error, setError] = useState(null)
@@ -37,7 +38,7 @@ export const ContactForm = (props) => {
 
       try {
         const body = JSON.stringify(values)
-        const req = await fetch((props.apiBaseUrl || '') + '/portal/appointments',
+        const req = await fetch((apiBaseUrl || '') + '/portal/appointments',
           {
             method: 'POST',
             headers: {
@@ -139,7 +140,6 @@ export const ContactForm = (props) => {
 
           {
             <AppointmentBooking
-              apiBaseUrl={props.apiBaseUrl}
               show={values.appointment === true || values.appointment === 'true'}
             />
           }
