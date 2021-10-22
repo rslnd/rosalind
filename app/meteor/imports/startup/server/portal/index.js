@@ -71,6 +71,16 @@ export default () => {
             console.error(e)
             return respondWithJSON(res, {error: 'unknown-server-error'})
           }
+        } else if (req.url.endsWith('/login')) {
+          res.writeHead(200, {
+            'Content-Type': 'text/html'
+          })
+          return res.end(Assets.getText('login.html'))
+        } else if (req.url.endsWith('/media')) {
+          res.writeHead(200, {
+            'Content-Type': 'text/html'
+          })
+          return res.end(Assets.getText('media.html'))
         } else {
           res.writeHead(200, {
             'Content-Type': 'text/html'
