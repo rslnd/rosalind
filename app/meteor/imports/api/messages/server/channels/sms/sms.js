@@ -117,7 +117,11 @@ export const receive = (payload, req) => {
       })
 
       cancelAppointment = isIntentToCancel(message.text)
-      if (appointment && cancelAppointment) {
+      const canCancel = moment().add(5, 'minutes').isBefore(appointment.start)
+      if (cancelAppointment && !canCancel) {
+        console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId, 'but was recevied too close to appointment start, ignoring')
+      }
+      if (cancelAppointment && canCancel) {
         console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
         Appointments.actions.setCanceled.call({ appointmentId, canceledByMessageId: messageId })
 
@@ -179,21 +183,25 @@ export const receive = (payload, req) => {
 
   // If we couldn't match this incoming message to a message we sent,
   // or if it is not an intent to cancel, create an inbound call
-  const inboundCallId = InboundCalls.insert({
-    lastName: (patient && patient.lastName) || 'SMS',
-    firstName: (patient && patient.firstName) || undefined,
-    telephone: message.from,
-    note: message.text,
-    patientId: patient ? patientId : undefined,
-    payload: {
-      channel: 'SMS',
-      messageId,
-      appointmentId,
-      patientId
-    },
-    createdAt: new Date()
-  })
-  console.log('[Messages] channels/sms: Created inbound call', inboundCallId, 'of received message', messageId)
+  if (Settings.get('messages.sms.createInboundCalls')) {
+    const inboundCallId = InboundCalls.insert({
+      lastName: (patient && patient.lastName) || 'SMS',
+      firstName: (patient && patient.firstName) || undefined,
+      telephone: message.from,
+      note: message.text,
+      patientId: patient ? patientId : undefined,
+      payload: {
+        channel: 'SMS',
+        messageId,
+        appointmentId,
+        patientId
+      },
+      createdAt: new Date()
+    })
+    console.log('[Messages] channels/sms: Created inbound call', inboundCallId, 'of received message', messageId)
+  } else {
+    console.log('[Messages] channels/sms: Ignoring incoming message', messageId)
+  }
 
   return { message, response }
 }
