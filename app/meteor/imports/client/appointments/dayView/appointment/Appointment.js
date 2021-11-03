@@ -325,16 +325,16 @@ class AppointmentItem extends React.Component {
             calendar && calendar.showTagNames &&
               <TagNames tags={appointment.tags} />
           }
-          <Indicator
-            appointment={appointment}
-            calendar={calendar}
-          />
           {
             appointment.createdViaPortal &&
             <span title='Online gebucht' style={bookableIconStyle}>
               <Icon name='square' />
             </span>
           }
+          <Indicator
+            appointment={appointment}
+            calendar={calendar}
+          />
         </div>
       </div>
     )
