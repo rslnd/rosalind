@@ -14,8 +14,6 @@ export const publication = ({ Media, MediaTags }) => {
       // Attach derived field on documents before publishing
       const credentials = getCredentials()
 
-      console.log(credentials)
-
       const transform = doc => {
         if (credentials) {
           const requests = createPresignedRequests({

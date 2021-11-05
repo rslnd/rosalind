@@ -39,17 +39,17 @@ export const sendEmail = async (args = {}) => {
       return
     }
 
-    reports.map(r => {
-      const missingRevenue = (
-        !r.total.revenue.total.expected &&
-        !r.total.revenue.total.actual
-      )
+    // reports.map(r => {
+    //   const missingRevenue = (
+    //     !r.total.revenue.total.expected &&
+    //     !r.total.revenue.total.actual
+    //   )
 
-      if (missingRevenue) {
-        console.log('[Reports] sendEmail: missing revenue', r.calendarId, r.total.revenue.total)
-        throw new Error('[Reports] sendEmail: missing revenue')
-      }
-    })
+    //   if (missingRevenue) {
+    //     console.log('[Reports] sendEmail: missing revenue', r.calendarId, r.total.revenue.total)
+    //     throw new Error('[Reports] sendEmail: missing revenue')
+    //   }
+    // })
 
     const isTodaysReport = moment().isSame(dayToDate(day), 'day')
     const isLastWeekReport = moment(dayToDate(day)).isBetween(
@@ -104,7 +104,7 @@ export const sendEmail = async (args = {}) => {
 
     Events.post('reports/sendEmail', { reportIds: reports.map(r => r._id) })
   } catch (e) {
-    console.error(e)
+    console.error('caught sendEmail error', e)
     return false
   }
 }

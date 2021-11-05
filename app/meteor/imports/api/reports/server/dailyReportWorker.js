@@ -19,6 +19,7 @@ export const dailyReportWorker = (job, callback) => {
   try {
     sendEmail()
       .then(() => {
+        console.log('[Reports] worker: job done')
         cleanOldJobs(job)
         job.done()
         callback()
