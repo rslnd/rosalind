@@ -3,6 +3,7 @@ import { processJobs } from './processJobs'
 import { ensurePeriodicJob } from './ensurePeriodicJob'
 import { publication } from './publication'
 import { sendCustomSms } from './sendCustomSms'
+import { getStats } from './getStats'
 
 export default function () {
   inboundWebhooks()
@@ -10,4 +11,5 @@ export default function () {
   processJobs()
   publication()
   sendCustomSms()
+  getStats()
 }

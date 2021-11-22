@@ -12,7 +12,7 @@ export class Message extends React.Component {
         <div className='col-md-6'>
           <span className='enable-select'>{message.text}</span>
         </div>
-        <div className='col-md-6 text-right text-muted'>
+        <div className='col-md-6 text-right text-muted enable-select'>
           <p>
             +{message.from}<br />
             <RelativeTime time={message.createdAt} /><br />
@@ -38,13 +38,25 @@ const List = ({ messages, onCreateInboundCall }) => (
   </FlipMove>
 )
 
-export const MessagesScreen = ({ isLoading, inbound, intentToCancel, onCreateInboundCall }) => (
+export const MessagesScreen = ({ isLoading, inbound, intentToCancel, stats, onCreateInboundCall }) => (
   <div className='content'>
     {
       isLoading
         ? <Loading />
         : <div className='row'>
-          <div className='col-md-6'>
+            <div className='col-md-6 enable-select'>
+              {stats &&
+                <Box title='Statistik' icon='pie-chart'>
+                  {stats.map(([month, total, inbound, outbound]) =>
+                    <div key={month}>
+                      {month} &emsp; <b>{total}</b> &emsp; &emsp; &emsp; {inbound} empfangen, {outbound} gesendet
+                    </div>
+                  )}
+                  <br />
+                  Jahressumme: {stats.map(s => s[1]).reduce((a, b) => a+b, 0)}
+                </Box>
+              }
+
             <Box title='Inbound messages matched as intent to cancel' icon='calendar-times-o'>
               <List messages={intentToCancel} onCreateInboundCall={onCreateInboundCall} />
             </Box>

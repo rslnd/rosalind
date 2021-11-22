@@ -84,7 +84,8 @@ const schema = new SimpleSchema({
   createdAt: {
     type: Date,
     autoValue: Auto.createdAt,
-    optional: true
+    optional: true,
+    index: -1
   },
 
   sentAt: {
