@@ -81,7 +81,34 @@ export class AppointmentsView extends React.Component {
     } else if (this.props.move.isMoving) {
       this.handleMoveEnd(options)
     } else {
-      this.handleNewAppointmentModalOpen(options)
+      if (options.event &&
+          options.event.shiftKey &&
+          hasRole(Meteor.userId(), ['admin', 'schedules-edit'])) {
+        
+        const newSchedule = {
+          userId: options.assigneeId,
+          calendarId: this.props.calendar._id,
+          start: options.start,
+          end: options.end,
+          available: false,
+          type: 'override'
+        }
+  
+        console.log('[Appointments] Schedules override end event', { newSchedule })
+  
+        Schedules.actions.insert.callPromise({ schedule: newSchedule }).then(() => {
+          this.setState({
+            override: {
+              isOverriding: false,
+              start: null,
+              end: null,
+              overrideAssigneeId: null
+            }
+          })
+        })
+      } else {
+        this.handleNewAppointmentModalOpen(options)
+      }
     }
   }
 
