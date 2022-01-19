@@ -14,13 +14,7 @@ const parsePatient = (hash, p) => {
 
   const patientSince = p.ERSTORD ? (() => {
     const sinceMonth = parseInt(p.ERSTORD.substr(0, 2), 10)
-    let sinceYear = parseInt(p.ERSTORD.substr(2, 2), 10)
-    const is1900 = ((new Date()).getYear() - 100) > 20
-    if (is1900) {
-      sinceYear += 1900
-    } else {
-      sinceYear += 2000
-    }
+    const sinceYear = parseInt(p.ERSTORD.substr(2, 2), 10) + 2000
     return new Date([sinceYear, sinceMonth, '01'].join('-'))
   })() : undefined
 
