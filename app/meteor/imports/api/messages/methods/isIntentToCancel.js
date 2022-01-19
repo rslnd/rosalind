@@ -1,6 +1,6 @@
 import some from 'lodash/some'
 
-export const cancelKeywords = ['STORNO', 'NEIN']
+export const cancelKeywords = ['STORNO', 'NEIN', 'NEİN']
 
 export const isIntentToCancel = (text) => {
   const lower = text.toLowerCase().trim()
