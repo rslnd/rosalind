@@ -62,7 +62,6 @@ const isUrlValid = urlString => {
   try {
     const url = new URL(urlString)
     const isValid = !!(
-      url.origin.match(/^https:\/\/.*\.rslnd\.com$/) ||
       url.origin.match(/^https:\/\/.*\.fxp\.at$/) ||
       (process.env.NODE_ENV === 'development' && url.origin.match(/^http:\/\/localhost:3000$/))
     )
