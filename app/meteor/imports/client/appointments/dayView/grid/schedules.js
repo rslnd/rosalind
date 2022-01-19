@@ -59,7 +59,11 @@ const Schedule = ({ start, end, note, roles, scheduleId, assigneeId, slotSize, o
       }}>
 
       {
-        (duration - (note ? slotSize : 0)) > slotSize
+        (
+          (
+            (duration - (note ? slotSize : 0)) > slotSize) &&
+            (duration > 15)
+          )
           ? [
             <div key={1} style={style.schedulesText}>
               {!isFirstSlot(timeStart) && timeStart.format('H:mm')}
