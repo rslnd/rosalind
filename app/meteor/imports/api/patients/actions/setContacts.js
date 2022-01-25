@@ -4,6 +4,19 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Contact } from '../schema'
+import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
+
+const normalizeContact = c => {
+  if (c.channel === 'Phone') {
+    const valueNormalized = normalizePhoneNumber(c.value)
+    const value = c.value.trim()
+    return { ...c, valueNormalized, value }
+  } else {
+    const value = c.value.trim()
+    return { ...c, value }
+  }
+}
+
 
 export const setContacts = ({ Patients }) => {
   return new ValidatedMethod({
@@ -23,7 +36,7 @@ export const setContacts = ({ Patients }) => {
       if (patient) {
         Patients.update({ _id: patientId }, {
           $set: {
-            contacts,
+            contacts: contacts.map(normalizeContact),
             updatedAt: new Date(),
             updatedBy: this.userId
           }

@@ -130,7 +130,7 @@ export const upsert = ({ Patients }) =>
                 if (c.channel === 'Phone') {
                   c.value = zerofix(c.value)
                 }
-                newContacts.push(c)
+                newContacts.push(normalizeContact(c))
               }
             })
 
