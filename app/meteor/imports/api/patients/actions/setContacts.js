@@ -7,16 +7,17 @@ import { Contact } from '../schema'
 import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
 
 const normalizeContact = c => {
-  if (c.channel === 'Phone') {
+  if (c.channel === 'Phone' && c.value) {
     const valueNormalized = normalizePhoneNumber(c.value)
     const value = c.value.trim()
     return { ...c, valueNormalized, value }
-  } else {
+  } else if (c.value) {
     const value = c.value.trim()
     return { ...c, value }
+  } else {
+    return c
   }
 }
-
 
 export const setContacts = ({ Patients }) => {
   return new ValidatedMethod({

@@ -28,13 +28,15 @@ const isEmpty = (v, k) => {
 }
 
 const normalizeContact = c => {
-  if (c.channel === 'Phone') {
+  if (c.channel === 'Phone' && c.value) {
     const valueNormalized = normalizePhoneNumber(c.value)
     const value = c.value.trim()
     return { ...c, valueNormalized, value }
-  } else {
+  } else if (c.value) {
     const value = c.value.trim()
     return { ...c, value }
+  } else {
+    return c
   }
 }
 
