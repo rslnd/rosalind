@@ -7,10 +7,6 @@ export const publication = () => {
     roles: ['appointments', 'calendar-column-*', 'inboundCalls', 'admin'],
     args: { messageId: String },
     fn: function ({ messageId }) {
-      console.log('pubbing', messageId, Messages.find({
-        _id: messageId
-      }).fetch())
-
       return Messages.find({
         _id: messageId
       })

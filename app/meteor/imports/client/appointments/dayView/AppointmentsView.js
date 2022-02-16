@@ -248,13 +248,20 @@ export class AppointmentsView extends React.Component {
   }
 
   handleSetAdmitted (appointment) {
+    const calendar = this.props.calendar
+
     if (appointment.assigneeId && !hasRole(appointment.assigneeId, ['promptWaitlistAssigneeId'])) {
       this.props.onSetAdmitted({ appointmentId: appointment._id })
+    } else if (!appointment.assigneeId && calendar.unassignedAssigneeId) {
+      // when calendar's unassignedAssigneeId is set, assign to them
+      this.props.onSetAdmitted({
+        appointmentId: appointment._id,
+        waitlistAssigneeId: calendar.unassignedAssigneeId
+      })
     } else {
       // prompt if there is more than one one assignee today
       const otherAssignees = this.props.assignees.filter(a => a && a._id)
-      const calendar = this.props.calendar
-
+    
       if (!(calendar && calendar.allowAdmittingUnassignedToAnyone) && otherAssignees.length === 1) {
         this.props.onSetAdmitted({
           appointmentId: appointment._id,

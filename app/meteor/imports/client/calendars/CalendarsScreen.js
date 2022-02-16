@@ -6,6 +6,7 @@ import Chip from '@material-ui/core/Chip'
 import { __ } from '../../i18n'
 import { toClass, withProps } from 'recompose'
 import { Box } from '../components/Box'
+import { UserPicker } from '../users/UserPicker'
 import { Icon } from '../components/Icon'
 import { Table } from '../components/InlineEditTable'
 import { CalendarPicker } from './CalendarPicker'
@@ -118,6 +119,13 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
   {
     header: 'Einschub-Spaltenbeschriftung',
     field: 'unassignedLabel'
+  },
+  {
+    header: 'Einschub zuweisen zu',
+    field: 'unassignedAssigneeId',
+    unsetWhenEmpty: true,
+    EditComponent: UserPicker,
+    render: t => t.unassignedAssigneeId && getAssigneeName(t.unassignedAssigneeId)
   },
   {
     header: 'Report Addenda',

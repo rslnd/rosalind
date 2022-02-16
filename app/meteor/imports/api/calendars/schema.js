@@ -48,6 +48,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  unassignedAssigneeId: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+
   privateAppointments: {
     type: Boolean,
     optional: true
