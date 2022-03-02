@@ -5,7 +5,7 @@ import some from 'lodash/some'
 const moment = extendMoment(momentTz)
 
 export const dayTimeFrom = (m) => m.hour(9).startOf('hour')
-export const dayTimeTo = (m) => m.hour(21).endOf('hour')
+export const dayTimeTo = (m) => m.hour(15).endOf('hour')
 
 export const isDayTime = (time) => {
   const now = time.clone().tz(process.TZ_CLIENT || 'Europe/Vienna')
