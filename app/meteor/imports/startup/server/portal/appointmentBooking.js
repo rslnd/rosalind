@@ -33,7 +33,7 @@ export const getBookables = () => {
   }
 
   const appointments = Appointments.find(selector, {
-    limit: 20,
+    limit: 250,
     fields,
     sort: { start: 1 }
   }).fetch()
