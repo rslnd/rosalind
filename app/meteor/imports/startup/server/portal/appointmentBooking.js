@@ -21,7 +21,7 @@ export const getBookables = () => {
   const selector = {
     type: 'bookable',
     start: { $gt: moment().endOf('day').toDate() },
-    end: { $lte: moment().add(12, 'weeks').toDate() },
+    end: { $lte: moment().add(16, 'weeks').toDate() },
     lockedAt: null
   }
 
