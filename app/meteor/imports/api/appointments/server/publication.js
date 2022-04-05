@@ -2,7 +2,7 @@ import moment from 'moment'
 import { Comments } from '../../comments'
 import { Patients } from '../../patients'
 import Appointments from '../collection'
-import { publishComposite } from '../../../util/meteor/publish'
+import { Optional, publishComposite } from '../../../util/meteor/publish'
 import { dayToDate } from '../../../util/time/day'
 import { hasRole } from '../../../util/meteor/hasRole'
 
@@ -159,11 +159,15 @@ export default () => {
   publishComposite({
     name: 'appointments-patient',
     args: {
-      patientId: String
+      patientId: String,
+      page: Optional(Number),
+      assigneeId: Optional(String),
+      calendarId: Optional(String)
     },
     roles: ['appointments-*'],
-    fn: function ({ patientId }) {
+    fn: function ({ patientId, page = 0, assigneeId, calendarId }) {
       const userId = this.userId
+      const pageSize = 20
 
       return {
         find: function () {
@@ -177,11 +181,26 @@ export default () => {
           },
           {
             find: function (patient) {
-              return Appointments.find({ patientId: patient._id }, {
-                sort: { start: 1 },
+              const selector = { patientId: patient._id }
+
+              if (assigneeId) {
+                selector.assigneeId = assigneeId
+              }
+
+              if (calendarId) {
+                selector.calendarId = calendarId
+              }
+
+              const as = Appointments.find(selector, {
+                sort: { start: -1 },
                 fields: limitFieldsByRole(userId),
+                skip: page * pageSize,
+                limit: pageSize,
                 removed: true
               })
+
+              console.log('pub as', patientId, as.fetch().length, 'page', page, selector)
+              return as
             },
             children: [
               {

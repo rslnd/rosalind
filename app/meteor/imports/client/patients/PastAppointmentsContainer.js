@@ -10,7 +10,7 @@ const composer = (props) => {
   const patientId = props.patientId
   if (!patientId) { return {} }
 
-  subscribe('appointments-patient', { patientId })
+  subscribe('appointments-patient', { patientId, page: 0 })
 
   const patient = Patients.findOne({ _id: patientId })
 

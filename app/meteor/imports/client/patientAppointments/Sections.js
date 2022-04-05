@@ -5,12 +5,13 @@ import { __ } from '../../i18n'
 import { dateColumnStyle } from './Info'
 import { AppointmentsList, currentAppointmentInnerStyle } from './Appointment'
 
-export const Oldest = () =>
+export const Oldest = ({ children }) =>
   <div style={separatorHeadingStyle}>
+    {children}<br/>
     {__('appointments.oldestAppointment')}
   </div>
 
-const separatorHeadingStyle = {
+export const separatorHeadingStyle = {
   paddingTop: 55,
   paddingLeft: dateColumnStyle.width + 12 + 12, // Fake same column as assignee name
   opacity: 0.3

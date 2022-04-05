@@ -3,7 +3,7 @@ import { compose, withState, withHandlers, withPropsOnChange } from 'recompose'
 import { Filter } from './Filter'
 import { AppointmentsList, Appointment } from './Appointment'
 import { Referrals } from './Referrals'
-import { Oldest, Current, Future } from './Sections'
+import { Oldest, Current, Future, separatorHeadingStyle } from './Sections'
 import { Loading } from '../components/Loading'
 
 export const Appointments = compose(
@@ -21,6 +21,8 @@ export const Appointments = compose(
     props => props.scrollToBottom()
   )
 )(({
+  page,
+  setPage,
   currentAppointment,
   pastAppointments,
   pastAppointmentsWithFloatingMedia,
@@ -44,10 +46,18 @@ export const Appointments = compose(
     <div ref={setScrollRef} style={outerStyle}> {/* Scroll this to bottom */}
       <div style={middleStyle}>
         <div style={innerStyle}> {/* Inside this div things will not be reversed */}
-          {
-            pastAppointments.length > 6 &&
-            <Oldest />
-          }
+
+          <div style={separatorHeadingStyle}>
+              {pastAppointments.length > 0 &&
+                <a href="#" onClick={() => setPage(page + 1)}>Vorherige Termine suchen</a>
+              }
+              
+              <br />Seite {page + 1}<br/>
+
+              {pastAppointments.length == 0 &&
+              'Keine älteren Termine'}
+          </div>
+
           <AppointmentsList
             pastAppointmentsWithFloatingMedia={pastAppointmentsWithFloatingMedia}
             fullNameWithTitle={fullNameWithTitle}
@@ -59,6 +69,13 @@ export const Appointments = compose(
           {
             loading && <Loading />
           }
+
+          { page > 0 &&
+            <div style={separatorHeadingStyle}>
+              <a href="#" onClick={() => setPage(page - 1)}>Neuere Termine suchen</a>
+            </div>
+          }
+
           {
             currentAppointment && pastAppointments.length > 1 &&
             <Current />

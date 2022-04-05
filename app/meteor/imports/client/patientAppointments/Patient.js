@@ -344,16 +344,16 @@ const localityStyle = {
 
 const Loyalty = ({ patientSince, gender, totalRevenue, portalVerifiedAt, _id }) =>
   <div style={loyaltyStyle}>
-    <div>{
+    {/* <div>{
       totalRevenue
         ? __('patients.totalRevenue', { revenue: currencyRounded(totalRevenue) })
         : null
-    } </div>
-    <div>{
+    } </div> */}
+    {/* <div>{
       patientSince
         ? __(gender === 'Female' ? 'patients.patientSince_female' : 'patients.patientSince_male', { date: formatPatientSince(patientSince) })
         : null
-    }</div>
+    }</div> */}
     <div onClick={async () => {
       const yes = await prompt({ title: 'Möchten Sie den Zugang für Online Befund- und Bildabfrage wieder sperren?',
     confirm: 'Sperren'})

@@ -23,7 +23,8 @@ const composer = props => {
   console.log('PatientsAppointmentsContainer', props)
   const {
     appointmentId,
-    filter
+    filter,
+    page
   } = props
 
   const currentAppointment = Appointments.findOne({ _id: appointmentId })
@@ -33,7 +34,15 @@ const composer = props => {
   const userId = Meteor.userId()
   const canRefer = hasRole(userId, ['referrals', 'referrals-immediate', 'referrals-delayed'])
 
-  const loading = patientId && !subscribe('appointments-patient', { patientId }).ready()
+  const loading = patientId && 
+    !subscribe('appointments-patient',
+      {
+        patientId,
+        page,
+        calendarId: filter ? filter.calendarId : null,
+        assigneeId: filter ? filter.assigneeId : null,
+      }
+    ).ready()
 
   if (patientId) {
     subscribe('media', { patientId })
@@ -45,14 +54,18 @@ const composer = props => {
     })
   }
 
-  const otherAppointments = patient ? Appointments.find({
+  // do not sort -1 for skip/limit pagination from newest and then reverse for display,
+  // since the publication limits to pageSize on the server
+  const otherAppointments = (patient ? Appointments.find({
     patientId
-  }, { removed: true, sort: { start: 1 } }).fetch().filter(a =>
+  }, {
+    removed: true,
+    sort: { start: 1 }
+  }).fetch().filter(a =>
     currentAppointment
       ? a._id !== currentAppointment._id
       : true
-  ) : []
-
+  ) : [])
   const now = currentAppointment ? currentAppointment.start : (new Date())
   const futureAppointments = otherAppointments && otherAppointments.filter(a =>
     a.start > now
@@ -73,24 +86,24 @@ const composer = props => {
   const canceledCount = otherAppointments.filter(a => (a.canceled || a.removed)).length
 
   if (patient) {
-    patient.totalRevenue = otherAppointments.reduce((acc, a) => {
-      if (a.admitted) {
-        return acc + (a.revenue || 0)
-      } else {
-        return acc
-      }
-    }, 0) +
-      ((currentAppointment && currentAppointment.revenue) || 0) +
-      (patient.externalRevenue || 0)
+    // patient.totalRevenue = otherAppointments.reduce((acc, a) => {
+    //   if (a.admitted) {
+    //     return acc + (a.revenue || 0)
+    //   } else {
+    //     return acc
+    //   }
+    // }, 0) +
+    //   ((currentAppointment && currentAppointment.revenue) || 0) +
+    //   (patient.externalRevenue || 0)
 
-    const patientSinceCandidates = [
-      patient.patientSince,
-      (unfilteredPastAppointments[0] && unfilteredPastAppointments[0].start)
-    ].filter(identity)
+    // const patientSinceCandidates = [
+    //   patient.patientSince,
+    //   (unfilteredPastAppointments[0] && unfilteredPastAppointments[0].start)
+    // ].filter(identity)
 
-    if (patientSinceCandidates.length >= 1) {
-      patient.patientSince = new Date(Math.min(...patientSinceCandidates))
-    }
+    // if (patientSinceCandidates.length >= 1) {
+    //   patient.patientSince = new Date(Math.min(...patientSinceCandidates))
+    // }
   }
 
   const floatingMedia = Media.find({
@@ -144,8 +157,15 @@ const composer = props => {
   const client = getClient()
   const currentCycle = client && client.nextMedia && client.nextMedia.cycle
 
+  const onClose = (e) => {
+    console.log('onClose intercepted, resetting page')
+    props.setPage && props.setPage(0)
+    return props.onClose(e)
+  }
+
   return {
     ...props,
+    onClose,
     patientId,
     // loading, // debugging random closing
     currentAppointment,
@@ -169,5 +189,6 @@ const last = xs => xs.slice(xs.length - 1)[0]
 export const PatientsAppointmentsContainer = compose(
   connect(),
   withState('filter', 'setFilter', null), // default filter is loaded from user preferences
+  withState('page', 'setPage', 0),
   withTracker(composer)
 )(PatientAppointmentsModal)

@@ -21,7 +21,7 @@ const QuarterWarning = withTracker(({ patientId, calendarId, start }) => {
     return {}
   }
 
-  subscribe('appointments-patient', { patientId })
+  subscribe('appointments-patient', { patientId, page: 0 })
 
   const selectedQ = q(getQ(start))(start)
 
