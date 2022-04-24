@@ -30,7 +30,7 @@ mdg:validated-method
 aldeed:simple-schema
 aldeed:collection2
 zimme:collection-softremovable
-cultofcoders:publish-composite
+reywood:publish-composite
 didericis:callpromise-mixin
 percolate:migrations
 ccorcos:subs-cache
