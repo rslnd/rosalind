@@ -1,10 +1,11 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import 'moment-duration-format'
+import momentDurationFormat from 'moment-duration-format'
 import idx from 'idx'
 import ColorHash from 'color-hash'
 import { dayToDate } from '../../util/time/day'
 import { __ } from '../../i18n';
+momentDurationFormat(moment)
 
 const colorHash = new ColorHash({ saturation: 0.75, lightness: 0.65 })
 const clampLower = n => (n < 0) ? 0 : n
@@ -26,8 +27,8 @@ const avatarStyle = {
   'WebkitPrintColorAdjust': 'exact'
 }
 
-const formatDuration = mins =>
-  moment.duration(mins, 'minutes').format(__('time.durationFormatShort'), null, {
+const formatDuration = (mins = 0) =>
+  moment.duration((mins || 0), 'minutes').format(__('time.durationFormatShort'), null, {
     trim: false
   })
 

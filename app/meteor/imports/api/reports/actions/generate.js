@@ -26,17 +26,16 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
 
         const date = moment(dayToDate(day))
 
-        const hiddenAssigneeIds = Users.find({
+        const exemptWorkloadAssigneeIds = Users.find({
           hiddenInReports: true
         }).fetch().map(u => u._id)
-
+        
         const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
         return calendars.map(calendar => {
           const calendarId = calendar._id
 
           const appointments = Appointments.find({
             calendarId,
-            assigneeId: { $nin: hiddenAssigneeIds },
             start: {
               $gt: date.startOf('day').toDate(),
               $lt: date.endOf('day').toDate()
@@ -50,8 +49,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
           const pastAppointments = Appointments.find(pastAppointmentsSelector({
             date,
             calendarId,
-            appointments,
-            hiddenAssigneeIds
+            appointments
           })).fetch()
 
           const overrideSchedules = Schedules.find({
@@ -87,7 +85,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
             filteredAddendum = addendum
           }
 
-          const generatedReport = generateReport({ calendar, day, appointments, pastAppointments, daySchedule, overrideSchedules, tagMapping, messages, existingReport, addendum: filteredAddendum })
+          const generatedReport = generateReport({ calendar, day, appointments, pastAppointments, daySchedule, overrideSchedules, tagMapping, messages, existingReport, exemptWorkloadAssigneeIds, addendum: filteredAddendum })
 
           if (generatedReport.assignees.length === 0) {
             return null

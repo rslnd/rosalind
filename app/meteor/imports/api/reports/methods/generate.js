@@ -6,7 +6,7 @@ import { merge as mergeReport } from './merge'
 import { reapplyAddenda, applyAddendum } from './reapplyAddenda'
 import { dayToDate } from '../../../util/time/day'
 
-export const generate = ({ calendar, day, appointments, pastAppointments, daySchedule, overrideSchedules, tagMapping, messages, existingReport, addendum }) => {
+export const generate = ({ calendar, day, appointments, pastAppointments, daySchedule, overrideSchedules, tagMapping, messages, existingReport, exemptWorkloadAssigneeIds, addendum }) => {
   let report = {}
 
   report.calendarId = calendar._id
@@ -24,8 +24,8 @@ export const generate = ({ calendar, day, appointments, pastAppointments, daySch
 
   report = mergeReport(report, mapHours({ calendar, report, appointments, overrideSchedules }))
 
-  report.total = mapTotal({ report })
-  report.average = mapAverage({ report })
+  report.total = mapTotal({ report, exemptWorkloadAssigneeIds })
+  report.average = mapAverage({ report, exemptWorkloadAssigneeIds })
 
   report.createdAt = new Date()
 

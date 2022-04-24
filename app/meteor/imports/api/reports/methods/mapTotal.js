@@ -69,8 +69,9 @@ const mapWeightedWorkload = ({ report }) => {
   return summedWeightedWorkloads / summedWeights
 }
 
-export const mapWorkload = ({ report }) => {
+export const mapWorkload = ({ report, exemptWorkloadAssigneeIds = [] }) => {
   const sum = accessor => report.assignees
+    .filter(a => !exemptWorkloadAssigneeIds.includes(a._id))
     .map(accessor)
     .reduce((acc, curr) => {
       return {
@@ -110,11 +111,11 @@ const mapRevenue = ({ report }) => {
   return revenues
 }
 
-const preprocess = ({ report }) => {
+const preprocess = ({ report, exemptWorkloadAssigneeIds }) => {
   const patients = mapPatients({ report })
   const assignees = mapAssignees({ report })
   const hours = mapHours({ report })
-  const workload = mapWorkload({ report })
+  const workload = mapWorkload({ report, exemptWorkloadAssigneeIds })
   const revenue = mapRevenue({ report })
 
   return {
@@ -143,7 +144,7 @@ const postprocess = ({ report, total }) => {
   }
 }
 
-export const mapTotal = ({ report }) => {
-  const total = preprocess({ report })
+export const mapTotal = ({ report, exemptWorkloadAssigneeIds }) => {
+  const total = preprocess({ report, exemptWorkloadAssigneeIds })
   return postprocess({ total, report })
 }
