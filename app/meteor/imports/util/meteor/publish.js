@@ -40,6 +40,9 @@ const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requir
       if (debug && result && result.count) {
         console.log(`Publication ${name} returned cursor with ${result.count()} documents`)
       }
+      if (debug && result && !result.count) {
+        console.log(`Composite publication ${name} returned ${result.find().count()}+ documents`)
+      }
       return result
     } else {
       if (debug) {

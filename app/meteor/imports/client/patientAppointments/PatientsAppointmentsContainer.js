@@ -31,22 +31,26 @@ const composer = props => {
   const patientId = currentAppointment ? currentAppointment.patientId : props.patientId
   const patient = Patients.findOne({ _id: patientId })
 
-  const userId = Meteor.userId()
-  const canRefer = hasRole(userId, ['referrals', 'referrals-immediate', 'referrals-delayed'])
-
-  const loading = patientId && 
-    !subscribe('appointments-patient',
-      {
-        patientId,
-        page,
-        calendarId: filter ? filter.calendarId : null,
-        assigneeId: filter ? filter.assigneeId : null,
-      }
-    ).ready()
+  console.log('patientId', patientId)
 
   if (patientId) {
+    subscribe('patient', { patientId })
+    subscribe('patient-comments', { patientId })
     subscribe('media', { patientId })
+
+    const subArgs = {
+      patientId,
+      page,
+      calendarId: filter ? filter.calendarId : null,
+      assigneeId: filter ? filter.assigneeId : null,
+    }
+
+    subscribe('appointments-patient', subArgs)
+    subscribe('appointments-patient-comments', subArgs)
   }
+
+  const userId = Meteor.userId()
+  const canRefer = hasRole(userId, ['referrals', 'referrals-immediate', 'referrals-delayed'])
 
   if (patientId && canRefer) {
     canRefer && subscribe('referrals', {
