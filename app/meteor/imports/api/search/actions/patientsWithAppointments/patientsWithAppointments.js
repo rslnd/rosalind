@@ -11,10 +11,11 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
     validate: new SimpleSchema({
       query: { type: String },
       // enables fuzzy matching even on short names
-      forceNgramMatching: { type: Boolean, optional: true }
+      forceNgramMatching: { type: Boolean, optional: true },
+      limit: { type: Number, optional: true }
     }).validator(),
 
-    run ({ query, forceNgramMatching }) {
+    run ({ query, forceNgramMatching, limit }) {
       try {
         this.unblock()
 
@@ -37,7 +38,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
         if (selector) {
           const patients = Patients.find(selector, {
             sort: { lastName: 1 },
-            limit: 100,
+            limit: limit || 600,
             fields: Patients.fields.search
           }).fetch()
 
