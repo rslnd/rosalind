@@ -237,7 +237,7 @@ export default () => {
     },
     roles: ['appointments-*'],
     fn: function ({ patientId }) {
-      return Patients.find({ patientId })
+      return Patients.find({ _id: patientId })
     }
   })
 

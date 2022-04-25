@@ -29,9 +29,6 @@ const composer = props => {
 
   const currentAppointment = Appointments.findOne({ _id: appointmentId })
   const patientId = currentAppointment ? currentAppointment.patientId : props.patientId
-  const patient = Patients.findOne({ _id: patientId })
-
-  console.log('patientId', patientId)
 
   if (patientId) {
     subscribe('patient', { patientId })
@@ -48,6 +45,10 @@ const composer = props => {
     subscribe('appointments-patient', subArgs)
     subscribe('appointments-patient-comments', subArgs)
   }
+
+  const patient = Patients.findOne({ _id: patientId })
+
+  console.log('patientId', patientId, patient)
 
   const userId = Meteor.userId()
   const canRefer = hasRole(userId, ['referrals', 'referrals-immediate', 'referrals-delayed'])
