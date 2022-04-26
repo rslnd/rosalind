@@ -9,7 +9,7 @@ export const ingest = ({ Importers }) => {
     if (name && name.includes('Ärzte Statistik Umsätze')) { return 'eoswinRevenueReports' }
     if (name && name.match(/\.PAT$/i)) { return 'eoswinPatients' }
     if (name && name.match(/\.json$/i)) { return 'genericJson' }
-    if (name && name.match(/(\.gdt)$|(\.bdt$)|(\.xdt$)/i)) { return 'xdt' }
+    if (name && name.match(/(\.gdt)$|(\.bdt$)|(\.xdt$)|(\.001)/i)) { return 'xdt' }
     if (content && content.match(/Online Konsultation mit e-card/i)) { return 'eoswinJournalReports' }
     if (content && content.match(/Krankenscheine gesamt/i) && content.match(/Abrechnungsgruppe/i)) { return 'eoswinRevenueReports' }
   }

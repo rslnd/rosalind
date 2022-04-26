@@ -16,6 +16,7 @@ import { currencyRounded } from '../../util/format'
 import { FutureRecord } from '../records/FutureRecord'
 import { PairingButton } from '../clients/PairingButton'
 import { Pinned } from '../media/Pinned'
+import { withPromise } from '../components/withPromise'
 import { hasRole } from '../../util/meteor/hasRole'
 import { ScanButton } from './Documents'
 import { SmsModalContainer } from './SmsModal'
@@ -342,18 +343,35 @@ const localityStyle = {
   display: 'inline-block'
 }
 
-const Loyalty = ({ patientSince, gender, totalRevenue, portalVerifiedAt, _id }) =>
+
+const fetchLoyalty = ({ _id }) =>
+  new Promise((resolve) => {
+    console.log('testooo')
+    Meteor.call(
+      'patients/getLoyalty', 
+      { patientId: _id },
+      (err, loyalty) => {
+        resolve(loyalty)
+      })
+  })
+
+const Loyalty = withPromise(fetchLoyalty)(({ patientSince, totalRevenue, patientId, gender, portalVerifiedAt, _id }) =>
   <div style={loyaltyStyle}>
-    {/* <div>{
-      totalRevenue
-        ? __('patients.totalRevenue', { revenue: currencyRounded(totalRevenue) })
-        : null
-    } </div> */}
-    {/* <div>{
-      patientSince
-        ? __(gender === 'Female' ? 'patients.patientSince_female' : 'patients.patientSince_male', { date: formatPatientSince(patientSince) })
-        : null
-    }</div> */}
+    {
+      _id === patientId && // avoid stale data when opening/closing modal quickly
+      <div className='enable-select'>
+        <div>{
+          totalRevenue
+            ? __('patients.totalRevenue', { revenue: currencyRounded(totalRevenue) })
+            : null
+        } </div>
+        <div>{
+          patientSince
+            ? __(gender === 'Female' ? 'patients.patientSince_female' : 'patients.patientSince_male', { date: formatPatientSince(patientSince) })
+            : null
+        }</div>
+      </div>
+    }
     <div onClick={async () => {
       const yes = await prompt({ title: 'Möchten Sie den Zugang für Online Befund- und Bildabfrage wieder sperren?',
     confirm: 'Sperren'})
@@ -368,6 +386,7 @@ const Loyalty = ({ patientSince, gender, totalRevenue, portalVerifiedAt, _id }) 
       }
     </div>
   </div>
+)
 
 const formatPatientSince = d =>
   moment(d).format(__('time.dateFormatMonthYearOnly'))

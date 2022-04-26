@@ -172,7 +172,7 @@ export default () => {
   // that's why there are 3 separate regular publications for appts, comments and patient
   const appointmentsCursor = ({ patientId, page = 0, assigneeId, calendarId }) => {
     const userId = this.userId
-    const pageSize = 20
+    const pageSize = 10
     const selector = { patientId }
 
     if (assigneeId) {
