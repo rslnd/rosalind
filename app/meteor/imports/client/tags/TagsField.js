@@ -13,6 +13,7 @@ const moment = extendMoment(_moment)
 
 // This should be deprecated, and be merged with Appointments.methods.getAllowedTags once pure availabilities are "live"
 export const getConstrainedTags = ({
+  scheduleableTags,
   allowedTags,
   value,
   maxDuration,
@@ -21,8 +22,6 @@ export const getConstrainedTags = ({
   time,
   constraint
 }) => {
-  const allTags = Tags.find({}, { sort: { order: 1 } }).fetch()
-
   const mapSelectState = (t) => {
     const selected = value && value.includes(t._id)
     return {
@@ -31,6 +30,42 @@ export const getConstrainedTags = ({
       selected
     }
   }
+
+  // scheduleable via script overrides everything else (except max duration and parallel)
+  if (scheduleableTags) {
+    return scheduleableTags.map(mapSelectState).filter(t => {
+      if (maxDuration === null) {
+        return true
+      }
+  
+      const duration = getDefaultDuration({
+        calendarId,
+        assigneeId,
+        tags: [...(value || []), t._id],
+        date: moment(time)
+      })
+  
+      if (duration > maxDuration) {
+        return false
+      } else {
+        return true
+      }
+    }).filter(t => {
+      if (t.maxParallel &&
+        Appointments.methods.getParallelAppointments({
+          start: time,
+          end: moment(time).clone().add(t.duration, 'minutes').subtract(1, 'second'),
+          tags: t._id
+        }).length >= t.maxParallel
+      ) {
+        return false
+      } else {
+        return true
+      }
+    })
+  }
+
+  const allTags = Tags.find({}, { sort: { order: 1 } }).fetch()
 
   const tags = allTags.filter(t =>
     allowedTags ? allowedTags.indexOf(t._id) !== -1 : true
@@ -128,6 +163,7 @@ export class TagsField extends React.Component {
     } = this.props
 
     const constrainedTags = getConstrainedTags({
+      scheduleableTags,
       allowedTags,
       value,
       assigneeId,
@@ -153,6 +189,7 @@ export class TagsField extends React.Component {
       input: { value },
       meta,
       assigneeId,
+      scheduleableTags,
       allowedTags,
       maxDuration,
       calendarId,
@@ -162,6 +199,7 @@ export class TagsField extends React.Component {
     } = this.props
 
     const constrainedTags = getConstrainedTags({
+      scheduleableTags,
       allowedTags,
       value,
       assigneeId,

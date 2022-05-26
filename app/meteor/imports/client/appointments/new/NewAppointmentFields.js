@@ -70,6 +70,7 @@ export const NewAppointmentFields = props => {
   const {
     start,
     end,
+    scheduleableTags,
     allowedTags,
     tags,
     maxDuration,
@@ -117,6 +118,7 @@ export const NewAppointmentFields = props => {
             <Field
               name='tags'
               component={TagsField}
+              scheduleableTags={scheduleableTags}
               allowedTags={allowedTags}
               maxDuration={maxDuration}
               calendarId={calendarId}

@@ -77,6 +77,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'slug'
   },
   {
+    header: 'Script',
+    field: 'scheduleableTagsScript',
+    render: (s) => <pre>{s.scheduleableTagsScript}</pre>,
+    multiline: true
+  },
+  {
     header: 'Feldlänge',
     field: 'slotSize'
   },

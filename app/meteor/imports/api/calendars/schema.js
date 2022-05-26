@@ -213,5 +213,10 @@ export const schema = new SimpleSchema({
   sameQuarterWarning: {
     type: Boolean,
     optional: true
+  },
+
+  scheduleableTagsScript: {
+    type: String,
+    optional: true
   }
 })

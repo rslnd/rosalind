@@ -126,6 +126,7 @@ export class NewAppointmentContainerComponent extends React.Component {
         calendar={calendar}
         calendarId={calendar._id}
         assigneeId={assigneeId}
+        scheduleableTags={Appointments.methods.getScheduleableTags({ time: start, calendarId: calendar._id, assigneeId: assigneeId })}
         allowedTags={Appointments.methods.getAllowedTags({ time: start, calendarId: calendar._id, assigneeId: assigneeId })}
         maxDuration={Appointments.methods.getMaxDuration({ time: start, calendarId: calendar._id, assigneeId: assigneeId })}
         constraint={constraint}
