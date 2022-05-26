@@ -60,9 +60,8 @@ const buildCsp = (req, res) => {
     ],
     'script-src': [
       self,
-      `'nonce-${req.nonce}'`,
-      'https://api.smooch.io',
-      'https://cdn.smooch.io'
+      `'unsafe-eval'`
+      // `'nonce-${req.nonce}'`,
     ],
     'style-src': [
       self,
