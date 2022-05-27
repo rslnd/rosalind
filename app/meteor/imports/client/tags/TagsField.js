@@ -154,6 +154,7 @@ export class TagsField extends React.Component {
     if (!value || value.length === 0) { return }
 
     const {
+      scheduleableTags,
       allowedTags,
       assigneeId,
       calendarId,
