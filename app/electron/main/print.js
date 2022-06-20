@@ -6,11 +6,15 @@ const { shell, ipcMain } = require('electron')
 const logger = require('./logger')
 
 const start = (options) => {
+  logger.info('print setup')
   temp.track()
-  ipcMain.on('print', (e, printOptions) => {
 
+  logger.info('print tracking')
+  ipcMain.on('print', (e, printOptions) => {
+    logger.info('print called')
     const { title, physical, printer, flags, localPath, base64 } = printOptions
     if (physical && (base64 || localPath)) {
+      logger.info('print physical')
       const args = {
         printer,
         win32: flags
@@ -37,10 +41,12 @@ const start = (options) => {
           })
         })
       } else if (localPath) {
+        logger.info('print localPath')
         logger.info(`[print] physical local path file "${localPath}" on printer "${printer}" with flags ${JSON.stringify(args)}`)
         pdfToPrinter.print(localPath, args)
       }
     } else {
+      logger.info('print toPdf')
       options.title = title
       printToPdf(options)
     }
@@ -48,7 +54,9 @@ const start = (options) => {
 }
 
 const printToPdf = (options) => {
+  logger.info('print making temp')
   temp.mkdir('rosalind', (err, tmpDir) => {
+    logger.info('print made')
     if (err) { return logger.error(err) }
     const pdfPath = path.join(tmpDir, (options.title || 'Print') + '.pdf')
 
@@ -59,18 +67,22 @@ const printToPdf = (options) => {
       landscape: true
     }
 
+    logger.info('print calling ipcReceiver.printToPDF')
     options.ipcReceiver.printToPDF(printOptions, (err, data) => {
       if (err) {
         logger.error('[Print] Failed to generate pdf: ' + err)
         return
       }
 
+      logger.info('print writing file')
       fs.writeFile(pdfPath, data, (err) => {
         if (err) {
           logger.error('[Print] Failed to save pdf: ' + err)
           return
         }
         logger.info('[Print] Saved pdf to path: ' + pdfPath)
+
+        logger.info('print opening file')
         const ok = shell.openItem(pdfPath)
         if (!ok) {
           logger.error('[Print] failed to open pdf: ' + pdfPath)
