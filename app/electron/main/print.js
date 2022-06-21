@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const temp = require('temp')
 const pdfToPrinter = require('pdf-to-printer')
-const { shell, ipcMain } = require('electron')
+const { shell, ipcMain, webContents } = require('electron')
 const logger = require('./logger')
 
 const start = (options) => {
@@ -68,12 +68,7 @@ const printToPdf = (options) => {
     }
 
     logger.info('print calling ipcReceiver.printToPDF')
-    options.ipcReceiver.printToPDF(printOptions, (err, data) => {
-      if (err) {
-        logger.error('[Print] Failed to generate pdf: ' + err)
-        return
-      }
-
+    webContents.getFocusedWebContents().printToPDF(printOptions).then(data => {
       logger.info('print writing file')
       fs.writeFile(pdfPath, data, (err) => {
         if (err) {
@@ -83,7 +78,7 @@ const printToPdf = (options) => {
         logger.info('[Print] Saved pdf to path: ' + pdfPath)
 
         logger.info('print opening file')
-        const ok = shell.openItem(pdfPath)
+        const ok = shell.openPath(pdfPath)
         if (!ok) {
           logger.error('[Print] failed to open pdf: ' + pdfPath)
         }
