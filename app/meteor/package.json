@@ -61,7 +61,7 @@
     "redux": "^4.0.4",
     "redux-form": "^8.2.4",
     "redux-thunk": "^2.3.0",
-    "snyk": "^1.530.0",
+    "snyk": "^1.680.0",
     "spotoninc-moment-round": "2.0.0",
     "uuid": "^8.2.0",
     "websmscom": "^1.0.3",
