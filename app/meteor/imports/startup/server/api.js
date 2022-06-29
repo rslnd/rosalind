@@ -20,6 +20,7 @@ import media from '../../api/media/server'
 import records from '../../api/records/server'
 import templates from '../../api/templates/server'
 import consents from '../../api/consents/server'
+import checkups from '../../api/checkups/server'
 
 export default function () {
   settings()
@@ -44,4 +45,5 @@ export default function () {
   records()
   templates()
   consents()
+  checkups()
 }

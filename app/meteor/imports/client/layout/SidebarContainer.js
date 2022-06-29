@@ -71,6 +71,12 @@ const sidebarItems = ({ history }) => {
       ]
     },
     {
+      name: 'checkups',
+      icon: 'thermometer-3',
+      roles: ['admin', 'checkups', 'checkups-edit'],
+      link: '/checkups'
+    },
+    {
       name: 'schedules',
       icon: 'clock-o',
       roles: ['admin', 'schedules-edit'],

@@ -3,6 +3,7 @@ import { Icon } from '../../../components/Icon'
 import { background, highlight, important } from '../../../layout/styles'
 import { InlineEdit } from '../../../components/form'
 import { isNoteBarVisible } from './CalendarNote'
+import { Checkups } from '../../../../api/checkups'
 
 const barStyle = {
   position: 'fixed',
@@ -47,19 +48,22 @@ const relevantCellStyle = {
   pointerEvents: 'auto'
 }
 
-export const BreakLines = ({ children, placeholder }) =>
+export const BreakLines = ({ children, placeholder, isImportant = false }) =>
   (children && children.length >= 1)
     ? children.split('\n').map((t, i) => (
-      <span key={i} style={children.indexOf('!') === -1 ? highlight : important}>{t}<br /></span>
+      <span key={i} style={(children.indexOf('!') === -1 && !isImportant) ? highlight : important}>{t}<br /></span>
     ))
     : (placeholder || null)
 
-const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onChangeNote, isLast }) => {
+const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, expanded, onChangeNote, isLast }) => {
   const isDayNoteColumn = (!assignee || (!calendar.allowUnassigned && isLast))
   const hasDayNote = (daySchedule && (daySchedule.note || daySchedule.noteDetails))
   const style = (isDayNoteColumn && (canEditSchedules || hasDayNote))
     ? { ...relevantCellStyle, ...cellStyle }
     : cellStyle
+
+  const checkups = isDayNoteColumn && Checkups.methods.getDue({ date })
+  const hasCheckups = checkups.length >= 1
 
   // Day note
   const dayNote = (isDayNoteColumn && (hasDayNote || canEditSchedules))
@@ -99,6 +103,11 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
         </div>
       }
       {
+        !expanded && hasCheckups && <div>
+          <BreakLines isImportant>{checkups.map(c => c.name).join('\n')}</BreakLines>
+        </div>
+      }
+      {
         !expanded && hasDayNote && <div>
           <BreakLines>{daySchedule.note}</BreakLines>
         </div>
@@ -116,12 +125,13 @@ const Cell = ({ calendar, daySchedule, canEditSchedules, assignee, expanded, onC
   </div>
 }
 
-export const AssigneesDetails = ({ calendar, daySchedule, assignees, expanded, canEditSchedules, onChangeNote }) => (
+export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, expanded, canEditSchedules, onChangeNote }) => (
   <div style={isNoteBarVisible({ calendar, canEditSchedules }) ? barStyleWithNote : barStyle}>
     {
       assignees.map((assignee, i) =>
         <Cell
           key={assignee ? assignee._id : 'unassigned'}
+          date={date}
           calendar={calendar}
           canEditSchedules={canEditSchedules}
           onChangeNote={onChangeNote}
@@ -135,6 +145,7 @@ export const AssigneesDetails = ({ calendar, daySchedule, assignees, expanded, c
       assignees.length === 0 &&
         <Cell
           key={'note'}
+          date={date}
           calendar={calendar}
           canEditSchedules={canEditSchedules}
           onChangeNote={onChangeNote}

@@ -13,6 +13,7 @@ import { MainLayoutContainer } from './layout'
 import { Dashboard } from './layout/Dashboard'
 import { InboundCalls } from './inboundCalls'
 import { Appointments } from './appointments'
+import { Checkups } from './checkups'
 import { Waitlist } from './appointments/waitlist'
 import { Schedules } from './schedules'
 import { Reports } from './reports'
@@ -32,6 +33,7 @@ export const Rosalind = () => (
               <Switch>
                 <Route path='/appointments' component={Appointments} />
                 <Route path='/waitlist' component={Waitlist} />
+                <Route path='/checkups' component={Checkups} />
                 <Route path='/inboundCalls' component={InboundCalls} />
                 <Route path='/schedules' component={Schedules} />
                 <Route path='/reports' component={Reports} />

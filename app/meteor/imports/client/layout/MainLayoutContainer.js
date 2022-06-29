@@ -38,6 +38,8 @@ const composer = (props) => {
     subs.push(subscribe('referrables'))
     subs.push(subscribe('media-tags'))
     subs.push(subscribe('templates'))
+    subs.push(subscribe('checkups'))
+    subs.push(subscribe('checkupsRules'))
   }
 
   const isReadyToPrint = subs.every(s => s.ready())
