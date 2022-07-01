@@ -60,7 +60,7 @@ export default () => {
     const randomName = () =>
       pseudonyms[Math.floor(Math.random() * (pseudonyms.length - 1))]
 
-    Api.Users.find({}).fetch().forEach(({_id}) => {
+    Api.Users.find({}, { removed: true }).fetch().forEach(({_id}) => {
       Api.Users.update({ _id }, {
         $set: {
           lastName: randomName(),
@@ -71,12 +71,16 @@ export default () => {
 
     // turn one original (admin) user into a demo user
     if (process.env.DEMO_USERNAME_ORIGINAL) {
-      Accounts.setPassword(Api.Users.findOne({ username: process.env.DEMO_USERNAME_ORIGINAL })._id, process.env.DEMO_PASSWORD, { logout: false })
-      Api.Users.update({ username: 'az' }, {
-        $set: {
-          username: process.env.DEMO_USERNAME
-        }
-      })
+      if (Api.Users.findOne({ username: process.env.DEMO_USERNAME_ORIGINAL })) {
+        Accounts.setPassword(Api.Users.findOne({ username: process.env.DEMO_USERNAME_ORIGINAL })._id, process.env.DEMO_PASSWORD, { logout: false })
+        Api.Users.update({ username: 'az' }, {
+          $set: {
+            username: process.env.DEMO_USERNAME
+          }
+        })
+      } else {
+        console.error('Error: DEMO_USERNAME_ORIGINAL user not found: ' + process.env.DEMO_USERNAME_ORIGINAL)
+      }
     }
 
     Api.Settings.remove({ key: 'messages.sms.fxpsms.host' })
@@ -94,7 +98,7 @@ export default () => {
     Api.Settings.set('primaryColor', '#3c4fbc')
     
 
-    Api.InboundCallsTopics.find({}).fetch().forEach(({_id}) => {
+    Api.InboundCallsTopics.find({}, { removed: true }).fetch().forEach(({_id}) => {
       const name = randomName()
       Api.InboundCallsTopics.update({ _id }, {
         $set: {
@@ -107,7 +111,7 @@ export default () => {
 
 
     const patientsBatch = Api.Patients.rawCollection().initializeUnorderedBulkOp()
-    Api.Patients.find({}, { fields: { _id: 1 } }).fetch().forEach(({ _id }) => {
+    Api.Patients.find({}, { fields: { _id: 1 }, removed: true }).fetch().forEach(({ _id }) => {
       const lastName = randomName()
       patientsBatch.find({ _id }).updateOne({
         $set: {
@@ -132,7 +136,7 @@ export default () => {
     Meteor.wrapAsync(patientsBatch.execute, patientsBatch)()
 
     const callsBatch = Api.InboundCalls.rawCollection().initializeUnorderedBulkOp()
-    Api.InboundCalls.find({}, { fields: { _id: 1 } }).fetch().forEach(({ _id }) => {
+    Api.InboundCalls.find({}, { fields: { _id: 1 }, removed: true }).fetch().forEach(({ _id }) => {
       const lastName = randomName()
       callsBatch.find({ _id }).updateOne({
         $set: {
@@ -146,7 +150,7 @@ export default () => {
     Meteor.wrapAsync(callsBatch.execute, callsBatch)()
 
     const commentsBatch = Api.Comments.rawCollection().initializeUnorderedBulkOp()
-    Api.Comments.find({}, { fields: { _id: 1 } }).fetch().forEach(({ _id }) => {
+    Api.Comments.find({}, { fields: { _id: 1 }, removed: true }).fetch().forEach(({ _id }) => {
       commentsBatch.find({ _id }).updateOne({
         $set: {
           body: 'Anmerkung ABC',
@@ -156,7 +160,7 @@ export default () => {
     Meteor.wrapAsync(commentsBatch.execute, commentsBatch)()
 
     const messagesBatch = Api.Messages.rawCollection().initializeUnorderedBulkOp()
-    Api.Messages.find({}, { fields: { _id: 1 } }).fetch().forEach(({ _id }) => {
+    Api.Messages.find({}, { fields: { _id: 1 }, removed: true }).fetch().forEach(({ _id }) => {
       messagesBatch.find({ _id }).updateOne({
         $set: {
           text: 'SMS-Mustertext',
@@ -170,7 +174,7 @@ export default () => {
 
 
     const appointmentsBatch = Api.Appointments.rawCollection().initializeUnorderedBulkOp()
-    Api.Appointments.find({}, { fields: { _id: 1 } }).fetch().forEach(({ _id }) => {
+    Api.Appointments.find({}, { fields: { _id: 1 }, removed: true }).fetch().forEach(({ _id }) => {
       const lastName = randomName()
       appointmentsBatch.find({ _id }).updateOne({
         $set: {
