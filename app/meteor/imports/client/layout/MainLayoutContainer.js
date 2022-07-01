@@ -55,7 +55,7 @@ const composer = (props) => {
   const themeColorMetaTag = document.head.querySelector('[property=theme-color][content]')
   const primaryColor =
     (isColor(Settings.get('primaryColor')) && Settings.get('primaryColor')) ||
-    (isColor(themeColorMetaTag.content) && themeColorMetaTag.content) ||
+    (themeColorMetaTag && isColor(themeColorMetaTag.content) && themeColorMetaTag.content) ||
     '#3c8dbc'
 
   const client = getClient()
