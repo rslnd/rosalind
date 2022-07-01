@@ -31,18 +31,29 @@ export const isConstraintApplicable = ({ constraint, date }) => {
 }
 
 export const getDefaultDuration = ({ calendarId, assigneeId, date, tags = [] }) => {
-  const unconstrainedTags = Tags.find({ _id: { $in: tags } }).fetch()
-  const constraint = findConstraint(Constraints)({ calendarId, assigneeId, time: date })
-  const constrainedTags = constraint && (unconstrainedTags.length >= 1) &&
-    applyConstraintToTags({
-      constraint,
-      tags: unconstrainedTags
-    })
+  const didSelectScheduleableTags = tags.find(t => t.scheduleable)
+
+  let selectedTags = tags.map(t => (typeof t === 'string') ? Tags.findOne({ _id: t}) : t)
+  let constraint = null
+
+  if (!didSelectScheduleableTags) {
+    const unconstrainedTags = Tags.find({ _id: { $in: tags } }).fetch()
+    constraint = findConstraint(Constraints)({ calendarId, assigneeId, time: date })
+    const constrainedTags = constraint && (unconstrainedTags.length >= 1) &&
+      applyConstraintToTags({
+        constraint,
+        tags: unconstrainedTags
+      })
+
+    if (constrainedTags && constrainedTags.length >= 1) {
+      selectedTags = constrainedTags
+    }
+  }
 
   const duration = applyDurationStrategy({
     calendarId,
     constraint,
-    tags: ((constrainedTags && constrainedTags.length >= 1) ? constrainedTags : unconstrainedTags)
+    tags: selectedTags
   })
 
   return duration || getCalendarDefaultDuration({ calendarId })

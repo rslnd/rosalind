@@ -13,6 +13,7 @@ import { getDefaultDuration } from '../../../api/appointments/methods/getDefault
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 import { calculateRevenue } from './RevenueField'
 import { withTracker } from '../../components/withTracker'
+import { getScheduleableTags } from '../../../api/appointments/methods/getScheduleableTags'
 
 export class NewAppointmentContainerComponent extends React.Component {
   constructor (props) {

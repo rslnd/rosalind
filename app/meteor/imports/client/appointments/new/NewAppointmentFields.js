@@ -15,6 +15,7 @@ import { Calendars, Patients, Appointments } from '../../../api'
 import { withTracker } from '../../components/withTracker'
 import { getQ, q, format } from '../../../util/time/quarter'
 import { subscribe } from '../../../util/meteor/subscribe'
+import { getDefaultDuration } from '../../../api/appointments/methods/getDefaultDuration'
 
 const QuarterWarning = withTracker(({ patientId, calendarId, start }) => {
   if (!patientId || patientId === 'newPatient') {
@@ -164,6 +165,7 @@ export const NewAppointmentFields = props => {
         <Summary
           start={start}
           assigneeId={assigneeId}
+          calendarId={calendarId}
           tags={tags}
         />
       </div>
@@ -195,15 +197,25 @@ const summaryStyle = {
   marginBottom: 5
 }
 
-const Summary = ({ start, assigneeId, tags }) => (
-  <div style={summaryStyle}>
+const Summary = ({ calendarId, assigneeId, tags, start }) => {
+
+  const duration = getDefaultDuration({
+    calendarId,
+    assigneeId,
+    tags,
+    date: moment(start)
+  })
+
+  return <div style={summaryStyle}>
     <TagsList tags={tags} tiny /><br />
 
     <span className='text-muted'>{__('appointments.thisSingular')}</span>&nbsp;
     {moment(start).format(__('time.dateFormatWeekday'))}<br />
 
     <span className='text-muted'>{__('time.at')}</span>&nbsp;
-    <b>{moment(start).format(__('time.timeFormat'))}</b><br />
+    <b>{moment(start).format(__('time.timeFormat'))}</b>&emsp;
+    {duration && <span className='text-muted'>({duration} min)</span>}
+    <br />
 
     {
       assigneeId && <div>
@@ -215,4 +227,4 @@ const Summary = ({ start, assigneeId, tags }) => (
       </div>
     }
   </div>
-)
+}

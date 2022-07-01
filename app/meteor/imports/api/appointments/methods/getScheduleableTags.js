@@ -14,6 +14,7 @@ export const getScheduleableTags = ({ time, assigneeId, calendarId }) => {
   try {
     const u = Users.find({}).fetch().reduce((acc, u) => { return {...acc, [u.username]: u._id} }, {})
     const t = Tags.find({}).fetch().reduce((acc, t) => { return {...acc, [t.tag]: t} }, {})
+    const tid = Tags.find({}).fetch().reduce((acc, t) => { return {...acc, [t._id]: t} }, {})
     const log = (...a) => console.log('getScheduleableTagsScipt:', ...a)
     const without = (tags, ...withoutTagIds) => tags.filter(t => !withoutTagIds.includes(t._id))
     const isAM = (t) => t.hour() < 12
@@ -30,7 +31,7 @@ export const getScheduleableTags = ({ time, assigneeId, calendarId }) => {
 
     console.log('getScheduleableTagsScipt got', tags.length, 'tags', tags)
 
-    const filtered = tags.filter(t => t)
+    const filtered = tags.filter(t => t).map(t => ({ ...t, scheduleable: true }))
 
     console.log('getScheduleableTagsScipt got', filtered.length, 'filtered', tags)
 
