@@ -121,7 +121,7 @@ export default () => {
     Api.Clients.find({}).fetch().map(({ _id }) => {
       Api.Clients.update({ _id }, {
         $set: {
-          clientKey: Random._id() + Random._id() + Random._id() + Random._id()
+          clientKey: Random.id() + Random.id() + Random.id() + Random.id()
         }
       })
     })
