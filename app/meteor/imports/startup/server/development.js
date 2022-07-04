@@ -60,11 +60,14 @@ export default () => {
     const randomName = () =>
       pseudonyms[Math.floor(Math.random() * (pseudonyms.length - 1))]
 
-    Api.Users.find({}, { removed: true }).fetch().forEach(({_id}) => {
+    Api.Users.find({}, { removed: true }).fetch().forEach(({ _id, username }) => {
       Api.Users.update({ _id }, {
         $set: {
           lastName: randomName(),
           firstName: randomName(),
+          $unset: {
+            services: 1
+          }
         }
       })
     })
@@ -81,6 +84,10 @@ export default () => {
       } else {
         console.error('Error: DEMO_USERNAME_ORIGINAL user not found: ' + process.env.DEMO_USERNAME_ORIGINAL)
       }
+    }
+
+    if (process.env.DEMO_USERNAME && Api.Users.findOne({ username: process.env.DEMO_USERNAME })) {
+      Accounts.setPassword(Api.Users.findOne({ username: process.env.DEMO_USERNAME })._id, process.env.DEMO_PASSWORD, { logout: false })
     }
 
     Api.Settings.remove({ key: 'messages.sms.fxpsms.host' })
