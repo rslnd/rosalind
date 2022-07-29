@@ -5,7 +5,29 @@ import { validateForm, optional } from './parseForm'
 import { InboundCalls, InboundCallsTopics } from '../../../api/inboundCalls'
 import { Events } from '../../../api/events'
 
-export const ContactForm = () =>
+const available = false
+
+const UnavailableMessage = () =>
+  <div>
+    <h2>Liebe Patientinnen und Patienten!</h2>
+    <p>Aufgrund von Umbauarbeiten bleibt unsere Ordination von 1.8. bis 5.8.2022 geschlossen.</p>
+    <Section>
+      <p>
+        Wir freuen uns, Sie ab 8.8.2022 wieder bei uns begrüßen zu dürfen!
+        <br />
+        Wir sind für Sie da!
+      </p>
+      <p>
+        <i>Dr. Sabine Schwarz und Team</i>
+      </p>
+    </Section>
+  </div>
+
+export const ContactForm = () => {
+  if (!available) {
+    return <UnavailableMessage />
+  }
+
   <div>
     <h2>Sehr geehrte Patientin, sehr geehrter Patient!</h2>
     <p>Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich telefonisch mit Ihnen in Verbindung setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren.</p>
@@ -82,6 +104,7 @@ export const ContactForm = () =>
 
     </form>
   </div>
+}
 
 const Success = () =>
   <div>
