@@ -14,8 +14,6 @@ const UnavailableMessage = () =>
     <Section>
       <p>
         Wir freuen uns, Sie ab 8.8.2022 wieder bei uns begrüßen zu dürfen!
-        <br />
-        Wir sind für Sie da!
       </p>
       <p>
         <i>Dr. Sabine Schwarz und Team</i>
