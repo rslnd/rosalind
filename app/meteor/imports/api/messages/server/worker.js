@@ -19,13 +19,18 @@ export const worker = (job, callback) => {
   // when a patient wants to cancel her appointment at night
   try {
     Messages.actions.createReminders.callPromise()
-      .then(() => Messages.actions.sendScheduled.callPromise())
-      .then(() => {
+      .then(async () => {
+        try {
+          await Messages.actions.sendScheduled.callPromise()
+        } catch (e) {
+          console.error('[Messages] worker: failed temporarily with', e)
+        }
+
         cleanOldJobs(job)
         job.done()
         callback()
       }).catch((e) => {
-        console.error('[Messages] worker: errored with', e)
+        console.error('[Messages] worker: failed permanently with', e)
         job.fail()
       })
   } catch (e) {
