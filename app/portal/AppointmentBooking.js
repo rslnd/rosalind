@@ -82,14 +82,20 @@ const timeLabelInnerStyle = {
   paddingRight: 10
 }
 
-const Time = ({ _id, day, time, isReserve }) => {
+const Time = ({ _id, day, time, assigneeNameShort, isReserve }) => {
   const [hover, setHover] = useState(false)
-  const label = isReserve
-    ? time + ' ⚠️'
-    : time
+
+  const label = <span>
+    {time} {isReserve && ' ⚠️'}
+    <span style={{ whiteSpace: 'nowrap'}}>
+    {assigneeNameShort && <span><br /><span style={{opacity: 0.6, whiteSpace: 'nowrap'}}>{assigneeNameShort}</span></span>}
+    </span>
+  </span>
+
   const title = isReserve
     ? [day, time].join(' um ') + ' Uhr - Reservetermin mit langen Wartezeiten'
     : [day, time].join(' um ') + ' Uhr'
+
   return <div
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
@@ -177,6 +183,8 @@ const SlotPicker = (props) => {
     return <b>Einen Moment bitte, verfügbare Termine werden gesucht...</b>
   }
 
+  console.log(pages)
+
   const days = pages.slice(page * pageSize, page * pageSize + pageSize)
 
   if (!days || days.length === 0) {
@@ -236,11 +244,12 @@ const SlotPicker = (props) => {
       {
         selectedBookable &&
          <span>
-           <b>
-           Ihr Termin:
+           <b>Ihr Termin:</b>
            &nbsp;
-           {selectedBookable.day} um {selectedBookable.time} Uhr
-           </b>
+           <b>{selectedBookable.day}</b> um <b>{selectedBookable.time}&nbsp;Uhr</b>
+           {selectedBookable.assigneeName &&
+             <span> bei <b>{selectedBookable.assigneeName}</b></span>}
+           
            {selectedBookable.isReserve &&
              <p><b>
                ⚠️ &emsp; Reservetermin bzw. Einschub: Bei diesem Termin kann es zu sehr langen Wartezeiten kommen.

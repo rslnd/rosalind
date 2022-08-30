@@ -1,4 +1,4 @@
-import { Appointments, InboundCalls, InboundCallsTopics, Patients } from '../../../api'
+import { Appointments, InboundCalls, InboundCallsTopics, Patients, Users } from '../../../api'
 import moment from 'moment-timezone'
 import { formatDate } from '../../../api/messages/methods/buildMessageText'
 import { normalizeName } from '../../../api/patients/util/normalizeName'
@@ -6,6 +6,7 @@ import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
 import { daySelector } from '../../../util/time/day'
 import chunk from 'lodash/chunk'
 import { __ } from '../../../i18n'
+import { fullNameWithTitle, lastNameWithTitle } from '../../../api/users/methods'
 
 const formatDay = (s) =>
   moment.tz(s, 'Europe/Vienna').format('dd., D.M.')
@@ -38,6 +39,8 @@ export const getBookables = () => {
     sort: { start: 1 }
   }).fetch()
 
+  const assignees = Users.find({}).fetch().reduce((acc, u) => ({ ...acc, [u._id]: u}))
+
   // group by days
   const bookables = appointments.reduce((acc, a, i) => {
     const formattedTime = formatTime(a.start)
@@ -46,7 +49,9 @@ export const getBookables = () => {
       time: formattedTime,
       isReserve: isReserve(a),
       calendarId: a.calendarId,
-      assigneeId: a.assigneeId
+      assigneeId: a.assigneeId,
+      assigneeName: fullNameWithTitle(assignees[a.assigneeId]),
+      assigneeNameShort: lastNameWithTitle(assignees[a.assigneeId])
     }
 
     const prevA = (i >= 1) && (appointments[i - 1])

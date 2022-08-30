@@ -45,8 +45,6 @@ export const getLoyalty = ({ Patients }) =>
         patientId
       }
 
-      console.log('loy', loyalty)
-
       return loyalty
     }
   })

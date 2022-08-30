@@ -36,7 +36,7 @@ const Root = ({ children }) => {
     ical={{
       url: 'https://urologie11.at',
       location: 'Simmeringer Hauptstraße 40, Stiege 4 - 1. Stock, 1110 Wien',
-      name: 'Urologie11 - Dr. Nike Morakis',
+      name: 'Urologie11',
       description: 'Urologie11 +43 1 877 32 79'
     }}
   />
