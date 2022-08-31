@@ -26,7 +26,7 @@ export const ContactForm = () => {
     return <UnavailableMessage />
   }
 
-  <div>
+  return <div>
     <h2>Sehr geehrte Patientin, sehr geehrter Patient!</h2>
     <p>Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich telefonisch mit Ihnen in Verbindung setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren.</p>
     <form method='POST'>
