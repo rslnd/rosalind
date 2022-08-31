@@ -5,7 +5,7 @@ import { validateForm, optional } from './parseForm'
 import { InboundCalls, InboundCallsTopics } from '../../../api/inboundCalls'
 import { Events } from '../../../api/events'
 
-const available = false
+const available = true
 
 const UnavailableMessage = () =>
   <div>
