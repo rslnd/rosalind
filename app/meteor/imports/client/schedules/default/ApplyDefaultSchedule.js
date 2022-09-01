@@ -195,7 +195,6 @@ class ApplyDefaultScheduleComponent extends React.Component {
                       Users.methods.fullNameWithTitle(assignees.find(a => a._id === assigneeId))).join(', ')
                     }</b><br />
 
-                    <Icon name='info-circle' /> Die Arbeitszeiten werden nur an den Tagen geändert, an welchen die jeweilige Person bereits anwesend ist.
                   </span>
                   : <span>Für alle oben geplanten MitarbeiterInnen</span>
               }

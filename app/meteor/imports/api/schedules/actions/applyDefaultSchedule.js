@@ -5,8 +5,9 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { transformDefaultsToOverrides } from '../methods/transformDefaultsToOverrides'
-import { rangeToDays, isSame, daySelector } from '../../../util/time/day'
+import { rangeToDays, isSame, daySelector, dayToDate } from '../../../util/time/day'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { union, without } from 'lodash'
 
 export const applyDefaultSchedule = ({ Schedules }) => {
   return new ValidatedMethod({
@@ -65,10 +66,26 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       const countRemovedOverrides = Schedules.remove(oldOverridesSelector)
       console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedOverrides, 'override schedules')
 
-      // Remove all day schedules in selected period
+
+      const existingDaySchedules = Schedules.find({
+        type: 'day',
+        calendarId,
+        $or: days.map(d => daySelector(d)) // force 1-arity to prevent map index from being set as prefix
+      })
+
+      // Remove (assignees or all) from day schedules in selected period
       if (assigneeIds) {
-        console.log('[Schedules] applyDefaultSchedule: Warning: Skipping removing day schedules')
+        // First, remove all to-be-updated assignees from all day schedules. We'll later re-add them and recreate any missing day schedules
+        existingDaySchedules.map(ds => {
+          Schedules.update({ _id: ds._id },
+            {
+              $set: {
+                userIds: without(ds.userIds, assigneeIds)
+              }
+            })
+        })
       } else {
+        // When applying to all assignees, remove all day schedules
         const countRemovedDays = Schedules.remove({
           type: 'day',
           calendarId,
@@ -85,18 +102,48 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
       const overrideSchedules = transformDefaultsToOverrides({ defaultSchedules, days })
 
-      // NB: Applying schedules for a single assignee only has an effect if the
-      // same assignee is already present in the day schedule
-      const ids = overrideSchedules.filter(s =>
-        assigneeIds
-          ? (s.type === 'override' && assigneeIds.indexOf(s.userId) !== -1)
-          : true
-      ).map(s => {
-        const id = Schedules.insert(s)
-        console.log('Inserted', id, s)
+
+      if (assigneeIds) {
+        // Now re-add users to existing day schedules
+        console.log('[Schedules] applyDefaultSchedule: Re-adding users to existing day schedules')
+        let daysForWhichDaySchedulesAlreadyExist = []
+        existingDaySchedules.map(es => {
+          overrideSchedules.filter(os => os.type === 'day').map(os => {
+            if (isSame(es.day, os.day)) {
+              console.log('[Schedules] applyDefaultSchedule:' + es._id + ' ' + union(es.userIds, os.userIds).join())
+              daysForWhichDaySchedulesAlreadyExist.push(es.day)
+              Schedules.update({ _id: es._id }, {
+                $set: {
+                  userIds: union(es.userIds, os.userIds)
+                }
+              })
+            }
+          })
+        })
+
+        // Now, create any day schedules for days that were not accounted for above
+        console.log('[Schedules] applyDefaultSchedule: creating day schedules for previously unaccounted days')
+        overrideSchedules.filter(os => os.type === 'day').map(ds => {
+          if (!daysForWhichDaySchedulesAlreadyExist.find(d => isSame(d, ds.day))) {
+            console.log('[Schedules] applyDefaultSchedule: insert ' + dayToDate(ds.day), + ' ' + ds.userIds)
+            Schedules.insert(ds)
+          }
+        })
+      } else {
+        console.log('[Schedules] applyDefaultSchedule: inserting all day schedules')
+        overrideSchedules.filter(os => os.type === 'day').map(ds => {
+          Schedules.insert(ds)
+        })
+      }
+
+
+      // Add all override schedules
+      console.log('[Schedules] applyDefaultSchedule: inserting all override schedules')
+      overrideSchedules.filter(os => os.type === 'override').map(os => {
+        Schedules.insert(os)
       })
 
-      console.log('[Schedules] applyDefaultSchedule: Inserted', ids.length, 'override and day schedules from', defaultSchedules.length, 'default schedules')
+      console.log('[Schedules] applyDefaultSchedule: Done. Inserted override and day schedules from', defaultSchedules.length, 'default schedules')
 
       Events.post('schedules/applyDefaultSchedule', {
         calendarId,
