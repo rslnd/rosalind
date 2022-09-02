@@ -114,7 +114,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
               daysForWhichDaySchedulesAlreadyExist.push(es.day)
               Schedules.update({ _id: es._id }, {
                 $set: {
-                  userIds: union(es.userIds, os.userIds)
+                  userIds: union(es.userIds, os.userIds.filter(oid => assigneeIds.includes(oid)))
                 }
               })
             }
@@ -126,7 +126,10 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         overrideSchedules.filter(os => os.type === 'day').map(ds => {
           if (!daysForWhichDaySchedulesAlreadyExist.find(d => isSame(d, ds.day))) {
             console.log('[Schedules] applyDefaultSchedule: insert ' + dayToDate(ds.day), + ' ' + ds.userIds)
-            Schedules.insert(ds)
+            Schedules.insert({
+              ...ds,
+              userIds: ds.userIds.filter(oid => assigneeIds.includes(oid))
+            })
           }
         })
       } else {
