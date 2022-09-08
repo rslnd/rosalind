@@ -171,9 +171,33 @@ export const createReminders = ({ Messages }) => {
             return false
           }
 
-          const text =
+          let text =
             (calendar && calendar.smsAppointmentReminderText) ||
             Settings.get('messages.sms.appointmentReminder.text')
+
+          // uro11 special: different text if appt is within first hour of day
+          if (process.env.CUSTOMER_PREFIX === 'uro11' && Settings.get('messages.sms.appointmentReminder.textFirstHour')) {
+            const firstApptOfDay = Appointments.findOne({
+              calendarId: payload.calendarId,
+              start: {
+                $gte: moment(payload.start).startOf('day'),
+                $lte: moment(payload.start).startOf('day'),
+              }
+            }, {
+              sort: {
+                start: 1
+              }
+            })
+
+            if (firstApptOfDay) {
+              const firstHourFrom = moment(firstApptOfDay.start)
+              const firstHourTo = moment(firstApptOfDay.start).add(1, 'hour')
+
+              if (moment(payload.start).isBetween(firstHourFrom, firstHourTo)) {
+                text = Settings.get('messages.sms.appointmentReminder.textFirstHour')
+              }
+            }
+          }
 
           if (!text) {
             return false
