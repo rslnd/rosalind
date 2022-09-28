@@ -193,15 +193,17 @@ export const handleAppointmentBooking = (untrustedBody) => {
 
   if (wantsAppointment && bookableId) {
     const bookableSelector = { _id: bookableId, type: 'bookable' }
-    const bookable = Appointments.findOne(bookableSelector)
-    if (!bookable) {
-      throw new Error(`bookable #{bookableId} not found`)
+    const existingBookable = Appointments.findOne(bookableSelector)
+    if (!existingBookable) {
+      throw new Error(`bookable ${bookableId} not found`)
     }
-    Appointments.remove(bookableSelector)
+    
+    Appointments.softRemove(bookableSelector)
 
+    const { _id, type, ...bookable } = existingBookable
+    
     const appointmentId = Appointments.insert({
       ...bookable,
-      type: null,
       createdViaPortal: true,
       createdAt: new Date(),
       createdBy: null,

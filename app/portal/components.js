@@ -53,6 +53,7 @@ export const Input = ({ name, label, required, ...props }) =>
       className='textfield'
       name={name}
       id={name}
+      required={required}
       {...props}
     />
   </div>
@@ -70,6 +71,7 @@ export const CleaveInput = ({ name, label, required, ...props }) => {
     <Cleave
       name={name}
       id={name}
+      required={required}
       className='textfield'
       onChange={e => {
         e.target.value = e.target.rawValue

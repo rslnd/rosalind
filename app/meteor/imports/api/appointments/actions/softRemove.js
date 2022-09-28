@@ -19,6 +19,12 @@ export const softRemove = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      // Restore bookable
+      const appointment = Appointments.findOne({
+        _id: appointmentId
+      })
+
+
       Appointments.update({ _id: appointmentId }, {
         $set: {
           removed: true,
@@ -30,6 +36,30 @@ export const softRemove = ({ Appointments }) => {
       if (Meteor.isServer) {
         Referrals.serverActions.unredeem({ appointmentId })
         Messages.actions.removeReminder.call({ appointmentId })
+
+        const previousBookable = Appointments.findOne({
+          type: 'bookable',
+          start: appointment.start,
+          end: appointment.end,
+          calendarId: appointment.calendarId,
+          assigneeId: appointment.assigneeId,
+        }, { removed: true })
+
+        if (previousBookable) {
+          console.log('appointments/softRemove: restored bookable', previousBookable._id)
+          Appointments.update({ _id: previousBookable._id }, 
+            {
+              $unset: {
+                removed: 1,
+                removedAt: 1,
+                removedBy: 1
+              }
+            },
+            {
+              removed: true
+            }
+          )
+        }
       }
 
       Events.post('appointments/softRemove', { appointmentId })

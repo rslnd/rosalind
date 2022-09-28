@@ -24,6 +24,7 @@ export const unsetBookable = ({ Appointments }) =>
         if (lock.type !== 'bookable') {
           throw new Error('Refusing to remove anything but bookables')
         }
+        // hard remove is okay here, only soft remove when an appt is created on top
         Appointments.remove({ _id: lock._id })
         return lock._id
       })

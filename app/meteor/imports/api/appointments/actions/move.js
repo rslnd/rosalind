@@ -103,7 +103,7 @@ export const move = ({ Appointments }) => {
         newAssigneeId
       })
 
-      Appointments.remove({
+      Appointments.softRemove({
         type: 'bookable',
         start: newStart,
         calendarId: appointment.calendarId,

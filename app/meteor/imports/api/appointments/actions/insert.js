@@ -57,7 +57,7 @@ export const insert = ({ Appointments }) => {
           }
           Events.post('appointments/insert', { appointmentId })
 
-          Appointments.remove({
+          Appointments.softRemove({
             type: 'bookable',
             start: restFields.start,
             calendarId: restFields.calendarId,
