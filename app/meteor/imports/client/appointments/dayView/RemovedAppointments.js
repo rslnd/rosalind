@@ -29,7 +29,8 @@ const composer = props => {
       $gte: startOfDay,
       $lte: endOfDay
     },
-    removed: true
+    removed: true,
+    type: { $ne: 'bookable' }
   }, {
     removed: true,
     sort: {
