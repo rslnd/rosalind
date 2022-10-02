@@ -10,6 +10,26 @@ import { hasRole } from '../../../util/meteor/hasRole'
 import { union, without } from 'lodash'
 
 export const applyDefaultSchedule = ({ Schedules }) => {
+
+  console.log(new Date(), 's start')
+  Schedules.find({
+    type: 'override'
+  }).fetch().map(os => {
+    // avoid removing all schedules, only check for dupes when os wasn't removed already
+    if (Schedules.findOne({_id: os._id })) {
+      Schedules.remove({
+        _id: { $ne: os._id },
+        start: os.start,
+        end: os.end,
+        assigneeId: os.assigneeId,
+        calendarId: os.assigneeId,
+        type: 'override'
+      })
+    }
+  })
+  console.log(new Date(), 's end')
+  
+
   return new ValidatedMethod({
     name: 'schedules/applyDefaultSchedule',
     mixins: [CallPromiseMixin],
