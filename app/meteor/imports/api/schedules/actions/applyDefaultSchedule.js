@@ -142,9 +142,12 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
       // Add all override schedules
       console.log('[Schedules] applyDefaultSchedule: inserting all override schedules')
-      overrideSchedules.filter(os => os.type === 'override').map(os => {
-        Schedules.insert(os)
-      })
+      overrideSchedules
+        .filter(os => os.type === 'override')
+        .filter(os => assigneeIds ? assigneeIds.includes(os.userId) : true)
+        .map(os => {
+          Schedules.insert(os)
+        })
 
       console.log('[Schedules] applyDefaultSchedule: Done. Inserted override and day schedules from', defaultSchedules.length, 'default schedules')
 
