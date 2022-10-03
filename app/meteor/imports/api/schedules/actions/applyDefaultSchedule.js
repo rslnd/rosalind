@@ -169,8 +169,8 @@ export const applyDefaultSchedule = ({ Schedules }) => {
             _id: { $ne: os._id },
             start: os.start,
             end: os.end,
-            assigneeId: os.assigneeId,
-            calendarId: os.assigneeId,
+            userId: os.userId,
+            calendarId: os.calendarId,
             type: 'override'
           })
         }
