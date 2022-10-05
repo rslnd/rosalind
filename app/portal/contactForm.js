@@ -297,15 +297,21 @@ export const ContactForm = (props) => {
                             <b>Ihr Termin:</b>
                             &nbsp;
                             <b>{selectedBookable.day}</b> um <b>{selectedBookable.time}&nbsp;Uhr</b>
-                            {selectedBookable.assigneeName &&
-                              <span> bei <b>{selectedBookable.assigneeName}</b></span>}
+                            
+                            {/* {selectedBookable.assigneeName &&
+                              <span> bei <b>{selectedBookable.assigneeName}</b></span>} */}
 
-                            {selectedBookable.isReserve &&
+                            {/* {selectedBookable.isReserve &&
                               <p><b>
                                 ⚠️ &emsp; Reservetermin bzw. Einschub: Bei diesem Termin kann es zu sehr langen Wartezeiten kommen.
-                              </b></p>}
+                              </b></p>} */}
                           </span>
                         }
+                        <p>
+                          Wir möchten Sie darauf aufmerksam machen, dass es bei Terminen in der Kassenordination zu längeren Wartezeiten kommen kann.<br />
+                          Sie können uns gerne telefonisch kontaktieren, um einen privaten Termin zu vereinbaren.
+                        </p>
+
                       </Section>
                     </Section>
                   </ErrorBoundary>
@@ -414,10 +420,15 @@ const AppointmentSuccess = ({ appointment, confirmationInfo, ical }) => {
       Wir bestätigen Ihren Termin am <b>{appointment.date}</b> um <b>{appointment.time} Uhr</b>.
     </p>
 
-    {appointment.isReserve &&
+    <p>
+      Wir möchten Sie darauf aufmerksam machen, dass es bei Terminen in der Kassenordination zu längeren Wartezeiten kommen kann.<br />
+      Sie können uns gerne telefonisch kontaktieren, um einen privaten Termin zu vereinbaren.
+    </p>
+
+    {/* {appointment.isReserve &&
       <p>
         ⚠️ &emsp; Reservetermin bzw. Einschub: Bei diesem Termin kann es zu sehr langen Wartezeiten kommen.
-      </p>}
+      </p>} */}
 
     {confirmationInfo}
 
@@ -545,14 +556,15 @@ const Time = ({ _id, day, time, assigneeNameShort, isReserve }) => {
   const [hover, setHover] = useState(false)
 
   const label = <span>
-    {time} {isReserve && ' ⚠️'}
-    <span style={{ whiteSpace: 'nowrap' }}>
+    {time} {/* isReserve && ' ⚠️' */}
+
+    {/* <span style={{ whiteSpace: 'nowrap' }}>
       {assigneeNameShort && <span><br /><span style={{ opacity: 0.6, whiteSpace: 'nowrap' }}>{assigneeNameShort}</span></span>}
-    </span>
+    </span> */}
   </span>
 
   const title = isReserve
-    ? [day, time].join(' um ') + ' Uhr - Reservetermin mit langen Wartezeiten'
+    ? [day, time].join(' um ') + ' Uhr' // [day, time].join(' um ') + ' Uhr - Reservetermin mit langen Wartezeiten'
     : [day, time].join(' um ') + ' Uhr'
 
   return <div
