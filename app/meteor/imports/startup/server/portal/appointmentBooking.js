@@ -22,7 +22,7 @@ export const getBookables = () => {
   const selector = {
     type: 'bookable',
     start: { $gt: moment().endOf('day').toDate() },
-    end: { $lte: moment().add(16, 'weeks').toDate() },
+    end: { $lte: moment().add(3, 'months').toDate() },
     lockedAt: null
   }
 
@@ -34,7 +34,7 @@ export const getBookables = () => {
   }
 
   const appointments = Appointments.find(selector, {
-    limit: 250,
+    limit: 6500, // ~60 per day for 3 months
     fields,
     sort: { start: 1 }
   }).fetch()
