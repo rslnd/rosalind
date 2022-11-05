@@ -72,7 +72,7 @@ case "$1" in
 
     echo "[CI] Installing meteor npm dependencies"
     cd app/meteor
-    yarn
+    npm i --legacy-peer-deps
     cd -
 
     echo -en "travis_fold:end:install_dependencies\r"
@@ -82,7 +82,7 @@ case "$1" in
   test)
     echo "[CI] Running test suite"
     # Run unit tests
-    yarn run test
+    npm run test
     ;;
 
   build)

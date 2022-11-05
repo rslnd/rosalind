@@ -23,7 +23,8 @@ cp ../app/meteor/package.json ../build/bundle/
 cp ../app/meteor/env.js ../build/bundle/
 
 cd ../build/bundle/
-npm prune --production
+echo "** Pruning"
+npm prune --omit=dev --legacy-peer-deps
 cd -
 
 if [ ! -z "$CI" ]; then
