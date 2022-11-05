@@ -11,11 +11,16 @@ import { withTracker } from '../components/withTracker'
 import { getClient } from '../../api/clients/methods/getClient'
 import { attemptRegistration } from '../../startup/client/native/attemptRegistration'
 import { important } from '../layout/styles'
+import { Settings } from '../../api'
+import { Box } from '../components/Box'
 
 const composer = () => {
   const client = getClient()
   const defaultUsername = client && client.settings && client.settings.defaultUsername
-  return { defaultUsername }
+
+  const [licenseExpired, licenseExpiredMessage] = [Settings.get('licenseExpired'), Settings.get('licenseExpiredMessage')]
+
+  return { defaultUsername, licenseExpired, licenseExpiredMessage }
 }
 
 class LoginScreen extends React.Component {
@@ -150,9 +155,27 @@ class LoginScreen extends React.Component {
   }
 
   render () {
+    const { licenseExpired, licenseExpiredMessage } = this.props
+
+    const showLogin = !licenseExpired || window.imbed
+
     return (
       <div>
-        <form className='login form-horizontal' onSubmit={this.handleSubmit}>
+        {
+          licenseExpired && 
+            <div style={{textAlign: 'left'}} className='enable-select'>
+              <Box type='danger' title='Zugang gesperrt'>
+                {licenseExpiredMessage || 'Verzögert der Kunde die Zahlung einer fälligen Vergütung um mehr als vier Wochen, ist der Anbieter nach vorheriger Mahnung mit Fristsetzung und Ablauf der Frist zur Sperrung des Zugangs zur Software berechtigt. Der Vergütungsanspruch des Anbieters bleibt von der Sperrung unberührt. Der Zugang zur Software wird nach Begleichung der Rückstände unverzüglich wieder freigeschaltet.'}
+              </Box>
+            </div>
+        }
+        <form
+          style={showLogin
+            ? {display: 'block'}
+            : {display: 'none'}}
+          className='login form-horizontal'
+          onSubmit={this.handleSubmit}
+        >
           <div className='panel panel-default'>
             <div className='panel-heading'>
               <h3 className='panel-title'>{__('login.heading')}</h3>

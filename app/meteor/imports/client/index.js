@@ -59,7 +59,14 @@ export default () => {
     const containerNode = document.createElement('div')
     containerNode.id = 'rosalind'
     const rootNode = document.body.appendChild(containerNode)
-    ReactDOM.render(<Rosalind />, rootNode)
+
+    const rerender = () => {
+      ReactDOM.render(<Rosalind />, rootNode)
+    }
+
+    rerender()
+
+    window.rerender = rerender
   })
 }
 
