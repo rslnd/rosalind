@@ -1,5 +1,5 @@
 import idx from 'idx'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import identity from 'lodash/identity'
 import { toClass } from 'recompose'
 import { withTracker } from '../../components/withTracker'

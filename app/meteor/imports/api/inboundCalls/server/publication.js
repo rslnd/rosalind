@@ -1,6 +1,6 @@
 import { InboundCalls, InboundCallsTopics } from '../'
 import flatten from 'lodash/flatten'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { Comments } from '../../comments'
 import { Patients } from '../../patients'

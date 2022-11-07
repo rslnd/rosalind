@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { expect } from 'chai'
 import { daysForPreview } from './daysForPreview'
 

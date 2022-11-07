@@ -2,7 +2,7 @@ import React from 'react'
 import { namecase } from '../../util/namecase'
 import sortBy from 'lodash/fp/sortBy'
 import { __ } from '../../i18n'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import {
   Table,
   TableBody,

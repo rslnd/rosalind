@@ -5,7 +5,7 @@ import { Appointments } from '../../api/appointments'
 import { TagsList } from './TagsList'
 import { getDefaultDuration } from '../../api/appointments/methods/getDefaultDuration'
 import { applyConstraintToTags } from '../../api/constraints/methods/applyConstraintToTags'
-import _moment from 'moment'
+import _moment from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import { isValidAt } from '../../util/time/valid'
 

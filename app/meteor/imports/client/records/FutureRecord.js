@@ -1,6 +1,6 @@
 import React from 'react'
 import Alert from 'react-s-alert'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import identity from 'lodash/identity'
 import { Meteor } from 'meteor/meteor'
 import { compose, withState, withHandlers, withProps } from 'recompose'

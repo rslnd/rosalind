@@ -1,6 +1,6 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import 'moment-duration-format'
 import idx from 'idx'
 import find from 'lodash/fp/find'

@@ -1,4 +1,4 @@
-import _moment from 'moment'
+import _moment from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import { dateToDay } from '../../../util/time/day'
 const moment = extendMoment(_moment)

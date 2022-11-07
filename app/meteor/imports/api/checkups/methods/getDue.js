@@ -1,5 +1,5 @@
 import RRule from 'rrule'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 export const getDue = ({ Checkups, CheckupsRules }) =>
   ({ date }) => {

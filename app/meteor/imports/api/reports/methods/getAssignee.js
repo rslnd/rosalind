@@ -1,6 +1,6 @@
 import sortBy from 'lodash/fp/sortBy'
 import findIndex from 'lodash/fp/findIndex'
-import _moment from 'moment'
+import _moment from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import { mapTotal } from './mapTotal'
 import { mapAverage } from './mapAverage'

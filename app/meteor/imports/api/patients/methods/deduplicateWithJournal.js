@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import idx from 'idx'
 import leftPad from 'left-pad'
 import find from 'lodash/fp/find'

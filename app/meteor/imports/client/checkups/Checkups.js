@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import React, { useState } from 'react'
 import Alert from 'react-s-alert'
 import { datetime, RRule } from 'rrule'

@@ -1,7 +1,7 @@
 import idx from 'idx'
 import React from 'react'
 import Select from 'react-select'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { withProps } from 'recompose'
 import { Icon } from '../../components/Icon'
 import { __ } from '../../../i18n'

@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import Alert from 'react-s-alert'
 import { Box } from '../../components/Box'
 import { Icon } from '../../components/Icon'

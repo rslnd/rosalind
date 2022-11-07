@@ -3,7 +3,7 @@ import { Messages } from '../../api'
 import { subscribe } from '../../util/meteor/subscribe'
 import { withTracker } from '../components/withTracker'
 import { __ } from '../../i18n'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 const composer = ({ appointment }) => {
   const messageId = appointment && appointment.canceledByMessageId

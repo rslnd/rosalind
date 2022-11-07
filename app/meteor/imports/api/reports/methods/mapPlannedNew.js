@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import identity from 'lodash/identity'
 import find from 'lodash/fp/find'
 import { quarter } from '../../../util/time/quarter'

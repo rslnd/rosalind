@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Match } from 'meteor/check'
 import { Reports } from '../'
 import { isTrustedNetwork } from '../../customer/isTrustedNetwork'

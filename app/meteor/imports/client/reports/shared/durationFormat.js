@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import 'moment-duration-format'
 
 export const durationFormat = (decimal, unit = 'hours') => (

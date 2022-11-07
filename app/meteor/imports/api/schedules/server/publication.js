@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Schedules } from '../'
 import { publish } from '../../../util/meteor/publish'
 import { dayToDate, daySelector } from '../../../util/time/day'

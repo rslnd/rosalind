@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Comments } from '../../comments'
 import { Patients } from '../../patients'
 import Appointments from '../collection'
