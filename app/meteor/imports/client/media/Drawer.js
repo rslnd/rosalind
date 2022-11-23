@@ -58,7 +58,10 @@ export const Preview = ({ media, handleMediaClick, borderStyle, style }) => {
     {!media.uploadCompletedAt && <Icon style={uploadingIconStyle} name='clock-o' />}
     {tag && <Tag {...tag} />}
     <img
-      src={media.preview}
+      // dangerous possibility of data loss when media server is not available
+      // avoid making it look like the image has been uploaded
+      // better show nothing instead of preview
+      src={media.uploadCompletedAt ? media.preview : ""} // {media.preview}
       style={style}
     />
   </div>
