@@ -4,6 +4,8 @@ import { Media as MediaAPI, MediaTags } from '../../api/media'
 import { Icon } from '../components/Icon'
 import { withHandlers } from 'recompose'
 import { NewCycle, splitCycles, Cycle } from './Cycles'
+import { identity } from 'lodash'
+import moment from 'moment'
 
 const composer = props => {
   const { appointmentId } = props
@@ -41,12 +43,23 @@ export const Drawer = withTracker(composer)(({ media, patientId, appointmentId, 
     </div>
 )
 
-export const Preview = ({ media, handleMediaClick, borderStyle, style }) => {
-  const [hover, setHover] = useState(false)
+export const Preview = ({ media, handleMediaClick, borderStyle, style = {} }) => {
+  // const [hover, setHover] = useState(false) // buggy?
+  const hover = false
+  const setHover = identity
+
   const baseStyle = hover ? imageBorderHoverStyle : imageBorderStyle
   const outerStyle = borderStyle ? ({ ...baseStyle, ...borderStyle }) : baseStyle
 
+  const uploadPending = !media.uploadCompletedAt
+  const uploadFailed = uploadPending
+    && (media.createdAt < moment().subtract(1, 'minute').toDate())
+
+  const imagePendingStyle = { ...style, filter: 'grayscale(1)', opacity: 0.1 }
+  const imageStyle = uploadPending ? {...style, ...imagePendingStyle} : style
+
   const tag = (media.tagIds && media.tagIds.length >= 1) && MediaTags.findOne({ _id: media.tagIds[0] })
+
 
   return <div
     title={tag ? tag.name : null}
@@ -55,14 +68,20 @@ export const Preview = ({ media, handleMediaClick, borderStyle, style }) => {
     onMouseLeave={() => setHover(false)}
     onClick={() => handleMediaClick(media._id)}
   >
-    {!media.uploadCompletedAt && <Icon style={uploadingIconStyle} name='clock-o' />}
+    {!media.uploadCompletedAt && 
+      <Icon
+        style={uploadingIconStyle}
+        spin={uploadPending && !uploadFailed}
+        name={uploadFailed ? 'warning' : 'refresh'}
+      />
+    }
     {tag && <Tag {...tag} />}
     <img
       // dangerous possibility of data loss when media server is not available
       // avoid making it look like the image has been uploaded
       // better show nothing instead of preview
-      src={media.uploadCompletedAt ? media.preview : ""} // {media.preview}
-      style={style}
+      src={media.preview} // needed for dimensions, but hide in style
+      style={imageStyle}
     />
   </div>
 }
@@ -94,11 +113,12 @@ const imageBorderHoverStyle = {
 
 const uploadingIconStyle = {
   position: 'absolute',
-  bottom: 5,
-  right: 5,
-  opacity: 0.3,
+  bottom: 10,
+  right: 13,
+  fontSize: '1.4em',
+  opacity: 0.8,
   color: 'white',
-  textShadow: '1px 1px 2px rgba(0,0,0,0.6)'
+  textShadow: '0px 0px 3px rgba(0,0,0,0.6)'
 }
 
 const drawerStyle = {
