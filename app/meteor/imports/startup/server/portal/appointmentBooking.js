@@ -21,7 +21,7 @@ const isReserve = ({ start }) =>
 export const getBookables = () => {
   const selector = {
     type: 'bookable',
-    start: { $gt: moment().endOf('day').toDate() },
+    start: { $gt: moment().endOf('minute').toDate() },
     end: { $lte: moment().add(3, 'months').toDate() },
     lockedAt: null
   }
@@ -80,7 +80,7 @@ export const getBookables = () => {
   }, [])
 
   const filteredBookables = bookables.map(day => {
-    const maxCount = 6
+    const maxCount = 10
     if (day.times.length > maxCount) {
       return { ...day, times: chunk(day.times, day.times.length / maxCount).map(c => c[0]) }
     } else {
