@@ -66,14 +66,18 @@ export const move = ({ Appointments }) => {
         tags: appointment.tags
       })
       const oldStart = appointment.start
+      const oldEnd = appointment.end
       const oldAssigneeId = appointment.assigneeId
+
+      // usually passed from frontend to fit slots
+      newEnd = duration
+        ? moment(newStart).add(duration, 'minutes').toDate()
+        : newEnd
 
       Appointments.update({ _id: appointmentId }, {
         $set: {
           start: newStart,
-          end: duration
-            ? moment(newStart).add(duration, 'minutes').toDate()
-            : newEnd,
+          end: newEnd,
           assigneeId: newAssigneeId
         },
         $push: {
@@ -105,11 +109,46 @@ export const move = ({ Appointments }) => {
 
       Appointments.softRemove({
         type: 'bookable',
-        start: newStart,
+        start: { $gte: newStart, $lt: newEnd },
+        end: { $gt: newStart, $lte: newEnd },
         calendarId: appointment.calendarId,
         assigneeId: newAssigneeId
       })
 
+      // restore previous bookables
+      // ensure bookables do not get created over overrides
+      Appointments.find({
+        type: 'bookable',
+        start: { $gte: oldStart, $lt: oldEnd },
+        end: { $gt: oldStart, $lte: oldEnd },
+        calendarId: appointment.calendarId,
+        assigneeId: oldAssigneeId,
+        removed: true
+      }).fetch().map(a => {
+        // was a new override created behind the appt?
+        const block = Schedules.findOne({
+          type: 'override',
+          calendarId: appointment.calendarId,
+          userId: oldAssigneeId,
+          start: { $lte: oldStart },
+          end: { $gte: oldEnd }
+        })
+
+        if (!block) {
+          Appointments.update(
+            { _id: a._id },
+            {
+              $unset: {
+                removed: 1,
+                removedAt: 1,
+                removedBy: 1
+              }
+            },
+            { removed: true })
+        }
+
+      })
+      
       return appointmentId
     }
   })
