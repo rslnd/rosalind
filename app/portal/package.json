@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "npm run dev",
     "dev": "next dev -H 0.0.0.0 -p 3030",
     "build": "next build && next export && rm -rf ../meteor/public/portal-assets && cp -r out ../meteor/public/portal-assets && cp ../meteor/public/portal-assets/*.html ../meteor/private/",
-    "start": "next start -p 3030"
+    "prod": "next start -p 3030"
   },
   "dependencies": {
     "cleave.js": "^1.6.0",

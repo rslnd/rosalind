@@ -131,8 +131,8 @@ export const ContactForm = (props) => {
 
       return <div>
           <h2>{props.welcome || 'Sehr geehrte Patientin, sehr geehrter Patient!'}</h2>
-          <p>{props.instructions || 'Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich mit Ihnen in Verbindung setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren.'}</p>
           <p><b>{props.instructionsDisclaimer}</b></p>
+          <p>{props.instructions || 'Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich mit Ihnen in Verbindung setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren.'}</p>
           <Form method='POST'>
             <Select label='Anrede' name='gender'>
               <option disabled value={''}>-</option>
