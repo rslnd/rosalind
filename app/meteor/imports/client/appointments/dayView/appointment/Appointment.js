@@ -128,6 +128,7 @@ const Bookable = ({ canEdit, ...props }) =>
     style={bookableStyle}
     title={__('appointments.unsetBookable')}
     onClick={canEdit && handleUnsetBookable(props)}
+    onMouseOver={e => e.shiftKey && e.buttons === 1 && canEdit && handleUnsetBookable(props)(e)}
     {...props}
   >
       <Icon name='share-square-o' />

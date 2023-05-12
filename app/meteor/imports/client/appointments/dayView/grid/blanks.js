@@ -77,7 +77,9 @@ class BlankState extends React.PureComponent {
       end: setTime(this.props.endTime)(moment(this.props.date)).toDate(),
       assigneeId: this.props.assigneeId
     }).then(a => {
-      Alert.success(__('appointments.setBookableSuccess'))
+      if (a) {
+        Alert.success(__('appointments.setBookableSuccess'))
+      }
     }).catch(e => {
       console.error(e)
       Alert.error(e.message)
@@ -104,6 +106,8 @@ class BlankState extends React.PureComponent {
           {assigneeId && canEditBookables &&
             <BookableIndicator
               onClick={this.handleBookableClick}
+              onMouseEnter={e => e.buttons === 1 && this.handleBookableClick(e)}
+              onMouseDown={e => e.buttons === 1 && this.handleBookableClick(e)}
             />
           }
         &nbsp;

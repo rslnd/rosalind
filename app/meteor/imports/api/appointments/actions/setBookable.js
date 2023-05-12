@@ -18,18 +18,33 @@ export const setBookable = ({ Appointments }) =>
     fn: function ({ calendarId, assigneeId, start, end }) {
       this.unblock()
 
-      const appointmentId = Appointments.insert({
+
+      const existing = Appointments.find({
         calendarId,
         start,
         end,
         assigneeId,
-        type: 'bookable',
-        createdAt: new Date(),
-        createdBy: this.userId
-      })
+        type: 'bookable'
+      }).fetch()
 
-      Events.post('appointments/setBookable', { appointmentId })
+      if (existing.length > 0) {
+        console.log('setBookable: ignoring duplicate bookable')
+        return null
+      } else {
 
-      return appointmentId
+        const appointmentId = Appointments.insert({
+          calendarId,
+          start,
+          end,
+          assigneeId,
+          type: 'bookable',
+          createdAt: new Date(),
+          createdBy: this.userId
+        })
+
+        Events.post('appointments/setBookable', { appointmentId })
+
+        return appointmentId
+      }
     }
   })
