@@ -194,7 +194,8 @@ const genderStyle = {
   ...secondary,
   cursor: 'pointer',
   width: 22,
-  display: 'inline-block'
+  display: 'inline-block',
+  minHeight: '1em'
 }
 
 const titleStyle = {
