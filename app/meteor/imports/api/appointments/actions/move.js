@@ -27,6 +27,8 @@ export const move = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      const userId = this.userId
+
       if (this.isSimulation) {
         return
       }
@@ -107,48 +109,70 @@ export const move = ({ Appointments }) => {
         newAssigneeId
       })
 
-      Appointments.softRemove({
-        type: 'bookable',
-        start: { $gte: newStart, $lt: newEnd },
-        end: { $gt: newStart, $lte: newEnd },
-        calendarId: appointment.calendarId,
-        assigneeId: newAssigneeId
-      })
-
-      // restore previous bookables
-      // ensure bookables do not get created over overrides
-      Appointments.find({
-        type: 'bookable',
-        start: { $gte: oldStart, $lt: oldEnd },
-        end: { $gt: oldStart, $lte: oldEnd },
-        calendarId: appointment.calendarId,
-        assigneeId: oldAssigneeId,
-        removed: true
-      }).fetch().map(a => {
-        // was a new override created behind the appt?
-        const block = Schedules.findOne({
-          type: 'override',
+      if (Meteor.isServer) {
+        // delete bookables at new location
+        Appointments.find({
+          type: 'bookable',
+          start: { $gte: newStart, $lt: newEnd },
+          end: { $gt: newStart, $lte: newEnd },
           calendarId: appointment.calendarId,
-          userId: oldAssigneeId,
-          start: { $lte: oldStart },
-          end: { $gte: oldEnd }
+          assigneeId: newAssigneeId
+        }, { removed: true }).map(a => {
+          Appointments.update({_id: a._id}, { $set: {
+            removed: true,
+            removedAt: new Date(),
+            removedBy: userId,
+            note: 'Gelöscht, weil ein Termin hier hin verschoben wurde ' + appointmentId + ' \n' + (a.note || '')
+          }})
         })
 
-        if (!block) {
-          Appointments.update(
-            { _id: a._id },
-            {
-              $unset: {
-                removed: 1,
-                removedAt: 1,
-                removedBy: 1
-              }
-            },
-            { removed: true })
-        }
+        // restore previous bookables
+        // ensure bookables do not get created over overrides
+        Appointments.find({
+          type: 'bookable',
+          start: { $gte: oldStart, $lt: oldEnd },
+          end: { $gt: oldStart, $lte: oldEnd },
+          calendarId: appointment.calendarId,
+          assigneeId: oldAssigneeId,
+          removed: true
+        }, { removed: true }).fetch().map(a => {
+          // was a new override created behind the appt?
+          const block = Schedules.findOne({
+            type: 'override',
+            calendarId: appointment.calendarId,
+            userId: oldAssigneeId,
+            start: { $lte: oldStart },
+            end: { $gte: oldEnd }
+          })
 
-      })
-      
+          // avoid double bookables being restored after moving appts around the same spot multiple times
+          const currentBookable = Appointments.findOne({
+            type: 'bookable',
+            start: a.start,
+            end: a.end,
+            calendarId: a.calendarId,
+            assigneeId: a.assigneeId
+          })
+
+          if (!block && !currentBookable) {
+            Appointments.insert({
+              type: 'bookable',
+              start: a.start,
+              end: a.end,
+              calendarId: a.calendarId,
+              assigneeId: a.assigneeId,
+              createdBy: userId,
+              note: 'Wieder online freigegeben, weil Termin von hier weg verschoben wurde. Frühere Freigabe: ' + a._id + ' Termin: ' + appointmentId + ' ' + JSON.stringify({
+                oldStart,
+                oldAssigneeId,
+                newStart,
+                newAssigneeId
+              })
+            })
+          }
+        })
+      }
+
       return appointmentId
     }
   })

@@ -198,9 +198,13 @@ export const handleAppointmentBooking = (untrustedBody) => {
       throw new Error(`bookable ${bookableId} not found`)
     }
     
-    Appointments.softRemove(bookableSelector)
+    Appointments.update(bookableSelector, { $set: {
+      removed: true,
+      removedAt: new Date(),
+      note: 'Durch Online-Buchung vom System gelöscht' + ' \n' + existingBookable.note
+    }})
 
-    const { _id, type, ...bookable } = existingBookable
+    const { _id, type, note, ...bookable } = existingBookable
     
     const appointmentId = Appointments.insert({
       ...bookable,

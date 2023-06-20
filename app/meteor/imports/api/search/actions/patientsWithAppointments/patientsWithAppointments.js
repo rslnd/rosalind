@@ -26,7 +26,13 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
         let selector
 
         if (query.match(SimpleSchema.RegEx.Id)) {
-          selector = { _id: query }
+          const appt = Appointments.findOne({ _id: query })
+
+          if (appt && appt.patientId) {
+            selector = { _id: appt.patientId }
+          } else {
+            selector = { _id: query }
+          }
         } else if (query === '!banned') { // banned
           selector = { banned: true }
         } else if (query[0] === '!') { // special case: seach notes, return

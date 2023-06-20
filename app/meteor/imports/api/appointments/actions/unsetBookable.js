@@ -15,6 +15,8 @@ export const unsetBookable = ({ Appointments }) =>
     fn: function ({ bookableId }) {
       this.unblock()
 
+      const userId = this.userId
+
       let selector = {
         _id: bookableId,
         type: 'bookable'
@@ -24,8 +26,19 @@ export const unsetBookable = ({ Appointments }) =>
         if (lock.type !== 'bookable') {
           throw new Error('Refusing to remove anything but bookables')
         }
-        // hard remove is okay here, only soft remove when an appt is created on top
-        Appointments.remove({ _id: lock._id })
+        // hard remove used to be okay here, only soft remove when an appt is created on top
+        // since 2023-06-20 always softremove
+
+        Appointments.update({
+          _id: lock._id
+        }, {
+          $set: {
+            removed: true,
+            removedBy: userId,
+            removedAt: new Date(),
+            note: 'Manuell gelöscht durch Klick' + '\n' + (lock.note || '')
+          }
+        })
         return lock._id
       })
 

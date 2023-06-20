@@ -21,6 +21,8 @@ export const insert = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
+      const userId = this.userId
+
       this.unblock()
 
       let patientId = appointment.patientId
@@ -28,8 +30,6 @@ export const insert = ({ Appointments }) => {
       if (newPatient) {
         patientId = Meteor.call('patients/upsert', { patient: newPatient })
       }
-
-      let appointmentId = null
 
       const { note, ...restFields } = appointment
 
@@ -48,23 +48,30 @@ export const insert = ({ Appointments }) => {
         noteInAppointment = true
       }
 
-      appointmentId = Appointments.insert({ ...restFields, patientId }, (err, appointmentId) => {
-        if (err) {
-          console.error('[Appointments] Appointment insert failed with error', err)
-        } else {
-          if (note && !noteInAppointment) {
-            Comments.actions.post.callPromise({ docId: appointmentId, body: note })
-          }
-          Events.post('appointments/insert', { appointmentId })
+      const appointmentId = Appointments.insert({ ...restFields, patientId })
+      
+      if (note && !noteInAppointment) {
+        Comments.actions.post.callPromise({ docId: appointmentId, body: note })
+      }
+      Events.post('appointments/insert', { appointmentId })
 
-          Appointments.softRemove({
-            type: 'bookable',
-            start: restFields.start,
-            calendarId: restFields.calendarId,
-            assigneeId: restFields.assigneeId
-          })
-        }
-      })
+
+      if (Meteor.isServer) {
+        Appointments.find({
+          type: 'bookable',
+          start: {$gte: restFields.start },
+          end: { $lte: restFields.end },
+          calendarId: restFields.calendarId,
+          assigneeId: restFields.assigneeId
+        }).map(b => {
+          Appointments.update({ _id: b._id }, { $set: {
+            removed: true,
+            removedAt: new Date(),
+            removedBy: userId,
+            note: 'Gelöscht, weil Termin ausgemacht wurde. Termin: ' + appointmentId + ' \n' + (b.note || '')
+          }})
+        })
+      }
 
       return appointmentId
     }

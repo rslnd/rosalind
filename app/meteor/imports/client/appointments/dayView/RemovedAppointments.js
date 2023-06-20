@@ -1,6 +1,6 @@
 import React from 'react'
 import { withTracker } from '../../components/withTracker'
-import { compose } from 'recompose'
+import { compose, withState } from 'recompose'
 import { subscribe } from '../../../util/meteor/subscribe'
 import { dateToDay } from '../../../util/time/day'
 import { Appointments, Patients, Users } from '../../../api'
@@ -12,9 +12,12 @@ import { connect } from 'react-redux'
 import { hasRole } from '../../../util/meteor/hasRole'
 import { Meteor } from 'meteor/meteor'
 import { Box } from '../../components/Box'
+import { sortBy } from 'lodash'
+import { Icon } from '../../components/Icon'
+import { Checkbox, FormControlLabel } from '@material-ui/core'
 
 const composer = props => {
-  const { dispatch, calendarId, date } = props
+  const { dispatch, calendarId, date, showAll, setShowAll } = props
   const startOfDay = moment(date).clone().startOf('day').toDate()
   const endOfDay = moment(date).clone().endOf('day').toDate()
   const day = dateToDay(date)
@@ -30,7 +33,7 @@ const composer = props => {
       $lte: endOfDay
     },
     removed: true,
-    type: { $ne: 'bookable' }
+    type: (showAll || window.rdebug) ? {$ne: 'unused-value-to-show-all-including-bookables'} : { $ne: 'bookable' }
   }, {
     removed: true,
     sort: {
@@ -39,9 +42,15 @@ const composer = props => {
   }).fetch()
 
   const getPatient = _id => Patients.findOne({ _id })
-  const fullName = _id => _id
-    ? fullNameWithTitle(Users.findOne({ _id }, { removed: true }))
-    : __('appointments.unassigned')
+  const fullName = _id => {
+    if (_id) {
+      const user = Users.findOne({ _id }, { removed: true })
+      if (user) {
+        return fullNameWithTitle(user)
+      }
+    }
+    return __('appointments.unassigned')
+  }
 
   const selectPatient = patient =>
     dispatch({
@@ -59,22 +68,49 @@ const composer = props => {
   }
 }
 
-const Appointment = ({ start, assigneeId, fullName, getPatient, patientId, removedAt, removedBy, note, selectPatient }) =>
-  <tr style={appointmentStyle} onClick={() => selectPatient(getPatient(patientId))}>
-    <td>{moment(start).format('HH:mm')}</td>
-    <td>{fullName(assigneeId)}</td>
-    <td>{
-      patientId
-        ? <PatientName patient={getPatient(patientId)} />
-        : note
-    }</td>
-    <td>{fullName(removedBy)}</td>
-    <td>{moment(removedAt).format(__('time.dateFormat'))}</td>
-    <td>{moment(removedAt).format(__('time.timeFormat'))}</td>
-  </tr>
+const Appointment = (a) => {
+  const { start, assigneeId, fullName, getPatient, patientId, removedAt, removedBy, note, selectPatient, type } = a
+  return <tr className='enable-select'
+             style={type === 'bookable' ? {} : {cursor: 'pointer'}}
+             onClick={() => selectPatient(getPatient(patientId))}
+             title={JSON.stringify(a)}>
+  <td>{moment(start).format('HH:mm')}</td>
+  <td>{fullName(assigneeId)}</td>
+  <td>{
+    patientId
+      ? <PatientName patient={getPatient(patientId)} />
+      : (type !== 'bookable') && note
+  }{
+    type === 'bookable' &&
+      <span style={{color: '#6AA7FA', fontSize: '80%'}}>
+        <Icon name='share-square-o' />&nbsp;
+        {a.note}
+      </span>
+  }</td>
+  <td>{fullName(removedBy)}</td>
+  <td>{moment(removedAt).format(__('time.dateFormat'))}</td>
+  <td>{moment(removedAt).format(__('time.timeFormat'))}</td>
+</tr>
 
-const RemovedList = ({ appointments, canView, ...rest }) =>
-  !canView ? null : <Box title='Gelöschte Termine' noPadding>
+}
+
+const RemovedList = ({ appointments, canView, showAll, setShowAll, ...rest }) =>
+  !canView ? null : <Box 
+    noPadding
+    title={<span style={{zoom: 0.7}}>Gelöschte Termine
+            &emsp;
+            <FormControlLabel
+              label="(inkl. Online-Freigaben)"
+              control={
+                <Checkbox
+                  size="small"
+                  checked={showAll}
+                  onChange={e => setShowAll(!showAll)}
+                >(inkl. Online-Freigaben)</Checkbox>
+              }
+            />
+          </span>}
+    >
     {
       appointments.length === 0
         ? 'Keine gelöschten Termine an diesem Tag'
@@ -90,9 +126,12 @@ const RemovedList = ({ appointments, canView, ...rest }) =>
             </tr>
           </thead>
           <tbody>
-            {appointments.map(a =>
-              <Appointment key={a._id} {...a} {...rest} />
-            )}
+            {
+              sortBy(appointments, 'start')
+              .map(a =>
+                <Appointment key={a._id} {...a} {...rest} />
+              )
+            }
           </tbody>
         </table>
     }
@@ -100,6 +139,7 @@ const RemovedList = ({ appointments, canView, ...rest }) =>
 
 export const RemovedAppointments = compose(
   connect(),
+  withState('showAll', 'setShowAll', false),
   withTracker(composer)
 )(RemovedList)
 
