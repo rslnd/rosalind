@@ -171,9 +171,17 @@ export const createReminders = ({ Messages }) => {
             return false
           }
 
-          let text =
-            (calendar && calendar.smsAppointmentReminderText) ||
-            Settings.get('messages.sms.appointmentReminder.text')
+
+          let text = Settings.get('messages.sms.appointmentReminder.text')
+
+          if (calendar && calendar.smsAppointmentReminderText && calendar.smsAppointmentReminderText.length > 10) {
+            text = calendar.smsAppointmentReminderText
+          }
+
+          if (payload.gender === 'Male' && calendar && calendar.smsAppointmentReminderTextMale && calendar.smsAppointmentReminderTextMale.length > 10) {
+            text = calendar.smsAppointmentReminderTextMale
+          }
+                  
 
           // uro11 special: different text if appt is within first hour of day
           if (process.env.CUSTOMER_PREFIX === 'uro11' && Settings.get('messages.sms.appointmentReminder.textFirstHour')) {

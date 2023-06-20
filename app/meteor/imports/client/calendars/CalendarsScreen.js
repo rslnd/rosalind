@@ -160,8 +160,13 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     type: Boolean
   },
   {
-    header: 'SMS Erinnerung',
+    header: 'SMS Erinnerung (Allgemein oder weiblich)',
     field: 'smsAppointmentReminderText',
+    EditComponent: SMSField
+  },
+  {
+    header: 'SMS Erinnerung (Männlich, optional)',
+    field: 'smsAppointmentReminderTextMale',
     EditComponent: SMSField
   },
   {
@@ -202,6 +207,12 @@ const structure = ({ getCalendarName, getAssigneeName }) => [
     field: 'showTagNames',
     type: Boolean,
     render: t => t.showTagNames && <Icon name='check' />
+  },
+  {
+    header: 'Anzahl freier Felder anzeigen?',
+    field: 'showCounts',
+    type: Boolean,
+    render: t => t.showCounts && <Icon name='check' />
   },
   {
     header: 'Behandlungen immer bearbeitbar?',

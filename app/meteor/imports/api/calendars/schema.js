@@ -78,6 +78,11 @@ export const schema = new SimpleSchema({
     optional: true
   },
 
+  showCounts: {
+    type: Boolean,
+    optional: true
+  },
+
   allowEditTagsWhenUnavailable: {
     type: Boolean,
     optional: true
@@ -109,6 +114,11 @@ export const schema = new SimpleSchema({
   },
 
   smsAppointmentReminderText: {
+    type: String,
+    optional: true
+  },
+
+  smsAppointmentReminderTextMale: {
     type: String,
     optional: true
   },
