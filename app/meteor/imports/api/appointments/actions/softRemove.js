@@ -46,19 +46,14 @@ export const softRemove = ({ Appointments }) => {
         }, { removed: true })
 
         if (previousBookable) {
-          console.log('appointments/softRemove: restored bookable', previousBookable._id)
-          Appointments.update({ _id: previousBookable._id }, 
-            {
-              $unset: {
-                removed: 1,
-                removedAt: 1,
-                removedBy: 1
-              }
-            },
-            {
-              removed: true
-            }
-          )
+          Appointments.insert({
+            type: 'bookable',
+            start: appointment.start,
+            end: appointment.end,
+            calendarId: appointment.calendarId,
+            assigneeId: appointment.assigneeId,
+            note: 'Wieder freigegeben, nachdem Termin gelöscht wurde. Termin: ' + appointmentId
+          })
         }
       }
 

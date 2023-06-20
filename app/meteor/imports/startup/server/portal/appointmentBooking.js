@@ -201,7 +201,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
     Appointments.update(bookableSelector, { $set: {
       removed: true,
       removedAt: new Date(),
-      note: 'Durch Online-Buchung vom System gelöscht' + ' \n' + existingBookable.note
+      note: 'Durch Online-Buchung vom System gelöscht' + ' \n' + (existingBookable.note || '')
     }})
 
     const { _id, type, note, ...bookable } = existingBookable
