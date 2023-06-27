@@ -334,7 +334,7 @@ export const ContactForm = (props) => {
               </p>
 
               {error && <p><b>
-                Entschuldigung! Ihr gewählter Termin ist leider nicht mehr verfügbar. Bitte versuchen Sie, einen anderen Termin zu buchen oder kontaktieren Sie und telefonisch.
+                Entschuldigung! Ihr gewählter Termin konnte leider nicht reserviert werden. Bitte kontaktieren Sie uns telefonisch. Danke!
               </b></p>}
 
               <input
