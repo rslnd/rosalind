@@ -205,7 +205,21 @@ export const handleAppointmentBooking = (untrustedBody) => {
     }})
 
     const { _id, type, note, ...bookable } = existingBookable
-    
+
+    // Prevent patient from booking multiple appts on same day
+    const sameDaySamePatAppt = Appointments.findOne({ 
+      patientId,
+      start: {
+        $gte: moment(bookable.start).startOf('day').toDate(),
+        $lte: moment(bookable.start).endOf('day').toDate()
+      },
+      canceled: { $ne: true }
+    })
+
+    if (patientId && sameDaySamePatAppt) {
+      throw new Error(`sameDaySamePatAppt: prevented patient from booking multiple appts on same day, patient ${patientId}`)
+    }
+
     const appointmentId = Appointments.insert({
       ...bookable,
       createdViaPortal: true,
