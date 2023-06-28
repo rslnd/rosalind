@@ -11,7 +11,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@popperjs/core": "^2.9.2",
-    "@shortcm/qr-image": "^4.2.1",
+    "@shortcm/qr-image": "^4.4.2",
     "aws4": "^1.8.0",
     "bcrypt": "^5.0.1",
     "buffer": "^6.0.3",
@@ -62,7 +62,7 @@
     "redux-form": "^8.2.4",
     "redux-thunk": "^2.3.0",
     "rrule": "^2.7.0",
-    "snyk": "^1.530.0",
+    "snyk": "^1.685.0",
     "spotoninc-moment-round": "2.0.0",
     "uuid": "^8.2.0",
     "websmscom": "^1.0.3",
