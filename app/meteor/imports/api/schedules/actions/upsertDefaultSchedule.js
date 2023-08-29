@@ -32,7 +32,11 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const available = !(newSchedule && newSchedule.note)
+      // note starting with ! creates an available overlay (eg emergency)
+      // other note creates an unavailable override
+      const available = !(newSchedule && newSchedule.note && !newSchedule.note.includes('!'))
+
+      console.log('UD', available, newSchedule)
 
       if (scheduleId) {
         const existingSchedule = Schedules.findOne({

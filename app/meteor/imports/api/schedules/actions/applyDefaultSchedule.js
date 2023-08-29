@@ -49,7 +49,10 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
       // Remove all overrides in selected period
       const oldOverridesSelector = {
-        type: 'override',
+        $or: [
+          { type: 'override' },
+          { type: 'overlay' },
+        ],
         calendarId,
         start: {
           $gte: moment(from).startOf('day').toDate()
@@ -143,7 +146,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       // Add all override schedules
       console.log('[Schedules] applyDefaultSchedule: inserting all override schedules')
       overrideSchedules
-        .filter(os => os.type === 'override')
+        .filter(os => ((os.type === 'override') || (os.type === 'overlay')))
         .filter(os => assigneeIds ? assigneeIds.includes(os.userId) : true)
         .map(os => {
           Schedules.insert(os)
@@ -164,7 +167,10 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         start: { $gte: from },
         end: { $lte: to },
         calendarId,
-        type: 'override'
+        $or: [
+          { type: 'override' },
+          { type: 'overlay' }
+        ]
       }).fetch().map(os => {
         // avoid removing all schedules, only check for dupes when os wasn't removed already
         if (Schedules.findOne({_id: os._id })) {
@@ -173,8 +179,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
             start: os.start,
             end: os.end,
             userId: os.userId,
-            calendarId: os.calendarId,
-            type: 'override'
+            calendarId: os.calendarId
           })
         }
       })

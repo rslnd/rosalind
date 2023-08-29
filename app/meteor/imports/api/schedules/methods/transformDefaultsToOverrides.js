@@ -85,6 +85,8 @@ const expandColumn = days => defaultSchedulesByColumn => {
     const expandedUnAvailableSchedules = unavailableSchedules.map(s => {
       const { from, to, calendarId, userId, note, roles } = s
 
+      console.log('UNAV', note)
+
       return {
         type: 'override',
         available: false,
@@ -100,13 +102,16 @@ const expandColumn = days => defaultSchedulesByColumn => {
     const expandedAvailableSchedules = availableSchedules.reduce((acc, curr, i) => {
       const { available, from, to, calendarId, userId, note, roles } = curr
 
+      console.log('AV', note, available)
+
+
 
       const props = {
         type: 'override',
         available: false,
         calendarId,
         userId,
-        note,
+        // note,
         roles
       }
 
@@ -155,9 +160,34 @@ const expandColumn = days => defaultSchedulesByColumn => {
       }, ...acc]
     }, [])
 
+
+    const expandedOverlaySchedules = availableSchedules
+      .filter(s => s.note && s.note.includes('!'))
+      .map(s => {
+        const { from, to, calendarId, userId, note, roles } = s
+
+
+        const newNote = note.replace(/\w+!/, '')
+
+        console.log('OV', note)
+
+        return {
+          type: 'overlay',
+          available: true,
+          calendarId,
+          userId,
+          note: newNote,
+          roles,
+          start: applyHM(day, from),
+          end: applyHM(day, to)
+        }
+      })
+
+
     const expandedSchedules = [
       ...expandedUnAvailableSchedules,
       ...expandedAvailableSchedules,
+      ...expandedOverlaySchedules
     ]
 
     const isNonzero = s => s.start.getTime() !== s.end.getTime()

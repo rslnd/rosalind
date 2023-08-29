@@ -16,6 +16,12 @@ const style = {
     flexDirection: 'column',
     justifyContent: 'space-between'
   },
+  overlay: {
+    background: '#b91212',
+    pointerEvents: 'none',
+    opacity: 0.2,
+    display: 'flex',
+  },
   schedulesText: {
     textAlign: 'center'
   }
@@ -27,16 +33,13 @@ export const schedules = ({ schedules, onDoubleClick, slotSize }) =>
       key={s._id}
       scheduleId={s._id}
       assigneeId={s.userId}
-      start={s.start}
-      end={s.end}
-      note={s.note}
-      roles={s.roles}
       slotSize={slotSize}
       onDoubleClick={onDoubleClick}
+      {...s}
     />
   )
 
-const Schedule = ({ start, end, note, roles, scheduleId, assigneeId, slotSize, onDoubleClick }) => {
+const Schedule = ({ available, type, start, end, note, roles, scheduleId, assigneeId, slotSize, onDoubleClick }) => {
   const timeStart = moment(start).floor(5, 'minutes')
   const timeEnd = moment(end).ceil(5, 'minutes')
   const duration = (end - start) / 1000 / 60
@@ -52,7 +55,7 @@ const Schedule = ({ start, end, note, roles, scheduleId, assigneeId, slotSize, o
       data-scheduleid={scheduleId}
       onDoubleClick={(event) => onDoubleClick({ event, scheduleId })}
       style={{
-        ...style.scheduledUnavailable,
+        ...(type === 'overlay' ? style.overlay : style.scheduledUnavailable),
         gridRowStart: timeStart.format('[T]HHmm'),
         gridRowEnd: timeEnd.format('[T]HHmm'),
         gridColumn: `assignee-${assigneeId || 'unassigned'}`
@@ -61,6 +64,7 @@ const Schedule = ({ start, end, note, roles, scheduleId, assigneeId, slotSize, o
       {
         (
           (
+            (type === 'override') &&
             (duration - (note ? slotSize : 0)) > slotSize) &&
             (duration > 15)
           )
@@ -74,7 +78,10 @@ const Schedule = ({ start, end, note, roles, scheduleId, assigneeId, slotSize, o
             <div key={3} style={style.schedulesText}>
               {!isLastSlot(timeEnd) && timeEnd.format('H:mm')}
             </div>
-          ] : <div style={style.schedulesText}>
+          ]
+          : (type === 'overlay')
+          ? null
+          : <div style={style.schedulesText}>
             {timeStart.format('H:mm')} - {timeEnd.format('H:mm')}
             {note && <span> {note}</span>}
           </div>

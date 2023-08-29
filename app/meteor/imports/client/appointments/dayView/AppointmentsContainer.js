@@ -99,7 +99,10 @@ const composer = (props) => {
   let assignees = Users.find({ _id: { $in: assigneeIds } }, { sort: { lastName: 1 }, removed: true }).fetch()
 
   const schedules = Schedules.find({
-    type: 'override',
+    $or: [
+      { type: 'override' },
+      { type: 'overlay' },
+    ],
     userId: { $in: assigneeIds },
     ...selector
   }).fetch()

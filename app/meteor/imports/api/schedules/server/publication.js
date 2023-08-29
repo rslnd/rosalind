@@ -19,7 +19,10 @@ export default () => {
         calendarId,
         $or: [
           {
-            type: 'override',
+            $or: [
+              { type: 'override' },
+              { type: 'overlay' }
+            ],
             start: {
               $gte: moment(date).startOf('day').toDate(),
               $lte: moment(date).endOf('day').toDate()
