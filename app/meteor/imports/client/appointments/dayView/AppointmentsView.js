@@ -153,13 +153,17 @@ export class AppointmentsView extends React.Component {
   }
 
   handleToggleOverrideMode ({ assigneeId, overlay, removeOverlay }) {
+    const override = {
+      isOverriding: !removeOverlay && !this.state.override.isOverriding,
+      overlay: overlay,
+      removeOverlay: removeOverlay,
+      overrideAssigneeId: assigneeId
+    }
+
+    console.log('handleToggleOverrideMode', override)
+
     this.setState({
-      override: {
-        isOverriding: !removeOverlay && !this.state.override.isOverriding,
-        overlay: overlay,
-        removeOverlay: removeOverlay,
-        overrideAssigneeId: assigneeId
-      }
+      override
     })
   }
 

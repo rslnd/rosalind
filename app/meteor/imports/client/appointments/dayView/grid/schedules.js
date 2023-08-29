@@ -41,10 +41,10 @@ export const schedules = ({ schedules, onDoubleClick, slotSize, override }) => {
       onDoubleClick={(
         (s.type === 'overlay' && removeOverlay) ||
         (s.type === 'override')
-      ) && onDoubleClick}
+      ) ? onDoubleClick : undefined}
 
       onClick={
-        (s.type === 'overlay' && removeOverlay) && onDoubleClick
+        (s.type === 'overlay' && removeOverlay) ? onDoubleClick : undefined
       }
 
       {...s}
