@@ -18,7 +18,7 @@ const style = {
   },
   overlay: {
     background: '#b91212',
-    pointerEvents: 'none',
+    // pointerEvents: 'none',
     opacity: 0.2,
     display: 'flex',
   },
@@ -27,19 +27,32 @@ const style = {
   }
 }
 
-export const schedules = ({ schedules, onDoubleClick, slotSize }) =>
-  schedules.map(s =>
+export const schedules = ({ schedules, onDoubleClick, slotSize, override }) => {
+  const removeOverlay = override && override.removeOverlay
+
+  return schedules.map(s =>
     <Schedule
       key={s._id}
       scheduleId={s._id}
       assigneeId={s.userId}
       slotSize={slotSize}
-      onDoubleClick={onDoubleClick}
+      clickable={removeOverlay}
+
+      onDoubleClick={(
+        (s.type === 'overlay' && removeOverlay) ||
+        (s.type === 'override')
+      ) && onDoubleClick}
+
+      onClick={
+        (s.type === 'overlay' && removeOverlay) && onDoubleClick
+      }
+
       {...s}
     />
   )
+}
 
-const Schedule = ({ available, type, start, end, note, roles, scheduleId, assigneeId, slotSize, onDoubleClick }) => {
+const Schedule = ({ available, type, start, end, note, roles, scheduleId, assigneeId, slotSize, onDoubleClick, onClick, ...props }) => {
   const timeStart = moment(start).floor(5, 'minutes')
   const timeEnd = moment(end).ceil(5, 'minutes')
   const duration = (end - start) / 1000 / 60
@@ -53,14 +66,17 @@ const Schedule = ({ available, type, start, end, note, roles, scheduleId, assign
   return (
     <div
       data-scheduleid={scheduleId}
-      onDoubleClick={(event) => onDoubleClick({ event, scheduleId })}
+      onDoubleClick={onDoubleClick && ((event) => onDoubleClick({ event, scheduleId }))}
+      onClick={onClick && ((event) => onClick({ event, scheduleId }))}
       style={{
         ...(type === 'overlay' ? style.overlay : style.scheduledUnavailable),
+        pointerEvents: onDoubleClick ? 'all' : 'none',
         gridRowStart: timeStart.format('[T]HHmm'),
         gridRowEnd: timeEnd.format('[T]HHmm'),
         gridColumn: `assignee-${assigneeId || 'unassigned'}`
-      }}>
-
+      }}
+      {...props}
+    >
       {
         (
           (

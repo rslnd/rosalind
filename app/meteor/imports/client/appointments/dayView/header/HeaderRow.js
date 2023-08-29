@@ -58,6 +58,8 @@ export class HeaderRow extends React.Component {
     this.handleUserDropdownOpen = this.handleUserDropdownOpen.bind(this)
     this.handleUserDropdownClose = this.handleUserDropdownClose.bind(this)
     this.handleToggleOverrideModeClick = this.handleToggleOverrideModeClick.bind(this)
+    this.handleToggleOverlayModeClick = this.handleToggleOverlayModeClick.bind(this)
+    this.handleRemoveOverlayModeClick = this.handleRemoveOverlayModeClick.bind(this)
     this.handleMouseEnter = this.handleMouseEnter.bind(this)
     this.handleMouseLeave = this.handleMouseLeave.bind(this)
     this.handleChangeAssigneeClick = this.handleChangeAssigneeClick.bind(this)
@@ -103,10 +105,26 @@ export class HeaderRow extends React.Component {
     }
   }
 
-  handleToggleOverrideModeClick () {
+  handleToggleOverrideModeClick (e) {
     const assigneeId = this.state.userDropdownAssigneeId
     if (assigneeId && this.props.onToggleOverrideMode) {
-      this.props.onToggleOverrideMode({ assigneeId })
+      this.props.onToggleOverrideMode({ assigneeId, overlay: e.shiftKey })
+    }
+    this.handleUserDropdownClose()
+  }
+
+  handleToggleOverlayModeClick () {
+    const assigneeId = this.state.userDropdownAssigneeId
+    if (assigneeId && this.props.onToggleOverrideMode) {
+      this.props.onToggleOverrideMode({ assigneeId, overlay: true })
+    }
+    this.handleUserDropdownClose()
+  }
+
+  handleRemoveOverlayModeClick () {
+    const assigneeId = this.state.userDropdownAssigneeId
+    if (assigneeId && this.props.onToggleOverrideMode) {
+      this.props.onToggleOverrideMode({ assigneeId, removeOverlay: true })
     }
     this.handleUserDropdownClose()
   }
@@ -222,6 +240,12 @@ export class HeaderRow extends React.Component {
         >
           <MenuItem onClick={this.handleToggleOverrideModeClick}>
             Zeitraum blockieren
+          </MenuItem>
+          <MenuItem onClick={this.handleToggleOverlayModeClick}>
+            Zeitraum einfärben
+          </MenuItem>
+          <MenuItem onClick={this.handleRemoveOverlayModeClick}>
+            Zeitraum-Farben entfernen
           </MenuItem>
           <MenuItem onClick={this.handleChangeAssigneeClick}>
             Person ändern

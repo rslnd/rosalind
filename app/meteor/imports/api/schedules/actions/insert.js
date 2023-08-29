@@ -11,7 +11,7 @@ export const insert = ({ Schedules, Users }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       schedule: { type: new SimpleSchema({
-        type: { type: String, allowedValues: ['override', 'holiday'] },
+        type: { type: String, allowedValues: ['override', 'overlay', 'holiday'] },
         calendarId: { type: SimpleSchema.RegEx.Id, optional: true },
         userId: { type: SimpleSchema.RegEx.Id, optional: true },
         day: { type: Day, optional: true },

@@ -84,7 +84,7 @@ export class AppointmentsView extends React.Component {
       if (options.event &&
           options.event.shiftKey &&
           hasRole(Meteor.userId(), ['admin', 'schedules-edit'])) {
-        
+
         const newSchedule = {
           userId: options.assigneeId,
           calendarId: this.props.calendar._id,
@@ -93,9 +93,9 @@ export class AppointmentsView extends React.Component {
           available: false,
           type: 'override'
         }
-  
+
         console.log('[Appointments] Schedules override end event', { newSchedule })
-  
+
         Schedules.actions.insert.callPromise({ schedule: newSchedule }).then(() => {
           this.setState({
             override: {
@@ -152,10 +152,12 @@ export class AppointmentsView extends React.Component {
     return setTime(this.state.selectedStart)(moment(this.props.date))
   }
 
-  handleToggleOverrideMode ({ assigneeId }) {
+  handleToggleOverrideMode ({ assigneeId, overlay, removeOverlay }) {
     this.setState({
       override: {
-        isOverriding: !this.state.override.isOverriding,
+        isOverriding: !removeOverlay && !this.state.override.isOverriding,
+        overlay: overlay,
+        removeOverlay: removeOverlay,
         overrideAssigneeId: assigneeId
       }
     })
@@ -195,8 +197,8 @@ export class AppointmentsView extends React.Component {
         calendarId: this.props.calendar._id,
         start,
         end,
-        available: false,
-        type: 'override'
+        available: this.state.override.overlay,
+        type: this.state.override.overlay ? 'overlay' : 'override'
       }
 
       console.log('[Appointments] Schedules override end event', { newSchedule })
@@ -261,7 +263,7 @@ export class AppointmentsView extends React.Component {
     } else {
       // prompt if there is more than one one assignee today
       const otherAssignees = this.props.assignees.filter(a => a && a._id)
-    
+
       if (!(calendar && calendar.allowAdmittingUnassignedToAnyone) && otherAssignees.length === 1) {
         this.props.onSetAdmitted({
           appointmentId: appointment._id,
