@@ -76,7 +76,7 @@ export default () => {
     if (process.env.DEMO_USERNAME_ORIGINAL && process.env.DEMO_USERNAME) {
       if (Api.Users.findOne({ username: process.env.DEMO_USERNAME_ORIGINAL })) {
         Accounts.setPassword(Api.Users.findOne({ username: process.env.DEMO_USERNAME_ORIGINAL })._id, process.env.DEMO_PASSWORD, { logout: false })
-        Api.Users.update({ username: 'az' }, {
+        Api.Users.update({ username: process.env.DEMO_USERNAME_ORIGINAL }, {
           $set: {
             username: process.env.DEMO_USERNAME
           }
@@ -86,6 +86,7 @@ export default () => {
       }
     }
 
+    // avoid lockout when demo user changes pw
     if (process.env.DEMO_USERNAME && Api.Users.findOne({ username: process.env.DEMO_USERNAME })) {
       Accounts.setPassword(Api.Users.findOne({ username: process.env.DEMO_USERNAME })._id, process.env.DEMO_PASSWORD, { logout: false })
     }
@@ -205,8 +206,8 @@ export default () => {
     Api.Appointments.find({}, { fields: { _id: 1 }, removed: true }).fetch().forEach(({ _id }) => {
       const lastName = randomName()
       appointmentsBatch.find({ _id }).updateOne({
-        $set: {
-          note: 'Anmerkung zu Behandlung ABC',
+        $unset: {
+          note: 1,
         }
       })
     })
