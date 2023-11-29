@@ -26,6 +26,18 @@ describe('api', () => {
           expect(isIntentToCancel('neinnnnnnnnnnnnnnnnnnnn')).to.equal(true)
         })
 
+        it('turkish', () => {
+          expect(isIntentToCancel('NEIN')).to.equal(true)
+          expect(isIntentToCancel('NEIN NEIN')).to.equal(true)
+          expect(isIntentToCancel('NEIN')).to.equal(true)
+          expect(isIntentToCancel('NEıN')).to.equal(true)
+          expect(isIntentToCancel('NEıN')).to.equal(true)
+          expect(isIntentToCancel('NEİN')).to.equal(true)
+          expect(isIntentToCancel('NEİN')).to.equal(true)
+          expect(isIntentToCancel('NEïN')).to.equal(true)
+        })
+
+
         it('alternative word', () => {
           expect(isIntentToCancel('NEIN, danke!!\n')).to.equal(true)
         })
