@@ -2,7 +2,7 @@ import { WebApp } from 'meteor/webapp'
 import parse from 'co-body'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import { ContactForm, handleContactForm } from './contactForm'
+import { ContactForm, ContactFormNeurodermitis, handleContactForm } from './contactForm'
 import { getBookables, handleAppointmentBooking } from './appointmentBooking'
 import { portalCss } from './portalCss'
 import { portalLogin, twoFactor } from './portalLogin'
@@ -138,6 +138,28 @@ export default () => {
           return respondWithJSON(res, {error: 'unknown-server-error'})
         }
       default: return respondWithJSON(res, {error: 'unknown-server-error'})
+    }
+  })
+
+  WebApp.connectHandlers.use('/contact-neurodermitis', async (req, res, next) => {
+    switch (req.method) {
+      case 'GET':
+        try {
+          return respondWith(res, ContactFormNeurodermitis)
+        } catch (e) {
+          console.error(e)
+          return respondWith(res, ErrorMessage)
+        }
+      case 'POST':
+        try {
+          const body = await parse.form(req)
+          const Response = await handleContactForm(body)
+          return respondWith(res, Response)
+        } catch (e) {
+          console.error(e)
+          return respondWith(res, ErrorMessage)
+        }
+      default: return respondWith(res, ErrorMessage)
     }
   })
 
