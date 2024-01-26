@@ -156,8 +156,8 @@ export const ContactFormNeurodermitis = () => {
       </Section>
 
       <Section>
-        <label>Ich benötige:</label><br />
-        <Checkbox name='neurodermitis' label='Neurodermitis' />
+        <label>Interessiert an:</label><br />
+        <Checkbox name='neurodermitis' label='Neurodermitissprechstunde' />
         <Checkbox name='nutrition' label='Ernährungsberatung' />
       </Section>
 
