@@ -80,35 +80,39 @@ export class AppointmentsView extends React.Component {
       this.handleOverrideStartOrEnd(options)
     } else if (this.props.move.isMoving) {
       this.handleMoveEnd(options)
-    } else {
-      if (options.event &&
-          options.event.shiftKey &&
-          hasRole(Meteor.userId(), ['admin', 'schedules-edit'])) {
+    } else if (options.event &&
+        options.event.shiftKey &&
+        hasRole(Meteor.userId(), ['admin', 'schedules-edit'])) {
 
-        const newSchedule = {
-          userId: options.assigneeId,
-          calendarId: this.props.calendar._id,
-          start: options.start,
-          end: options.end,
-          available: false,
-          type: 'override'
-        }
-
-        console.log('[Appointments] Schedules override end event', { newSchedule })
-
-        Schedules.actions.insert.callPromise({ schedule: newSchedule }).then(() => {
-          this.setState({
-            override: {
-              isOverriding: false,
-              start: null,
-              end: null,
-              overrideAssigneeId: null
-            }
-          })
-        })
-      } else {
-        this.handleNewAppointmentModalOpen(options)
+      const newSchedule = {
+        userId: options.assigneeId,
+        calendarId: this.props.calendar._id,
+        start: options.start,
+        end: options.end,
+        available: false,
+        type: 'override'
       }
+
+      console.log('[Appointments] Schedules override end event', { newSchedule })
+
+      Schedules.actions.insert.callPromise({ schedule: newSchedule }).then(() => {
+        this.setState({
+          override: {
+            isOverriding: false,
+            start: null,
+            end: null,
+            overrideAssigneeId: null
+          }
+        })
+      })
+
+    } else if (options.event &&
+        options.event.altKey &&
+        hasRole(Meteor.userId(), ['admin', 'schedules-edit'])) {
+      this.handleToggleOverrideMode({ ...options, overlay: true })
+      setTimeout(() => this.handleOverrideStartOrEnd(options), 30)
+    } else {
+      this.handleNewAppointmentModalOpen(options)
     }
   }
 
@@ -220,11 +224,11 @@ export class AppointmentsView extends React.Component {
     }
   }
 
-  handleOverrideStartOrEnd ({ start, end, assigneeId }) {
+  handleOverrideStartOrEnd ({ start, end, assigneeId, ...rest }) {
     if (this.state.override.start) {
-      this.handleOverrideEnd({ start, end, assigneeId })
+      this.handleOverrideEnd({ start, end, assigneeId, ...rest })
     } else {
-      this.handleOverrideStart({ start, end, assigneeId })
+      this.handleOverrideStart({ start, end, assigneeId, ...rest })
     }
   }
 
