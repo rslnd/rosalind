@@ -20,7 +20,7 @@ export const ScheduleModalInner = ({ scheduleId, user, schedule, show, onClose, 
 
       {
         scheduleId && schedule && (
-          <table className='table'>
+          <table className='table enable-select'>
             <tbody>
               <tr><td>Datum</td><td>{moment(schedule.start).format(__('time.dateFormat'))}</td></tr>
               <tr><td>Blockiert von</td><td>{moment(schedule.start).format(__('time.timeFormatShort'))} (inkl.)</td></tr>
@@ -28,7 +28,7 @@ export const ScheduleModalInner = ({ scheduleId, user, schedule, show, onClose, 
               <tr><td>Dauer</td><td>{durationFormat(schedule.end - schedule.start, 'ms')} h</td></tr>
               <tr><td>Erstellt von</td><td>{user ? fullNameWithTitle(user) : <i>System</i>}</td></tr>
               <tr><td>Erstellt am</td><td>{moment(schedule.createdAt).format(__('time.dateTime'))}</td></tr>
-              <tr><td></td><td></td></tr>
+              <tr className="text-muted"><td>ID</td><td>{schedule._id}</td></tr>
             </tbody>
           </table>
         )
