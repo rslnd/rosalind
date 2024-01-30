@@ -1,10 +1,13 @@
 import { Meteor } from 'meteor/meteor'
 import moment from 'moment-timezone'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { dayToDate, daySelector } from '../../../util/time/day'
+import { dayToDate, daySelector, dateToDay } from '../../../util/time/day'
 import { action, Match } from '../../../util/meteor/action'
 import { generate as generateReport } from '../methods/generate'
 import { pastAppointmentsSelector } from '../methods/mapPlannedNew'
+import uniq from 'lodash/uniq'
+import sortBy from 'lodash/fp/sortBy'
+
 
 export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, Tags, Messages, Users }) => {
   return action({
@@ -29,7 +32,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
         const exemptWorkloadAssigneeIds = Users.find({
           hiddenInReports: true
         }).fetch().map(u => u._id)
-        
+
         const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
         return calendars.map(calendar => {
           const calendarId = calendar._id
@@ -60,6 +63,48 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
               $lt: date.endOf('day').toDate()
             }
           }).fetch()
+
+          // hzw: ignore noon telemed (add fake override if no override overlaps noon)
+          // + ignore appts
+          if (process.env.CUSTOMER_PREFIX === 'hzw') {
+            const userIds = uniq(overrideSchedules.map(s => s.userId))
+
+            userIds.map(uid => {
+              const usersOverrides =sortBy('start', overrideSchedules.filter(s => s.userId === uid))
+
+              // is there an override spanning noon?
+              const noonBlocked = usersOverrides.find(o => (
+                moment(date).clone().hour(13).minute(13).isBetween(
+                  moment(o.start),
+                  moment(o.end)
+                )
+              ))
+
+              if (!noonBlocked) {
+                // add fake override
+                const fakeStart = moment(date).clone().hour(13).minute(0).startOf('minute').toDate()
+                const fakeEnd = moment(date).clone().hour(13).minute(45).startOf('minute').toDate()
+
+                overrideSchedules.push({
+                  start: fakeStart,
+                  end: fakeEnd,
+                  type: 'override',
+                  isFake: true,
+                  userId: uid,
+                  calendarId
+                })
+
+                // remove noon telemed appts
+                appointments = appointments.filter(a => {
+                  if (moment(a.start).isBetween(fakeStart, fakeEnd)) {
+                    return false
+                  } else {
+                    return true
+                  }
+                })
+              }
+            })
+          }
 
           const daySchedule = Schedules.findOne({
             calendarId,

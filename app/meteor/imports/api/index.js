@@ -23,6 +23,33 @@ import { Media, MediaTags } from './media'
 import { Records } from './records'
 import { Templates } from './templates'
 import { Consents } from './consents'
+import day, { dateToDay } from '../util/time/day'
+import moment from 'moment-timezone'
+import { Meteor } from 'meteor/meteor'
+
+const callAsync = (method, args) =>
+  new Promise((resolve, reject) => {
+    Meteor.call(method, args, (err, ok) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(ok)
+      }
+    })
+  })
+
+const generateReports = async (start, end) => {
+  const range = moment.range(moment(start), moment(end))
+  const days = Array.from(range.by('days')).map(t => moment(t))
+
+  for (let d of days) {
+    console.log('Generating report for', d.toString())
+    await callAsync('reports/generate', { day: dateToDay(d) })
+  }
+
+  console.log('Done generating reports for', days.length, 'days')
+}
+
 
 export {
   Users,
@@ -52,5 +79,9 @@ export {
   MediaTags,
   Records,
   Templates,
-  Consents
+  Consents,
+  day,
+  moment,
+  Meteor,
+  generateReports
 }
