@@ -1,11 +1,16 @@
 import React from 'react'
-import { timeSlots } from './timeSlots'
+import { label, timeSlots } from './timeSlots'
 import { appointments as renderAppointments } from './appointments'
 import { timeLegend } from './timeLegend'
 import { blanks } from './blanks'
 import { availabilities as renderAvailabilities } from './availabilities'
 import { schedules as renderSchedules } from './schedules'
 import { overrideOverlay } from './overrideOverlay'
+import { ErrorBoundary } from '../../../layout/ErrorBoundary'
+import moment from 'moment-timezone'
+import { sortBy } from 'lodash'
+import { Icon } from '../../../components/Icon'
+import { durationFormat } from '../../../reports/shared/durationFormat'
 
 // row name    | column names
 // ---------------------------------------------------------------
@@ -34,12 +39,12 @@ export const AppointmentsGrid = ({
 }) => {
   const { scheduleOffset, atMinutes } = calendar
   const slotSize = calendar.slotSize || 5
-  const gridTimeSlots = timeSlots(slotSize, scheduleOffset, atMinutes).map((time) => `[${time}] 25px`).join(' ')
+  const gridTimeSlots = timeSlots(slotSize, scheduleOffset, atMinutes)
 
   const gridTemplateRows = `
-    [header] 90px
+    [header] 140px
     [subheader] 0px
-    ${gridTimeSlots}
+    ${gridTimeSlots.map((time) => `[${time}] 25px`).join(' ')}
   `
 
   const style = {
@@ -48,7 +53,7 @@ export const AppointmentsGrid = ({
     marginTop: 30,
     gridTemplateRows,
     gridTemplateColumns: `
-      [time] 60px
+      [time] 50px
       ${assignees.map((assignee, index) =>
     `[assignee-${assignee ? assignee._id : 'unassigned'}] 1fr`).join(' ')
 }`
@@ -58,6 +63,10 @@ export const AppointmentsGrid = ({
 
   return (
     <div style={style}>
+      <ErrorBoundary silent name='AppG Counts'>
+        {renderCounts({ calendar, assignees, appointments, schedules, gridTimeSlots })}
+      </ErrorBoundary>
+
       {renderAppointments({ calendar, slotSize, scheduleOffset, atMinutes, appointments, onClick: onAppointmentClick, move, canSeeBookables, canEditBookables })}
       {ffAva ? null : blanks({ calendar, date, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter, canSeeBookables, canEditBookables })}
       {ffAva ? renderAvailabilities({ calendar, date, availabilities, assignees, onClick: onBlankClick, onMouseEnter: onBlankMouseEnter }) : null}
@@ -66,4 +75,99 @@ export const AppointmentsGrid = ({
       {timeLegend({ slotSize, scheduleOffset, atMinutes })}
     </div>
   )
+}
+
+const renderCounts = ({ assignees, calendar, appointments, schedules, gridTimeSlots }) => {
+  const { showCounts, slotSize, slotSizeAppointment, allowUnassigned, atMinutes } = calendar
+  if (!showCounts) { return null }
+
+
+  const labeledAppointments = appointments.map(a => {
+    return {
+      ...a,
+      startLabel: label(moment(a.start)),
+      endLabel: label(moment(a.end))
+    }
+  })
+
+
+  return assignees.map(assignee => {
+    if (!assignee && !allowUnassigned) { return }
+
+    const assigneeId = assignee ? assignee._id : null
+
+    // const scheduleOffset = slotSizeAppointment &&
+    //   (assignee && assignee.schedules && assignee.schedules.length >= 1) &&
+    //   moment(sortBy(assignee.schedules, 'end')[0].end).add(1, 'second').minute()
+
+    // const slotSizeBlank = (scheduleOffset === 0 || scheduleOffset > 0)
+    //   ? slotSizeAppointment
+    //   : slotSize
+
+    // const slots = timeSlots(slotSizeBlank, scheduleOffset, atMinutes)
+
+    const assigneeAppointments = labeledAppointments.filter(ap => (ap.assigneeId === assigneeId))
+
+    const admittedCount = assigneeAppointments.filter(ap => ap.admittedAt).length
+    const noShowCount = assigneeAppointments.length - admittedCount
+
+
+    const assigneeSchedules = schedules.filter(s => (
+      (s.userId === assigneeId) &&
+      !s.available &&
+      (!s.roles || s.roles.length === 0)
+    ))
+
+    const blockedMs = assigneeSchedules.reduce((acc, s) => (acc + (s.end - s.start)), 0)
+    const apptMs = assigneeAppointments.reduce((acc, a) => (acc + (a.end - a.start)), 0)
+
+    const wholeDayMs = assigneeSchedules.length >= 2
+      ? (assigneeSchedules[assigneeSchedules.length - 1].end - assigneeSchedules[0].start)
+      : ((22 - 7.5) * 60 * 60 * 1000)
+
+    const wholeDayHrs = durationFormat(wholeDayMs - blockedMs, 'ms')
+    const freeHrs =  durationFormat(wholeDayMs - blockedMs - apptMs, 'ms')
+
+
+    // let gridTimeSlots2 =
+    // for (let i = 0; i < gridTimeSlots.length; i++) {
+    //   // punch away grid time slots
+    // }
+
+
+
+    // assigneeAppointments.map(ap => {
+
+    //   slots.indexOf(ap.startLabel)
+
+    // })
+
+    const text = '' // assigneeSchedules.length
+
+    // console.log(slots)
+
+    const style = {
+      opacity: 0.8,
+      paddingBottom: '1em',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'end',
+      textAlign: 'center',
+      overflow: 'ellipse',
+      gridRow: 'header',
+      gridColumn: `assignee-${assigneeId || 'unassigned'}`,
+    }
+    return <>
+      <div style={style} className='enable-select text-muted'>
+        <span>
+          {freeHrs} frei von {wholeDayHrs} <br/>
+          {admittedCount} <Icon name="check" /> &emsp; {noShowCount} <Icon name="times" />
+
+        </span>
+        <br />
+        {text}
+
+      </div>
+    </>
+  })
 }

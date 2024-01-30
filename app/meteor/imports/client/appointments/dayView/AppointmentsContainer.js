@@ -105,6 +105,10 @@ const composer = (props) => {
     ],
     userId: { $in: assigneeIds },
     ...selector
+  }, {
+    sort: {
+      start: 1
+    }
   }).fetch()
 
   assigneeIds.push(null)

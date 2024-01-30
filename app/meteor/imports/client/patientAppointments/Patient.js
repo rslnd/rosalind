@@ -347,9 +347,8 @@ const localityStyle = {
 
 const fetchLoyalty = ({ _id }) =>
   new Promise((resolve) => {
-    console.log('testooo')
     Meteor.call(
-      'patients/getLoyalty', 
+      'patients/getLoyalty',
       { patientId: _id },
       (err, loyalty) => {
         resolve(loyalty)
