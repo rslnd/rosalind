@@ -4,8 +4,10 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Day } from '../../../util/schema/day'
 import { Events } from '../../events'
-import { daySelector } from '../../../util/time/day'
+import { daySelector, dayToDate } from '../../../util/time/day'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { Appointments } from '../../appointments'
+import moment from 'moment-timezone'
 
 export const removeUserFromDay = ({ Schedules, Users }) => {
   return new ValidatedMethod({
@@ -22,6 +24,15 @@ export const removeUserFromDay = ({ Schedules, Users }) => {
         !hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
+
+      // Remove any bookables
+      Appointments.remove({
+        type: 'bookable',
+        start: { $gte: moment(dayToDate(day)).startOf('day').toDate() },
+        end: { $lte: moment(dayToDate(day)).endOf('day').toDate() },
+        assigneeId: userId,
+        calendarId
+      }, { multi: true })
 
       // BUG: Bulk applying default schedules creates multiple day schedules, we should probably do away with day schedules altogether once availabilities are live.
       const existingSchedules = Schedules.find({
