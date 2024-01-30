@@ -25,6 +25,7 @@ export const time = {
   dateFormatWeekdayShort: 'dd., D. MMMM YYYY',
   dateFormatWeekdayShortNoYear: 'dd., D. MMMM',
   dateFormatMonthYearOnly: 'MMMM YYYY',
+  dateTime: 'D. MMMM YYYY [um] HH:mm [Uhr]',
   calendar: 'Kalender',
   oneDayForward: 'Einen Tag vorwärts',
   oneDayBackward: 'Einen Tag zurück',

@@ -385,6 +385,7 @@ export class AppointmentsView extends React.Component {
 
         <ErrorBoundary name='AppV SchedMod'>
           <ScheduleModal
+            scheduleId={this.state.scheduleModalId}
             show={this.state.scheduleModalOpen}
             onClose={this.handleScheduleModalClose}
             onClickScheduleSoftRemove={this.handleScheduleSoftRemove} />
