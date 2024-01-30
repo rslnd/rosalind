@@ -56,7 +56,7 @@ export const ScheduleModalInner = ({ scheduleId, user, schedule, show, onClose, 
 const composer = (props) => {
   if (props.scheduleId) {
     const schedule = Schedules.findOne({ _id: props.scheduleId })
-    const user = Users.findOne({ _id: schedule.createdBy })
+    const user = schedule && Users.findOne({ _id: schedule.createdBy })
     return { schedule, user, ...props }
   } else {
     return props
