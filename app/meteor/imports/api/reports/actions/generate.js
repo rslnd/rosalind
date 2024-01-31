@@ -37,7 +37,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
         return calendars.map(calendar => {
           const calendarId = calendar._id
 
-          const appointments = Appointments.find({
+          let appointments = Appointments.find({
             calendarId,
             start: {
               $gt: date.startOf('day').toDate(),
