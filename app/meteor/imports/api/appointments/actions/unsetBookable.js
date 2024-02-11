@@ -50,6 +50,5 @@ export const unsetBookable = ({ Appointments }) =>
         return locks
       }
 
-      return appointmentId
     }
   })

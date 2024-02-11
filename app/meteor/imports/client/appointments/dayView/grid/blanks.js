@@ -106,8 +106,8 @@ class BlankState extends React.PureComponent {
           {assigneeId && canEditBookables &&
             <BookableIndicator
               onClick={this.handleBookableClick}
-              onMouseEnter={e => e.buttons === 1 && this.handleBookableClick(e)}
-              onMouseDown={e => e.buttons === 1 && this.handleBookableClick(e)}
+              onMouseEnter={e => !e.shiftKey && e.buttons === 1 && this.handleBookableClick(e)}
+              onMouseDown={e => !e.shiftKey && e.buttons === 1 && this.handleBookableClick(e)}
             />
           }
         &nbsp;
