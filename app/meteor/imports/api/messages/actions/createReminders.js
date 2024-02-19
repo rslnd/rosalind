@@ -150,7 +150,7 @@ export const createReminders = ({ Messages }) => {
           if (a.patient && a.patient.contacts && mobilePhone(a.patient.contacts)) {
             return true
           } else {
-            debug(a, 'no contacts', a, a.patient, a.patient.contacts)
+            debug(a, 'no contacts', a, a.patient, a.patient && a.patient.contacts)
             return false
           }
         })
