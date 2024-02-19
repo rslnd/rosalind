@@ -31,7 +31,7 @@ export const findUpcomingAppointments = (cutoffDate) => {
   // back-to-back appointments for the same patient
   const start = {
     $gt: cutoffDate.clone().startOf('day').toDate(),
-    $lt: cutoffDate.endOf('day').toDate()
+    $lt: cutoffDate.clone().endOf('day').toDate()
   }
 
   const selector = {
@@ -122,18 +122,36 @@ export const createReminders = ({ Messages }) => {
 
         const { calculateReminderDate, calculateFutureCutoff } = reminderDateCalculator({
           holidays,
-          days: (calendar.smsDaysBefore || 2)
+          days: 1 // minimum cutoff here
         })
 
         const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
+        console.log('reminders cutoff date', cutoffDate)
         const appointments = findUpcomingAppointments(cutoffDate)
+
+        console.log('reminders cutoff date', cutoffDate, appointments[0].start, appointments[appointments.length - 1].start)
+
+        console.log('DEBUG', appointments.length, appointments.find(a=> (a._id === 'XuTkK7dTBLNgG7Fvn')))
+
+        const debug = (a, ...msg) => {
+          // if ((a.appointmentCreatedAt || a.createdAt)
+            //  && moment().subtract(1, 'minute').isBefore(a.appointmentCreatedAt || a.createdAt)) {
+            console.log('DEBUG SMS: ', ...msg)
+          // }
+        }
+
+
         const appointmentsWithMobile = appointments.filter((a) => {
           if (a.patient && a.patient.noSMS) {
+            debug(a, 'patient.noSms')
             return false
           }
 
-          if (a.patient && a.patient.contacts) {
-            return !!mobilePhone(a.patient.contacts)
+          if (a.patient && a.patient.contacts && mobilePhone(a.patient.contacts)) {
+            return true
+          } else {
+            debug(a, 'no contacts', a, a.patient, a.patient.contacts)
+            return false
           }
         })
         const uniqueAppointmentsWithMobile = uniqBy(appointmentsWithMobile, (a) => (
@@ -152,23 +170,47 @@ export const createReminders = ({ Messages }) => {
             lastName: a.patient.lastName,
             prefix: a.patient.prefix,
             gender: a.patient.gender,
-            contacts: a.patient.contacts
+            contacts: a.patient.contacts,
+            appointmentCreatedAt: a.createdAt
           }
         })
+
+        console.log('apptsWMobile', appointmentsWithMobile.length)
 
         const messages = messagePayloads.map((payload) => {
           const calendar = Calendars.findOne({ _id: payload.calendarId })
           if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
+            debug(payload, 'no calendar or smsAppointmentReminder: false')
             return false
           }
 
           const tags = Tags.methods.expand(payload.tags)
-          if (tags.some(t => t.noSmsAppointmentReminder)) {
-            return false
+
+          if (payload.assignee === 'y8JK7n9D4W8HvMpMu') {
+            console.log(hasRole(payload.assigneeId, ['forceSmsAppointmentReminder']),
+              payload)
+
           }
 
-          if (payload.assigneeId && hasRole(payload.assigneeId, ['noSmsAppointmentReminder'])) {
-            return false
+          const forceSMS = payload.assigneeId
+            ? hasRole(payload.assigneeId, ['forceSmsAppointmentReminder'])
+            : false
+
+
+          if (forceSMS) {
+            debug(payload, 'forceSMS', forceSMS)
+          }
+
+          if (true) {
+            if (tags.some(t => t.noSmsAppointmentReminder)) {
+              debug(payload, 'some tags noSmsAppointmentReminder')
+              return false
+            }
+
+            if (payload.assigneeId && hasRole(payload.assigneeId, ['noSmsAppointmentReminder'])) {
+              debug(payload, 'assignee noSmsAppointmentReminder')
+              return false
+            }
           }
 
 
@@ -181,7 +223,7 @@ export const createReminders = ({ Messages }) => {
           if (payload.gender === 'Male' && calendar && calendar.smsAppointmentReminderTextMale && calendar.smsAppointmentReminderTextMale.length > 10) {
             text = calendar.smsAppointmentReminderTextMale
           }
-                  
+
 
           // uro11 special: different text if appt is within first hour of day
           if (process.env.CUSTOMER_PREFIX === 'uro11' && Settings.get('messages.sms.appointmentReminder.textFirstHour')) {
@@ -207,7 +249,26 @@ export const createReminders = ({ Messages }) => {
             }
           }
 
+          // vasektomie ohne voller blase
+          if (process.env.CUSTOMER_PREFIX === 'uro11') {
+            const vasec = tags.find(t => t.tag === 'Vasektomie')
+            if (vasec && Settings.get('messages.sms.appointmentReminder.textVasectomy')) {
+              text = Settings.get('messages.sms.appointmentReminder.textVasectomy')
+            }
+          }
+
+
+          // hzw special: different text + time if assignee is telemed
+          if (process.env.CUSTOMER_PREFIX === 'hzw' && Settings.get('messages.sms.appointmentReminder.textTelemedizinSpalte')) {
+            if (payload.assigneeId && hasRole(payload.assigneeId, ['telemedicine-provider'])) {
+              text = Settings.get('messages.sms.appointmentReminder.textTelemedizinSpalte')
+              calendar.smsDaysBefore = 1 // send 24h before appt
+              debug(payload, 'set text to: ' + text)
+            }
+          }
+
           if (!text) {
+            debug(payload, 'no text')
             return false
           }
 
@@ -222,12 +283,14 @@ export const createReminders = ({ Messages }) => {
               date: payload.start
             }),
             invalidBefore: moment(payload.start).subtract(3, 'weeks').toDate(),
-            invalidAfter: moment(payload.start).startOf('day').subtract(12, 'hours').toDate(),
+            invalidAfter: moment(payload.start).subtract(4, 'hours').toDate(),
             appointmentId: payload.appointmentId,
             patientId: payload.patientId,
             payload
           }
         }).filter(identity)
+
+        console.log('upserting messages: ' + messages.length)
 
         messages.map((message) => {
           const existingMessage = Messages.findOne({
@@ -236,9 +299,10 @@ export const createReminders = ({ Messages }) => {
           })
 
           if (existingMessage) {
-            if (!isSameMessage(existingMessage, message)) {
-              Messages.update({ appointmentId: message.appointmentId }, { $set: message })
-            }
+            // noop
+            // if (!isSameMessage(existingMessage, message)) {
+            //   Messages.update({ _id: existingMessage }, { $set: message })
+            // }
           } else {
             Messages.insert({
               ...message,
