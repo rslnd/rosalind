@@ -7,6 +7,7 @@ import { daySelector } from '../../../util/time/day'
 import chunk from 'lodash/chunk'
 import { __ } from '../../../i18n'
 import { fullNameWithTitle, lastNameWithTitle } from '../../../api/users/methods'
+import quarter from '../../../util/time/quarter'
 
 const formatDay = (s) =>
   moment.tz(s, 'Europe/Vienna').format('dd., D.M.')
@@ -50,8 +51,8 @@ export const getBookables = () => {
       isReserve: isReserve(a),
       calendarId: a.calendarId,
       assigneeId: a.assigneeId,
-      assigneeName: fullNameWithTitle(assignees[a.assigneeId]),
-      assigneeNameShort: lastNameWithTitle(assignees[a.assigneeId])
+      assigneeName: assignees[a.assigneeId] ? fullNameWithTitle(assignees[a.assigneeId]) : 'ÄrztIn',
+      assigneeNameShort: assignees[a.assigneeId] ? lastNameWithTitle(assignees[a.assigneeId]) : 'ÄrztIn'
     }
 
     const prevA = (i >= 1) && (appointments[i - 1])
@@ -197,28 +198,60 @@ export const handleAppointmentBooking = (untrustedBody) => {
     if (!existingBookable) {
       throw new Error(`bookable ${bookableId} not found`)
     }
-    
+
+    const { _id, type, note, ...bookable } = existingBookable
+
+    if (patientId) {
+      // 2024-02-29: Max 2 bookings per quarter for same patient (any calendar or assingee)
+      const allFutureAppts = Appointments.find({
+        patientId,
+        start: { $gte: new Date() },
+        canceled: { $ne: true }
+      }).fetch()
+
+      const apptsInSameQuarter = allFutureAppts.filter(a => quarter.isSame(a.start, bookable.start))
+
+      if (patientId && apptsInSameQuarter.length >= 2) {
+        throw new Error(`sameQuarterSamePat2Appts: prevented patient from booking more than 3 appts in same quarter, patient ${patientId}`)
+      }
+
+
+      // 2024-02-29: Disallow when two or more no shows in past 2 years
+      const pastNoShows = Appointments.find({
+        patientId,
+        start: {
+          $lte: new Date(),
+          $gte: moment().subtract(2, 'years').toDate()
+        },
+        canceled: { $ne: true },
+        admitted: { $ne: true }
+      }).fetch()
+
+      if (pastNoShows.length >= 2) {
+        throw new Error(`twoOrMoreNoShows: prevented patient from booking because of ${pastNoShows.length} no-shows in past 2 years, patient ${patientId}`)
+      }
+
+
+      // Prevent patient from booking multiple appts on same day (any calendar or assingee)
+      const sameDaySamePatAppt = Appointments.findOne({
+        patientId,
+        start: {
+          $gte: moment(bookable.start).startOf('day').toDate(),
+          $lte: moment(bookable.start).endOf('day').toDate()
+        },
+        canceled: { $ne: true }
+      })
+
+      if (sameDaySamePatAppt) {
+        throw new Error(`sameDaySamePatAppt: prevented patient from booking multiple appts on same day, patient ${patientId}`)
+      }
+    }
+
     Appointments.update(bookableSelector, { $set: {
       removed: true,
       removedAt: new Date(),
       note: 'Durch Online-Buchung vom System gelöscht' + ' \n' + (existingBookable.note || '')
     }})
-
-    const { _id, type, note, ...bookable } = existingBookable
-
-    // Prevent patient from booking multiple appts on same day
-    const sameDaySamePatAppt = Appointments.findOne({ 
-      patientId,
-      start: {
-        $gte: moment(bookable.start).startOf('day').toDate(),
-        $lte: moment(bookable.start).endOf('day').toDate()
-      },
-      canceled: { $ne: true }
-    })
-
-    if (patientId && sameDaySamePatAppt) {
-      throw new Error(`sameDaySamePatAppt: prevented patient from booking multiple appts on same day, patient ${patientId}`)
-    }
 
     const appointmentId = Appointments.insert({
       ...bookable,
