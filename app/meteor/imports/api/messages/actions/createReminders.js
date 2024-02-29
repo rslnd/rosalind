@@ -60,6 +60,7 @@ export const findUpcomingAppointments = (cutoffDate) => {
     const assignee = appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId })
 
     let result = {
+      ...appointment,
       _id: appointment._id,
       assigneeId: assignee && appointment.assigneeId,
       start: appointment.start,
@@ -127,17 +128,17 @@ export const createReminders = ({ Messages }) => {
         })
 
         const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
-        console.log('reminders cutoff date', cutoffDate)
+        // console.log('reminders cutoff date', cutoffDate)
         const appointments = findUpcomingAppointments(cutoffDate)
 
-        console.log('reminders cutoff date', cutoffDate, appointments[0] && appointments[0].start, appointments[0] && appointments[appointments.length - 1].start)
+        // console.log('reminders cutoff date', cutoffDate, appointments[0] && appointments[0].start, appointments[0] && appointments[appointments.length - 1].start)
 
-        console.log('DEBUG', appointments.length, appointments.find(a=> (a._id === 'XuTkK7dTBLNgG7Fvn')))
+        // console.log('DEBUG appts length', appointments.length, appointments.find(a=> (a._id === 'XuTkK7dTBLNgG7Fvn')))
 
         const debug = (a, ...msg) => {
           // if ((a.appointmentCreatedAt || a.createdAt)
-            //  && moment().subtract(1, 'minute').isBefore(a.appointmentCreatedAt || a.createdAt)) {
-            console.log('DEBUG SMS: ', ...msg)
+          //    && moment().startOf('day').isBefore(a.appointmentCreatedAt || a.createdAt)) {
+          //   console.log('DEBUG SMS: ', ...msg)
           // }
         }
 
@@ -176,7 +177,7 @@ export const createReminders = ({ Messages }) => {
           }
         })
 
-        console.log('apptsWMobile', appointmentsWithMobile.length)
+        // console.log('apptsWMobile', appointmentsWithMobile.length)
 
         const messages = messagePayloads.map((payload) => {
           const calendar = Calendars.findOne({ _id: payload.calendarId })
@@ -193,16 +194,15 @@ export const createReminders = ({ Messages }) => {
 
           }
 
-          const forceSMS = payload.assigneeId
+          let forceSMS = payload.assigneeId
             ? hasRole(payload.assigneeId, ['forceSmsAppointmentReminder'])
             : false
-
 
           if (forceSMS) {
             debug(payload, 'forceSMS', forceSMS)
           }
 
-          if (true) {
+          if (!forceSMS) {
             if (tags.some(t => t.noSmsAppointmentReminder)) {
               debug(payload, 'some tags noSmsAppointmentReminder')
               return false
@@ -260,9 +260,9 @@ export const createReminders = ({ Messages }) => {
 
 
           // hzw special: different text + time if assignee is telemed
-          if (process.env.CUSTOMER_PREFIX === 'hzw' && Settings.get('messages.sms.appointmentReminder.textTelemedizinSpalte')) {
+          if (Settings.get('messages.sms.appointmentReminder.telemedicineText')) {
             if (payload.assigneeId && hasRole(payload.assigneeId, ['telemedicine-provider'])) {
-              text = Settings.get('messages.sms.appointmentReminder.textTelemedizinSpalte')
+              text = Settings.get('messages.sms.appointmentReminder.telemedicineText')
               calendar.smsDaysBefore = 1 // send 24h before appt
               debug(payload, 'set text to: ' + text)
             }
