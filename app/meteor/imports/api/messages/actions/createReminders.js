@@ -130,7 +130,7 @@ export const createReminders = ({ Messages }) => {
         console.log('reminders cutoff date', cutoffDate)
         const appointments = findUpcomingAppointments(cutoffDate)
 
-        console.log('reminders cutoff date', cutoffDate, appointments[0].start, appointments[appointments.length - 1].start)
+        console.log('reminders cutoff date', cutoffDate, appointments[0] && appointments[0].start, appointments[0] && appointments[appointments.length - 1].start)
 
         console.log('DEBUG', appointments.length, appointments.find(a=> (a._id === 'XuTkK7dTBLNgG7Fvn')))
 
