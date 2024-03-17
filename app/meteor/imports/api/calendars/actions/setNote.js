@@ -11,7 +11,7 @@ export const setNote = ({ Calendars }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       calendarId: { type: SimpleSchema.RegEx.Id },
-      newNote: { type: String }
+      newNote: { type: String, optional: true }
     }).validator(),
 
     run ({ calendarId, newNote }) {
