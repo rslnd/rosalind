@@ -48,6 +48,22 @@ export const Tags = compose(
 
     const allowedTags = Appointments.methods.getAllowedTags({ time: start, assigneeId, calendarId })
 
+    if (!assigneeId) {
+      return {
+        possibleTags: (getConstrainedTags({
+          assigneeId,
+          allowedTags,
+          maxDuration,
+          calendarId,
+          assigneeId,
+          time: start,
+          // constraint: constraints[0] // commented out intentionally, apply no constraints for unassigned
+        }) || []),
+        tags,
+        maxDuration
+      }
+    }
+
     return {
       possibleTags: getConstrainedTags({
         assigneeId,
