@@ -20,7 +20,7 @@ describe('patients', function () {
 
       it('parses first name', function () {
         expect(parseQuery('_ Ilse')).to.eql({
-          'firstNameNormalized': { $regex: '^Ilse', $options: 'i' }
+          'firstNameNormalized': { $regex: '^ILSE', $options: 'i' }
         })
       })
 
