@@ -158,7 +158,6 @@ export const handleAppointmentBooking = (untrustedBody) => {
   const birthdaySelector = birthday ? daySelector(birthday, 'birthday') : {}
   const patientSelector = {
     insuranceId,
-    firstName,
     lastNameNormalized: normalizeName(lastName),
     ...birthdaySelector
   }

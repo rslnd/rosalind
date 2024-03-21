@@ -83,6 +83,10 @@ export const upsert = ({ Patients }) =>
           patient.lastNameNormalized = normalizeName(patient.lastName)
         }
 
+        if (patient.firstName) {
+          patient.firstNameNormalized = normalizeName(patient.firstName)
+        }
+
         // TODO: Split into separate method
         let existingPatient = null
 

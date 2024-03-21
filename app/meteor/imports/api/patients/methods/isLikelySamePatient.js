@@ -5,7 +5,7 @@ export const isLikelySamePatient = (a, b) => (
   a && b &&
   a._id !== b._id &&
   (a.gender === b.gender) &&
-  (a.firstName === b.firstName) &&
+  (a.firstNameNormalized === b.firstNameNormalized) &&
   (a.lastNameNormalized === b.lastNameNormalized) &&
   ((a.birthday && b.birthday) ? isSame(a.birthday, b.birthday) : true) &&
   ((a.insuranceId && b.insuranceId) ? (a.insuranceId === b.insuranceId) : true) &&

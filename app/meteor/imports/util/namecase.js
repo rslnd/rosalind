@@ -1,16 +1,16 @@
 import { pseudonyms } from './pseudonyms'
-import startCase from 'lodash/startCase'
+import { startCase } from '../util/fuzzy/startCase'
 
 const checkName = a =>
   a === a.toUpperCase() || a === a.toLowerCase()
 
 export const namecase = (a = '') => {
-  if (window.pseudonymize) {
+  if (typeof window !== 'undefined' && window.pseudonymize) {
     return pseudonym(a)
   }
 
-  if (checkName(a)) {
-    return startCase(a.toLowerCase()) // apparently needed
+  if (checkName(a) && a.length >= 2) {
+    return startCase(a)
   } else {
     return a
   }

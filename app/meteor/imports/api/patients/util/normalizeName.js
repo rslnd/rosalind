@@ -1,7 +1,11 @@
+import slugify from 'slugify'
+
 export const normalizeName = (name) => {
-  return name
-    .toUpperCase()
-    .replace(/[^A-Za-z]/g, '')
-    .replace(/[äüöÄÜÖ]/g, '')
-    .replace(/-/g, '')
+  if (typeof name !== 'string') {
+    return ''
+  }
+
+  return slugify(name, {
+    locale: 'de'
+  }).toUpperCase()
 }

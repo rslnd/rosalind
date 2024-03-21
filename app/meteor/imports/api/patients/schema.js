@@ -124,6 +124,12 @@ export default new SimpleSchema({
     index: 1
   },
 
+  firstNameNormalized: {
+    type: String,
+    optional: true,
+    index: 1,
+  },
+
   titlePrepend: {
     type: String,
     optional: true

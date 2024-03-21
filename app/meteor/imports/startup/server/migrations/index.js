@@ -17,6 +17,7 @@ import './14-fixAppointmentsComments'
 import './15-canceledBySMS'
 import './16-messagePatientAppointmentIds'
 import './17-messageCalendarId'
+import './18-normalizeName'
 
 export default () => {
   Meteor.startup(() => {

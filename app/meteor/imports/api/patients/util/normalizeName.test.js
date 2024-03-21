@@ -9,20 +9,24 @@ describe('util', function () {
     })
 
     it('removes space', function () {
-      expect(normalizeName('rotter rotter')).to.eql('ROTTERROTTER')
+      expect(normalizeName('rotter rotter')).to.eql('ROTTER-ROTTER')
     })
 
     it('removes other characters', function () {
-      expect(normalizeName('rotter-rotter')).to.eql('ROTTERROTTER')
-      expect(normalizeName('rotter- -rotter')).to.eql('ROTTERROTTER')
+      expect(normalizeName('rotter-rotter')).to.eql('ROTTER-ROTTER')
+      expect(normalizeName('rotter- -rotter')).to.eql('ROTTER-ROTTER')
     })
 
     it('removes umlauts', function () {
-      expect(normalizeName('rötter')).to.eql('RTTER')
+      expect(normalizeName('rötter')).to.eql('ROETTER')
     })
 
     it('removes umlauts', function () {
-      expect(normalizeName('mayrhofer-ilhan-ümüht')).to.eql('MAYRHOFERILHANMHT')
+      expect(normalizeName('mayrhofer-ilhan-ümüht')).to.eql('MAYRHOFER-ILHAN-UEMUEHT')
+    })
+
+    it('transliterate diacritics', function () {
+      expect(normalizeName('Rádríguez')).to.eql('RADRIGUEZ')
     })
   })
 })

@@ -6,8 +6,8 @@ const parseFirstName = (query) => {
   if (query && query.trim()) {
     return {
       result: {
-        firstName: {
-          $regex: '^' + query.trim(),
+        firstNameNormalized: {
+          $regex: '^' + normalizeName(query),
           $options: 'i'
         }
       }
@@ -93,7 +93,7 @@ export const parseExactName = (query, forceNgramMatching) => {
         })),
         // Try to match all tokens as first name too
         ...names.map(n => ({
-          firstName: {
+          firstNameNormalized: {
             $regex: '^' + n,
             $options: 'i'
           }
