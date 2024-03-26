@@ -17,7 +17,7 @@ const parseFirstName = (query) => {
   }
 }
 
-export const parseExactName = (query, forceNgramMatching) => {
+export const parseExactName = (query, forcePartialMatching) => {
   if (query && query[0] === '_') {
     return parseFirstName(query.substr(1))
   }
@@ -40,10 +40,11 @@ export const parseExactName = (query, forceNgramMatching) => {
   if (names && names.length === 1) {
     const normalized = normalizeName(names[0])
     if (normalized) {
+      // console.log('XXX exact match of one last name', normalized)
       let result = {}
       // Force exact match for short queries to avoid unnecessary fetching
       // was <= 4 - maybe < 3 is too aggressive? watch db perf
-      if (!forceNgramMatching && normalized.length < 3) {
+      if (!forcePartialMatching && normalized.length < 3) {
         result = {
           'lastNameNormalized': normalized
         }

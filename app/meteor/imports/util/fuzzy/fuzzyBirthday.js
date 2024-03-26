@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import { zerofix } from '../zerofix'
 
-export const pattern = /(\d\d?)[ .\-/\\,]*((\d\d?)|([a-zA-Z]+))[ .\-/\\,]*(\d\d\d?\d?)?(\s.*)?/
+export const pattern = /(\d\d?)[ .\-/\\,]*((\d\d?)|([a-zA-Z]+))[ .\-/\\,]*(\d\d\d?\d?)?/
 
 export const fuzzyBirthday = (query) => {
   const zerofixed = zerofix(query, { dontSplit: true })

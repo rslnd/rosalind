@@ -15,19 +15,25 @@ export const parseQuery = (query, forceNgramMatching) => {
     parsed = { ...parsed, ...birthday.result }
   }
 
+  // console.log('XXX', 'remaining query after parsing birthday', birthday.remainingQuery)
+
   if (birthday.remainingQuery && birthday.remainingQuery.length > 0) {
     const contact = parseContact(birthday.remainingQuery)
     if (contact && contact.result) {
       parsed = { ...parsed, ...contact.result }
     }
-  }
 
-  if (birthday.remainingQuery && birthday.remainingQuery.length > 0) {
-    const name = parseExactName(birthday.remainingQuery, forceNgramMatching)
-    if (name && name.result) {
-      parsed = { ...parsed, ...name.result }
+    // console.log('XXX', 'remaining query after parsing contacts', contact.remainingQuery)
+
+    if (contact.remainingQuery && contact.remainingQuery.length > 0) {
+      const name = parseExactName(contact.remainingQuery, (forceNgramMatching || birthday.result))
+      if (name && name.result) {
+        parsed = { ...parsed, ...name.result }
+      }
     }
   }
+
+  // console.log('XXXY parsed', parsed)
 
   if (Object.keys(parsed).length > 0) {
     return parsed
