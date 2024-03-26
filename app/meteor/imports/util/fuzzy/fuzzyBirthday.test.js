@@ -48,7 +48,7 @@ describe('util', function () {
       })
 
       it('returns result', function () {
-        expect(fuzzyBirthday('12.06.1994 hello hello')).to.eql({ ...parsed, note: 'hello hello' })
+        expect(fuzzyBirthday('12.06.1994 hello hello')).to.eql(parsed)
         expect(fuzzyBirthday('unicorn walrus 12.06.1994')).to.eql(parsed)
       })
 

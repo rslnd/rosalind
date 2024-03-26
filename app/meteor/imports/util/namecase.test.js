@@ -14,6 +14,6 @@ describe('util/namecase', () => {
     expect(namecase('U')).to.equal('U')
     expect(namecase('A de So')).to.equal('A de So')
     expect(namecase('Ól')).to.equal('Ól')
-    // expect(namecase('GROS-BAUER')).to.equal('Gros-Bauer') // name casing is hopeless: https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+    expect(namecase('GROS-BAUER')).to.equal('Gros-Bauer') // name casing is hopeless: https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
   })
 })

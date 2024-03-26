@@ -37,13 +37,14 @@ export const fuzzyDayMonthYear = (query) => {
     }
   })()
 
-  const note = match && match[match.length - 1]
+  // this probably was never used and collided with <birthday lastname> search order
+  // const note = match && match[match.length - 1]
 
-  if (note && note.trim()) {
-    return { ...dmy, note: note.trim() }
-  } else {
+  // if (note && note.trim()) {
+  //   return { ...dmy, note: note.trim() }
+  // } else {
     return dmy
-  }
+  // }
 }
 
 export const fuzzyMonth = (month) => {

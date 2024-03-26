@@ -29,7 +29,9 @@ export const parseContact = (query) => {
     { insuranceId }
   ].filter(identity)
 
-  if (queries && queries.length >= 1) {
+  if (queries && queries.length === 1) {
+    return { result: queries[0], remainingQuery }
+  } else if (queries && queries.length >= 1) {
     const selector = {
       $or: queries
     }
