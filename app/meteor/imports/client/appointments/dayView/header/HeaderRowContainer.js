@@ -27,11 +27,12 @@ const composer = (props) => {
     })
   }
 
-  const onChangeNote = ({ ...fields }) => {
+  const onChangeNote = (fields) => {
     Schedules.actions.setNote.callPromise({
-      calendarId,
-      day,
-      ...fields
+      calendarId: fields.calendarId || calendarId,
+      day: fields.day || day,
+      note: fields.note,
+      noteDetails: fields.noteDetails
     }).catch(err => {
       Alert.error(__('ui.error'))
       console.error(err)

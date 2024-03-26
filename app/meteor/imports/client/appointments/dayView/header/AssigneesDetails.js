@@ -71,26 +71,28 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, expande
       {
         expanded && canEditSchedules && <div>
           <InlineEdit
+            key={'note' + (daySchedule && daySchedule._id)}
             value={(daySchedule && daySchedule.note) || ''}
             placeholder='Info'
             rows={3}
             rowsMax={10}
             submitOnBlur
             submitOnMouseLeave
-            onChange={note => onChangeNote({ note })}
+            onChange={note => onChangeNote({ ...(daySchedule || {}), note })}
           ><BreakLines placeholder='Info'>{daySchedule && daySchedule.note}</BreakLines></InlineEdit>
 
           <br />
           <br />
 
           <InlineEdit
+            key={'noteDetails' + (daySchedule && daySchedule._id)}
             value={(daySchedule && daySchedule.noteDetails) || ''}
             placeholder='Details'
             rows={3}
             rowsMax={10}
             submitOnBlur
             submitOnMouseLeave
-            onChange={noteDetails => onChangeNote({ noteDetails })}
+            onChange={noteDetails => onChangeNote({ ...(daySchedule || {}), noteDetails })}
           ><BreakLines placeholder='Details'>{daySchedule && daySchedule.noteDetails}</BreakLines></InlineEdit>
         </div>
       }

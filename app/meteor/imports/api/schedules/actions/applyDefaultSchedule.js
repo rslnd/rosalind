@@ -88,11 +88,15 @@ export const applyDefaultSchedule = ({ Schedules }) => {
             })
         })
       } else {
-        // When applying to all assignees, remove all day schedules
-        const countRemovedDays = Schedules.remove({
+        // When applying to all assignees, DO NOT remove all day schedules (would lose day note + noteDetails) but just clear users
+        const countRemovedDays = Schedules.update({
           type: 'day',
           calendarId,
           $or: days.map(d => daySelector(d)) // force 1-arity to prevent map index from being set as prefix
+        }, {
+          $set: {
+            userIds: []
+          }
         })
         console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedDays, 'day schedules')
       }
@@ -136,9 +140,23 @@ export const applyDefaultSchedule = ({ Schedules }) => {
           }
         })
       } else {
-        console.log('[Schedules] applyDefaultSchedule: inserting all day schedules')
+        console.log('[Schedules] applyDefaultSchedule: re-adding assignees to all day schedules or upserting')
         overrideSchedules.filter(os => os.type === 'day').map(ds => {
-          Schedules.insert(ds)
+          const existingDay = Schedules.findOne({
+            type: 'day',
+            calendarId,
+            ...daySelector(ds.day)
+          })
+
+          if (existingDay) {
+            Schedules.update({ _id: existingDay._id }, {
+              $set: {
+                userIds: ds.userIds
+              }
+            })
+          } else {
+            Schedules.insert(ds)
+          }
         })
       }
 
