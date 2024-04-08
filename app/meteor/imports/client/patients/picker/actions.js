@@ -62,17 +62,21 @@ export const changeInputValue = (inputValue, fieldAction = 'input-change', ownPr
       if (shouldRefetch) {
         Search.actions.patientsWithAppointments
           .callPromise({ query: inputValue })
-          .then(patients => {
-            dispatch({
-              type: PATIENTS_RESULTS_LOADED,
-              patients: (patients || []).map(p => ({
-                ...p,
-                appointments: (p.appointments || []).map(a => ({
-                  ...a,
-                  calendar: Calendars.findOne({ _id: a.calendarId })
+          .then(({ query, patients }) => {
+            const currentInputValue = getState().patientPicker.inputValue // inputValue is bound to old immutable at time of outer closure construction
+
+            if (query === currentInputValue) { // avoid slower responses to previous searches overwriting newer results
+              dispatch({
+                type: PATIENTS_RESULTS_LOADED,
+                patients: (patients || []).map(p => ({
+                  ...p,
+                  appointments: (p.appointments || []).map(a => ({
+                    ...a,
+                    calendar: Calendars.findOne({ _id: a.calendarId })
+                  }))
                 }))
-              }))
-            })
+              })
+            }
           })
       }
     }

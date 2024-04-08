@@ -48,15 +48,18 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
             fields: Patients.fields.search
           }).fetch()
 
-          return patients.map((patient) => {
-            return {
-              ...patient,
-              appointments: Appointments.find({ patientId: patient._id }, {
-                sort: { start: -1 },
-                limit: 3
-              }).fetch()
-            }
-          })
+          return {
+            query, // repeat to client for ignoring slower reordered responses while typing
+            patients: patients.map((patient) => {
+              return {
+                ...patient,
+                appointments: Appointments.find({ patientId: patient._id }, {
+                  sort: { start: -1 },
+                  limit: 3
+                }).fetch()
+              }
+            })
+          }
         }
       } catch (e) {
         console.error('[Search] patientsWithAppointments failed')
