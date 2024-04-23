@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "next dev -H 0.0.0.0 -p 3030",
-    "build": "next build && next export && rm -rf ../meteor/public/portal-assets && cp -r out ../meteor/public/portal-assets && cp ../meteor/public/portal-assets/*.html ../meteor/private/",
+    "build": "NODE_ENV=production next build && rm -rf ../meteor/public/portal-assets && cp -r out ../meteor/public/portal-assets && cp ../meteor/public/portal-assets/*.html ../meteor/private/",
     "prod": "next start -p 3030"
   },
   "dependencies": {
