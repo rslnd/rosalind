@@ -18,33 +18,37 @@ const MediaPage = ({ token }) => {
   const [retry, setRetry] = useState(true)
   const [media, setMedia] = useState([])
 
-  useEffect(async () => {
-    try {
-      setError(null)
-      setLoading(true)
-      const body = JSON.stringify({
-        token
-      })
-      const req = await fetch((apiBaseUrl || '') + '/portal/media',
-        {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'content-length': body.length
-          },
-          body: body
+  useEffect(() => {
+    async function load () {
+      try {
+        setError(null)
+        setLoading(true)
+        const body = JSON.stringify({
+          token
         })
-      const res = await req.json()
-      setLoading(false)
-      if (res.error) {
-        setError(res.error)
-      } else {
-        setMedia(res)
+        const req = await fetch((apiBaseUrl || '') + '/portal/media',
+          {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'content-length': body.length
+            },
+            body: body
+          })
+        const res = await req.json()
+        setLoading(false)
+        if (res.error) {
+          setError(res.error)
+        } else {
+          setMedia(res)
+        }
+      } catch (e) {
+        setLoading(false)
+        setError(e)
       }
-    } catch (e) {
-      setLoading(false)
-      setError(e)
     }
+
+    load()
   }, [token, retry])
 
   const saveAsFile = ({ filename, b64, mediaType }) => {

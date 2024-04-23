@@ -4,7 +4,7 @@ import { formatDate } from '../../../api/messages/methods/buildMessageText'
 import { normalizeName } from '../../../api/patients/util/normalizeName'
 import { fuzzyBirthday } from '../../../util/fuzzy/fuzzyBirthday'
 import { daySelector } from '../../../util/time/day'
-import chunk from 'lodash/chunk'
+import sortBy from 'lodash/sortBy'
 import { __ } from '../../../i18n'
 import { fullNameWithTitle, lastNameWithTitle } from '../../../api/users/methods'
 import quarter from '../../../util/time/quarter'
@@ -18,6 +18,22 @@ const formatTime = (s) =>
 const isReserve = ({ start }) =>
   (!!['10', '20', '40', '50'].find(m => formatTime(start).endsWith(m)))
 
+const bookableTags = ({ start, assigneeId }) => {
+  const assistanceId = "b6rEBPraMYgwmLADT"
+  if ( assistanceId === assigneeId ) {
+    return [
+      'rR6oXAKdQBSppY4u3',
+      'cDTyHnYJzYuiyzXfq',
+      'cm27Abehxg6NCiisc',
+      '7ywG7Njg3B2sgkaK5',
+      'XorzhDvyEPqFuNKwk'
+    ]
+  } else {
+    return [
+      'eEgBDJuPxNFsFfAfK'
+    ]
+  }
+}
 
 export const getBookables = () => {
   const selector = {
@@ -42,55 +58,26 @@ export const getBookables = () => {
 
   const assignees = Users.find({}).fetch().reduce((acc, u) => ({ ...acc, [u._id]: u}))
 
-  // group by days
-  const bookables = appointments.reduce((acc, a, i) => {
+
+  const bookables = appointments.map((a) => {
     const formattedTime = formatTime(a.start)
-    const time = {
+    const b = {
       _id: a._id,
+      day: formatDay(a.start),
       time: formattedTime,
       isReserve: isReserve(a),
+      tags: bookableTags(a),
+      start: a.start,
       calendarId: a.calendarId,
       assigneeId: a.assigneeId,
       assigneeName: assignees[a.assigneeId] ? fullNameWithTitle(assignees[a.assigneeId]) : 'ÄrztIn',
       assigneeNameShort: assignees[a.assigneeId] ? lastNameWithTitle(assignees[a.assigneeId]) : 'ÄrztIn'
     }
 
-    const prevA = (i >= 1) && (appointments[i - 1])
-
-    // same day
-    if (prevA && formatDay(prevA.start) === formatDay(a.start)) {
-      const butlast = acc.slice(0, acc.length - 1)
-      const lastDay = acc[acc.length - 1]
-      return [
-        ...butlast,
-        {
-          ...lastDay,
-          times: [...lastDay.times, time]
-        }
-      ]
-    // new day (or first day)
-    } else {
-      return [
-        ...acc,
-        {
-          'day': formatDay(a.start),
-          times: [time]
-        }
-      ]
-    }
-  }, [])
-
-  const filteredBookables = bookables.map(day => {
-    const maxCount = 10
-    if (day.times.length > maxCount) {
-      return { ...day, times: chunk(day.times, day.times.length / maxCount).map(c => c[0]) }
-    } else {
-      return day
-    }
+    return b
   })
 
-
-  return filteredBookables
+  return bookables
 }
 
 const string = (x) => {
@@ -128,8 +115,8 @@ const bool = (x) => {
 }
 
 export const handleAppointmentBooking = (untrustedBody) => {
-  const tag = 'portal/handleAppointmentBooking'
-  console.log(tag, untrustedBody)
+  const ltag = 'portal/handleAppointmentBooking'
+  console.log(ltag, untrustedBody)
 
   if (!bool(untrustedBody.privacy)) {
     throw new Error('Privacy is requires')
@@ -143,6 +130,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
   const birthdayString = requiredString(untrustedBody.birthday)
   const telephone = requiredString(untrustedBody.telephone)
   const wantsAppointment = bool(untrustedBody.appointment)
+  const tag = optionalString(untrustedBody.tag)
   const bookableId = optionalString(untrustedBody.bookableId)
 
   if (insuranceId.length !== 10) {
@@ -163,17 +151,17 @@ export const handleAppointmentBooking = (untrustedBody) => {
   }
 
   const patients = Patients.find(patientSelector).fetch()
-  console.log(tag, 'patientSelector', patientSelector)
+  console.log(ltag, 'patientSelector', patientSelector)
   let patientId = null
   if (patients.length >= 2) {
-    console.error(tag, `warning: matched ${patients.length} patients with selector`, patientSelector)
+    console.error(ltag, `warning: matched ${patients.length} patients with selector`, patientSelector)
   }
 
   if (patients.length === 1) {
     patientId = patients[0]._id
-    console.log(tag, 'matched one existing patient', patientId)
+    console.log(ltag, 'matched one existing patient', patientId)
   } else {
-    console.log(tag, `matched ${patients.length} patients, creating new patient`, patientId)
+    console.log(ltag, `matched ${patients.length} patients, creating new patient`, patientId)
     patientId = Patients.insert({
       titlePrepend,
       lastName,
@@ -254,13 +242,14 @@ export const handleAppointmentBooking = (untrustedBody) => {
 
     const appointmentId = Appointments.insert({
       ...bookable,
+      tags: [tag],
       createdViaPortal: true,
       createdAt: new Date(),
       createdBy: null,
       patientId
     })
 
-    console.log(tag, `created appointment ${appointmentId}`)
+    console.log(ltag, `created appointment ${appointmentId}`)
 
     return {
       ok: 1,
@@ -298,7 +287,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
 
     const inbouncallId = InboundCalls.insert(call)
 
-    console.log(tag, `created inboundCall ${inbouncallId}`)
+    console.log(ltag, `created inboundCall ${inbouncallId}`)
     return { ok: 1 }
   }
 }

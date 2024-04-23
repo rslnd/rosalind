@@ -12,13 +12,12 @@ const Root = ({ children }) => {
       </p>
       <p>
         Folgende Termine können NICHT online vergeben werden, sondern nur telefonisch:
-        <ul>
-          <li>Blasenspiegelung (Cystoskopie)</li>
-          <li>Strahltest (Uroflow)</li>
-          <li>Befundbesprechung</li>
-          <li>Privattermin (z.B. Vasektomiegespräch)</li>
-        </ul>
       </p>
+      <ul>
+        <li>Blasenspiegelung (Cystoskopie)</li>
+        <li>Befundbesprechung</li>
+        <li>Privattermin (z.B. Vasektomiegespräch)</li>
+      </ul>
     </>}
     disclaimer='Wir bitten Sie höflichst, im Falle einer Verhinderung Ihren Termin rechtzeitig (mind. 24 Stunden vorher) abzusagen oder zu verschieben. Wir bitten um Ihr Verständnis, dass nicht rechtzeitig abgesagte Termine in Rechnung gestellt werden können.'
     greeting='Dr. Nike Morakis & Team'

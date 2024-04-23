@@ -2,53 +2,32 @@ import { useState, useEffect } from 'react'
 import { Formik, Form } from 'formik'
 import { Section, ErrorBoundary, Checkbox, Input, Required, CleaveInput, Radio, Select, errorMessage } from './components'
 import { apiBaseUrl } from './apiBaseUrl'
+import chunk from 'lodash/chunk'
 
 export const ContactForm = (props) => {
   const [initialPending, setInitialPending] = useState(true)
   const [pending, setPending] = useState(true)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
-  const [pages, setPages] = useState(null)
+  const [allBookables, setBookables] = useState(null)
   const [page, setPage] = useState(0)
   const [canRefresh, setCanRefresh] = useState(false)
 
-  const refresh = async () => {
+  const refresh = async () => { // Termine generieren
     setCanRefresh(false)
     setPending(true)
     const res = await fetch((apiBaseUrl || '') + '/portal/appointments')
     const ps = await res.json()
-    setPages(ps)
+    setBookables(ps)
     const refreshable = setTimeout(() => setCanRefresh(true), 3000)
     setPending(false)
     if (initialPending) {
       setInitialPending(false)
     }
-    console.log(ps)
     return () => clearTimeout(refreshable)
   }
 
-  useEffect(refresh, [page]) // TODO: refresh on form values change, post as params
-
-  // responsive hack: show one day on mobile only
-  const pageSize = (typeof document !== 'undefined' && document.body.clientWidth < 500) ? 1 : 3
-
-  const days = (pages || []).slice(page * pageSize, page * pageSize + pageSize)
-
-  const next = pages && (pages.length > (page * pageSize + pageSize)) && (() => setPage(page + 1))
-  const prev = pages && page > 0 && (() => setPage(page - 1))
-
-  // Edge case fix: navigate to page 2/2, wait until all bookables are gone, refresh, stuck on an empty page
-  if (page > 0 && (!days || days.length === 0) && pages && pages.length > 0) {
-    console.log('resetting page to zero when there are pages but no days')
-    setTimeout(() => setPage(0), 20)
-  }
-
-  console.log('rr', pages, 'page', page,
-  page * pageSize, page * pageSize + pageSize,
-  'p<', (Math.floor((pages || []).length / pageSize) - 1),
-  !!prev, !!next)
-
-
+  useEffect(() => { refresh() }, [page]) // TODO: refresh on form values change, post as params
 
   return <Formik
     initialValues={{
@@ -70,7 +49,6 @@ export const ContactForm = (props) => {
       tag: ''
     }}
     onSubmit={async (values, { setSubmitting }) => {
-      console.log(values)
       setSuccess(null)
       setError(null)
 
@@ -103,9 +81,67 @@ export const ContactForm = (props) => {
     }}
   >
     {({ values, isSubmitting, handleChange, setFieldValue }) => {
-      const selectedBookable = values.bookableId && pages && (() => {
-        for (let i = 0; i < pages.length; i++) {
-          const page = pages[i]
+
+      const filteredBookables = (allBookables || [])
+        .filter(b => values.tag ? b.tags.includes(values.tag) : true)
+
+      const groupedBookables = filteredBookables.reduce((acc, b) => { // group by days
+        const lastDay = acc.length >= 1 && acc[acc.length - 1]
+
+        // same day
+        if (lastDay && lastDay.day === b.day) {
+          const butlast = acc.slice(0, acc.length - 1)
+          return [
+            ...butlast,
+            {
+              ...lastDay,
+              times: [...lastDay.times, b]
+            }
+          ]
+        // new day (or first day)
+        } else {
+          return [
+            ...acc,
+            {
+              day: b.day,
+              times: [b]
+            }
+          ]
+        }
+      }, [])
+
+      const bookables = groupedBookables
+        .map(day => {
+          const maxCount = 8
+          if (day.times.length > maxCount) {
+            return { ...day, times: chunk(day.times, day.times.length / maxCount).map(c => c[0]) }
+          } else {
+            return day
+          }
+        })
+
+      // responsive hack: show one day on mobile only
+      const pageSize = (typeof document !== 'undefined' && document.body.clientWidth < 500) ? 1 : 3
+
+      const days = (bookables || []).slice(page * pageSize, page * pageSize + pageSize)
+
+      const next = bookables && (bookables.length > (page * pageSize + pageSize)) && (() => setPage(page + 1))
+      const prev = bookables && page > 0 && (() => setPage(page - 1))
+
+      // Edge case fix: navigate to page 2/2, wait until all bookables are gone, refresh, stuck on an empty page
+      if (page > 0 && (!days || days.length === 0) && bookables && bookables.length > 0) {
+        console.log('resetting page to zero when there are pages but no days')
+        setTimeout(() => setPage(0), 20)
+      }
+
+      // console.log('rr', bookables, 'page', page,
+      // page * pageSize, page * pageSize + pageSize,
+      // 'p<', (Math.floor((bookables || []).length / pageSize) - 1),
+      // !!prev, !!next)
+
+      const selectedBookable = values.bookableId && bookables && (() => {
+        for (let i = 0; i < bookables.length; i++) {
+          const page = bookables[i]
           if (page) {
             for (let j = 0; j < page.times.length; j++) {
               const time = page.times[j]
@@ -120,18 +156,18 @@ export const ContactForm = (props) => {
       if (success) {
         return <Success {...props} success={success} />
       }
-    
-      if (!pages || initialPending) {
+
+      if (!allBookables || initialPending) {
         return <Notice>Einen Moment bitte, verfügbare Termine werden gesucht...</Notice>
       }
 
-      if ((!pages || pages.length === 0) && (!days || days.length === 0)) {
+      if (allBookables.length === 0) {
         return <Notice>Entschuldigung, momentan sind leider keine Termine online verfügbar. Bitte kontaktieren Sie uns telefonisch.</Notice>
       }
 
       return <div>
           <h2>{props.welcome || 'Sehr geehrte Patientin, sehr geehrter Patient!'}</h2>
-          <p><b>{props.instructionsDisclaimer}</b></p>
+          <div><b>{props.instructionsDisclaimer}</b></div>
           <p>{props.instructions || 'Wir bitten Sie um Vervollständigung des Kontaktformulars. Nach Erhalt werden wir uns schnellstmöglich mit Ihnen in Verbindung setzen, um Ihr Anliegen zu besprechen bzw. einen Termin zu vereinbaren.'}</p>
           <Form method='POST'>
             <Select label='Anrede' name='gender'>
@@ -231,91 +267,101 @@ export const ContactForm = (props) => {
                     <RequestSameAssignee />
                   </Section>
                 } */}
-
+                <Select label='Art des Termins' name='tag' required>
+                  <option value='eEgBDJuPxNFsFfAfK'>Kassenordination (Standard)</option>
+                  <option value='rR6oXAKdQBSppY4u3'>Restharnkontrolle</option>
+                  <option value='cDTyHnYJzYuiyzXfq'>Blutabnahme</option>
+                  <option value='cm27Abehxg6NCiisc'>Strahltest / Uroflow</option>
+                  <option value='7ywG7Njg3B2sgkaK5'>Blaseninstillation</option>
+                  <option value='XorzhDvyEPqFuNKwk'>Katheterwechsel</option>
+                </Select>
                 <Section>
                   <ErrorBoundary>
+                    {bookables.length === 0 && <p>
+                      <b>Momentan sind keine Termine der gewählten Art online verfügbar.<br /></b>
+                      Bitte kontaktieren Sie uns telefonisch.
+                    </p>}
+
+                    <p>
+                      Wählen Sie Ihren Wunschtermin
+                      &emsp;
+                      {canRefresh &&
+                        <a
+                          href='#'
+                          style={{ opacity: 0.8, display: 'inline-block', paddingLeft: 20 }}
+                          onClick={(e) => { e.preventDefault(); refresh(); }}
+                        >
+                          Neu laden
+                        </a>
+                      }
+                    </p>
+
+                    {/* causes jumping */}
+                    {/* {pending && <p><i>Verfügbare Termine werden gesucht...</i></p>} */}
+
+                    <div style={slotPickerStyle}>
+                      <Button
+                        title={prev
+                          ? 'Frühere Termine'
+                          : 'Keine früheren Termine verfügbar'}
+                        disabled={!prev}
+                        style={arrowButtonStyle}
+                        onClick={(e) => { e.preventDefault(); prev() }}
+                      >
+                        &lt;
+                      </Button>
+
+                      {days.map(d =>
+                        <Day
+                          key={d.day}
+                          {...d}
+                          onClick={() => {
+                            setFieldValue('bookableId', d.times[0]._id)
+                          }} />
+                      )}
+
+                      <Button
+                        title={next
+                          ? 'Spätere Termine'
+                          : 'Keine späteren Termine verfügbar'}
+                        disabled={!next}
+                        style={arrowButtonStyle}
+                        onClick={(e) => { e.preventDefault(); next() }}
+                      >
+                        &gt;
+                      </Button>
+                    </div>
+
+                    { /* this should not happen */
+                      (page > 0 && (!days || days.length === 0)) &&
+                        <Notice>Keine Termine gefunden</Notice>
+                    }
+
                     <Section>
+                      {
+                        selectedBookable &&
+                        <span>
+                          <b>Ihr Termin:</b>
+                          &nbsp;
+                          <b>{selectedBookable.day}</b> um <b>{selectedBookable.time}&nbsp;Uhr</b>
+
+                          {/* {selectedBookable.assigneeName &&
+                            <span> bei <b>{selectedBookable.assigneeName}</b></span>} */}
+
+                          {/* {selectedBookable.isReserve &&
+                            <p><b>
+                              ⚠️ &emsp; Reservetermin bzw. Einschub: Bei diesem Termin kann es zu sehr langen Wartezeiten kommen.
+                            </b></p>} */}
+                        </span>
+                      }
                       <p>
-                        Wählen Sie Ihren Wunschtermin
-                        &emsp;
-                        {canRefresh &&
-                          <a
-                            href='#'
-                            style={{ opacity: 0.8, display: 'inline-block', paddingLeft: 20 }}
-                            onClick={(e) => { e.preventDefault(); refresh(); }}
-                          >
-                            Neu laden
-                          </a>
-                        }
+                        Wir möchten Sie darauf aufmerksam machen, dass es bei Terminen in der Kassenordination zu längeren Wartezeiten kommen kann.<br />
+                        Sie können uns gerne telefonisch kontaktieren, um einen privaten Termin zu vereinbaren.
                       </p>
 
-                      {/* causes jumping */}
-                      {/* {pending && <p><i>Verfügbare Termine werden gesucht...</i></p>} */}
-
-                      <div style={slotPickerStyle}>
-                        <Button
-                          title={prev
-                            ? 'Frühere Termine'
-                            : 'Keine früheren Termine verfügbar'}
-                          disabled={!prev}
-                          style={arrowButtonStyle}
-                          onClick={(e) => { e.preventDefault(); prev() }}
-                        >
-                          &lt;
-                        </Button>
-
-                        {days.map(d =>
-                          <Day
-                            key={d.day}
-                            {...d}
-                            onClick={() => {
-                              setFieldValue('bookableId', d.times[0]._id)
-                            }} />
-                        )}
-
-                        <Button
-                          title={next
-                            ? 'Spätere Termine'
-                            : 'Keine späteren Termine verfügbar'}
-                          disabled={!next}
-                          style={arrowButtonStyle}
-                          onClick={(e) => { e.preventDefault(); next() }}
-                        >
-                          &gt;
-                        </Button>
-                      </div>
-
-                      { /* this should not happen */
-                        (page > 0 && (!days || days.length === 0)) &&
-                          <Notice>Keine Termine gefunden</Notice>
-                      }
-
-                      <Section>
-                        {
-                          selectedBookable &&
-                          <span>
-                            <b>Ihr Termin:</b>
-                            &nbsp;
-                            <b>{selectedBookable.day}</b> um <b>{selectedBookable.time}&nbsp;Uhr</b>
-                            
-                            {/* {selectedBookable.assigneeName &&
-                              <span> bei <b>{selectedBookable.assigneeName}</b></span>} */}
-
-                            {/* {selectedBookable.isReserve &&
-                              <p><b>
-                                ⚠️ &emsp; Reservetermin bzw. Einschub: Bei diesem Termin kann es zu sehr langen Wartezeiten kommen.
-                              </b></p>} */}
-                          </span>
-                        }
-                        <p>
-                          Wir möchten Sie darauf aufmerksam machen, dass es bei Terminen in der Kassenordination zu längeren Wartezeiten kommen kann.<br />
-                          Sie können uns gerne telefonisch kontaktieren, um einen privaten Termin zu vereinbaren.
-                        </p>
-
-                      </Section>
-                    </Section>
-                  </ErrorBoundary>
-                </Section>
+                  </Section>
+                </ErrorBoundary>
+              </Section>
               </div>
             }
 
@@ -456,7 +502,7 @@ const AppointmentSuccess = ({ appointment, confirmationInfo, ical }) => {
 
 export const Success = ({ greeting = '', contactInfo, success, ...props }) =>
   <div>
-    <h2>Vielen Dank!</h2>
+    <h2>✅ Vielen Dank!</h2>
 
     {success && success.appointment
       ? <AppointmentSuccess appointment={success.appointment} {...props} />

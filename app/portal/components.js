@@ -121,10 +121,13 @@ export const Radio = ({ label, labelStyle, checkedLabelStyle, labelInnerStyle, .
   </div>
 }
 
-export const Select = ({ label, children, ...props }) => {
+export const Select = ({ label, children, required, ...props }) => {
   const [field, meta] = useField(props)
   return <div>
-    <label htmlFor={field.name}>{label}</label><br />
+    <label htmlFor={field.name}>
+      {label}
+      {required && <Required />}
+    </label><br />
     <select
       className='textfield'
       {...field}
