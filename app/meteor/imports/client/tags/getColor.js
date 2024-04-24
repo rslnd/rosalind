@@ -6,6 +6,6 @@ export const getColor = (tags = [], defaultColor) => {
     return defaultColor || tagBackgroundColor
   } else {
     const firstTag = Tags.methods.expand(tags)[0]
-    return firstTag.color || defaultColor || tagBackgroundColor
+    return (firstTag && firstTag.color) || defaultColor || tagBackgroundColor
   }
 }
