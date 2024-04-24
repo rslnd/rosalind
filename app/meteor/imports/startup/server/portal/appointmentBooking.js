@@ -241,7 +241,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
 
     const appointmentId = Appointments.insert({
       ...bookable,
-      tags: [tag],
+      tags: tag ? [tag] : null,
       createdViaPortal: true,
       createdAt: new Date(),
       createdBy: null,

@@ -46,7 +46,7 @@ export const ContactForm = (props) => {
       privacy: false,
       requestSameAssignee: 'dontcare',
       slot: '',
-      tag: ''
+      tag: 'eEgBDJuPxNFsFfAfK' // Kassenordination
     }}
     onSubmit={async (values, { setSubmitting }) => {
       setSuccess(null)
