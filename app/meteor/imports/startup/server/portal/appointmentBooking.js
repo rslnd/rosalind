@@ -29,7 +29,7 @@ const bookableTags = ({ start, assigneeId }) => {
     ]
   } else {
     return [
-      'eEgBDJuPxNFsFfAfK'
+      'eEgBDJuPxNFsFfAfK' // Kassenordination
     ]
   }
 }
