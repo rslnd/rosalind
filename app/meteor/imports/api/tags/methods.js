@@ -1,5 +1,6 @@
 import fromPairs from 'lodash/fromPairs'
 import some from 'lodash/fp/some'
+import identity from 'lodash/identity'
 
 export default ({ Tags }) => {
   // Maps Tag ids to reporting categories, eg.:
@@ -17,7 +18,7 @@ export default ({ Tags }) => {
       typeof t === 'string'
         ? Tags.findOne({ _id: t }, { sort: { order: 1 }, removed: true })
         : t
-    )
+    ).filter(identity)
 
   const isPrivate = tags =>
     some('privateAppointment')(expand(tags))
