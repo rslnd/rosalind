@@ -22,11 +22,10 @@ const bookableTags = ({ start, assigneeId }) => {
   const assistanceId = "b6rEBPraMYgwmLADT"
   if ( assistanceId === assigneeId ) {
     return [
-      'rR6oXAKdQBSppY4u3',
-      'cDTyHnYJzYuiyzXfq',
-      'cm27Abehxg6NCiisc',
-      '7ywG7Njg3B2sgkaK5',
-      'XorzhDvyEPqFuNKwk'
+      'rR6oXAKdQBSppY4u3', // Restharnkontrolle
+      'cDTyHnYJzYuiyzXfq', // Blutabnahme
+      '7ywG7Njg3B2sgkaK5', // Blaseninstillation
+      'XorzhDvyEPqFuNKwk' // Katheterwechsel
     ]
   } else {
     return [

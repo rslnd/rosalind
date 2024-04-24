@@ -271,7 +271,6 @@ export const ContactForm = (props) => {
                   <option value='eEgBDJuPxNFsFfAfK'>Kassenordination (Standard)</option>
                   <option value='rR6oXAKdQBSppY4u3'>Restharnkontrolle</option>
                   <option value='cDTyHnYJzYuiyzXfq'>Blutabnahme</option>
-                  <option value='cm27Abehxg6NCiisc'>Strahltest / Uroflow</option>
                   <option value='7ywG7Njg3B2sgkaK5'>Blaseninstillation</option>
                   <option value='XorzhDvyEPqFuNKwk'>Katheterwechsel</option>
                 </Select>
