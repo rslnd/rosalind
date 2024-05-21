@@ -112,6 +112,8 @@ const ComposeSms = ({ patient }) => {
 
   text = (value && error)
     ? `Fehler: ${value.length < 20 ? 'Mindestlänge: 20 Zeichen' : text}`
+    : (!value || text.length === 0)
+    ? "160 Zeichen möglich"
     : `${text.length} Zeichen`
 
   const handleSend = async () => {
