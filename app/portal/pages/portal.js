@@ -15,6 +15,7 @@ const Root = ({ children }) => {
       </p>
       <ul>
         <li>Blasenspiegelung (Cystoskopie)</li>
+        <li>Schienenentfernung</li>
         <li>Befundbesprechung</li>
         <li>Privattermin (z.B. Vasektomiegespräch)</li>
       </ul>
