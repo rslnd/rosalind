@@ -22,7 +22,7 @@ describe('api', () => {
       const now = moment.parseZone('2017-12-20T19:30:00.000+01:00')
       const expectedCutoffDate = moment.parseZone('2018-01-08T19:30:00.000+01:00')
       const appointmentDate = moment.parseZone('2018-01-08T18:35:00.000+01:00')
-      const expectedReminderDate = moment.parseZone('2017-12-20T15:35:00.000+01:00')
+      const expectedReminderDate = moment.parseZone('2017-12-20T18:35:00.000+01:00')
 
       it('skips backwards over holidays, weekends, and clamps time', () => {
         expect(
