@@ -18,6 +18,39 @@ describe('patients', function () {
         })
       })
 
+
+      it('parses birthdays from one number, yy 94', function () {
+        expect(parseQuery('120694')).to.eql({
+          'birthday.day': 12,
+          'birthday.month': 6,
+          'birthday.year': 1994
+        })
+      })
+
+      it('parses birthdays from one number, yyyy 1994', function () {
+        expect(parseQuery('12061994')).to.eql({
+          'birthday.day': 12,
+          'birthday.month': 6,
+          'birthday.year': 1994
+        })
+      })
+
+      it('parses birthdays from one number, yyyy 2012', function () {
+        expect(parseQuery('12062012')).to.eql({
+          'birthday.day': 12,
+          'birthday.month': 6,
+          'birthday.year': 2012
+        })
+      })
+
+      it('parses birthdays from one number, yyyy 12', function () {
+        expect(parseQuery('120612')).to.eql({
+          'birthday.day': 12,
+          'birthday.month': 6,
+          'birthday.year': 2012
+        })
+      })
+
       it('parses first name', function () {
         expect(parseQuery('_ Ilse')).to.eql({
           'firstNameNormalized': { $regex: '^ILSE', $options: 'i' }
