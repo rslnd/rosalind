@@ -24,6 +24,36 @@ describe('patients', function () {
         })
       })
 
+      it('parses last name', function () {
+        expect(parseQuery('Rotter')).to.eql({
+          'lastNameNormalized': { $regex: '^ROTTER' }
+        })
+      })
+
+      it('parses full last name, double with dash', function () {
+        expect(parseQuery('rotter-maier').lastNameNormalized).to.eql({
+          $regex: '^ROTTER-MAIER'
+        })
+      })
+
+      it('parses full last name, double no dash', function () {
+        expect(parseQuery('rottermaier')).to.eql({
+          'lastNameNormalized': { $regex: '^ROTTERMAIER' }
+        })
+      })
+
+      it('parses full last name, double no dash, with partial first name', function () {
+        expect(parseQuery('rottermaier trud').lastNameNormalized).to.eql({
+          $regex: '^ROTTERMAIER'
+        })
+
+        expect(parseQuery('rottermaier trud')['$or'].find(x => (x.firstNameNormalized && (x.firstNameNormalized.$regex === "^trud")))).to.eql({
+          firstNameNormalized: {
+            $options: "i",
+            $regex: "^trud"
+          }
+        })
+      })
 
       // it('parses names', function () {
       //   expect(parseQuery('walrus unicorn i')).to.eql({

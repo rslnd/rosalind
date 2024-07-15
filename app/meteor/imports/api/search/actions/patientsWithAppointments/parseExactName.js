@@ -32,10 +32,14 @@ export const parseExactName = (query, forcePartialMatching) => {
   }
 
   // Build list of potential last names
-  const names = uniq([ match.join(''), ...match ]
+  const names = uniq([ match.join('-'), match.join(''), ...match ]
     .filter(identity)
     .filter((w) => w.length > 0)
   )
+
+  const firstWord = ([...query.match(/([^\s]{1,})/g)]
+    .filter(identity)
+    .filter((w) => w.length > 0)[0]) || names[0]
 
   if (names && names.length === 1) {
     const normalized = normalizeName(names[0])
@@ -62,7 +66,7 @@ export const parseExactName = (query, forcePartialMatching) => {
 
   if (names && names.length >= 2) {
     // Always match the first (non-combined) fragment as start of last name
-    const normalized = normalizeName(names[1])
+    const normalized = normalizeName(firstWord)
     if (normalized) {
       let result = {
         'lastNameNormalized': {
@@ -77,12 +81,21 @@ export const parseExactName = (query, forcePartialMatching) => {
       // [a, b, c] => [abc, ab, a]
       // [a, b, c, d] => [abcd, abc, ab, a]
       const namePermutations = names =>
-        names.map((n, i) =>
-          [
-            ...names.slice(0, i),
-            n
-          ].filter(identity).join('')
-        ).reverse()
+
+        [
+          ...names.map((n, i) =>
+            [
+              ...names.slice(0, i),
+              n
+            ].filter(identity).join('-')
+          ).reverse(),
+          ...names.map((n, i) =>
+            [
+              ...names.slice(0, i),
+              n
+            ].filter(identity).join('')
+          ).reverse(),
+        ]
 
       result.$or = [
         // This matches combined last names such as "van der Bellen"
