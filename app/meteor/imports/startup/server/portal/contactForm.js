@@ -249,6 +249,27 @@ export const handleContactForm = async (untrusted) => {
     nutrition && 'Ernährungsberatung',
   ].filter(identity).join(', ')
 
+  let text = `
+Ich benötige: ${note}
+Vorname: ${firstName}
+Nachname: ${lastName}
+Telefonnummer: ${telephone}
+Email: ${email}
+Geschlecht: ${gender}
+Titel: ${titlePrepend}
+Geburtsdatum: ${birthdate}
+Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
+
+`
+
+  Email.send({
+    from: process.env.MAIL_REPORTS_FROM,
+    to: process.env.MAIL_REPORTS_TO,
+    replyTo: process.env.MAIL_REPORTS_REPLYTO,
+    subject: "Anfrage Kontaktformular",
+    text
+  })
+
   const topic = InboundCallsTopics.findOne({ contactForm: true })
   const topicId = topic ? topic._id : null
 
