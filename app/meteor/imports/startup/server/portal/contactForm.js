@@ -266,7 +266,7 @@ Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
   Email.send({
     from: process.env.MAIL_REPORTS_FROM,
     to: process.env.MAIL_REPORTS_TO,
-    replyTo: process.env.MAIL_REPORTS_REPLYTO,
+    replyTo: email,
     subject: "Anfrage Kontaktformular",
     text
   })
