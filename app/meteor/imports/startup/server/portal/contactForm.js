@@ -1,4 +1,5 @@
 import { identity } from 'lodash'
+import { Email } from 'meteor/email'
 import React from 'react'
 import { Section, Checkbox, Input, Required, Radio } from './components'
 import { validateForm, optional } from './parseForm'
