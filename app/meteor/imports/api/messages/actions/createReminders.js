@@ -124,7 +124,7 @@ export const createReminders = ({ Messages }) => {
 
         const { calculateReminderDate, calculateFutureCutoff } = reminderDateCalculator({
           holidays,
-          days: 1 // minimum cutoff here
+          days: 5 // minimum cutoff here
         })
 
         const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
