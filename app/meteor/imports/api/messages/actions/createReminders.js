@@ -263,7 +263,7 @@ export const createReminders = ({ Messages }) => {
           if (Settings.get('messages.sms.appointmentReminder.telemedicineText')) {
             if (payload.assigneeId && hasRole(payload.assigneeId, ['telemedicine-provider'])) {
               text = Settings.get('messages.sms.appointmentReminder.telemedicineText')
-              calendar.smsDaysBefore = 1 // send 24h before appt
+              // calendar.smsDaysBefore = 1 // send 24h before appt
               debug(payload, 'set text to: ' + text)
             }
           }
