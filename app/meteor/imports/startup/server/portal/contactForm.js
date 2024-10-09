@@ -267,7 +267,7 @@ Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
     from: process.env.MAIL_REPORTS_FROM,
     to: process.env.MAIL_REPORTS_TO,
     replyTo: email,
-    subject: "Anfrage Kontaktformular",
+    subject: `${firstName} ${lastName} ${note}`,
     text
   })
 
