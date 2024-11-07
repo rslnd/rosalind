@@ -100,9 +100,9 @@ const buildCsp = (req, res) => {
     'form-action': [
       self
     ],
-    'report-uri': [
-      reportUri
-    ],
+    // 'report-uri': [
+    //   reportUri
+    // ],
     'frame-ancestors': [
       none
     ],
