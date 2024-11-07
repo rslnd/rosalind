@@ -22,7 +22,10 @@ const mediaHosts = () => {
     )
   ]
 
-  const scheme = (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') ? 'https://' : 'http://'
+  const scheme = (
+    Settings.get('media.s3.scheme') ||
+    ((process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') ? 'https://' : 'http://')
+  )
   return hosts.filter(identity).map(h => [scheme, h].join(''))
 }
 
@@ -33,30 +36,36 @@ const buildCsp = (req, res) => {
     ...(process.env.VIRTUAL_HOST ? process.env.VIRTUAL_HOST.split(',') : [])
   ]
 
-  const reportUri = `https://sentry.io/api/62218/security/?sentry_key=6af65eb19a37410f968d4e602ce572d7&sentry_release=${process.env.COMMIT_HASH}&sentry_environment=${process.env.NODE_ENV}`
+  // const reportUri = `https://sentry.io/api/62218/security/?sentry_key=6af65eb19a37410f968d4e602ce572d7&sentry_release=${process.env.COMMIT_HASH}&sentry_environment=${process.env.NODE_ENV}`
 
   const csp = {
     'connect-src': [
       self,
-      ...flatten(domains.map(d => [
-        `https://${d}`,
-        `wss://${d}`
-      ])),
+      ...flatten(domains.map(d =>
+        ((Settings.get('media.s3.scheme') === 'http')
+        ? [
+          `http://${d}`,
+          `ws://${d}`
+        ] : [
+          `https://${d}`,
+          `wss://${d}`
+        ])
+      )),
       ...mediaHosts(),
-      `https://${process.env.SMOOCH_APP_ID}.config.smooch.io/`,
-      'wss://api.smooch.io',
-      'https://api.smooch.io',
-      'https://sentry.io/',
+      // `https://${process.env.SMOOCH_APP_ID}.config.smooch.io/`,
+      // 'wss://api.smooch.io',
+      // 'https://api.smooch.io',
+      // 'https://sentry.io/',
     ],
     'img-src': [
       self,
       'blob:',
       'data:',
       ...mediaHosts(),
-      'https://app.smooch.io',
-      'https://cdn.smooch.io',
-      'https://media.smooch.io',
-      'https://www.gravatar.com/avatar/9551b5ac12bb6a04fd48d1dcb51f046a.png'
+      // 'https://app.smooch.io',
+      // 'https://cdn.smooch.io',
+      // 'https://media.smooch.io',
+      // 'https://www.gravatar.com/avatar/9551b5ac12bb6a04fd48d1dcb51f046a.png'
     ],
     'script-src': [
       self,
@@ -67,17 +76,17 @@ const buildCsp = (req, res) => {
       self,
       // react-select needs a nonce
       `'nonce-${req.nonce}'`,
-      'https://cdn.smooch.io'
+      // 'https://cdn.smooch.io'
     ],
     'worker-src': [
       self // pdfjs needs a worker
     ],
     'font-src': [
       self,
-      'https://cdn.smooch.io'
+      // 'https://cdn.smooch.io'
     ],
     'frame-src': [
-      'https://cdn.smooch.io'
+      // 'https://cdn.smooch.io'
     ],
     'child-src': [
       self
