@@ -30,7 +30,9 @@ export const getCredentials = () => {
     throw new Error(`There are ${config.length} S3 configs specified, but ${secrets.length} secrets`)
   }
 
-  const scheme = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+  const scheme = (Settings.get('media.s3.scheme') ||
+    (process.env.NODE_ENV === 'development' ? 'http' : 'https')
+  )
 
   const secretConfig = config.map((c, i) => ({
     ...c,
