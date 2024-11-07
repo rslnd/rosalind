@@ -23,7 +23,7 @@ const mediaHosts = () => {
   ]
 
   const scheme = (
-    Settings.get('media.s3.scheme') ||
+    (Settings.get('media.s3.scheme') ? (Settings.get('media.s3.scheme') + '://') : null) ||
     ((process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') ? 'https://' : 'http://')
   )
   return hosts.filter(identity).map(h => [scheme, h].join(''))
