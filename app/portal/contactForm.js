@@ -499,6 +499,16 @@ const AppointmentSuccess = ({ appointment, confirmationInfo, ical }) => {
   </div>
 }
 
+const ScrollUpHint = ({n}) => {
+  return <div>
+    {Array(n).fill(true).map((_, i) =>
+      <div key={i}
+        style={{ opacity: 0.7, marginTop: '12rem'}}>
+        ⏫ Bitte nach oben scrollen
+      </div>)}
+  </div>
+}
+
 export const Success = ({ greeting = '', contactInfo, success, ...props }) =>
   <div>
     <h2>✅ Vielen Dank!</h2>
@@ -516,6 +526,8 @@ export const Success = ({ greeting = '', contactInfo, success, ...props }) =>
         {contactInfo}
       </p>
     </Section>
+
+    <ScrollUpHint n={9} />
   </div>
 
 const RequestSameAssignee = () => {
