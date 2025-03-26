@@ -11,7 +11,7 @@
     "@react-native-community/async-storage": "^1.6.1",
     "@react-native-community/netinfo": "^4.2.1",
     "@sentry/react-native": "^1.6.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "react": "^16.13.1",
     "react-native": "^0.62.2",
     "react-native-camera": "^3.4.0",
