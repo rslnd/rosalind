@@ -6,7 +6,7 @@
     "test": "cd ./app/meteor && npm run test",
     "test:acceptance": "cd ./app/meteor && npm run test:acceptance",
     "lint": "standard",
-    "cloc": "cloc --exclude-dir build,.git,.meteor,node_modules,packages,vendor,minio-data,Pods .",
+    "cloc": "cloc --exclude-dir build,.git,.next,.meteor,node_modules,public,packages,.cljs,vendor,minio-data,Pods app/meteor/imports",
     "licenses": "cd app/electron && yarn licenses generate-disclaimer > ../../licenses.txt && cd ../meteor && yarn licenses generate-disclaimer >> ../../licenses.txt && cd ../../ && cat ./licenses-extra.txt >> ./licenses.txt"
   },
   "standard": {
