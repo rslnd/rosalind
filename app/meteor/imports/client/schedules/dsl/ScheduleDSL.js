@@ -11,6 +11,10 @@ import { timeSlots, setTime, label } from '../../appointments/dayView/grid/timeS
 
 const DEFAULT_STEP_DELAY = 300 // ms between operations for visibility
 
+// Day boundaries - match server-side transformDefaultsToOverrides.js
+const DAY_START_TIME = '0730'
+const DAY_END_TIME = '2100'
+
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 // Wait for subscriptions to be ready
@@ -125,26 +129,15 @@ export const createDSLContext = ({
 
     // Create override blocks for unavailable periods (pauses, breaks)
     for (const d of unavailableDefaults) {
-      const start = timeToDate(currentDate, hmToString(d.from))
-      const end = timeToDate(currentDate, hmToString(d.to))
-
-      await Schedules.actions.insert.callPromise({
-        schedule: {
-          type: 'override',
-          calendarId,
-          userId,
-          start: start.toDate(),
-          end: end.toDate(),
-          available: false,
-          note: d.note || 'Pause'
-        }
-      })
+      const start = timeToDate(currentDate, hmToString(d.from)).toDate()
+      const end = timeToDate(currentDate, hmToString(d.to)).toDate()
+      await insertBlockingOverride(userId, start, end, d.note || 'Pause')
     }
 
     // Create override blocks for times outside available periods
     if (availableDefaults.length > 0) {
-      const dayStart = timeToDate(currentDate, '0730')
-      const dayEnd = timeToDate(currentDate, '2100')
+      const dayStart = timeToDate(currentDate, DAY_START_TIME)
+      const dayEnd = timeToDate(currentDate, DAY_END_TIME)
 
       // Sort by start time
       const sorted = availableDefaults.sort((a, b) => {
@@ -156,16 +149,7 @@ export const createDSLContext = ({
       // Block before first available
       const firstStart = timeToDate(currentDate, hmToString(sorted[0].from))
       if (firstStart.isAfter(dayStart)) {
-        await Schedules.actions.insert.callPromise({
-          schedule: {
-            type: 'override',
-            calendarId,
-            userId,
-            start: dayStart.toDate(),
-            end: firstStart.toDate(),
-            available: false
-          }
-        })
+        await insertBlockingOverride(userId, dayStart.toDate(), firstStart.toDate())
       }
 
       // Block between available periods
@@ -174,33 +158,14 @@ export const createDSLContext = ({
         const nextStart = timeToDate(currentDate, hmToString(sorted[i + 1].from))
 
         if (currEnd.isBefore(nextStart)) {
-          await Schedules.actions.insert.callPromise({
-            schedule: {
-              type: 'override',
-              calendarId,
-              userId,
-              start: currEnd.toDate(),
-              end: nextStart.toDate(),
-              available: false,
-              note: 'Break'
-            }
-          })
+          await insertBlockingOverride(userId, currEnd.toDate(), nextStart.toDate(), 'Break')
         }
       }
 
       // Block after last available
       const lastEnd = timeToDate(currentDate, hmToString(sorted[sorted.length - 1].to))
       if (lastEnd.isBefore(dayEnd)) {
-        await Schedules.actions.insert.callPromise({
-          schedule: {
-            type: 'override',
-            calendarId,
-            userId,
-            start: lastEnd.toDate(),
-            end: dayEnd.toDate(),
-            available: false
-          }
-        })
+        await insertBlockingOverride(userId, lastEnd.toDate(), dayEnd.toDate())
       }
     }
   }
@@ -275,6 +240,130 @@ export const createDSLContext = ({
       log(`Removed existing override ${moment(schedule.start).format('HH:mm')}-${moment(schedule.end).format('HH:mm')}`)
       await sleep(stepDelay() / 2)
     }
+  }
+
+  // Remove bookables that overlap with a time range (when creating blocking overrides)
+  const removeOverlappingBookables = async (userId, start, end) => {
+    checkAborted()
+    const overlapping = Appointments.find({
+      type: 'bookable',
+      calendarId,
+      assigneeId: userId,
+      removed: { $ne: true },
+      start: { $lt: end },
+      end: { $gt: start }
+    }).fetch()
+
+    for (const bookable of overlapping) {
+      await Appointments.actions.unsetBookable.callPromise({ bookableId: bookable._id })
+    }
+
+    if (overlapping.length > 0) {
+      log(`Removed ${overlapping.length} bookable(s) in blocked time range`)
+    }
+  }
+
+  // Helper to insert an override and clean up bookables in that range
+  const insertBlockingOverride = async (userId, start, end, note) => {
+    // First remove any bookables in this range
+    await removeOverlappingBookables(userId, start, end)
+
+    // Then create the override
+    await Schedules.actions.insert.callPromise({
+      schedule: {
+        type: 'override',
+        calendarId,
+        userId,
+        start,
+        end,
+        available: false,
+        note
+      }
+    })
+  }
+
+  // Get existing overrides for a user on current day to find available time slots
+  const getExistingOverrides = (userId) => {
+    const dayStart = timeToDate(currentDate, DAY_START_TIME).toDate()
+    const dayEnd = timeToDate(currentDate, DAY_END_TIME).toDate()
+
+    return Schedules.find({
+      type: { $in: ['override', 'overlay'] },
+      calendarId,
+      userId,
+      removed: { $ne: true },
+      start: { $gte: dayStart },
+      end: { $lte: dayEnd }
+    }, { sort: { start: 1 } }).fetch()
+  }
+
+  // Find available time ranges from existing overrides (gaps where available or no override)
+  const findAvailableRangesFromOverrides = (userId) => {
+    const overrides = getExistingOverrides(userId)
+    const dayStart = timeToDate(currentDate, DAY_START_TIME)
+    const dayEnd = timeToDate(currentDate, DAY_END_TIME)
+
+    if (overrides.length === 0) {
+      // No overrides - no available time (don't assume anything)
+      return []
+    }
+
+    const availableRanges = []
+
+    // Check for available overlays (positive availability)
+    const availableOverlays = overrides.filter(o => o.type === 'overlay' || o.available === true)
+    for (const overlay of availableOverlays) {
+      availableRanges.push({
+        from: moment(overlay.start).format('HHmm'),
+        to: moment(overlay.end).format('HHmm')
+      })
+    }
+
+    // If we have available overlays, use those
+    if (availableRanges.length > 0) {
+      return availableRanges
+    }
+
+    // Otherwise, find gaps between unavailable overrides
+    const unavailableOverrides = overrides.filter(o => o.available === false)
+    if (unavailableOverrides.length === 0) {
+      return [] // No info, don't assume
+    }
+
+    // Sort by start time
+    const sorted = unavailableOverrides.sort((a, b) => a.start - b.start)
+
+    // Check gap before first override
+    const firstStart = moment(sorted[0].start)
+    if (firstStart.isAfter(dayStart)) {
+      availableRanges.push({
+        from: dayStart.format('HHmm'),
+        to: firstStart.format('HHmm')
+      })
+    }
+
+    // Check gaps between overrides
+    for (let i = 0; i < sorted.length - 1; i++) {
+      const currEnd = moment(sorted[i].end)
+      const nextStart = moment(sorted[i + 1].start)
+      if (currEnd.isBefore(nextStart)) {
+        availableRanges.push({
+          from: currEnd.format('HHmm'),
+          to: nextStart.format('HHmm')
+        })
+      }
+    }
+
+    // Check gap after last override
+    const lastEnd = moment(sorted[sorted.length - 1].end)
+    if (lastEnd.isBefore(dayEnd)) {
+      availableRanges.push({
+        from: lastEnd.format('HHmm'),
+        to: dayEnd.format('HHmm')
+      })
+    }
+
+    return availableRanges
   }
 
   const parseTime = (timeStr) => {
@@ -373,23 +462,14 @@ export const createDSLContext = ({
 
       await ensureAssigneeOnDay(user._id)
 
-      // Use business hours or default 7:00-21:00
-      const dayStart = timeToDate(currentDate, options.from || '0700')
-      const dayEnd = timeToDate(currentDate, options.to || '2100')
+      // Use provided times or day boundaries
+      const dayStart = timeToDate(currentDate, options.from || DAY_START_TIME)
+      const dayEnd = timeToDate(currentDate, options.to || DAY_END_TIME)
 
       await removeOverlappingOverrides(user._id, dayStart.toDate(), dayEnd.toDate())
 
-      const schedule = {
-        type: 'override',
-        calendarId,
-        userId: user._id,
-        start: dayStart.toDate(),
-        end: dayEnd.toDate(),
-        available: false,
-        note: options.reason || 'Closed via DSL'
-      }
-
-      await Schedules.actions.insert.callPromise({ schedule })
+      // Use helper that also removes bookables in the blocked range
+      await insertBlockingOverride(user._id, dayStart.toDate(), dayEnd.toDate(), options.reason || 'Closed via DSL')
       log(`Closed ${userName}`, 'success')
       await sleep(stepDelay())
     },
@@ -418,8 +498,8 @@ export const createDSLContext = ({
       fromTime = fromTime || '0800'
       toTime = toTime || '1800'
 
-      const dayStart = timeToDate(currentDate, '0730')
-      const dayEnd = timeToDate(currentDate, '2100')
+      const dayStart = timeToDate(currentDate, DAY_START_TIME)
+      const dayEnd = timeToDate(currentDate, DAY_END_TIME)
       const openStart = timeToDate(currentDate, fromTime)
       const openEnd = timeToDate(currentDate, toTime)
 
@@ -428,32 +508,12 @@ export const createDSLContext = ({
 
       // Block time BEFORE open period
       if (openStart.isAfter(dayStart)) {
-        await Schedules.actions.insert.callPromise({
-          schedule: {
-            type: 'override',
-            calendarId,
-            userId: user._id,
-            start: dayStart.toDate(),
-            end: openStart.toDate(),
-            available: false,
-            note: options.note
-          }
-        })
+        await insertBlockingOverride(user._id, dayStart.toDate(), openStart.toDate(), options.note)
       }
 
       // Block time AFTER open period
       if (openEnd.isBefore(dayEnd)) {
-        await Schedules.actions.insert.callPromise({
-          schedule: {
-            type: 'override',
-            calendarId,
-            userId: user._id,
-            start: openEnd.toDate(),
-            end: dayEnd.toDate(),
-            available: false,
-            note: options.note
-          }
-        })
+        await insertBlockingOverride(user._id, openEnd.toDate(), dayEnd.toDate(), options.note)
       }
 
       log(`Opened ${userName} ${fromTime}-${toTime} (blocked before/after)`, 'success')
@@ -477,8 +537,8 @@ export const createDSLContext = ({
       }
 
       // Remove all existing overrides for this user on this day
-      const dayStart = timeToDate(currentDate, '0700').toDate()
-      const dayEnd = timeToDate(currentDate, '2100').toDate()
+      const dayStart = timeToDate(currentDate, DAY_START_TIME).toDate()
+      const dayEnd = timeToDate(currentDate, DAY_END_TIME).toDate()
       await removeOverlappingOverrides(user._id, dayStart, dayEnd)
 
       // Apply default schedule as overrides
@@ -508,36 +568,18 @@ export const createDSLContext = ({
         timeRanges = [{ from: options.from, to: options.to }]
 
         // Block non-open times using open() logic
-        const dayStart = timeToDate(currentDate, '0730')
-        const dayEnd = timeToDate(currentDate, '2100')
+        const dayStart = timeToDate(currentDate, DAY_START_TIME)
+        const dayEnd = timeToDate(currentDate, DAY_END_TIME)
         const openStart = timeToDate(currentDate, options.from)
         const openEnd = timeToDate(currentDate, options.to)
 
         await removeOverlappingOverrides(user._id, dayStart.toDate(), dayEnd.toDate())
 
         if (openStart.isAfter(dayStart)) {
-          await Schedules.actions.insert.callPromise({
-            schedule: {
-              type: 'override',
-              calendarId,
-              userId: user._id,
-              start: dayStart.toDate(),
-              end: openStart.toDate(),
-              available: false
-            }
-          })
+          await insertBlockingOverride(user._id, dayStart.toDate(), openStart.toDate())
         }
         if (openEnd.isBefore(dayEnd)) {
-          await Schedules.actions.insert.callPromise({
-            schedule: {
-              type: 'override',
-              calendarId,
-              userId: user._id,
-              start: openEnd.toDate(),
-              end: dayEnd.toDate(),
-              available: false
-            }
-          })
+          await insertBlockingOverride(user._id, openEnd.toDate(), dayEnd.toDate())
         }
       } else if (defaults.length > 0) {
         // Use available blocks from default schedule
@@ -548,41 +590,21 @@ export const createDSLContext = ({
         }))
 
         // Remove existing overrides and apply defaults (blocks before/after/between)
-        const dayStart = timeToDate(currentDate, '0700').toDate()
-        const dayEnd = timeToDate(currentDate, '2100').toDate()
+        const dayStart = timeToDate(currentDate, DAY_START_TIME).toDate()
+        const dayEnd = timeToDate(currentDate, DAY_END_TIME).toDate()
         await removeOverlappingOverrides(user._id, dayStart, dayEnd)
         await applyDefaultScheduleOverrides(user._id, defaults)
       } else {
-        // Fallback to 08:00-18:00 - block outside these times
-        timeRanges = [{ from: '0800', to: '1800' }]
+        // No default schedule - look at existing overrides to find available slots
+        // Don't assume availability, only fill in gaps from existing manual overrides
+        timeRanges = findAvailableRangesFromOverrides(user._id)
 
-        const dayStart = timeToDate(currentDate, '0730')
-        const dayEnd = timeToDate(currentDate, '2100')
-        const openStart = timeToDate(currentDate, '0800')
-        const openEnd = timeToDate(currentDate, '1800')
+        if (timeRanges.length === 0) {
+          log(`No default schedule and no available time found in existing overrides for ${userName}`, 'warning')
+          return
+        }
 
-        await removeOverlappingOverrides(user._id, dayStart.toDate(), dayEnd.toDate())
-
-        await Schedules.actions.insert.callPromise({
-          schedule: {
-            type: 'override',
-            calendarId,
-            userId: user._id,
-            start: dayStart.toDate(),
-            end: openStart.toDate(),
-            available: false
-          }
-        })
-        await Schedules.actions.insert.callPromise({
-          schedule: {
-            type: 'override',
-            calendarId,
-            userId: user._id,
-            start: openEnd.toDate(),
-            end: dayEnd.toDate(),
-            available: false
-          }
-        })
+        log(`Using ${timeRanges.length} available range(s) from existing overrides`)
       }
 
       if (timeRanges.length === 0) {
@@ -596,8 +618,8 @@ export const createDSLContext = ({
       const atMinutes = calendar && calendar.atMinutes
 
       // Day boundaries for schedule queries
-      const dayStartQuery = timeToDate(currentDate, '0700').toDate()
-      const dayEndQuery = timeToDate(currentDate, '2100').toDate()
+      const dayStartQuery = timeToDate(currentDate, DAY_START_TIME).toDate()
+      const dayEndQuery = timeToDate(currentDate, DAY_END_TIME).toDate()
 
       // Get the user's schedules to determine offset (same as blanks.js)
       const userSchedules = Schedules.find({
