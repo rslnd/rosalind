@@ -57,6 +57,57 @@ class DateNavigationButtons extends React.Component {
     this.isToday = this.isToday.bind(this)
     this.isSelected = this.isSelected.bind(this)
     this.initialVisibleMonth = this.initialVisibleMonth.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
+  componentDidMount () {
+    document.addEventListener('keydown', this.handleKeyDown)
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.handleKeyDown)
+  }
+
+  handleKeyDown (e) {
+    // Don't navigate if user is typing in an input field
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+      return
+    }
+
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault()
+        if (e.shiftKey) {
+          this.handleBackwardWeekClick()
+        } else {
+          this.handleBackwardDayClick()
+        }
+        break
+      case 'ArrowRight':
+        e.preventDefault()
+        if (e.shiftKey) {
+          this.handleForwardWeekClick()
+        } else {
+          this.handleForwardDayClick()
+        }
+        break
+      case 'ArrowUp':
+        e.preventDefault()
+        if (e.shiftKey) {
+          this.handleBackwardMonthClick()
+        } else {
+          this.handleBackwardWeekClick()
+        }
+        break
+      case 'ArrowDown':
+        e.preventDefault()
+        if (e.shiftKey) {
+          this.handleForwardMonthClick()
+        } else {
+          this.handleForwardWeekClick()
+        }
+        break
+    }
   }
 
   dateToPath (date) {
