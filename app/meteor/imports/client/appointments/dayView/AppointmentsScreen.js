@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import React from 'react'
 import moment from 'moment-timezone'
 import { monkey } from 'spotoninc-moment-round'
+import Modal from 'react-bootstrap/lib/Modal'
 import { __ } from '../../../i18n'
 import { weekOfYear } from '../../../util/time/format'
 import { DateNavigation } from '../../components/DateNavigation'
@@ -40,13 +41,41 @@ export class AppointmentsScreen extends React.Component {
     console.log('Constructing AppointmentsScreen')
 
     this.state = {
-      patientModalId: null
+      patientModalId: null,
+      showKeyboardShortcuts: false
     }
 
     this.scrollToCurrentTime = this.scrollToCurrentTime.bind(this)
     this.handlePrint = this.handlePrint.bind(this)
     this.handlePatientModalClose = this.handlePatientModalClose.bind(this)
     this.handlePatientModalOpen = this.handlePatientModalOpen.bind(this)
+    this.handleKeyboardShortcutsToggle = this.handleKeyboardShortcutsToggle.bind(this)
+    this.handleFocusSearch = this.handleFocusSearch.bind(this)
+    this.handleBlurSearch = this.handleBlurSearch.bind(this)
+  }
+
+  handleKeyboardShortcutsToggle () {
+    this.setState(state => ({ showKeyboardShortcuts: !state.showKeyboardShortcuts }))
+  }
+
+  handleFocusSearch () {
+    const container = document.getElementById('patient-picker-container')
+    if (container) {
+      const input = container.querySelector('input')
+      if (input) {
+        input.focus()
+      }
+    }
+  }
+
+  handleBlurSearch () {
+    const container = document.getElementById('patient-picker-container')
+    if (container) {
+      const input = container.querySelector('input')
+      if (input) {
+        input.blur()
+      }
+    }
   }
 
   scrollToCurrentTime() {
@@ -128,7 +157,7 @@ export class AppointmentsScreen extends React.Component {
             </small>
           </h1>
 
-          <div style={{ marginLeft: 30, marginRight: 15, flexGrow: 1 }}>
+          <div id='patient-picker-container' style={{ marginLeft: 30, marginRight: 15, flexGrow: 1 }}>
             <PatientPicker
               withAppointments
               onPatientModalOpen={this.handlePatientModalOpen}
@@ -137,10 +166,23 @@ export class AppointmentsScreen extends React.Component {
             />
           </div>
 
+          <div style={{display: "flex", alignItems: "center"}}>
+            <span
+              style={{ cursor: 'pointer', paddingRight: 10, marginTop: -3, opacity: 0.6 }}
+              onClick={this.handleKeyboardShortcutsToggle}
+              title={__('ui.keyboardShortcuts')}
+            >
+              <Icon name='keyboard-o' />
+            </span>
+          </div>
+
           <div style={{ marginTop: 27 }}>
             <DateNavigation
               date={date}
               onTodayClick={this.scrollToCurrentTime}
+              onKeyboardShortcutsToggle={this.handleKeyboardShortcutsToggle}
+              onFocusSearch={this.handleFocusSearch}
+              onBlurSearch={this.handleBlurSearch}
               basePath={`appointments/${calendar.slug}`}
               pullRight
               jumpWeekForward
@@ -177,6 +219,34 @@ export class AppointmentsScreen extends React.Component {
             onClose={this.handlePatientModalClose}
           />
         }
+
+        <Modal
+          show={this.state.showKeyboardShortcuts}
+          onHide={this.handleKeyboardShortcutsToggle}
+          bsSize='small'
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>{__('ui.keyboardShortcuts')}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <table style={{ width: '100%' }}>
+              <tbody>
+                <tr><td><kbd>←</kbd></td><td>{__('time.oneDayBackward')}</td></tr>
+                <tr><td><kbd>→</kbd></td><td>{__('time.oneDayForward')}</td></tr>
+                <tr><td><kbd>↑</kbd></td><td>{__('time.oneWeekBackward')}</td></tr>
+                <tr><td><kbd>↓</kbd></td><td>{__('time.oneWeekForward')}</td></tr>
+                <tr><td><kbd>Shift</kbd> + <kbd>←</kbd></td><td>{__('time.oneWeekBackward')}</td></tr>
+                <tr><td><kbd>Shift</kbd> + <kbd>→</kbd></td><td>{__('time.oneWeekForward')}</td></tr>
+                <tr><td><kbd>Shift</kbd> + <kbd>↑</kbd></td><td>{__('time.oneMonthBackward')}</td></tr>
+                <tr><td><kbd>Shift</kbd> + <kbd>↓</kbd></td><td>{__('time.oneMonthForward')}</td></tr>
+                <tr><td><kbd>H</kbd></td><td>{__('ui.today')}</td></tr>
+                <tr><td><kbd>{__('ui.space')}</kbd></td><td>{__('patients.search')}</td></tr>
+                <tr><td><kbd>Esc</kbd></td><td>{__('ui.blur')}</td></tr>
+                <tr><td><kbd>?</kbd></td><td>{__('ui.keyboardShortcuts')}</td></tr>
+              </tbody>
+            </table>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }

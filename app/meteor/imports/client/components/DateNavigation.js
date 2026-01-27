@@ -61,14 +61,22 @@ class DateNavigationButtons extends React.Component {
   }
 
   componentDidMount () {
-    document.addEventListener('keydown', this.handleKeyDown)
+    document.addEventListener('keydown', this.handleKeyDown, true)
   }
 
   componentWillUnmount () {
-    document.removeEventListener('keydown', this.handleKeyDown)
+    document.removeEventListener('keydown', this.handleKeyDown, true)
   }
 
   handleKeyDown (e) {
+    // Escape should always blur the current input
+    if (e.key === 'Escape') {
+      if (this.props.onBlurSearch) {
+        this.props.onBlurSearch()
+      }
+      return
+    }
+
     // Don't navigate if user is typing in an input field
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
       return
@@ -105,6 +113,23 @@ class DateNavigationButtons extends React.Component {
           this.handleForwardMonthClick()
         } else {
           this.handleForwardWeekClick()
+        }
+        break
+      case 'h':
+      case 'H':
+        e.preventDefault()
+        this.handleTodayClick()
+        break
+      case '?':
+        e.preventDefault()
+        if (this.props.onKeyboardShortcutsToggle) {
+          this.props.onKeyboardShortcutsToggle()
+        }
+        break
+      case ' ':
+        e.preventDefault()
+        if (this.props.onFocusSearch) {
+          this.props.onFocusSearch()
         }
         break
     }
