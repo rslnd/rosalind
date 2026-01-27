@@ -2,6 +2,7 @@ import idx from 'idx'
 import moment from 'moment-timezone'
 import memoize from 'lodash/memoize'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../../i18n'
@@ -183,6 +184,7 @@ const mapStateToProps = (store) => ({
 })
 
 export const AppointmentsContainer = compose(
+  withRouter,
   connect(mapStateToProps),
   withTracker(composer)
 )(AppointmentsScreen)

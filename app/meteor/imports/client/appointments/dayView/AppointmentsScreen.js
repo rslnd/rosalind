@@ -16,6 +16,7 @@ import { Loading } from '../../components/Loading'
 import { Tooltip } from '../../components/Tooltip'
 import { PatientsAppointmentsContainer } from '../../patientAppointments/PatientsAppointmentsContainer'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { ScheduleDSLEditor } from '../../schedules/dsl'
 
 const contentHeaderStyle = {
   background,
@@ -247,6 +248,15 @@ export class AppointmentsScreen extends React.Component {
             </table>
           </Modal.Body>
         </Modal>
+
+        {hasRole(Meteor.userId(), ['admin', 'schedules-dsl']) &&
+          <ScheduleDSLEditor
+            calendarId={calendar._id}
+            calendar={calendar}
+            history={this.props.history}
+            basePath={`appointments/${calendar.slug}`}
+          />
+        }
       </div>
     )
   }
