@@ -1,4 +1,4 @@
-FROM node:14.20.1
+FROM node:14.21.3-bullseye
 
 HEALTHCHECK \
   --interval=6s \
@@ -18,10 +18,9 @@ ENV NODE_ENV production
 RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
-    libgconf-2-4 \
-    gconf-service \
     libasound2 \
     libatk1.0-0 \
+    libatk-bridge2.0-0 \
     libc6 \
     libcairo2 \
     libcups2 \
@@ -29,7 +28,6 @@ RUN apt-get update && apt-get install -y \
     libexpat1 \
     libfontconfig1 \
     libgcc1 \
-    libgconf-2-4 \
     libgdk-pixbuf2.0-0 \
     libglib2.0-0 \
     libgtk-3-0 \
@@ -52,7 +50,8 @@ RUN apt-get update && apt-get install -y \
     libxtst6 \
     ca-certificates \
     fonts-liberation \
-    libappindicator1 \
+    libdrm2 \
+    libgbm1 \
     libnss3 \
     lsb-release \
     xdg-utils \
@@ -65,7 +64,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y google-chrome-stable \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
-    && apt-get purge --auto-remove -y curl \
     && rm -rf /src/*.deb
 
 RUN bash -c "time bash -c 'yarn \
