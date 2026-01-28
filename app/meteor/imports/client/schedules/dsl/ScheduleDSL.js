@@ -131,7 +131,7 @@ export const createDSLContext = ({
     for (const d of unavailableDefaults) {
       const start = timeToDate(currentDate, hmToString(d.from)).toDate()
       const end = timeToDate(currentDate, hmToString(d.to)).toDate()
-      await insertBlockingOverride(userId, start, end, d.note || 'Pause')
+      await insertBlockingOverride(userId, start, end)
     }
 
     // Create override blocks for times outside available periods
@@ -158,7 +158,7 @@ export const createDSLContext = ({
         const nextStart = timeToDate(currentDate, hmToString(sorted[i + 1].from))
 
         if (currEnd.isBefore(nextStart)) {
-          await insertBlockingOverride(userId, currEnd.toDate(), nextStart.toDate(), 'Break')
+          await insertBlockingOverride(userId, currEnd.toDate(), nextStart.toDate())
         }
       }
 
@@ -264,7 +264,7 @@ export const createDSLContext = ({
   }
 
   // Helper to insert an override and clean up bookables in that range
-  const insertBlockingOverride = async (userId, start, end, note) => {
+  const insertBlockingOverride = async (userId, start, end) => {
     // First remove any bookables in this range
     await removeOverlappingBookables(userId, start, end)
 
@@ -276,10 +276,28 @@ export const createDSLContext = ({
         userId,
         start,
         end,
-        available: false,
-        note
+        available: false
       }
     })
+  }
+
+  // Check if current day is a holiday
+  const isHoliday = () => {
+    const day = {
+      year: currentDate.year(),
+      month: currentDate.month() + 1,
+      day: currentDate.date()
+    }
+
+    const holiday = Schedules.findOne({
+      type: 'holiday',
+      calendarId,
+      'day.year': day.year,
+      'day.month': day.month,
+      'day.day': day.day
+    })
+
+    return !!holiday
   }
 
   // Get existing overrides for a user on current day to find available time slots
@@ -547,7 +565,7 @@ export const createDSLContext = ({
       await removeOverlappingOverrides(user._id, dayStart.toDate(), dayEnd.toDate())
 
       // Use helper that also removes bookables in the blocked range
-      await insertBlockingOverride(user._id, dayStart.toDate(), dayEnd.toDate(), options.reason || 'Closed via DSL')
+      await insertBlockingOverride(user._id, dayStart.toDate(), dayEnd.toDate())
       log(`Closed ${userName}`, 'success')
       await sleep(stepDelay())
     },
@@ -558,6 +576,13 @@ export const createDSLContext = ({
     // Or: open('name', { times: [{ from: '0800', to: '1200' }, { from: '1300', to: '1700' }] }) - multiple ranges with breaks
     open: async (assigneeName, options = {}) => {
       checkAborted()
+
+      // Do not open on holidays
+      if (isHoliday()) {
+        log(`Skipping ${currentDate.format('YYYY-MM-DD')} - holiday`, 'warning')
+        return
+      }
+
       const user = findAssigneeByName(assigneeName)
       const userName = Users.methods.fullNameWithTitle(user)
 
@@ -621,7 +646,7 @@ export const createDSLContext = ({
       // Block time BEFORE first open period
       const firstOpen = timeToDate(currentDate, timeRanges[0].from)
       if (firstOpen.isAfter(dayStart)) {
-        await insertBlockingOverride(user._id, dayStart.toDate(), firstOpen.toDate(), options.note)
+        await insertBlockingOverride(user._id, dayStart.toDate(), firstOpen.toDate())
       }
 
       // Block breaks BETWEEN open periods
@@ -629,14 +654,14 @@ export const createDSLContext = ({
         const currEnd = timeToDate(currentDate, timeRanges[i].to)
         const nextStart = timeToDate(currentDate, timeRanges[i + 1].from)
         if (currEnd.isBefore(nextStart)) {
-          await insertBlockingOverride(user._id, currEnd.toDate(), nextStart.toDate(), options.note || 'Break')
+          await insertBlockingOverride(user._id, currEnd.toDate(), nextStart.toDate())
         }
       }
 
       // Block time AFTER last open period
       const lastClose = timeToDate(currentDate, timeRanges[timeRanges.length - 1].to)
       if (lastClose.isBefore(dayEnd)) {
-        await insertBlockingOverride(user._id, lastClose.toDate(), dayEnd.toDate(), options.note)
+        await insertBlockingOverride(user._id, lastClose.toDate(), dayEnd.toDate())
       }
 
       const rangesStr = timeRanges.map(r => `${r.from}-${r.to}`).join(', ')
@@ -647,6 +672,13 @@ export const createDSLContext = ({
     // Open a day for an assignee by applying their default schedule as overrides
     openDay: async (assigneeName, options = {}) => {
       checkAborted()
+
+      // Do not open on holidays
+      if (isHoliday()) {
+        log(`Skipping ${currentDate.format('YYYY-MM-DD')} - holiday`, 'warning')
+        return
+      }
+
       const user = findAssigneeByName(assigneeName)
       const userName = Users.methods.fullNameWithTitle(user)
 
@@ -676,6 +708,13 @@ export const createDSLContext = ({
     // Open bookable slots for an assignee - uses the same timeSlots logic as the UI
     openBookable: async (assigneeName, options = {}) => {
       checkAborted()
+
+      // Do not open on holidays
+      if (isHoliday()) {
+        log(`Skipping ${currentDate.format('YYYY-MM-DD')} - holiday`, 'warning')
+        return
+      }
+
       const user = findAssigneeByName(assigneeName)
       const userName = Users.methods.fullNameWithTitle(user)
 
