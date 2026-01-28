@@ -10,6 +10,7 @@ Migrations.add({
 
   up: function () {
     const batch = Patients.rawCollection().initializeUnorderedBulkOp()
+    let count = 0
 
     Patients.find({}).forEach(patient => {
       const operation = {
@@ -20,10 +21,13 @@ Migrations.add({
       }
 
       batch.find({ _id: patient._id }).updateOne(operation)
+      count++
     })
 
-    const execute = Meteor.wrapAsync(batch.execute, batch)
-    execute()
+    if (count > 0) {
+      const execute = Meteor.wrapAsync(batch.execute, batch)
+      execute()
+    }
 
     return true
   },

@@ -151,9 +151,12 @@ export const ScheduleDSLEditor = ({ calendarId, calendar, history, basePath }) =
     }
   })
   const [selectedSnippet, setSelectedSnippet] = useState('')
+  const [showSaveInput, setShowSaveInput] = useState(false)
+  const [saveInputValue, setSaveInputValue] = useState('')
   const abortControllerRef = useRef(null)
   const logContainerRef = useRef(null)
   const speedRef = useRef(speed) // Use ref so running DSL can access current speed
+  const manualModeRef = useRef(manualMode) // Use ref so DSL can access current value
   const confirmResolverRef = useRef(null)
 
   // Debounced save to localStorage
@@ -211,6 +214,7 @@ export const ScheduleDSLEditor = ({ calendarId, calendar, history, basePath }) =
   const handleManualModeChange = (e) => {
     const checked = e.target.checked
     setManualMode(checked)
+    manualModeRef.current = checked
     try {
       localStorage.setItem(STORAGE_KEY_MANUAL, String(checked))
     } catch (e) {
@@ -276,7 +280,7 @@ export const ScheduleDSLEditor = ({ calendarId, calendar, history, basePath }) =
         onProgress: handleProgress,
         signal: abortControllerRef.current.signal,
         getStepDelay,
-        manualMode,
+        getManualMode: () => manualModeRef.current,
         requestConfirmation
       })
       handleLog({ message: 'Done!', type: 'success', timestamp: new Date() })
@@ -293,6 +297,12 @@ export const ScheduleDSLEditor = ({ calendarId, calendar, history, basePath }) =
       abortControllerRef.current.abort()
       handleLog({ message: 'Stopping...', type: 'warning', timestamp: new Date() })
     }
+    // Also resolve any pending confirmation with abort
+    if (confirmResolverRef.current) {
+      confirmResolverRef.current('abort')
+      confirmResolverRef.current = null
+    }
+    setPendingConfirm(null)
   }
 
   const handleClear = () => {
@@ -310,19 +320,49 @@ export const ScheduleDSLEditor = ({ calendarId, calendar, history, basePath }) =
   }
 
   const handleSaveSnippet = () => {
-    const name = window.prompt('Snippet name:')
-    if (!name || !name.trim()) return
+    // Show inline input for snippet name
+    setShowSaveInput(true)
+    setSaveInputValue(selectedSnippet || '')
+  }
 
-    const trimmedName = name.trim()
-    const existing = snippets.find(s => s.name === trimmedName)
+  const handleSaveInputConfirm = () => {
+    const name = saveInputValue.trim()
+    if (!name) {
+      setShowSaveInput(false)
+      return
+    }
+
+    const existing = snippets.find(s => s.name === name)
     if (existing) {
-      if (!window.confirm(`Overwrite "${trimmedName}"?`)) return
-      const updated = snippets.map(s => s.name === trimmedName ? { ...s, code } : s)
+      // Use native confirm (not overridden like window.prompt)
+      // eslint-disable-next-line no-restricted-globals
+      if (!confirm(`Overwrite "${name}"?`)) {
+        setShowSaveInput(false)
+        return
+      }
+      const updated = snippets.map(s => s.name === name ? { ...s, code } : s)
       saveSnippets(updated)
     } else {
-      saveSnippets([...snippets, { name: trimmedName, code }])
+      saveSnippets([...snippets, { name, code }])
     }
-    setSelectedSnippet(trimmedName)
+    setSelectedSnippet(name)
+    setShowSaveInput(false)
+    setSaveInputValue('')
+  }
+
+  const handleSaveInputCancel = () => {
+    setShowSaveInput(false)
+    setSaveInputValue('')
+  }
+
+  const handleSaveInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleSaveInputConfirm()
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      handleSaveInputCancel()
+    }
   }
 
   const handleLoadSnippet = (e) => {
@@ -362,45 +402,88 @@ export const ScheduleDSLEditor = ({ calendarId, calendar, history, basePath }) =
       </div>
 
       <div style={{ display: 'flex', gap: 6, padding: '6px 10px', backgroundColor: '#252526', alignItems: 'center' }}>
-        <select
-          value={selectedSnippet}
-          onChange={handleLoadSnippet}
-          disabled={isRunning}
-          style={{
-            flex: 1,
-            backgroundColor: '#3c3c3c',
-            color: '#d4d4d4',
-            border: '1px solid #555',
-            borderRadius: 3,
-            padding: '4px 8px',
-            fontSize: 11
-          }}
-        >
-          <option value="">-- Snippets --</option>
-          {snippets.map(s => (
-            <option key={s.name} value={s.name}>{s.name}</option>
-          ))}
-        </select>
-        <Button
-          size='small'
-          style={{ minWidth: 32, padding: '2px 8px', color: '#d4d4d4', borderColor: '#555' }}
-          variant='outlined'
-          onClick={handleSaveSnippet}
-          disabled={isRunning || !code.trim()}
-          title='Save snippet'
-        >
-          <Icon name='save' />
-        </Button>
-        <Button
-          size='small'
-          style={{ minWidth: 32, padding: '2px 8px', color: selectedSnippet ? '#f14c4c' : '#666', borderColor: '#555' }}
-          variant='outlined'
-          onClick={handleDeleteSnippet}
-          disabled={isRunning || !selectedSnippet}
-          title='Delete snippet'
-        >
-          <Icon name='trash' />
-        </Button>
+        {showSaveInput ? (
+          <>
+            <input
+              type="text"
+              value={saveInputValue}
+              onChange={(e) => setSaveInputValue(e.target.value)}
+              onKeyDown={handleSaveInputKeyDown}
+              autoFocus
+              placeholder="Snippet name..."
+              style={{
+                flex: 1,
+                backgroundColor: '#3c3c3c',
+                color: '#d4d4d4',
+                border: '1px solid #0e639c',
+                borderRadius: 3,
+                padding: '4px 8px',
+                fontSize: 11,
+                outline: 'none'
+              }}
+            />
+            <Button
+              size='small'
+              style={{ minWidth: 32, padding: '2px 8px', color: '#4ec9b0', borderColor: '#555' }}
+              variant='outlined'
+              onClick={handleSaveInputConfirm}
+              title='Confirm'
+            >
+              <Icon name='check' />
+            </Button>
+            <Button
+              size='small'
+              style={{ minWidth: 32, padding: '2px 8px', color: '#888', borderColor: '#555' }}
+              variant='outlined'
+              onClick={handleSaveInputCancel}
+              title='Cancel'
+            >
+              <Icon name='times' />
+            </Button>
+          </>
+        ) : (
+          <>
+            <select
+              value={selectedSnippet}
+              onChange={handleLoadSnippet}
+              disabled={isRunning}
+              style={{
+                flex: 1,
+                backgroundColor: '#3c3c3c',
+                color: '#d4d4d4',
+                border: '1px solid #555',
+                borderRadius: 3,
+                padding: '4px 8px',
+                fontSize: 11
+              }}
+            >
+              <option value="">-- Snippets --</option>
+              {snippets.map(s => (
+                <option key={s.name} value={s.name}>{s.name}</option>
+              ))}
+            </select>
+            <Button
+              size='small'
+              style={{ minWidth: 32, padding: '2px 8px', color: '#d4d4d4', borderColor: '#555' }}
+              variant='outlined'
+              onClick={handleSaveSnippet}
+              disabled={isRunning || !code.trim()}
+              title='Save snippet'
+            >
+              <Icon name='save' />
+            </Button>
+            <Button
+              size='small'
+              style={{ minWidth: 32, padding: '2px 8px', color: selectedSnippet ? '#f14c4c' : '#666', borderColor: '#555' }}
+              variant='outlined'
+              onClick={handleDeleteSnippet}
+              disabled={isRunning || !selectedSnippet}
+              title='Delete snippet'
+            >
+              <Icon name='trash' />
+            </Button>
+          </>
+        )}
       </div>
 
       <textarea
@@ -448,8 +531,7 @@ export const ScheduleDSLEditor = ({ calendarId, calendar, history, basePath }) =
               checked={manualMode}
               onChange={handleManualModeChange}
               size='small'
-              style={{ color: '#888', padding: 4 }}
-              disabled={isRunning}
+              style={{ color: manualMode ? '#ffcc00' : '#888', padding: 4 }}
             />
           }
           label={<span style={{ color: '#888', fontSize: 11 }}>Manual</span>}

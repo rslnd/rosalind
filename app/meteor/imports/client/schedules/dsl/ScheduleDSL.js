@@ -48,7 +48,7 @@ export const createDSLContext = ({
   getAssignees,
   getDaySchedule,
   getStepDelay,
-  manualMode,
+  getManualMode,
   requestConfirmation
 }) => {
   // Use dynamic step delay or fall back to default
@@ -377,12 +377,47 @@ export const createDSLContext = ({
     return date.clone().startOf('day').add(h, 'hours').add(m, 'minutes')
   }
 
+  // Weekday name to ISO weekday number mapping
+  const weekdayMap = {
+    'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5, 'sat': 6, 'sun': 7,
+    'monday': 1, 'tuesday': 2, 'wednesday': 3, 'thursday': 4, 'friday': 5, 'saturday': 6, 'sunday': 7
+  }
+
+  // Helper to set up day predicates for current date
+  const setupDayPredicates = () => {
+    const dayOfWeek = currentDate.isoWeekday()
+    dsl.isMonday = dayOfWeek === 1
+    dsl.isTuesday = dayOfWeek === 2
+    dsl.isWednesday = dayOfWeek === 3
+    dsl.isThursday = dayOfWeek === 4
+    dsl.isFriday = dayOfWeek === 5
+    dsl.isSaturday = dayOfWeek === 6
+    dsl.isSunday = dayOfWeek === 7
+    dsl.currentDate = currentDate.format('YYYY-MM-DD')
+    dsl.dayOfWeek = dayOfWeek
+    return dayOfWeek
+  }
+
   // DSL Functions
   const dsl = {
-    // Date iteration
-    doBetween: async (startStr, endStr, callback) => {
+    // Date iteration with optional weekdays filter
+    // Usage: doBetween('2027-01-01', '2027-12-31', async () => {...})
+    // Or: doBetween('2027-01-01', '2027-12-31', ['mon', 'wed', 'fri'], async () => {...})
+    doBetween: async (startStr, endStr, weekdaysOrCallback, maybeCallback) => {
       const start = moment(startStr, 'YYYY-MM-DD')
       const end = moment(endStr, 'YYYY-MM-DD')
+
+      // Handle optional weekdays parameter
+      let weekdaysFilter = null
+      let callback
+      if (typeof weekdaysOrCallback === 'function') {
+        callback = weekdaysOrCallback
+      } else if (Array.isArray(weekdaysOrCallback)) {
+        weekdaysFilter = weekdaysOrCallback.map(d => weekdayMap[d.toLowerCase()]).filter(Boolean)
+        callback = maybeCallback
+      } else {
+        throw new Error('Invalid arguments to doBetween')
+      }
 
       if (!start.isValid() || !end.isValid()) {
         throw new Error(`Invalid date range: ${startStr} - ${endStr}`)
@@ -391,31 +426,46 @@ export const createDSLContext = ({
       totalDays = end.diff(start, 'days') + 1
       processedDays = 0
 
-      log(`Processing ${totalDays} days from ${startStr} to ${endStr}`)
+      const weekdaysStr = weekdaysFilter ? ` (${weekdaysOrCallback.join(', ')} only)` : ''
+      log(`Processing ${totalDays} days from ${startStr} to ${endStr}${weekdaysStr}`)
 
       currentDate = start.clone()
       while (currentDate.isSameOrBefore(end, 'day')) {
         checkAborted()
 
+        const dayOfWeek = currentDate.isoWeekday()
+
+        // Skip if weekday filter is set and this day isn't in it
+        if (weekdaysFilter && !weekdaysFilter.includes(dayOfWeek)) {
+          currentDate.add(1, 'day')
+          continue
+        }
+
         // Navigate to the current date in the calendar view
         await navigateToDate(currentDate)
 
         // Set up day-of-week predicates for current iteration
-        const dayOfWeek = currentDate.isoWeekday()
-        dsl.isMonday = dayOfWeek === 1
-        dsl.isTuesday = dayOfWeek === 2
-        dsl.isWednesday = dayOfWeek === 3
-        dsl.isThursday = dayOfWeek === 4
-        dsl.isFriday = dayOfWeek === 5
-        dsl.isSaturday = dayOfWeek === 6
-        dsl.isSunday = dayOfWeek === 7
-        dsl.currentDate = currentDate.format('YYYY-MM-DD')
-        dsl.dayOfWeek = dayOfWeek
+        setupDayPredicates()
 
-        // Manual confirmation mode
-        if (manualMode && requestConfirmation) {
+        // Manual confirmation mode - with abort support
+        // Check manual mode dynamically (can be toggled during run)
+        const isManualMode = getManualMode ? getManualMode() : false
+        if (isManualMode && requestConfirmation) {
           const dateStr = currentDate.format('YYYY-MM-DD (dddd)')
-          const result = await requestConfirmation(dateStr)
+
+          // Create a promise that races between confirmation and abort
+          const result = await Promise.race([
+            requestConfirmation(dateStr),
+            new Promise((resolve) => {
+              const checkAbort = setInterval(() => {
+                if (signal && signal.aborted) {
+                  clearInterval(checkAbort)
+                  resolve('abort')
+                }
+              }, 100)
+            })
+          ])
+
           if (result === 'abort') {
             throw new Error('Aborted by user')
           }
@@ -447,6 +497,34 @@ export const createDSLContext = ({
       log(`Completed processing ${totalDays} days`, 'success')
     },
 
+    // Run on current day only (when no doBetween is used)
+    doToday: async (callback) => {
+      checkAborted()
+      totalDays = 1
+      processedDays = 0
+
+      // Use the date from the current URL or today
+      const urlMatch = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/)
+      currentDate = urlMatch ? moment(urlMatch[1], 'YYYY-MM-DD') : moment()
+
+      log(`Processing current day: ${currentDate.format('YYYY-MM-DD')}`)
+
+      // Navigate and set up predicates
+      await navigateToDate(currentDate)
+      setupDayPredicates()
+
+      await callback()
+
+      processedDays = 1
+      onProgress && onProgress({
+        current: 1,
+        total: 1,
+        date: currentDate.format('YYYY-MM-DD')
+      })
+
+      log(`Completed processing ${currentDate.format('YYYY-MM-DD')}`, 'success')
+    },
+
     // Date range check within loop
     isBetween: (startStr, endStr) => {
       const start = moment(startStr, 'YYYY-MM-DD')
@@ -475,6 +553,9 @@ export const createDSLContext = ({
     },
 
     // Open an assignee for appointments (block non-open times with overrides)
+    // Usage: open('name') - uses default schedule
+    // Or: open('name', { from: '0800', to: '1700' }) - single time range
+    // Or: open('name', { times: [{ from: '0800', to: '1200' }, { from: '1300', to: '1700' }] }) - multiple ranges with breaks
     open: async (assigneeName, options = {}) => {
       checkAborted()
       const user = findAssigneeByName(assigneeName)
@@ -483,40 +564,83 @@ export const createDSLContext = ({
       await ensureAssigneeOnDay(user._id)
 
       const weekday = currentDate.isoWeekday()
-      const defaultSchedule = getDefaultSchedule(user._id, weekday)
+      const defaults = getAllDefaultSchedules(user._id, weekday)
+      const firstDefault = defaults.find(d => d.available !== false)
 
-      let fromTime = options.from
-      let toTime = options.to
-
-      if (!fromTime && defaultSchedule && defaultSchedule.from) {
-        fromTime = `${String(defaultSchedule.from.h).padStart(2, '0')}${String(defaultSchedule.from.m).padStart(2, '0')}`
+      // Helper to get default time
+      const getDefaultFrom = () => firstDefault && firstDefault.from
+        ? `${String(firstDefault.from.h).padStart(2, '0')}${String(firstDefault.from.m).padStart(2, '0')}`
+        : '0800'
+      const getDefaultTo = () => {
+        const lastDefault = [...defaults].reverse().find(d => d.available !== false)
+        return lastDefault && lastDefault.to
+          ? `${String(lastDefault.to.h).padStart(2, '0')}${String(lastDefault.to.m).padStart(2, '0')}`
+          : '1800'
       }
-      if (!toTime && defaultSchedule && defaultSchedule.to) {
-        toTime = `${String(defaultSchedule.to.h).padStart(2, '0')}${String(defaultSchedule.to.m).padStart(2, '0')}`
+
+      // Determine time ranges
+      let timeRanges = []
+
+      if (options.times && Array.isArray(options.times)) {
+        // Multiple time ranges with breaks between
+        timeRanges = options.times.map(t => ({
+          from: t.from || getDefaultFrom(),
+          to: t.to || getDefaultTo()
+        }))
+      } else if (options.from || options.to) {
+        // Single time range - use default for missing value
+        timeRanges = [{
+          from: options.from || getDefaultFrom(),
+          to: options.to || getDefaultTo()
+        }]
+      } else if (defaults.length > 0) {
+        // Use all available blocks from default schedule
+        const availableDefaults = defaults.filter(d => d.available !== false)
+        timeRanges = availableDefaults.map(d => ({
+          from: hmToString(d.from),
+          to: hmToString(d.to)
+        }))
+      } else {
+        // Fallback
+        timeRanges = [{ from: '0800', to: '1800' }]
       }
 
-      fromTime = fromTime || '0800'
-      toTime = toTime || '1800'
+      // Sort ranges by start time
+      timeRanges.sort((a, b) => {
+        const aMin = parseInt(a.from.slice(0, 2)) * 60 + parseInt(a.from.slice(2, 4))
+        const bMin = parseInt(b.from.slice(0, 2)) * 60 + parseInt(b.from.slice(2, 4))
+        return aMin - bMin
+      })
 
       const dayStart = timeToDate(currentDate, DAY_START_TIME)
       const dayEnd = timeToDate(currentDate, DAY_END_TIME)
-      const openStart = timeToDate(currentDate, fromTime)
-      const openEnd = timeToDate(currentDate, toTime)
 
       // Remove any overlapping schedules first
       await removeOverlappingOverrides(user._id, dayStart.toDate(), dayEnd.toDate())
 
-      // Block time BEFORE open period
-      if (openStart.isAfter(dayStart)) {
-        await insertBlockingOverride(user._id, dayStart.toDate(), openStart.toDate(), options.note)
+      // Block time BEFORE first open period
+      const firstOpen = timeToDate(currentDate, timeRanges[0].from)
+      if (firstOpen.isAfter(dayStart)) {
+        await insertBlockingOverride(user._id, dayStart.toDate(), firstOpen.toDate(), options.note)
       }
 
-      // Block time AFTER open period
-      if (openEnd.isBefore(dayEnd)) {
-        await insertBlockingOverride(user._id, openEnd.toDate(), dayEnd.toDate(), options.note)
+      // Block breaks BETWEEN open periods
+      for (let i = 0; i < timeRanges.length - 1; i++) {
+        const currEnd = timeToDate(currentDate, timeRanges[i].to)
+        const nextStart = timeToDate(currentDate, timeRanges[i + 1].from)
+        if (currEnd.isBefore(nextStart)) {
+          await insertBlockingOverride(user._id, currEnd.toDate(), nextStart.toDate(), options.note || 'Break')
+        }
       }
 
-      log(`Opened ${userName} ${fromTime}-${toTime} (blocked before/after)`, 'success')
+      // Block time AFTER last open period
+      const lastClose = timeToDate(currentDate, timeRanges[timeRanges.length - 1].to)
+      if (lastClose.isBefore(dayEnd)) {
+        await insertBlockingOverride(user._id, lastClose.toDate(), dayEnd.toDate(), options.note)
+      }
+
+      const rangesStr = timeRanges.map(r => `${r.from}-${r.to}`).join(', ')
+      log(`Opened ${userName} ${rangesStr} (blocked breaks)`, 'success')
       await sleep(stepDelay())
     },
 
@@ -786,7 +910,7 @@ export const executeDSL = async (code, context) => {
   const getDayOfWeek = () => dsl.dayOfWeek
 
   // Rewrite the code to use function calls for day predicates
-  const wrappedCode = code
+  let wrappedCode = code
     .replace(/\bisMonday\b(?!\s*[:(])/g, 'isMonday()')
     .replace(/\bisTuesday\b(?!\s*[:(])/g, 'isTuesday()')
     .replace(/\bisWednesday\b(?!\s*[:(])/g, 'isWednesday()')
@@ -797,8 +921,15 @@ export const executeDSL = async (code, context) => {
     .replace(/\bcurrentDate\b(?!\s*[:(])/g, 'currentDate()')
     .replace(/\bdayOfWeek\b(?!\s*[:(])/g, 'dayOfWeek()')
 
+  // If code doesn't use doBetween or doToday, auto-wrap with doToday
+  const usesDoBetween = /\bdoBetween\s*\(/.test(code)
+  const usesDoToday = /\bdoToday\s*\(/.test(code)
+  if (!usesDoBetween && !usesDoToday) {
+    wrappedCode = `await doToday(async () => { ${wrappedCode} })`
+  }
+
   const wrappedFn = new Function(
-    'doBetween', 'isBetween', 'close', 'open', 'openDay', 'openBookable', 'closeBookable', 'skipSundays',
+    'doBetween', 'doToday', 'isBetween', 'close', 'open', 'openDay', 'openBookable', 'closeBookable', 'skipSundays',
     'isMonday', 'isTuesday', 'isWednesday', 'isThursday', 'isFriday', 'isSaturday', 'isSunday',
     'currentDate', 'dayOfWeek',
     `return (async () => { ${wrappedCode} })()`
@@ -806,6 +937,7 @@ export const executeDSL = async (code, context) => {
 
   return wrappedFn(
     dsl.doBetween,
+    dsl.doToday,
     dsl.isBetween,
     dsl.close,
     dsl.open,
