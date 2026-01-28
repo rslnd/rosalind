@@ -1,4 +1,4 @@
-FROM node:20.18.1
+FROM node:14.20.1
 
 HEALTHCHECK \
   --interval=6s \
@@ -18,23 +18,22 @@ ENV NODE_ENV production
 RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
+    libgconf-2-4 \
+    gconf-service \
     libasound2 \
     libatk1.0-0 \
-    libatk-bridge2.0-0 \
     libc6 \
     libcairo2 \
     libcups2 \
     libdbus-1-3 \
-    libdrm2 \
     libexpat1 \
     libfontconfig1 \
-    libgbm1 \
     libgcc1 \
+    libgconf-2-4 \
     libgdk-pixbuf2.0-0 \
     libglib2.0-0 \
     libgtk-3-0 \
     libnspr4 \
-    libnss3 \
     libpango-1.0-0 \
     libpangocairo-1.0-0 \
     libstdc++6 \
@@ -49,19 +48,24 @@ RUN apt-get update && apt-get install -y \
     libxi6 \
     libxrandr2 \
     libxrender1 \
-    libxshmfence1 \
+    libxss1 \
+    libxtst6 \
     ca-certificates \
     fonts-liberation \
+    libappindicator1 \
+    libnss3 \
+    lsb-release \
     xdg-utils \
     wget \
-    gnupg \
     --no-install-recommends \
-    && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
-    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
-    && apt-get install -y google-chrome-stable \
+    && apt-get install -y google-chrome-unstable \
       --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get purge --auto-remove -y curl \
+    && rm -rf /src/*.deb
 
 RUN bash -c "time bash -c 'yarn \
   && npm cache clear --force \
