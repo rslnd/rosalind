@@ -24,7 +24,7 @@
     "@sentry/electron": "^2.5.1",
     "chokidar": "^3.5.2",
     "electron-localshortcut": "^3.2.1",
-    "electron-updater": "^4.3.9",
+    "electron-updater": "^6.3.0",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
     "iconv-lite": "^0.6.2",
