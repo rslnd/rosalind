@@ -12,11 +12,13 @@ import { dayToDate } from '../../util/time/day'
 import { Icon } from './Icon'
 import { skipForwards, skipBackwards } from '../../api/messages/methods/skipBackwards'
 
+const calendarPadding = 6
+const calendarPaddingTop = 2
 export const calendarStyle = {
   position: 'fixed',
   zIndex: 50,
-  top: 50,
-  right: 15,
+  top: 50 - calendarPaddingTop,
+  right: 15 - calendarPadding,
   display: 'none'
 }
 
@@ -66,6 +68,7 @@ class DateNavigationButtons extends React.Component {
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.handleKeyDown, true)
+    clearTimeout(this.closeTimer)
   }
 
   handleKeyDown (e) {
@@ -212,9 +215,18 @@ class DateNavigationButtons extends React.Component {
           closeOnEsc
           onClose={this.handleCalendarClose}>
           {
-            ({ openPortal, closePortal, isOpen, portal }) =>
-              <div>
-                <ButtonGroup onMouseEnter={openPortal}>
+            ({ openPortal, closePortal, isOpen, portal }) => {
+              const handleOpen = e => {
+                clearTimeout(this.closeTimer)
+                openPortal(e)
+              }
+              const handleClose = () => {
+                clearTimeout(this.closeTimer)
+                this.closeTimer = setTimeout(closePortal, 80)
+              }
+              return (
+                <div>
+                  <ButtonGroup onMouseOver={handleOpen}>
                   {this.props.before}
 
                   {
@@ -278,7 +290,10 @@ class DateNavigationButtons extends React.Component {
                       <div
                         className='hide-print'
                         style={isOpen ? calendarStyleOpen : calendarStyle}>
-                        <div onMouseLeave={closePortal}>
+                        <div
+                          onMouseOver={handleOpen}
+                          onMouseLeave={handleClose}
+                          style={{ padding: `${calendarPaddingTop}px ${calendarPadding}px ${calendarPadding}px` }}>
                           <DayPickerSingleDateController
                             onDateChange={this.handleCalendarDayChange}
                             date={this.props.date}
@@ -302,6 +317,8 @@ class DateNavigationButtons extends React.Component {
                   }
                 </ButtonGroup>
               </div>
+              )
+            }
           }
         </PortalWithState>
       </div>
