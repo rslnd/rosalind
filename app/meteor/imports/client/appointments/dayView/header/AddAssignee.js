@@ -76,6 +76,7 @@ export const AddAssignee = (props) => {
               <Paper style={popoverStyle}>
                 <UserPicker
                   autoFocus
+                  openMenuOnFocus
                   onChange={handleAddUser} />
               </Paper>
             </ClickAwayListener>
