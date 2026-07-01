@@ -58,15 +58,21 @@ const buildMonthOptions = () => {
 
 const monthCaptionRootStyle = {
   position: 'relative',
-  textAlign: 'center'
+  textAlign: 'center',
+  // Lift the caption so it lines up with the nav arrows: they sit at top: 18px,
+  marginTop: -4
 }
 
 const monthCaptionStyle = {
-  border: '1px solid transparent',
+  boxSizing: 'border-box',
+  height: 33,
+  padding: '0 9px',
+  border: '1px solid #e4e7e7',
   borderRadius: 3,
-  padding: '2px 8px',
+  background: '#fff',
   font: 'inherit',
   fontWeight: 'bold',
+  color: '#484848',
   cursor: 'pointer',
   display: 'inline-flex',
   alignItems: 'center'
@@ -161,11 +167,11 @@ class MonthYearSelect extends React.Component {
     const { open, hovered, coords, captionHover, captionPressed } = this.state
     const today = moment()
     const container = getContainer && getContainer()
-    let captionLook = { borderColor: 'transparent', background: 'transparent' }
+    let captionLook = { borderColor: '#e4e7e7', background: '#fff' }
     if (captionPressed) {
-      captionLook = { borderColor: '#999', background: '#e6e6e6' }
+      captionLook = { borderColor: '#c4c4c4', background: '#f2f2f2' }
     } else if (captionHover || open) {
-      captionLook = { borderColor: '#ccc', background: '#f5f5f5' }
+      captionLook = { borderColor: '#c4c4c4', background: '#fff' }
     }
 
     return (
