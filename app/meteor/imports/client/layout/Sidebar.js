@@ -2,7 +2,6 @@ import React from 'react'
 import injectSheet from 'react-jss'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
-import FlipMove from 'react-flip-move'
 import { __ } from '../../i18n'
 
 const duration = 0.18
@@ -83,21 +82,16 @@ const SidebarItem = injectSheet(styles)(({ item, location, sidebarOpen, classes 
               className='pointer level-0 link'>
               <i className={`fa fa-${item.icon}`} />
               <span className={hideWhenClosed}>{name}</span>
-              <FlipMove typeName='span'>
-                {
-                  item.count && item.count > 0
-                    ? <small
-                      key={item.count}
-                      className={`label pull-right label-primary ${!sidebarOpen && classes.badgeWhenClosed}`}>
-                      {item.count}
-                    </small>
-                    : (item.subItems &&
-                    <i
-                      key='subItems'
-                      className={`i fa fa-angle-left pull-right ${hideWhenClosed}`} />
-                    )
-                }
-              </FlipMove>
+              {
+                item.count && item.count > 0
+                  ? <small
+                    className={`label pull-right label-primary ${!sidebarOpen && classes.badgeWhenClosed}`}>
+                    {item.count}
+                  </small>
+                  : (item.subItems &&
+                  <i className={`fa fa-angle-left ${hideWhenClosed}`} />
+                  )
+              }
             </Link>
           )
       }
