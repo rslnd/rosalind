@@ -190,6 +190,8 @@ export class AppointmentsScreen extends React.Component {
               onBlurSearch={this.handleBlurSearch}
               basePath={`appointments/${calendar.slug}`}
               pullRight
+              jumpMonthBackward
+              jumpWeekBackward
               jumpWeekForward
               jumpMonthForward />
           </div>

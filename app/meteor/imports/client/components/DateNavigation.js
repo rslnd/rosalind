@@ -354,6 +354,7 @@ class DateNavigationButtons extends React.Component {
 
     const path = this.dateToPath(targetDay)
     this.props.history.replace(path)
+    this.goToPickerMonth(moment(targetDay))
   }
 
   handleBackwardMonthClick () {
