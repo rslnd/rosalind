@@ -146,15 +146,19 @@ export class AppointmentsScreen extends React.Component {
             <small>
               {weekOfYear(date, { short: true })}
               &nbsp;
-              <Tooltip
-                title={__('appointments.printDayView')}
-              >
-                <span
-                  style={printStyle}
-                  onClick={this.handlePrint}>
-                  <Icon name='print' />
-                </span>
-              </Tooltip>
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Tooltip
+                  placement='bottom'
+                  offset='0, 2'
+                  title={<span style={{ whiteSpace: 'nowrap' }}>{__('appointments.printDayView')}</span>}
+                >
+                  <span
+                    style={printStyle}
+                    onClick={this.handlePrint}>
+                    <Icon name='print' />
+                  </span>
+                </Tooltip>
+              </span>
             </small>
           </h1>
 

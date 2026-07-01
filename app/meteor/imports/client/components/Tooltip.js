@@ -11,6 +11,9 @@ const styles = theme => ({
     fontSize: 10,
     textTransform: 'uppercase'
   },
+  tooltipLabel: {
+    position: 'relative'
+  },
   arrowPopper: arrowGenerator(theme.palette.grey[700]),
   arrow: {
     position: 'absolute',
@@ -32,7 +35,7 @@ export const Tooltip = compose(
   withStyles(styles),
   withState('arrowRef', 'setArrowRef')
 )(
-  ({ children, title, arrowRef, setArrowRef, classes, delay, ...props }) =>
+  ({ children, title, arrowRef, setArrowRef, classes, delay, offset, ...props }) =>
     <MUITooltip
       title={
         <React.Fragment>
@@ -40,12 +43,15 @@ export const Tooltip = compose(
           <span className={classes.arrow} ref={setArrowRef} />
         </React.Fragment>
       }
-      classes={{ popper: classes.arrowPopper }}
+      classes={{ popper: classes.arrowPopper, tooltip: classes.tooltipLabel }}
       PopperProps={{
         disablePortal: true,
         popperOptions: {
           disablePortal: true,
           modifiers: {
+            flip: { boundariesElement: 'viewport' },
+            preventOverflow: { boundariesElement: 'viewport' },
+            offset: { offset: offset || '0, 0' },
             arrow: {
               enabled: Boolean(arrowRef),
               element: arrowRef
