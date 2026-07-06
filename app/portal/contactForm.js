@@ -355,6 +355,7 @@ export const ContactForm = (props) => {
                       }
                       <p>
                         Wir möchten Sie darauf aufmerksam machen, dass es bei Terminen in der Kassenordination zu längeren Wartezeiten kommen kann.<br />
+                        Ihr Termin wird einer unserer Ärztinnen oder einem unserer Ärzte zugeteilt.<br />
                         Sie können uns gerne telefonisch kontaktieren, um einen privaten Termin zu vereinbaren.
                       </p>
 
@@ -468,6 +469,7 @@ const AppointmentSuccess = ({ appointment, confirmationInfo, ical }) => {
 
     <p>
       Wir möchten Sie darauf aufmerksam machen, dass es bei Terminen in der Kassenordination zu längeren Wartezeiten kommen kann.<br />
+      Ihr Termin wird einer unserer Ärztinnen oder einem unserer Ärzte zugeteilt.<br />
       Sie können uns gerne telefonisch kontaktieren, um einen privaten Termin zu vereinbaren.
     </p>
 
