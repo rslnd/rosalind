@@ -287,10 +287,16 @@ export const ContactForm = (props) => {
                       {canRefresh &&
                         <a
                           href='#'
-                          style={{ opacity: 0.8, display: 'inline-block', paddingLeft: 20 }}
+                          style={{
+                            opacity: 0.8,
+                            display: 'inline-block',
+                            padding: '2px 8px',
+                            border: '1px solid #ccc',
+                            borderRadius: 4
+                          }}
                           onClick={(e) => { e.preventDefault(); refresh(); }}
                         >
-                          Neu laden
+                          🔄 Neu laden
                         </a>
                       }
                     </p>
@@ -563,7 +569,10 @@ const buttonStyle = {
   width: 34,
   height: 31,
   fontSize: '12pt',
-  padding: '4px 0px 0px 0px'
+  padding: 0,
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center'
 }
 
 const Button = ({ children, style = {}, ...props }) =>
