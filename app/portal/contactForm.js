@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Formik, Form } from 'formik'
 import { Section, ErrorBoundary, Checkbox, Input, Required, CleaveInput, Radio, Select, errorMessage } from './components'
 import { apiBaseUrl } from './apiBaseUrl'
@@ -500,18 +500,19 @@ const AppointmentSuccess = ({ appointment, confirmationInfo, ical }) => {
   </div>
 }
 
-const ScrollUpHint = ({n}) => {
-  return <div>
-    {Array(n).fill(true).map((_, i) =>
-      <div key={i}
-        style={{ opacity: 0.7, marginTop: '12rem'}}>
-        ⏫ Bitte nach oben scrollen
-      </div>)}
-  </div>
-}
+export const Success = ({ greeting = '', contactInfo, success, ...props }) => {
+  const topRef = useRef(null)
 
-export const Success = ({ greeting = '', contactInfo, success, ...props }) =>
-  <div>
+  // Portal is embedded in an iframe (urologie11.at). After submitting, the
+  // parent page keeps its scroll position, so the confirmation can end up out
+  // of view. Scroll the confirmation into view across the iframe boundary.
+  useEffect(() => {
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ block: 'start' })
+    }
+  }, [])
+
+  return <div ref={topRef}>
     <h2>✅ Vielen Dank!</h2>
 
     {success && success.appointment
@@ -527,9 +528,8 @@ export const Success = ({ greeting = '', contactInfo, success, ...props }) =>
         {contactInfo}
       </p>
     </Section>
-
-    <ScrollUpHint n={9} />
   </div>
+}
 
 const RequestSameAssignee = () => {
   return <div>
