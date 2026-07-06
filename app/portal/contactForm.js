@@ -379,7 +379,8 @@ export const ContactForm = (props) => {
               </p>
 
               {error && <p><b>
-                Entschuldigung! Ihr gewählter Termin konnte leider nicht reserviert werden. Bitte kontaktieren Sie uns telefonisch. Danke!
+                Entschuldigung! Ihr gewählter Termin konnte leider nicht reserviert werden. Bitte kontaktieren Sie uns telefonisch unter <a href='tel:+4318773279'>+43 1 877 32 79</a>. Danke!
+                {error.error === 'dup' && <><br />Code: dup</>}
               </b></p>}
 
               <input

@@ -153,7 +153,8 @@ export const handleAppointmentBooking = (untrustedBody) => {
   console.log(ltag, 'patientSelector', patientSelector)
   let patientId = null
   if (patients.length >= 2) {
-    console.error(ltag, `warning: matched ${patients.length} patients with selector`, patientSelector)
+    console.error(ltag, `dup: matched ${patients.length} patients with selector`, patientSelector)
+    return { error: 'dup' }
   }
 
   if (patients.length === 1) {
