@@ -12,7 +12,7 @@ import { withTracker } from '../components/withTracker'
 import { __ } from '../../i18n'
 import { fullNameWithTitle } from '../../api/users/methods'
 import { Icon } from '../components/Icon'
-import { gray } from '../layout/styles'
+import { gray, green, red, warning, darkGray } from '../layout/styles'
 import { hasRole } from '../../util/meteor/hasRole'
 import { prompt } from '../layout/Prompt'
 import { buildMessageText } from '../../api/messages/methods/buildMessageText'
@@ -37,6 +37,35 @@ const composer = (props) => {
 const formatDate = (d) =>
   d && moment(d).format([__('time.dateFormat'), __('time.timeFormat')].join(' '))
 
+const smsStatusConfig = {
+  sent: { color: green, icon: 'check-circle' },
+  failed: { color: red, icon: 'exclamation-triangle' },
+  scheduled: { color: warning, icon: 'clock-o' },
+  draft: { color: darkGray, icon: 'pencil' },
+  final: { color: darkGray, icon: 'hourglass-half' }
+}
+
+const SmsStatus = ({ message }) => {
+  const { status } = message
+  const config = smsStatusConfig[status] || { color: darkGray, icon: 'question-circle' }
+  const label = smsStatusConfig[status] ? __(`ui.smsStatus.${status}`) : status
+
+  return <span
+    title={JSON.stringify(message)}
+    style={{
+      display: 'inline-block',
+      color: '#fff',
+      backgroundColor: config.color,
+      borderRadius: 3,
+      padding: '1px 7px',
+      fontWeight: 'bold',
+      marginLeft: 6
+    }}
+  >
+    <Icon name={config.icon} />&nbsp;{label}
+  </span>
+}
+
 const Message = ({ message, patientName, primaryColor }) => {
   const isInbound = message.direction === 'inbound'
   const isOutbound = !isInbound
@@ -48,12 +77,7 @@ const Message = ({ message, patientName, primaryColor }) => {
       <div className='direct-chat-name float-left enable-select'>{senderName}</div>
       <div className='direct-chat-timestamp float-right enable-select'>
         {formatDate(timestamp)}
-        {
-          message.status !== 'sent' &&
-            <span title={JSON.stringify(message)}>
-              &nbsp;({message.status})
-            </span>
-        }
+        {isOutbound && <SmsStatus message={message} />}
       </div>
     </div>
 
