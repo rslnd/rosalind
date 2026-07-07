@@ -31,6 +31,27 @@ export const sendScheduled = ({ Messages }) => {
 
       if (!Meteor.isServer) { return }
 
+      // Retry reminders that failed to send: once, ~24h after the failure, and
+      // only while still well before the appointment (invalidAfter, i.e.
+      // start - 4h, must still be in the future). Flipping them back to
+      // 'scheduled' lets the normal send path below pick them up in this same
+      // tick; the `retries` counter (incremented on every failure in
+      // channels/sms) caps this at a single retry.
+      const retryAfterHours = 24
+      const maxRetries = 1
+
+      Messages.update({
+        status: 'failed',
+        direction: 'outbound',
+        type: 'appointmentReminder',
+        removed: { $ne: true },
+        retries: { $lte: maxRetries },
+        failedAt: { $lt: moment().subtract(retryAfterHours, 'hours').toDate() },
+        invalidAfter: { $gt: moment().toDate() }
+      }, {
+        $set: { status: 'scheduled' }
+      }, { multi: true })
+
       const timeWindow = {
         $gt: moment().subtract(5, 'day').toDate(),
         $lt: moment().toDate()

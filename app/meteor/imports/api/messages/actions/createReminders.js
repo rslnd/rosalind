@@ -1,5 +1,3 @@
-import some from 'lodash/some'
-import find from 'lodash/find'
 import uniqBy from 'lodash/uniqBy'
 import identity from 'lodash/identity'
 import moment from 'moment-timezone'
@@ -11,13 +9,10 @@ import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
 import { Users } from '../../users'
-import { Tags } from '../../tags'
 import { Schedules } from '../../schedules'
 import { Settings } from '../../settings'
-import { isMobileNumber } from '../methods/isMobileNumber'
-import { buildMessageText } from '../methods/buildMessageText'
 import { reminderDateCalculator } from '../methods/reminderDateCalculator'
-import { hasRole } from '../../../util/meteor/hasRole'
+import { buildReminderMessage, mobilePhone } from '../methods/buildReminderMessage'
 
 // Don't immediately send out reminder if appointment is very soon,
 // We don't want the patient to receive the reminder while still
@@ -111,18 +106,10 @@ export const createReminders = ({ Messages }) => {
         removed: { $ne: true }
       }).fetch()
 
-      const mobilePhone = (contacts = []) => {
-        const c = find(contacts, c =>
-          (c.channel === 'Phone' &&
-          isMobileNumber(c.value))
-        )
-        return c && c.value
-      }
-
       Calendars.find({ smsAppointmentReminder: true }).fetch().map(calendar => {
         const calendarId = calendar._id
 
-        const { calculateReminderDate, calculateFutureCutoff } = reminderDateCalculator({
+        const { calculateFutureCutoff } = reminderDateCalculator({
           holidays,
           days: (
             Number.isInteger(parseInt(Settings.get('messages.sms.appointmentReminder.daysBefore')))
@@ -139,29 +126,23 @@ export const createReminders = ({ Messages }) => {
 
         // console.log('DEBUG appts length', appointments.length, appointments.find(a=> (a._id === 'XuTkK7dTBLNgG7Fvn')))
 
-        const debug = (a, ...msg) => {
-          // if ((a.appointmentCreatedAt || a.createdAt)
-          //    && moment().startOf('day').isBefore(a.appointmentCreatedAt || a.createdAt)) {
-          //   console.log('DEBUG SMS: ', ...msg)
-          // }
-        }
-
-
         const appointmentsWithMobile = appointments.filter((a) => {
           if (a.patient && a.patient.noSMS) {
-            debug(a, 'patient.noSms')
             return false
           }
 
           if (a.patient && a.patient.contacts && mobilePhone(a.patient.contacts)) {
             return true
           } else {
-            debug(a, 'no contacts', a, a.patient, a.patient && a.patient.contacts)
             return false
           }
         })
+        // Dedupe per patient (not per phone number): otherwise two distinct
+        // patients sharing a number (e.g. spouses, parent + child) would
+        // collapse into one and only one of them would ever be reminded.
+        // Appointments are sorted by `start` asc, so the earliest is kept.
         const uniqueAppointmentsWithMobile = uniqBy(appointmentsWithMobile, (a) => (
-          a.patient.contacts[0].value
+          a.patient._id
         ))
 
         let insertedCount = 0
@@ -183,117 +164,9 @@ export const createReminders = ({ Messages }) => {
 
         // console.log('apptsWMobile', appointmentsWithMobile.length)
 
-        const messages = messagePayloads.map((payload) => {
-          const calendar = Calendars.findOne({ _id: payload.calendarId })
-          if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
-            debug(payload, 'no calendar or smsAppointmentReminder: false')
-            return false
-          }
-
-          const tags = Tags.methods.expand(payload.tags)
-
-          if (payload.assignee === 'y8JK7n9D4W8HvMpMu') {
-            console.log(hasRole(payload.assigneeId, ['forceSmsAppointmentReminder']),
-              payload)
-
-          }
-
-          let forceSMS = payload.assigneeId
-            ? hasRole(payload.assigneeId, ['forceSmsAppointmentReminder'])
-            : false
-
-          if (forceSMS) {
-            debug(payload, 'forceSMS', forceSMS)
-          }
-
-          if (!forceSMS) {
-            if (tags.some(t => t.noSmsAppointmentReminder)) {
-              debug(payload, 'some tags noSmsAppointmentReminder')
-              return false
-            }
-
-            if (payload.assigneeId && hasRole(payload.assigneeId, ['noSmsAppointmentReminder'])) {
-              debug(payload, 'assignee noSmsAppointmentReminder')
-              return false
-            }
-          }
-
-
-          let text = Settings.get('messages.sms.appointmentReminder.text')
-
-          if (calendar && calendar.smsAppointmentReminderText && calendar.smsAppointmentReminderText.length > 10) {
-            text = calendar.smsAppointmentReminderText
-          }
-
-          if (payload.gender === 'Male' && calendar && calendar.smsAppointmentReminderTextMale && calendar.smsAppointmentReminderTextMale.length > 10) {
-            text = calendar.smsAppointmentReminderTextMale
-          }
-
-
-          // uro11 special: different text if appt is within first hour of day
-          if (process.env.CUSTOMER_PREFIX === 'uro11' && Settings.get('messages.sms.appointmentReminder.textFirstHour')) {
-            const firstApptOfDay = Appointments.findOne({
-              calendarId: payload.calendarId,
-              start: {
-                $gte: moment(payload.start).startOf('day'),
-                $lte: moment(payload.start).startOf('day'),
-              }
-            }, {
-              sort: {
-                start: 1
-              }
-            })
-
-            if (firstApptOfDay) {
-              const firstHourFrom = moment(firstApptOfDay.start)
-              const firstHourTo = moment(firstApptOfDay.start).add(1, 'hour')
-
-              if (moment(payload.start).isBetween(firstHourFrom, firstHourTo)) {
-                text = Settings.get('messages.sms.appointmentReminder.textFirstHour')
-              }
-            }
-          }
-
-          // vasektomie ohne voller blase
-          if (process.env.CUSTOMER_PREFIX === 'uro11') {
-            const vasec = tags.find(t => t.tag === 'Vasektomie')
-            if (vasec && Settings.get('messages.sms.appointmentReminder.textVasectomy')) {
-              text = Settings.get('messages.sms.appointmentReminder.textVasectomy')
-            }
-          }
-
-
-          // hzw special: different text + time if assignee is telemed
-          if (Settings.get('messages.sms.appointmentReminder.telemedicineText')) {
-            if (payload.assigneeId && hasRole(payload.assigneeId, ['telemedicine-provider'])) {
-              text = Settings.get('messages.sms.appointmentReminder.telemedicineText')
-              // calendar.smsDaysBefore = 1 // send 24h before appt
-              debug(payload, 'set text to: ' + text)
-            }
-          }
-
-          if (!text) {
-            debug(payload, 'no text')
-            return false
-          }
-
-          return {
-            type: 'appointmentReminder',
-            channel: 'SMS',
-            direction: 'outbound',
-            status: 'scheduled',
-            to: mobilePhone(payload.contacts),
-            scheduled: calculateReminderDate(payload.start, calendar.smsDaysBefore || 2).toDate(),
-            text: buildMessageText({ text }, {
-              date: payload.start
-            }),
-            invalidBefore: moment(payload.start).subtract(3, 'weeks').toDate(),
-            invalidAfter: moment(payload.start).subtract(4, 'hours').toDate(),
-            appointmentId: payload.appointmentId,
-            patientId: payload.patientId,
-            payload
-          }
-        }).filter(identity)
+        const messages = messagePayloads
+          .map((payload) => buildReminderMessage({ payload, holidays }))
+          .filter(identity)
 
         console.log('upserting messages: ' + messages.length)
 

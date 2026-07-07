@@ -94,6 +94,12 @@ const schema = new SimpleSchema({
     index: -1
   },
 
+  failedAt: {
+    type: Date,
+    optional: true,
+    index: -1
+  },
+
   retries: {
     type: Number,
     optional: true

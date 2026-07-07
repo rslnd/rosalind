@@ -34,6 +34,7 @@ const sendUnthrottled = (messageId) => {
       Messages.update({ _id: message._id }, {
         $set: {
           status: 'failed',
+          failedAt: new Date(),
           [`payload.${provider.name}`]: err
         },
         $inc: {
