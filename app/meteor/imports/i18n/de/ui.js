@@ -60,6 +60,13 @@ export const ui = {
   printing: 'Wird gedruckt',
   restored: 'Wiederhergestellt',
   smsSendSuccess: 'SMS verschickt',
+  smsStatus: {
+    sent: 'Zugestellt',
+    failed: 'Fehlgeschlagen',
+    scheduled: 'Geplant',
+    draft: 'Entwurf',
+    final: 'Bereit'
+  },
   mediaTypeNotAllowed: 'Dateityp nicht erlaubt',
   fileTooLarge: 'Datei zu groß (max. __maxMB__ MB)'
 }

@@ -3,7 +3,6 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { deduplicate as merge, perform } from '../../methods/deduplicateWithJournal'
-import { hasRole } from '../../../../util/meteor/hasRole'
 import { isLikelySamePatient } from '../../methods/isLikelySamePatient'
 
 export const deduplicate = ({ Patients }) => {
@@ -17,11 +16,8 @@ export const deduplicate = ({ Patients }) => {
     run ({ patientIds }) {
       this.unblock()
 
+      // Every logged-in user may merge; no dedicated role required anymore.
       if (this.connection && !this.userId) {
-        throw new Meteor.Error(403, 'Not authorized')
-      }
-
-      if (!hasRole(this.userId, ['admin', 'patients-merge'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 

@@ -98,7 +98,12 @@ export const move = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
+        // Remove the stale reminder (old date/time) and rebuild one for the
+        // new start. Recreation can't be left to the periodic createReminders
+        // job: it only scans appointments exactly `daysBefore` business days
+        // out, so moving to a nearer date would otherwise drop the reminder.
         Messages.actions.removeReminder.call({ appointmentId })
+        Messages.actions.createReminderForAppointment.call({ appointmentId })
       }
 
       Events.post('appointments/move', {
