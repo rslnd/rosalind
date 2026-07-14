@@ -1,156 +1,11 @@
-import moment from 'moment-timezone'
 import idx from 'idx'
-import leftPad from 'left-pad'
 import find from 'lodash/fp/find'
 import flatten from 'lodash/flatten'
 import negate from 'lodash/negate'
-import identity from 'lodash/identity'
-import sortBy from 'lodash/fp/sortBy'
 import omitBy from 'lodash/fp/omitBy'
 import isNil from 'lodash/isNil'
 import isEmpty from 'lodash/isEmpty'
-import uniq from 'lodash/uniq'
-import { parseCsv, parseDayFromRows } from '../../reports/methods/external/eoswin/journal/processJournal'
-import { dayToDate } from '../../../util/time/day'
 import { zerofix } from '../../../util/zerofix'
-
-export const deduplicateWithJournal = ({ journal, ...Api }) => {
-  const journalRows = parseCsv(journal)
-  const day = parseDayFromRows(journalRows)
-  if (day) {
-    const dayPatients = findPatientsOfDay({ ...Api, day })
-    const duplicates = findDuplicatePatients({ ...Api, patientsToCheck: dayPatients })
-    const sortedDuplicates = sortDuplicates({ duplicates, journalRows })
-    const actions = deduplicate(sortedDuplicates)
-    console.log(sortedDuplicates.length, 'sorted duplicates')
-    return perform({ ...Api, actions })
-  }
-}
-
-const findIdForPatient = journalRows => patient => {
-  const dd = leftPad(patient.birthday.day, 2, '0')
-  const mm = leftPad(patient.birthday.month, 2, '0')
-  const yyyy = patient.birthday.year
-  const needle1 = `Patient: ${patient.fullNameNormalized}`
-  const needle2 = `geb. am: ${dd}.${mm}.${yyyy}`
-
-  const result = find(r =>
-    r.Text.indexOf(needle1) &&
-    r.Text.indexOf(needle2)
-  )(journalRows)
-
-  if (result) {
-    return result.PatId
-  }
-}
-
-const findPatientsOfDay = ({ Appointments, Patients, day }) => {
-  const startOfDay = moment(dayToDate(day)).startOf('day').toDate()
-  const endOfDay = moment(dayToDate(day)).endOf('day').toDate()
-
-  const appointments = Appointments.find({
-    start: {
-      $gt: startOfDay,
-      $lt: endOfDay
-    },
-    removed: { $ne: true },
-    patientId: { $ne: null }
-  }).fetch()
-
-  const patients = Patients.find({
-    _id: {
-      $in: appointments.map(a => a.patientId)
-    },
-    removed: { $ne: true },
-    'birthday.day': { $ne: null }
-  }).fetch()
-
-  if (patients.length === 0) {
-    console.warn('[Reports] deduplicateWithJournal: No patients found on day', day, 'but journal was imported anyways')
-  }
-
-  return patients
-}
-
-const findDuplicatePatients = ({ Appointments, Patients, patientsToCheck }) => {
-  if (!patientsToCheck || patientsToCheck.length === 0) {
-    return []
-  }
-
-  const sameBirthday = Patients.find({
-    _id: {
-      $nin: patientsToCheck.map(p => p._id)
-    },
-    $or: patientsToCheck.map(p => ({
-      'birthday.day': p.birthday.day,
-      'birthday.month': p.birthday.month,
-      'birthday.year': p.birthday.year
-    })),
-    removed: { $ne: true }
-  }).fetch()
-
-  const sort = sortBy('fullNameNormalized')
-  const fullNameNormalized = sort(sameBirthday.map(p => ({
-    ...p,
-    fullNameNormalized: `${p.lastName} ${p.firstName}`.toUpperCase()
-  })))
-
-  const fullNameNormalizedToCheck = sort(patientsToCheck.map(p => ({
-    ...p,
-    fullNameNormalized: `${p.lastName} ${p.firstName}`.toUpperCase()
-  })))
-
-  const duplicates = fullNameNormalizedToCheck.map(check => ([
-    check,
-    ...fullNameNormalized.filter(f =>
-      f.fullNameNormalized === check.fullNameNormalized &&
-      f.birthday.day === check.birthday.day &&
-      f.birthday.month === check.birthday.month &&
-      f.birthday.year === check.birthday.year
-    )
-  ])).filter(a => a.length > 1)
-
-  const checkedDuplicates = duplicates.filter(sanityCheckDuplicates)
-
-  return checkedDuplicates
-}
-
-const sortDuplicates = ({ duplicates, journalRows }) => {
-  const findId = findIdForPatient(journalRows)
-
-  return duplicates.map(tuples => {
-    // if exactly one of the duplicates has an external id, it becomes the master
-    const isExternal = t => (
-      idx(t, _ => _.external.eoswin.id) ||
-      idx(t, _ => _.external.inno.id)
-    )
-
-    if (tuples.map(isExternal).filter(identity).length === 1) {
-      const master = tuples.find(isExternal)
-      return [ master, ...tuples.filter(negate(isExternal)) ]
-    }
-
-    // if there's no external id in the db yet, attempt to parse it from the journal
-    if (uniq(tuples.map(findId)).filter(identity).length === 1) {
-      const master = tuples.find(findId)
-
-      return [
-        {
-          ...master,
-          external: {
-            eoswin: {
-              id: findId(master)
-            }
-          }
-        },
-        ...tuples.filter(negate(findId))
-      ]
-    }
-
-    // else we don't merge
-    return null
-  }).filter(identity)
-}
 
 const mergePatient = (master, addendum) => {
   const { fullNameNormalized, ...masterFields } = master
@@ -216,7 +71,7 @@ export const deduplicate = duplicates =>
 export const perform = ({ actions, Patients, Appointments, InboundCalls, Media, Messages, Referrals, Records }) =>
   actions.map(a => {
     const masterId = a.master._id
-    console.log('[Patients] deduplicateWithJournal: Merging', masterId, ' <- ', a.duplicateIds)
+    console.log('[Patients] deduplicate: Merging', masterId, ' <- ', a.duplicateIds)
 
     // Patients
     Patients.update({ _id: masterId }, { $set: {
@@ -257,13 +112,3 @@ export const perform = ({ actions, Patients, Appointments, InboundCalls, Media, 
 
     return result
   })
-
-const sanityCheckDuplicates = duplicates => {
-  // fail if any of the potential duplicates have different external ids
-  if (uniq(duplicates.map(a =>
-    idx(a, _ => _.external.eoswin.id) ||
-    idx(a, _ => _.external.inno.id)
-  ).filter(identity)).length > 1) { return false }
-
-  return true
-}

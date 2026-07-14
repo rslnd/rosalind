@@ -6,18 +6,13 @@ import { action, Match } from '../../../util/meteor/action'
 
 export const ingest = ({ Importers }) => {
   const determineImporter = ({ name, content }) => {
-    if (name && name.includes('Ärzte Statistik Umsätze')) { return 'eoswinRevenueReports' }
     if (name && name.match(/\.PAT$/i)) { return 'eoswinPatients' }
     if (name && name.match(/\.json$/i)) { return 'genericJson' }
     if (name && name.match(/(\.gdt)$|(\.bdt$)|(\.xdt$)|(\.001)/i)) { return 'xdt' }
-    if (content && content.match(/Online Konsultation mit e-card/i)) { return 'eoswinJournalReports' }
-    if (content && content.match(/Krankenscheine gesamt/i) && content.match(/Abrechnungsgruppe/i)) { return 'eoswinRevenueReports' }
   }
 
   const determineEncoding = ({ importer }) => {
     switch (importer) {
-      case 'eoswinRevenueReports': return 'ISO-8859-1'
-      case 'eoswinJournalReports': return 'ISO-8859-1'
       case 'eoswinPatients': return 'WINDOWS-1252'
       case 'xdt': return 'ISO-8859-15'
       case 'genericJson': return 'utf8'

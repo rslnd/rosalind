@@ -1,108 +1,67 @@
 import moment from 'moment-timezone'
-import idx from 'idx'
-import identity from 'lodash/identity'
-import sum from 'lodash/sum'
-import { dayToDate } from '../../../util/time/day'
-import { float, percentage, currencyRounded } from '../../../util/format'
 
-const isNull = s => s &&
-  (
-    (typeof s === 'string' && s.match(/false|undefined| null|NaN/g)) ||
-    (typeof s === 'string' && s.match(/reports\./g)) ||
-    (typeof s === 'string' && s.match(/\{|\}|\$/)) || // catch misplaced interpolation brackets
-    (typeof s === 'string' && s.length === 0) ||
-    (typeof s === 'number' && s === 0)
-  )
+const nf0 = new Intl.NumberFormat('de-AT', { maximumFractionDigits: 0 })
+const nf1 = new Intl.NumberFormat('de-AT', { maximumFractionDigits: 1 })
 
-const renderLine = (text, value, separator = ': ') => {
-  if (text && value && !isNull(value)) {
-    return [text, value].join(separator)
-  }
+const int = n => (n == null || Number.isNaN(n)) ? '–' : nf0.format(n)
+const pct = v => (v == null || Number.isNaN(v)) ? '–' : `${nf1.format(v * 100)} %`
+
+const fmtDate = d => d ? moment(d).locale('de-AT').format('D. MMM YYYY') : '–'
+
+// " (VJ <value>)" suffix, or empty when there is no previous-year value.
+const vj = (prev, fmt) => (prev == null || Number.isNaN(prev)) ? '' : ` (VJ ${fmt(prev)})`
+
+const renderTotal = (current, previous) => {
+  // Default params only apply to `undefined`; previous.total is `null` when
+  // there is no previous-year window, so normalize explicitly here.
+  const cur = current || {}
+  const prev = previous || {}
+  return [
+    'ORDINATION GESAMT',
+    `Auslastung (Zeit): ${pct(cur.timeUtilization)}${vj(prev.timeUtilization, pct)}`,
+    `Auslastung (Online-Slots): ${pct(cur.slotUtilization)}${vj(prev.slotUtilization, pct)}`,
+    `Termine gesamt: ${int(cur.total)}${vj(prev.total, int)}`,
+    `Nicht erschienen: ${int(cur.noShow)} / ${pct(cur.noShowRate)}${vj(prev.noShowRate, pct)}`,
+    `Kasse / Privat: ${int(cur.insurance)} / ${int(cur.private)}`,
+    `Online gebucht: ${int(cur.online)}${vj(prev.online, int)}`,
+    `Online nicht erschienen: ${int(cur.onlineNoShow)} / ${pct(cur.onlineNoShowRate)}${vj(prev.onlineNoShowRate, pct)}`
+  ].join('\n')
 }
 
-export const renderHeader = ({ day }) => {
-  return `
-Tagesbericht für ${moment(dayToDate(day)).locale('de-AT').format('dddd, D. MMMM YYYY')}
-Kalenderwoche ${moment(dayToDate(day)).isoWeek()}
-  `
+const renderAssignee = (a) => {
+  const cur = a.current || {}
+  const prev = a.previous || {}
+  return [
+    a.name,
+    `  Termine ${int(cur.total)}${vj(prev.total, int)}`,
+    `  Nicht ersch. ${int(cur.noShow)} / ${pct(cur.noShowRate)}${vj(prev.noShowRate, pct)}`,
+    `  Auslastung ${pct(cur.timeUtilization)}${vj(prev.timeUtilization, pct)}`,
+    `  Online ${int(cur.online)}${vj(prev.online, int)}`
+  ].join('\n')
 }
 
-export const renderSummary = ({ report, mapCalendar }) => {
-  return `
--- ${mapCalendar(report.calendarId).name} --
-Gesamtumsatz: ${currencyRounded(
-    idx(report, _ => _.total.revenue.total.actual) ||
-    idx(report, _ => _.total.revenue.total.expected))}
-Auslastung: ${
-  percentage({ value: report.total.workload.weighted }) ||
-  percentage({ part: report.total.workload.actual, of: report.total.workload.available })}
-`
-}
+export const renderEmail = ({ statistics }) => {
+  const cur = statistics.current || {}
+  const prev = statistics.previous || {}
 
-export const renderBody = ({ report, mapUserIdToName, mapAssigneeType }) => {
-  const renderAssignee = (assignee, i) => {
-    const name = mapUserIdToName(assignee.assigneeId) || (assignee.type && mapAssigneeType(assignee.type)) || 'Ohne Zuweisung'
-    const rankAndName = (assignee.assigneeId && `${i + 1} - ${name}`) || name
-    const revenue = assignee.revenue &&
-      (currencyRounded(idx(assignee, _ => _.revenue.total.actual)) ||
-      currencyRounded(idx(assignee, _ => _.revenue.total.expected)))
-    const newPerHour = float(idx(assignee, _ => _.patients.new.actualPerHour))
-    const patientsActual = idx(assignee, _ => _.patients.total.actual)
-    const patientsPlanned = idx(assignee, _ => _.patients.total.planned)
-    const surgery = idx(assignee, _ => _.patients.surgery.actual)
-    const cautery = idx(assignee, _ => _.patients.cautery.planned)
-    const workload = percentage({
-      part: idx(assignee, _ => _.patients.total.actual),
-      of: idx(assignee, _ => _.patients.total.expected)
-    })
+  const title = `Tagesbericht Statistik – ${fmtDate(cur.from)} bis ${fmtDate(cur.to)}`
 
-    return [
-      rankAndName,
-      renderLine('Umsatz', revenue),
-      renderLine('Neu / Stunde', newPerHour),
-      renderLine('Auslastung', workload),
-      renderLine('PatientInnen', patientsActual || patientsPlanned),
-      renderLine('OPs', surgery),
-      renderLine('Kaustik', cautery)
-    ].filter(identity).filter(s => !isNull(s)).join('\n').replace(/(\n+)/g, '\n')
-  }
+  const header = [
+    'Tagesbericht – Statistik',
+    `Zeitraum: ${fmtDate(cur.from)} – ${fmtDate(cur.to)} (letzte ${statistics.windowDays} Tage)`,
+    'Vergleich jeweils mit demselben Zeitraum im Vorjahr (VJ).'
+  ].join('\n')
 
-  const body = report.assignees.map(renderAssignee).join('\n\n')
+  const totalSection = renderTotal(cur.total, prev.total)
 
-  return body
-}
+  const assigneesSection = [
+    'PRO ÄRZTIN',
+    (statistics.assignees || []).map(renderAssignee).join('\n\n')
+  ].join('\n\n')
 
-export const renderFooter = () => {
-  return `
+  const footer = 'Details inkl. Grafik (Vorlaufzeit der Terminbuchung) im PDF-Anhang.'
 
-Der detaillierte Tagesbericht befindet sich im Anhang.
-
-Danke!
-
-  `
-}
-
-export const renderEmail = ({ reports, mapUserIdToName, mapAssigneeType, mapCalendar }) => {
-  const day = reports[0].day
-  const totalRevenue = sum(reports.map(r =>
-    idx(r, _ => _.total.revenue.total.actual) ||
-    idx(r, _ => _.total.revenue.total.expected) || 0))
-
-  const title = `Tagesbericht für ${moment(dayToDate(day)).locale('de-AT').format('dddd, D. MMMM YYYY')} - Umsatz ${currencyRounded(totalRevenue)}`.replace(/NaN/g, "0")
-
-  const header = renderHeader({ day })
-
-  const body = reports.map(report => {
-    const summary = renderSummary({ report, mapUserIdToName, mapCalendar })
-    const reportBody = renderBody({ report, mapUserIdToName, mapAssigneeType })
-    return [summary, reportBody].join('\n\n')
-  }).join('\n\n\n')
-
-  const footer = renderFooter()
-
-  const text = [header, body, footer]
-    .join('\n\n')
-    .replace(/NaN/g, "0")
+  const text = [header, totalSection, assigneesSection, footer].join('\n\n\n')
 
   return { title, text }
 }

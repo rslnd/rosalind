@@ -1,13 +1,16 @@
 import moment from 'moment-timezone'
-import fromPairs from 'lodash/fromPairs'
 import { Meteor } from 'meteor/meteor'
 import { Email } from 'meteor/email'
 import { __ } from '../../../../i18n'
-import { Reports } from '../../'
+import { Appointments } from '../../../appointments'
 import { Calendars } from '../../../calendars'
+import { Schedules } from '../../../schedules'
+import { Constraints } from '../../../constraints'
+import { Tags } from '../../../tags'
 import { Events } from '../../../events'
 import { Users } from '../../../users'
-import { dateToDay, dayToDate, dayToSlug, daySelector } from '../../../../util/time/day'
+import { dateToDay, dayToDate, dayToSlug } from '../../../../util/time/day'
+import { computeStatistics } from '../../methods/computeStatistics'
 import { renderEmail } from '../../methods/renderEmail'
 import { renderPdf } from '../../methods/renderPdf'
 
@@ -24,48 +27,11 @@ export const sendEmail = async (args = {}) => {
     const test = (process.env.NODE_ENV !== 'production') || args.test
 
     const day = args.day || dateToDay(moment(args))
+    const asOf = moment(dayToDate(day)).endOf('day').toDate()
 
-    const reports = Reports.find({
-      ...daySelector(day)
-    }).fetch()
+    const statistics = computeStatistics({ Appointments, Schedules, Calendars, Users, Constraints, Tags, asOf })
 
-    if (reports.length === 0) {
-      console.log('[Reports] There are no reports for this day, no email will be sent')
-      return
-    }
-
-    if (reports.length > Calendars.find({}).count()) {
-      console.error('[Reports] sendEmail: There are more reports than calendars, this should not happen (possibly a race during report generation?)')
-      return
-    }
-
-    // reports.map(r => {
-    //   const missingRevenue = (
-    //     !r.total.revenue.total.expected &&
-    //     !r.total.revenue.total.actual
-    //   )
-
-    //   if (missingRevenue) {
-    //     console.log('[Reports] sendEmail: missing revenue', r.calendarId, r.total.revenue.total)
-    //     throw new Error('[Reports] sendEmail: missing revenue')
-    //   }
-    // })
-
-    const isTodaysReport = moment().isSame(dayToDate(day), 'day')
-    const isLastWeekReport = moment(dayToDate(day)).isBetween(
-      moment().subtract(2, 'weeks').startOf('week'),
-      moment().add(1, 'day')
-    )
-    if (!test && reports.length === 0 && (!isTodaysReport && !isLastWeekReport)) {
-      throw new Meteor.Error(400, 'There is no report for this date, or the date is not within the last 2 weeks, and no email will be sent')
-    }
-
-    const userIdToNameMapping = fromPairs(Users.find({}).map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
-    const mapAssigneeType = type => __(`reports.assigneeType__${type}`, null, 'de-AT')
-    const mapUserIdToName = userId => userIdToNameMapping[userId]
-    const mapCalendar = calendarId => Calendars.findOne({ _id: calendarId })
-
-    const { title, text } = renderEmail({ reports, mapUserIdToName, mapAssigneeType, mapCalendar })
+    const { title, text } = renderEmail({ statistics })
     const pdf = await renderPdf({ day })
 
     if (!pdf) {
@@ -74,7 +40,7 @@ export const sendEmail = async (args = {}) => {
 
     const filename = [
       dayToSlug(day),
-      __('reports.thisDaySingular', null, 'de-AT'),
+      __('reports.statisticsTitle', null, 'de-AT'),
       process.env.CUSTOMER_NAME
     ].join(' ') + '.pdf'
 
@@ -102,7 +68,7 @@ export const sendEmail = async (args = {}) => {
       ]
     })
 
-    Events.post('reports/sendEmail', { reportIds: reports.map(r => r._id) })
+    Events.post('reports/sendEmail', { day })
   } catch (e) {
     console.error('caught sendEmail error', e)
     return false

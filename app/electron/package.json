@@ -47,8 +47,6 @@
       "assets/appicon.ico"
     ],
     "extraResources": [
-      "assets/eoswinPrinter.reg",
-      "assets/generateEoswinReports.exe",
       "assets/focus.exe"
     ],
     "generateUpdatesFilesForAllChannels": true,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { label, timeSlots } from './timeSlots'
+import { label, timeSlots, setTime } from './timeSlots'
 import { appointments as renderAppointments } from './appointments'
 import { timeLegend } from './timeLegend'
 import { blanks } from './blanks'
@@ -132,30 +132,28 @@ const renderCounts = ({ date, assignees, calendar, appointments, schedules, grid
     const wholeDayHrs = durationFormat(wholeDayMs - blockedMs, 'ms')
     const freeHrs =  durationFormat(wholeDayMs - blockedMs - apptMs, 'ms')
 
+    // Slot counts: honor slot size and atMinutes, matching the bookable "blanks".
+    // A slot is available when it is not inside a blocking schedule, and free
+    // when it is additionally not covered by a (non-bookable) appointment.
+    const scheduleOffset = slotSizeAppointment &&
+      (assignee && assignee.schedules && assignee.schedules.length >= 1) &&
+      moment(sortBy(assignee.schedules, 'end')[0].end).add(1, 'second').minute()
 
-    console.log({ assigneeSchedules: assigneeSchedules.length,
-       assigneeAppointments: assigneeAppointments.length,
-       blockedMs: durationFormat(blockedMs, 'ms'),
-       apptMs: durationFormat(apptMs, 'ms'),
-       wholeDayMs: durationFormat(wholeDayMs, 'ms'),
-       freeHrs })
+    const slotSizeBlank = (scheduleOffset === 0 || scheduleOffset > 0)
+      ? slotSizeAppointment
+      : (slotSize || 5)
 
-    // let gridTimeSlots2 =
-    // for (let i = 0; i < gridTimeSlots.length; i++) {
-    //   // punch away grid time slots
-    // }
+    const slotTimes = timeSlots(slotSizeBlank, scheduleOffset, atMinutes)
+      .map(l => setTime(l)(moment(date)).toDate())
 
+    const isBlocked = t => assigneeSchedules.some(s => (t >= s.start && t < s.end))
+    const isOccupied = t => assigneeAppointments.some(a => (t >= a.start && t < a.end))
 
+    const availableSlots = slotTimes.filter(t => !isBlocked(t))
+    const totalSlots = availableSlots.length
+    const freeSlots = availableSlots.filter(t => !isOccupied(t)).length
 
-    // assigneeAppointments.map(ap => {
-
-    //   slots.indexOf(ap.startLabel)
-
-    // })
-
-    const text = '' // assigneeSchedules.length
-
-    // console.log(slots)
+    const text = ''
 
     const style = {
       opacity: 0.8,
@@ -173,6 +171,9 @@ const renderCounts = ({ date, assignees, calendar, appointments, schedules, grid
         <span>
           {(assigneeId &&
             <>{freeHrs} frei von {wholeDayHrs} <br/></>)}
+
+          {(assigneeId &&
+            <><b>{freeSlots}</b> frei von {totalSlots} Slots <br/></>)}
 
 
           {

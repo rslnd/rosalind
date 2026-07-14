@@ -96,9 +96,7 @@ const sidebarItems = ({ history }) => {
       icon: 'bar-chart',
       roles: ['admin', 'reports'],
       subItems: [
-        { name: 'dashboard', path: '/day' },
-        { name: 'assignees', path: '/assignee' },
-        { name: 'referrals', path: '/referrals' }
+        { name: 'dashboard', path: '/day' }
       ]
     },
     {

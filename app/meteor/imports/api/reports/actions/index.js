@@ -3,6 +3,7 @@ import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
 import { Users } from '../../users'
 import { Tags } from '../../tags'
+import { Constraints } from '../../constraints'
 import { Events } from '../../events'
 import { Messages } from '../../messages'
 import { upsert } from './upsert'
@@ -10,6 +11,7 @@ import { tally } from './tally'
 import { generate } from './generate'
 import { generatePreview } from './generatePreview'
 import { generateQuarter } from './generateQuarter'
+import { statistics } from './statistics'
 import { remove } from './remove'
 
 export default function ({ Reports }) {
@@ -19,6 +21,7 @@ export default function ({ Reports }) {
     { generate: generate({ Events, Calendars, Reports, Schedules, Appointments, Tags, Messages, Users }) },
     { generatePreview: generatePreview({ Calendars, Reports, Schedules, Appointments, Tags, Messages, Users }) },
     { generateQuarter: generateQuarter({ Calendars, Reports, Schedules }) },
+    { statistics: statistics({ Reports, Appointments, Schedules, Calendars, Users, Constraints, Tags }) },
     { remove: remove({ Reports, Events }) }
   )
 }

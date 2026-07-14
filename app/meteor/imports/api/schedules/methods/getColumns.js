@@ -42,8 +42,6 @@ export default ({ Schedules }) => {
 
     const tags = Tags.find({}).fetch()
 
-    console.log(overrides.length, 'Overrides - ', appointments.length, 'Appointments - ', constraints.length, 'Constraints')
-
     return overridesToColumns({ day, calendar, overrides, constraints, appointments, tags })
   }
 

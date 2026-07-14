@@ -21,10 +21,6 @@ export const importWith = ({ Importers }) => {
 
       try {
         switch (importer) {
-          case 'eoswinRevenueReports':
-            return Importers.actions.eoswin.revenueReports.call({ name, content })
-          case 'eoswinJournalReports':
-            return Importers.actions.eoswin.journalReports.call({ name, content })
           case 'eoswinPatients':
             return Importers.actions.eoswin.patients.call({ name, content })
           case 'xdt':

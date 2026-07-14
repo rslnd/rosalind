@@ -3,7 +3,6 @@ const toNative = [
   'hello',
   'print',
   'quitAndInstall',
-  'automation/generateEoswinReports',
   'scanStart',
   'dataTransferSuccess',
   'settings'
