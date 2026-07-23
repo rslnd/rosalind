@@ -166,8 +166,8 @@ const renderCounts = ({ date, assignees, calendar, appointments, schedules, grid
       gridRow: 'header',
       gridColumn: `assignee-${assigneeId || 'unassigned'}`,
     }
-    return <>
-      <div style={style} className='enable-select text-muted'>
+    return (
+      <div key={assigneeId || 'unassigned'} style={style} className='enable-select text-muted'>
         <span>
           {(assigneeId &&
             <>{freeHrs} frei von {wholeDayHrs} <br/></>)}
@@ -179,7 +179,7 @@ const renderCounts = ({ date, assignees, calendar, appointments, schedules, grid
           {
             moment().isSameOrAfter(date, 'day')
             ? <>{admittedCount} <Icon name="check" /> &emsp; {noShowCount} <Icon name="times" /></>
-            : <>{admittedCount + noShowCount} <Icon name="user" /></>
+            : <span title={`${admittedCount + noShowCount} belegte Slots`} style={{ cursor: 'default' }}>{admittedCount + noShowCount} <Icon name="user" /></span>
           }
 
 
@@ -188,6 +188,6 @@ const renderCounts = ({ date, assignees, calendar, appointments, schedules, grid
         {text}
 
       </div>
-    </>
+    )
   })
 }
