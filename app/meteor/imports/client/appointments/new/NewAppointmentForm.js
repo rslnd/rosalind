@@ -23,7 +23,7 @@ export const NewAppointmentForm = compose(
   withTracker(composer),
   reduxForm({
     form: formName,
-    enableReinitialize: false,
+    enableReinitialize: true,
     updateUnregisteredFields: true,
     keepDirtyOnReinitialize: true,
     touchOnChange: true,

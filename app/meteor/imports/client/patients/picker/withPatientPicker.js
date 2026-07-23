@@ -16,21 +16,22 @@ const mapStateToProps = state => {
 export const withPatientPicker = connect(mapStateToProps)
 
 const toDefaultValue = formName => props => {
-  if (!props.patientPicker) {
-    return props
-  }
-
-  const { patient, ...otherState } = props.patientPicker
+  const { patient, ...otherState } = props.patientPicker || {}
 
   const patientFields = mapPatientToFields(patient)
 
-  const setTouched = patient && patient.patientId !== 'newPatient'
-  props.dispatch(touchPatientFields(formName, { setTouched }))
-
-  console.log('[withPatient] fields', patientFields)
+  if (patient) {
+    const setTouched = patient.patientId !== 'newPatient'
+    props.dispatch(touchPatientFields(formName, { setTouched }))
+  }
 
   return {
     ...props,
+    // Always provide initialValues (even before a patient is chosen) so the
+    // redux-form form is `initialized` right from mount. Otherwise the very
+    // first patient selection after a page load is redux-form's *initial*
+    // initialize, where keepDirtyOnReinitialize does not apply yet, and tags
+    // selected beforehand would be wiped.
     initialValues: {
       ...(props.defaultValue || {}),
       patient: patientFields
