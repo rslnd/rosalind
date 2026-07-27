@@ -178,7 +178,11 @@ const renderCounts = ({ date, assignees, calendar, appointments, schedules, grid
 
           {
             moment().isSameOrAfter(date, 'day')
-            ? <>{admittedCount} <Icon name="check" /> &emsp; {noShowCount} <Icon name="times" /></>
+            ? <>
+                <span title={`${admittedCount} PatientInnen erschienen`} style={{ cursor: 'default' }}>{admittedCount} <Icon name="check" /></span>
+                &emsp;
+                <span title={`${noShowCount} PatientInnen nicht erschienen`} style={{ cursor: 'default' }}>{noShowCount} <Icon name="times" /></span>
+              </>
             : <span title={`${admittedCount + noShowCount} belegte Slots`} style={{ cursor: 'default' }}>{admittedCount + noShowCount} <Icon name="user" /></span>
           }
 

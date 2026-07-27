@@ -57,6 +57,7 @@ export const AddAssignee = (props) => {
         ref={setReferenceElement}
         style={buttonStyle}
         className='hide-print'
+        title='MitarbeiterIn hinzufügen'
         onClick={handleAddUserPopoverOpen}>
         <span
           className='text-muted'
