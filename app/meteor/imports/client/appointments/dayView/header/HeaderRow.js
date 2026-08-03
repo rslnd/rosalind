@@ -4,6 +4,7 @@ import Alert from 'react-s-alert'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { __ } from '../../../../i18n'
+import { HoverTooltip } from '../../../components/HoverTooltip'
 import { AddAssignee } from './AddAssignee'
 import { AssigneesDetails } from './AssigneesDetails'
 import { background, grayDisabled, gray } from '../../../layout/styles'
@@ -250,13 +251,18 @@ export class HeaderRow extends React.Component {
           <MenuItem onClick={this.handleChangeAssigneeClick}>
             Person ändern
           </MenuItem>
-          <MenuItem
-            // no - always enable as there is a modal prompt
-            // there mey be cancenel appts, notes etc that should not keep a column from getting deleted
-            // disabled={!this.state.canRemoveUser}
-            onClick={this.handleRemoveUser}>
-            Spalte löschen
-          </MenuItem>
+          {/* HoverTooltip corrects the body zoom (1.221) so it lands in the right
+              spot, and wraps the item so the tooltip still fires over the disabled
+              (pointer-events: none) MenuItem. No title when the column is empty. */}
+          <HoverTooltip
+            placement='bottom'
+            title={this.state.canRemoveUser ? undefined : 'Bitte weisen Sie alle Termine dieser Spalte einer anderen ÄrztIn oder MitarbeiterIn zu, um diese Spalte zu löschen.'}>
+            <MenuItem
+              disabled={!this.state.canRemoveUser}
+              onClick={this.handleRemoveUser}>
+              Spalte löschen
+            </MenuItem>
+          </HoverTooltip>
           <hr />
           <MenuItem
             onClick={this.handleUserDropdownClose}>
