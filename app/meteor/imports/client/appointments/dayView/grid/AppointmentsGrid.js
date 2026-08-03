@@ -11,6 +11,7 @@ import moment from 'moment-timezone'
 import { sortBy } from 'lodash'
 import { Icon } from '../../../components/Icon'
 import { durationFormat } from '../../../reports/shared/durationFormat'
+import { isNoteBarVisible } from '../header/CalendarNote'
 
 // row name    | column names
 // ---------------------------------------------------------------
@@ -41,8 +42,12 @@ export const AppointmentsGrid = ({
   const slotSize = calendar.slotSize || 5
   const gridTimeSlots = timeSlots(slotSize, scheduleOffset, atMinutes)
 
+  // Without a calendar note the note bar is hidden, so reserve less header
+  // height (otherwise there is a gap under the doctor header).
+  const headerHeight = isNoteBarVisible({ calendar }) ? 140 : 103
+
   const gridTemplateRows = `
-    [header] 140px
+    [header] ${headerHeight}px
     [subheader] 0px
     ${gridTimeSlots.map((time) => `[${time}] 25px`).join(' ')}
   `

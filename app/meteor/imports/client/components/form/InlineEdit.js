@@ -37,12 +37,38 @@ export class InlineEdit extends React.Component {
     this.handleAccept = this.handleAccept.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
     this.handleBlur = this.handleBlur.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
+  componentDidUpdate (prevProps) {
+    // Adopt an external value change (e.g. the same field edited elsewhere)
+    // as long as we are not editing here. Prevents a stale internal value from
+    // overwriting the change on save.
+    if (!this.state.editing && prevProps.value !== this.props.value) {
+      let value = this.props.value
+      if (this.props.stringify) {
+        value = this.props.stringify(value)
+      }
+      this.setState({ value })
+    }
+  }
+
+  componentWillUnmount () {
+    // If the component is unmounted while still editing, notify the parent so
+    // that e.g. a panel does not stay stuck open
+    if (this.state.editing && this.props.onEditingChange) {
+      this.props.onEditingChange(false)
+    }
   }
 
   setEditing () {
     this.setState({
       editing: true
     })
+
+    if (this.props.onEditingChange) {
+      this.props.onEditingChange(true)
+    }
   }
 
   handleChange (e) {
@@ -76,6 +102,10 @@ export class InlineEdit extends React.Component {
       editing: false
     })
 
+    if (this.props.onEditingChange) {
+      this.props.onEditingChange(false)
+    }
+
     let originalValue = this.props.value
 
     if (this.props.stringify) {
@@ -98,11 +128,23 @@ export class InlineEdit extends React.Component {
       editing: false,
       value: this.props.value
     })
+
+    if (this.props.onEditingChange) {
+      this.props.onEditingChange(false)
+    }
   }
 
   handleBlur () {
     if (this.props.submitOnBlur) {
       this.handleAccept()
+    }
+  }
+
+  handleKeyDown (e) {
+    // ESC ends editing and discards the change
+    if (e.key === 'Escape' || e.keyCode === 27) {
+      e.preventDefault()
+      this.handleCancel()
     }
   }
 
@@ -151,12 +193,19 @@ export class InlineEdit extends React.Component {
       </span>
     } else {
       return <span style={spanStyle} onMouseLeave={this.handleMouseLeave}>
+        {this.props.editingHeader}
         <form onSubmit={this.handleAccept}>
           <TextField
             value={this.state.value}
             onChange={this.handleChange}
             onKeyPress={this.props.submitOnEnter ? handleKeyPress(this.handleBlur) : null}
+            onKeyDown={this.handleKeyDown}
             onBlur={this.handleBlur}
+            onFocus={(e) => {
+              // Place the caret at the end of the text instead of the beginning
+              const end = e.target.value.length
+              e.target.setSelectionRange(end, end)
+            }}
             autoFocus
             multiline={!!(this.props.multiline || this.props.rows || this.props.rowsMax)}
             fullWidth={this.props.fullWidth}

@@ -52,6 +52,8 @@ export class HeaderRow extends React.Component {
       userDropdownOpen: false,
       userDropdownAnchor: null,
       hovering: false,
+      editing: false,
+      open: false,
       changingAssignee: false
     }
 
@@ -63,6 +65,8 @@ export class HeaderRow extends React.Component {
     this.handleRemoveOverlayModeClick = this.handleRemoveOverlayModeClick.bind(this)
     this.handleMouseEnter = this.handleMouseEnter.bind(this)
     this.handleMouseLeave = this.handleMouseLeave.bind(this)
+    this.handleEditingChange = this.handleEditingChange.bind(this)
+    this.handleOpenPanel = this.handleOpenPanel.bind(this)
     this.handleChangeAssigneeClick = this.handleChangeAssigneeClick.bind(this)
     this.handleChangeAssigneeFinishClick = this.handleChangeAssigneeFinishClick.bind(this)
   }
@@ -137,9 +141,28 @@ export class HeaderRow extends React.Component {
   }
 
   handleMouseLeave () {
+    // Only the hover-driven expansion ends here. An explicit "Info hinzufügen"
+    // open (and an active edit) is kept alive so the panel does not close when
+    // the mouse leaves the field after clicking the button.
     this.setState({
       hovering: false
     })
+  }
+
+  // While a field in the panel is being edited, keep the panel expanded –
+  // even when the mouse leaves it. Only enter/blur ends editing.
+  handleEditingChange (editing) {
+    // When editing ends and the mouse is no longer on the panel, also drop the
+    // explicit "Info hinzufügen" open so the panel collapses again.
+    this.setState(state => ({
+      editing,
+      open: (!editing && !state.hovering) ? false : state.open
+    }))
+  }
+
+  // "Info hinzufügen" button: open the notes panel and keep it open
+  handleOpenPanel () {
+    this.setState({ open: true })
   }
 
   handleChangeAssigneeClick () {
@@ -282,8 +305,13 @@ export class HeaderRow extends React.Component {
           daySchedule={daySchedule}
           canEditSchedules={canEditSchedules}
           onChangeNote={onChangeNote}
+          onChangeCalendarNote={onChangeCalendarNote}
+          onEditingChange={this.handleEditingChange}
+          onOpenPanel={this.handleOpenPanel}
           assignees={assignees}
-          expanded={this.state.hovering} />
+          hovering={this.state.hovering}
+          editing={this.state.editing}
+          open={this.state.open} />
         <div style={topPaddingStyle} />
 
         {

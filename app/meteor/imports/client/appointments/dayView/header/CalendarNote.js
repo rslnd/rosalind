@@ -20,26 +20,28 @@ const barStyle = {
   display: 'flex'
 }
 
-const alwaysShow = true
+// Only show the row when a calendar note ("Wichtige Information") is set
+export const isNoteBarVisible = ({ calendar }) =>
+  !!(calendar && calendar.note)
 
-export const isNoteBarVisible = ({ calendar, canEditSchedules }) =>
-  (canEditSchedules || (calendar && calendar.note) || alwaysShow)
-
+// Editable here too. Saved on blur/enter (no submitOnMouseLeave) so hovering does
+// not overwrite the note. InlineEdit syncs its internal value on external changes
+// (componentDidUpdate), so editing the same note in parallel in the notes panel
+// does not lead to stale values.
 export const CalendarNote = ({ calendar, canEditSchedules, onChangeNote }) =>
-  isNoteBarVisible({ calendar, canEditSchedules }) && <div style={barStyle}>
+  isNoteBarVisible({ calendar }) && <div style={barStyle}>
     {
       canEditSchedules
         ? <InlineEdit
           key={calendar._id} // Fix weird note copying across calendars
           value={(calendar && calendar.note) || ''}
-          placeholder='Info'
           rows={1}
           rowsMax={3}
           submitOnBlur
-          submitOnMouseLeave
+          submitOnEnter
           fullWidth
           onChange={newNote => onChangeNote(newNote)}
-        ><BreakLines placeholder='Info'>{calendar && calendar.note}</BreakLines></InlineEdit>
-        : <BreakLines placeholder='Info'>{calendar && calendar.note}</BreakLines>
+        ><BreakLines>{calendar && calendar.note}</BreakLines></InlineEdit>
+        : <BreakLines>{calendar && calendar.note}</BreakLines>
     }
   </div>
