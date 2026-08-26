@@ -13,6 +13,7 @@ export const insert = ({ Users }) =>
       titlePrepend: Match.Maybe(String),
       titleAppend: Match.Maybe(String),
       employee: Match.Maybe(Boolean),
+      hiddenInReports: Match.Maybe(Boolean),
       groupId: Match.Maybe(String)
     },
     roles: ['admin', 'users-edit'],

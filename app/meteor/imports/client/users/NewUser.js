@@ -1,97 +1,130 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { reduxForm, Field, formValueSelector } from 'redux-form'
+import Button from '@material-ui/core/Button'
+import Alert from 'react-s-alert'
 import { ContentHeader } from '../components/ContentHeader'
 import { Box } from '../components/Box'
-import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import { Users } from '../../api/users'
 import { Icon } from '../components/Icon'
 import { TextField } from '../components/form/TextField'
-import { asyncValidate as asyncValidatePassword, validate as validatePassword } from './ChangePasswordForm'
+import { withTracker } from '../components/withTracker'
+import { subscribe } from '../../util/meteor/subscribe'
+import { validate as validatePassword } from './ChangePasswordForm'
 import { UserProfileFields } from './UserProfileForm'
-import { reduxForm, Field } from 'redux-form'
-import Button from '@material-ui/core/Button'
+import { usernameInitials, firstFreeUsername } from '../../api/users/methods/generateUsername'
 
-const NewUserScreen = ({ submitting, invalid, validating, pristine, handleSubmit }) =>
-  <div>
-    <ContentHeader>
-      <Icon name='user-plus' /> {__('users.thisNew')}
-    </ContentHeader>
-    <div className='content'>
-      <div className='row'>
-        <div className='col-md-12'>
-          <Box title={__('users.profile')} type='primary'>
-            <form onSubmit={handleSubmit}>
-              <UserProfileFields />
+const isTaken = username => !!Users.findOne({ username }, { removed: true })
 
-              <Field
-                name='password'
-                component={TextField}
-                type='password'
-                label={__('users.password')}
-              />
+// Only the fields the users/insert action accepts.
+const INSERT_FIELDS = ['username', 'password', 'firstName', 'lastName', 'titlePrepend', 'titleAppend', 'employee', 'hiddenInReports', 'groupId']
 
-              <Field
-                name='roles'
-                component={TextField}
-                label={__('users.roles')}
-              />
+class NewUserScreen extends React.Component {
+  // Prefill the username from the name (initials, collision-suffixed) as long
+  // as the admin hasn't edited it themselves.
+  componentDidUpdate (prev) {
+    const { firstName, lastName, username, change } = this.props
 
-              <br /><br />
+    if (username && username !== this.lastSuggestion) { this.edited = true }
+    if (this.edited) { return }
+    if (firstName === prev.firstName && lastName === prev.lastName) { return }
 
-              <Button
-                type='submit'
-                color='primary'
-                variant='contained'
-                fullWidth
-                disabled={submitting || invalid || validating || pristine}
-                onClick={handleSubmit}
-              >{
-                  submitting || validating
-                    ? <Icon name='refresh' spin />
-                    : __('users.thisSave')
-                }</Button>
-            </form>
-          </Box>
+    const suggestion = firstFreeUsername(usernameInitials({ firstName, lastName }), isTaken)
+    if (suggestion && suggestion !== username) {
+      this.lastSuggestion = suggestion
+      change('username', suggestion)
+    }
+  }
+
+  render () {
+    const { submitting, invalid, validating, pristine, handleSubmit } = this.props
+    return (
+      <div>
+        <ContentHeader>
+          <Icon name='user-plus' /> {__('users.thisNew')}
+        </ContentHeader>
+        <div className='content'>
+          <div className='row'>
+            <div className='col-md-12'>
+              <Box title={__('users.profile')} type='primary'>
+                <form onSubmit={handleSubmit}>
+                  <UserProfileFields />
+
+                  <Field
+                    name='password'
+                    component={TextField}
+                    type='password'
+                    label={__('users.password')}
+                  />
+
+                  <br /><br />
+
+                  <Button
+                    type='submit'
+                    color='primary'
+                    variant='contained'
+                    fullWidth
+                    disabled={submitting || invalid || validating || pristine}
+                    onClick={handleSubmit}
+                  >{
+                      submitting || validating
+                        ? <Icon name='refresh' spin />
+                        : __('users.thisSave')
+                    }</Button>
+                </form>
+              </Box>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    )
+  }
+}
 
-const onSubmit = values =>
-  Users.actions.insert.callPromise(values)
+const onSubmit = values => {
+  const payload = {}
+  INSERT_FIELDS.forEach(k => { if (values[k] !== undefined) { payload[k] = values[k] } })
+
+  return Users.actions.insert.callPromise(payload)
     .then(() => Alert.success(__('ui.saved')))
     .catch((e) => {
       console.error(e)
-      Alert.error(__('ui.error'))
+      Alert.error(e.reason || e.message || __('ui.error'))
     })
+}
 
 const validateProfile = ({ username }) => {
   if (!username) {
     return { username: __('ui.required') }
   }
-
   if (Users.findOne({ username }, { removed: true })) {
     return { username: __('users.usernameTaken') }
   }
+  return {}
 }
 
-const validate = values => {
-  return {
-    ...(values.password ? validatePassword(values) : {}),
-    ...validateProfile(values)
-  }
-}
+// Password is required (min length enforced by validatePassword) so the new
+// user can log in immediately.
+const validate = values => ({
+  ...validatePassword(values),
+  ...validateProfile(values)
+})
 
-const asyncValidate = values =>
-  values.password
-    ? Promise.all([
-      asyncValidatePassword(values)
-    ])
-    : Promise.resolve()
+const selector = formValueSelector('newUser')
+const withValues = connect(state => ({
+  firstName: selector(state, 'firstName'),
+  lastName: selector(state, 'lastName'),
+  username: selector(state, 'username')
+}))
 
-export const NewUser = reduxForm({
+const Form = reduxForm({
   form: 'newUser',
-  asyncValidate,
   validate,
   onSubmit
-})(NewUserScreen)
+})(withValues(NewUserScreen))
+
+export const NewUser = withTracker(() => {
+  subscribe('users') // for username collision detection
+  return {}
+})(Form)

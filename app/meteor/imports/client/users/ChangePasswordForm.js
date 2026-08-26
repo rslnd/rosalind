@@ -1,6 +1,5 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import { Users } from '../../api/users'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Button from '@material-ui/core/Button'
@@ -26,7 +25,6 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
       fullWidth
       disabled={submitting || invalid || validating || pristine}
       onClick={handleSubmit}
-      title={invalid ? 'Danger zone: append ALLOWINSECURE directly after the password field to override checks. IMPORTANT: Make sure to restrict this user to secure workstations.' : ''}
     >{
         submitting || validating
           ? <Icon name='refresh' spin />
@@ -34,41 +32,15 @@ const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
       }</Button>
   </form>
 
-export const asyncValidate = async ({ password }) => {
-  if (allowInsecure(password)) {
-    return true
+// No breach/complexity checks anymore — only a minimum length (see validate).
+export const asyncValidate = async () => {}
+
+const MIN_LENGTH = 4
+
+export const validate = ({ password }) => {
+  if (!password || password.length < MIN_LENGTH) {
+    return { password: __('users.passwordMinLength', { minLength: MIN_LENGTH }) }
   }
-
-  const breachCount = await Users.methods.isWeakPassword(password)
-  if (breachCount && breachCount > 0) {
-    throw { password: __('users.passwordBreached', { breachCount }) } // eslint-disable-line
-  }
-}
-
-const allowInsecure = p =>
-  p && p.indexOf('ALLOWINSECURE') !== -1
-
-const cleanPassword = p =>
-  p.replace('ALLOWINSECURE', '')
-
-export const validate = ({ password }, props) => {
-  if (allowInsecure(password)) {
-    return {}
-  }
-
-  const minLength = 12
-  if (!password || password.length < minLength) {
-    return { password: __('users.passwordMinLength', { minLength }) }
-  }
-
-  if (props && props.user) {
-    const profile = JSON.stringify(props.user)
-    const profileContainsPassword = profile.toLowerCase().indexOf(password.toLowerCase()) !== -1
-    if (profileContainsPassword) {
-      return { password: __('users.profileContainsPassword') }
-    }
-  }
-
   return {}
 }
 
@@ -76,7 +48,7 @@ const onSubmit = ({ password }, dispatch, props) =>
   new Promise((resolve, reject) => {
     Meteor.call('users/updatePassword', {
       userId: props.user._id,
-      password: cleanPassword(password)
+      password
     }, (e) => {
       if (e) {
         console.error(e)

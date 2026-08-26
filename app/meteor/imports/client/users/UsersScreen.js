@@ -70,7 +70,9 @@ const structure = ({ getAssigneeName, isInRole }) => [
     unsetWhenEmpty: true,
     isMulti: true,
     EditComponent: ClientsPicker,
-    render: u => u.allowedClientIds && u.allowedClientIds.length
+    render: u => (u.allowedClientIds && u.allowedClientIds.length)
+      ? u.allowedClientIds.length
+      : <span className='text-muted'>{__('users.allClients')}</span>
   },
 
   {
