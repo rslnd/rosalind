@@ -12,6 +12,7 @@ import { generate } from './generate'
 import { generatePreview } from './generatePreview'
 import { generateQuarter } from './generateQuarter'
 import { statistics } from './statistics'
+import { patientFlow } from './patientFlow'
 import { remove } from './remove'
 
 export default function ({ Reports }) {
@@ -22,6 +23,7 @@ export default function ({ Reports }) {
     { generatePreview: generatePreview({ Calendars, Reports, Schedules, Appointments, Tags, Messages, Users }) },
     { generateQuarter: generateQuarter({ Calendars, Reports, Schedules }) },
     { statistics: statistics({ Reports, Appointments, Schedules, Calendars, Users, Constraints, Tags }) },
+    { patientFlow: patientFlow({ Appointments, Users }) },
     { remove: remove({ Reports, Events }) }
   )
 }
