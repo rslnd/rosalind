@@ -105,7 +105,7 @@ class LoginScreen extends React.Component {
               Alert.error(__('login.unknownClientKey'))
             } else if (clientKey) {
               await attemptRegistration({ clientKey })
-              handleSubmit(e, { isRetry: true }) // try again
+              this.handleSubmit(e, { isRetry: true }) // try again
             } else {
               Alert.error(__('login.clientKeyRequired'))
             }

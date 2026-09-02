@@ -40,6 +40,7 @@ export const register = ({ Clients }) =>
             clientKey,
             systemInfo,
             createdAt: new Date(),
+            connectionId: this.connection.id,
             isBanned
           })
           Events.post('clients/register/banned', { newClientId: clientId })

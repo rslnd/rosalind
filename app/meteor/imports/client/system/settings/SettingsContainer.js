@@ -10,7 +10,13 @@ export const composer = (props) => {
   const isLoading = !subscribe('settings').ready()
 
   const get = (key) => Settings.get(key)
-  const set = (key, value) => Settings.actions.set.call({ key, value })
+  const set = (key, value) =>
+    Settings.actions.set.call({ key, value }, err => {
+      if (err) {
+        console.error('[Settings] Failed to set', key, err)
+        Alert.error(__('ui.error'))
+      }
+    })
 
   const settings = Settings.find({}, { sort: { isPublic: -1, key: 1 }}).fetch()
 

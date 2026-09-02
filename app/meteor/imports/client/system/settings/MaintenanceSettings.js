@@ -5,7 +5,7 @@ import Switch from '@material-ui/core/Switch'
 export const MaintenanceSettings = ({ settings }) => (
   <div className='container'>
     <Switch
-      checked={settings.get('maintenance.enabled')}
+      checked={!!settings.get('maintenance.enabled')}
       onChange={(e, v) => settings.set('maintenance.enabled', v)}
     />
 

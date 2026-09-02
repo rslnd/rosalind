@@ -19,6 +19,10 @@ const structure = ({ getCalendarName, getGroupName, getAssigneeName }) => [
     field: 'description'
   },
   {
+    header: 'Hostname',
+    render: c => c.systemInfo && c.systemInfo.hostname
+  },
+  {
     icon: 'ban',
     description: 'Gesperrt',
     field: 'isBanned',
@@ -87,7 +91,7 @@ export const ClientsScreen = toClass(({ clients, settings, getAssigneeName, getG
           <FormGroup row>
             <FormControlLabel
               control={<Switch
-                checked={settings.get('clients.allowNewClients')}
+                checked={!!settings.get('clients.allowNewClients')}
                 onChange={(e, v) => settings.set('clients.allowNewClients', v)}
               />}
               label='Neue Clients zulassen'
