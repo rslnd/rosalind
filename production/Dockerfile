@@ -15,6 +15,24 @@ ENV NPM_CONFIG_LOGLEVEL warn
 ENV TZ UTC
 ENV NODE_ENV production
 
+# Debian 11 (bullseye) reached LTS end-of-life on 2026-08-31 and is being pruned
+# from the deb.debian.org mirrors. The package indexes still advertise versions
+# whose .deb files are already gone from some CDN edges, so `apt-get install`
+# dies with 404s on packages it only wants in order to upgrade the base image
+# (libsystemd0, gpgsm, libglib2.0-dev, ...). Pin apt to a snapshot taken before
+# the pruning started; this also makes the image reproducible.
+# Bump DEBIAN_SNAPSHOT only together with the base image.
+ARG DEBIAN_SNAPSHOT=20260801T000000Z
+RUN printf '%s\n' \
+      "deb http://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}/ bullseye main" \
+      "deb http://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}/ bullseye-updates main" \
+      "deb http://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}/ bullseye-security main" \
+      > /etc/apt/sources.list \
+  && printf '%s\n' \
+      'Acquire::Check-Valid-Until "false";' \
+      'Acquire::Retries "5";' \
+      > /etc/apt/apt.conf.d/99rosalind-pin
+
 RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
