@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import { assert } from 'chai'
 import { createBookableSlots } from './createBookableSlots'
+import { applyHM } from '../../schedules/methods/transformDefaultsToOverrides'
 
 // Minimal in-memory fake of the Appointments collection.
 const fakeAppointments = (existing = []) => {
@@ -42,10 +43,11 @@ describe('createBookableSlots', function () {
     const Appointments = fakeAppointments()
     const make = createBookableSlots({ Appointments })
 
-    // Block 09:00–09:30
+    // Block 09:00–09:30 (built in the same Europe/Vienna basis as the slots so
+    // the test is timezone-independent).
     const block = {
-      start: new Date(2026, 8, 2, 9, 0, 0),
-      end: new Date(2026, 8, 2, 9, 30, 0)
+      start: applyHM(day, { h: 9, m: 0 }),
+      end: applyHM(day, { h: 9, m: 30 })
     }
 
     const created = make({
