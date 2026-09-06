@@ -4,6 +4,14 @@ export const lastName = u => u.lastName || u.firstName || u.username
 export const fullName = u => [u.firstName, u.lastName].filter(identity).join(' ') || u.username
 export const fullNameWithTitle = u => [u.titlePrepend, fullName(u), u.titleAppend].filter(identity).join(' ') || u.username
 
+// Abbreviates the first name to an initial, e.g. "Dr. Elisa Asya" -> "Dr. E. Asya"
+export const abbreviatedName = u => {
+  const first = u.firstName ? `${u.firstName.charAt(0)}.` : ''
+  return [first, u.lastName].filter(identity).join(' ') || fullName(u)
+}
+export const abbreviatedNameWithTitle = u =>
+  [u.titlePrepend, abbreviatedName(u), u.titleAppend].filter(identity).join(' ') || u.username
+
 export const lastNameWithTitle = u => {
   if (u.titlePrepend) {
     return [u.titlePrepend, lastName(u), u.titleAppend].filter(identity).join(' ')

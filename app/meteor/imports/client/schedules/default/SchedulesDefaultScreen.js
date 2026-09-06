@@ -18,11 +18,15 @@ import {
   TableRow
 } from '../../components/Table'
 import { Icon } from '../../components/Icon'
+import Modal from 'react-bootstrap/lib/Modal'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import { HMTimeField } from '../../components/form'
 import { ApplyDefaultSchedule } from './ApplyDefaultSchedule'
 import { subscribe } from '../../../util/meteor/subscribe'
-import { HMtoString, HMRangeToString, stringToHMRange } from '../../../util/time/hm'
+import { HMtoString, HMRangeToString } from '../../../util/time/hm'
 
 const HMRangeToStringWithRoles = (schedule) => {
   if (!schedule || !schedule.from) { return '' }
@@ -153,6 +157,12 @@ class SchedulesDefaultScreenComponent extends React.Component {
       s.weekday === weekday
     ))
 
+    const assignee = this.props.users.find(u => u._id === assigneeId)
+    const editTitle = [
+      assignee && Users.methods.fullNameWithTitle(assignee),
+      __(`time.${weekday}`)
+    ].filter(identity).join(' · ')
+
     const isAddingSchedule =
       this.state.edit &&
       this.state.edit.weekday === weekday &&
@@ -174,6 +184,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
                 ? (
                   <EditSchedule
                     schedule={s}
+                    title={editTitle}
                     onChange={this.handleSaveEdit(s)}
                     onCancel={this.handleEndEdit}
                   />
@@ -183,11 +194,13 @@ class SchedulesDefaultScreenComponent extends React.Component {
                     style={{
                       width: '100%',
                       fontSize: '14px',
+                      textTransform: 'none',
                       color: s.note && s.note.includes("!") ? "red" : "inherit",
-                      opacity: s.note && s.note.toUpperCase() === 'PAUSE' ? 0.7 : 1
+                      opacity: s.available === false ? 0.6 : 1
                     }}
                     onClick={this.handleStartEdit(s._id)}>
                       {HMRangeToStringWithRoles(s)}
+                      {s.bookable && <>&nbsp;<Icon name='globe' title='Online buchbar' /></>}
                   </Button>
                 )
             }
@@ -199,6 +212,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
         isAddingSchedule
           ? (
             <EditSchedule
+              title={editTitle}
               onChange={this.handleSaveEdit({ weekday, assigneeId })}
               onCancel={this.handleEndEdit}
             />
@@ -231,7 +245,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
                   <TableCell>{/* */}</TableCell>
                   {
                     weekdays.map(weekday =>
-                      <TableCell key={weekday}>
+                      <TableCell key={weekday} style={{ textAlign: 'center', fontWeight: 'bold' }}>
                         {__(`time.${weekday}`)}
                       </TableCell>
                     )
@@ -292,62 +306,140 @@ class EditSchedule extends React.Component {
   constructor (props) {
     super(props)
 
+    const s = this.props.schedule || {}
+
+    // Roles are still encoded as `role-x` tokens inside the note (preserving the
+    // existing convention); show them back in the note field for editing.
+    const note = [
+      s.note || '',
+      (s.roles || []).map(r => `role-${r}`).join(' ')
+    ].filter(Boolean).join(' ').trim()
+
     this.state = {
-      value: HMRangeToStringWithRoles(this.props.schedule)
+      from: s.from || { h: 8, m: 0 },
+      to: s.to || { h: 12, m: 0 },
+      note,
+      bookable: !!s.bookable,
+      // A block is a "Pause" (blocking, non-working) when it is not available.
+      // available is derived server-side from the note, so we mirror it here.
+      pause: s.available === false
     }
 
-    this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
+    this.handleTogglePause = this.handleTogglePause.bind(this)
   }
 
-  handleChange (e) {
-    this.setState({
-      value: e.target.value
-    })
+  handleTogglePause (checked) {
+    // A pause can't be online bookable.
+    this.setState(state => ({ pause: checked, bookable: checked ? false : state.bookable }))
   }
 
-  handleSave () {
-    if (!this.state.value) {
+  handleSave (e) {
+    if (e && e.preventDefault) { e.preventDefault() }
+
+    const { from, to, note, bookable, pause } = this.state
+
+    if (!from || !to) {
       this.props.onChange(null)
       return
     }
 
-    const { note, from, to } = stringToHMRange(this.state.value)
-
+    // Extract role-x tokens from the note (existing convention).
     const regex = /role-[a-zA-Z0-9-]+/g
     const roles = (note && note.match(regex))
       ? note.match(regex).map(r => r.replace(/^role-/, ''))
       : undefined
-    const remainingNote = note ? note.replace(regex, '') : undefined
+    let remainingNote = note ? note.replace(regex, '').trim() : ''
 
-    const schedule = {
-      from,
-      to,
-      note: remainingNote,
-      roles
+    // A "Pause" is represented by a note without '!' (server sets available:false).
+    // Guarantee that by stripping any '!' and defaulting the label to "Pause".
+    if (pause) {
+      remainingNote = (remainingNote.replace(/!/g, '').trim()) || 'Pause'
     }
 
-    this.props.onChange(schedule)
+    this.props.onChange({
+      from,
+      to,
+      note: remainingNote || undefined,
+      roles,
+      bookable: pause ? false : bookable
+    })
+  }
+
+  handleDelete () {
+    this.props.onChange(null)
   }
 
   render () {
-    const { onCancel } = this.props
+    const { onCancel, schedule, title } = this.props
+    const { from, to, note, bookable, pause } = this.state
 
     return (
-      <form onSubmit={this.handleSave}>
-        <TextField
-          autoFocus
-          onChange={this.handleChange}
-          value={this.state.value}
-        />
-        <br />
-        <Button style={{ minWidth: 25, opacity: 0.2 }} onClick={onCancel}>
-          <Icon name='times' />
-        </Button>
-        <Button style={{ minWidth: 25 }} onClick={this.handleSave}>
-          <Icon name='check' />
-        </Button>
-      </form>
+      <Modal show enforceFocus={false} onHide={onCancel} bsSize='small'>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ fontSize: 18 }}>
+            {schedule ? 'Zeit bearbeiten' : 'Zeit hinzufügen'}
+            {title && <span style={{ color: '#888', fontWeight: 'normal' }}> – {title}</span>}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
+            <HMTimeField label='Von' value={from} onChange={v => this.setState({ from: v })} />
+            <HMTimeField label='Bis' value={to} onChange={v => this.setState({ to: v })} />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={pause}
+                  onChange={e => this.handleTogglePause(e.target.checked)}
+                  style={{ padding: 4 }}
+                />
+              }
+              label='Pause / Sperre'
+              style={{ marginLeft: 0 }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={bookable}
+                  onChange={e => this.setState({ bookable: e.target.checked })}
+                  disabled={pause}
+                  style={{ padding: 4 }}
+                />
+              }
+              label='Online buchbar'
+              style={{ marginLeft: 0 }}
+            />
+          </div>
+
+          <TextField
+            fullWidth
+            label={pause ? 'Bezeichnung' : 'Notiz (optional)'}
+            placeholder={pause ? 'z. B. Pause' : ''}
+            value={note}
+            onChange={e => this.setState({ note: e.target.value })}
+            InputLabelProps={{ shrink: true }}
+            style={{ marginTop: 8 }}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <div className='pull-left'>
+            {schedule &&
+              <Button size='small' style={{ color: 'red' }} onClick={this.handleDelete}>
+                <Icon name='trash' />&nbsp;Löschen
+              </Button>
+            }
+          </div>
+          <Button size='small' onClick={onCancel}>Abbrechen</Button>
+          &nbsp;
+          <Button size='small' variant='contained' color='primary' onClick={this.handleSave}>
+            <Icon name='check' />&nbsp;Speichern
+          </Button>
+        </Modal.Footer>
+      </Modal>
     )
   }
 }

@@ -59,7 +59,8 @@ class ApplyDefaultScheduleComponent extends React.Component {
       focusedInput: START_DATE,
       applying: false,
       applied: false,
-      assigneeIds: null
+      assigneeIds: null,
+      quickCount: 1
     }
 
     this.handleDatesChange = this.handleDatesChange.bind(this)
@@ -68,6 +69,16 @@ class ApplyDefaultScheduleComponent extends React.Component {
     this.applyDefaultSchedule = this.applyDefaultSchedule.bind(this)
     this.isOutsideRange = this.isOutsideRange.bind(this)
     this.handleSelectAllAssignees = this.handleSelectAllAssignees.bind(this)
+    this.handleQuickRange = this.handleQuickRange.bind(this)
+  }
+
+  // Quick-select: apply for the next N days/weeks/months/quarters starting
+  // tomorrow (the action requires future dates).
+  handleQuickRange (unit) {
+    const n = Math.max(1, parseInt(this.state.quickCount, 10) || 1)
+    const startDate = moment().add(1, 'day').startOf('day')
+    const endDate = startDate.clone().add(n, unit).subtract(1, 'day').endOf('day')
+    this.setState({ startDate, endDate })
   }
 
   applyDefaultSchedule () {
@@ -124,8 +135,12 @@ class ApplyDefaultScheduleComponent extends React.Component {
   }
 
   handleSelectAllAssignees () {
+    const allIds = this.props.assignees.map(a => a._id)
+    const allSelected = this.state.assigneeIds && this.state.assigneeIds.length === allIds.length
+    // Toggle: when everything is selected, clear the selection (which means
+    // "all planned assignees" again); otherwise select everyone explicitly.
     this.setState({
-      assigneeIds: this.props.assignees.map(a => a._id)
+      assigneeIds: allSelected ? null : allIds
     })
   }
 
@@ -139,13 +154,19 @@ class ApplyDefaultScheduleComponent extends React.Component {
     const { startDate, endDate, focusedInput, applying, applied, assigneeIds } = this.state
     const { calendar, lastPlannedDate, assignees, isHoliday } = this.props
 
+    const dayCount = (startDate && endDate)
+      ? endDate.clone().startOf('day').diff(startDate.clone().startOf('day'), 'days') + 1
+      : 0
+
     return (
       <Box title='Wochenplan anwenden' icon='magic' noPadding noBorder>
         <div style={userPickerContainerStyle}>
           <Button
             size='small'
             variant='outlined'
-            onClick={this.handleSelectAllAssignees}>Alle auswählen</Button>
+            onClick={this.handleSelectAllAssignees}>
+            {(assigneeIds && assigneeIds.length === assignees.length) ? 'Alle abwählen' : 'Alle auswählen'}
+          </Button>
           <div style={userPickerStyle}>
             <UserPicker
               isMulti
@@ -156,6 +177,23 @@ class ApplyDefaultScheduleComponent extends React.Component {
               placeholder={'Auf alle oben geplanten MitarbeiterInnen anwenden...'}
             />
           </div>
+        </div>
+        <div style={quickRangeStyle}>
+          <span>Für die nächsten</span>
+          <select
+            value={this.state.quickCount}
+            onChange={e => this.setState({ quickCount: parseInt(e.target.value, 10) })}
+            style={quickInputStyle}
+          >
+            {Array.from({ length: 24 }, (_, i) => i + 1).map(n =>
+              <option key={n} value={n}>{n}</option>
+            )}
+          </select>
+          <Button size='small' variant='outlined' onClick={() => this.handleQuickRange('days')}>Tage</Button>
+          <Button size='small' variant='outlined' onClick={() => this.handleQuickRange('weeks')}>Wochen</Button>
+          <Button size='small' variant='outlined' onClick={() => this.handleQuickRange('months')}>Monate</Button>
+          <Button size='small' variant='outlined' onClick={() => this.handleQuickRange('quarters')}>Quartale</Button>
+          <span style={{ marginLeft: 8, color: '#888' }}>anwenden</span>
         </div>
         <div style={containerStyle}>
           <DayPickerRangeController
@@ -196,7 +234,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
                     }</b><br />
 
                   </span>
-                  : <span>Für alle oben geplanten MitarbeiterInnen</span>
+                  : <span style={{ color: '#c0392b' }}><Icon name='exclamation-triangle' /> Bitte MitarbeiterInnen auswählen</span>
               }
             </p>
 
@@ -223,9 +261,9 @@ class ApplyDefaultScheduleComponent extends React.Component {
                 color='secondary'
                 style={buttonStyle}
                 onClick={this.applyDefaultSchedule}
-                disabled={applying || !startDate || !endDate}
+                disabled={applying || !startDate || !endDate || !(assigneeIds && assigneeIds.length >= 1)}
               >
-                <Icon name='cog' spin={applying} /> Wochenplan auf die gewählten Tage im Kalender {calendar.name} anwenden
+                <Icon name='cog' spin={applying} /> Wochenplan für {dayCount} {dayCount === 1 ? 'Tag' : 'Tage'} anwenden
               </Button>
             </div>
           </div>
@@ -237,6 +275,22 @@ class ApplyDefaultScheduleComponent extends React.Component {
 
 const containerStyle = {
   display: 'flex'
+}
+
+const quickRangeStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  padding: '0 10px 10px 10px'
+}
+
+const quickInputStyle = {
+  width: 64,
+  padding: '4px 6px',
+  border: '1px solid #d2d6de',
+  borderRadius: 3,
+  background: '#fff',
+  cursor: 'pointer'
 }
 
 const userPickerContainerStyle = {

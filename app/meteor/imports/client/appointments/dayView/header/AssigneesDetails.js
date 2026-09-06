@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import { Icon } from '../../../components/Icon'
-import { background, highlight, important, gray, grayActive, primary, primaryActive } from '../../../layout/styles'
+import { background, highlight, important, gray, grayActive, primary, primaryActive, red } from '../../../layout/styles'
 import { InlineEdit } from '../../../components/form'
 import { isNoteBarVisible } from './CalendarNote'
 import { CalendarNoteLabel } from './CalendarNoteLabel'
 import { LabelButton } from '../../../components/LabelButton'
 import { Checkups } from '../../../../api/checkups'
+import { Users } from '../../../../api/users'
+import { VacationEditor } from './VacationEditor'
 
 const barStyle = {
   position: 'fixed',
@@ -81,6 +83,19 @@ const relevantCellStyle = {
   pointerEvents: 'auto'
 }
 
+const dayClosedButtonStyle = (isClosed) => ({
+  textTransform: 'none',
+  fontSize: 11,
+  lineHeight: 1.4,
+  color: isClosed ? red : grayActive,
+  borderColor: isClosed ? red : gray,
+  backgroundColor: background,
+  padding: '0px 6px',
+  minWidth: 0,
+  marginTop: 4,
+  pointerEvents: 'auto'
+})
+
 export const BreakLines = ({ children, placeholder, isImportant = false }) =>
   (children && children.length >= 1)
     ? children.split('\n').map((t, i) => (
@@ -99,7 +114,7 @@ export const BreakLines = ({ children, placeholder, isImportant = false }) =>
     ))
     : (placeholder || null)
 
-const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hovering, editing, open, onOpenPanel, onChangeNote, onChangeCalendarNote, onEditingChange, isLast }) => {
+const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hovering, editing, open, onOpenPanel, onChangeNote, onChangeCalendarNote, onEditingChange, isLast, onOpenVacationPicker, isClosed, onSetDayClosed }) => {
   const isDayNoteColumn = (!assignee || (!calendar.allowUnassigned && isLast))
   const hasDayNote = (daySchedule && (daySchedule.note || daySchedule.noteDetails))
   // The "Info hinzufügen" button depends on the Tagesinfo only (not on a possibly
@@ -213,47 +228,90 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
 
   return <div style={style}>
     { dayNote }
+    {
+      isDayNoteColumn && canEditSchedules &&
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <Button
+            size='small'
+            variant='outlined'
+            style={{ ...addInfoButtonStyle, marginTop: 4 }}
+            onClick={onOpenVacationPicker}>
+            <Icon name='umbrella' />&nbsp;Urlaub eintragen
+          </Button>
+          <Button
+            size='small'
+            variant='outlined'
+            style={dayClosedButtonStyle(isClosed)}
+            onClick={() => onSetDayClosed(!isClosed)}>
+            <Icon name={isClosed ? 'lock' : 'unlock'} />&nbsp;
+            {isClosed ? 'Praxis geschlossen' : 'Als geschlossen markieren'}
+          </Button>
+        </div>
+    }
   </div>
 }
 
-export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hovering, editing, open, onOpenPanel, canEditSchedules, onChangeNote, onChangeCalendarNote, onEditingChange }) => (
-  <div style={isNoteBarVisible({ calendar, canEditSchedules }) ? barStyleWithNote : barStyle}>
-    {
-      assignees.map((assignee, i) =>
-        <Cell
-          key={assignee ? assignee._id : 'unassigned'}
-          date={date}
-          calendar={calendar}
-          canEditSchedules={canEditSchedules}
-          onChangeNote={onChangeNote}
-          onChangeCalendarNote={onChangeCalendarNote}
-          onEditingChange={onEditingChange}
-          onOpenPanel={onOpenPanel}
-          assignee={assignee}
-          hovering={hovering}
-          editing={editing}
-          open={open}
-          isLast={i === (assignees.length - 1)}
-          daySchedule={daySchedule} />
-      )
-    }
-    {
-      assignees.length === 0 &&
-        <Cell
-          key={'note'}
-          date={date}
-          calendar={calendar}
-          canEditSchedules={canEditSchedules}
-          onChangeNote={onChangeNote}
-          onChangeCalendarNote={onChangeCalendarNote}
-          onEditingChange={onEditingChange}
-          onOpenPanel={onOpenPanel}
-          assignee={{}}
-          hovering={hovering}
-          editing={editing}
-          open={open}
-          isLast
-          daySchedule={daySchedule} />
-    }
-  </div>
-)
+export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hovering, editing, open, onOpenPanel, canEditSchedules, onChangeNote, onChangeCalendarNote, onEditingChange, vacations, allVacations, isClosed, onSaveVacation, onRemoveVacation, onSetDayClosed }) => {
+  const [editingVacation, setEditingVacation] = useState(null) // { assignee, vacation }
+
+  // Central button: no preset assignee -> the editor shows the staff dropdown.
+  const onOpenVacationPicker = () => setEditingVacation({ assignee: null, vacation: null })
+  const closeVacationEditor = () => setEditingVacation(null)
+
+  // Staff for the central picker: the day's assignees (full names in the
+  // vacation UI; abbreviations are only used in the month grid).
+  const staff = (assignees || [])
+    .filter(a => a && a._id)
+    .map(a => ({ _id: a._id, name: Users.methods.fullNameWithTitle(a) }))
+
+  const cellProps = {
+    date,
+    calendar,
+    canEditSchedules,
+    onChangeNote,
+    onChangeCalendarNote,
+    onEditingChange,
+    onOpenPanel,
+    hovering,
+    editing,
+    open,
+    daySchedule,
+    onOpenVacationPicker,
+    isClosed,
+    onSetDayClosed
+  }
+
+  return (
+    <div style={isNoteBarVisible({ calendar, canEditSchedules }) ? barStyleWithNote : barStyle}>
+      {
+        assignees.map((assignee, i) =>
+          <Cell
+            key={assignee ? assignee._id : 'unassigned'}
+            {...cellProps}
+            assignee={assignee}
+            isLast={i === (assignees.length - 1)} />
+        )
+      }
+      {
+        assignees.length === 0 &&
+          <Cell
+            key={'note'}
+            {...cellProps}
+            assignee={{}}
+            isLast />
+      }
+      {
+        editingVacation &&
+          <VacationEditor
+            assignee={editingVacation.assignee}
+            staff={staff}
+            date={date}
+            vacation={editingVacation.vacation}
+            existingVacations={allVacations}
+            onSave={onSaveVacation}
+            onRemove={onRemoveVacation}
+            onClose={closeVacationEditor} />
+      }
+    </div>
+  )
+}

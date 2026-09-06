@@ -14,6 +14,10 @@ import { UserPicker } from '../../../users/UserPicker'
 import { CalendarNote } from './CalendarNote'
 import { Users } from '../../../../api/users'
 import { prompt } from '../../../layout/Prompt'
+import { VacationEditor } from './VacationEditor'
+import { Icon } from '../../../components/Icon'
+
+const darkBlue = '#1e3a5f'
 
 const headerRowStyle = {
   backgroundColor: background,
@@ -40,6 +44,22 @@ const headerCellStyle = {
   textAlign: 'center'
 }
 
+const headerCellVacationStyle = {
+  backgroundColor: 'rgba(30, 58, 95, 0.10)'
+}
+
+const vacationBadgeStyle = {
+  display: 'inline-block',
+  marginLeft: 8,
+  padding: '1px 6px',
+  borderRadius: 10,
+  backgroundColor: darkBlue,
+  color: '#fff',
+  fontSize: 11,
+  fontWeight: 'bold',
+  verticalAlign: 'middle'
+}
+
 const topPaddingStyle = {
   height: 30
 }
@@ -54,7 +74,8 @@ export class HeaderRow extends React.Component {
       hovering: false,
       editing: false,
       open: false,
-      changingAssignee: false
+      changingAssignee: false,
+      vacationModal: null // { assignee, vacation }
     }
 
     this.handleRemoveUser = this.handleRemoveUser.bind(this)
@@ -69,15 +90,34 @@ export class HeaderRow extends React.Component {
     this.handleOpenPanel = this.handleOpenPanel.bind(this)
     this.handleChangeAssigneeClick = this.handleChangeAssigneeClick.bind(this)
     this.handleChangeAssigneeFinishClick = this.handleChangeAssigneeFinishClick.bind(this)
+    this.handleAddVacationClick = this.handleAddVacationClick.bind(this)
   }
 
-  handleUserDropdownOpen ({ event, assigneeId, canRemoveUser }) {
+  handleAddVacationClick () {
+    const assigneeId = this.state.userDropdownAssigneeId
+    if (assigneeId) {
+      const assignee = this.props.assignees.find(a => a && a._id === assigneeId) || Users.findOne({ _id: assigneeId })
+      this.handleUserDropdownClose()
+      this.setState({ vacationModal: { assignee, vacation: null } })
+    }
+  }
+
+  // Clicking the "Urlaub" badge opens the modal for the existing vacation of
+  // that assignee on this day (edit / delete).
+  handleVacationBadgeClick (event, assignee) {
+    event.stopPropagation()
+    const vacation = (this.props.vacations || []).find(v => v.userId === assignee._id)
+    this.setState({ vacationModal: { assignee, vacation } })
+  }
+
+  handleUserDropdownOpen ({ event, assigneeId, canRemoveUser, hasBookables }) {
     if (this.props.canEditSchedules) {
       this.setState({
         userDropdownOpen: true,
         userDropdownAnchor: event.currentTarget,
         userDropdownAssigneeId: assigneeId,
-        canRemoveUser
+        canRemoveUser,
+        hasBookables
       })
     }
   }
@@ -93,11 +133,27 @@ export class HeaderRow extends React.Component {
   async handleRemoveUser () {
     if (this.state.userDropdownAssigneeId) {
       const id = this.state.userDropdownAssigneeId
+      const name = Users.methods.fullNameWithTitle(Users.findOne({ _id: id }))
+
+      // The column has only online releases (bookables): allow deletion, but
+      // warn that those releases will be removed as well.
+      if (this.state.canRemoveUser && this.state.hasBookables) {
+        const ok = await prompt({
+          title: <span style={{ fontSize: 20, fontWeight: 'bold' }}>Spalte löschen</span>,
+          body: `Die Spalte ${name} enthält nur Online-Freigaben. Beim Löschen werden diese Online-Freigaben ebenfalls entfernt. Fortfahren?`,
+          confirm: 'Ja, löschen',
+          cancel: 'Abbrechen'
+        })
+        if (!ok) { return }
+        this.handleUserDropdownClose()
+        this.props.onRemoveUser(id)
+        return
+      }
+
       if (this.state.canRemoveUser) {
         this.handleUserDropdownClose()
         this.props.onRemoveUser(id)
       } else {
-        const name = Users.methods.fullNameWithTitle(Users.findOne({ _id: id }))
         const ok = await prompt({
           title: `Spalte ${name} wirklich löschen?`,
           confirm: 'Ja, löschen'
@@ -213,7 +269,13 @@ export class HeaderRow extends React.Component {
       onChangeCalendarNote,
       date,
       daySchedule,
-      onChangeNote
+      onChangeNote,
+      vacations,
+      allVacations,
+      isClosed,
+      onSaveVacation,
+      onRemoveVacation,
+      onSetDayClosed
     } = this.props
 
     return (
@@ -231,8 +293,8 @@ export class HeaderRow extends React.Component {
           {assignees.map((assignee) => (
             <div
               key={assignee ? assignee._id : 'unassigned'}
-              style={headerCellStyle}
-              onClick={(event) => assignee && this.handleUserDropdownOpen({ event, assigneeId: assignee._id, canRemoveUser: !assignee.hasAppointments })}>
+              style={(assignee && assignee.onVacation) ? { ...headerCellStyle, ...headerCellVacationStyle } : headerCellStyle}
+              onClick={(event) => assignee && this.handleUserDropdownOpen({ event, assigneeId: assignee._id, canRemoveUser: !assignee.hasAppointments, hasBookables: assignee.hasBookables })}>
               {
                 assignee
                   ? (
@@ -241,6 +303,14 @@ export class HeaderRow extends React.Component {
                         assignee.employee
                           ? Users.methods.fullNameWithTitle(assignee)
                           : <span className='text-muted'>{Users.methods.fullNameWithTitle(assignee)}</span>
+                      }
+                      {assignee.onVacation &&
+                        <span
+                          style={{ ...vacationBadgeStyle, cursor: 'pointer' }}
+                          title='Urlaub bearbeiten / löschen'
+                          onClick={(e) => this.handleVacationBadgeClick(e, assignee)}>
+                          <Icon name='umbrella' />&nbsp;Urlaub
+                        </span>
                       }
                     </span>
                   )
@@ -273,6 +343,9 @@ export class HeaderRow extends React.Component {
           </MenuItem>
           <MenuItem onClick={this.handleChangeAssigneeClick}>
             Person ändern
+          </MenuItem>
+          <MenuItem onClick={this.handleAddVacationClick}>
+            Urlaub eintragen
           </MenuItem>
           {/* HoverTooltip corrects the body zoom (1.221) so it lands in the right
               spot, and wraps the item so the tooltip still fires over the disabled
@@ -309,9 +382,27 @@ export class HeaderRow extends React.Component {
           onEditingChange={this.handleEditingChange}
           onOpenPanel={this.handleOpenPanel}
           assignees={assignees}
+          vacations={vacations}
+          allVacations={allVacations}
+          isClosed={isClosed}
+          onSaveVacation={onSaveVacation}
+          onRemoveVacation={onRemoveVacation}
+          onSetDayClosed={onSetDayClosed}
           hovering={this.state.hovering}
           editing={this.state.editing}
           open={this.state.open} />
+
+        {
+          this.state.vacationModal &&
+            <VacationEditor
+              assignee={this.state.vacationModal.assignee}
+              vacation={this.state.vacationModal.vacation}
+              date={date}
+              existingVacations={allVacations}
+              onSave={onSaveVacation}
+              onRemove={onRemoveVacation}
+              onClose={() => this.setState({ vacationModal: null })} />
+        }
         <div style={topPaddingStyle} />
 
         {

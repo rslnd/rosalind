@@ -79,6 +79,14 @@ const composer = (props) => {
     ...daySelector(day)
   })
 
+  // Whether the day is marked as closed (practice-wide holiday).
+  const closedHoliday = Schedules.findOne({
+    type: 'holiday',
+    removed: { $ne: true },
+    ...daySelector(day)
+  })
+  const isClosed = !!closedHoliday
+
   let assigneeIds = daySchedule ? (daySchedule.userIds || []) : []
 
   if (hasRole(Meteor.userId(), ['appointments-column-*'])) {
@@ -139,11 +147,27 @@ const composer = (props) => {
     appointments.push(move.appointment)
   }
 
+  // Vacations covering this day, to mark assignees on vacation (dark column +
+  // header badge).
+  const dayVacations = Schedules.find({
+    type: 'vacation',
+    calendarId,
+    removed: { $ne: true },
+    start: { $lte: moment(date).endOf('day').toDate() },
+    end: { $gte: moment(date).startOf('day').toDate() }
+  }).fetch()
+
   assignees = assignees.map(a =>
     a
     ? ({
       ...a,
-      hasAppointments: a && appointments.find(ap => ap.assigneeId === a._id)
+      // Only real appointments block column deletion – online releases
+      // (bookables) do not, and get removed together with the column.
+      hasAppointments: a && appointments.some(ap =>
+        ap.assigneeId === a._id && ap.type !== 'bookable' && !ap.canceled),
+      hasBookables: a && appointments.some(ap =>
+        ap.assigneeId === a._id && ap.type === 'bookable'),
+      onVacation: a && dayVacations.some(v => v.userId === a._id)
     }) : a // keep null assignee
   )
 
@@ -161,6 +185,8 @@ const composer = (props) => {
   return {
     day,
     daySchedule,
+    isClosed,
+    closedHoliday,
     calendar,
     date,
     appointments,

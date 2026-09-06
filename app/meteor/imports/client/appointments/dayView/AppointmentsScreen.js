@@ -17,6 +17,7 @@ import { Tooltip } from '../../components/Tooltip'
 import { PatientsAppointmentsContainer } from '../../patientAppointments/PatientsAppointmentsContainer'
 import { hasRole } from '../../../util/meteor/hasRole'
 import { ScheduleDSLEditor } from '../../schedules/dsl'
+import { MonthViewContainer } from '../monthView/MonthViewContainer'
 
 const contentHeaderStyle = {
   background,
@@ -33,6 +34,22 @@ const printStyle = {
   padding: 6
 }
 
+// Fixed to the bottom so it spans the full width without covering the date /
+// title in the fixed top header.
+const closedBannerStyle = {
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  zIndex: 60,
+  background: '#c0392b',
+  color: '#fff',
+  padding: '10px 16px',
+  textAlign: 'center',
+  fontSize: 14,
+  boxShadow: '0 -2px 8px rgba(0,0,0,0.25)'
+}
+
 monkey(moment)
 
 export class AppointmentsScreen extends React.Component {
@@ -43,7 +60,9 @@ export class AppointmentsScreen extends React.Component {
 
     this.state = {
       patientModalId: null,
-      showKeyboardShortcuts: false
+      showKeyboardShortcuts: false,
+      showMonth: false,
+      monthDate: null
     }
 
     this.scrollToCurrentTime = this.scrollToCurrentTime.bind(this)
@@ -53,6 +72,27 @@ export class AppointmentsScreen extends React.Component {
     this.handleKeyboardShortcutsToggle = this.handleKeyboardShortcutsToggle.bind(this)
     this.handleFocusSearch = this.handleFocusSearch.bind(this)
     this.handleBlurSearch = this.handleBlurSearch.bind(this)
+    this.handleMonthToggle = this.handleMonthToggle.bind(this)
+    this.handleMonthSelectDay = this.handleMonthSelectDay.bind(this)
+    this.handleMonthChange = this.handleMonthChange.bind(this)
+  }
+
+  handleMonthToggle () {
+    this.setState(state => ({ showMonth: !state.showMonth, monthDate: null }))
+  }
+
+  handleMonthSelectDay (dateStr) {
+    this.setState({ showMonth: false })
+    if (this.props.history) {
+      this.props.history.push(`/appointments/${this.props.calendar.slug}/${dateStr}`)
+    }
+  }
+
+  handleMonthChange (delta) {
+    this.setState(state => ({
+      monthDate: (state.monthDate ? moment(state.monthDate) : moment(this.props.date))
+        .clone().add(delta, 'month').format('YYYY-MM-DD')
+    }))
   }
 
   handleKeyboardShortcutsToggle () {
@@ -134,8 +174,14 @@ export class AppointmentsScreen extends React.Component {
       onNewAppointmentModalClose,
       move,
       dispatch,
-      isReady
+      isReady,
+      isClosed,
+      closedHoliday
     } = this.props
+
+    const realAppointmentCount = (appointments || [])
+      .filter(a => a.type !== 'bookable' && !a.canceled).length
+    const showClosedBanner = isClosed && realAppointmentCount > 0
 
     return (
       <div>
@@ -174,6 +220,13 @@ export class AppointmentsScreen extends React.Component {
           <div style={{display: "flex", alignItems: "center"}}>
             <span
               style={{ cursor: 'pointer', paddingRight: 10, marginTop: -3, opacity: 0.6 }}
+              onClick={this.handleMonthToggle}
+              title='Monatsübersicht'
+            >
+              <Icon name='calendar' />
+            </span>
+            <span
+              style={{ cursor: 'pointer', paddingRight: 10, marginTop: -3, opacity: 0.6 }}
               onClick={this.handleKeyboardShortcutsToggle}
               title={__('ui.keyboardShortcuts')}
             >
@@ -197,6 +250,14 @@ export class AppointmentsScreen extends React.Component {
           </div>
         </div>
 
+        {showClosedBanner &&
+          <div style={closedBannerStyle}>
+            <Icon name='exclamation-triangle' />&nbsp;
+            <b>Praxis an diesem Tag als geschlossen markiert</b>
+            &nbsp;– es {realAppointmentCount === 1 ? 'ist noch 1 Termin' : `sind noch ${realAppointmentCount} Termine`} vereinbart. Bitte verschieben oder absagen.
+          </div>
+        }
+
         <div className='content print-zoom-1' style={appointmentsViewStyle}>
           <AppointmentsView
             assignees={assignees || []}
@@ -217,6 +278,18 @@ export class AppointmentsScreen extends React.Component {
             dispatch={dispatch}
           />
         </div>
+
+        {
+          this.state.showMonth &&
+          <MonthViewContainer
+            embedded
+            calendarSlug={calendar.slug}
+            dateStr={(this.state.monthDate ? moment(this.state.monthDate) : date).format('YYYY-MM-DD')}
+            onClose={this.handleMonthToggle}
+            onSelectDay={this.handleMonthSelectDay}
+            onChangeMonth={this.handleMonthChange}
+          />
+        }
 
         {
           this.state.patientModalId &&

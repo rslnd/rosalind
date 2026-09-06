@@ -4,8 +4,11 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
-import { transformDefaultsToOverrides } from '../methods/transformDefaultsToOverrides'
-import { rangeToDays, isSame, daySelector, dayToDate } from '../../../util/time/day'
+import { Appointments } from '../../appointments'
+import { Calendars } from '../../calendars'
+import { transformDefaultsToOverrides, applyHM } from '../methods/transformDefaultsToOverrides'
+import { createBookableSlots } from '../../appointments/methods/createBookableSlots'
+import { rangeToDays, isSame, daySelector, dayToDate, dateToDay } from '../../../util/time/day'
 import { hasRole } from '../../../util/meteor/hasRole'
 import { union, without } from 'lodash'
 
@@ -47,6 +50,42 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
       const days = rangeToDays({ from, to }).filter(excludeHolidays)
 
+      // Load vacations overlapping the applied range. Vacations are a separate
+      // schedule type, so the override/overlay/day removal below never touches
+      // them – bulk apply must not reopen a vacation.
+      const vacationSelector = {
+        type: 'vacation',
+        calendarId,
+        removed: { $ne: true },
+        start: { $lte: moment(to).endOf('day').toDate() },
+        end: { $gte: moment(from).startOf('day').toDate() }
+      }
+      if (assigneeIds) {
+        vacationSelector.userId = { $in: assigneeIds }
+      }
+      const vacations = Schedules.find(vacationSelector).fetch()
+
+      // Vacations (allDay / partial) covering a given day for a given user.
+      const vacationsFor = (day, userId) => {
+        const dayStart = moment(dayToDate(day)).startOf('day').toDate()
+        const dayEnd = moment(dayToDate(day)).endOf('day').toDate()
+        return vacations.filter(v =>
+          v.userId === userId &&
+          v.start <= dayEnd &&
+          v.end >= dayStart
+        )
+      }
+      const hasAllDayVacation = (day, userId) =>
+        vacationsFor(day, userId).some(v => v.allDay)
+      // Blocked date intervals on a day caused by partial-day vacations.
+      const partialVacationRanges = (day, userId) =>
+        vacationsFor(day, userId)
+          .filter(v => !v.allDay && v.from && v.to)
+          .map(v => ({
+            start: applyHM(day, v.from),
+            end: applyHM(day, v.to)
+          }))
+
       // Remove all overrides in selected period
       const oldOverridesSelector = {
         $or: [
@@ -68,6 +107,21 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
       const countRemovedOverrides = Schedules.remove(oldOverridesSelector)
       console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedOverrides, 'override schedules')
+
+      // Remove existing bookable slots in the range before recreating them, so
+      // re-applying does not accumulate duplicate bookables.
+      const oldBookablesSelector = {
+        type: 'bookable',
+        calendarId,
+        removed: { $ne: true },
+        start: { $gte: moment(from).startOf('day').toDate() },
+        end: { $lte: moment(to).endOf('day').toDate() }
+      }
+      if (assigneeIds) {
+        oldBookablesSelector.assigneeId = { $in: assigneeIds }
+      }
+      const countRemovedBookables = Appointments.remove(oldBookablesSelector)
+      console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedBookables, 'bookable slots')
 
 
       const existingDaySchedules = Schedules.find({
@@ -107,7 +161,46 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         calendarId
       }).fetch()
 
-      const overrideSchedules = transformDefaultsToOverrides({ defaultSchedules, days })
+      const rawOverrideSchedules = transformDefaultsToOverrides({ defaultSchedules, days })
+
+      // Vacation protection:
+      // - allDay vacations: drop the user's blocking overrides for that day and
+      //   remove them from the day's attendance (they get no column that day).
+      // - partial-day vacations: keep the user scheduled but add a blocking
+      //   override for the vacation interval.
+      const overrideSchedules = rawOverrideSchedules
+        .filter(os => {
+          if (os.type === 'day') { return true }
+          return !hasAllDayVacation(dateToDay(os.start), os.userId)
+        })
+        .map(os => {
+          if (os.type !== 'day') { return os }
+          return {
+            ...os,
+            userIds: os.userIds.filter(uid => !hasAllDayVacation(os.day, uid))
+          }
+        })
+
+      // Blocking overrides for partial-day vacations.
+      vacations
+        .filter(v => !v.allDay && v.from && v.to)
+        .forEach(v => {
+          days.forEach(day => {
+            const ds = moment(dayToDate(day)).startOf('day').toDate()
+            const de = moment(dayToDate(day)).endOf('day').toDate()
+            if (v.start <= de && v.end >= ds) {
+              overrideSchedules.push({
+                type: 'override',
+                available: false,
+                calendarId,
+                userId: v.userId,
+                note: 'Urlaub',
+                start: applyHM(day, v.from),
+                end: applyHM(day, v.to)
+              })
+            }
+          })
+        })
 
 
       if (assigneeIds) {
@@ -201,6 +294,45 @@ export const applyDefaultSchedule = ({ Schedules }) => {
           })
         }
       })
+
+      // Create bookable slots for default blocks marked "online bookable",
+      // skipping days/times covered by a vacation.
+      const calendar = Calendars.findOne({ _id: calendarId })
+      const makeBookableSlots = createBookableSlots({ Appointments })
+      let totalBookables = 0
+
+      days.forEach(day => {
+        const wd = moment(dayToDate(day)).locale('en').format('ddd').toLowerCase()
+        const bookableDefaults = defaultSchedules.filter(d =>
+          d.weekday === wd &&
+          d.available !== false &&
+          d.bookable === true &&
+          d.from && d.to &&
+          (assigneeIds ? assigneeIds.includes(d.userId) : true)
+        )
+
+        // Group ranges by user so we can honor per-user vacations.
+        const byUser = {}
+        bookableDefaults.forEach(d => {
+          if (hasAllDayVacation(day, d.userId)) { return }
+          byUser[d.userId] = byUser[d.userId] || []
+          byUser[d.userId].push({ from: d.from, to: d.to })
+        })
+
+        Object.keys(byUser).forEach(userId => {
+          totalBookables += makeBookableSlots({
+            calendar,
+            calendarId,
+            userId,
+            day,
+            ranges: byUser[userId],
+            blockedRanges: partialVacationRanges(day, userId),
+            createdBy: this.userId
+          })
+        })
+      })
+
+      console.log('[Schedules] applyDefaultSchedule: Created', totalBookables, 'bookable slots')
 
       return true
     }

@@ -197,6 +197,31 @@ export default () => {
     return as
   }
 
+  // Lean publication for the month overview: all appointments of a calendar in
+  // the month (used to compute utilization and warnings). No patient/comments.
+  publish({
+    name: 'appointments-month',
+    roles: ['appointments-*'],
+    args: {
+      year: Number,
+      month: Number,
+      calendarId: String
+    },
+    fn: function ({ year, month, calendarId }) {
+      const userId = this.userId
+      const start = moment.tz({ year, month: month - 1, day: 1 }, 'Europe/Vienna').startOf('month')
+      const end = start.clone().endOf('month')
+
+      return Appointments.find({
+        calendarId,
+        start: { $gte: start.toDate(), $lte: end.toDate() }
+      }, {
+        sort: { start: 1 },
+        fields: limitFieldsByRole(userId)
+      })
+    }
+  })
+
   publish({
     name: 'appointments-patient',
     args: {

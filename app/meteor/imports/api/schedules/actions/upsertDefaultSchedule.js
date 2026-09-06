@@ -12,6 +12,7 @@ const Schedule = new SimpleSchema({
   to: { type: HM },
   note: { type: String, optional: true },
   roles: { type: [String], optional: true },
+  bookable: { type: Boolean, optional: true }
 })
 
 export const upsertDefaultSchedule = ({ Schedules }) => {
@@ -63,6 +64,7 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
             to: newSchedule.to,
             note: newSchedule.note,
             roles: newSchedule.roles,
+            bookable: !!newSchedule.bookable,
             available
           }
         }
@@ -101,6 +103,7 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
             to: newSchedule.to,
             note: newSchedule.note,
             roles: newSchedule.roles,
+            bookable: !!newSchedule.bookable,
             available,
             createdAt: new Date(),
             createdBy: this.userId

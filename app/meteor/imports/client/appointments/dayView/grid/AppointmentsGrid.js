@@ -78,6 +78,20 @@ export const AppointmentsGrid = ({
       {ffAva ? null : overrideOverlay(override)}
       {ffAva ? null : renderSchedules({ slotSize, schedules, assignees, date, calendar, onDoubleClick: onScheduleModalOpen, override })}
       {timeLegend({ slotSize, scheduleOffset, atMinutes })}
+
+      {/* Darken the whole column for assignees on vacation. */}
+      {assignees.filter(a => a && a.onVacation).map(a => (
+        <div
+          key={`vacation-col-${a._id}`}
+          style={{
+            gridColumn: `assignee-${a._id}`,
+            gridRow: '1 / -1',
+            backgroundColor: 'rgba(30, 58, 95, 0.10)',
+            pointerEvents: 'none',
+            zIndex: 5
+          }}
+        />
+      ))}
     </div>
   )
 }

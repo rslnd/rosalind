@@ -12,7 +12,8 @@ export const Schema = new SimpleSchema({
       'businessHours',
       'businessHoursOverride',
       'holiday',
-      'day'
+      'day',
+      'vacation'
     ],
     index: 1
   },
@@ -65,6 +66,19 @@ export const Schema = new SimpleSchema({
     index: 1,
     optional: true,
     defaultValue: true
+  },
+
+  // For default schedules: marks the working block as online bookable, so that
+  // applying the default schedule creates bookable slots for this time range.
+  bookable: {
+    type: Boolean,
+    optional: true
+  },
+
+  // For vacation schedules: whole-day vacation (no from/to times).
+  allDay: {
+    type: Boolean,
+    optional: true
   },
 
   start: {

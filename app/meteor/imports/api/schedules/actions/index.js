@@ -6,6 +6,8 @@ import { insert } from './insert'
 import { setNote } from './setNote'
 import { upsertDefaultSchedule } from './upsertDefaultSchedule'
 import { applyDefaultSchedule } from './applyDefaultSchedule'
+import { upsertVacation } from './upsertVacation'
+import { setDayClosed } from './setDayClosed'
 
 export default ({ Schedules }) => {
   return {
@@ -15,6 +17,8 @@ export default ({ Schedules }) => {
     insert: insert({ Schedules, Users }),
     setNote: setNote({ Schedules }),
     upsertDefaultSchedule: upsertDefaultSchedule({ Schedules }),
-    applyDefaultSchedule: applyDefaultSchedule({ Schedules })
+    applyDefaultSchedule: applyDefaultSchedule({ Schedules }),
+    upsertVacation: upsertVacation({ Schedules }),
+    setDayClosed: setDayClosed({ Schedules })
   }
 }
