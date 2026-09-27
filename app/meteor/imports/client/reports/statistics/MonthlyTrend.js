@@ -1,47 +1,44 @@
 import React from 'react'
 import { __ } from '../../../i18n'
 import { fmtInt } from './format'
-import { BRAND, COMPARE, TEXT_COLOR } from './flowPalette'
+import { TEXT_COLOR, paleOf } from './flowPalette'
 import { GroupedBarChart } from './GroupedBarChart'
+import { monthUnion, monthLabel, byMonth } from './monthsAxis'
 
-const MONTHS_DE = ['Jän', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
-const monthLabel = (key) => {
-  const [y, m] = key.split('-')
-  return `${MONTHS_DE[Number(m) - 1]} ${y.slice(2)}`
-}
-
-const Legend = ({ color, label, numeric, bold }) => (
-  <span style={{ marginRight: 14, whiteSpace: 'nowrap', fontSize: 12 }}>
+const Legend = ({ color, label, numeric, faded }) => (
+  <span style={{ marginRight: 14, whiteSpace: 'nowrap', fontSize: 12, opacity: faded ? 0.85 : 1 }}>
     <span style={{ display: 'inline-block', width: 12, height: 12, background: color, borderRadius: 2, verticalAlign: 'middle', marginRight: 5 }} />
-    <span style={{ color: TEXT_COLOR, fontWeight: bold ? 700 : 400 }}>{label}</span>
+    <span style={{ color: TEXT_COLOR }}>{label}</span>
     {numeric && <span style={{ color: '#aaa', marginLeft: 4 }}>({numeric})</span>}
   </span>
 )
 
-// Monthly appointment volume (seasonal). Comparison period is drawn as the left
-// bar of each month, the current period as the right bar. Legends use the
-// concrete periods (compact form, e.g. "Q3 2025").
-export const MonthlyTrend = ({ months = [], previousMonths = null, periods = {} }) => {
-  if (!months.length) { return null }
-  const hasCompare = !!(previousMonths && previousMonths.length)
-  const curLabel = (periods.current && periods.current.compact) || __('reports.currentPeriod')
-  const prevLabel = periods.previous
-    ? `${__('reports.comparePeriod')} ${periods.previous.compact}`
-    : __('reports.comparePeriod')
+// Monthly appointment volume (seasonal) for several cohorts on one shared month
+// axis. Each cohort is one colored bar per month; with compare on, the cohort's
+// previous-year volume is drawn as a paler bar right next to it.
+export const MonthlyTrend = ({ cohorts = [], compare = false }) => {
+  const categories = monthUnion(
+    ...cohorts.map(c => c.current && c.current.months),
+    ...(compare ? cohorts.map(c => c.previous && c.previous.months) : [])
+  ).map(key => ({ key, label: monthLabel(key) }))
+  if (!categories.length) { return null }
 
-  const categories = months.map(m => ({ key: m.month, label: monthLabel(m.month) }))
-  const series = [
-    ...(hasCompare ? [{ id: 'prev', label: prevLabel, color: COMPARE, values: previousMonths.map(m => m.total) }] : []),
-    { id: 'cur', label: curLabel, color: BRAND, values: months.map(m => m.total) }
-  ]
+  const series = []
+  cohorts.forEach(c => {
+    const cur = byMonth(c.current && c.current.months, m => m.total)
+    series.push({ id: `${c.id}-cur`, label: c.label, color: c.color, values: categories.map(cat => cur[cat.key] || 0) })
+    if (compare && c.previous) {
+      const prev = byMonth(c.previous.months, m => m.total)
+      series.push({ id: `${c.id}-prev`, label: __('reports.cohortVorjahrSuffix', { label: c.label }), color: paleOf(c.color), values: categories.map(cat => prev[cat.key] || 0) })
+    }
+  })
 
   return (
     <div>
-      {hasCompare &&
-        <div style={{ marginBottom: 8 }}>
-          <Legend color={COMPARE} label={prevLabel} numeric={periods.previous && periods.previous.numeric} />
-          <Legend color={BRAND} label={curLabel} numeric={periods.current && periods.current.numeric} bold />
-        </div>}
+      <div style={{ marginBottom: 8 }}>
+        {cohorts.map(c => <Legend key={c.id} color={c.color} label={c.label} />)}
+        {compare && <span style={{ fontSize: 11, color: '#999', fontStyle: 'italic' }}>{__('reports.paleIsVorjahr')}</span>}
+      </div>
       <GroupedBarChart categories={categories} series={series} yFormat={fmtInt} ariaLabel={__('reports.monthlyTitle')} />
     </div>
   )

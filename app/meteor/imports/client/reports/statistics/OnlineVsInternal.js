@@ -92,26 +92,29 @@ const PieBlock = ({ label, online, internal, pale, compare }) => {
   )
 }
 
-// Online (portal) vs. internally booked appointments: pie(s) (Vorjahr left &
-// paler when comparison is on) and the monthly online/internal composition as a
-// stacked bar (internal drawn as the red complement).
-export const OnlineVsInternal = ({ current, previous, months = [], periods = {} }) => {
+const cohortHeading = { fontSize: 13, fontWeight: 700, color: '#333', margin: '0 0 8px' }
+
+// One cohort's online-vs-internal block: pie(s) (Vorjahr left & paler when
+// comparing) plus its monthly online/internal composition (stacked bars).
+const CohortOnline = ({ cohort, compare, showHeading }) => {
+  const current = cohort.current
   if (!current) { return null }
+  const previous = compare ? cohort.previous : null
   const hasCompare = !!previous
 
-  // Vorjahr labels carry the word "Vorjahr" in front of their date.
-  const prevLabelObj = periods.previous
-    ? { compact: `${__('reports.comparePeriod')} ${periods.previous.compact}`, numeric: periods.previous.numeric }
+  const curLabelObj = { compact: cohort.label, numeric: '' }
+  const prevLabelObj = hasCompare
+    ? { compact: __('reports.cohortVorjahrSuffix', { label: cohort.label }), numeric: '' }
     : null
-  const curLabelText = periods.current && periods.current.compact
-  const prevLabelText = prevLabelObj && prevLabelObj.compact
+  const months = current.months || []
 
   return (
-    <div>
+    <div style={{ marginBottom: 26 }}>
+      {showHeading && <div style={cohortHeading}>{cohort.label}</div>}
       <div style={{ display: 'flex', alignItems: 'center', gap: 40, flexWrap: 'wrap', marginBottom: 18 }}>
         {hasCompare &&
           <PieBlock label={prevLabelObj} online={previous.online || 0} internal={previous.internal || 0} pale />}
-        <PieBlock label={hasCompare ? periods.current : null}
+        <PieBlock label={hasCompare ? curLabelObj : null}
           online={current.online || 0} internal={current.internal || 0}
           compare={hasCompare ? previous : null} />
       </div>
@@ -120,8 +123,19 @@ export const OnlineVsInternal = ({ current, previous, months = [], periods = {} 
         <OnlineMonthlyStacked
           months={months}
           previousMonths={hasCompare ? (previous.months || []) : null}
-          currentLabel={curLabelText}
-          previousLabel={prevLabelText} />}
+          currentLabel={curLabelObj.compact}
+          previousLabel={prevLabelObj && prevLabelObj.compact} />}
+    </div>
+  )
+}
+
+// Online (portal) vs. internally booked appointments, one block per cohort.
+export const OnlineVsInternal = ({ cohorts = [], compare = false }) => {
+  if (!cohorts.length) { return null }
+  const showHeading = cohorts.length > 1
+  return (
+    <div>
+      {cohorts.map(c => <CohortOnline key={c.id} cohort={c} compare={compare} showHeading={showHeading} />)}
     </div>
   )
 }

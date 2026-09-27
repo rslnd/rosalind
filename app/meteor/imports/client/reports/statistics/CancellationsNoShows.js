@@ -33,19 +33,22 @@ const trendChart = (data, pale) => {
   )
 }
 
-// Cancellations & no-shows: headline counts/rates plus a monthly trend.
-// No-shows are computed server-side (admittedAt/canceled), not a DB flag.
-// When comparing, the Vorjahr chart (paler) is shown first, then the current one.
-export const CancellationsNoShows = ({ current, previous, months = [], periods = {} }) => {
+const cohortHeading = { fontSize: 13, fontWeight: 700, color: '#333', margin: '0 0 8px' }
+
+// One cohort's cancellations & no-shows: headline counts/rates + a monthly
+// trend. No-shows are computed server-side (admittedAt/canceled), not a DB flag.
+const CohortCancel = ({ cohort, compare, showHeading }) => {
+  const current = cohort.current
   if (!current) { return null }
+  const previous = compare ? cohort.previous : null
+  const months = current.months || []
   const hasCompare = !!(previous && previous.months && previous.months.length)
-  const curLabel = periods.current && periods.current.compact
-  const prevLabel = periods.previous
-    ? `${__('reports.comparePeriod')} ${periods.previous.compact}`
-    : null
+  const curLabel = cohort.label
+  const prevLabel = hasCompare ? __('reports.cohortVorjahrSuffix', { label: cohort.label }) : null
 
   return (
-    <div>
+    <div style={{ marginBottom: 26 }}>
+      {showHeading && <div style={cohortHeading}>{cohort.label}</div>}
       <TileRow>
         <Tile label={__('reports.canceled')}><Metric current={current.canceled} previous={previous && previous.canceled} kind='int' strong /></Tile>
         <Tile label={__('reports.cancelRate')}><Metric current={current.canceledRate} previous={previous && previous.canceledRate} kind='pct' strong /></Tile>
@@ -70,6 +73,17 @@ export const CancellationsNoShows = ({ current, previous, months = [], periods =
             <div style={subHeading}>{curLabel}</div>}
           {trendChart(months, false)}
         </div>}
+    </div>
+  )
+}
+
+// Cancellations & no-shows, one block per cohort.
+export const CancellationsNoShows = ({ cohorts = [], compare = false }) => {
+  if (!cohorts.length) { return null }
+  const showHeading = cohorts.length > 1
+  return (
+    <div>
+      {cohorts.map(c => <CohortCancel key={c.id} cohort={c} compare={compare} showHeading={showHeading} />)}
     </div>
   )
 }

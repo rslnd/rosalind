@@ -17,6 +17,35 @@ export const TEXT_COLOR = '#666'
 export const EMPTY_CELL = '#f4f6f9'
 export const HOVER_STROKE = '#1b2b3a'
 
+// Categorical palette for comparing several cohorts (doctors / periods / types)
+// in one chart. Distinct hues, CVD-safe ordering (blue/orange lead), cycled when
+// there are more cohorts than colors.
+export const SERIES_COLORS = [
+  '#256abf', // blue
+  '#e6a41e', // gelborange
+  '#2e8b6f', // teal green
+  '#c0392b', // red
+  '#7d5ba6', // purple
+  '#3aa0d1', // sky blue
+  '#c9762f', // burnt orange
+  '#5a6b7b' // slate
+]
+export const seriesColorAt = (i) => SERIES_COLORS[((i % SERIES_COLORS.length) + SERIES_COLORS.length) % SERIES_COLORS.length]
+
+// Pale variant of a cohort color for its Vorjahr (year-over-year) overlay:
+// mix ~55 % toward white. Accepts #rgb / #rrggbb.
+export const paleOf = (color, amount = 0.55) => {
+  const hex = String(color).replace('#', '')
+  const full = hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex
+  const num = parseInt(full, 16)
+  if (Number.isNaN(num) || full.length !== 6) { return color }
+  const r = (num >> 16) & 255
+  const g = (num >> 8) & 255
+  const b = num & 255
+  const mix = (c) => Math.round(c + (255 - c) * amount)
+  return `rgb(${mix(r)}, ${mix(g)}, ${mix(b)})`
+}
+
 // Sequential blue ramp anchors (near-white → dark), interpolated in sRGB.
 const RAMP_LO = [232, 240, 251] // #e8f0fb
 const RAMP_HI = [13, 54, 107] // #0d366b

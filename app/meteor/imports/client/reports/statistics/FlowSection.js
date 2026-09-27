@@ -8,35 +8,42 @@ import { Loading } from '../../components/Loading'
 import { Reports } from '../../../api/reports'
 import { Users } from '../../../api/users'
 import { Tags } from '../../../api/tags'
-import { FlowFilterBar, PRESETS } from './FlowFilterBar'
+import { CohortEditor, PRESETS, autoCohortLabel } from './FlowFilterBar'
 import { HeatmapWeekHour } from './HeatmapWeekHour'
 import { MonthlyTrend } from './MonthlyTrend'
 import { OnlineVsInternal } from './OnlineVsInternal'
 import { CancellationsNoShows } from './CancellationsNoShows'
 import { LeadTimeDaysChart } from './LeadTimeDaysChart'
 import { MonthlyLeadTime } from './MonthlyLeadTime'
-import { periodLabel } from './periodLabel'
+import { seriesColorAt } from './flowPalette'
 
 const avoidBreak = { pageBreakInside: 'avoid' }
-const subHeading = { fontSize: 12, color: '#555', marginBottom: 8, fontWeight: 700 }
+const cohortHeading = { fontSize: 13, fontWeight: 700, color: '#333', margin: '0 0 8px' }
+const subHeading = { fontSize: 12, color: '#555', margin: '0 0 8px', fontWeight: 700 }
+
+let uid = 0
+const nextId = () => `c${++uid}`
+
+const makeCohort = () => {
+  const r = PRESETS.find(p => p.key === 'last365').range()
+  return { id: nextId(), label: '', preset: 'last365', from: r.from, to: r.to, assigneeIds: [], tags: [] }
+}
 
 class FlowSectionInner extends React.Component {
   constructor (props) {
     super(props)
     this._seq = 0
-    const r = PRESETS.find(p => p.key === 'last365').range()
     this.state = {
-      preset: 'last365',
-      from: r.from,
-      to: r.to,
-      assigneeIds: [],
-      tags: [],
+      cohorts: [makeCohort()],
       compare: false,
       data: null,
       loading: true,
       error: null
     }
-    this.handleChange = this.handleChange.bind(this)
+    this.changeCohort = this.changeCohort.bind(this)
+    this.addCohort = this.addCohort.bind(this)
+    this.removeCohort = this.removeCohort.bind(this)
+    this.toggleCompare = this.toggleCompare.bind(this)
   }
 
   componentDidMount () {
@@ -47,93 +54,111 @@ class FlowSectionInner extends React.Component {
     if (!previousProps.userId && this.props.userId) { this.fetch() }
   }
 
-  handleChange (patch) {
-    this.setState(patch, () => this.fetch())
+  changeCohort (id, patch) {
+    this.setState(s => ({
+      cohorts: s.cohorts.map(c => c.id === id ? { ...c, ...patch } : c)
+    }), () => this.fetch())
+  }
+
+  addCohort () {
+    this.setState(s => ({ cohorts: s.cohorts.concat(makeCohort()) }), () => this.fetch())
+  }
+
+  removeCohort (id) {
+    this.setState(s => s.cohorts.length <= 1 ? null : ({
+      cohorts: s.cohorts.filter(c => c.id !== id)
+    }), () => this.fetch())
+  }
+
+  toggleCompare (compare) {
+    this.setState({ compare }, () => this.fetch())
   }
 
   fetch () {
-    const { from, to, assigneeIds, tags, compare } = this.state
-    const args = {
-      from: moment(from).startOf('day').toDate(),
-      to: moment(to).endOf('day').toDate()
-    }
-    if (assigneeIds.length) { args.assigneeIds = assigneeIds }
-    if (tags.length) { args.tags = tags }
-    if (compare) {
-      args.compareFrom = moment(from).subtract(1, 'year').startOf('day').toDate()
-      args.compareTo = moment(to).subtract(1, 'year').endOf('day').toDate()
-    }
+    const { doctors, tagOptions } = this.props
+    const { cohorts, compare } = this.state
+    const series = cohorts.map(c => {
+      const s = {
+        id: c.id,
+        label: c.label && c.label.trim() ? c.label.trim() : autoCohortLabel(c, doctors, tagOptions),
+        from: moment(c.from).startOf('day').toDate(),
+        to: moment(c.to).endOf('day').toDate()
+      }
+      if (c.assigneeIds.length) { s.assigneeIds = c.assigneeIds }
+      if (c.tags.length) { s.tags = c.tags }
+      return s
+    })
 
     const seq = ++this._seq
     this.setState({ loading: true, error: null })
-    Reports.actions.patientFlow.callPromise(args)
+    Reports.actions.patientFlow.callPromise({ series, compare })
       .then(data => { if (seq === this._seq) { this.setState({ data, loading: false }) } })
       .catch(err => { if (seq === this._seq) { this.setState({ error: err.reason || err.message, loading: false }) } })
   }
 
   render () {
     const { doctors, tagOptions } = this.props
-    const { data, loading, error, from, to, preset, assigneeIds, tags, compare } = this.state
+    const { data, loading, error, cohorts, compare } = this.state
 
-    const current = data && data.current
-    const previous = data && data.previous
-    const periods = data ? {
-      current: periodLabel(data.from, data.to),
-      previous: data.compare ? periodLabel(data.compareFrom, data.compareTo) : null
-    } : {}
+    // Join server results (current/previous per cohort) with a stable color by
+    // position; the server echoes the resolved label we sent.
+    const viewCohorts = data
+      ? data.series.map((s, i) => ({ id: s.id, label: s.label, color: seriesColorAt(i), current: s.current, previous: s.previous }))
+      : []
+    const dataCompare = data ? data.compare : false
+    const showHeading = viewCohorts.length > 1
 
     return (
       <div>
-        <FlowFilterBar
-          from={from} to={to} preset={preset}
-          assigneeIds={assigneeIds} tags={tags} compare={compare}
+        <CohortEditor
+          cohorts={cohorts} compare={compare}
           doctors={doctors} tagOptions={tagOptions}
-          onChange={this.handleChange} />
+          onChangeCohort={this.changeCohort}
+          onAddCohort={this.addCohort}
+          onRemoveCohort={this.removeCohort}
+          onToggleCompare={this.toggleCompare} />
 
         {loading && !data && <Loading />}
         {error && <Box type='warning' title={__('ui.notice')}><p>{error}</p></Box>}
 
-        {current && (
+        {viewCohorts.length > 0 && (
           <div style={{ opacity: loading ? 0.5 : 1, transition: 'opacity 150ms' }}>
             <Box title={__('reports.heatmapTitle')} icon='table' style={avoidBreak}>
-              {previous
-                ? <div>
-                  <div style={subHeading}>{periods.previous && `${__('reports.comparePeriod')} ${periods.previous.compact}`}</div>
-                  <HeatmapWeekHour heatmap={previous.heatmap} pale />
-                  <div style={{ ...subHeading, marginTop: 18 }}>{periods.current && periods.current.compact}</div>
-                  <HeatmapWeekHour heatmap={current.heatmap} />
+              {viewCohorts.map(c => (
+                <div key={c.id} style={{ marginBottom: 22 }}>
+                  {showHeading &&
+                    <div style={cohortHeading}>
+                      <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: 2, background: c.color, marginRight: 6 }} />
+                      {c.label}
+                    </div>}
+                  {dataCompare && c.previous
+                    ? <div>
+                      <div style={subHeading}>{__('reports.cohortVorjahrSuffix', { label: c.label })}</div>
+                      <HeatmapWeekHour heatmap={c.previous.heatmap} pale />
+                      <div style={{ ...subHeading, marginTop: 18 }}>{c.label}</div>
+                      <HeatmapWeekHour heatmap={c.current.heatmap} />
+                    </div>
+                    : <HeatmapWeekHour heatmap={c.current.heatmap} />}
                 </div>
-                : <HeatmapWeekHour heatmap={current.heatmap} />}
+              ))}
             </Box>
 
             <Box title={__('reports.monthlyTitle')} icon='bar-chart' style={avoidBreak}>
-              <MonthlyTrend
-                months={current.months}
-                previousMonths={previous && previous.months}
-                periods={periods} />
+              <MonthlyTrend cohorts={viewCohorts} compare={dataCompare} />
             </Box>
 
             <Box title={__('reports.onlineTitle')} icon='globe' style={avoidBreak}>
-              <OnlineVsInternal
-                current={current} previous={previous}
-                months={current.months}
-                periods={periods} />
+              <OnlineVsInternal cohorts={viewCohorts} compare={dataCompare} />
             </Box>
 
             <Box title={__('reports.leadTimeTitle')} icon='clock-o' style={avoidBreak}>
               <p className='text-muted' style={{ marginTop: 0 }}>{__('reports.leadTimeHint')}</p>
-              <LeadTimeDaysChart
-                current={current.leadDays}
-                previous={previous && previous.leadDays}
-                periods={periods} />
-              <MonthlyLeadTime
-                months={current.months}
-                previousMonths={previous && previous.months}
-                periods={periods} />
+              <LeadTimeDaysChart cohorts={viewCohorts} compare={dataCompare} />
+              <MonthlyLeadTime cohorts={viewCohorts} compare={dataCompare} />
             </Box>
 
             <Box title={__('reports.cancelNoShowTitle')} icon='ban' style={avoidBreak}>
-              <CancellationsNoShows current={current} previous={previous} months={current.months} periods={periods} />
+              <CancellationsNoShows cohorts={viewCohorts} compare={dataCompare} />
             </Box>
           </div>
         )}

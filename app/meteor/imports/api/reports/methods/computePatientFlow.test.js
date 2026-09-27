@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import moment from 'moment-timezone'
-import { aggregate, weekdayIndex, hourOf, monthKey, WEEKDAYS } from './computePatientFlow'
+import { aggregate, computePatientFlow, weekdayIndex, hourOf, monthKey, WEEKDAYS } from './computePatientFlow'
 
 // A fixed "now" well in the future so every fixture appointment counts as past
 // (so no-show/kept logic is exercised deterministically).
@@ -74,6 +74,100 @@ describe('reports/methods/computePatientFlow', function () {
     const res = aggregate([past, future], { now: new Date('2026-07-01T00:00:00Z') })
     assert.equal(res.noShow, 1)
     assert.equal(res.total, 2)
+  })
+
+  describe('computePatientFlow (cohorts)', function () {
+    // Minimal in-memory stand-in for a Mongo collection supporting the operators
+    // computePatientFlow uses ($exists/$ne/$in/$nin/$gte/$lte, tags $in).
+    const matchField = (value, cond) => {
+      if (cond && typeof cond === 'object' && !(cond instanceof Date)) {
+        if ('$exists' in cond && (value !== undefined) !== cond.$exists) { return false }
+        if ('$ne' in cond && value === cond.$ne) { return false }
+        if ('$in' in cond) {
+          const arr = Array.isArray(value) ? value : [value]
+          if (!cond.$in.some(x => arr.includes(x))) { return false }
+        }
+        if ('$nin' in cond && cond.$nin.includes(value)) { return false }
+        if ('$gte' in cond && !(value >= cond.$gte)) { return false }
+        if ('$lte' in cond && !(value <= cond.$lte)) { return false }
+        return true
+      }
+      return value === cond
+    }
+    const makeColl = (docs) => ({
+      find: (selector = {}) => ({
+        fetch: () => docs.filter(d => Object.keys(selector).every(k => matchField(d[k], selector[k])))
+      })
+    })
+
+    const appt = (isoLocal, extra = {}) => ({
+      ...at(isoLocal, extra),
+      patientId: extra.patientId || 'p',
+      removed: false
+    })
+
+    it('returns one cohort per series with filtered current aggregates', function () {
+      const Appointments = makeColl([
+        appt('2026-06-15T09:00', { assigneeId: 'dr-a', tags: ['t1'] }),
+        appt('2026-06-16T09:00', { assigneeId: 'dr-a', tags: ['t2'] }),
+        appt('2026-06-17T09:00', { assigneeId: 'dr-b', tags: ['t1'] })
+      ])
+      const Users = makeColl([])
+
+      const res = computePatientFlow({
+        Appointments,
+        Users,
+        series: [
+          { id: 'c1', label: 'Dr. A', from: new Date('2026-06-01'), to: new Date('2026-06-30'), assigneeIds: ['dr-a'] },
+          { id: 'c2', label: 'Typ t1', from: new Date('2026-06-01'), to: new Date('2026-06-30'), tags: ['t1'] }
+        ],
+        now: NOW
+      })
+
+      assert.equal(res.compare, false)
+      assert.equal(res.series.length, 2)
+      assert.equal(res.series[0].id, 'c1')
+      assert.equal(res.series[0].current.total, 2) // both dr-a appointments
+      assert.equal(res.series[0].previous, null)
+      assert.equal(res.series[1].current.total, 2) // both t1 appointments
+    })
+
+    it('honors hiddenInReports and excludes those doctors', function () {
+      const Appointments = makeColl([
+        appt('2026-06-15T09:00', { assigneeId: 'dr-a' }),
+        appt('2026-06-16T09:00', { assigneeId: 'dr-hidden' })
+      ])
+      const Users = makeColl([{ _id: 'dr-hidden', hiddenInReports: true }])
+
+      const res = computePatientFlow({
+        Appointments,
+        Users,
+        series: [{ id: 'c1', label: 'Alle', from: new Date('2026-06-01'), to: new Date('2026-06-30') }],
+        now: NOW
+      })
+      assert.equal(res.series[0].current.total, 1) // hidden doctor excluded
+    })
+
+    it('adds a previous-year aggregate per cohort when compare is set', function () {
+      const Appointments = makeColl([
+        appt('2026-06-15T09:00', { assigneeId: 'dr-a' }),
+        appt('2025-06-15T09:00', { assigneeId: 'dr-a' }),
+        appt('2025-06-20T09:00', { assigneeId: 'dr-a' })
+      ])
+      const Users = makeColl([])
+
+      const res = computePatientFlow({
+        Appointments,
+        Users,
+        compare: true,
+        series: [{ id: 'c1', label: 'Dr. A', from: new Date('2026-06-01T00:00:00'), to: new Date('2026-06-30T23:59:59'), assigneeIds: ['dr-a'] }],
+        now: NOW
+      })
+      assert.equal(res.compare, true)
+      assert.equal(res.series[0].current.total, 1) // 2026
+      assert.ok(res.series[0].previous)
+      assert.equal(res.series[0].previous.total, 2) // 2025 same window
+    })
   })
 
   it('builds an online-only lead-time histogram', function () {

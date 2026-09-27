@@ -121,16 +121,15 @@ const REAL_FIELDS = {
   admittedAt: 1, canceled: 1, canceledAt: 1, patientId: 1, tags: 1
 }
 
-export const computePatientFlow = ({
-  Appointments, Users,
-  from, to, assigneeIds, tags,
-  compareFrom, compareTo,
-  now
-}) => {
+// Compares several freely defined cohorts. Each cohort carries its own period
+// (from/to), doctor filter (assigneeIds) and appointment-type filter (tags).
+// When `compare` is set, every cohort additionally gets the same period of the
+// previous year (year-over-year overlay). Powers the "Patientenstromanalyse".
+export const computePatientFlow = ({ Appointments, Users, series = [], compare, now }) => {
   const hiddenIds = Users.find({ hiddenInReports: true }, { fields: { _id: 1 } })
     .fetch().map(u => u._id)
 
-  const fetchRange = (rangeFrom, rangeTo) => {
+  const fetchRange = (rangeFrom, rangeTo, assigneeIds, tags) => {
     const selector = {
       type: { $exists: false },
       patientId: { $exists: true, $ne: null },
@@ -147,16 +146,31 @@ export const computePatientFlow = ({
     return Appointments.find(selector, { fields: REAL_FIELDS }).fetch()
   }
 
-  const compare = !!(compareFrom && compareTo)
+  const buildCohort = (s) => {
+    const { id, label, from, to, assigneeIds, tags } = s
+    let previous = null
+    let compareFrom = null
+    let compareTo = null
+    if (compare) {
+      compareFrom = moment(from).subtract(1, 'year').toDate()
+      compareTo = moment(to).subtract(1, 'year').toDate()
+      previous = aggregate(fetchRange(compareFrom, compareTo, assigneeIds, tags), { now })
+    }
+    return {
+      id,
+      label,
+      from,
+      to,
+      compareFrom,
+      compareTo,
+      filters: { assigneeIds: assigneeIds || [], tags: tags || [] },
+      current: aggregate(fetchRange(from, to, assigneeIds, tags), { now }),
+      previous
+    }
+  }
 
   return {
-    from,
-    to,
-    filters: { assigneeIds: assigneeIds || [], tags: tags || [] },
-    current: aggregate(fetchRange(from, to), { now }),
-    previous: compare ? aggregate(fetchRange(compareFrom, compareTo), { now }) : null,
-    compare,
-    compareFrom: compareFrom || null,
-    compareTo: compareTo || null
+    compare: !!compare,
+    series: series.map(buildCohort)
   }
 }

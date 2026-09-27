@@ -1,7 +1,7 @@
 import React from 'react'
 import { __ } from '../../../i18n'
 import { fmtPct } from './format'
-import { BRAND, ORANGE, AXIS_COLOR, TEXT_COLOR, HOVER_STROKE } from './flowPalette'
+import { AXIS_COLOR, TEXT_COLOR, HOVER_STROKE, paleOf } from './flowPalette'
 
 const VIEW_W = 820
 const VIEW_H = 300
@@ -16,11 +16,10 @@ const plotH = plotBottom - plotTop
 // Cut the axis off at two months, as requested.
 const MAX_DAYS = 60
 
-const Legend = ({ color, label, numeric, bold }) => (
-  <span style={{ marginRight: 14, whiteSpace: 'nowrap', fontSize: 12, display: 'inline-flex', alignItems: 'center' }}>
-    <span style={{ display: 'inline-block', width: 22, height: 0, borderTop: `${bold ? 3 : 2}px solid ${color}`, marginRight: 5 }} />
-    <span style={{ color: TEXT_COLOR, fontWeight: bold ? 700 : 400 }}>{label}</span>
-    {numeric && <span style={{ color: '#aaa', marginLeft: 4 }}>({numeric})</span>}
+const Legend = ({ color, label, faded }) => (
+  <span style={{ marginRight: 14, whiteSpace: 'nowrap', fontSize: 12, display: 'inline-flex', alignItems: 'center', opacity: faded ? 0.85 : 1 }}>
+    <span style={{ display: 'inline-block', width: 22, height: 0, borderTop: `${faded ? 2 : 2.5}px ${faded ? 'dashed' : 'solid'} ${color}`, marginRight: 5 }} />
+    <span style={{ color: TEXT_COLOR }}>{label}</span>
   </span>
 )
 
@@ -31,10 +30,10 @@ const infoText = (percent, days) => {
   return __('reports.leadInfoDays', { percent, count: days })
 }
 
-// Booking lead time at day resolution for online appointments. X = exact days
-// in advance (cut at 2 months), Y = number of bookings. Current (blue) vs.
-// comparison (gelborange). Crosshair follows the cursor, snaps to the day, and
-// shows a live sentence like "20 % der Termine wurden 3 Tage vorher gebucht".
+// Booking lead time at day resolution for online appointments, one line per
+// cohort (+ a paler dashed Vorjahr line when comparing). X = exact days in
+// advance (cut at 2 months), Y = number of bookings. Crosshair follows the
+// cursor, snaps to the day, and lists each cohort's share for that day.
 export class LeadTimeDaysChart extends React.Component {
   constructor (props) {
     super(props)
@@ -56,61 +55,65 @@ export class LeadTimeDaysChart extends React.Component {
   onLeave () { if (this.state.hover) { this.setState({ hover: null }) } }
 
   render () {
-    const { current, previous, periods = {} } = this.props
-    if (!current || !current.counts) { return null }
-    const hasCompare = !!(previous && previous.counts && previous.counts.some(c => c > 0))
-    const hasCurrent = current.counts.some(c => c > 0)
-    if (!hasCurrent && !hasCompare) {
+    const { cohorts = [], compare = false } = this.props
+
+    // Flatten to drawable lines: each cohort's current line, plus a paler dashed
+    // Vorjahr line when comparing. Keep totals for share readouts.
+    const lines = []
+    cohorts.forEach(c => {
+      const cur = c.current && c.current.leadDays
+      if (cur && cur.counts) {
+        lines.push({ id: `${c.id}-cur`, label: c.label, color: c.color, counts: cur.counts, max: cur.max || 0, total: sum(cur.counts), dashed: false, width: 2.5 })
+      }
+      if (compare && c.previous && c.previous.leadDays && c.previous.leadDays.counts) {
+        const p = c.previous.leadDays
+        lines.push({ id: `${c.id}-prev`, label: __('reports.cohortVorjahrSuffix', { label: c.label }), color: paleOf(c.color), counts: p.counts, max: p.max || 0, total: sum(p.counts), dashed: true, width: 1.5 })
+      }
+    })
+
+    const anyData = lines.some(l => l.counts.some(v => v > 0))
+    if (!anyData) {
       return <p className='text-muted'>{__('reports.statisticsEmpty')}</p>
     }
 
-    const curLabel = (periods.current && periods.current.compact) || __('reports.currentPeriod')
-    const prevLabel = periods.previous
-      ? `${__('reports.comparePeriod')} ${periods.previous.compact}`
-      : __('reports.comparePeriod')
-
-    const dataMax = Math.max(2, current.max || 0, hasCompare ? (previous.max || 0) : 0)
+    const dataMax = Math.max(2, ...lines.map(l => l.max))
     const max = Math.min(MAX_DAYS, dataMax)
     this._max = max
 
     const countAt = (arr, d) => (arr && arr[d]) || 0
-    // Totals over the full (uncapped) distribution so shares are correct.
-    const curTotal = sum(current.counts)
-    const rawYMax = Math.max(1,
-      ...current.counts.slice(0, max + 1),
-      ...(hasCompare ? previous.counts.slice(0, max + 1) : [0]))
+    const rawYMax = Math.max(1, ...lines.reduce((acc, l) => acc.concat(l.counts.slice(0, max + 1)), []))
     const yMax = Math.ceil(rawYMax / 5) * 5 || 5
 
     const xFor = d => plotLeft + (max > 0 ? d / max : 0) * plotW
     const yFor = v => plotBottom - (v / yMax) * plotH
 
-    const points = (arr) => {
+    const pointsOf = (arr) => {
       const pts = []
       for (let d = 0; d <= max; d++) { pts.push(`${xFor(d)},${yFor(countAt(arr, d))}`) }
       return pts.join(' ')
     }
 
     const yTicks = [0, 0.5, 1].map(f => Math.round(f * yMax))
-    // Finer x markings: minor tick each day, labels weekly.
     const labelStep = 7
     const minorTicks = []
     for (let d = 0; d <= max; d++) { minorTicks.push(d) }
 
     const hover = this.state.hover
     const hoverDay = hover ? hover.day : null
-    const hoverCount = hoverDay != null ? countAt(current.counts, hoverDay) : 0
-    const hoverShare = curTotal > 0 ? hoverCount / curTotal : 0
 
-    const prevTotal = hasCompare ? sum(previous.counts) : 0
-    const hoverPrevCount = (hover && hasCompare) ? countAt(previous.counts, hoverDay) : 0
-    const hoverPrevShare = prevTotal > 0 ? hoverPrevCount / prevTotal : 0
-
-    // Info box anchored on the current value line (along the y-value crosshair),
-    // following the cursor horizontally. One row per period when comparing.
+    // Info box: one row per line with that day's share of its own total.
     let info = null
     if (hover) {
-      const rows = [{ color: BRAND, text: infoText(fmtPct(hoverShare), hoverDay) }]
-      if (hasCompare) { rows.push({ color: ORANGE, text: `${prevLabel}: ${fmtPct(hoverPrevShare)}` }) }
+      const rows = lines.map((l, i) => {
+        const share = l.total > 0 ? countAt(l.counts, hoverDay) / l.total : 0
+        return {
+          color: l.color,
+          bold: !l.dashed,
+          text: i === 0 && !l.dashed
+            ? infoText(fmtPct(share), hoverDay)
+            : `${l.label}: ${fmtPct(share)}`
+        }
+      })
       const lineH = 15
       const padY = 5
       const boxH = rows.length * lineH + padY * 2 - 3
@@ -118,7 +121,6 @@ export class LeadTimeDaysChart extends React.Component {
       let bx = xFor(hoverDay) + 12
       if (bx + boxW > plotRight) { bx = xFor(hoverDay) - 12 - boxW }
       if (bx < plotLeft) { bx = plotLeft }
-      // Always at the cursor's height.
       let by = hover.vy - boxH / 2
       by = Math.max(plotTop, Math.min(plotBottom - boxH, by))
       info = { rows, bx, by, boxW, boxH, lineH, padY }
@@ -127,8 +129,7 @@ export class LeadTimeDaysChart extends React.Component {
     return (
       <div>
         <div style={{ marginBottom: 8 }}>
-          {hasCompare && <Legend color={ORANGE} label={prevLabel} numeric={periods.previous && periods.previous.numeric} />}
-          <Legend color={BRAND} label={curLabel} numeric={periods.current && periods.current.numeric} bold />
+          {lines.map(l => <Legend key={l.id} color={l.color} label={l.label} faded={l.dashed} />)}
         </div>
 
         <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} style={{ width: '100%', height: 'auto' }} role='img'
@@ -141,7 +142,6 @@ export class LeadTimeDaysChart extends React.Component {
             </g>
           ))}
 
-          {/* minor + labelled x ticks */}
           {minorTicks.map(d => (
             <line key={`t${d}`} x1={xFor(d)} y1={plotBottom} x2={xFor(d)} y2={plotBottom + (d % labelStep === 0 ? 6 : 3)}
               stroke={AXIS_COLOR} strokeWidth={0.5} />
@@ -153,23 +153,27 @@ export class LeadTimeDaysChart extends React.Component {
             {__('reports.leadDaysAxis')}
           </text>
 
-          {hasCompare &&
-            <polyline points={points(previous.counts)} fill='none' stroke={ORANGE} strokeWidth={1.5} strokeLinejoin='round' strokeLinecap='round' />}
-          <polyline points={points(current.counts)} fill='none' stroke={BRAND} strokeWidth={2.5} strokeLinejoin='round' strokeLinecap='round' />
+          {/* Vorjahr (dashed) lines first, current lines on top */}
+          {lines.filter(l => l.dashed).map(l => (
+            <polyline key={l.id} points={pointsOf(l.counts)} fill='none' stroke={l.color} strokeWidth={l.width}
+              strokeDasharray='5 3' strokeLinejoin='round' strokeLinecap='round' />
+          ))}
+          {lines.filter(l => !l.dashed).map(l => (
+            <polyline key={l.id} points={pointsOf(l.counts)} fill='none' stroke={l.color} strokeWidth={l.width}
+              strokeLinejoin='round' strokeLinecap='round' />
+          ))}
 
-          {/* crossing crosshair + live info anchored on the value line */}
           {hover && (
             <g pointerEvents='none'>
               <line x1={xFor(hoverDay)} y1={plotTop} x2={xFor(hoverDay)} y2={plotBottom} stroke={HOVER_STROKE} strokeWidth={0.75} strokeDasharray='2 3' opacity={0.7} />
-              <line x1={plotLeft} y1={yFor(hoverCount)} x2={plotRight} y2={yFor(hoverCount)} stroke={HOVER_STROKE} strokeWidth={0.75} strokeDasharray='2 3' opacity={0.7} />
-              {hasCompare &&
-                <circle cx={xFor(hoverDay)} cy={yFor(hoverPrevCount)} r={4} fill={ORANGE} stroke='#fff' strokeWidth={1} />}
-              <circle cx={xFor(hoverDay)} cy={yFor(hoverCount)} r={4} fill={BRAND} stroke='#fff' strokeWidth={1} />
+              {lines.map(l => (
+                <circle key={l.id} cx={xFor(hoverDay)} cy={yFor(countAt(l.counts, hoverDay))} r={l.dashed ? 3 : 4} fill={l.color} stroke='#fff' strokeWidth={1} />
+              ))}
               <rect x={info.bx} y={info.by} width={info.boxW} height={info.boxH} rx={3} fill={HOVER_STROKE} opacity={0.94} />
               {info.rows.map((r, i) => (
                 <g key={i}>
                   <rect x={info.bx + 7} y={info.by + info.padY + i * info.lineH + 3} width={9} height={9} rx={2} fill={r.color} />
-                  <text x={info.bx + 20} y={info.by + info.padY + i * info.lineH + 11} fontSize='11' fontWeight={i === 0 ? 700 : 600} fill='#fff'>{r.text}</text>
+                  <text x={info.bx + 20} y={info.by + info.padY + i * info.lineH + 11} fontSize='11' fontWeight={r.bold ? 700 : 600} fill='#fff'>{r.text}</text>
                 </g>
               ))}
             </g>

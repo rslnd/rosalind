@@ -122,5 +122,17 @@ export const reports = {
   filterSelected: '__count__ ausgewählt',
   filterSelected_plural: '__count__ ausgewählt',
   filterCustomRange: 'Benutzerdefiniert',
-  compareYearOverYear: 'Mit Vorjahr vergleichen'
+  compareYearOverYear: 'Mit Vorjahr vergleichen',
+
+  // Kohorten-Vergleich (mehrere Ärzte / Zeiträume / Terminarten)
+  cohortsTitle: 'Vergleichsgruppen',
+  cohortsHint: 'Lege beliebig viele Gruppen an und vergleiche sie miteinander – jede mit eigenem Zeitraum, Arzt und Terminart.',
+  cohortLabel: 'Bezeichnung',
+  cohortLabelPlaceholder: 'z. B. Dr. Huber Q1',
+  addCohort: 'Vergleichen',
+  removeCohort: 'Gruppe entfernen',
+  cohortDefaultName: 'Gruppe __n__',
+  cohortVorjahrSuffix: '__label__ (Vorjahr)',
+  cohortsEmpty: 'Bitte mindestens eine Vergleichsgruppe anlegen.',
+  paleIsVorjahr: 'hellere Balken = Vorjahr'
 }
