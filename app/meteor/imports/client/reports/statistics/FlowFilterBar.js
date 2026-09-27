@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment-timezone'
 import { __ } from '../../../i18n'
+import { Icon } from '../../components/Icon'
 import { periodLabel } from './periodLabel'
 import { seriesColorAt } from './flowPalette'
 
@@ -221,7 +222,7 @@ const rowStyle = {
 // Cohort comparison editor: one row per comparison group (color swatch, free
 // label, period/doctor/type dropdowns, remove), plus an "add group" button and
 // the year-over-year toggle. Not sticky — it can grow with many cohorts.
-export const CohortEditor = ({ cohorts, compare, doctors, tagOptions, onChangeCohort, onAddCohort, onRemoveCohort, onToggleCompare }) => (
+export const CohortEditor = ({ cohorts, compare, doctors, tagOptions, onChangeCohort, onAddCohort, onRemoveCohort, onToggleCompare, onPrint }) => (
   <div className='hide-print' style={cardStyle}>
     <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: 12 }}>
       <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>{__('reports.statistics')}</span>
@@ -230,6 +231,9 @@ export const CohortEditor = ({ cohorts, compare, doctors, tagOptions, onChangeCo
         <input type='checkbox' checked={compare} onChange={e => onToggleCompare(e.target.checked)} style={{ marginRight: 6 }} />
         {__('reports.compareYearOverYear')}
       </label>
+      <button type='button' className='btn btn-sm btn-default' onClick={onPrint} title={__('ui.print')}>
+        <Icon name='print' /> {__('ui.print')}
+      </button>
     </div>
 
     {cohorts.map((cohort, i) => (

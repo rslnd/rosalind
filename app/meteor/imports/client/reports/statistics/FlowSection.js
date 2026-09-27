@@ -8,6 +8,7 @@ import { Loading } from '../../components/Loading'
 import { Reports } from '../../../api/reports'
 import { Users } from '../../../api/users'
 import { Tags } from '../../../api/tags'
+import { toNative, getClientKey } from '../../../startup/client/native/events'
 import { CohortEditor, PRESETS, autoCohortLabel } from './FlowFilterBar'
 import { HeatmapWeekHour } from './HeatmapWeekHour'
 import { MonthlyTrend } from './MonthlyTrend'
@@ -44,6 +45,16 @@ class FlowSectionInner extends React.Component {
     this.addCohort = this.addCohort.bind(this)
     this.removeCohort = this.removeCohort.bind(this)
     this.toggleCompare = this.toggleCompare.bind(this)
+    this.handlePrint = this.handlePrint.bind(this)
+  }
+
+  handlePrint () {
+    if (getClientKey()) {
+      const title = moment().format(`YYYY-MM-DD-[${__('reports.statistics')}]`)
+      toNative('print', { title })
+    } else {
+      window.print()
+    }
   }
 
   componentDidMount () {
@@ -116,14 +127,15 @@ class FlowSectionInner extends React.Component {
           onChangeCohort={this.changeCohort}
           onAddCohort={this.addCohort}
           onRemoveCohort={this.removeCohort}
-          onToggleCompare={this.toggleCompare} />
+          onToggleCompare={this.toggleCompare}
+          onPrint={this.handlePrint} />
 
         {loading && !data && <Loading />}
         {error && <Box type='warning' title={__('ui.notice')}><p>{error}</p></Box>}
 
         {viewCohorts.length > 0 && (
           <div style={{ opacity: loading ? 0.5 : 1, transition: 'opacity 150ms' }}>
-            <Box title={__('reports.heatmapTitle')} icon='table' style={avoidBreak}>
+            <Box title={__('reports.heatmapTitle')} icon='table' boxStyle={avoidBreak}>
               {viewCohorts.map(c => (
                 <div key={c.id} style={{ marginBottom: 22 }}>
                   {showHeading &&
@@ -143,21 +155,21 @@ class FlowSectionInner extends React.Component {
               ))}
             </Box>
 
-            <Box title={__('reports.monthlyTitle')} icon='bar-chart' style={avoidBreak}>
+            <Box title={__('reports.monthlyTitle')} icon='bar-chart' boxStyle={avoidBreak}>
               <MonthlyTrend cohorts={viewCohorts} compare={dataCompare} />
             </Box>
 
-            <Box title={__('reports.onlineTitle')} icon='globe' style={avoidBreak}>
+            <Box title={__('reports.onlineTitle')} icon='globe' boxStyle={avoidBreak}>
               <OnlineVsInternal cohorts={viewCohorts} compare={dataCompare} />
             </Box>
 
-            <Box title={__('reports.leadTimeTitle')} icon='clock-o' style={avoidBreak}>
+            <Box title={__('reports.leadTimeTitle')} icon='clock-o' boxStyle={avoidBreak}>
               <p className='text-muted' style={{ marginTop: 0 }}>{__('reports.leadTimeHint')}</p>
               <LeadTimeDaysChart cohorts={viewCohorts} compare={dataCompare} />
               <MonthlyLeadTime cohorts={viewCohorts} compare={dataCompare} />
             </Box>
 
-            <Box title={__('reports.cancelNoShowTitle')} icon='ban' style={avoidBreak}>
+            <Box title={__('reports.cancelNoShowTitle')} icon='ban' boxStyle={avoidBreak}>
               <CancellationsNoShows cohorts={viewCohorts} compare={dataCompare} />
             </Box>
           </div>

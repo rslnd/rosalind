@@ -35,7 +35,7 @@ export const MonthlyLeadTime = ({ cohorts = [], compare = false }) => {
   })
 
   return (
-    <div style={{ marginTop: 16 }}>
+    <div style={{ marginTop: 16, pageBreakInside: 'avoid' }}>
       <div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.3, color: '#888', marginBottom: 4 }}>
         {__('reports.monthlyLeadTitle')}
       </div>

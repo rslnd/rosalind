@@ -63,7 +63,7 @@ export const HeatmapWeekHour = ({ heatmap, pale }) => {
         </p>}
 
       <div style={{ overflowX: 'auto', opacity: pale ? 0.55 : undefined }}>
-        <table style={{ borderCollapse: 'separate', borderSpacing: 3, minWidth: 680 }}>
+        <table className='flow-heatmap' style={{ borderCollapse: 'separate', borderSpacing: 3, minWidth: 680 }}>
           <thead>
             <tr>
               <th />
@@ -83,13 +83,20 @@ export const HeatmapWeekHour = ({ heatmap, pale }) => {
                 {hours.map(h => {
                   const v = row[h] || 0
                   const t = peak > 0 ? v / peak : 0
+                  const bg = v > 0 ? blueFor(t) : EMPTY_CELL
+                  const fg = v > 0 ? textOn(t) : '#ccc'
                   return (
                     <td key={h}
                       title={`${WD_LABELS[wd]} ${pad2(h)}:00 – ${v}`}
                       style={{
                         ...cellBase,
-                        background: v > 0 ? blueFor(t) : EMPTY_CELL,
-                        color: v > 0 ? textOn(t) : '#ccc'
+                        background: bg,
+                        color: fg,
+                        // Mirror the colors as custom properties so the print
+                        // stylesheet can re-apply them past Bootstrap's
+                        // `* { background: transparent !important }` reset.
+                        '--cell-bg': bg,
+                        '--cell-fg': fg
                       }}>
                       {v > 0 ? v : ''}
                     </td>

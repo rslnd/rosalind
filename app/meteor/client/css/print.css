@@ -15,6 +15,17 @@
     background: #ddd !important;
   }
 
+  /* Bootstrap's print reset forces `* { background: transparent !important }`,
+     which strips the heatmap cell colors. Re-apply them from the per-cell
+     custom properties with a more specific selector so the colors print. */
+  .flow-heatmap td {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: var(--cell-bg) !important;
+    color: var(--cell-fg) !important;
+  }
+
   .label {
     background-color: #ddd !important;
     color: #333 !important;

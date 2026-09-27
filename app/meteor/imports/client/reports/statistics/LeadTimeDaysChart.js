@@ -127,7 +127,7 @@ export class LeadTimeDaysChart extends React.Component {
     }
 
     return (
-      <div>
+      <div style={{ pageBreakInside: 'avoid' }}>
         <div style={{ marginBottom: 8 }}>
           {lines.map(l => <Legend key={l.id} color={l.color} label={l.label} faded={l.dashed} />)}
         </div>
