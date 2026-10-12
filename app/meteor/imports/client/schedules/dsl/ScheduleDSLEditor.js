@@ -109,6 +109,7 @@ await doBetween('2025-03-01', '2025-06-30', async () => {
 // await openDay('Name')       - Apply default schedule as overrides (no bookables)
 // await open('Name')          - Create overlay for available time
 // await close('Name')         - Block entire day
+// await closeAndRemove('Name') - Block entire day, remove column if no appointments left
 // await closeBookable('Name') - Remove bookables
 `
 
