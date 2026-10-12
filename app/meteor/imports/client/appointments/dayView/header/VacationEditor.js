@@ -62,6 +62,20 @@ const nativeSelectStyle = {
   background: '#fff'
 }
 
+// Group staff entries by their optional `group` label, keeping the given order,
+// so the dropdown can list e.g. today's assignees before everyone else. Without
+// labels this yields a single unlabeled group, i.e. a plain flat list.
+const groupStaff = staff => staff.reduce((groups, s) => {
+  const label = s.group || ''
+  const last = groups[groups.length - 1]
+  if (last && last.label === label) {
+    last.items.push(s)
+  } else {
+    groups.push({ label, items: [s] })
+  }
+  return groups
+}, [])
+
 // Modal to create or edit a vacation: date range picker, all-day checkbox,
 // from/to times (when not all-day) and a reason. When no fixed `assignee` is
 // given, a staff dropdown (`staff`) lets the user pick the person.
@@ -178,7 +192,12 @@ export const VacationEditor = ({ assignee, staff, date, vacation, existingVacati
             <label style={{ display: 'block', marginBottom: 4 }}>MitarbeiterIn</label>
             <select value={userId} onChange={e => setUserId(e.target.value)} style={nativeSelectStyle}>
               <option value='' disabled>MitarbeiterIn wählen…</option>
-              {staff.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
+              {groupStaff(staff).map((g, i) => {
+                const options = g.items.map(s => <option key={s._id} value={s._id}>{s.name}</option>)
+                return g.label
+                  ? <optgroup key={i} label={g.label}>{options}</optgroup>
+                  : <React.Fragment key={i}>{options}</React.Fragment>
+              })}
             </select>
           </div>
         }

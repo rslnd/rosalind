@@ -258,11 +258,21 @@ export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hover
   const onOpenVacationPicker = () => setEditingVacation({ assignee: null, vacation: null })
   const closeVacationEditor = () => setEditingVacation(null)
 
-  // Staff for the central picker: the day's assignees (full names in the
-  // vacation UI; abbreviations are only used in the month grid).
-  const staff = (assignees || [])
-    .filter(a => a && a._id)
-    .map(a => ({ _id: a._id, name: Users.methods.fullNameWithTitle(a) }))
+  // Staff for the central picker: the day's assignees first (full names in the
+  // vacation UI; abbreviations are only used in the month grid), followed by
+  // everyone else, so a vacation can also be entered for someone who is not
+  // scheduled on this day.
+  const todaysAssignees = (assignees || []).filter(a => a && a._id)
+  const toStaff = group => u => ({ _id: u._id, name: Users.methods.fullNameWithTitle(u), group })
+  const others = Users.find({
+    _id: { $nin: todaysAssignees.map(a => a._id) },
+    groupId: { $ne: null },
+    removed: { $ne: true }
+  }, { sort: { lastName: 1 } }).fetch()
+  const staff = [
+    ...todaysAssignees.map(toStaff('Heute im Dienst')),
+    ...others.map(toStaff('Weitere MitarbeiterInnen'))
+  ]
 
   const cellProps = {
     date,
