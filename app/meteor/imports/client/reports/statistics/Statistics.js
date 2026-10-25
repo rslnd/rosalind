@@ -1,9 +1,9 @@
 import React from 'react'
+import moment from 'moment-timezone'
 import { __ } from '../../../i18n'
 import { Box } from '../../components/Box'
 import { TodayBlock } from './TodayBlock'
-import { KpiTiles } from './KpiTiles'
-import { BillingBlock } from './BillingBlock'
+import { PracticeTotals } from './PracticeTotals'
 import { StatisticsTable } from './StatisticsTable'
 import { AssigneeBars } from './AssigneeBars'
 import { AssigneeComparisonTable } from './AssigneeComparisonTable'
@@ -16,6 +16,15 @@ export const Statistics = ({ statistics }) => {
 
   const { today, current = {}, previous = {}, assignees = [], leadTime = {} } = statistics
   const hasData = current.total && current.total.total > 0
+
+  const einschubRow = assignees.find(a => a.type === 'einschub')
+  const einschubCount = einschubRow && einschubRow.current ? einschubRow.current.total : 0
+  const rangeLabel = current.from && current.to
+    ? __('reports.windowRange', {
+      from: moment(current.from).format('D. MMM'),
+      to: moment(current.to).format('D. MMM YYYY')
+    })
+    : ''
 
   if (!hasData) {
     return (
@@ -34,13 +43,17 @@ export const Statistics = ({ statistics }) => {
         monthNoShow={current.total.noShow}
         monthNoShowRate={current.total.noShowRate} />
 
-      {/* Ordination gesamt (30 Tage, Vorjahresvergleich) */}
-      <Box title={__('reports.practiceTotal') + ' · ' + __('reports.windowLabel', { days: statistics.windowDays })} icon='hospital-o'>
-        <KpiTiles current={current.total} previous={previous.total} />
+      {/* Ordination gesamt (30 Tage) — absolute Zahlen + Anteile */}
+      <Box
+        icon='hospital-o'
+        title={
+          <span>
+            {__('reports.windowReportTitle', { days: statistics.windowDays })}
+            {rangeLabel && <small className='text-muted' style={{ fontWeight: 400 }}>&ensp;{rangeLabel}</small>}
+          </span>
+        }>
+        <PracticeTotals total={current.total} einschub={einschubCount} />
       </Box>
-
-      {/* Kasse / Privat (gesamt) */}
-      <BillingBlock total={current.total} />
 
       {/* Pro Arzt – aktuelle Werte + Balken */}
       <Box title={__('reports.assignee_plural') + ' · ' + __('reports.windowLabel', { days: statistics.windowDays })} icon='users' style={avoidBreak}>

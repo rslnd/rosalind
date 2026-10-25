@@ -89,7 +89,7 @@ const endWith = (wip, o, { appointments, ...rest }) => {
   const slotCount = Math.round(duration / slotSize)
   const slotsAvailable = wip.slotsAvailable + slotCount
   const slotsUsed = appointments
-    .filter(isWithin({ from: o.from, to }))
+    .filter(isWithin({ from, to }))
     .map(a => countSlots({ from: a.start, to: a.end, slotSize }))
     .reduce(sum, 0)
 

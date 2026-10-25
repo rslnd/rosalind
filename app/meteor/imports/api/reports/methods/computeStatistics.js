@@ -5,8 +5,8 @@ import { fullNameWithTitle } from '../../users/methods/name'
 import { calculateScheduledHours } from '../../schedules/methods/getScheduledHours'
 import { overridesToColumns } from '../../schedules/methods/overridesToColumns'
 import { columnsToAvailabilities } from '../../schedules/methods/columnsToAvailabilities'
-import { computeScope } from './statistics'
-import { leadTimeDistribution, leadTimeDistributionByAssignee } from './leadTimeDistribution'
+import { computeScope, isOnline } from './statistics'
+import { leadTimeDistribution, leadTimeDistributionByAssignee, histogram, BINS } from './leadTimeDistribution'
 
 const WINDOW_DAYS = 30
 const EARLIEST_YEAR = 2021
@@ -209,16 +209,73 @@ export const computeStatistics = ({ Appointments, Schedules, Calendars, Users, C
     ? buildScope({ ...yearWindows[1], withUtilization: true })
     : { from: null, to: null, total: null, assignees: [] }
 
-  // Today (selected day) — appointment metrics only (no roster/slot cost)
+  // Today (selected day)
   const todayRange = {
     from: now.clone().startOf('day').toDate(),
     to: now.clone().endOf('day').toDate()
   }
+  const todayReal = fetchReal(todayRange)
+  const todayFreeSlots = fetchFreeSlots(todayRange)
+
+  // Retrospective "Heute" block — appointment metrics only (no roster/slot cost).
   const todayScope = computeScope({
-    appointments: fetchReal(todayRange),
-    freeSlots: fetchFreeSlots(todayRange),
+    appointments: todayReal,
+    freeSlots: todayFreeSlots,
     workingDays: 1
   })
+
+  // Forecast (selected day is today or in the future): the same single day, but
+  // WITH roster hours + calendar-slot occupancy and a row for every rostered
+  // doctor (present, even if nothing is booked yet). Lead time is split into the
+  // online vs. internally-arranged bookings for that day.
+  const forecastUtil = computeUtilization(todayRange)
+  const forecastPresentIds = uniq([
+    ...Object.keys(forecastUtil.scheduledByUser),
+    ...Object.keys(forecastUtil.slotByUser)
+  ])
+  const forecastScope = computeScope({
+    appointments: todayReal,
+    freeSlots: todayFreeSlots,
+    scheduledHoursByUser: forecastUtil.scheduledByUser,
+    scheduledHoursTotal: forecastUtil.scheduledTotal,
+    slotStatsByUser: forecastUtil.slotByUser,
+    slotStatsTotal: forecastUtil.slotStatsTotal,
+    workingDays: 1,
+    presentUserIds: forecastPresentIds
+  })
+
+  const forecastUserIds = forecastScope.assignees.filter(a => a.assigneeId).map(a => a.assigneeId)
+  const forecastUsersById = {}
+  Users.find({ _id: { $in: forecastUserIds } }).fetch().forEach(u => { forecastUsersById[u._id] = u })
+
+  const forecastAssignees = forecastScope.assignees.map(a => ({
+    assigneeId: a.assigneeId || null,
+    type: a.type || null,
+    name: a.type === 'einschub'
+      ? 'Einschub'
+      : (forecastUsersById[a.assigneeId] ? fullNameWithTitle(forecastUsersById[a.assigneeId]) : a.assigneeId),
+    metrics: a.metrics
+  })).sort((a, b) => {
+    if (a.type === 'einschub') { return 1 }
+    if (b.type === 'einschub') { return -1 }
+    return a.name.localeCompare(b.name, 'de')
+  })
+
+  const einschubRow = forecastScope.assignees.find(a => a.type === 'einschub')
+
+  const forecast = {
+    date: todayRange.from,
+    total: forecastScope.total,
+    einschub: einschubRow ? einschubRow.metrics.total : 0,
+    assignees: forecastAssignees,
+    leadTime: {
+      bins: BINS.map(b => b.label),
+      series: [
+        { label: 'Online', ...histogram(todayReal.filter(isOnline)) },
+        { label: 'Intern', ...histogram(todayReal.filter(a => !isOnline(a))) }
+      ]
+    }
+  }
 
   // Merge per-assignee current + previous-year figures under one row per doctor
   const nameFor = (usersById, ref) => {
@@ -268,6 +325,7 @@ export const computeStatistics = ({ Appointments, Schedules, Calendars, Users, C
     day: dateToDay(now.toDate()),
     windowDays: WINDOW_DAYS,
     today: { date: todayRange.from, total: todayScope.total },
+    forecast,
     current: { from: current.from, to: current.to, workingDays: current.workingDays, total: current.total },
     previous: { from: previous.from, to: previous.to, total: previous.total },
     assignees,

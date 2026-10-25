@@ -8,7 +8,7 @@ import { PrintSettings } from './shared/PrintSettings'
 import { FooterContainer } from '../layout/FooterContainer'
 import { Loading } from '../components/Loading'
 import { Statistics } from './statistics/Statistics'
-import { PreviewBoxes } from './PreviewBoxes'
+import { Forecast } from './statistics/Forecast'
 import { getClientKey, toNative } from '../../startup/client/native/events'
 
 export class ReportsScreen extends React.Component {
@@ -31,21 +31,14 @@ export class ReportsScreen extends React.Component {
     const {
       date,
       statistics,
-      previews,
-      mapUserIdToName,
-      mapUserIdToUsername,
       sendEmail,
       sendEmailTest,
       viewAppointments
     } = this.props
 
-    const from = statistics && statistics.current && statistics.current.from
-    const rangeLabel = from
-      ? __('reports.windowRange', {
-        from: moment(from).format('D. MMM'),
-        to: date.format('D. MMM YYYY')
-      })
-      : ''
+    // Today and future days are a forecast (planned capacity vs. bookings), not a
+    // retrospective 30-day window.
+    const isForecast = date.isSameOrAfter(moment(), 'day')
 
     return (
       <div>
@@ -53,8 +46,8 @@ export class ReportsScreen extends React.Component {
 
         <div className='content-header'>
           <h1>
-            {__('reports.statisticsTitle')}&nbsp;
-            <small>{__('reports.windowLabel', { days: (statistics && statistics.windowDays) || 30 })} · {rangeLabel}</small>
+            {__('reports.statisticsTitle')}
+            {isForecast && <span>&nbsp;<small>{__('reports.forecastTitle')}</small></span>}
           </h1>
           <DateNavigation
             date={date}
@@ -71,18 +64,11 @@ export class ReportsScreen extends React.Component {
         {
           !statistics
             ? <Loading />
-            : <div className='content'>
-              <Statistics statistics={statistics} />
-
+            : <div className='content enable-select'>
               {
-                previews &&
-                  <div style={{ marginTop: 16 }}>
-                    <h2>{__('reports.previewTitle')}</h2>
-                    <PreviewBoxes
-                      previews={previews}
-                      mapUserIdToUsername={mapUserIdToUsername}
-                      mapUserIdToName={mapUserIdToName} />
-                  </div>
+                isForecast
+                  ? <Forecast forecast={statistics.forecast} date={date} />
+                  : <Statistics statistics={statistics} />
               }
 
               <FooterContainer />

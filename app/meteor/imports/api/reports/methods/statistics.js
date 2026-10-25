@@ -1,5 +1,6 @@
 import groupBy from 'lodash/groupBy'
 import sumBy from 'lodash/sumBy'
+import uniq from 'lodash/uniq'
 
 // A cancelation is recorded via canceledAt (SMS/manual). See appointments/schema.js.
 export const isCanceled = a => !!(a.canceledAt || a.canceled)
@@ -56,6 +57,9 @@ export const computeMetrics = ({
   const onlineExpected = online.filter(a => !isCanceled(a)).length
   const onlineNoShow = online.filter(isNoShow).length
 
+  // Internally arranged = everything not booked via the online portal.
+  const internal = total - onlineCount
+
   const bookedHours = sumBy(appointments.filter(a => !isCanceled(a)), durationHours)
 
   const metrics = {
@@ -70,6 +74,7 @@ export const computeMetrics = ({
     private: priv,
 
     online: onlineCount,
+    internal,
     onlineNoShow,
     onlineNoShowRate: ratio(onlineNoShow, onlineExpected),
 
@@ -113,13 +118,19 @@ export const computeScope = ({
   scheduledHoursTotal = null,
   slotStatsByUser = {},
   slotStatsTotal = {},
-  workingDays = null
+  workingDays = null,
+  // Doctors rostered for the window: forced to appear as a row even with zero
+  // appointments (so a forecast day lists everyone present, not only the booked).
+  presentUserIds = []
 }) => {
   const apptsByAssignee = groupBy(appointments, a => a.assigneeId || EINSCHUB)
   const slotsByAssignee = groupBy(freeSlots, 'assigneeId')
 
-  const assigneeIds = Object.keys(apptsByAssignee)
-    .filter(id => id && id !== 'undefined' && id !== 'null' && id !== EINSCHUB)
+  const assigneeIds = uniq([
+    ...Object.keys(apptsByAssignee)
+      .filter(id => id && id !== 'undefined' && id !== 'null' && id !== EINSCHUB),
+    ...presentUserIds.filter(Boolean)
+  ])
 
   const assignees = assigneeIds.map(assigneeId => ({
     assigneeId,

@@ -238,6 +238,7 @@ class DateNavigationButtons extends React.Component {
 
     this.monthOptions = buildMonthOptions()
     this.calendarRef = React.createRef()
+    this.navRef = React.createRef()
     this.getCalendarContainer = () => this.calendarRef.current
 
     this.renderMonthElement = this.renderMonthElement.bind(this)
@@ -256,6 +257,7 @@ class DateNavigationButtons extends React.Component {
     this.isSelected = this.isSelected.bind(this)
     this.initialVisibleMonth = this.initialVisibleMonth.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
+    this.handleDocumentMouseMove = this.handleDocumentMouseMove.bind(this)
   }
 
   componentDidMount () {
@@ -264,7 +266,46 @@ class DateNavigationButtons extends React.Component {
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.handleKeyDown, true)
+    this.stopPointerTracking()
     clearTimeout(this.closeTimer)
+  }
+
+  // While the calendar is open we watch the pointer at the document level rather
+  // than relying on the calendar's own mouseleave: that would miss the pointer
+  // once it has left through a viewport edge and come back elsewhere on the page.
+  // mousemove never fires while the pointer is outside the window, so leaving the
+  // viewport keeps the calendar open on its own; it closes as soon as the pointer
+  // moves anywhere inside the window that is neither the nav buttons nor the
+  // calendar.
+  handleDocumentMouseMove (e) {
+    const inNav = this.navRef.current && this.navRef.current.contains(e.target)
+    const inCalendar = this.calendarRef.current && this.calendarRef.current.contains(e.target)
+    if (inNav || inCalendar) {
+      clearTimeout(this.closeTimer)
+      this.closeTimer = null
+    } else if (!this.closeTimer) {
+      this.closeTimer = setTimeout(() => {
+        this.closeTimer = null
+        this.stopPointerTracking()
+        if (this.closePortalFn) {
+          this.closePortalFn()
+        }
+      }, 80)
+    }
+  }
+
+  startPointerTracking () {
+    if (!this.pointerTracking) {
+      document.addEventListener('mousemove', this.handleDocumentMouseMove, true)
+      this.pointerTracking = true
+    }
+  }
+
+  stopPointerTracking () {
+    if (this.pointerTracking) {
+      document.removeEventListener('mousemove', this.handleDocumentMouseMove, true)
+      this.pointerTracking = false
+    }
   }
 
   handleKeyDown (e) {
@@ -474,16 +515,23 @@ class DateNavigationButtons extends React.Component {
           closeOnEsc>
           {
             ({ openPortal, closePortal, isOpen, portal }) => {
+              // Keep the latest closePortal around for the deferred, document-level
+              // pointer tracking to call once the cursor settles off the calendar.
+              this.closePortalFn = closePortal
               const handleOpen = e => {
                 clearTimeout(this.closeTimer)
+                this.closeTimer = null
+                this.startPointerTracking()
                 openPortal(e)
               }
-              const handleClose = () => {
+              const closeNow = () => {
                 clearTimeout(this.closeTimer)
-                this.closeTimer = setTimeout(closePortal, 80)
+                this.closeTimer = null
+                this.stopPointerTracking()
+                closePortal()
               }
               return (
-                <div>
+                <div ref={this.navRef}>
                   <ButtonGroup onMouseOver={handleOpen}>
                   {this.props.before}
 
@@ -551,7 +599,6 @@ class DateNavigationButtons extends React.Component {
                         <div
                           ref={this.calendarRef}
                           onMouseOver={handleOpen}
-                          onMouseLeave={handleClose}
                           style={{ position: 'relative', padding: `${calendarPaddingTop}px ${calendarPadding}px ${calendarPadding}px` }}>
                           <DayPickerSingleDateController
                             onDateChange={this.handleCalendarDayChange}
@@ -571,7 +618,7 @@ class DateNavigationButtons extends React.Component {
                   }
 
                   {
-                    this.props.children && <div onMouseEnter={isOpen ? closePortal : null}>
+                    this.props.children && <div onMouseEnter={isOpen ? closeNow : null}>
                       {this.props.children}
                     </div>
                   }
