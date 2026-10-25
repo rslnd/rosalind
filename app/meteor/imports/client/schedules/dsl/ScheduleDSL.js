@@ -195,6 +195,19 @@ export const createDSLContext = ({
     await sleep(100)
   }
 
+  const isAssigneeOnDay = (userId) => {
+    const existing = Schedules.findOne({
+      type: 'day',
+      calendarId,
+      'day.year': currentDate.year(),
+      'day.month': currentDate.month() + 1,
+      'day.day': currentDate.date(),
+      userIds: userId
+    })
+
+    return !!existing
+  }
+
   const ensureAssigneeOnDay = async (userId) => {
     checkAborted()
     const day = {
@@ -279,6 +292,24 @@ export const createDSLContext = ({
         available: false
       }
     })
+  }
+
+  // Real appointments of a user on the current day. Online releases
+  // (bookables) and canceled appointments do not count – same rule the day
+  // view uses to decide whether a column may be deleted.
+  const countAppointmentsOnDay = (userId) => {
+    const dayStart = currentDate.clone().startOf('day').toDate()
+    const dayEnd = currentDate.clone().endOf('day').toDate()
+
+    return Appointments.find({
+      calendarId,
+      assigneeId: userId,
+      type: { $ne: 'bookable' },
+      canceled: { $ne: true },
+      removed: { $ne: true },
+      start: { $gte: dayStart },
+      end: { $lte: dayEnd }
+    }).count()
   }
 
   // Check if current day is a holiday
@@ -567,6 +598,42 @@ export const createDSLContext = ({
       // Use helper that also removes bookables in the blocked range
       await insertBlockingOverride(user._id, dayStart.toDate(), dayEnd.toDate())
       log(`Closed ${userName}`, 'success')
+      await sleep(stepDelay())
+    },
+
+    // Close a day for an assignee and remove their column entirely when no
+    // appointments are left on that day. Online releases (bookables) are
+    // removed along with the column; if real appointments remain, the assignee
+    // is only closed and the column stays so those appointments stay visible.
+    closeAndRemove: async (assigneeName, options = {}) => {
+      checkAborted()
+      const user = findAssigneeByName(assigneeName)
+      const userName = Users.methods.fullNameWithTitle(user)
+
+      // Nothing to close or remove - don't add a column just to drop it again
+      if (!isAssigneeOnDay(user._id) && countAppointmentsOnDay(user._id) === 0) {
+        log(`${userName} is not on this day`)
+        return
+      }
+
+      await dsl.close(assigneeName, options)
+
+      const remaining = countAppointmentsOnDay(user._id)
+      if (remaining > 0) {
+        log(`Kept column of ${userName} - ${remaining} appointment(s) on this day`, 'warning')
+        return
+      }
+
+      await Schedules.actions.removeUserFromDay.callPromise({
+        calendarId,
+        userId: user._id,
+        day: {
+          year: currentDate.year(),
+          month: currentDate.month() + 1,
+          day: currentDate.date()
+        }
+      })
+      log(`Removed ${userName} from day`, 'success')
       await sleep(stepDelay())
     },
 
@@ -968,7 +1035,7 @@ export const executeDSL = async (code, context) => {
   }
 
   const wrappedFn = new Function(
-    'doBetween', 'doToday', 'isBetween', 'close', 'open', 'openDay', 'openBookable', 'closeBookable', 'skipSundays',
+    'doBetween', 'doToday', 'isBetween', 'close', 'closeAndRemove', 'open', 'openDay', 'openBookable', 'closeBookable', 'skipSundays',
     'isMonday', 'isTuesday', 'isWednesday', 'isThursday', 'isFriday', 'isSaturday', 'isSunday',
     'currentDate', 'dayOfWeek',
     `return (async () => { ${wrappedCode} })()`
@@ -979,6 +1046,7 @@ export const executeDSL = async (code, context) => {
     dsl.doToday,
     dsl.isBetween,
     dsl.close,
+    dsl.closeAndRemove,
     dsl.open,
     dsl.openDay,
     dsl.openBookable,
