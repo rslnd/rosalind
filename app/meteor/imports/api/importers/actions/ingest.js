@@ -1,6 +1,6 @@
 import iconv from 'iconv-lite'
 import { Meteor } from 'meteor/meteor'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { allowedImporters } from '../allowedImporters'
 import { action, Match } from '../../../util/meteor/action'
 

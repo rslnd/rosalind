@@ -31,22 +31,28 @@ export default () => {
   const db = Mongo.db
   const multiplexers = Mongo._observeMultiplexers
 
-  db.s.topology.on('close', e => {
-    console.error('[Debug] Database topology change: closed')
-    console.log(`Number of observes are active: ${Object.keys(multiplexers).length}`)
-  })
+  // Diagnostic logging of MongoDB topology changes. The mongodb Node driver v4+
+  // (shipped with npm-mongo@4) no longer exposes `db.s.topology` with the v3
+  // event API, so guard against its absence.
+  const topology = db && db.s && db.s.topology
+  if (topology && typeof topology.on === 'function') {
+    topology.on('close', e => {
+      console.error('[Debug] Database topology change: closed')
+      console.log(`Number of observes are active: ${Object.keys(multiplexers).length}`)
+    })
 
-  db.s.topology.on('reconnect', data =>
-    console.log('[Debug] Database topology change: Successfully reconnected to mongo'))
+    topology.on('reconnect', data =>
+      console.log('[Debug] Database topology change: Successfully reconnected to mongo'))
 
-  db.s.topology.on('reconnectFailed', data =>
-    console.error('[Debug] Database topology change: Failed to reconnect to mongo'))
+    topology.on('reconnectFailed', data =>
+      console.error('[Debug] Database topology change: Failed to reconnect to mongo'))
 
-  db.s.topology.on('left', data =>
-    console.log('[Debug] Database topology change: A server left the replica set'))
+    topology.on('left', data =>
+      console.log('[Debug] Database topology change: A server left the replica set'))
 
-  db.s.topology.on('joined', data =>
-    console.log('[Debug] Database topology change: A server joined the replica set'))
+    topology.on('joined', data =>
+      console.log('[Debug] Database topology change: A server joined the replica set'))
+  }
 
   if (process.env.NODE_ENV === 'production') { return }
 

@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
 export const schema = new SimpleSchema({
@@ -19,9 +19,10 @@ export const schema = new SimpleSchema({
   },
 
   passwordlessGroupIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'passwordlessGroupIds.$': { type: SimpleSchema.RegEx.Id },
 
   lastActionBy: {
     type: SimpleSchema.RegEx.Id,

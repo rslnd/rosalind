@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 
 export const schema = new SimpleSchema({
   patientId: {

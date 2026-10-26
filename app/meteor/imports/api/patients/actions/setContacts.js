@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Contact } from '../schema'
@@ -25,7 +25,8 @@ export const setContacts = ({ Patients }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       patientId: { type: SimpleSchema.RegEx.Id },
-      contacts: { type: [Contact] }
+      contacts: { type: Array },
+      'contacts.$': { type: Contact }
     }).validator(),
 
     run({ patientId, contacts }) {

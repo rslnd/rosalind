@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { External, File } from '../../util/schema'
 
 export const inboundCallsTopics = new SimpleSchema({

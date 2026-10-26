@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { Events } from '../../events'
 import { Tags } from '../../tags'
@@ -14,9 +14,11 @@ export const update = ({ Appointments }) => {
       update: {
         type: new SimpleSchema({
           revenue: { type: Number, decimal: true, optional: true },
-          tags: { type: [SimpleSchema.RegEx.Id], optional: true },
+          tags: { type: Array, optional: true },
+          'tags.$': { type: SimpleSchema.RegEx.Id },
           note: { type: String, optional: true },
-          consentMediaIds: { type: [SimpleSchema.RegEx.Id], optional: true }
+          consentMediaIds: { type: Array, optional: true },
+          'consentMediaIds.$': { type: SimpleSchema.RegEx.Id }
         })
       }
     }).validator(),

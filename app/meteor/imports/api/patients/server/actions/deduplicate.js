@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { deduplicate as merge, perform } from '../../methods/deduplicateWithJournal'
 import { isLikelySamePatient } from '../../methods/isLikelySamePatient'
@@ -10,7 +10,8 @@ export const deduplicate = ({ Patients }) => {
     name: 'patients/deduplicate',
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
-      patientIds: { type: [SimpleSchema.RegEx.Id] }
+      patientIds: { type: Array },
+      'patientIds.$': { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
     run ({ patientIds }) {

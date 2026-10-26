@@ -1,6 +1,6 @@
 import moment from 'moment-timezone'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { dayToDate } from '../../../util/time/day'
 import { getQuarterSelector, getRange } from '../../../util/time/quarter'

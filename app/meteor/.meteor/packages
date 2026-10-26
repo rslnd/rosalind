@@ -1,27 +1,27 @@
 # Core
-meteor-base@1.4.0
-ecmascript@0.15.0
-mongo@1.10.1
-session@1.2.0
-tracker@1.2.0
-logging@1.2.0
+meteor-base@1.5.1
+ecmascript@0.16.8
+mongo@1.16.10
+session@1.2.1
+tracker@1.3.3
+logging@1.3.4
 reload@1.3.1
-random@1.2.0
-ejson@1.1.1
-check@1.3.1
-accounts-base@1.8.0
-accounts-password@1.7.0
-reactive-var@1.0.11
+random@1.2.1
+ejson@1.1.3
+check@1.4.1
+accounts-base@2.2.11
+accounts-password@2.4.0
+reactive-var@1.0.12
 shell-server@0.5.0
 fastclick@1.0.13
-promise@0.11.2
-modules@0.16.0
-dynamic-import@0.6.0
+promise@0.12.2
+modules@0.20.0
+dynamic-import@0.7.3
 react-meteor-data@2.2.1
-ddp-rate-limiter@1.0.9
+ddp-rate-limiter@1.2.1
 audit-argument-checks@1.0.7
-ddp-server@2.3.2
-hot-module-replacement@0.2.0
+ddp-server@2.7.1
+hot-module-replacement@0.5.3
 
 # Security
 mdg:validated-method
@@ -43,4 +43,4 @@ simonsimcity:job-collection
 
 # Monitoring
 flowkey:raven
-underscore@1.0.10
+underscore@1.6.1

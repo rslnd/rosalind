@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 
 const Login = new SimpleSchema({
   name: {
@@ -29,8 +29,9 @@ const UpdatePassword = new SimpleSchema({
 
 const UpdateRoles = new SimpleSchema({
   roles: {
-    type: [String]
+    type: Array
   },
+  'roles.$': { type: String },
 
   userId: {
     type: String

@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { Appointments } from '../../appointments'
 import { Calendars } from '../../calendars'
@@ -18,7 +18,8 @@ export const applyDefaultSchedule = ({ Schedules }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       calendarId: { type: SimpleSchema.RegEx.Id },
-      assigneeIds: { type: [SimpleSchema.RegEx.Id], optional: true },
+      assigneeIds: { type: Array, optional: true },
+      'assigneeIds.$': { type: SimpleSchema.RegEx.Id },
       from: { type: Date },
       to: { type: Date }
     }).validator(),

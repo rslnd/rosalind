@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { External, Day, Auto } from '../../util/schema'
 
 // TODO: Refactor to collection
@@ -157,9 +157,10 @@ export default new SimpleSchema({
   },
 
   contacts: {
-    type: [Contact],
+    type: Array,
     optional: true
   },
+  'contacts.$': { type: Contact },
 
   noSMS: {
     type: Boolean,
@@ -203,9 +204,10 @@ export default new SimpleSchema({
   },
 
   agreements: {
-    type: [Agreement],
+    type: Array,
     optional: true
   },
+  'agreements.$': { type: Agreement },
 
   externalRevenue: {
     type: Number,

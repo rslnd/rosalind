@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Meteor } from 'meteor/meteor'
 
 export default () => {

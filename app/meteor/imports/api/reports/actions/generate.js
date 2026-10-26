@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import moment from 'moment-timezone'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { dayToDate, daySelector, dateToDay } from '../../../util/time/day'
 import { action, Match } from '../../../util/meteor/action'
 import { generate as generateReport } from '../methods/generate'

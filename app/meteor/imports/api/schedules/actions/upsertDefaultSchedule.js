@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { weekdays } from '../../../util/time/weekdays'
 import { HM } from '../../../util/schema'
@@ -11,7 +11,8 @@ const Schedule = new SimpleSchema({
   from: { type: HM },
   to: { type: HM },
   note: { type: String, optional: true },
-  roles: { type: [String], optional: true },
+  roles: { type: Array, optional: true },
+  'roles.$': { type: String },
   bookable: { type: Boolean, optional: true }
 })
 
