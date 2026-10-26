@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const changeWaitlistAssignee = ({ Appointments }) => {
@@ -13,12 +13,12 @@ export const changeWaitlistAssignee = ({ Appointments }) => {
       waitlistAssigneeId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ appointmentId, waitlistAssigneeId }) {
+    async run ({ appointmentId, waitlistAssigneeId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      Appointments.update({
+      await Appointments.updateAsync({
         _id: appointmentId
       }, {
         $set: {

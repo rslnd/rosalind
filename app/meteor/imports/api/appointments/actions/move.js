@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Messages } from '../../messages'
 import { Calendars } from '../../calendars'
@@ -22,7 +22,7 @@ export const move = ({ Appointments }) => {
       newEnd: { type: Date }
     }).validator(),
 
-    run ({ appointmentId, newStart, newEnd, newAssigneeId }) {
+    async run ({ appointmentId, newStart, newEnd, newAssigneeId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -33,20 +33,20 @@ export const move = ({ Appointments }) => {
         return
       }
 
-      const appointment = Appointments.findOne({ _id: appointmentId })
+      const appointment = await Appointments.findOneAsync({ _id: appointmentId })
 
       if (!appointment) {
         throw new Meteor.Error(404, 'Appointment not found')
       }
 
-      const calendar = Calendars.findOne({ _id: appointment.calendarId })
+      const calendar = await Calendars.findOneAsync({ _id: appointment.calendarId })
 
       const allowMoveBetweenAssignees =
-        hasRole(Meteor.userId(), ['allowMoveBetweenAssignees']) ||
+        await hasRole(Meteor.userId(), ['allowMoveBetweenAssignees']) ||
         calendar.allowMoveBetweenAssignees
 
       if (!allowMoveBetweenAssignees) {
-        const daySchedule = Schedules.findOne({
+        const daySchedule = await Schedules.findOneAsync({
           type: 'day',
           calendarId: appointment.calendarId,
           ...daySelector(dateToDay(newStart))
@@ -61,7 +61,7 @@ export const move = ({ Appointments }) => {
         }
       }
 
-      const duration = getDefaultDuration({
+      const duration = await getDefaultDuration({
         calendarId: appointment.calendarId,
         assigneeId: newAssigneeId,
         date: moment(newStart),
@@ -76,7 +76,7 @@ export const move = ({ Appointments }) => {
         ? moment(newStart).add(duration, 'minutes').toDate()
         : newEnd
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $set: {
           start: newStart,
           end: newEnd,
@@ -102,8 +102,8 @@ export const move = ({ Appointments }) => {
         // new start. Recreation can't be left to the periodic createReminders
         // job: it only scans appointments exactly `daysBefore` business days
         // out, so moving to a nearer date would otherwise drop the reminder.
-        Messages.actions.removeReminder.call({ appointmentId })
-        Messages.actions.createReminderForAppointment.call({ appointmentId })
+        await Messages.actions.removeReminder.callPromise({ appointmentId })
+        await Messages.actions.createReminderForAppointment.callPromise({ appointmentId })
       }
 
       Events.post('appointments/move', {
@@ -116,14 +116,14 @@ export const move = ({ Appointments }) => {
 
       if (Meteor.isServer) {
         // delete bookables at new location
-        Appointments.find({
+        await Appointments.find({
           type: 'bookable',
           start: { $gte: newStart, $lt: newEnd },
           end: { $gt: newStart, $lte: newEnd },
           calendarId: appointment.calendarId,
           assigneeId: newAssigneeId
-        }, { removed: true }).map(a => {
-          Appointments.update({_id: a._id}, { $set: {
+        }, { removed: true }).mapAsync(async a => {
+          await Appointments.updateAsync({_id: a._id}, { $set: {
             removed: true,
             removedAt: new Date(),
             removedBy: userId,
@@ -133,16 +133,16 @@ export const move = ({ Appointments }) => {
 
         // restore previous bookables
         // ensure bookables do not get created over overrides
-        Appointments.find({
+        ;await Promise.all((await Appointments.find({
           type: 'bookable',
           start: { $gte: oldStart, $lt: oldEnd },
           end: { $gt: oldStart, $lte: oldEnd },
           calendarId: appointment.calendarId,
           assigneeId: oldAssigneeId,
           removed: true
-        }, { removed: true }).fetch().map(a => {
+        }, { removed: true }).fetchAsync()).map(async a => {
           // was a new override created behind the appt?
-          const block = Schedules.findOne({
+          const block = await Schedules.findOneAsync({
             type: 'override',
             calendarId: appointment.calendarId,
             userId: oldAssigneeId,
@@ -151,7 +151,7 @@ export const move = ({ Appointments }) => {
           })
 
           // avoid double bookables being restored after moving appts around the same spot multiple times
-          const currentBookable = Appointments.findOne({
+          const currentBookable = await Appointments.findOneAsync({
             type: 'bookable',
             start: a.start,
             end: a.end,
@@ -160,7 +160,7 @@ export const move = ({ Appointments }) => {
           })
 
           if (!block && !currentBookable) {
-            Appointments.insert({
+            await Appointments.insertAsync({
               type: 'bookable',
               start: a.start,
               end: a.end,
@@ -175,7 +175,7 @@ export const move = ({ Appointments }) => {
               })
             })
           }
-        })
+        }))
       }
 
       return appointmentId

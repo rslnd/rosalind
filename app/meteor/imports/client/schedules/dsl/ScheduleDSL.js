@@ -29,8 +29,9 @@ const waitForSubscriptions = (subs, timeout = 10000) => {
       const allReady = subs.every(sub => sub.ready())
       if (allReady) {
         clearTimeout(timeoutId)
-        // Use Meteor.defer to stop computation outside of autorun
-        Meteor.defer(() => computation.stop())
+        // Stop the computation outside of autorun. Use a plain timer (not
+        // Meteor.defer) to avoid "Can't set timers inside simulations".
+        setTimeout(() => computation.stop(), 0)
         resolve()
       }
     })

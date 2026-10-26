@@ -11,7 +11,7 @@ export const remove = ({ Users }) =>
     },
     roles: ['admin', 'users-edit'],
     fn: async ({ userId }) => {
-      const user = Users.findOne({ _id: userId }, { removed: true})
+      const user = await Users.findOneAsync({ _id: userId }, { removed: true})
 
       if (!user) {
         throw new Meteor.Error(404, 'User not found')
@@ -19,7 +19,7 @@ export const remove = ({ Users }) =>
 
       const date = moment().format('YYYYMMDD')
 
-      Users.update({ _id: userId }, {
+      await Users.updateAsync({ _id: userId }, {
         $set: {
           username: user.username + 'Removed' + date,
           employee: false,
@@ -29,7 +29,7 @@ export const remove = ({ Users }) =>
         }
       })
 
-      Users.update({ _id: userId }, {
+      await Users.updateAsync({ _id: userId }, {
         $unset: {
           services: 1,
           weakPassword: 1

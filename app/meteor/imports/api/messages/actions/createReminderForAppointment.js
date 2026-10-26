@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
 import { Schedules } from '../../schedules'
@@ -23,7 +23,7 @@ export const createReminderForAppointment = ({ Messages }) => {
     validate: new SimpleSchema({
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
-    run ({ appointmentId }) {
+    async run ({ appointmentId }) {
       this.unblock()
 
       if (this.connection && !this.userId) {
@@ -32,9 +32,9 @@ export const createReminderForAppointment = ({ Messages }) => {
 
       if (!Meteor.isServer) { return }
 
-      if (!Settings.get('messages.sms.enabled')) { return }
+      if (!await Settings.get('messages.sms.enabled')) { return }
 
-      const appointment = Appointments.findOne({ _id: appointmentId })
+      const appointment = await Appointments.findOneAsync({ _id: appointmentId })
 
       if (!appointment ||
           appointment.removed ||
@@ -45,7 +45,7 @@ export const createReminderForAppointment = ({ Messages }) => {
 
       // Mirror the idempotency guard of createReminders: never create a second
       // reminder for an appointment that already has one (e.g. one already sent).
-      const existingMessage = Messages.findOne({
+      const existingMessage = await Messages.findOneAsync({
         appointmentId,
         removed: { $ne: true }
       })
@@ -53,16 +53,16 @@ export const createReminderForAppointment = ({ Messages }) => {
       if (existingMessage) { return }
 
       const patient = appointment.patientId &&
-        Patients.findOne({ _id: appointment.patientId })
+        await Patients.findOneAsync({ _id: appointment.patientId })
 
       if (!patient || !patient.contacts) { return }
 
       if (patient.noSMS) { return }
 
-      const holidays = Schedules.find({
+      const holidays = await Schedules.find({
         type: 'holiday',
         removed: { $ne: true }
-      }).fetch()
+      }).fetchAsync()
 
       const payload = {
         appointmentId: appointment._id,
@@ -95,7 +95,7 @@ export const createReminderForAppointment = ({ Messages }) => {
       // if the patient has no usable mobile contact.
       if (!message.to) { return }
 
-      Messages.insert({
+      await Messages.insertAsync({
         ...message,
         createdAt: new Date()
       })

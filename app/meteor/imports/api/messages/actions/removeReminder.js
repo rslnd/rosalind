@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 
 export const removeReminder = ({ Messages }) => {
   return new ValidatedMethod({
@@ -10,14 +10,14 @@ export const removeReminder = ({ Messages }) => {
     validate: new SimpleSchema({
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
-    run ({ appointmentId }) {
+    async run ({ appointmentId }) {
       this.unblock()
 
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const removedCount = Messages.softRemove({
+      const removedCount = await Messages.softRemove({
         type: 'appointmentReminder',
         status: 'scheduled',
         direction: 'outbound',

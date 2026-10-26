@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Schedules } from '../../schedules'
 import { Day } from '../../../util/schema/day'
@@ -21,7 +21,7 @@ export const changeAssignee = ({ Appointments }) => {
       day: { type: Day }
     }).validator(),
 
-    run ({ calendarId, oldAssigneeId, newAssigneeId, day }) {
+    async run ({ calendarId, oldAssigneeId, newAssigneeId, day }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -35,7 +35,7 @@ export const changeAssignee = ({ Appointments }) => {
         }
       }
 
-      Appointments.update({
+      await Appointments.updateAsync({
         ...selector,
         assigneeId: oldAssigneeId
       }, {
@@ -46,7 +46,7 @@ export const changeAssignee = ({ Appointments }) => {
         multi: true
       })
 
-      Schedules.update({
+      await Schedules.updateAsync({
         ...selector,
         type: 'override',
         userId: oldAssigneeId
@@ -64,7 +64,7 @@ export const changeAssignee = ({ Appointments }) => {
         calendarId
       }
 
-      Schedules.update({
+      await Schedules.updateAsync({
         ...dayScheduleSelector,
         userIds: oldAssigneeId
       }, {
@@ -73,7 +73,7 @@ export const changeAssignee = ({ Appointments }) => {
         }
       })
       // Can't push and pull on the same field in one update
-      Schedules.update(dayScheduleSelector, {
+      await Schedules.updateAsync(dayScheduleSelector, {
         $addToSet: {
           userIds: newAssigneeId
         }

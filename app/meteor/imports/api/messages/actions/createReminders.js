@@ -3,7 +3,7 @@ import identity from 'lodash/identity'
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
@@ -20,7 +20,7 @@ import { buildReminderMessage, mobilePhone } from '../methods/buildReminderMessa
 export const waitMinutesAfterNewAppointment = 120
 
 // TODO: Replace with GraphQL
-export const findUpcomingAppointments = (cutoffDate) => {
+export const findUpcomingAppointments = async (cutoffDate) => {
   // It's important not to use a closing-sliding window here, as
   // that could lead to two reminders being sent out for
   // back-to-back appointments for the same patient
@@ -36,23 +36,23 @@ export const findUpcomingAppointments = (cutoffDate) => {
     canceled: { $ne: true }
   }
 
-  const appointments = Appointments.find(selector, {
+  const appointments = await Appointments.find(selector, {
     sort: {
       start: 1
     }
-  }).fetch()
+  }).fetchAsync()
 
-  return appointments.map((appointment) => {
+  return await Promise.all(appointments.map(async (appointment) => {
     let patient, contacts
 
     if (appointment.patientId) {
-      patient = Patients.findOne({ _id: appointment.patientId })
+      patient = await Patients.findOneAsync({ _id: appointment.patientId })
       if (patient && patient.contacts) {
         contacts = patient.contacts
       }
     }
 
-    const assignee = appointment.assigneeId && Users.findOne({ _id: appointment.assigneeId })
+    const assignee = appointment.assigneeId && await Users.findOneAsync({ _id: appointment.assigneeId })
 
     let result = {
       ...appointment,
@@ -77,7 +77,7 @@ export const findUpcomingAppointments = (cutoffDate) => {
     }
 
     return result
-  })
+  }))
 }
 
 export const isSameMessage = (a, b) => {
@@ -92,28 +92,28 @@ export const createReminders = ({ Messages }) => {
     name: 'messages/createReminders',
     mixins: [CallPromiseMixin],
     validate: () => {},
-    run () {
+    async run () {
       this.unblock()
 
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!Settings.get('messages.sms.enabled')) { return }
+      if (!await Settings.get('messages.sms.enabled')) { return }
 
-      const holidays = Schedules.find({
+      const holidays = await Schedules.find({
         type: 'holiday',
         removed: { $ne: true }
-      }).fetch()
+      }).fetchAsync()
 
-      Calendars.find({ smsAppointmentReminder: true }).fetch().map(calendar => {
+      ;await Promise.all((await Calendars.find({ smsAppointmentReminder: true }).fetchAsync()).map(async calendar => {
         const calendarId = calendar._id
 
         const { calculateFutureCutoff } = reminderDateCalculator({
           holidays,
           days: (
-            Number.isInteger(parseInt(Settings.get('messages.sms.appointmentReminder.daysBefore')))
-            ? parseInt(Settings.get('messages.sms.appointmentReminder.daysBefore'))
+            Number.isInteger(parseInt(await Settings.get('messages.sms.appointmentReminder.daysBefore')))
+            ? parseInt(await Settings.get('messages.sms.appointmentReminder.daysBefore'))
             : 2
           )
         })
@@ -170,8 +170,8 @@ export const createReminders = ({ Messages }) => {
 
         console.log('upserting messages: ' + messages.length)
 
-        messages.map((message) => {
-          const existingMessage = Messages.findOne({
+        await Promise.all(messages.map(async (message) => {
+          const existingMessage = await Messages.findOneAsync({
             appointmentId: message.appointmentId,
             removed: { $ne: true }
           })
@@ -182,13 +182,13 @@ export const createReminders = ({ Messages }) => {
             //   Messages.update({ _id: existingMessage }, { $set: message })
             // }
           } else {
-            Messages.insert({
+            await Messages.insertAsync({
               ...message,
               createdAt: new Date()
             })
             insertedCount++
           }
-        })
+        }))
 
         if (insertedCount > 0) {
           Events.post('messages/createReminders', {
@@ -201,7 +201,7 @@ export const createReminders = ({ Messages }) => {
             insertedCount
           })
         }
-      })
+      }))
     }
   })
 }

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const setDismissed = ({ Appointments }) => {
@@ -12,12 +12,12 @@ export const setDismissed = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run({ appointmentId }) {
+    async run({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).dismissed) {
+      if ((await Appointments.findOneAsync({ _id: appointmentId })).dismissed) {
         console.warn('[Appointments] setDismissed: Appointment is already set to admitted', { appointmentId })
         return
       }
@@ -42,7 +42,7 @@ export const setDismissed = ({ Appointments }) => {
         treatmentEnd: 1
       }
 
-      Appointments.update({ _id: appointmentId }, { $set, $unset })
+      await Appointments.updateAsync({ _id: appointmentId }, { $set, $unset })
 
       Events.post('appointments/setDismissed', { appointmentId })
 

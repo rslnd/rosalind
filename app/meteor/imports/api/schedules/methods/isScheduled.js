@@ -1,16 +1,16 @@
 import moment from 'moment-timezone'
 
 export default ({ Schedules, Users }) => {
-  const getScheduled = (time = moment()) => {
-    const allUsers = Users.find({}).fetch()
+  const getScheduled = async (time = moment()) => {
+    const allUsers = await Users.find({}).fetchAsync()
 
     return allUsers.filter((user) => {
       return isScheduled(time, user._id)
     })
   }
 
-  const isOverrideUnavailable = (time = moment(), userId = null) => {
-    return Schedules.findOne({
+  const isOverrideUnavailable = async (time = moment(), userId = null) => {
+    return await Schedules.findOneAsync({
       type: 'override',
       available: false,
       start: { $lte: time.toDate() },
@@ -20,8 +20,8 @@ export default ({ Schedules, Users }) => {
     })
   }
 
-  const isOverrideAvailable = (time = moment(), userId = null) => {
-    return Schedules.findOne({
+  const isOverrideAvailable = async (time = moment(), userId = null) => {
+    return await Schedules.findOneAsync({
       type: 'override',
       available: true,
       start: { $lte: time.toDate() },
@@ -31,8 +31,8 @@ export default ({ Schedules, Users }) => {
     })
   }
 
-  const isScheduledDefault = (time = moment(), userId = null) => {
-    const defaultSchedule = Schedules.findOne({
+  const isScheduledDefault = async (time = moment(), userId = null) => {
+    const defaultSchedule = await Schedules.findOneAsync({
       type: 'default',
       userId: userId,
       removed: { $ne: true }
@@ -41,8 +41,8 @@ export default ({ Schedules, Users }) => {
     return (defaultSchedule && defaultSchedule.isWithin(time))
   }
 
-  const isScheduled = (time = moment(), userId = null) => {
-    const user = Users.findOne({ _id: userId })
+  const isScheduled = async (time = moment(), userId = null) => {
+    const user = await Users.findOneAsync({ _id: userId })
     if (!user) { return false }
     if (!Schedules.methods.isOpen(time)) { return false }
     if (isOverrideUnavailable(time, userId)) { return false }

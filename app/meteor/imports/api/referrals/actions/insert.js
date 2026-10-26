@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const insert = ({ Referrals, Referrables }) => {
@@ -15,12 +15,12 @@ export const insert = ({ Referrals, Referrables }) => {
       referrableId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run({ patientId, appointmentId, referredTo, referrableId }) {
+    async run({ patientId, appointmentId, referredTo, referrableId }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const referrable = Referrables.findOne({ _id: referrableId })
+      const referrable = await Referrables.findOneAsync({ _id: referrableId })
       if (!referrable) {
         throw new Error(`[Referrals] Unknown referrableId: ${referrableId}`)
       }
@@ -46,13 +46,13 @@ export const insert = ({ Referrals, Referrables }) => {
       }
 
       const referralId = referrable.redeemImmediately
-        ? Referrals.insert({
+        ? await Referrals.insertAsync({
           ...referral,
           redeemedImmediately: true,
           redeemedAt: new Date(),
           redeemingAppointmentId: null
         })
-        : Referrals.insert({ ...referral })
+        : await Referrals.insertAsync({ ...referral })
 
       Events.post('referrals/insert', { referralId })
 

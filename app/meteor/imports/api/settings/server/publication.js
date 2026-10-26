@@ -6,8 +6,8 @@ export default () => {
   publish({
     name: 'settings',
     allowAnonymous: true,
-    fn: function () {
-      if (this.userId && hasRole(this.userId, [ 'admin', 'settings-edit' ])) {
+    fn: async function () {
+      if (this.userId && await hasRole(this.userId, [ 'admin', 'settings-edit' ])) {
         return Settings.find({})
       } else {
         return Settings.find({ isPublic: true })

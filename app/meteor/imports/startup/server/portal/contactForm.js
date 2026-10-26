@@ -271,7 +271,7 @@ Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
     text
   })
 
-  const topic = InboundCallsTopics.findOne({ contactForm: true })
+  const topic = await InboundCallsTopics.findOneAsync({ contactForm: true })
   const topicId = topic ? topic._id : null
 
   const call = {
@@ -290,7 +290,7 @@ Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
     createdAt: new Date()
   }
 
-  const _id = InboundCalls.insert(call)
+  const _id = await InboundCalls.insertAsync(call)
 
   Events.post('inboundCalls/postContactForm', { _id })
 

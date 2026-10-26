@@ -2,7 +2,7 @@ import identity from 'lodash/identity'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
 import { hasRole } from '../../../util/meteor/hasRole'
@@ -18,7 +18,7 @@ export const detail = ({ Referrals, Referrables }) => {
       redeemImmediately: { type: Boolean, optional: true }
     }).validator(),
 
-    run({ from, to, referredBy, redeemImmediately }) {
+    async run({ from, to, referredBy, redeemImmediately }) {
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../customer/isTrustedNetwork')
         if (!this.userId && this.connection && !isTrustedNetwork(this.connection.clientAddress)) {
@@ -29,13 +29,13 @@ export const detail = ({ Referrals, Referrables }) => {
         return
       }
 
-      if (!hasRole(this.userId, ['admin', 'reports'])) {
+      if (!await hasRole(this.userId, ['admin', 'reports'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const referrables = Referrables.find({
+      const referrables = await Referrables.find({
         redeemImmediately
-      }).fetch()
+      }).fetchAsync()
 
       const selector = {
         type: { $ne: 'external' },
@@ -50,7 +50,7 @@ export const detail = ({ Referrals, Referrables }) => {
       const isInRange = ({ from, to }) => date =>
         date && (from <= date && date <= to)
 
-      const referrals = Referrals.find(selector).fetch().map(r => {
+      const referrals = (await Referrals.find(selector).fetchAsync()).map(r => {
         const redeemedInPeriod = isInRange({ from, to })(r.redeemedAt)
 
         if (!redeemedInPeriod) {
@@ -65,24 +65,24 @@ export const detail = ({ Referrals, Referrables }) => {
 
       const patientIds = referrals.map(r => r.patientId)
 
-      const futureAppointments = Appointments.find({
+      const futureAppointments = await Appointments.find({
         patientId: { $in: patientIds },
         start: { $gte: new Date() },
         canceled: { $ne: true }
-      }).fetch()
+      }).fetchAsync()
 
       const redeemingAppointmentIds = referrals
         .map(r => r.redeemingAppointmentId).filter(identity)
-      const redeemingAppointments = Appointments.find({
+      const redeemingAppointments = await Appointments.find({
         _id: { $in: redeemingAppointmentIds }
-      }).fetch()
+      }).fetchAsync()
 
-      const patients = Patients.find({
+      const patients = await Patients.find({
         _id: { $in: patientIds }
       }, {
           removed: true,
           fields: Patients.fields.preload
-        }).fetch()
+        }).fetchAsync()
 
       return Referrals.methods.detail({
         from,

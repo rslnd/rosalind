@@ -1,12 +1,12 @@
 import moment from 'moment-timezone'
-import { Job } from 'meteor/simonsimcity:job-collection'
+import { Job } from 'meteor/strigops:job-collection'
 import { Messages } from '../'
 
-const cleanOldJobs = (job) => {
-  const ids = Messages.jobs.find({
+const cleanOldJobs = async (job) => {
+  const ids = await Messages.jobs.find({
     status: { $in: Job.jobStatusRemovable },
     updated: { $lt: moment().subtract(1, 'day').toDate() }
-  }, { fields: { _id: 1 } }).map(d => d._id)
+  }, { fields: { _id: 1 } }).mapAsync(d => d._id)
 
   if (ids.length > 0) {
     Messages.jobs.removeJobs(ids)

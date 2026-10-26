@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Calendars } from '../../calendars'
 import { Appointments } from '../../appointments'
 import { Patients } from '../../patients'
@@ -20,14 +20,14 @@ export const sendScheduled = ({ Messages }) => {
     name: 'messages/sendScheduled',
     mixins: [CallPromiseMixin],
     validate () {},
-    run () {
+    async run () {
       this.unblock()
 
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!Settings.get('messages.sms.enabled')) { return }
+      if (!await Settings.get('messages.sms.enabled')) { return }
 
       if (!Meteor.isServer) { return }
 
@@ -40,7 +40,7 @@ export const sendScheduled = ({ Messages }) => {
       const retryAfterHours = 24
       const maxRetries = 1
 
-      Messages.update({
+      await Messages.updateAsync({
         status: 'failed',
         direction: 'outbound',
         type: 'appointmentReminder',
@@ -59,7 +59,7 @@ export const sendScheduled = ({ Messages }) => {
 
       const maxSentPerRecipientLimit = 3
 
-      const sentToNumbersToday = Messages.find({
+      const sentToNumbersToday = (await Messages.find({
         status: 'sent',
         direction: 'outbound',
         type: 'appointmentReminder',
@@ -68,43 +68,46 @@ export const sendScheduled = ({ Messages }) => {
           $gt: moment().startOf('day').toDate(),
           $lt: moment().endOf('day').toDate()
         }
-      }).fetch().map((m) => m.to)
+      }).fetchAsync()).map((m) => m.to)
 
-      const scheduledMessages = Messages.find({
+      const candidates = await Messages.find({
         status: 'scheduled',
         direction: 'outbound',
         scheduled: timeWindow,
         invalidBefore: { $lt: moment().toDate() },
         invalidAfter: { $gt: moment().toDate() },
         removed: { $ne: true }
-      }).fetch().filter((message) => {
-        const patient = Patients.findOne({ _id: message.patientId })
+      }).fetchAsync()
+
+      const scheduledMessages = []
+      for (const message of candidates) {
+        const patient = await Patients.findOneAsync({ _id: message.patientId })
         if (patient && patient.noSMS) {
           console.log('[Messages] sendScheduled: Skipping', message._id, 'because patient has noSMS set' )
-          return false
+          continue
         }
 
-        const appointment = Appointments.findOne({ _id: message.appointmentId })
+        const appointment = await Appointments.findOneAsync({ _id: message.appointmentId })
         if (!appointment) {
           console.log('[Messages] sendScheduled: Skipping', message._id, 'because appointment', message.appointmentId, 'was not found (likely removed)')
-          return false
+          continue
         }
 
-        const calendar = Calendars.findOne({ _id: appointment.calendarId })
+        const calendar = await Calendars.findOneAsync({ _id: appointment.calendarId })
         if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
           console.log('[Messages] sendScheduled: Skipping', message._id, 'because calendar disabled sms reminders')
-          return false
+          continue
         }
 
-        const tags = Tags.methods.expand(appointment.tags)
+        const tags = await Tags.methods.expand(appointment.tags)
         if (tags.some(t => t.noSmsAppointmentReminder)) {
           // console.log('[Messages] sendScheduled: Skipping', message._id, 'because appointment', appointment._id, 'has a tag with noSmsAppointmentReminder set')
-          return false
+          continue
         }
 
-        if (appointment.assigneeId && hasRole(appointment.assigneeId, ['noSmsAppointmentReminder'])) {
+        if (appointment.assigneeId && await hasRole(appointment.assigneeId, ['noSmsAppointmentReminder'])) {
           console.log('[Messages] sendScheduled: Skipping', message._id, 'because assignee of appointment', appointment._id, 'has role noSmsAppointmentReminder')
-          return false
+          continue
         }
 
         // Only allow confirmation of cancelation to be sent during quiet time
@@ -117,17 +120,18 @@ export const sendScheduled = ({ Messages }) => {
           console.warn(`[Messages] sendScheduled: Sent count per recipient exceeded, message ${message._id} not sent`, { quietTimeRespected, withinSentPerRecipientLimit })
         }
 
-        return ok
-      }).map((message) => {
+        if (!ok) { continue }
+
         switch (message.channel) {
           case 'SMS':
-            return SMS.send(message._id)
+            scheduledMessages.push(SMS.send(message._id))
+            break
           default:
             throw new Meteor.Error(500, `[Messages] sendScheduled: Unknown channel ${message.channel} of message ${message._id}`)
         }
-      })
+      }
 
-      return Promise.awaitAll(scheduledMessages)
+      return Promise.all(scheduledMessages)
     }
   })
 }

@@ -24,18 +24,18 @@ export const mobilePhone = (contacts = []) => {
 // Extracted from createReminders so a single appointment's reminder can be
 // (re)built on demand, e.g. when an appointment is moved (see
 // actions/createReminderForAppointment.js).
-export const buildReminderMessage = ({ payload, holidays = [] }) => {
-  const calendar = Calendars.findOne({ _id: payload.calendarId })
+export const buildReminderMessage = async ({ payload, holidays = [] }) => {
+  const calendar = await Calendars.findOneAsync({ _id: payload.calendarId })
   if ((calendar && !calendar.smsAppointmentReminder) || !calendar) {
     return false
   }
 
   const { calculateReminderDate } = reminderDateCalculator({ holidays })
 
-  const tags = Tags.methods.expand(payload.tags)
+  const tags = await Tags.methods.expand(payload.tags)
 
   let forceSMS = payload.assigneeId
-    ? hasRole(payload.assigneeId, ['forceSmsAppointmentReminder'])
+    ? await hasRole(payload.assigneeId, ['forceSmsAppointmentReminder'])
     : false
 
   if (!forceSMS) {
@@ -43,12 +43,12 @@ export const buildReminderMessage = ({ payload, holidays = [] }) => {
       return false
     }
 
-    if (payload.assigneeId && hasRole(payload.assigneeId, ['noSmsAppointmentReminder'])) {
+    if (payload.assigneeId && await hasRole(payload.assigneeId, ['noSmsAppointmentReminder'])) {
       return false
     }
   }
 
-  let text = Settings.get('messages.sms.appointmentReminder.text')
+  let text = await Settings.get('messages.sms.appointmentReminder.text')
 
   if (calendar && calendar.smsAppointmentReminderText && calendar.smsAppointmentReminderText.length > 10) {
     text = calendar.smsAppointmentReminderText
@@ -59,8 +59,8 @@ export const buildReminderMessage = ({ payload, holidays = [] }) => {
   }
 
   // uro11 special: different text if appt is within first hour of day
-  if (process.env.CUSTOMER_PREFIX === 'uro11' && Settings.get('messages.sms.appointmentReminder.textFirstHour')) {
-    const firstApptOfDay = Appointments.findOne({
+  if (process.env.CUSTOMER_PREFIX === 'uro11' && await Settings.get('messages.sms.appointmentReminder.textFirstHour')) {
+    const firstApptOfDay = await Appointments.findOneAsync({
       calendarId: payload.calendarId,
       start: {
         $gte: moment(payload.start).startOf('day'),
@@ -77,7 +77,7 @@ export const buildReminderMessage = ({ payload, holidays = [] }) => {
       const firstHourTo = moment(firstApptOfDay.start).add(1, 'hour')
 
       if (moment(payload.start).isBetween(firstHourFrom, firstHourTo)) {
-        text = Settings.get('messages.sms.appointmentReminder.textFirstHour')
+        text = await Settings.get('messages.sms.appointmentReminder.textFirstHour')
       }
     }
   }
@@ -85,15 +85,15 @@ export const buildReminderMessage = ({ payload, holidays = [] }) => {
   // vasektomie ohne voller blase
   if (process.env.CUSTOMER_PREFIX === 'uro11') {
     const vasec = tags.find(t => t.tag === 'Vasektomie')
-    if (vasec && Settings.get('messages.sms.appointmentReminder.textVasectomy')) {
-      text = Settings.get('messages.sms.appointmentReminder.textVasectomy')
+    if (vasec && await Settings.get('messages.sms.appointmentReminder.textVasectomy')) {
+      text = await Settings.get('messages.sms.appointmentReminder.textVasectomy')
     }
   }
 
   // hzw special: different text + time if assignee is telemed
-  if (Settings.get('messages.sms.appointmentReminder.telemedicineText')) {
-    if (payload.assigneeId && hasRole(payload.assigneeId, ['telemedicine-provider'])) {
-      text = Settings.get('messages.sms.appointmentReminder.telemedicineText')
+  if (await Settings.get('messages.sms.appointmentReminder.telemedicineText')) {
+    if (payload.assigneeId && await hasRole(payload.assigneeId, ['telemedicine-provider'])) {
+      text = await Settings.get('messages.sms.appointmentReminder.telemedicineText')
     }
   }
 

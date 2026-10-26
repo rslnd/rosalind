@@ -3,7 +3,7 @@ import uniq from 'lodash/uniq'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Appointments } from '../../appointments'
 
 export const tally = ({ Referrals, Referrables }) => {
@@ -18,7 +18,7 @@ export const tally = ({ Referrals, Referrables }) => {
       redeemImmediately: { type: Boolean, optional: true }
     }).validator(),
 
-    run({ date, from, to, referredBy, redeemImmediately }) {
+    async run({ date, from, to, referredBy, redeemImmediately }) {
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../customer/isTrustedNetwork')
         if (!this.userId && this.connection && !isTrustedNetwork(this.connection.clientAddress)) {
@@ -29,7 +29,7 @@ export const tally = ({ Referrals, Referrables }) => {
         return
       }
 
-      const referrables = Referrables.find({ redeemImmediately }).fetch()
+      const referrables = await Referrables.find({ redeemImmediately }).fetchAsync()
 
       const selector = {
         type: { $ne: 'external' },
@@ -40,14 +40,14 @@ export const tally = ({ Referrals, Referrables }) => {
         selector.referredBy = referredBy
       }
 
-      const referrals = Referrals.find(selector).fetch()
+      const referrals = await Referrals.find(selector).fetchAsync()
 
       const patientIds = uniq(referrals.map(r => r.patientId).filter(identity))
-      const futureAppointments = Appointments.find({
+      const futureAppointments = await Appointments.find({
         patientId: { $in: patientIds },
         start: { $gte: new Date() },
         canceled: { $ne: true }
-      }).fetch()
+      }).fetchAsync()
 
       return Referrals.methods.tally({
         date,

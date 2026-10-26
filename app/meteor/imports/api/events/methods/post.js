@@ -12,13 +12,13 @@ export const post = ({ Events }) => {
       payload: { type: Object, blackbox: true, optional: true }
     }).validator(),
 
-    run ({ type, level, payload = {} }) {
+    async run ({ type, level, payload = {} }) {
       const userId = (payload.userId || Meteor.userId())
 
       console.log(`[Event] ${level || 'info'}: ${type}`, { payload }, { userId })
       if (Object.keys(payload).length === 0) { payload = null }
 
-      Events.insert({
+      await Events.insertAsync({
         type: type,
         level: level || 'info',
         createdBy: userId,

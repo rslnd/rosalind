@@ -8,28 +8,28 @@ import { Settings } from '../../api'
 const self = "'self'"
 const none = "'none'"
 
-const mediaHosts = () => {
+const mediaHosts = async () => {
   const hosts = [
     process.env.MEDIA_S3_HOST, // LEGACY
-    Settings.get('media.s3.host'), // LEGACY
+    await Settings.get('media.s3.host'), // LEGACY
     ...(process.env.MEDIA_S3_CONFIG
       ? JSON.parse(process.env.MEDIA_S3_CONFIG).map(c => c.host)
       : []
     ),
-    ...(Settings.get('media.s3.config')
-      ? Settings.get('media.s3.config').map(c => c.host)
+    ...(await Settings.get('media.s3.config')
+      ? (await Settings.get('media.s3.config')).map(c => c.host)
       : []
     )
   ]
 
   const scheme = (
-    (Settings.get('media.s3.scheme') ? (Settings.get('media.s3.scheme') + '://') : null) ||
+    (await Settings.get('media.s3.scheme') ? (await Settings.get('media.s3.scheme') + '://') : null) ||
     ((process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') ? 'https://' : 'http://')
   )
   return hosts.filter(identity).map(h => [scheme, h].join(''))
 }
 
-const buildCsp = (req, res) => {
+const buildCsp = async (req, res) => {
   const domain = Meteor.absoluteUrl().replace(/http(s)*:\/\//, '').replace(/\/$/, '')
   const domains = [
     domain,
@@ -41,8 +41,8 @@ const buildCsp = (req, res) => {
   const csp = {
     'connect-src': [
       self,
-      ...flatten(domains.map(d =>
-        ((Settings.get('media.s3.scheme') === 'http')
+      ...flatten(await Promise.all(domains.map(async d =>
+        ((await Settings.get('media.s3.scheme') === 'http')
         ? [
           `http://${d}`,
           `ws://${d}`
@@ -50,8 +50,8 @@ const buildCsp = (req, res) => {
           `https://${d}`,
           `wss://${d}`
         ])
-      )),
-      ...mediaHosts(),
+      ))),
+      ...(await mediaHosts()),
       // `https://${process.env.SMOOCH_APP_ID}.config.smooch.io/`,
       // 'wss://api.smooch.io',
       // 'https://api.smooch.io',
@@ -61,7 +61,7 @@ const buildCsp = (req, res) => {
       self,
       'blob:',
       'data:',
-      ...mediaHosts(),
+      ...(await mediaHosts()),
       // 'https://app.smooch.io',
       // 'https://cdn.smooch.io',
       // 'https://media.smooch.io',
@@ -149,9 +149,9 @@ const buildCsp = (req, res) => {
   ].join('; ')
 }
 
-const buildHeaders = (req, res) => {
+const buildHeaders = async (req, res) => {
   return {
-    'content-security-policy': buildCsp(req, res),
+    'content-security-policy': await buildCsp(req, res),
     'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
     'expect-ct': 'max-age=604800',
     'pragma': 'no-cache',
@@ -192,8 +192,8 @@ export default () => {
       next()
     })
 
-    WebApp.connectHandlers.use((req, res, next) => {
-      const headers = buildHeaders(req, res)
+    WebApp.connectHandlers.use(async (req, res, next) => {
+      const headers = await buildHeaders(req, res)
       Object.keys(headers).forEach(k => {
         res.setHeader(k, headers[k])
       })
@@ -201,12 +201,21 @@ export default () => {
     })
 
     // JSS, used by material-ui, requires the csp-nonce meta tag
-    WebAppInternals.registerBoilerplateDataCallback('rosalind/csp', (request, data, arch) => {
-      // This request object contains a stripped req, with
-      // the url parsed from the original request string.
-      // url.hash contains # and the nonce we just attached.
-      const nonce = request.url.hash.substr(1)
-      const primaryColor = Settings.get('primaryColor')
+    WebAppInternals.registerBoilerplateDataCallback('rosalind/csp', async (request, data, arch) => {
+      // This request object contains a stripped req, with the url carrying the
+      // nonce we attached as a fragment (#<nonce>). Meteor 2 parsed url into an
+      // object with a `.hash`; Meteor 3 may pass the url as a plain string, so
+      // handle both shapes.
+      const rawUrl = request.url
+      let nonce
+      if (rawUrl && typeof rawUrl === 'object' && typeof rawUrl.hash === 'string') {
+        nonce = rawUrl.hash.replace(/^#/, '')
+      } else {
+        const urlString = typeof rawUrl === 'string' ? rawUrl : String((rawUrl && rawUrl.href) || '')
+        const hashIndex = urlString.indexOf('#')
+        nonce = hashIndex >= 0 ? urlString.slice(hashIndex + 1) : Buffer.from(uuidv4()).toString('base64')
+      }
+      const primaryColor = await Settings.get('primaryColor')
 
       let head = ''
 

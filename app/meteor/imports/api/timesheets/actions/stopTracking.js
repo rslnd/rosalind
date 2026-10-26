@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const stopTracking = ({ Timesheets }) => {
@@ -15,9 +15,9 @@ export const stopTracking = ({ Timesheets }) => {
       }
 
       Timesheets.actions.isTracking.callPromise({ userId })
-        .then((currentTimesheet) => {
+        .then(async (currentTimesheet) => {
           if (currentTimesheet) {
-            Timesheets.update({ _id: currentTimesheet._id }, { $set: {
+            await Timesheets.updateAsync({ _id: currentTimesheet._id }, { $set: {
               end: new Date(),
               tracking: false
             } })

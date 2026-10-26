@@ -9,7 +9,7 @@ import { applyHM } from '../../schedules/methods/transformDefaultsToOverrides'
 // calendar's atMinutes, if configured), mirroring the day-grid blanks. Slots
 // overlapping an existing (non-bookable) appointment or any blocked range are
 // skipped.
-export const createBookableSlots = ({ Appointments }) => ({ calendar, calendarId, userId, day, ranges, blockedRanges = [], createdBy }) => {
+export const createBookableSlots = ({ Appointments }) => async ({ calendar, calendarId, userId, day, ranges, blockedRanges = [], createdBy }) => {
   if (!ranges || ranges.length === 0) { return 0 }
 
   const step = (calendar && calendar.slotSize) || 5
@@ -19,14 +19,14 @@ export const createBookableSlots = ({ Appointments }) => ({ calendar, calendarId
   const dayEnd = moment(dayStart).endOf('day').toDate()
 
   // Existing appointments that block a slot (bookables do not block).
-  const existing = Appointments.find({
+  const existing = await Appointments.find({
     calendarId,
     assigneeId: userId,
     start: { $gte: dayStart },
     end: { $lte: dayEnd },
     removed: { $ne: true },
     canceled: { $ne: true }
-  }).fetch()
+  }).fetchAsync()
 
   const isBlocked = (start, end) => {
     for (const appt of existing) {
@@ -46,7 +46,7 @@ export const createBookableSlots = ({ Appointments }) => ({ calendar, calendarId
 
   let created = 0
 
-  ranges.forEach(({ from, to }) => {
+  for (const { from, to } of ranges) {
     const fromMin = from.h * 60 + (from.m || 0)
     const toMin = to.h * 60 + (to.m || 0)
 
@@ -61,7 +61,7 @@ export const createBookableSlots = ({ Appointments }) => ({ calendar, calendarId
       if (isBlocked(slotStart, slotEnd)) { continue }
 
       // Avoid duplicates (old bookables in the range are removed beforehand).
-      const dupe = Appointments.findOne({
+      const dupe = await Appointments.findOneAsync({
         calendarId,
         assigneeId: userId,
         type: 'bookable',
@@ -71,7 +71,7 @@ export const createBookableSlots = ({ Appointments }) => ({ calendar, calendarId
       })
       if (dupe) { continue }
 
-      Appointments.insert({
+      await Appointments.insertAsync({
         calendarId,
         assigneeId: userId,
         type: 'bookable',
@@ -82,7 +82,7 @@ export const createBookableSlots = ({ Appointments }) => ({ calendar, calendarId
       })
       created++
     }
-  })
+  }
 
   return created
 }

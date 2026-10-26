@@ -1,4 +1,4 @@
-import { Job } from 'meteor/simonsimcity:job-collection'
+import { Job } from 'meteor/strigops:job-collection'
 import { Messages } from '../'
 
 export const ensurePeriodicJob = () => {

@@ -7,7 +7,7 @@ import { Calendars } from '../../../api/calendars'
 import { Availabilities } from '../../../api/availabilities'
 import { dayToDate, rangeToDays } from '../../../util/time/day'
 
-const migrateUp = () => {
+const migrateUp = async () => {
   // TODO: Do properly. Only do this hack on one machine, otherwise
   // we end up with more or less duplicated availabilities
   if (process.env.PROCESS_JOBS !== '1') {
@@ -16,14 +16,14 @@ const migrateUp = () => {
 
   console.log('Simulating migration')
   console.log('Removing all Availabilities')
-  Availabilities.remove({})
+  await Availabilities.removeAsync({})
 
-  Calendars.find({}).fetch().map(calendar => {
+  ;await Promise.all((await Calendars.find({}).fetchAsync()).map(async calendar => {
     const calendarId = calendar._id
     console.log('Calendar', calendarId)
 
-    const overrideDate = sort =>
-      idx(Schedules.find({
+    const overrideDate = async sort =>
+      idx((await Schedules.find({
         type: 'override',
         calendarId
       }, {
@@ -31,7 +31,7 @@ const migrateUp = () => {
           start: sort === 'earliest' ? 1 : -1
         },
         limit: 1
-      }).fetch()[0], _ => _.start)
+      }).fetchAsync())[0], _ => _.start)
 
     const cutoffDate = new Date()
 
@@ -40,19 +40,19 @@ const migrateUp = () => {
       to: overrideDate('latest') || cutoffDate
     })
 
-    days.map(day => {
+    await Promise.all(days.map(async day => {
       const columns = Schedules.methods.getColumns({ calendarId, day })
       const availabilities = Schedules.methods.columnsToAvailabilities(columns)
 
       try {
-        availabilities.map(a => Availabilities.insert(a))
+        await Promise.all(availabilities.map(async a => await Availabilities.insertAsync(a)))
       } catch (e) {
         console.error(e)
         console.log('From', columns.length, 'Columns')
         console.log('To', availabilities.length, 'Availabilities:', availabilities)
       }
-    })
-  })
+    }))
+  }))
 
   console.log('Done')
 }

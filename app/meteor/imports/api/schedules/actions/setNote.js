@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Day } from '../../../util/schema/day'
@@ -18,22 +18,22 @@ export const setNote = ({ Schedules }) => {
       noteDetails: { type: String, optional: true }
     }).validator(),
 
-    run ({ calendarId, day, note, noteDetails }) {
+    async run ({ calendarId, day, note, noteDetails }) {
       console.log({ calendarId, day, note, noteDetails })
 
       if ((this.connection && !this.userId) ||
-        !hasRole(this.userId, ['admin', 'schedules-edit'])) {
+        !await hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const existingSchedule = Schedules.findOne({
+      const existingSchedule = await Schedules.findOneAsync({
         type: 'day',
         calendarId,
         ...daySelector(day)
       })
 
       if (existingSchedule) {
-        Schedules.update({ _id: existingSchedule._id }, {
+        await Schedules.updateAsync({ _id: existingSchedule._id }, {
           $set: {
             note,
             noteDetails
@@ -52,7 +52,7 @@ export const setNote = ({ Schedules }) => {
           noteDetails
         }
 
-        const scheduleId = Schedules.insert(schedule, (err) => {
+        const scheduleId = await Schedules.insertAsync(schedule, (err) => {
           if (err) { throw err }
           Events.post('schedules/setNoteInsert', { scheduleId })
         })

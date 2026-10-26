@@ -9,9 +9,9 @@ export const pairingCancel = ({ Clients }) =>
     args: {
       clientKey: String
     },
-    fn ({ clientKey }) {
+    async fn ({ clientKey }) {
       Events.post('clients/pairingCancel')
-      Clients.update({ clientKey }, {
+      await Clients.updateAsync({ clientKey }, {
         $unset: {
           pairingToken: 1,
           pairingTokenCreatedAt: 1,

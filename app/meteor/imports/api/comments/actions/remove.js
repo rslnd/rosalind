@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 
 export const remove = ({ Comments }) => {
   return new ValidatedMethod({
@@ -10,18 +10,18 @@ export const remove = ({ Comments }) => {
     validate: new SimpleSchema({
       commentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
-    run ({ commentId }) {
+    async run ({ commentId }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      Meteor.call('events/post', {
+      await Meteor.callAsync('events/post', {
         type: 'comments/remove',
         level: 'info',
         payload: { commentId, userId: Meteor.userId() }
       })
 
-      return Comments.softRemove(commentId)
+      return await Comments.softRemove(commentId)
     }
   })
 }

@@ -10,8 +10,8 @@ export const resolve = ({ InboundCalls }) => {
       _id: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ _id }) {
-      InboundCalls.softRemove(_id)
+    async run ({ _id }) {
+      await InboundCalls.softRemove(_id)
       Events.post('inboundCalls/resolve', { _id })
     }
   })

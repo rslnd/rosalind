@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../../util/meteor/callPromiseMixin'
 import { deduplicate as merge, perform } from '../../methods/deduplicateWithJournal'
 import { isLikelySamePatient } from '../../methods/isLikelySamePatient'
 
@@ -14,7 +14,7 @@ export const deduplicate = ({ Patients }) => {
       'patientIds.$': { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ patientIds }) {
+    async run ({ patientIds }) {
       this.unblock()
 
       // Every logged-in user may merge; no dedicated role required anymore.
@@ -22,7 +22,7 @@ export const deduplicate = ({ Patients }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const patients = patientIds.map(_id => Patients.findOne({ _id }))
+      const patients = await Promise.all(patientIds.map(async _id => await Patients.findOneAsync({ _id })))
 
       if (patients.some(p => !p)) {
         throw new Meteor.Error(404, 'Not found')

@@ -11,12 +11,12 @@ export const pairingFinish = ({ Clients }) =>
       clientKey: String,
       pairingToken: String
     },
-    fn ({ clientKey, pairingToken }) {
-      const consumer = Clients.findOne({ pairingToken })
+    async fn ({ clientKey, pairingToken }) {
+      const consumer = await Clients.findOneAsync({ pairingToken })
       if (!consumer) { throw new Meteor.Error(404, 'Consumer client not found') }
       if (!consumer.pairingAllowed) { throw new Meteor.Error(403, 'Pairing not allowed') }
 
-      const producer = Clients.findOne({ clientKey })
+      const producer = await Clients.findOneAsync({ clientKey })
       if (!producer) { throw new Meteor.Error(404, 'Producer client not found') }
 
       Events.post('clients/pairingFinish', {
@@ -25,7 +25,7 @@ export const pairingFinish = ({ Clients }) =>
         userId: consumer.pairingTokenCreatedBy
       })
 
-      Clients.update({ _id: consumer._id }, {
+      await Clients.updateAsync({ _id: consumer._id }, {
         $unset: {
           pairingToken: 1,
           pairingTokenCreatedAt: 1,
@@ -33,7 +33,7 @@ export const pairingFinish = ({ Clients }) =>
         }
       })
 
-      Clients.update({ _id: producer._id }, {
+      await Clients.updateAsync({ _id: producer._id }, {
         $set: {
           pairedTo: consumer._id,
           pairedBy: consumer.pairingTokenCreatedBy,

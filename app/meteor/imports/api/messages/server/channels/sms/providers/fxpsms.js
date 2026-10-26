@@ -10,18 +10,18 @@ export const name = 'fxpsms'
 let isTest = false
 
 export const send = (message) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const to = normalizePhoneNumber(message.to)
     if (!to) {
       reject(new Error(`Invalid phone number of message ${message._id}`))
     }
 
-    if (!Settings.get('messages.sms.fxpsms.token')) {
+    if (!await Settings.get('messages.sms.fxpsms.token')) {
       reject(new Error('Please set messages.sms.fxpsms.token in settings to send and receive sms with fxpsms'))
     }
 
 
-    if (!Settings.get('messages.sms.fxpsms.host')) {
+    if (!await Settings.get('messages.sms.fxpsms.host')) {
       reject(new Error('Please set messages.sms.fxpsms.host in settings to send and receive sms with fxpsms'))
     }
 
@@ -29,9 +29,9 @@ export const send = (message) => {
 
     console.log('[Messages] channels/sms/fxpsms: Sending SMS', message._id)
 
-    if (Settings.get('messages.sms.whitelist.enabled')) {
+    if (await Settings.get('messages.sms.whitelist.enabled')) {
       isTest = true
-      if (Settings.get('messages.sms.whitelist.numbers') && some(Settings.get('messages.sms.whitelist.numbers').split(','), n => to.indexOf(n) !== -1)) {
+      if (await Settings.get('messages.sms.whitelist.numbers') && some((await Settings.get('messages.sms.whitelist.numbers')).split(','), n => to.indexOf(n) !== -1)) {
         isTest = false
         console.log('[Messages] channels/sms/fxpsms: Not running in production environment, enabling test mode')
       }
@@ -51,13 +51,13 @@ export const send = (message) => {
       test: isTest
     }), 'utf8')
 
-    const url = Settings.get('messages.sms.fxpsms.host') + '/sms/send'
+    const url = await Settings.get('messages.sms.fxpsms.host') + '/sms/send'
 
     const engine = (process.env.NODE_ENV === 'production') ? https : (url.indexOf('http://') === 0 ? http : https)
     const req = engine.request(url, {
       method: 'POST',
       headers: {
-        authorization: Settings.get('messages.sms.fxpsms.token'),
+        authorization: await Settings.get('messages.sms.fxpsms.token'),
         'content-type': 'application/json',
         'content-length': body.byteLength
       }
@@ -87,8 +87,8 @@ export const send = (message) => {
   })
 }
 
-export const receive = (payload, req) => {
-  console.log('receive', payload, req, Settings.get('messages.sms.fxpsms.token'), process.env.CUSTOMER_PREFIX)
+export const receive = async (payload, req) => {
+  console.log('receive', payload, req, await Settings.get('messages.sms.fxpsms.token'), process.env.CUSTOMER_PREFIX)
 
   if (!payload ||
     !payload.from ||
@@ -98,8 +98,8 @@ export const receive = (payload, req) => {
     !req ||
     !req.headers ||
     !req.headers.authorization ||
-    !Settings.get('messages.sms.fxpsms.token') ||
-    req.headers.authorization !== Settings.get('messages.sms.fxpsms.token')
+    !await Settings.get('messages.sms.fxpsms.token') ||
+    req.headers.authorization !== await Settings.get('messages.sms.fxpsms.token')
   ) {
     console.error('[Messages] channels/sms/fxpsms: Error: Received invalid payload or missing/wrong authorization', payload, req)
     return {

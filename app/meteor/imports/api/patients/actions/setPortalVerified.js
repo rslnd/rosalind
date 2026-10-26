@@ -10,7 +10,7 @@ export const setPortalVerified = ({ Patients }) =>
       patientId: String,
       phone: String
     },
-    fn: function ({ patientId, phone }) {
+    fn: async function ({ patientId, phone }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -19,7 +19,7 @@ export const setPortalVerified = ({ Patients }) =>
         throw new Meteor.Error('not-a-mobile-number', 'phone is not a mobile number')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
 
       if (!patient) {
         throw new Meteor.Error(404, 'Patient not found')
@@ -49,7 +49,7 @@ export const setPortalVerified = ({ Patients }) =>
         throw new Meteor.Error('contact-not-found', 'did not find supplied number in patients contacts')
       }
 
-      return Patients.update({ _id: patientId }, {
+      return await Patients.updateAsync({ _id: patientId }, {
         $set: {
           contacts: newContacts,
           portalVerifiedAt: new Date(),

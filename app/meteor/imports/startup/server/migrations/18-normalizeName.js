@@ -8,11 +8,11 @@ import { normalizeName } from '../../../api/patients/util/normalizeName'
 Migrations.add({
   version: 18,
 
-  up: function () {
+  up: async function () {
     const batch = Patients.rawCollection().initializeUnorderedBulkOp()
     let count = 0
 
-    Patients.find({}).forEach(patient => {
+    await Patients.find({}).forEachAsync(patient => {
       const operation = {
         $set: {
           lastNameNormalized: normalizeName(patient.lastName),
@@ -25,8 +25,7 @@ Migrations.add({
     })
 
     if (count > 0) {
-      const execute = Meteor.wrapAsync(batch.execute, batch)
-      execute()
+      await batch.execute()
     }
 
     return true

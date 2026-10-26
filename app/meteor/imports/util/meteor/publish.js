@@ -14,7 +14,7 @@ const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requir
     throw new Error(`Publication ${name} has debug flag set in non-development environment`)
   }
 
-  return function (clientArgs = {}) {
+  return async function (clientArgs = {}) {
     try {
       check(clientArgs, {
         clientKey: Match.Maybe(String),
@@ -26,7 +26,7 @@ const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requir
       throw e
     }
 
-    if (isAllowed({
+    if (await isAllowed({
       allowAnonymous,
       requireClientKey,
       connection: this.connection,
@@ -36,7 +36,7 @@ const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requir
       roles,
       debug
     })) {
-      const result = fn.call(this, clientArgs)
+      const result = await fn.call(this, clientArgs)
       if (debug && result && result.count) {
         console.log(`Publication ${name} returned cursor with ${result.count()} documents`)
       }

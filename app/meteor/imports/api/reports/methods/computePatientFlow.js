@@ -125,11 +125,11 @@ const REAL_FIELDS = {
 // (from/to), doctor filter (assigneeIds) and appointment-type filter (tags).
 // When `compare` is set, every cohort additionally gets the same period of the
 // previous year (year-over-year overlay). Powers the "Patientenstromanalyse".
-export const computePatientFlow = ({ Appointments, Users, series = [], compare, now }) => {
-  const hiddenIds = Users.find({ hiddenInReports: true }, { fields: { _id: 1 } })
-    .fetch().map(u => u._id)
+export const computePatientFlow = async ({ Appointments, Users, series = [], compare, now }) => {
+  const hiddenIds = (await Users.find({ hiddenInReports: true }, { fields: { _id: 1 } })
+    .fetchAsync()).map(u => u._id)
 
-  const fetchRange = (rangeFrom, rangeTo, assigneeIds, tags) => {
+  const fetchRange = async (rangeFrom, rangeTo, assigneeIds, tags) => {
     const selector = {
       type: { $exists: false },
       patientId: { $exists: true, $ne: null },
@@ -143,7 +143,7 @@ export const computePatientFlow = ({ Appointments, Users, series = [], compare, 
     if (tags && tags.length) {
       selector.tags = { $in: tags }
     }
-    return Appointments.find(selector, { fields: REAL_FIELDS }).fetch()
+    return await Appointments.find(selector, { fields: REAL_FIELDS }).fetchAsync()
   }
 
   const buildCohort = (s) => {

@@ -10,8 +10,8 @@ export const unresolve = ({ InboundCalls }) => {
       _id: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ _id }) {
-      InboundCalls.restore(_id)
+    async run ({ _id }) {
+      await InboundCalls.restore(_id)
       Events.post('inboundCalls/unresolve', { _id })
     }
   })

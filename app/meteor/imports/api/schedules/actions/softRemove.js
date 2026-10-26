@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const softRemove = ({ Schedules }) => {
@@ -12,12 +12,12 @@ export const softRemove = ({ Schedules }) => {
       scheduleId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ scheduleId }) {
+    async run ({ scheduleId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      Schedules.update({ _id: scheduleId }, {
+      await Schedules.updateAsync({ _id: scheduleId }, {
         $set: {
           removed: true,
           removedAt: new Date(),

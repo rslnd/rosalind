@@ -1,17 +1,17 @@
 export const unredeem = ({ Referrals, Appointments }) => {
-  return ({ appointmentId }) => {
-    const appointment = Appointments.findOne({ _id: appointmentId })
+  return async ({ appointmentId }) => {
+    const appointment = await Appointments.findOneAsync({ _id: appointmentId })
     if (!appointment) { return false }
     const { patientId } = appointment
 
     if (patientId) {
-      const referral = Referrals.findOne({
+      const referral = await Referrals.findOneAsync({
         patientId,
         redeemingAppointmentId: appointmentId
       })
 
       if (referral) {
-        Referrals.update({ _id: referral._id }, {
+        await Referrals.updateAsync({ _id: referral._id }, {
           $unset: {
             redeemedAt: true,
             redeemingAppointmentId: true

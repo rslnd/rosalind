@@ -14,13 +14,13 @@ const update = ({ Media }) =>
         rotation: Match.Optional(Number)
       }
     },
-    fn ({ mediaId, update }) {
-      const media = Media.findOne({ _id: mediaId })
+    async fn ({ mediaId, update }) {
+      const media = await Media.findOneAsync({ _id: mediaId })
       if (!media) {
         throw new Error('Media not found')
       }
 
-      Media.update({ _id: mediaId }, {
+      await Media.updateAsync({ _id: mediaId }, {
         $set: update
       })
 
@@ -35,13 +35,13 @@ export const remove = ({ Media }) =>
     args: {
       mediaId: String
     },
-    fn ({ mediaId }) {
-      const media = Media.findOne({ _id: mediaId })
+    async fn ({ mediaId }) {
+      const media = await Media.findOneAsync({ _id: mediaId })
       if (!media) {
         throw new Error('Media not found')
       }
 
-      Media.update({ _id: mediaId }, {
+      await Media.updateAsync({ _id: mediaId }, {
         $set: {
           removed: true,
           removedAt: new Date(),
@@ -61,17 +61,17 @@ const portalPublish = ({ Media }) =>
       mediaId: String,
       b64: String
     },
-    fn ({ mediaId, b64 }) {
-      const media = Media.findOne({ _id: mediaId })
+    async fn ({ mediaId, b64 }) {
+      const media = await Media.findOneAsync({ _id: mediaId })
       if (!media) {
         throw new Meteor.Error(404, 'Media not found')
       }
 
-      if (PortalMedia.findOne({ mediaId })) {
-        PortalMedia.remove({ mediaId })
+      if (await PortalMedia.findOneAsync({ mediaId })) {
+        await PortalMedia.removeAsync({ mediaId })
       }
 
-      const portalMediaId = PortalMedia.insert({
+      const portalMediaId = await PortalMedia.insertAsync({
         mediaId: media._id,
         patientId: media.patientId,
         appointmentId: media.appointmentId,
@@ -106,19 +106,19 @@ const portalUnpublish = ({ Media }) =>
     args: {
       mediaId: String
     },
-    fn ({ mediaId }) {
-      const media = Media.findOne({ _id: mediaId })
+    async fn ({ mediaId }) {
+      const media = await Media.findOneAsync({ _id: mediaId })
       if (!media) {
         throw new Meteor.Error(404, 'Media not found')
       }
 
-      const pm = PortalMedia.findOne({ mediaId })
+      const pm = await PortalMedia.findOneAsync({ mediaId })
 
       if (!pm) {
         throw new Meteor.Error(404, 'PortalMedia not found')
       }
 
-      PortalMedia.remove({ mediaId })
+      await PortalMedia.removeAsync({ mediaId })
     }
   })
 

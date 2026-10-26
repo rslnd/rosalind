@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const unsetCanceled = ({ Appointments }) => {
@@ -12,17 +12,17 @@ export const unsetCanceled = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ appointmentId }) {
+    async run ({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!Appointments.findOne({ _id: appointmentId }).canceled) {
+      if (!(await Appointments.findOneAsync({ _id: appointmentId })).canceled) {
         console.warn('[Appointments] unsetCanceled: Appointment is already not canceled', { appointmentId })
         return
       }
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $unset: {
           canceled: null,
           canceledAt: null,

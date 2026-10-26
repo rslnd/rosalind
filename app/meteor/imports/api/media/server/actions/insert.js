@@ -30,22 +30,22 @@ export const insert = ({ Media, MediaTags }) =>
       preview: String,
       nonce: Match.Optional(String)
     },
-    fn: function ({ width, height, takenAt, kind, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle, tagIds, nonce }) {
+    fn: async function ({ width, height, takenAt, kind, mediaType, consumerId, preview, clientKey, patientId, appointmentId, cycle, tagIds, nonce }) {
       let userId = null
       let producerId = null
 
       if (clientKey && consumerId) {
-        const producer = Clients.findOne({ clientKey })
+        const producer = await Clients.findOneAsync({ clientKey })
         if (!producer) { throw new Error('Could not find producer by clientKey') }
         if (!producer.pairedTo) { throw new Error('Producer is not paired to any consumer') }
         if (producer.pairedTo !== consumerId) { throw new Error('Pairing ids do not match') }
         producerId = producer._id
-        const consumer = Clients.findOne({ _id: consumerId })
+        const consumer = await Clients.findOneAsync({ _id: consumerId })
         if (!consumer) { throw new Error(`Could not find consumer with id ${consumerId}`) }
         userId = producer.pairedBy
       } else {
         userId = this.userId
-        if (!userId || !hasRole(userId, ['documents', 'documents-insert', 'media', 'media-insert', 'admin'])) {
+        if (!userId || !await hasRole(userId, ['documents', 'documents-insert', 'media', 'media-insert', 'admin'])) {
           throw new Error('Authentication failed or permission denied')
         }
       }
@@ -57,7 +57,7 @@ export const insert = ({ Media, MediaTags }) =>
       }
 
       const existingMedia = (nonce && nonce.length >= 20)
-        ? Media.findOne({ nonce })
+        ? await Media.findOneAsync({ nonce })
         : false
 
       if (existingMedia) {
@@ -75,15 +75,15 @@ export const insert = ({ Media, MediaTags }) =>
       // Automatically append photos to newest cycle if not given, and
       // set consumer's current cycle to that new cycle so that subsequent media gets appended too
       if (!cycle && kind === 'photo') {
-        const consumer = Clients.findOne({ _id: consumerId })
+        const consumer = await Clients.findOneAsync({ _id: consumerId })
         if (consumer.nextMedia && consumer.nextMedia.cycle !== null) {
           console.error('Producer sent no cycle, but consumer has cycle selected. Appending to currently selected cycle', { producerId, consumerId, filename })
           cycle = consumer.nextMedia.cycle
         } else if (consumer.nextMedia && consumer.nextMedia.patientId) {
-          const medias = Media.find({ patientId }, { sort: { createdAt: -1 } }).fetch()
+          const medias = await Media.find({ patientId }, { sort: { createdAt: -1 } }).fetchAsync()
           const uniqueCycles = uniq(medias.map(m => m.cycle).filter(identity))
           const newCycleNr = String(uniqueCycles.length + 1)
-          Clients.update({ _id: consumer._id }, { $set: { 'nextMedia.cycle': newCycleNr }})
+          await Clients.updateAsync({ _id: consumer._id }, { $set: { 'nextMedia.cycle': newCycleNr }})
           cycle = newCycleNr
         }
       }
@@ -93,7 +93,10 @@ export const insert = ({ Media, MediaTags }) =>
         cycle = null
 
         // documents with pinned tags are global for the patient
-        if (tagIds && tagIds.some(t => idx(MediaTags.findOne({ _id: t }), _ => _.pinned))) {
+        const anyPinnedTag = tagIds
+          ? (await Promise.all(tagIds.map(async t => idx(await MediaTags.findOneAsync({ _id: t }), _ => _.pinned)))).some(Boolean)
+          : false
+        if (anyPinnedTag) {
           appointmentId = null
         }
       }
@@ -109,7 +112,7 @@ export const insert = ({ Media, MediaTags }) =>
 
       const mediaId = existingMedia
         ? existingMedia._id
-        : Media.insert({
+        : await Media.insertAsync({
           filename,
           width,
           height,
@@ -153,13 +156,13 @@ export const insert = ({ Media, MediaTags }) =>
       }))
 
       // If this media is a consent document, create a reference to this media in the corresponding appointment's consentMediaIds field
-      const consentTag = MediaTags.findOne({ isConsent: true })
+      const consentTag = await MediaTags.findOneAsync({ isConsent: true })
       if (appointmentId &&
         kind === 'document' &&
         consentTag &&
         tagIds && tagIds.indexOf(consentTag._id) !== -1
       ) {
-        Appointments.update({ _id: appointmentId }, {
+        await Appointments.updateAsync({ _id: appointmentId }, {
           $addToSet: {
             consentMediaIds: mediaId
           }

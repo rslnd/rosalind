@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Referrals } from '../../referrals'
 
@@ -14,17 +14,17 @@ export const nextTreatment = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ appointmentId }) {
+    async run ({ appointmentId }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).treatmentEnd) {
+      if ((await Appointments.findOneAsync({ _id: appointmentId })).treatmentEnd) {
         console.warn('[Appointments] nextTreatment: Appointment has already set treatmentEnd', { appointmentId })
         return
       }
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $set: {
           treatmentEnd: new Date(),
           treatmentBy: this.userId,
@@ -51,13 +51,13 @@ export const nextTreatment = ({ Appointments }) => {
         }
       }
 
-      const nextAppointments = Appointments.find(waitlistSelector, {
+      const nextAppointments = await Appointments.find(waitlistSelector, {
         sort: { admittedAt: 1 },
         limit: 1
-      }).fetch()
+      }).fetchAsync()
 
       if (nextAppointments[0]) {
-        Appointments.update({ _id: nextAppointments[0]._id }, {
+        await Appointments.updateAsync({ _id: nextAppointments[0]._id }, {
           $set: {
             treatmentStart: new Date(),
             treatmentBy: this.userId

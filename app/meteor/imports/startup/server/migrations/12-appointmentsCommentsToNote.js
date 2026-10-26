@@ -3,20 +3,20 @@ import { Migrations } from 'meteor/percolate:migrations'
 import { Appointments } from '../../../api/appointments'
 import { Comments } from '../../../api/comments'
 
-const up = () => {
-  const appointments = Appointments.find({}).fetch()
+const up = async () => {
+  const appointments = await Appointments.find({}).fetchAsync()
 
   console.log('[Migration]', appointments.length, 'appointments comments to notes')
 
-  appointments.forEach((appointment, i) => {
+  for (const [i, appointment] of appointments.entries()) {
     if ((i % 1000) === 0) {
       console.log('[Migration] Progress', i, 'of', appointments.length)
     }
 
-    const comments = Comments.find({ docId: appointment._id }, { sort: { createdAt: 1 } }).fetch()
+    const comments = await Comments.find({ docId: appointment._id }, { sort: { createdAt: 1 } }).fetchAsync()
 
     if (!comments || comments.length === 0) {
-      return
+      continue
     }
 
     const text = comments.map(c => c.body).join('\n\n')
@@ -26,13 +26,13 @@ const up = () => {
       text
     ].filter(identity).join('\n\n')
 
-    Appointments.update({ _id: appointment._id }, {
+    await Appointments.updateAsync({ _id: appointment._id }, {
       $set: {
         note: newNote,
         noteLegacy: appointment.note
       }
     })
-  })
+  }
 
   return true
 }

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Patients } from '../../patients'
 
 export const genericJson = ({ Importers }) => {
@@ -21,7 +21,7 @@ export const genericJson = ({ Importers }) => {
 
       console.log('[Importers] genericJson: parsing', parsed.length, 'records')
 
-      parsed.forEach(rawPatient => {
+      for (const rawPatient of parsed) {
         try {
           const contacts = []
           if (rawPatient.Email) {
@@ -66,11 +66,11 @@ export const genericJson = ({ Importers }) => {
             }
           }
 
-          return Meteor.call('patients/upsert', { patient })
+          continue; // await Meteor.callAsync('patients/upsert', { patient })
         } catch (e) {
           console.error('[Importers] genericJson: Failed', e)
         }
-      })
+      }
 
       console.log('[Importers] genericJson: done')
     }

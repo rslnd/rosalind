@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
@@ -28,9 +28,9 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
       newSchedule: { type: Schedule, optional: true }
     }).validator(),
 
-    run ({ calendarId, userId, scheduleId, weekday, newSchedule }) {
+    async run ({ calendarId, userId, scheduleId, weekday, newSchedule }) {
       if ((this.connection && !this.userId) ||
-        !hasRole(this.userId, ['admin', 'schedules-edit'])) {
+        !await hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
@@ -41,7 +41,7 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
       console.log('UD', available, newSchedule)
 
       if (scheduleId) {
-        const existingSchedule = Schedules.findOne({
+        const existingSchedule = await Schedules.findOneAsync({
           type: 'default',
           _id: scheduleId
         })
@@ -51,7 +51,7 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
         }
 
         if (!newSchedule) {
-          Schedules.softRemove({ _id: scheduleId })
+          await Schedules.softRemove({ _id: scheduleId })
           Events.post('schedules/softRemoveDefaultSchedule', {
             scheduleId: scheduleId,
             userId: this.userId
@@ -86,7 +86,7 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
           }
         }
 
-        Schedules.update({ _id: scheduleId }, modifier)
+        await Schedules.updateAsync({ _id: scheduleId }, modifier)
 
         Events.post('schedules/updateDefaultSchedule', {
           scheduleId: scheduleId,
@@ -95,7 +95,7 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
         return scheduleId
       } else {
         if (userId && calendarId && weekday && newSchedule) {
-          const newScheduleId = Schedules.insert({
+          const newScheduleId = await Schedules.insertAsync({
             type: 'default',
             userId,
             calendarId,

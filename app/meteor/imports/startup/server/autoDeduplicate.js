@@ -5,25 +5,27 @@ import { isLikelySamePatient } from '../../api/patients/methods/isLikelySamePati
 import idx from 'idx'
 import { deduplicate, perform } from '../../api/patients/methods/deduplicateWithJournal'
 
-const autoDeduplicate = () => {
+const autoDeduplicate = async () => {
   console.log('[autoDeduplicate] Starting')
   const startAt = new Date()
 
-  const patients = Api.Patients.find({}, {
+  const patients = await Api.Patients.find({}, {
     $sort: { _id: 1 }
-  }).fetch()
+  }).fetchAsync()
 
-  const suspectedDupes = patients.reduce((acc, p1, i) => {
+  const suspectedDupes = []
+  for (let i = 0; i < patients.length; i++) {
+    const p1 = patients[i]
     // only look at p2-patients starting from the current p1-index to avoid symmetrical duplicates
 
     if (i % 1000 === 0) {
       console.log('[autoDeduplicate] Processing', i, '/', patients.length, 'patients')
     }
 
-    const sus = Api.Patients.find({
+    const sus = (await Api.Patients.find({
       lastNameNormalized: p1.lastNameNormalized,
       _id: { $gt: p1._id }
-    }).fetch().filter(p2 =>
+    }).fetchAsync()).filter(p2 =>
       isLikelySamePatient(p1, p2)
     )
 
@@ -36,12 +38,9 @@ const autoDeduplicate = () => {
       (p.insuranceId || (p.birthday && p.birthday.day))) || p1
       const nonmaster = tuple.filter(p => p._id !== master._id)
 
-      return [...acc, [master, ...nonmaster]]
-    } else {
-      return acc
+      suspectedDupes.push([master, ...nonmaster])
     }
-
-  }, [])
+  }
 
   suspectedDupes.map(ps => ps.map(p => p._id)).map((l, i, all) =>
     console.log('[autoDeduplicate]', i+1, '/', all.length, l)
@@ -50,7 +49,7 @@ const autoDeduplicate = () => {
   console.log('[autoDeduplicate] suspected duplicate tuples', suspectedDupes.length)
 
   const actions = deduplicate(suspectedDupes)
-  const result = perform({ actions, ...Api })
+  const result = await perform({ actions, ...Api })
 
   console.log('[autoDeduplicate] result of deduplicating', result)
 

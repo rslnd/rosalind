@@ -64,11 +64,11 @@ export const upsert = ({ Patients }) =>
       quiet: Match.Maybe(Match.Optional(Boolean)),
       createExternalReferralTo: Match.Maybe(Match.Optional(String))
     },
-    fn ({ patient, quiet, replaceContacts, createExternalReferralTo, clientKey }) {
+    async fn ({ patient, quiet, replaceContacts, createExternalReferralTo, clientKey }) {
       try {
         if (Meteor.isServer) {
           const { isTrustedNetwork } = require('../../../customer/isTrustedNetwork')
-          if (!this.userId && (this.connection && (!isTrustedNetwork(this.connection.clientAddress) || !(clientKey && !Clients.findOne({ clientKey }).isBanned)))) {
+          if (!this.userId && (this.connection && (!isTrustedNetwork(this.connection.clientAddress) || !(clientKey && !(await Clients.findOneAsync({ clientKey })).isBanned)))) {
             throw new Meteor.Error(403, 'Not authorized')
           }
         }
@@ -94,29 +94,29 @@ export const upsert = ({ Patients }) =>
           if (patient._id === 'newPatient') {
             throw new Meteor.Error('Invalid patientId `newPatient`')
           }
-          existingPatient = Patients.findOne({ _id: patient._id }, { removed: true })
+          existingPatient = await Patients.findOneAsync({ _id: patient._id }, { removed: true })
         }
 
         if (!existingPatient && patient.insuranceId) {
-          existingPatient = Patients.findOne({ insuranceId: patient.insuranceId }, { removed: true })
+          existingPatient = await Patients.findOneAsync({ insuranceId: patient.insuranceId }, { removed: true })
         }
 
-        ['eoswin', 'inno', 'bioresonanz'].forEach(ex => {
+        for (const ex of ['eoswin', 'inno', 'bioresonanz']) {
           if (!existingPatient && patient.external && patient.external[ex] && patient.external[ex].id) {
-            existingPatient = Patients.findOne({ [`external.${ex}.id`]: patient.external[ex].id }, { removed: true })
+            existingPatient = await Patients.findOneAsync({ [`external.${ex}.id`]: patient.external[ex].id }, { removed: true })
           }
-        })
+        }
 
         if (!existingPatient &&
           patient.birthday &&
           patient.birthday.day &&
           patient.birthday.month &&
           patient.birthday.year) {
-          const candidates = Patients.find({
+          const candidates = await Patients.find({
             firstName: patient.firstName,
             lastNameNormalized: patient.lastNameNormalized,
             ...daySelector(patient.birthday, 'birthday')
-          }).fetch()
+          }).fetchAsync()
           const potentialExistingPatient = candidates.length === 1 ? candidates[0] : null
 
           const extIdA = idx(potentialExistingPatient, _ => _.external.eoswin.id)
@@ -205,7 +205,7 @@ export const upsert = ({ Patients }) =>
             console.log('[Patients] Updating', existingPatient._id)
 
             // trimStrings collection2 flag to prevent killing space-y "layout" of notes
-            Patients.update({ _id: existingPatient._id }, update, { trimStrings: false }, (err) => {
+            await Patients.updateAsync({ _id: existingPatient._id }, update, { trimStrings: false }, async (err) => {
               if (err) {
                 console.error('[Patients] upsert: Update failed with error', err)
                 throw err
@@ -217,7 +217,7 @@ export const upsert = ({ Patients }) =>
                 createExternalReferralTo
               })
 
-              Patients.update({ _id: existingPatient._id }, {
+              await Patients.updateAsync({ _id: existingPatient._id }, {
                 $set: {
                   updatedAt: new Date(),
                   updatedBy: this.userId
@@ -237,7 +237,7 @@ export const upsert = ({ Patients }) =>
           }
 
           try {
-            const patientId = Patients.insert(patient, (e, patientId) => {
+            const patientId = await Patients.insertAsync(patient, (e, patientId) => {
               if (e) {
                 console.error('[Patients] upsert: Insert failed with error', e)
                 throw e
@@ -263,16 +263,16 @@ export const upsert = ({ Patients }) =>
     }
   })
 
-const ensureExternalReferral = ({ patientId, createExternalReferralTo }) => {
+const ensureExternalReferral = async ({ patientId, createExternalReferralTo }) => {
   try {
     if (createExternalReferralTo) {
-      const existingReferral = Referrals.findOne({
+      const existingReferral = await Referrals.findOneAsync({
         patientId,
         referredTo: createExternalReferralTo
       })
 
       if (!existingReferral) {
-        const referralId = Referrals.insert({
+        const referralId = await Referrals.insertAsync({
           type: 'external',
           patientId,
           referredTo: createExternalReferralTo,

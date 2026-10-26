@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Contact } from '../schema'
 import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
@@ -29,14 +29,14 @@ export const setContacts = ({ Patients }) => {
       'contacts.$': { type: Contact }
     }).validator(),
 
-    run({ patientId, contacts }) {
+    async run({ patientId, contacts }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
       if (patient) {
-        Patients.update({ _id: patientId }, {
+        await Patients.updateAsync({ _id: patientId }, {
           $set: {
             contacts: contacts.map(normalizeContact),
             updatedAt: new Date(),

@@ -5,7 +5,7 @@ export const getDue = ({ Checkups, CheckupsRules }) =>
   ({ date }) => {
     const d = moment(date).toDate()
 
-    return CheckupsRules.find({}).fetch().filter(ru => {
+    return (CheckupsRules.find({}).fetch()).filter(ru => {
         return moment(
             RRule.fromString(ru.rrule)
             .after(d, true))

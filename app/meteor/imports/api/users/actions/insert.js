@@ -27,7 +27,7 @@ export const insert = ({ Users }) =>
 
       console.log('[Users] insert', userId, username)
 
-      Users.update({ _id: userId }, {
+      await Users.updateAsync({ _id: userId }, {
         $set: profile
       })
 

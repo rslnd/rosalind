@@ -5,10 +5,10 @@ import { Constraints } from '../../../api/constraints'
 Migrations.add({
   version: 7,
 
-  up: function () {
+  up: async function () {
     const cursor = Schedules.find({ type: 'constraint' })
 
-    cursor.forEach(schedule => {
+    for (const schedule of cursor) {
       let from
       let to
 
@@ -17,7 +17,7 @@ Migrations.add({
         to = { h: schedule.hourEnd, m: 59 }
       }
 
-      Constraints.insert({
+      await Constraints.insertAsync({
         assigneeIds: [schedule.userId],
         from,
         to,
@@ -29,10 +29,10 @@ Migrations.add({
         duration: schedule.duration
       })
 
-      Schedules.remove({ _id: schedule._id })
-    })
+      await Schedules.removeAsync({ _id: schedule._id })
+    }
 
-    console.log('Migration schedulesToConstraint: processed', cursor.count(), 'constraints')
+    console.log('Migration schedulesToConstraint: processed', await cursor.countAsync(), 'constraints')
 
     return true
   },

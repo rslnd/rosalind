@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Day } from '../../../util/schema/day'
 
@@ -14,14 +14,14 @@ export const setBirthday = ({ Patients }) => {
       birthday: { type: Day }
     }).validator(),
 
-    run ({ patientId, birthday }) {
+    async run ({ patientId, birthday }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
       if (patient) {
-        Patients.update({ _id: patientId }, {
+        await Patients.updateAsync({ _id: patientId }, {
           $set: {
             birthday,
             updatedAt: new Date(),

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { Events } from '../../events'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 
 export const startTracking = ({ Timesheets }) => {
   return new ValidatedMethod({
@@ -15,9 +15,9 @@ export const startTracking = ({ Timesheets }) => {
 
       const userId = this.userId
       Timesheets.actions.isTracking.callPromise({ userId })
-        .then((isTracking) => {
+        .then(async (isTracking) => {
           if (!isTracking) {
-            const timesheetId = Timesheets.insert({
+            const timesheetId = await Timesheets.insertAsync({
               userId,
               start: new Date(),
               tracking: true

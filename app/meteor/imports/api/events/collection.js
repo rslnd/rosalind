@@ -6,18 +6,20 @@ import Schema from './schema'
 const Events = new Mongo.Collection('events')
 
 if (Meteor.isServer) {
-  const db = Meteor.users.rawDatabase()
-  const collectionExists = db.listCollections({ name: 'events' }).hasNext().await()
-  if (!collectionExists) {
-    db.createCollection('events', { capped: true, size: 1024 * 1024 * 4 }).await()
-  }
+  Meteor.startup(async () => {
+    const db = Meteor.users.rawDatabase()
+    const collectionExists = await db.listCollections({ name: 'events' }).hasNext()
+    if (!collectionExists) {
+      await db.createCollection('events', { capped: true, size: 1024 * 1024 * 4 })
+    }
+  })
 }
 
 Events.attachSchema(Schema)
 Events.methods = methods({ Events })
 
-// Shortcut method
+// Shortcut method. Returns a promise; most callers use it fire-and-forget.
 Events.post = (type, payload, level = 'info') =>
-  Events.methods.post.call({ type, payload, level })
+  Events.methods.post.callPromise({ type, payload, level })
 
 export default Events

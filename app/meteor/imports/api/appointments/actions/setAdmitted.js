@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Referrals } from '../../referrals'
 
@@ -14,12 +14,12 @@ export const setAdmitted = ({ Appointments }) => {
       waitlistAssigneeId: { type: SimpleSchema.RegEx.Id, optional: true }
     }).validator(),
 
-    run({ appointmentId, waitlistAssigneeId }) {
+    async run({ appointmentId, waitlistAssigneeId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).admitted) {
+      if ((await Appointments.findOneAsync({ _id: appointmentId })).admitted) {
         console.warn('[Appointments] setAdmitted: Appointment is already set to admitted', { appointmentId })
         return
       }
@@ -48,7 +48,7 @@ export const setAdmitted = ({ Appointments }) => {
         treatmentEnd: 1
       }
 
-      Appointments.update({ _id: appointmentId }, { $set, $unset })
+      await Appointments.updateAsync({ _id: appointmentId }, { $set, $unset })
 
       if (Meteor.isServer) {
         Referrals.serverActions.redeem({ appointmentId })

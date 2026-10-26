@@ -6,11 +6,11 @@ import { dayToDate } from '../../../util/time/day'
 Migrations.add({
   version: 3,
 
-  up: function () {
+  up: async function () {
     const batch = Reports.rawCollection().initializeUnorderedBulkOp()
     let hasUpdates = false
 
-    Reports.find({}).forEach(report => {
+    await Reports.find({}).forEachAsync(report => {
       hasUpdates = true
 
       const createdAt = dayToDate(report.day)
@@ -25,18 +25,17 @@ Migrations.add({
     })
 
     if (hasUpdates) {
-      const execute = Meteor.wrapAsync(batch.execute, batch)
-      return execute()
+      return await batch.execute()
     }
 
     return true
   },
 
-  down: function () {
+  down: async function () {
     const batch = Reports.rawCollection().initializeUnorderedBulkOp()
     let hasUpdates = false
 
-    Reports.find({ createdAt: { $ne: null } }).forEach(patient => {
+    await Reports.find({ createdAt: { $ne: null } }).forEachAsync(patient => {
       hasUpdates = true
 
       const operation = {
@@ -49,8 +48,7 @@ Migrations.add({
     })
 
     if (hasUpdates) {
-      const execute = Meteor.wrapAsync(batch.execute, batch)
-      return execute()
+      return await batch.execute()
     }
 
     return true

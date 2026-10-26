@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 
 export const edit = ({ Comments }) => {
   return new ValidatedMethod({
@@ -11,25 +11,25 @@ export const edit = ({ Comments }) => {
       commentId: { type: SimpleSchema.RegEx.Id },
       newBody: { type: String }
     }).validator(),
-    run ({ commentId, newBody }) {
+    async run ({ commentId, newBody }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
       if (newBody.length === 0) {
-        return Comments.actions.remove.call({ commentId })
+        return await Comments.actions.remove.callPromise({ commentId })
       }
 
-      const comment = Comments.findOne({ _id: commentId })
+      const comment = await Comments.findOneAsync({ _id: commentId })
       if (!comment) {
         throw new Meteor.Error(404, 'Not found')
       }
 
-      Comments.update({ _id: commentId }, { $set: {
+      await Comments.updateAsync({ _id: commentId }, { $set: {
         body: newBody
       } })
 
-      Meteor.call('events/post', {
+      await Meteor.callAsync('events/post', {
         type: 'comments/edit',
         level: 'info',
         payload: { commentId, userId: Meteor.userId() }

@@ -4,24 +4,28 @@ import { Appointments } from '../../../api/appointments'
 import { Messages } from '../../../api/messages'
 import { Comments } from '../../../api/comments'
 
-const up = () => {
-  const messages = Messages.find({
+const up = async () => {
+  const messages = (await Messages.find({
     type: 'intentToCancel'
-  }).fetch().filter(m => m.payload && m.payload.appointmentId)
+  }).fetchAsync()).filter(m => m.payload && m.payload.appointmentId)
   console.log('Found', messages.length, 'messages with intent to cancel')
 
-  const messagesWithMatchingAppointment = messages.filter(m => Appointments.findOne({ _id: m.payload.appointmentId, canceled: true, canceledBy: null }, { removed: true })).filter(a => a)
+  const withAppointment = await Promise.all(messages.map(async m => ({
+    message: m,
+    matchingAppointment: await Appointments.findOneAsync({ _id: m.payload.appointmentId, canceled: true, canceledBy: null }, { removed: true })
+  })))
+  const messagesWithMatchingAppointment = withAppointment.filter(x => x.matchingAppointment).map(x => x.message)
   console.log('Found', messagesWithMatchingAppointment.length, 'appointments that were canceled by message')
 
-  messagesWithMatchingAppointment.forEach(message => {
-    Appointments.update({
+  for (const message of messagesWithMatchingAppointment) {
+    await Appointments.updateAsync({
       _id: message.payload.appointmentId
     }, {
       $set: {
         canceledByMessageId: message._id
       }
     })
-  })
+  }
 
   return true
 }

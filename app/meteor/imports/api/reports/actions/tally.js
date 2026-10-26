@@ -18,16 +18,16 @@ export const tally = ({ Reports }) => {
       report: { type: Object, blackbox: true }
     }).validator(),
 
-    run ({ report }) {
+    async run ({ report }) {
       report.total || (report.total = {})
 
-      report.assignees = report.assignees.map((a) => {
+      report.assignees = await Promise.all(report.assignees.map(async (a) => {
         a.hours || (a.hours = {})
         a.patients.newPercentage = 100.0 * a.patients.new / a.patients.total
 
         if (a.userId) {
           // Scheduled hours
-          a.hours.scheduled = Schedules.methods.getScheduledHours({ userId: a.userId, day: report.day })
+          a.hours.scheduled = await Schedules.methods.getScheduledHours({ userId: a.userId, day: report.day })
           if (a.hours.scheduled) {
             a.patients.perHourScheduled = a.patients.total / a.hours.scheduled
             a.patients.newPerHourScheduled = a.patients.new / a.hours.scheduled
@@ -44,7 +44,7 @@ export const tally = ({ Reports }) => {
           }
         }
         return a
-      })
+      }))
 
       report.total.patientsNewPerHourScheduled = flow(
         filter((a) => a.patients.newPerHourScheduled > 0),

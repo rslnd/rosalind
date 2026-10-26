@@ -2,7 +2,7 @@ import flatten from 'lodash/flatten'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Calendars } from '../../calendars'
 
 export const setAgreement = ({ Patients }) => {
@@ -15,20 +15,20 @@ export const setAgreement = ({ Patients }) => {
       agreed: { type: Boolean }
     }).validator(),
 
-    run({ patientId, agreement, agreed }) {
+    async run({ patientId, agreement, agreed }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
 
       if (!patient) {
         throw new Meteor.Error(404, 'Patient not found')
       }
 
-      const possibleAgreements = flatten(Calendars.find({
+      const possibleAgreements = flatten((await Calendars.find({
         requiredAgreements: { $ne: null }
-      }).fetch().map(c => c.requiredAgreements))
+      }).fetchAsync()).map(c => c.requiredAgreements))
 
       if (!possibleAgreements.includes(agreement)) {
         throw new Meteor.Error(404, `Agreement ${agreement} is not defined in any calendar`)
@@ -48,7 +48,7 @@ export const setAgreement = ({ Patients }) => {
 
         console.log('[Patients] setAgreement: Setting agreement', agreement, patientId)
 
-        return Patients.update({ _id: patientId }, {
+        return await Patients.updateAsync({ _id: patientId }, {
           $set: {
             agreements: newAgreements,
             updatedAt: new Date(),
@@ -60,7 +60,7 @@ export const setAgreement = ({ Patients }) => {
 
         console.log('[Patients] setAgreement: Removing agreement', agreement, patientId)
 
-        return Patients.update({ _id: patientId }, {
+        return await Patients.updateAsync({ _id: patientId }, {
           $set: {
             agreements: newAgreements,
             updatedAt: new Date(),

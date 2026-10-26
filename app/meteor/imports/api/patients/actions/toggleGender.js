@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 
 export const toggleGender = ({ Patients }) => {
   return new ValidatedMethod({
@@ -11,12 +11,12 @@ export const toggleGender = ({ Patients }) => {
       patientId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ patientId }) {
+    async run ({ patientId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
 
       let newGender = 'Female'
 
@@ -26,7 +26,7 @@ export const toggleGender = ({ Patients }) => {
 
       console.log('[Patients] toggleGender: Setting gender of patient', patientId)
 
-      Patients.update({ _id: patientId }, {
+      await Patients.updateAsync({ _id: patientId }, {
         $set: {
           gender: newGender,
           updatedAt: new Date(),

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { daySelector } from '../../../util/time/day'
 import { Events } from '../../events'
 
@@ -13,23 +13,23 @@ export const upsert = ({ Reports }) => {
       report: { type: Object, blackbox: true }
     }).validator(),
 
-    run ({ report }) {
+    async run ({ report }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const existingReport = Reports.findOne({
+      const existingReport = await Reports.findOneAsync({
         calendarId: report.calendarId,
         ...daySelector(report.day)
       })
 
       if (existingReport) {
-        Reports.update({ _id: existingReport._id }, { $set: report })
+        await Reports.updateAsync({ _id: existingReport._id }, { $set: report })
         Events.post('reports/update', { reportId: existingReport._id })
         return existingReport._id
       } else {
         try {
-          const reportId = Reports.insert(report, (err) => {
+          const reportId = await Reports.insertAsync(report, (err) => {
             if (err) { throw err }
             Events.post('reports/insert', { reportId })
           })

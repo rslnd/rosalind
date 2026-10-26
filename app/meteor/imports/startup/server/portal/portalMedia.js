@@ -1,22 +1,22 @@
 import { PortalMedia } from "../../../api/media/collection"
 import { patientFromToken } from "./portalLogin"
 
-export const findPubilshedMedia = ({ token }) => {
+export const findPubilshedMedia = async ({ token }) => {
   const patient = patientFromToken(token)
 
-  const media = PortalMedia.find({ patientId: patient._id }, {
+  const media = await PortalMedia.find({ patientId: patient._id }, {
     fields: {
       b64: 0
     }
-  }).fetch()
+  }).fetchAsync()
 
   return media
 }
 
-export const downloadMedia = ({ token, _id }) => {
+export const downloadMedia = async ({ token, _id }) => {
   const patient = patientFromToken(token)
 
-  const media = PortalMedia.findOne({
+  const media = await PortalMedia.findOneAsync({
     patientId: patient._id,
     _id
   })

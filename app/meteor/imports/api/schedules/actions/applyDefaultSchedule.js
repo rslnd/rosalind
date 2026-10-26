@@ -1,6 +1,6 @@
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
@@ -24,9 +24,9 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       to: { type: Date }
     }).validator(),
 
-    run ({ calendarId, assigneeIds, from, to }) {
+    async run ({ calendarId, assigneeIds, from, to }) {
       if ((this.connection && !this.userId) ||
-        !hasRole(this.userId, ['admin', 'schedules-edit'])) {
+        !await hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
@@ -40,12 +40,12 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
       if (this.isSimulation) { return }
 
-      const holidays = Schedules.find({
+      const holidays = await Schedules.find({
         type: 'holiday',
         start: {
           $gte: new Date()
         }
-      }).fetch()
+      }).fetchAsync()
 
       const excludeHolidays = d => !holidays.find(h => isSame(d, h.day))
 
@@ -64,7 +64,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       if (assigneeIds) {
         vacationSelector.userId = { $in: assigneeIds }
       }
-      const vacations = Schedules.find(vacationSelector).fetch()
+      const vacations = await Schedules.find(vacationSelector).fetchAsync()
 
       // Vacations (allDay / partial) covering a given day for a given user.
       const vacationsFor = (day, userId) => {
@@ -106,7 +106,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         oldOverridesSelector.userId = { $in: assigneeIds }
       }
 
-      const countRemovedOverrides = Schedules.remove(oldOverridesSelector)
+      const countRemovedOverrides = await Schedules.removeAsync(oldOverridesSelector)
       console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedOverrides, 'override schedules')
 
       // Remove existing bookable slots in the range before recreating them, so
@@ -121,7 +121,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       if (assigneeIds) {
         oldBookablesSelector.assigneeId = { $in: assigneeIds }
       }
-      const countRemovedBookables = Appointments.remove(oldBookablesSelector)
+      const countRemovedBookables = await Appointments.removeAsync(oldBookablesSelector)
       console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedBookables, 'bookable slots')
 
 
@@ -134,17 +134,17 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       // Remove (assignees or all) from day schedules in selected period
       if (assigneeIds) {
         // First, remove all to-be-updated assignees from all day schedules. We'll later re-add them and recreate any missing day schedules
-        existingDaySchedules.map(ds => {
-          Schedules.update({ _id: ds._id },
+        await Promise.all(existingDaySchedules.map(async ds => {
+          await Schedules.updateAsync({ _id: ds._id },
             {
               $set: {
                 userIds: without(ds.userIds, assigneeIds)
               }
             })
-        })
+        }))
       } else {
         // When applying to all assignees, DO NOT remove all day schedules (would lose day note + noteDetails) but just clear users
-        const countRemovedDays = Schedules.update({
+        const countRemovedDays = await Schedules.updateAsync({
           type: 'day',
           calendarId,
           $or: days.map(d => daySelector(d)) // force 1-arity to prevent map index from being set as prefix
@@ -157,10 +157,10 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       }
 
       // Create new overrides from schedules
-      const defaultSchedules = Schedules.find({
+      const defaultSchedules = await Schedules.find({
         type: 'default',
         calendarId
-      }).fetch()
+      }).fetchAsync()
 
       const rawOverrideSchedules = transformDefaultsToOverrides({ defaultSchedules, days })
 
@@ -208,61 +208,61 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         // Now re-add users to existing day schedules
         console.log('[Schedules] applyDefaultSchedule: Re-adding users to existing day schedules')
         let daysForWhichDaySchedulesAlreadyExist = []
-        existingDaySchedules.map(es => {
-          overrideSchedules.filter(os => os.type === 'day').map(os => {
+        await Promise.all(existingDaySchedules.map(async es => {
+          await Promise.all(overrideSchedules.filter(os => os.type === 'day').map(async os => {
             if (isSame(es.day, os.day)) {
               console.log('[Schedules] applyDefaultSchedule:' + es._id + ' ' + union(es.userIds, os.userIds).join())
               daysForWhichDaySchedulesAlreadyExist.push(es.day)
-              Schedules.update({ _id: es._id }, {
+              await Schedules.updateAsync({ _id: es._id }, {
                 $set: {
                   userIds: union(es.userIds, os.userIds.filter(oid => assigneeIds.includes(oid)))
                 }
               })
             }
-          })
-        })
+          }))
+        }))
 
         // Now, create any day schedules for days that were not accounted for above
         console.log('[Schedules] applyDefaultSchedule: creating day schedules for previously unaccounted days')
-        overrideSchedules.filter(os => os.type === 'day').map(ds => {
+        await Promise.all(overrideSchedules.filter(os => os.type === 'day').map(async ds => {
           if (!daysForWhichDaySchedulesAlreadyExist.find(d => isSame(d, ds.day))) {
             console.log('[Schedules] applyDefaultSchedule: insert ' + dayToDate(ds.day), + ' ' + ds.userIds)
-            Schedules.insert({
+            await Schedules.insertAsync({
               ...ds,
               userIds: ds.userIds.filter(oid => assigneeIds.includes(oid))
             })
           }
-        })
+        }))
       } else {
         console.log('[Schedules] applyDefaultSchedule: re-adding assignees to all day schedules or upserting')
-        overrideSchedules.filter(os => os.type === 'day').map(ds => {
-          const existingDay = Schedules.findOne({
+        await Promise.all(overrideSchedules.filter(os => os.type === 'day').map(async ds => {
+          const existingDay = await Schedules.findOneAsync({
             type: 'day',
             calendarId,
             ...daySelector(ds.day)
           })
 
           if (existingDay) {
-            Schedules.update({ _id: existingDay._id }, {
+            await Schedules.updateAsync({ _id: existingDay._id }, {
               $set: {
                 userIds: ds.userIds
               }
             })
           } else {
-            Schedules.insert(ds)
+            await Schedules.insertAsync(ds)
           }
-        })
+        }))
       }
 
 
       // Add all override schedules
       console.log('[Schedules] applyDefaultSchedule: inserting all override schedules')
-      overrideSchedules
+      await Promise.all(overrideSchedules
         .filter(os => ((os.type === 'override') || (os.type === 'overlay')))
         .filter(os => assigneeIds ? assigneeIds.includes(os.userId) : true)
-        .map(os => {
-          Schedules.insert(os)
-        })
+        .map(async os => {
+          await Schedules.insertAsync(os)
+        }))
 
       console.log('[Schedules] applyDefaultSchedule: Done. Inserted override and day schedules from', defaultSchedules.length, 'default schedules')
 
@@ -275,7 +275,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       })
 
       // Hacky fix: remove duplicate override schedules
-      Schedules.find({
+      ;await Promise.all((await Schedules.find({
         start: { $gte: from },
         end: { $lte: to },
         calendarId,
@@ -283,10 +283,10 @@ export const applyDefaultSchedule = ({ Schedules }) => {
           { type: 'override' },
           { type: 'overlay' }
         ]
-      }).fetch().map(os => {
+      }).fetchAsync()).map(async os => {
         // avoid removing all schedules, only check for dupes when os wasn't removed already
-        if (Schedules.findOne({_id: os._id })) {
-          Schedules.remove({
+        if (await Schedules.findOneAsync({_id: os._id })) {
+          await Schedules.removeAsync({
             _id: { $ne: os._id },
             start: os.start,
             end: os.end,
@@ -294,11 +294,11 @@ export const applyDefaultSchedule = ({ Schedules }) => {
             calendarId: os.calendarId
           })
         }
-      })
+      }))
 
       // Create bookable slots for default blocks marked "online bookable",
       // skipping days/times covered by a vacation.
-      const calendar = Calendars.findOne({ _id: calendarId })
+      const calendar = await Calendars.findOneAsync({ _id: calendarId })
       const makeBookableSlots = createBookableSlots({ Appointments })
       let totalBookables = 0
 

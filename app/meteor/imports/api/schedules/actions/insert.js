@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
@@ -23,7 +23,7 @@ export const insert = ({ Schedules, Users }) => {
       quiet: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ schedule, quiet }) {
+    async run ({ schedule, quiet }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -32,7 +32,7 @@ export const insert = ({ Schedules, Users }) => {
         quiet = false
       }
 
-      const scheduleId = Schedules.insert(schedule, (err, scheduleId) => {
+      const scheduleId = await Schedules.insertAsync(schedule, (err, scheduleId) => {
         if (err) { throw err }
         if (!quiet) { Events.post('schedules/insert', { scheduleId }) }
       })

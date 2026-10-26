@@ -46,57 +46,57 @@ const pushInto = (map, key, value) => {
   map[key].push(value)
 }
 
-export const computeStatistics = ({ Appointments, Schedules, Calendars, Users, Constraints, Tags, asOf }) => {
+export const computeStatistics = async ({ Appointments, Schedules, Calendars, Users, Constraints, Tags, asOf }) => {
   const now = asOf ? moment(asOf) : moment()
   const cacheKey = dayKeyFromDay(dateToDay(now.toDate()))
   const cached = cacheGet(cacheKey)
   if (cached) { return cached }
 
-  const hiddenIds = Users.find({ hiddenInReports: true }, { fields: { _id: 1 } })
-    .fetch().map(u => u._id)
-  const calendars = Calendars.find({}, { fields: { _id: 1, slotSize: 1, slotSizeAppointment: 1, scheduleOffset: 1, atMinutes: 1 } }).fetch()
+  const hiddenIds = (await Users.find({ hiddenInReports: true }, { fields: { _id: 1 } })
+    .fetchAsync()).map(u => u._id)
+  const calendars = await Calendars.find({}, { fields: { _id: 1, slotSize: 1, slotSizeAppointment: 1, scheduleOffset: 1, atMinutes: 1 } }).fetchAsync()
 
   // Shared, window-independent prefetches (small collections, fetched once)
-  const tags = Tags ? Tags.find({}).fetch() : []
+  const tags = Tags ? await Tags.find({}).fetchAsync() : []
   const constraintsByCalendar = {}
   if (Constraints) {
-    Constraints.find({}).fetch().forEach(c => pushInto(constraintsByCalendar, c.calendarId, c))
+    ;(await Constraints.find({}).fetchAsync()).forEach(c => pushInto(constraintsByCalendar, c.calendarId, c))
   }
   const dayScheduleMap = {} // `${calendarId}|${dayKey}` -> daySchedule
-  Schedules.find({ type: 'day' }, { fields: { calendarId: 1, day: 1, userIds: 1, removed: 1 } })
-    .fetch().forEach(s => {
+  ;(await Schedules.find({ type: 'day' }, { fields: { calendarId: 1, day: 1, userIds: 1, removed: 1 } })
+    .fetchAsync()).forEach(s => {
       if (!s.day) { return }
       const key = `${s.calendarId}|${dayKeyFromDay(s.day)}`
       if (!dayScheduleMap[key] || s.removed !== true) { dayScheduleMap[key] = s }
     })
 
-  const fetchReal = ({ from, to }) => Appointments.find({
+  const fetchReal = async ({ from, to }) => await Appointments.find({
     type: { $exists: false },
     patientId: { $exists: true, $ne: null },
     assigneeId: { $nin: hiddenIds },
     removed: { $ne: true },
     start: { $gte: from, $lte: to }
-  }, { fields: REAL_FIELDS }).fetch()
+  }, { fields: REAL_FIELDS }).fetchAsync()
 
-  const fetchFreeSlots = ({ from, to }) => Appointments.find({
+  const fetchFreeSlots = async ({ from, to }) => await Appointments.find({
     type: 'bookable',
     removed: { $ne: true },
     start: { $gte: from, $lte: to }
-  }, { fields: { start: 1, end: 1, assigneeId: 1 } }).fetch()
+  }, { fields: { start: 1, end: 1, assigneeId: 1 } }).fetchAsync()
 
   // Computes roster hours + calendar slot occupancy for a window using a few
   // batched queries instead of one query per (day, calendar, user).
-  const computeUtilization = ({ from, to }) => {
+  const computeUtilization = async ({ from, to }) => {
     const days = rangeToDays({ from, to })
 
-    const overrides = Schedules.find({
+    const overrides = await Schedules.find({
       type: 'override',
       start: { $gte: from, $lte: to }
-    }, { fields: { userId: 1, calendarId: 1, start: 1, end: 1, note: 1, available: 1, roles: 1 } }).fetch()
+    }, { fields: { userId: 1, calendarId: 1, start: 1, end: 1, note: 1, available: 1, roles: 1 } }).fetchAsync()
 
-    const allAppointments = Appointments.find({
+    const allAppointments = await Appointments.find({
       start: { $gte: from, $lte: to }
-    }, { fields: { start: 1, end: 1, assigneeId: 1, calendarId: 1, type: 1 } }).fetch()
+    }, { fields: { start: 1, end: 1, assigneeId: 1, calendarId: 1, type: 1 } }).fetchAsync()
 
     const overridesByCalDay = {}
     const overridesByUserDay = {}
@@ -246,7 +246,7 @@ export const computeStatistics = ({ Appointments, Schedules, Calendars, Users, C
 
   const forecastUserIds = forecastScope.assignees.filter(a => a.assigneeId).map(a => a.assigneeId)
   const forecastUsersById = {}
-  Users.find({ _id: { $in: forecastUserIds } }).fetch().forEach(u => { forecastUsersById[u._id] = u })
+  ;(await Users.find({ _id: { $in: forecastUserIds } }).fetchAsync()).forEach(u => { forecastUsersById[u._id] = u })
 
   const forecastAssignees = forecastScope.assignees.map(a => ({
     assigneeId: a.assigneeId || null,
@@ -288,7 +288,7 @@ export const computeStatistics = ({ Appointments, Schedules, Calendars, Users, C
     ...previous.assignees.filter(a => a.assigneeId).map(a => a.assigneeId)
   ])
   const usersById = {}
-  Users.find({ _id: { $in: assigneeIds } }).fetch().forEach(u => { usersById[u._id] = u })
+  ;(await Users.find({ _id: { $in: assigneeIds } }).fetchAsync()).forEach(u => { usersById[u._id] = u })
 
   const findEntry = (scope, ref) => scope.assignees.find(a =>
     ref.type === 'einschub' ? a.type === 'einschub' : a.assigneeId === ref.assigneeId

@@ -3,7 +3,7 @@ import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { dateToDay } from '../../../util/time/day'
 import { Patients } from '../../patients'
 
@@ -17,7 +17,7 @@ export const xdt = ({ Importers }) => {
       content: { type: String }
     }).validator(),
 
-    run ({ name, content }) {
+    async run ({ name, content }) {
       if (!Meteor.userId()) { return }
       this.unblock()
 
@@ -69,7 +69,7 @@ export const xdt = ({ Importers }) => {
         }
 
         console.log('[Importers] Xdt', { externalId: parsed.patient.id })
-        return Meteor.call('patients/upsert', { patient })
+        return await Meteor.callAsync('patients/upsert', { patient })
       } else {
         console.error('[Importers] Xdt: Failed to parse patient')
         throw new Meteor.Error(500, '[Importers] Xdt: Failed to parse patient')

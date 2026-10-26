@@ -1,6 +1,6 @@
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
@@ -26,9 +26,9 @@ export const upsertVacation = ({ Schedules }) => {
       reason: { type: String, optional: true, allowedValues: ['vacation', 'compensatory', 'sick'] }
     }).validator(),
 
-    run ({ scheduleId, calendarId, userId, start, end, allDay, from, to, reason }) {
+    async run ({ scheduleId, calendarId, userId, start, end, allDay, from, to, reason }) {
       if ((this.connection && !this.userId) ||
-        !hasRole(this.userId, ['admin', 'schedules-edit'])) {
+        !await hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
@@ -67,7 +67,7 @@ export const upsertVacation = ({ Schedules }) => {
       }
 
       if (scheduleId) {
-        const existing = Schedules.findOne({ type: 'vacation', _id: scheduleId })
+        const existing = await Schedules.findOneAsync({ type: 'vacation', _id: scheduleId })
         if (!existing) {
           throw new Meteor.Error(404, 'Vacation not found')
         }
@@ -77,12 +77,12 @@ export const upsertVacation = ({ Schedules }) => {
           modifier.$unset = { from: 1, to: 1 }
         }
 
-        Schedules.update({ _id: scheduleId }, modifier)
+        await Schedules.updateAsync({ _id: scheduleId }, modifier)
         Events.post('schedules/updateVacation', { scheduleId, userId: this.userId })
         return scheduleId
       }
 
-      const newId = Schedules.insert({
+      const newId = await Schedules.insertAsync({
         ...doc,
         createdAt: new Date(),
         createdBy: this.userId

@@ -6,7 +6,7 @@ import { buildMessageText } from '../../../api/messages/methods/buildMessageText
 import { SMS } from '../../../api/messages/server/channels/sms'
 import { normalizeName } from '../../../api/patients/util/normalizeName'
 
-export const portalLogin = (unsafeArgs) => {
+export const portalLogin = async (unsafeArgs) => {
   try {
     check(unsafeArgs, {
       firstName: String,
@@ -23,7 +23,7 @@ export const portalLogin = (unsafeArgs) => {
 
     console.log('portalLogin attempt', insuranceId)
 
-    const patient = Patients.findOne({
+    const patient = await Patients.findOneAsync({
       insuranceId,
       lastNameNormalized: normalizeName(lastName)
     })
@@ -63,7 +63,7 @@ export const portalLogin = (unsafeArgs) => {
 
     const code = (Math.floor(Math.random() * 90000) + 10000).toString()
 
-    Patients.update({ _id: patient._id }, {
+    await Patients.updateAsync({ _id: patient._id }, {
       $set: {
         portalTwoFactorCode: code,
         portalTwoFactorCodeCreatedAt: new Date(),
@@ -75,7 +75,7 @@ export const portalLogin = (unsafeArgs) => {
 
     const text = '%code ist Ihr Einmalkennwort. Teilen Sie dieses Einmalkennwort nicht mit anderen Personen.'
 
-    const messageId = Messages.insert({
+    const messageId = await Messages.insertAsync({
       type: 'portalLogin',
       channel: 'SMS',
       direction: 'outbound',
@@ -106,7 +106,7 @@ export const portalLogin = (unsafeArgs) => {
   }
 }
 
-export const twoFactor = (unsafeArgs) => {
+export const twoFactor = async (unsafeArgs) => {
   try {
     check(unsafeArgs, {
       firstName: String,
@@ -129,7 +129,7 @@ export const twoFactor = (unsafeArgs) => {
 
     console.log('portalLogin twoFactor attempt', insuranceId)
 
-    const patient = Patients.findOne({
+    const patient = await Patients.findOneAsync({
       insuranceId,
       lastNameNormalized: normalizeName(lastName)
     })
@@ -168,7 +168,7 @@ export const twoFactor = (unsafeArgs) => {
 
     const token = uuidv4()
 
-    Patients.update({ _id: patientId }, {
+    await Patients.updateAsync({ _id: patientId }, {
       $set: {
         portalSessionToken: token,
         portalSessionCreatedAt: new Date()
@@ -182,10 +182,10 @@ export const twoFactor = (unsafeArgs) => {
   }
 }
 
-export const patientFromToken = (token) => {
+export const patientFromToken = async (token) => {
   check(token, String)
 
-  const patient = Patients.findOne({ portalSessionToken: token })
+  const patient = await Patients.findOneAsync({ portalSessionToken: token })
 
   if (!patient) {
     throw new Error(`No patient found with token ${token}`)

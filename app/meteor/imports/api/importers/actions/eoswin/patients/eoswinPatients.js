@@ -15,7 +15,7 @@ export const eoswinPatients = ({ Importers }) => {
       quiet: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ name, content, quiet }) {
+    async run ({ name, content, quiet }) {
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../../../customer/isTrustedNetwork')
         if (!this.userId && (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
@@ -25,11 +25,11 @@ export const eoswinPatients = ({ Importers }) => {
 
       let patients = parsePatients(content)
 
-      let ids = patients.map(({ patient, action }) => {
+      let ids = await Promise.all(patients.map(async ({ patient, action }) => {
         switch (action) {
           case 'insert':
           case 'update':
-            Meteor.call('patients/upsert', { patient, quiet })
+            await Meteor.callAsync('patients/upsert', { patient, quiet })
             break
           case 'softRemove':
             // TODO: Add method to soft remove patients
@@ -37,7 +37,7 @@ export const eoswinPatients = ({ Importers }) => {
             break
           default: throw new Error(`[Importers] eoswinPatients: Unknown action ${action}`)
         }
-      })
+      }))
 
       if (ids.length === 1) {
         return ids[0]

@@ -42,8 +42,8 @@ export const publication = () => {
     },
     allowAnonymous: true,
     requireClientKey: true,
-    fn: function ({ clientKey }) {
-      const consumer = Clients.findOne({ clientKey })
+    fn: async function ({ clientKey }) {
+      const consumer = await Clients.findOneAsync({ clientKey })
       const producers = Clients.find({ pairedTo: consumer._id }, { fields: {
         _id: 1,
         description: 1,
@@ -61,8 +61,8 @@ export const publication = () => {
     },
     allowAnonymous: true,
     requireClientKey: true,
-    fn: function ({ clientKey }) {
-      const producer = Clients.findOne({ clientKey })
+    fn: async function ({ clientKey }) {
+      const producer = await Clients.findOneAsync({ clientKey })
       if (!producer) { throw new Error('Producer not found') }
 
       const consumer = Clients.find({ _id: producer.pairedTo }, { fields: {
@@ -71,7 +71,7 @@ export const publication = () => {
         nextMedia: 1
       } })
 
-      if (!consumer.fetch().length === 1) {
+      if (!(await consumer.fetchAsync()).length === 1) {
         throw new Error('Consumer not found')
       }
 

@@ -7,16 +7,16 @@ import { Patients } from '../../patients'
 import { publish, publishComposite, Optional } from '../../../util/meteor/publish'
 import { hasRole } from '../../../util/meteor/hasRole'
 
-const restrictTopicsToRole = (userId, field = 'topicId') => {
-  if (hasRole(userId, ['inboundCalls'])) {
+const restrictTopicsToRole = async (userId, field = 'topicId') => {
+  if (await hasRole(userId, ['inboundCalls'])) {
     return {}
   }
 
-  const topicIds = InboundCallsTopics.find({}).fetch().filter(t => {
-    return hasRole(userId, ['inboundCalls-topic-' + t.slug || 'null'])
+  const topicIds = (await InboundCallsTopics.find({}).fetchAsync()).filter(async t => {
+    return await hasRole(userId, ['inboundCalls-topic-' + t.slug || 'null'])
   }).map(t => t._id)
 
-  if (hasRole(userId, ['inboundCalls-topic-null'])) {
+  if (await hasRole(userId, ['inboundCalls-topic-null'])) {
     topicIds.push(null)
   }
 
@@ -68,14 +68,14 @@ export default () => {
       page: Optional(Number),
       query: Optional(String)
     },
-    fn: function ({ topicId, patientId, removed, page = 0, query }) {
+    fn: async function ({ topicId, patientId, removed, page = 0, query }) {
       let selector = {}
 
       if (topicId !== false) { // false == all
-        const topic = InboundCallsTopics.findOne({ _id: topicId })
+        const topic = await InboundCallsTopics.findOneAsync({ _id: topicId })
         const topicSlug = (topicId === null) ? 'null' : (topic && topic.slug)
   
-        if (!topicSlug || !hasRole(this.userId, ['inboundCalls', 'inboundCalls-topic-' + topicSlug])) {
+        if (!topicSlug || !await hasRole(this.userId, ['inboundCalls', 'inboundCalls-topic-' + topicSlug])) {
           // Missing role, return empty cursor
           return {
             find: () => InboundCalls.find({ _id: 'dummy' })
@@ -117,9 +117,9 @@ export default () => {
       }
 
       return {
-        find: function () {
+        find: async function () {
           const s = InboundCalls.find(selector, options)
-          console.log(selector, s.count(), topicId)
+          console.log(selector, await s.countAsync(), topicId)
           return s
         },
         children: [

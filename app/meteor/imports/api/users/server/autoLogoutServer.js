@@ -1,15 +1,15 @@
 import moment from 'moment-timezone'
-import { JobCollection, Job } from 'meteor/simonsimcity:job-collection'
+import { JobCollection, Job } from 'meteor/strigops:job-collection'
 import { Users } from '../'
 
-const removeSessionTokens = () => {
-  Users.update(
+const removeSessionTokens = async () => {
+  await Users.updateAsync(
     {},
     { $unset: { 'services.resume.loginTokens': 1 }},
     { multi: true })
 }
 
-export default autoLogoutServer = () => {
+export default () => {
   const sendAtHourLocal = 3
   const sendAtHourUTC = moment().tz('Europe/Vienna').hour(sendAtHourLocal).startOf('hour').utc().hours()
 
@@ -34,11 +34,11 @@ export default autoLogoutServer = () => {
     }
   })
 
-  const cleanOldJobs = (job) => {
-    const ids = jobs.find({
+  const cleanOldJobs = async (job) => {
+    const ids = await jobs.find({
       status: { $in: Job.jobStatusRemovable },
       updated: { $lt: moment().subtract(7, 'days').toDate() }
-    }, { fields: { _id: 1 } }).map(d => d._id)
+    }, { fields: { _id: 1 } }).mapAsync(d => d._id)
 
     if (ids.length > 0) {
       jobs.removeJobs(ids)
@@ -78,7 +78,7 @@ export default autoLogoutServer = () => {
   }
 
 
-  processJobs = () => {
+  const processJobs = () => {
     const options = {
       workTimeout: 2 * 60 * 1000,
       callbackStrict: true

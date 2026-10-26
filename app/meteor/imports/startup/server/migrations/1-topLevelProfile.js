@@ -22,7 +22,7 @@ const profileFields = [
 Migrations.add({
   version: 1,
 
-  up: function () {
+  up: async function () {
     const batch = Patients.rawCollection().initializeUnorderedBulkOp()
     let hasUpdates = false
 
@@ -30,7 +30,7 @@ Migrations.add({
       profile: { $ne: null }
     }
 
-    Patients.find(selector).forEach(patient => {
+    await Patients.find(selector).forEachAsync(patient => {
       hasUpdates = true
 
       const newFields = pick(patient.profile, profileFields)
@@ -48,14 +48,13 @@ Migrations.add({
     })
 
     if (hasUpdates) {
-      const execute = Meteor.wrapAsync(batch.execute, batch)
-      return execute()
+      return await batch.execute()
     }
 
     return true
   },
 
-  down: function () {
+  down: async function () {
     const batch = Patients.rawCollection().initializeUnorderedBulkOp()
     let hasUpdates = false
 
@@ -66,7 +65,7 @@ Migrations.add({
 
     const unset = fromPairs(profileFields.map(k => [k, 1]))
 
-    Patients.find(selector).forEach(patient => {
+    await Patients.find(selector).forEachAsync(patient => {
       hasUpdates = true
 
       const newFields = pick(patient, profileFields)
@@ -82,8 +81,7 @@ Migrations.add({
     })
 
     if (hasUpdates) {
-      const execute = Meteor.wrapAsync(batch.execute, batch)
-      return execute()
+      return await batch.execute()
     }
 
     return true

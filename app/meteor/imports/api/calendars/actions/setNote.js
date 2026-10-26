@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { hasRole } from '../../../util/meteor/hasRole'
 
@@ -14,16 +14,16 @@ export const setNote = ({ Calendars }) => {
       newNote: { type: String, optional: true }
     }).validator(),
 
-    run ({ calendarId, newNote }) {
+    async run ({ calendarId, newNote }) {
       if (this.isSimulation) {
         return true
       }
 
-      if (!this.userId || !hasRole(this.userId, ['admin', 'schedules-edit'])) {
+      if (!this.userId || !await hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const calendar = Calendars.findOne({ _id: calendarId })
+      const calendar = await Calendars.findOneAsync({ _id: calendarId })
 
       if (!calendar) {
         throw new Meteor.Error(404, 'Calendar not found')
@@ -31,7 +31,7 @@ export const setNote = ({ Calendars }) => {
 
       Events.post('calendars/setNote', { calendarId, newNote })
 
-      return Calendars.update({ _id: calendarId }, {
+      return await Calendars.updateAsync({ _id: calendarId }, {
         $set: {
           note: newNote
         }

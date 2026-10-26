@@ -8,9 +8,9 @@ export const remove = ({ Records }) =>
     args: {
       recordId: String
     },
-    fn({ recordId }) {
+    async fn({ recordId }) {
       console.log('removed by', this.userId)
-      Records.update({ _id: recordId, removed: { $ne: true } }, {
+      await Records.updateAsync({ _id: recordId, removed: { $ne: true } }, {
         $set: {
           removed: true,
           removedAt: new Date(),

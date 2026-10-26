@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const releaseLock = ({ Appointments }) => {
@@ -15,7 +15,7 @@ export const releaseLock = ({ Appointments }) => {
       assigneeId: { type: String, optional: true }
     }).validator(),
 
-    run ({ calendarId, assigneeId, start, end }) {
+    async run ({ calendarId, assigneeId, start, end }) {
       this.unblock()
 
       if (this.connection && !this.userId) {
@@ -33,10 +33,10 @@ export const releaseLock = ({ Appointments }) => {
         selector.start = start
       }
 
-      const locks = Appointments.find(selector).fetch().map((lock) => {
-        Appointments.remove({ _id: lock._id })
+      const locks = await Promise.all((await Appointments.find(selector).fetchAsync()).map(async (lock) => {
+        await Appointments.removeAsync({ _id: lock._id })
         return lock._id
-      })
+      }))
 
       if (locks.length === 1) {
         Events.post('appointments/releaseLock', { appointmentId: locks[0] })
