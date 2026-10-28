@@ -106,7 +106,11 @@ export const createReminders = ({ Messages }) => {
         removed: { $ne: true }
       }).fetchAsync()
 
-      ;await Promise.all((await Calendars.find({ smsAppointmentReminder: true }).fetchAsync()).map(async calendar => {
+      // Sequential on purpose: findUpcomingAppointments is not scoped to the
+      // calendar, so every iteration sees the same appointments and relies on
+      // the previous iteration's inserts for the findOne-then-insert dedupe.
+      const calendars = await Calendars.find({ smsAppointmentReminder: true }).fetchAsync()
+      for (const calendar of calendars) {
         const calendarId = calendar._id
 
         const { calculateFutureCutoff } = reminderDateCalculator({
@@ -201,7 +205,7 @@ export const createReminders = ({ Messages }) => {
             insertedCount
           })
         }
-      }))
+      }
     }
   })
 }

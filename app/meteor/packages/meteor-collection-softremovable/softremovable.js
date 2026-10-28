@@ -2,12 +2,10 @@
 // Compatible with aldeed:collection2@4 (aldeed:simple-schema@1.13.x wrapper)
 // and matb33:collection-hooks@2 (Meteor 2.16 + 3.x).
 //
-// NOTE (Meteor 3 behaviour change): collection-hooks v2 fires `before.find`
-// only for the async cursor reads (fetchAsync/countAsync/forEachAsync) and no
-// longer for `findOne`/`findOneAsync`. Soft-removed documents are therefore
-// still hidden from find().fetchAsync()/count, but a direct findOne lookup will
-// return a soft-removed document. Add an explicit `{ removed: { $exists: false } }`
-// where a findOne must exclude soft-removed docs.
+// Soft-removed documents are hidden from both cursor reads (before.find, which
+// collection-hooks v2 fires for fetchAsync/countAsync/forEachAsync/mapAsync)
+// and findOneAsync (before.findOne), unless the selector mentions `removed`
+// or `{ removed: true }` is passed in the options.
 import { Meteor } from 'meteor/meteor'
 import { check, Match } from 'meteor/check'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
@@ -51,9 +49,11 @@ function behaviour (options = {}) {
 
   collection.attachSchema(new SimpleSchema(definition))
 
-  // Hide soft-removed documents from cursor reads unless explicitly requested.
+  // Hide soft-removed documents from reads unless explicitly requested.
   // Must be synchronous (collection-hooks v2 forbids async before.find hooks).
-  collection.before.find(function (userId, selector, options) {
+  // The hooks receive an already normalized selector (string ids become
+  // { _id }) and mutating it in place is what the wrapped method queries with.
+  const beforeFindHook = function (userId, selector, options) {
     if (!selector || typeof selector === 'string') { return }
 
     if (Match.test(selector, Object) &&
@@ -61,7 +61,10 @@ function behaviour (options = {}) {
         selector[removed] === undefined) {
       selector[removed] = { $exists: false }
     }
-  })
+  }
+
+  collection.before.find(beforeFindHook)
+  collection.before.findOne(beforeFindHook)
 
   // Translate $set/$unset of the `removed` flag into the full bookkeeping.
   collection.before.update(function (userId = systemId, doc, fieldNames, modifier, options) {

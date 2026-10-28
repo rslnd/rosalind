@@ -19,7 +19,7 @@ export const uploadComplete = ({ Media }) =>
           throw new Error('Could not find producer by clientKey')
         }
       } else {
-        if (!this.userId && await hasRole(this.userId, ['media', 'admin'])) {
+        if (!this.userId || !await hasRole(this.userId, ['documents', 'documents-insert', 'media', 'media-insert', 'admin'])) {
           throw new Error('Not authorized')
         }
       }

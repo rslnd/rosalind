@@ -28,7 +28,10 @@ export const eoswinPatients = ({ Importers }) => {
 
       let patients = parsePatients(content)
 
-      let ids = await Promise.all(patients.map(async ({ patient, action }) => {
+      // Sequential on purpose: patients/upsert is a non-atomic find-then-insert,
+      // so concurrent rows for the same patient would both insert.
+      let ids = []
+      for (const { patient, action } of patients) {
         switch (action) {
           case 'insert':
           case 'update':
@@ -40,7 +43,8 @@ export const eoswinPatients = ({ Importers }) => {
             break
           default: throw new Error(`[Importers] eoswinPatients: Unknown action ${action}`)
         }
-      }))
+        ids.push(undefined)
+      }
 
       if (ids.length === 1) {
         return ids[0]

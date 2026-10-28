@@ -36,7 +36,7 @@ export const unsetQueued = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        Referrals.serverActions.unredeem({ appointmentId })
+        await Referrals.serverActions.unredeem({ appointmentId })
       }
 
       Events.post('appointments/unsetQueued', { appointmentId })

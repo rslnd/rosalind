@@ -3,6 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Patients } from '../../patients'
+import { callNested } from '../../../util/meteor/isInSimulation'
 
 export const genericJson = ({ Importers }) => {
   return new ValidatedMethod({
@@ -14,7 +15,7 @@ export const genericJson = ({ Importers }) => {
       content: { type: String }
     }).validator(),
 
-    run ({ name, content }) {
+    async run ({ name, content }) {
       if (!Meteor.userId()) { return }
 
       const parsed = JSON.parse(content)
@@ -66,7 +67,7 @@ export const genericJson = ({ Importers }) => {
             }
           }
 
-          continue; // await Meteor.callAsync('patients/upsert', { patient })
+          await callNested('patients/upsert', { patient })
         } catch (e) {
           console.error('[Importers] genericJson: Failed', e)
         }

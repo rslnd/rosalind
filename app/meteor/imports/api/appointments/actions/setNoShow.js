@@ -46,7 +46,7 @@ export const setNoShow = ({ Appointments }) => {
 
       if (Meteor.isServer) {
         await Messages.actions.removeReminder.callPromise({ appointmentId })
-        Referrals.serverActions.unredeem({ appointmentId })
+        await Referrals.serverActions.unredeem({ appointmentId })
       }
 
       Events.post('appointments/setNoShow', { appointmentId })

@@ -22,54 +22,60 @@ export const isConstraintApplicable = ({ constraint, date }) => {
   }
 }
 
+// Shared, pure part of the duration algorithm. Only the data loading differs
+// between client and server, so keep any logic changes in here.
+const isScheduleableSelection = tags => tags.find(t => t && t.scheduleable)
+
+const pickTags = ({ selectedTags, unconstrainedTags, constraint }) => {
+  const constrainedTags = constraint && unconstrainedTags && (unconstrainedTags.length >= 1) &&
+    applyConstraintToTags({ constraint, tags: unconstrainedTags })
+
+  return (constrainedTags && constrainedTags.length >= 1)
+    ? constrainedTags
+    : selectedTags
+}
+
+const fallbackDuration = calendar =>
+  (calendar && calendar.defaultDuration) || null
+
 // Client: synchronous (reactive minimongo) so it can be used in trackers/render.
 // Server: async. Server callers must `await getDefaultDuration(...)`.
 const getDefaultDurationServer = async ({ calendarId, assigneeId, date, tags = [] }) => {
-  const didSelectScheduleableTags = tags.find(t => t && t.scheduleable)
-
-  let selectedTags = await Promise.all(tags.map(async t => (typeof t === 'string') ? await Tags.findOneAsync({ _id: t }, { removed: true }) : t))
+  const selectedTags = await Promise.all(tags.map(t => (typeof t === 'string') ? Tags.findOneAsync({ _id: t }, { removed: true }) : t))
   let constraint = null
+  let unconstrainedTags = null
 
-  if (!didSelectScheduleableTags) {
-    const unconstrainedTags = await Tags.find({ _id: { $in: tags } }, { removed: true }).fetchAsync()
+  if (!isScheduleableSelection(tags)) {
+    unconstrainedTags = await Tags.find({ _id: { $in: tags } }, { removed: true }).fetchAsync()
     constraint = await findConstraint(Constraints)({ calendarId, assigneeId, time: date })
-    const constrainedTags = constraint && (unconstrainedTags.length >= 1) &&
-      applyConstraintToTags({ constraint, tags: unconstrainedTags })
-
-    if (constrainedTags && constrainedTags.length >= 1) {
-      selectedTags = constrainedTags
-    }
   }
 
-  const duration = applyDurationStrategy({ calendarId, constraint, tags: selectedTags })
+  const duration = applyDurationStrategy({
+    calendarId,
+    constraint,
+    tags: pickTags({ selectedTags, unconstrainedTags, constraint })
+  })
 
-  if (duration) { return duration }
-  const calendar = await Calendars.findOneAsync(calendarId)
-  return (calendar && calendar.defaultDuration) || null
+  return duration || fallbackDuration(await Calendars.findOneAsync(calendarId))
 }
 
 const getDefaultDurationClient = ({ calendarId, assigneeId, date, tags = [] }) => {
-  const didSelectScheduleableTags = tags.find(t => t && t.scheduleable)
-
-  let selectedTags = tags.map(t => (typeof t === 'string') ? Tags.findOne({ _id: t }, { removed: true }) : t)
+  const selectedTags = tags.map(t => (typeof t === 'string') ? Tags.findOne({ _id: t }, { removed: true }) : t)
   let constraint = null
+  let unconstrainedTags = null
 
-  if (!didSelectScheduleableTags) {
-    const unconstrainedTags = Tags.find({ _id: { $in: tags } }, { removed: true }).fetch()
+  if (!isScheduleableSelection(tags)) {
+    unconstrainedTags = Tags.find({ _id: { $in: tags } }, { removed: true }).fetch()
     constraint = findConstraint(Constraints)({ calendarId, assigneeId, time: date })
-    const constrainedTags = constraint && (unconstrainedTags.length >= 1) &&
-      applyConstraintToTags({ constraint, tags: unconstrainedTags })
-
-    if (constrainedTags && constrainedTags.length >= 1) {
-      selectedTags = constrainedTags
-    }
   }
 
-  const duration = applyDurationStrategy({ calendarId, constraint, tags: selectedTags })
+  const duration = applyDurationStrategy({
+    calendarId,
+    constraint,
+    tags: pickTags({ selectedTags, unconstrainedTags, constraint })
+  })
 
-  if (duration) { return duration }
-  const calendar = Calendars.findOne(calendarId)
-  return (calendar && calendar.defaultDuration) || null
+  return duration || fallbackDuration(Calendars.findOne(calendarId))
 }
 
 export const getDefaultDuration = Meteor.isServer ? getDefaultDurationServer : getDefaultDurationClient

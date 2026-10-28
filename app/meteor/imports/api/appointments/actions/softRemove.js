@@ -34,7 +34,7 @@ export const softRemove = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        Referrals.serverActions.unredeem({ appointmentId })
+        await Referrals.serverActions.unredeem({ appointmentId })
         await Messages.actions.removeReminder.callPromise({ appointmentId })
 
         const previousBookable = await Appointments.findOneAsync({

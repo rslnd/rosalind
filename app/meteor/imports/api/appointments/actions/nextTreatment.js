@@ -33,7 +33,7 @@ export const nextTreatment = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        Referrals.serverActions.redeem({ appointmentId })
+        await Referrals.serverActions.redeem({ appointmentId })
       }
 
       const waitlistSelector = {

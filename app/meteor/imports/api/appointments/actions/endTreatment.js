@@ -32,7 +32,7 @@ export const endTreatment = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        Referrals.serverActions.redeem({ appointmentId })
+        await Referrals.serverActions.redeem({ appointmentId })
       }
 
       Events.post('appointments/endTreatment', { appointmentId })

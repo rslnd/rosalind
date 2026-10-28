@@ -201,19 +201,24 @@ export default () => {
     })
 
     // JSS, used by material-ui, requires the csp-nonce meta tag
-    WebAppInternals.registerBoilerplateDataCallback('rosalind/csp', async (request, data, arch) => {
-      // This request object contains a stripped req, with the url carrying the
-      // nonce we attached as a fragment (#<nonce>). Meteor 2 parsed url into an
-      // object with a `.hash`; Meteor 3 may pass the url as a plain string, so
-      // handle both shapes.
-      const rawUrl = request.url
-      let nonce
-      if (rawUrl && typeof rawUrl === 'object' && typeof rawUrl.hash === 'string') {
-        nonce = rawUrl.hash.replace(/^#/, '')
-      } else {
-        const urlString = typeof rawUrl === 'string' ? rawUrl : String((rawUrl && rawUrl.href) || '')
-        const hashIndex = urlString.indexOf('#')
-        nonce = hashIndex >= 0 ? urlString.slice(hashIndex + 1) : Buffer.from(uuidv4()).toString('base64')
+    WebAppInternals.registerBoilerplateDataCallback('rosalind/csp', async (request, data, arch, response) => {
+      // Must be the same nonce that buildHeaders put into the CSP header.
+      // Meteor 3 passes the raw node response as 4th argument, whose .req is
+      // the original req we attached the nonce to. The stripped `request`
+      // (categorizeRequest) no longer carries the url fragment (url is only
+      // `{ query }`), so the fragment is just a fallback for older webapp.
+      let nonce = response && response.req && response.req.nonce
+      if (!nonce) {
+        const rawUrl = request.url
+        if (rawUrl && typeof rawUrl === 'object' && typeof rawUrl.hash === 'string') {
+          nonce = rawUrl.hash.replace(/^#/, '')
+        } else if (typeof rawUrl === 'string' && rawUrl.indexOf('#') >= 0) {
+          nonce = rawUrl.slice(rawUrl.indexOf('#') + 1)
+        }
+      }
+      if (!nonce) {
+        console.warn('[browserPolicy] No CSP nonce found for boilerplate, inline styles will be blocked')
+        nonce = Buffer.from(uuidv4()).toString('base64')
       }
       const primaryColor = await Settings.get('primaryColor')
 

@@ -35,7 +35,7 @@ export const unsetAdmitted = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        Referrals.serverActions.unredeem({ appointmentId })
+        await Referrals.serverActions.unredeem({ appointmentId })
       }
 
       Events.post('appointments/unsetAdmitted', { appointmentId })

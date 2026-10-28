@@ -44,6 +44,8 @@ export const publication = () => {
     requireClientKey: true,
     fn: async function ({ clientKey }) {
       const consumer = await Clients.findOneAsync({ clientKey })
+      if (!consumer) { throw new Error('Consumer not found') }
+
       const producers = Clients.find({ pairedTo: consumer._id }, { fields: {
         _id: 1,
         description: 1,
@@ -71,7 +73,7 @@ export const publication = () => {
         nextMedia: 1
       } })
 
-      if (!(await consumer.fetchAsync()).length === 1) {
+      if (await consumer.countAsync() !== 1) {
         throw new Error('Consumer not found')
       }
 

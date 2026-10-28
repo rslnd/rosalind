@@ -51,7 +51,7 @@ export const setAdmitted = ({ Appointments }) => {
       await Appointments.updateAsync({ _id: appointmentId }, { $set, $unset })
 
       if (Meteor.isServer) {
-        Referrals.serverActions.redeem({ appointmentId })
+        await Referrals.serverActions.redeem({ appointmentId })
       }
 
       Events.post('appointments/setAdmitted', { appointmentId, waitlistAssigneeId })

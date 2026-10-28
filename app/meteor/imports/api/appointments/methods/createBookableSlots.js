@@ -58,7 +58,10 @@ export const createBookableSlots = ({ Appointments }) => async ({ calendar, cale
       const slotStart = applyHM(day, { h: Math.floor(min / 60), m })
       const endMin = min + step
       // end on the next grid line, eg. with atMinutes [0, 10, 15, ...] 8:00 -> 8:10
-      const slotEnd = ceilToSlot({ calendar, date: applyHM(day, { h: Math.floor(endMin / 60), m: endMin % 60 }) }).toDate()
+      // but never past the end of the working block
+      const blockEnd = applyHM(day, { h: to.h, m: to.m || 0 })
+      const ceiledEnd = ceilToSlot({ calendar, date: applyHM(day, { h: Math.floor(endMin / 60), m: endMin % 60 }) }).toDate()
+      const slotEnd = ceiledEnd > blockEnd ? blockEnd : ceiledEnd
 
       if (isBlocked(slotStart, slotEnd)) { continue }
 

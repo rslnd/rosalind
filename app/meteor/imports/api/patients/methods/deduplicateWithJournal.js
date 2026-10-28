@@ -68,8 +68,11 @@ export const deduplicate = duplicates =>
     }
   })
 
-export const perform = async ({ actions, Patients, Appointments, InboundCalls, Media, Messages, Referrals, Records }) =>
-  await Promise.all(actions.map(async a => {
+// Sequential on purpose: autoDeduplicate produces overlapping tuples
+// ([A, B, C] and [B, C]) whose merges are only correct when applied in order.
+export const perform = async ({ actions, Patients, Appointments, InboundCalls, Media, Messages, Referrals, Records }) => {
+  const results = []
+  for (const a of actions) {
     const masterId = a.master._id
     console.log('[Patients] deduplicate: Merging', masterId, ' <- ', a.duplicateIds)
 
@@ -110,5 +113,7 @@ export const perform = async ({ actions, Patients, Appointments, InboundCalls, M
 
     console.log('[Patients] deduplicate: Done, reassigned to master patient id', masterId, ' <- ', changedIds)
 
-    return result
-  }))
+    results.push(result)
+  }
+  return results
+}
