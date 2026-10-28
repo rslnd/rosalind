@@ -7,6 +7,7 @@ import { Events } from '../../events'
 import { Messages } from '../../messages'
 import { Calendars } from '../../calendars'
 import { getDefaultDuration } from '../methods/getDefaultDuration'
+import { ceilToSlot } from '../methods/ceilToSlot'
 import { Schedules } from '../../schedules'
 import { daySelector, dateToDay } from '../../../util/time/day'
 import { hasRole } from '../../../util/meteor/hasRole'
@@ -72,8 +73,10 @@ export const move = ({ Appointments }) => {
       const oldAssigneeId = appointment.assigneeId
 
       // usually passed from frontend to fit slots
+      // snap to the next grid line, otherwise eg. a 5 min appt moved to 8:00
+      // ends at 8:05, which does not exist when slots are at :00, :10, ...
       newEnd = duration
-        ? moment(newStart).add(duration, 'minutes').toDate()
+        ? ceilToSlot({ calendar, date: moment(newStart).add(duration, 'minutes') }).toDate()
         : newEnd
 
       await Appointments.updateAsync({ _id: appointmentId }, {

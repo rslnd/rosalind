@@ -11,7 +11,8 @@ import { background, primaryActive, darkGrayDisabled, darkGray, lighten } from '
 import { namecase } from '../../../../util/namecase'
 import { getDefaultDuration } from '../../../../api/appointments/methods/getDefaultDuration'
 import { prefix } from '../../../../api/patients/methods'
-import { Appointments, Users } from '../../../../api'
+import { ceilToSlot } from '../../../../api/appointments/methods/ceilToSlot'
+import { Appointments, Users, Tags } from '../../../../api'
 import Alert from 'react-s-alert'
 
 const assigneeName = _id => {
@@ -200,7 +201,7 @@ class AppointmentItem extends React.Component {
       })
       timeStart = newStartTime.format('[T]HHmm')
       timeEnd = duration
-        ? newStartTime.add(duration, 'minutes').format('[T]HHmm')
+        ? ceilToSlot({ calendar, date: newStartTime.add(duration, 'minutes') }).format('[T]HHmm')
         : moment(this.props.moveToEnd || appointment.end).format('[T]HHmm')
       assigneeId = newAssigneeId
     } else {
@@ -324,7 +325,7 @@ class AppointmentItem extends React.Component {
         <div style={rightStyle}>
           {
             calendar && calendar.showTagNames &&
-              <TagNames tags={appointment.tags} />
+              <TagNames tags={Tags.methods.expand(appointment.tags)} />
           }
           {
             appointment.createdViaPortal &&
