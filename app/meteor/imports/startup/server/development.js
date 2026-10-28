@@ -81,7 +81,7 @@ export default async () => {
     // turn one original (admin) user into a demo user
     if (process.env.DEMO_USERNAME_ORIGINAL && process.env.DEMO_USERNAME) {
       if (await Api.Users.findOneAsync({ username: process.env.DEMO_USERNAME_ORIGINAL })) {
-        Accounts.setPassword((await Api.Users.findOneAsync({ username: process.env.DEMO_USERNAME_ORIGINAL }))._id, process.env.DEMO_PASSWORD, { logout: false })
+        await Accounts.setPasswordAsync((await Api.Users.findOneAsync({ username: process.env.DEMO_USERNAME_ORIGINAL }))._id, process.env.DEMO_PASSWORD, { logout: false })
         await Api.Users.updateAsync({ username: process.env.DEMO_USERNAME_ORIGINAL }, {
           $set: {
             username: process.env.DEMO_USERNAME
@@ -94,7 +94,7 @@ export default async () => {
 
     // avoid lockout when demo user changes pw
     if (process.env.DEMO_USERNAME && await Api.Users.findOneAsync({ username: process.env.DEMO_USERNAME })) {
-      Accounts.setPassword((await Api.Users.findOneAsync({ username: process.env.DEMO_USERNAME }))._id, process.env.DEMO_PASSWORD, { logout: false })
+      await Accounts.setPasswordAsync((await Api.Users.findOneAsync({ username: process.env.DEMO_USERNAME }))._id, process.env.DEMO_PASSWORD, { logout: false })
     }
 
     await Api.Settings.removeAsync({ key: 'messages.sms.fxpsms.host' })

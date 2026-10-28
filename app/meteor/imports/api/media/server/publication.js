@@ -8,7 +8,10 @@ export const publication = ({ Media, MediaTags }) => {
     args: {
       patientId: String
     },
-    fn: function ({ patientId }) {
+    // async + observeAsync: Meteor 3's cursor.observe() returns a Promise, so the
+    // old code stored a Promise in `observer` and onStop threw
+    // "observer.stop is not a function", leaking the observer on every unsubscribe.
+    fn: async function ({ patientId }) {
       const selector = { patientId }
 
       // Attach derived field on documents before publishing
@@ -28,7 +31,7 @@ export const publication = ({ Media, MediaTags }) => {
         return doc
       }
 
-      const observer = Media.find(selector).observe({
+      const observer = await Media.find(selector).observeAsync({
         added: doc =>
           this.added('media', doc._id, transform(doc)),
         changed: (newDoc, oldDoc) =>

@@ -22,6 +22,7 @@ import { ScanButton } from './Documents'
 import { SmsModalContainer } from './SmsModal'
 import { CommentsContainer } from '../comments'
 import { prompt } from '../layout/Prompt'
+import { call } from '../../util/meteor/call'
 
 const action = promise =>
   promise.then(() => {
@@ -347,7 +348,7 @@ const localityStyle = {
 
 const fetchLoyalty = ({ _id }) =>
   new Promise((resolve) => {
-    Meteor.call(
+    call(
       'patients/getLoyalty',
       { patientId: _id },
       (err, loyalty) => {

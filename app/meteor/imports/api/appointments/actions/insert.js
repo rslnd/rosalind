@@ -6,6 +6,7 @@ import { Events } from '../../events'
 import { Comments } from '../../comments'
 import { Calendars } from '../../calendars'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { callNested } from '../../../util/meteor/isInSimulation'
 
 export const insert = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -28,7 +29,7 @@ export const insert = ({ Appointments }) => {
       let patientId = appointment.patientId
 
       if (newPatient) {
-        patientId = await Meteor.callAsync('patients/upsert', { patient: newPatient })
+        patientId = await callNested('patients/upsert', { patient: newPatient })
       }
 
       const { note, ...restFields } = appointment
@@ -51,7 +52,11 @@ export const insert = ({ Appointments }) => {
       const appointmentId = await Appointments.insertAsync({ ...restFields, patientId })
       
       if (note && !noteInAppointment) {
-        Comments.actions.post.callPromise({ docId: appointmentId, body: note })
+        // Must be awaited: an unawaited nested method call from inside a stub
+        // leaves DDP._CurrentMethodInvocation pointing at this method forever,
+        // after which the client treats every later call as a simulation and
+        // stops sending anything to the server.
+        await Comments.actions.post.callPromise({ docId: appointmentId, body: note })
       }
       Events.post('appointments/insert', { appointmentId })
 

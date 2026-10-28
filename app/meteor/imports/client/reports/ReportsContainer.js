@@ -4,7 +4,6 @@ import { parse as fromQuery } from 'query-string'
 import { compose, mapProps, toClass } from 'recompose'
 import moment from 'moment-timezone'
 import { withRouter } from 'react-router-dom'
-import { Meteor } from 'meteor/meteor'
 import { withTracker } from '../components/withTracker'
 import { Reports } from '../../api/reports'
 import { Users } from '../../api/users'
@@ -12,6 +11,7 @@ import { Calendars } from '../../api/calendars'
 import { dayToDate } from '../../util/time/day'
 import { ReportsScreen } from './ReportsScreen'
 import { withPromise } from '../components/withPromise'
+import { call } from '../../util/meteor/call'
 
 // Only stable primitives/plain objects reach withPromise, so fetches re-run on
 // date change only (deep-equal props do not refetch; functions are ignored).
@@ -70,10 +70,10 @@ const withActions = (props) => {
       props.history.push(`/appointments/${slug}`)
     },
     sendEmail () {
-      Meteor.call('reports/sendEmail', { day })
+      call('reports/sendEmail', { day })
     },
     sendEmailTest () {
-      Meteor.call('reports/sendEmail', { to: 'me+TEST@albertzak.com', day })
+      call('reports/sendEmail', { to: 'me+TEST@albertzak.com', day })
     }
   }
 }

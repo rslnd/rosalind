@@ -1,12 +1,12 @@
 import idx from 'idx'
 import React from 'react'
-import { Meteor } from 'meteor/meteor'
 import { compose, withState, mapProps, withHandlers } from 'recompose'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Button from '@material-ui/core/Button'
 import { important } from '../layout/styles'
 import { Icon } from '../components/Icon'
+import { call } from '../../util/meteor/call'
 
 const Fields = ({ submitting, handleUnsetPassword, hasPassword, weakPassword }) =>
   <div>
@@ -36,7 +36,7 @@ const Fields = ({ submitting, handleUnsetPassword, hasPassword, weakPassword }) 
 const handleUnsetPassword = ({ user, setSubmitting }) => () =>
   new Promise((resolve, reject) => {
     setSubmitting(true)
-    Meteor.call('users/unsetPassword', {
+    call('users/unsetPassword', {
       userId: user._id
     }, (e) => {
       setSubmitting(false)

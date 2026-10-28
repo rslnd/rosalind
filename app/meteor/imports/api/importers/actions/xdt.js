@@ -6,6 +6,7 @@ import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { dateToDay } from '../../../util/time/day'
 import { Patients } from '../../patients'
+import { callNested } from '../../../util/meteor/isInSimulation'
 
 export const xdt = ({ Importers }) => {
   return new ValidatedMethod({
@@ -69,7 +70,7 @@ export const xdt = ({ Importers }) => {
         }
 
         console.log('[Importers] Xdt', { externalId: parsed.patient.id })
-        return await Meteor.callAsync('patients/upsert', { patient })
+        return await callNested('patients/upsert', { patient })
       } else {
         console.error('[Importers] Xdt: Failed to parse patient')
         throw new Meteor.Error(500, '[Importers] Xdt: Failed to parse patient')

@@ -16,6 +16,7 @@ import { gray, green, red, warning, darkGray } from '../layout/styles'
 import { hasRole } from '../../util/meteor/hasRole'
 import { prompt } from '../layout/Prompt'
 import { buildMessageText } from '../../api/messages/methods/buildMessageText'
+import { call } from '../../util/meteor/call'
 
 const composer = (props) => {
   if (!props.patient) { return null }
@@ -148,7 +149,7 @@ const ComposeSms = ({ patient }) => {
     if (!ok) { return }
 
     setSending(true)
-    Meteor.call('messages/sendCustomSms', { patientId, text: value }, (e) => {
+    call('messages/sendCustomSms', { patientId, text: value }, (e) => {
       if (e) {
         Alert.error(e.message)
         console.error(e)

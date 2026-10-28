@@ -11,8 +11,9 @@ export default () => {
       smoochUserId: { type: String }
     }).validator(),
 
-    run ({ smoochUserId }) {
-      if (!Meteor.user()) { return }
+    // userAsync: Meteor 3 has no synchronous Meteor.user() on the server.
+    async run ({ smoochUserId }) {
+      if (!await Meteor.userAsync()) { return }
 
       return jwt.sign(
         {

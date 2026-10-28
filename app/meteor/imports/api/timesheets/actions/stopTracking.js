@@ -8,23 +8,27 @@ export const stopTracking = ({ Timesheets }) => {
     name: 'timesheets/stopTracking',
     mixins: [CallPromiseMixin],
     validate () {},
-    run () {
+    // Awaited throughout: a nested method call started from inside a stub and
+    // left unawaited corrupts DDP._CurrentMethodInvocation, wedging the client
+    // into a permanent simulation where no method reaches the server again.
+    async run () {
       const userId = this.userId
       if (this.connection && !userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      Timesheets.actions.isTracking.callPromise({ userId })
-        .then(async (currentTimesheet) => {
-          if (currentTimesheet) {
-            await Timesheets.updateAsync({ _id: currentTimesheet._id }, { $set: {
-              end: new Date(),
-              tracking: false
-            } })
+      const currentTimesheet = await Timesheets.actions.isTracking.callPromise({ userId })
 
-            Events.post('timesheets/stopTracking', { userId, timesheetId: currentTimesheet._id })
+      if (currentTimesheet) {
+        await Timesheets.updateAsync({ _id: currentTimesheet._id }, {
+          $set: {
+            end: new Date(),
+            tracking: false
           }
         })
+
+        Events.post('timesheets/stopTracking', { userId, timesheetId: currentTimesheet._id })
+      }
     }
   })
 }

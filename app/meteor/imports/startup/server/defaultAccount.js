@@ -12,7 +12,7 @@ export default async () => {
   }
 
   console.warn(`[Server] Creating first admin user '${defaultAccount.username}' with password '${defaultAccount.password}'`)
-  Accounts.createUser(defaultAccount)
+  await Accounts.createUserAsync(defaultAccount)
 
   await Users.updateAsync({ username: 'admin' }, {
     $set: {

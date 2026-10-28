@@ -6,6 +6,7 @@ import sum from 'lodash/fp/sum'
 import mean from 'lodash/fp/mean'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { dayToDate } from '../../../util/time/day'
 import { Schedules } from '../../schedules'
 import { Timesheets } from '../../timesheets'
@@ -13,6 +14,7 @@ import { Timesheets } from '../../timesheets'
 export const tally = ({ Reports }) => {
   return new ValidatedMethod({
     name: 'reports/tally',
+    mixins: [CallPromiseMixin],
 
     validate: new SimpleSchema({
       report: { type: Object, blackbox: true }

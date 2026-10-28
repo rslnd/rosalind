@@ -122,7 +122,13 @@ function behaviour (options = {}) {
 
     try {
       if (Meteor.isServer || isLocalCollection) {
-        selector = Object.assign({}, selector, { [removed]: true })
+        // A plain id is a valid selector here (InboundCalls.restore(_id)).
+        // Object.assign over a string spreads it into {0:'a',1:'b',...}, which
+        // matches nothing -- the restore then silently did nothing at all.
+        selector = typeof selector === 'string'
+          ? { _id: selector, [removed]: true }
+          : Object.assign({}, selector, { [removed]: true })
+
         return await this.updateAsync(selector, modifier, { multi: true }, callback)
       }
       return await this.updateAsync(selector, modifier, callback)

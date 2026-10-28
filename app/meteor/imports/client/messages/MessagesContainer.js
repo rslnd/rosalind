@@ -7,6 +7,7 @@ import { InboundCalls } from '../../api/inboundCalls'
 import { MessagesScreen } from './MessagesScreen'
 import { subscribe } from '../../util/meteor/subscribe'
 import { hasRole } from '../../util/meteor/hasRole'
+import { call } from '../../util/meteor/call'
 
 const composer = (props) => {
   const handle = subscribe('messages-inbound')
@@ -42,7 +43,7 @@ const composer = (props) => {
 
 const fetchStats = () => new Promise((resolve) => {
   if (hasRole(Meteor.userId(), ['messages-stats'])) {
-    Meteor.call('messages/getStats', {}, (e, stats) => resolve({ stats }) )
+    call('messages/getStats', {}, (e, stats) => resolve({ stats }) )
   } else {
     resolve({})
   }

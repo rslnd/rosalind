@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
+import { Events } from '../../events'
 
 export const edit = ({ Comments }) => {
   return new ValidatedMethod({
@@ -29,11 +30,7 @@ export const edit = ({ Comments }) => {
         body: newBody
       } })
 
-      await Meteor.callAsync('events/post', {
-        type: 'comments/edit',
-        level: 'info',
-        payload: { commentId, userId: Meteor.userId() }
-      })
+      Events.post('comments/edit', { commentId, userId: Meteor.userId() })
     }
   })
 }

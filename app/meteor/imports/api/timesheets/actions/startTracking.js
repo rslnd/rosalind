@@ -8,24 +8,26 @@ export const startTracking = ({ Timesheets }) => {
     name: 'timesheets/startTracking',
     mixins: [CallPromiseMixin],
     validate () {},
-    run () {
+    // Awaited throughout: a nested method call started from inside a stub and
+    // left unawaited corrupts DDP._CurrentMethodInvocation, wedging the client
+    // into a permanent simulation where no method reaches the server again.
+    async run () {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
       const userId = this.userId
-      Timesheets.actions.isTracking.callPromise({ userId })
-        .then(async (isTracking) => {
-          if (!isTracking) {
-            const timesheetId = await Timesheets.insertAsync({
-              userId,
-              start: new Date(),
-              tracking: true
-            })
+      const isTracking = await Timesheets.actions.isTracking.callPromise({ userId })
 
-            Events.post('timesheets/startTracking', { userId, timesheetId })
-          }
+      if (!isTracking) {
+        const timesheetId = await Timesheets.insertAsync({
+          userId,
+          start: new Date(),
+          tracking: true
         })
+
+        Events.post('timesheets/startTracking', { userId, timesheetId })
+      }
     }
   })
 }

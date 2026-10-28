@@ -54,7 +54,10 @@ export const sendEmail = async (args = {}) => {
 
     console.log('[Reports] sendEmail: Sending')
 
-    Email.send({
+    // sendAsync, awaited: Meteor 3's Email.send only forwards to sendAsync and
+    // swallows the rejection into console.error, so a failed send still looked
+    // like a success here.
+    await Email.sendAsync({
       from: process.env.MAIL_REPORTS_FROM,
       to: recipients,
       replyTo: process.env.MAIL_REPORTS_REPLYTO,

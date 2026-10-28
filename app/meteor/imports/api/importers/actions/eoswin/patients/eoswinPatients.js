@@ -1,12 +1,15 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../../../util/meteor/callPromiseMixin'
 import { parsePatients } from './parsePatient'
 import { Patients } from '../../../../patients'
+import { callNested } from '../../../../../util/meteor/isInSimulation'
 
 export const eoswinPatients = ({ Importers }) => {
   return new ValidatedMethod({
     name: 'importers/eoswinPatients',
+    mixins: [CallPromiseMixin],
 
     validate: new SimpleSchema({
       importer: { type: String, optional: true, allowedValues: [ 'eoswinPatients' ] },
@@ -29,7 +32,7 @@ export const eoswinPatients = ({ Importers }) => {
         switch (action) {
           case 'insert':
           case 'update':
-            await Meteor.callAsync('patients/upsert', { patient, quiet })
+            await callNested('patients/upsert', { patient, quiet })
             break
           case 'softRemove':
             // TODO: Add method to soft remove patients

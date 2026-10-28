@@ -1,10 +1,12 @@
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const unresolve = ({ InboundCalls }) => {
   return new ValidatedMethod({
     name: 'inboundCalls/unresolve',
+    mixins: [CallPromiseMixin],
 
     validate: new SimpleSchema({
       _id: { type: SimpleSchema.RegEx.Id }

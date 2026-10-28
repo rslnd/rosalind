@@ -1,6 +1,7 @@
 import { Events } from '../../events'
 import { action, Match } from '../../../util/meteor/action'
 import { safeMediaTypes } from '../../../util/schema'
+import { callNested } from '../../../util/meteor/isInSimulation'
 
 export const post = ({ InboundCalls }) =>
   action({
@@ -69,7 +70,7 @@ export const post = ({ InboundCalls }) =>
         }
 
         if (patientId === 'newPatient') {
-          const newPatientId = await Meteor.callAsync('patients/upsert', {
+          const newPatientId = await callNested('patients/upsert', {
             patient: patientFields
           })
 
@@ -81,7 +82,7 @@ export const post = ({ InboundCalls }) =>
           Events.post('inboundCalls/post', { _id })
           return _id
         } else {
-          const existingPatientId = await Meteor.callAsync('patients/upsert', {
+          const existingPatientId = await callNested('patients/upsert', {
             patient: {
               ...patientFields,
               _id: patientId

@@ -263,7 +263,9 @@ Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
 
 `
 
-  Email.send({
+  // sendAsync, awaited: Meteor 3's Email.send only forwards to sendAsync and
+  // swallows the rejection into console.error.
+  await Email.sendAsync({
     from: process.env.MAIL_REPORTS_FROM,
     to: process.env.MAIL_REPORTS_TO,
     replyTo: email,

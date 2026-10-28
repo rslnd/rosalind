@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
+import { Events } from '../../events'
 
 export const post = ({ Comments }) => {
   return new ValidatedMethod({
@@ -16,11 +17,7 @@ export const post = ({ Comments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      await Meteor.callAsync('events/post', {
-        type: 'comments/post',
-        level: 'info',
-        payload: { docId, userId: Meteor.userId() }
-      })
+      Events.post('comments/post', { docId, userId: Meteor.userId() })
 
       return await Comments.insertAsync({ docId, body })
     }
