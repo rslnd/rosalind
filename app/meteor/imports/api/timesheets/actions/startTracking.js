@@ -17,7 +17,7 @@ export const startTracking = ({ Timesheets }) => {
       }
 
       const userId = this.userId
-      const isTracking = await Timesheets.actions.isTracking.callPromise({ userId })
+      const isTracking = await Timesheets.methods.isTracking({ userId })
 
       if (!isTracking) {
         const timesheetId = await Timesheets.insertAsync({

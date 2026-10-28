@@ -111,7 +111,7 @@ export const sendScheduled = ({ Messages }) => {
         }
 
         // Only allow confirmation of cancelation to be sent during quiet time
-        const quietTimeRespected = isQuietTimeRespected(message)
+        const quietTimeRespected = await isQuietTimeRespected(message)
 
         const withinSentPerRecipientLimit = (sentToNumbersToday.filter((n) => n === message.to).length <= maxSentPerRecipientLimit)
         const ok = quietTimeRespected && withinSentPerRecipientLimit

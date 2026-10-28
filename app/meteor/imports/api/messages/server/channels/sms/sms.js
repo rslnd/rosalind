@@ -72,7 +72,7 @@ export const send = async (messageId) => {
 }
 
 export const receive = async (payload, req) => {
-  const { message, response } = provider.receive(payload, req)
+  const { message, response } = await provider.receive(payload, req)
 
   if (!message) {
     return { response }
@@ -170,7 +170,7 @@ export const receive = async (payload, req) => {
           })
 
           console.log('[Messages] channels/sms: Sending cancelation confirmation', confirmationId, 'for received message', messageId)
-          send(confirmationId)
+          await send(confirmationId)
         }
 
         return { message, response }

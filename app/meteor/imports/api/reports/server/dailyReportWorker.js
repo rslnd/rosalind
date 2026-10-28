@@ -10,7 +10,7 @@ const cleanOldJobs = async (job) => {
   }, { fields: { _id: 1 } }).mapAsync(d => d._id)
 
   if (ids.length > 0) {
-    Reports.jobs.removeJobs(ids)
+    await Reports.jobs.removeJobs(ids)
   }
 }
 
@@ -18,16 +18,18 @@ export const dailyReportWorker = (job, callback) => {
   console.log('[Reports] dailyReportWorker: Sending email')
   try {
     sendEmail()
-      .then(() => {
+      .then(async () => {
         console.log('[Reports] worker: job done')
-        cleanOldJobs(job)
-        job.done()
-        callback()
-      }).catch((e) => {
+        await cleanOldJobs(job).catch(e => console.error('[Reports] worker: failed to clean old jobs', e))
+        await job.done()
+      }).catch(async (e) => {
         console.error('[Reports] worker: errored with', e)
-        job.fail()
+        await job.fail().catch(e => console.error('[Reports] worker: failed to mark job as failed', e))
       })
+      // Always release the queue slot, otherwise processJobs stops picking up jobs after a failure
+      .finally(() => callback())
   } catch (e) {
     console.error('[Reports] worker: hard errored with', e)
+    callback()
   }
 }

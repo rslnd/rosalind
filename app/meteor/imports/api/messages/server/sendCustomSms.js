@@ -65,7 +65,7 @@ export const sendCustomSms = () =>
       })
 
 
-      SMS.send(messageId)
+      await SMS.send(messageId)
 
       return messageId
     }

@@ -32,10 +32,8 @@ export const insert = ({ Schedules, Users }) => {
         quiet = false
       }
 
-      const scheduleId = await Schedules.insertAsync(schedule, (err, scheduleId) => {
-        if (err) { throw err }
-        if (!quiet) { Events.post('schedules/insert', { scheduleId }) }
-      })
+      const scheduleId = await Schedules.insertAsync(schedule)
+      if (!quiet) { Events.post('schedules/insert', { scheduleId }) }
 
       return scheduleId
     }

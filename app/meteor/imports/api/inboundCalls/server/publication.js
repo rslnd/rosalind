@@ -12,9 +12,11 @@ const restrictTopicsToRole = async (userId, field = 'topicId') => {
     return {}
   }
 
-  const topicIds = (await InboundCallsTopics.find({}).fetchAsync()).filter(async t => {
-    return await hasRole(userId, ['inboundCalls-topic-' + t.slug || 'null'])
-  }).map(t => t._id)
+  const topics = await InboundCallsTopics.find({}).fetchAsync()
+  const allowed = await Promise.all(topics.map(t =>
+    t.slug && hasRole(userId, ['inboundCalls-topic-' + t.slug])
+  ))
+  const topicIds = topics.filter((t, i) => allowed[i]).map(t => t._id)
 
   if (await hasRole(userId, ['inboundCalls-topic-null'])) {
     topicIds.push(null)
@@ -27,8 +29,8 @@ export default () => {
   publish({
     name: 'inboundCallsTopics',
     roles: ['inboundCalls', 'inboundCalls-topic-*'],
-    fn: function () {
-      return InboundCallsTopics.find({ ...restrictTopicsToRole(this.userId, '_id') })
+    fn: async function () {
+      return InboundCallsTopics.find({ ...await restrictTopicsToRole(this.userId, '_id') })
     }
   })
 
@@ -36,9 +38,10 @@ export default () => {
     name: 'inboundCalls',
     roles: ['inboundCalls', 'inboundCalls-topic-*'],
     fn: function () {
+      const userId = this.userId
       return {
-        find: function () {
-          return InboundCalls.find({ ...restrictTopicsToRole(this.userId), removed: { $ne: true } })
+        find: async function () {
+          return InboundCalls.find({ ...await restrictTopicsToRole(userId), removed: { $ne: true } })
         },
         children: [
           {

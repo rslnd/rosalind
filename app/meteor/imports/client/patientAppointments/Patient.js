@@ -378,6 +378,7 @@ const Loyalty = withPromise(fetchLoyalty)(({ patientSince, totalRevenue, patient
     confirm: 'Sperren'})
       if (yes) {
         Patients.actions.unsetPortalVerified.callPromise({ patientId: _id })
+          .catch(err => { Alert.error(__('ui.error')); console.error(err) })
       }
     }}>
       {

@@ -83,7 +83,7 @@ export const createReminderForAppointment = ({ Messages }) => {
       // still succeed even if its reminder can't be built).
       let message
       try {
-        message = buildReminderMessage({ payload, holidays })
+        message = await buildReminderMessage({ payload, holidays })
       } catch (e) {
         console.error(`[Messages] createReminderForAppointment: Failed to build reminder for appointment ${appointmentId}`, e)
         return

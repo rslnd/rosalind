@@ -98,12 +98,12 @@ export const perform = async ({ actions, Patients, Appointments, InboundCalls, M
 
     const changedIds = {
       patients: a.duplicateIds,
-      ...forceReassignPatientId('appointments', Appointments),
-      ...forceReassignPatientId('inboundCalls', InboundCalls),
-      ...forceReassignPatientId('media', Media),
-      ...forceReassignPatientId('messages', Messages),
-      ...forceReassignPatientId('referrals', Referrals),
-      ...forceReassignPatientId('records', Records)
+      ...await forceReassignPatientId('appointments', Appointments),
+      ...await forceReassignPatientId('inboundCalls', InboundCalls),
+      ...await forceReassignPatientId('media', Media),
+      ...await forceReassignPatientId('messages', Messages),
+      ...await forceReassignPatientId('referrals', Referrals),
+      ...await forceReassignPatientId('records', Records)
     }
 
     const result = { masterId, ...changedIds }

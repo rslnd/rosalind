@@ -4,9 +4,8 @@ export default ({ Schedules, Users }) => {
   const getScheduled = async (time = moment()) => {
     const allUsers = await Users.find({}).fetchAsync()
 
-    return allUsers.filter((user) => {
-      return isScheduled(time, user._id)
-    })
+    const scheduled = await Promise.all(allUsers.map(user => isScheduled(time, user._id)))
+    return allUsers.filter((user, i) => scheduled[i])
   }
 
   const isOverrideUnavailable = async (time = moment(), userId = null) => {
@@ -44,9 +43,9 @@ export default ({ Schedules, Users }) => {
   const isScheduled = async (time = moment(), userId = null) => {
     const user = await Users.findOneAsync({ _id: userId })
     if (!user) { return false }
-    if (!Schedules.methods.isOpen(time)) { return false }
-    if (isOverrideUnavailable(time, userId)) { return false }
-    if (isOverrideAvailable(time, userId)) { return true }
+    if (!await Schedules.methods.isOpen({ time })) { return false }
+    if (await isOverrideUnavailable(time, userId)) { return false }
+    if (await isOverrideAvailable(time, userId)) { return true }
     return isScheduledDefault(time, userId)
   }
 

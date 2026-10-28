@@ -29,10 +29,8 @@ export const upsert = ({ Reports }) => {
         return existingReport._id
       } else {
         try {
-          const reportId = await Reports.insertAsync(report, (err) => {
-            if (err) { throw err }
-            Events.post('reports/insert', { reportId })
-          })
+          const reportId = await Reports.insertAsync(report)
+          Events.post('reports/insert', { reportId })
           return reportId
         } catch (e) {
           console.error('[Reports] Insert failed with error', e)

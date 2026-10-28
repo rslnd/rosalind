@@ -9,7 +9,7 @@ const cleanOldJobs = async (job) => {
   }, { fields: { _id: 1 } }).mapAsync(d => d._id)
 
   if (ids.length > 0) {
-    Messages.jobs.removeJobs(ids)
+    await Messages.jobs.removeJobs(ids)
   }
 }
 
@@ -26,14 +26,16 @@ export const worker = (job, callback) => {
           console.error('[Messages] worker: failed temporarily with', e)
         }
 
-        cleanOldJobs(job)
-        job.done()
-        callback()
-      }).catch((e) => {
+        await cleanOldJobs(job).catch(e => console.error('[Messages] worker: failed to clean old jobs', e))
+        await job.done()
+      }).catch(async (e) => {
         console.error('[Messages] worker: failed permanently with', e)
-        job.fail()
+        await job.fail().catch(e => console.error('[Messages] worker: failed to mark job as failed', e))
       })
+      // Always release the queue slot, otherwise processJobs stops picking up jobs after a failure
+      .finally(() => callback())
   } catch (e) {
     console.error('[Messages] worker: hard errored with', e)
+    callback()
   }
 }

@@ -108,8 +108,8 @@ export default async () => {
     await Api.Settings.removeAsync({ key: 'media.s3.secrets' })
     await Api.Settings.removeAsync({ isPublic: { $ne: true} })
 
-    Api.Settings.set('messages.sms.enabled', false)
-    Api.Settings.set('primaryColor', '#3c4fbc')
+    await Api.Settings.set('messages.sms.enabled', false)
+    await Api.Settings.set('primaryColor', '#3c4fbc')
 
     await Api.Settings.insertAsync({
       key: 'logo.svg',

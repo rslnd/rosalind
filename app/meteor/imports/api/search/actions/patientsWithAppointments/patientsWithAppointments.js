@@ -36,7 +36,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
         } else if (query === '!banned') { // banned
           selector = { banned: true }
         } else if (query[0] === '!') { // special case: seach notes, return
-          return findNotes({ Appointments, Patients, query })
+          return await findNotes({ Appointments, Patients, query })
         } else {
           selector = parseQuery(query, forceNgramMatching)
         }

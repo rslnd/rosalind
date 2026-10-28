@@ -39,7 +39,7 @@ export const deduplicate = ({ Patients }) => {
       const Api = require('../../../../api')
       const actions = merge([patients])
       console.log('Deduplicate will perform', actions)
-      perform({ actions, ...Api })
+      await perform({ actions, ...Api })
     }
   })
 }

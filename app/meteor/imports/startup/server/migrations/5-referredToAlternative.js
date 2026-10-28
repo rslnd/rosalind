@@ -10,7 +10,7 @@ Migrations.add({
   up: async function () {
     const cursor = Patients.find({ 'external.bioresonanz.id': { $ne: null } })
 
-    for (const patient of cursor) {
+    for await (const patient of cursor) {
       const referral = {
         patientId: patient._id,
         createdAt: new Date(),

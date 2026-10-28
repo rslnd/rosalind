@@ -93,7 +93,7 @@ export const portalLogin = async (unsafeArgs) => {
       }
     })
 
-    SMS.send(messageId)
+    await SMS.send(messageId)
 
     console.log('portalLogin: sent code in message', { messageId, patientId })
 

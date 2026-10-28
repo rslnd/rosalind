@@ -63,8 +63,10 @@ if (process.env.PROCESS_JOBS === '1') {
 
   const next1AMInMs = moment().add(1, 'day').startOf('day').add(1, 'hour').diff(moment(), 'milliseconds')
 
+  const run = () => autoDeduplicate().catch(e => console.error('[autoDeduplicate] Failed', e))
+
   Meteor.setTimeout(() => {
-    autoDeduplicate()
-    Meteor.setInterval(autoDeduplicate, 1000 * 86400)
+    run()
+    Meteor.setInterval(run, 1000 * 86400)
   }, next1AMInMs)
 }

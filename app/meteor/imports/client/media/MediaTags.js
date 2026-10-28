@@ -5,6 +5,7 @@ import { darken } from '../layout/styles'
 import { Icon } from '../components/Icon'
 import { compose, withState } from 'recompose'
 import { __ } from '../../i18n'
+import Alert from 'react-s-alert'
 
 const composer = (props) => {
   const { media, singleTag, setForceExpanded } = props
@@ -27,7 +28,7 @@ const composer = (props) => {
       update: {
         tagIds
       }
-    })
+    }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
 
     if (singleTag) {
       setForceExpanded(false)

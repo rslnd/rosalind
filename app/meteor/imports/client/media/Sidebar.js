@@ -290,7 +290,7 @@ const Edit = ({ media, handleRemove, setCurrentMediaId }) => {
       update: {
         rotation: (((media.rotation || 0) + 90) % 360)
       }
-    })
+    }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
   }
 
   const handleShare = async (e) => {

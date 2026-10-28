@@ -38,10 +38,10 @@ const wrappedPublication = ({ name, args = {}, roles, fn, allowAnonymous, requir
     })) {
       const result = await fn.call(this, clientArgs)
       if (debug && result && result.count) {
-        console.log(`Publication ${name} returned cursor with ${result.count()} documents`)
+        console.log(`Publication ${name} returned cursor with ${await result.countAsync()} documents`)
       }
       if (debug && result && !result.count) {
-        console.log(`Composite publication ${name} returned ${result.find().count()}+ documents`)
+        console.log(`Composite publication ${name} returned ${await (await result.find()).countAsync()}+ documents`)
       }
       return result
     } else {

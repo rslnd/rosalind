@@ -41,7 +41,7 @@ export default () => {
     }, { fields: { _id: 1 } }).mapAsync(d => d._id)
 
     if (ids.length > 0) {
-      jobs.removeJobs(ids)
+      await jobs.removeJobs(ids)
     }
   }
 
@@ -59,18 +59,19 @@ export default () => {
     .save({
       cancelRepeats: true
     })
+    .catch(e => console.error('[Users] autoLogoutServer: failed to save periodic job', e))
 
   const worker = (job, callback) => {
     console.log('[Users] autoLogoutServer: Running job')
     try {
       removeSessionTokens()
-        .then(() => {
-          cleanOldJobs(job)
-          job.done()
+        .then(async () => {
+          await cleanOldJobs(job).catch(e => console.error('[Users] autoLogoutServer: failed to clean old jobs', e))
+          await job.done()
           callback()
-        }).catch((e) => {
+        }).catch(async (e) => {
           console.error('[Users] autoLogoutServer: errored with', e)
-          job.fail()
+          await job.fail().catch(e => console.error('[Users] autoLogoutServer: failed to mark job as failed', e))
         })
     } catch (e) {
       console.error('[Users] autoLogoutServer: hard errored with', e)
@@ -95,6 +96,7 @@ export default () => {
     Meteor.setTimeout(() => {
       if (process.env.PROCESS_JOBS === '1') {
         jobs.startJobServer()
+          .catch(e => console.error('[Users] autoLogoutServer: failed to start job server', e))
         jobs.processJobs('autoLogoutServer', options, worker)
       }
     }, process.env.NODE_ENV === 'production' ? 60 * 1000 : 1000)

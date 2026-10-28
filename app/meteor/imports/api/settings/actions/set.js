@@ -18,7 +18,7 @@ export const set = ({ Settings }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      Settings.set(key, value, isPublic)
+      await Settings.set(key, value, isPublic)
 
       Events.post('settings/set', { key, isPublic })
     }

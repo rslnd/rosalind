@@ -27,6 +27,7 @@ import { HMTimeField } from '../../components/form'
 import { ApplyDefaultSchedule } from './ApplyDefaultSchedule'
 import { subscribe } from '../../../util/meteor/subscribe'
 import { HMtoString, HMRangeToString } from '../../../util/time/hm'
+import Alert from 'react-s-alert'
 
 const HMRangeToStringWithRoles = (schedule) => {
   if (!schedule || !schedule.from) { return '' }
@@ -124,13 +125,13 @@ class SchedulesDefaultScreenComponent extends React.Component {
         Schedules.actions.upsertDefaultSchedule.callPromise({
           newSchedule,
           scheduleId: _id
-        })
+        }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
       } else if (!newSchedule && _id) {
         console.log('deleting schedule', _id)
         Schedules.actions.upsertDefaultSchedule.callPromise({
           newSchedule,
           scheduleId: _id
-        })
+        }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
       } else if (newSchedule && !_id) {
         console.log('inserting new schedule', { newSchedule, assigneeId, weekday })
         Schedules.actions.upsertDefaultSchedule.callPromise({
@@ -138,7 +139,7 @@ class SchedulesDefaultScreenComponent extends React.Component {
           weekday,
           userId: assigneeId,
           calendarId: this.props.calendar._id
-        })
+        }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
       }
 
       this.handleEndEdit()

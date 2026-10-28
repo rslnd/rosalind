@@ -9,9 +9,9 @@ describe('schedules', () => {
   before(() => {
     const Schedules = {
       methods: {
-        isOpen: (time) => { return time !== 0 }
+        isOpen: async ({ time }) => { return time !== 0 }
       },
-      findOne: (q) => {
+      findOneAsync: async (q) => {
         if (q.userId === 'notAvailableUserByOverride' &&
         q.available === false &&
         q.type === 'override') {
@@ -38,10 +38,10 @@ describe('schedules', () => {
     }
 
     const Users = {
-      findOne: ({ _id }) => { return (_id !== 'doesNotExist') },
+      findOneAsync: async ({ _id }) => { return (_id !== 'doesNotExist') },
       find: () => {
         return {
-          fetch: () => {
+          fetchAsync: async () => {
             return [ { _id: 'scheduledUserByDefault' }, { _id: 'notAvailableUser' } ]
           }
         }
@@ -52,34 +52,34 @@ describe('schedules', () => {
   })
 
   describe('getScheduled', () => {
-    it('filters out unavailable users', () => {
-      expect(isScheduled.getScheduled(moment())).to.eql([{ _id: 'scheduledUserByDefault' }])
+    it('filters out unavailable users', async () => {
+      expect(await isScheduled.getScheduled(moment())).to.eql([{ _id: 'scheduledUserByDefault' }])
     })
   })
 
   describe('isScheduled', () => {
-    it('returns false if user does not exist', () => {
-      expect(isScheduled.isScheduled(null, 'doesNotExist')).to.equal(false)
+    it('returns false if user does not exist', async () => {
+      expect(await isScheduled.isScheduled(null, 'doesNotExist')).to.equal(false)
     })
 
-    it('returns false if time is outside business hours', () => {
-      expect(isScheduled.isScheduled(0, 'validUserId')).to.equal(false)
+    it('returns false if time is outside business hours', async () => {
+      expect(await isScheduled.isScheduled(0, 'validUserId')).to.equal(false)
     })
 
-    it('returns false if user is not available by override', () => {
-      expect(isScheduled.isScheduled(moment(), 'notAvailableUserByOverride')).to.equal(false)
+    it('returns false if user is not available by override', async () => {
+      expect(await isScheduled.isScheduled(moment(), 'notAvailableUserByOverride')).to.equal(false)
     })
 
-    it('returns true if user is available by override', () => {
-      expect(isScheduled.isScheduled(moment(), 'availableUserByOverride')).to.equal(true)
+    it('returns true if user is available by override', async () => {
+      expect(await isScheduled.isScheduled(moment(), 'availableUserByOverride')).to.equal(true)
     })
 
-    it('returns true if user is scheduled by default', () => {
-      expect(isScheduled.isScheduled(moment(), 'scheduledUserByDefault')).to.equal(true)
+    it('returns true if user is scheduled by default', async () => {
+      expect(await isScheduled.isScheduled(moment(), 'scheduledUserByDefault')).to.equal(true)
     })
 
-    it('returns false if user is not scheduled by default', () => {
-      expect(isScheduled.isScheduled(moment(), 'notScheduledUserByDefault')).to.equal(false)
+    it('returns false if user is not scheduled by default', async () => {
+      expect(await isScheduled.isScheduled(moment(), 'notScheduledUserByDefault')).to.equal(false)
     })
   })
 })

@@ -9,7 +9,7 @@ import { overridesToColumns } from './overridesToColumns'
 export default ({ Schedules }) => {
   const getColumns = async ({ day, calendarId }) => {
     const calendar = await Calendars.findOneAsync({ _id: calendarId })
-    const assigneeIds = Schedules.methods.getScheduledAssignees({ day, calendarId })
+    const assigneeIds = await Schedules.methods.getScheduledAssignees({ day, calendarId })
     if (!assigneeIds || assigneeIds.length === 0) { return [] }
 
     const startOfDay = moment(dayToDate(day)).startOf('day').toDate()

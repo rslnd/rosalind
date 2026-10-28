@@ -3,6 +3,8 @@ import { Users } from '../../api/users'
 import { Calendars } from '../../api/calendars'
 import { CalendarsScreen } from './CalendarsScreen'
 import { prompt } from '../layout/Prompt'
+import Alert from 'react-s-alert'
+import { __ } from '../../i18n'
 
 const composer = (props) => {
   const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
@@ -19,6 +21,7 @@ const composer = (props) => {
     })
     if (ok) {
       Calendars.actions.softRemove.callPromise({ calendarId })
+        .catch(err => { Alert.error(__('ui.error')); console.error(err) })
     }
   }
 

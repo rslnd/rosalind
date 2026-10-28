@@ -17,7 +17,7 @@ export const stopTracking = ({ Timesheets }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const currentTimesheet = await Timesheets.actions.isTracking.callPromise({ userId })
+      const currentTimesheet = await Timesheets.methods.isTracking({ userId })
 
       if (currentTimesheet) {
         await Timesheets.updateAsync({ _id: currentTimesheet._id }, {

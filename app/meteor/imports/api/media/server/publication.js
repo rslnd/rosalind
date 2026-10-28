@@ -15,7 +15,7 @@ export const publication = ({ Media, MediaTags }) => {
       const selector = { patientId }
 
       // Attach derived field on documents before publishing
-      const credentials = getCredentials()
+      const credentials = await getCredentials()
 
       const transform = doc => {
         if (credentials) {

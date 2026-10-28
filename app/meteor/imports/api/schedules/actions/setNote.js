@@ -52,10 +52,8 @@ export const setNote = ({ Schedules }) => {
           noteDetails
         }
 
-        const scheduleId = await Schedules.insertAsync(schedule, (err) => {
-          if (err) { throw err }
-          Events.post('schedules/setNoteInsert', { scheduleId })
-        })
+        const scheduleId = await Schedules.insertAsync(schedule)
+        Events.post('schedules/setNoteInsert', { scheduleId })
         return scheduleId
       }
     }

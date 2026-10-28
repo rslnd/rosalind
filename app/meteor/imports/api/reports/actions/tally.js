@@ -38,7 +38,7 @@ export const tally = ({ Reports }) => {
           // Actual hours
           const start = moment(dayToDate(report.day)).startOf('day')
           const end = moment(dayToDate(report.day)).endOf('day')
-          a.hours.actual = Timesheets.methods.sum({ userId: a.userId, start, end })
+          a.hours.actual = await Timesheets.methods.sum({ userId: a.userId, start, end })
           if (a.hours.actual) {
             a.hours.actual = a.hours.actual / 1000 / 60 / 60
             a.patients.perHourActual = a.patients.total / a.hours.actual

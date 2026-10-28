@@ -120,7 +120,7 @@ export const createReminders = ({ Messages }) => {
 
         const cutoffDate = calculateFutureCutoff(moment.tz(process.env.TZ_CLIENT))
         // console.log('reminders cutoff date', cutoffDate)
-        const appointments = findUpcomingAppointments(cutoffDate)
+        const appointments = await findUpcomingAppointments(cutoffDate)
 
         // console.log('reminders cutoff date', cutoffDate, appointments[0] && appointments[0].start, appointments[0] && appointments[appointments.length - 1].start)
 
@@ -164,8 +164,8 @@ export const createReminders = ({ Messages }) => {
 
         // console.log('apptsWMobile', appointmentsWithMobile.length)
 
-        const messages = messagePayloads
-          .map((payload) => buildReminderMessage({ payload, holidays }))
+        const messages = (await Promise.all(messagePayloads
+          .map((payload) => buildReminderMessage({ payload, holidays }))))
           .filter(identity)
 
         console.log('upserting messages: ' + messages.length)

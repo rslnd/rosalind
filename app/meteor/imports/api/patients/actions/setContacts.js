@@ -42,10 +42,8 @@ export const setContacts = ({ Patients }) => {
             updatedAt: new Date(),
             updatedBy: this.userId
           }
-        }, (err) => {
-          if (err) { throw err }
-          Events.post('patients/setContacts', { patientId })
         })
+        Events.post('patients/setContacts', { patientId })
       } else {
         throw new Meteor.Error(404, 'Patient not found')
       }

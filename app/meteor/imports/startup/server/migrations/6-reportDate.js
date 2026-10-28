@@ -8,7 +8,7 @@ Migrations.add({
   up: async function () {
     const cursor = Reports.find({ day: { $ne: null } })
 
-    for (const report of cursor) {
+    for await (const report of cursor) {
       const date = dayToDate(report.day)
 
       await Reports.updateAsync({ _id: report._id }, {

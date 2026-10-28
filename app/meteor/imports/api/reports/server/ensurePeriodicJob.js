@@ -31,4 +31,5 @@ export const ensurePeriodicJob = () => {
     .save({
       cancelRepeats: true
     })
+    .catch(e => console.error('[Reports] Failed to save periodic job', e))
 }

@@ -113,6 +113,7 @@ const composer = (props) => {
     closeModal()
     Alert.success(__('appointments.softRemoveSuccess'))
     Appointments.actions.softRemove.callPromise(args)
+      .catch(err => { Alert.error(__('ui.error')); console.error(err) })
   })
 
   let move

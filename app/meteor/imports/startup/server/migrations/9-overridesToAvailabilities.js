@@ -36,12 +36,12 @@ const migrateUp = async () => {
     const cutoffDate = new Date()
 
     const days = rangeToDays({
-      from: cutoffDate || overrideDate('earliest'), // TODO: Remove debugging
-      to: overrideDate('latest') || cutoffDate
+      from: cutoffDate || await overrideDate('earliest'), // TODO: Remove debugging
+      to: await overrideDate('latest') || cutoffDate
     })
 
     await Promise.all(days.map(async day => {
-      const columns = Schedules.methods.getColumns({ calendarId, day })
+      const columns = await Schedules.methods.getColumns({ calendarId, day })
       const availabilities = Schedules.methods.columnsToAvailabilities(columns)
 
       try {
@@ -61,9 +61,11 @@ Meteor.startup(migrateUp)
 
 const nextMidnightInMs = moment().add(1, 'day').startOf('day').diff(moment(), 'milliseconds')
 
+const runMigrateUp = () => migrateUp().catch(e => console.error('[overridesToAvailabilities] Failed', e))
+
 Meteor.setTimeout(() => {
-  migrateUp()
-  Meteor.setInterval(migrateUp, 1000 * 86400)
+  runMigrateUp()
+  Meteor.setInterval(runMigrateUp, 1000 * 86400)
 }, nextMidnightInMs)
 
 

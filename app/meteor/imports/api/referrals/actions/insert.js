@@ -29,7 +29,7 @@ export const insert = ({ Referrals, Referrables }) => {
         throw new Error('[Referrals] Maximum referrable count is zero')
       }
 
-      const existingReferrals = Referrals.find({ patientId, referredTo, referrableId })
+      const existingReferrals = await Referrals.find({ patientId, referredTo, referrableId }).fetchAsync()
       if (referrable.max >= 1 && existingReferrals.length >= referrable.max) {
         console.warn(`[Referrals] insert: Patient ${patientId} has already been referred to ${referredTo}`)
         return

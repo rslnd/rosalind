@@ -137,7 +137,7 @@ export const insert = ({ Media, MediaTags }) =>
       }
 
       // Create multiple presigned requests as fallbacks, the app will try to upload to one of them starting, with the first
-      const credentials = getCredentials()
+      const credentials = await getCredentials()
       const signed = createPresignedRequests({
         credentials,
         filename,

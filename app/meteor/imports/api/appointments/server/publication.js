@@ -170,8 +170,7 @@ export default () => {
 
   // composite publishing is buggy with comments and pagination,
   // that's why there are 3 separate regular publications for appts, comments and patient
-  const appointmentsCursor = async ({ patientId, page = 0, assigneeId, calendarId }) => {
-    const userId = this.userId
+  const appointmentsCursor = async ({ userId, patientId, page = 0, assigneeId, calendarId }) => {
     const pageSize = 10
     const selector = { patientId }
 
@@ -232,7 +231,7 @@ export default () => {
     },
     roles: ['appointments-*'],
     fn: async function ({ patientId, page = 0, assigneeId, calendarId }) {
-      return appointmentsCursor({ patientId, page, assigneeId, calendarId })
+      return appointmentsCursor({ userId: this.userId, patientId, page, assigneeId, calendarId })
     }
   })
 
@@ -247,7 +246,7 @@ export default () => {
     },
     roles: ['appointments-*'],
     fn: async function ({ patientId, page = 0, assigneeId, calendarId }) {
-      const as = await appointmentsCursor({ patientId, page, assigneeId, calendarId })
+      const as = await appointmentsCursor({ userId: this.userId, patientId, page, assigneeId, calendarId })
       const ids = await as.mapAsync(a => a._id)
       return Comments.find({ docId: { $in: ids } })
     }

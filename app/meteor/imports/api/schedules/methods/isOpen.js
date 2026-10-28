@@ -3,12 +3,12 @@ import { extendMoment } from 'moment-range'
 const moment = extendMoment(momentTz)
 
 export default ({ Schedules }) => {
-  const isOpen = ({ time = moment(), within = 'minute' } = {}) => {
-    if (Schedules.methods.isBusinessHoursOverride({ time, within })) {
+  const isOpen = async ({ time = moment(), within = 'minute' } = {}) => {
+    if (await Schedules.methods.isBusinessHoursOverride({ time, within })) {
       return true
-    } else if (Schedules.methods.isHoliday({ time, within })) {
+    } else if (await Schedules.methods.isHoliday({ time, within })) {
       return false
-    } else if (Schedules.methods.isRegularBusinessHours({ time, within })) {
+    } else if (await Schedules.methods.isRegularBusinessHours({ time, within })) {
       return true
     } else {
       return false

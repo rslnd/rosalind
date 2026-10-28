@@ -205,24 +205,25 @@ export const upsert = ({ Patients }) =>
             console.log('[Patients] Updating', existingPatient._id)
 
             // trimStrings collection2 flag to prevent killing space-y "layout" of notes
-            await Patients.updateAsync({ _id: existingPatient._id }, update, { trimStrings: false }, async (err) => {
-              if (err) {
-                console.error('[Patients] upsert: Update failed with error', err)
-                throw err
+            // Meteor 3's updateAsync never invokes a callback; follow-ups run after the await.
+            try {
+              await Patients.updateAsync({ _id: existingPatient._id }, update, { trimStrings: false })
+            } catch (err) {
+              console.error('[Patients] upsert: Update failed with error', err)
+              throw err
+            }
+            if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
+
+            await ensureExternalReferral({
+              patientId: existingPatient._id,
+              createExternalReferralTo
+            })
+
+            await Patients.updateAsync({ _id: existingPatient._id }, {
+              $set: {
+                updatedAt: new Date(),
+                updatedBy: this.userId
               }
-              if (!quiet) { Events.post('patients/update', { patientId: existingPatient._id }) }
-
-              ensureExternalReferral({
-                patientId: existingPatient._id,
-                createExternalReferralTo
-              })
-
-              await Patients.updateAsync({ _id: existingPatient._id }, {
-                $set: {
-                  updatedAt: new Date(),
-                  updatedBy: this.userId
-                }
-              })
             })
           }
 
@@ -237,17 +238,13 @@ export const upsert = ({ Patients }) =>
           }
 
           try {
-            const patientId = await Patients.insertAsync(patient, (e, patientId) => {
-              if (e) {
-                console.error('[Patients] upsert: Insert failed with error', e)
-                throw e
-              }
-              if (!quiet) { Events.post('patients/insert', { patientId }) }
+            // Meteor 3's insertAsync never invokes a callback; follow-ups run after the await.
+            const patientId = await Patients.insertAsync(patient)
+            if (!quiet) { Events.post('patients/insert', { patientId }) }
 
-              ensureExternalReferral({
-                patientId,
-                createExternalReferralTo
-              })
+            await ensureExternalReferral({
+              patientId,
+              createExternalReferralTo
             })
 
             return patientId

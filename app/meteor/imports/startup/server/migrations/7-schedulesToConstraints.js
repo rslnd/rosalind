@@ -8,7 +8,7 @@ Migrations.add({
   up: async function () {
     const cursor = Schedules.find({ type: 'constraint' })
 
-    for (const schedule of cursor) {
+    for await (const schedule of cursor) {
       let from
       let to
 
