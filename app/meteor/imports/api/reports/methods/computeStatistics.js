@@ -168,10 +168,10 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
     }
   }
 
-  const buildScope = ({ from, to, realAppts, withUtilization }) => {
+  const buildScope = async ({ from, to, realAppts, withUtilization }) => {
     const workingDays = rangeToDays({ from, to }).length
     const util = withUtilization
-      ? computeUtilization({ from, to })
+      ? await computeUtilization({ from, to })
       : { scheduledByUser: {}, scheduledTotal: null, slotByUser: {}, slotStatsTotal: {} }
 
     return {
@@ -180,7 +180,7 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
       workingDays,
       ...computeScope({
         appointments: realAppts,
-        freeSlots: fetchFreeSlots({ from, to }),
+        freeSlots: await fetchFreeSlots({ from, to }),
         scheduledHoursByUser: util.scheduledByUser,
         scheduledHoursTotal: util.scheduledTotal,
         slotStatsByUser: util.slotByUser,
@@ -201,12 +201,12 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
   for (let k = 0; k <= yearsBack; k++) {
     const end = now.clone().subtract(k, 'years')
     const range = rangeOf(end)
-    yearWindows.push({ year: end.year(), ...range, realAppts: fetchReal(range) })
+    yearWindows.push({ year: end.year(), ...range, realAppts: await fetchReal(range) })
   }
 
-  const current = buildScope({ ...yearWindows[0], withUtilization: true })
+  const current = await buildScope({ ...yearWindows[0], withUtilization: true })
   const previous = yearWindows[1]
-    ? buildScope({ ...yearWindows[1], withUtilization: true })
+    ? await buildScope({ ...yearWindows[1], withUtilization: true })
     : { from: null, to: null, total: null, assignees: [] }
 
   // Today (selected day)
@@ -214,8 +214,8 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
     from: now.clone().startOf('day').toDate(),
     to: now.clone().endOf('day').toDate()
   }
-  const todayReal = fetchReal(todayRange)
-  const todayFreeSlots = fetchFreeSlots(todayRange)
+  const todayReal = await fetchReal(todayRange)
+  const todayFreeSlots = await fetchFreeSlots(todayRange)
 
   // Retrospective "Heute" block — appointment metrics only (no roster/slot cost).
   const todayScope = computeScope({
@@ -228,7 +228,7 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
   // WITH roster hours + calendar-slot occupancy and a row for every rostered
   // doctor (present, even if nothing is booked yet). Lead time is split into the
   // online vs. internally-arranged bookings for that day.
-  const forecastUtil = computeUtilization(todayRange)
+  const forecastUtil = await computeUtilization(todayRange)
   const forecastPresentIds = uniq([
     ...Object.keys(forecastUtil.scheduledByUser),
     ...Object.keys(forecastUtil.slotByUser)

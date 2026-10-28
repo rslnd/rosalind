@@ -20,7 +20,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
     async run({ day, accessToken }) {
       try {
         if (this.isSimulation) { return }
-        assertReportsAccess({ userId: this.userId, connection: this.connection, accessToken })
+        await assertReportsAccess({ userId: this.userId, connection: this.connection, accessToken })
 
         const calendars = await Calendars.find({}, { sort: { order: 1 } }).fetchAsync()
 
@@ -73,7 +73,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
               appointmentId: { $in: appointmentIds }
             }).fetchAsync()
 
-            const tagMapping = Tags.methods.getMappingForReports()
+            const tagMapping = await Tags.methods.getMappingForReports()
 
             const existingReport = await Reports.findOneAsync({
               calendarId,

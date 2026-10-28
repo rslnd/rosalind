@@ -146,7 +146,7 @@ export const computePatientFlow = async ({ Appointments, Users, series = [], com
     return await Appointments.find(selector, { fields: REAL_FIELDS }).fetchAsync()
   }
 
-  const buildCohort = (s) => {
+  const buildCohort = async (s) => {
     const { id, label, from, to, assigneeIds, tags } = s
     let previous = null
     let compareFrom = null
@@ -154,7 +154,7 @@ export const computePatientFlow = async ({ Appointments, Users, series = [], com
     if (compare) {
       compareFrom = moment(from).subtract(1, 'year').toDate()
       compareTo = moment(to).subtract(1, 'year').toDate()
-      previous = aggregate(fetchRange(compareFrom, compareTo, assigneeIds, tags), { now })
+      previous = aggregate(await fetchRange(compareFrom, compareTo, assigneeIds, tags), { now })
     }
     return {
       id,
@@ -164,13 +164,13 @@ export const computePatientFlow = async ({ Appointments, Users, series = [], com
       compareFrom,
       compareTo,
       filters: { assigneeIds: assigneeIds || [], tags: tags || [] },
-      current: aggregate(fetchRange(from, to, assigneeIds, tags), { now }),
+      current: aggregate(await fetchRange(from, to, assigneeIds, tags), { now }),
       previous
     }
   }
 
   return {
     compare: !!compare,
-    series: series.map(buildCohort)
+    series: await Promise.all(series.map(buildCohort))
   }
 }

@@ -74,7 +74,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
             'payload.appointmentId': { $in: appointmentIds }
           }).fetchAsync()
 
-          const tagMapping = Tags.methods.getMappingForReports()
+          const tagMapping = await Tags.methods.getMappingForReports()
 
           const existingReport = await Reports.findOneAsync({
             calendarId,

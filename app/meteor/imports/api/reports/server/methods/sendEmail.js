@@ -29,7 +29,7 @@ export const sendEmail = async (args = {}) => {
     const day = args.day || dateToDay(moment(args))
     const asOf = moment(dayToDate(day)).endOf('day').toDate()
 
-    const statistics = computeStatistics({ Appointments, Schedules, Calendars, Users, Constraints, Tags, asOf })
+    const statistics = await computeStatistics({ Appointments, Schedules, Calendars, Users, Constraints, Tags, asOf })
 
     const { title, text } = renderEmail({ statistics })
     const pdf = await renderPdf({ day })
