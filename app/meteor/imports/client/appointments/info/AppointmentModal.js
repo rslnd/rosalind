@@ -18,7 +18,9 @@ export const AppointmentModal = (props) => {
     patient
   } = props
 
-  const Actions = () =>
+  // Element, not a component defined inline: a new component type on every
+  // render would remount the footer and reset the "..." menu state
+  const actions =
     <Modal.Footer style={{ backgroundColor: '#fcfcfc' }}>
       <AppointmentActionsContainer
         appointmentId={appointmentId}
@@ -44,7 +46,7 @@ export const AppointmentModal = (props) => {
         }
       </Modal.Body>
 
-      <Actions />
+      {actions}
 
       {
         patient &&
@@ -53,7 +55,7 @@ export const AppointmentModal = (props) => {
               <PastAppointmentsContainer
                 patientId={patient._id}
                 currentAppointmentId={appointmentId}
-                appendIfMany={<Actions />} />
+                appendIfMany={actions} />
             </div>
           </div>
       }

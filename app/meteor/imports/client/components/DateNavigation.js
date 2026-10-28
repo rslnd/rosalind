@@ -1,4 +1,5 @@
 import React from 'react'
+import { unzoom } from '../layout/bodyZoom'
 import ReactDOM from 'react-dom'
 import moment from 'moment-timezone'
 import { withRouter } from 'react-router-dom'
@@ -130,7 +131,7 @@ class MonthYearSelect extends React.Component {
     const buttonRect = this.buttonRef.current.getBoundingClientRect()
     const containerRect = container ? container.getBoundingClientRect() : { top: 0 }
     const coords = {
-      top: buttonRect.bottom - containerRect.top + 2
+      top: unzoom(buttonRect.bottom - containerRect.top) + 2
     }
     this.setState({ open: true, coords }, () => {
       document.addEventListener('mousedown', this.handleOutsideClick, true)

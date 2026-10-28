@@ -1,5 +1,6 @@
 import moment from 'moment-timezone'
 import { applyHM } from '../../schedules/methods/transformDefaultsToOverrides'
+import { ceilToSlot } from './ceilToSlot'
 
 // Server-side equivalent of the DSL `openBookable` slot logic: for a given day
 // and assignee, create bookable appointment slots covering the provided time
@@ -56,7 +57,8 @@ export const createBookableSlots = ({ Appointments }) => async ({ calendar, cale
 
       const slotStart = applyHM(day, { h: Math.floor(min / 60), m })
       const endMin = min + step
-      const slotEnd = applyHM(day, { h: Math.floor(endMin / 60), m: endMin % 60 })
+      // end on the next grid line, eg. with atMinutes [0, 10, 15, ...] 8:00 -> 8:10
+      const slotEnd = ceilToSlot({ calendar, date: applyHM(day, { h: Math.floor(endMin / 60), m: endMin % 60 }) }).toDate()
 
       if (isBlocked(slotStart, slotEnd)) { continue }
 

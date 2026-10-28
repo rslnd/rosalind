@@ -125,11 +125,11 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       console.log('[Schedules] applyDefaultSchedule: Removed', countRemovedBookables, 'bookable slots')
 
 
-      const existingDaySchedules = Schedules.find({
+      const existingDaySchedules = await Schedules.find({
         type: 'day',
         calendarId,
         $or: days.map(d => daySelector(d)) // force 1-arity to prevent map index from being set as prefix
-      })
+      }).fetchAsync()
 
       // Remove (assignees or all) from day schedules in selected period
       if (assigneeIds) {
@@ -138,7 +138,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
           await Schedules.updateAsync({ _id: ds._id },
             {
               $set: {
-                userIds: without(ds.userIds, assigneeIds)
+                userIds: without(ds.userIds, ...assigneeIds)
               }
             })
         }))
@@ -302,7 +302,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       const makeBookableSlots = createBookableSlots({ Appointments })
       let totalBookables = 0
 
-      days.forEach(day => {
+      for (const day of days) {
         const wd = moment(dayToDate(day)).locale('en').format('ddd').toLowerCase()
         const bookableDefaults = defaultSchedules.filter(d =>
           d.weekday === wd &&
@@ -320,8 +320,8 @@ export const applyDefaultSchedule = ({ Schedules }) => {
           byUser[d.userId].push({ from: d.from, to: d.to })
         })
 
-        Object.keys(byUser).forEach(userId => {
-          totalBookables += makeBookableSlots({
+        for (const userId of Object.keys(byUser)) {
+          totalBookables += await makeBookableSlots({
             calendar,
             calendarId,
             userId,
@@ -330,8 +330,8 @@ export const applyDefaultSchedule = ({ Schedules }) => {
             blockedRanges: partialVacationRanges(day, userId),
             createdBy: this.userId
           })
-        })
-      })
+        }
+      }
 
       console.log('[Schedules] applyDefaultSchedule: Created', totalBookables, 'bookable slots')
 
