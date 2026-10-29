@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { HotKeys, configure } from 'react-hotkeys'
 import { NonceProvider } from 'react-select'
 import { Meteor } from 'meteor/meteor'
@@ -60,8 +60,9 @@ export default () => {
     containerNode.id = 'rosalind'
     const rootNode = document.body.appendChild(containerNode)
 
+    const root = createRoot(rootNode)
     const rerender = () => {
-      ReactDOM.render(<Rosalind />, rootNode)
+      root.render(<Rosalind />)
     }
 
     rerender()

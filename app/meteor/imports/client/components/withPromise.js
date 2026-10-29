@@ -45,9 +45,9 @@ export const withPromise = fetcher =>
         this.cancel = this.cancel.bind(this)
       }
 
-      componentWillReceiveProps (nextProps) {
-        if (!propsEqual(this.props, nextProps)) {
-          this.fetch(nextProps)
+      componentDidUpdate (prevProps) {
+        if (!propsEqual(prevProps, this.props)) {
+          this.fetch(this.props)
         }
       }
 

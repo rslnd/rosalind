@@ -16,7 +16,7 @@ shell-server@0.7.1
 promise@1.0.0
 modules@0.20.3
 dynamic-import@0.8.0
-react-meteor-data
+react-meteor-data@4.0.1
 ddp-rate-limiter@1.3.0
 audit-argument-checks@1.0.8
 ddp-server@3.5.0
