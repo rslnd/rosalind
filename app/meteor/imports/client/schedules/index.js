@@ -1,20 +1,20 @@
 import React from 'react'
-import { Switch } from 'react-router-dom'
+import { Routes } from 'react-router-dom'
 import { CalendarSelect } from '../calendars/CalendarSelect'
 import { SchedulesDefaultScreen } from './default/SchedulesDefaultScreen'
 import { HolidaysContainer } from './holidays/HolidaysContainer'
 import { ConstraintsContainer } from './constraints/ConstraintsContainer'
-import { Route } from '../layout/SafeRoute'
+import { route } from '../layout/SafeRoute'
 
-export const Schedules = ({ match }) => (
+export const Schedules = () => (
   <div>
-    <Switch>
-      <Route exact path={`${match.url}/default/:slug`} component={SchedulesDefaultScreen} />
-      <Route exact path={`${match.url}/default`} component={Select} />
-      <Route exact path={`${match.url}/holidays`} component={HolidaysContainer} />
-      <Route exact path={`${match.url}/constraints`} component={ConstraintsContainer} />
-      <Route path={match.url} component={Select} />
-    </Switch>
+    <Routes>
+      {route('default/:slug', SchedulesDefaultScreen)}
+      {route('default', Select)}
+      {route('holidays', HolidaysContainer)}
+      {route('constraints', ConstraintsContainer)}
+      {route('*', Select)}
+    </Routes>
   </div>
 )
 

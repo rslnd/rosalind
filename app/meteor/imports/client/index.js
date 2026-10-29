@@ -4,7 +4,7 @@ import { HotKeys, configure } from 'react-hotkeys'
 import { NonceProvider } from 'react-select'
 import { Meteor } from 'meteor/meteor'
 import { Provider as ReduxProvider } from 'react-redux'
-import { BrowserRouter as Router, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Routes } from 'react-router-dom'
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import { muiTheme } from './layout/muiTheme'
 import { store } from './store'
@@ -20,29 +20,29 @@ import { Reports } from './reports'
 import { Users } from './users'
 import { Patients } from './patients'
 import { System } from './system'
-import { Route } from './layout/SafeRoute'
+import { route } from './layout/SafeRoute'
 import { getStyleNonce } from './layout/styles'
 
 export const Rosalind = () => (
   <ReduxProvider store={store}>
     <Router>
-      <NonceProvider nonce={getStyleNonce()}>
+      <NonceProvider nonce={getStyleNonce()} cacheKey='react-select'>
         <MuiThemeProvider theme={muiTheme}>
           <HotKeys keyMap={keyMap}>
             <MainLayoutContainer>
-              <Switch>
-                <Route path='/appointments' component={Appointments} />
-                <Route path='/waitlist' component={Waitlist} />
-                <Route path='/checkups' component={Checkups} />
-                <Route path='/inboundCalls' component={InboundCalls} />
-                <Route path='/schedules' component={Schedules} />
-                <Route path='/reports' component={Reports} />
-                <Route path='/users' component={Users} />
-                <Route path='/patients' component={Patients} />
-                <Route path='/system' component={System} />
-                <Route exact path='/' component={Dashboard} />
-                <Route path='/' component={Error} />
-              </Switch>
+              <Routes>
+                {route('/appointments/*', Appointments)}
+                {route('/waitlist/*', Waitlist)}
+                {route('/checkups/*', Checkups)}
+                {route('/inboundCalls/*', InboundCalls)}
+                {route('/schedules/*', Schedules)}
+                {route('/reports/*', Reports)}
+                {route('/users/*', Users)}
+                {route('/patients/*', Patients)}
+                {route('/system/*', System)}
+                {route('/', Dashboard)}
+                {route('*', Error)}
+              </Routes>
             </MainLayoutContainer>
           </HotKeys>
         </MuiThemeProvider>

@@ -1,6 +1,6 @@
 import identity from 'lodash/identity'
 import { withTracker } from '../components/withTracker'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from '../components/withRouter'
 import { Meteor } from 'meteor/meteor'
 import { Calendars } from '../../api/calendars'
 import { InboundCallsTopics, InboundCalls } from '../../api/inboundCalls'
