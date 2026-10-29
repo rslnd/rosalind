@@ -1,4 +1,4 @@
-import dot from 'mongo-dot-notation'
+import { flatten } from 'mongo-dot-notation'
 import idx from 'idx'
 import omitBy from 'lodash/fp/omitBy'
 import isEqual from 'lodash/isEqual'
@@ -153,7 +153,7 @@ export const upsert = ({ Patients }) =>
           const agreements = patient.agreements || []
           delete patient.agreements
 
-          let update = dot.flatten(cleanFields(patient))
+          let update = flatten(cleanFields(patient))
           if (!update['$unset']) {
             update['$unset'] = {}
           }

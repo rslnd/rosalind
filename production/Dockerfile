@@ -15,6 +15,8 @@ WORKDIR /opt/app/programs/server
 ENV NPM_CONFIG_LOGLEVEL warn
 ENV TZ UTC
 ENV NODE_ENV production
+# puppeteer launches the google-chrome-stable installed below (channel: 'chrome')
+ENV PUPPETEER_SKIP_DOWNLOAD true
 
 # Chrome for puppeteer (PDF reports). The .deb declares its own library
 # dependencies, so apt resolves the correct (t64-renamed) packages on trixie.
