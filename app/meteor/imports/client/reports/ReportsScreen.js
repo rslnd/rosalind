@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import Button from 'react-bootstrap/lib/Button'
+import { Button } from '../components/bootstrap'
 import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { DateNavigation } from '../components/DateNavigation'

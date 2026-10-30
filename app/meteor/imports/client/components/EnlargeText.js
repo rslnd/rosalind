@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import Overlay from 'react-bootstrap/lib/Overlay'
+import { createPortal } from 'react-dom'
 import { Icon } from './Icon'
 
 const largeStyle = {
@@ -52,17 +52,14 @@ export const EnlargeText = ({ children, iconOnly, style, value, icon = 'search-p
         }
       </span>
 
-      <Overlay
-        show={show}
-        onHide={() => setShow(false)}
-        enforceFocus={false}
-        animation={false}
-        backdrop={false}
-        bsSize='large'>
-        <CustomModal onHide={this.handleHide}>
-          {value || children}
-        </CustomModal>
-      </Overlay>
+      {
+        show && createPortal(
+          <CustomModal onHide={() => setShow(false)}>
+            {value || children}
+          </CustomModal>,
+          document.body
+        )
+      }
     </span>
   )
 }

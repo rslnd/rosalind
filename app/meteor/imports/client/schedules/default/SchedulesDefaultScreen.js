@@ -18,7 +18,7 @@ import {
   TableRow
 } from '../../components/Table'
 import { Icon } from '../../components/Icon'
-import Modal from 'react-bootstrap/lib/Modal'
+import { Modal } from '../../components/bootstrap'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Checkbox from '@material-ui/core/Checkbox'

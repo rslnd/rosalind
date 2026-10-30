@@ -1,5 +1,5 @@
 import React from 'react'
-import Modal from 'react-bootstrap/lib/Modal'
+import { Modal } from '../../components/bootstrap'
 import { AppointmentInfoContainer } from './AppointmentInfoContainer'
 import { AppointmentActionsContainer } from './AppointmentActionsContainer'
 import { PastAppointmentsContainer } from '../../patients/PastAppointmentsContainer'
