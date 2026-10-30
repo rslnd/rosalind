@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
+import { callNested } from '../../../util/meteor/isInSimulation'
 
 export const upsert = ({ Patients }) => {
   return new ValidatedMethod({
@@ -21,7 +22,7 @@ export const upsert = ({ Patients }) => {
         return result
       }
 
-      return Meteor.call('patients/upsert', { patient })
+      return await callNested('patients/upsert', { patient })
     }
   })
 }

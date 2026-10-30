@@ -2,12 +2,12 @@ import { Migrations } from 'meteor/percolate:migrations'
 import { Patients } from '../../../api/patients'
 import { dayToDate } from '../../../util/time/day'
 
-const up = () => {
-  const patients = Patients.find({ note: { $ne: null } }).fetch()
+const up = async () => {
+  const patients = await Patients.find({ note: { $ne: null } }).fetchAsync()
 
   console.log('[Migration]', patients.length, 'patients with note to parse')
 
-  patients.forEach((patient, i) => {
+  for (const [i, patient] of patients.entries()) {
     if ((i % 1000) === 0) {
       console.log('[Migration] Progress', i, 'of', patients.length)
     }
@@ -38,7 +38,7 @@ const up = () => {
       const newNote = patient.note.replace(dateInNote[0], '').trim()
 
       try {
-        Patients.update({ _id: patient._id }, {
+        await Patients.updateAsync({ _id: patient._id }, {
           $set: {
             patientSince,
             note: newNote
@@ -48,7 +48,7 @@ const up = () => {
         console.error(`[Migration] Failed to migrate patient ${patient._id} ${dateInNote[0]} ${JSON.stringify(day)}`)
       }
     }
-  })
+  }
 
   return true
 }

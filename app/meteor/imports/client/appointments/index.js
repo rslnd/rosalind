@@ -1,17 +1,17 @@
 import React from 'react'
-import { Switch } from 'react-router-dom'
+import { Routes } from 'react-router-dom'
 import { AppointmentsContainer } from './dayView/AppointmentsContainer'
 import { CalendarSelect } from '../calendars/CalendarSelect'
-import { Route } from '../layout/SafeRoute'
+import { route } from '../layout/SafeRoute'
 
-export const Appointments = ({ match }) => (
-  <Switch>
-    <Route path={`${match.url}/day/:calendar/:date`} component={AppointmentsContainer} />
-    <Route path={`${match.url}/day/:calendar`} component={AppointmentsContainer} />
-    <Route path={`${match.url}/:calendar/:date`} component={AppointmentsContainer} />
-    <Route path={`${match.url}/:calendar`} component={AppointmentsContainer} />
-    <Route path={`${match.url}`} component={Select} />
-  </Switch>
+export const Appointments = () => (
+  <Routes>
+    {route('day/:calendar/:date', AppointmentsContainer)}
+    {route('day/:calendar', AppointmentsContainer)}
+    {route(':calendar/:date', AppointmentsContainer)}
+    {route(':calendar', AppointmentsContainer)}
+    {route('*', Select)}
+  </Routes>
 )
 
 const Select = () =>

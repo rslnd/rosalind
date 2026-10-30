@@ -139,16 +139,10 @@ const createPreview = ({ mediaType, base64, quality, maxPx }) =>
     img.src = `data:${mediaType};base64,${base64}`
   })
 
-const call = (name, args) =>
-  new Promise((resolve, reject) => {
-    Meteor.call(name, args, (err, res) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(res)
-      }
-    })
-  })
+// Meteor.callAsync, not Meteor.call: the sync path does not await the method's
+// stub, which corrupts DDP._CurrentMethodInvocation and wedges the client into a
+// permanent simulation where no method reaches the server. See util/meteor/call.
+const call = (name, args) => Meteor.callAsync(name, args)
 
 const uploadS3WithFallback = async ({ signedRequests, file }) => {
   for (let i = 0; i < signedRequests.length; i++) {
@@ -299,15 +293,13 @@ const setupAuerPhone = () => {
     const hasNew = calls && calls && calls[0] && calls[0].id && (auerPhonelastSeenId !== calls[0].id)
     if (hasNew) {
       console.log(`[auerPhone] Importing ${calls.length} calls, latest id ${calls[0] && calls[0].id}, previous was ${auerPhonelastSeenId}`)
-      Meteor.call('inboundCalls/auerPhone', {
+      Meteor.callAsync('inboundCalls/auerPhone', {
         calls: calls,
         clientKey
-      }, (e, res) => {
-        if (!e) {
-          // auerPhonelastSeenId = calls[0].id
-        }
-        console.log(`[auerPhone] import callback ${e} ${res}`)
-      })
+      }).then(
+        res => console.log(`[auerPhone] import callback undefined ${res}`),
+        e => console.log(`[auerPhone] import callback ${e} undefined`)
+      )
     }
   })
 }

@@ -1,6 +1,6 @@
 import iconv from 'iconv-lite'
 import { Meteor } from 'meteor/meteor'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { allowedImporters } from '../allowedImporters'
 import { action, Match } from '../../../util/meteor/action'
 
@@ -28,7 +28,7 @@ export const ingest = ({ Importers }) => {
       base64: Match.Maybe(Match.OneOf(undefined, null, String))
     },
     allowAnonymous: true,
-    fn ({ importer, name, content, base64 }) {
+    async fn ({ importer, name, content, base64 }) {
       try {
         if (Meteor.isServer) {
           const { isTrustedNetwork } = require('../../customer/isTrustedNetwork')
@@ -57,7 +57,7 @@ export const ingest = ({ Importers }) => {
         if (importer) {
           return {
             importer,
-            result: Importers.actions.importWith.call({ importer, name, content })
+            result: await Importers.actions.importWith.callPromise({ importer, name, content })
           }
         } else {
           throw new Meteor.Error('no-importer-found', `Could not determine importer for ${name}`)

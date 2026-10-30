@@ -1,5 +1,6 @@
 import idx from 'idx'
 import React from 'react'
+import { unzoom } from '../layout/bodyZoom'
 import { PortalWithState } from 'react-portal'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import isEqual from 'lodash/isEqual'
@@ -71,11 +72,44 @@ class EditModal extends React.Component {
     this.state = {
       value: props.structure.stringify
         ? props.structure.stringify(initialValue)
-        : initialValue
+        : initialValue,
+      shiftLeft: 0
     }
 
+    this.boxRef = React.createRef()
     this.handleChange = this.handleChange.bind(this)
     this.handleUpdateClick = this.handleUpdateClick.bind(this)
+  }
+
+  componentDidMount () {
+    this.keepInViewport()
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.style !== this.props.style) {
+      this.keepInViewport()
+    }
+  }
+
+  // The box is aligned to the left edge of the edited cell, so for cells near
+  // the right edge it would stick out of the viewport. Shift it left instead.
+  keepInViewport () {
+    const box = this.boxRef.current
+    if (!box) { return }
+
+    const margin = 8
+    const rect = box.getBoundingClientRect()
+    // rect and clientWidth are in visual pixels, left is in (zoomed) body pixels
+    const overflow = rect.right - (document.documentElement.clientWidth - margin)
+    const current = this.state.shiftLeft
+    const shiftLeft = Math.max(0, Math.min(
+      current + unzoom(overflow),
+      (this.props.style && this.props.style.left) || 0
+    ))
+
+    if (Math.abs(shiftLeft - current) > 0.5) {
+      this.setState({ shiftLeft })
+    }
   }
 
   handleChange (e) {
@@ -126,11 +160,13 @@ class EditModal extends React.Component {
       zIndex: 50,
       position: 'absolute',
       width: 320,
-      ...style
+      ...style,
+      left: ((style && style.left) || 0) - this.state.shiftLeft
     }
 
     return (
       <div
+        ref={this.boxRef}
         style={boxStyle}>
         {
           EditComponent
@@ -239,9 +275,9 @@ export class Table extends React.Component {
         editingValue: this.props.rows[rowIndex] || '',
         editingStructure: structure,
         editModalPosition: {
-          top: targetRect.bottom - bodyRect.top,
-          left: targetRect.left - bodyRect.left,
-          minWidth: targetRect.width
+          top: unzoom(targetRect.bottom - bodyRect.top),
+          left: unzoom(targetRect.left - bodyRect.left),
+          minWidth: unzoom(targetRect.width)
         }
       })
     }

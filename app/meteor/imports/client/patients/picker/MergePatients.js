@@ -6,6 +6,7 @@ import { Icon } from '../../components/Icon'
 import { compose, withProps, withHandlers } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { isLikelySamePatient } from '../../../api/patients/methods/isLikelySamePatient'
+import { call } from '../../../util/meteor/call'
 
 const partnerName = p =>
   [p.lastName, p.firstName].filter(Boolean).join(' ')
@@ -38,7 +39,7 @@ export const MergePatients = compose(
   withHandlers({
     handleClick: props => e => {
       console.log(`[Patients] merge: ${props.mergePartner._id} ${props.patient._id}`)
-      Meteor.call('patients/deduplicate', {
+      call('patients/deduplicate', {
         patientIds: [props.mergePartner._id, props.patient._id]
       }, (err) => {
         if (err) {

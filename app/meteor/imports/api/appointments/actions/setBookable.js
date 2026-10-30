@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { action } from '../../../util/meteor/action'
 
@@ -15,24 +15,24 @@ export const setBookable = ({ Appointments }) =>
       assigneeId: String
     },
     roles: ['bookables-edit'],
-    fn: function ({ calendarId, assigneeId, start, end }) {
+    fn: async function ({ calendarId, assigneeId, start, end }) {
       this.unblock()
 
 
-      const existing = Appointments.find({
+      const existing = await Appointments.find({
         calendarId,
         start,
         end,
         assigneeId,
         type: 'bookable'
-      }).fetch()
+      }).fetchAsync()
 
       if (existing.length > 0) {
         console.log('setBookable: ignoring duplicate bookable')
         return null
       } else {
 
-        const appointmentId = Appointments.insert({
+        const appointmentId = await Appointments.insertAsync({
           calendarId,
           start,
           end,

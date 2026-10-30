@@ -1,12 +1,15 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../../../util/meteor/callPromiseMixin'
 import { parsePatients } from './parsePatient'
 import { Patients } from '../../../../patients'
+import { callNested } from '../../../../../util/meteor/isInSimulation'
 
 export const eoswinPatients = ({ Importers }) => {
   return new ValidatedMethod({
     name: 'importers/eoswinPatients',
+    mixins: [CallPromiseMixin],
 
     validate: new SimpleSchema({
       importer: { type: String, optional: true, allowedValues: [ 'eoswinPatients' ] },
@@ -15,7 +18,7 @@ export const eoswinPatients = ({ Importers }) => {
       quiet: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ name, content, quiet }) {
+    async run ({ name, content, quiet }) {
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../../../customer/isTrustedNetwork')
         if (!this.userId && (this.connection && !isTrustedNetwork(this.connection.clientAddress))) {
@@ -25,11 +28,14 @@ export const eoswinPatients = ({ Importers }) => {
 
       let patients = parsePatients(content)
 
-      let ids = patients.map(({ patient, action }) => {
+      // Sequential on purpose: patients/upsert is a non-atomic find-then-insert,
+      // so concurrent rows for the same patient would both insert.
+      let ids = []
+      for (const { patient, action } of patients) {
         switch (action) {
           case 'insert':
           case 'update':
-            Meteor.call('patients/upsert', { patient, quiet })
+            await callNested('patients/upsert', { patient, quiet })
             break
           case 'softRemove':
             // TODO: Add method to soft remove patients
@@ -37,7 +43,8 @@ export const eoswinPatients = ({ Importers }) => {
             break
           default: throw new Error(`[Importers] eoswinPatients: Unknown action ${action}`)
         }
-      })
+        ids.push(undefined)
+      }
 
       if (ids.length === 1) {
         return ids[0]

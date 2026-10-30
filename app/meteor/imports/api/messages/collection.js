@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo'
-import { JobCollection, Job } from 'meteor/simonsimcity:job-collection'
+import { JobCollection, Job } from 'meteor/strigops:job-collection'
 import actions from './actions'
 import schema from './schema'
 

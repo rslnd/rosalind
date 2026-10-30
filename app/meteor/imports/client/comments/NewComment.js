@@ -1,8 +1,8 @@
 import React from 'react'
-import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { Avatar } from '../users/Avatar'
 import { TextField, handleKeyPress } from '../components/form/TextField'
+import { call } from '../../util/meteor/call'
 
 export class NewComment extends React.Component {
   constructor (props) {
@@ -23,7 +23,7 @@ export class NewComment extends React.Component {
     e.preventDefault()
     let body = this.state.body.trim()
     if (body) {
-      Meteor.call('comments/post', { body, docId: this.props.docId })
+      call('comments/post', { body, docId: this.props.docId })
       this.setState({ body: '' })
     }
   }

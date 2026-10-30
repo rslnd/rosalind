@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Auto, Day, External } from '../../util/schema'
 
 module.exports = new SimpleSchema({
@@ -19,10 +19,11 @@ module.exports = new SimpleSchema({
   },
 
   assignees: {
-    type: [Object],
+    type: Array,
     blackbox: true,
     optional: true
   },
+  'assignees.$': { type: Object },
 
   average: {
     type: Object,
@@ -37,9 +38,10 @@ module.exports = new SimpleSchema({
 
   addenda: {
     optional: true,
-    type: [Object],
+    type: Array,
     blackbox: true
   },
+  'addenda.$': { type: Object },
 
   createdAt: {
     type: Date,

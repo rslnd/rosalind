@@ -10,6 +10,7 @@ import { TextField } from '../components/form'
 import { Icon } from '../components/Icon'
 import { prompt } from '../layout/Prompt'
 import { withTracker } from '../components/withTracker'
+import { call } from '../../util/meteor/call'
 
 export const Checkups = () => {
   const [newRule, setNew] = useState(false)
@@ -74,7 +75,7 @@ const NewRule = ({ onDone }) => {
 
   const handleSave = () => {
     setSubmitting(true)
-    Meteor.call('checkupsRules/insert', {
+    call('checkupsRules/insert', {
       checkupsRule: {
         name,
         text,
@@ -159,7 +160,7 @@ const Rules = withTracker(() => {
       title: 'Regel löschen?',
       body: ru.name
     })) {
-      Meteor.call('checkupsRules/softRemove', { checkupsRuleId: ru._id })
+      call('checkupsRules/softRemove', { checkupsRuleId: ru._id })
       Alert.success(__('ui.deleted'))
     }
   }

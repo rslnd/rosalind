@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import moment from 'moment-timezone'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { dayToDate, daySelector, dateToDay } from '../../../util/time/day'
 import { action, Match } from '../../../util/meteor/action'
 import { generate as generateReport } from '../methods/generate'
@@ -15,7 +15,7 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
       addendum: Match.Optional(Object)
     },
     allowAnonymous: true,
-    fn ({ day, addendum }) {
+    async fn ({ day, addendum }) {
       try {
         if (this.isSimulation) { return }
         if (Meteor.isServer) {
@@ -27,42 +27,42 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
 
         const date = moment(dayToDate(day))
 
-        const exemptWorkloadAssigneeIds = Users.find({
+        const exemptWorkloadAssigneeIds = (await Users.find({
           hiddenInReports: true
-        }).fetch().map(u => u._id)
+        }).fetchAsync()).map(u => u._id)
 
-        const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
-        return calendars.map(calendar => {
+        const calendars = await Calendars.find({}, { sort: { order: 1 } }).fetchAsync()
+        return await Promise.all(calendars.map(async calendar => {
           const calendarId = calendar._id
 
-          let appointments = Appointments.find({
+          let appointments = await Appointments.find({
             calendarId,
             start: {
               $gt: date.startOf('day').toDate(),
               $lt: date.endOf('day').toDate()
             }
-          }).fetch()
+          }).fetchAsync()
 
           if (appointments.length === 0) {
             return null
           }
 
-          const pastAppointments = Appointments.find(pastAppointmentsSelector({
+          const pastAppointments = await Appointments.find(pastAppointmentsSelector({
             date,
             calendarId,
             appointments
-          })).fetch()
+          })).fetchAsync()
 
-          const overrideSchedules = Schedules.find({
+          const overrideSchedules = await Schedules.find({
             calendarId,
             type: 'override',
             start: {
               $gt: date.startOf('day').toDate(),
               $lt: date.endOf('day').toDate()
             }
-          }).fetch()
+          }).fetchAsync()
 
-          const daySchedule = Schedules.findOne({
+          const daySchedule = await Schedules.findOneAsync({
             calendarId,
             type: 'day',
             removed: { $ne: true },
@@ -70,13 +70,13 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
           })
 
           const appointmentIds = appointments.map(a => a._id)
-          const messages = Messages.find({
+          const messages = await Messages.find({
             'payload.appointmentId': { $in: appointmentIds }
-          }).fetch()
+          }).fetchAsync()
 
-          const tagMapping = Tags.methods.getMappingForReports()
+          const tagMapping = await Tags.methods.getMappingForReports()
 
-          const existingReport = Reports.findOne({
+          const existingReport = await Reports.findOneAsync({
             calendarId,
             ...daySelector(day)
           })
@@ -94,13 +94,13 @@ export const generate = ({ Events, Calendars, Reports, Appointments, Schedules, 
 
           if (existingReport) {
             Events.post('reports/update', { reportId: existingReport._id })
-            return Reports.update({ _id: existingReport._id }, generatedReport, { bypassCollection2: true })
+            return await Reports.updateAsync({ _id: existingReport._id }, generatedReport, { bypassCollection2: true })
           } else {
-            const reportId = Reports.insert(generatedReport)
+            const reportId = await Reports.insertAsync(generatedReport)
             Events.post('reports/insert', { reportId })
             return reportId
           }
-        })
+        }))
       } catch (e) {
         console.error(e.message, e.stack)
         throw e

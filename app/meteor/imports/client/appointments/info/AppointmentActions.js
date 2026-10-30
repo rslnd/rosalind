@@ -44,14 +44,17 @@ const Button = ({ icon, name, primary, ...props }) => {
     onClick={onClick}
   >
     <Icon name={icon} />
-    &emsp;
-    {__('appointments.' + name)}
+    <span style={labelStyle}>{__('appointments.' + name)}</span>
   </MuiButton>
+}
+
+const labelStyle = {
+  marginLeft: 8
 }
 
 const buttonStyle = {
   opacity: 0.75,
-  marginRight: 20,
+  marginRight: 8,
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   minWidth: 30
@@ -60,16 +63,19 @@ const buttonStyle = {
 const primaryButtonStyle = {
   ...buttonStyle,
   opacity: 0.9,
-  backgroundColor: '#fff'
+  backgroundColor: '#fff',
+  // don't let the flex row squeeze the label into the button edge
+  flexShrink: 0,
+  paddingLeft: 14,
+  paddingRight: 14
 }
 
 const menuButtonStyle = {
   ...buttonStyle,
   opacity: 0.3,
-  marginRight: 20,
   height: 37,
   width: 40,
-  minWidth: 55
+  minWidth: 40
 }
 
 export const AppointmentActions = compose(

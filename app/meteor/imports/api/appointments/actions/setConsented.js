@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const setConsented = ({ Appointments }) => {
@@ -14,17 +14,17 @@ export const setConsented = ({ Appointments }) => {
       consentAppointmentId: { type: SimpleSchema.RegEx.Id, optional: true }
     }).validator(),
 
-    run ({ appointmentId, consentAppointmentId, consentedAt }) {
+    async run ({ appointmentId, consentAppointmentId, consentedAt }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).consentedAt) {
+      if ((await Appointments.findOneAsync({ _id: appointmentId })).consentedAt) {
         console.warn('[Appointments] setConsented: Appointment has already set consentedAt', { appointmentId })
         return
       }
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $set: {
           consentedAt: consentedAt || new Date(),
           consentedBy: this.userId,

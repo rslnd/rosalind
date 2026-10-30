@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Tags } from '../../tags'
 
@@ -14,30 +14,32 @@ export const update = ({ Appointments }) => {
       update: {
         type: new SimpleSchema({
           revenue: { type: Number, decimal: true, optional: true },
-          tags: { type: [SimpleSchema.RegEx.Id], optional: true },
+          tags: { type: Array, optional: true },
+          'tags.$': { type: SimpleSchema.RegEx.Id },
           note: { type: String, optional: true },
-          consentMediaIds: { type: [SimpleSchema.RegEx.Id], optional: true }
+          consentMediaIds: { type: Array, optional: true },
+          'consentMediaIds.$': { type: SimpleSchema.RegEx.Id }
         })
       }
     }).validator(),
 
-    run ({ appointmentId, update }) {
+    async run ({ appointmentId, update }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const appointment = Appointments.findOne({ _id: appointmentId }, { removed: true })
+      const appointment = await Appointments.findOneAsync({ _id: appointmentId }, { removed: true })
 
       if (appointment) {
         // TODO: Calendar flag for setting auto revenue calculation strategy
         if (update.tags && update.tags.length >= 1 && !update.revenue) {
-          const revenue = Math.max(...Tags.methods.expand(update.tags).map(t => t.defaultRevenue))
+          const revenue = Math.max(...(await Tags.methods.expand(update.tags)).map(t => t.defaultRevenue))
           if (revenue > 0 || revenue === 0) {
             update.revenue = revenue
           }
         }
 
-        Appointments.update({ _id: appointmentId }, {
+        await Appointments.updateAsync({ _id: appointmentId }, {
           $set: update
         }, { trimStrings: false }) // collection2 flag to prevent killing space-y "layout" of note
 

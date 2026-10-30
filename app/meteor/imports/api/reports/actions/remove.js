@@ -11,7 +11,7 @@ export const remove = ({ Reports, Events }) => {
       day: Object
     },
     allowAnonymous: true,
-    fn ({ day }) {
+    async fn ({ day }) {
       if (this.isSimulation) { return }
       if (Meteor.isServer) {
         const { isTrustedNetwork } = require('../../customer/isTrustedNetwork')
@@ -20,13 +20,13 @@ export const remove = ({ Reports, Events }) => {
         }
       }
 
-      if (!hasRole(this.userId, ['admin', 'reports'])) {
+      if (!await hasRole(this.userId, ['admin', 'reports'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
       const date = moment(dayToDate(day))
 
-      const result = Reports.remove({
+      const result = await Reports.removeAsync({
         ...daySelector(day)
       })
 

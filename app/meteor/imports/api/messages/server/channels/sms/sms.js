@@ -1,5 +1,4 @@
 import moment from 'moment-timezone'
-import { rateLimit } from 'meteor/dandv:rate-limit'
 import { Messages } from '../../../'
 import { Calendars } from '../../../../calendars'
 import { Appointments } from '../../../../appointments'
@@ -13,15 +12,15 @@ import { buildMessageText } from '../../../methods/buildMessageText'
 import { okToSend } from '../../../methods/okToSend'
 import { normalizePhoneNumber } from '../../../methods/normalizePhoneNumber'
 
-const sendUnthrottled = (messageId) => {
-  if (!Settings.get('messages.sms.enabled')) { return }
+const sendUnthrottled = async (messageId) => {
+  if (!await Settings.get('messages.sms.enabled')) { return }
 
-  const message = Messages.findOne({ _id: messageId })
+  const message = await Messages.findOneAsync({ _id: messageId })
   if (message && okToSend(message)) {
     console.log('[Messages] channels/sms: Sending SMS', message._id)
-    return provider.send(message).then((res) => {
+    return provider.send(message).then(async (res) => {
       console.log('[Messages] channels/sms: Successfully sent SMS', message._id)
-      Messages.update({ _id: message._id }, {
+      await Messages.updateAsync({ _id: message._id }, {
         $set: {
           status: 'sent',
           sentAt: new Date(),
@@ -29,9 +28,9 @@ const sendUnthrottled = (messageId) => {
         }
       })
       return res
-    }).catch((err) => {
+    }).catch(async (err) => {
       console.log('[Messages] channels/sms: Failed to send SMS', message._id, err)
-      Messages.update({ _id: message._id }, {
+      await Messages.updateAsync({ _id: message._id }, {
         $set: {
           status: 'failed',
           failedAt: new Date(),
@@ -47,27 +46,39 @@ const sendUnthrottled = (messageId) => {
   }
 }
 
-const sendThrottled = rateLimit(sendUnthrottled, 2000, this, {
-  debug: true,
-  futures: true
-})
-
-export const send = (messageId) => {
-  return new Promise((resolve) => {
-    const response = sendThrottled(messageId)
-    Promise.await(response)
-    resolve(response)
-  })
+// Serialize SMS sends, spacing each call at least `intervalMs` apart to respect
+// the provider's rate limit. Replaces the Fibers-based dandv:rate-limit package.
+const rateLimitAsync = (fn, intervalMs) => {
+  let chain = Promise.resolve()
+  let last = 0
+  return (...args) => {
+    const run = chain.then(async () => {
+      const wait = Math.max(0, last + intervalMs - Date.now())
+      if (wait > 0) { await new Promise(resolve => setTimeout(resolve, wait)) }
+      last = Date.now()
+      return fn(...args)
+    })
+    chain = run.catch(() => {})
+    return run
+  }
 }
 
-export const receive = (payload, req) => {
-  const { message, response } = provider.receive(payload, req)
+const sendThrottled = rateLimitAsync(sendUnthrottled, 2000)
+
+export const send = async (messageId) => {
+  const response = sendThrottled(messageId)
+  await response
+  return response
+}
+
+export const receive = async (payload, req) => {
+  const { message, response } = await provider.receive(payload, req)
 
   if (!message) {
     return { response }
   }
 
-  const messageId = Messages.insert(message)
+  const messageId = await Messages.insertAsync(message)
 
   let parentMessage
   let appointmentId
@@ -82,7 +93,7 @@ export const receive = (payload, req) => {
 
   // Try to match received reply with a message sent by the system
   const cutoffDate = moment().subtract(1, 'week').toDate()
-  const sentMessages = Messages.find(
+  const sentMessages = await Messages.find(
     {
       channel: 'SMS',
       direction: 'outbound',
@@ -93,22 +104,22 @@ export const receive = (payload, req) => {
         sentAt: -1
       }
     }
-  ).fetch()
+  ).fetchAsync()
 
   parentMessage = findParentMessage({ messages: sentMessages, message })
   if (parentMessage) {
     console.log('[Messages] channels/sms: Matched message', messageId, 'as reply to', parentMessage._id)
 
     appointmentId = parentMessage.appointmentId
-    appointment = Appointments.findOne({ _id: appointmentId })
+    appointment = await Appointments.findOneAsync({ _id: appointmentId })
 
     if (appointment) {
       calendarId = appointment.calendarId
-      calendar = calendarId && Calendars.findOne({ _id: calendarId })
+      calendar = calendarId && await Calendars.findOneAsync({ _id: calendarId })
       patientId = parentMessage.patientId
-      patient = Patients.findOne({ _id: patientId })
+      patient = await Patients.findOneAsync({ _id: patientId })
 
-      Messages.update({ _id: messageId }, {
+      await Messages.updateAsync({ _id: messageId }, {
         $set: {
           parentMessageId: parentMessage._id,
           appointmentId: appointmentId,
@@ -124,9 +135,9 @@ export const receive = (payload, req) => {
       }
       if (cancelAppointment && canCancel) {
         console.log('[Messages] channels/sms: Matched message', messageId, 'as intent to cancel appointment', appointmentId)
-        Appointments.actions.setCanceled.call({ appointmentId, canceledByMessageId: messageId })
+        await Appointments.actions.setCanceled.callPromise({ appointmentId, canceledByMessageId: messageId })
 
-        Messages.update({ _id: messageId }, {
+        await Messages.updateAsync({ _id: messageId }, {
           $set: {
             type: 'intentToCancel',
             status: 'answered'
@@ -135,10 +146,10 @@ export const receive = (payload, req) => {
 
         const cancelationConfirmationText =
           (calendar && calendar.smsAppointmentReminderCancelationConfirmationText) ||
-          Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')
+          await Settings.get('messages.sms.appointmentReminder.cancelationConfirmationText')
 
         if (cancelationConfirmationText) {
-          const confirmationId = Messages.insert({
+          const confirmationId = await Messages.insertAsync({
             type: 'intentToCancelConfirmation',
             channel: 'SMS',
             direction: 'outbound',
@@ -159,7 +170,7 @@ export const receive = (payload, req) => {
           })
 
           console.log('[Messages] channels/sms: Sending cancelation confirmation', confirmationId, 'for received message', messageId)
-          send(confirmationId)
+          await send(confirmationId)
         }
 
         return { message, response }
@@ -170,11 +181,11 @@ export const receive = (payload, req) => {
   }
 
   if (!patientId) {
-    patient = Patients.findOne({ 'contacts.valueNormalized': normalizePhoneNumber(message.from) })
+    patient = await Patients.findOneAsync({ 'contacts.valueNormalized': normalizePhoneNumber(message.from) })
     if (patient) {
       patientId = patient._id
 
-      Messages.update({ _id: messageId }, {
+      await Messages.updateAsync({ _id: messageId }, {
         $set: {
           patientId: patientId
         }
@@ -184,8 +195,8 @@ export const receive = (payload, req) => {
 
   // If we couldn't match this incoming message to a message we sent,
   // or if it is not an intent to cancel, create an inbound call
-  if (Settings.get('messages.sms.createInboundCalls')) {
-    const inboundCallId = InboundCalls.insert({
+  if (await Settings.get('messages.sms.createInboundCalls')) {
+    const inboundCallId = await InboundCalls.insertAsync({
       lastName: (patient && patient.lastName) || 'SMS',
       firstName: (patient && patient.firstName) || undefined,
       telephone: message.from,

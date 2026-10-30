@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 
 const Pause = new SimpleSchema({
   from: {
@@ -51,9 +51,10 @@ export const schema = new SimpleSchema({
   },
 
   pauses: {
-    type: [Pause],
+    type: Array,
     optional: true
   },
+  'pauses.$': { type: Pause },
 
   assigneeId: {
     type: SimpleSchema.RegEx.Id,

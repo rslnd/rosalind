@@ -8,8 +8,8 @@ import { isTrustedNetwork, isLocalhost } from '../../customer/isTrustedNetwork'
 //   - a valid trusted access token from localhost (used by the PDF/e-mail render)
 //   - a trusted network (localhost or a configured TENANT_IP)
 // Call only on the server (after the isSimulation guard).
-export const assertReportsAccess = ({ userId, connection, accessToken }) => {
-  if (hasRole(userId, ['reports', 'admin'])) { return }
+export const assertReportsAccess = async ({ userId, connection, accessToken }) => {
+  if (await hasRole(userId, ['reports', 'admin'])) { return }
 
   if (accessToken && connection &&
     isTrustedAccessToken(accessToken) && isLocalhost(connection.clientAddress)) { return }

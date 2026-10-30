@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
 const schema = new SimpleSchema({

@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { agreements } from '../patients/schema'
 
 export const schema = new SimpleSchema({
@@ -34,9 +34,10 @@ export const schema = new SimpleSchema({
   },
 
   atMinutes: {
-    type: [Number],
+    type: Array,
     optional: true
   },
+  'atMinutes.$': { type: Number },
 
   allowUnassigned: {
     type: Boolean,
@@ -64,9 +65,10 @@ export const schema = new SimpleSchema({
   },
 
   reportAddenda: {
-    type: [String],
+    type: Array,
     optional: true
   },
+  'reportAddenda.$': { type: String },
 
   admittedIsTreated: {
     type: Boolean,
@@ -99,9 +101,10 @@ export const schema = new SimpleSchema({
   },
 
   requiredFields: {
-    type: [String],
+    type: Array,
     optional: true
   },
+  'requiredFields.$': { type: String },
 
   note: {
     type: String,
@@ -164,9 +167,10 @@ export const schema = new SimpleSchema({
   },
 
   referrableFrom: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'referrableFrom.$': { type: SimpleSchema.RegEx.Id },
 
   consentRequired: {
     type: Boolean,
@@ -174,10 +178,11 @@ export const schema = new SimpleSchema({
   },
 
   requiredAgreements: {
-    type: [String],
+    type: Array,
     allowedValues: agreements,
     optional: true
   },
+  'requiredAgreements.$': { type: String },
 
   history: {
     type: Boolean,

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Referrals } from '../../referrals'
 import { Messages } from '../../messages'
@@ -14,18 +14,18 @@ export const softRemove = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ appointmentId }) {
+    async run ({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
       // Restore bookable
-      const appointment = Appointments.findOne({
+      const appointment = await Appointments.findOneAsync({
         _id: appointmentId
       })
 
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $set: {
           removed: true,
           removedAt: new Date(),
@@ -34,10 +34,10 @@ export const softRemove = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        Referrals.serverActions.unredeem({ appointmentId })
-        Messages.actions.removeReminder.call({ appointmentId })
+        await Referrals.serverActions.unredeem({ appointmentId })
+        await Messages.actions.removeReminder.callPromise({ appointmentId })
 
-        const previousBookable = Appointments.findOne({
+        const previousBookable = await Appointments.findOneAsync({
           type: 'bookable',
           start: appointment.start,
           end: appointment.end,
@@ -46,7 +46,7 @@ export const softRemove = ({ Appointments }) => {
         }, { removed: true })
 
         if (previousBookable) {
-          Appointments.insert({
+          await Appointments.insertAsync({
             type: 'bookable',
             start: appointment.start,
             end: appointment.end,

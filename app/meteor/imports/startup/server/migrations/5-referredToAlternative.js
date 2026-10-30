@@ -7,10 +7,10 @@ const alternativeCalendarId = 'msAPu96R9pjQkcNBQ'
 Migrations.add({
   version: 5,
 
-  up: function () {
+  up: async function () {
     const cursor = Patients.find({ 'external.bioresonanz.id': { $ne: null } })
 
-    cursor.forEach(patient => {
+    for await (const patient of cursor) {
       const referral = {
         patientId: patient._id,
         createdAt: new Date(),
@@ -19,10 +19,10 @@ Migrations.add({
         type: 'external'
       }
 
-      Referrals.insert(referral)
-    })
+      await Referrals.insertAsync(referral)
+    }
 
-    console.log('Migration referredToAlternative: added external referrals for', cursor.count(), 'patients')
+    console.log('Migration referredToAlternative: added external referrals for', await cursor.countAsync(), 'patients')
 
     return true
   },

@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer'
+import { createRequire } from 'module'
 import { dayToSlug } from '../../../util/time/day'
 import { withTrustedAccessToken } from '../../../util/meteor/withTrustedAccessToken'
 
@@ -16,14 +16,25 @@ const printOptions = {
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
+// puppeteer is ESM-only and Meteor's bundler fails to recompile its
+// dependencies (import.meta), so load it with Node's native require instead.
+const loadPuppeteer = () => {
+  const nativeRequire = createRequire(`${__meteor_bootstrap__.serverDir}/`)
+  return nativeRequire('puppeteer').default
+}
+
 const printToPDF = async ({ url, printOptions }) => {
+  const puppeteer = loadPuppeteer()
   const browser = await puppeteer.launch({
     headless: true, // Note: Only disable for debugging, pdf only renders in headless mode
+    // System Chrome (google-chrome-stable in the Docker image), see .puppeteerrc.cjs
+    channel: 'chrome',
+    // Chrome takes ~20-30s to start under Rosetta (x86_64 Meteor tool on Apple Silicon)
+    timeout: 60000,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
-      '--no-default-browser-check',
-      '--disable-bundled-ppapi-flash'
+      '--no-default-browser-check'
     ]
   })
 
@@ -38,8 +49,14 @@ const printToPDF = async ({ url, printOptions }) => {
     let loaded = false
     let retries = 0
 
-    await page.goto(url, { waitUntil: 'networkidle2' })
-    await page.exposeFunction('print', () => { loaded = true })
+    // The page calls window.print() once the report is ready. exposeFunction no
+    // longer replaces existing globals like window.print, so redirect it to an
+    // exposed function on every (re)load instead.
+    await page.exposeFunction('__reportLoaded', () => { loaded = true })
+    await page.evaluateOnNewDocument(() => { window.print = () => window.__reportLoaded() })
+
+    // Generous timeout for the same reason as the launch timeout above
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 120000 })
 
     do {
       await delay(2000)
@@ -56,7 +73,8 @@ const printToPDF = async ({ url, printOptions }) => {
     await delay(10000)
 
     console.log('[Reports] renderPdf: Rendering pdf')
-    const buffer = await page.pdf(printOptions)
+    // page.pdf() returns a Uint8Array since puppeteer 22; nodemailer expects a Buffer
+    const buffer = Buffer.from(await page.pdf(printOptions))
     console.log('[Reports] renderPdf: Rendered pdf')
 
     return buffer

@@ -12,9 +12,9 @@ export const insert = ({ Records }) =>
       note: String,
       type: String
     },
-    fn ({ patientId, calendarId, note, type }) {
+    async fn ({ patientId, calendarId, note, type }) {
       if (type === 'future') {
-        const existingRecord = Records.findOne({
+        const existingRecord = await Records.findOneAsync({
           patientId,
           calendarId,
           type: 'future',
@@ -26,7 +26,7 @@ export const insert = ({ Records }) =>
       }
 
       // trimStrings collection2 flag to prevent killing space-y "layout" of notes
-      const recordId = Records.insert({ patientId, calendarId, note, type }, { trimStrings: false })
+      const recordId = await Records.insertAsync({ patientId, calendarId, note, type }, { trimStrings: false })
 
       Events.post('records/insert', { recordId })
 

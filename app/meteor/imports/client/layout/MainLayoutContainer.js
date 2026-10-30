@@ -1,6 +1,6 @@
 import { compose, withState } from 'recompose'
 import { withTracker } from '../components/withTracker'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from '../components/withRouter'
 import { Meteor } from 'meteor/meteor'
 import { MainLayout } from './MainLayout'
 import { subscribe } from '../../util/meteor/subscribe'

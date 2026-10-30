@@ -18,19 +18,19 @@ export const sendCustomSms = () =>
       text: String
     },
     roles: ['admin', 'messages-sendCustomSms'],
-    fn: function({ patientId, text }) {
+    fn: async function({ patientId, text }) {
       if (!Meteor.isServer) { return }
-      if (!Settings.get('messages.sms.enabled')) {
+      if (!await Settings.get('messages.sms.enabled')) {
         throw new Meteor.Error('Sending SMS is disabled in global settings')
       }
 
       const userId = this.userId
 
-      if (!userId || !hasRole(userId, ['admin', 'messages-sendCustomSms'])) {
+      if (!userId || !await hasRole(userId, ['admin', 'messages-sendCustomSms'])) {
         throw new Meteor.Error('You are not authorized to send custom SMS')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
       if (!patient || (patient && patient.noSMS)) {
         throw new Meteor.Error('Patient does not want to receive SMS')
       }
@@ -41,7 +41,7 @@ export const sendCustomSms = () =>
         throw new Meteor.Error('Patient does not have a valid mobile phone number')
       }
 
-      const messageId = Messages.insert({
+      const messageId = await Messages.insertAsync({
         type: 'custom',
         channel: 'SMS',
         direction: 'outbound',
@@ -65,7 +65,7 @@ export const sendCustomSms = () =>
       })
 
 
-      SMS.send(messageId)
+      await SMS.send(messageId)
 
       return messageId
     }

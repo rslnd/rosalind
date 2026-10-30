@@ -64,7 +64,7 @@ export default () => {
         // req.url is subscoped at /portal, so it's /portal/appointments
         if (req.url.endsWith('/appointments')) {
           try {
-            const bookables = getBookables()
+            const bookables = await getBookables()
 
             return respondWithJSON(res, bookables)
           } catch (e) {

@@ -34,7 +34,7 @@ const bookableTags = ({ start, assigneeId }) => {
   }
 }
 
-export const getBookables = () => {
+export const getBookables = async () => {
   const selector = {
     type: 'bookable',
     start: { $gt: moment().endOf('minute').toDate() },
@@ -49,13 +49,13 @@ export const getBookables = () => {
     assigneeId: 1
   }
 
-  const appointments = Appointments.find(selector, {
+  const appointments = await Appointments.find(selector, {
     limit: 6500, // ~60 per day for 3 months
     fields,
     sort: { start: 1 }
-  }).fetch()
+  }).fetchAsync()
 
-  const assignees = Users.find({}).fetch().reduce((acc, u) => ({ ...acc, [u._id]: u}))
+  const assignees = (await Users.find({}).fetchAsync()).reduce((acc, u) => ({ ...acc, [u._id]: u}))
 
 
   const bookables = appointments.map((a) => {
@@ -113,7 +113,7 @@ const bool = (x) => {
   return x
 }
 
-export const handleAppointmentBooking = (untrustedBody) => {
+export const handleAppointmentBooking = async (untrustedBody) => {
   const ltag = 'portal/handleAppointmentBooking'
   console.log(ltag, untrustedBody)
 
@@ -149,7 +149,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
     ...birthdaySelector
   }
 
-  const patients = Patients.find(patientSelector).fetch()
+  const patients = await Patients.find(patientSelector).fetchAsync()
   console.log(ltag, 'patientSelector', patientSelector)
   let patientId = null
   if (patients.length >= 2) {
@@ -162,7 +162,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
     console.log(ltag, 'matched one existing patient', patientId)
   } else {
     console.log(ltag, `matched ${patients.length} patients, creating new patient`, patientId)
-    patientId = Patients.insert({
+    patientId = await Patients.insertAsync({
       titlePrepend,
       lastName,
       lastNameNormalized: normalizeName(lastName),
@@ -181,7 +181,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
 
   if (wantsAppointment && bookableId) {
     const bookableSelector = { _id: bookableId, type: 'bookable' }
-    const existingBookable = Appointments.findOne(bookableSelector)
+    const existingBookable = await Appointments.findOneAsync(bookableSelector)
     if (!existingBookable) {
       throw new Error(`bookable ${bookableId} not found`)
     }
@@ -190,11 +190,11 @@ export const handleAppointmentBooking = (untrustedBody) => {
 
     if (patientId) {
       // 2024-02-29: Max 2 bookings per quarter for same patient (any calendar or assingee)
-      const allFutureAppts = Appointments.find({
+      const allFutureAppts = await Appointments.find({
         patientId,
         start: { $gte: new Date() },
         canceled: { $ne: true }
-      }).fetch()
+      }).fetchAsync()
 
       const apptsInSameQuarter = allFutureAppts.filter(a => quarter.isSame(a.start, bookable.start))
 
@@ -204,7 +204,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
 
 
       // 2024-02-29: Disallow when two or more no shows in past 2 years
-      const pastNoShows = Appointments.find({
+      const pastNoShows = await Appointments.find({
         patientId,
         start: {
           $lte: new Date(),
@@ -212,7 +212,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
         },
         canceled: { $ne: true },
         admitted: { $ne: true }
-      }).fetch()
+      }).fetchAsync()
 
       if (pastNoShows.length >= 2) {
         throw new Error(`twoOrMoreNoShows: prevented patient from booking because of ${pastNoShows.length} no-shows in past 2 years, patient ${patientId}`)
@@ -220,7 +220,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
 
 
       // Prevent patient from booking multiple appts on same day (any calendar or assingee)
-      const sameDaySamePatAppt = Appointments.findOne({
+      const sameDaySamePatAppt = await Appointments.findOneAsync({
         patientId,
         start: {
           $gte: moment(bookable.start).startOf('day').toDate(),
@@ -234,13 +234,13 @@ export const handleAppointmentBooking = (untrustedBody) => {
       }
     }
 
-    Appointments.update(bookableSelector, { $set: {
+    await Appointments.updateAsync(bookableSelector, { $set: {
       removed: true,
       removedAt: new Date(),
       note: 'Durch Online-Buchung vom System gelöscht' + ' \n' + (existingBookable.note || '')
     }})
 
-    const appointmentId = Appointments.insert({
+    const appointmentId = await Appointments.insertAsync({
       ...bookable,
       tags: tag ? [tag] : null,
       createdViaPortal: true,
@@ -265,7 +265,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
     }
   } else {
     // create inbound call
-    const topic = InboundCallsTopics.findOne({ contactForm: true })
+    const topic = await InboundCallsTopics.findOneAsync({ contactForm: true })
     const topicId = topic ? topic._id : null
 
     const call = {
@@ -285,7 +285,7 @@ export const handleAppointmentBooking = (untrustedBody) => {
       createdAt: new Date()
     }
 
-    const inbouncallId = InboundCalls.insert(call)
+    const inbouncallId = await InboundCalls.insertAsync(call)
 
     console.log(ltag, `created inboundCall ${inbouncallId}`)
     return { ok: 1 }

@@ -18,7 +18,7 @@ export const postContactForm = ({ InboundCalls, InboundCallsTopics }) =>
       existingPatient: Boolean,
       note: String
     },
-    fn ({
+    async fn ({
       firstName,
       lastName,
       titlePrepend,
@@ -29,7 +29,7 @@ export const postContactForm = ({ InboundCalls, InboundCallsTopics }) =>
       existingPatient,
       note
     }) {
-      const topic = InboundCallsTopics.findOne({ contactForm: true })
+      const topic = await InboundCallsTopics.findOneAsync({ contactForm: true })
       const topicId = topic ? topic._id : null
 
       const call = {
@@ -48,7 +48,7 @@ export const postContactForm = ({ InboundCalls, InboundCallsTopics }) =>
         createdAt: new Date()
       }
 
-      const _id = InboundCalls.insert(call)
+      const _id = await InboundCalls.insertAsync(call)
 
       Events.post('inboundCalls/postContactForm', { _id })
       return _id

@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Auto, Day, External } from '../../../util/schema'
 
 export default new SimpleSchema({
@@ -65,9 +65,10 @@ export default new SimpleSchema({
   },
 
   allowedClientIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'allowedClientIds.$': { type: SimpleSchema.RegEx.Id },
 
   createdAt: {
     type: Date,
@@ -93,14 +94,16 @@ export default new SimpleSchema({
   },
 
   addedRoles: {
-    type: [String],
+    type: Array,
     optional: true
   },
+  'addedRoles.$': { type: String },
 
   removedRoles: {
-    type: [String],
+    type: Array,
     optional: true
   },
+  'removedRoles.$': { type: String },
 
   status: {
     type: Object,

@@ -36,7 +36,7 @@ export class DayNoteField extends React.Component {
     this.parseFuzzy = this.parseFuzzy.bind(this)
   }
 
-  componentWillReceiveProps (props) {
+  UNSAFE_componentWillReceiveProps (props) {
     if (!this.state.focus) {
       this.setState({
         stringValue: toStringValue(props.day.input.value, props.note.input.value, props.multiline)

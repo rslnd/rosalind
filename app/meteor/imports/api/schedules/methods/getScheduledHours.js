@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import _moment from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import flatten from 'lodash/flatten'
@@ -68,17 +69,26 @@ export const calculateScheduledHours = ({ dayHours = DAY_HOURS, overrideSchedule
 }
 
 export default ({ Schedules }) => {
-  const getScheduledHours = ({ day, userId }) => {
+  const selector = (day, userId) => {
     const date = moment(dayToDate(day))
-    const overrideSchedules = Schedules.find({
+    return {
       type: 'override',
       start: { $gt: date.startOf('day').toDate() },
       end: { $lt: date.endOf('day').toDate() },
       userId
-    }).fetch()
-
-    return calculateScheduledHours({ overrideSchedules })
+    }
   }
+
+  // Client: synchronous (reactive minimongo). Server: async.
+  const getScheduledHours = Meteor.isServer
+    ? async ({ day, userId }) => {
+      const overrideSchedules = await Schedules.find(selector(day, userId)).fetchAsync()
+      return calculateScheduledHours({ overrideSchedules })
+    }
+    : ({ day, userId }) => {
+      const overrideSchedules = Schedules.find(selector(day, userId)).fetch()
+      return calculateScheduledHours({ overrideSchedules })
+    }
 
   return {
     getScheduledHours

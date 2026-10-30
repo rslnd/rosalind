@@ -68,28 +68,31 @@ export const deduplicate = duplicates =>
     }
   })
 
-export const perform = ({ actions, Patients, Appointments, InboundCalls, Media, Messages, Referrals, Records }) =>
-  actions.map(a => {
+// Sequential on purpose: autoDeduplicate produces overlapping tuples
+// ([A, B, C] and [B, C]) whose merges are only correct when applied in order.
+export const perform = async ({ actions, Patients, Appointments, InboundCalls, Media, Messages, Referrals, Records }) => {
+  const results = []
+  for (const a of actions) {
     const masterId = a.master._id
     console.log('[Patients] deduplicate: Merging', masterId, ' <- ', a.duplicateIds)
 
     // Patients
-    Patients.update({ _id: masterId }, { $set: {
+    await Patients.updateAsync({ _id: masterId }, { $set: {
       ...a.master,
       updatedAt: new Date(),
       updatedBy: null
     }})
-    Patients.update({ _id: { $in: a.duplicateIds } }, { $set: {
+    await Patients.updateAsync({ _id: { $in: a.duplicateIds } }, { $set: {
       removed: true,
       removedAt: new Date()
     } }, { multi: true })
 
     // helper function
-    const forceReassignPatientId = (apiName, Api) => {
-      const docs = Api.find({ patientId: { $in: a.duplicateIds } }).fetch()
+    const forceReassignPatientId = async (apiName, Api) => {
+      const docs = await Api.find({ patientId: { $in: a.duplicateIds } }).fetchAsync()
       console.log('[Patients] deduplicate: Reassigning to master patient id', masterId, ' <- ', docs.length, apiName)
 
-      Api.update({ _id: { $in: docs.map(a => a._id) } }, { $set: {
+      await Api.updateAsync({ _id: { $in: docs.map(a => a._id) } }, { $set: {
         patientId: masterId
       } }, { multi: true })
 
@@ -98,17 +101,19 @@ export const perform = ({ actions, Patients, Appointments, InboundCalls, Media, 
 
     const changedIds = {
       patients: a.duplicateIds,
-      ...forceReassignPatientId('appointments', Appointments),
-      ...forceReassignPatientId('inboundCalls', InboundCalls),
-      ...forceReassignPatientId('media', Media),
-      ...forceReassignPatientId('messages', Messages),
-      ...forceReassignPatientId('referrals', Referrals),
-      ...forceReassignPatientId('records', Records)
+      ...await forceReassignPatientId('appointments', Appointments),
+      ...await forceReassignPatientId('inboundCalls', InboundCalls),
+      ...await forceReassignPatientId('media', Media),
+      ...await forceReassignPatientId('messages', Messages),
+      ...await forceReassignPatientId('referrals', Referrals),
+      ...await forceReassignPatientId('records', Records)
     }
 
     const result = { masterId, ...changedIds }
 
     console.log('[Patients] deduplicate: Done, reassigned to master patient id', masterId, ' <- ', changedIds)
 
-    return result
-  })
+    results.push(result)
+  }
+  return results
+}

@@ -23,14 +23,14 @@ export const updateProfile = ({ Users }) =>
     fn: async (args) => {
       const { userId, ...fields } = args
 
-      const user = Users.findOne({ _id: userId }, { removed: true })
+      const user = await Users.findOneAsync({ _id: userId }, { removed: true })
       if (!user) {
         throw new Meteor.Error(404, 'User not found')
       }
 
       Events.post('user/update', { userId })
 
-      return Users.update({ _id: userId }, {
+      return await Users.updateAsync({ _id: userId }, {
         $set: fields
       })
     }

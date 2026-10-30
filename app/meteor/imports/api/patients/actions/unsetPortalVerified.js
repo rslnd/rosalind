@@ -8,12 +8,12 @@ export const unsetPortalVerified = ({ Patients }) =>
     args: {
       patientId: String
     },
-    fn: function ({ patientId }) {
+    fn: async function ({ patientId }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
 
       if (!patient) {
         throw new Meteor.Error(404, 'Patient not found')
@@ -31,7 +31,7 @@ export const unsetPortalVerified = ({ Patients }) =>
         return rest
       })
 
-      return Patients.update({ _id: patientId }, {
+      return await Patients.updateAsync({ _id: patientId }, {
         $set: {
           contacts: newContacts
         },

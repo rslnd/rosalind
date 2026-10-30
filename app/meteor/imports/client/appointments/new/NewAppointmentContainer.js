@@ -10,6 +10,7 @@ import { NewAppointmentForm } from './NewAppointmentForm'
 import { Appointments } from '../../../api/appointments'
 import { Tags } from '../../../api/tags'
 import { getDefaultDuration } from '../../../api/appointments/methods/getDefaultDuration'
+import { ceilToSlot } from '../../../api/appointments/methods/ceilToSlot'
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 import { calculateRevenue } from './RevenueField'
 import { withTracker } from '../../components/withTracker'
@@ -28,7 +29,10 @@ export class NewAppointmentContainerComponent extends React.Component {
       note: note || 'PAUSE',
       calendarId: this.props.calendar._id,
       start: moment(this.props.start).toDate(),
-      end: moment(this.props.start).add(duration || this.props.calendar.defaultDuration || this.props.calendar.slotSize || 5, 'minutes').toDate(),
+      end: ceilToSlot({
+        calendar: this.props.calendar,
+        date: moment(this.props.start).add(duration || this.props.calendar.defaultDuration || this.props.calendar.slotSize || 5, 'minutes')
+      }).toDate(),
       assigneeId: this.props.assigneeId
     }
 
@@ -87,8 +91,10 @@ export class NewAppointmentContainerComponent extends React.Component {
       note: values.appointment.note,
       tags: values.appointment.tags,
       start: moment(this.props.start).toDate(),
+      // snap to the next grid line, otherwise eg. a 5 min appt at 8:00 ends at 8:05,
+      // which does not exist when slots are at :00, :10, ...
       end: duration
-        ? moment(this.props.start).add(duration, 'minutes').toDate()
+        ? ceilToSlot({ calendar: this.props.calendar, date: moment(this.props.start).add(duration, 'minutes') }).toDate()
         : this.props.end,
       assigneeId: this.props.assigneeId,
       privateAppointment: Tags.methods.isPrivate(values.appointment.tags),

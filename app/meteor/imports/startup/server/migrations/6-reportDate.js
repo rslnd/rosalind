@@ -5,20 +5,20 @@ import { dayToDate } from '../../../util/time/day'
 Migrations.add({
   version: 6,
 
-  up: function () {
+  up: async function () {
     const cursor = Reports.find({ day: { $ne: null } })
 
-    cursor.forEach(report => {
+    for await (const report of cursor) {
       const date = dayToDate(report.day)
 
-      Reports.update({ _id: report._id }, {
+      await Reports.updateAsync({ _id: report._id }, {
         $set: {
           'day.date': date
         }
       })
-    })
+    }
 
-    console.log('Migration reportDate: added date to', cursor.count(), 'reports')
+    console.log('Migration reportDate: added date to', await cursor.countAsync(), 'reports')
 
     return true
   },

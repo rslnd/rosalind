@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { toClass } from 'recompose'
 import Alert from 'react-s-alert'
 import { __ } from '../../../i18n'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from '../../components/withRouter'
 import { withTracker } from '../../components/withTracker'
 import { Patients } from '../../../api/patients'
 import { Calendars } from '../../../api/calendars'
@@ -113,6 +113,7 @@ const composer = (props) => {
     closeModal()
     Alert.success(__('appointments.softRemoveSuccess'))
     Appointments.actions.softRemove.callPromise(args)
+      .catch(err => { Alert.error(__('ui.error')); console.error(err) })
   })
 
   let move

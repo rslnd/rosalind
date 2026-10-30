@@ -21,7 +21,7 @@ const isProduction = (
 const warning = once((p) => console.warn(`[Messages] channels/sms/providers: Using provider ${p} in production mode`))
 
 if (isProduction) {
-  provider = providers[Settings.get('messages.sms.provider') || 'stub']
+  provider = providers[await Settings.get('messages.sms.provider') || 'stub']
   warning(provider.name)
 } else {
   provider = stub

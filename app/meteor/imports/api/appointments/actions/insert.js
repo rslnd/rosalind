@@ -1,11 +1,12 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Comments } from '../../comments'
 import { Calendars } from '../../calendars'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { callNested } from '../../../util/meteor/isInSimulation'
 
 export const insert = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -16,7 +17,7 @@ export const insert = ({ Appointments }) => {
       newPatient: { type: Object, optional: true, blackbox: true }
     }).validator(),
 
-    run ({ appointment, newPatient }) {
+    async run ({ appointment, newPatient }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -28,12 +29,12 @@ export const insert = ({ Appointments }) => {
       let patientId = appointment.patientId
 
       if (newPatient) {
-        patientId = Meteor.call('patients/upsert', { patient: newPatient })
+        patientId = await callNested('patients/upsert', { patient: newPatient })
       }
 
       const { note, ...restFields } = appointment
 
-      const calendar = Calendars.findOne({ _id: appointment.calendarId })
+      const calendar = await Calendars.findOneAsync({ _id: appointment.calendarId })
 
       if (!calendar) {
         throw new Meteor.Error('Calendar not found')
@@ -48,23 +49,27 @@ export const insert = ({ Appointments }) => {
         noteInAppointment = true
       }
 
-      const appointmentId = Appointments.insert({ ...restFields, patientId })
+      const appointmentId = await Appointments.insertAsync({ ...restFields, patientId })
       
       if (note && !noteInAppointment) {
-        Comments.actions.post.callPromise({ docId: appointmentId, body: note })
+        // Must be awaited: an unawaited nested method call from inside a stub
+        // leaves DDP._CurrentMethodInvocation pointing at this method forever,
+        // after which the client treats every later call as a simulation and
+        // stops sending anything to the server.
+        await Comments.actions.post.callPromise({ docId: appointmentId, body: note })
       }
       Events.post('appointments/insert', { appointmentId })
 
 
       if (Meteor.isServer) {
-        Appointments.find({
+        await Appointments.find({
           type: 'bookable',
           start: {$gte: restFields.start },
           end: { $lte: restFields.end },
           calendarId: restFields.calendarId,
           assigneeId: restFields.assigneeId
-        }).map(b => {
-          Appointments.update({ _id: b._id }, { $set: {
+        }).mapAsync(async b => {
+          await Appointments.updateAsync({ _id: b._id }, { $set: {
             removed: true,
             removedAt: new Date(),
             removedBy: userId,

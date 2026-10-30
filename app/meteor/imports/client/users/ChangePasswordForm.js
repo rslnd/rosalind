@@ -1,11 +1,11 @@
 import React from 'react'
-import { Meteor } from 'meteor/meteor'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Button from '@material-ui/core/Button'
 import { reduxForm, Field } from 'redux-form'
 import { TextField } from '../components/form/TextField'
 import { Icon } from '../components/Icon'
+import { call } from '../../util/meteor/call'
 
 const Fields = ({ handleSubmit, submitting, invalid, validating, pristine }) =>
   <form onSubmit={handleSubmit}>
@@ -46,7 +46,7 @@ export const validate = ({ password }) => {
 
 const onSubmit = ({ password }, dispatch, props) =>
   new Promise((resolve, reject) => {
-    Meteor.call('users/updatePassword', {
+    call('users/updatePassword', {
       userId: props.user._id,
       password
     }, (e) => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from '../components/withRouter'
 import { Users } from '../../api/users'
 import { compose, withState, withHandlers } from 'recompose'
 import Alert from 'react-s-alert'

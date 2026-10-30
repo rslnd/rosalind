@@ -84,7 +84,10 @@ const deAt = {
 moment.defineLocale('de-at', deAt)
 moment.locale(locale)
 
-momentTz.defineLocale('de-at', deAt)
+// moment-timezone may share the same moment instance; defining twice warns
+if (momentTz !== moment) {
+  momentTz.defineLocale('de-at', deAt)
+}
 momentTz.locale(locale)
 
 

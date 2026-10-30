@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
 // TODO: Add fromTagId, fromUserId [assignee/waitlistAssignee], byUserId [loggen in user]
@@ -17,8 +17,9 @@ export const referrables = new SimpleSchema({
   },
 
   fromCalendarIds: {
-    type: [SimpleSchema.RegEx.Id]
+    type: Array
   },
+  'fromCalendarIds.$': { type: SimpleSchema.RegEx.Id },
 
   toCalendarId: {
     type: SimpleSchema.RegEx.Id,

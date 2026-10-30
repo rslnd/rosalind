@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import moment from 'moment-timezone'
-import Modal from 'react-bootstrap/lib/Modal'
+import { Modal } from '../../../components/bootstrap'
 import Button from '@material-ui/core/Button'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -92,16 +92,6 @@ export const VacationEditor = ({ assignee, staff, date, vacation, existingVacati
   const [reason, setReason] = useState((vacation && vacation.reason) || 'vacation')
   const [saving, setSaving] = useState(false)
   const [showSaveTip, setShowSaveTip] = useState(false)
-
-  // Safety net: react-bootstrap's Modal manager sometimes fails to restore the
-  // body scroll lock (inline overflow:hidden + .modal-open) it sets while the
-  // modal is open – especially when the modal is unmounted directly. Restore it
-  // ourselves on unmount so the page stays scrollable.
-  useEffect(() => () => {
-    document.body.classList.remove('modal-open')
-    document.body.style.overflow = ''
-    document.body.style.paddingRight = ''
-  }, [])
 
   // Why the save button is disabled (shown as an instant tooltip).
   const disabledReason = !userId

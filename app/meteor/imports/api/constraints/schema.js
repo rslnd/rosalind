@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { HM, Auto } from '../../util/schema'
 import { weekdays } from '../../util/time/weekdays'
 
@@ -39,9 +39,10 @@ const DurationStrategy = new SimpleSchema({
 
 export const Schema = new SimpleSchema({
   assigneeIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     index: 1
   },
+  'assigneeIds.$': { type: SimpleSchema.RegEx.Id },
 
   order: {
     type: Number,
@@ -49,10 +50,11 @@ export const Schema = new SimpleSchema({
   },
 
   tags: {
-    type: [Tag],
+    type: Array,
     index: 1,
     optional: true
   },
+  'tags.$': { type: Tag },
 
   note: {
     type: String,
@@ -60,10 +62,11 @@ export const Schema = new SimpleSchema({
   },
 
   weekdays: {
-    type: [String],
+    type: Array,
     optional: true,
     allowedValues: weekdays
   },
+  'weekdays.$': { type: String },
 
   duration: {
     type: Number,

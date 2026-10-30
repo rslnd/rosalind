@@ -1,15 +1,15 @@
 import moment from 'moment-timezone'
-import { JobCollection, Job } from 'meteor/simonsimcity:job-collection'
+import { JobCollection, Job } from 'meteor/strigops:job-collection'
 import { Users } from '../'
 
-const removeSessionTokens = () => {
-  Users.update(
+const removeSessionTokens = async () => {
+  await Users.updateAsync(
     {},
     { $unset: { 'services.resume.loginTokens': 1 }},
     { multi: true })
 }
 
-export default autoLogoutServer = () => {
+export default () => {
   const sendAtHourLocal = 3
   const sendAtHourUTC = moment().tz('Europe/Vienna').hour(sendAtHourLocal).startOf('hour').utc().hours()
 
@@ -34,14 +34,14 @@ export default autoLogoutServer = () => {
     }
   })
 
-  const cleanOldJobs = (job) => {
-    const ids = jobs.find({
+  const cleanOldJobs = async (job) => {
+    const ids = await jobs.find({
       status: { $in: Job.jobStatusRemovable },
       updated: { $lt: moment().subtract(7, 'days').toDate() }
-    }, { fields: { _id: 1 } }).map(d => d._id)
+    }, { fields: { _id: 1 } }).mapAsync(d => d._id)
 
     if (ids.length > 0) {
-      jobs.removeJobs(ids)
+      await jobs.removeJobs(ids)
     }
   }
 
@@ -59,18 +59,19 @@ export default autoLogoutServer = () => {
     .save({
       cancelRepeats: true
     })
+    .catch(e => console.error('[Users] autoLogoutServer: failed to save periodic job', e))
 
   const worker = (job, callback) => {
     console.log('[Users] autoLogoutServer: Running job')
     try {
       removeSessionTokens()
-        .then(() => {
-          cleanOldJobs(job)
-          job.done()
+        .then(async () => {
+          await cleanOldJobs(job).catch(e => console.error('[Users] autoLogoutServer: failed to clean old jobs', e))
+          await job.done()
           callback()
-        }).catch((e) => {
+        }).catch(async (e) => {
           console.error('[Users] autoLogoutServer: errored with', e)
-          job.fail()
+          await job.fail().catch(e => console.error('[Users] autoLogoutServer: failed to mark job as failed', e))
         })
     } catch (e) {
       console.error('[Users] autoLogoutServer: hard errored with', e)
@@ -78,7 +79,7 @@ export default autoLogoutServer = () => {
   }
 
 
-  processJobs = () => {
+  const processJobs = () => {
     const options = {
       workTimeout: 2 * 60 * 1000,
       callbackStrict: true
@@ -95,6 +96,7 @@ export default autoLogoutServer = () => {
     Meteor.setTimeout(() => {
       if (process.env.PROCESS_JOBS === '1') {
         jobs.startJobServer()
+          .catch(e => console.error('[Users] autoLogoutServer: failed to start job server', e))
         jobs.processJobs('autoLogoutServer', options, worker)
       }
     }, process.env.NODE_ENV === 'production' ? 60 * 1000 : 1000)

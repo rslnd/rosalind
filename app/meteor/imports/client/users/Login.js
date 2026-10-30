@@ -1,7 +1,7 @@
 /* global Accounts */
 import React from 'react'
 import Alert from 'react-s-alert'
-import Button from 'react-bootstrap/lib/Button'
+import { Button } from '../components/bootstrap'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
@@ -13,6 +13,7 @@ import { attemptRegistration } from '../../startup/client/native/attemptRegistra
 import { important } from '../layout/styles'
 import { Settings } from '../../api'
 import { Box } from '../components/Box'
+import { call } from '../../util/meteor/call'
 
 const composer = () => {
   const client = getClient()
@@ -117,12 +118,12 @@ class LoginScreen extends React.Component {
       } else {
         if (password) {
           isWeakPassword(password).then((weakPassword) => {
-            Meteor.call('users/afterLogin', { weakPassword }, () => {
+            call('users/afterLogin', { weakPassword }, () => {
               console.log('[Users] Logged in successfully', { weakPassword })
             })
           })
         } else {
-          Meteor.call('users/afterLogin', { weakPassword: null }, () => {
+          call('users/afterLogin', { weakPassword: null }, () => {
             console.log('[Users] Logged in successfully')
           })
         }

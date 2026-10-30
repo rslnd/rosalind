@@ -1,4 +1,4 @@
-import { Job } from 'meteor/simonsimcity:job-collection'
+import { Job } from 'meteor/strigops:job-collection'
 import { Messages } from '../'
 
 export const ensurePeriodicJob = () => {
@@ -16,4 +16,5 @@ export const ensurePeriodicJob = () => {
     .save({
       cancelRepeats: true
     })
+    .catch(e => console.error('[Messages] Failed to save periodic job', e))
 }

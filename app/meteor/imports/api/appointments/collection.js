@@ -11,8 +11,8 @@ Appointments.methods = methods({ Appointments })
 Appointments.actions = actions({ Appointments })
 
 if (Meteor.isServer) {
-  Meteor.startup(() => {
-    Appointments._ensureIndex({ lockedAt: 1 }, { expireAfterSeconds: 60 * 10 })
+  Meteor.startup(async () => {
+    await Appointments.createIndexAsync({ lockedAt: 1 }, { expireAfterSeconds: 60 * 10 })
   })
 }
 

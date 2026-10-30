@@ -125,11 +125,11 @@ const REAL_FIELDS = {
 // (from/to), doctor filter (assigneeIds) and appointment-type filter (tags).
 // When `compare` is set, every cohort additionally gets the same period of the
 // previous year (year-over-year overlay). Powers the "Patientenstromanalyse".
-export const computePatientFlow = ({ Appointments, Users, series = [], compare, now }) => {
-  const hiddenIds = Users.find({ hiddenInReports: true }, { fields: { _id: 1 } })
-    .fetch().map(u => u._id)
+export const computePatientFlow = async ({ Appointments, Users, series = [], compare, now }) => {
+  const hiddenIds = (await Users.find({ hiddenInReports: true }, { fields: { _id: 1 } })
+    .fetchAsync()).map(u => u._id)
 
-  const fetchRange = (rangeFrom, rangeTo, assigneeIds, tags) => {
+  const fetchRange = async (rangeFrom, rangeTo, assigneeIds, tags) => {
     const selector = {
       type: { $exists: false },
       patientId: { $exists: true, $ne: null },
@@ -143,10 +143,10 @@ export const computePatientFlow = ({ Appointments, Users, series = [], compare, 
     if (tags && tags.length) {
       selector.tags = { $in: tags }
     }
-    return Appointments.find(selector, { fields: REAL_FIELDS }).fetch()
+    return await Appointments.find(selector, { fields: REAL_FIELDS }).fetchAsync()
   }
 
-  const buildCohort = (s) => {
+  const buildCohort = async (s) => {
     const { id, label, from, to, assigneeIds, tags } = s
     let previous = null
     let compareFrom = null
@@ -154,7 +154,7 @@ export const computePatientFlow = ({ Appointments, Users, series = [], compare, 
     if (compare) {
       compareFrom = moment(from).subtract(1, 'year').toDate()
       compareTo = moment(to).subtract(1, 'year').toDate()
-      previous = aggregate(fetchRange(compareFrom, compareTo, assigneeIds, tags), { now })
+      previous = aggregate(await fetchRange(compareFrom, compareTo, assigneeIds, tags), { now })
     }
     return {
       id,
@@ -164,13 +164,13 @@ export const computePatientFlow = ({ Appointments, Users, series = [], compare, 
       compareFrom,
       compareTo,
       filters: { assigneeIds: assigneeIds || [], tags: tags || [] },
-      current: aggregate(fetchRange(from, to, assigneeIds, tags), { now }),
+      current: aggregate(await fetchRange(from, to, assigneeIds, tags), { now }),
       previous
     }
   }
 
   return {
     compare: !!compare,
-    series: series.map(buildCohort)
+    series: await Promise.all(series.map(buildCohort))
   }
 }

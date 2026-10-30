@@ -1,5 +1,5 @@
 import moment from 'moment-timezone'
-import { Job } from 'meteor/simonsimcity:job-collection'
+import { Job } from 'meteor/strigops:job-collection'
 import { Reports } from '../'
 
 export const ensurePeriodicJob = () => {
@@ -31,4 +31,5 @@ export const ensurePeriodicJob = () => {
     .save({
       cancelRepeats: true
     })
+    .catch(e => console.error('[Reports] Failed to save periodic job', e))
 }

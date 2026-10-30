@@ -20,11 +20,11 @@ import './17-messageCalendarId'
 import './18-normalizeName'
 
 export default () => {
-  Meteor.startup(() => {
+  Meteor.startup(async () => {
     Migrations.config({
       logIfLatest: false
     })
 
-    Migrations.migrateTo('latest')
+    await Migrations.migrateTo('latest')
   })
 }

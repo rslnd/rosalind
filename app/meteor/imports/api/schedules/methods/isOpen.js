@@ -3,19 +3,19 @@ import { extendMoment } from 'moment-range'
 const moment = extendMoment(momentTz)
 
 export default ({ Schedules }) => {
-  const isOpen = ({ time = moment(), within = 'minute' } = {}) => {
-    if (Schedules.methods.isBusinessHoursOverride({ time, within })) {
+  const isOpen = async ({ time = moment(), within = 'minute' } = {}) => {
+    if (await Schedules.methods.isBusinessHoursOverride({ time, within })) {
       return true
-    } else if (Schedules.methods.isHoliday({ time, within })) {
+    } else if (await Schedules.methods.isHoliday({ time, within })) {
       return false
-    } else if (Schedules.methods.isRegularBusinessHours({ time, within })) {
+    } else if (await Schedules.methods.isRegularBusinessHours({ time, within })) {
       return true
     } else {
       return false
     }
   }
 
-  const isHoliday = ({ time = moment(), within = 'minute' } = {}) => {
+  const isHoliday = async ({ time = moment(), within = 'minute' } = {}) => {
     const holidays = Schedules.find({
       type: 'holiday',
       start: { $lte: time.toDate() },
@@ -23,16 +23,16 @@ export default ({ Schedules }) => {
       removed: { $ne: true }
     })
 
-    return (holidays.count() > 0)
+    return (await holidays.countAsync() > 0)
   }
 
-  const isBusinessHoursOverride = ({ time = moment(), within = 'minute' } = {}) => {
-    const overrides = Schedules.find({
+  const isBusinessHoursOverride = async ({ time = moment(), within = 'minute' } = {}) => {
+    const overrides = await Schedules.find({
       type: 'businessHoursOverride',
       start: { $gte: time.clone().startOf('day').toDate() },
       end: { $lte: time.clone().endOf('day').toDate() },
       removed: { $ne: true }
-    }).fetch()
+    }).fetchAsync()
 
     let any = false
 
@@ -47,8 +47,8 @@ export default ({ Schedules }) => {
     return any
   }
 
-  const isRegularBusinessHours = ({ time = moment(), within = 'minute' }) => {
-    const businessHoursRegular = Schedules.findOne({
+  const isRegularBusinessHours = async ({ time = moment(), within = 'minute' }) => {
+    const businessHoursRegular = await Schedules.findOneAsync({
       type: 'businessHours',
       removed: { $ne: true }
     })

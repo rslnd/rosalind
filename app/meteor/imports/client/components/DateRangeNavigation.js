@@ -1,7 +1,6 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import Button from 'react-bootstrap/lib/Button'
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
+import { Button, ButtonGroup } from './bootstrap'
 import { DayPickerRangeController } from 'react-dates'
 import { START_DATE, END_DATE } from 'react-dates/constants'
 import { PortalWithState } from 'react-portal'

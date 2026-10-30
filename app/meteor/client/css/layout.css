@@ -9,6 +9,20 @@ body {
   transition: filter 1s cubic-bezier(.17,.67,.83,.67);
 }
 
+/* MUI positions popovers (Menu, Select, Popover) and tooltips from
+   getBoundingClientRect(), which is in zoomed pixels, and the resulting
+   top/left/translate get multiplied by the body zoom again -> offset.
+   Undo the zoom on the positioned layer and re-apply it to the content. */
+.MuiPopover-root,
+.MuiTooltip-popper {
+  zoom: calc(1 / 1.221);
+}
+
+.MuiPopover-paper > *,
+.MuiTooltip-popper > .MuiTooltip-tooltip {
+  zoom: 1.221;
+}
+
 .zoom-1 {
   /* zoom: calc(1 / 1.221); */
 }

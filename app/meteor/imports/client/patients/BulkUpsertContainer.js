@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor'
 import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
 import { compose } from 'recompose'
@@ -8,13 +7,14 @@ import { __ } from '../../i18n'
 import { Patients } from '../../api/patients'
 import { mapFieldsToPatient } from './mapFieldsToPatient'
 import { BulkUpsertScreen } from './BulkUpsertScreen'
+import { call } from '../../util/meteor/call'
 
 const composer = (props) => {
   const onSubmit = v => {
     try {
       const patient = mapFieldsToPatient(v.patient)
 
-      return Meteor.call('patients/upsert', {
+      return call('patients/upsert', {
         patient,
         replaceContacts: true,
         createExternalReferralTo: '9MY6AiaNrAkcER8DK'

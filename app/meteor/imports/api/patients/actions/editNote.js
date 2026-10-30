@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const editNote = ({ Patients }) => {
@@ -13,15 +13,15 @@ export const editNote = ({ Patients }) => {
       newNote: { type: String, optional: true }
     }).validator(),
 
-    run ({ patientId, newNote }) {
+    async run ({ patientId, newNote }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
 
       if (patient) {
-        Patients.update({ _id: patientId }, {
+        await Patients.updateAsync({ _id: patientId }, {
           $set: {
             note: newNote,
             updatedAt: new Date(),

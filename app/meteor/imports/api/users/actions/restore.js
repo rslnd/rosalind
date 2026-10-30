@@ -10,7 +10,7 @@ export const restore = ({ Users }) =>
     },
     roles: ['admin', 'users-edit'],
     fn: async ({ userId }) => {
-      const user = Users.findOne({ _id: userId, removed: true }, { removed: true })
+      const user = await Users.findOneAsync({ _id: userId, removed: true }, { removed: true })
 
       if (!user) {
         throw new Meteor.Error(404, 'User not found')
@@ -20,7 +20,7 @@ export const restore = ({ Users }) =>
         .replace(/deleted/i, '')
         .replace(/removed\d+/i, '')
 
-      Users.update({ _id: userId }, {
+      await Users.updateAsync({ _id: userId }, {
         $set: {
           username: previousUsername,
           employee: true,

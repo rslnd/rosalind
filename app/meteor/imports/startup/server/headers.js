@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor'
 import { WebApp } from 'meteor/webapp'
 import { Settings } from '../../api/settings'
 
-const getImageFromSettings = name => {
-  const setting = Settings.findOne({ key: name })
+const getImageFromSettings = async name => {
+  const setting = await Settings.findOneAsync({ key: name })
   if (!setting || !setting.base64Image) { return null }
 
   const str = setting.base64Image
@@ -24,8 +24,8 @@ export default () => {
     })
 
     WebApp.connectHandlers.use('/logo.svg', async (req, res, next) => {
-      const image = getImageFromSettings('logo.svg')
-      if (!image) { res.writeHead(404); res.end('404') }
+      const image = await getImageFromSettings('logo.svg')
+      if (!image) { res.writeHead(404); res.end('404'); return }
 
       res.writeHead(200, {
         'Content-Length': image.length,
@@ -36,8 +36,8 @@ export default () => {
     })
 
     WebApp.connectHandlers.use('/favicon.ico', async (req, res, next) => {
-      const image = getImageFromSettings('favicon.ico')
-      if (!image) { res.writeHead(404); res.end('404') }
+      const image = await getImageFromSettings('favicon.ico')
+      if (!image) { res.writeHead(404); res.end('404'); return }
 
       res.writeHead(200, {
         'Content-Length': image.length,
