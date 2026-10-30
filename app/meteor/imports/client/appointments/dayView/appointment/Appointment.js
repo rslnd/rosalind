@@ -206,7 +206,9 @@ class AppointmentItem extends React.Component {
       assigneeId = newAssigneeId
     } else {
       timeStart = moment(appointment.start).format('[T]HHmm')
-      timeEnd = moment(appointment.end).format('[T]HHmm')
+      // an end between grid lines (eg. 8:05 when slots are at :00, :10, ...) has no
+      // matching grid row and would make the appointment span far too long
+      timeEnd = ceilToSlot({ calendar, date: appointment.end }).format('[T]HHmm')
       assigneeId = appointment.assigneeId
     }
 
