@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Log, Auto, External } from '../../util/schema'
 
 export default new SimpleSchema({
@@ -42,14 +42,16 @@ export default new SimpleSchema({
   },
 
   assistantIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'assistantIds.$': { type: SimpleSchema.RegEx.Id },
 
   tags: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'tags.$': { type: SimpleSchema.RegEx.Id },
 
   note: {
     type: String,
@@ -75,10 +77,11 @@ export default new SimpleSchema({
   },
 
   consentMediaIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true,
     index: 1
   },
+  'consentMediaIds.$': { type: SimpleSchema.RegEx.Id },
 
   dismissedAt: {
     type: Date,
@@ -252,9 +255,10 @@ export default new SimpleSchema({
   },
 
   logs: {
-    type: [Log],
+    type: Array,
     optional: true
   },
+  'logs.$': { type: Log },
 
   // This field is TTL indexed
   // see collection.js for details

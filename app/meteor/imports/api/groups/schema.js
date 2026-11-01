@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 
 export default new SimpleSchema({
   name: {
@@ -26,7 +26,8 @@ export default new SimpleSchema({
   },
 
   baseRoles: {
-    type: [String],
+    type: Array,
     optional: true
-  }
+  },
+  'baseRoles.$': { type: String }
 })

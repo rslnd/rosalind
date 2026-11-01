@@ -10,15 +10,15 @@ export const register = ({ Clients }) =>
       systemInfo: Match.Maybe(Match.Optional(Object))
     },
     allowAnonymous: true,
-    fn ({ clientKey, systemInfo }) {
+    async fn ({ clientKey, systemInfo }) {
       if (this.isSimulation) {
         return { isOk: true }
       }
 
-      const existingClient = Clients.findOne({ clientKey })
+      const existingClient = await Clients.findOneAsync({ clientKey })
 
       if (existingClient) {
-        Clients.update({ clientKey }, {
+        await Clients.updateAsync({ clientKey }, {
           $set: {
             lastActionAt: new Date(),
             systemInfo: systemInfo || existingClient.systemInfo,
@@ -28,7 +28,7 @@ export const register = ({ Clients }) =>
         Events.post('clients/register/existing', { existingClientId: existingClient._id })
         return { isOk: true, settings: existingClient.settings }
       } else {
-        if (!Settings.get('clients.allowNewClients')) {
+        if (!await Settings.get('clients.allowNewClients')) {
           console.error('[Clients] New client registration is disabled')
           console.error('[Clients] Blocked attempt to register new client key', clientKey)
           Events.post('clients/register/blocked', { blocked: true })
@@ -36,7 +36,7 @@ export const register = ({ Clients }) =>
         } else {
           const isBanned = !(process.env.NODE_ENV === 'staging' && process.env.INSECURE_APPROVE_NEW_CLIENTS)
 
-          const clientId = Clients.insert({
+          const clientId = await Clients.insertAsync({
             clientKey,
             systemInfo,
             createdAt: new Date(),

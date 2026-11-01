@@ -12,6 +12,7 @@ import { Popover, setNextMedia } from './Consents'
 import { toNative, getClientKey } from '../../startup/client/native/events'
 import { getClient } from '../../api/clients/methods/getClient'
 import { hasRole } from '../../util/meteor/hasRole'
+import { __ } from '../../i18n'
 
 const Document = ({ children, isCurrent, isMissing, color, ...props }) =>
   (!isCurrent && isMissing)
@@ -149,10 +150,10 @@ const scan = ({ mediaTag, patientId, appointmentId }) => {
     appointmentId,
     tagIds: [ mediaTag._id ],
     cycle: null
-  })
-
-  Alert.info(mediaTag.name + ' wird gescannt')
-  toNative('scanStart', { profile })
+  }).then(() => {
+    Alert.info(mediaTag.name + ' wird gescannt')
+    toNative('scanStart', { profile })
+  }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
 }
 
 

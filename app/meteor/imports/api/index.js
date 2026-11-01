@@ -27,16 +27,10 @@ import day, { dateToDay } from '../util/time/day'
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
 
-const callAsync = (method, args) =>
-  new Promise((resolve, reject) => {
-    Meteor.call(method, args, (err, ok) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(ok)
-      }
-    })
-  })
+// Meteor.callAsync, not Meteor.call: the sync path does not await the method's
+// stub, which corrupts DDP._CurrentMethodInvocation and wedges the client into a
+// permanent simulation where no method reaches the server. See util/meteor/call.
+const callAsync = (method, args) => Meteor.callAsync(method, args)
 
 const generateReports = async (start, end) => {
   const range = moment.range(moment(start), moment(end))

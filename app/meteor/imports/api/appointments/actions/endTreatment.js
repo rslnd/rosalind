@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Referrals } from '../../referrals'
 
@@ -13,17 +13,17 @@ export const endTreatment = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ appointmentId }) {
+    async run ({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).treatmentEnd) {
+      if ((await Appointments.findOneAsync({ _id: appointmentId })).treatmentEnd) {
         console.warn('[Appointments] endTreatment: Appointment has already set treatmentEnd', { appointmentId })
         return
       }
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $set: {
           treatmentEnd: new Date(),
           treatmentBy: this.userId,
@@ -32,7 +32,7 @@ export const endTreatment = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        Referrals.serverActions.redeem({ appointmentId })
+        await Referrals.serverActions.redeem({ appointmentId })
       }
 
       Events.post('appointments/endTreatment', { appointmentId })

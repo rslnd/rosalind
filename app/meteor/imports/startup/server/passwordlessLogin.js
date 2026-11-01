@@ -12,7 +12,7 @@ export default () => {
     bcryptRounds: 11
   })
 
-  Accounts.registerLoginHandler('clientKey passwordless', (loginRequest) => {
+  Accounts.registerLoginHandler('clientKey passwordless', async (loginRequest) => {
     if (loginRequest.passwordless && loginRequest.clientKey) {
       check(loginRequest, {
         user: {
@@ -23,7 +23,7 @@ export default () => {
       })
 
       const username = loginRequest.user && loginRequest.user.username
-      const user = username && Users.findOne({ username: username.toLowerCase() })
+      const user = username && await Users.findOneAsync({ username: username.toLowerCase() })
       if (user) {
         const userId = user._id
         if (user.services && user.services.passwordless) {
@@ -40,7 +40,7 @@ export default () => {
     }
   })
 
-  Accounts.validateLoginAttempt((loginAttempt) => {
+  Accounts.validateLoginAttempt(async (loginAttempt) => {
     if (!loginAttempt.allowed) { return false }
     const user = loginAttempt.user
     const userId = user._id
@@ -55,7 +55,7 @@ export default () => {
       if (isTrustedNetwork(ipAddress)) {
         if (userPasswordlessAllowed) {
           if (clientKey) {
-            const client = Clients.findOne({ clientKey })
+            const client = await Clients.findOneAsync({ clientKey })
             if (client && !client.removed && !client.isBanned) {
               if (client.passwordlessGroupIds) {
                 if (client.passwordlessGroupIds.includes(user.groupId)) {
@@ -89,7 +89,7 @@ export default () => {
 }
 
 // Check allowedClientIds
-Accounts.validateLoginAttempt((loginAttempt) => {
+Accounts.validateLoginAttempt(async (loginAttempt) => {
   if (!loginAttempt.allowed) { return false }
   if (loginAttempt.type !== 'password') { return loginAttempt.allowed }
 
@@ -97,7 +97,7 @@ Accounts.validateLoginAttempt((loginAttempt) => {
   const connectionId = loginAttempt.connection.id
 
   if (user.allowedClientIds) {
-    const client = Clients.findOne({ connectionId })
+    const client = await Clients.findOneAsync({ connectionId })
     if (client && !client.removed && !client.isBanned) {
       if (user.allowedClientIds.indexOf(client._id) !== -1) {
         return true

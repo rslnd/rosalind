@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from './callPromiseMixin'
 import { check, Match } from 'meteor/check'
 import { hasRole } from './hasRole'
 import { isAllowed } from './isAllowed'
@@ -44,9 +44,9 @@ export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKe
         throw new Error(e)
       }
     },
-    run: function (safeArgs) {
+    run: async function (safeArgs) {
       if (!allowAnonymous) {
-        if (!hasRole(this.userId, roles)) {
+        if (!await hasRole(this.userId, roles)) {
           throw new Meteor.Error(403, 'Not authorized')
         }
       }
@@ -55,7 +55,7 @@ export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKe
         return
       }
 
-      if (isAllowed({
+      if (await isAllowed({
         allowAnonymous,
         requireClientKey,
         connection: this.connection,
@@ -63,14 +63,14 @@ export const action = ({ name, args = {}, roles, allowAnonymous, requireClientKe
         clientKey: safeArgs.clientKey,
         roles
       })) {
-        const result = fn.call(this, safeArgs)
+        const result = await fn.call(this, safeArgs)
 
         try {
-          if (safeArgs.clientKey) {
+          if (safeArgs.clientKey && Meteor.isServer) {
             const { Clients } = require('../../api/clients')
-            const client = Clients.findOne({ clientKey: safeArgs.clientKey })
+            const client = await Clients.findOneAsync({ clientKey: safeArgs.clientKey })
             if (client) {
-              Clients.update({ _id: client._id }, {
+              await Clients.updateAsync({ _id: client._id }, {
                 $set: {
                   lastActionAt: new Date(),
                   lastActionBy: this.userId
@@ -115,8 +115,8 @@ export const lifecycleActions = ({
       args: {
         [singular]: Object
       },
-      fn: function (a) {
-        const _id = Collection.insert(a[singular])
+      fn: async function (a) {
+        const _id = await Collection.insertAsync(a[singular])
         console.log(`[${plural}] insert (lifecycle) ${_id} by ${this.userId}`)
         return _id
       }
@@ -128,8 +128,8 @@ export const lifecycleActions = ({
         [`${singular}Id`]: String,
         update: Object
       },
-      fn: function (a) {
-        Collection.update({ _id: a[`${singular}Id`] }, a.update)
+      fn: async function (a) {
+        await Collection.updateAsync({ _id: a[`${singular}Id`] }, a.update)
         console.log(`[${plural}] update (lifecycle) ${a[`${singular}Id`]} by ${this.userId}`)
       }
     }),
@@ -139,8 +139,8 @@ export const lifecycleActions = ({
       args: {
         [`${singular}Id`]: String
       },
-      fn: function (a) {
-        Collection.softRemove({ _id: a[`${singular}Id`] })
+      fn: async function (a) {
+        await Collection.softRemove({ _id: a[`${singular}Id`] })
         console.log(`[${plural}] softRemove (lifecycle) ${a[`${singular}Id`]} by ${this.userId}`)
       }
     }),
@@ -150,8 +150,8 @@ export const lifecycleActions = ({
       args: {
         [`${singular}Id`]: String
       },
-      fn: function (a) {
-        Collection.remove({ _id: a[`${singular}Id`] })
+      fn: async function (a) {
+        await Collection.removeAsync({ _id: a[`${singular}Id`] })
         console.log(`[${plural}] hardRemove (lifecycle) ${a[`${singular}Id`]} by ${this.userId}`)
       }
     })

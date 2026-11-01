@@ -1,11 +1,11 @@
 import { Migrations } from 'meteor/percolate:migrations'
 import { Referrals, Referrables } from '../../../api/referrals'
 
-const up = () => {
-  const referrals = Referrals.find({}).fetch()
-  const referrables = Referrables.find({}).fetch()
+const up = async () => {
+  const referrals = await Referrals.find({}).fetchAsync()
+  const referrables = await Referrables.find({}).fetchAsync()
 
-  referrals.forEach(r => {
+  for (const r of referrals) {
     const referrableId = referrables.find(b =>
       r.referredTo === b.toCalendarId ||
       r.referredTo === b.toTagId
@@ -16,18 +16,18 @@ const up = () => {
       throw new Error('Unknown referrableId')
     }
 
-    Referrals.update({ _id: r._id }, {
+    await Referrals.updateAsync({ _id: r._id }, {
       $set: {
         referrableId
       }
     })
-  })
+  }
 
   return true
 }
 
-const down = () => {
-  Referrals.update({}, {
+const down = async () => {
+  await Referrals.updateAsync({}, {
     $unset: {
       referrableId: 1
     }

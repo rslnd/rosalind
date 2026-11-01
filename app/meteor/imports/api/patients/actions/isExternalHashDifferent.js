@@ -12,20 +12,20 @@ export const isExternalHashDifferent = ({ Patients }) =>
       externalHashes: [String],
       externalProvider: 'inno'
     },
-    fn ({ externalHashes, externalProvider }) {
+    async fn ({ externalHashes, externalProvider }) {
       Events.post('patients/isExternalHashDifferent')
       console.log(`[Patients] isExternalHashDifferent: processing ${externalHashes.length} external hashes`)
       const startAt = new Date()
 
       const field = `external.${externalProvider}.hash`
-      const upToDatePatients = Patients.find({
+      const upToDatePatients = (await Patients.find({
         [field]: { $in: externalHashes }
       }, {
         fields: {
           [field]: 1
         },
         removed: true
-      }).fetch().map(p => p.external[externalProvider].hash)
+      }).fetchAsync()).map(p => p.external[externalProvider].hash)
 
       let upToDatePatientsHashmap = {}
       upToDatePatients.forEach(h => {

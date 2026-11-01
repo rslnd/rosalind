@@ -10,14 +10,14 @@ export const getLoyalty = ({ Patients }) =>
       patientId: String
     },
     roles: ['appointments-*', 'patients'],
-    fn: function ({ patientId }) {
+    fn: async function ({ patientId }) {
       this.unblock()
 
-      const patient = Patients.findOne({ _id: patientId })
-      const appts = Appointments.find({ patientId }, {
+      const patient = await Patients.findOneAsync({ _id: patientId })
+      const appts = await Appointments.find({ patientId }, {
         sort: { start: 1 },
         fields: { revenue: 1, start: 1, admittedAt: 1, treatedAt: 1 }
-      }).fetch()
+      }).fetchAsync()
 
       const patientSinceCandidates = [
         patient.patientSince,

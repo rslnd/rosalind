@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { dayToDate, daySelector } from '../../../util/time/day'
 import { daysForPreview } from '../methods/daysForPreview'
 import { generate as generateReport } from '../methods/generate'
@@ -17,27 +17,27 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
       accessToken: { type: String, optional: true }
     }).validator(),
 
-    run({ day, accessToken }) {
+    async run({ day, accessToken }) {
       try {
         if (this.isSimulation) { return }
-        assertReportsAccess({ userId: this.userId, connection: this.connection, accessToken })
+        await assertReportsAccess({ userId: this.userId, connection: this.connection, accessToken })
 
-        const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
+        const calendars = await Calendars.find({}, { sort: { order: 1 } }).fetchAsync()
 
         // Filter out hacky hidden/assistance users
-        const allowedAssigneeIds = Users.find({
+        const allowedAssigneeIds = (await Users.find({
           employee: { $ne: false },
           hiddenInReports: { $ne: true }
-        }).fetch().map(u => u._id)
+        }).fetchAsync()).map(u => u._id)
 
-        return calendars.map(calendar => {
+        return await Promise.all(calendars.map(async calendar => {
           const calendarId = calendar._id
 
-          const days = daysForPreview(dayToDate(day)).map(day => {
+          const days = await Promise.all(daysForPreview(dayToDate(day)).map(async day => {
             const date = moment(dayToDate(day))
 
             // TODO: Dry up, merge with generate action
-            let appointments = Appointments.find({
+            let appointments = await Appointments.find({
               calendarId,
               assigneeId: { $in: allowedAssigneeIds },
               removed: { $ne: true },
@@ -45,9 +45,9 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
                 $gt: date.startOf('day').toDate(),
                 $lt: date.endOf('day').toDate()
               }
-            }).fetch()
+            }).fetchAsync()
 
-            const daySchedule = Schedules.findOne({
+            const daySchedule = await Schedules.findOneAsync({
               calendarId,
               type: 'day',
               removed: { $ne: true },
@@ -57,7 +57,7 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
               daySchedule.userIds = daySchedule.userIds.filter(_id => allowedAssigneeIds.includes(_id))
             }
 
-            let overrideSchedules = Schedules.find({
+            let overrideSchedules = await Schedules.find({
               calendarId,
               type: 'override',
               removed: { $ne: true },
@@ -66,16 +66,16 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
                 $gt: date.startOf('day').toDate(),
                 $lt: date.endOf('day').toDate()
               }
-            }).fetch()
+            }).fetchAsync()
 
             const appointmentIds = appointments.map(a => a._id)
-            const messages = Messages.find({
+            const messages = await Messages.find({
               appointmentId: { $in: appointmentIds }
-            }).fetch()
+            }).fetchAsync()
 
-            const tagMapping = Tags.methods.getMappingForReports()
+            const tagMapping = await Tags.methods.getMappingForReports()
 
-            const existingReport = Reports.findOne({
+            const existingReport = await Reports.findOneAsync({
               calendarId,
               ...daySelector(day)
             })
@@ -86,13 +86,13 @@ export const generatePreview = ({ Calendars, Reports, Appointments, Schedules, T
               const generatedPreview = generateReport({ calendar, day, appointments, daySchedule, overrideSchedules, tagMapping, messages })
               return generatedPreview
             }
-          })
+          }))
 
           return {
             days,
             calendarId
           }
-        })
+        }))
       } catch (e) {
         console.error(e.message, e.stack)
         throw e

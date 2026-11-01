@@ -2,7 +2,7 @@ import { hasRole } from './hasRole'
 import { isTrustedAccessToken } from './withTrustedAccessToken'
 import { isLocalhost } from '../../api/customer/isTrustedNetwork'
 
-export const isAllowed = ({ connection, userId, clientKey, accessToken, roles, allowAnonymous, requireClientKey, debug }) => {
+export const isAllowed = async ({ connection, userId, clientKey, accessToken, roles, allowAnonymous, requireClientKey, debug }) => {
   const trustedAccessToken = (accessToken && isTrustedAccessToken(accessToken))
 
   // Allow trustedAccessTokens from localhost
@@ -16,13 +16,13 @@ export const isAllowed = ({ connection, userId, clientKey, accessToken, roles, a
     return false
   }
 
-  if (requireClientKey && !checkClientKey(clientKey)) {
+  if (requireClientKey && !(await checkClientKey(clientKey))) {
     debug && console.log('[isAllowed] failed because client key')
     return false
   }
 
   // Check for roles
-  if (roles && roles.length > 0 && hasRole(userId, [...roles, 'admin'])) {
+  if (roles && roles.length > 0 && await hasRole(userId, [...roles, 'admin'])) {
     return true
   }
 
@@ -45,7 +45,7 @@ export const isAllowed = ({ connection, userId, clientKey, accessToken, roles, a
 
 // Avoid import loop
 let Clients = null
-const checkClientKey = (clientKey) => {
+const checkClientKey = async (clientKey) => {
   if (!clientKey) {
     return false
   }
@@ -54,7 +54,7 @@ const checkClientKey = (clientKey) => {
     Clients = require('../../api/clients').Clients
   }
 
-  const client = Clients.findOne({ clientKey })
+  const client = await Clients.findOneAsync({ clientKey })
 
   if (!client) {
     return false

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const setQueued = ({ Appointments }) => {
@@ -12,12 +12,12 @@ export const setQueued = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run({ appointmentId }) {
+    async run({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).queued) {
+      if ((await Appointments.findOneAsync({ _id: appointmentId })).queued) {
         console.warn('[Appointments] setQueued: Appointment is already set to admitted', { appointmentId })
         return
       }
@@ -45,7 +45,7 @@ export const setQueued = ({ Appointments }) => {
         treatmentEnd: 1
       }
 
-      Appointments.update({ _id: appointmentId }, { $set, $unset })
+      await Appointments.updateAsync({ _id: appointmentId }, { $set, $unset })
 
       Events.post('appointments/setQueued', { appointmentId })
 

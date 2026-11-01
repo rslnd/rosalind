@@ -1,11 +1,11 @@
 import idx from 'idx'
 import React from 'react'
-import { Meteor } from 'meteor/meteor'
 import { compose, withState, mapProps, withHandlers } from 'recompose'
 import Alert from 'react-s-alert'
 import { __ } from '../../i18n'
 import Button from '@material-ui/core/Button'
 import { Icon } from '../components/Icon'
+import { call } from '../../util/meteor/call'
 
 const Fields = ({ submitting, handleToggle, passwordless }) =>
   <div>
@@ -36,7 +36,7 @@ const Fields = ({ submitting, handleToggle, passwordless }) =>
 const handleToggle = ({ passwordless, user, setSubmitting }) => () =>
   new Promise((resolve, reject) => {
     setSubmitting(true)
-    Meteor.call('users/setPasswordless', {
+    call('users/setPasswordless', {
       userId: user._id,
       passwordless: !passwordless
     }, (e) => {

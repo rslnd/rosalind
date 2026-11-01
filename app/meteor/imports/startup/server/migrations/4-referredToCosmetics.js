@@ -7,8 +7,8 @@ const cosmeticsCalendarId = 'XrK3jfwdzqMCHZ5N9'
 Migrations.add({
   version: 4,
 
-  up: function () {
-    Patients.find({ patientSince: { $ne: null } }).forEach(patient => {
+  up: async function () {
+    await Patients.find({ patientSince: { $ne: null } }).forEachAsync(async patient => {
       const referral = {
         patientId: patient._id,
         createdAt: new Date(),
@@ -17,7 +17,7 @@ Migrations.add({
         type: 'external'
       }
 
-      Referrals.insert(referral)
+      await Referrals.insertAsync(referral)
     })
     return true
   },

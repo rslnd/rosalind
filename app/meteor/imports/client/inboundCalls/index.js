@@ -1,15 +1,18 @@
 import React from 'react'
+import { Routes } from 'react-router-dom'
 import { InboundCallsContainer } from './InboundCallsContainer'
 import { NewInboundCallContainer } from './NewInboundCallContainer'
 import { ResolvedScreen } from './ResolvedScreen'
-import { Route } from '../layout/SafeRoute'
+import { route } from '../layout/SafeRoute'
 
-export const InboundCalls = ({ match }) => (
+export const InboundCalls = () => (
   <div>
-    <Route exact path={`${match.url}/resolved/:slug`} component={ResolvedScreen} />
-    <Route exact path={`${match.url}/resolved`} component={ResolvedScreen} />
-    <Route exact path={`${match.url}/new`} component={NewInboundCallContainer} />
-    <Route path={`${match.url}/topic/:slug`} component={InboundCallsContainer} />
-    <Route exact path={match.url} component={InboundCallsContainer} />
+    <Routes>
+      {route('resolved/:slug', ResolvedScreen)}
+      {route('resolved', ResolvedScreen)}
+      {route('new', NewInboundCallContainer)}
+      {route('topic/:slug/*', InboundCallsContainer)}
+      {route('', InboundCallsContainer)}
+    </Routes>
   </div>
 )

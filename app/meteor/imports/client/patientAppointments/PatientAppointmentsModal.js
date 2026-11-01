@@ -15,6 +15,7 @@ import { MediaOverlay } from '../media/Overlay'
 import { DropZone } from './DropZone'
 import { insertMedia } from '../../startup/client/dataTransfer'
 import { HotKeys } from 'react-hotkeys'
+import Alert from 'react-s-alert'
 
 export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
   const modalRef = useRef(null)
@@ -29,7 +30,7 @@ export const PatientAppointmentsModal = ({ loading, show, ref, ...props }) => {
           appointmentId: ((show && props.appointmentId) || null),
           cycle: ((show && props.cycle) || null),
           tagIds: []
-        })
+        }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
       }
     }, 16)
 

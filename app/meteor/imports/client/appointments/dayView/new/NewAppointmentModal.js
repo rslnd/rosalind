@@ -1,5 +1,5 @@
 import React from 'react'
-import Modal from 'react-bootstrap/lib/Modal'
+import { Modal } from '../../../components/bootstrap'
 import injectSheet from 'react-jss'
 import { NewAppointmentContainer } from '../../new/NewAppointmentContainer'
 

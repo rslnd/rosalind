@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const unsetEndTreatment = ({ Appointments }) => {
@@ -12,12 +12,12 @@ export const unsetEndTreatment = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run({ appointmentId }) {
+    async run({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const appointment = Appointments.findOne({ _id: appointmentId })
+      const appointment = await Appointments.findOneAsync({ _id: appointmentId })
       if (!appointment) {
         throw new Meteor.Error(404, 'Not found')
       }
@@ -27,7 +27,7 @@ export const unsetEndTreatment = ({ Appointments }) => {
         return
       }
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $unset: {
           treated: 1,
           treatmentEnd: 1

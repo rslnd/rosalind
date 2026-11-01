@@ -5,10 +5,10 @@ export const canIgnoreQuietTime = (message) => {
   return (message.type === 'intentToCancelConfirmation')
 }
 
-export const isQuietTimeRespected = (message) => {
+export const isQuietTimeRespected = async (message) => {
   return (
     !isQuietTime() ||
     (isQuietTime() && canIgnoreQuietTime(message)) ||
-    Settings.get('messages.sms.overrideQuietTime')
+    await Settings.get('messages.sms.overrideQuietTime')
   )
 }

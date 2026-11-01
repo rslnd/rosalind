@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 
 const Placeholder = new SimpleSchema({
   x: {
@@ -71,7 +71,8 @@ export const Schema = new SimpleSchema({
   },
 
   placeholders: {
-    type: [Placeholder],
+    type: Array,
     optional: true
-  }
+  },
+  'placeholders.$': { type: Placeholder }
 })

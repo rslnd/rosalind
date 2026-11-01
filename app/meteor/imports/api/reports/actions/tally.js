@@ -5,7 +5,8 @@ import map from 'lodash/fp/map'
 import sum from 'lodash/fp/sum'
 import mean from 'lodash/fp/mean'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { dayToDate } from '../../../util/time/day'
 import { Schedules } from '../../schedules'
 import { Timesheets } from '../../timesheets'
@@ -13,21 +14,22 @@ import { Timesheets } from '../../timesheets'
 export const tally = ({ Reports }) => {
   return new ValidatedMethod({
     name: 'reports/tally',
+    mixins: [CallPromiseMixin],
 
     validate: new SimpleSchema({
       report: { type: Object, blackbox: true }
     }).validator(),
 
-    run ({ report }) {
+    async run ({ report }) {
       report.total || (report.total = {})
 
-      report.assignees = report.assignees.map((a) => {
+      report.assignees = await Promise.all(report.assignees.map(async (a) => {
         a.hours || (a.hours = {})
         a.patients.newPercentage = 100.0 * a.patients.new / a.patients.total
 
         if (a.userId) {
           // Scheduled hours
-          a.hours.scheduled = Schedules.methods.getScheduledHours({ userId: a.userId, day: report.day })
+          a.hours.scheduled = await Schedules.methods.getScheduledHours({ userId: a.userId, day: report.day })
           if (a.hours.scheduled) {
             a.patients.perHourScheduled = a.patients.total / a.hours.scheduled
             a.patients.newPerHourScheduled = a.patients.new / a.hours.scheduled
@@ -36,7 +38,7 @@ export const tally = ({ Reports }) => {
           // Actual hours
           const start = moment(dayToDate(report.day)).startOf('day')
           const end = moment(dayToDate(report.day)).endOf('day')
-          a.hours.actual = Timesheets.methods.sum({ userId: a.userId, start, end })
+          a.hours.actual = await Timesheets.methods.sum({ userId: a.userId, start, end })
           if (a.hours.actual) {
             a.hours.actual = a.hours.actual / 1000 / 60 / 60
             a.patients.perHourActual = a.patients.total / a.hours.actual
@@ -44,7 +46,7 @@ export const tally = ({ Reports }) => {
           }
         }
         return a
-      })
+      }))
 
       report.total.patientsNewPerHourScheduled = flow(
         filter((a) => a.patients.newPerHourScheduled > 0),

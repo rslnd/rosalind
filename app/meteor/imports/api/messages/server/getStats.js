@@ -6,7 +6,7 @@ export const getStats = () =>
   action({
     name: 'messages/getStats',
     roles: ['messages-stats'],
-    fn: function () {
+    fn: async function () {
       const months = 12
       let acc = []
       for (let i = 0; i <= months; i++) {
@@ -20,8 +20,8 @@ export const getStats = () =>
           }
         }
 
-        const inbound = Messages.find({ ...selector, direction: 'inbound' }).count()
-        const outbound = Messages.find({ ...selector, direction: 'outbound' }).count()
+        const inbound = await Messages.find({ ...selector, direction: 'inbound' }).countAsync()
+        const outbound = await Messages.find({ ...selector, direction: 'outbound' }).countAsync()
 
         if (inbound > 0 || outbound > 0) {
           acc.push([m.clone().startOf('month').locale('en').format('YYYY-MM'), inbound + outbound, inbound, outbound ])

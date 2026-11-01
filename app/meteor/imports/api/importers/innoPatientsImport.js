@@ -112,12 +112,9 @@ export const innoPatientsImport = async ({ json }) => {
 const sha256 = s =>
   window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(hex)
 
-const call = (m, args) => new Promise((resolve, reject) => {
-  Meteor.call(m, { clientKey: getClientKey(), ...args }, (e, res) => {
-    if (e) { return reject(e) }
-    resolve(res)
-  })
-})
+// Meteor.callAsync, not Meteor.call: see util/meteor/call for why the sync path
+// wedges the client into a permanent simulation.
+const call = (m, args) => Meteor.callAsync(m, { clientKey: getClientKey(), ...args })
 
 
 // https://stackoverflow.com/questions/40031688/javascript-arraybuffer-to-hex

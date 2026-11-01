@@ -2,10 +2,18 @@ version: 2.1
 jobs:
   build:
     machine:
-      image: 'ubuntu-2204:2022.10.2'
+      image: 'ubuntu-2404:current'
     resource_class: large
     steps:
       - checkout
+      - run:
+          # Keep in sync with the Node version of the Meteor release (`meteor node --version`)
+          name: Install Node.js 24
+          command: |
+            nvm install 24.22.1
+            nvm alias default 24.22.1
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run: chmod +x ci.sh && ./ci.sh install
       - run: ./ci.sh test
       - run: ./ci.sh build

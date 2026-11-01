@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const setMessagePreferences = ({ Patients }) => {
@@ -14,7 +14,7 @@ export const setMessagePreferences = ({ Patients }) => {
       noCall: { type: Boolean, optional: true }
     }).validator(),
 
-    run ({ patientId, noSMS, noCall }) {
+    async run ({ patientId, noSMS, noCall }) {
       this.unblock()
 
       if (this.connection && !this.userId) {
@@ -26,7 +26,7 @@ export const setMessagePreferences = ({ Patients }) => {
       if (noCall !== undefined) { update['noCall'] = noCall }
 
       if (Object.keys(update).length > 0) {
-        Patients.update(
+        await Patients.updateAsync(
           { _id: patientId },
           {
             $set: {

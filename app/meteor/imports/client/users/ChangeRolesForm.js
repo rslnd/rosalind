@@ -1,5 +1,4 @@
 import React from 'react'
-import { Meteor } from 'meteor/meteor'
 import Alert from 'react-s-alert'
 import { compose, withProps } from 'recompose'
 import Button from '@material-ui/core/Button'
@@ -11,10 +10,11 @@ import { TextField } from '../components/form/TextField'
 import { Groups } from '../../api/groups'
 import identity from 'lodash/identity'
 import { effectiveRoles } from '../../util/meteor/hasRole'
+import { call } from '../../util/meteor/call'
 
 const onSubmit = ({ addedRoles, removedRoles }, dispatch, props) =>
   new Promise((resolve, reject) => {
-    Meteor.call('users/updateRoles', {
+    call('users/updateRoles', {
       userId: props.user._id,
       addedRoles: stringToRoles(addedRoles),
       removedRoles: stringToRoles(removedRoles)

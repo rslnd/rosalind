@@ -16,7 +16,10 @@ const mapStateToProps = state => {
 export const withPatientPicker = connect(mapStateToProps)
 
 const toDefaultValue = formName => props => {
-  const { patient, ...otherState } = props.patientPicker || {}
+  // Don't pass the picker's isLoading on: withTracker would render <Loading />
+  // instead of the form on every search keypress, unmounting the input.
+  // eslint-disable-next-line no-unused-vars
+  const { patient, isLoading, ...otherState } = props.patientPicker || {}
 
   const patientFields = mapPatientToFields(patient)
 

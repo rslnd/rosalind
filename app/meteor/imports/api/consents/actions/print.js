@@ -15,7 +15,7 @@ export const print = ({ Consents }) =>
       payload: Object
     },
     roles: ['templates-print', 'media', 'patients', 'appointments', 'calendar-column-*', 'admin'],
-    fn: function({ patientId, assigneeId, appointmentId, templateId, clientId, payload }) {
+    fn: async function({ patientId, assigneeId, appointmentId, templateId, clientId, payload }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
@@ -35,7 +35,7 @@ export const print = ({ Consents }) =>
 
       console.log(consent)
 
-      const consentId = Consents.insert(consent)
+      const consentId = await Consents.insertAsync(consent)
 
       Events.post('consents/print', { consentId })
 

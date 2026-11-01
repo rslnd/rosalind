@@ -1,6 +1,6 @@
 import React from 'react'
 import { Error } from '../components/Error'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from '../components/withRouter'
 
 class ErrorBoundaryComponent extends React.Component {
   constructor (props) {

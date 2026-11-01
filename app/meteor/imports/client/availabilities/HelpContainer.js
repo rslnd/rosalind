@@ -10,7 +10,7 @@ import { Calendars } from '../../api/calendars'
 import { withTracker } from '../components/withTracker'
 import { prepareAvailabilities, applySearchFilter } from './filter'
 import { withDrawer } from './Drawer'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from '../components/withRouter'
 import { dateToDay } from '../../util/time/day'
 
 const composer = props => {

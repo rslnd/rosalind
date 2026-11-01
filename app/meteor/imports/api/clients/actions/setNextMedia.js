@@ -14,7 +14,7 @@ export const setNextMedia = ({ Clients }) =>
       tagIds: Match.Maybe(Match.OneOf(undefined, null, [String]))
     },
     requireClientKey: true,
-    fn ({ clientKey, patientId, appointmentId, cycle, tagIds }) {
+    async fn ({ clientKey, patientId, appointmentId, cycle, tagIds }) {
       const nextMedia = {
         patientId,
         appointmentId,
@@ -22,7 +22,7 @@ export const setNextMedia = ({ Clients }) =>
         tagIds
       }
 
-      Clients.update({ clientKey }, {
+      await Clients.updateAsync({ clientKey }, {
         $set: {
           nextMedia
         }

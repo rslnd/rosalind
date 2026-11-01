@@ -30,8 +30,8 @@ export const auerPhone = ({ InboundCalls }) =>
         abrgArt: String
       }]
     },
-    fn ({ calls }) {
-      const lastInserted = InboundCalls.findOne(
+    async fn ({ calls }) {
+      const lastInserted = await InboundCalls.findOneAsync(
         { 'external.auerPhone.id': { $ne: null } },
         { sort: { 'external.auerPhone.id': -1 }, removed: true } // include removed to avoid respawning
       )
@@ -55,10 +55,10 @@ export const auerPhone = ({ InboundCalls }) =>
         )
       )
 
-      const inboundCalls = missedCalls.map(c => {
+      const inboundCalls = await Promise.all(missedCalls.map(async c => {
 
         const normalizedTel = c.extRufNr && normalizePhoneNumber(c.extRufNr)
-        const patient = normalizedTel ? Patients.findOne({ 'contacts.valueNormalized': normalizedTel }) : null
+        const patient = normalizedTel ? await Patients.findOneAsync({ 'contacts.valueNormalized': normalizedTel }) : null
 
         const createdAt = moment.tz(
           [c.datum, c.startZeit].join(' '),
@@ -82,10 +82,10 @@ export const auerPhone = ({ InboundCalls }) =>
             }
           }
         }
-      })
+      }))
 
       // console.log(inboundCalls)
-      const ids = inboundCalls.map(c => InboundCalls.insert(c))
+      const ids = await Promise.all(inboundCalls.map(async c => await InboundCalls.insertAsync(c)))
 
       console.log(`[inboundCalls] auerPhone: Inserting ${missedCalls.length} calls: ${JSON.stringify(ids)}`)
 

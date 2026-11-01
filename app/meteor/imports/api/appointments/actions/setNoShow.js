@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Messages } from '../../messages'
 import { Referrals } from '../../referrals'
@@ -14,18 +14,18 @@ export const setNoShow = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run({ appointmentId }) {
+    async run({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).noShow) {
+      if ((await Appointments.findOneAsync({ _id: appointmentId })).noShow) {
         console.log('[Appointments] setNoShow: Appointment is already set to no show', { appointmentId })
-        Messages.actions.removeReminder.call({ appointmentId })
+        await Messages.actions.removeReminder.callPromise({ appointmentId })
         return
       }
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $set: {
           noShow: true,
           noShowAt: new Date()
@@ -45,8 +45,8 @@ export const setNoShow = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        Messages.actions.removeReminder.call({ appointmentId })
-        Referrals.serverActions.unredeem({ appointmentId })
+        await Messages.actions.removeReminder.callPromise({ appointmentId })
+        await Referrals.serverActions.unredeem({ appointmentId })
       }
 
       Events.post('appointments/setNoShow', { appointmentId })

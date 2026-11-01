@@ -8,7 +8,7 @@ export const login = ({ Users }) =>
     args: {
       weakPassword: Match.OneOf(Boolean, Number, null)
     },
-    fn ({ weakPassword } = {}) {
+    async fn ({ weakPassword } = {}) {
       if (this.simulation) { return }
 
       const userId = this.userId
@@ -16,19 +16,19 @@ export const login = ({ Users }) =>
       console.log('[Users] Logged in', { userId })
 
       if (weakPassword) {
-        Users.update({ _id: this.userId }, { $set: {
+        await Users.updateAsync({ _id: this.userId }, { $set: {
           weakPassword
         } })
 
         Events.post('users/loginWithWeakPassword', { userId, weakPassword }, 'warning')
       } else {
-        Users.update({ _id: this.userId }, { $unset: {
+        await Users.updateAsync({ _id: this.userId }, { $unset: {
           weakPassword: 1
         } })
         Events.post('users/login', { userId })
       }
 
-      Users.update({ _id: this.userId }, { $set: {
+      await Users.updateAsync({ _id: this.userId }, { $set: {
         lastLoginAt: new Date()
       } })
     }

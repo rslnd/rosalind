@@ -8,25 +8,25 @@ const fakeAppointments = (existing = []) => {
   const inserted = []
   return {
     inserted,
-    find: () => ({ fetch: () => existing }),
-    findOne: (sel) => inserted.find(a =>
+    find: () => ({ fetchAsync: async () => existing }),
+    findOneAsync: async (sel) => inserted.find(a =>
       a.assigneeId === sel.assigneeId &&
       a.type === 'bookable' &&
       a.start.getTime() === sel.start.getTime() &&
       a.end.getTime() === sel.end.getTime()
     ) || null,
-    insert: (doc) => { inserted.push(doc); return String(inserted.length) }
+    insertAsync: async (doc) => { inserted.push(doc); return String(inserted.length) }
   }
 }
 
 const day = { year: 2026, month: 9, day: 2 }
 
-describe('createBookableSlots', function () {
-  it('creates one bookable per slot within the range', function () {
+describe('createBookableSlots', async function () {
+  it('creates one bookable per slot within the range', async function () {
     const Appointments = fakeAppointments()
     const make = createBookableSlots({ Appointments })
 
-    const created = make({
+    const created = await make({
       calendar: { slotSize: 30 },
       calendarId: 'cal1',
       userId: 'u1',
@@ -39,7 +39,7 @@ describe('createBookableSlots', function () {
     assert.equal(Appointments.inserted[0].type, 'bookable')
   })
 
-  it('skips slots overlapping a blocked range (e.g. partial vacation)', function () {
+  it('skips slots overlapping a blocked range (e.g. partial vacation)', async function () {
     const Appointments = fakeAppointments()
     const make = createBookableSlots({ Appointments })
 
@@ -50,7 +50,7 @@ describe('createBookableSlots', function () {
       end: applyHM(day, { h: 9, m: 30 })
     }
 
-    const created = make({
+    const created = await make({
       calendar: { slotSize: 30 },
       calendarId: 'cal1',
       userId: 'u1',
@@ -62,9 +62,9 @@ describe('createBookableSlots', function () {
     assert.equal(created, 3)
   })
 
-  it('does nothing without ranges', function () {
+  it('does nothing without ranges', async function () {
     const Appointments = fakeAppointments()
     const make = createBookableSlots({ Appointments })
-    assert.equal(make({ calendar: {}, calendarId: 'c', userId: 'u', day, ranges: [] }), 0)
+    assert.equal(await make({ calendar: {}, calendarId: 'c', userId: 'u', day, ranges: [] }), 0)
   })
 })

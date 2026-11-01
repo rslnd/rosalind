@@ -45,7 +45,7 @@ export default () => {
       return res.end('(?)')
     }
 
-    const patient = Patients.findOne({ 'contacts.valueNormalized': normalizedTel })
+    const patient = await Patients.findOneAsync({ 'contacts.valueNormalized': normalizedTel })
 
     console.log('[patients] resolveName', patient ? patient._id : 'unknown')
 

@@ -1,3 +1,4 @@
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import Auto from './auto'
 import { Day } from './day'
 import { External } from './external'

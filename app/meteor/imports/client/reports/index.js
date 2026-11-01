@@ -1,19 +1,19 @@
 import React from 'react'
-import { Switch } from 'react-router-dom'
+import { Routes } from 'react-router-dom'
 import { ReportsContainer } from './ReportsContainer'
 import { ReferralsReportContainer } from './ReferralsReportContainer'
 import { StatisticsScreen } from './StatisticsScreen'
-import { Route } from '../layout/SafeRoute'
+import { route } from '../layout/SafeRoute'
 
-export const Reports = ({ match }) => (
+export const Reports = () => (
   <div>
-    <Switch>
-      <Route exact path={`${match.url}/day/:date`} component={ReportsContainer} />
-      <Route exact path={`${match.url}/day`} component={ReportsContainer} />
-      <Route exact path={`${match.url}/statistics`} component={StatisticsScreen} />
-      <Route exact path={`${match.url}/referrals`} component={ReferralsReportContainer} />
-      <Route exact path={`${match.url}/referrals/:username`} component={ReferralsReportContainer} />
-      <Route path={match.url} component={ReportsContainer} />
-    </Switch>
+    <Routes>
+      {route('day/:date', ReportsContainer)}
+      {route('day', ReportsContainer)}
+      {route('statistics', StatisticsScreen)}
+      {route('referrals', ReferralsReportContainer)}
+      {route('referrals/:username', ReferralsReportContainer)}
+      {route('*', ReportsContainer)}
+    </Routes>
   </div>
 )

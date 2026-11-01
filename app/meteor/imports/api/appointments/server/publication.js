@@ -17,10 +17,10 @@ export default () => {
       const userId = this.userId
 
       return {
-        find: function () {
+        find: async function () {
           return Appointments.find({ _id: appointmentId }, {
             limit: 1,
-            fields: limitFieldsByRole(userId)
+            fields: await limitFieldsByRole(userId)
           })
         },
         children: [
@@ -50,10 +50,10 @@ export default () => {
       const userId = this.userId
 
       return {
-        find: function () {
+        find: async function () {
           return Appointments.find({ _id: { $in: appointmentIds } }, {
             limit: 1,
-            fields: limitFieldsByRole(userId)
+            fields: await limitFieldsByRole(userId)
           })
         },
         children: [
@@ -89,12 +89,12 @@ export default () => {
       }
 
       return {
-        find: function () {
+        find: async function () {
           return Appointments.find(selector, {
             sort: {
               start: -1
             },
-            fields: limitFieldsByRole(userId)
+            fields: await limitFieldsByRole(userId)
           })
         },
         children: [
@@ -138,12 +138,12 @@ export default () => {
       }
 
       return {
-        find: function () {
+        find: async function () {
           return Appointments.find(selector, {
             sort: {
               start: 1
             },
-            fields: limitFieldsByRole(userId)
+            fields: await limitFieldsByRole(userId)
           })
         },
         children: [
@@ -170,8 +170,7 @@ export default () => {
 
   // composite publishing is buggy with comments and pagination,
   // that's why there are 3 separate regular publications for appts, comments and patient
-  const appointmentsCursor = ({ patientId, page = 0, assigneeId, calendarId }) => {
-    const userId = this.userId
+  const appointmentsCursor = async ({ userId, patientId, page = 0, assigneeId, calendarId }) => {
     const pageSize = 10
     const selector = { patientId }
 
@@ -185,14 +184,14 @@ export default () => {
 
     const as = Appointments.find(selector, {
       sort: { start: -1 },
-      fields: limitFieldsByRole(userId),
+      fields: await limitFieldsByRole(userId),
       skip: page * pageSize,
       limit: pageSize,
       removed: true
     })
 
 
-    console.log('pub as', patientId, as.fetch().length, 'page', page, selector)
+    console.log('pub as', patientId, (await as.fetchAsync()).length, 'page', page, selector)
 
     return as
   }
@@ -207,7 +206,7 @@ export default () => {
       month: Number,
       calendarId: String
     },
-    fn: function ({ year, month, calendarId }) {
+    fn: async function ({ year, month, calendarId }) {
       const userId = this.userId
       const start = moment.tz({ year, month: month - 1, day: 1 }, 'Europe/Vienna').startOf('month')
       const end = start.clone().endOf('month')
@@ -217,7 +216,7 @@ export default () => {
         start: { $gte: start.toDate(), $lte: end.toDate() }
       }, {
         sort: { start: 1 },
-        fields: limitFieldsByRole(userId)
+        fields: await limitFieldsByRole(userId)
       })
     }
   })
@@ -231,9 +230,8 @@ export default () => {
       calendarId: Optional(String)
     },
     roles: ['appointments-*'],
-    fn: function ({ patientId, page = 0, assigneeId, calendarId }) {
-      const as = appointmentsCursor({ patientId, page, assigneeId, calendarId })
-      return as
+    fn: async function ({ patientId, page = 0, assigneeId, calendarId }) {
+      return appointmentsCursor({ userId: this.userId, patientId, page, assigneeId, calendarId })
     }
   })
 
@@ -247,10 +245,10 @@ export default () => {
       calendarId: Optional(String)
     },
     roles: ['appointments-*'],
-    fn: function ({ patientId, page = 0, assigneeId, calendarId }) {
-      const as = appointmentsCursor({ patientId, page, assigneeId, calendarId })
-      const cs = Comments.find({ docId: { $in: as.map(a => a._id) }})
-      return cs
+    fn: async function ({ patientId, page = 0, assigneeId, calendarId }) {
+      const as = await appointmentsCursor({ userId: this.userId, patientId, page, assigneeId, calendarId })
+      const ids = await as.mapAsync(a => a._id)
+      return Comments.find({ docId: { $in: ids } })
     }
   })
 
@@ -301,13 +299,13 @@ export default () => {
       }
 
       return {
-        find: function () {
+        find: async function () {
           return Appointments.find(selector, {
             removed: true,
             sort: {
               start: 1
             },
-            fields: limitFieldsByRole(userId)
+            fields: await limitFieldsByRole(userId)
           })
         },
         children: [
@@ -326,8 +324,8 @@ export default () => {
   })
 }
 
-const limitFieldsByRole = userId => {
-  if (hasRole(userId, ['appointments-note'])) {
+const limitFieldsByRole = async userId => {
+  if (await hasRole(userId, ['appointments-note'])) {
     return {} // Publish all fields
   } else {
     return {

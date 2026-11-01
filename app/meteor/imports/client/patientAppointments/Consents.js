@@ -39,7 +39,7 @@ export const setNextMedia = ({ patientId, appointmentId, cycle, tagIds = [] }) =
       appointmentId,
       cycle,
       tagIds
-    })
+    }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
   }
 }
 
@@ -204,9 +204,8 @@ export const Popover = withTracker(composer)(({
       update: {
         consentMediaIds
       }
-    })
-
-    Alert.success('Revers weiter gültig')
+    }).then(() => Alert.success('Revers weiter gültig'))
+      .catch(err => { Alert.error(__('ui.error')); console.error(err) })
   }
 
   return <Dialog transitionDuration={0} onClose={onClose} open={open} PaperProps={paperProps}>

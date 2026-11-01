@@ -10,13 +10,13 @@ export const unsetPassword = ({ Users }) =>
     },
     roles: ['admin', 'users-edit'],
     fn: async ({ userId, passwordless }) => {
-      const user = Users.findOne({ _id: userId }, { removed: true })
+      const user = await Users.findOneAsync({ _id: userId }, { removed: true })
 
       if (!user) {
         throw new Meteor.Error(404, 'User not found')
       }
 
-      Users.update({ _id: userId }, {
+      await Users.updateAsync({ _id: userId }, {
         $unset: {
           'services.password': 1,
           weakPassword: 1

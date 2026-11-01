@@ -7,16 +7,18 @@ import { Patients } from '../../patients'
 import { publish, publishComposite, Optional } from '../../../util/meteor/publish'
 import { hasRole } from '../../../util/meteor/hasRole'
 
-const restrictTopicsToRole = (userId, field = 'topicId') => {
-  if (hasRole(userId, ['inboundCalls'])) {
+const restrictTopicsToRole = async (userId, field = 'topicId') => {
+  if (await hasRole(userId, ['inboundCalls'])) {
     return {}
   }
 
-  const topicIds = InboundCallsTopics.find({}).fetch().filter(t => {
-    return hasRole(userId, ['inboundCalls-topic-' + t.slug || 'null'])
-  }).map(t => t._id)
+  const topics = await InboundCallsTopics.find({}).fetchAsync()
+  const allowed = await Promise.all(topics.map(t =>
+    t.slug && hasRole(userId, ['inboundCalls-topic-' + t.slug])
+  ))
+  const topicIds = topics.filter((t, i) => allowed[i]).map(t => t._id)
 
-  if (hasRole(userId, ['inboundCalls-topic-null'])) {
+  if (await hasRole(userId, ['inboundCalls-topic-null'])) {
     topicIds.push(null)
   }
 
@@ -27,8 +29,8 @@ export default () => {
   publish({
     name: 'inboundCallsTopics',
     roles: ['inboundCalls', 'inboundCalls-topic-*'],
-    fn: function () {
-      return InboundCallsTopics.find({ ...restrictTopicsToRole(this.userId, '_id') })
+    fn: async function () {
+      return InboundCallsTopics.find({ ...await restrictTopicsToRole(this.userId, '_id') })
     }
   })
 
@@ -36,9 +38,10 @@ export default () => {
     name: 'inboundCalls',
     roles: ['inboundCalls', 'inboundCalls-topic-*'],
     fn: function () {
+      const userId = this.userId
       return {
-        find: function () {
-          return InboundCalls.find({ ...restrictTopicsToRole(this.userId), removed: { $ne: true } })
+        find: async function () {
+          return InboundCalls.find({ ...await restrictTopicsToRole(userId), removed: { $ne: true } })
         },
         children: [
           {
@@ -68,14 +71,14 @@ export default () => {
       page: Optional(Number),
       query: Optional(String)
     },
-    fn: function ({ topicId, patientId, removed, page = 0, query }) {
+    fn: async function ({ topicId, patientId, removed, page = 0, query }) {
       let selector = {}
 
       if (topicId !== false) { // false == all
-        const topic = InboundCallsTopics.findOne({ _id: topicId })
+        const topic = await InboundCallsTopics.findOneAsync({ _id: topicId })
         const topicSlug = (topicId === null) ? 'null' : (topic && topic.slug)
   
-        if (!topicSlug || !hasRole(this.userId, ['inboundCalls', 'inboundCalls-topic-' + topicSlug])) {
+        if (!topicSlug || !await hasRole(this.userId, ['inboundCalls', 'inboundCalls-topic-' + topicSlug])) {
           // Missing role, return empty cursor
           return {
             find: () => InboundCalls.find({ _id: 'dummy' })
@@ -117,9 +120,9 @@ export default () => {
       }
 
       return {
-        find: function () {
+        find: async function () {
           const s = InboundCalls.find(selector, options)
-          console.log(selector, s.count(), topicId)
+          console.log(selector, await s.countAsync(), topicId)
           return s
         },
         children: [

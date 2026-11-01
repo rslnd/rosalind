@@ -54,7 +54,7 @@ export class AppointmentInfo extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // TODO: This doensn't work.
     // TODO: How to show validation errors even on untouched fields?
     setTimeout(() => {

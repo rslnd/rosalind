@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { Contact } from '../schema'
 import { normalizePhoneNumber } from '../../messages/methods/normalizePhoneNumber'
@@ -25,26 +25,25 @@ export const setContacts = ({ Patients }) => {
     mixins: [CallPromiseMixin],
     validate: new SimpleSchema({
       patientId: { type: SimpleSchema.RegEx.Id },
-      contacts: { type: [Contact] }
+      contacts: { type: Array },
+      'contacts.$': { type: Contact }
     }).validator(),
 
-    run({ patientId, contacts }) {
+    async run({ patientId, contacts }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const patient = Patients.findOne({ _id: patientId })
+      const patient = await Patients.findOneAsync({ _id: patientId })
       if (patient) {
-        Patients.update({ _id: patientId }, {
+        await Patients.updateAsync({ _id: patientId }, {
           $set: {
             contacts: contacts.map(normalizeContact),
             updatedAt: new Date(),
             updatedBy: this.userId
           }
-        }, (err) => {
-          if (err) { throw err }
-          Events.post('patients/setContacts', { patientId })
         })
+        Events.post('patients/setContacts', { patientId })
       } else {
         throw new Meteor.Error(404, 'Patient not found')
       }

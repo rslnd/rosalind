@@ -14,6 +14,8 @@ export const updatePassword = ({ Users }) =>
     fn: async ({ userId, password }) => {
       console.log('[Users] Setting password for user', userId)
       Events.post('users/updatePassword', { userId }, 'warning')
-      Accounts.setPassword(userId, password, { logout: false })
+      // Meteor 3 removed the synchronous Accounts.setPassword entirely; the old
+      // call threw "Accounts.setPassword is not a function".
+      await Accounts.setPasswordAsync(userId, password, { logout: false })
     }
   })

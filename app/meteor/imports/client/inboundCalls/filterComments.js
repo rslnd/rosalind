@@ -2,6 +2,7 @@ import React from 'react'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../i18n'
+import { call } from '../../util/meteor/call'
 
 const filters = [
   {
@@ -86,7 +87,7 @@ const CommentsAction = ({ filter, buckets, inboundCall, onToggle }) => () => {
           return null
       }
 
-      Meteor.call('comments/post', {
+      call('comments/post', {
         body: filter.commentText,
         docId: inboundCall._id
       })

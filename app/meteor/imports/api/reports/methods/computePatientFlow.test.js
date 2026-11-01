@@ -96,7 +96,7 @@ describe('reports/methods/computePatientFlow', function () {
     }
     const makeColl = (docs) => ({
       find: (selector = {}) => ({
-        fetch: () => docs.filter(d => Object.keys(selector).every(k => matchField(d[k], selector[k])))
+        fetchAsync: async () => docs.filter(d => Object.keys(selector).every(k => matchField(d[k], selector[k])))
       })
     })
 
@@ -106,7 +106,7 @@ describe('reports/methods/computePatientFlow', function () {
       removed: false
     })
 
-    it('returns one cohort per series with filtered current aggregates', function () {
+    it('returns one cohort per series with filtered current aggregates', async function () {
       const Appointments = makeColl([
         appt('2026-06-15T09:00', { assigneeId: 'dr-a', tags: ['t1'] }),
         appt('2026-06-16T09:00', { assigneeId: 'dr-a', tags: ['t2'] }),
@@ -114,7 +114,7 @@ describe('reports/methods/computePatientFlow', function () {
       ])
       const Users = makeColl([])
 
-      const res = computePatientFlow({
+      const res = await computePatientFlow({
         Appointments,
         Users,
         series: [
@@ -132,14 +132,14 @@ describe('reports/methods/computePatientFlow', function () {
       assert.equal(res.series[1].current.total, 2) // both t1 appointments
     })
 
-    it('honors hiddenInReports and excludes those doctors', function () {
+    it('honors hiddenInReports and excludes those doctors', async function () {
       const Appointments = makeColl([
         appt('2026-06-15T09:00', { assigneeId: 'dr-a' }),
         appt('2026-06-16T09:00', { assigneeId: 'dr-hidden' })
       ])
       const Users = makeColl([{ _id: 'dr-hidden', hiddenInReports: true }])
 
-      const res = computePatientFlow({
+      const res = await computePatientFlow({
         Appointments,
         Users,
         series: [{ id: 'c1', label: 'Alle', from: new Date('2026-06-01'), to: new Date('2026-06-30') }],
@@ -148,7 +148,7 @@ describe('reports/methods/computePatientFlow', function () {
       assert.equal(res.series[0].current.total, 1) // hidden doctor excluded
     })
 
-    it('adds a previous-year aggregate per cohort when compare is set', function () {
+    it('adds a previous-year aggregate per cohort when compare is set', async function () {
       const Appointments = makeColl([
         appt('2026-06-15T09:00', { assigneeId: 'dr-a' }),
         appt('2025-06-15T09:00', { assigneeId: 'dr-a' }),
@@ -156,7 +156,7 @@ describe('reports/methods/computePatientFlow', function () {
       ])
       const Users = makeColl([])
 
-      const res = computePatientFlow({
+      const res = await computePatientFlow({
         Appointments,
         Users,
         compare: true,

@@ -21,25 +21,25 @@ describe('schedules', () => {
       isOpen = factory({ Schedules })
     })
 
-    it('returns false if nothing is defined', () => {
-      expect(isOpen.isOpen()).to.equal(false)
+    it('returns false if nothing is defined', async () => {
+      expect(await isOpen.isOpen()).to.equal(false)
     })
 
-    it('returns true if regular business hours are defined', () => {
+    it('returns true if regular business hours are defined', async () => {
       isRegularBusinessHours = true
-      expect(isOpen.isOpen()).to.equal(true)
+      expect(await isOpen.isOpen()).to.equal(true)
     })
 
-    it('returns false if regular business hours are defined but it is a holiday', () => {
+    it('returns false if regular business hours are defined but it is a holiday', async () => {
       isRegularBusinessHours = true
       isHoliday = true
-      expect(isOpen.isOpen()).to.equal(false)
+      expect(await isOpen.isOpen()).to.equal(false)
     })
 
-    it('returns true it is a holiday but override business hours are defined', () => {
+    it('returns true it is a holiday but override business hours are defined', async () => {
       isBusinessHoursOverride = true
       isHoliday = true
-      expect(isOpen.isOpen()).to.equal(true)
+      expect(await isOpen.isOpen()).to.equal(true)
     })
   })
 })

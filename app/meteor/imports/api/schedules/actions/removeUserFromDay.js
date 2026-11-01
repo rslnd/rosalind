@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Day } from '../../../util/schema/day'
 import { Events } from '../../events'
 import { daySelector, dayToDate } from '../../../util/time/day'
@@ -19,14 +19,14 @@ export const removeUserFromDay = ({ Schedules, Users }) => {
       day: { type: Day }
     }).validator(),
 
-    run ({ day, calendarId, userId }) {
+    async run ({ day, calendarId, userId }) {
       if ((this.connection && !this.userId) ||
-        !hasRole(this.userId, ['admin', 'schedules-edit'])) {
+        !await hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
       // Remove any bookables
-      Appointments.remove({
+      await Appointments.removeAsync({
         type: 'bookable',
         start: { $gte: moment(dayToDate(day)).startOf('day').toDate() },
         end: { $lte: moment(dayToDate(day)).endOf('day').toDate() },
@@ -35,16 +35,16 @@ export const removeUserFromDay = ({ Schedules, Users }) => {
       }, { multi: true })
 
       // BUG: Bulk applying default schedules creates multiple day schedules, we should probably do away with day schedules altogether once availabilities are live.
-      const existingSchedules = Schedules.find({
+      const existingSchedules = await Schedules.find({
         ...daySelector(day),
         calendarId,
         userIds: userId,
         type: 'day'
-      }).fetch()
+      }).fetchAsync()
 
       if (existingSchedules.length > 0) {
         const ids = existingSchedules.map(s => s._id)
-        Schedules.update({ _id: { $in: ids } }, {
+        await Schedules.updateAsync({ _id: { $in: ids } }, {
           $pull: { userIds: userId }
         })
 

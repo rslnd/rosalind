@@ -10,6 +10,8 @@ import reverse from 'lodash/reverse'
 import { getClientKey } from '../../startup/client/native/events'
 import { Clients } from '../../api'
 import { Icon } from '../components/Icon'
+import Alert from 'react-s-alert'
+import { __ } from '../../i18n'
 
 export const patientCyclesNames = patientId => {
   const medias = MediaAPI.find({ patientId }, { sort: { createdAt: -1 } }).fetch()
@@ -41,7 +43,7 @@ export const setNextMedia = ({ patientId, appointmentId, cycle }) => {
       appointmentId,
       cycle,
       tagIds: []
-    })
+    }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
   }
 }
 

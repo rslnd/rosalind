@@ -9,8 +9,8 @@ export const setNote = ({ Records }) =>
       recordId: String,
       note: String
     },
-    fn ({ recordId, note }) {
-      Records.update({ _id: recordId }, {
+    async fn ({ recordId, note }) {
+      await Records.updateAsync({ _id: recordId }, {
         $set: { note }
       }, { trimStrings: false })
 

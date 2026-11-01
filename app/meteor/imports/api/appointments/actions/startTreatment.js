@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 
 export const startTreatment = ({ Appointments }) => {
@@ -12,17 +12,17 @@ export const startTreatment = ({ Appointments }) => {
       appointmentId: { type: SimpleSchema.RegEx.Id }
     }).validator(),
 
-    run ({ appointmentId }) {
+    async run ({ appointmentId }) {
       if (this.connection && !this.userId) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (Appointments.findOne({ _id: appointmentId }).treatmentStart) {
+      if ((await Appointments.findOneAsync({ _id: appointmentId })).treatmentStart) {
         console.warn('[Appointments] startTreatment: Appointment has already set treatmentStart', { appointmentId })
         return
       }
 
-      Appointments.update({ _id: appointmentId }, {
+      await Appointments.updateAsync({ _id: appointmentId }, {
         $set: {
           treatmentStart: new Date(),
           treatmentBy: this.userId

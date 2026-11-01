@@ -1,8 +1,8 @@
 import moment from 'moment-timezone'
 import { Meteor } from 'meteor/meteor'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Events } from '../../events'
 import { Day } from '../../../util/schema'
 import { daySelector } from '../../../util/time/day'
@@ -21,17 +21,17 @@ export const setDayClosed = ({ Schedules }) => {
       note: { type: String, optional: true }
     }).validator(),
 
-    run ({ day, closed, note }) {
+    async run ({ day, closed, note }) {
       if ((this.connection && !this.userId) ||
-        !hasRole(this.userId, ['admin', 'schedules-edit'])) {
+        !await hasRole(this.userId, ['admin', 'schedules-edit'])) {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      const existing = Schedules.find({
+      const existing = await Schedules.find({
         type: 'holiday',
         removed: { $ne: true },
         ...daySelector(day)
-      }).fetch()
+      }).fetchAsync()
 
       if (closed) {
         if (existing.length > 0) {
@@ -41,7 +41,7 @@ export const setDayClosed = ({ Schedules }) => {
         // Build the day boundaries in the clinic timezone so the holiday does
         // not bleed into the neighbouring day when compared in Europe/Vienna.
         const viennaDay = moment.tz({ year: day.year, month: day.month - 1, day: day.day }, 'Europe/Vienna')
-        const scheduleId = Schedules.insert({
+        const scheduleId = await Schedules.insertAsync({
           type: 'holiday',
           available: false,
           day,
@@ -55,11 +55,11 @@ export const setDayClosed = ({ Schedules }) => {
         Events.post('schedules/setDayClosed', { scheduleId, userId: this.userId })
         return scheduleId
       } else {
-        existing.forEach(h => {
-          Schedules.update({ _id: h._id }, {
+        for (const h of existing) {
+          await Schedules.updateAsync({ _id: h._id }, {
             $set: { removed: true, removedAt: new Date(), removedBy: this.userId }
           })
-        })
+        }
         Events.post('schedules/setDayOpen', { userId: this.userId })
         return null
       }

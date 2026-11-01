@@ -23,6 +23,7 @@ import { mapPatientToFields } from '../../patients/mapPatientToFields'
 import { mapFieldsToPatient } from '../../patients/mapFieldsToPatient'
 import { validate } from '../new/newAppointmentValidators'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { call } from '../../../util/meteor/call'
 
 export const formName = 'appointmentInfoForm'
 
@@ -85,7 +86,7 @@ const composer = props => {
       if (patient && !isEqual(initialPatientFields, v.patient)) {
         const patient = mapFieldsToPatient(v.patient)
 
-        return Meteor.call('patients/upsert', {
+        return call('patients/upsert', {
           patient: {
             ...patient,
             _id: patient._id

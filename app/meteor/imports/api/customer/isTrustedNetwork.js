@@ -1,5 +1,5 @@
 import { check, Match } from 'meteor/check'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 
 const validateIp = ip =>
   check(ip, Match.Where((s) => {

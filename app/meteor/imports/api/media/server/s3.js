@@ -13,14 +13,14 @@ const requiredKeys = [
   'scheme'
 ]
 
-export const getCredentials = () => {
+export const getCredentials = async () => {
   const config = process.env.MEDIA_S3_CONFIG
     ? JSON.parse(process.env.MEDIA_S3_CONFIG)
-    : Settings.get('media.s3.config')
+    : await Settings.get('media.s3.config')
 
   const secrets = process.env.MEDIA_S3_SECRETS
     ? JSON.parse(process.env.MEDIA_S3_SECRETS)
-    : Settings.get('media.s3.secrets')
+    : await Settings.get('media.s3.secrets')
 
   if (!config || !secrets) {
     return null
@@ -30,7 +30,7 @@ export const getCredentials = () => {
     throw new Error(`There are ${config.length} S3 configs specified, but ${secrets.length} secrets`)
   }
 
-  const scheme = (Settings.get('media.s3.scheme') ||
+  const scheme = (await Settings.get('media.s3.scheme') ||
     (process.env.NODE_ENV === 'development' ? 'http' : 'https')
   )
 

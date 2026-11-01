@@ -12,36 +12,36 @@ const down = ({ tagId }) => tagId
 Migrations.add({
   version: 10,
 
-  up: function () {
-    const constraints = Constraints.find({}, { removed: true }).fetch()
+  up: async function () {
+    const constraints = await Constraints.find({}, { removed: true }).fetchAsync()
 
-    constraints.filter(hasTags).forEach(c => {
+    for (const c of constraints.filter(hasTags)) {
       const tags = c.tags.filter(identity).map(up)
       console.log(c._id, ': ', c.tags, '->', tags, '.')
 
       if (tags.length === 0) throw new Error('Invalid tag mapping')
 
-      Constraints.update({ _id: c._id }, {
+      await Constraints.updateAsync({ _id: c._id }, {
         $set: {
           tags
         }
       })
-    })
+    }
 
     return true
   },
 
-  down: function () {
-    const constraints = Constraints.find({}, { removed: true }).fetch()
+  down: async function () {
+    const constraints = await Constraints.find({}, { removed: true }).fetchAsync()
 
-    constraints.filter(hasTags).forEach(c => {
+    for (const c of constraints.filter(hasTags)) {
       const tags = c.tags.filter(identity).map(down)
-      Constraints.update({ _id: c._id }, {
+      await Constraints.updateAsync({ _id: c._id }, {
         $set: {
           tags
         }
       })
-    })
+    }
 
     return true
   }

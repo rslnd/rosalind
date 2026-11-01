@@ -1,6 +1,7 @@
 import { Events } from '../../events'
 import { action, Match } from '../../../util/meteor/action'
 import { safeMediaTypes } from '../../../util/schema'
+import { callNested } from '../../../util/meteor/isInSimulation'
 
 export const post = ({ InboundCalls }) =>
   action({
@@ -26,7 +27,7 @@ export const post = ({ InboundCalls }) =>
         name: String
       })),
     },
-    fn ({
+    async fn ({
       kind,
       note,
       topicId,
@@ -52,7 +53,7 @@ export const post = ({ InboundCalls }) =>
       }
 
       if (kind === 'other') {
-        const _id = InboundCalls.insert({
+        const _id = await InboundCalls.insertAsync({
           ...call,
           lastName,
           firstName,
@@ -69,11 +70,11 @@ export const post = ({ InboundCalls }) =>
         }
 
         if (patientId === 'newPatient') {
-          const newPatientId = Meteor.call('patients/upsert', {
+          const newPatientId = await callNested('patients/upsert', {
             patient: patientFields
           })
 
-          const _id = InboundCalls.insert({
+          const _id = await InboundCalls.insertAsync({
             ...call,
             patientId: newPatientId
           })
@@ -81,14 +82,14 @@ export const post = ({ InboundCalls }) =>
           Events.post('inboundCalls/post', { _id })
           return _id
         } else {
-          const existingPatientId = Meteor.call('patients/upsert', {
+          const existingPatientId = await callNested('patients/upsert', {
             patient: {
               ...patientFields,
               _id: patientId
             }
           })
 
-          const _id = InboundCalls.insert({
+          const _id = await InboundCalls.insertAsync({
             ...call,
             patientId: existingPatientId
           })

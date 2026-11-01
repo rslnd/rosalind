@@ -30,7 +30,7 @@ export class CalculatorField extends React.Component {
     this.renderValue = this.renderValue.bind(this)
   }
 
-  componentWillReceiveProps (props) {
+  UNSAFE_componentWillReceiveProps (props) {
     if (!this.state.focus && calculate(this.state.stringValue) !== props.input.value) {
       this.setState({
         stringValue: props.input.value

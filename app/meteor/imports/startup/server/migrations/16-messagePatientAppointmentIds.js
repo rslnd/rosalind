@@ -1,15 +1,15 @@
 import { Migrations } from 'meteor/percolate:migrations'
 import { Messages } from '../../../api/messages'
 
-const up = () => {
-  const messages = Messages.find({}).fetch()
+const up = async () => {
+  const messages = await Messages.find({}).fetchAsync()
   console.log('Migrating up to', messages.length, 'messages')
 
   let i = 0
-  messages.forEach(m => {
+  for (const m of messages) {
     if (m.payload.appointmentId || m.payload.patientId) {
 
-      Messages.update({
+      await Messages.updateAsync({
         _id: m._id
       }, {
         $set: {
@@ -24,7 +24,7 @@ const up = () => {
         console.log('Migrated', i, 'of', messages.length, 'messages')
       }
     }
-  })
+  }
 
   console.log('Done. Migrated', i, 'messages')
 

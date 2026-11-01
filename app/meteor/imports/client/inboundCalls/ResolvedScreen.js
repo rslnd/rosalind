@@ -19,7 +19,7 @@ import { Comments, Patients, Users } from '../../api'
 import { filterComments } from './filterComments'
 import { UserPicker } from '../users/UserPicker'
 import { TopicPicker } from './TopicPicker'
-import { withRouter } from 'react-router'
+import { withRouter } from '../components/withRouter'
 import { Icon } from '../components/Icon'
 import { onSearchPatient } from './InboundCallsContainer'
 

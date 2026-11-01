@@ -11,7 +11,8 @@ import { background, primaryActive, darkGrayDisabled, darkGray, lighten } from '
 import { namecase } from '../../../../util/namecase'
 import { getDefaultDuration } from '../../../../api/appointments/methods/getDefaultDuration'
 import { prefix } from '../../../../api/patients/methods'
-import { Appointments, Users } from '../../../../api'
+import { ceilToSlot } from '../../../../api/appointments/methods/ceilToSlot'
+import { Appointments, Users, Tags } from '../../../../api'
 import Alert from 'react-s-alert'
 
 const assigneeName = _id => {
@@ -200,12 +201,14 @@ class AppointmentItem extends React.Component {
       })
       timeStart = newStartTime.format('[T]HHmm')
       timeEnd = duration
-        ? newStartTime.add(duration, 'minutes').format('[T]HHmm')
+        ? ceilToSlot({ calendar, date: newStartTime.add(duration, 'minutes') }).format('[T]HHmm')
         : moment(this.props.moveToEnd || appointment.end).format('[T]HHmm')
       assigneeId = newAssigneeId
     } else {
       timeStart = moment(appointment.start).format('[T]HHmm')
-      timeEnd = moment(appointment.end).format('[T]HHmm')
+      // an end between grid lines (eg. 8:05 when slots are at :00, :10, ...) has no
+      // matching grid row and would make the appointment span far too long
+      timeEnd = ceilToSlot({ calendar, date: appointment.end }).format('[T]HHmm')
       assigneeId = appointment.assigneeId
     }
 
@@ -324,7 +327,7 @@ class AppointmentItem extends React.Component {
         <div style={rightStyle}>
           {
             calendar && calendar.showTagNames &&
-              <TagNames tags={appointment.tags} />
+              <TagNames tags={Tags.methods.expand(appointment.tags)} />
           }
           {
             appointment.createdViaPortal &&

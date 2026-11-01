@@ -12,12 +12,12 @@ export const updateAllowedClientIds = ({ Users }) =>
     },
     roles: ['admin', 'users-edit'],
     fn: async ({ userId, allowedClientIds }) => {
-      const user = Users.findOne({ _id: userId }, { removed: true })
+      const user = await Users.findOneAsync({ _id: userId }, { removed: true })
       if (!user) { throw new Meteor.Error(404, 'User not found') }
       console.log('[Users] Setting allowed client ids for user', userId, allowedClientIds)
       Events.post('users/updateAllowedClientIds', { userId, allowedClientIds }, 'warning')
 
-      Users.update({ _id: userId }, {
+      await Users.updateAsync({ _id: userId }, {
         $set: {
           allowedClientIds
         }

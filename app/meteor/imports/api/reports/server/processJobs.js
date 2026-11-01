@@ -19,6 +19,7 @@ export const processJobs = () => {
   Meteor.setTimeout(() => {
     if (process.env.PROCESS_JOBS === '1') {
       Reports.jobs.startJobServer()
+        .catch(e => console.error('[Reports] Failed to start job server', e))
       Reports.jobs.processJobs('dailyReport', options, dailyReportWorker)
     }
   }, process.env.NODE_ENV === 'production' ? 60 * 1000 : 1000)

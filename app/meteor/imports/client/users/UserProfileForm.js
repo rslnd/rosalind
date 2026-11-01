@@ -1,5 +1,4 @@
 import React from 'react'
-import { Meteor } from 'meteor/meteor'
 import Alert from 'react-s-alert'
 import { Users } from '../../api/users'
 import { compose, mapProps } from 'recompose'
@@ -12,10 +11,11 @@ import { TextField } from '../components/form/TextField'
 import { NameFields } from '../patients/fields/NameFields'
 import { Checkbox } from '../components/form/Checkbox'
 import { GroupPickerField } from '../users/GroupPicker'
+import { call } from '../../util/meteor/call'
 
 const onSubmit = (fields, dispatch, props) =>
   new Promise((resolve, reject) => {
-    Meteor.call('users/updateProfile', {
+    call('users/updateProfile', {
       userId: props.user._id,
       ...fields
     }, (e) => {

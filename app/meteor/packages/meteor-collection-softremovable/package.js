@@ -2,28 +2,28 @@ Package.describe({
   git: 'https://github.com/zimme/meteor-collection-softremovable.git',
   name: 'zimme:collection-softremovable',
   summary: 'Add soft remove to collections',
-  version: '1.0.6-beta.2'
+  version: '2.0.0'
 });
 
 Package.onUse(function(api) {
+  api.versionsFrom(['2.16', '3.0']);
+
   api.use([
-    'check',
-    'coffeescript',
-    'underscore'
+    'ecmascript',
+    'check'
   ]);
 
   api.use([
-    'matb33:collection-hooks@0.9.0-rc.4',
-    'zimme:collection-behaviours@1.0.3'
+    'matb33:collection-hooks@2.0.0',
+    'zimme:collection-behaviours@2.0.0',
+    'aldeed:simple-schema'
   ]);
 
   api.use([
-    'aldeed:autoform@4.0.0 || 5.0.0',
-    'aldeed:collection2@2.0.0',
-    'aldeed:simple-schema@1.0.3'
+    'aldeed:collection2@4.0.0'
   ], ['client', 'server'], {weak: true});
 
   api.imply('zimme:collection-behaviours');
 
-  api.addFiles('softremovable.coffee');
+  api.mainModule('softremovable.js');
 });

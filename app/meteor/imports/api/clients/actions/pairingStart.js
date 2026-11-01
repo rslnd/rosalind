@@ -11,8 +11,8 @@ export const pairingStart = ({ Clients }) =>
     args: {
       clientKey: String
     },
-    fn: function ({ clientKey }) {
-      const client = Clients.findOne({ clientKey })
+    fn: async function ({ clientKey }) {
+      const client = await Clients.findOneAsync({ clientKey })
       if (!client) { throw new Meteor.Error(404, 'Client not found') }
       if (!client.pairingAllowed) { throw new Meteor.Error(403, 'Pairing not allowed') }
 
@@ -20,7 +20,7 @@ export const pairingStart = ({ Clients }) =>
 
       Events.post('clients/pairingStart', { clientId: client._id })
 
-      Clients.update({ clientKey }, {
+      await Clients.updateAsync({ clientKey }, {
         $set: {
           pairingToken,
           pairingTokenCreatedAt: new Date(),

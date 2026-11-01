@@ -8,8 +8,8 @@ PortalMedia.attachSchema(portalMedia)
 
 if (Meteor.isServer) {
   const publishedFor = 86400 * 14 // 14 days
-  Meteor.startup(() => {
-    PortalMedia._ensureIndex({ publishedAt: 1 }, { expireAfterSeconds: publishedFor })
+  Meteor.startup(async () => {
+    await PortalMedia.createIndexAsync({ publishedAt: 1 }, { expireAfterSeconds: publishedFor })
   })
 }
 

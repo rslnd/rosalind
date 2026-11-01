@@ -6,7 +6,7 @@ import {
   stringify as toQuery
 } from 'query-string'
 import moment from 'moment-timezone'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from '../components/withRouter'
 import { withTracker } from '../components/withTracker'
 import { Users } from '../../api/users'
 import { Referrals } from '../../api/referrals'

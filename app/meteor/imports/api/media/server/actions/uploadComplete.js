@@ -12,24 +12,24 @@ export const uploadComplete = ({ Media }) =>
       mediaId: String,
       clientKey: Match.Optional(String)
     },
-    fn ({ mediaId, clientKey }) {
+    async fn ({ mediaId, clientKey }) {
       if (clientKey) {
-        const producer = Clients.findOne({ clientKey })
+        const producer = await Clients.findOneAsync({ clientKey })
         if (!producer) {
           throw new Error('Could not find producer by clientKey')
         }
       } else {
-        if (!this.userId && hasRole(this.userId, ['media', 'admin'])) {
+        if (!this.userId || !await hasRole(this.userId, ['documents', 'documents-insert', 'media', 'media-insert', 'admin'])) {
           throw new Error('Not authorized')
         }
       }
 
-      const media = Media.findOne({ _id: mediaId })
+      const media = await Media.findOneAsync({ _id: mediaId })
       if (!media) {
         throw new Error('Media not found')
       }
 
-      Media.update({ _id: mediaId }, {
+      await Media.updateAsync({ _id: mediaId }, {
         $set: {
           uploadCompletedAt: new Date()
         }

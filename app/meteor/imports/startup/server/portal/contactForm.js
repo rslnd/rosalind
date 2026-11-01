@@ -263,7 +263,9 @@ Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
 
 `
 
-  Email.send({
+  // sendAsync, awaited: Meteor 3's Email.send only forwards to sendAsync and
+  // swallows the rejection into console.error.
+  await Email.sendAsync({
     from: process.env.MAIL_REPORTS_FROM,
     to: process.env.MAIL_REPORTS_TO,
     replyTo: email,
@@ -271,7 +273,7 @@ Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
     text
   })
 
-  const topic = InboundCallsTopics.findOne({ contactForm: true })
+  const topic = await InboundCallsTopics.findOneAsync({ contactForm: true })
   const topicId = topic ? topic._id : null
 
   const call = {
@@ -290,7 +292,7 @@ Bereits PatientIn: ${existingPatient ? "Ja" :"Nein"}
     createdAt: new Date()
   }
 
-  const _id = InboundCalls.insert(call)
+  const _id = await InboundCalls.insertAsync(call)
 
   Events.post('inboundCalls/postContactForm', { _id })
 

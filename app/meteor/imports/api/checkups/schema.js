@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { Day, External, File } from '../../util/schema'
 
 export const checkups = new SimpleSchema({

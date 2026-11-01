@@ -50,15 +50,9 @@ const bufferToHexString = buffer =>
 
 const queryHibp = hashPrefix => {
   if (Meteor.isClient) {
-    return new Promise((resolve, reject) => {
-      Meteor.call('users/hibp', { hashPrefix }, (err, res) => {
-        if (err) {
-          return reject(err)
-        } else {
-          return resolve(res)
-        }
-      })
-    })
+    // Meteor.callAsync, not Meteor.call: see util/meteor/call for why the sync
+    // path wedges the client into a permanent simulation.
+    return Meteor.callAsync('users/hibp', { hashPrefix })
   } else {
     const { queryHibp } = require('../server/actions/hibp')
     return queryHibp(hashPrefix)

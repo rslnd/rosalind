@@ -1,10 +1,10 @@
 import React from 'react'
+import { unzoom } from '../layout/bodyZoom'
 import ReactDOM from 'react-dom'
 import moment from 'moment-timezone'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from './withRouter'
 import { withTracker } from '../components/withTracker'
-import Button from 'react-bootstrap/lib/Button'
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
+import { Button, ButtonGroup } from './bootstrap'
 import { DayPickerSingleDateController } from 'react-dates'
 import { PortalWithState } from 'react-portal'
 import { __ } from '../../i18n'
@@ -130,7 +130,7 @@ class MonthYearSelect extends React.Component {
     const buttonRect = this.buttonRef.current.getBoundingClientRect()
     const containerRect = container ? container.getBoundingClientRect() : { top: 0 }
     const coords = {
-      top: buttonRect.bottom - containerRect.top + 2
+      top: unzoom(buttonRect.bottom - containerRect.top) + 2
     }
     this.setState({ open: true, coords }, () => {
       document.addEventListener('mousedown', this.handleOutsideClick, true)

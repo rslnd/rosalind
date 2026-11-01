@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { unzoom } from '../layout/bodyZoom'
 import Alert from 'react-s-alert'
 import { compose, withState, withHandlers } from 'recompose'
 import { __ } from '../../i18n'
@@ -160,6 +161,9 @@ const Selector = ({ selector, setSelector, patientId, appointmentId }) => {
       nonce={getStyleNonce()}
       styles={{ menuPortal: base => ({
         ...base,
+        top: unzoom(base.top),
+        left: unzoom(base.left),
+        width: unzoom(base.width),
         filter: selectStyle.filter,
         zIndex: 3000
       })}}
@@ -286,7 +290,7 @@ const Edit = ({ media, handleRemove, setCurrentMediaId }) => {
       update: {
         rotation: (((media.rotation || 0) + 90) % 360)
       }
-    })
+    }).catch(err => { Alert.error(__('ui.error')); console.error(err) })
   }
 
   const handleShare = async (e) => {

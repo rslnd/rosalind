@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
 export default new SimpleSchema({
@@ -13,9 +13,10 @@ export default new SimpleSchema({
   },
 
   synonyms: {
-    type: [String],
+    type: Array,
     optional: true
   },
+  'synonyms.$': { type: String },
 
   order: {
     type: Number,
@@ -63,19 +64,22 @@ export default new SimpleSchema({
   },
 
   calendarIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'calendarIds.$': { type: SimpleSchema.RegEx.Id },
 
   assigneeIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'assigneeIds.$': { type: SimpleSchema.RegEx.Id },
 
   blacklistAssigneeIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'blacklistAssigneeIds.$': { type: SimpleSchema.RegEx.Id },
 
   reportAs: {
     type: String,
@@ -88,9 +92,10 @@ export default new SimpleSchema({
   },
 
   referrableFrom: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true
   },
+  'referrableFrom.$': { type: SimpleSchema.RegEx.Id },
 
   maxParallel: {
     type: Number,
@@ -113,10 +118,11 @@ export default new SimpleSchema({
   },
 
   external: {
-    type: [ String ],
+    type: Array,
     optional: true,
     index: 1
   },
+  'external.$': { type: String },
 
   createdBy: {
     type: String,

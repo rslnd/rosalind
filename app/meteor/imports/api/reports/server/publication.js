@@ -14,8 +14,8 @@ export const publication = () => {
       from: Match.Optional(Date),
       to: Match.Optional(Date)
     },
-    fn: function ({ date, from, to }) {
-      const canShowRevenue = hasRole(this.userId, ['reports-showRevenue', 'admin']) || (!this.userId && this.connection && isTrustedNetwork(this.connection.clientAddress))
+    fn: async function ({ date, from, to }) {
+      const canShowRevenue = await hasRole(this.userId, ['reports-showRevenue', 'admin']) || (!this.userId && this.connection && isTrustedNetwork(this.connection.clientAddress))
 
       const fields = canShowRevenue
         ? Reports.fields.withRevenue

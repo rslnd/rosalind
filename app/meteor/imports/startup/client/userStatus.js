@@ -25,6 +25,7 @@ export default () => {
 
             if (getClientKey()) {
               attemptRegistration({ clientKey: getClientKey() })
+                .catch(err => { Alert.error(__('ui.error')); console.error(err) })
             }
             const icon = React.createElement(Icon, { name: 'thumbs-up' }, null)
             Alert.success(__('ui.statusMessages.connected'), { timeout: 2000, customFields: { icon } })

@@ -1,5 +1,5 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
-import QR from '@shortcm/qr-image'
+import { getQRImage } from '@shortcm/qr-image'
 
 export const fillPlaceholders = async ({ base64, placeholders, values }) => {
   const pdf = await PDFDocument.load(base64)
@@ -16,7 +16,7 @@ export const fillPlaceholders = async ({ base64, placeholders, values }) => {
     if (!text) { continue }
 
     if (p.qr) {
-      const png = await QR.image(text, { type: 'png' })
+      const png = await getQRImage(text, { type: 'png' })
       console.log('PNG', png)
       const qrcode = await pdf.embedPng(png)
       page.drawImage(qrcode, {

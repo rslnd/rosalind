@@ -15,8 +15,8 @@ export const edit = ({ InboundCalls }) =>
       telephone: Match.Optional(String),
       topicId: Match.Optional(Match.OneOf(String, null))
     },
-    fn: function ({ _id, note, firstName, lastName, telephone, topicId }) {
-      const inboundCall = InboundCalls.findOne({ _id })
+    fn: async function ({ _id, note, firstName, lastName, telephone, topicId }) {
+      const inboundCall = await InboundCalls.findOneAsync({ _id })
       if (!inboundCall) {
         throw new Meteor.Error(404, 'Not found')
       }
@@ -37,7 +37,7 @@ export const edit = ({ InboundCalls }) =>
         [key]: fields[key]
       }), {})
 
-      InboundCalls.update({ _id }, {
+      await InboundCalls.updateAsync({ _id }, {
         $set
       })
 

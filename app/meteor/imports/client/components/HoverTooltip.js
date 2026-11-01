@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
+import { unzoom } from '../layout/bodyZoom'
 
 // The body is globally zoomed (client/css/layout.css: body { zoom: 1.221 }).
 // A popover portaled into the zoomed body has the offset computed by Popper
 // multiplied by that factor, so it ends up misplaced. We counter the translate
 // offset by 1/zoom so it sits correctly.
-const BODY_ZOOM = 1.221
 
 const correctPopperForZoom = (popperStyles) => {
   if (!popperStyles || typeof popperStyles.transform !== 'string') {
@@ -17,7 +17,7 @@ const correctPopperForZoom = (popperStyles) => {
     (match, is3d, args) => {
       const scaled = args.split(',').map(part => {
         const value = parseFloat(part)
-        return Number.isNaN(value) ? part.trim() : `${value / BODY_ZOOM}px`
+        return Number.isNaN(value) ? part.trim() : `${unzoom(value)}px`
       })
       return `translate${is3d || ''}(${scaled.join(', ')})`
     }

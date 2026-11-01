@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme } from '@material-ui/core/styles'
 import {
   fontStack,
   text,
@@ -9,7 +9,7 @@ import {
 
 const animationSpeed = 1.6
 
-export const muiTheme = createMuiTheme({
+export const muiTheme = createTheme({
   typography: {
     useNextVariants: true,
     fontFamily: fontStack

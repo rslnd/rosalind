@@ -2,7 +2,7 @@ import idx from 'idx'
 import moment from 'moment-timezone'
 import memoize from 'lodash/memoize'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from '../../components/withRouter'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
 import { __ } from '../../../i18n'
@@ -58,12 +58,14 @@ const composer = (props) => {
   const appointmentsSub = subsCache.subscribe('appointments-day', { ...day, calendarId })
   const schedulesSub = subsCache.subscribe('schedules-day', { ...day, calendarId })
 
-  // Preload next day in background
-  Meteor.defer(() => {
+  // Preload next day in background. Use a plain timer (not Meteor.defer) because
+  // this composer runs inside a reactive computation where Meteor treats timers
+  // as simulation timers ("Can't set timers inside simulations").
+  setTimeout(() => {
     const nextDay = dateToDay(moment(date).add(1, 'day').toDate())
     subsCache.subscribe('appointments-day', { ...nextDay, calendarId })
     subsCache.subscribe('schedules-day', { ...nextDay, calendarId })
-  })
+  }, 0)
 
   const selector = {
     calendarId,

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
+import { CallPromiseMixin } from '../../../../util/meteor/callPromiseMixin'
 import { parseQuery } from './parseQuery'
 
 export const patientsWithAppointments = ({ Patients, Appointments }) => {
@@ -15,7 +15,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
       limit: { type: Number, optional: true }
     }).validator(),
 
-    run ({ query, forceNgramMatching, limit }) {
+    async run ({ query, forceNgramMatching, limit }) {
       try {
         this.unblock()
 
@@ -26,7 +26,7 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
         let selector
 
         if (query.match(SimpleSchema.RegEx.Id)) {
-          const appt = Appointments.findOne({ _id: query })
+          const appt = await Appointments.findOneAsync({ _id: query })
 
           if (appt && appt.patientId) {
             selector = { _id: appt.patientId }
@@ -36,29 +36,29 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
         } else if (query === '!banned') { // banned
           selector = { banned: true }
         } else if (query[0] === '!') { // special case: seach notes, return
-          return findNotes({ Appointments, Patients, query })
+          return await findNotes({ Appointments, Patients, query })
         } else {
           selector = parseQuery(query, forceNgramMatching)
         }
 
         if (selector) {
-          const patients = Patients.find(selector, {
+          const patients = await Patients.find(selector, {
             sort: { lastName: 1 },
             limit: limit || 300,
             fields: Patients.fields.search
-          }).fetch()
+          }).fetchAsync()
 
           return {
             query, // repeat to client for ignoring slower reordered responses while typing
-            patients: patients.map((patient) => {
+            patients: await Promise.all(patients.map(async (patient) => {
               return {
                 ...patient,
-                appointments: Appointments.find({ patientId: patient._id }, {
+                appointments: await Appointments.find({ patientId: patient._id }, {
                   sort: { start: -1 },
                   limit: 3
-                }).fetch()
+                }).fetchAsync()
               }
-            })
+            }))
           }
         }
       } catch (e) {
@@ -69,20 +69,20 @@ export const patientsWithAppointments = ({ Patients, Appointments }) => {
   })
 }
 
-const findNotes = ({ Appointments, Patients, query }) => {
+const findNotes = async ({ Appointments, Patients, query }) => {
   const searchString = query.substr(1).trim()
 
   if (searchString && searchString.length >= 2) {
-    const appointments = Appointments.find({
+    const appointments = await Appointments.find({
       note: {
         $regex: searchString,
         $options: 'i'
       }
     }, {
       sort: { start: -1 }
-    }).fetch()
+    }).fetchAsync()
 
-    const patients = Patients.find({ _id: { $in: appointments.map(a => a._id)}}).fetch()
+    const patients = await Patients.find({ _id: { $in: appointments.map(a => a._id)}}).fetchAsync()
 
     return [
       ...appointments.map(appointment => ({ appointment })),

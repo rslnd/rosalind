@@ -35,24 +35,24 @@ const hasAccepted = note => {
 Migrations.add({
   version: 8,
 
-  up: function () {
+  up: async function () {
     let agreedCount = 0
-    Patients.find({}).fetch().map(p => {
+    ;await Promise.all((await Patients.find({}).fetchAsync()).map(async p => {
       const ok = p.note && hasAccepted(p.note)
       if (!ok) { return }
 
       agreedCount++
 
-      const lastAppointment = Appointments.find({
+      const lastAppointment = await Appointments.find({
         patientId: p._id
       }, {
         sort: { start: -1 },
         limit: 1
-      }).fetch()
+      }).fetchAsync()
 
       const lastAppointmentDate = lastAppointment[0] && lastAppointment[0].start
 
-      Patients.update({ _id: p._id }, {
+      await Patients.updateAsync({ _id: p._id }, {
         $set: {
           agreements: [
             {
@@ -62,7 +62,7 @@ Migrations.add({
           ]
         }
       })
-    })
+    }))
 
     console.log(`Parsed ${agreedCount} agreements`)
     return true

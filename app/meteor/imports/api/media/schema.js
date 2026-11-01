@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import SimpleSchema from 'meteor/aldeed:simple-schema'
 import Auto from '../../util/schema/auto'
 
 export const mediaTypes = ['image/jpeg']
@@ -33,10 +33,11 @@ export const portalMedia = new SimpleSchema({
   },
 
   tagIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true,
     index: 1
   },
+  'tagIds.$': { type: SimpleSchema.RegEx.Id },
 
   rotation: {
     type: Number,
@@ -144,10 +145,11 @@ export const media = new SimpleSchema({
   },
 
   tagIds: {
-    type: [SimpleSchema.RegEx.Id],
+    type: Array,
     optional: true,
     index: 1
   },
+  'tagIds.$': { type: SimpleSchema.RegEx.Id },
 
   rotation: {
     type: Number,

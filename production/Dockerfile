@@ -1,4 +1,5 @@
-FROM node:14.21.3-bullseye
+# Keep in sync with the Node version of the Meteor release (`meteor node --version`)
+FROM node:24.22.1-trixie
 
 HEALTHCHECK \
   --interval=6s \
@@ -14,65 +15,15 @@ WORKDIR /opt/app/programs/server
 ENV NPM_CONFIG_LOGLEVEL warn
 ENV TZ UTC
 ENV NODE_ENV production
+# puppeteer launches the google-chrome-stable installed below (channel: 'chrome')
+ENV PUPPETEER_SKIP_DOWNLOAD true
 
-# Debian 11 (bullseye) reached LTS end-of-life on 2026-08-31 and is being pruned
-# from the deb.debian.org mirrors. The package indexes still advertise versions
-# whose .deb files are already gone from some CDN edges, so `apt-get install`
-# dies with 404s on packages it only wants in order to upgrade the base image
-# (libsystemd0, gpgsm, libglib2.0-dev, ...). Pin apt to a snapshot taken before
-# the pruning started; this also makes the image reproducible.
-# Bump DEBIAN_SNAPSHOT only together with the base image.
-ARG DEBIAN_SNAPSHOT=20260801T000000Z
-RUN printf '%s\n' \
-      "deb http://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}/ bullseye main" \
-      "deb http://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}/ bullseye-updates main" \
-      "deb http://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}/ bullseye-security main" \
-      > /etc/apt/sources.list \
-  && printf '%s\n' \
-      'Acquire::Check-Valid-Until "false";' \
-      'Acquire::Retries "5";' \
-      > /etc/apt/apt.conf.d/99rosalind-pin
-
+# Chrome for puppeteer (PDF reports). The .deb declares its own library
+# dependencies, so apt resolves the correct (t64-renamed) packages on trixie.
 RUN apt-get update && apt-get install -y \
-    libxss1 \
-    libxtst6 \
-    libasound2 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libc6 \
-    libcairo2 \
-    libcups2 \
-    libdbus-1-3 \
-    libexpat1 \
-    libfontconfig1 \
-    libgcc1 \
-    libgdk-pixbuf2.0-0 \
-    libglib2.0-0 \
-    libgtk-3-0 \
-    libnspr4 \
-    libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libstdc++6 \
-    libx11-6 \
-    libx11-xcb1 \
-    libxcb1 \
-    libxcomposite1 \
-    libxcursor1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxi6 \
-    libxrandr2 \
-    libxrender1 \
-    libxss1 \
-    libxtst6 \
     ca-certificates \
     fonts-liberation \
-    libdrm2 \
-    libgbm1 \
-    libnss3 \
-    lsb-release \
-    xdg-utils \
+    libxss1 \
     wget \
     gnupg \
     --no-install-recommends \
@@ -84,7 +35,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /src/*.deb
 
-RUN bash -c "time bash -c 'yarn \
+RUN bash -c "time bash -c 'npm install --omit=dev \
   && npm cache clear --force \
   && mv /opt/app/node_modules /opt/node_modules/ \
   && cp -r /opt/app/programs/server/node_modules/. /opt/node_modules/ \
@@ -103,7 +54,6 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
     && chown -R pptruser:pptruser /opt/node_modules/
 
 USER pptruser
-ENV NODE_ICU_DATA /opt/app/programs/server/npm/node_modules/full-icu/
 ENV PORT 3000
 EXPOSE 3000
 
