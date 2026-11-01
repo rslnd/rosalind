@@ -8,9 +8,12 @@ import { Appointments } from '../../appointments'
 import { Calendars } from '../../calendars'
 import { transformDefaultsToOverrides, applyHM } from '../methods/transformDefaultsToOverrides'
 import { createBookableSlots } from '../../appointments/methods/createBookableSlots'
-import { rangeToDays, isSame, daySelector, dayToDate, dateToDay } from '../../../util/time/day'
+import { rangeToDaysInTz, rangeBounds, dayBounds, isSame, daySelector, dayToDate, dateToDay } from '../../../util/time/day'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { toWeekday } from '../../../util/time/weekdays'
 import { union, without } from 'lodash'
+import { invalidDefaultSchedules, describeDefaultSchedule } from '../methods/validateDefaultSchedule'
+import { Users } from '../../users'
 
 export const applyDefaultSchedule = ({ Schedules }) => {
   return new ValidatedMethod({
@@ -34,22 +37,50 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         throw new Meteor.Error(400, 'Swap to and from dates')
       }
 
-      if (to <= new Date() || from <= new Date()) {
-        throw new Meteor.Error(400, 'Dates must be in the future')
+      // Today may be (re)planned as well, eg. from the day view. Online
+      // bookable slots are only ever created for times still in the future.
+      const now = new Date()
+      if (to <= now || from < moment.tz(now, 'Europe/Vienna').startOf('day').toDate()) {
+        throw new Meteor.Error(400, 'Dates must not be in the past')
       }
 
       if (this.isSimulation) { return }
 
+      // Days and day boundaries of the practice (Vienna); the server runs in UTC,
+      // where eg. Vienna midnight of the 3rd is still the 2nd.
+      const range = rangeBounds({ from, to })
+
+      // Refuse to apply default schedules that don't line up with the day view
+      // grid: they would create blocked times and bookable slots at odd times.
+      const calendar = await Calendars.findOneAsync({ _id: calendarId })
+      const defaultSchedules = await Schedules.find({
+        type: 'default',
+        calendarId,
+        removed: { $ne: true }
+      }).fetchAsync()
+
+      const invalid = invalidDefaultSchedules({
+        calendar,
+        defaultSchedules: defaultSchedules.filter(d => assigneeIds ? assigneeIds.includes(d.userId) : true)
+      })
+      if (invalid.length >= 1) {
+        const lines = await Promise.all(invalid.map(async ({ schedule, problems }) => {
+          const user = await Users.findOneAsync({ _id: schedule.userId })
+          const name = user ? Users.methods.fullNameWithTitle(user) : schedule.userId
+          return `${name} ${describeDefaultSchedule(schedule)}: ${problems.join(', ')}`
+        }))
+        throw new Meteor.Error(400, `Wochenplan bitte zuerst korrigieren – ${lines.join('; ')}`)
+      }
+
       const holidays = await Schedules.find({
         type: 'holiday',
-        start: {
-          $gte: new Date()
-        }
+        removed: { $ne: true },
+        end: { $gte: range.start }
       }).fetchAsync()
 
       const excludeHolidays = d => !holidays.find(h => isSame(d, h.day))
 
-      const days = rangeToDays({ from, to }).filter(excludeHolidays)
+      const days = rangeToDaysInTz({ from, to }).filter(excludeHolidays)
 
       // Load vacations overlapping the applied range. Vacations are a separate
       // schedule type, so the override/overlay/day removal below never touches
@@ -58,8 +89,8 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         type: 'vacation',
         calendarId,
         removed: { $ne: true },
-        start: { $lte: moment(to).endOf('day').toDate() },
-        end: { $gte: moment(from).startOf('day').toDate() }
+        start: { $lte: range.end },
+        end: { $gte: range.start }
       }
       if (assigneeIds) {
         vacationSelector.userId = { $in: assigneeIds }
@@ -68,8 +99,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
       // Vacations (allDay / partial) covering a given day for a given user.
       const vacationsFor = (day, userId) => {
-        const dayStart = moment(dayToDate(day)).startOf('day').toDate()
-        const dayEnd = moment(dayToDate(day)).endOf('day').toDate()
+        const { start: dayStart, end: dayEnd } = dayBounds(day)
         return vacations.filter(v =>
           v.userId === userId &&
           v.start <= dayEnd &&
@@ -95,10 +125,10 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         ],
         calendarId,
         start: {
-          $gte: moment(from).startOf('day').toDate()
+          $gte: range.start
         },
         end: {
-          $lte: moment(to).endOf('day').toDate()
+          $lte: range.end
         }
       }
 
@@ -111,12 +141,13 @@ export const applyDefaultSchedule = ({ Schedules }) => {
 
       // Remove existing bookable slots in the range before recreating them, so
       // re-applying does not accumulate duplicate bookables.
+      // Past bookables (earlier today) are kept, they are not recreated either.
       const oldBookablesSelector = {
         type: 'bookable',
         calendarId,
         removed: { $ne: true },
-        start: { $gte: moment(from).startOf('day').toDate() },
-        end: { $lte: moment(to).endOf('day').toDate() }
+        start: { $gte: new Date(Math.max(range.start.getTime(), now.getTime())) },
+        end: { $lte: range.end }
       }
       if (assigneeIds) {
         oldBookablesSelector.assigneeId = { $in: assigneeIds }
@@ -157,11 +188,6 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       }
 
       // Create new overrides from schedules
-      const defaultSchedules = await Schedules.find({
-        type: 'default',
-        calendarId
-      }).fetchAsync()
-
       const rawOverrideSchedules = transformDefaultsToOverrides({ defaultSchedules, days })
 
       // Vacation protection:
@@ -187,8 +213,7 @@ export const applyDefaultSchedule = ({ Schedules }) => {
         .filter(v => !v.allDay && v.from && v.to)
         .forEach(v => {
           days.forEach(day => {
-            const ds = moment(dayToDate(day)).startOf('day').toDate()
-            const de = moment(dayToDate(day)).endOf('day').toDate()
+            const { start: ds, end: de } = dayBounds(day)
             if (v.start <= de && v.end >= ds) {
               overrideSchedules.push({
                 type: 'override',
@@ -306,13 +331,12 @@ export const applyDefaultSchedule = ({ Schedules }) => {
       }
 
       // Create bookable slots for default blocks marked "online bookable",
-      // skipping days/times covered by a vacation.
-      const calendar = await Calendars.findOneAsync({ _id: calendarId })
+      // skipping days/times covered by a vacation or a pause block.
       const makeBookableSlots = createBookableSlots({ Appointments })
       let totalBookables = 0
 
       for (const day of days) {
-        const wd = moment(dayToDate(day)).locale('en').format('ddd').toLowerCase()
+        const wd = toWeekday(dayBounds(day).start)
         const bookableDefaults = defaultSchedules.filter(d =>
           d.weekday === wd &&
           d.available !== false &&
@@ -329,6 +353,11 @@ export const applyDefaultSchedule = ({ Schedules }) => {
           byUser[d.userId].push({ from: d.from, to: d.to })
         })
 
+        // Pause / blocking blocks of the default schedule ("Mittag", ...)
+        const pauseRanges = userId => defaultSchedules
+          .filter(d => d.weekday === wd && d.userId === userId && d.available === false && d.from && d.to)
+          .map(d => ({ start: applyHM(day, d.from), end: applyHM(day, d.to) }))
+
         for (const userId of Object.keys(byUser)) {
           totalBookables += await makeBookableSlots({
             calendar,
@@ -336,7 +365,8 @@ export const applyDefaultSchedule = ({ Schedules }) => {
             userId,
             day,
             ranges: byUser[userId],
-            blockedRanges: partialVacationRanges(day, userId),
+            blockedRanges: [...partialVacationRanges(day, userId), ...pauseRanges(userId)],
+            notBefore: now,
             createdBy: this.userId
           })
         }

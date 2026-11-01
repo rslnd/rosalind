@@ -13,6 +13,7 @@ import { DayPickerRangeController } from 'react-dates'
 import { START_DATE } from 'react-dates/constants'
 import Button from '@material-ui/core/Button'
 import { UserPicker } from '../../users/UserPicker'
+import { invalidDefaultSchedules, describeDefaultSchedule } from '../../../api/schedules/methods/validateDefaultSchedule'
 
 const composer = props => {
   const { calendarId } = props
@@ -152,7 +153,13 @@ class ApplyDefaultScheduleComponent extends React.Component {
 
   render () {
     const { startDate, endDate, focusedInput, applying, applied, assigneeIds } = this.state
-    const { calendar, lastPlannedDate, assignees, isHoliday } = this.props
+    const { calendar, lastPlannedDate, assignees, isHoliday, defaultSchedules = [] } = this.props
+
+    // Default schedules of the selected assignees that don't fit the day view
+    // grid: applying is refused by the server until they are fixed.
+    const invalid = (assigneeIds && assigneeIds.length >= 1)
+      ? invalidDefaultSchedules({ calendar, defaultSchedules: defaultSchedules.filter(d => assigneeIds.includes(d.userId)) })
+      : []
 
     const dayCount = (startDate && endDate)
       ? endDate.clone().startOf('day').diff(startDate.clone().startOf('day'), 'days') + 1
@@ -248,6 +255,20 @@ class ApplyDefaultScheduleComponent extends React.Component {
             </p>
 
             {
+              invalid.length >= 1 &&
+                <div style={{ color: '#c0392b', marginBottom: 10 }}>
+                  <b><Icon name='exclamation-triangle' /> Bitte zuerst den Wochenplan korrigieren:</b>
+                  <ul style={{ margin: '4px 0 0 18px', padding: 0 }}>
+                    {invalid.map(({ schedule, problems }) =>
+                      <li key={schedule._id}>
+                        {Users.methods.fullNameWithTitle(assignees.find(a => a._id === schedule.userId) || {})} {describeDefaultSchedule(schedule)}: {problems.join(', ')}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+            }
+
+            {
               startDate && endDate &&
                 <p>
                   <Icon name='exclamation-triangle' /> <b>Vorsicht</b> Diese Aktion kann nicht rückgängig gemacht werden.
@@ -261,7 +282,7 @@ class ApplyDefaultScheduleComponent extends React.Component {
                 color='secondary'
                 style={buttonStyle}
                 onClick={this.applyDefaultSchedule}
-                disabled={applying || !startDate || !endDate || !(assigneeIds && assigneeIds.length >= 1)}
+                disabled={applying || !startDate || !endDate || !(assigneeIds && assigneeIds.length >= 1) || invalid.length >= 1}
               >
                 <Icon name='cog' spin={applying} /> Wochenplan für {dayCount} {dayCount === 1 ? 'Tag' : 'Tage'} anwenden
               </Button>

@@ -4,6 +4,7 @@ import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
 import { action } from '../../../util/meteor/action'
+import { findOverlappingAppointment } from '../methods/bookableConflicts'
 
 export const setBookable = ({ Appointments }) =>
   action({
@@ -29,6 +30,9 @@ export const setBookable = ({ Appointments }) =>
 
       if (existing.length > 0) {
         console.log('setBookable: ignoring duplicate bookable')
+        return null
+      } else if (await findOverlappingAppointment({ Appointments, calendarId, assigneeId, start, end })) {
+        console.log('setBookable: refusing to create bookable over an appointment')
         return null
       } else {
 

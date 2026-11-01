@@ -3,6 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import SimpleSchema from 'meteor/aldeed:simple-schema'
 import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { Events } from '../../events'
+import { removeBookablesOverlapping } from '../methods/bookableConflicts'
 
 export const unsetCanceled = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -17,7 +18,8 @@ export const unsetCanceled = ({ Appointments }) => {
         throw new Meteor.Error(403, 'Not authorized')
       }
 
-      if (!(await Appointments.findOneAsync({ _id: appointmentId })).canceled) {
+      const appointment = await Appointments.findOneAsync({ _id: appointmentId })
+      if (!appointment.canceled) {
         console.warn('[Appointments] unsetCanceled: Appointment is already not canceled', { appointmentId })
         return
       }
@@ -29,6 +31,19 @@ export const unsetCanceled = ({ Appointments }) => {
           canceledBy: null
         }
       })
+
+      // The appointment takes its slot again: drop bookables created there meanwhile
+      if (Meteor.isServer) {
+        await removeBookablesOverlapping({
+          Appointments,
+          calendarId: appointment.calendarId,
+          assigneeId: appointment.assigneeId,
+          start: appointment.start,
+          end: appointment.end,
+          removedBy: this.userId,
+          note: 'Gelöscht, weil Termin wiederhergestellt wurde. Termin: ' + appointmentId
+        })
+      }
 
       Events.post('appointments/unsetCanceled', { appointmentId })
 

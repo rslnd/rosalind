@@ -932,13 +932,14 @@ export const createDSLContext = ({
         const slotEnd = setTime(nextSlotLabel)(currentDate.clone()).toDate()
 
         if (!isSlotBlocked(slotStart, slotEnd)) {
-          await Appointments.actions.setBookable.callPromise({
+          // null: duplicate, or refused by the server because of an appointment
+          const bookableId = await Appointments.actions.setBookable.callPromise({
             calendarId,
             start: slotStart,
             end: slotEnd,
             assigneeId: user._id
           })
-          totalCreated++
+          if (bookableId) { totalCreated++ }
         }
       }
 

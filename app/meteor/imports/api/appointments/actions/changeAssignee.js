@@ -7,6 +7,7 @@ import { Events } from '../../events'
 import { Schedules } from '../../schedules'
 import { Day } from '../../../util/schema/day'
 import { dayToDate, daySelector } from '../../../util/time/day'
+import { removeBookablesOverlappingAppointments } from '../methods/bookableConflicts'
 
 // This action updates the assigneeId of someone's appointments on a given day,
 // eg. when the assignee gets ill
@@ -78,6 +79,19 @@ export const changeAssignee = ({ Appointments }) => {
           userIds: newAssigneeId
         }
       })
+
+      // The new assignee's own bookables must not lie under the taken-over appointments
+      if (Meteor.isServer) {
+        await removeBookablesOverlappingAppointments({
+          Appointments,
+          calendarId,
+          assigneeId: newAssigneeId,
+          from: selector.start.$gte,
+          to: selector.start.$lte,
+          removedBy: this.userId,
+          note: 'Gelöscht, weil Termine auf diese Person übertragen wurden'
+        })
+      }
 
       Events.post('appointments/changeAssignee', {
         day,

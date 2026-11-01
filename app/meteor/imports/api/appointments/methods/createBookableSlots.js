@@ -1,30 +1,31 @@
-import moment from 'moment-timezone'
 import { applyHM } from '../../schedules/methods/transformDefaultsToOverrides'
-import { ceilToSlot } from './ceilToSlot'
+import { gridSlotsWithin } from './ceilToSlot'
+import { dayBounds } from '../../../util/time/day'
 
 // Server-side equivalent of the DSL `openBookable` slot logic: for a given day
 // and assignee, create bookable appointment slots covering the provided time
-// ranges (the working blocks marked "online bookable" in the default schedule).
+// ranges (eg. the working blocks marked "online bookable" in the default
+// schedule, or the open time of a column).
 //
-// Slots are aligned within each hour to the calendar's slot size (or the
-// calendar's atMinutes, if configured), mirroring the day-grid blanks. Slots
-// overlapping an existing (non-bookable) appointment or any blocked range are
+// Slots run from one grid line of the calendar's day view to the next (slot
+// size or atMinutes), so they never overlap and always line up with the rows.
+// A slot that would stick out of its range is dropped instead of being cut
+// short at an off-grid time. Slots overlapping an existing (non-bookable)
+// appointment or any blocked range, or starting before `notBefore`, are
 // skipped.
-export const createBookableSlots = ({ Appointments }) => async ({ calendar, calendarId, userId, day, ranges, blockedRanges = [], createdBy }) => {
+export const createBookableSlots = ({ Appointments }) => async ({ calendar, calendarId, userId, day, ranges, blockedRanges = [], notBefore, createdBy }) => {
   if (!ranges || ranges.length === 0) { return 0 }
 
-  const step = (calendar && calendar.slotSize) || 5
-  const atMinutes = calendar && calendar.atMinutes
+  // In the practice's timezone, the server runs in UTC
+  const { start: dayStart, end: dayEnd } = dayBounds(day)
 
-  const dayStart = applyHM(day, { h: 0, m: 0 })
-  const dayEnd = moment(dayStart).endOf('day').toDate()
-
-  // Existing appointments that block a slot (bookables do not block).
+  // Existing appointments that block a slot (bookables do not block). Fetch by
+  // overlap, so appointments reaching into the day from before/after count too.
   const existing = await Appointments.find({
     calendarId,
     assigneeId: userId,
-    start: { $gte: dayStart },
-    end: { $lte: dayEnd },
+    start: { $lt: dayEnd },
+    end: { $gt: dayStart },
     removed: { $ne: true },
     canceled: { $ne: true }
   }).fetchAsync()
@@ -40,10 +41,7 @@ export const createBookableSlots = ({ Appointments }) => async ({ calendar, cale
     return false
   }
 
-  const isValidStartMinute = m =>
-    (atMinutes && atMinutes.length >= 1)
-      ? atMinutes.indexOf(m) !== -1
-      : (m % step === 0)
+  const toDate = min => applyHM(day, { h: Math.floor(min / 60), m: min % 60 })
 
   let created = 0
 
@@ -51,21 +49,14 @@ export const createBookableSlots = ({ Appointments }) => async ({ calendar, cale
     const fromMin = from.h * 60 + (from.m || 0)
     const toMin = to.h * 60 + (to.m || 0)
 
-    for (let min = fromMin; min < toMin; min++) {
-      const m = min % 60
-      if (!isValidStartMinute(m)) { continue }
+    for (const { startMin, endMin } of gridSlotsWithin({ calendar, fromMin, toMin })) {
+      const slotStart = toDate(startMin)
+      const slotEnd = toDate(endMin)
 
-      const slotStart = applyHM(day, { h: Math.floor(min / 60), m })
-      const endMin = min + step
-      // end on the next grid line, eg. with atMinutes [0, 10, 15, ...] 8:00 -> 8:10
-      // but never past the end of the working block
-      const blockEnd = applyHM(day, { h: to.h, m: to.m || 0 })
-      const ceiledEnd = ceilToSlot({ calendar, date: applyHM(day, { h: Math.floor(endMin / 60), m: endMin % 60 }) }).toDate()
-      const slotEnd = ceiledEnd > blockEnd ? blockEnd : ceiledEnd
-
+      if (notBefore && slotStart < notBefore) { continue }
       if (isBlocked(slotStart, slotEnd)) { continue }
 
-      // Avoid duplicates (old bookables in the range are removed beforehand).
+      // Avoid duplicates (eg. overlapping ranges, or bookables left in place).
       const dupe = await Appointments.findOneAsync({
         calendarId,
         assigneeId: userId,

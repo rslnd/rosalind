@@ -6,6 +6,8 @@ import { Events } from '../../events'
 import { weekdays } from '../../../util/time/weekdays'
 import { HM } from '../../../util/schema'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { Calendars } from '../../calendars'
+import { defaultScheduleProblems } from '../methods/validateDefaultSchedule'
 
 const Schedule = new SimpleSchema({
   from: { type: HM },
@@ -38,7 +40,14 @@ export const upsertDefaultSchedule = ({ Schedules }) => {
       // other note creates an unavailable override
       const available = !(newSchedule && newSchedule.note && !newSchedule.note.includes('!'))
 
-      console.log('UD', available, newSchedule)
+      if (newSchedule) {
+        const existing = scheduleId && await Schedules.findOneAsync({ _id: scheduleId })
+        const calendar = await Calendars.findOneAsync({ _id: calendarId || (existing && existing.calendarId) })
+        const problems = defaultScheduleProblems({ calendar, schedule: newSchedule })
+        if (problems.length >= 1) {
+          throw new Meteor.Error(400, problems.join('. '))
+        }
+      }
 
       if (scheduleId) {
         const existingSchedule = await Schedules.findOneAsync({

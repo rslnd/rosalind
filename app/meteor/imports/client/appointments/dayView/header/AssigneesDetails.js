@@ -114,7 +114,7 @@ export const BreakLines = ({ children, placeholder, isImportant = false }) =>
     ))
     : (placeholder || null)
 
-const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hovering, editing, open, onOpenPanel, onClosePanel, onChangeNote, onChangeCalendarNote, onEditingChange, isLast, onOpenVacationPicker, isClosed, onSetDayClosed }) => {
+const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hovering, editing, open, onOpenPanel, onClosePanel, onChangeNote, onChangeCalendarNote, onEditingChange, isLast, onOpenVacationPicker, isClosed, onSetDayClosed, onOpenQuickPlan }) => {
   const isDayNoteColumn = (!assignee || (!calendar.allowUnassigned && isLast))
   const hasDayNote = (daySchedule && (daySchedule.note || daySchedule.noteDetails))
   // The "Info hinzufügen" button depends on the Tagesinfo only (not on a possibly
@@ -261,12 +261,22 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
             <Icon name={isClosed ? 'lock' : 'unlock'} />&nbsp;
             {isClosed ? 'Praxis geschlossen' : 'Als geschlossen markieren'}
           </Button>
+          {onOpenQuickPlan && !isClosed &&
+            <Button
+              size='small'
+              variant='outlined'
+              style={addInfoButtonStyle}
+              title='Wochenplan anwenden oder Online-Freigaben für den ganzen Tag setzen'
+              onClick={onOpenQuickPlan}>
+              <Icon name='magic' />&nbsp;Tag planen
+            </Button>
+          }
         </div>
     }
   </div>
 }
 
-export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hovering, editing, open, onOpenPanel, onClosePanel, canEditSchedules, onChangeNote, onChangeCalendarNote, onEditingChange, vacations, allVacations, isClosed, onSaveVacation, onRemoveVacation, onSetDayClosed }) => {
+export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hovering, editing, open, onOpenPanel, onClosePanel, canEditSchedules, onChangeNote, onChangeCalendarNote, onEditingChange, vacations, allVacations, isClosed, onSaveVacation, onRemoveVacation, onSetDayClosed, onOpenQuickPlan }) => {
   const [editingVacation, setEditingVacation] = useState(null) // { assignee, vacation }
 
   // Central button: no preset assignee -> the editor shows the staff dropdown.
@@ -304,7 +314,8 @@ export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hover
     daySchedule,
     onOpenVacationPicker,
     isClosed,
-    onSetDayClosed
+    onSetDayClosed,
+    onOpenQuickPlan
   }
 
   return (

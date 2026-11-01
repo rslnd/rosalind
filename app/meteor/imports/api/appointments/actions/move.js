@@ -11,6 +11,7 @@ import { ceilToSlot } from '../methods/ceilToSlot'
 import { Schedules } from '../../schedules'
 import { daySelector, dateToDay } from '../../../util/time/day'
 import { hasRole } from '../../../util/meteor/hasRole'
+import { removeBookablesOverlapping, findOverlappingAppointment } from '../methods/bookableConflicts'
 
 export const move = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -118,20 +119,15 @@ export const move = ({ Appointments }) => {
       })
 
       if (Meteor.isServer) {
-        // delete bookables at new location
-        await Appointments.find({
-          type: 'bookable',
-          start: { $gte: newStart, $lt: newEnd },
-          end: { $gt: newStart, $lte: newEnd },
+        // delete bookables at new location (also partially overlapping ones)
+        await removeBookablesOverlapping({
+          Appointments,
           calendarId: appointment.calendarId,
-          assigneeId: newAssigneeId
-        }, { removed: true }).mapAsync(async a => {
-          await Appointments.updateAsync({_id: a._id}, { $set: {
-            removed: true,
-            removedAt: new Date(),
-            removedBy: userId,
-            note: 'Gelöscht, weil ein Termin hier hin verschoben wurde ' + appointmentId + ' \n' + (a.note || '')
-          }})
+          assigneeId: newAssigneeId,
+          start: newStart,
+          end: newEnd,
+          removedBy: userId,
+          note: 'Gelöscht, weil ein Termin hier hin verschoben wurde ' + appointmentId
         })
 
         // restore previous bookables
@@ -156,13 +152,23 @@ export const move = ({ Appointments }) => {
           // avoid double bookables being restored after moving appts around the same spot multiple times
           const currentBookable = await Appointments.findOneAsync({
             type: 'bookable',
-            start: a.start,
-            end: a.end,
+            removed: { $ne: true },
+            start: { $lt: a.end },
+            end: { $gt: a.start },
             calendarId: a.calendarId,
             assigneeId: a.assigneeId
           })
 
-          if (!block && !currentBookable) {
+          // never restore a bookable under another appointment that is (still) there
+          const occupied = await findOverlappingAppointment({
+            Appointments,
+            calendarId: a.calendarId,
+            assigneeId: a.assigneeId,
+            start: a.start,
+            end: a.end
+          })
+
+          if (!block && !currentBookable && !occupied) {
             await Appointments.insertAsync({
               type: 'bookable',
               start: a.start,

@@ -16,6 +16,7 @@ import { Users } from '../../../../api/users'
 import { prompt } from '../../../layout/Prompt'
 import { VacationEditor } from './VacationEditor'
 import { Icon } from '../../../components/Icon'
+import { QuickPlanModal } from '../../../schedules/quick/QuickPlanModal'
 
 const darkBlue = '#1e3a5f'
 
@@ -60,6 +61,18 @@ const vacationBadgeStyle = {
   verticalAlign: 'middle'
 }
 
+const menuDividerStyle = {
+  margin: '4px 0',
+  border: 0,
+  borderTop: `1px solid ${grayDisabled}`
+}
+
+// Fixed-width icon so the labels of all menu entries line up
+const MenuIcon = ({ name }) =>
+  <span style={{ display: 'inline-block', width: 22, color: '#888' }}>
+    <Icon name={name} />
+  </span>
+
 const topPaddingStyle = {
   height: 30
 }
@@ -75,7 +88,8 @@ export class HeaderRow extends React.Component {
       editing: false,
       open: false,
       changingAssignee: false,
-      vacationModal: null // { assignee, vacation }
+      vacationModal: null, // { assignee, vacation }
+      quickPlan: null // { action, assigneeIds } for the quick planning modal
     }
 
     this.handleRemoveUser = this.handleRemoveUser.bind(this)
@@ -92,6 +106,22 @@ export class HeaderRow extends React.Component {
     this.handleChangeAssigneeClick = this.handleChangeAssigneeClick.bind(this)
     this.handleChangeAssigneeFinishClick = this.handleChangeAssigneeFinishClick.bind(this)
     this.handleAddVacationClick = this.handleAddVacationClick.bind(this)
+    this.handleQuickPlanClick = this.handleQuickPlanClick.bind(this)
+    this.handleOpenDayQuickPlan = this.handleOpenDayQuickPlan.bind(this)
+  }
+
+  // Column menu: plan only this column (assignee) on this day
+  handleQuickPlanClick (action) {
+    const assigneeId = this.state.userDropdownAssigneeId
+    this.handleUserDropdownClose()
+    if (assigneeId) {
+      this.setState({ quickPlan: { action, assigneeIds: [assigneeId] } })
+    }
+  }
+
+  // Day info panel: plan the whole day
+  handleOpenDayQuickPlan () {
+    this.setState({ quickPlan: {} })
   }
 
   handleAddVacationClick () {
@@ -340,20 +370,33 @@ export class HeaderRow extends React.Component {
           transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <MenuItem onClick={this.handleToggleOverrideModeClick}>
-            Zeitraum blockieren
+            <MenuIcon name='ban' />Zeitraum blockieren
           </MenuItem>
           <MenuItem onClick={this.handleToggleOverlayModeClick}>
-            Zeitraum einfärben
+            <MenuIcon name='paint-brush' />Zeitraum einfärben
           </MenuItem>
           <MenuItem onClick={this.handleRemoveOverlayModeClick}>
-            Zeitraum-Farben entfernen
+            <MenuIcon name='eraser' />Zeitraum-Farben entfernen
           </MenuItem>
           <MenuItem onClick={this.handleChangeAssigneeClick}>
-            Person ändern
+            <MenuIcon name='exchange' />Person ändern
           </MenuItem>
           <MenuItem onClick={this.handleAddVacationClick}>
-            Urlaub eintragen
+            <MenuIcon name='umbrella' />Urlaub eintragen
           </MenuItem>
+          <hr style={menuDividerStyle} />
+          <MenuItem onClick={() => this.handleQuickPlanClick('applyDefault')}>
+            <MenuIcon name='magic' />Wochenplan anwenden
+          </MenuItem>
+          <MenuItem onClick={() => this.handleQuickPlanClick('openBookable')}>
+            <MenuIcon name='share-square-o' />Online freigeben
+          </MenuItem>
+          {this.state.hasBookables &&
+            <MenuItem onClick={() => this.handleQuickPlanClick('closeBookable')}>
+              <MenuIcon name='square-o' />Online-Freigaben entfernen
+            </MenuItem>
+          }
+          <hr style={menuDividerStyle} />
           {/* HoverTooltip corrects the body zoom (1.221) so it lands in the right
               spot, and wraps the item so the tooltip still fires over the disabled
               (pointer-events: none) MenuItem. No title when the column is empty. */}
@@ -363,13 +406,12 @@ export class HeaderRow extends React.Component {
             <MenuItem
               disabled={!this.state.canRemoveUser}
               onClick={this.handleRemoveUser}>
-              Spalte löschen
+              <MenuIcon name='trash-o' />Spalte löschen
             </MenuItem>
           </HoverTooltip>
-          <hr />
           <MenuItem
             onClick={this.handleUserDropdownClose}>
-            Schließen
+            Menü schließen
           </MenuItem>
         </Menu>
 
@@ -396,6 +438,7 @@ export class HeaderRow extends React.Component {
           onSaveVacation={onSaveVacation}
           onRemoveVacation={onRemoveVacation}
           onSetDayClosed={onSetDayClosed}
+          onOpenQuickPlan={this.handleOpenDayQuickPlan}
           hovering={this.state.hovering}
           editing={this.state.editing}
           open={this.state.open} />
@@ -410,6 +453,17 @@ export class HeaderRow extends React.Component {
               onSave={onSaveVacation}
               onRemove={onRemoveVacation}
               onClose={() => this.setState({ vacationModal: null })} />
+        }
+        {
+          this.state.quickPlan &&
+            <QuickPlanModal
+              calendar={calendar}
+              from={date.toDate ? date.toDate() : date}
+              to={date.toDate ? date.toDate() : date}
+              action={this.state.quickPlan.action}
+              assigneeIds={this.state.quickPlan.assigneeIds}
+              staffIds={assignees.filter(a => a && a._id).map(a => a._id)}
+              onClose={() => this.setState({ quickPlan: null })} />
         }
         <div style={topPaddingStyle} />
 

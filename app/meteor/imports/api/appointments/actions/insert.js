@@ -7,6 +7,7 @@ import { Comments } from '../../comments'
 import { Calendars } from '../../calendars'
 import { hasRole } from '../../../util/meteor/hasRole'
 import { callNested } from '../../../util/meteor/isInSimulation'
+import { removeBookablesOverlapping } from '../methods/bookableConflicts'
 
 export const insert = ({ Appointments }) => {
   return new ValidatedMethod({
@@ -62,19 +63,15 @@ export const insert = ({ Appointments }) => {
 
 
       if (Meteor.isServer) {
-        await Appointments.find({
-          type: 'bookable',
-          start: {$gte: restFields.start },
-          end: { $lte: restFields.end },
+        // Every bookable overlapping the new appointment, also partially
+        await removeBookablesOverlapping({
+          Appointments,
           calendarId: restFields.calendarId,
-          assigneeId: restFields.assigneeId
-        }).mapAsync(async b => {
-          await Appointments.updateAsync({ _id: b._id }, { $set: {
-            removed: true,
-            removedAt: new Date(),
-            removedBy: userId,
-            note: 'Gelöscht, weil Termin ausgemacht wurde. Termin: ' + appointmentId + ' \n' + (b.note || '')
-          }})
+          assigneeId: restFields.assigneeId,
+          start: restFields.start,
+          end: restFields.end,
+          removedBy: userId,
+          note: 'Gelöscht, weil Termin ausgemacht wurde. Termin: ' + appointmentId
         })
       }
 

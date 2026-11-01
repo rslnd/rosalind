@@ -8,6 +8,7 @@ import { upsertDefaultSchedule } from './upsertDefaultSchedule'
 import { applyDefaultSchedule } from './applyDefaultSchedule'
 import { upsertVacation } from './upsertVacation'
 import { setDayClosed } from './setDayClosed'
+import { setBookables } from './setBookables'
 
 export default ({ Schedules }) => {
   return {
@@ -19,6 +20,7 @@ export default ({ Schedules }) => {
     upsertDefaultSchedule: upsertDefaultSchedule({ Schedules }),
     applyDefaultSchedule: applyDefaultSchedule({ Schedules }),
     upsertVacation: upsertVacation({ Schedules }),
-    setDayClosed: setDayClosed({ Schedules })
+    setDayClosed: setDayClosed({ Schedules }),
+    setBookables: setBookables({ Schedules })
   }
 }

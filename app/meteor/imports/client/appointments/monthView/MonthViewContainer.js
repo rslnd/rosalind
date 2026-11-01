@@ -13,6 +13,8 @@ import { dateToDay, dayToString, isSame } from '../../../util/time/day'
 import { transformDefaultsToOverrides } from '../../../api/schedules/methods/transformDefaultsToOverrides'
 import { calculateScheduledHours } from '../../../api/schedules/methods/getScheduledHours'
 import { MonthView } from './MonthView'
+import { Meteor } from 'meteor/meteor'
+import { hasRole } from '../../../util/meteor/hasRole'
 
 const minutesBetween = (start, end) => Math.max(0, (end.getTime() - start.getTime()) / 60000)
 
@@ -221,6 +223,7 @@ const composer = (props) => {
       dayStr,
       date: dStart,
       isSunday: moment(dStart).isoWeekday() === 7,
+      isPast: moment(dEnd).isBefore(moment()),
       attendees: attendeeIds.map(uid => ({ _id: uid, name: nameShort(uid) })),
       note,
       holiday,
@@ -268,6 +271,7 @@ const composer = (props) => {
     dayData,
     staff,
     existingVacations: allVacations,
+    canQuickPlan: hasRole(Meteor.userId(), ['admin', 'schedules-edit', 'bookables-edit']),
     isReady: schedulesSub.ready() && appointmentsSub.ready(),
     basePath: 'appointments/month',
     // pass-through for embedded/overlay usage

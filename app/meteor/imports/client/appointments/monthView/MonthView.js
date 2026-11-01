@@ -5,6 +5,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { Icon } from '../../components/Icon'
 import { prompt } from '../../layout/Prompt'
 import { VacationEditor } from '../dayView/header/VacationEditor'
+import { QuickPlanModal } from '../../schedules/quick/QuickPlanModal'
 import { primary, primaryActive, warning, red, green, gray } from '../../layout/styles'
 
 // Icon with hover / active colors (inline styles can't express :hover).
@@ -71,8 +72,15 @@ const UtilizationBar = ({ value }) => (
   </div>
 )
 
-const DayActions = ({ data, onAddVacation, onToggleClosed }) => (
+const DayActions = ({ data, onAddVacation, onToggleClosed, onQuickPlan }) => (
   <div style={dayActionsStyle} className='month-day-actions'>
+    {onQuickPlan && !data.holiday && !data.isPast &&
+      <HoverIcon
+        name='magic'
+        title='Tag planen: Wochenplan anwenden, Online freigeben … (Shift+Klick auf Tage: Zeitraum auswählen)'
+        onClick={(e) => { e.stopPropagation(); onQuickPlan(data) }}
+      />
+    }
     <HoverIcon
       name='umbrella'
       title='Urlaub eintragen'
@@ -89,7 +97,7 @@ const DayActions = ({ data, onAddVacation, onToggleClosed }) => (
   </div>
 )
 
-const DayCell = ({ data, filters, onSelectDay, onAddVacation, onEditVacation, onToggleClosed }) => {
+const DayCell = ({ data, filters, onSelectDay, onAddVacation, onEditVacation, onToggleClosed, onQuickPlan, rangeState, onHover }) => {
   if (!data) { return <td style={{ ...cellStyle, background: '#f8f9f9', height: cellStyle.height }} /> }
 
   const hasWarnings = data.warnings.length >= 1
@@ -103,12 +111,13 @@ const DayCell = ({ data, filters, onSelectDay, onAddVacation, onEditVacation, on
     ...cellStyle,
     cursor: 'pointer',
     ...(data.holiday && filters.holidays ? { background: '#f9edee' } : {}),
-    ...(data.deviation && filters.deviations ? { borderLeft: `3px solid ${warning}` } : {})
+    ...(data.deviation && filters.deviations ? { borderLeft: `3px solid ${warning}` } : {}),
+    ...(rangeState ? { background: rangeState === 'anchor' ? '#cfe3f7' : '#e8f1fb', boxShadow: `inset 0 0 0 2px ${primary}` } : {})
   }
 
   return (
-    <td style={style} onClick={() => onSelectDay(data)} title='Zur Tagesansicht'>
-      <DayActions data={data} onAddVacation={onAddVacation} onToggleClosed={onToggleClosed} />
+    <td style={style} onClick={(e) => onSelectDay(data, e)} onMouseEnter={onHover ? () => onHover(data.date) : undefined} title='Zur Tagesansicht (Shift+Klick: Zeitraum zum Planen auswählen)'>
+      <DayActions data={data} onAddVacation={onAddVacation} onToggleClosed={onToggleClosed} onQuickPlan={onQuickPlan} />
 
       <div style={dayNumberStyle(data)}>
         {moment(data.date).date()}
@@ -156,7 +165,7 @@ export const MonthView = (props) => {
   const {
     calendar, monthMoment, dayData, staff, isReady, existingVacations,
     embedded, onClose, onSelectDay, onChangeMonth,
-    onSaveVacation, onRemoveVacation, onSetDayClosed
+    onSaveVacation, onRemoveVacation, onSetDayClosed, canQuickPlan
   } = props
 
   const [filters, setFilters] = useState({
@@ -171,13 +180,53 @@ export const MonthView = (props) => {
   const [vacationDay, setVacationDay] = useState(null) // day data for which to add a vacation
   const [vacationEdit, setVacationEdit] = useState(null) // { vacation, date } to edit/delete
   const [showWarnings, setShowWarnings] = useState(true)
+  const [quickPlan, setQuickPlan] = useState(null) // { from, to } for the quick planning modal
+  const [rangeAnchor, setRangeAnchor] = useState(null) // first day of a Shift+click span selection
+  const [rangeHover, setRangeHover] = useState(null)
 
   if (!calendar) { return null }
 
   const toggle = key => setFilters(f => ({ ...f, [key]: !f[key] }))
 
-  const handleSelectDay = (data) => {
+  const handleSelectDay = (data, event) => {
+    // Shift+click: select a span of days to plan (first click sets the start,
+    // second click the end and opens the quick planning modal).
+    if (event && event.shiftKey && canQuickPlan) {
+      if (!rangeAnchor) {
+        setRangeAnchor(data.date)
+      } else {
+        const [from, to] = [rangeAnchor, data.date].sort((a, b) => a - b)
+        setRangeAnchor(null)
+        setRangeHover(null)
+        setQuickPlan({ from, to })
+      }
+      return
+    }
     if (onSelectDay) { onSelectDay(moment(data.date).format('YYYY-MM-DD')) }
+  }
+
+  const handleQuickPlanDay = (data) => {
+    if (rangeAnchor) {
+      handleSelectDay(data, { shiftKey: true })
+    } else {
+      setQuickPlan({ from: data.date, to: data.date })
+    }
+  }
+
+  const handleQuickPlanMonth = () => {
+    const monthStart = monthMoment.clone().startOf('month')
+    setQuickPlan({
+      from: moment.max(monthStart, moment().startOf('day')).toDate(),
+      to: monthMoment.clone().endOf('month').toDate()
+    })
+  }
+
+  const rangeStateOf = data => {
+    if (!data || !rangeAnchor) { return null }
+    if (moment(data.date).isSame(rangeAnchor, 'day')) { return 'anchor' }
+    if (!rangeHover) { return null }
+    const [a, b] = [rangeAnchor, rangeHover].sort((x, y) => x - y)
+    return (data.date >= a && data.date <= b) ? 'inRange' : null
   }
 
   const handleAddVacation = (data) => setVacationDay(data)
@@ -234,6 +283,19 @@ export const MonthView = (props) => {
           )}
         </div>
 
+        {!canQuickPlan ? null : rangeAnchor
+          ? <span style={{ fontSize: 12, color: primary }}>
+            Ende des Zeitraums mit Shift+Klick wählen&nbsp;
+            <a style={{ cursor: 'pointer' }} onClick={() => { setRangeAnchor(null); setRangeHover(null) }}>Abbrechen</a>
+          </span>
+          : <span
+            style={{ fontSize: 12, color: primary, cursor: 'pointer', whiteSpace: 'nowrap' }}
+            title='Wochenplan anwenden oder Online-Freigaben für einen Zeitraum setzen. Tipp: Shift+Klick auf zwei Tage wählt einen Zeitraum.'
+            onClick={handleQuickPlanMonth}>
+            <Icon name='magic' /> Zeitraum planen
+          </span>
+        }
+
         {embedded &&
           <HoverIcon name='times' title='Schließen' base={primary} style={{ ...navBtnStyle, fontSize: 22 }} onClick={onClose} />
         }
@@ -283,12 +345,25 @@ export const MonthView = (props) => {
                   onAddVacation={handleAddVacation}
                   onEditVacation={handleEditVacation}
                   onToggleClosed={handleToggleClosed}
+                  onQuickPlan={canQuickPlan ? handleQuickPlanDay : null}
+                  rangeState={rangeStateOf(d)}
+                  onHover={rangeAnchor ? setRangeHover : null}
                 />
               )}
             </tr>
           )}
         </tbody>
       </table>
+
+      {quickPlan &&
+        <QuickPlanModal
+          calendar={calendar}
+          from={quickPlan.from}
+          to={quickPlan.to}
+          staffIds={staff.map(s => s._id)}
+          onClose={() => setQuickPlan(null)}
+        />
+      }
 
       {vacationDay &&
         <VacationEditor

@@ -113,7 +113,7 @@ const RemovedList = ({ appointments, canView, showAll, setShowAll, ...rest }) =>
     >
     {
       appointments.length === 0
-        ? 'Keine gelöschten Termine an diesem Tag'
+        ? <div style={{padding: 15}}>Keine gelöschten Termine an diesem Tag</div>
         : <table className='table' style={tableStyle}>
           <thead>
             <tr>

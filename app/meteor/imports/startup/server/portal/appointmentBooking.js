@@ -8,6 +8,7 @@ import sortBy from 'lodash/sortBy'
 import { __ } from '../../../i18n'
 import { fullNameWithTitle, lastNameWithTitle } from '../../../api/users/methods'
 import quarter from '../../../util/time/quarter'
+import { overlapsAnyAppointment, findOverlappingAppointment, removeBookablesOverlapping } from '../../../api/appointments/methods/bookableConflicts'
 
 const formatDay = (s) =>
   moment.tz(s, 'Europe/Vienna').format('dd., D.M.')
@@ -45,15 +46,36 @@ export const getBookables = async () => {
   const fields = {
     _id: 1,
     start: 1,
+    end: 1,
     calendarId: 1,
     assigneeId: 1
   }
 
-  const appointments = await Appointments.find(selector, {
+  const allBookables = await Appointments.find(selector, {
     limit: 6500, // ~60 per day for 3 months
     fields,
     sort: { start: 1 }
   }).fetchAsync()
+
+  // Never offer a bookable that lies over a real appointment of that column
+  const realAppointments = allBookables.length === 0 ? [] : await Appointments.find({
+    type: { $nin: ['bookable', 'lock'] },
+    canceled: { $ne: true },
+    removed: { $ne: true },
+    assigneeId: { $ne: null },
+    start: { $lt: allBookables[allBookables.length - 1].end },
+    end: { $gt: allBookables[0].start }
+  }, { fields: { start: 1, end: 1, calendarId: 1, assigneeId: 1, type: 1 } }).fetchAsync()
+
+  const byColumn = {}
+  realAppointments.forEach(a => {
+    const key = a.calendarId + '/' + a.assigneeId
+    byColumn[key] = byColumn[key] || []
+    byColumn[key].push(a)
+  })
+
+  const appointments = allBookables.filter(b =>
+    !overlapsAnyAppointment(b, byColumn[b.calendarId + '/' + b.assigneeId] || []))
 
   const assignees = (await Users.find({}).fetchAsync()).reduce((acc, u) => ({ ...acc, [u._id]: u}))
 
@@ -188,6 +210,26 @@ export const handleAppointmentBooking = async (untrustedBody) => {
 
     const { _id, type, note, ...bookable } = existingBookable
 
+    // The slot was taken by an appointment in the meantime: refuse and drop the bookable
+    const occupiedBy = await findOverlappingAppointment({
+      Appointments,
+      calendarId: bookable.calendarId,
+      assigneeId: bookable.assigneeId,
+      start: bookable.start,
+      end: bookable.end
+    })
+    if (occupiedBy) {
+      await removeBookablesOverlapping({
+        Appointments,
+        calendarId: bookable.calendarId,
+        assigneeId: bookable.assigneeId,
+        start: occupiedBy.start,
+        end: occupiedBy.end,
+        note: 'Gelöscht, weil ein Termin hier liegt. Termin: ' + occupiedBy._id
+      })
+      throw new Error(`bookableOccupied: bookable ${bookableId} overlaps appointment ${occupiedBy._id}`)
+    }
+
     if (patientId) {
       // 2024-02-29: Max 2 bookings per quarter for same patient (any calendar or assingee)
       const allFutureAppts = await Appointments.find({
@@ -247,6 +289,16 @@ export const handleAppointmentBooking = async (untrustedBody) => {
       createdAt: new Date(),
       createdBy: null,
       patientId
+    })
+
+    // Other bookables overlapping the booked slot (eg. misaligned ones) go too
+    await removeBookablesOverlapping({
+      Appointments,
+      calendarId: bookable.calendarId,
+      assigneeId: bookable.assigneeId,
+      start: bookable.start,
+      end: bookable.end,
+      note: 'Durch Online-Buchung vom System gelöscht. Termin: ' + appointmentId
     })
 
     console.log(ltag, `created appointment ${appointmentId}`)

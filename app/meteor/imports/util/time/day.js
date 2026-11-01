@@ -79,3 +79,37 @@ export default {
   dayToDate,
   dayToSlug
 }
+
+// The server runs in UTC (moment.tz.setDefault('UTC')), but days are days of
+// the practice. These helpers work in the practice's timezone on both sides.
+export const PRACTICE_TZ = 'Europe/Vienna'
+
+// Start and end (Date) of a { year, month, day } in the practice's timezone
+export const dayBounds = (day, tz = PRACTICE_TZ) => {
+  const m = moment.tz({ year: day.year, month: day.month - 1, day: day.day }, tz)
+  return {
+    start: m.clone().startOf('day').toDate(),
+    end: m.clone().endOf('day').toDate()
+  }
+}
+
+// Days ({ year, month, day }) between two dates in the practice's timezone,
+// without Sundays (like rangeToDays)
+export const rangeToDaysInTz = ({ from, to }, tz = PRACTICE_TZ) => {
+  const days = []
+  const cursor = moment.tz(from, tz).startOf('day')
+  const end = moment.tz(to, tz)
+  while (cursor.isSameOrBefore(end) && days.length < 1000) {
+    if (cursor.day() !== 0) {
+      days.push({ year: cursor.year(), month: cursor.month() + 1, day: cursor.date() })
+    }
+    cursor.add(1, 'day')
+  }
+  return days
+}
+
+// Start of the first / end of the last day of a date range in the practice's timezone
+export const rangeBounds = ({ from, to }, tz = PRACTICE_TZ) => ({
+  start: moment.tz(from, tz).startOf('day').toDate(),
+  end: moment.tz(to, tz).endOf('day').toDate()
+})
