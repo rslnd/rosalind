@@ -210,8 +210,7 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
           </></InlineEdit>
 
           {showTagesinfoField && <>
-            <br />
-            <br />
+            <div style={{ height: 6 }} />
 
             <InlineEdit
               key={'note' + (daySchedule && daySchedule._id)}

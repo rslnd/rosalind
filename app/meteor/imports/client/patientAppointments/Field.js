@@ -13,11 +13,13 @@ const fieldStyle = {
   width: '100%'
 }
 
-export const PlainField = ({ style, ...props }) =>
+export const PlainField = React.forwardRef(({ style, ...props }, ref) =>
   <input
+    ref={ref}
     style={style ? { ...fieldStyle, ...style } : fieldStyle}
     {...props}
   />
+)
 
 class DebouncedField extends React.Component {
   constructor (props) {
