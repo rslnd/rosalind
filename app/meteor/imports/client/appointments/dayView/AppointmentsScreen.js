@@ -328,7 +328,7 @@ export class AppointmentsScreen extends React.Component {
           </Modal.Body>
         </Modal>
 
-        {hasRole(Meteor.userId(), ['admin', 'schedules-dsl']) &&
+        {hasRole(Meteor.userId(), ['schedules-dsl']) &&
           <ScheduleDSLEditor
             calendarId={calendar._id}
             calendar={calendar}
