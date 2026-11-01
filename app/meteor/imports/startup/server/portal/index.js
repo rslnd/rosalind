@@ -75,17 +75,17 @@ export default () => {
           res.writeHead(200, {
             'Content-Type': 'text/html'
           })
-          return res.end(Assets.getText('login.html'))
+          return res.end(await Assets.getTextAsync('login.html'))
         } else if (req.url.endsWith('/media')) {
           res.writeHead(200, {
             'Content-Type': 'text/html'
           })
-          return res.end(Assets.getText('media.html'))
+          return res.end(await Assets.getTextAsync('media.html'))
         } else {
           res.writeHead(200, {
             'Content-Type': 'text/html'
           })
-          return res.end(Assets.getText('portal.html'))
+          return res.end(await Assets.getTextAsync('portal.html'))
         }
       case 'POST':
         // book appointment
