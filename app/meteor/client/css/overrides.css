@@ -285,3 +285,9 @@ input.placeholder-light::placeholder {
   font-size: 80%;
   padding-left: 2px;
 }
+
+/* Larger close X in the vacation editor modal */
+.vacation-editor-header .close {
+  font-size: 32px;
+  line-height: 0.8;
+}

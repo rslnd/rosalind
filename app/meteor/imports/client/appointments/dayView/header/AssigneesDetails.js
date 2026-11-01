@@ -42,25 +42,39 @@ const cellStyle = {
   paddingBottom: 6
 }
 
-const addInfoButtonStyle = {
+const panelButtonStyle = {
   textTransform: 'none',
   fontSize: 11,
   lineHeight: 1.4,
-  color: grayActive,
-  borderColor: gray,
   backgroundColor: background,
   padding: '0px 6px',
   minWidth: 0,
+  justifyContent: 'flex-start',
   pointerEvents: 'auto'
 }
 
+// Text field look for the panel's notes while editing: light gray box with
+// border and rounded corners around label and input.
+const editingBoxStyle = {
+  display: 'block',
+  boxSizing: 'border-box',
+  background: '#f7f8fa',
+  border: '1px solid #d2d6de',
+  borderRadius: 6,
+  padding: '4px 10px 6px'
+}
+
+// Centered box; the buttons inside share one width and are left-aligned.
+const panelButtonsOuterStyle = { display: 'flex', justifyContent: 'center', marginTop: 4 }
+const panelButtonsStyle = { display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch', gap: 4 }
+
 // MUI Button styled via inline style can't express :hover/:active, so track the
 // state manually and swap to the primary colors on hover / press.
-const AddInfoButton = ({ onClick }) => {
+const PanelButton = ({ onClick, color: baseColor = grayActive, borderColor: baseBorderColor = gray, children }) => {
   const [hover, setHover] = useState(false)
   const [active, setActive] = useState(false)
-  const color = active ? primaryActive : (hover ? primary : grayActive)
-  const borderColor = active ? primaryActive : (hover ? primary : gray)
+  const color = active ? primaryActive : (hover ? primary : baseColor)
+  const borderColor = active ? primaryActive : (hover ? primary : baseBorderColor)
 
   return (
     <Button
@@ -71,8 +85,8 @@ const AddInfoButton = ({ onClick }) => {
       onMouseLeave={() => { setHover(false); setActive(false) }}
       onMouseDown={() => setActive(true)}
       onMouseUp={() => setActive(false)}
-      style={{ ...addInfoButtonStyle, color, borderColor }}>
-      <Icon name='plus' />&nbsp;Info hinzufügen
+      style={{ ...panelButtonStyle, color, borderColor }}>
+      {children}
     </Button>
   )
 }
@@ -80,21 +94,10 @@ const AddInfoButton = ({ onClick }) => {
 const relevantCellStyle = {
   background,
   borderBottom: '1px solid #d2d6de',
+  borderLeft: '1px solid #d2d6de',
+  borderRight: '1px solid #d2d6de',
   pointerEvents: 'auto'
 }
-
-const dayClosedButtonStyle = (isClosed) => ({
-  textTransform: 'none',
-  fontSize: 11,
-  lineHeight: 1.4,
-  color: isClosed ? red : grayActive,
-  borderColor: isClosed ? red : gray,
-  backgroundColor: background,
-  padding: '0px 6px',
-  minWidth: 0,
-  marginTop: 4,
-  pointerEvents: 'auto'
-})
 
 export const BreakLines = ({ children, placeholder, isImportant = false }) =>
   (children && children.length >= 1)
@@ -121,11 +124,33 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
   // leftover, no longer editable Details note), so it stays visible whenever the
   // Tagesinfo is empty.
   const hasTagesinfo = !!(daySchedule && daySchedule.note)
+  const hasCalendarNote = !!(calendar && calendar.note)
   const panelRef = useRef(null)
+  const buttonsRef = useRef(null)
   // Expand the notes panel when editing, when opened via the "Info hinzufügen"
   // button, or on hover – for editors only when a note already exists; an empty
   // note is opened explicitly via the button so the button stays clickable.
   const isExpanded = editing || open || (hovering && (hasDayNote || !canEditSchedules))
+
+  // Field to start editing right away when the panel is opened via one of the
+  // "… hinzufügen" buttons ('note' | 'calendarNote').
+  const [focusField, setFocusField] = useState(null)
+  useEffect(() => {
+    if (!isExpanded) { setFocusField(null) }
+  }, [isExpanded])
+  const openPanelAt = (field) => {
+    setFocusField(field)
+    onOpenPanel()
+  }
+
+  // An empty Tagesinfo is offered via the "Tagesinfo" button (aligned with the
+  // other panel buttons); the field itself only shows once it has content or
+  // while it is being edited.
+  const showTagesinfoField = hasTagesinfo || focusField === 'note'
+  const handleNoteEditingChange = (isEditing) => {
+    if (!isEditing && focusField === 'note') { setFocusField(null) }
+    onEditingChange(isEditing)
+  }
 
   // While opened via "Info hinzufügen", a click anywhere outside the panel
   // closes it again. An active edit is ended by the field's own submitOnBlur.
@@ -133,6 +158,8 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
   useEffect(() => {
     if (!isPanelCell || !onClosePanel) { return }
     const handleMouseDown = (e) => {
+      // The panel buttons (e.g. "Tagesinfo") act on the open panel themselves
+      if (buttonsRef.current && buttonsRef.current.contains(e.target)) { return }
       if (panelRef.current && !panelRef.current.contains(e.target)) {
         onClosePanel()
       }
@@ -151,7 +178,7 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
   // non-editing state), mirroring the calendar note's CalendarNoteLabel.
   const tagesinfoLabel = (
     <div style={{ marginTop: 4, marginBottom: 4 }}>
-      <LabelButton>Tagesinfo</LabelButton>
+      <LabelButton plain>Tagesinfo</LabelButton>
     </div>
   )
 
@@ -160,25 +187,6 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
     ? <div ref={panelRef} style={{ width: '100%' }}>
       {
         isExpanded && canEditSchedules && <div>
-          <InlineEdit
-            key={'note' + (daySchedule && daySchedule._id)}
-            value={(daySchedule && daySchedule.note) || ''}
-            rows={1}
-            rowsMax={10}
-            fullWidth
-            submitOnBlur
-            submitOnEnter
-            onEditingChange={onEditingChange}
-            editingHeader={tagesinfoLabel}
-            onChange={note => onChangeNote({ ...(daySchedule || {}), note })}
-          ><>
-            {tagesinfoLabel}
-            <BreakLines>{daySchedule && daySchedule.note}</BreakLines>
-          </></InlineEdit>
-
-          <br />
-          <br />
-
           {/* Calendar note ("Wichtige Information") – shown on every day.
               The label text doubles as the click target to start editing. */}
           <InlineEdit
@@ -191,12 +199,39 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
             submitOnBlur
             submitOnEnter
             onEditingChange={onEditingChange}
-            editingHeader={<div style={{ marginBottom: 4 }}><CalendarNoteLabel /></div>}
+            startEditing={focusField === 'calendarNote'}
+            editingBoxStyle={editingBoxStyle}
+            disableUnderline
+            editingHeader={<div style={{ marginBottom: 4 }}><CalendarNoteLabel plain={hasCalendarNote} /></div>}
             onChange={note => onChangeCalendarNote && onChangeCalendarNote(note)}
           ><>
-            <div style={{ marginBottom: 4 }}><CalendarNoteLabel /></div>
+            <div style={{ marginBottom: 4 }}><CalendarNoteLabel plain={hasCalendarNote} /></div>
             <BreakLines>{calendar && calendar.note}</BreakLines>
           </></InlineEdit>
+
+          {showTagesinfoField && <>
+            <br />
+            <br />
+
+            <InlineEdit
+              key={'note' + (daySchedule && daySchedule._id)}
+              value={(daySchedule && daySchedule.note) || ''}
+              rows={1}
+              rowsMax={10}
+              fullWidth
+              submitOnBlur
+              submitOnEnter
+              onEditingChange={handleNoteEditingChange}
+              startEditing={focusField === 'note'}
+              editingBoxStyle={editingBoxStyle}
+              disableUnderline
+              editingHeader={<div style={{ marginBottom: 4 }}><LabelButton plain>Tagesinfo</LabelButton></div>}
+              onChange={note => onChangeNote({ ...(daySchedule || {}), note })}
+            ><>
+              {tagesinfoLabel}
+              <BreakLines>{daySchedule && daySchedule.note}</BreakLines>
+            </></InlineEdit>
+          </>}
 
           {/* Details UI disabled (not deleted) – re-enable when needed
           <br />
@@ -233,11 +268,6 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
           <BreakLines>{daySchedule.note}</BreakLines>
         </div>
       }
-      {
-        !isExpanded && canEditSchedules && !hasTagesinfo && <div>
-          <AddInfoButton onClick={onOpenPanel} />
-        </div>
-      }
     </div>
     : null
 
@@ -245,22 +275,32 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
     { dayNote }
     {
       isDayNoteColumn && canEditSchedules &&
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <Button
-            size='small'
-            variant='outlined'
-            style={{ ...addInfoButtonStyle, marginTop: 4 }}
-            onClick={onOpenVacationPicker}>
-            <Icon name='umbrella' />&nbsp;Urlaub eintragen
-          </Button>
-          <Button
-            size='small'
-            variant='outlined'
-            style={dayClosedButtonStyle(isClosed)}
-            onClick={() => onSetDayClosed(!isClosed)}>
-            <Icon name={isClosed ? 'lock' : 'unlock'} />&nbsp;
-            {isClosed ? 'Praxis geschlossen' : 'Als geschlossen markieren'}
-          </Button>
+        <div style={panelButtonsOuterStyle}>
+          <div ref={buttonsRef} style={panelButtonsStyle}>
+            {/* Always shown: the calendar note is usually already set (it is
+                shown on every day), so offer editing it as well. */}
+            {!isExpanded &&
+              <PanelButton onClick={() => openPanelAt('calendarNote')}>
+                <Icon name={hasCalendarNote ? 'pencil' : 'plus'} />&nbsp;
+                Wichtige Info
+              </PanelButton>
+            }
+            {!showTagesinfoField &&
+              <PanelButton onClick={() => openPanelAt('note')}>
+                <Icon name='plus' />&nbsp;Tagesinfo
+              </PanelButton>
+            }
+            <PanelButton onClick={onOpenVacationPicker}>
+              <Icon name='umbrella' />&nbsp;Urlaub eintragen
+            </PanelButton>
+            <PanelButton
+              color={isClosed ? red : grayActive}
+              borderColor={isClosed ? red : gray}
+              onClick={() => onSetDayClosed(!isClosed)}>
+              <Icon name={isClosed ? 'lock' : 'unlock'} />&nbsp;
+              {isClosed ? 'Praxis geschlossen' : 'Als geschlossen markieren'}
+            </PanelButton>
+          </div>
         </div>
     }
   </div>

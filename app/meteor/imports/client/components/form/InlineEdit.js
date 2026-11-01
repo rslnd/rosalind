@@ -26,7 +26,8 @@ export class InlineEdit extends React.Component {
 
     this.state = {
       hovering: false,
-      editing: false,
+      // startEditing: open directly in edit mode when mounted
+      editing: !!this.props.startEditing,
       value
     }
 
@@ -38,6 +39,12 @@ export class InlineEdit extends React.Component {
     this.handleCancel = this.handleCancel.bind(this)
     this.handleBlur = this.handleBlur.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
+  componentDidMount () {
+    if (this.state.editing && this.props.onEditingChange) {
+      this.props.onEditingChange(true)
+    }
   }
 
   componentDidUpdate (prevProps) {
@@ -192,7 +199,8 @@ export class InlineEdit extends React.Component {
         ))) || (this.props.hidePlaceholder ? null : this.props.placeholder)}
       </span>
     } else {
-      return <span style={spanStyle} onMouseLeave={this.handleMouseLeave}>
+      // editingBoxStyle: optional box around header + field while editing
+      return <span style={{ ...spanStyle, ...(this.props.editingBoxStyle || {}) }} onMouseLeave={this.handleMouseLeave}>
         {this.props.editingHeader}
         <form onSubmit={this.handleAccept}>
           <TextField
@@ -214,6 +222,7 @@ export class InlineEdit extends React.Component {
             placeholder={this.props.placeholder}
             name={this.props.label}
             label={this.props.label}
+            InputProps={this.props.disableUnderline ? { disableUnderline: true } : undefined}
           />
 
           {

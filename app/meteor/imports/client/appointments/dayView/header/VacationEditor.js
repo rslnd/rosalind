@@ -171,7 +171,7 @@ export const VacationEditor = ({ assignee, staff, date, vacation, existingVacati
     // when opened from there.
     <Modal show enforceFocus={false} onHide={onClose} bsSize='large' style={{ zIndex: 1300 }}
       backdropStyle={{ zIndex: 1299 }}>
-      <Modal.Header>
+      <Modal.Header closeButton className='vacation-editor-header'>
         <Modal.Title>
           Urlaub / Abwesenheit – {title}
         </Modal.Title>
@@ -260,7 +260,7 @@ export const VacationEditor = ({ assignee, staff, date, vacation, existingVacati
               <div style={saveTooltipStyle}>{disabledReason}</div>
             }
             <Button color='primary' disabled={saveDisabled} onClick={handleSave}>
-              <Icon name='cog' spin={saving} /> {__('ui.save')}
+              <Icon name='cog' spin={saving} />&nbsp;&nbsp;{__('ui.save')}
             </Button>
           </span>
         </div>

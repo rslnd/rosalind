@@ -12,7 +12,7 @@ const iconStyle = (color) => ({
 
 const infoText = 'Wird an jedem Tag angezeigt. Infotext befindet sich am oberen Seitenrand und färbt sich mit Rufzeichen rot.'
 
-export const CalendarNoteLabel = () => {
+export const CalendarNoteLabel = ({ plain }) => {
   const [hover, setHover] = useState(false)
   const color = hover ? primary : darkGray
 
@@ -20,7 +20,7 @@ export const CalendarNoteLabel = () => {
     <span>
       {/* Do not steal focus from the text field while editing, so a click on
           the heading does not close the field */}
-      <LabelButton onMouseDown={e => e.preventDefault()}>
+      <LabelButton plain={plain} onMouseDown={e => e.preventDefault()}>
         Wichtige Information
       </LabelButton>
       {/* Custom (non-native) tooltip that shows the info text on hover.
