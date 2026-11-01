@@ -60,7 +60,7 @@ const dayNumberStyle = (data) => ({
 })
 
 const UtilizationBar = ({ value }) => (
-  <div title={`Auslastung ${Math.round(value * 100)}%`} style={{ marginTop: 3 }}>
+  <div title={`Auslastung ${Math.round(value * 100)}%`} style={utilizationBarStyle}>
     <div style={{ height: 5, background: '#e5e7eb', borderRadius: 2, overflow: 'hidden' }}>
       <div style={{
         width: `${Math.round(value * 100)}%`,
@@ -112,6 +112,8 @@ const DayCell = ({ data, filters, onSelectDay, onAddVacation, onEditVacation, on
     cursor: 'pointer',
     ...(data.holiday && filters.holidays ? { background: '#f9edee' } : {}),
     ...(data.deviation && filters.deviations ? { borderLeft: `3px solid ${warning}` } : {}),
+    // Keep room for the bottom-aligned utilization bar.
+    ...(filters.utilization && data.utilization !== null ? { paddingBottom: 26 } : {}),
     ...(rangeState ? { background: rangeState === 'anchor' ? '#cfe3f7' : '#e8f1fb', boxShadow: `inset 0 0 0 2px ${primary}` } : {})
   }
 
@@ -430,6 +432,9 @@ const warningItemStyle = {
 }
 const vacationChip = {
   color: '#6E5221', background: '#fff3cd', borderRadius: 3, padding: '1px 3px', marginTop: 2
+}
+const utilizationBarStyle = {
+  position: 'absolute', left: 4, right: 4, bottom: 4
 }
 const dayActionsStyle = {
   position: 'absolute', top: 2, right: 2, display: 'flex', gap: 6, fontSize: 13

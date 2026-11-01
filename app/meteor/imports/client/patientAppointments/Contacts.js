@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import debounce from 'lodash/debounce'
 import isEqual from 'lodash/isEqual'
 import Alert from 'react-s-alert'
@@ -23,7 +23,8 @@ export class Contacts extends React.Component {
     super(props)
 
     this.state = {
-      tempContacts: null
+      tempContacts: null,
+      focusRequest: null
     }
 
     this.setTempContacts = this.setTempContacts.bind(this)
@@ -34,7 +35,7 @@ export class Contacts extends React.Component {
   // Reset state on props change
   componentDidUpdate(prevProps) {
     if (prevProps._id !== this.props._id) {
-      this.setState({ tempContacts: null })
+      this.setState({ tempContacts: null, focusRequest: null })
     }
 
     // BUG: When 2+ users edit the same contacts at the same time,
@@ -56,9 +57,10 @@ export class Contacts extends React.Component {
     })
   }
 
-  setTempContacts(tempContacts, { persist = true } = {}) {
+  setTempContacts(tempContacts, { persist = true, focusI = null } = {}) {
     this.setState({
-      tempContacts: tempContacts.map((c, i) => ({ ...c, i }))
+      tempContacts: tempContacts.map((c, i) => ({ ...c, i })),
+      focusRequest: focusI === null ? null : { i: focusI, at: Date.now() }
     })
     if (persist) {
       this.debouncedPersist()
@@ -66,7 +68,7 @@ export class Contacts extends React.Component {
   }
 
   render() {
-    const { tempContacts } = this.state
+    const { tempContacts, focusRequest } = this.state
     const contacts = this.props.contacts || []
 
     const channels = ['Phone', 'Email']
@@ -81,6 +83,7 @@ export class Contacts extends React.Component {
     const props = {
       tempContacts,
       allContacts,
+      focusRequest,
       persist: this.persist,
       setTempContacts: this.setTempContacts
     }
@@ -107,9 +110,17 @@ const ContactsList = compose(
     handleAdd: props => (i, channel) => e => props.setTempContacts([
       newContact(channel),
       ...(props.tempContacts || props.allContacts)
-    ], { persist: false }),
+    ], { persist: false, focusI: 0 }),
     handleRemove: props => i => e => props.setTempContacts(
       (props.tempContacts || props.allContacts).filter(c => c.i !== i)
+    ),
+    // Last remaining contact of a channel can't be removed, only reset
+    handleReset: props => i => e => props.setTempContacts(
+      (props.tempContacts || props.allContacts).map(c =>
+        c.i === i
+          ? { ...newContact(c.channel), i }
+          : c
+      )
     ),
     handleChange: props => i => e => props.setTempContacts(
       (props.tempContacts || props.allContacts).map(c =>
@@ -126,15 +137,20 @@ const ContactsList = compose(
       )
     )
   })
-)(({ contacts, handleAdd, handleRemove, handleChange, handleChangeConsent }) =>
+)(({ contacts, focusRequest, handleAdd, handleRemove, handleReset, handleChange, handleChangeConsent }) =>
   <div style={listStyle}>
     {contacts.map((c, ix) =>
       <Contact
         key={c.i}
         onAdd={(ix === 0 && handleAdd(c.i, c.channel))}
-        onRemove={handleRemove(c.i)}
+        onRemove={
+          (c.hasNone || c.noConsent)
+            ? (contacts.length > 1 ? handleRemove(c.i) : handleReset(c.i))
+            : (!c.value && contacts.length > 1 && handleRemove(c.i))
+        }
         onChange={handleChange(c.i)}
         onChangeConsent={handleChangeConsent(c.i)}
+        focusAt={(focusRequest && focusRequest.i === c.i) ? focusRequest.at : null}
         {...c}
       />
     )}
@@ -146,15 +162,25 @@ const listStyle = {
   marginBottom: 8
 }
 
-const Contact = ({ channel, onChange, onChangeConsent, value, noConsent, hasNone, ...rest }) =>
-  <div>
+const Contact = ({ channel, onChange, onChangeConsent, value, noConsent, hasNone, focusAt, ...rest }) => {
+  const inputRef = useRef()
+
+  // Rows are keyed by index, so a newly added row may reuse an existing
+  // element and the native autoFocus attribute would not fire
+  useEffect(() => {
+    if (focusAt && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [focusAt])
+
+  return <div>
     <div style={rowStyle}>
-      <Icon name={icon(channel)} style={channelIconStyle} />
+      <Icon name={icon(channel)} style={channelIconStyle} title={label(channel)} />
       {
         (hasNone || noConsent)
           ? <Nope hasNone={hasNone} noConsent={noConsent} />
           : <>
-            <PlainField value={value} onChange={onChange} />
+            <PlainField ref={inputRef} value={value} onChange={onChange} title={label(channel)} />
             {
               value && channel === 'Phone' &&
               <EnlargeText iconOnly style={zoomIconStyle}>
@@ -170,6 +196,7 @@ const Contact = ({ channel, onChange, onChangeConsent, value, noConsent, hasNone
       <Consent onChangeConsent={onChangeConsent} />
     }
   </div>
+}
 
 const zoomIconStyle = {
   opacity: 0.5,
@@ -195,9 +222,18 @@ const icon = channel =>
     ? 'phone'
     : 'envelope-open-o'
 
+const label = channel =>
+  channel === 'Phone'
+    ? 'Telefonnummer'
+    : 'E-Mail'
+
 const Actions = ({ onAdd, onRemove }) =>
   <div style={actionsStyle}>
-    <Button style={buttonRemoveStyle} onClick={onRemove}><Icon name='minus' style={buttonIconStyle} /></Button>
+    {
+      onRemove
+        ? <Button style={buttonRemoveStyle} onClick={onRemove}><Icon name='minus' style={buttonIconStyle} /></Button>
+        : <div style={buttonRemoveStyle} />
+    }
     {
       onAdd
         ? <Button style={buttonAddStyle} onClick={onAdd}><Icon name='plus' style={buttonIconStyle} /></Button>

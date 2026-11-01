@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { background, primary, primaryActive } from '../layout/styles'
+import { background, darkGray, primary, primaryActive } from '../layout/styles'
 
 // A clickable label styled as a prominent outlined button so it clearly reads as
 // clickable. Rendered as a span (not a MUI Button) so a click bubbles up to the
@@ -18,13 +18,28 @@ const labelButtonBaseStyle = {
   userSelect: 'none'
 }
 
-export const LabelButton = ({ children, style, onMouseDown }) => {
+// Plain gray label (no button look), used once the field already has content.
+const plainLabelStyle = {
+  display: 'inline-block',
+  fontSize: 13,
+  fontWeight: 600,
+  lineHeight: 1.4,
+  color: darkGray,
+  cursor: 'pointer',
+  userSelect: 'none'
+}
+
+export const LabelButton = ({ children, style, onMouseDown, plain }) => {
   const [hover, setHover] = useState(false)
   const [active, setActive] = useState(false)
 
   const color = active ? '#fff' : (hover ? primaryActive : primary)
   const borderColor = active ? primaryActive : (hover ? primaryActive : primary)
   const backgroundColor = active ? primaryActive : background
+
+  if (plain) {
+    return <span style={{ ...plainLabelStyle, ...style }} onMouseDown={onMouseDown}>{children}</span>
+  }
 
   return (
     <span
