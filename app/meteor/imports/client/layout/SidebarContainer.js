@@ -8,6 +8,7 @@ import { Sidebar } from './Sidebar'
 import { hasRole } from '../../util/meteor/hasRole'
 import { sumBy } from 'lodash/fp'
 import { subscribe } from '../../util/meteor/subscribe'
+import { __ } from '../../i18n'
 
 const sidebarItems = ({ history }) => {
   const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
@@ -80,10 +81,15 @@ const sidebarItems = ({ history }) => {
       name: 'schedules',
       icon: 'clock-o',
       roles: ['admin', 'schedules-edit'],
+      // open the default week of the first calendar, but keep the whole section highlighted
+      link: calendars[0] && '/schedules/default/' + calendars[0].slug,
+      linkToFirstSubItem: true,
       subItems: [
         ...calendars.map(c => ({
           name: c.slug,
-          label: c.name,
+          label: calendars.length > 1
+            ? `${__('schedules.planDefaultWeek')} (${c.name})`
+            : __('schedules.planDefaultWeek'),
           path: '/default/' + c.slug,
           slug: c.slug
         })),

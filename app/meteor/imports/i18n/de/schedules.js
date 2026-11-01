@@ -4,6 +4,7 @@ export const schedules = {
   thisDefault: 'Übliche Arbeitszeiten',
   thisDefaultEdit: 'Übliche Arbeitszeiten bearbeiten',
   thisInsert: 'Neu',
+  planDefaultWeek: 'Standardwoche planen',
   overrideCallout: {
     title: 'Abweichende Arbeitszeiten haben Vorrang',
     body: 'Wenn für einen Tag für einen Mitarbeiter eine abweichende Arbeitszeit eingetragen ist, überschreibt dieser Eintrag die übliche Arbeitszeit für diesen Tag und Mitarbeiter zur Gänze.'
