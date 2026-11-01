@@ -37,11 +37,7 @@ export const Statistics = ({ statistics }) => {
   return (
     <div>
       {/* Heute */}
-      <TodayBlock
-        today={today}
-        monthAdmitted={current.total.admitted}
-        monthNoShow={current.total.noShow}
-        monthNoShowRate={current.total.noShowRate} />
+      <TodayBlock today={today} />
 
       {/* Ordination gesamt (30 Tage) — absolute Zahlen + Anteile */}
       <Box

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Button from '@material-ui/core/Button'
 import { Icon } from '../../../components/Icon'
 import { background, highlight, important, gray, grayActive, primary, primaryActive, red } from '../../../layout/styles'
@@ -114,17 +114,32 @@ export const BreakLines = ({ children, placeholder, isImportant = false }) =>
     ))
     : (placeholder || null)
 
-const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hovering, editing, open, onOpenPanel, onChangeNote, onChangeCalendarNote, onEditingChange, isLast, onOpenVacationPicker, isClosed, onSetDayClosed }) => {
+const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hovering, editing, open, onOpenPanel, onClosePanel, onChangeNote, onChangeCalendarNote, onEditingChange, isLast, onOpenVacationPicker, isClosed, onSetDayClosed }) => {
   const isDayNoteColumn = (!assignee || (!calendar.allowUnassigned && isLast))
   const hasDayNote = (daySchedule && (daySchedule.note || daySchedule.noteDetails))
   // The "Info hinzufügen" button depends on the Tagesinfo only (not on a possibly
   // leftover, no longer editable Details note), so it stays visible whenever the
   // Tagesinfo is empty.
   const hasTagesinfo = !!(daySchedule && daySchedule.note)
+  const panelRef = useRef(null)
   // Expand the notes panel when editing, when opened via the "Info hinzufügen"
   // button, or on hover – for editors only when a note already exists; an empty
   // note is opened explicitly via the button so the button stays clickable.
   const isExpanded = editing || open || (hovering && (hasDayNote || !canEditSchedules))
+
+  // While opened via "Info hinzufügen", a click anywhere outside the panel
+  // closes it again. An active edit is ended by the field's own submitOnBlur.
+  const isPanelCell = isDayNoteColumn && open
+  useEffect(() => {
+    if (!isPanelCell || !onClosePanel) { return }
+    const handleMouseDown = (e) => {
+      if (panelRef.current && !panelRef.current.contains(e.target)) {
+        onClosePanel()
+      }
+    }
+    document.addEventListener('mousedown', handleMouseDown)
+    return () => document.removeEventListener('mousedown', handleMouseDown)
+  }, [isPanelCell, onClosePanel])
   const style = (isDayNoteColumn && (canEditSchedules || hasDayNote))
     ? { ...relevantCellStyle, ...cellStyle }
     : cellStyle
@@ -142,7 +157,7 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
 
   // Day note
   const dayNote = (isDayNoteColumn && (hasDayNote || canEditSchedules))
-    ? <div style={{ width: '100%' }}>
+    ? <div ref={panelRef} style={{ width: '100%' }}>
       {
         isExpanded && canEditSchedules && <div>
           <InlineEdit
@@ -251,7 +266,7 @@ const Cell = ({ date, calendar, daySchedule, canEditSchedules, assignee, hoverin
   </div>
 }
 
-export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hovering, editing, open, onOpenPanel, canEditSchedules, onChangeNote, onChangeCalendarNote, onEditingChange, vacations, allVacations, isClosed, onSaveVacation, onRemoveVacation, onSetDayClosed }) => {
+export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hovering, editing, open, onOpenPanel, onClosePanel, canEditSchedules, onChangeNote, onChangeCalendarNote, onEditingChange, vacations, allVacations, isClosed, onSaveVacation, onRemoveVacation, onSetDayClosed }) => {
   const [editingVacation, setEditingVacation] = useState(null) // { assignee, vacation }
 
   // Central button: no preset assignee -> the editor shows the staff dropdown.
@@ -282,6 +297,7 @@ export const AssigneesDetails = ({ date, calendar, daySchedule, assignees, hover
     onChangeCalendarNote,
     onEditingChange,
     onOpenPanel,
+    onClosePanel,
     hovering,
     editing,
     open,

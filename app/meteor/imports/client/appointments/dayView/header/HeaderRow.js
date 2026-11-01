@@ -88,6 +88,7 @@ export class HeaderRow extends React.Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this)
     this.handleEditingChange = this.handleEditingChange.bind(this)
     this.handleOpenPanel = this.handleOpenPanel.bind(this)
+    this.handleClosePanel = this.handleClosePanel.bind(this)
     this.handleChangeAssigneeClick = this.handleChangeAssigneeClick.bind(this)
     this.handleChangeAssigneeFinishClick = this.handleChangeAssigneeFinishClick.bind(this)
     this.handleAddVacationClick = this.handleAddVacationClick.bind(this)
@@ -96,7 +97,7 @@ export class HeaderRow extends React.Component {
   handleAddVacationClick () {
     const assigneeId = this.state.userDropdownAssigneeId
     if (assigneeId) {
-      const assignee = this.props.assignees.find(a => a && a._id === assigneeId) || Users.findOne({ _id: assigneeId })
+      const assignee = this.props.assignees.find(a => a && a._id === assigneeId) || Users.findOne({ _id: assigneeId }, { removed: true })
       this.handleUserDropdownClose()
       this.setState({ vacationModal: { assignee, vacation: null } })
     }
@@ -133,7 +134,8 @@ export class HeaderRow extends React.Component {
   async handleRemoveUser () {
     if (this.state.userDropdownAssigneeId) {
       const id = this.state.userDropdownAssigneeId
-      const name = Users.methods.fullNameWithTitle(Users.findOne({ _id: id }))
+      // removed: true – the column may belong to a deleted user
+      const name = Users.methods.fullNameWithTitle(Users.findOne({ _id: id }, { removed: true }))
 
       // The column has only online releases (bookables): allow deletion, but
       // warn that those releases will be removed as well.
@@ -219,6 +221,11 @@ export class HeaderRow extends React.Component {
   // "Info hinzufügen" button: open the notes panel and keep it open
   handleOpenPanel () {
     this.setState({ open: true })
+  }
+
+  // Click outside the opened panel: drop the explicit open again
+  handleClosePanel () {
+    this.setState({ open: false })
   }
 
   handleChangeAssigneeClick () {
@@ -381,6 +388,7 @@ export class HeaderRow extends React.Component {
           onChangeCalendarNote={onChangeCalendarNote}
           onEditingChange={this.handleEditingChange}
           onOpenPanel={this.handleOpenPanel}
+          onClosePanel={this.handleClosePanel}
           assignees={assignees}
           vacations={vacations}
           allVacations={allVacations}

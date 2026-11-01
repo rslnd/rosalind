@@ -73,6 +73,15 @@ h6,
   height: 100%;
 }
 
+/* Submenu chevron: AdminLTE only rotates it on .menu-open, which we never set –
+   the submenu is expanded via .active. Collapsed points down, expanded left. */
+.sidebar-menu li > a > .fa-angle-left {
+  transform: rotate(-90deg);
+}
+.sidebar-menu .active > a > .fa-angle-left {
+  transform: none;
+}
+
 .modal .box,
 .modal .box.box-widget {
   margin-bottom: -10px;
