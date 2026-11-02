@@ -10,9 +10,14 @@ import { isQuietTimeRespected } from '../../messages/methods/isQuietTimeRespecte
 import { Tags } from '../../tags'
 import { hasRole } from '../../../util/meteor/hasRole'
 
-let SMS
-if (Meteor.isServer) {
-  SMS = require('../../messages/server/channels/sms')
+// Server-only SMS channel, resolved when sending. The channel is an async
+// module (top-level await in its dependency tree): depending on load order, a
+// synchronous require() at import time returns a Promise instead of its
+// exports (production: "SMS.send is not a function"). Awaiting the require
+// result works for both.
+const loadSMS = async () => {
+  const mod = await require('../../messages/server/channels/sms')
+  return mod.SMS || mod
 }
 
 export const sendScheduled = ({ Messages }) => {
@@ -124,7 +129,7 @@ export const sendScheduled = ({ Messages }) => {
 
         switch (message.channel) {
           case 'SMS':
-            scheduledMessages.push(SMS.send(message._id))
+            scheduledMessages.push((await loadSMS()).send(message._id))
             break
           default:
             throw new Meteor.Error(500, `[Messages] sendScheduled: Unknown channel ${message.channel} of message ${message._id}`)
