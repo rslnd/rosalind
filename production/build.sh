@@ -5,7 +5,8 @@ set -e
 cd "$(dirname "$0")"
 
 echo "** Pulling base image in background"
-docker pull node:24.22.1-trixie &
+# Take the tag from the Dockerfile so the two cannot drift apart
+docker pull "$(sed -n 's/^FROM //p' Dockerfile)" &
 
 echo "** Building meteor bundle"
 
