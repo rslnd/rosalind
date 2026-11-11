@@ -6,6 +6,7 @@ import { calculateScheduledHours } from '../../schedules/methods/getScheduledHou
 import { computeScope, isOnline } from './statistics'
 import { dayCounts } from './leadTimeDistribution'
 import { headerSlots } from '../../schedules/methods/headerSlots'
+import { dayStatus } from './dayFinished'
 
 const CACHE_TTL_MS = 120 * 1000
 // Cap for the exact-day lead time (same as the patient-flow analysis)
@@ -14,7 +15,10 @@ const LEAD_CAP_DAYS = 120
 const REAL_FIELDS = {
   start: 1, end: 1, createdAt: 1, assigneeId: 1,
   privateAppointment: 1, createdViaPortal: 1,
-  admittedAt: 1, canceled: 1, canceledAt: 1, patientId: 1
+  admittedAt: 1, canceled: 1, canceledAt: 1, patientId: 1,
+  // Whether the day is finished (see dayFinished.js)
+  calendarId: 1, noShow: 1, noShowAt: 1, dismissed: 1, dismissedAt: 1,
+  treatmentStart: 1, treatmentEnd: 1
 }
 
 // Short-lived cache so the interactive reload and the PDF/e-mail render (which
@@ -53,7 +57,7 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
 
   const hiddenIds = (await Users.find({ hiddenInReports: true }, { fields: { _id: 1 } })
     .fetchAsync()).map(u => u._id)
-  const calendars = await Calendars.find({}, { fields: { _id: 1, slotSize: 1, slotSizeAppointment: 1, scheduleOffset: 1, atMinutes: 1 } }).fetchAsync()
+  const calendars = await Calendars.find({}, { fields: { _id: 1, slotSize: 1, slotSizeAppointment: 1, scheduleOffset: 1, atMinutes: 1, admittedIsTreated: 1 } }).fetchAsync()
 
   // Shared, window-independent prefetch (small collection, fetched once)
   const dayScheduleMap = {} // `${calendarId}|${dayKey}` -> daySchedule
@@ -260,9 +264,18 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
     return a.name.localeCompare(b.name, 'de')
   })
 
+  // Today's report stays a forecast until everybody is processed (or 22:00)
+  const day = dateToDay(now.toDate())
+  const calendarsById = {}
+  calendars.forEach(c => { calendarsById[c._id] = c })
+  const status = dayStatus({ appointments: todayReal, calendarsById, day })
+
   const result = {
     asOf: now.toDate(),
-    day: dateToDay(now.toDate()),
+    day,
+    dayFinished: status.finished,
+    finishedAt: status.finishedAt,
+    finishedReason: status.reason,
     forecast,
     current: { from: todayRange.from, to: todayRange.to, total: current.total },
     assignees,

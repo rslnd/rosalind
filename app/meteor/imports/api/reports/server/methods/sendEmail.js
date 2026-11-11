@@ -69,7 +69,7 @@ export const sendEmail = async (args = {}) => {
       ]
     })
 
-    Events.post('reports/sendEmail', { day })
+    Events.post('reports/sendEmail', { day, test: !!test })
   } catch (e) {
     console.error('caught sendEmail error', e)
     return false

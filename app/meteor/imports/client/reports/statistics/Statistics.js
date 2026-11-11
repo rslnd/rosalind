@@ -29,7 +29,7 @@ const badgeStyle = {
 
 const dayTitle = (date) => {
   const m = moment(date)
-  return [m.format('dd'), m.format('D. MMM YYYY')].join(' • ')
+  return [__('reports.statisticsTitle'), m.format('dd'), m.format('D. MMM YYYY')].join(' • ')
 }
 
 // Retrospective report for the selected (past) day.

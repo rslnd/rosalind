@@ -61,9 +61,12 @@ export class ReportsScreen extends React.Component {
       calendars = []
     } = this.props
 
-    // Today and future days are a forecast (planned capacity vs. bookings), past
-    // days a retrospective report of that single day.
-    const isForecast = date.isSameOrAfter(moment(), 'day')
+    // Future days are a forecast (planned capacity vs. bookings), past days a
+    // retrospective report of that single day. Today stays a forecast until the
+    // last patient is processed (or the hard end of the day), see dayFinished.js.
+    const isFuture = date.isAfter(moment(), 'day')
+    const isToday = date.isSame(moment(), 'day')
+    const isForecast = isFuture || (isToday && !(statistics && statistics.dayFinished))
 
     return (
       <div>
