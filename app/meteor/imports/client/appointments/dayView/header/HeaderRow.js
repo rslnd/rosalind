@@ -2,6 +2,7 @@ import identity from 'lodash/identity'
 import React from 'react'
 import Alert from 'react-s-alert'
 import Menu from '@material-ui/core/Menu'
+import Popover from '@material-ui/core/Popover'
 import MenuItem from '@material-ui/core/MenuItem'
 import { __ } from '../../../../i18n'
 import { HoverTooltip } from '../../../components/HoverTooltip'
@@ -17,6 +18,7 @@ import { prompt } from '../../../layout/Prompt'
 import { VacationEditor } from './VacationEditor'
 import { Icon } from '../../../components/Icon'
 import { QuickPlanModal } from '../../../schedules/quick/QuickPlanModal'
+import { columnCounts, ColumnCounts } from '../grid/columnCounts'
 
 const darkBlue = '#1e3a5f'
 
@@ -73,6 +75,12 @@ const MenuIcon = ({ name }) =>
     <Icon name={name} />
   </span>
 
+const unassignedCountsStyle = {
+  padding: '10px 16px',
+  textAlign: 'center',
+  lineHeight: 1.6
+}
+
 const topPaddingStyle = {
   height: 30
 }
@@ -84,6 +92,7 @@ export class HeaderRow extends React.Component {
     this.state = {
       userDropdownOpen: false,
       userDropdownAnchor: null,
+      unassignedCountsAnchor: null, // Einschub column header: slot/time counts popover
       hovering: false,
       editing: false,
       open: false,
@@ -312,7 +321,9 @@ export class HeaderRow extends React.Component {
       isClosed,
       onSaveVacation,
       onRemoveVacation,
-      onSetDayClosed
+      onSetDayClosed,
+      appointments = [],
+      schedules = []
     } = this.props
 
     return (
@@ -331,7 +342,9 @@ export class HeaderRow extends React.Component {
             <div
               key={assignee ? assignee._id : 'unassigned'}
               style={(assignee && assignee.onVacation) ? { ...headerCellStyle, ...headerCellVacationStyle } : headerCellStyle}
-              onClick={(event) => assignee && this.handleUserDropdownOpen({ event, assigneeId: assignee._id, canRemoveUser: !assignee.hasAppointments, hasBookables: assignee.hasBookables })}>
+              onClick={(event) => assignee
+                ? this.handleUserDropdownOpen({ event, assigneeId: assignee._id, canRemoveUser: !assignee.hasAppointments, hasBookables: assignee.hasBookables })
+                : this.setState({ unassignedCountsAnchor: event.currentTarget })}>
               {
                 assignee
                   ? (
@@ -352,13 +365,31 @@ export class HeaderRow extends React.Component {
                     </span>
                   )
                   : (
-                    calendar.unassignedLabel ||
-                  __('appointments.unassigned')
+                    <span className='pointer'>
+                      {calendar.unassignedLabel || __('appointments.unassigned')}
+                    </span>
                   )
               }
             </div>
           ))}
         </div>
+
+        <Popover
+          open={Boolean(this.state.unassignedCountsAnchor)}
+          anchorEl={this.state.unassignedCountsAnchor}
+          onClose={() => this.setState({ unassignedCountsAnchor: null })}
+          getContentAnchorEl={null}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          {
+            this.state.unassignedCountsAnchor &&
+              <div className='text-muted' style={unassignedCountsStyle}>
+                <ColumnCounts
+                  date={date}
+                  counts={columnCounts({ date, calendar, assignee: null, appointments, schedules })} />
+              </div>
+          }
+        </Popover>
 
         <Menu
           anchorEl={this.state.userDropdownAnchor}

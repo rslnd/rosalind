@@ -25,6 +25,10 @@ const Legend = ({ color, label, faded }) => (
 
 const sum = arr => (arr || []).reduce((a, b) => a + b, 0)
 
+const bookedText = (days) => days === 0
+  ? __('reports.leadBookedSameDay')
+  : __('reports.leadBookedDays', { count: days })
+
 const infoText = (percent, days) => {
   if (days === 0) { return __('reports.leadInfoSameDay', { percent }) }
   return __('reports.leadInfoDays', { percent, count: days })
@@ -55,7 +59,11 @@ export class LeadTimeDaysChart extends React.Component {
   onLeave () { if (this.state.hover) { this.setState({ hover: null }) } }
 
   render () {
-    const { cohorts = [], compare = false } = this.props
+    // labeledInfo: hover box shows the day ("x Tage vorher gebucht"), each
+    // line's booking count for that day and their sum (instead of shares)
+    // fullRange: always span the whole axis (0 … MAX_DAYS), not just up to the
+    // longest lead time in the data
+    const { cohorts = [], compare = false, labeledInfo = false, fullRange = false } = this.props
 
     // Flatten to drawable lines: each cohort's current line, plus a paler dashed
     // Vorjahr line when comparing. Keep totals for share readouts.
@@ -63,7 +71,7 @@ export class LeadTimeDaysChart extends React.Component {
     cohorts.forEach(c => {
       const cur = c.current && c.current.leadDays
       if (cur && cur.counts) {
-        lines.push({ id: `${c.id}-cur`, label: c.label, color: c.color, counts: cur.counts, max: cur.max || 0, total: sum(cur.counts), dashed: false, width: 2.5 })
+        lines.push({ id: `${c.id}-cur`, label: c.label, name: c.name || c.label, color: c.color, counts: cur.counts, max: cur.max || 0, total: sum(cur.counts), dashed: false, width: 2.5 })
       }
       if (compare && c.previous && c.previous.leadDays && c.previous.leadDays.counts) {
         const p = c.previous.leadDays
@@ -77,7 +85,7 @@ export class LeadTimeDaysChart extends React.Component {
     }
 
     const dataMax = Math.max(2, ...lines.map(l => l.max))
-    const max = Math.min(MAX_DAYS, dataMax)
+    const max = fullRange ? MAX_DAYS : Math.min(MAX_DAYS, dataMax)
     this._max = max
 
     const countAt = (arr, d) => (arr && arr[d]) || 0
@@ -101,19 +109,26 @@ export class LeadTimeDaysChart extends React.Component {
     const hover = this.state.hover
     const hoverDay = hover ? hover.day : null
 
-    // Info box: one row per line with that day's share of its own total.
+    // Info box: one row per line with that day's share of its own total, or
+    // (labeledInfo) a day header plus each line's count for that day.
     let info = null
     if (hover) {
-      const rows = lines.map((l, i) => {
-        const share = l.total > 0 ? countAt(l.counts, hoverDay) / l.total : 0
-        return {
-          color: l.color,
-          bold: !l.dashed,
-          text: i === 0 && !l.dashed
-            ? infoText(fmtPct(share), hoverDay)
-            : `${l.label}: ${fmtPct(share)}`
-        }
-      })
+      const rows = labeledInfo
+        ? [
+            { bold: true, text: bookedText(hoverDay) },
+            ...lines.map(l => ({ color: l.color, text: `${l.name}: ${countAt(l.counts, hoverDay)}` })),
+            { bold: true, text: `${__('reports.leadTotal')}: ${sum(lines.map(l => countAt(l.counts, hoverDay)))}` }
+          ]
+        : lines.map((l, i) => {
+          const share = l.total > 0 ? countAt(l.counts, hoverDay) / l.total : 0
+          return {
+            color: l.color,
+            bold: !l.dashed,
+            text: i === 0 && !l.dashed
+              ? infoText(fmtPct(share), hoverDay)
+              : `${l.label}: ${fmtPct(share)}`
+          }
+        })
       const lineH = 15
       const padY = 5
       const boxH = rows.length * lineH + padY * 2 - 3
@@ -172,8 +187,8 @@ export class LeadTimeDaysChart extends React.Component {
               <rect x={info.bx} y={info.by} width={info.boxW} height={info.boxH} rx={3} fill={HOVER_STROKE} opacity={0.94} />
               {info.rows.map((r, i) => (
                 <g key={i}>
-                  <rect x={info.bx + 7} y={info.by + info.padY + i * info.lineH + 3} width={9} height={9} rx={2} fill={r.color} />
-                  <text x={info.bx + 20} y={info.by + info.padY + i * info.lineH + 11} fontSize='11' fontWeight={r.bold ? 700 : 600} fill='#fff'>{r.text}</text>
+                  {r.color && <rect x={info.bx + 7} y={info.by + info.padY + i * info.lineH + 3} width={9} height={9} rx={2} fill={r.color} />}
+                  <text x={info.bx + (r.color ? 20 : 7)} y={info.by + info.padY + i * info.lineH + 11} fontSize='11' fontWeight={r.bold ? 700 : 600} fill='#fff'>{r.text}</text>
                 </g>
               ))}
             </g>

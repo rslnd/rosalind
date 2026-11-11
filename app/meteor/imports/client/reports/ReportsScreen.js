@@ -5,7 +5,6 @@ import { __ } from '../../i18n'
 import { Icon } from '../components/Icon'
 import { DateNavigation } from '../components/DateNavigation'
 import { PrintSettings } from './shared/PrintSettings'
-import { FooterContainer } from '../layout/FooterContainer'
 import { Loading } from '../components/Loading'
 import { Statistics } from './statistics/Statistics'
 import { Forecast } from './statistics/Forecast'
@@ -15,6 +14,31 @@ export class ReportsScreen extends React.Component {
   constructor (props) {
     super(props)
     this.handlePrint = this.handlePrint.bind(this)
+  }
+
+  // The browser prints document.title in the page header, so name the report
+  // there while it is open (and restore the practice name afterwards).
+  componentDidMount () {
+    this.originalTitle = document.title
+    this.updateTitle()
+  }
+
+  componentDidUpdate () {
+    this.updateTitle()
+  }
+
+  componentWillUnmount () {
+    document.title = this.originalTitle
+  }
+
+  updateTitle () {
+    const title = [
+      __('reports.statisticsTitle'),
+      this.props.date.format('D. MMMM YYYY'),
+      '–',
+      this.originalTitle
+    ].join(' ')
+    if (document.title !== title) { document.title = title }
   }
 
   handlePrint () {
@@ -33,7 +57,8 @@ export class ReportsScreen extends React.Component {
       statistics,
       sendEmail,
       sendEmailTest,
-      viewAppointments
+      viewAppointments,
+      calendars = []
     } = this.props
 
     // Today and future days are a forecast (planned capacity vs. bookings), past
@@ -45,7 +70,7 @@ export class ReportsScreen extends React.Component {
         <PrintSettings orientation='landscape' />
 
         <div className='content-header'>
-          <h1>
+          <h1 className='enable-select'>
             {__('reports.statisticsTitle')}
             {isForecast && <span>&nbsp;<small>{__('reports.forecastTitle')}</small></span>}
           </h1>
@@ -57,6 +82,15 @@ export class ReportsScreen extends React.Component {
             jumpMonthBackward
             jumpWeekForward
             jumpMonthForward>
+            {calendars.map(c => (
+              <Button
+                key={c._id}
+                onClick={() => viewAppointments(c.slug)}
+                title={`${__('reports.openDayView')} ${c.name}`}>
+                <Icon name={c.icon || 'calendar'} />
+                {calendars.length > 1 && <>&nbsp;{c.name}</>}
+              </Button>
+            ))}
             <Button onClick={this.handlePrint} title={__('ui.print')}><Icon name='print' /></Button>
           </DateNavigation>
         </div>
@@ -71,12 +105,7 @@ export class ReportsScreen extends React.Component {
                   : <Statistics statistics={statistics} />
               }
 
-              <FooterContainer />
-
               <div className='hide-print'>
-                <Button onClick={viewAppointments}>
-                  {__('appointments.this')}
-                </Button>
                 <Button onClick={sendEmailTest}>
                   {__('reports.statisticsTitle')} – Test-E-Mail
                 </Button>

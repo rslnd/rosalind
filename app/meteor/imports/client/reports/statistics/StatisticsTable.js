@@ -6,8 +6,8 @@ import { fmtInt, fmtNum, fmtHours, fmtPct } from './format'
 // Einschub (unassigned) is shown as its own row.
 const columns = [
   { key: 'scheduledHours', label: __('reports.scheduledHours'), fmt: fmtHours },
-  { key: 'slotsAvailable', label: __('reports.availableAppointments'), fmt: fmtInt },
   { key: 'calendarSlotUtilization', label: __('reports.slotUtilization'), fmt: fmtPct, hint: __('reports.slotUtilizationHint') },
+  { key: 'slotsAvailable', label: __('reports.availableAppointments'), fmt: fmtInt },
   { key: 'total', label: __('reports.appointmentsTotal'), fmt: fmtInt },
   { key: 'admitted', label: __('reports.kept'), fmt: fmtInt },
   { key: 'insurance', label: __('reports.insurance'), fmt: fmtInt },
@@ -26,34 +26,46 @@ const Row = ({ name, metrics, muted }) => (
   </tr>
 )
 
-export const StatisticsTable = ({ total, assignees = [] }) => (
-  <div style={{ overflowX: 'auto' }}>
-    <table className='table table-condensed' style={{ fontSize: 13 }}>
-      <thead>
-        <tr>
-          <th>{__('reports.assignee')}</th>
-          {columns.map(col => (
-            <th key={col.key} style={{ textAlign: 'right' }} title={col.hint}>{col.label}</th>
+export const StatisticsTable = ({ total, assignees = [] }) => {
+  // Practice total utilization includes the Einschub appointments (all
+  // appointments vs. available slots, like the "Auslastung" tile).
+  const totalMetrics = total && {
+    ...total,
+    calendarSlotUtilization: total.slotsAvailable > 0 ? total.total / total.slotsAvailable : null
+  }
+
+  return (
+    <div style={{ overflowX: 'auto' }}>
+      <table className='table table-condensed' style={{ fontSize: 13 }}>
+        <thead>
+          <tr>
+            <th>{__('reports.assignee')}</th>
+            {columns.map(col => (
+              <th key={col.key} style={{ textAlign: 'right' }} title={col.hint}>{col.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {assignees.map(a => (
+            <Row
+              key={a.assigneeId || a.type}
+              name={a.name}
+              metrics={a.current}
+              muted={a.type === 'einschub'}
+            />
           ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr style={{ fontWeight: 700, background: '#fafafa' }}>
-          <td>{__('reports.practiceTotal')}</td>
-          {columns.map(col => (
-            <td key={col.key} style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-              {total ? col.fmt(total[col.key]) : '–'}
-            </td>
-          ))}
-        </tr>
-        {assignees.map(a => (
-          <Row
-            key={a.assigneeId || a.type}
-            name={a.name}
-            metrics={a.current}
-            muted={a.type === 'einschub'} />
-        ))}
-      </tbody>
-    </table>
-  </div>
-)
+        </tbody>
+        <tfoot>
+          <tr style={{ fontWeight: 700, background: '#fafafa' }}>
+            <td>{__('reports.practiceTotal')}</td>
+            {columns.map(col => (
+              <td key={col.key} style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                {totalMetrics ? col.fmt(totalMetrics[col.key]) : '–'}
+              </td>
+            ))}
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  )
+}

@@ -342,6 +342,8 @@ export class AppointmentsView extends React.Component {
             daySchedule={this.props.daySchedule}
             calendar={this.props.calendar}
             assignees={this.props.assignees}
+            appointments={this.props.appointments}
+            schedules={this.props.schedules}
             onToggleOverrideMode={this.handleToggleOverrideMode}
             overrideMode={this.state.override.isOverriding} />
         </ErrorBoundary>

@@ -25,6 +25,16 @@ const binIndex = (days) => {
   return i === -1 ? BINS.length - 1 : i
 }
 
+// Exact-day distribution: { max, counts } with counts[d] = bookings made d days
+// in advance (0 … max); lead times beyond `cap` days are counted at `cap`.
+export const dayCounts = (appointments = [], cap = Infinity) => {
+  const values = appointments.map(leadDays).filter(d => d != null)
+  const max = values.length ? Math.min(cap, Math.max(...values)) : 0
+  const counts = new Array(max + 1).fill(0)
+  values.forEach(d => { counts[Math.min(d, max)] += 1 })
+  return { max, counts }
+}
+
 // Returns { counts: [...perBin], total, share: [...perBin fraction] }
 export const histogram = (appointments = []) => {
   const counts = BINS.map(() => 0)

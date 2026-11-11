@@ -1,5 +1,6 @@
 export const appointments = {
   this: 'Termine',
+  openDayReport: 'Tagesbericht zu diesem Tag',
   thisSingular: 'Termin',
   thisOpen: 'Heute bevorstehend',
   thisCalendar: 'Terminkalender',

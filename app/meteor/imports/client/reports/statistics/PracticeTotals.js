@@ -1,18 +1,19 @@
 import React from 'react'
 import { __ } from '../../../i18n'
 import { Tile, TileRow } from './Tile'
-import { fmtInt, fmtPct } from './format'
+import { fmtInt, fmtPct, fmtHours } from './format'
 
 const ratio = (v, base) => (base > 0 && v != null) ? v / base : null
 
 // Absolute number with its share underneath (muted). The share base is spelled
 // out so the percentages stay unambiguous ("der Termine" vs. "der erwarteten").
-const Value = ({ abs, pct, sub }) => (
+// `note` replaces the share line with free text.
+const Value = ({ abs, pct, sub, note }) => (
   <span>
     {fmtInt(abs)}
     <br />
     <small className='text-muted' style={{ fontSize: 12 }}>
-      {pct != null ? `${fmtPct(pct)}${sub ? ` ${sub}` : ''}` : ' '}
+      {note || (pct != null ? `${fmtPct(pct)}${sub ? ` ${sub}` : ''}` : ' ')}
     </small>
   </span>
 )
@@ -30,8 +31,10 @@ export const PracticeTotals = ({ total, einschub = 0 }) => {
   // Items are rendered left-to-right; an array is a pair kept together on one
   // line (Intern vereinbart + Online are complementary, together = all bookings).
   const items = [
-    { label: __('reports.availableAppointments'), abs: t.slotsAvailable },
-    { label: __('reports.bookedAppointments'), abs: t.slotsUsed, pct: t.calendarSlotUtilization, sub: __('reports.ofAvailable') },
+    { label: __('reports.availableAppointments'), abs: t.slotsAvailable, note: `${fmtHours(t.scheduledHours)} ${__('reports.hoursTotal')}` },
+    // All appointments of the day incl. Einschub, measured against the available
+    // slots of the doctor columns – exceeds 100 % when the day is overbooked.
+    { label: __('reports.bookedAppointments'), abs: t.total, pct: ratio(t.total, t.slotsAvailable), sub: __('reports.ofAvailable') },
     { label: __('reports.einschub'), abs: einschub, pct: ratio(einschub, base), sub: ofTotal },
     { label: __('reports.insurance'), abs: t.insurance, pct: ratio(t.insurance, base), sub: ofTotal },
     { label: __('reports.privateShort'), abs: t.private, pct: ratio(t.private, base), sub: ofTotal },
@@ -40,12 +43,13 @@ export const PracticeTotals = ({ total, einschub = 0 }) => {
       { label: __('reports.onlineAppointments'), abs: t.online, pct: ratio(t.online, base), sub: ofTotal }
     ],
     { label: __('reports.appeared'), abs: t.admitted, pct: ratio(t.admitted, expected), sub: ofExpected },
-    { label: __('reports.noShow'), abs: t.noShow, pct: ratio(t.noShow, expected), sub: ofExpected }
+    { label: __('reports.noShow'), abs: t.noShow, pct: ratio(t.noShow, expected), sub: ofExpected },
+    { label: __('reports.canceled'), abs: t.canceled, pct: ratio(t.canceled, base), sub: ofTotal }
   ]
 
   const renderTile = (tile, key) => (
     <Tile key={key} label={tile.label}>
-      <Value abs={tile.abs} pct={tile.pct} sub={tile.sub} />
+      <Value abs={tile.abs} pct={tile.pct} sub={tile.sub} note={tile.note} />
     </Tile>
   )
 

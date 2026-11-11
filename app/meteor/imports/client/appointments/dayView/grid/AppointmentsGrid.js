@@ -1,5 +1,6 @@
 import React from 'react'
-import { label, timeSlots, setTime } from './timeSlots'
+import { timeSlots } from './timeSlots'
+import { columnCounts, ColumnCounts } from './columnCounts'
 import { appointments as renderAppointments } from './appointments'
 import { timeLegend } from './timeLegend'
 import { blanks } from './blanks'
@@ -7,10 +8,6 @@ import { availabilities as renderAvailabilities } from './availabilities'
 import { schedules as renderSchedules } from './schedules'
 import { overrideOverlay } from './overrideOverlay'
 import { ErrorBoundary } from '../../../layout/ErrorBoundary'
-import moment from 'moment-timezone'
-import { sortBy } from 'lodash'
-import { Icon } from '../../../components/Icon'
-import { durationFormat } from '../../../reports/shared/durationFormat'
 import { isNoteBarVisible } from '../header/CalendarNote'
 
 // row name    | column names
@@ -69,7 +66,7 @@ export const AppointmentsGrid = ({
   return (
     <div style={style}>
       <ErrorBoundary silent name='AppG Counts'>
-        {renderCounts({ date, calendar, assignees, appointments, schedules, gridTimeSlots })}
+        {renderCounts({ date, calendar, assignees, appointments, schedules })}
       </ErrorBoundary>
 
       {renderAppointments({ calendar, slotSize, scheduleOffset, atMinutes, appointments, onClick: onAppointmentClick, move, canSeeBookables, canEditBookables })}
@@ -96,81 +93,15 @@ export const AppointmentsGrid = ({
   )
 }
 
-const renderCounts = ({ date, assignees, calendar, appointments, schedules, gridTimeSlots }) => {
-  const { showCounts, slotSize, slotSizeAppointment, allowUnassigned, atMinutes } = calendar
+const renderCounts = ({ date, assignees, calendar, appointments, schedules }) => {
+  const { showCounts, allowUnassigned } = calendar
   if (!showCounts) { return null }
-
-
-  const labeledAppointments = appointments.map(a => {
-    return {
-      ...a,
-      startLabel: label(moment(a.start)),
-      endLabel: label(moment(a.end))
-    }
-  })
-
 
   return assignees.map(assignee => {
     if (!assignee && !allowUnassigned) { return }
 
     const assigneeId = assignee ? assignee._id : null
-
-    // const scheduleOffset = slotSizeAppointment &&
-    //   (assignee && assignee.schedules && assignee.schedules.length >= 1) &&
-    //   moment(sortBy(assignee.schedules, 'end')[0].end).add(1, 'second').minute()
-
-    // const slotSizeBlank = (scheduleOffset === 0 || scheduleOffset > 0)
-    //   ? slotSizeAppointment
-    //   : slotSize
-
-    // const slots = timeSlots(slotSizeBlank, scheduleOffset, atMinutes)
-
-    const assigneeAppointments = labeledAppointments.filter(ap =>
-      (ap.assigneeId === assigneeId) &&
-      (ap.type !== 'bookable')
-    )
-
-    const admittedCount = assigneeAppointments.filter(ap => ap.admittedAt).length
-    const noShowCount = assigneeAppointments.length - admittedCount
-
-
-    const assigneeSchedules = sortBy(schedules.filter(s => (
-      (s.userId === assigneeId) &&
-      (s.calendarId === calendar._id) &&
-      !s.available &&
-      (!s.roles || s.roles.length === 0)
-    )), 'start')
-
-    const blockedMs = assigneeSchedules.reduce((acc, s) => (acc + (s.end - s.start)), 0)
-    const apptMs = assigneeAppointments.reduce((acc, a) => (acc + (a.end - a.start)), 0)
-
-    const wholeDayMs = assigneeSchedules.length >= 2
-      ? (assigneeSchedules[assigneeSchedules.length - 1].end - assigneeSchedules[0].start)
-      : ((22 - 7.5 - 1) * 60 * 60 * 1000)
-
-    const wholeDayHrs = durationFormat(wholeDayMs - blockedMs, 'ms')
-    const freeHrs =  durationFormat(wholeDayMs - blockedMs - apptMs, 'ms')
-
-    // Slot counts: honor slot size and atMinutes, matching the bookable "blanks".
-    // A slot is available when it is not inside a blocking schedule, and free
-    // when it is additionally not covered by a (non-bookable) appointment.
-    const scheduleOffset = slotSizeAppointment &&
-      (assignee && assignee.schedules && assignee.schedules.length >= 1) &&
-      moment(sortBy(assignee.schedules, 'end')[0].end).add(1, 'second').minute()
-
-    const slotSizeBlank = (scheduleOffset === 0 || scheduleOffset > 0)
-      ? slotSizeAppointment
-      : (slotSize || 5)
-
-    const slotTimes = timeSlots(slotSizeBlank, scheduleOffset, atMinutes)
-      .map(l => setTime(l)(moment(date)).toDate())
-
-    const isBlocked = t => assigneeSchedules.some(s => (t >= s.start && t < s.end))
-    const isOccupied = t => assigneeAppointments.some(a => (t >= a.start && t < a.end))
-
-    const availableSlots = slotTimes.filter(t => !isBlocked(t))
-    const totalSlots = availableSlots.length
-    const freeSlots = availableSlots.filter(t => !isOccupied(t)).length
+    const counts = columnCounts({ date, calendar, assignee, appointments, schedules })
 
     const text = ''
 
@@ -187,26 +118,7 @@ const renderCounts = ({ date, assignees, calendar, appointments, schedules, grid
     }
     return (
       <div key={assigneeId || 'unassigned'} style={style} className='enable-select text-muted'>
-        <span>
-          {(assigneeId &&
-            <>{freeHrs} frei von {wholeDayHrs} <br/></>)}
-
-          {(assigneeId &&
-            <><b>{freeSlots}</b> frei von {totalSlots} Slots <br/></>)}
-
-
-          {
-            moment().isSameOrAfter(date, 'day')
-            ? <>
-                <span title={`${admittedCount} PatientInnen erschienen`} style={{ cursor: 'default' }}>{admittedCount} <Icon name="check" /></span>
-                &emsp;
-                <span title={`${noShowCount} PatientInnen nicht erschienen`} style={{ cursor: 'default' }}>{noShowCount} <Icon name="times" /></span>
-              </>
-            : <span title={`${admittedCount + noShowCount} belegte Slots`} style={{ cursor: 'default' }}>{admittedCount + noShowCount} <Icon name="user" /></span>
-          }
-
-
-        </span>
+        <ColumnCounts date={date} counts={counts} withFree={!!assigneeId} />
         <br />
         {text}
 

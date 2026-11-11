@@ -12,6 +12,8 @@ import { dayToDate } from '../../util/time/day'
 import { ReportsScreen } from './ReportsScreen'
 import { withPromise } from '../components/withPromise'
 import { call } from '../../util/meteor/call'
+import { Meteor } from 'meteor/meteor'
+import { hasRole } from '../../util/meteor/hasRole'
 
 // Only stable primitives/plain objects reach withPromise, so fetches re-run on
 // date change only (deep-equal props do not refetch; functions are ignored).
@@ -33,8 +35,13 @@ const namesComposer = (props) => {
   const nameById = fromPairs(users.map(u => [u._id, Users.methods.fullNameWithTitle(u)]))
   const usernameById = fromPairs(users.map(u => [u._id, u.username]))
 
+  // Calendars this user may open, in sidebar order (for the links to the day view)
+  const calendars = Calendars.find({}, { sort: { order: 1 } }).fetch()
+    .filter(c => hasRole(Meteor.userId(), [`calendar-${c.slug}`, 'calendars']))
+
   return {
     ...props,
+    calendars,
     mapUserIdToName: id => nameById[id],
     mapUserIdToUsername: id => usernameById[id]
   }
@@ -66,8 +73,8 @@ const withActions = (props) => {
   return {
     ...props,
     date: moment(slug).endOf('day'),
-    viewAppointments () {
-      props.history.push(`/appointments/${slug}`)
+    viewAppointments (calendarSlug) {
+      props.history.push(`/appointments/${calendarSlug}/${slug}`)
     },
     sendEmail () {
       call('reports/sendEmail', { day })

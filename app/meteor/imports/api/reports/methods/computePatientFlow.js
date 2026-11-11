@@ -1,6 +1,6 @@
 import moment from 'moment-timezone'
 import { isCanceled, isNoShow, isKept, isOnline, isPrivate } from './statistics'
-import { histogram, leadDays as leadDaysOf } from './leadTimeDistribution'
+import { histogram, dayCounts, leadDays as leadDaysOf } from './leadTimeDistribution'
 
 // Cap the exact-day lead-time axis so a single far-out booking can't stretch it.
 const LEAD_CAP_DAYS = 120
@@ -76,10 +76,7 @@ export const aggregate = (appointments = [], { now = new Date() } = {}) => {
   // Exact-day lead-time distribution for online appointments (counts per day,
   // 0 … max), for the day-resolution lead-time line chart.
   const onlineAppointments = appointments.filter(isOnline)
-  const leadValues = onlineAppointments.map(leadDaysOf).filter(d => d != null)
-  const leadMax = leadValues.length ? Math.min(LEAD_CAP_DAYS, Math.max(...leadValues)) : 0
-  const leadCounts = new Array(leadMax + 1).fill(0)
-  leadValues.forEach(d => { leadCounts[Math.min(d, leadMax)] += 1 })
+  const { max: leadMax, counts: leadCounts } = dayCounts(onlineAppointments, LEAD_CAP_DAYS)
 
   return {
     total,

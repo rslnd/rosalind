@@ -4,10 +4,12 @@ import { rangeToDays, dateToDay } from '../../../util/time/day'
 import { fullNameWithTitle } from '../../users/methods/name'
 import { calculateScheduledHours } from '../../schedules/methods/getScheduledHours'
 import { computeScope, isOnline } from './statistics'
-import { histogram, BINS } from './leadTimeDistribution'
+import { dayCounts } from './leadTimeDistribution'
 import { headerSlots } from '../../schedules/methods/headerSlots'
 
 const CACHE_TTL_MS = 120 * 1000
+// Cap for the exact-day lead time (same as the patient-flow analysis)
+const LEAD_CAP_DAYS = 120
 
 const REAL_FIELDS = {
   start: 1, end: 1, createdAt: 1, assigneeId: 1,
@@ -188,12 +190,12 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
     workingDays: 1
   })
 
-  // Lead time of the day's bookings, split into online vs. internally arranged.
+  // Lead time of the day's bookings (exact days in advance), split into online
+  // vs. internally arranged.
   const leadTime = {
-    bins: BINS.map(b => b.label),
     series: [
-      { label: 'Online', ...histogram(todayReal.filter(isOnline)) },
-      { label: 'Intern', ...histogram(todayReal.filter(a => !isOnline(a))) }
+      { label: 'Online', ...dayCounts(todayReal.filter(isOnline), LEAD_CAP_DAYS) },
+      { label: 'Intern', ...dayCounts(todayReal.filter(a => !isOnline(a)), LEAD_CAP_DAYS) }
     ]
   }
 

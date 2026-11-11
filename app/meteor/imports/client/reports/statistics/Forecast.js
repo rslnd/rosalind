@@ -7,7 +7,8 @@ import { ForecastDoctorTable } from './ForecastDoctorTable'
 import { LeadTimeSeriesChart } from './LeadTimeSeriesChart'
 import { fmtInt } from './format'
 
-const avoidBreak = { pageBreakInside: 'avoid' }
+// On the whole box (boxStyle), so a title never ends up alone at the bottom of a printed page
+const avoidBreak = { pageBreakInside: 'avoid', breakInside: 'avoid' }
 
 const dayTitle = (date) => {
   if (!date) { return __('reports.forecastTitle') }
@@ -45,12 +46,12 @@ export const Forecast = ({ forecast, date }) => {
       </Box>
 
       {/* Anwesende ÄrztInnen */}
-      <Box title={__('reports.assignee_plural')} icon='users' style={avoidBreak}>
+      <Box title={__('reports.assignee_plural')} icon='users' boxStyle={avoidBreak}>
         <ForecastDoctorTable total={t} assignees={forecast.assignees} />
       </Box>
 
       {/* Vorlaufzeit Online vs. intern */}
-      <Box title={__('reports.forecastLeadTitle')} icon='bar-chart' style={avoidBreak}>
+      <Box title={__('reports.forecastLeadTitle')} icon='bar-chart' boxStyle={avoidBreak}>
         <p className='text-muted' style={{ marginTop: 0 }}>{__('reports.leadTimeHint')}</p>
         <LeadTimeSeriesChart distribution={forecast.leadTime} />
       </Box>

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { leadDays, histogram, BINS, leadTimeDistribution } from './leadTimeDistribution'
+import { leadDays, histogram, BINS, leadTimeDistribution, dayCounts } from './leadTimeDistribution'
 
 const appt = (createdDaysBeforeStart) => {
   const start = new Date('2026-06-30T09:00:00Z')
@@ -37,5 +37,11 @@ describe('reports/methods/leadTimeDistribution', function () {
     assert.equal(dist.series.length, 2)
     assert.equal(dist.series[0].year, 2026)
     assert.equal(dist.series[1].total, 2)
+  })
+
+  it('dayCounts counts bookings per exact day in advance, capped', function () {
+    assert.deepEqual(dayCounts([appt(0), appt(2), appt(2), appt(5)]), { max: 5, counts: [1, 0, 2, 0, 0, 1] })
+    assert.deepEqual(dayCounts([appt(1), appt(9)], 3), { max: 3, counts: [0, 1, 0, 1] })
+    assert.deepEqual(dayCounts([]), { max: 0, counts: [0] })
   })
 })

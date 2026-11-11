@@ -1,30 +1,29 @@
 import React from 'react'
 import { __ } from '../../../i18n'
-import { Metric } from './format'
 import { Tile, TileRow } from './Tile'
+import { fmtInt, fmtNum, fmtPct } from './format'
 
-// Headline tiles for the whole practice (Ordination gesamt), 30 days vs. previous year.
-export const KpiTiles = ({ current, previous }) => {
-  const cur = current || {}
-  const prev = previous || {}
+const ratio = (v, base) => (base > 0 && v != null) ? v / base : null
 
-  const T = ({ label, hint, kind, field }) => (
-    <Tile label={label} hint={hint}>
-      <Metric current={cur[field]} previous={prev[field]} kind={kind} strong />
-    </Tile>
-  )
+// Headline rates of the day (Ordination gesamt), to compare days with each other.
+export const KpiTiles = ({ total, doctorCount }) => {
+  const t = total || {}
 
   return (
     <TileRow>
-      <T label={__('reports.utilizationTime')} hint={__('reports.utilizationTimeHint')} kind='pct' field='timeUtilization' />
-      <T label={__('reports.utilizationSlots')} hint={__('reports.utilizationSlotsHint')} kind='pct' field='slotUtilization' />
-      <T label={__('reports.appointmentsTotal')} kind='int' field='total' />
-      <T label={__('reports.kept')} hint={__('reports.keptHint')} kind='int' field='admitted' />
-      <T label={__('reports.noShow')} kind='pct' field='noShowRate' />
-      <T label={__('reports.insurance')} kind='int' field='insurance' />
-      <T label={__('reports.privateShort')} kind='int' field='private' />
-      <T label={__('reports.onlineBooked')} kind='int' field='online' />
-      <T label={__('reports.onlineNoShow')} kind='pct' field='onlineNoShowRate' />
+      <Tile label={__('reports.assignee_plural')}>
+        <b>{fmtInt(doctorCount)}</b>
+      </Tile>
+      {/* Same base as the "Termine" tile: all appointments incl. Einschub vs. available slots */}
+      <Tile label={__('reports.utilization')} hint={__('reports.utilizationHint')}>
+        <b>{fmtPct(ratio(t.total, t.slotsAvailable))}</b>
+      </Tile>
+      <Tile label={__('reports.noShowRate')} hint={__('reports.noShowRateHint')}>
+        <b>{fmtPct(t.noShowRate)}</b>
+      </Tile>
+      <Tile label={__('reports.patientsPerHour')} hint={__('reports.patientsPerHourHint')}>
+        <b>{fmtNum(t.patientsPerHour)}</b>
+      </Tile>
     </TileRow>
   )
 }

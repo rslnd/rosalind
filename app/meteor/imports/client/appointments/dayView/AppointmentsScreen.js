@@ -73,12 +73,19 @@ export class AppointmentsScreen extends React.Component {
     this.handleFocusSearch = this.handleFocusSearch.bind(this)
     this.handleBlurSearch = this.handleBlurSearch.bind(this)
     this.handleMonthToggle = this.handleMonthToggle.bind(this)
+    this.handleReportClick = this.handleReportClick.bind(this)
     this.handleMonthSelectDay = this.handleMonthSelectDay.bind(this)
     this.handleMonthChange = this.handleMonthChange.bind(this)
   }
 
   handleMonthToggle () {
     this.setState(state => ({ showMonth: !state.showMonth, monthDate: null }))
+  }
+
+  handleReportClick () {
+    if (this.props.history) {
+      this.props.history.push(`/reports/day/${moment(this.props.date).format('YYYY-MM-DD')}`)
+    }
   }
 
   handleMonthSelectDay (dateStr) {
@@ -225,6 +232,15 @@ export class AppointmentsScreen extends React.Component {
             >
               <Icon name='calendar' />
             </span>
+            {hasRole(Meteor.userId(), ['admin', 'reports']) &&
+              <span
+                style={{ cursor: 'pointer', paddingRight: 10, marginTop: -3, opacity: 0.6 }}
+                onClick={this.handleReportClick}
+                title={__('appointments.openDayReport')}
+              >
+                <Icon name='bar-chart' />
+              </span>
+            }
             <span
               style={{ cursor: 'pointer', paddingRight: 10, marginTop: -3, opacity: 0.6 }}
               onClick={this.handleKeyboardShortcutsToggle}
