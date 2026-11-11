@@ -1,7 +1,7 @@
 # Keep on the same Node major as the Meteor release (`meteor node --version`,
 # 24.x for METEOR@3.5.4) so native modules built there load here. The patch
 # version may run ahead of Meteor's bundled Node for security fixes.
-FROM node:24.22.1-trixie
+FROM node:24.22.3-trixie
 
 HEALTHCHECK \
   --interval=6s \
