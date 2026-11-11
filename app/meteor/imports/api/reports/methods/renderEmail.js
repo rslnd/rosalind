@@ -8,51 +8,42 @@ const pct = v => (v == null || Number.isNaN(v)) ? '–' : `${nf1.format(v * 100)
 
 const fmtDate = d => d ? moment(d).locale('de-AT').format('D. MMM YYYY') : '–'
 
-// " (VJ <value>)" suffix, or empty when there is no previous-year value.
-const vj = (prev, fmt) => (prev == null || Number.isNaN(prev)) ? '' : ` (VJ ${fmt(prev)})`
-
-const renderTotal = (current, previous) => {
-  // Default params only apply to `undefined`; previous.total is `null` when
-  // there is no previous-year window, so normalize explicitly here.
-  const cur = current || {}
-  const prev = previous || {}
+const renderTotal = (total) => {
+  const cur = total || {}
   return [
     'ORDINATION GESAMT',
-    `Auslastung (Zeit): ${pct(cur.timeUtilization)}${vj(prev.timeUtilization, pct)}`,
-    `Auslastung (Online-Slots): ${pct(cur.slotUtilization)}${vj(prev.slotUtilization, pct)}`,
-    `Termine gesamt: ${int(cur.total)}${vj(prev.total, int)}`,
-    `Nicht erschienen: ${int(cur.noShow)} / ${pct(cur.noShowRate)}${vj(prev.noShowRate, pct)}`,
+    `Auslastung (Zeit): ${pct(cur.timeUtilization)}`,
+    `Auslastung (Online-Slots): ${pct(cur.slotUtilization)}`,
+    `Termine gesamt: ${int(cur.total)}`,
+    `Nicht erschienen: ${int(cur.noShow)} / ${pct(cur.noShowRate)}`,
     `Kasse / Privat: ${int(cur.insurance)} / ${int(cur.private)}`,
-    `Online gebucht: ${int(cur.online)}${vj(prev.online, int)}`,
-    `Online nicht erschienen: ${int(cur.onlineNoShow)} / ${pct(cur.onlineNoShowRate)}${vj(prev.onlineNoShowRate, pct)}`
+    `Online gebucht: ${int(cur.online)}`,
+    `Online nicht erschienen: ${int(cur.onlineNoShow)} / ${pct(cur.onlineNoShowRate)}`
   ].join('\n')
 }
 
 const renderAssignee = (a) => {
   const cur = a.current || {}
-  const prev = a.previous || {}
   return [
     a.name,
-    `  Termine ${int(cur.total)}${vj(prev.total, int)}`,
-    `  Nicht ersch. ${int(cur.noShow)} / ${pct(cur.noShowRate)}${vj(prev.noShowRate, pct)}`,
-    `  Auslastung ${pct(cur.timeUtilization)}${vj(prev.timeUtilization, pct)}`,
-    `  Online ${int(cur.online)}${vj(prev.online, int)}`
+    `  Termine ${int(cur.total)}`,
+    `  Nicht ersch. ${int(cur.noShow)} / ${pct(cur.noShowRate)}`,
+    `  Auslastung ${pct(cur.timeUtilization)}`,
+    `  Online ${int(cur.online)}`
   ].join('\n')
 }
 
 export const renderEmail = ({ statistics }) => {
   const cur = statistics.current || {}
-  const prev = statistics.previous || {}
 
-  const title = `Tagesbericht Statistik – ${fmtDate(cur.from)} bis ${fmtDate(cur.to)}`
+  const title = `Tagesbericht Statistik – ${fmtDate(cur.from)}`
 
   const header = [
     'Tagesbericht – Statistik',
-    `Zeitraum: ${fmtDate(cur.from)} – ${fmtDate(cur.to)} (letzte ${statistics.windowDays} Tage)`,
-    'Vergleich jeweils mit demselben Zeitraum im Vorjahr (VJ).'
+    `Tag: ${fmtDate(cur.from)}`
   ].join('\n')
 
-  const totalSection = renderTotal(cur.total, prev.total)
+  const totalSection = renderTotal(cur.total)
 
   const assigneesSection = [
     'PRO ÄRZTIN',

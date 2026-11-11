@@ -3,10 +3,9 @@ import { expect } from 'chai'
 import { renderEmail } from './renderEmail'
 
 const statistics = {
-  windowDays: 30,
   current: {
-    from: new Date('2026-06-13'),
-    to: new Date('2026-07-13'),
+    from: new Date('2026-07-13T00:00:00'),
+    to: new Date('2026-07-13T23:59:59'),
     total: {
       total: 512,
       insurance: 300,
@@ -20,24 +19,11 @@ const statistics = {
       slotUtilization: 0.41
     }
   },
-  previous: {
-    from: new Date('2025-06-13'),
-    to: new Date('2025-07-13'),
-    total: {
-      total: 498,
-      noShowRate: 0.071,
-      online: 90,
-      onlineNoShowRate: 0.09,
-      timeUtilization: 0.68,
-      slotUtilization: 0.39
-    }
-  },
   assignees: [
     {
       assigneeId: 'a1',
       name: 'Dr. A',
-      current: { total: 120, noShow: 6, noShowRate: 0.05, timeUtilization: 0.75, online: 20 },
-      previous: { total: 110, noShowRate: 0.06, timeUtilization: 0.70, online: 15 }
+      current: { total: 120, noShow: 6, noShowRate: 0.05, timeUtilization: 0.75, online: 20 }
     }
   ]
 }
@@ -46,16 +32,18 @@ describe('reports', () => {
   describe('renderEmail (statistics)', () => {
     const rendered = renderEmail({ statistics })
 
-    it('renders a statistics title with the date range', () => {
+    it('renders a statistics title with the day', () => {
       expect(rendered.title).to.include('Tagesbericht Statistik')
+      expect(rendered.title).to.include('13.')
       expect(rendered.title).to.include('2026')
       expect(rendered.text).to.be.a('string')
     })
 
-    it('renders the practice total with previous-year comparison', () => {
+    it('renders the practice total without a 30-day or previous-year comparison', () => {
       expect(rendered.text).to.include('ORDINATION GESAMT')
       expect(rendered.text).to.include('Termine gesamt: 512')
-      expect(rendered.text).to.include('(VJ 498)')
+      expect(rendered.text).not.to.include('VJ')
+      expect(rendered.text).not.to.include('30 Tage')
       expect(rendered.text).to.include('Kasse / Privat: 300 / 212')
     })
 

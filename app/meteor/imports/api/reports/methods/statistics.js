@@ -32,7 +32,7 @@ const ratio = (numerator, denominator) =>
 //   appointments    real patient appointments (type unset, patientId set, not removed)
 //   freeSlots       unbooked online-bookable slots (type: 'bookable', not removed)
 //   scheduledHours  planned roster hours for this scope/window
-//   slotsUsed/Available  calendar slot occupancy (columnsToAvailabilities) for the window
+//   slotsUsed/Available  calendar slot occupancy (headerSlots) for the window
 //   workingDays     number of working days in the window (for daily averages)
 export const computeMetrics = ({
   appointments = [],

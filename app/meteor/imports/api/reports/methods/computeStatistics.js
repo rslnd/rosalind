@@ -3,13 +3,10 @@ import uniq from 'lodash/uniq'
 import { rangeToDays, dateToDay } from '../../../util/time/day'
 import { fullNameWithTitle } from '../../users/methods/name'
 import { calculateScheduledHours } from '../../schedules/methods/getScheduledHours'
-import { overridesToColumns } from '../../schedules/methods/overridesToColumns'
-import { columnsToAvailabilities } from '../../schedules/methods/columnsToAvailabilities'
 import { computeScope, isOnline } from './statistics'
-import { leadTimeDistribution, leadTimeDistributionByAssignee, histogram, BINS } from './leadTimeDistribution'
+import { histogram, BINS } from './leadTimeDistribution'
+import { headerSlots } from '../../schedules/methods/headerSlots'
 
-const WINDOW_DAYS = 30
-const EARLIEST_YEAR = 2021
 const CACHE_TTL_MS = 120 * 1000
 
 const REAL_FIELDS = {
@@ -46,7 +43,7 @@ const pushInto = (map, key, value) => {
   map[key].push(value)
 }
 
-export const computeStatistics = async ({ Appointments, Schedules, Calendars, Users, Constraints, Tags, asOf }) => {
+export const computeStatistics = async ({ Appointments, Schedules, Calendars, Users, asOf }) => {
   const now = asOf ? moment(asOf) : moment()
   const cacheKey = dayKeyFromDay(dateToDay(now.toDate()))
   const cached = cacheGet(cacheKey)
@@ -56,12 +53,7 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
     .fetchAsync()).map(u => u._id)
   const calendars = await Calendars.find({}, { fields: { _id: 1, slotSize: 1, slotSizeAppointment: 1, scheduleOffset: 1, atMinutes: 1 } }).fetchAsync()
 
-  // Shared, window-independent prefetches (small collections, fetched once)
-  const tags = Tags ? await Tags.find({}).fetchAsync() : []
-  const constraintsByCalendar = {}
-  if (Constraints) {
-    ;(await Constraints.find({}).fetchAsync()).forEach(c => pushInto(constraintsByCalendar, c.calendarId, c))
-  }
+  // Shared, window-independent prefetch (small collection, fetched once)
   const dayScheduleMap = {} // `${calendarId}|${dayKey}` -> daySchedule
   ;(await Schedules.find({ type: 'day' }, { fields: { calendarId: 1, day: 1, userIds: 1, removed: 1 } })
     .fetchAsync()).forEach(s => {
@@ -94,19 +86,27 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
       start: { $gte: from, $lte: to }
     }, { fields: { userId: 1, calendarId: 1, start: 1, end: 1, note: 1, available: 1, roles: 1 } }).fetchAsync()
 
+    // Overrides + overlays, as the day view's column header counts slots with both
+    const blockingSchedules = await Schedules.find({
+      type: { $in: ['override', 'overlay'] },
+      start: { $gte: from, $lte: to }
+    }, { fields: { userId: 1, calendarId: 1, start: 1, end: 1, available: 1, roles: 1 } }).fetchAsync()
+
     const allAppointments = await Appointments.find({
       start: { $gte: from, $lte: to }
     }, { fields: { start: 1, end: 1, assigneeId: 1, calendarId: 1, type: 1 } }).fetchAsync()
 
-    const overridesByCalDay = {}
     const overridesByUserDay = {}
-    overrides.forEach(o => {
-      const k = dayKeyFromDate(o.start)
-      pushInto(overridesByCalDay, `${o.calendarId}|${k}`, o)
-      pushInto(overridesByUserDay, `${o.userId}|${k}`, o)
-    })
-    const apptsByCalDay = {}
-    allAppointments.forEach(a => pushInto(apptsByCalDay, `${a.calendarId}|${dayKeyFromDate(a.start)}`, a))
+    overrides.forEach(o => pushInto(overridesByUserDay, `${o.userId}|${dayKeyFromDate(o.start)}`, o))
+    const schedulesByColumnDay = {}
+    blockingSchedules.forEach(s => pushInto(schedulesByColumnDay, `${s.calendarId}|${s.userId}|${dayKeyFromDate(s.start)}`, s))
+    const apptsByColumnDay = {}
+    allAppointments.forEach(a => pushInto(apptsByColumnDay, `${a.calendarId}|${a.assigneeId}|${dayKeyFromDate(a.start)}`, a))
+
+    const rosteredIds = uniq(Object.values(dayScheduleMap).flatMap(s => s.userIds || []))
+    const assigneesById = {}
+    ;(await Users.find({ _id: { $in: rosteredIds } }, { fields: { schedules: 1 } }).fetchAsync())
+      .forEach(u => { assigneesById[u._id] = u })
 
     const scheduledByUser = {}
     let scheduledTotal = 0
@@ -136,27 +136,24 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
             scheduledTotal += hours
           })
 
-        // Calendar slot occupancy (same logic as getColumns → columnsToAvailabilities)
-        const columns = overridesToColumns({
-          day,
-          calendar,
-          overrides: overridesByCalDay[`${calendar._id}|${dk}`] || [],
-          constraints: constraintsByCalendar[calendar._id] || [],
-          appointments: apptsByCalDay[`${calendar._id}|${dk}`] || [],
-          tags
-        })
-        columnsToAvailabilities(columns).forEach(av => {
-          const userId = av.assigneeId
-          const used = av.slotsUsed || 0
-          const available = av.slotsAvailable || 0
-          if (userId && !hiddenIds.includes(userId)) {
+        // Slot counts per doctor column, same as the day view's column header
+        assigneeIds
+          .filter(userId => !hiddenIds.includes(userId))
+          .forEach(userId => {
+            const columnKey = `${calendar._id}|${userId}|${dk}`
+            const { slotsUsed, slotsAvailable } = headerSlots({
+              day,
+              calendar,
+              assignee: assigneesById[userId],
+              schedules: schedulesByColumnDay[columnKey] || [],
+              appointments: apptsByColumnDay[columnKey] || []
+            })
             slotByUser[userId] = slotByUser[userId] || { slotsUsed: 0, slotsAvailable: 0 }
-            slotByUser[userId].slotsUsed += used
-            slotByUser[userId].slotsAvailable += available
-          }
-          slotsUsedTotal += used
-          slotsAvailableTotal += available
-        })
+            slotByUser[userId].slotsUsed += slotsUsed
+            slotByUser[userId].slotsAvailable += slotsAvailable
+            slotsUsedTotal += slotsUsed
+            slotsAvailableTotal += slotsAvailable
+          })
       })
     })
 
@@ -168,47 +165,6 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
     }
   }
 
-  const buildScope = async ({ from, to, realAppts, withUtilization }) => {
-    const workingDays = rangeToDays({ from, to }).length
-    const util = withUtilization
-      ? await computeUtilization({ from, to })
-      : { scheduledByUser: {}, scheduledTotal: null, slotByUser: {}, slotStatsTotal: {} }
-
-    return {
-      from,
-      to,
-      workingDays,
-      ...computeScope({
-        appointments: realAppts,
-        freeSlots: await fetchFreeSlots({ from, to }),
-        scheduledHoursByUser: util.scheduledByUser,
-        scheduledHoursTotal: util.scheduledTotal,
-        slotStatsByUser: util.slotByUser,
-        slotStatsTotal: util.slotStatsTotal,
-        workingDays
-      })
-    }
-  }
-
-  const rangeOf = (endMoment) => ({
-    from: endMoment.clone().subtract(WINDOW_DAYS, 'days').startOf('day').toDate(),
-    to: endMoment.clone().endOf('day').toDate()
-  })
-
-  // One 30-day window per year (for KPIs + lead-time), fetched once each
-  const yearsBack = Math.max(0, now.year() - EARLIEST_YEAR)
-  const yearWindows = []
-  for (let k = 0; k <= yearsBack; k++) {
-    const end = now.clone().subtract(k, 'years')
-    const range = rangeOf(end)
-    yearWindows.push({ year: end.year(), ...range, realAppts: await fetchReal(range) })
-  }
-
-  const current = await buildScope({ ...yearWindows[0], withUtilization: true })
-  const previous = yearWindows[1]
-    ? await buildScope({ ...yearWindows[1], withUtilization: true })
-    : { from: null, to: null, total: null, assignees: [] }
-
   // Today (selected day)
   const todayRange = {
     from: now.clone().startOf('day').toDate(),
@@ -217,29 +173,43 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
   const todayReal = await fetchReal(todayRange)
   const todayFreeSlots = await fetchFreeSlots(todayRange)
 
-  // Retrospective "Heute" block — appointment metrics only (no roster/slot cost).
-  const todayScope = computeScope({
+  // Roster hours + calendar-slot occupancy of the selected day, shared by the
+  // retrospective day report and the forecast.
+  const dayUtil = await computeUtilization(todayRange)
+
+  // Retrospective day report (selected day is in the past).
+  const current = computeScope({
     appointments: todayReal,
     freeSlots: todayFreeSlots,
+    scheduledHoursByUser: dayUtil.scheduledByUser,
+    scheduledHoursTotal: dayUtil.scheduledTotal,
+    slotStatsByUser: dayUtil.slotByUser,
+    slotStatsTotal: dayUtil.slotStatsTotal,
     workingDays: 1
   })
 
+  // Lead time of the day's bookings, split into online vs. internally arranged.
+  const leadTime = {
+    bins: BINS.map(b => b.label),
+    series: [
+      { label: 'Online', ...histogram(todayReal.filter(isOnline)) },
+      { label: 'Intern', ...histogram(todayReal.filter(a => !isOnline(a))) }
+    ]
+  }
+
   // Forecast (selected day is today or in the future): the same single day, but
-  // WITH roster hours + calendar-slot occupancy and a row for every rostered
-  // doctor (present, even if nothing is booked yet). Lead time is split into the
-  // online vs. internally-arranged bookings for that day.
-  const forecastUtil = await computeUtilization(todayRange)
+  // with a row for every rostered doctor (present, even if nothing is booked yet).
   const forecastPresentIds = uniq([
-    ...Object.keys(forecastUtil.scheduledByUser),
-    ...Object.keys(forecastUtil.slotByUser)
+    ...Object.keys(dayUtil.scheduledByUser),
+    ...Object.keys(dayUtil.slotByUser)
   ])
   const forecastScope = computeScope({
     appointments: todayReal,
     freeSlots: todayFreeSlots,
-    scheduledHoursByUser: forecastUtil.scheduledByUser,
-    scheduledHoursTotal: forecastUtil.scheduledTotal,
-    slotStatsByUser: forecastUtil.slotByUser,
-    slotStatsTotal: forecastUtil.slotStatsTotal,
+    scheduledHoursByUser: dayUtil.scheduledByUser,
+    scheduledHoursTotal: dayUtil.scheduledTotal,
+    slotStatsByUser: dayUtil.slotByUser,
+    slotStatsTotal: dayUtil.slotStatsTotal,
     workingDays: 1,
     presentUserIds: forecastPresentIds
   })
@@ -268,71 +238,33 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
     total: forecastScope.total,
     einschub: einschubRow ? einschubRow.metrics.total : 0,
     assignees: forecastAssignees,
-    leadTime: {
-      bins: BINS.map(b => b.label),
-      series: [
-        { label: 'Online', ...histogram(todayReal.filter(isOnline)) },
-        { label: 'Intern', ...histogram(todayReal.filter(a => !isOnline(a))) }
-      ]
-    }
+    leadTime
   }
 
-  // Merge per-assignee current + previous-year figures under one row per doctor
-  const nameFor = (usersById, ref) => {
-    if (ref.type === 'einschub') { return 'Einschub' }
-    return usersById[ref.assigneeId] ? fullNameWithTitle(usersById[ref.assigneeId]) : ref.assigneeId
-  }
-
-  const assigneeIds = uniq([
-    ...current.assignees.filter(a => a.assigneeId).map(a => a.assigneeId),
-    ...previous.assignees.filter(a => a.assigneeId).map(a => a.assigneeId)
-  ])
+  const assigneeIds = current.assignees.filter(a => a.assigneeId).map(a => a.assigneeId)
   const usersById = {}
   ;(await Users.find({ _id: { $in: assigneeIds } }).fetchAsync()).forEach(u => { usersById[u._id] = u })
 
-  const findEntry = (scope, ref) => scope.assignees.find(a =>
-    ref.type === 'einschub' ? a.type === 'einschub' : a.assigneeId === ref.assigneeId
-  )
-
-  const keys = []
-  const push = (a) => {
-    const key = a.type === 'einschub' ? 'einschub' : a.assigneeId
-    if (!keys.find(k => k.key === key)) { keys.push({ key, ref: a }) }
-  }
-  current.assignees.forEach(push)
-  previous.assignees.forEach(push)
-
-  const assignees = keys.map(({ ref }) => {
-    const cur = findEntry(current, ref)
-    const prev = findEntry(previous, ref)
-    return {
-      assigneeId: ref.assigneeId || null,
-      type: ref.type || null,
-      name: nameFor(usersById, ref),
-      current: cur ? cur.metrics : null,
-      previous: prev ? prev.metrics : null
-    }
-  }).sort((a, b) => {
+  const assignees = current.assignees.map(a => ({
+    assigneeId: a.assigneeId || null,
+    type: a.type || null,
+    name: a.type === 'einschub'
+      ? 'Einschub'
+      : (usersById[a.assigneeId] ? fullNameWithTitle(usersById[a.assigneeId]) : a.assigneeId),
+    current: a.metrics
+  })).sort((a, b) => {
     if (a.type === 'einschub') { return 1 }
     if (b.type === 'einschub') { return -1 }
     return a.name.localeCompare(b.name, 'de')
   })
 
-  const yearWindowsForLeadTime = yearWindows.map(w => ({ year: w.year, appointments: w.realAppts }))
-
   const result = {
     asOf: now.toDate(),
     day: dateToDay(now.toDate()),
-    windowDays: WINDOW_DAYS,
-    today: { date: todayRange.from, total: todayScope.total },
     forecast,
-    current: { from: current.from, to: current.to, workingDays: current.workingDays, total: current.total },
-    previous: { from: previous.from, to: previous.to, total: previous.total },
+    current: { from: todayRange.from, to: todayRange.to, total: current.total },
     assignees,
-    leadTime: {
-      total: leadTimeDistribution({ yearWindows: yearWindowsForLeadTime }),
-      byAssignee: leadTimeDistributionByAssignee({ yearWindows: yearWindowsForLeadTime })
-    }
+    leadTime
   }
 
   cacheSet(cacheKey, result)

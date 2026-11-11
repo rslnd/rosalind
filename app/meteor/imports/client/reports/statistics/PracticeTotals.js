@@ -17,7 +17,7 @@ const Value = ({ abs, pct, sub }) => (
   </span>
 )
 
-// "Ordination gesamt" headline figures for the 30-day window: each as an absolute
+// "Ordination gesamt" headline figures for the selected day: each as an absolute
 // count and, where meaningful, its share of the appropriate base.
 export const PracticeTotals = ({ total, einschub = 0 }) => {
   const t = total || {}

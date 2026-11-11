@@ -12,7 +12,8 @@ export const prepareAvailabilities = ({ allAvailabilities, constraints, tags }) 
       return acc
     }
 
-    if (availability.slotsAvailable === 0) {
+    // Skip fully booked periods (no free slot left)
+    if (availability.slotsAvailable - (availability.slotsUsed || 0) <= 0) {
       return acc
     } else {
       const possibleTags = getPossibleTags({ availability, tags, constraints })

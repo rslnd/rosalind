@@ -2,10 +2,11 @@ import React from 'react'
 import { __ } from '../../../i18n'
 import { fmtInt, fmtNum, fmtHours, fmtPct } from './format'
 
-// Per-doctor current-window figures (no year comparison — that is a separate table).
+// Per-doctor figures for the selected day.
 // Einschub (unassigned) is shown as its own row.
 const columns = [
   { key: 'scheduledHours', label: __('reports.scheduledHours'), fmt: fmtHours },
+  { key: 'slotsAvailable', label: __('reports.availableAppointments'), fmt: fmtInt },
   { key: 'calendarSlotUtilization', label: __('reports.slotUtilization'), fmt: fmtPct, hint: __('reports.slotUtilizationHint') },
   { key: 'total', label: __('reports.appointmentsTotal'), fmt: fmtInt },
   { key: 'admitted', label: __('reports.kept'), fmt: fmtInt },

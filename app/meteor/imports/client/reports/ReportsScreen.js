@@ -36,8 +36,8 @@ export class ReportsScreen extends React.Component {
       viewAppointments
     } = this.props
 
-    // Today and future days are a forecast (planned capacity vs. bookings), not a
-    // retrospective 30-day window.
+    // Today and future days are a forecast (planned capacity vs. bookings), past
+    // days a retrospective report of that single day.
     const isForecast = date.isSameOrAfter(moment(), 'day')
 
     return (

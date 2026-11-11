@@ -1,5 +1,5 @@
 // Shared colors for the patient-flow charts. Kept consistent with the existing
-// reports charts (LeadTimeChart / AssigneeBars), whose blue is validated via
+// reports charts (LeadTimeSeriesChart), whose blue is validated via
 // scripts/validate_palette.js. Sequential single-hue blue for magnitude
 // (heatmap), brand blue vs. neutral grey for the online/internal split, and a
 // recency ramp (current darker than the comparison period).

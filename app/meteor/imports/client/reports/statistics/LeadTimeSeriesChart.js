@@ -2,8 +2,8 @@ import React from 'react'
 import { BRAND, ORANGE, AXIS_COLOR, TEXT_COLOR } from './flowPalette'
 
 // Lead-time distribution with named series (e.g. Online vs. Intern) drawn in one
-// graph. Mirrors LeadTimeChart, but series are keyed by `label` and coloured from
-// the categorical blue/orange pair (CVD-safe) instead of the year recency ramp.
+// graph. Series are keyed by `label` and coloured from the categorical
+// blue/orange pair (CVD-safe).
 const SERIES_COLORS = [BRAND, ORANGE]
 const FALLBACK = '#9aa7b8'
 

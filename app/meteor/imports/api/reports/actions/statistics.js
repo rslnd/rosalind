@@ -4,7 +4,7 @@ import { CallPromiseMixin } from '../../../util/meteor/callPromiseMixin'
 import { computeStatistics } from '../methods/computeStatistics'
 import { assertReportsAccess } from '../methods/assertReportsAccess'
 
-export const statistics = ({ Reports, Appointments, Schedules, Calendars, Users, Constraints, Tags }) => {
+export const statistics = ({ Reports, Appointments, Schedules, Calendars, Users }) => {
   return new ValidatedMethod({
     name: 'reports/statistics',
     mixins: [CallPromiseMixin],
@@ -17,7 +17,7 @@ export const statistics = ({ Reports, Appointments, Schedules, Calendars, Users,
       try {
         if (this.isSimulation) { return }
         await assertReportsAccess({ userId: this.userId, connection: this.connection, accessToken })
-        return await computeStatistics({ Appointments, Schedules, Calendars, Users, Constraints, Tags, asOf })
+        return await computeStatistics({ Appointments, Schedules, Calendars, Users, asOf })
       } catch (e) {
         console.error(e.message, e.stack)
         throw e

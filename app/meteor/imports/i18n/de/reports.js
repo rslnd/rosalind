@@ -50,8 +50,6 @@ export const reports = {
 
   statistics: 'Statistik',
   statisticsTitle: 'Tagesbericht',
-  windowLabel: 'Letzte __days__ Tage',
-  windowRange: '__from__ – __to__',
   previousYear: 'Vorjahr',
   noPreviousYear: 'kein Vorjahreswert',
   practiceTotal: 'Ordination gesamt',
@@ -88,7 +86,6 @@ export const reports = {
   internalShort: 'Intern',
 
   // "Ordination gesamt"-Kennzahlen (absolut + Anteil)
-  windowReportTitle: '__days__-Tagesbericht',
   availableAppointments: 'Verfügbare Termine',
   bookedAppointments: 'Termine',
   einschub: 'Einschub',

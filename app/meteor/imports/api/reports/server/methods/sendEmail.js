@@ -5,8 +5,6 @@ import { __ } from '../../../../i18n'
 import { Appointments } from '../../../appointments'
 import { Calendars } from '../../../calendars'
 import { Schedules } from '../../../schedules'
-import { Constraints } from '../../../constraints'
-import { Tags } from '../../../tags'
 import { Events } from '../../../events'
 import { Users } from '../../../users'
 import { dateToDay, dayToDate, dayToSlug } from '../../../../util/time/day'
@@ -29,7 +27,7 @@ export const sendEmail = async (args = {}) => {
     const day = args.day || dateToDay(moment(args))
     const asOf = moment(dayToDate(day)).endOf('day').toDate()
 
-    const statistics = await computeStatistics({ Appointments, Schedules, Calendars, Users, Constraints, Tags, asOf })
+    const statistics = await computeStatistics({ Appointments, Schedules, Calendars, Users, asOf })
 
     const { title, text } = renderEmail({ statistics })
     const pdf = await renderPdf({ day })
