@@ -15,12 +15,6 @@ const sidebarItems = ({ history }) => {
   const inboundCallsTopics = InboundCallsTopics.find({}, { sort: { order: 1 } }).fetch()
 
   return [
-    {
-      name: 'patients.thisNext',
-      link: '/waitlist',
-      icon: 'angle-double-right',
-      roles: ['waitlist', 'waitlist-all', 'admin']
-    },
     ...calendars.map((c, i) => ({
       shouldNavigateHereAfterLoad: true,
       label: c.name,
