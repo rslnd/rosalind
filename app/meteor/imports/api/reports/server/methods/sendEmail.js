@@ -44,10 +44,16 @@ export const sendEmail = async (args = {}) => {
 
     let recipients = args.to || process.env.MAIL_REPORTS_TO.split(',')
 
+    // Optional, comma-separated. Not used for test mails, see below.
+    let bcc = process.env.MAIL_REPORTS_BCC
+      ? process.env.MAIL_REPORTS_BCC.split(',').map(a => a.trim()).filter(Boolean)
+      : undefined
+
     if (test) {
       const testEmail = 'me+TEST@albertzak.com'
       console.log('[Reports] sendEmail: Overriding recipients because not running in production enviroment')
       recipients = testEmail
+      bcc = undefined
     }
 
     console.log('[Reports] sendEmail: Sending')
@@ -58,6 +64,7 @@ export const sendEmail = async (args = {}) => {
     await Email.sendAsync({
       from: process.env.MAIL_REPORTS_FROM,
       to: recipients,
+      bcc,
       replyTo: process.env.MAIL_REPORTS_REPLYTO,
       subject: title,
       text,
