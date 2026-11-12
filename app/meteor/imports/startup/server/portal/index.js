@@ -5,8 +5,6 @@ import ReactDOMServer from 'react-dom/server'
 import { ContactForm, ContactFormNeurodermitis, handleContactForm } from './contactForm'
 import { getBookables, handleAppointmentBooking } from './appointmentBooking'
 import { portalCss } from './portalCss'
-import { portalLogin, twoFactor } from './portalLogin'
-import { downloadMedia, findPubilshedMedia } from './portalMedia'
 
 const ErrorMessage = () =>
   <div>
@@ -19,7 +17,7 @@ const ErrorMessage = () =>
 
 const respondWith = (res, Component) => {
   const rendered = ReactDOMServer.renderToString(<Component />)
-    html = `<!DOCTYPE html>
+  const html = `<!DOCTYPE html>
 <html>
   <head>
     <style>${portalCss}</style>
@@ -71,16 +69,6 @@ export default () => {
             console.error(e)
             return respondWithJSON(res, {error: 'unknown-server-error'})
           }
-        } else if (req.url.endsWith('/login')) {
-          res.writeHead(200, {
-            'Content-Type': 'text/html'
-          })
-          return res.end(await Assets.getTextAsync('login.html'))
-        } else if (req.url.endsWith('/media')) {
-          res.writeHead(200, {
-            'Content-Type': 'text/html'
-          })
-          return res.end(await Assets.getTextAsync('media.html'))
         } else {
           res.writeHead(200, {
             'Content-Type': 'text/html'
@@ -93,42 +81,6 @@ export default () => {
           try {
             const body = await parse.json(req)
             const response = await handleAppointmentBooking(body)
-            return respondWithJSON(res, response)
-          } catch (e) {
-            console.log(e)
-            return respondWithJSON(res, {error: 'unknown-server-error'})
-          }
-        } else if (req.url.endsWith('/login')) {
-          try {
-            const body = await parse.json(req)
-            const response = await portalLogin(body)
-            return respondWithJSON(res, response)
-          } catch (e) {
-            console.log(e)
-            return respondWithJSON(res, {error: 'unknown-server-error'})
-          }
-        } else if (req.url.endsWith('/two-factor')) {
-          try {
-            const body = await parse.json(req)
-            const response = await twoFactor(body)
-            return respondWithJSON(res, response)
-          } catch (e) {
-            console.log(e)
-            return respondWithJSON(res, {error: 'unknown-server-error'})
-          }
-        } else if (req.url.endsWith('/media')) {
-          try {
-            const body = await parse.json(req)
-            const response = await findPubilshedMedia(body)
-            return respondWithJSON(res, response)
-          } catch (e) {
-            console.log(e)
-            return respondWithJSON(res, {error: 'unknown-server-error'})
-          }
-        } else if (req.url.endsWith('/media-download')) {
-          try {
-            const body = await parse.json(req)
-            const response = await downloadMedia(body)
             return respondWithJSON(res, response)
           } catch (e) {
             console.log(e)

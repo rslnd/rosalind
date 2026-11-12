@@ -135,9 +135,18 @@ const bool = (x) => {
   return x
 }
 
+// Hard cap on how many brand-new patient records the public, unauthenticated
+// portal may create in a rolling window. Each booking with an insuranceId that
+// does not match an existing patient inserts a new patient, so without this an
+// attacker could mass-pollute the patient database. Legitimate new-patient
+// bookings are well below this.
+const NEW_PATIENT_PORTAL_WINDOW_MS = 1000 * 60 * 60 * 24 // 24h
+const NEW_PATIENT_PORTAL_MAX = 30
+
 export const handleAppointmentBooking = async (untrustedBody) => {
   const ltag = 'portal/handleAppointmentBooking'
-  console.log(ltag, untrustedBody)
+  // Do not log the raw body: it carries name, insuranceId, phone and birthday.
+  console.log(ltag, 'received booking request')
 
   if (!bool(untrustedBody.privacy)) {
     throw new Error('Privacy is requires')
@@ -172,10 +181,10 @@ export const handleAppointmentBooking = async (untrustedBody) => {
   }
 
   const patients = await Patients.find(patientSelector).fetchAsync()
-  console.log(ltag, 'patientSelector', patientSelector)
+  // Do not log patientSelector: it contains the insuranceId and normalized name.
   let patientId = null
   if (patients.length >= 2) {
-    console.error(ltag, `dup: matched ${patients.length} patients with selector`, patientSelector)
+    console.error(ltag, `dup: matched ${patients.length} patients with selector`)
     return { error: 'dup' }
   }
 
@@ -183,7 +192,15 @@ export const handleAppointmentBooking = async (untrustedBody) => {
     patientId = patients[0]._id
     console.log(ltag, 'matched one existing patient', patientId)
   } else {
-    console.log(ltag, `matched ${patients.length} patients, creating new patient`, patientId)
+    const recentPortalPatients = await Patients.find({
+      createdViaPortal: true,
+      createdAt: { $gte: new Date(Date.now() - NEW_PATIENT_PORTAL_WINDOW_MS) }
+    }).countAsync()
+    if (recentPortalPatients >= NEW_PATIENT_PORTAL_MAX) {
+      throw new Error(`newPatientPortalCap: refused to create patient, ${recentPortalPatients} portal patients already created in the past 24h`)
+    }
+
+    console.log(ltag, 'creating new patient')
     patientId = await Patients.insertAsync({
       titlePrepend,
       lastName,
@@ -331,7 +348,7 @@ export const handleAppointmentBooking = async (untrustedBody) => {
         existingPatient: !!patientId,
         patientId,
         titlePrepend,
-        birthdate,
+        birthdate: birthdayString,
         gender,
       },
       createdAt: new Date()
