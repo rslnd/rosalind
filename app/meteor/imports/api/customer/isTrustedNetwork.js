@@ -28,8 +28,16 @@ export const isTrustedNetwork = ip => {
 
 export const isLocalhost = ip => {
   validateIp(ip)
+  // Only a genuine loopback socket is localhost. Do NOT treat null/undefined as
+  // localhost: that is what Meteor yields when it cannot determine a client
+  // address (e.g. the x-forwarded-for fallback, or a missing header), and
+  // trusting it would let a misrouted or header-stripped remote request be
+  // treated as server-local. Server-internal calls (connection === null) are
+  // already handled by the `this.connection && …` guards at each call site, so
+  // they do not rely on this returning true for null.
   return (
-    (ip === null) ||
-    (ip === '127.0.0.1')
+    (ip === '127.0.0.1') ||
+    (ip === '::1') ||
+    (ip === '::ffff:127.0.0.1')
   )
 }
