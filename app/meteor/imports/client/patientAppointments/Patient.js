@@ -21,7 +21,6 @@ import { hasRole } from '../../util/meteor/hasRole'
 import { ScanButton } from './Documents'
 import { SmsModalContainer } from './SmsModal'
 import { CommentsContainer } from '../comments'
-import { prompt } from '../layout/Prompt'
 import { call } from '../../util/meteor/call'
 
 const action = promise =>
@@ -356,7 +355,7 @@ const fetchLoyalty = ({ _id }) =>
       })
   })
 
-const Loyalty = withPromise(fetchLoyalty)(({ patientSince, totalRevenue, patientId, gender, portalVerifiedAt, _id }) =>
+const Loyalty = withPromise(fetchLoyalty)(({ patientSince, totalRevenue, patientId, gender, _id }) =>
   <div style={loyaltyStyle}>
     {
       _id === patientId && // avoid stale data when opening/closing modal quickly
@@ -373,20 +372,6 @@ const Loyalty = withPromise(fetchLoyalty)(({ patientSince, totalRevenue, patient
         }</div>
       </div>
     }
-    <div onClick={async () => {
-      const yes = await prompt({ title: 'Möchten Sie den Zugang für Online Befund- und Bildabfrage wieder sperren?',
-    confirm: 'Sperren'})
-      if (yes) {
-        Patients.actions.unsetPortalVerified.callPromise({ patientId: _id })
-          .catch(err => { Alert.error(__('ui.error')); console.error(err) })
-      }
-    }}>
-      {
-        portalVerifiedAt
-        ? __('patients.portalVerified')
-        : null
-      }
-    </div>
   </div>
 )
 

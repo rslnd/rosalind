@@ -66,16 +66,6 @@ export const Contact = new SimpleSchema({
   hasNone: {
     type: Boolean,
     optional: true
-  },
-
-  portalVerifiedAt: {
-    type: Date,
-    optional: true
-  },
-
-  portalVerifiedBy: {
-    type: SimpleSchema.RegEx.Id,
-    optional: true
   }
 })
 
@@ -257,37 +247,5 @@ export default new SimpleSchema({
   updatedBy: {
     type: SimpleSchema.RegEx.Id,
     optional: true
-  },
-
-  portalVerifiedAt: {
-    type: Date,
-    optional: true
-  },
-
-  portalVerifiedBy: {
-    type: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-
-  portalTwoFactorCode: {
-    type: String,
-    optional: true,
-    index: 1
-  },
-
-  portalTwoFactorCodeCreatedAt: {
-    type: String,
-    optional: true
-  },
-
-  portalSessionCreatedAt: {
-    type: Date,
-    optional: true
-  },
-
-  portalSessionToken: {
-    type: String,
-    optional: true,
-    index: 1
   }
 })

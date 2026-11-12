@@ -73,11 +73,7 @@ export const patients = {
   privateInsurance: 'Privat',
   selectCalendarToEditFutureNote: 'Bitte Kalender wählen, um eine Nachtricht zu schreiben.',
   pleaseUpdateProfile: 'Bitte die Stammdaten überprüfen und aktualisieren',
-  portalVerifiedSuccess: 'Zugang freigeschaltet',
   noValidMobileNumber: 'Es ist keine gültige Mobiltelefonnummer hinterlegt',
-  noSMSnoPortal: 'SMS-Empfang ist auf Wunsch der PatientIn deaktiviert, es können keine Bilder online abgerufen werden.',
   pleaseCheckProfile: 'Bitte Stammdaten vervollständigen',
-  insuranceIdRequired: 'Sozialvesicherungsnummer fehlt',
-  portalVerified: 'Für Online-Befunde registriert',
-  portalUploadSuccess: 'Jetzt online abrufbar'
+  insuranceIdRequired: 'Sozialvesicherungsnummer fehlt'
 }
