@@ -41,6 +41,13 @@ const printToPDF = async ({ url, printOptions }) => {
   try {
     const page = await browser.newPage()
 
+    // Meteor derives the client address from x-forwarded-for when running behind
+    // a proxy (HTTP_FORWARDED_COUNT), and yields null for this direct connection.
+    // Null is deliberately not trusted as localhost (see isTrustedNetwork.js), so
+    // state the loopback address. Behind the proxy, Meteor only reads the entry
+    // the proxy appended, so this cannot be forged from outside.
+    await page.setExtraHTTPHeaders({ 'x-forwarded-for': '127.0.0.1' })
+
     // BUG: UNSAFE: Fix CSP
     await page.setBypassCSP(true)
 
