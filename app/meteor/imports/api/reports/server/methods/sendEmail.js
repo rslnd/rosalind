@@ -9,6 +9,7 @@ import { Events } from '../../../events'
 import { Users } from '../../../users'
 import { dateToDay, dayToDate, dayToSlug } from '../../../../util/time/day'
 import { computeStatistics } from '../../methods/computeStatistics'
+import { hasData } from '../../methods/hasData'
 import { renderEmail } from '../../methods/renderEmail'
 import { renderPdf } from '../../methods/renderPdf'
 
@@ -28,6 +29,11 @@ export const sendEmail = async (args = {}) => {
     const asOf = moment(dayToDate(day)).endOf('day').toDate()
 
     const statistics = await computeStatistics({ Appointments, Schedules, Calendars, Users, asOf })
+
+    if (!hasData(statistics)) {
+      console.log('[Reports] sendEmail: No data for this day, not sending email')
+      return false
+    }
 
     const { title, text } = renderEmail({ statistics })
     const pdf = await renderPdf({ day })

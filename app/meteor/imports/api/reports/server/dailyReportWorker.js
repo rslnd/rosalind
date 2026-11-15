@@ -7,6 +7,7 @@ import { Schedules } from '../../schedules'
 import { Events } from '../../events'
 import { Users } from '../../users'
 import { dayToDate } from '../../../util/time/day'
+import { hasData } from '../methods/hasData'
 import { computeStatistics } from '../methods/computeStatistics'
 import { TIMEZONE, CUTOFF_HOUR, sendAt } from '../methods/dayFinished'
 import { sendEmail } from './methods'
@@ -53,6 +54,11 @@ export const sendIfReady = async () => {
 
   if (Date.now() < readyAt) {
     console.log('[Reports] dailyReportWorker: Day not finished yet, waiting until', new Date(readyAt).toISOString())
+    return
+  }
+
+  if (!hasData(statistics)) {
+    console.log('[Reports] dailyReportWorker: No data today, not sending email')
     return
   }
 
