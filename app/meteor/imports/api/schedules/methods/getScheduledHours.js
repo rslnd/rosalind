@@ -46,18 +46,32 @@ export const calculateScheduledHoursPM = ({ overrideSchedules }) =>
     dayHours: PM_HOURS
   })
 
+// Merges overlapping or touching [start, end] ranges into disjoint ones
+const mergeRanges = (schedules) => {
+  const sorted = schedules
+    .map(s => ({ start: +moment(s.start), end: +moment(s.end) }))
+    .sort((a, b) => a.start - b.start)
+
+  return sorted.reduce((merged, range) => {
+    const last = merged[merged.length - 1]
+    if (last && range.start <= last.end) {
+      last.end = Math.max(last.end, range.end)
+    } else {
+      merged.push({ ...range })
+    }
+    return merged
+  }, [])
+}
+
 export const calculateScheduledHours = ({ dayHours = DAY_HOURS, overrideSchedules = [] }) => {
   if (overrideSchedules.length === 0) {
     return dayHours
   }
 
-  // Calculate the durations of each blocking override
-  const blockedDurations = overrideSchedules.map((schedule) =>
-    moment.range(schedule.start, schedule.end).duration() / 1000 / 60
-  )
-
-  // Add them up
-  const blockedMinutes = blockedDurations.reduce((prev, curr) => (prev + curr), 0)
+  // Overlapping overrides block the same time only once, so merge them first
+  // and add up the durations of the merged blocks
+  const blockedMinutes = mergeRanges(overrideSchedules)
+    .reduce((prev, { start, end }) => prev + (end - start) / 1000 / 60, 0)
 
   // Subtract the blocked minutes from the duration of the day
   const dayDuration = 60 * dayHours

@@ -136,9 +136,10 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
             const hk = `${dk}|${userId}`
             if (countedHour[hk]) { return }
             countedHour[hk] = true
-            const hours = calculateScheduledHours({
+            // Overlapping override schedules can add up to negative hours
+            const hours = Math.max(0, calculateScheduledHours({
               overrideSchedules: overridesByUserDay[`${userId}|${dk}`] || []
-            })
+            }))
             scheduledByUser[userId] = (scheduledByUser[userId] || 0) + hours
             scheduledTotal += hours
           })

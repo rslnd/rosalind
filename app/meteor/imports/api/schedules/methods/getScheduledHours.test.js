@@ -47,5 +47,14 @@ describe('schedules', () => {
     it('calculates hours scheduled ', () => {
       expect(calculateScheduledHours({ overrideSchedules })).to.equal(3.75) // 3h 45min
     })
+
+    it('counts overlapping overrides only once', () => {
+      const overlapping = [
+        { start: moment.tz('2017-05-06T08:00:00.000', tz), end: moment.tz('2017-05-06T12:00:00.000', tz) },
+        { start: moment.tz('2017-05-06T10:00:00.000', tz), end: moment.tz('2017-05-06T14:00:00.000', tz) },
+        { start: moment.tz('2017-05-06T09:00:00.000', tz), end: moment.tz('2017-05-06T11:00:00.000', tz) }
+      ]
+      expect(calculateScheduledHours({ overrideSchedules: overlapping })).to.equal(7.5) // 13.5h - 6h
+    })
   })
 })
