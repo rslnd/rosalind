@@ -20,6 +20,7 @@ const statistics = {
       onlineNoShow: 10,
       onlineNoShowRate: 0.08,
       slotsAvailable: 600,
+      utilization: 470 / 600,
       scheduledHours: 80,
       timeUtilization: 0.72,
       slotUtilization: 0.41,
@@ -67,11 +68,11 @@ describe('reports', () => {
       const t = rendered.text
       expect(t).to.include('ORDINATION GESAMT')
       expect(t).to.include('ÄrztInnen: 1')
-      expect(t).to.include('Auslastung: 85,3 %')
+      expect(t).to.include('Auslastung: 78,3 %')
       expect(t).to.include('Nicht-erschienen-Quote: 6,4 %')
       expect(t).to.include('PatientInnen / Std: 5,9')
       expect(t).to.include('Slots: 600 (80 h gesamt)')
-      expect(t).to.include('Termine: 512 (85,3 % Auslastung)')
+      expect(t).to.include('Eingehaltene Termine: 470 (78,3 % Auslastung)')
       expect(t).to.include('Einschub: 12 (2,3 % der Termine)')
       expect(t).to.include('Kasse: 300 (58,6 % der Termine)')
       expect(t).to.include('Privat: 212 (41,4 % der Termine)')

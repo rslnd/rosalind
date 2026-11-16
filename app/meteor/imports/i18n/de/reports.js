@@ -83,14 +83,14 @@ export const reports = {
   booked: 'Belegt',
   free: 'Frei',
   utilization: 'Auslastung',
-  utilizationHint: 'Alle Termine des Tages inkl. Einschub gemessen an den verfügbaren Slots der ÄrztInnen-Spalten – über 100 % bei Überbuchung',
+  utilizationHint: 'Erschienene Termine inkl. Einschub gemessen an den verfügbaren Slots der ÄrztInnen-Spalten – über 100 % bei Überbuchung',
   present: 'Anwesend',
   einschuebe: 'Einschübe',
   internalShort: 'Intern',
 
   // "Ordination gesamt"-Kennzahlen (absolut + Anteil)
   availableAppointments: 'Slots',
-  bookedAppointments: 'Termine',
+  bookedAppointments: 'Eingehaltene Termine',
   einschub: 'Einschub',
   internalArranged: 'Intern vereinbart',
   onlineAppointments: 'Online',

@@ -47,6 +47,7 @@ describe('reports/methods/statistics', function () {
       assert.equal(m.canceled, 1)
       assert.equal(m.expected, 4)
       assert.equal(m.admitted, 2) // p1 and p5 checked in
+      assert.equal(m.utilization, 2 / 120)
       assert.equal(m.noShow, 2) // p2 and p4
       assert.equal(m.noShowRate, 2 / 4)
       assert.equal(m.insurance, 4)

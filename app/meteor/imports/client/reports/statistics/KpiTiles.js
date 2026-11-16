@@ -3,8 +3,6 @@ import { __ } from '../../../i18n'
 import { Tile, TileRow } from './Tile'
 import { fmtInt, fmtNum, fmtPct } from './format'
 
-const ratio = (v, base) => (base > 0 && v != null) ? v / base : null
-
 // Headline rates of the day (Ordination gesamt), to compare days with each other.
 export const KpiTiles = ({ total, doctorCount }) => {
   const t = total || {}
@@ -14,9 +12,9 @@ export const KpiTiles = ({ total, doctorCount }) => {
       <Tile label={__('reports.assignee_plural')}>
         <b>{fmtInt(doctorCount)}</b>
       </Tile>
-      {/* Same base as the "Termine" tile: all appointments incl. Einschub vs. available slots */}
+      {/* Same base as the "Termine" tile: kept appointments incl. Einschub vs. available slots */}
       <Tile label={__('reports.utilization')} hint={__('reports.utilizationHint')}>
-        <b>{fmtPct(ratio(t.total, t.slotsAvailable))}</b>
+        <b>{fmtPct(t.utilization)}</b>
       </Tile>
       <Tile label={__('reports.noShowRate')} hint={__('reports.noShowRateHint')}>
         <b>{fmtPct(t.noShowRate)}</b>

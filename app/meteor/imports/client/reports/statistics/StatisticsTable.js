@@ -6,7 +6,7 @@ import { fmtInt, fmtNum, fmtHours, fmtPct } from './format'
 // Einschub (unassigned) is shown as its own row.
 const columns = [
   { key: 'scheduledHours', label: __('reports.scheduledHours'), fmt: fmtHours },
-  { key: 'calendarSlotUtilization', label: __('reports.slotUtilization'), fmt: fmtPct, hint: __('reports.slotUtilizationHint') },
+  { key: 'utilization', label: __('reports.utilization'), fmt: fmtPct, hint: __('reports.utilizationHint') },
   { key: 'slotsAvailable', label: __('reports.availableAppointments'), fmt: fmtInt },
   { key: 'total', label: __('reports.appointmentsTotal'), fmt: fmtInt },
   { key: 'admitted', label: __('reports.kept'), fmt: fmtInt },
@@ -27,13 +27,6 @@ const Row = ({ name, metrics, muted }) => (
 )
 
 export const StatisticsTable = ({ total, assignees = [] }) => {
-  // Practice total utilization includes the Einschub appointments (all
-  // appointments vs. available slots, like the "Auslastung" tile).
-  const totalMetrics = total && {
-    ...total,
-    calendarSlotUtilization: total.slotsAvailable > 0 ? total.total / total.slotsAvailable : null
-  }
-
   return (
     <div style={{ overflowX: 'auto' }}>
       <table className='table table-condensed' style={{ fontSize: 13 }}>
@@ -60,7 +53,7 @@ export const StatisticsTable = ({ total, assignees = [] }) => {
             <td>{__('reports.practiceTotal')}</td>
             {columns.map(col => (
               <td key={col.key} style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                {totalMetrics ? col.fmt(totalMetrics[col.key]) : '–'}
+                {total ? col.fmt(total[col.key]) : '–'}
               </td>
             ))}
           </tr>

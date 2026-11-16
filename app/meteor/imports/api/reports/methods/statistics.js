@@ -92,6 +92,11 @@ export const computeMetrics = ({
     slotsAvailable,
     calendarSlotUtilization: ratio(slotsUsed, slotsAvailable),
 
+    // Kept appointments vs. available slots. Appointments are one slot long, so
+    // this equals the slot-based figure; it exceeds 1 on overbooked days (Einschub
+    // is part of the practice total's admitted but adds no slots).
+    utilization: ratio(admitted, slotsAvailable),
+
     // Throughput
     patientsPerHour: ratio(admitted, scheduledHours),
     admittedPerDay: ratio(admitted, workingDays)

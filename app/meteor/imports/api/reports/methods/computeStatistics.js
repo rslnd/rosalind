@@ -99,6 +99,7 @@ export const computeStatistics = async ({ Appointments, Schedules, Calendars, Us
     }, { fields: { userId: 1, calendarId: 1, start: 1, end: 1, available: 1, roles: 1 } }).fetchAsync()
 
     const allAppointments = await Appointments.find({
+      removed: { $ne: true },
       start: { $gte: from, $lte: to }
     }, { fields: { start: 1, end: 1, assigneeId: 1, calendarId: 1, type: 1 } }).fetchAsync()
 

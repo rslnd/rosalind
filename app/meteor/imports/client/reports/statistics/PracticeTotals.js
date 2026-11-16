@@ -32,9 +32,9 @@ export const PracticeTotals = ({ total, einschub = 0 }) => {
   // line (Intern vereinbart + Online are complementary, together = all bookings).
   const items = [
     { label: __('reports.availableAppointments'), abs: t.slotsAvailable, note: `${fmtHours(t.scheduledHours)} ${__('reports.hoursTotal')}` },
-    // All appointments of the day incl. Einschub, measured against the available
-    // slots of the doctor columns – exceeds 100 % when the day is overbooked.
-    { label: __('reports.bookedAppointments'), abs: t.total, pct: ratio(t.total, t.slotsAvailable), sub: __('reports.ofAvailable') },
+    // Kept appointments of the day incl. Einschub, measured against
+    // the available slots of the doctor columns – exceeds 100 % when overbooked.
+    { label: __('reports.bookedAppointments'), abs: t.admitted, pct: t.utilization, sub: __('reports.ofAvailable') },
     { label: __('reports.einschub'), abs: einschub, pct: ratio(einschub, base), sub: ofTotal },
     { label: __('reports.insurance'), abs: t.insurance, pct: ratio(t.insurance, base), sub: ofTotal },
     { label: __('reports.privateShort'), abs: t.private, pct: ratio(t.private, base), sub: ofTotal },

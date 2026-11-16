@@ -26,13 +26,13 @@ const renderTotal = (total, { doctorCount, einschub }) => {
   return [
     'ORDINATION GESAMT',
     `ÄrztInnen: ${int(doctorCount)}`,
-    // Same base as the report: all appointments incl. Einschub vs. available slots
-    `Auslastung: ${pct(ratio(t.total, t.slotsAvailable))}`,
+    // Same base as the report: kept appointments incl. Einschub vs. available slots
+    `Auslastung: ${pct(t.utilization)}`,
     `Nicht-erschienen-Quote: ${pct(t.noShowRate)}`,
     `PatientInnen / Std: ${num(t.patientsPerHour)}`,
     '',
     `Slots: ${int(t.slotsAvailable)} (${hours(t.scheduledHours)} gesamt)`,
-    `Termine: ${withShare(t.total, ratio(t.total, t.slotsAvailable), 'Auslastung')}`,
+    `Eingehaltene Termine: ${withShare(t.admitted, t.utilization, 'Auslastung')}`,
     `Einschub: ${withShare(einschub, ratio(einschub, base), 'der Termine')}`,
     `Kasse: ${withShare(t.insurance, ratio(t.insurance, base), 'der Termine')}`,
     `Privat: ${withShare(t.private, ratio(t.private, base), 'der Termine')}`,
