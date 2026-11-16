@@ -69,9 +69,11 @@ export const calculateScheduledHours = ({ dayHours = DAY_HOURS, overrideSchedule
   }
 
   // Overlapping overrides block the same time only once, so merge them first
-  // and add up the durations of the merged blocks
+  // and add up the durations of the merged blocks. Blocks conventionally end at
+  // hh:59:59, so round each to whole minutes: a block over the whole day must
+  // leave exactly 0 hours, not a sliver of a second.
   const blockedMinutes = mergeRanges(overrideSchedules)
-    .reduce((prev, { start, end }) => prev + (end - start) / 1000 / 60, 0)
+    .reduce((prev, { start, end }) => prev + Math.round((end - start) / 1000 / 60), 0)
 
   // Subtract the blocked minutes from the duration of the day
   const dayDuration = 60 * dayHours

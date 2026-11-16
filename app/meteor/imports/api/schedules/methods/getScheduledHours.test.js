@@ -48,6 +48,13 @@ describe('schedules', () => {
       expect(calculateScheduledHours({ overrideSchedules })).to.equal(3.75) // 3h 45min
     })
 
+    it('is exactly 0 when a block covers the whole day, ending at hh:59:59', () => {
+      const wholeDay = [
+        { start: moment.tz('2017-05-06T07:30:00.000', tz), end: moment.tz('2017-05-06T20:59:59.000', tz) }
+      ]
+      expect(calculateScheduledHours({ overrideSchedules: wholeDay })).to.equal(0)
+    })
+
     it('counts overlapping overrides only once', () => {
       const overlapping = [
         { start: moment.tz('2017-05-06T08:00:00.000', tz), end: moment.tz('2017-05-06T12:00:00.000', tz) },

@@ -39,7 +39,7 @@ const statistics = {
         noShow: 6,
         noShowRate: 0.05,
         timeUtilization: 0.75,
-        calendarSlotUtilization: 0.8,
+        utilization: 0.8,
         slotsAvailable: 150,
         scheduledHours: 8,
         patientsPerHour: 13.75,

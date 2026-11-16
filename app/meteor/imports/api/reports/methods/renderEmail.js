@@ -50,7 +50,7 @@ const renderAssignee = (a) => {
   return [
     a.name,
     `  Geplante Stunden: ${hours(cur.scheduledHours)}`,
-    `  Auslastung: ${pct(cur.calendarSlotUtilization)}`,
+    `  Auslastung: ${pct(cur.utilization)}`,
     `  Slots: ${int(cur.slotsAvailable)}`,
     `  Termine: ${int(cur.total)}`,
     `  Erschienen: ${int(cur.admitted)}`,
