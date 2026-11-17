@@ -24,6 +24,10 @@ const durationHours = (a) => {
   return ms / 1000 / 60 / 60
 }
 
+// Below this many planned hours a per-hour rate is meaningless (a nearly
+// blocked-out doctor who still sees a few patients would show 100+ per hour)
+const MIN_HOURS_FOR_RATE = 1
+
 const ratio = (numerator, denominator) =>
   (denominator > 0 && numerator != null) ? numerator / denominator : null
 
@@ -98,7 +102,7 @@ export const computeMetrics = ({
     utilization: ratio(admitted, slotsAvailable),
 
     // Throughput
-    patientsPerHour: ratio(admitted, scheduledHours),
+    patientsPerHour: scheduledHours >= MIN_HOURS_FOR_RATE ? ratio(admitted, scheduledHours) : null,
     admittedPerDay: ratio(admitted, workingDays)
   }
 

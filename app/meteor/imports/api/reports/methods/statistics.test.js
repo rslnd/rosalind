@@ -71,6 +71,13 @@ describe('reports/methods/statistics', function () {
       assert.equal(m.billing.private.admitted, 1) // p5
     })
 
+    it('shows no patients per hour below one planned hour', () => {
+      const appointments = [{ admittedAt: new Date() }, { admittedAt: new Date() }]
+      assert.equal(computeMetrics({ appointments, scheduledHours: 0.02 }).patientsPerHour, null)
+      assert.equal(computeMetrics({ appointments, scheduledHours: 0 }).patientsPerHour, null)
+      assert.equal(computeMetrics({ appointments, scheduledHours: 1 }).patientsPerHour, 2)
+    })
+
     it('guards divisions by zero with null', function () {
       const m = computeMetrics({ appointments: [], freeSlots: 0, scheduledHours: 0, slotsAvailable: 0 })
       assert.equal(m.noShowRate, null)
